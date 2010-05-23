@@ -1,0 +1,185 @@
+#!/usr/bin/env python
+
+import sys
+import os
+import gtk
+import urllib
+
+class AboutWindow(gtk.Window):
+	def __init__(self, parent):
+		# create main window
+		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
+		self.connect('delete_event', self._hide)
+		self.set_title('About Sunflower')
+		self.set_size_request(450, 350)
+		self.set_resizable(False)
+		self.set_skip_taskbar_hint(True)
+		self.set_modal(True)
+		self.set_deletable(False)
+		self.set_transient_for(parent)
+		self.realize()
+		style = self.get_style().copy()
+
+		# create gui
+		vbox = gtk.VBox(False, 0)
+
+		# program logo
+		image_file = os.path.join(os.path.dirname(sys.argv[0]),
+									'images',
+									'sunflower_hi-def_64x64.png')
+		image = gtk.Image()
+		image.set_from_file(image_file)
+		image.set_size_request(70, 70)
+
+		# program label
+		program_label = gtk.Label('<span color="%s"><span size="x-large" weight="bold">'
+			'Sunflower</span>\nVersion 0.1</span>' % style.fg[gtk.STATE_SELECTED].to_string())
+
+		program_label.set_use_markup(True)
+
+		# top horizontal box containing image and program title
+		frame = gtk.EventBox()
+		frame.modify_bg(gtk.STATE_NORMAL, style.bg[gtk.STATE_SELECTED])
+
+		hbox1 = gtk.HBox(False, 0)
+		frame.add(hbox1)
+
+		hbox1.pack_start(image, False, False, 0)
+		hbox1.pack_start(program_label, False, False, 5)
+
+		# bottom vbox
+		vbox2 = gtk.VBox(False, 5)
+		vbox2.set_border_width(5)
+
+		# middle content
+		notebook = gtk.Notebook()
+
+		tab1 = gtk.VBox(False, 10)
+		tab1.set_border_width(5)
+
+		program_info = gtk.Label('This software is being developed under GNU general '
+			'public license. If you would like to obtain source code '
+			'please visit our web site. Any bug reports, sugestions '
+			'or questions are more than welcome.')
+		program_info.set_line_wrap(True)
+		program_info.set_alignment(0,0)
+		tab1.pack_start(program_info, False, True, 0)
+
+		developer_info = gtk.Label('<b>Developer</b>\n\tMeanEYE, <i>'
+									'<span size="small">RCF Group</span></i>')
+		developer_info.set_use_markup(True)
+		developer_info.set_alignment(0,0)
+		tab1.pack_start(developer_info, False, True, 0)
+
+		artist_info = gtk.Label('<b>Artist</b>\n\tMrakoslava, <i>'
+									'<span size="small">Studio Spectra</span></i>')
+		artist_info.set_use_markup(True)
+		artist_info.set_alignment(0,0)
+		tab1.pack_start(artist_info, False, True, 0)
+
+		tab1_label = gtk.Label('Copyright')
+		notebook.append_page(tab1, tab1_label)
+
+		# license tab
+		tab2 = gtk.ScrolledWindow()
+		tab2.set_border_width(2)
+		tab2.set_shadow_type(gtk.SHADOW_IN)
+
+		license_list = {
+				'posix': os.path.join(
+								'/',
+								'usr',
+								'share',
+								'common-licenses',
+								'GPL'
+							),
+				'nt': os.path.join(
+								os.path.dirname(sys.argv[0]),
+								'application',
+								'GPL.txt',
+							)
+			}
+
+		license_text = None
+
+		if os.path.isfile(license_list[os.name]):
+			license_file = open(license_list[os.name], 'r')
+
+			if license_file:
+				license_text = license_file.read()
+				license_file.close()
+
+		license = gtk.TextView()
+		license.set_editable(False)
+		license.set_cursor_visible(False)
+
+		if license_text is not None:
+			buffer_ = license.get_buffer()
+			buffer_.set_text(license_text)
+
+		tab2.add(license)
+
+		tab2_label = gtk.Label('License')
+		notebook.append_page(tab2, tab2_label)
+
+		# wakoopa statistics
+		tab3 = gtk.VBox(False, 5)
+		tab3.set_border_width(5);
+
+		warning = gtk.Label('In order to avoid slow program starting and '
+			'unecessary bandwidth usage, automatic wakoopa statistics loading '
+			'has been disabled. Please click on <i>load</i> button to retrieve data. ')
+		warning.set_use_markup(True)
+		warning.set_line_wrap(True)
+		warning.set_alignment(0,0)
+
+		self._wakoopa_image = gtk.Image()
+
+		hbox3 = gtk.HBox(False, 0)
+		load_button = gtk.Button('Load');
+		load_button.connect('clicked', self.load_wakoopa_image)
+
+		hbox3.pack_end(load_button, False, True, 0)
+
+		tab3.pack_start(warning, False, True, 0)
+		tab3.pack_start(self._wakoopa_image, False, True, 0)
+		tab3.pack_end(hbox3, False, True, 0)
+
+		tab3_label = gtk.Label('Wakoopa')
+		notebook.append_page(tab3, tab3_label)
+
+		# bottom button controls
+		hbox2 = gtk.HBox(False, 3)
+
+		btn_close = gtk.Button(stock=gtk.STOCK_CLOSE)
+		btn_close.connect('clicked', self._hide)
+		hbox2.pack_end(btn_close, False, False, 0)
+
+		btn_web1 = gtk.Button('RCF Group')
+		btn_web1.connect('clicked', parent.goto_web, 'rcf-group.com')
+		hbox2.pack_start(btn_web1, False, False, 0)
+
+		btn_web2 = gtk.Button('Studio Spectra')
+		btn_web2.connect('clicked', parent.goto_web, 'www.studiospectra.com')
+		hbox2.pack_start(btn_web2, False, False, 0)
+
+		# pack all the controlers
+		vbox.pack_start(frame, False, False, padding=0)
+		vbox.pack_start(vbox2, True, True, padding=0)
+
+		vbox2.pack_start(notebook, True, True, padding=0)
+		vbox2.pack_start(hbox2, False, False, padding=0)
+
+		self.add(vbox)
+
+	def _show(self, widget, data=None):
+		self.show_all()
+
+	def _hide(self, widget, data=None):
+		self.hide()
+		return True  # return True so we get to keep our controls safe from GC
+
+	def load_wakoopa_image(self, widget, data=None):
+		"""Retrieve wakoopa statistics image"""
+		file_name = urllib.urlretrieve('http://wakoopa.com/software/sunflower-py/badge.png')[0]
+		self._wakoopa_image.set_from_file(file_name)

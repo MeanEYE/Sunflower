@@ -152,6 +152,11 @@ class MainWindow(gtk.Window):
 					},
 					{'type': 'separator'},
 					{
+						'label': 'File a _bug report',
+						'callback': self.goto_web,
+						'data': 'code.google.com/p/sunflower-fm/issues/entry'
+					},
+					{
 						'label': 'Check for _updates',
 					},
 					{'type': 'separator'},

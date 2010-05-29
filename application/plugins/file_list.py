@@ -295,7 +295,7 @@ class FileList(ItemList):
 									self._parent,
 									self.get_provider(),
 									None,
-									result[1]
+									result[1]  # options from dialog
 									)
 			operation.start()
 

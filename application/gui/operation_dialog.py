@@ -2,6 +2,7 @@
 
 import gtk
 import pango
+import locale
 
 __all__ = ['CopyDialog', 'DeleteDialog']
 
@@ -21,6 +22,7 @@ class OperationDialog(gtk.Window):
 		self._application = application
 		self._thread = thread
 		self._size_format = '{0} / {1}'
+		self._count_format = '{0} / {1}'
 
 		self._total_size = 0L
 		self._total_count = 0L
@@ -91,7 +93,7 @@ class OperationDialog(gtk.Window):
 		table.set_row_spacing(0, 2)
 
 		self._label_status = gtk.Label('Current status...')
-		self._label_current_file = gtk.Label('current_file.ext')
+		self._label_current_file = gtk.Label()
 		self._pb_current_file = gtk.ProgressBar()
 
 		# pack interface
@@ -105,6 +107,7 @@ class OperationDialog(gtk.Window):
 		# configure components
 		self._label_status.set_alignment(0, 0.5)
 		self._label_current_file.set_alignment(1, 0.5)
+		self._label_current_file.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
 
 	def _add_details(self):
 		"""Add ETA to the dialog"""
@@ -173,6 +176,9 @@ class OperationDialog(gtk.Window):
 		self._button_minimize = gtk.Button('Minimize')
 		self._button_cancel = gtk.Button('Cancel')
 
+		self._button_pause.set_sensitive(False)
+		self._button_minimize.set_sensitive(False)
+		
 		self._button_pause.connect('clicked', self._pause_click)
 		self._button_cancel.connect('clicked', self._cancel_click)
 
@@ -208,6 +214,24 @@ class OperationDialog(gtk.Window):
 		"""Handle 'cancel' button click event"""
 		if self._confirm_cancel("Are you sure about canceling current operation?"):
 			self._thread._can_continue = False
+			
+	def _update_total_count(self):
+		"""Update progress bar and labels for total count"""
+		assert self._value_total_count is not None
+		self._value_total_count.set_label(self._count_format.format(
+															self._current_count,
+															self._total_count
+															))
+		self.set_total_count_fraction(float(self._current_count) / self._total_count)
+		
+	def _update_total_size(self):
+		"""Update progress bar and labels for total size"""
+		assert self._value_total_size is not None
+		self._value_total_size.set_label(self._size_format.format(
+															locale.format('%d', self._current_size, True),
+															locale.format('%d', self._total_size, True)
+															))
+		self.set_total_size_fraction(float(self._current_size) / self._total_size)
 
 	def set_status(self, status):
 		"""Set current status"""
@@ -223,6 +247,12 @@ class OperationDialog(gtk.Window):
 		"""Set current file progress bar position"""
 		assert self._pb_current_file is not None
 		self._pb_current_file.set_fraction(fraction)
+		
+	def set_current_count(self, count):
+		"""Set current count value"""
+		assert self._value_total_count is not None
+		self._current_count = count
+		self._update_total_count()
 
 	def set_source(self, source):
 		"""Set the content of source label"""
@@ -257,16 +287,41 @@ class OperationDialog(gtk.Window):
 	def set_total_count(self, count):
 		"""Set total count label"""
 		assert self._value_total_count is not None
-		self._value_total_count.set_label(count)
+		self._total_count = count
+		self._update_total_count()
 
 	def set_total_count_fraction(self, fraction):
 		"""Set total size progress bar position"""
 		assert self._pb_total_count is not None
 		self._pb_total_count.set_fraction(fraction)
 
+	def increment_total_size(self, value):
+		"""Increment total file size"""
+		assert self._value_total_size is not None
+		self._total_size += value
+		self._update_total_size()
+
+	def increment_current_size(self, value):
+		"""Increment current summed file size"""
+		assert self._value_total_size is not None
+		self._current_size += value
+		self._update_total_size()
+		
+	def increment_total_count(self, value):
+		"""Increment total file count by value"""
+		assert self._value_total_count is not None
+		self._total_count += value
+		self._update_total_count()
+		
+	def increment_current_count(self, value):
+		"""Increment current file count by value"""
+		assert self._value_total_count is not None
+		self._current_count += value
+		self._update_total_count()
+
 
 class CopyDialog(OperationDialog):
-	"""Dialog displayed and used to copy files"""
+	"""Dialog used to display progress for copying files"""
 
 	def __init__(self, application, thread):
 		OperationDialog.__init__(self, application, thread)
@@ -280,19 +335,15 @@ class CopyDialog(OperationDialog):
 		# configure layout
 		self.set_title('Copy Selection')
 
-		self.set_source('/media/remote/gvfs/cmass.info/usr/share/cmass/v5.25/core/lib')
-		self.set_destination('/media/remote/gvfs/cmass.info/usr/share/cmass/v5.25/core/lib')
+		
+class MoveDialog(CopyDialog):
+	"""Dialog used to display progress for moving files"""
 
-		self.set_current_file_fraction(0.5)
-
-		self.set_eta('0h 01m 05s')
-		self.set_speed('5 MB/s')
-
-		self.set_total_size('3.4MB / 16MB')
-		self.set_total_size_fraction(0.17)
-
-		self.set_total_count('4 / 7')
-		self.set_total_count_fraction(0.6)
+	def __init__(self, application, thread):
+		CopyDialog.__init__(self, application, thread)
+		
+		# configure layout
+		self.set_title('Move Selection')
 
 
 class DeleteDialog(OperationDialog):

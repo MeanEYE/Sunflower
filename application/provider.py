@@ -41,6 +41,10 @@ class Provider:
 	def get_file_handle(self, path, mode):
 		"""Open path in specified mode and return its handle"""
 		pass
+	
+	def get_stat(self, path):
+		"""Return file statistics"""
+		pass
 
 	def get_selection(self):
 		"""Get list of selected items"""

@@ -332,7 +332,13 @@ class CopyDialog(gtk.Dialog):
 
 		"""
 		code = self.run()
+		options = (
+				self.edit_type.get_text(), 
+				self.edit_destination.get_text(),
+				self.checkbox_owner.get_active(),
+				self.checkbox_mode.get_active()
+				)
 
 		self.destroy()
 
-		return (code, )
+		return (code, options)

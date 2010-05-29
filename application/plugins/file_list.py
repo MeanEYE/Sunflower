@@ -199,8 +199,7 @@ class FileList(ItemList):
 		if response[0] == gtk.RESPONSE_OK:
 			try:
 				# try to create directories
-				# TODO: Create dirs through provider
-				os.makedirs(os.path.join(self.path, response[1]), mode)
+				self.get_provider().create_directory(os.path.join(self.path, response[1]), mode)
 
 			except OSError as error:
 				# error creating, report to user
@@ -295,7 +294,8 @@ class FileList(ItemList):
 			operation = CopyOperation(
 									self._parent,
 									self.get_provider(),
-									None
+									None,
+									result[1]
 									)
 			operation.start()
 
@@ -653,7 +653,7 @@ class FileList(ItemList):
 		if can_add:
 			# directory
 			if os.path.isdir(full_name):
-				file_stat = os.stat(full_name)
+				file_stat = provider.get_stat(full_name)
 
 				file_size = -1
 				file_mode = stat.S_IMODE(file_stat.st_mode)
@@ -664,7 +664,7 @@ class FileList(ItemList):
 
 			# regular file
 			elif os.path.isfile(full_name):
-				file_stat = os.stat(full_name)
+				file_stat = provider.get_stat(full_name)
 
 				file_size = file_stat.st_size
 				file_mode = stat.S_IMODE(file_stat.st_mode)
@@ -678,7 +678,7 @@ class FileList(ItemList):
 				# TODO: Finish!
 				linked_name = os.path.join(self.path, os.readlink(full_name))
 				if os.path.exists(linked_name):
-					file_stat = os.stat(linked_name)
+					file_stat = provider.get_stat(linked_name)
 
 					file_size = file_stat.st_size
 					file_mode = stat.S_IMODE(file_stat.st_mode)
@@ -993,6 +993,22 @@ class LocalProvider(Provider):
 	def _remove_file(self, path):
 		"""Remove file"""
 		os.remove(path)
+		
+	def create_file(self, path, mode=None):
+		"""Create empty file with specified mode set"""
+		pass
+	
+	def create_directory(self, path, mode=None):
+		"""Create directory with specified mode set"""
+		os.makedirs(path, mode if mode is not None else 0755)
+
+	def get_file_handle(self, path, mode):
+		"""Open path in specified mode and return its handle"""
+		pass
+	
+	def get_stat(self, path):
+		"""Return file statistics"""
+		return os.stat(path)
 
 	def list_dir(self, path):
 		"""Get directory list"""

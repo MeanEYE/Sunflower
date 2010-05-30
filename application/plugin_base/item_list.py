@@ -66,6 +66,9 @@ class ItemList(PluginBase):
 			'F5': {
 					'000': self._copy_files,
 				},
+			'F6': {
+					'000': self._move_files,
+				},
 			'F7': {
 					'000': self._create_directory,
 					'100': self._create_file,
@@ -253,6 +256,10 @@ class ItemList(PluginBase):
 	def _copy_files(self, widget, data=None):
 		"""Abstract method used to copy files"""
 		pass
+	
+	def _move_files(self, widget, data=None):
+		"""Abstract method used to move files"""
+		pass
 
 	def _send_to(self, widget, data=None):
 		"""Abstract method for Send To Nautilus integration"""
@@ -274,6 +281,26 @@ class ItemList(PluginBase):
 	def _get_popup_menu_position(self, menu, data=None):
 		"""Abstract method for positioning menu properly on given row"""
 		return (0, 0, True)
+	
+	def _get_other_provider(self):
+		"""Return provider from oposite list. 
+		
+		If oposite tab is not ItemList or does not have a provider
+		return None.
+		
+		"""
+		notebook = self._parent.left_notebook \
+								if self._notebook is self._parent.right_notebook \
+								else self._parent.right_notebook
+								
+		object = notebook.get_nth_page(notebook.get_current_page())
+		
+		if hasattr(object, "get_provider"):
+			result = object.get_provider()
+		else:
+			result = None
+			
+		return result
 
 	def _create_popup_menu(self):
 		"""Create popup menu and its constant elements"""

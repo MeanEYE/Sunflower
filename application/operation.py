@@ -13,6 +13,8 @@ OPTION_DESTINATION = 1
 OPTION_SET_OWNER   = 2
 OPTION_SET_MODE    = 3
 
+COPY_BUFFER = 100 * 1024
+
 class Operation(Thread):
 	"""Parent class for all operation threads"""
 
@@ -97,8 +99,29 @@ class CopyOperation(Operation):
 
 	def _copy_file(self, source, destination):
 		"""Copy file content"""
-		pass
-
+		# TODO: Handle errors!
+		sh = self._source.get_file_handle(source, 'rb')
+		dh = self._destination.get_file_handle(destination, "wb")
+		
+		destination_size = 0L
+		file_stat = self._source.get_stat(source)
+		
+		while True:
+			buffer = sh.read(COPY_BUFFER)
+			
+			if (buffer):
+				dh.write(buffer)
+				
+				destination_size += len(buffer)
+				gobject.idle_add(self._dialog.increment_current_size, len(buffer))
+				if file_stat.st_size > 0:  # ensure we don't end up with error on 0 size files
+					gobject.idle_add(
+									self._dialog.set_current_file_fraction, 
+									destination_size / float(file_stat.st_size)
+									)
+			else:
+				break;
+		
 	def _create_directories(self, source, destination, list):
 		"""Create all directories in list"""
 		gobject.idle_add(self._update_status, "Creating directories...")
@@ -109,7 +132,13 @@ class CopyOperation(Operation):
 
 			file_stat = self._source.get_stat(dir)
 			mode = stat.S_IMODE(file_stat.st_mode) if self._options[OPTION_SET_MODE] else 0755
-#			self._destination.create_directory(os.path.join(destination, display_name))
+			
+			# TODO: Handle errors!
+			self._destination.create_directory(os.path.join(destination, display_name), mode)
+			
+			# try to set owner
+			if self._options[OPTION_SET_OWNER]:
+				pass  # TODO: Implement set owner
 
 			# if we are not allowed to continue, exit
 			if not self._can_continue: break
@@ -117,10 +146,11 @@ class CopyOperation(Operation):
 	def _copy_file_list(self, source, destination, list):
 		"""Copy list of files to destination path"""
 		gobject.idle_add(self._update_status, "Copying files...")
-		for number, file in enumerate(list, 0):
+		for file in list:
+			display_name = file[len(source)+1:]  # just take the ending part of the path
 			gobject.idle_add(self._dialog.set_current_file, os.path.basename(file))
 
-			self._copy_file(None, None)				
+			self._copy_file(file, os.path.join(destination, display_name))				
 			gobject.idle_add(self._dialog.increment_current_count, 1)
 
 			# if we are not allowed to continue, exit
@@ -142,11 +172,11 @@ class CopyOperation(Operation):
 		self._get_lists(dir_list, file_list)
 		
 		# create directories
-		if (self._can_continue):
+		if self._can_continue:
 			self._create_directories(path_source, path_destination, dir_list)
 		
 		# copy files
-		if (self._can_continue):
+		if self._can_continue:
 			self._copy_file_list(path_source, path_destination, file_list)
 
 		gobject.idle_add(self._destroy_ui)
@@ -163,18 +193,17 @@ class MoveOperation(CopyOperation):
 		"""Delete files after copying"""
 		CopyOperation._copy_file_list(self, source, destination, list)
 		
-		if (self._can_continue):
+		if self._can_continue:
 			self._delete_file_list()
 		
 	def _delete_file_list(self):
 		"""Remove files from source list"""
 		self._update_status("Deleting source files...")
 		
-		for number, item in enumerate(self._source.get_selection(), 0):
+		list = self._source.get_selection()
+		for number, item in enumerate(list, 0):
 			gobject.idle_add(self._dialog.set_current_file, os.path.basename(item))
-			
-			# TODO: Uncomment when copying works properly
-			#self._source.remove_path(item)
+			self._source.remove_path(item)
 			gobject.idle_add(self._dialog.set_current_file_fraction, float(number) / len(list))
 			
 			# if we are not allowed to continue, exit
@@ -188,11 +217,6 @@ class DeleteOperation(Operation):
 		Operation.__init__(self, application, source, destination)
 		self._dialog = DeleteDialog(application, self)
 
-	def _update_status(self, path, fraction):
-		"""Update user interface"""
-		self._dialog.set_current_file(path)
-		self._dialog.set_current_file_fraction(fraction)
-
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
 		self._dialog.show_all()
@@ -200,8 +224,9 @@ class DeleteOperation(Operation):
 		list = self._source.get_selection()
 
 		for index, item in enumerate(list, 1):
-			gobject.idle_add(self._update_status, item, float(index) / len(list))
+			gobject.idle_add(self._dialog.set_current_file, os.path.basename(item))
 			self._source.remove_path(item)
+			gobject.idle_add(self._dialog.set_current_file_fraction, float(index) / len(list))
 
 			# if we are not allowed to continue, exit
 			if not self._can_continue: break

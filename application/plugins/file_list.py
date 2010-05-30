@@ -12,7 +12,7 @@ import fnmatch
 
 from application.provider import Provider
 from application.operation import DeleteOperation, CopyOperation, MoveOperation
-from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog, CopyDialog
+from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog, CopyDialog, MoveDialog
 
 # try to import I/O library
 try:
@@ -286,7 +286,11 @@ class FileList(ItemList):
 		list = self._get_selection_list()
 		if list is None: return
 
-		dialog = CopyDialog(self._parent, self.get_provider())
+		dialog = CopyDialog(
+						self._parent, 
+						self.get_provider(),
+						self._get_other_provider().get_path()
+						)
 		result = dialog.get_response()
 		
 		if result[0] == gtk.RESPONSE_OK:
@@ -294,7 +298,29 @@ class FileList(ItemList):
 			operation = CopyOperation(
 									self._parent,
 									self.get_provider(),
-									None,
+									self._get_other_provider(),
+									result[1]  # options from dialog
+									)
+			operation.start()
+			
+	def _move_files(self, widget=None, data=None):
+		"""Move selected files"""
+		list = self._get_selection_list()
+		if list is None: return
+
+		dialog = MoveDialog(
+						self._parent, 
+						self.get_provider(),
+						self._get_other_provider().get_path()
+						)
+		result = dialog.get_response()
+		
+		if result[0] == gtk.RESPONSE_OK:
+			# if user confirmed copying
+			operation = MoveOperation(
+									self._parent,
+									self.get_provider(),
+									self._get_other_provider(),
 									result[1]  # options from dialog
 									)
 			operation.start()
@@ -648,11 +674,9 @@ class FileList(ItemList):
 		can_add = not (file_name[0] == '.' and not show_hidden)
 		provider = self.get_provider()
 
-		# TODO: Modify os.stat to be derived from provider
-
 		if can_add:
 			# directory
-			if os.path.isdir(full_name):
+			if provider._is_dir(full_name):
 				file_stat = provider.get_stat(full_name)
 
 				file_size = -1
@@ -663,7 +687,7 @@ class FileList(ItemList):
 				self._dirs['count'] += 1
 
 			# regular file
-			elif os.path.isfile(full_name):
+			elif provider._is_file(full_name):
 				file_stat = provider.get_stat(full_name)
 
 				file_size = file_stat.st_size
@@ -674,7 +698,7 @@ class FileList(ItemList):
 				self._files['count'] += 1
 
 			# link
-			elif os.path.islink(full_name):
+			elif provider._is_link(full_name):
 				# TODO: Finish!
 				linked_name = os.path.join(self.path, os.readlink(full_name))
 				if os.path.exists(linked_name):
@@ -812,7 +836,6 @@ class FileList(ItemList):
 		self._files['selected'] = 0
 
 		# populate list
-		# TODO: Use provider
 		for file_name in self.get_provider().list_dir(self.path):
 			full_name = os.path.join(self.path, file_name)
 
@@ -1004,7 +1027,7 @@ class LocalProvider(Provider):
 
 	def get_file_handle(self, path, mode):
 		"""Open path in specified mode and return its handle"""
-		pass
+		return open(path, mode)
 	
 	def get_stat(self, path):
 		"""Return file statistics"""

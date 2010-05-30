@@ -240,13 +240,16 @@ class DirectoryCreateDialog(CreateDialog):
 class CopyDialog(gtk.Dialog):
 	"""Dialog which will ask user for additional options before copying"""
 	
-	def __init__(self, application, provider):
+	_title = "Copy item(s)"
+	_operation_label = "Copy <b>{0}</b> item(s) to:"
+	
+	def __init__(self, application, provider, path):
 		gtk.Dialog.__init__(self, parent=application)
 
 		self._application = application
 		self._provider = provider
 
-		self.set_title('Copy items(s)')
+		self.set_title(self._title)
 		self.set_default_size(340, 10)
 		self.set_resizable(True)
 		self.set_skip_taskbar_hint(True)
@@ -265,6 +268,7 @@ class CopyDialog(gtk.Dialog):
 		self._update_label()
 		
 		self.edit_destination = gtk.Entry()
+		self.edit_destination.set_text(path)
 		
 		# additional options
 		advanced = gtk.Frame('<span size="small">Advanced options</span>')
@@ -285,14 +289,9 @@ class CopyDialog(gtk.Dialog):
 		self.checkbox_owner = gtk.CheckButton('Set owner on destination')
 		self.checkbox_mode = gtk.CheckButton('Set access mode on destination')
 		
-		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
-		button_copy = gtk.Button(stock=gtk.STOCK_COPY)
-		button_copy.set_flags(gtk.CAN_DEFAULT)
-	
-		# pack UI
-		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
-		self.add_action_widget(button_copy, gtk.RESPONSE_OK)
+		self._create_buttons()
 		
+		# pack UI
 		advanced.add(vbox2)
 		
 		vbox2.pack_start(label_type, False, False, 0)
@@ -309,6 +308,15 @@ class CopyDialog(gtk.Dialog):
 		self.set_default_response(gtk.RESPONSE_OK)
 		self.show_all()
 		
+	def _create_buttons(self):
+		"""Create action buttons"""
+		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
+		button_copy = gtk.Button("Copy")
+		button_copy.set_flags(gtk.CAN_DEFAULT)
+
+		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self.add_action_widget(button_copy, gtk.RESPONSE_OK)
+		
 	def _get_item_count(self):
 		"""Count number of items to copy"""
 		list = self._provider.get_selection() 
@@ -322,7 +330,7 @@ class CopyDialog(gtk.Dialog):
 	
 	def _update_label(self, widget=None, data=None):
 		"""Update label based on file type and selection"""
-		self.label_destination.set_markup("Copy <b>{0}</b> item(s) to:".format(self._get_item_count()))
+		self.label_destination.set_markup(self._operation_label.format(self._get_item_count()))
 
 	def get_response(self):
 		"""Return value and self-destruct
@@ -342,3 +350,19 @@ class CopyDialog(gtk.Dialog):
 		self.destroy()
 
 		return (code, options)
+	
+
+class MoveDialog(CopyDialog):
+	"""Dialog which will ask user for additional options before moving"""
+	
+	_title = "Move item(s)"
+	_operation_label = "Move <b>{0}</b> item(s) to:"
+	
+	def _create_buttons(self):
+		"""Create action buttons"""
+		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
+		button_move = gtk.Button("Move")
+		button_move.set_flags(gtk.CAN_DEFAULT)
+
+		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self.add_action_widget(button_move, gtk.RESPONSE_OK)

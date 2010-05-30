@@ -20,6 +20,7 @@ from icons import IconManager
 from associations import AssociationManager
 
 # plugin imports
+# TODO: Load plugins dynamically
 from plugins import *
 
 class MainWindow(gtk.Window):
@@ -228,8 +229,8 @@ class MainWindow(gtk.Window):
 				('Refresh', 'Reload active item list (F2 or CTRL+R)', self._command_reload),
 				('View', 'View selected file (F3)', None),
 				('Edit', 'Edit selected file (F4)', self._command_edit),
-				('Copy', 'Copy selected items from active to oposite list (F5)', None),
-				('Move', 'Move selected items from active to oposite list (F6)', None),
+				('Copy', 'Copy selected items from active to oposite list (F5)', self._command_copy),
+				('Move', 'Move selected items from active to oposite list (F6)', self._command_move),
 				('Create', 'Create new directory (F7)\nCreate new file (CTRL+F7)', self._command_create),
 				('Delete', 'Delete selected items (F8 or Delete)', self._command_delete)
 			)
@@ -355,6 +356,20 @@ class MainWindow(gtk.Window):
 
 		if hasattr(active_object, '_edit_selected'):
 			active_object._edit_selected()
+
+	def _command_copy(self, widget, data=None):
+		"""Handle command button click"""
+		active_object = self._get_active_object()
+
+		if hasattr(active_object, '_copy_files'):
+			active_object._copy_files()
+
+	def _command_move(self, widget, data=None):
+		"""Handle command button click"""
+		active_object = self._get_active_object()
+
+		if hasattr(active_object, '_move_files'):
+			active_object._move_files()
 
 	def _command_create(self, widget, data=None):
 		"""Handle command button click"""

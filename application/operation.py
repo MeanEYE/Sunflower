@@ -121,6 +121,8 @@ class CopyOperation(Operation):
 									)
 			else:
 				break;
+			
+			if not self._can_continue: break
 		
 	def _create_directories(self, source, destination, list):
 		"""Create all directories in list"""

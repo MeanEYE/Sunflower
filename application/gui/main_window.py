@@ -8,9 +8,9 @@ import webbrowser
 import locale
 import user
 
-from menus import Menus
-
+from application.menus import Menus
 from input_dialog import InputDialog
+
 from ConfigParser import RawConfigParser
 
 # gui imports
@@ -18,6 +18,7 @@ from about_window import AboutWindow
 from options_window import OptionsWindow
 from icons import IconManager
 from associations import AssociationManager
+from indicator import Indicator
 
 # plugin imports
 # TODO: Load plugins dynamically
@@ -37,10 +38,7 @@ class MainWindow(gtk.Window):
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 		self.realize()
 
-		self.connect("delete-event", self._destroy)
-
 		self.set_title("Sunflower")
-		#self.set_default_size(950, 450)
 		self.set_icon_from_file(os.path.join(os.path.dirname(sys.argv[0]),
 											'images',
 											'sunflower_hi-def_64x64.png'))
@@ -48,12 +46,18 @@ class MainWindow(gtk.Window):
 		# load config
 		self.load_config()
 
+		if self.options.getboolean('main', 'hide_on_close'):
+			self.connect("delete-event", self._delete_event)
+		else:
+			self.connect("delete-event", self._destroy)
+
 		# create other guis
 		self.icon_manager = IconManager(self)
 		self.menu_manager = Menus(self)
 		self.associations_manager = AssociationManager()
 		self.about_window = AboutWindow(self)
 		self.options_window = OptionsWindow(self)
+		self.indicator = Indicator(self)
 
 		# define local variables
 		self._in_fullscreen = False
@@ -184,11 +188,15 @@ class MainWindow(gtk.Window):
 		self.left_notebook = gtk.Notebook()
 		self.left_notebook.set_scrollable(True)
 		self.left_notebook.connect('focus-in-event', self._transfer_focus)
+		self.left_notebook.connect('page-added', self._tab_moved)
+		self.left_notebook.connect('page-reordered', self._tab_moved)
 		self.left_notebook.set_group_id(0)
 
 		self.right_notebook = gtk.Notebook()
 		self.right_notebook.set_scrollable(True)
 		self.right_notebook.connect('focus-in-event', self._transfer_focus)
+		self.right_notebook.connect('page-added', self._tab_moved)
+		self.right_notebook.connect('page-reordered', self._tab_moved)
 		self.right_notebook.set_group_id(0)
 
 		hbox.pack_start(self.left_notebook, True, True, 0)
@@ -288,6 +296,18 @@ class MainWindow(gtk.Window):
 		self.save_config()
 
 		gtk.main_quit()
+		
+	def _delete_event(self, widget, data=None):
+		"""Handle delete event"""
+		self.hide()
+		self.indicator.adjust_visibility_items(False)
+		
+		return True  # prevent default handler
+	
+	def _tab_moved(self, notebook, child, page_num):
+		"""Handle adding/moving tab accross notebooks"""
+		if hasattr(child, 'update_notebook'):
+			child.update_notebook(notebook)
 
 	def _transfer_focus(self, notebook, data=None):
 		"""Transfer focus from notebook to child widget in active tab"""
@@ -454,7 +474,7 @@ class MainWindow(gtk.Window):
 			dialog = InputDialog(self)
 
 			dialog.set_title('Select items')
-			dialog.set_text('Selection pattern (eg.: *.jpg):')
+			dialog.set_label('Selection pattern (eg.: *.jpg):')
 
 			# get response
 			response = dialog.get_response()
@@ -477,7 +497,7 @@ class MainWindow(gtk.Window):
 			dialog = InputDialog(self)
 
 			dialog.set_title('Unselect items')
-			dialog.set_text('Selection pattern (eg.: *.jpg):')
+			dialog.set_label('Selection pattern (eg.: *.jpg):')
 
 			# get response
 			response = dialog.get_response()
@@ -501,7 +521,7 @@ class MainWindow(gtk.Window):
 			self.create_tab(self.right_notebook, FileList)
 
 		gtk.main()
-
+		
 	def create_tab(self, notebook, plugin_class=None, data=None):
 		"""Safe create tab"""
 		if data is None:
@@ -510,7 +530,6 @@ class MainWindow(gtk.Window):
 			new_tab = plugin_class(self, notebook, data)
 
 		index = notebook.append_page(new_tab, new_tab._tab_label)
-		new_tab._tab_index = index
 		notebook.set_tab_reorderable(new_tab, True)
 		notebook.set_tab_detachable(new_tab, True)
 
@@ -522,17 +541,13 @@ class MainWindow(gtk.Window):
 		"""Create terminal tab on selected notebook"""
 		self.create_tab(notebook, SystemTerminal, path)
 
-	def close_tab(self, notebook, tab_number):
+	def close_tab(self, notebook, child):
 		"""Safely remove tab and it's children"""
 
 		if notebook.get_n_pages() > 1:
-			object = notebook.get_nth_page(tab_number)
-			notebook.remove_page(tab_number)
+			notebook.remove_page(notebook.page_num(child))
 
-			del object
-
-			object = notebook.get_nth_page(notebook.get_current_page())
-			object._main_object.grab_focus()
+			del child
 
 	def next_tab(self, notebook):
 		"""Select next tab on given notebook"""
@@ -694,6 +709,7 @@ class MainWindow(gtk.Window):
 				'tabs_right': 0,
 				'history_file': '.bash_history',
 				'window': '950x450',
+				'hide_on_close': 'on',
 			}
 
 		# set default options

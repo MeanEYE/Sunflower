@@ -4,6 +4,7 @@ import os
 import gtk
 
 from plugin import PluginBase
+from terminal import Terminal
 
 class ItemList(PluginBase):
 	"""General item list
@@ -60,6 +61,9 @@ class ItemList(PluginBase):
 			'Delete': {
 					'000': self._delete_files,
 				},
+			'F2': {
+					'000': self._rename_file,
+				},
 			'F4': {
 					'000': self._edit_selected,
 				},
@@ -68,6 +72,7 @@ class ItemList(PluginBase):
 				},
 			'F6': {
 					'000': self._move_files,
+					'001': self._rename_file,
 				},
 			'F7': {
 					'000': self._create_directory,
@@ -84,10 +89,12 @@ class ItemList(PluginBase):
 					'100': self._show_open_with_menu,
 				},
 			'Left': {
+					'000': self._parent_folder,
 					'100': self._handle_path_inheritance,
 				},
 			'Right': {
 					'100': self._handle_path_inheritance,
+					'000': self._execute_selected_item,
 				},
 		}
 
@@ -116,6 +123,14 @@ class ItemList(PluginBase):
 
 		self._history_button.connect('clicked', self._history_button_clicked)
 		self._top_hbox.pack_end(self._history_button, False, False, 0)
+
+		# terminal button
+		self._terminal_button = gtk.Button(u'\u2605')
+		self._terminal_button.set_focus_on_click(False)
+		self._terminal_button.set_tooltip_text('Terminal')
+
+		self._terminal_button.connect('clicked', self._create_terminal)
+		self._top_hbox.pack_end(self._terminal_button, False, False, 0)
 
 		# file list
 		container = gtk.ScrolledWindow()
@@ -178,7 +193,7 @@ class ItemList(PluginBase):
 			self._show_popup_menu(widget)
 			result = True
 
-		return result
+		return False
 
 	def _handle_key_press(self, widget, event):
 		"""Handles key events in item list"""
@@ -252,13 +267,17 @@ class ItemList(PluginBase):
 	def _delete_files(self, widget, data=None):
 		"""Abstract method used to delete files"""
 		pass
-	
+
 	def _copy_files(self, widget, data=None):
 		"""Abstract method used to copy files"""
 		pass
-	
+
 	def _move_files(self, widget, data=None):
 		"""Abstract method used to move files"""
+		pass
+
+	def _rename_file(self, widget, data=None):
+		"""Abstract method used to rename selection"""
 		pass
 
 	def _send_to(self, widget, data=None):
@@ -281,25 +300,25 @@ class ItemList(PluginBase):
 	def _get_popup_menu_position(self, menu, data=None):
 		"""Abstract method for positioning menu properly on given row"""
 		return (0, 0, True)
-	
+
 	def _get_other_provider(self):
-		"""Return provider from oposite list. 
-		
+		"""Return provider from oposite list.
+
 		If oposite tab is not ItemList or does not have a provider
 		return None.
-		
+
 		"""
 		notebook = self._parent.left_notebook \
 								if self._notebook is self._parent.right_notebook \
 								else self._parent.right_notebook
-								
+
 		object = notebook.get_nth_page(notebook.get_current_page())
-		
+
 		if hasattr(object, "get_provider"):
 			result = object.get_provider()
 		else:
 			result = None
-			
+
 		return result
 
 	def _create_popup_menu(self):
@@ -382,9 +401,11 @@ class ItemList(PluginBase):
 
 		item = menu_manager.create_menu_item({
 								'label': '_Rename...',
+								'callback': self._rename_file
 							})
 		result.append(item)
 		item.set_sensitive(False)
+		self._rename_item = item
 
 		# separator
 		item = menu_manager.create_menu_item({'type': 'separator'})
@@ -480,8 +501,11 @@ class ItemList(PluginBase):
 
 		self._bookmarks_button.modify_bg(gtk.STATE_NORMAL, background_color)
 		self._history_button.modify_bg(gtk.STATE_NORMAL, background_color)
+		self._terminal_button.modify_bg(gtk.STATE_NORMAL, background_color)
+
 		self._bookmarks_button.child.modify_fg(gtk.STATE_NORMAL, text_color)
 		self._history_button.child.modify_fg(gtk.STATE_NORMAL, text_color)
+		self._terminal_button.child.modify_fg(gtk.STATE_NORMAL, text_color)
 
 	def _bookmarks_button_clicked(self, widget, data=None):
 		"""Bookmarks button click event"""
@@ -578,7 +602,11 @@ class ItemList(PluginBase):
 											)
 
 			if key_name == 'Right':
-				oposite_object.change_path(self.path)
+				if hasattr(oposite_object, 'feed_terminal'):
+					oposite_object.feed_terminal(os.path.basename(self._get_selection()))
+				else:
+					oposite_object.change_path(self.path)
+
 				result = True
 
 			elif key_name == 'Left':
@@ -596,7 +624,11 @@ class ItemList(PluginBase):
 				result = True
 
 			elif key_name == 'Left':
-				oposite_object.change_path(self.path)
+				if hasattr(oposite_object, 'feed_terminal'):
+					oposite_object.feed_terminal(os.path.basename(self._get_selection()))
+				else:
+					oposite_object.change_path(self.path)
+
 				result = True
 
 		return result

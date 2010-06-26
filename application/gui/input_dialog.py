@@ -56,9 +56,13 @@ class InputDialog(gtk.Dialog):
 		if self._entry.get_text() != '':
 			self.response(gtk.RESPONSE_OK)
 
-	def set_text(self, label_text):
+	def set_label(self, label_text):
 		"""Provide an easy way to set label text"""
 		self._label.set_text(label_text)
+		
+	def set_text(self, entry_text):
+		"""Set main entry text"""
+		self._entry.set_text(entry_text)
 
 	def get_response(self):
 		"""Return value and self-destruct
@@ -224,7 +228,7 @@ class FileCreateDialog(CreateDialog):
 		CreateDialog.__init__(self, application)
 
 		self.set_title('Create empty file')
-		self.set_text('Enter new file name:')
+		self.set_label('Enter new file name:')
 		
 		
 class DirectoryCreateDialog(CreateDialog):
@@ -233,7 +237,7 @@ class DirectoryCreateDialog(CreateDialog):
 		CreateDialog.__init__(self, application)
 
 		self.set_title('Create directory')
-		self.set_text('Enter new directory name:')
+		self.set_label('Enter new directory name:')
 		self.set_mode(0755)
 		
 
@@ -267,8 +271,9 @@ class CopyDialog(gtk.Dialog):
 		self.label_destination.set_use_markup(True)
 		self._update_label()
 		
-		self.edit_destination = gtk.Entry()
-		self.edit_destination.set_text(path)
+		self.entry_destination = gtk.Entry()
+		self.entry_destination.set_text(path)
+		self.entry_destination.connect('activate', self._confirm_entry)
 		
 		# additional options
 		advanced = gtk.Frame('<span size="small">Advanced options</span>')
@@ -282,9 +287,9 @@ class CopyDialog(gtk.Dialog):
 		label_type = gtk.Label("Only files of this type:")
 		label_type.set_alignment(0, 0.5)
 		
-		self.edit_type = gtk.Entry()
-		self.edit_type.set_text('*')
-		self.edit_type.connect('activate', self._update_label)
+		self.entry_type = gtk.Entry()
+		self.entry_type.set_text('*')
+		self.entry_type.connect('activate', self._update_label)
 		
 		self.checkbox_owner = gtk.CheckButton('Set owner on destination')
 		self.checkbox_mode = gtk.CheckButton('Set access mode on destination')
@@ -295,12 +300,12 @@ class CopyDialog(gtk.Dialog):
 		advanced.add(vbox2)
 		
 		vbox2.pack_start(label_type, False, False, 0)
-		vbox2.pack_start(self.edit_type, False, False, 0)
+		vbox2.pack_start(self.entry_type, False, False, 0)
 		vbox2.pack_start(self.checkbox_owner, False, False, 0)
 		vbox2.pack_start(self.checkbox_mode, False, False, 0)
 		
 		vbox.pack_start(self.label_destination, False, False, 0)
-		vbox.pack_start(self.edit_destination, False, False, 0)
+		vbox.pack_start(self.entry_destination, False, False, 0)
 		vbox.pack_start(advanced, False, False, 5)
 		
 		self.vbox.pack_start(vbox, True, True, 0)
@@ -316,14 +321,19 @@ class CopyDialog(gtk.Dialog):
 
 		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
 		self.add_action_widget(button_copy, gtk.RESPONSE_OK)
+
+	def _confirm_entry(self, widget, data=None):
+		"""Enable user to confirm by pressing Enter"""
+		if self.entry_destination.get_text() != '':
+			self.response(gtk.RESPONSE_OK)
 		
 	def _get_item_count(self):
 		"""Count number of items to copy"""
 		list = self._provider.get_selection() 
 		result = len(list)
 		
-		if hasattr(self, 'edit_type'):
-			matches = fnmatch.filter(list, self.edit_type.get_text())
+		if hasattr(self, 'entry_type'):
+			matches = fnmatch.filter(list, self.entry_type.get_text())
 			result = len(matches)
 				
 		return result
@@ -341,8 +351,8 @@ class CopyDialog(gtk.Dialog):
 		"""
 		code = self.run()
 		options = (
-				self.edit_type.get_text(), 
-				self.edit_destination.get_text(),
+				self.entry_type.get_text(), 
+				self.entry_destination.get_text(),
 				self.checkbox_owner.get_active(),
 				self.checkbox_mode.get_active()
 				)
@@ -366,3 +376,16 @@ class MoveDialog(CopyDialog):
 
 		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
 		self.add_action_widget(button_move, gtk.RESPONSE_OK)
+		
+		
+class RenameDialog(InputDialog):
+	
+	def __init__(self, application, selection):
+		InputDialog.__init__(self, application)
+		
+		self.set_title('Rename file/directory')
+		self.set_label('Enter a new name for this item:')
+		self.set_text(selection)
+		
+		self._entry.select_region(0, len(os.path.splitext(selection)[0]))
+		

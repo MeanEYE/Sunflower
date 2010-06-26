@@ -28,3 +28,15 @@ class SystemTerminal(Terminal):
 	def _update_terminal_status(self, widget, data=None):
 		"""Update status bar text with terminal data"""
 		self.update_status(self._terminal.get_status_line())
+
+	def _recycle_terminal(self, widget, data=None):
+		"""Recycle terminal"""
+		if self._terminal is None: return
+		
+		shell_command = os.environ['SHELL']
+		self._terminal.reset(True, True)
+		self._terminal.fork_command(
+								command=shell_command,
+								directory=self.path
+							)
+

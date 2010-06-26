@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import sys
 import shutil
 import gtk
 import time
@@ -10,9 +11,10 @@ import mimetypes
 import user
 import fnmatch
 
-from application.provider import Provider
-from application.operation import DeleteOperation, CopyOperation, MoveOperation
-from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog, CopyDialog, MoveDialog
+from provider import Provider
+from operation import DeleteOperation, CopyOperation, MoveOperation
+from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
+from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
 
 # try to import I/O library
 try:
@@ -21,7 +23,7 @@ except:
 	gio = None
 
 
-from plugin_base.item_list import ItemList
+from application.plugin_base.item_list import ItemList
 
 # constants
 COL_NAME   = 0
@@ -45,7 +47,18 @@ class FileList(ItemList):
 		# set item list model
 		self._item_list.set_model(self._store)
 
+		# selection image
+		image = gtk.Image()
+		image.set_from_file(os.path.join(
+									os.path.dirname(sys.argv[0]),
+									'images',
+									'selection_arrow.png'
+								))
+
+		self._pixbuf_selection = image.get_pixbuf()
+
 		# create columns
+		cell_selected = gtk.CellRendererPixbuf()
 		cell_icon = gtk.CellRendererPixbuf()
 		cell_name = gtk.CellRendererText()
 		cell_extension = gtk.CellRendererText()
@@ -53,6 +66,7 @@ class FileList(ItemList):
 		cell_mode = gtk.CellRendererText()
 		cell_date = gtk.CellRendererText()
 
+		cell_selected.set_property('width', 6)
 		cell_name.set_property('font', 'Monospace')
 		cell_extension.set_property('size-points', 8)
 		cell_size.set_property('size-points', 8)
@@ -70,6 +84,7 @@ class FileList(ItemList):
 		# add cell renderers to columns
 		col_file.pack_start(cell_icon, False)
 		col_file.pack_start(cell_name, True)
+		col_file.pack_start(cell_selected, False)
 		col_extension.pack_start(cell_extension, True)
 		col_size.pack_start(cell_size, True)
 		col_mode.pack_start(cell_mode, True)
@@ -81,6 +96,7 @@ class FileList(ItemList):
 		col_mode.add_attribute(cell_mode, 'foreground', COL_COLOR)
 		col_date.add_attribute(cell_date, 'foreground', COL_COLOR)
 
+		col_file.set_cell_data_func(cell_selected, self._column_selected)
 		col_file.set_cell_data_func(cell_icon, self._column_icon)
 		col_file.set_cell_data_func(cell_name, self._column_filename)
 		col_extension.set_cell_data_func(cell_extension, self._column_extension)
@@ -173,7 +189,7 @@ class FileList(ItemList):
 				self._parent_folder(widget, data)
 			else:
 				self.change_path(os.path.join(self.path, name))
-				
+
 		elif self.get_provider().is_local:
 			# each os uses different method for opening files
 			command = {
@@ -280,19 +296,19 @@ class FileList(ItemList):
 									None
 									)
 			operation.start()
-		
+
 	def _copy_files(self, widget=None, data=None):
 		"""Copy selected files"""
 		list = self._get_selection_list()
 		if list is None: return
 
 		dialog = CopyDialog(
-						self._parent, 
+						self._parent,
 						self.get_provider(),
 						self._get_other_provider().get_path()
 						)
 		result = dialog.get_response()
-		
+
 		if result[0] == gtk.RESPONSE_OK:
 			# if user confirmed copying
 			operation = CopyOperation(
@@ -302,19 +318,19 @@ class FileList(ItemList):
 									result[1]  # options from dialog
 									)
 			operation.start()
-			
+
 	def _move_files(self, widget=None, data=None):
 		"""Move selected files"""
 		list = self._get_selection_list()
 		if list is None: return
 
 		dialog = MoveDialog(
-						self._parent, 
+						self._parent,
 						self.get_provider(),
 						self._get_other_provider().get_path()
 						)
 		result = dialog.get_response()
-		
+
 		if result[0] == gtk.RESPONSE_OK:
 			# if user confirmed copying
 			operation = MoveOperation(
@@ -324,6 +340,16 @@ class FileList(ItemList):
 									result[1]  # options from dialog
 									)
 			operation.start()
+
+	def _rename_file(self, widget=None, data=None):
+		"""Rename selected item"""
+		selection = os.path.basename(self._get_selection())
+
+		dialog = RenameDialog(self._parent, selection)
+		result = dialog.get_response()
+
+		if result[0] == gtk.RESPONSE_OK:
+			self.get_provider().rename_path(selection, result[1])
 
 	def _send_to(self, widget, data=None):
 		"""Nautilus Send To integration"""
@@ -424,7 +450,7 @@ class FileList(ItemList):
 		# add all items to menu
 		for config_file in program_list:
 			menu_item =	self._parent.menu_manager.get_menu_item_from_config(
-																	config_file, 
+																	config_file,
 																	self._get_selection_list
 																	)
 
@@ -437,6 +463,7 @@ class FileList(ItemList):
 		self._open_with_item.set_sensitive(has_items and self.get_provider().is_local)
 		self._send_to_item.set_sensitive(self.get_provider().is_local and not is_parent)
 		self._delete_item.set_sensitive(not is_parent)
+		self._rename_item.set_sensitive(not is_parent)
 
 	def _get_popup_menu_position(self, menu, data=None):
 		"""Positions menu properly for given row"""
@@ -482,7 +509,7 @@ class FileList(ItemList):
 			if self._sort_column == data:
 				# reverse sorting if column is already sorted
 				self._sort_ascending = not self._sort_ascending
-				
+
 			else:
 				# set sorting column
 				self._sort_column = data
@@ -571,6 +598,15 @@ class FileList(ItemList):
 			next_iter = list.iter_next(iter)
 			if next_iter is not None:
 				self._item_list.set_cursor(list.get_path(next_iter))
+
+	def _column_selected(self, column, cell, list, iter):
+		"""Display green arrow in front of selected item"""
+		selected = list.get_value(iter, COL_COLOR)
+
+		if selected is None:
+			cell.set_property('pixbuf', None)
+		else:
+			cell.set_property('pixbuf', self._pixbuf_selection)
 
 	def _column_icon(self, column, cell, list, iter):
 		"""Data provider function for icon"""
@@ -982,14 +1018,14 @@ class FileList(ItemList):
 		"""Get list provider object"""
 		if self._provider is None:
 			self._provider = LocalProvider(self)
-			
+
 		return self._provider
 
 
 class LocalProvider(Provider):
 	"""Content provider for local files"""
 	is_local = True
-	
+
 	def _is_file(self, path):
 		"""Test if given path is file"""
 		return os.path.isfile(path)
@@ -1016,11 +1052,11 @@ class LocalProvider(Provider):
 	def _remove_file(self, path):
 		"""Remove file"""
 		os.remove(path)
-		
+
 	def create_file(self, path, mode=None):
 		"""Create empty file with specified mode set"""
 		pass
-	
+
 	def create_directory(self, path, mode=None):
 		"""Create directory with specified mode set"""
 		os.makedirs(path, mode if mode is not None else 0755)
@@ -1028,10 +1064,17 @@ class LocalProvider(Provider):
 	def get_file_handle(self, path, mode):
 		"""Open path in specified mode and return its handle"""
 		return open(path, mode)
-	
+
 	def get_stat(self, path):
 		"""Return file statistics"""
 		return os.stat(path)
+
+	def rename_path(self, source, destination):
+		"""Rename file/directory within parents path"""
+		os.rename(
+				os.path.join(self._parent.path, source),
+				os.path.join(self._parent.path, destination)
+				)
 
 	def list_dir(self, path):
 		"""Get directory list"""

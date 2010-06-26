@@ -47,6 +47,14 @@ class Terminal(PluginBase):
 		icon = self._parent.icon_manager.get_icon_from_type('terminal', gtk.ICON_SIZE_LARGE_TOOLBAR)
 		self._icon.set_from_pixbuf(icon)
 
+		# recycle button
+		self._recycle_button = gtk.Button(u'\u267B')
+		self._recycle_button.set_focus_on_click(False)
+		self._recycle_button.set_tooltip_text('Recycle terminal')
+
+		self._recycle_button.connect('clicked', self._recycle_terminal)
+		self._top_hbox.pack_end(self._recycle_button, False, False, 0)
+
 		if vte is not None:
 			self._terminal = vte.Terminal()
 			self._terminal.connect('window-title-changed', self._update_title)
@@ -62,11 +70,26 @@ class Terminal(PluginBase):
 		self.pack_start(container, True, True, 0)
 
 		self._connect_main_object(self._terminal)
+		
+	def _change_top_panel_color(self, state):
+		"""Modify coloring of top panel"""
+		PluginBase._change_top_panel_color(self, state)
+
+		style = self._parent.get_style().copy()
+		background_color = style.bg[state]
+		text_color = style.text[state]
+
+		self._recycle_button.modify_bg(gtk.STATE_NORMAL, background_color)
+		self._recycle_button.child.modify_fg(gtk.STATE_NORMAL, text_color)
 
 	def _update_title(self, widget, data=None):
 		"""Update title with terminal window text"""
 		self._change_title_text(self._terminal.get_window_title())
 		return True
+	
+	def _recycle_terminal(self, widget, data=None):
+		"""Recycle terminal"""
+		pass
 
 	def _create_terminal(self, widget, data=None):
 		"""Create terminal tab in parent notebook"""
@@ -77,3 +100,7 @@ class Terminal(PluginBase):
 		"""Creates new tab with same path"""
 		PluginBase._duplicate_tab(self, None, self.path)
 		return True
+	
+	def feed_terminal(self, text):
+		"""Feed terminal process with specified text"""
+		self._terminal.feed_child(text)

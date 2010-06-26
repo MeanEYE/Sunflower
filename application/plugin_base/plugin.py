@@ -21,7 +21,6 @@ class PluginBase(gtk.VBox):
 
 		# create main container
 		self._tab_label = gtk.Label('')
-		self._tab_index = None
 
 		# create gui
 		self._top_panel = gtk.EventBox()
@@ -104,7 +103,7 @@ class PluginBase(gtk.VBox):
 
 	def _close_tab(self, widget, data=None):
 		"""Ask parent to kill this tab"""
-		self._parent.close_tab(self._notebook, self._tab_index)
+		self._parent.close_tab(self._notebook, self)
 		return True
 
 	def _handle_key_press(self, widget, event):
@@ -135,3 +134,8 @@ class PluginBase(gtk.VBox):
 	def update_status(self, status):
 		"""Change status text"""
 		self._status_bar.set_text(status)
+		
+	def update_notebook(self, notebook=None):
+		"""Update notebook and/or page number"""
+		if notebook is not None:
+			self._notebook = notebook

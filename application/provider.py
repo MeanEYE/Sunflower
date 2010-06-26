@@ -65,6 +65,10 @@ class Provider:
 		else:  # handle files
 			self._remove_file(path)
 			
+	def rename_path(self, source, destination):
+		"""Rename file/directory within parents path"""
+		pass
+			
 	def list_dir(self, path):
 		"""Get directory list"""
 		pass

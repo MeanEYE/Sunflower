@@ -170,6 +170,10 @@ class Menus:
 			else:
 				# connect on click event
 				new_item.connect('activate', item['callback'], data)
+				
+		elif not item.has_key('callback') and not item.has_key('submenu'):  
+			# item doesn't have a callback, so we disable it
+			new_item.set_sensitive(False)
 
 		# if menu should be right aligned
 		if item.has_key('right') and item['right']:

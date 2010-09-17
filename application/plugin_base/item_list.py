@@ -193,7 +193,7 @@ class ItemList(PluginBase):
 			self._show_popup_menu(widget)
 			result = True
 
-		return False
+		return result
 
 	def _handle_key_press(self, widget, event):
 		"""Handles key events in item list"""

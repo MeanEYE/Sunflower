@@ -315,7 +315,7 @@ class CopyDialog(gtk.Dialog):
 		
 	def _create_buttons(self):
 		"""Create action buttons"""
-		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
+		button_cancel = gtk.Button('Cancel')
 		button_copy = gtk.Button("Copy")
 		button_copy.set_flags(gtk.CAN_DEFAULT)
 
@@ -370,7 +370,7 @@ class MoveDialog(CopyDialog):
 	
 	def _create_buttons(self):
 		"""Create action buttons"""
-		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
+		button_cancel = gtk.Button('Cancel')
 		button_move = gtk.Button("Move")
 		button_move.set_flags(gtk.CAN_DEFAULT)
 
@@ -379,6 +379,7 @@ class MoveDialog(CopyDialog):
 		
 		
 class RenameDialog(InputDialog):
+	"""Dialog used for renaming file/directory"""
 	
 	def __init__(self, application, selection):
 		InputDialog.__init__(self, application)
@@ -388,4 +389,27 @@ class RenameDialog(InputDialog):
 		self.set_text(selection)
 		
 		self._entry.select_region(0, len(os.path.splitext(selection)[0]))
+				
+		
+class OverwriteDialog(gtk.Dialog):
+	"""Dialog used for confirmation of file/directory overwrite"""
+	
+	def __init__(self, application):
+		gtk.Dialog.__init__(self, parent=application)
+
+		self._application = application
+
+		self.set_title('Overwrite confirmation')
+		self.set_default_size(400, 10)
+		self.set_resizable(True)
+		self.set_skip_taskbar_hint(True)
+		self.set_modal(False)
+		self.set_transient_for(application)
+
+		self.vbox.set_spacing(0)
+
+		vbox = gtk.VBox(False, 0)
+		vbox.set_border_width(5)
+		
+		# create interface
 		

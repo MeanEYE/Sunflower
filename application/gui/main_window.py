@@ -8,7 +8,7 @@ import webbrowser
 import locale
 import user
 
-from application.menus import Menus
+from menus import Menus
 from input_dialog import InputDialog
 
 from ConfigParser import RawConfigParser
@@ -70,6 +70,10 @@ class MainWindow(gtk.Window):
 				'label': 'File',
 				'submenu': (
 					{
+						'label': 'Test dialog',
+						'callback': self.test
+					},
+					{
 						'label': 'E_xit',
 						'type': 'image',
 						'stock': gtk.STOCK_QUIT,
@@ -114,9 +118,6 @@ class MainWindow(gtk.Window):
 			{
 				'label': 'Settings',
 				'submenu': (
-					{'label': 'Tool_bar'},
-					{'label': 'Boo_kmarks'},
-					{'type': 'separator'},
 					{
 						'label': 'Show _hidden files',
 						'type': 'checkbox',
@@ -189,14 +190,12 @@ class MainWindow(gtk.Window):
 		self.left_notebook.set_scrollable(True)
 		self.left_notebook.connect('focus-in-event', self._transfer_focus)
 		self.left_notebook.connect('page-added', self._tab_moved)
-		self.left_notebook.connect('page-reordered', self._tab_moved)
 		self.left_notebook.set_group_id(0)
 
 		self.right_notebook = gtk.Notebook()
 		self.right_notebook.set_scrollable(True)
 		self.right_notebook.connect('focus-in-event', self._transfer_focus)
 		self.right_notebook.connect('page-added', self._tab_moved)
-		self.right_notebook.connect('page-reordered', self._tab_moved)
 		self.right_notebook.set_group_id(0)
 
 		hbox.pack_start(self.left_notebook, True, True, 0)
@@ -766,3 +765,8 @@ class MainWindow(gtk.Window):
 			self.fullscreen()
 			self._in_fullscreen = True
 
+	def test(self, widget, data=None):
+		import input_dialog
+		
+		d = input_dialog.OverwriteDialog(self)
+		d.show()

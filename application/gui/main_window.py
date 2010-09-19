@@ -30,8 +30,8 @@ class MainWindow(gtk.Window):
 	# set locale for international number formatting
 	locale.setlocale(locale.LC_ALL)
 
-	# temporary options container
-	options = None
+	options = None  # options parser
+	tab_options = None  # tab options
 
 	def __init__(self):
 		# create main window and other widgets
@@ -661,12 +661,22 @@ class MainWindow(gtk.Window):
 		"""Save configuration to file"""
 		try:
 			# try to save configuration
-			config_file = os.path.join(user.home, ".sunflower")
-			config = open(config_file, "w")
+			if os.path.isdir(os.path.join(user.home, '.config')):
+				path = os.path.join(user.home, '.config', 'sunflower')
+			else:
+				path = os.path.join(user.home, '.sunflower')
 
-			self.options.write(config)
+			if not os.path.isdir(path):
+				os.makedirs(path)
+				
+			# TODO: Remove in next version
+			# remove old config file if present on the system
+			if os.path.isfile(os.path.join(user.home, '.sunflower')):
+				os.unlink(os.path.join(user.home, '.sunflower'))
+		
+			self.options.write(open(os.path.join(path, 'config'), 'w'))
 
-		except:
+		except IOError as error:
 			# notify user about failure
 			dialog = gtk.MessageDialog(
 									self,
@@ -674,8 +684,9 @@ class MainWindow(gtk.Window):
 									gtk.MESSAGE_ERROR,
 									gtk.BUTTONS_OK,
 									"There was an error saving configuration to "
-									"file located in your home directory."
+									"file located in your home directory. "
 									"Make sure you have enough permissions."
+									"\n\n{0}".format(error)
 									)
 			dialog.run()
 			dialog.destroy()
@@ -684,9 +695,21 @@ class MainWindow(gtk.Window):
 		"""Load configuration from file located in users home directory"""
 
 		self.options = RawConfigParser()
-		config_file = os.path.join(user.home, ".sunflower")
-
-		self.options.read(config_file)
+		self.tab_options = RawConfigParser()
+		
+		# backward compatibility, load old config file if it exists
+		if os.path.isfile(os.path.join(user.home, '.sunflower')): 
+			# TODO: Remove in next version
+			self.options.read(os.path.join(user.home, ".sunflower"))
+			
+		else:
+			# load configuration from right folder on systems that support it 
+			if os.path.isdir(os.path.join(user.home, '.config')):
+				path = os.path.join(user.home, '.config', 'sunflower')
+			else:
+				path = os.path.join(user.home, '.sunflower')
+		
+			self.options.read(os.path.join(path, "config"))
 
 		# set default values
 		if not self.options.has_section('main'):

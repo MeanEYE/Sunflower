@@ -26,6 +26,10 @@ class OptionsWindow(gtk.Window):
 					gtk.Label('Display')
 					)
 		tabs.append_page(
+					ViewEditOptions(),
+					gtk.Label('View & Edit')
+					)
+		tabs.append_page(
 					ToolbarOptions(),
 					gtk.Label('Toolbar')
 					)
@@ -36,10 +40,16 @@ class OptionsWindow(gtk.Window):
 
 		# create buttons
 		hbox = gtk.HBox(False, 2)
+		hbox.set_border_width(5)
 
 		btn_close = gtk.Button(stock=gtk.STOCK_CLOSE)
 		btn_close.connect('clicked', self._hide)
+
+		btn_save = gtk.Button(stock=gtk.STOCK_SAVE)
+		btn_save.set_sensitive(False)
+		
 		hbox.pack_end(btn_close, False, False, 0)
+		hbox.pack_end(btn_save, False, False, 0)
 
 		# pack gui
 		vbox.pack_start(tabs, True, True, 0)
@@ -61,6 +71,76 @@ class DisplayOptions(gtk.VBox):
 	def __init__(self):
 		gtk.VBox.__init__(self, False, False)
 		
+		# configure self
+		self.set_border_width(10)
+		self.set_spacing(5)
+		
+		# main window options
+		frame_main_window = gtk.Frame('Main window')
+		vbox_main_window = gtk.VBox(False, 0)
+		vbox_main_window.set_border_width(5)
+		
+		checkbox_hide_on_close = gtk.CheckButton('Hide main window on close')
+		checkbox_focus_new_tab = gtk.CheckButton('Focus new tab after opening')
+		checkbox_show_toolbar = gtk.CheckButton('Show toolbar')
+		checkbox_show_command_bar = gtk.CheckButton('Show command bar')
+		
+		# file list options
+		frame_file_list = gtk.Frame('File list')
+		vbox_file_list = gtk.VBox(False, 0)
+		vbox_file_list.set_border_width(5)
+		
+		checkbox_row_hinting = gtk.CheckButton('Row hinting')
+		checkbox_show_hidden = gtk.CheckButton('Show hidden files')
+		checkbox_show_mount_points = gtk.CheckButton('Show mount points on bookmarks menu')
+		
+		vbox_grid_lines = gtk.VBox(False, 0)
+		label_grid_lines = gtk.Label('Show grid lines:')
+		label_grid_lines.set_alignment(0, 0.1)
+		
+		list_grid_lines = gtk.ListStore(str, int)
+		list_grid_lines.append(('None', gtk.TREE_VIEW_GRID_LINES_NONE))
+		list_grid_lines.append(('Horizontal', gtk.TREE_VIEW_GRID_LINES_HORIZONTAL))
+		list_grid_lines.append(('Vertical', gtk.TREE_VIEW_GRID_LINES_VERTICAL))
+		list_grid_lines.append(('Both', gtk.TREE_VIEW_GRID_LINES_BOTH))
+		
+		cell_grid_lines = gtk.CellRendererText()
+		
+		combobox_grid_lines = gtk.ComboBox(list_grid_lines)
+		combobox_grid_lines.pack_start(cell_grid_lines)
+		combobox_grid_lines.add_attribute(cell_grid_lines, 'text', 0)
+				
+		# pack ui
+		vbox_grid_lines.pack_start(label_grid_lines, False, False, 0)
+		vbox_grid_lines.pack_start(combobox_grid_lines, False, False, 0)
+
+		vbox_main_window.pack_start(checkbox_hide_on_close, False, False, 0)
+		vbox_main_window.pack_start(checkbox_focus_new_tab, False, False, 0)
+		vbox_main_window.pack_start(checkbox_show_toolbar, False, False, 0)
+		vbox_main_window.pack_start(checkbox_show_command_bar, False, False, 0)
+		
+		vbox_file_list.pack_start(checkbox_row_hinting, False, False, 0)
+		vbox_file_list.pack_start(vbox_grid_lines, False, False, 5)
+		vbox_file_list.pack_start(checkbox_show_hidden, False, False, 0)
+		vbox_file_list.pack_start(checkbox_show_mount_points, False, False, 0)
+		
+		frame_main_window.add(vbox_main_window)
+		frame_file_list.add(vbox_file_list)
+		
+		self.pack_start(frame_main_window, False, False, 0)
+		self.pack_start(frame_file_list, False, False, 0)
+
+
+class ViewEditOptions(gtk.VBox):
+	"""View & Edit options extension class"""
+	
+	def __init__(self):
+		gtk.VBox.__init__(self, False, 0)
+		
+		# configure self
+		self.set_border_width(10)
+		self.set_spacing(5)
+
 
 class ToolbarOptions(gtk.VBox):
 	"""Toolbar options extension class"""
@@ -69,7 +149,7 @@ class ToolbarOptions(gtk.VBox):
 		gtk.VBox.__init__(self, False, 0)
 		
 		# configure self
-		self.set_border_width(5)
+		self.set_border_width(10)
 		self.set_spacing(5)
 		
 		# create list box
@@ -110,7 +190,7 @@ class BookmarkOptions(gtk.VBox):
 		gtk.VBox.__init__(self, False, 0)
 		
 		# configure self
-		self.set_border_width(5)
+		self.set_border_width(10)
 		self.set_spacing(5)
 		
 		# create list box
@@ -155,9 +235,13 @@ class BookmarkOptions(gtk.VBox):
 		button_add.connect('clicked', self._add_bookmark)
 		
 		button_delete = gtk.Button(stock=gtk.STOCK_DELETE)
+		button_delete.connect('clicked', self._delete_bookmark)
 		
 		button_move_up = gtk.Button('Move Up')
+		button_move_up.connect('clicked', self._move_bookmark, -1)
+		
 		button_move_down = gtk.Button('Move Down')
+		button_move_down.connect('clicked', self._move_bookmark, 1)
 		
 		# pack ui
 		button_box.pack_start(button_add, False, False, 0)
@@ -191,3 +275,15 @@ class BookmarkOptions(gtk.VBox):
 
 		if iter is not None:
 			list.remove(iter)
+			
+	def _move_bookmark(self, widget, direction):
+		"""Move selected bookmark up"""
+		selection = self._list.get_selection()
+		list, iter = selection.get_selected()
+
+		if iter is not None:
+			index = list.get_path(iter)[0]
+
+			if (direction == -1 and index > 0) \
+			or (direction == 1 and index < len(list) - 1):
+				list.swap(iter, list[index + direction].iter)		

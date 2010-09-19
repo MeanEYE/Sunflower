@@ -49,17 +49,17 @@ class AboutWindow(gtk.Window):
 
 		# bottom vbox
 		vbox2 = gtk.VBox(False, 5)
-		vbox2.set_border_width(5)
+		vbox2.set_border_width(10)
 
 		# middle content
 		notebook = gtk.Notebook()
 
 		tab1 = gtk.VBox(False, 10)
-		tab1.set_border_width(5)
+		tab1.set_border_width(10)
 
 		program_info = gtk.Label('This software is being developed under GNU general '
 			'public license. If you would like to obtain source code '
-			'please visit our web site. Any bug reports, sugestions '
+			'please visit our web site. Any bug reports, suggestions '
 			'or questions are more than welcome.')
 		program_info.set_line_wrap(True)
 		program_info.set_alignment(0,0)
@@ -82,22 +82,12 @@ class AboutWindow(gtk.Window):
 
 		# license tab
 		tab2 = gtk.ScrolledWindow()
-		tab2.set_border_width(2)
+		tab2.set_border_width(10)
 		tab2.set_shadow_type(gtk.SHADOW_IN)
 
 		license_list = {
-				'posix': os.path.join(
-								'/',
-								'usr',
-								'share',
-								'common-licenses',
-								'GPL'
-							),
-				'nt': os.path.join(
-								os.path.dirname(sys.argv[0]),
-								'application',
-								'GPL.txt',
-							)
+				'posix': os.path.join('/', 'usr', 'share', 'common-licenses', 'GPL'),
+				'nt': os.path.join(os.path.dirname(sys.argv[0]), 'application', 'GPL.txt')
 			}
 
 		license_text = None
@@ -124,10 +114,10 @@ class AboutWindow(gtk.Window):
 
 		# wakoopa statistics
 		tab3 = gtk.VBox(False, 5)
-		tab3.set_border_width(5);
+		tab3.set_border_width(10);
 
 		warning = gtk.Label('In order to avoid slow program starting and '
-			'unecessary bandwidth usage, automatic wakoopa statistics loading '
+			'unnecessary bandwidth usage, automatic <b>Wakoopa</b> statistics loading '
 			'has been disabled. Please click on <i>load</i> button to retrieve data. ')
 		warning.set_use_markup(True)
 		warning.set_line_wrap(True)
@@ -159,11 +149,15 @@ class AboutWindow(gtk.Window):
 		btn_web1.connect('clicked', parent.goto_web, 'rcf-group.com')
 		hbox2.pack_start(btn_web1, False, False, 0)
 
-		btn_web2 = gtk.Button('Studio Spectra')
-		btn_web2.connect('clicked', parent.goto_web, 'www.studiospectra.com')
+		btn_web2 = gtk.Button('Google Code')
+		btn_web2.connect('clicked', parent.goto_web, 'code.google.com/p/sunflower-fm')
 		hbox2.pack_start(btn_web2, False, False, 0)
 
-		# pack all the controlers
+		btn_web3 = gtk.Button('Studio Spectra')
+		btn_web3.connect('clicked', parent.goto_web, 'www.studiospectra.com')
+		hbox2.pack_start(btn_web3, False, False, 0)
+
+		# pack ui
 		vbox.pack_start(frame, False, False, padding=0)
 		vbox.pack_start(vbox2, True, True, padding=0)
 

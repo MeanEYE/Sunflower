@@ -108,6 +108,11 @@ class ItemList(PluginBase):
 		self._sort_column_widget = None
 		self._columns = None
 
+		# idle spinner
+		self._spinner = gtk.Spinner()
+		self._spinner.set_size_request(16, 16)
+		self._top_hbox.pack_start(self._spinner, False, False, 3)
+
 		# bookmarks button
 		self._bookmarks_button = gtk.Button(u'\u2318')
 		self._bookmarks_button.set_focus_on_click(False)
@@ -171,7 +176,18 @@ class ItemList(PluginBase):
 		self._change_top_panel_color(gtk.STATE_NORMAL)
 
 		self.show_all()
+		self._spinner.hide()
 		self._search_panel.hide()
+
+	def _show_spinner(self):
+		"""Show spinner animation"""
+		self._spinner.start()
+		self._spinner.show()
+
+	def _hide_spinner(self):
+		"""Hide spinner animation"""
+		self._spinner.hide()
+		self._spinner.stop()
 
 	def _handle_button_press(self, widget, event):
 		"""Handles mouse events"""

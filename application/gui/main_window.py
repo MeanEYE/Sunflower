@@ -30,8 +30,10 @@ class MainWindow(gtk.Window):
 	# set locale for international number formatting
 	locale.setlocale(locale.LC_ALL)
 
-	options = None  # options parser
-	tab_options = None  # tab options
+	options = None 
+	tab_options = None 
+	bookmark_options = None
+	toolbar_options = None
 
 	def __init__(self):
 		# create main window and other widgets
@@ -287,8 +289,8 @@ class MainWindow(gtk.Window):
 	def _destroy(self, widget, data=None):
 		"""Application desctructor"""
 
-		self.save_tabs(self.left_notebook, 'tabs_left')
-		self.save_tabs(self.right_notebook, 'tabs_right')
+		self.save_tabs(self.left_notebook, 'left_notebook')
+		self.save_tabs(self.right_notebook, 'right_notebook')
 
 		self._save_window_position()
 
@@ -512,11 +514,11 @@ class MainWindow(gtk.Window):
 		"""Main application loop"""
 
 		# load tabs in the left notebook
-		if not self.load_tabs(self.left_notebook, 'tabs_left'):
+		if not self.load_tabs(self.left_notebook, 'left_notebook'):
 			self.create_tab(self.left_notebook, FileList)
 
 		# load tabs in the right notebook
-		if not self.load_tabs(self.right_notebook, 'tabs_right'):
+		if not self.load_tabs(self.right_notebook, 'right_notebook'):
 			self.create_tab(self.right_notebook, FileList)
 
 		gtk.main()
@@ -618,8 +620,8 @@ class MainWindow(gtk.Window):
 	def save_tabs(self, notebook, section):
 		"""Save opened tabs"""
 
-		self.options.remove_section(section)
-		self.options.add_section(section)
+		self.tab_options.remove_section(section)
+		self.tab_options.add_section(section)
 
 		for index in range(0, notebook.get_n_pages()):
 			page = notebook.get_nth_page(index)
@@ -627,33 +629,46 @@ class MainWindow(gtk.Window):
 			tab_class = page.__class__.__name__
 			tab_path = page.path
 
-			self.options.set(
+			self.tab_options.set(
 							section,
 							'tab_{0}'.format(index),
 							'{0}:{1}'.format(tab_class, tab_path)
-							)
+						)
 
-		self.options.set('main', section, notebook.get_current_page())
+		if not self.tab_options.has_section('options'):
+			self.tab_options.add_section('options')
+			
+		self.tab_options.set(
+					'options', 
+					'{0}_selected'.format(section), 
+					notebook.get_current_page()
+				)
 
 	def load_tabs(self, notebook, section):
 		"""Load saved tabs"""
 		result = False
 
-		if self.options.has_section(section):
+		if self.tab_options.has_section(section):
 			# if section exists, load it
-			count = len(self.options.options(section))
-			for index in range(0, count):
-				data = self.options.get(section, 'tab_{0}'.format(index))
+			tab_list = self.tab_options.options(section)
+			tab_list.sort()
+			
+			for tab in tab_list:
+				data = self.tab_options.get(section, tab).split(':', 1)
 
-				tab_class = data.split(':', 1)[0]
-				tab_path = data.split(':', 1)[1]
+				tab_class = data[0]
+				tab_path = data[1]
 
 				self.create_tab(notebook, globals()[tab_class], tab_path)
 
 			result = True
 
 			# set active tab
-			self.set_active_tab(notebook, self.options.getint('main', section))
+			active_tab = self.tab_options.getint(
+										'options', 
+										'{0}_selected'.format(section)
+									)
+			self.set_active_tab(notebook, active_tab)
 
 		return result
 
@@ -675,6 +690,9 @@ class MainWindow(gtk.Window):
 				os.unlink(os.path.join(user.home, '.sunflower'))
 		
 			self.options.write(open(os.path.join(path, 'config'), 'w'))
+			self.tab_options.write(open(os.path.join(path, 'tabs'), 'w'))
+			self.bookmark_options.write(open(os.path.join(path, 'bookmarks'), 'w'))
+			self.toolbar_options.write(open(os.path.join(path, 'toolbar'), 'w'))
 
 		except IOError as error:
 			# notify user about failure
@@ -696,6 +714,8 @@ class MainWindow(gtk.Window):
 
 		self.options = RawConfigParser()
 		self.tab_options = RawConfigParser()
+		self.bookmark_options = RawConfigParser()
+		self.toolbar_options = RawConfigParser()
 		
 		# backward compatibility, load old config file if it exists
 		if os.path.isfile(os.path.join(user.home, '.sunflower')): 
@@ -709,7 +729,10 @@ class MainWindow(gtk.Window):
 			else:
 				path = os.path.join(user.home, '.sunflower')
 		
-			self.options.read(os.path.join(path, "config"))
+			self.options.read(os.path.join(path, 'config'))
+			self.tab_options.read(os.path.join(path, 'tabs'))
+			self.bookmark_options.read(os.path.join(path, 'bookmarks'))
+			self.toolbar_options.read(os.path.join(path, 'toolbar'))
 
 		# set default values
 		if not self.options.has_section('main'):

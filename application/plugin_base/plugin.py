@@ -14,7 +14,7 @@ class PluginBase(gtk.VBox):
 	def __init__(self, parent, notebook):
 		gtk.VBox.__init__(self, False, 0)
 
-		self._parent = parent  # parent is stored localy for later use
+		self._parent = parent  # parent is stored locally for later use
 		self._notebook = notebook
 
 		self._key_handlers = None
@@ -31,7 +31,7 @@ class PluginBase(gtk.VBox):
 		self._top_panel.add(self._top_hbox)
 
 		# top folder icon as default
-		self._icon = gtk.Image();
+		self._icon = gtk.Image()
 		self._top_hbox.pack_start(self._icon, False, False, 0)
 
 		# status bar
@@ -134,7 +134,7 @@ class PluginBase(gtk.VBox):
 	def update_status(self, status):
 		"""Change status text"""
 		self._status_bar.set_text(status)
-		
+
 	def update_notebook(self, notebook=None):
 		"""Update notebook and/or page number"""
 		if notebook is not None:

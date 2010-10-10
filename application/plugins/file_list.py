@@ -17,6 +17,8 @@ from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
 
 # try to import I/O library
+import gobject
+
 try:
 	import gio
 except:
@@ -837,6 +839,7 @@ class FileList(ItemList):
 
 	def change_path(self, path=None, selected=None):
 		"""Change file list path"""
+		gobject.idle_add(self._show_spinner)
 
 		# cancel current directory monitor
 		if gio is not None and self._fs_monitor is not None:
@@ -913,6 +916,8 @@ class FileList(ItemList):
 		if gio is not None and self.get_provider().is_local:
 			self._fs_monitor = gio.File(self.path).monitor_directory()
 			self._fs_monitor.connect('changed', self._directory_changed)
+
+		gobject.idle_add(self._hide_spinner)
 
 	def select_all(self, pattern=None):
 		"""Select all items matching pattern """

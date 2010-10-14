@@ -57,14 +57,12 @@ class PluginBase(gtk.VBox):
 
 	def _connect_main_object(self, object):
 		"""Create focus chain and connect basic events"""
-
 		object.connect('focus-in-event', self._control_got_focus)
 		object.connect('focus-out-event', self._control_lost_focus)
 		object.connect('key-press-event', self._handle_key_press)
 
 		self.set_focus_chain((object,))
 		self._main_object = object
-
 
 	def _control_got_focus(self, widget, data=None):
 		"""List focus in event"""

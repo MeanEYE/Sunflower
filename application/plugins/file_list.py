@@ -458,7 +458,7 @@ class FileList(ItemList):
 
 		# add all items to menu
 		for config_file in program_list:
-			menu_item =	self._parent.menu_manager.get_menu_item_from_config(
+			menu_item =	self._parent.menu_manager.get_item_from_config(
 																	config_file,
 																	self._get_selection_list
 																	)

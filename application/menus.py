@@ -10,6 +10,7 @@ class Menus:
 
 	"""
 	_cache = {}
+	_named_items = {}
 
 	def __init__(self, application):
 		self._application = application
@@ -73,7 +74,16 @@ class Menus:
 		if data is not None:
 			self._application.associations_manager.open_file_with_config(data['callback'], data['config'])
 
-	def get_menu_item_from_config(self, config_file, callback):
+	def get_item_by_name(self, name):
+		"""Get menu by specified name"""
+		if name in self._named_items:
+			result = self._named_items[name]
+		else:
+			result = None
+			
+		return result
+
+	def get_item_from_config(self, config_file, callback):
 		"""Retrieves menu item for selected config file
 
 		This method is used to populate "open with" menu. All
@@ -178,6 +188,10 @@ class Menus:
 		# if menu should be right aligned
 		if item.has_key('right') and item['right']:
 			new_item.set_right_justified(item['right'])
+			
+		# add item if name is specified
+		if item.has_key('name'):
+			self._named_items[item['name']] = new_item
 
 		new_item.show_all()
 		return new_item

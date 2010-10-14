@@ -124,17 +124,22 @@ class MainWindow(gtk.Window):
 						'label': 'Show _hidden files',
 						'type': 'checkbox',
 						'active': self.options.getboolean('main', 'show_hidden'),
-						'callback': self._toggle_show_hidden_files
+						'callback': self._toggle_show_hidden_files,
+						'name': 'show_hidden_files',
 					},
 					{
 						'label': 'Show _toolbar',
 						'type': 'checkbox',
+						'active': self.options.getboolean('main', 'show_toolbar'),
+						'callback': self._toggle_show_toolbar,
+						'name': 'show_toolbar',
 					},
 					{
 						'label': 'Show _command bar',
 						'type': 'checkbox',
 						'active': self.options.getboolean('main', 'show_command_bar'),
-						'callback': self._toggle_show_command_bar
+						'callback': self._toggle_show_command_bar,
+						'name': 'show_command_bar',
 					},
 					{'type': 'separator'},
 					{
@@ -184,6 +189,10 @@ class MainWindow(gtk.Window):
 
 		# create toolbar
 		self.toolbar = gtk.Toolbar()
+		self.toolbar.set_property(
+						'no-show-all',
+						not self.options.getboolean('main', 'show_toolbar')
+					)
 
 		# create notebooks
 		hbox = gtk.HBox(True, 3)
@@ -264,7 +273,7 @@ class MainWindow(gtk.Window):
 		self.command_bar.set_property(
 						'no-show-all',
 						not self.options.getboolean('main', 'show_command_bar')
-						)
+					)
 
 		# pack gui
 		vbox = gtk.VBox(False, 0)
@@ -337,12 +346,16 @@ class MainWindow(gtk.Window):
 	def _toggle_show_command_bar(self, widget, data=None):
 		"""Show/hide command bar"""
 		show_command_bar = widget.get_active()
+		
 		self.options.set('main', 'show_command_bar', ('False', 'True')[show_command_bar])
+		self.command_bar.set_visible(show_command_bar)
+			
+	def _toggle_show_toolbar(self, widget, data=None):
+		"""Show/hide toolbar"""
+		show_toolbar = widget.get_active()
 
-		if show_command_bar:
-			self.command_bar.show()
-		else:
-			self.command_bar.hide()
+		self.options.set('main', 'show_toolbar', ('False', 'True')[show_toolbar])
+		self.toolbar.set_visible(show_toolbar)
 
 	def _get_active_object(self):
 		"""Return active notebook object"""
@@ -741,22 +754,22 @@ class MainWindow(gtk.Window):
 		# define default options
 		default_options = {
 				'default_editor': 'gedit "{0}"',
-				'wait_for_editor': False,
+				'wait_for_editor': 'False',
 				'status_text': 'Directories: %(dir_count_sel)i/%(dir_count)i, '
 							   'Files: %(file_count_sel)i/%(file_count)i',
-				'show_hidden': False,
-				'show_mounts': True,
-				'show_toolbar': False,
-				'show_command_bar': False,
+				'show_hidden': 'False',
+				'show_mounts': 'True',
+				'show_toolbar': 'False',
+				'show_command_bar': 'False',
 				'search_modifier': '010',
 				'time_format': '%H:%M %d-%m-%y',
-				'focus_new_tab': True,
-				'row_hinting': False,
+				'focus_new_tab': 'True',
+				'row_hinting': 'False',
 				'grid_lines': 0,
 				'selection_color': 'red',
 				'history_file': '.bash_history',
 				'window': '950x450',
-				'hide_on_close': True,
+				'hide_on_close': 'True',
 			}
 
 		# set default options

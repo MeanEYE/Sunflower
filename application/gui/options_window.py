@@ -226,6 +226,7 @@ class DisplayOptions(gtk.VBox):
 		# for config parser to get boolean, you need to set string :/. makes sense?
 		bool = ('False', 'True')
 		
+		# save options
 		options.set('main', 'hide_on_close', bool[self._checkbox_hide_on_close.get_active()])
 		options.set('main', 'focus_new_tab', bool[self._checkbox_focus_new_tab.get_active()])
 		options.set('main', 'show_toolbar', bool[self._checkbox_show_toolbar.get_active()])
@@ -236,6 +237,16 @@ class DisplayOptions(gtk.VBox):
 		options.set('main', 'show_mounts', bool[self._checkbox_show_mount_points.get_active()])
 		options.set('main', 'time_format', self._entry_time_format.get_text())
 		options.set('main', 'status_text', self._entry_status_text.get_text())
+		
+		# change ui states
+		show_hidden = self._application.menu_manager.get_item_by_name('show_hidden_files')
+		show_hidden.set_active(self._checkbox_show_hidden.get_active())
+			
+		show_command_bar = self._application.menu_manager.get_item_by_name('show_command_bar')
+		show_command_bar.set_active(self._checkbox_show_command_bar.get_active())
+		
+		show_toolbar = self._application.menu_manager.get_item_by_name('show_toolbar')
+		show_toolbar.set_active(self._checkbox_show_toolbar.get_active())
 
 
 class ViewEditOptions(gtk.VBox):

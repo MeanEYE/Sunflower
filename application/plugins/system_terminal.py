@@ -12,6 +12,11 @@ class SystemTerminal(Terminal):
 
 		self.path = path
 		shell_command = os.environ['SHELL']
+		
+		# we need TERM environment variable set
+		if 'TERM' not in os.environ:
+			os.environ['TERM'] = 'xterm'
+			os.environ['COLORTERM'] = 'gnome-terminal'
 
 		if self._terminal is not None:
 			self._terminal.connect('child-exited', self._close_tab)

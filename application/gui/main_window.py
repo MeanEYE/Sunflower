@@ -318,7 +318,7 @@ class MainWindow(gtk.Window):
 	def _toggle_show_hidden_files(self, widget, data=None):
 		"""Transfer option event to all the lists"""
 		show_hidden = widget.get_active()
-		self.options.set('main', 'show_hidden', ('off', 'on')[show_hidden])
+		self.options.set('main', 'show_hidden', ('False', 'True')[show_hidden])
 
 		# update left notebook
 		for index in range(0, self.left_notebook.get_n_pages()):
@@ -337,7 +337,7 @@ class MainWindow(gtk.Window):
 	def _toggle_show_command_bar(self, widget, data=None):
 		"""Show/hide command bar"""
 		show_command_bar = widget.get_active()
-		self.options.set('main', 'show_command_bar', ('off', 'on')[show_command_bar])
+		self.options.set('main', 'show_command_bar', ('False', 'True')[show_command_bar])
 
 		if show_command_bar:
 			self.command_bar.show()
@@ -740,21 +740,23 @@ class MainWindow(gtk.Window):
 
 		# define default options
 		default_options = {
-				'default_editor': 'gedit "{0}" &',
+				'default_editor': 'gedit "{0}"',
+				'wait_for_editor': False,
 				'status_text': 'Directories: %(dir_count_sel)i/%(dir_count)i, '
 							   'Files: %(file_count_sel)i/%(file_count)i',
-				'show_hidden': 'off',
-				'show_command_bar': 'off',
+				'show_hidden': False,
+				'show_mounts': True,
+				'show_toolbar': False,
+				'show_command_bar': False,
 				'search_modifier': '010',
 				'time_format': '%H:%M %d-%m-%y',
-				'focus_new_tab': 'on',
-				'row_hinting': 'on',
+				'focus_new_tab': True,
+				'row_hinting': False,
+				'grid_lines': 0,
 				'selection_color': 'red',
-				'tabs_left': 0,
-				'tabs_right': 0,
 				'history_file': '.bash_history',
 				'window': '950x450',
-				'hide_on_close': 'on',
+				'hide_on_close': True,
 			}
 
 		# set default options

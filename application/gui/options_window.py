@@ -8,7 +8,7 @@ class OptionsWindow(gtk.Window):
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 		self.connect('delete_event', self._hide)
 		self.set_title('Options')
-		self.set_size_request(600, 450)
+		self.set_size_request(600, 500)
 		self.set_modal(True)
 		self.set_skip_taskbar_hint(True)
 		self.set_deletable(False)
@@ -51,7 +51,6 @@ class OptionsWindow(gtk.Window):
 
 		self._btn_save = gtk.Button(stock=gtk.STOCK_SAVE)
 		self._btn_save.connect('clicked', self._save_options)
-		self._btn_save.set_sensitive(False)
 
 		hbox.pack_end(btn_close, False, False, 0)
 		hbox.pack_end(self._btn_save, False, False, 0)
@@ -63,11 +62,24 @@ class OptionsWindow(gtk.Window):
 		self.add(vbox)
 
 	def _show(self, widget, data=None):
+		"""Show dialog and reload options"""
+		self._load_options()
 		self.show_all()
 
 	def _hide(self, widget, data=None):
+		"""Hide dialog"""
 		self.hide()
 		return True  # avoid destroying components
+	
+	def _load_options(self):
+		"""Change interface to present current state of configuration"""
+		for i in range(self._tabs.get_n_pages()):
+			page = self._tabs.get_nth_page(i)
+			
+			if hasattr(page, '_load_options'):
+				page._load_options()
+				
+		self._btn_save.set_sensitive(False)
 	
 	def _save_options(self, widget, data=None):
 		"""Save options"""
@@ -79,7 +91,7 @@ class OptionsWindow(gtk.Window):
 		
 		self._btn_save.set_sensitive(False)
 		
-	def enable_save(self):
+	def enable_save(self, widget=None, data=None):
 		"""Enable save button"""
 		self._btn_save.set_sensitive(True)
 
@@ -102,23 +114,32 @@ class DisplayOptions(gtk.VBox):
 		vbox_main_window = gtk.VBox(False, 0)
 		vbox_main_window.set_border_width(5)
 
-		checkbox_hide_on_close = gtk.CheckButton('Hide main window on close')
-		checkbox_focus_new_tab = gtk.CheckButton('Focus new tab after opening')
-		checkbox_show_toolbar = gtk.CheckButton('Show toolbar')
-		checkbox_show_command_bar = gtk.CheckButton('Show command bar')
+		self._checkbox_hide_on_close = gtk.CheckButton('Hide main window on close')
+		self._checkbox_focus_new_tab = gtk.CheckButton('Focus new tab after opening')
+		self._checkbox_show_toolbar = gtk.CheckButton('Show toolbar')
+		self._checkbox_show_command_bar = gtk.CheckButton('Show command bar')
+		
+		self._checkbox_hide_on_close.connect('toggled', self._parent.enable_save)
+		self._checkbox_focus_new_tab.connect('toggled', self._parent.enable_save)
+		self._checkbox_show_toolbar.connect('toggled', self._parent.enable_save)
+		self._checkbox_show_command_bar.connect('toggled', self._parent.enable_save)
 
 		# file list options
 		frame_file_list = gtk.Frame('File list')
 		vbox_file_list = gtk.VBox(False, 0)
 		vbox_file_list.set_border_width(5)
 
-		checkbox_row_hinting = gtk.CheckButton('Row hinting')
-		checkbox_show_hidden = gtk.CheckButton('Show hidden files')
-		checkbox_show_mount_points = gtk.CheckButton('Show mount points on bookmarks menu')
+		self._checkbox_row_hinting = gtk.CheckButton('Row hinting')
+		self._checkbox_show_hidden = gtk.CheckButton('Show hidden files')
+		self._checkbox_show_mount_points = gtk.CheckButton('Show mount points on bookmarks menu')
+		
+		self._checkbox_row_hinting.connect('toggled', self._parent.enable_save)
+		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
+		self._checkbox_show_mount_points.connect('toggled', self._parent.enable_save)
 
 		vbox_grid_lines = gtk.VBox(False, 0)
 		label_grid_lines = gtk.Label('Show grid lines:')
-		label_grid_lines.set_alignment(0, 0.1)
+		label_grid_lines.set_alignment(0, 0.5)
 
 		list_grid_lines = gtk.ListStore(str, int)
 		list_grid_lines.append(('None', gtk.TREE_VIEW_GRID_LINES_NONE))
@@ -128,29 +149,93 @@ class DisplayOptions(gtk.VBox):
 
 		cell_grid_lines = gtk.CellRendererText()
 
-		combobox_grid_lines = gtk.ComboBox(list_grid_lines)
-		combobox_grid_lines.pack_start(cell_grid_lines)
-		combobox_grid_lines.add_attribute(cell_grid_lines, 'text', 0)
+		self._combobox_grid_lines = gtk.ComboBox(list_grid_lines)
+		self._combobox_grid_lines.connect('changed', self._parent.enable_save)
+		self._combobox_grid_lines.pack_start(cell_grid_lines)
+		self._combobox_grid_lines.add_attribute(cell_grid_lines, 'text', 0)
+
+		vbox_time_format = gtk.VBox(False, 0)
+		label_time_format = gtk.Label('Date format:')
+		label_time_format.set_alignment(0, 0.5)
+		self._entry_time_format = gtk.Entry()
+		self._entry_time_format.set_tooltip_markup(
+								'<b>Time is formed using the format located at:</b>\n'
+								'http://docs.python.org/library/time.html#time.strftime'
+								)
+		self._entry_time_format.connect('activate', self._parent.enable_save)
+		
+		vbox_status_text = gtk.VBox(False, 0)
+		label_status_text = gtk.Label('Status text:')
+		label_status_text.set_alignment(0, 0.5)
+		self._entry_status_text = gtk.Entry()
+		self._entry_status_text.set_tooltip_markup(
+								'<b>Replacement strings:</b>\n'
+								'<i>%(dir_count)i</i>\t\tTotal directory count\n'
+								'<i>%(dir_count_sel)i</i>\tSelected directories count\n'
+								'<i>%(file_count)i</i>\t\tTotal file count\n'
+								'<i>%(file_count_sel)i</i>\tSelected file count'
+								)
+		self._entry_status_text.connect('activate', self._parent.enable_save)
 
 		# pack ui
 		vbox_grid_lines.pack_start(label_grid_lines, False, False, 0)
-		vbox_grid_lines.pack_start(combobox_grid_lines, False, False, 0)
+		vbox_grid_lines.pack_start(self._combobox_grid_lines, False, False, 0)
+		
+		vbox_time_format.pack_start(label_time_format, False, False, 0)
+		vbox_time_format.pack_start(self._entry_time_format, False, False, 0)
+		
+		vbox_status_text.pack_start(label_status_text, False, False, 0)
+		vbox_status_text.pack_start(self._entry_status_text, False, False, 0)
 
-		vbox_main_window.pack_start(checkbox_hide_on_close, False, False, 0)
-		vbox_main_window.pack_start(checkbox_focus_new_tab, False, False, 0)
-		vbox_main_window.pack_start(checkbox_show_toolbar, False, False, 0)
-		vbox_main_window.pack_start(checkbox_show_command_bar, False, False, 0)
+		vbox_main_window.pack_start(self._checkbox_hide_on_close, False, False, 0)
+		vbox_main_window.pack_start(self._checkbox_focus_new_tab, False, False, 0)
+		vbox_main_window.pack_start(self._checkbox_show_toolbar, False, False, 0)
+		vbox_main_window.pack_start(self._checkbox_show_command_bar, False, False, 0)
 
-		vbox_file_list.pack_start(checkbox_row_hinting, False, False, 0)
+		vbox_file_list.pack_start(self._checkbox_row_hinting, False, False, 0)
 		vbox_file_list.pack_start(vbox_grid_lines, False, False, 5)
-		vbox_file_list.pack_start(checkbox_show_hidden, False, False, 0)
-		vbox_file_list.pack_start(checkbox_show_mount_points, False, False, 0)
+		vbox_file_list.pack_start(self._checkbox_show_hidden, False, False, 0)
+		vbox_file_list.pack_start(self._checkbox_show_mount_points, False, False, 0)
+		vbox_file_list.pack_start(vbox_time_format, False, False, 5)
+		vbox_file_list.pack_start(vbox_status_text, False, False, 5)
 
 		frame_main_window.add(vbox_main_window)
 		frame_file_list.add(vbox_file_list)
 
 		self.pack_start(frame_main_window, False, False, 0)
 		self.pack_start(frame_file_list, False, False, 0)
+		
+	def _load_options(self):
+		"""Load display options"""
+		options = self._application.options
+		
+		self._checkbox_hide_on_close.set_active(options.getboolean('main', 'hide_on_close'))
+		self._checkbox_focus_new_tab.set_active(options.getboolean('main', 'focus_new_tab'))
+		self._checkbox_show_toolbar.set_active(options.getboolean('main', 'show_toolbar'))
+		self._checkbox_show_command_bar.set_active(options.getboolean('main', 'show_command_bar'))
+		self._checkbox_row_hinting.set_active(options.getboolean('main', 'row_hinting'))
+		self._combobox_grid_lines.set_active(options.getint('main', 'grid_lines'))
+		self._checkbox_show_hidden.set_active(options.getboolean('main', 'show_hidden'))
+		self._checkbox_show_mount_points.set_active(options.getboolean('main', 'show_mounts'))
+		self._entry_time_format.set_text(options.get('main', 'time_format'))
+		self._entry_status_text.set_text(options.get('main', 'status_text'))
+	
+	def _save_options(self):
+		"""Save display options"""
+		options = self._application.options
+		# for config parser to get boolean, you need to set string :/. makes sense?
+		bool = ('False', 'True')
+		
+		options.set('main', 'hide_on_close', bool[self._checkbox_hide_on_close.get_active()])
+		options.set('main', 'focus_new_tab', bool[self._checkbox_focus_new_tab.get_active()])
+		options.set('main', 'show_toolbar', bool[self._checkbox_show_toolbar.get_active()])
+		options.set('main', 'show_command_bar', bool[self._checkbox_show_command_bar.get_active()])
+		options.set('main', 'row_hinting', bool[self._checkbox_row_hinting.get_active()])
+		options.set('main', 'grid_lines', self._combobox_grid_lines.get_active())
+		options.set('main', 'show_hidden', bool[self._checkbox_show_hidden.get_active()])
+		options.set('main', 'show_mounts', bool[self._checkbox_show_mount_points.get_active()])
+		options.set('main', 'time_format', self._entry_time_format.get_text())
+		options.set('main', 'status_text', self._entry_status_text.get_text())
 
 
 class ViewEditOptions(gtk.VBox):
@@ -187,9 +272,11 @@ class ViewEditOptions(gtk.VBox):
 		label_editor = gtk.Label('Command line:')
 		label_editor.set_alignment(0, 0.5)
 		label_editor.set_use_markup(True)
-		entry_editor = gtk.Entry()
+		self._entry_editor = gtk.Entry()
+		self._entry_editor.connect('activate', self._parent.enable_save)
 		
-		checkbox_wait_for_editor = gtk.CheckButton('Wait for editor process to end')
+		self._checkbox_wait_for_editor = gtk.CheckButton('Wait for editor process to end')
+		self._checkbox_wait_for_editor.connect('toggled', self._parent.enable_save)
 		
 		# internal options
 		radio_internal = gtk.RadioButton(
@@ -203,8 +290,8 @@ class ViewEditOptions(gtk.VBox):
 
 		# pack ui
 		vbox_external.pack_start(label_editor, False, False, 0)
-		vbox_external.pack_start(entry_editor, False, False, 0)
-		vbox_external.pack_start(checkbox_wait_for_editor, False, False, 0)
+		vbox_external.pack_start(self._entry_editor, False, False, 0)
+		vbox_external.pack_start(self._checkbox_wait_for_editor, False, False, 0)
 		
 		vbox_edit.pack_start(radio_external, False, False, 0)
 		vbox_edit.pack_start(vbox_external, False, False, 0)
@@ -216,6 +303,21 @@ class ViewEditOptions(gtk.VBox):
 		
 		self.pack_start(frame_view, False, False, 0)
 		self.pack_start(frame_edit, False, False, 0)
+		
+	def _load_options(self):
+		"""Load options"""
+		options = self._application.options
+		
+		self._entry_editor.set_text(options.get('main', 'default_editor'))
+		self._checkbox_wait_for_editor.set_active(options.getboolean('main', 'wait_for_editor'))
+		
+	def _save_options(self):
+		"""Save options"""
+		options = self._application.options
+		bool = ('False', 'True')
+		
+		options.set('main', 'default_editor', self._entry_editor.get_text())
+		options.set('main', 'wait_for_editor', bool[self._checkbox_wait_for_editor.get_active()])
 
 
 class ToolbarOptions(gtk.VBox):
@@ -336,9 +438,6 @@ class BookmarkOptions(gtk.VBox):
 
 		self.pack_start(container, True, True, 0)
 		self.pack_start(button_box, False, False, 0)
-		
-		# load options
-		self._load_options()
 
 	def _add_bookmark(self, widget, data=None):
 		"""Add new bookmark to the store"""
@@ -386,6 +485,7 @@ class BookmarkOptions(gtk.VBox):
 		if bookmark_options.has_section('bookmarks'):
 			item_list = bookmark_options.options('bookmarks')
 			item_list.sort()
+			self._bookmarks.clear()
 			
 			for item in item_list:
 				bookmark = bookmark_options.get('bookmarks', item).split(';', 1)
@@ -393,15 +493,17 @@ class BookmarkOptions(gtk.VBox):
 		
 	def _save_options(self):
 		"""Save bookmarks to file"""
-		if not self._application.bookmark_options.has_section('bookmarks'):
-			self._application.bookmark_options.add_section('bookmarks')
+		bookmark_options = self._application.bookmark_options
+		
+		bookmark_options.remove_section('bookmarks')
+		bookmark_options.add_section('bookmarks')
 			
 		for i, bookmark in enumerate(self._bookmarks, 1):
-			self._application.bookmark_options.set(
-												'bookmarks',
-												'b_{0}'.format(i),
-												'{0};{1}'.format(bookmark[0], bookmark[1])
-											)
+			bookmark_options.set(
+								'bookmarks',
+								'b_{0}'.format(i),
+								'{0};{1}'.format(bookmark[0], bookmark[1])
+								)
 
 				
 class ToolOptions(gtk.VBox):

@@ -225,6 +225,10 @@ class ItemList(PluginBase):
 
 			# retrieve human readable key representation
 			key_name = gtk.gdk.keyval_name(event.keyval)
+			
+			# handle searching for hidden files
+			if key_name == 'period':
+				key_name = '.'
 
 			# give other handlers chance to process event
 			if state == self._parent.options.get('main', 'search_modifier'):

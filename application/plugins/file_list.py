@@ -10,6 +10,7 @@ import stat
 import mimetypes
 import user
 import fnmatch
+import gobject
 
 from provider import Provider
 from operation import DeleteOperation, CopyOperation, MoveOperation
@@ -17,8 +18,6 @@ from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
 
 # try to import I/O library
-import gobject
-
 try:
 	import gio
 except:
@@ -159,6 +158,14 @@ class FileList(ItemList):
 
 		row_hinting = self._parent.options.getboolean('main', 'row_hinting')
 		self._item_list.set_rules_hint(row_hinting)
+		
+		grid_lines = (
+					gtk.TREE_VIEW_GRID_LINES_NONE,
+					gtk.TREE_VIEW_GRID_LINES_HORIZONTAL,
+					gtk.TREE_VIEW_GRID_LINES_VERTICAL,
+					gtk.TREE_VIEW_GRID_LINES_BOTH,			
+				)[self._parent.options.getint('main', 'grid_lines')]
+		self._item_list.set_grid_lines(grid_lines)
 
 		# change list icon
 		icon = self._parent.icon_manager.get_icon_from_type('folder', gtk.ICON_SIZE_LARGE_TOOLBAR)
@@ -684,7 +691,12 @@ class FileList(ItemList):
 		if not is_dir and self.get_provider().is_local:
 			filename = list.get_value(iter, COL_NAME)
 			default_editor = self._parent.options.get('main', 'default_editor')
+
 			command = default_editor.format(os.path.join(self.path, filename))
+			
+			# if we shouldn't wait for editor, add & at the end of command
+			if not self._parent.options.getboolean('main', 'wait_for_editor'):
+				command = '{0} &'.format(command)
 
 			os.system(command)
 

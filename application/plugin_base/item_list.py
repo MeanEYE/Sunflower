@@ -159,6 +159,7 @@ class ItemList(PluginBase):
 
 		self._search_entry = gtk.Entry()
 		self._search_entry.connect('key-press-event', self._handle_search_key_press)
+		self._search_entry.connect('focus-out-event', self._stop_search)
 		self._item_list.set_search_entry(self._search_entry)
 
 		self._search_panel.pack_start(label, False, False, 3)
@@ -266,10 +267,11 @@ class ItemList(PluginBase):
 		self._search_entry.set_text(key)
 		self._search_entry.set_position(len(key))
 
-	def _stop_search(self):
+	def _stop_search(self, widget=None, data=None):
 		"""Hide quick search panel and return focus to item list"""
 		self._search_panel.hide()
 		self._item_list.grab_focus()
+		return False
 
 	def _execute_selected_item(self, widget, data=None):
 		"""Abstract method for handling execution of certain item"""

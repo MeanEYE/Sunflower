@@ -38,6 +38,7 @@ class InputDialog(gtk.Dialog):
 
 		button_ok = gtk.Button(stock=gtk.STOCK_OK)
 		button_ok.connect('clicked', self._confirm_entry)
+		button_ok.set_can_default(True)
 
 		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
 
@@ -47,6 +48,7 @@ class InputDialog(gtk.Dialog):
 
 		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
 		self.action_area.pack_end(button_ok, False, False, 0)
+		self.set_default_response(gtk.RESPONSE_OK)
 
 		self.vbox.pack_start(vbox, True, True, 0)
 		self.show_all()
@@ -399,7 +401,6 @@ class OverwriteDialog(gtk.Dialog):
 
 		self._application = application
 
-		self.set_title('Overwrite confirmation')
 		self.set_default_size(400, 10)
 		self.set_resizable(True)
 		self.set_skip_taskbar_hint(True)
@@ -408,8 +409,146 @@ class OverwriteDialog(gtk.Dialog):
 
 		self.vbox.set_spacing(0)
 
-		vbox = gtk.VBox(False, 0)
-		vbox.set_border_width(5)
+		hbox = gtk.HBox(False, 10)
+		hbox.set_border_width(10)
+		
+		vbox = gtk.VBox(False, 10)
+		vbox_icon = gtk.VBox(False, 0)
 		
 		# create interface
+		icon = gtk.Image()
+		icon.set_from_stock(gtk.STOCK_DIALOG_WARNING, gtk.ICON_SIZE_DIALOG)
 		
+		self._label_title = gtk.Label()
+		self._label_title.set_use_markup(True)
+		self._label_title.set_alignment(0, 0.5)
+		self._label_title.set_line_wrap(True)
+		
+		self._label_message = gtk.Label()
+		self._label_message.set_alignment(0, 0.5)
+		self._label_message.set_line_wrap(True)
+		
+		# inner hbox for original file
+		hbox_original = gtk.HBox(False, 0)
+		
+		self._icon_original = gtk.Image()
+		self._label_original = gtk.Label()
+		self._label_original.set_use_markup(True)
+		self._label_original.set_alignment(0, 0.5)
+		
+		# inner hbox for source file
+		hbox_source = gtk.HBox(False, 0)
+		
+		self._icon_source = gtk.Image()
+		self._label_source = gtk.Label()
+		self._label_source.set_use_markup(True)
+		self._label_source.set_alignment(0, 0.5)
+		
+		# rename expander
+		expander = gtk.Expander(label='Select a new name for the destination')
+		hbox_rename = gtk.HBox(False, 10)
+		
+		self._entry_rename = gtk.Entry()
+		button_reset = gtk.Button('Reset')
+		
+		# apply to all checkbox
+		self._apply_to_all = gtk.CheckButton('Apply this action to all files')
+		
+		# pack interface
+		vbox_icon.pack_start(icon, False, False, 0)
+		
+		hbox_original.pack_start(self._icon_original, False, False, 10)
+		hbox_original.pack_start(self._label_original, True, True, 0)
+		
+		hbox_source.pack_start(self._icon_source, False, False, 10)
+		hbox_source.pack_start(self._label_source, True, True, 0)
+		
+		expander.add(hbox_rename)
+		
+		hbox_rename.pack_start(self._entry_rename, False, False, 0)
+		hbox_rename.pack_start(button_reset, False, False, 0)
+		
+		vbox.pack_start(self._label_title, False, False, 0)
+		vbox.pack_start(self._label_message, False, False, 0)
+		vbox.pack_start(hbox_original, False, False, 0)
+		vbox.pack_start(hbox_source, False, False, 0)
+		vbox.pack_start(expander, False, False, 0)
+		vbox.pack_start(self._apply_to_all, False, False, 0)
+		
+		hbox.pack_start(vbox_icon, False, False, 0)
+		hbox.pack_start(vbox, True, True, 0)
+		
+		self.vbox.pack_start(hbox, True, True, 0)
+		
+		self._create_buttons()
+		self.show_all()
+
+	def _create_buttons(self):
+		"""Create basic buttons"""
+		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
+		button_skip = gtk.Button(label="Skip")
+		
+		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self.add_action_widget(button_skip, gtk.RESPONSE_NO)
+		
+	def set_title_element(self, element):
+		"""Set title label with appropriate formatting"""
+		pass
+	
+	def set_message_element(self, element):
+		"""Set message element"""
+		pass
+	
+	def set_original(self, provider, path):
+		"""Set original element data"""
+		icon = self._application.icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_DIALOG)
+		self._icon_original.set_from_pixbuf(icon)
+		
+		self._label_original.set_markup(
+									'<b>Original file</b>\n'
+									'<i>Size:</i>\t\t{0}\n'
+									'<i>Modified:</i>\t{1}'
+								)
+	
+	def set_source(self, provider, path):
+		"""Set source element data"""
+		icon = self._application.icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_DIALOG)
+		self._icon_source.set_from_pixbuf(icon)
+
+		self._label_source.set_markup(
+									'<b>Replace with</b>\n'
+									'<i>Size:</i>\t\t{0}\n'
+									'<i>Modified:</i>\t{1}'
+								)
+	
+		
+class OverwriteFileDialog(OverwriteDialog):
+	
+	def __init__(self, application):
+		OverwriteDialog.__init__(self, application)
+		
+		self.set_title('File conflict')
+		
+	def _create_buttons(self):
+		"""Create dialog specific button"""
+		button_replace = gtk.Button(label="Replace")
+		button_replace.set_can_default(True)
+		
+		OverwriteDialog._create_buttons(self)
+		self.add_action_widget(button_replace, gtk.RESPONSE_YES)
+		
+		self.set_default_response(gtk.RESPONSE_YES)
+		
+	def set_title_element(self, element):
+		"""Set title label with appropriate formatting"""
+		self._label_title.set_markup(
+							'<span size="large" weight="bold">'
+							'Replace file "{0}"?</span>'.format(element)
+							)
+		
+	def set_message_element(self, element):
+		"""Set message element"""
+		self._label_message.set_text(
+							'Another file with the same name already exists in'
+							'"{0}". Replacing it will overwrite its content.'.format(element)
+							)

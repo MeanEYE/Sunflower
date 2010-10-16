@@ -2,7 +2,7 @@
 
 import gtk
 
-class Menus:
+class MenuManager:
 	"""Menu handling class
 
 	This class also supports local cache for menus used in 'Open With'
@@ -11,9 +11,13 @@ class Menus:
 	"""
 	_cache = {}
 	_named_items = {}
+	_accel_group = None
 
 	def __init__(self, application):
 		self._application = application
+		
+		self._accel_group = gtk.AccelGroup()
+		self._application.add_accel_group(self._accel_group)
 
 	def _item_normal(self, item):
 		"""Create normal menu item"""
@@ -110,7 +114,7 @@ class Menus:
 					icon_name = None
 
 				# get label
-				label = 'Open with {0}'.format(config['name'])
+				label = str(config['name'])
 
 				# create menu item
 				if icon_name is not None:
@@ -139,7 +143,7 @@ class Menus:
 	def create_menu_item(self, item):
 		"""Create new menu item from definition"""
 
-		# ensure we dont get confused with item type
+		# ensure we don't get confused with item type
 		if item.has_key('type'):
 			item_type = item['type']
 		else:
@@ -160,6 +164,8 @@ class Menus:
 		# if item has children then make submenu
 		if item_type is not 'separator' and item.has_key('submenu'):
 			submenu = gtk.Menu()
+			submenu.set_accel_group(self._accel_group)
+			
 			for sub_item in item['submenu']:
 				submenu.append(self.create_menu_item(sub_item))
 			new_item.set_submenu(submenu)
@@ -192,6 +198,10 @@ class Menus:
 		# add item if name is specified
 		if item.has_key('name'):
 			self._named_items[item['name']] = new_item
+			
+		# set accelerator path
+		if item.has_key('path'):
+			new_item.set_accel_path(item['path'])
 
 		new_item.show_all()
 		return new_item

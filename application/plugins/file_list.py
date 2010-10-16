@@ -27,14 +27,20 @@ except:
 from application.plugin_base.item_list import ItemList
 
 # constants
-COL_NAME   = 0
-COL_EXT    = 1
-COL_SIZE   = 2
-COL_MODE   = 3
-COL_DATE   = 4
-COL_DIR    = 5
-COL_PARENT = 6
-COL_COLOR  = 7
+COL_NAME	= 0
+COL_FNAME	= 1
+COL_EXT		= 2
+COL_SIZE	= 3
+COL_FSIZE	= 4
+COL_MODE	= 5
+COL_FMODE	= 6
+COL_DATE	= 7
+COL_FDATE	= 8
+COL_DIR		= 9
+COL_PARENT	= 10
+COL_COLOR 	= 11
+COL_ICON	= 12
+COL_SELECTED = 13
 
 class FileList(ItemList):
 
@@ -42,8 +48,22 @@ class FileList(ItemList):
 		ItemList.__init__(self, parent, notebook)
 
 		# storage system for list items
-		self._store = gtk.ListStore(str, str, float, int, int,
-									bool, bool, str)
+		self._store = gtk.ListStore(
+								str,	# COL_NAME 
+								str,	# COL_FNAME
+								str,	# COL_EXT 
+								float,	# COL_SIZE
+								str,	# COL_FSIZE
+								int,	# COL_MODE
+								str,	# COL_FMODE
+								int,	# COL_DATE
+								str,	# COL_FDATE
+								bool,	# COL_DIR
+								bool,	# COL_PARENT
+								str,	# COL_COLOR
+								gtk.gdk.Pixbuf, # COL_ICON
+								gtk.gdk.Pixbuf  # COL_SELECTED
+								)
 
 		# set item list model
 		self._item_list.set_model(self._store)
@@ -97,13 +117,13 @@ class FileList(ItemList):
 		col_mode.add_attribute(cell_mode, 'foreground', COL_COLOR)
 		col_date.add_attribute(cell_date, 'foreground', COL_COLOR)
 
-		col_file.set_cell_data_func(cell_selected, self._column_selected)
-		col_file.set_cell_data_func(cell_icon, self._column_icon)
-		col_file.set_cell_data_func(cell_name, self._column_filename)
-		col_extension.set_cell_data_func(cell_extension, self._column_extension)
-		col_size.set_cell_data_func(cell_size, self._column_size)
-		col_mode.set_cell_data_func(cell_mode, self._column_mode)
-		col_date.set_cell_data_func(cell_date, self._column_date)
+		col_file.add_attribute(cell_selected, 'pixbuf', COL_SELECTED)
+		col_file.add_attribute(cell_icon, 'pixbuf', COL_ICON)
+		col_file.add_attribute(cell_name, 'text', COL_FNAME)
+		col_extension.add_attribute(cell_extension, 'text', COL_EXT)
+		col_size.add_attribute(cell_size, 'text', COL_FSIZE)
+		col_mode.add_attribute(cell_mode, 'text', COL_FMODE)
+		col_date.add_attribute(cell_date, 'text', COL_FDATE)
 
 		col_file.set_resizable(True)
 		col_file.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
@@ -418,7 +438,7 @@ class FileList(ItemList):
 		return result
 
 	def _prepare_popup_menu(self):
-		"""Populate popup menu items"""
+		"""Populate pop-up menu items"""
 		selection = self._item_list.get_selection()
 		list, iter = selection.get_selected()
 
@@ -448,7 +468,7 @@ class FileList(ItemList):
 				if list is not None:
 					program_list.extend((list_item) for list_item in list if list_item not in program_list)
 
-				# filter out empty entrys
+				# filter out empty entries
 				program_list = filter(lambda x: x is not '', program_list)
 
 			except:
@@ -596,8 +616,10 @@ class FileList(ItemList):
 			# toggle selection
 			selected = not selected
 
-			value = [None, 'red'][selected]
+			value = (None, 'red')[selected]
+			image = (None, self._pixbuf_selection)[selected]
 			list.set_value(iter, COL_COLOR, value)
+			list.set_value(iter, COL_SELECTED, image)
 
 		# update status bar
 		self._update_status_with_statistis()
@@ -607,79 +629,6 @@ class FileList(ItemList):
 			next_iter = list.iter_next(iter)
 			if next_iter is not None:
 				self._item_list.set_cursor(list.get_path(next_iter))
-
-	def _column_selected(self, column, cell, list, iter):
-		"""Display green arrow in front of selected item"""
-		selected = list.get_value(iter, COL_COLOR)
-
-		if selected is None:
-			cell.set_property('pixbuf', None)
-		else:
-			cell.set_property('pixbuf', self._pixbuf_selection)
-
-	def _column_icon(self, column, cell, list, iter):
-		"""Data provider function for icon"""
-		is_dir = list.get_value(iter, COL_DIR)
-		is_parent = list.get_value(iter, COL_PARENT)
-		name = os.path.join(self.path, list.get_value(iter, COL_NAME))
-
-		if is_dir:
-				icon = self._parent.icon_manager.get_icon_from_type(
-							('folder', 'up')[is_parent]
-						)
-		else:
-			icon = self._parent.icon_manager.get_icon_for_file(name)
-
-		cell.set_property('pixbuf', icon)
-
-	def _column_filename(self, column, cell, list, iter):
-		"""Data provider function for filename"""
-		is_dir = list.get_value(iter, COL_DIR)
-		name = list.get_value(iter, COL_NAME)
-
-		if not is_dir:
-			name = os.path.splitext(name)[0]
-
-		cell.set_property('text', name)
-
-	def _column_extension(self, column, cell, list, iter):
-		"""Data provider function for extension"""
-		is_dir = list.get_value(iter, COL_DIR)
-		name = os.path.splitext(
-						list.get_value(iter, COL_NAME)
-					)[1][1:] if not is_dir else ''
-
-		cell.set_property('text', name)
-
-	def _column_size(self, column, cell, list, iter):
-		"""Data provider function for size"""
-		is_dir = list.get_value(iter, COL_DIR)
-
-		size = locale.format(
-						'%d', list.get_value(iter, COL_SIZE), True
-					) if not is_dir else '<DIR>'
-
-		cell.set_property('text', size)
-
-	def _column_mode(self, column, cell, list, iter):
-		"""Data provider function for mode"""
-		is_parent = list.get_value(iter, COL_PARENT)
-		mode = oct(list.get_value(iter, COL_MODE)) if not is_parent else ''
-
-		cell.set_property('text', mode)
-
-	def _column_date(self, column, cell, list, iter):
-		"""Data provider function for date"""
-		is_parent = list.get_value(iter, COL_PARENT)
-		raw_date = list.get_value(iter, COL_DATE)
-
-		format = self._parent.options.get('main', 'time_format')
-		date = time.strftime(
-							format,
-							time.gmtime(raw_date)
-						) if not is_parent else ''
-
-		cell.set_property('text', date)
 
 	def _edit_selected(self, widget=None, data=None):
 		"""Abstract method to edit currently selected item"""
@@ -768,15 +717,33 @@ class FileList(ItemList):
 
 			# add item to the list
 			try:
+				format = self._parent.options.get('main', 'time_format')
+
+				file_info = os.path.splitext(file_name)
+				formated_file_size = locale.format('%d', file_size, True) if not is_dir else '<DIR>'
+				formated_file_mode = oct(file_mode)
+				formated_file_date = time.strftime(format, time.gmtime(file_date)) 
+				
+				if is_dir:
+					icon = self._parent.icon_manager.get_icon_from_type('folder')
+				else:
+					icon = self._parent.icon_manager.get_icon_for_file(file_name)				
+				
 				props = (
 						file_name,
-						os.path.splitext(file_name)[1],
+						file_info[0],
+						file_info[1][1:],
 						file_size,
+						formated_file_size,
 						file_mode,
+						formated_file_mode,
 						file_date,
+						formated_file_date,
 						is_dir,
 						False,
 						None,
+						icon,
+						None
 					)
 				result = self._store.append(props)
 			except:
@@ -901,15 +868,21 @@ class FileList(ItemList):
 		# add parent option for parent directory
 		self._store.insert(0, (
 							os.path.pardir,
+							os.path.pardir,
 							'',
 							-2,
+							'<DIR>',
 							-1,
+							'',
 							-1,
+							'',
 							True,
 							True,
 							None,
+							self._parent.icon_manager.get_icon_from_type('up'),
+							None
 						))
-
+		
 		# restore model and sort function
 		# disabled: not required atm
 		#~self._item_list.set_model(self._store)
@@ -944,6 +917,7 @@ class FileList(ItemList):
 			# set selection
 			if not row[COL_PARENT] and fnmatch.fnmatch(row[COL_NAME], pattern):
 				row[COL_COLOR] = 'red'
+				row[COL_SELECTED] = self._pixbuf_selection
 
 			# update dir/file count
 			if row[COL_COLOR] is not None:
@@ -970,6 +944,7 @@ class FileList(ItemList):
 			# set selection
 			if not row[COL_PARENT] and fnmatch.fnmatch(row[COL_NAME], pattern):
 				row[COL_COLOR] = None
+				row[COL_SELECTED] = None
 
 			# update dir/file count
 			if row[COL_COLOR] is not None:
@@ -996,8 +971,10 @@ class FileList(ItemList):
 			if not row[COL_PARENT] and fnmatch.fnmatch(row[COL_NAME], pattern):
 				if row[COL_COLOR] is None:
 					row[COL_COLOR] = 'red'
+					row[COL_SELECTED] = self._pixbuf_selection
 				else:
 					row[COL_COLOR] = None
+					row[COL_SELECTED] = None
 
 			# update dir/file count
 			if row[COL_COLOR] is not None:

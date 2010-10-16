@@ -17,11 +17,12 @@ class IconManager:
 		self._icon_cache.clear()
 		return True
 
-	def get_icon_from_type(self, mime_type, size=gtk.ICON_SIZE_MENU):
-		"""Get icon based on mime type and size"""
+	def get_icon_from_type(self, mime_type, icon_size=gtk.ICON_SIZE_MENU):
+		"""Get icon based on MIME type and size"""
 
 		result = None
-		key_name = "{0}_{1}".format(mime_type, size)  # create mimetype/size based key
+		size = gtk.icon_size_lookup(icon_size)
+		key_name = "{0}_{1}".format(mime_type, size[0])  # create MIME type/size based key
 
 		if self._icon_cache.has_key(key_name):
 			# icon is cached and we return already loaded image
@@ -29,16 +30,12 @@ class IconManager:
 
 		else:
 			# icon is not cached, load it and cache it
-			sizes = {
-					gtk.ICON_SIZE_MENU: 16,
-					gtk.ICON_SIZE_LARGE_TOOLBAR: 24,
-				}
-
-			icon_info = self._icon_theme.lookup_icon(mime_type, sizes[size], 0)
+			icon_info = self._icon_theme.lookup_icon(mime_type, size[0], 0)
 
 			if icon_info is not None:
 				result = icon_info.load_icon()
 				self._icon_cache[key_name] = result
+				
 			else:
 				# in case icon does not exist we provide stock icons
 				stock_ids = {
@@ -47,15 +44,18 @@ class IconManager:
 							'document': gtk.STOCK_FILE,
 						}
 
-				stock_id = stock_ids[mime_type] if mime_type in stock_ids.keys() else stock_ids['document']
+				if mime_type in stock_ids.keys():
+					stock_id = stock_ids[mime_type] 
+				else: 
+					stock_id = stock_ids['document']
 
-				result = self._parent.render_icon(stock_id, size, detail=None)
+				result = self._parent.render_icon(stock_id, icon_size, detail=None)
 				self._icon_cache[key_name] = result
 
 		return result
 
 	def get_icon_for_file(self, filename, size=gtk.ICON_SIZE_MENU):
-		"""Load icon for specified filetype"""
+		"""Load icon for specified file type"""
 		mime_type = mimetypes.guess_type(filename, False)[0]
 
 		result = None

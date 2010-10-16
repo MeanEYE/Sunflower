@@ -57,22 +57,28 @@ class AboutWindow(gtk.Window):
 		tab1 = gtk.VBox(False, 10)
 		tab1.set_border_width(10)
 
-		program_info = gtk.Label('This software is being developed under GNU general '
-			'public license. If you would like to obtain source code '
-			'please visit our web site. Any bug reports, suggestions '
-			'or questions are more than welcome.')
-		program_info.set_line_wrap(True)
+		program_info = gtk.Label(
+						'This software is being developed under GNU general '
+						'public license. If you would like to obtain source code '
+						'please visit our web site. Any bug reports, suggestions '
+						'or questions are more than welcome.'
+						)
 		program_info.set_alignment(0,0)
+		program_info.set_line_wrap(True)
 		tab1.pack_start(program_info, False, True, 0)
 
-		developer_info = gtk.Label('<b>Developer</b>\n\tMeanEYE, <i>'
-									'<span size="small">RCF Group</span></i>')
+		developer_info = gtk.Label(
+							'<b>Developer</b>\n\tMeanEYE, <i>'
+							'<span size="small">RCF Group</span></i>'
+							)
 		developer_info.set_use_markup(True)
 		developer_info.set_alignment(0,0)
 		tab1.pack_start(developer_info, False, True, 0)
 
-		artist_info = gtk.Label('<b>Artist</b>\n\tMrakoslava, <i>'
-									'<span size="small">Studio Spectra</span></i>')
+		artist_info = gtk.Label(
+							'<b>Artist</b>\n\tMrakoslava, <i>'
+							'<span size="small">Studio Spectra</span></i>'
+							)
 		artist_info.set_use_markup(True)
 		artist_info.set_alignment(0,0)
 		tab1.pack_start(artist_info, False, True, 0)

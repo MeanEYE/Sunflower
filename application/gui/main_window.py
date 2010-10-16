@@ -8,7 +8,7 @@ import webbrowser
 import locale
 import user
 
-from menus import Menus
+from menus import MenuManager
 from input_dialog import InputDialog
 
 from ConfigParser import RawConfigParser
@@ -30,10 +30,14 @@ class MainWindow(gtk.Window):
 	# set locale for international number formatting
 	locale.setlocale(locale.LC_ALL)
 
+	# config parsers
 	options = None 
 	tab_options = None 
 	bookmark_options = None
 	toolbar_options = None
+	
+	# location of all configuration files
+	config_path = None
 
 	def __init__(self):
 		# create main window and other widgets
@@ -55,7 +59,7 @@ class MainWindow(gtk.Window):
 
 		# create other guis
 		self.icon_manager = IconManager(self)
-		self.menu_manager = Menus(self)
+		self.menu_manager = MenuManager(self)
 		self.associations_manager = AssociationManager()
 		self.about_window = AboutWindow(self)
 		self.options_window = OptionsWindow(self)
@@ -79,7 +83,8 @@ class MainWindow(gtk.Window):
 						'label': 'E_xit',
 						'type': 'image',
 						'stock': gtk.STOCK_QUIT,
-						'callback' : self._destroy
+						'callback' : self._destroy,
+						'path': '<Sunflower>/File/Exit',
 					},
 				)
 			},
@@ -90,30 +95,36 @@ class MainWindow(gtk.Window):
 						'label': '_Select all',
 						'type': 'image',
 						'stock': gtk.STOCK_SELECT_ALL,
-						'callback': self.select_all
+						'callback': self.select_all,
+						'path': '<Sunflower>/Mark/SelectAll',
 					},
 					{
 						'label': '_Unselect all',
-						'callback': self.unselect_all
+						'callback': self.unselect_all,
+						'path': '<Sunflower>/Mark/UnselectAll',
 					},
 					{
 						'label': 'Invert select_ion',
-						'callback': self.invert_selection
+						'callback': self.invert_selection,
+						'path': '<Sunflower>/Mark/InvertSelection',
 					},
 					{'type': 'separator'},
 					{
 						'label': 'S_elect with pattern',
-						'callback': self.select_with_pattern
+						'callback': self.select_with_pattern,
+						'path': '<Sunflower>/Mark/SelectPattern',
 					},
 					{
 						'label': 'Unselect with pa_ttern',
-						'callback': self.unselect_with_pattern
+						'callback': self.unselect_with_pattern,
+						'path': '<Sunflower>/Mark/UnselectPattern',
 					},
 					{'type': 'separator'},
 					{
 						'label': 'Compare _directories',
 						'type': 'image',
 						'stock': gtk.STOCK_DIRECTORY,
+						'path': '<Sunflower>/Mark/Compare',
 					}
 				)
 			},
@@ -126,6 +137,7 @@ class MainWindow(gtk.Window):
 						'active': self.options.getboolean('main', 'show_hidden'),
 						'callback': self._toggle_show_hidden_files,
 						'name': 'show_hidden_files',
+						'path': '<Sunflower>/Settings/ShowHidden',
 					},
 					{
 						'label': 'Show _toolbar',
@@ -133,6 +145,7 @@ class MainWindow(gtk.Window):
 						'active': self.options.getboolean('main', 'show_toolbar'),
 						'callback': self._toggle_show_toolbar,
 						'name': 'show_toolbar',
+						'path': '<Sunflower>/Settings/ShowToolbar',
 					},
 					{
 						'label': 'Show _command bar',
@@ -140,12 +153,14 @@ class MainWindow(gtk.Window):
 						'active': self.options.getboolean('main', 'show_command_bar'),
 						'callback': self._toggle_show_command_bar,
 						'name': 'show_command_bar',
+						'path': '<Sunflower>/Settings/ShowCommandBar',
 					},
 					{'type': 'separator'},
 					{
 						'label': '_Options', 'type': 'image',
 						'stock': gtk.STOCK_PREFERENCES,
-						'callback': self.options_window._show
+						'callback': self.options_window._show,
+						'path': '<Sunflower>/Settings/Options',
 					},
 				)
 			},
@@ -161,16 +176,19 @@ class MainWindow(gtk.Window):
 						'type': 'image',
 						'stock': gtk.STOCK_HOME,
 						'callback': self.goto_web,
-						'data': 'rcf-group.com'
+						'data': 'rcf-group.com',
+						'path': '<Sunflower>/Help/HomePage',
 					},
 					{'type': 'separator'},
 					{
 						'label': 'File a _bug report',
 						'callback': self.goto_web,
-						'data': 'code.google.com/p/sunflower-fm/issues/entry'
+						'data': 'code.google.com/p/sunflower-fm/issues/entry',
+						'path': '<Sunflower>/Help/BugReport',
 					},
 					{
 						'label': 'Check for _updates',
+						'path': '<Sunflower>/Help/CheckForUpdates',
 					},
 					{'type': 'separator'},
 					{
@@ -178,6 +196,7 @@ class MainWindow(gtk.Window):
 						'type': 'image',
 						'stock': gtk.STOCK_ABOUT,
 						'callback': self.about_window._show,
+						'path': '<Sunflower>/Help/About',
 					}
 				)
 			},
@@ -186,6 +205,9 @@ class MainWindow(gtk.Window):
 		# add items to main menu
 		for item in menu_items:
 			menu_bar.append(self.menu_manager.create_menu_item(item))
+			
+		# load accelerator map
+		self.load_accel_map(os.path.join(self.config_path, 'accel_map'))
 
 		# create toolbar
 		self.toolbar = gtk.Toolbar()
@@ -685,27 +707,41 @@ class MainWindow(gtk.Window):
 
 		return result
 
+	def save_accel_map(self, path):
+		"""Save menu accelerator map"""
+		gtk.accel_map_save(path)
+	
+	def load_accel_map(self, path):
+		"""Load menu accelerator map"""
+		if os.path.isfile(path):
+			gtk.accel_map_load(path)
+		
+		else:
+			# no existing configuration, set default
+			accel_map = (
+						('<Sunflower>/Mark/SelectAll', 'A', gtk.gdk.CONTROL_MASK),
+						('<Sunflower>/Mark/SelectPattern', 'KP_Add', 0),
+						('<Sunflower>/Mark/UnselectPattern', 'KP_Subtract', 0),
+						('<Sunflower>/Mark/InvertSelection', 'KP_Multiply', 0),
+						('<Sunflower>/Mark/Compare', 'F12', 0),
+						('<Sunflower>/Settings/ShowHidden', 'H', gtk.gdk.CONTROL_MASK),
+						('<Sunflower>/Settings/Options', 'P', gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK),
+						)
+			
+			for path, key, mask in accel_map:
+				gtk.accel_map_change_entry(path, gtk.gdk.keyval_from_name(key), mask, True)
+	
 	def save_config(self):
 		"""Save configuration to file"""
 		try:
-			# try to save configuration
-			if os.path.isdir(os.path.join(user.home, '.config')):
-				path = os.path.join(user.home, '.config', 'sunflower')
-			else:
-				path = os.path.join(user.home, '.sunflower')
-
-			if not os.path.isdir(path):
-				os.makedirs(path)
+			if not os.path.isdir(self.config_path):
+				os.makedirs(self.config_path)
 				
-			# TODO: Remove in next version
-			# remove old config file if present on the system
-			if os.path.isfile(os.path.join(user.home, '.sunflower')):
-				os.unlink(os.path.join(user.home, '.sunflower'))
-		
-			self.options.write(open(os.path.join(path, 'config'), 'w'))
-			self.tab_options.write(open(os.path.join(path, 'tabs'), 'w'))
-			self.bookmark_options.write(open(os.path.join(path, 'bookmarks'), 'w'))
-			self.toolbar_options.write(open(os.path.join(path, 'toolbar'), 'w'))
+			self.options.write(open(os.path.join(self.config_path, 'config'), 'w'))
+			self.tab_options.write(open(os.path.join(self.config_path, 'tabs'), 'w'))
+			self.bookmark_options.write(open(os.path.join(self.config_path, 'bookmarks'), 'w'))
+			self.toolbar_options.write(open(os.path.join(self.config_path, 'toolbar'), 'w'))
+			self.save_accel_map(os.path.join(self.config_path, 'accel_map'))
 
 		except IOError as error:
 			# notify user about failure
@@ -730,22 +766,16 @@ class MainWindow(gtk.Window):
 		self.bookmark_options = RawConfigParser()
 		self.toolbar_options = RawConfigParser()
 		
-		# backward compatibility, load old config file if it exists
-		if os.path.isfile(os.path.join(user.home, '.sunflower')): 
-			# TODO: Remove in next version
-			self.options.read(os.path.join(user.home, ".sunflower"))
-			
+		# load configuration from right folder on systems that support it 
+		if os.path.isdir(os.path.join(user.home, '.config')):
+			self.config_path = os.path.join(user.home, '.config', 'sunflower')
 		else:
-			# load configuration from right folder on systems that support it 
-			if os.path.isdir(os.path.join(user.home, '.config')):
-				path = os.path.join(user.home, '.config', 'sunflower')
-			else:
-				path = os.path.join(user.home, '.sunflower')
-		
-			self.options.read(os.path.join(path, 'config'))
-			self.tab_options.read(os.path.join(path, 'tabs'))
-			self.bookmark_options.read(os.path.join(path, 'bookmarks'))
-			self.toolbar_options.read(os.path.join(path, 'toolbar'))
+			self.config_path = os.path.join(user.home, '.sunflower')
+	
+		self.options.read(os.path.join(self.config_path, 'config'))
+		self.tab_options.read(os.path.join(self.config_path, 'tabs'))
+		self.bookmark_options.read(os.path.join(self.config_path, 'bookmarks'))
+		self.toolbar_options.read(os.path.join(self.config_path, 'toolbar'))
 
 		# set default values
 		if not self.options.has_section('main'):
@@ -829,5 +859,9 @@ class MainWindow(gtk.Window):
 	def test(self, widget, data=None):
 		import input_dialog
 		
-		d = input_dialog.OverwriteDialog(self)
+		d = input_dialog.OverwriteFileDialog(self)
+		d.set_title_element('trt.php')
+		d.set_message_element('njak')
+		d.set_original(None, '/home/meaneye/ancestor.php')
+		d.set_source(None, '/home/meaneye/ancestor.php')
 		d.show()

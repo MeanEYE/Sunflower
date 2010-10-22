@@ -4,7 +4,6 @@ import os
 import gtk
 
 from plugin import PluginBase
-from terminal import Terminal
 
 class ItemList(PluginBase):
 	"""General item list
@@ -16,9 +15,13 @@ class ItemList(PluginBase):
 	defining your own.
 
 	"""
+	
+	_provider = None
+	_open_with_menu = None
+	_open_with_item = None
+	
 	path = ''
 	history = []
-	_provider = None
 
 	def __init__(self, parent, notebook):
 		global _icon_theme
@@ -61,8 +64,12 @@ class ItemList(PluginBase):
 			'Delete': {
 					'000': self._delete_files,
 				},
+			'F1': {
+					'100': self._show_left_bookmarks,
+				},
 			'F2': {
 					'000': self._rename_file,
+					'100': self._show_right_bookmarks,
 				},
 			'F4': {
 					'000': self._edit_selected,
@@ -96,7 +103,7 @@ class ItemList(PluginBase):
 					'100': self._handle_path_inheritance,
 					'000': self._execute_selected_item,
 				},
-		}
+			}
 
 		self._dirs = {'count': 0, 'selected': 0}
 		self._files = {'count': 0, 'selected': 0}
@@ -109,9 +116,16 @@ class ItemList(PluginBase):
 		self._columns = None
 
 		# idle spinner
-		self._spinner = gtk.Spinner()
-		self._spinner.set_size_request(16, 16)
-		self._top_hbox.pack_start(self._spinner, False, False, 3)
+		try:
+			self._spinner = gtk.Spinner()
+			self._spinner.set_size_request(16, 16)
+			self._spinner.set_property('no-show-all', True)
+			
+			self._top_hbox.pack_start(self._spinner, False, False, 3)
+			
+		except:
+			# windows GTK+ doesn't have this component yet
+			self._spinner = None
 
 		# bookmarks button
 		self._bookmarks_button = gtk.Button(u'\u2318')
@@ -177,18 +191,27 @@ class ItemList(PluginBase):
 		self._change_top_panel_color(gtk.STATE_NORMAL)
 
 		self.show_all()
-		self._spinner.hide()
 		self._search_panel.hide()
 
 	def _show_spinner(self):
 		"""Show spinner animation"""
-		self._spinner.start()
-		self._spinner.show()
+		if self._spinner is not None:
+			self._spinner.start()
+			self._spinner.show()
+		
+	def _show_left_bookmarks(self, widget, data=None):
+		"""Show left bookmarks menu"""
+		self._parent.show_bookmarks_menu(None, self._parent.left_notebook)
+
+	def _show_right_bookmarks(self, widget, data=None):
+		"""Show left bookmarks menu"""
+		self._parent.show_bookmarks_menu(None, self._parent.right_notebook)
 
 	def _hide_spinner(self):
 		"""Hide spinner animation"""
-		self._spinner.hide()
-		self._spinner.stop()
+		if self._spinner is not None:
+			self._spinner.hide()
+			self._spinner.stop()
 
 	def _handle_button_press(self, widget, event):
 		"""Handles mouse events"""
@@ -530,7 +553,7 @@ class ItemList(PluginBase):
 
 	def _bookmarks_button_clicked(self, widget, data=None):
 		"""Bookmarks button click event"""
-		pass
+		self._parent.show_bookmarks_menu(widget)
 
 	def _history_button_clicked(self, widget, data=None):
 		"""History button click event"""

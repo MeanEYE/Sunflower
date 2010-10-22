@@ -36,6 +36,10 @@ class MainWindow(gtk.Window):
 	bookmark_options = None
 	toolbar_options = None
 	
+	# popup menus
+	menu_bookmarks = None
+	menu_mounts = None
+	
 	# location of all configuration files
 	config_path = None
 
@@ -311,6 +315,9 @@ class MainWindow(gtk.Window):
 		vbox.pack_start(vbox2, True, True, 0)
 		self.add(vbox)
 
+		# create bookmarks menu
+		self._create_bookmarks_menu()
+
 		# restore window size and position
 		self._restore_window_position()
 
@@ -335,6 +342,43 @@ class MainWindow(gtk.Window):
 		self.indicator.adjust_visibility_items(False)
 		
 		return True  # prevent default handler
+	
+	def _create_bookmarks_menu(self):
+		"""Create bookmarks menu as defined in options"""
+		if self.menu_bookmarks is None:
+			# menu does not exist, create it
+			self.menu_bookmarks = gtk.Menu()
+			
+		else:
+			# menu already exists, just remove items
+			for item in self.menu_bookmarks.get_children():
+				self.menu_bookmarks.remove(item)
+		
+		items = self.bookmark_options.options('bookmarks')
+		items.sort()
+		
+		for item in items:
+			data = self.bookmark_options.get('bookmarks', item).split(';', 1)
+			item_data = {
+					'label': data[0],
+					}
+			menu_item = self.menu_manager.create_menu_item(item_data)
+			self.menu_bookmarks.append(menu_item)
+			
+	def _get_bookmarks_menu_position(self, menu, button):
+		"""Get bookmarks position"""
+		window_x, window_y = self.window.get_position()
+		button_x, button_y = button.translate_coordinates(self, 0, 0)
+		button_h = button.get_allocation().height
+		
+		pos_x = window_x + button_x
+		pos_y = window_y + button_y + button_h
+		
+		return (pos_x, pos_y, True)
+			
+	def _create_mounts_menu(self):
+		"""Create mounts menu"""
+		pass
 	
 	def _tab_moved(self, notebook, child, page_num):
 		"""Handle adding/moving tab accross notebooks"""
@@ -475,6 +519,27 @@ class MainWindow(gtk.Window):
 	def _restore_window_position(self):
 		"""Restore window position from config string"""
 		self.parse_geometry(self.options.get('main', 'window'))
+
+	def show_bookmarks_menu(self, widget=None, notebook=None):
+		"""Position bookmarks menu properly and show it"""
+		button = None
+		
+		if notebook is not None:
+			# show request was triggered by global shortcut
+			page = notebook.get_nth_page(notebook.get_current_page())
+			if hasattr(page, '_bookmarks_button'):
+				button = page._bookmarks_button
+				
+		else:
+			# button called for menu
+			button = widget
+		
+		if button is not None:	
+			self.menu_bookmarks.popup(
+									None, None, 
+									self._get_bookmarks_menu_position, 
+									1, 0, button
+									)
 
 	def select_all(self, widget, data=None):
 		"""Select all items in active list"""
@@ -780,6 +845,9 @@ class MainWindow(gtk.Window):
 		# set default values
 		if not self.options.has_section('main'):
 			self.options.add_section('main')
+			
+		if not self.bookmark_options.has_section('bookmarks'):
+			self.bookmark_options.add_section('bookmarks')
 
 		# define default options
 		default_options = {

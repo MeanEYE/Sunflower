@@ -10,7 +10,6 @@ import stat
 import mimetypes
 import user
 import fnmatch
-import gobject
 
 from provider import Provider
 from operation import DeleteOperation, CopyOperation, MoveOperation
@@ -220,14 +219,7 @@ class FileList(ItemList):
 				self.change_path(os.path.join(self.path, name))
 
 		elif self.get_provider().is_local:
-			# each os uses different method for opening files
-			command = {
-					'nt': 'start "" "{0}"',
-					'posix': "gnome-open '{0}'",
-				}
-
-			# call the os-specific command
-			os.system(command[os.name].format(self._get_selection()))
+			os.system("gnome-open '{0}'".format(self._get_selection()))
 
 	def _create_directory(self, widget=None, data=None):
 		"""Prompt user and create directory"""
@@ -283,9 +275,7 @@ class FileList(ItemList):
 					raise OSError("Directory with same name exists: {0}".format(response[1]))
 
 				open(os.path.join(self.path, response[1]), 'w').close()
-
-				if os.name not in ('nt',):	# we can set file mode only on posix file systems
-					os.chmod(os.path.join(self.path, response[1]), mode)
+				os.chmod(os.path.join(self.path, response[1]), mode)
 
 			except OSError as error:
 				# error creating, report to user
@@ -496,10 +486,9 @@ class FileList(ItemList):
 
 	def _get_popup_menu_position(self, menu, data=None):
 		"""Positions menu properly for given row"""
-
 		selection = self._item_list.get_selection()
 		list, iter = selection.get_selected()
-
+		
 		# grab cell and tree rectangles
 		rect = self._item_list.get_cell_area(list.get_path(iter), self._columns[0])
 		tree_rect = self._item_list.get_visible_rect()
@@ -803,7 +792,7 @@ class FileList(ItemList):
 
 		space_free = self._format_size(stat.f_bsize * stat.f_bavail)
 		space_total = self._format_size(stat.f_bsize * stat.f_blocks)
-
+			
 		self._title_label.set_label(
 									'{0}\n<span size="x-small">'
 									'Free: {1} - Total: {2}</span>'.format(text, space_free, space_total)
@@ -818,7 +807,7 @@ class FileList(ItemList):
 
 	def change_path(self, path=None, selected=None):
 		"""Change file list path"""
-		gobject.idle_add(self._show_spinner)
+		self._show_spinner()
 
 		# cancel current directory monitor
 		if gio is not None and self._fs_monitor is not None:
@@ -845,8 +834,8 @@ class FileList(ItemList):
 
 		# disconnect store from widget to speed up the process
 		# disabled: not required atm
-		#~self._item_list.set_model(None)
-		#~self._store.set_default_sort_func(None)
+#		self._item_list.set_model(None)
+#		self._store.set_default_sort_func(None)
 
 		self._dirs['count'] = 0
 		self._dirs['selected'] = 0
@@ -859,9 +848,9 @@ class FileList(ItemList):
 
 			new_item = self._add_item(full_name, show_hidden)
 
-			if selected is not None and file_name == selected:
+			if file_name == selected:
 				to_select = new_item
-
+				
 		# update status bar
 		self._update_status_with_statistis()
 
@@ -885,8 +874,8 @@ class FileList(ItemList):
 		
 		# restore model and sort function
 		# disabled: not required atm
-		#~self._item_list.set_model(self._store)
-		#~self._set_sort_function(self._sort_column_widget)
+#		self._item_list.set_model(self._store)
+#		self._set_sort_function(self._sort_column_widget)
 
 		# select either first or previous item
 		if to_select is not None:
@@ -902,7 +891,7 @@ class FileList(ItemList):
 			self._fs_monitor = gio.File(self.path).monitor_directory()
 			self._fs_monitor.connect('changed', self._directory_changed)
 
-		gobject.idle_add(self._hide_spinner)
+		self._hide_spinner()
 
 	def select_all(self, pattern=None):
 		"""Select all items matching pattern """

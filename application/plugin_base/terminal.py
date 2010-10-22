@@ -18,6 +18,8 @@ class Terminal(PluginBase):
 	defining your own.
 
 	"""
+	
+	_vte_present = False
 
 	def __init__(self, parent, notebook):
 		PluginBase.__init__(self, parent, notebook)
@@ -56,6 +58,7 @@ class Terminal(PluginBase):
 		self._top_hbox.pack_end(self._recycle_button, False, False, 0)
 
 		if vte is not None:
+			self._vte_present = True
 			self._terminal = vte.Terminal()
 			self._terminal.connect('window-title-changed', self._update_title)
 		else:

@@ -40,8 +40,7 @@ if __name__ == '__main__':
 	sys.path.append(path_application)
 
 	# windows can't handle threads from GTK+
-	if os.name not in ('nt',):
-		gtk.gdk.threads_init()
+	gtk.gdk.threads_init()
 
 	# construct main application object
 	from application.gui.main_window import MainWindow

@@ -18,7 +18,7 @@ class SystemTerminal(Terminal):
 			os.environ['TERM'] = 'xterm'
 			os.environ['COLORTERM'] = 'gnome-terminal'
 
-		if self._terminal is not None:
+		if self._vte_present:
 			self._terminal.connect('child-exited', self._close_tab)
 			self._terminal.connect('status-line-changed', self._update_terminal_status)
 			self._terminal.fork_command(
@@ -36,7 +36,7 @@ class SystemTerminal(Terminal):
 
 	def _recycle_terminal(self, widget, data=None):
 		"""Recycle terminal"""
-		if self._terminal is None: return
+		if not self._vte_present: return
 		
 		shell_command = os.environ['SHELL']
 		self._terminal.reset(True, True)

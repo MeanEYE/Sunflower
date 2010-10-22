@@ -91,19 +91,19 @@ class AboutWindow(gtk.Window):
 		tab2.set_border_width(10)
 		tab2.set_shadow_type(gtk.SHADOW_IN)
 
-		license_list = {
-				'posix': os.path.join('/', 'usr', 'share', 'common-licenses', 'GPL'),
-				'nt': os.path.join(os.path.dirname(sys.argv[0]), 'application', 'GPL.txt')
-			}
+		license_location = os.path.join('/', 'usr', 'share', 'common-licenses', 'GPL')
+		if not os.path.isfile(license_location):
+			license_location = os.path.join(
+										os.path.dirname(sys.argv[0]), 
+										'application', 
+										'GPL.txt'
+									)
+		
+		license_file = open(license_location, 'r')
 
-		license_text = None
-
-		if os.path.isfile(license_list[os.name]):
-			license_file = open(license_list[os.name], 'r')
-
-			if license_file:
-				license_text = license_file.read()
-				license_file.close()
+		if license_file:
+			license_text = license_file.read()
+			license_file.close()
 
 		license = gtk.TextView()
 		license.set_editable(False)

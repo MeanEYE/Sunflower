@@ -169,10 +169,6 @@ class CreateDialog(InputDialog):
 		expander.add(self._advanced)
 		self.vbox.pack_start(expander, False, False, 0)
 
-		# disable advanced options on windows
-		sensitive = os.name not in ('nt',)
-		expander.set_sensitive(sensitive)
-
 		self.update_mode()
 		expander.show_all()
 		

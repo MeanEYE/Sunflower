@@ -11,13 +11,13 @@ class PluginBase(gtk.VBox):
 
 	"""
 
+	_key_handlers = {}
+
 	def __init__(self, parent, notebook):
 		gtk.VBox.__init__(self, False, 0)
 
 		self._parent = parent  # parent is stored locally for later use
 		self._notebook = notebook
-
-		self._key_handlers = None
 
 		# create main container
 		self._tab_label = gtk.Label('')

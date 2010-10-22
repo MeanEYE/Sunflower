@@ -39,7 +39,6 @@ if __name__ == '__main__':
 	path_application = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "application"))
 	sys.path.append(path_application)
 
-	# windows can't handle threads from GTK+
 	gtk.gdk.threads_init()
 
 	# construct main application object

@@ -361,9 +361,16 @@ class MainWindow(gtk.Window):
 			data = self.bookmark_options.get('bookmarks', item).split(';', 1)
 			item_data = {
 					'label': data[0],
+					'callback': self._handle_bookmarks_click,
 					}
 			menu_item = self.menu_manager.create_menu_item(item_data)
+			menu_item.set_data('path', os.path.expanduser(data[1]))
+			
 			self.menu_bookmarks.append(menu_item)
+			
+		# create mounts if specified
+		if self.options.getboolean('main', 'show_mounts'):
+			self._create_mounts_menu()
 			
 	def _get_bookmarks_menu_position(self, menu, button):
 		"""Get bookmarks position"""
@@ -375,7 +382,33 @@ class MainWindow(gtk.Window):
 		pos_y = window_y + button_y + button_h
 		
 		return (pos_x, pos_y, True)
+	
+	def _handle_bookmarks_click(self, widget, data=None):
+		"""Handle clicks on bookmark menu"""
+		item_list = self.menu_bookmarks.get_data('list')
+		
+		if item_list is not None and hasattr(item_list, 'change_path'):
+			path = widget.get_data('path')
 			
+			if os.path.isdir(path):
+				# path is valid
+				item_list.change_path(path)
+				
+			else:
+				# invalid path, notify user
+				dialog = gtk.MessageDialog(
+										self,
+										gtk.DIALOG_DESTROY_WITH_PARENT,
+										gtk.MESSAGE_ERROR,
+										gtk.BUTTONS_OK,
+										"Bookmarked path does not exist or is not "
+										"valid. If path is not local check if specified "
+										"volume is mounted."
+										"\n\n{0}".format(path)
+										)
+				dialog.run()
+				dialog.destroy()
+						
 	def _create_mounts_menu(self):
 		"""Create mounts menu"""
 		pass
@@ -530,6 +563,8 @@ class MainWindow(gtk.Window):
 			if hasattr(page, '_bookmarks_button'):
 				button = page._bookmarks_button
 				
+			self.menu_bookmarks.set_data('list', page)
+			
 		else:
 			# button called for menu
 			button = widget

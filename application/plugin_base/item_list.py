@@ -546,6 +546,7 @@ class ItemList(PluginBase):
 
 	def _bookmarks_button_clicked(self, widget, data=None):
 		"""Bookmarks button click event"""
+		self._parent.menu_bookmarks.set_data('list', self)
 		self._parent.show_bookmarks_menu(widget)
 
 	def _history_button_clicked(self, widget, data=None):

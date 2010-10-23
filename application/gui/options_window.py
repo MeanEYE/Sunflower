@@ -515,6 +515,9 @@ class BookmarkOptions(gtk.VBox):
 								'b_{0}'.format(i),
 								'{0};{1}'.format(bookmark[0], bookmark[1])
 								)
+			
+		# recreate bookmarks menu
+		self._application._create_bookmarks_menu()
 
 				
 class ToolOptions(gtk.VBox):

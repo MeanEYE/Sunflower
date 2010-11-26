@@ -11,8 +11,6 @@ class PluginBase(gtk.VBox):
 
 	"""
 
-	_key_handlers = {}
-
 	def __init__(self, parent, notebook):
 		gtk.VBox.__init__(self, False, 0)
 

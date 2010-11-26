@@ -15,16 +15,16 @@ class ItemList(PluginBase):
 	defining your own.
 
 	"""
-	
-	_provider = None
-	_open_with_menu = None
-	_open_with_item = None
-	
-	path = ''
-	history = []
 
 	def __init__(self, parent, notebook):
 		global _icon_theme
+
+		self._provider = None
+		self._open_with_menu = None
+		self._open_with_item = None
+
+		self.path = ''
+		self.history = []
 
 		# call parent constructor
 		PluginBase.__init__(self, parent, notebook)
@@ -119,9 +119,9 @@ class ItemList(PluginBase):
 		self._spinner = gtk.Spinner()
 		self._spinner.set_size_request(16, 16)
 		self._spinner.set_property('no-show-all', True)
-		
+
 		self._top_hbox.pack_start(self._spinner, False, False, 3)
-			
+
 		# bookmarks button
 		self._bookmarks_button = gtk.Button(u'\u2318')
 		self._bookmarks_button.set_focus_on_click(False)
@@ -192,7 +192,7 @@ class ItemList(PluginBase):
 		"""Show spinner animation"""
 		self._spinner.start()
 		self._spinner.show()
-		
+
 	def _show_left_bookmarks(self, widget, data=None):
 		"""Show left bookmarks menu"""
 		self._parent.show_bookmarks_menu(None, self._parent.left_notebook)
@@ -242,7 +242,7 @@ class ItemList(PluginBase):
 
 			# retrieve human readable key representation
 			key_name = gtk.gdk.keyval_name(event.keyval)
-			
+
 			# handle searching for hidden files
 			if key_name == 'period': key_name = '.'
 

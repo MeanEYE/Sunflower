@@ -3,6 +3,7 @@
 import os
 import sys
 import gtk
+import wnck
 
 try:
 	import appindicator
@@ -24,6 +25,7 @@ class Indicator(object):
 		self._parent = parent
 		self._menu = gtk.Menu()
 		self._create_menu_items()
+		self._screen = wnck.screen_get_default()
 
 		if appindicator is not None:
 			self._indicator = appindicator.Indicator(
@@ -45,6 +47,12 @@ class Indicator(object):
 
 	def _create_menu_items(self):
 		"""Create commonly used menu items in indicator"""
+		# bring to current desktop
+		self._bring_to_desktop = self._parent.menu_manager.create_menu_item({
+														'label': '_Bring to current desktop',
+														'callback': self._bring_to_current_desktop
+													})
+		self._menu.append(self._bring_to_desktop)
 	
 		# show window
 		self._menu_show = self._parent.menu_manager.create_menu_item({
@@ -81,7 +89,11 @@ class Indicator(object):
 		"""Change main window visibility"""
 		self._parent.set_visible(visible)
 		self.adjust_visibility_items(visible)
-			
+		
+	def _bring_to_current_desktop(self, widget, data=None):
+		"""Bring main window to current desktop"""
+		self._parent.window.move_to_current_desktop()
+
 	def adjust_visibility_items(self, visible):
 		"""Adjust show/hide menu items"""
 		self._menu_show.set_visible(not visible)

@@ -42,6 +42,10 @@ class MainWindow(gtk.Window):
 	
 	# location of all configuration files
 	config_path = None
+	
+	# version
+	version = '0.1a'
+	build_number = '11'
 
 	def __init__(self):
 		# create main window and other widgets
@@ -270,11 +274,11 @@ class MainWindow(gtk.Window):
 		self.command_bar = gtk.HBox(True, 0)
 
 		buttons = (
-				('Refresh', 'Reload active item list (F2 or CTRL+R)', self._command_reload),
+				('Refresh', 'Reload active item list (CTRL+R)', self._command_reload),
 				('View', 'View selected file (F3)', None),
 				('Edit', 'Edit selected file (F4)', self._command_edit),
-				('Copy', 'Copy selected items from active to oposite list (F5)', self._command_copy),
-				('Move', 'Move selected items from active to oposite list (F6)', self._command_move),
+				('Copy', 'Copy selected items from active to opposite list (F5)', self._command_copy),
+				('Move', 'Move selected items from active to opposite list (F6)', self._command_move),
 				('Create', 'Create new directory (F7)\nCreate new file (CTRL+F7)', self._command_create),
 				('Delete', 'Delete selected items (F8 or Delete)', self._command_delete)
 			)
@@ -684,7 +688,7 @@ class MainWindow(gtk.Window):
 			notebook.remove_page(notebook.page_num(child))
 
 			del child
-
+			
 	def next_tab(self, notebook):
 		"""Select next tab on given notebook"""
 

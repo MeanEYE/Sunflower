@@ -2,7 +2,7 @@
 #
 #		Sunflower.py
 #
-#		Copyright (c) 2009. by MeanEYE[rcf]
+#		Copyright (c) 2010. by MeanEYE[rcf]
 #		RCF Group, http://rcf-group.com
 #
 #		This program is free software; you can redistribute it and/or modify
@@ -26,7 +26,7 @@ import sys
 try:
 	# try to import GTK
 	import pygtk
-	pygtk.require('2.0')
+	pygtk.require20()
 	import gtk
 
 except:

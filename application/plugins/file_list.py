@@ -22,24 +22,23 @@ try:
 except:
 	gio = None
 
-
 from application.plugin_base.item_list import ItemList
 
 # constants
-COL_NAME	= 0
-COL_FNAME	= 1
-COL_EXT		= 2
-COL_SIZE	= 3
-COL_FSIZE	= 4
-COL_MODE	= 5
-COL_FMODE	= 6
-COL_DATE	= 7
-COL_FDATE	= 8
-COL_DIR		= 9
-COL_PARENT	= 10
-COL_COLOR 	= 11
-COL_ICON	= 12
-COL_SELECTED = 13
+COL_NAME 		= 0
+COL_FNAME 		= 1
+COL_EXT 		= 2
+COL_SIZE 		= 3
+COL_FSIZE 		= 4
+COL_MODE 		= 5
+COL_FMODE 		= 6
+COL_DATE 		= 7
+COL_FDATE 		= 8
+COL_DIR			= 9
+COL_PARENT 		= 10
+COL_COLOR 		= 11
+COL_ICON 		= 12
+COL_SELECTED 	= 13
 
 class FileList(ItemList):
 
@@ -48,9 +47,9 @@ class FileList(ItemList):
 
 		# storage system for list items
 		self._store = gtk.ListStore(
-								str,	# COL_NAME 
+								str,	# COL_NAME
 								str,	# COL_FNAME
-								str,	# COL_EXT 
+								str,	# COL_EXT
 								float,	# COL_SIZE
 								str,	# COL_FSIZE
 								int,	# COL_MODE
@@ -177,12 +176,12 @@ class FileList(ItemList):
 
 		row_hinting = self._parent.options.getboolean('main', 'row_hinting')
 		self._item_list.set_rules_hint(row_hinting)
-		
+
 		grid_lines = (
 					gtk.TREE_VIEW_GRID_LINES_NONE,
 					gtk.TREE_VIEW_GRID_LINES_HORIZONTAL,
 					gtk.TREE_VIEW_GRID_LINES_VERTICAL,
-					gtk.TREE_VIEW_GRID_LINES_BOTH,			
+					gtk.TREE_VIEW_GRID_LINES_BOTH,
 				)[self._parent.options.getint('main', 'grid_lines')]
 		self._item_list.set_grid_lines(grid_lines)
 
@@ -488,7 +487,7 @@ class FileList(ItemList):
 		"""Positions menu properly for given row"""
 		selection = self._item_list.get_selection()
 		list, iter = selection.get_selected()
-		
+
 		# grab cell and tree rectangles
 		rect = self._item_list.get_cell_area(list.get_path(iter), self._columns[0])
 		tree_rect = self._item_list.get_visible_rect()
@@ -552,17 +551,17 @@ class FileList(ItemList):
 		"""Sort list"""
 		reverse = (1, -1)[self._sort_ascending]
 
-		item1 = [
+		item1 = (
 				reverse * list.get_value(iter1, COL_PARENT),
 				reverse * list.get_value(iter1, COL_DIR),
 				list.get_value(iter1, self._sort_column)
-				]
+				)
 
-		item2 = [
+		item2 = (
 				reverse * list.get_value(iter2, COL_PARENT),
 				reverse * list.get_value(iter2, COL_DIR),
 				list.get_value(iter2, self._sort_column)
-				]
+				)
 
 		return cmp(item1, item2)
 
@@ -631,7 +630,7 @@ class FileList(ItemList):
 			default_editor = self._parent.options.get('main', 'default_editor')
 
 			command = default_editor.format(os.path.join(self.path, filename))
-			
+
 			# if we shouldn't wait for editor, add & at the end of command
 			if not self._parent.options.getboolean('main', 'wait_for_editor'):
 				command = '{0} &'.format(command)
@@ -711,13 +710,13 @@ class FileList(ItemList):
 				file_info = os.path.splitext(file_name)
 				formated_file_size = locale.format('%d', file_size, True) if not is_dir else '<DIR>'
 				formated_file_mode = oct(file_mode)
-				formated_file_date = time.strftime(format, time.gmtime(file_date)) 
-				
+				formated_file_date = time.strftime(format, time.gmtime(file_date))
+
 				if is_dir:
 					icon = self._parent.icon_manager.get_icon_from_type('folder')
 				else:
-					icon = self._parent.icon_manager.get_icon_for_file(file_name)				
-				
+					icon = self._parent.icon_manager.get_icon_for_file(file_name)
+
 				props = (
 						file_name,
 						file_info[0],
@@ -792,7 +791,7 @@ class FileList(ItemList):
 
 		space_free = self._format_size(stat.f_bsize * stat.f_bavail)
 		space_total = self._format_size(stat.f_bsize * stat.f_blocks)
-			
+
 		self._title_label.set_label(
 									'{0}\n<span size="x-small">'
 									'Free: {1} - Total: {2}</span>'.format(text, space_free, space_total)
@@ -850,7 +849,7 @@ class FileList(ItemList):
 
 			if file_name == selected:
 				to_select = new_item
-				
+
 		# update status bar
 		self._update_status_with_statistis()
 
@@ -871,7 +870,7 @@ class FileList(ItemList):
 							self._parent.icon_manager.get_icon_from_type('up'),
 							None
 						))
-		
+
 		# restore model and sort function
 		# disabled: not required atm
 #		self._item_list.set_model(self._store)

@@ -24,16 +24,26 @@ class AboutWindow(gtk.Window):
 		vbox = gtk.VBox(False, 0)
 
 		# program logo
-		image_file = os.path.join(os.path.dirname(sys.argv[0]),
-									'images',
-									'sunflower_hi-def_64x64.png')
+		image_file = os.path.join(
+								os.path.dirname(sys.argv[0]),
+								'images',
+								'sunflower_hi-def_64x64.png'
+								)
 		image = gtk.Image()
 		image.set_from_file(image_file)
 		image.set_size_request(70, 70)
 
 		# program label
-		program_label = gtk.Label('<span color="%s"><span size="x-large" weight="bold">'
-			'Sunflower</span>\nVersion 0.1</span>' % style.fg[gtk.STATE_SELECTED].to_string())
+		program_label = gtk.Label(
+							'<span color="{0}">'
+							'<span size="x-large" weight="bold">'
+							'Sunflower</span>\nVersion {1} <span size="small"><i>({2})</i></span>'
+							'</span>'.format(
+										style.fg[gtk.STATE_SELECTED].to_string(),
+										parent.version,
+										parent.build_number
+										)
+							)
 
 		program_label.set_use_markup(True)
 
@@ -88,7 +98,7 @@ class AboutWindow(gtk.Window):
 
 		# license tab
 		tab2 = gtk.ScrolledWindow()
-		tab2.set_border_width(10)
+		tab2.set_border_width(5)
 		tab2.set_shadow_type(gtk.SHADOW_IN)
 
 		license_location = os.path.join('/', 'usr', 'share', 'common-licenses', 'GPL')
@@ -118,31 +128,8 @@ class AboutWindow(gtk.Window):
 		tab2_label = gtk.Label('License')
 		notebook.append_page(tab2, tab2_label)
 
-		# wakoopa statistics
-		tab3 = gtk.VBox(False, 5)
-		tab3.set_border_width(10);
-
-		warning = gtk.Label('In order to avoid slow program starting and '
-			'unnecessary bandwidth usage, automatic <b>Wakoopa</b> statistics loading '
-			'has been disabled. Please click on <i>load</i> button to retrieve data. ')
-		warning.set_use_markup(True)
-		warning.set_line_wrap(True)
-		warning.set_alignment(0,0)
-
-		self._wakoopa_image = gtk.Image()
-
-		hbox3 = gtk.HBox(False, 0)
-		load_button = gtk.Button('Load');
-		load_button.connect('clicked', self.load_wakoopa_image)
-
-		hbox3.pack_end(load_button, False, True, 0)
-
-		tab3.pack_start(warning, False, True, 0)
-		tab3.pack_start(self._wakoopa_image, False, True, 0)
-		tab3.pack_end(hbox3, False, True, 0)
-
-		tab3_label = gtk.Label('Wakoopa')
-		notebook.append_page(tab3, tab3_label)
+		# create statistics tab
+		notebook.append_page(*self._create_statistics_tab())
 
 		# bottom button controls
 		hbox2 = gtk.HBox(False, 3)
@@ -178,6 +165,60 @@ class AboutWindow(gtk.Window):
 	def _hide(self, widget, data=None):
 		self.hide()
 		return True  # return True so we get to keep our controls safe from GC
+	
+	def _create_statistics_tab(self):
+		"""Create tab for all the promotional sites"""
+		tab = gtk.Notebook()
+		tab.set_tab_pos(gtk.POS_RIGHT)
+		tab.set_border_width(5)
+		tab_label = gtk.Label('Statistics')
+		
+		# wakoopa statistics
+		tab_wakoopa = gtk.VBox(False, 5)
+		tab_wakoopa.set_border_width(10);
+
+		warning = gtk.Label('In order to avoid slow program starting and '
+			'unnecessary bandwidth usage, automatic <b>Wakoopa</b> statistics loading '
+			'has been disabled. Please click on <i>load</i> button to retrieve data. ')
+		warning.set_use_markup(True)
+		warning.set_line_wrap(True)
+		warning.set_alignment(0,0)
+
+		self._wakoopa_image = gtk.Image()
+
+		hbox3 = gtk.HBox(False, 0)
+		load_button = gtk.Button('Load');
+		load_button.connect('clicked', self.load_wakoopa_image)
+
+		hbox3.pack_end(load_button, False, True, 0)
+
+		tab_wakoopa.pack_start(warning, False, True, 0)
+		tab_wakoopa.pack_start(self._wakoopa_image, False, True, 0)
+		tab_wakoopa.pack_end(hbox3, False, True, 0)
+
+		image_wakoopa = gtk.Image()
+		image_wakoopa.set_from_file(
+								os.path.join(
+									os.path.dirname(sys.argv[0]),
+									'images',
+									'wakoopa.png'
+								))
+		tab.append_page(tab_wakoopa, image_wakoopa)
+
+		# alternative to
+		tab_alternativeto = gtk.VBox(False, 5)
+		tab_alternativeto.set_border_width(10)
+
+		image_alternativeto = gtk.Image()
+		image_alternativeto.set_from_file(
+								os.path.join(
+									os.path.dirname(sys.argv[0]),
+									'images',
+									'alternativeto.png'
+								))
+		tab.append_page(tab_alternativeto, image_alternativeto)
+		
+		return (tab, tab_label)
 
 	def load_wakoopa_image(self, widget, data=None):
 		"""Retrieve wakoopa statistics image"""

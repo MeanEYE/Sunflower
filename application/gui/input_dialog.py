@@ -2,6 +2,8 @@
 
 import os
 import gtk
+import time
+import locale
 import fnmatch
 
 class InputDialog(gtk.Dialog):
@@ -396,6 +398,8 @@ class OverwriteDialog(gtk.Dialog):
 		gtk.Dialog.__init__(self, parent=application)
 
 		self._application = application
+		self._rename_value = ''
+		self._time_format = application.options.get('main', 'time_format')
 
 		self.set_default_size(400, 10)
 		self.set_resizable(True)
@@ -441,14 +445,16 @@ class OverwriteDialog(gtk.Dialog):
 		self._label_source.set_alignment(0, 0.5)
 		
 		# rename expander
-		expander = gtk.Expander(label='Select a new name for the destination')
+		self._expander_rename = gtk.Expander(label='Select a new name for the destination')
 		hbox_rename = gtk.HBox(False, 10)
 		
 		self._entry_rename = gtk.Entry()
 		button_reset = gtk.Button('Reset')
+		button_reset.connect('clicked', self._reset_rename_field)
 		
-		# apply to all checkbox
-		self._apply_to_all = gtk.CheckButton('Apply this action to all files')
+		# apply to all check box
+		self._checkbox_apply_to_all = gtk.CheckButton('Apply this action to all files')
+		self._checkbox_apply_to_all.connect('toggled', self._apply_to_all_toggled)
 		
 		# pack interface
 		vbox_icon.pack_start(icon, False, False, 0)
@@ -459,7 +465,7 @@ class OverwriteDialog(gtk.Dialog):
 		hbox_source.pack_start(self._icon_source, False, False, 10)
 		hbox_source.pack_start(self._label_source, True, True, 0)
 		
-		expander.add(hbox_rename)
+		self._expander_rename.add(hbox_rename)
 		
 		hbox_rename.pack_start(self._entry_rename, False, False, 0)
 		hbox_rename.pack_start(button_reset, False, False, 0)
@@ -468,8 +474,8 @@ class OverwriteDialog(gtk.Dialog):
 		vbox.pack_start(self._label_message, False, False, 0)
 		vbox.pack_start(hbox_original, False, False, 0)
 		vbox.pack_start(hbox_source, False, False, 0)
-		vbox.pack_start(expander, False, False, 0)
-		vbox.pack_start(self._apply_to_all, False, False, 0)
+		vbox.pack_start(self._expander_rename, False, False, 0)
+		vbox.pack_start(self._checkbox_apply_to_all, False, False, 0)
 		
 		hbox.pack_start(vbox_icon, False, False, 0)
 		hbox.pack_start(vbox, True, True, 0)
@@ -487,6 +493,29 @@ class OverwriteDialog(gtk.Dialog):
 		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
 		self.add_action_widget(button_skip, gtk.RESPONSE_NO)
 		
+	def _apply_to_all_toggled(self, widget, data=None):
+		"""Event called upon clicking on "apply to all" check box"""
+		checked = widget.get_active()
+		self._expander_rename.set_sensitive(not checked)
+		
+	def _reset_rename_field(self, widget, data=None):
+		"""Reset rename field to predefined value"""
+		self._entry_rename.set_text(self._rename_value)
+		
+	def _get_info(self, provider, path):
+		"""Return information for specified path using provider"""
+		stat = provider.get_stat(path)
+
+		if provider._is_dir(path):
+			size = len(provider.list_dir(path))
+		else:
+			size = stat.st_size
+
+		str_size = locale.format('%d', size, True)
+		str_date = time.strftime(self._time_format, time.gmtime(stat.st_mtime))
+		
+		return (str_size, str_date)
+		
 	def set_title_element(self, element):
 		"""Set title label with appropriate formatting"""
 		pass
@@ -500,10 +529,12 @@ class OverwriteDialog(gtk.Dialog):
 		icon = self._application.icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_DIALOG)
 		self._icon_original.set_from_pixbuf(icon)
 		
+		data = self._get_info(provider, path)
+
 		self._label_original.set_markup(
 									'<b>Original file</b>\n'
 									'<i>Size:</i>\t\t{0}\n'
-									'<i>Modified:</i>\t{1}'
+									'<i>Modified:</i>\t{1}'.format(*data)
 								)
 	
 	def set_source(self, provider, path):
@@ -511,12 +542,37 @@ class OverwriteDialog(gtk.Dialog):
 		icon = self._application.icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_DIALOG)
 		self._icon_source.set_from_pixbuf(icon)
 
+		data = self._get_info(provider, path)
+
 		self._label_source.set_markup(
 									'<b>Replace with</b>\n'
 									'<i>Size:</i>\t\t{0}\n'
-									'<i>Modified:</i>\t{1}'
+									'<i>Modified:</i>\t{1}'.format(*data)
 								)
+		
+	def set_rename_value(self, name):
+		"""Set rename default rename value"""
+		self._rename_value = name
+		self._entry_rename.set_text(name)
 	
+	def get_response(self):
+		"""Return value and self-destruct
+
+		This method returns tuple with response code and
+		dictionary with other selected options.
+
+		"""
+		code = self.run()
+		options = (
+				self._expander_rename.get_expanded(),
+				self._entry_rename.get_text(),
+				self._checkbox_apply_to_all.get_active()
+				)
+
+		self.destroy()
+
+		return (code, options)
+
 		
 class OverwriteFileDialog(OverwriteDialog):
 	

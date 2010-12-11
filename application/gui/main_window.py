@@ -966,9 +966,14 @@ class MainWindow(gtk.Window):
 	def test(self, widget, data=None):
 		import input_dialog
 		
+		provider = self._active_object.get_provider()
+		path = self._active_object._get_selection()
+		
 		d = input_dialog.OverwriteFileDialog(self)
 		d.set_title_element('trt.php')
+		d.set_rename_value('novo_ime.php')
 		d.set_message_element('njak')
-		d.set_original(None, '/home/meaneye/ancestor.php')
-		d.set_source(None, '/home/meaneye/ancestor.php')
-		d.show()
+		d.set_original(provider, path)
+		d.set_source(provider, path)
+		
+		print d.get_response()

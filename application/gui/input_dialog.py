@@ -502,19 +502,22 @@ class OverwriteDialog(gtk.Dialog):
 		"""Reset rename field to predefined value"""
 		self._entry_rename.set_text(self._rename_value)
 		
-	def _get_info(self, provider, path):
+	def _get_data(self, provider, path):
 		"""Return information for specified path using provider"""
 		stat = provider.get_stat(path)
 
 		if provider._is_dir(path):
 			size = len(provider.list_dir(path))
+			icon = self._application.icon_manager.get_icon_from_type('folder', gtk.ICON_SIZE_DIALOG)
+			
 		else:
 			size = stat.st_size
+			icon = self._application.icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_DIALOG)
 
 		str_size = locale.format('%d', size, True)
 		str_date = time.strftime(self._time_format, time.gmtime(stat.st_mtime))
 		
-		return (str_size, str_date)
+		return (str_size, str_date, icon)
 		
 	def set_title_element(self, element):
 		"""Set title label with appropriate formatting"""
@@ -526,28 +529,24 @@ class OverwriteDialog(gtk.Dialog):
 	
 	def set_original(self, provider, path):
 		"""Set original element data"""
-		icon = self._application.icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_DIALOG)
-		self._icon_original.set_from_pixbuf(icon)
-		
-		data = self._get_info(provider, path)
+		data = self._get_data(provider, path)
 
+		self._icon_original.set_from_pixbuf(data[2])
 		self._label_original.set_markup(
-									'<b>Original file</b>\n'
+									'<b>Original</b>\n'
 									'<i>Size:</i>\t\t{0}\n'
-									'<i>Modified:</i>\t{1}'.format(*data)
+									'<i>Modified:</i>\t{1}'.format(*data[0:2])
 								)
 	
 	def set_source(self, provider, path):
 		"""Set source element data"""
-		icon = self._application.icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_DIALOG)
-		self._icon_source.set_from_pixbuf(icon)
+		data = self._get_data(provider, path)
 
-		data = self._get_info(provider, path)
-
+		self._icon_source.set_from_pixbuf(data[2])
 		self._label_source.set_markup(
 									'<b>Replace with</b>\n'
 									'<i>Size:</i>\t\t{0}\n'
-									'<i>Modified:</i>\t{1}'.format(*data)
+									'<i>Modified:</i>\t{1}'.format(*data[0:2])
 								)
 		
 	def set_rename_value(self, name):
@@ -603,4 +602,38 @@ class OverwriteFileDialog(OverwriteDialog):
 		self._label_message.set_text(
 							'Another file with the same name already exists in'
 							'"{0}". Replacing it will overwrite its content.'.format(element)
+							)
+
+
+class OverwriteDirectoryDialog(OverwriteDialog):
+	
+	def __init__(self, application):
+		OverwriteDialog.__init__(self, application)
+		
+		self.set_title('Directory conflict')
+	
+	def _create_buttons(self):
+		"""Create dialog specific button"""
+		button_merge = gtk.Button(label="Merge")
+		button_merge.set_can_default(True)
+		
+		OverwriteDialog._create_buttons(self)
+		self.add_action_widget(button_merge, gtk.RESPONSE_YES)
+		
+		self.set_default_response(gtk.RESPONSE_YES)
+
+	def set_title_element(self, element):
+		"""Set title label with appropriate formatting"""
+		self._label_title.set_markup(
+							'<span size="large" weight="bold">'
+							'Merge directory "{0}"?</span>'.format(element)
+							)
+		
+	def set_message_element(self, element):
+		"""Set message element"""
+		self._label_message.set_text(
+							'Directory with the same name already exists in '
+							'"{0}". Merging will ask for confirmation before ' 
+							'replacing any files in the directory that conflict '
+							'with the files being copied.'.format(element)
 							)

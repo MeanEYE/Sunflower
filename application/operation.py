@@ -4,6 +4,7 @@ import os
 import stat
 import gobject
 import fnmatch
+import time
 
 from threading import Thread
 from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog
@@ -31,7 +32,7 @@ class Operation(Thread):
 	def _destroy_ui(self):
 		"""Destroy user interface"""
 		if self._dialog is not None:
-			self._dialog.destroy()
+			self._dialog.hide()
 
 	def pause(self, paused=True):
 		"""Pause current operation"""
@@ -66,6 +67,8 @@ class CopyOperation(Operation):
 		gobject.idle_add(self._update_status, "Searching for files...")
 
 		for item in self._source.get_selection():
+			if not self._can_continue: break  # abort operation if requested
+
 			if self._source._is_dir(item):
 				gobject.idle_add(self._dialog.set_current_file, os.path.basename(item))
 				self._scan_directory(dir_list, file_list, item)
@@ -75,14 +78,14 @@ class CopyOperation(Operation):
 				gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
 				file_list.append(item)
-				
-			if not self._can_continue: break  # abort operation if requested
 	
 	def _scan_directory(self, dir_list, file_list, dir):
 		"""Recursively scan directory and populate list"""
 		dir_list.append(dir)
 
 		for item in self._source.list_dir(dir):
+			if not self._can_continue: break  # abort operation if requested
+
 			full_name = os.path.join(dir, item)
 
 			if self._source._is_dir(full_name):
@@ -94,8 +97,6 @@ class CopyOperation(Operation):
 				gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
 				file_list.append(full_name)
-				
-			if not self._can_continue: break  # abort operation if requested
 
 	def _copy_file(self, source, destination):
 		"""Copy file content"""
@@ -107,6 +108,8 @@ class CopyOperation(Operation):
 		file_stat = self._source.get_stat(source)
 		
 		while True:
+			if not self._can_continue: break
+
 			buffer = sh.read(COPY_BUFFER)
 			
 			if (buffer):
@@ -121,13 +124,14 @@ class CopyOperation(Operation):
 									)
 			else:
 				break;
-			
-			if not self._can_continue: break
 		
 	def _create_directories(self, source, destination, list):
 		"""Create all directories in list"""
 		gobject.idle_add(self._update_status, "Creating directories...")
 		for number, dir in enumerate(list, 0):
+			# if we are not allowed to continue, exit
+			if not self._can_continue: break
+
 			display_name = dir[len(source)+1:]
 			gobject.idle_add(self._dialog.set_current_file, display_name)
 			gobject.idle_add(self._dialog.set_current_file_fraction, float(number)/len(list))
@@ -142,21 +146,18 @@ class CopyOperation(Operation):
 			if self._options[OPTION_SET_OWNER]:
 				pass  # TODO: Implement set owner
 
-			# if we are not allowed to continue, exit
-			if not self._can_continue: break
-
 	def _copy_file_list(self, source, destination, list):
 		"""Copy list of files to destination path"""
 		gobject.idle_add(self._update_status, "Copying files...")
 		for file in list:
+			# if we are not allowed to continue, exit
+			if not self._can_continue: break
+
 			display_name = file[len(source)+1:]  # just take the ending part of the path
 			gobject.idle_add(self._dialog.set_current_file, os.path.basename(file))
 
 			self._copy_file(file, os.path.join(destination, display_name))				
 			gobject.idle_add(self._dialog.increment_current_count, 1)
-
-			# if we are not allowed to continue, exit
-			if not self._can_continue: break
 		
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
@@ -174,12 +175,10 @@ class CopyOperation(Operation):
 		self._get_lists(dir_list, file_list)
 		
 		# create directories
-		if self._can_continue:
-			self._create_directories(path_source, path_destination, dir_list)
+		self._create_directories(path_source, path_destination, dir_list)
 		
 		# copy files
-		if self._can_continue:
-			self._copy_file_list(path_source, path_destination, file_list)
+		self._copy_file_list(path_source, path_destination, file_list)
 
 		gobject.idle_add(self._destroy_ui)
 
@@ -190,6 +189,24 @@ class MoveOperation(CopyOperation):
 	def _create_dialog(self):
 		"""Create progress dialog"""
 		self._dialog = MoveDialog(self._application, self)
+		
+	def _move_file(self, source, destination):
+		"""Move specified file using provider rename method"""
+		self._source.rename_path(source, destination)
+	
+	def _move_file_list(self, source, destination, list):
+		"""Move files from the list"""
+		gobject.idle_add(self._update_status, "Moving files...")
+		for file in list:
+			# if we are not allowed to continue, exit
+			if not self._can_continue: break
+
+			display_name = file[len(source)+1:]  # just take the ending part of the path
+			gobject.idle_add(self._dialog.set_current_file, os.path.basename(file))
+
+			self._move_file(file, os.path.join(destination, display_name))				
+			gobject.idle_add(self._dialog.increment_current_count, 1)
+
 		
 	def _copy_file_list(self, source, destination, list):
 		"""Delete files after copying"""
@@ -204,13 +221,61 @@ class MoveOperation(CopyOperation):
 		
 		list = self._source.get_selection()
 		for number, item in enumerate(list, 0):
+			# if we are not allowed to continue, exit
+			if not self._can_continue: break
+
 			gobject.idle_add(self._dialog.set_current_file, os.path.basename(item))
 			self._source.remove_path(item)
 			gobject.idle_add(self._dialog.set_current_file_fraction, float(number) / len(list))
-			
-			# if we are not allowed to continue, exit
+	
+	def _delete_directories(self, list):
+		"""Remove empty directories after moving files"""
+		for directory in list:
 			if not self._can_continue: break
+			self._source.remova_path(directory)
 			
+	def _check_devices(self):
+		"""Check if source and destination are on the same file system"""
+		dev_source = self._source.get_stat(self._source.get_path()).st_dev
+		dev_destination = self._destination.get_stat(self._destination.get_path()).st_dev
+		
+		return dev_source == dev_destination
+			
+	def run(self):
+		"""Main thread method
+		
+		We override this method from CopyDialog in order to provide
+		a bit smarter move operation.
+		
+		"""
+		self._dialog.show_all()
+
+		path_source = self._source.get_path()
+		path_destination = self._options[OPTION_DESTINATION]
+		dir_list = []
+		file_list = []
+		
+		# set dialog info
+		self._dialog.set_source(path_source)
+		self._dialog.set_destination(path_destination)
+		
+		self._get_lists(dir_list, file_list)
+		
+		# create directories
+		self._create_directories(path_source, path_destination, dir_list)
+		
+		# copy/move files
+		if self._check_devices():
+			# both paths are on the same file system, move instead of copy
+			self._move_file_list(path_source, path_destination, file_list)
+			self._delete_directories(dir_list)
+			
+		else:
+			# paths are located on different file systems, copy and remove
+			self._copy_file_list(path_source, path_destination, file_list)
+				
+		gobject.idle_add(self._destroy_ui)			
+		
 
 class DeleteOperation(Operation):
 	"""Operation thread used for deleting files"""

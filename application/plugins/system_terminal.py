@@ -3,6 +3,7 @@
 import os
 
 from plugin_base.terminal import Terminal
+from plugins import FileList
 
 class SystemTerminal(Terminal):
 	"""System terminal plugin"""
@@ -45,3 +46,9 @@ class SystemTerminal(Terminal):
 								directory=self.path
 							)
 
+	def _close_tab(self, widget, data=None):
+		"""Provide additional functionality"""
+		if self._notebook.get_n_pages() == 1:
+			self._parent.create_tab(self._notebook, FileList, self.path)
+				
+			Terminal._close_tab(self, widget, data)

@@ -4,7 +4,6 @@ import os
 import stat
 import gobject
 import fnmatch
-import time
 
 from threading import Thread
 from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog

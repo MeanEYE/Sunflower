@@ -584,6 +584,9 @@ class FileList(ItemList):
 		elif event is gio.FILE_MONITOR_EVENT_CHANGED:
 			self._update_item_details_by_name(file.get_path())
 
+		self._change_title_text()			
+		self._update_status_with_statistis()
+
 	def _toggle_selection(self, widget, data=None, advance=True):
 		"""Toggle item selection"""
 		selection = self._item_list.get_selection()
@@ -761,6 +764,11 @@ class FileList(ItemList):
 				if next_iter is not None:
 					self._item_list.set_cursor(list.get_path(next_iter))
 
+			if list.get_value(found_iter, COL_DIR):
+				self._dirs['count'] -= 1
+			else:
+				self._files['count'] -= 1
+
 			# remove
 			self._store.remove(found_iter)
 
@@ -785,8 +793,9 @@ class FileList(ItemList):
 			self._store.set_value(found_iter, COL_MODE, file_mode)
 			self._store.set_value(found_iter, COL_DATE, file_date)
 
-	def _change_title_text(self, text):
+	def _change_title_text(self, text=None):
 		"""Change title label text and add free space display"""
+		if text is None: text = self.path
 		stat = os.statvfs(self.path)
 
 		space_free = self._format_size(stat.f_bsize * stat.f_bavail)

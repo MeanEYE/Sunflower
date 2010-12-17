@@ -615,6 +615,7 @@ class MainWindow(gtk.Window):
 
 			dialog.set_title('Select items')
 			dialog.set_label('Selection pattern (eg.: *.jpg):')
+			dialog.set_text('*')
 
 			# get response
 			response = dialog.get_response()
@@ -638,6 +639,7 @@ class MainWindow(gtk.Window):
 
 			dialog.set_title('Unselect items')
 			dialog.set_label('Selection pattern (eg.: *.jpg):')
+			dialog.set_text('*')
 
 			# get response
 			response = dialog.get_response()
@@ -854,8 +856,8 @@ class MainWindow(gtk.Window):
 									gtk.DIALOG_DESTROY_WITH_PARENT,
 									gtk.MESSAGE_ERROR,
 									gtk.BUTTONS_OK,
-									"There was an error saving configuration to "
-									"file located in your home directory. "
+									"Error saving configuration to files"
+									"in your home directory. "
 									"Make sure you have enough permissions."
 									"\n\n{0}".format(error)
 									)

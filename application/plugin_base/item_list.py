@@ -674,7 +674,8 @@ class ItemList(PluginBase):
 	def change_path(self, path=None):
 		"""Public method for safe path change """
 		if not path in self.history:
-			self.history.append(path)
+			self.history.insert(0, path)
+			
 		else:
 			i = self.history.index(path)
 			if not i == 0:

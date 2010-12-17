@@ -690,15 +690,16 @@ class FileList(ItemList):
 			# link
 			elif provider._is_link(full_name):
 				# TODO: Finish!
-				linked_name = os.path.join(self.path, os.readlink(full_name))
-				if os.path.exists(linked_name):
+				try:
+					linked_name = os.path.join(self.path, os.readlink(full_name))
 					file_stat = provider.get_stat(linked_name)
 
 					file_size = file_stat.st_size
 					file_mode = stat.S_IMODE(file_stat.st_mode)
 					file_date = file_stat.st_mtime
 
-				else:
+				except:
+					# handle bad links
 					file_size = 0
 					file_mode = 0
 					file_date = 0
@@ -738,7 +739,7 @@ class FileList(ItemList):
 					)
 				result = self._store.append(props)
 			except:
-				print 'Error: ', props
+				pass
 
 		return result
 
@@ -822,7 +823,6 @@ class FileList(ItemList):
 			self._fs_monitor.cancel()
 
 		self._clear_list()
-		ItemList.change_path(self, path)
 
 		# change path
 		if path is not None:
@@ -851,14 +851,40 @@ class FileList(ItemList):
 		self._files['selected'] = 0
 
 		# populate list
-		for file_name in self.get_provider().list_dir(self.path):
-			full_name = os.path.join(self.path, file_name)
+		try:
+			for file_name in self.get_provider().list_dir(self.path):
+				full_name = os.path.join(self.path, file_name)
+	
+				new_item = self._add_item(full_name, show_hidden)
+	
+				if file_name == selected:
+					to_select = new_item
 
-			new_item = self._add_item(full_name, show_hidden)
-
-			if file_name == selected:
-				to_select = new_item
-
+			# if no errors occured during path change,
+			# call parent method which handles history
+			ItemList.change_path(self, path)
+			
+		except OSError as error:
+			# problem with listing directory, ask user what to do
+			dialog = gtk.MessageDialog(
+									self._parent,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_ERROR,
+									gtk.BUTTONS_YES_NO,
+									"Error changing working directory. "
+									"\n\n{0}\n\nWould you like to retry?".format(error)
+								)
+			result = dialog.run()
+			dialog.destroy()
+			
+			if result == gtk.RESPONSE_YES:
+				self.change_path(path)
+				
+			else:
+				self.change_path(self.history[0])
+				
+			return
+			
 		# update status bar
 		self._update_status_with_statistis()
 

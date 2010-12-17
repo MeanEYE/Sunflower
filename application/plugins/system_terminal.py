@@ -13,7 +13,7 @@ class SystemTerminal(Terminal):
 
 		self.path = path
 		shell_command = os.environ['SHELL']
-		
+
 		# we need TERM environment variable set
 		if 'TERM' not in os.environ:
 			os.environ['TERM'] = 'xterm'
@@ -38,7 +38,7 @@ class SystemTerminal(Terminal):
 	def _recycle_terminal(self, widget, data=None):
 		"""Recycle terminal"""
 		if not self._vte_present: return
-		
+
 		shell_command = os.environ['SHELL']
 		self._terminal.reset(True, True)
 		self._terminal.fork_command(
@@ -50,5 +50,5 @@ class SystemTerminal(Terminal):
 		"""Provide additional functionality"""
 		if self._notebook.get_n_pages() == 1:
 			self._parent.create_tab(self._notebook, FileList, self.path)
-				
-			Terminal._close_tab(self, widget, data)
+
+		Terminal._close_tab(self, widget, data)

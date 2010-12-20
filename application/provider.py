@@ -15,7 +15,11 @@ class Provider:
 		pass
 
 	def _is_link(self, path):
-		"""Test if given path is a ling"""
+		"""Test if given path is a link"""
+		pass
+	
+	def _exists(self, path):
+		"""Test if given path exists"""
 		pass
 
 	def _unlink(self, path):

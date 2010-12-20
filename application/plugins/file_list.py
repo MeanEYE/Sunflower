@@ -310,8 +310,7 @@ class FileList(ItemList):
 			# if user is sure about removal create operation
 			operation = DeleteOperation(
 									self._parent,
-									self.get_provider(),
-									None
+									self.get_provider()
 									)
 			operation.start()
 
@@ -860,7 +859,7 @@ class FileList(ItemList):
 				if file_name == selected:
 					to_select = new_item
 
-			# if no errors occured during path change,
+			# if no errors occurred during path change,
 			# call parent method which handles history
 			ItemList.change_path(self, path)
 			
@@ -1054,6 +1053,10 @@ class LocalProvider(Provider):
 	def _is_link(self, path):
 		"""Test if given path is a link"""
 		return os.path.islink(path)
+	
+	def _exists(self, path):
+		"""Test if given path exists"""
+		return os.path.exists(path)
 
 	def _unlink(self, path):
 		"""Unlink given path"""

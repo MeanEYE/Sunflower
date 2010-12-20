@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
 import os
+import gtk
 import stat
 import gobject
 import fnmatch
 
 from threading import Thread
+from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OPTION_APPLY_TO_ALL
 from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog
 
 OPTION_FILE_TYPE   = 0
@@ -18,7 +20,7 @@ COPY_BUFFER = 100 * 1024
 class Operation(Thread):
 	"""Parent class for all operation threads"""
 
-	def __init__(self, application, source, destination):
+	def __init__(self, application, source, destination=None):
 		Thread.__init__(self, target=self)
 
 		self._paused = False
@@ -51,6 +53,12 @@ class CopyOperation(Operation):
 		self._create_dialog()
 		self._options = options
 		
+		self._merge_all = None
+		self._overwrite_all = None
+		
+		self._merge_dialog = None
+		self._overwrite_dialog = None
+		
 	def _create_dialog(self):
 		"""Create progress dialog"""
 		self._dialog = CopyDialog(self._application, self)
@@ -60,6 +68,78 @@ class CopyOperation(Operation):
 		self._dialog.set_status(status)
 		self._dialog.set_current_file("")
 		self._dialog.set_current_file_fraction(0)
+		
+	def _get_merge_input(self, source_path, destination_path):
+		"""Get merge confirmation
+		
+		Source path contains item in question while destination
+		path contains parent directory.
+		
+		"""
+		if self._merge_dialog is None:
+			self._merge_dialog = OverwriteDirectoryDialog(self._application, self._dialog)
+			
+		title_element = os.path.basename(source_path)
+		message_element = os.path.basename(destination_path) 
+		
+		self._merge_dialog.set_title_element(title_element)
+		self._merge_dialog.set_message_element(message_element)
+		self._merge_dialog.set_rename_value(title_element)
+		self._merge_dialog.set_source(
+									self._source, 
+									source_path
+								)
+		self._merge_dialog.set_original(
+									self._destination, 
+									os.path.join(destination_path, title_element)
+								)
+		
+		result = self._merge_dialog.get_response()
+		
+		merge = result[0] == gtk.RESPONSE_YES
+		self._merge_all = merge and result[1][OPTION_APPLY_TO_ALL]
+		
+		# in case user canceled operation
+		if result[0] == gtk.RESPONSE_CANCEL:
+			self._can_continue = False
+		
+		return merge  # return only response for current directory
+	
+	def _get_overwrite_input(self, source_path, destination_path):
+		"""Get overwrite confirmation
+		
+		Source path contains item in question while destination
+		path contains parent directory.
+		
+		"""
+		if self._overwrite_dialog is None:
+			self._overwrite_dialog = OverwriteFileDialog(self._application, self._dialog)
+			
+		title_element = os.path.basename(source_path)
+		message_element = os.path.basename(destination_path) 
+		
+		self._overwrite_dialog.set_title_element(title_element)
+		self._overwrite_dialog.set_message_element(message_element)
+		self._overwrite_dialog.set_rename_value(title_element)
+		self._overwrite_dialog.set_source(
+									self._source, 
+									source_path
+								)
+		self._overwrite_dialog.set_original(
+									self._destination, 
+									os.path.join(destination_path, title_element)
+								)
+		
+		result = self._overwrite_dialog.get_response()
+		
+		overwrite = result[0] == gtk.RESPONSE_YES
+		self._overwrite_all = overwrite and result[1][OPTION_APPLY_TO_ALL]
+		
+		# in case user canceled operation
+		if result[0] == gtk.RESPONSE_CANCEL:
+			self._can_continue = False
+		
+		return overwrite  # return only response for current file
 		
 	def _get_lists(self, dir_list, file_list):
 		"""Find all files for copying"""
@@ -231,7 +311,7 @@ class MoveOperation(CopyOperation):
 		"""Remove empty directories after moving files"""
 		for directory in list:
 			if not self._can_continue: break
-			self._source.remova_path(directory)
+			self._source.remove_path(directory)
 			
 	def _check_devices(self):
 		"""Check if source and destination are on the same file system"""
@@ -279,8 +359,8 @@ class MoveOperation(CopyOperation):
 class DeleteOperation(Operation):
 	"""Operation thread used for deleting files"""
 
-	def __init__(self, application, source, destination):
-		Operation.__init__(self, application, source, destination)
+	def __init__(self, application, provider):
+		Operation.__init__(self, application, provider)
 		self._dialog = DeleteDialog(application, self)
 
 	def run(self):

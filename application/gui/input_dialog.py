@@ -6,6 +6,10 @@ import time
 import locale
 import fnmatch
 
+OPTION_RENAME		= 0
+OPTION_NEW_NAME		= 1
+OPTION_APPLY_TO_ALL	= 2
+
 class InputDialog(gtk.Dialog):
 	"""Simple input dialog
 
@@ -293,6 +297,13 @@ class CopyDialog(gtk.Dialog):
 		
 		self.checkbox_owner = gtk.CheckButton('Set owner on destination')
 		self.checkbox_mode = gtk.CheckButton('Set access mode on destination')
+		self.checkbox_silent = gtk.CheckButton('Silent mode')
+		
+		self.checkbox_silent.set_tooltip_text(
+										'Silent mode will enable operation to finish '
+										'without disturbing you. If any errors occur, '
+										'they will be presented to you after completion.'
+									)
 		
 		self._create_buttons()
 		
@@ -303,6 +314,7 @@ class CopyDialog(gtk.Dialog):
 		vbox2.pack_start(self.entry_type, False, False, 0)
 		vbox2.pack_start(self.checkbox_owner, False, False, 0)
 		vbox2.pack_start(self.checkbox_mode, False, False, 0)
+		vbox2.pack_start(self.checkbox_silent, False, False, 0)
 		
 		vbox.pack_start(self.label_destination, False, False, 0)
 		vbox.pack_start(self.entry_destination, False, False, 0)
@@ -394,8 +406,8 @@ class RenameDialog(InputDialog):
 class OverwriteDialog(gtk.Dialog):
 	"""Dialog used for confirmation of file/directory overwrite"""
 	
-	def __init__(self, application):
-		gtk.Dialog.__init__(self, parent=application)
+	def __init__(self, application, parent):
+		gtk.Dialog.__init__(self, parent=parent)
 
 		self._application = application
 		self._rename_value = ''
@@ -404,8 +416,8 @@ class OverwriteDialog(gtk.Dialog):
 		self.set_default_size(400, 10)
 		self.set_resizable(True)
 		self.set_skip_taskbar_hint(True)
-		self.set_modal(False)
-		self.set_transient_for(application)
+		self.set_modal(True)
+		self.set_transient_for(parent)
 
 		self.vbox.set_spacing(0)
 
@@ -575,8 +587,8 @@ class OverwriteDialog(gtk.Dialog):
 		
 class OverwriteFileDialog(OverwriteDialog):
 	
-	def __init__(self, application):
-		OverwriteDialog.__init__(self, application)
+	def __init__(self, application, parent):
+		OverwriteDialog.__init__(self, application, parent)
 		
 		self.set_title('File conflict')
 		
@@ -607,8 +619,8 @@ class OverwriteFileDialog(OverwriteDialog):
 
 class OverwriteDirectoryDialog(OverwriteDialog):
 	
-	def __init__(self, application):
-		OverwriteDialog.__init__(self, application)
+	def __init__(self, application, parent):
+		OverwriteDialog.__init__(self, application, parent)
 		
 		self.set_title('Directory conflict')
 	

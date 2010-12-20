@@ -198,7 +198,7 @@ class ItemList(PluginBase):
 		self._parent.show_bookmarks_menu(None, self._parent.left_notebook)
 
 	def _show_right_bookmarks(self, widget, data=None):
-		"""Show left bookmarks menu"""
+		"""Show right bookmarks menu"""
 		self._parent.show_bookmarks_menu(None, self._parent.right_notebook)
 
 	def _hide_spinner(self):

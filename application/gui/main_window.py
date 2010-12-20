@@ -971,7 +971,7 @@ class MainWindow(gtk.Window):
 		provider = self._active_object.get_provider()
 		path = self._active_object._get_selection()
 		
-		d = input_dialog.OverwriteDirectoryDialog(self)
+		d = input_dialog.OverwriteDirectoryDialog(self, self)
 		d.set_title_element('trt.php')
 		d.set_rename_value('novo_ime.php')
 		d.set_message_element('njak')

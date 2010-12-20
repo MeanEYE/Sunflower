@@ -4,8 +4,6 @@ import gtk
 import pango
 import locale
 
-__all__ = ['CopyDialog', 'DeleteDialog']
-
 class OperationDialog(gtk.Window):
 	"""Dialog for operations
 
@@ -46,8 +44,6 @@ class OperationDialog(gtk.Window):
 
 	def _add_source_destination(self):
 		"""Add source and destination labels to the GUI"""
-
-		# create interface
 		frame = gtk.Frame()
 		frame.set_shadow_type(gtk.SHADOW_OUT)
 
@@ -83,8 +79,6 @@ class OperationDialog(gtk.Window):
 
 	def _add_current_file(self):
 		"""Add 'current file' progress to the GUI"""
-
-		# create interface
 		frame = gtk.Frame()
 		frame.set_shadow_type(gtk.SHADOW_OUT)
 
@@ -111,8 +105,6 @@ class OperationDialog(gtk.Window):
 
 	def _add_details(self):
 		"""Add ETA to the dialog"""
-
-		# create interface
 		frame = gtk.Frame()
 		frame.set_shadow_type(gtk.SHADOW_OUT)
 
@@ -168,8 +160,6 @@ class OperationDialog(gtk.Window):
 
 	def _add_buttons(self):
 		"""Add button bar"""
-
-		# create interface
 		hbox = gtk.HBox(False, 5)
 
 		self._button_pause = gtk.Button('Pause')

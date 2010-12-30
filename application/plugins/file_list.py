@@ -391,7 +391,7 @@ class FileList(ItemList):
 
 		if not is_parent:
 			item = list.get_value(iter, COL_NAME)
-			result = item if not relative else os.path.join(self.path, item)
+			result = item if relative else os.path.join(self.path, item)
 
 		return result
 
@@ -414,7 +414,7 @@ class FileList(ItemList):
 		else:
 			for row in self._store:
 				if row[COL_COLOR] is not None:
-					value = row[COL_NAME] if not relative else os.path.join(self.path, row[COL_NAME])
+					value = row[COL_NAME] if relative else os.path.join(self.path, row[COL_NAME])
 					result.append(value)
 
 		if len(result) is 0:

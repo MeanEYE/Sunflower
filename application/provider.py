@@ -52,7 +52,7 @@ class Provider:
 
 	def get_selection(self, relative=False):
 		"""Get list of selected items"""
-		return self._parent._get_selection_list()
+		return self._parent._get_selection_list(relative=relative)
 	
 	def get_path(self):
 		"""Return parents path"""

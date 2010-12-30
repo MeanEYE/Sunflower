@@ -266,25 +266,26 @@ class MoveOperation(CopyOperation):
 		
 	def _move_file(self, source, destination):
 		"""Move specified file using provider rename method"""
-		self._source.rename_path(source, destination)
+		self._source.rename_path(source, destination, relative=True)
 	
-	def _move_file_list(self, source, destination, list):
+	def _move_file_list(self, list):
 		"""Move files from the list"""
 		gobject.idle_add(self._update_status, "Moving files...")
 		for file in list:
 			# if we are not allowed to continue, exit
 			if not self._can_continue: break
 
-			display_name = file[len(source)+1:]  # just take the ending part of the path
-			gobject.idle_add(self._dialog.set_current_file, os.path.basename(file))
+			gobject.idle_add(self._dialog.set_current_file, file)
 
-			self._move_file(file, os.path.join(destination, display_name))				
+			self._move_file(
+						os.path.join(self._source.get_path(), file),
+						os.path.join(self._destination.get_path(), file)
+					)				
 			gobject.idle_add(self._dialog.increment_current_count, 1)
-
 		
-	def _copy_file_list(self, source, destination, list):
+	def _copy_file_list(self, list):
 		"""Delete files after copying"""
-		CopyOperation._copy_file_list(self, source, destination, list)
+		CopyOperation._copy_file_list(self, list)
 		
 		if self._can_continue:
 			self._delete_file_list()
@@ -293,20 +294,23 @@ class MoveOperation(CopyOperation):
 		"""Remove files from source list"""
 		self._update_status("Deleting source files...")
 		
-		list = self._source.get_selection()
+		list = self._source.get_selection(relative=True)
 		for number, item in enumerate(list, 0):
 			# if we are not allowed to continue, exit
 			if not self._can_continue: break
 
-			gobject.idle_add(self._dialog.set_current_file, os.path.basename(item))
-			self._source.remove_path(item)
+			gobject.idle_add(self._dialog.set_current_file, item)
+			self._source.remove_path(item, relative=True)
 			gobject.idle_add(self._dialog.set_current_file_fraction, float(number) / len(list))
 	
-	def _delete_directories(self, list):
+	def _delete_directories(self):
 		"""Remove empty directories after moving files"""
+		list = self._source.get_selection(relative=True)
+		
 		for directory in list:
 			if not self._can_continue: break
-			self._source.remove_path(directory)
+			if self._source.exists(directory, relative=True):
+				self._source.remove_path(directory, relative=True)
 			
 	def _check_devices(self):
 		"""Check if source and destination are on the same file system"""
@@ -325,7 +329,7 @@ class MoveOperation(CopyOperation):
 		self._dialog.show_all()
 
 		path_source = self._source.get_path()
-		path_destination = self._options[OPTION_DESTINATION]
+		path_destination = self._destination.get_path()
 		dir_list = []
 		file_list = []
 		
@@ -336,17 +340,17 @@ class MoveOperation(CopyOperation):
 		self._get_lists(dir_list, file_list)
 		
 		# create directories
-		self._create_directories(path_source, path_destination, dir_list)
+		self._create_directories(dir_list)
 		
 		# copy/move files
 		if self._check_devices():
 			# both paths are on the same file system, move instead of copy
-			self._move_file_list(path_source, path_destination, file_list)
-			self._delete_directories(dir_list)
+			self._move_file_list(file_list)
+			self._delete_directories()
 			
 		else:
 			# paths are located on different file systems, copy and remove
-			self._copy_file_list(path_source, path_destination, file_list)
+			self._copy_file_list(file_list)
 				
 		gobject.idle_add(self._destroy_ui)			
 		

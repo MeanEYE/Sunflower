@@ -277,6 +277,7 @@ class CopyDialog(gtk.Dialog):
 		
 		self.entry_destination = gtk.Entry()
 		self.entry_destination.set_text(path)
+		self.entry_destination.set_editable(False)
 		self.entry_destination.connect('activate', self._confirm_entry)
 		
 		# additional options
@@ -518,7 +519,7 @@ class OverwriteDialog(gtk.Dialog):
 		"""Return information for specified path using provider"""
 		stat = provider.get_stat(path)
 
-		if provider._is_dir(path):
+		if provider.is_dir(path):
 			size = len(provider.list_dir(path))
 			icon = self._application.icon_manager.get_icon_from_type('folder', gtk.ICON_SIZE_DIALOG)
 			

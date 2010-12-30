@@ -145,15 +145,15 @@ class CopyOperation(Operation):
 		"""Find all files for copying"""
 		gobject.idle_add(self._update_status, "Searching for files...")
 
-		for item in self._source.get_selection():
+		for item in self._source.get_selection(relative=True):
 			if not self._can_continue: break  # abort operation if requested
 
-			if self._source._is_dir(item):
+			if self._source.is_dir(item, relative=True):
 				gobject.idle_add(self._dialog.set_current_file, os.path.basename(item))
 				self._scan_directory(dir_list, file_list, item)
 				
-			elif fnmatch.fnmatch(os.path.basename(item), self._options[OPTION_FILE_TYPE]):
-				stat = self._source.get_stat(item)
+			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
+				stat = self._source.get_stat(item, relative=True)
 				gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
 				file_list.append(item)
@@ -162,29 +162,29 @@ class CopyOperation(Operation):
 		"""Recursively scan directory and populate list"""
 		dir_list.append(dir)
 
-		for item in self._source.list_dir(dir):
+		for item in self._source.list_dir(dir, relative=True):
 			if not self._can_continue: break  # abort operation if requested
 
 			full_name = os.path.join(dir, item)
-
-			if self._source._is_dir(full_name):
+			
+			if self._source.is_dir(full_name, relative=True):
 				gobject.idle_add(self._dialog.set_current_file, item)
 				self._scan_directory(dir_list, file_list, full_name)
 				
 			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
-				stat = self._source.get_stat(full_name)
+				stat = self._source.get_stat(full_name, relative=True)
 				gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
 				file_list.append(full_name)
 
-	def _copy_file(self, source, destination):
+	def _copy_file(self, file):
 		"""Copy file content"""
 		# TODO: Handle errors!
-		sh = self._source.get_file_handle(source, 'rb')
-		dh = self._destination.get_file_handle(destination, "wb")
+		sh = self._source.get_file_handle(file, 'rb', relative=True)
+		dh = self._destination.get_file_handle(file, "wb", relative=True)
 		
 		destination_size = 0L
-		file_stat = self._source.get_stat(source)
+		file_stat = self._source.get_stat(file, relative=True)
 		
 		while True:
 			if not self._can_continue: break
@@ -204,38 +204,36 @@ class CopyOperation(Operation):
 			else:
 				break;
 		
-	def _create_directories(self, source, destination, list):
+	def _create_directories(self, list):
 		"""Create all directories in list"""
 		gobject.idle_add(self._update_status, "Creating directories...")
 		for number, dir in enumerate(list, 0):
 			# if we are not allowed to continue, exit
 			if not self._can_continue: break
 
-			display_name = dir[len(source)+1:]
-			gobject.idle_add(self._dialog.set_current_file, display_name)
+			gobject.idle_add(self._dialog.set_current_file, dir)
 			gobject.idle_add(self._dialog.set_current_file_fraction, float(number)/len(list))
 
-			file_stat = self._source.get_stat(dir)
+			file_stat = self._source.get_stat(dir, relative=True)
 			mode = stat.S_IMODE(file_stat.st_mode) if self._options[OPTION_SET_MODE] else 0755
 			
 			# TODO: Handle errors!
-			self._destination.create_directory(os.path.join(destination, display_name), mode)
+			self._destination.create_directory(dir, mode, relative=True)
 			
 			# try to set owner
 			if self._options[OPTION_SET_OWNER]:
 				pass  # TODO: Implement set owner
 
-	def _copy_file_list(self, source, destination, list):
+	def _copy_file_list(self, list):
 		"""Copy list of files to destination path"""
 		gobject.idle_add(self._update_status, "Copying files...")
 		for file in list:
 			# if we are not allowed to continue, exit
 			if not self._can_continue: break
 
-			display_name = file[len(source)+1:]  # just take the ending part of the path
-			gobject.idle_add(self._dialog.set_current_file, os.path.basename(file))
+			gobject.idle_add(self._dialog.set_current_file, file)
 
-			self._copy_file(file, os.path.join(destination, display_name))				
+			self._copy_file(file)				
 			gobject.idle_add(self._dialog.increment_current_count, 1)
 		
 	def run(self):
@@ -243,7 +241,7 @@ class CopyOperation(Operation):
 		self._dialog.show_all()
 
 		path_source = self._source.get_path()
-		path_destination = self._options[OPTION_DESTINATION]
+		path_destination = self._destination.get_path()
 		dir_list = []
 		file_list = []
 		
@@ -253,11 +251,8 @@ class CopyOperation(Operation):
 		
 		self._get_lists(dir_list, file_list)
 		
-		# create directories
-		self._create_directories(path_source, path_destination, dir_list)
-		
-		# copy files
-		self._copy_file_list(path_source, path_destination, file_list)
+		self._create_directories(dir_list)
+		self._copy_file_list(file_list)
 
 		gobject.idle_add(self._destroy_ui)
 
@@ -367,11 +362,11 @@ class DeleteOperation(Operation):
 		"""Main thread method, this is where all the stuff is happening"""
 		self._dialog.show_all()
 
-		list = self._source.get_selection()
+		list = self._source.get_selection(relative=True)
 
 		for index, item in enumerate(list, 1):
-			gobject.idle_add(self._dialog.set_current_file, os.path.basename(item))
-			self._source.remove_path(item)
+			gobject.idle_add(self._dialog.set_current_file, item)
+			self._source.remove_path(item, relative=True)
 			gobject.idle_add(self._dialog.set_current_file_fraction, float(index) / len(list))
 
 			# if we are not allowed to continue, exit

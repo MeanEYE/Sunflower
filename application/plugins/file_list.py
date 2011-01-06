@@ -1089,7 +1089,7 @@ class LocalProvider(Provider):
 		"""Create empty file with specified mode set"""
 		real_path = path if not relative else self._get_full_path(path)
 		open(real_path, 'w').close()
-		os.chmod(path, mode)
+		os.chmod(real_path, mode)
 
 	def create_directory(self, path, mode=0755, relative=False):
 		"""Create directory with specified mode set"""

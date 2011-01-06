@@ -67,12 +67,7 @@ class CopyOperation(Operation):
 		self._dialog.set_current_file_fraction(0)
 
 	def _get_merge_input(self, path):
-		"""Get merge confirmation
-
-		Source path contains item in question while destination
-		path contains parent directory.
-
-		"""
+		"""Get merge confirmation"""
 		dialog = OverwriteDirectoryDialog(self._application, self._dialog)
 
 		title_element = os.path.basename(path)
@@ -91,12 +86,14 @@ class CopyOperation(Operation):
 						path
 						)
 
-		gtk.gdk.threads_enter()  # prevend deadlocks
+		gtk.gdk.threads_enter()  # prevent deadlocks
 		result = dialog.get_response()
 		gtk.gdk.threads_leave()
 
 		merge = result[0] == gtk.RESPONSE_YES
-		self._merge_all = merge and result[1][OPTION_APPLY_TO_ALL]
+		
+		if result[1][OPTION_APPLY_TO_ALL]:
+			self._merge_all = merge 
 
 		# in case user canceled operation
 		if result[0] == gtk.RESPONSE_CANCEL:
@@ -104,36 +101,34 @@ class CopyOperation(Operation):
 
 		return merge  # return only response for current directory
 
-	def _get_overwrite_input(self, source_path, destination_path):
-		"""Get overwrite confirmation
-
-		Source path contains item in question while destination
-		path contains parent directory.
-
-		"""
+	def _get_overwrite_input(self, path):
+		"""Get overwrite confirmation"""
 		dialog = OverwriteFileDialog(self._application, self._dialog)
 
-		title_element = os.path.basename(source_path)
-		message_element = os.path.basename(destination_path)
+		title_element = os.path.basename(path)
+		message_element = os.path.basename(os.path.dirname(
+							os.path.join(self._destination.get_path(), path)))
 
 		dialog.set_title_element(title_element)
 		dialog.set_message_element(message_element)
 		dialog.set_rename_value(title_element)
 		dialog.set_source(
 						self._source,
-						source_path
+						path
 						)
 		dialog.set_original(
 						self._destination,
-						os.path.join(destination_path, title_element)
+						path
 						)
 
-		gtk.gdk.threads_enter()  # prevend deadlocks
+		gtk.gdk.threads_enter()  # prevent deadlocks
 		result = dialog.get_response()
 		gtk.gdk.threads_leave()
 
 		overwrite = result[0] == gtk.RESPONSE_YES
-		self._overwrite_all = overwrite and result[1][OPTION_APPLY_TO_ALL]
+		
+		if result[1][OPTION_APPLY_TO_ALL]:
+			self._overwrite_all = overwrite
 
 		# in case user canceled operation
 		if result[0] == gtk.RESPONSE_CANCEL:
@@ -166,10 +161,19 @@ class CopyOperation(Operation):
 					self._scan_directory(dir_list, file_list, item)
 
 			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
-				stat = self._source.get_stat(item, relative=True)
-				gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
-				gobject.idle_add(self._dialog.increment_total_count, 1)
-				file_list.append(item)
+				can_procede = True
+				
+				if self._destination.exists(item, relative=True):
+					if self._overwrite_all is not None:
+						can_procede = self._overwrite_all
+					else:
+						can_procede = self._get_overwrite_input(item)
+					
+				if can_procede:
+					stat = self._source.get_stat(item, relative=True)
+					gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
+					gobject.idle_add(self._dialog.increment_total_count, 1)
+					file_list.append(item)
 
 	def _scan_directory(self, dir_list, file_list, directory):
 		"""Recursively scan directory and populate list"""
@@ -197,10 +201,19 @@ class CopyOperation(Operation):
 					self._scan_directory(dir_list, file_list, full_name)
 
 			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
-				stat = self._source.get_stat(full_name, relative=True)
-				gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
-				gobject.idle_add(self._dialog.increment_total_count, 1)
-				file_list.append(full_name)
+				can_procede = True
+				
+				if self._destination.exists(full_name, relative=True):
+					if self._overwrite_all is not None:
+						can_procede = self._overwrite_all
+					else:
+						can_procede = self._get_overwrite_input(full_name)
+					
+				if can_procede:
+					stat = self._source.get_stat(full_name, relative=True)
+					gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
+					gobject.idle_add(self._dialog.increment_total_count, 1)
+					file_list.append(full_name)
 
 	def _copy_file(self, file):
 		"""Copy file content"""

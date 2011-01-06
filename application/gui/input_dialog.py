@@ -14,7 +14,7 @@ class InputDialog(gtk.Dialog):
 	"""Simple input dialog
 
 	This class can be extended with additional custom controls
-	by accessing localy stored objects. Initially this dialog
+	by accessing locally stored objects. Initially this dialog
 	contains single label and text entry, along with two buttons.
 
 	"""
@@ -463,6 +463,7 @@ class OverwriteDialog(gtk.Dialog):
 		hbox_rename = gtk.HBox(False, 10)
 
 		self._entry_rename = gtk.Entry()
+		self._entry_rename.set_sensitive(False)
 		button_reset = gtk.Button('Reset')
 		button_reset.connect('clicked', self._reset_rename_field)
 

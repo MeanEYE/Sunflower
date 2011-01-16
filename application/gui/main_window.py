@@ -51,7 +51,7 @@ class MainWindow(gtk.Window):
 			self.set_icon_from_file(os.path.join(
 										os.path.dirname(sys.argv[0]),
 										'images',
-										'main_scalable.svg'
+										'sunflower_hi-def_64x64.png'
 									))
 
 		# set locale for international number formatting
@@ -906,8 +906,9 @@ class MainWindow(gtk.Window):
 		default_options = {
 				'default_editor': 'gedit "{0}"',
 				'wait_for_editor': 'False',
-				'status_text': 'Directories: %(dir_count_sel)i/%(dir_count)i, '
-							   'Files: %(file_count_sel)i/%(file_count)i',
+				'status_text': 'Directories: %dir_sel/%dir_count   '
+							'Files: %file_sel/%file_count   '
+							'Size: %size_sel/%size_total',
 				'show_hidden': 'False',
 				'show_mounts': 'True',
 				'show_toolbar': 'False',

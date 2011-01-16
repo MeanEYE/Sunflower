@@ -17,6 +17,7 @@ class OperationDialog(gtk.Window):
 	def __init__(self, application, thread):
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 
+		self._paused = False
 		self._application = application
 		self._thread = thread
 		self._size_format = '{0} / {1}'
@@ -166,7 +167,6 @@ class OperationDialog(gtk.Window):
 		self._button_minimize = gtk.Button('Minimize')
 		self._button_cancel = gtk.Button('Cancel')
 
-		self._button_pause.set_sensitive(False)
 		self._button_minimize.set_sensitive(False)
 		
 		self._button_pause.connect('clicked', self._pause_click)
@@ -193,17 +193,19 @@ class OperationDialog(gtk.Window):
 
 	def _pause_click(self, widget, data=None):
 		"""Lock threading object"""
-		if not self._thread._paused:
+		self._paused = not self._paused
+		
+		if self._paused:
 			self._button_pause.set_label('Resume')
-			self._thread._paused = True
+			self._thread.pause()
 		else:
 			self._button_pause.set_label('Pause')
-			self._thread._paused = False
+			self._thread.resume()
 
 	def _cancel_click(self, widget, data=None):
 		"""Handle 'cancel' button click event"""
 		if self._confirm_cancel("Are you sure about canceling current operation?"):
-			self._thread._can_continue = False
+			self._thread.cancel()
 			
 	def _update_total_count(self):
 		"""Update progress bar and labels for total count"""

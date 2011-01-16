@@ -163,8 +163,8 @@ class OperationDialog(gtk.Window):
 		"""Add button bar"""
 		hbox = gtk.HBox(False, 5)
 
-		self._button_pause = gtk.Button('Pause')
 		self._button_minimize = gtk.Button('Minimize')
+		self._button_pause = gtk.Button('Pause')
 		self._button_cancel = gtk.Button('Cancel')
 
 		self._button_minimize.set_sensitive(False)
@@ -173,8 +173,8 @@ class OperationDialog(gtk.Window):
 		self._button_cancel.connect('clicked', self._cancel_click)
 
 		# pack interface
-		hbox.pack_start(self._button_pause, False, False, 0)
 		hbox.pack_start(self._button_minimize, False, False, 0)
+		hbox.pack_start(self._button_pause, False, False, 0)
 		hbox.pack_end(self._button_cancel, False, False, 0)
 
 		self._vbox.pack_end(hbox, False, False, 0)

@@ -522,12 +522,12 @@ class OverwriteDialog(gtk.Dialog):
 		"""Reset rename field to predefined value"""
 		self._entry_rename.set_text(self._rename_value)
 
-	def _get_data(self, provider, path):
+	def _get_data(self, provider, path, relative_to=None):
 		"""Return information for specified path using provider"""
-		stat = provider.get_stat(path, relative=True)
+		stat = provider.get_stat(path, relative_to=relative_to)
 
-		if provider.is_dir(path, relative=True):
-			size = len(provider.list_dir(path, relative=True))
+		if provider.is_dir(path, relative_to=relative_to):
+			size = len(provider.list_dir(path, relative_to=relative_to))
 			icon = self._application.icon_manager.get_icon_from_type(
 																'folder',
 																gtk.ICON_SIZE_DIALOG
@@ -556,9 +556,9 @@ class OverwriteDialog(gtk.Dialog):
 		"""Set message element"""
 		pass
 
-	def set_original(self, provider, path):
+	def set_original(self, provider, path, relative_to=None):
 		"""Set original element data"""
-		data = self._get_data(provider, path)
+		data = self._get_data(provider, path, relative_to)
 
 		self._icon_original.set_from_pixbuf(data[2])
 		self._label_original.set_markup(
@@ -567,9 +567,9 @@ class OverwriteDialog(gtk.Dialog):
 									'<i>Modified:</i>\t{1}'.format(*data[0:2])
 								)
 
-	def set_source(self, provider, path):
+	def set_source(self, provider, path, relative_to=None):
 		"""Set source element data"""
-		data = self._get_data(provider, path)
+		data = self._get_data(provider, path, relative_to)
 
 		self._icon_source.set_from_pixbuf(data[2])
 		self._label_source.set_markup(

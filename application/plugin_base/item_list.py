@@ -2,6 +2,7 @@
 
 import os
 import gtk
+import locale
 
 from plugin import PluginBase
 
@@ -107,6 +108,7 @@ class ItemList(PluginBase):
 
 		self._dirs = {'count': 0, 'selected': 0}
 		self._files = {'count': 0, 'selected': 0}
+		self._size = {'total': 0L, 'selected': 0}
 
 		self._is_updating = False
 
@@ -610,15 +612,16 @@ class ItemList(PluginBase):
 	def _update_status_with_statistis(self):
 		"""Set status bar text acording to dir/file stats"""
 
-		format = self._parent.options.get('main', 'status_text')
-		self.update_status(
-						format % {
-								'dir_count': self._dirs['count'],
-								'dir_count_sel': self._dirs['selected'],
-								'file_count': self._files['count'],
-								'file_count_sel': self._files['selected']
-								}
-						)
+		status = self._parent.options.get('main', 'status_text')
+		
+		status = status.replace('%dir_count', str(self._dirs['count']))
+		status = status.replace('%dir_sel', str(self._dirs['selected']))
+		status = status.replace('%file_count', str(self._files['count']))
+		status = status.replace('%file_sel', str(self._files['selected']))
+		status = status.replace('%size_total', locale.format('%d', self._size['total'], True))
+		status = status.replace('%size_sel', locale.format('%d', self._size['selected'], True))
+		
+		self.update_status(status)
 
 	def _toggle_selection(self, widget, data=None, advance=True):
 		"""Abstract method for toggling item selection"""

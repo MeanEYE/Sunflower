@@ -29,6 +29,11 @@ class Operation(Thread):
 		self._source = source
 		self._destination = destination
 		self._dialog = None
+
+		# store initial paths
+		self._source_path = self._source.get_path()
+		if self._destination is not None:
+			self._destination_path = self._destination.get_path()
 		
 		self._can_continue.set()
 
@@ -85,11 +90,13 @@ class CopyOperation(Operation):
 		dialog.set_rename_value(title_element)
 		dialog.set_source(
 						self._source,
-						path
+						path,
+						relative_to=self._source_path
 						)
 		dialog.set_original(
 						self._destination,
-						path
+						path,
+						relative_to=self._destination_path
 						)
 
 		gtk.gdk.threads_enter()  # prevent deadlocks
@@ -120,11 +127,13 @@ class CopyOperation(Operation):
 		dialog.set_rename_value(title_element)
 		dialog.set_source(
 						self._source,
-						path
+						path,
+						relative_to=self._source_path
 						)
 		dialog.set_original(
 						self._destination,
-						path
+						path,
+						relative_to=self._destination_path
 						)
 
 		gtk.gdk.threads_enter()  # prevent deadlocks
@@ -152,11 +161,11 @@ class CopyOperation(Operation):
 			
 			gobject.idle_add(self._dialog.set_current_file, item)
 
-			if self._source.is_dir(item, relative=True):
+			if self._source.is_dir(item, relative_to=self._source_path):
 				can_procede = True
 				can_create = True
 
-				if self._destination.exists(item, relative=True):
+				if self._destination.exists(item, relative_to=self._destination_path):
 					can_create = False
 
 					if self._merge_all is not None:
@@ -171,21 +180,21 @@ class CopyOperation(Operation):
 			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
 				can_procede = True
 				
-				if self._destination.exists(item, relative=True):
+				if self._destination.exists(item, relative_to=self._destination_path):
 					if self._overwrite_all is not None:
 						can_procede = self._overwrite_all
 					else:
 						can_procede = self._get_overwrite_input(item)
 					
 				if can_procede:
-					stat = self._source.get_stat(item, relative=True)
+					stat = self._source.get_stat(item, relative_to=self._source_path)
 					gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
 					gobject.idle_add(self._dialog.increment_total_count, 1)
 					file_list.append(item)
 
 	def _scan_directory(self, dir_list, file_list, directory):
 		"""Recursively scan directory and populate list"""
-		for item in self._source.list_dir(directory, relative=True):
+		for item in self._source.list_dir(directory, relative_to=self._source_path):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()
 			
@@ -193,11 +202,11 @@ class CopyOperation(Operation):
 
 			full_name = os.path.join(directory, item)
 
-			if self._source.is_dir(full_name, relative=True):
+			if self._source.is_dir(full_name, relative_to=self._source_path):
 				can_procede = True
 				can_create = True
 
-				if self._destination.exists(full_name, relative=True):
+				if self._destination.exists(full_name, relative_to=self._destination_path):
 					can_create = False
 
 					if self._merge_all is not None:
@@ -213,14 +222,14 @@ class CopyOperation(Operation):
 			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
 				can_procede = True
 				
-				if self._destination.exists(full_name, relative=True):
+				if self._destination.exists(full_name, relative_to=self._destination_path):
 					if self._overwrite_all is not None:
 						can_procede = self._overwrite_all
 					else:
 						can_procede = self._get_overwrite_input(full_name)
 					
 				if can_procede:
-					stat = self._source.get_stat(full_name, relative=True)
+					stat = self._source.get_stat(full_name, relative_to=self._source_path)
 					gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
 					gobject.idle_add(self._dialog.increment_total_count, 1)
 					file_list.append(full_name)
@@ -228,14 +237,20 @@ class CopyOperation(Operation):
 	def _copy_file(self, file):
 		"""Copy file content"""
 		# TODO: Handle errors!
-		sh = self._source.get_file_handle(file, 'rb', relative=True)
-		dh = self._destination.get_file_handle(file, "wb", relative=True)
+		sh = self._source.get_file_handle(file, 'rb', relative_to=self._source_path)
+		dh = self._destination.get_file_handle(file, 'wb', relative_to=self._destination_path)
 
 		destination_size = 0L
-		file_stat = self._source.get_stat(file, relative=True)
+		file_stat = self._source.get_stat(file, relative_to=self._source_path)
 
 		# reserve file size
-		dh.truncate(file_stat.st_size)
+		try:
+			dh.truncate(file_stat.st_size)
+		except:
+			# not all file systems support this option,  
+			# just ignore exception
+			pass
+		
 		dh.seek(0)
 
 		while True:
@@ -270,11 +285,11 @@ class CopyOperation(Operation):
 			gobject.idle_add(self._dialog.set_current_file, dir)
 			gobject.idle_add(self._dialog.set_current_file_fraction, float(number)/len(list))
 
-			file_stat = self._source.get_stat(dir, relative=True)
+			file_stat = self._source.get_stat(dir, relative_to=self._source_path)
 			mode = stat.S_IMODE(file_stat.st_mode) if self._options[OPTION_SET_MODE] else 0755
 
 			# TODO: Handle errors!
-			self._destination.create_directory(dir, mode, relative=True)
+			self._destination.create_directory(dir, mode, relative_to=self._destination_path)
 
 			# try to set owner
 			if self._options[OPTION_SET_OWNER]:
@@ -296,14 +311,12 @@ class CopyOperation(Operation):
 		"""Main thread method, this is where all the stuff is happening"""
 		self._dialog.show_all()
 
-		path_source = self._source.get_path()
-		path_destination = self._destination.get_path()
 		dir_list = []
 		file_list = []
 
 		# set dialog info
-		self._dialog.set_source(path_source)
-		self._dialog.set_destination(path_destination)
+		self._dialog.set_source(self._source_path)
+		self._dialog.set_destination(self._destination_path)
 
 		self._get_lists(dir_list, file_list)
 
@@ -322,7 +335,7 @@ class MoveOperation(CopyOperation):
 
 	def _move_file(self, source, destination):
 		"""Move specified file using provider rename method"""
-		self._source.rename_path(source, destination, relative=True)
+		self._source.rename_path(source, destination, relative_to=self._source_path)
 
 	def _move_file_list(self, list):
 		"""Move files from the list"""
@@ -342,31 +355,38 @@ class MoveOperation(CopyOperation):
 	def _copy_file_list(self, list):
 		"""Delete files after copying"""
 		CopyOperation._copy_file_list(self, list)
-		self._delete_file_list()
 
-	def _delete_file_list(self):
+	def _delete_file_list(self, file_list, dir_list):
 		"""Remove files from source list"""
-		self._update_status("Deleting source files...")
+		gobject.idle_add(self._update_status, "Deleting source files...")
 
-		list = self._source.get_selection(relative=True)
-		for number, item in enumerate(list, 0):
+		for number, item in enumerate(file_list, 0):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()
 			
 			gobject.idle_add(self._dialog.set_current_file, item)
-			self._source.remove_path(item, relative=True)
-			gobject.idle_add(self._dialog.set_current_file_fraction, float(number) / len(list))
+			self._source.remove_path(item, relative_to=self._source_path)
+			gobject.idle_add(self._dialog.set_current_file_fraction, float(number) / len(file_list))
+			
+		self._delete_directories(dir_list)
 
-	def _delete_directories(self):
+	def _delete_directories(self, dir_list):
 		"""Remove empty directories after moving files"""
-		list = self._source.get_selection(relative=True)
+		gobject.idle_add(self._update_status, "Deleting source directories...")
 
-		for directory in list:
+		dir_list.reverse()
+
+		for number, directory in enumerate(dir_list, 0):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()
 			
-			if self._source.exists(directory, relative=True):
-				self._source.remove_path(directory, relative=True)
+			if self._source.exists(directory, relative_to=self._source_path):
+				gobject.idle_add(self._dialog.set_current_file, directory)
+				self._source.remove_path(directory, relative_to=self._source_path)
+				gobject.idle_add(
+							self._dialog.set_current_file_fraction, 
+							float(number) / len(dir_list)
+							)
 
 	def _check_devices(self):
 		"""Check if source and destination are on the same file system"""
@@ -384,14 +404,12 @@ class MoveOperation(CopyOperation):
 		"""
 		self._dialog.show_all()
 
-		path_source = self._source.get_path()
-		path_destination = self._destination.get_path()
 		dir_list = []
 		file_list = []
 
 		# set dialog info
-		self._dialog.set_source(path_source)
-		self._dialog.set_destination(path_destination)
+		self._dialog.set_source(self._source_path)
+		self._dialog.set_destination(self._destination_path)
 
 		self._get_lists(dir_list, file_list)
 
@@ -402,11 +420,12 @@ class MoveOperation(CopyOperation):
 		if self._check_devices():
 			# both paths are on the same file system, move instead of copy
 			self._move_file_list(file_list)
-			self._delete_directories()
+			self._delete_directories(dir_list)
 
 		else:
 			# paths are located on different file systems, copy and remove
 			self._copy_file_list(file_list)
+			self._delete_file_list(file_list, dir_list)
 
 		gobject.idle_add(self._destroy_ui)
 
@@ -429,7 +448,7 @@ class DeleteOperation(Operation):
 			self._can_continue.wait()
 
 			gobject.idle_add(self._dialog.set_current_file, item)
-			self._source.remove_path(item, relative=True)
+			self._source.remove_path(item, relative_to=self._source_path)
 			gobject.idle_add(self._dialog.set_current_file_fraction, float(index) / len(list))
 
 		gobject.idle_add(self._destroy_ui)

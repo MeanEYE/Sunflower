@@ -86,7 +86,6 @@ class FileList(ItemList):
 		cell_date = gtk.CellRendererText()
 
 		cell_selected.set_property('width', 6)
-		cell_name.set_property('font', 'Monospace')
 		cell_extension.set_property('size-points', 8)
 		cell_size.set_property('size-points', 8)
 		cell_size.set_property('xalign', 1)
@@ -235,7 +234,7 @@ class FileList(ItemList):
 		if response[0] == gtk.RESPONSE_OK:
 			try:
 				# try to create directories
-				self.get_provider().create_directory(response[1], mode, relative=True)
+				self.get_provider().create_directory(response[1], mode, relative_to=self.path)
 
 			except OSError as error:
 				# error creating, report to user
@@ -273,7 +272,7 @@ class FileList(ItemList):
 				if os.path.isdir(os.path.join(self.path, response[1])):
 					raise OSError("Directory with same name exists: {0}".format(response[1]))
 
-				self.get_provider().create_file(response[1], mode=mode, relative=True)
+				self.get_provider().create_file(response[1], mode=mode, relative_to=self.path)
 
 			except OSError as error:
 				# error creating, report to user
@@ -594,6 +593,7 @@ class FileList(ItemList):
 
 		is_dir = list.get_value(iter, COL_DIR)
 		is_parent = list.get_value(iter, COL_PARENT)
+		size = list.get_value(iter, COL_SIZE)
 
 		if not is_parent:
 			# get current status of iter
@@ -603,6 +603,7 @@ class FileList(ItemList):
 				self._dirs['selected'] += [1, -1][selected]
 			else:
 				self._files['selected'] += [1, -1][selected]
+				self._size['selected'] += [1, -1][selected] * size 
 
 			# toggle selection
 			selected = not selected
@@ -686,6 +687,7 @@ class FileList(ItemList):
 
 				is_dir = False
 				self._files['count'] += 1
+				self._size['total'] += file_size
 
 			# link
 			elif provider.is_link(full_name):
@@ -706,12 +708,15 @@ class FileList(ItemList):
 
 				is_dir = False
 				self._files['count'] += 1
+				self._size['total'] += file_size
 
 			# add item to the list
 			try:
 				format = self._parent.options.get('main', 'time_format')
 
-				file_info = os.path.splitext(file_name)
+				# don't allow extension splitting on directories
+				file_info = (file_name, '') if is_dir else os.path.splitext(file_name)
+				
 				formated_file_size = locale.format('%d', file_size, True) if not is_dir else '<DIR>'
 				formated_file_mode = oct(file_mode)
 				formated_file_date = time.strftime(format, time.gmtime(file_date))
@@ -849,6 +854,8 @@ class FileList(ItemList):
 		self._dirs['selected'] = 0
 		self._files['count'] = 0
 		self._files['selected'] = 0
+		self._size['total'] = 0L
+		self._size['selected'] = 0
 
 		# populate list
 		try:
@@ -1043,79 +1050,80 @@ class LocalProvider(Provider):
 	"""Content provider for local files"""
 	is_local = True
 	
-	def _get_full_path(self, path):
-		"""Generates full path based on relative parameter and current path"""
-		return os.path.join(self.get_path(), path)
-
-	def is_file(self, path, relative=False):
+	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
-		real_path = path if not relative else self._get_full_path(path)
+		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		return os.path.isfile(real_path)
 
-	def is_dir(self, path, relative=False):
+	def is_dir(self, path, relative_to=None):
 		"""Test if given path is directory"""
-		real_path = path if not relative else self._get_full_path(path)
+		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		return os.path.isdir(real_path)
 
-	def is_link(self, path, relative=False):
+	def is_link(self, path, relative_to=None):
 		"""Test if given path is a link"""
-		real_path = path if not relative else self._get_full_path(path)
+		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		return os.path.islink(real_path)
 	
-	def exists(self, path, relative=False):
+	def exists(self, path, relative_to=None):
 		"""Test if given path exists"""
-		real_path = path if not relative else self._get_full_path(path)
+		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		return os.path.exists(real_path)
 
-	def unlink(self, path, relative=False):
+	def unlink(self, path, relative_to=None):
 		"""Unlink given path"""
-		real_path = path if not relative else self._get_full_path(path)
+		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		os.remove(real_path)
 
-	def remove_directory(self, path, recursive, relative=False):
+	def remove_directory(self, path, recursive, relative_to=None):
 		"""Remove directory and optionally its contents"""
-		real_path = path if not relative else self._get_full_path(path)
+		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		if recursive:
 			shutil.rmtree(real_path)
 		else:
 			os.rmdir(real_path)
 
-	def remove_file(self, path, relative=False):
+	def remove_file(self, path, relative_to=None):
 		"""Remove file"""
-		real_path = path if not relative else self._get_full_path(path)
+		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		os.remove(real_path)
 
-	def create_file(self, path, mode=0644, relative=False):
+	def create_file(self, path, mode=0644, relative_to=None):
 		"""Create empty file with specified mode set"""
-		real_path = path if not relative else self._get_full_path(path)
+		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		open(real_path, 'w').close()
 		os.chmod(real_path, mode)
 
-	def create_directory(self, path, mode=0755, relative=False):
+	def create_directory(self, path, mode=0755, relative_to=None):
 		"""Create directory with specified mode set"""
-		real_path = path if not relative else self._get_full_path(path)
+		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		os.makedirs(real_path, mode)
 
-	def get_file_handle(self, path, mode, relative=False):
+	def get_file_handle(self, path, mode, relative_to=None):
 		"""Open path in specified mode and return its handle"""
-		real_path = path if not relative else self._get_full_path(path)
+		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		return open(real_path, mode)
 
-	def get_stat(self, path, relative=False):
+	def get_stat(self, path, relative_to=None):
 		"""Return file statistics"""
-		real_path = path if not relative else self._get_full_path(path)
+		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		return os.stat(real_path)
 
-	def rename_path(self, source, destination, relative=False):
+	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""
-		real_source = source if not relative else self._get_full_path(source)
-		real_destination = destination if not relative else self._get_full_path(destination)
+		if relative_to is None:
+			real_source = source
+			real_destination = destination
+		else:
+			real_source = os.path.join(relative_to, source)
+			real_destination = os.path.join(relative_to, destination)
+			
 		os.rename(
 				os.path.join(self._parent.path, real_source),
 				os.path.join(self._parent.path, real_destination)
 				)
 
-	def list_dir(self, path, relative=False):
+	def list_dir(self, path, relative_to=None):
 		"""Get directory list"""
-		real_path = path if not relative else self._get_full_path(path)
+		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		return os.listdir(real_path)

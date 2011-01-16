@@ -33,8 +33,14 @@ class PluginBase(gtk.VBox):
 		self._top_hbox.pack_start(self._icon, False, False, 0)
 
 		# status bar
+		status_bar = gtk.EventBox()
 		self._status_bar = gtk.Label()
 		self._status_bar.set_alignment(0, 0.5)
+		self._status_bar.set_use_markup(True)
+		self._status_bar.set_ellipsize(pango.ELLIPSIZE_END)
+		
+		status_bar.add(self._status_bar)
+		status_bar.set_border_width(1)
 
 		self._title_label = gtk.Label()
 		self._title_label.set_alignment(0, 0.5)
@@ -43,7 +49,7 @@ class PluginBase(gtk.VBox):
 		self._top_hbox.pack_start(self._title_label, True, True, 3)
 
 		self.pack_start(self._top_panel, False, False, 0)
-		self.pack_end(self._status_bar, False, False, 0)
+		self.pack_end(status_bar, False, False, 0)
 
 	def _change_title_text(self, text):
 		"""Change title label text"""
@@ -129,7 +135,7 @@ class PluginBase(gtk.VBox):
 
 	def update_status(self, status):
 		"""Change status text"""
-		self._status_bar.set_text(status)
+		self._status_bar.set_markup(status)
 
 	def update_notebook(self, notebook=None):
 		"""Update notebook and/or page number"""

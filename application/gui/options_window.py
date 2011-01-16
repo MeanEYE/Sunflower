@@ -170,10 +170,12 @@ class DisplayOptions(gtk.VBox):
 		self._entry_status_text = gtk.Entry()
 		self._entry_status_text.set_tooltip_markup(
 								'<b>Replacement strings:</b>\n'
-								'<i>%(dir_count)i</i>\t\tTotal directory count\n'
-								'<i>%(dir_count_sel)i</i>\tSelected directories count\n'
-								'<i>%(file_count)i</i>\t\tTotal file count\n'
-								'<i>%(file_count_sel)i</i>\tSelected file count'
+								'<i>%dir_count</i>\t\tTotal directory count\n'
+								'<i>%dir_sel</i>\t\tSelected directories count\n'
+								'<i>%file_count</i>\t\tTotal file count\n'
+								'<i>%file_sel</i>\t\tSelected file count\n'
+								'<i>%size_total</i>\t\tTotal size of files in directory\n'
+								'<i>%size_sel</i>\t\tTotal size of selected files'
 								)
 		self._entry_status_text.connect('activate', self._parent.enable_save)
 

@@ -16,6 +16,10 @@ class IconManager:
 		"""Handle icon theme change"""
 		self._icon_cache.clear()
 		return True
+	
+	def has_icon(self, icon_name):
+		"""Check if icon with specified name exists in theme"""
+		return self._icon_theme.has_icon(icon_name)
 
 	def get_icon_from_type(self, mime_type, icon_size=gtk.ICON_SIZE_MENU):
 		"""Get icon based on MIME type and size"""

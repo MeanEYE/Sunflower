@@ -27,36 +27,51 @@ from plugins import *
 class MainWindow(gtk.Window):
 	"""Main application class"""
 
-	# set locale for international number formatting
-	locale.setlocale(locale.LC_ALL)
-
-	# config parsers
-	options = None 
-	tab_options = None 
-	bookmark_options = None
-	toolbar_options = None
-	
-	# popup menus
-	menu_bookmarks = None
-	menu_mounts = None
-	
-	# location of all configuration files
-	config_path = None
-	
 	# version
 	version = '0.1a'
-	build_number = '11'
+	build_number = '12'
 
 	def __init__(self):
 		# create main window and other widgets
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 		self.realize()
 
-		self.set_title("Sunflower")
-		self.set_icon_from_file(os.path.join(os.path.dirname(sys.argv[0]),
-											'images',
-											'sunflower_hi-def_64x64.png'))
+		# create managers early
+		self.icon_manager = IconManager(self)
+		self.menu_manager = MenuManager(self)
+		self.associations_manager = AssociationManager()
 
+		self.set_title('Sunflower')
+		
+		if self.icon_manager.has_icon('sunflower'):
+			# in case theme has its own icon, use that one
+			self.set_icon_name('sunflower')
+			
+		else:
+			self.set_icon_from_file(os.path.join(
+										os.path.dirname(sys.argv[0]),
+										'images',
+										'main_scalable.svg'
+									))
+
+		# set locale for international number formatting
+		locale.setlocale(locale.LC_ALL)
+	
+		# config parsers
+		self.options = None 
+		self.tab_options = None 
+		self.bookmark_options = None
+		self.toolbar_options = None
+		
+		# popup menus
+		self.menu_bookmarks = None
+		self.menu_mounts = None
+		
+		# location of all configuration files
+		self.config_path = None
+		
+		self.clipboard = gtk.Clipboard()
+	
 		# load config
 		self.load_config()
 
@@ -66,12 +81,9 @@ class MainWindow(gtk.Window):
 			self.connect("delete-event", self._destroy)
 
 		# create other guis
-		self.icon_manager = IconManager(self)
-		self.menu_manager = MenuManager(self)
-		self.associations_manager = AssociationManager()
+		self.indicator = Indicator(self)
 		self.about_window = AboutWindow(self)
 		self.options_window = OptionsWindow(self)
-		self.indicator = Indicator(self)
 
 		# define local variables
 		self._in_fullscreen = False

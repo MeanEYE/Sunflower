@@ -103,7 +103,7 @@ class DisplayOptions(gtk.VBox):
 	"""Display options extension class"""
 
 	def __init__(self, parent, application):
-		gtk.VBox.__init__(self, False, False)
+		gtk.VBox.__init__(self, False, 0)
 
 		self._parent = parent
 		self._application = application
@@ -129,7 +129,7 @@ class DisplayOptions(gtk.VBox):
 
 		# file list options
 		frame_file_list = gtk.Frame('File list')
-		vbox_file_list = gtk.VBox(False, 0)
+		vbox_file_list = gtk.VBox(False, 5)
 		vbox_file_list.set_border_width(5)
 
 		self._checkbox_row_hinting = gtk.CheckButton('Row hinting')
@@ -140,6 +140,7 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_mount_points.connect('toggled', self._parent.enable_save)
 
+		# grid lines
 		vbox_grid_lines = gtk.VBox(False, 0)
 		label_grid_lines = gtk.Label('Show grid lines:')
 		label_grid_lines.set_alignment(0, 0.5)
@@ -156,6 +157,20 @@ class DisplayOptions(gtk.VBox):
 		self._combobox_grid_lines.connect('changed', self._parent.enable_save)
 		self._combobox_grid_lines.pack_start(cell_grid_lines)
 		self._combobox_grid_lines.add_attribute(cell_grid_lines, 'text', 0)
+		
+		# quick search
+		label_quick_search = gtk.Label('Quick search combination:')
+		label_quick_search.set_alignment(0, 0.5)
+		self._checkbox_control = gtk.CheckButton('Control')
+		self._checkbox_alt = gtk.CheckButton('Alt')
+		self._checkbox_shift = gtk.CheckButton('Shift')
+		
+		self._checkbox_control.connect('toggled', self._parent.enable_save)
+		self._checkbox_alt.connect('toggled', self._parent.enable_save)
+		self._checkbox_shift.connect('toggled', self._parent.enable_save)
+		
+		vbox_quick_search = gtk.VBox(False, 0)
+		hbox_quick_search = gtk.HBox(False, 5)
 
 		vbox_time_format = gtk.VBox(False, 0)
 		label_time_format = gtk.Label('Date format:')
@@ -183,6 +198,13 @@ class DisplayOptions(gtk.VBox):
 		self._entry_status_text.connect('activate', self._parent.enable_save)
 
 		# pack ui
+		hbox_quick_search.pack_start(self._checkbox_control, False, False, 0)
+		hbox_quick_search.pack_start(self._checkbox_alt, False, False, 0)
+		hbox_quick_search.pack_start(self._checkbox_shift, False, False, 0)
+		
+		vbox_quick_search.pack_start(label_quick_search, False, False, 0)
+		vbox_quick_search.pack_start(hbox_quick_search, False, False, 0)
+		
 		vbox_grid_lines.pack_start(label_grid_lines, False, False, 0)
 		vbox_grid_lines.pack_start(self._combobox_grid_lines, False, False, 0)
 		
@@ -198,17 +220,18 @@ class DisplayOptions(gtk.VBox):
 		vbox_main_window.pack_start(self._checkbox_show_command_bar, False, False, 0)
 
 		vbox_file_list.pack_start(self._checkbox_row_hinting, False, False, 0)
-		vbox_file_list.pack_start(vbox_grid_lines, False, False, 5)
+		vbox_file_list.pack_start(vbox_grid_lines, False, False, 0)
 		vbox_file_list.pack_start(self._checkbox_show_hidden, False, False, 0)
 		vbox_file_list.pack_start(self._checkbox_show_mount_points, False, False, 0)
-		vbox_file_list.pack_start(vbox_time_format, False, False, 5)
-		vbox_file_list.pack_start(vbox_status_text, False, False, 5)
+		vbox_file_list.pack_start(vbox_time_format, False, False, 0)
+		vbox_file_list.pack_start(vbox_status_text, False, False, 0)
+		vbox_file_list.pack_start(vbox_quick_search, False, False, 0)
 
 		frame_main_window.add(vbox_main_window)
 		frame_file_list.add(vbox_file_list)
-
-		self.pack_start(frame_main_window, False, False, 0)
-		self.pack_start(frame_file_list, False, False, 0)
+		
+		self.pack_start(frame_main_window, True, True, 0)
+		self.pack_start(frame_file_list, True, True, 0)
 		
 	def _load_options(self):
 		"""Load display options"""
@@ -224,6 +247,11 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_show_mount_points.set_active(options.getboolean('main', 'show_mounts'))
 		self._entry_time_format.set_text(options.get('main', 'time_format'))
 		self._entry_status_text.set_text(options.get('main', 'status_text'))
+		
+		search_modifier = options.get('main', 'search_modifier')
+		self._checkbox_control.set_active(search_modifier[0] == '1')
+		self._checkbox_alt.set_active(search_modifier[1] == '1')
+		self._checkbox_shift.set_active(search_modifier[2] == '1')
 	
 	def _save_options(self):
 		"""Save display options"""
@@ -242,6 +270,13 @@ class DisplayOptions(gtk.VBox):
 		options.set('main', 'show_mounts', bool[self._checkbox_show_mount_points.get_active()])
 		options.set('main', 'time_format', self._entry_time_format.get_text())
 		options.set('main', 'status_text', self._entry_status_text.get_text())
+		
+		search_modifier = "%d%d%d" % (
+								self._checkbox_control.get_active(),
+								self._checkbox_alt.get_active(),
+								self._checkbox_shift.get_active()
+							)
+		options.set('main', 'search_modifier', search_modifier)
 		
 		# change ui states
 		show_hidden = self._application.menu_manager.get_item_by_name('show_hidden_files')

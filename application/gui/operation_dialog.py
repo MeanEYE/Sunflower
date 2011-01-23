@@ -22,6 +22,7 @@ class OperationDialog(gtk.Window):
 		self._thread = thread
 		self._size_format = '{0} / {1}'
 		self._count_format = '{0} / {1}'
+		self._has_details = False
 
 		self._total_size = 0L
 		self._total_count = 0L
@@ -36,9 +37,24 @@ class OperationDialog(gtk.Window):
 		self.set_transient_for(application)
 		self.set_border_width(7)
 		self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+		self.connect('destroy', self._destroy)
 
 		# create interface
 		self._vbox = gtk.VBox(False, 10)
+		
+		# operation items
+		self._operation_label = gtk.Label()
+		self._operation_label.set_alignment(0, 0.5)
+		self._operation_progress = gtk.ProgressBar()
+		
+		vbox_operation = gtk.VBox(False, 0)
+		vbox_operation.pack_start(self._operation_label, False, False, 0)
+		vbox_operation.pack_start(self._operation_progress, False, False, 0)
+		
+		self._operation_item = self._application.add_operation(
+															vbox_operation, 
+															self._operation_click
+														)
 
 		# pack interface
 		self.add(self._vbox)
@@ -106,6 +122,7 @@ class OperationDialog(gtk.Window):
 
 	def _add_details(self):
 		"""Add ETA to the dialog"""
+		self._has_details = True
 		frame = gtk.Frame()
 		frame.set_shadow_type(gtk.SHADOW_OUT)
 
@@ -167,8 +184,7 @@ class OperationDialog(gtk.Window):
 		self._button_pause = gtk.Button('Pause')
 		self._button_cancel = gtk.Button('Cancel')
 
-		self._button_minimize.set_sensitive(False)
-		
+		self._button_minimize.connect('clicked', self._minimize_click)
 		self._button_pause.connect('clicked', self._pause_click)
 		self._button_cancel.connect('clicked', self._cancel_click)
 
@@ -191,6 +207,12 @@ class OperationDialog(gtk.Window):
 
 		return result == gtk.RESPONSE_YES
 
+	def _minimize_click(self, widget, data=None):
+		"""Handle minimize click"""
+		self._operation_item.show()
+		self._application.operation_displayed()
+		self.hide()
+
 	def _pause_click(self, widget, data=None):
 		"""Lock threading object"""
 		self._paused = not self._paused
@@ -203,9 +225,15 @@ class OperationDialog(gtk.Window):
 			self._thread.resume()
 
 	def _cancel_click(self, widget, data=None):
-		"""Handle 'cancel' button click event"""
+		"""Handle cancel button click event"""
 		if self._confirm_cancel("Are you sure about canceling current operation?"):
 			self._thread.cancel()
+			
+	def _operation_click(self, widget, data=None):
+		"""Handle operation menu item click"""
+		self._operation_item.hide()
+		self._application.operation_hidden()
+		self.show()
 			
 	def _update_total_count(self):
 		"""Update progress bar and labels for total count"""
@@ -224,11 +252,16 @@ class OperationDialog(gtk.Window):
 															locale.format('%d', self._total_size, True)
 															))
 		self.set_total_size_fraction(float(self._current_size) / self._total_size)
+		
+	def _destroy(self, widget, data=None):
+		"""Remove operation menu item on dialog destroy"""
+		self._application.remove_operation(self._operation_item)
 
 	def set_status(self, status):
 		"""Set current status"""
 		assert self._label_status is not None
 		self._label_status.set_label(status)
+		self._operation_label.set_text(status)
 
 	def set_current_file(self, path):
 		"""Set current file name"""
@@ -239,6 +272,9 @@ class OperationDialog(gtk.Window):
 		"""Set current file progress bar position"""
 		assert self._pb_current_file is not None
 		self._pb_current_file.set_fraction(fraction)
+		
+		if not self._has_details:
+			self._operation_progress.set_fraction(fraction)
 		
 	def set_current_count(self, count):
 		"""Set current count value"""
@@ -275,6 +311,7 @@ class OperationDialog(gtk.Window):
 		"""Set total size progress bar position"""
 		assert self._pb_total_size is not None
 		self._pb_total_size.set_fraction(fraction)
+		self._operation_progress.set_fraction(fraction)
 
 	def set_total_count(self, count):
 		"""Set total count label"""

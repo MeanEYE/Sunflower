@@ -9,7 +9,7 @@ import locale
 import user
 
 from menus import MenuManager
-from input_dialog import InputDialog
+from input_dialog import InputDialog, AddBookmarkDialog
 
 from ConfigParser import RawConfigParser
 
@@ -29,7 +29,7 @@ class MainWindow(gtk.Window):
 
 	# version
 	version = '0.1a'
-	build_number = '12'
+	build_number = '13'
 
 	def __init__(self):
 		# create main window and other widgets
@@ -226,6 +226,16 @@ class MainWindow(gtk.Window):
 		for item in menu_items:
 			menu_bar.append(self.menu_manager.create_menu_item(item))
 			
+		# operations menu
+		self.menu_operations = gtk.Menu()
+
+		self._menu_item_operations = gtk.MenuItem(label='Operations')
+		self._menu_item_operations.set_sensitive(False)
+		self._menu_item_operations.set_submenu(self.menu_operations)
+		
+		menu_bar.insert(self._menu_item_operations, len(menu_items)-1)
+		self._operations_visible = 0
+			
 		# load accelerator map
 		self.load_accel_map(os.path.join(self.config_path, 'accel_map'))
 
@@ -342,7 +352,6 @@ class MainWindow(gtk.Window):
 
 	def _destroy(self, widget, data=None):
 		"""Application desctructor"""
-
 		self.save_tabs(self.left_notebook, 'left_notebook')
 		self.save_tabs(self.right_notebook, 'right_notebook')
 
@@ -383,6 +392,27 @@ class MainWindow(gtk.Window):
 			menu_item.set_data('path', os.path.expanduser(data[1]))
 			
 			self.menu_bookmarks.append(menu_item)
+
+		# add separator
+		menu_item = self.menu_manager.create_menu_item({'type': 'separator'})
+		self.menu_bookmarks.append(menu_item)
+		
+		# create additional options
+		menu_item = self.menu_manager.create_menu_item({
+										'label': 'Options',
+										'submenu': (
+												{
+													'label': '_Add bookmark',
+													'callback': self._add_bookmark,
+												},
+												{
+													'label': '_Edit bookmarks',
+													'callback': self.options_window._show,
+													'data': 3
+												},
+											) 
+									})
+		self.menu_bookmarks.append(menu_item)
 			
 		# create mounts if specified
 		if self.options.getboolean('main', 'show_mounts'):
@@ -398,6 +428,23 @@ class MainWindow(gtk.Window):
 		pos_y = window_y + button_y + button_h
 		
 		return (pos_x, pos_y, True)
+	
+	def _add_bookmark(self, widget, data=None):
+		"""Show dialog for adding a new bookmark"""
+		item_list = self.menu_bookmarks.get_data('list')		
+		path = item_list.path
+		dialog = AddBookmarkDialog(self, path)
+		
+		response = dialog.get_response()
+		
+		if response[0] == gtk.RESPONSE_OK:
+			bookmarks = self.bookmark_options.options('bookmarks')
+			
+			name = 'b_{0}'.format(len(bookmarks) + 1)
+			value = '{0};{1}'.format(response[1], response[2])
+			
+			self.bookmark_options.set('bookmarks', name, value)
+			self._create_bookmarks_menu()
 	
 	def _handle_bookmarks_click(self, widget, data=None):
 		"""Handle clicks on bookmark menu"""
@@ -977,18 +1024,49 @@ class MainWindow(gtk.Window):
 		else:
 			self.fullscreen()
 			self._in_fullscreen = True
+			
+	def add_operation(self, widget, callback, data=None):
+		"""Add operation to menu"""
+		item = gtk.MenuItem()
+		item.add(widget)
+		item.connect('activate', callback, data)
+		
+		item.show_all()
+		item.hide()
+		
+		self.menu_operations.append(item)
+		
+		return item
+	
+	def remove_operation(self, widget):
+		"""Remove operation item from menu"""
+		if widget.get_visible():
+			self.operation_hidden()
+			
+		self.menu_operations.remove(widget)
+	
+	def operation_displayed(self):
+		"""Increase count of visible operation menu items"""
+		self._operations_visible += 1
+		self._menu_item_operations.set_sensitive(True)
+		
+	def operation_hidden(self):
+		"""Decrease cound of visible operation menu items"""
+		self._operations_visible -= 1
+		
+		if self._operations_visible == 0:
+			self._menu_item_operations.set_sensitive(False)
 
 	def test(self, widget, data=None):
-		import input_dialog
+		vbox = gtk.VBox(False, 0)
 		
-		provider = self._active_object.get_provider()
-		path = self._active_object._get_selection()
+		label = gtk.Label('Copying: /var/files/home/njak')
+		label.set_alignment(0, 0.5)
+		progress = gtk.ProgressBar()
 		
-		d = input_dialog.OverwriteDirectoryDialog(self, self)
-		d.set_title_element('trt.php')
-		d.set_rename_value('novo_ime.php')
-		d.set_message_element('njak')
-		d.set_original(provider, path)
-		d.set_source(provider, path)
+		vbox.pack_start(label, False, False, 0)
+		vbox.pack_start(progress, False, False, 0)
 		
-		print d.get_response()
+		self.add_operation(vbox, None, None)
+		
+		

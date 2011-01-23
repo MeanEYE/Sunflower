@@ -65,6 +65,9 @@ class OptionsWindow(gtk.Window):
 		"""Show dialog and reload options"""
 		self._load_options()
 		self.show_all()
+		
+		if data is not None:
+			self._tabs.set_current_page(data)
 
 	def _hide(self, widget, data=None):
 		"""Hide dialog"""

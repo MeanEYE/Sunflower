@@ -666,3 +666,87 @@ class OverwriteDirectoryDialog(OverwriteDialog):
 							'replacing any files in the directory that conflict '
 							'with the files being copied.'.format(element)
 							)
+
+
+class AddBookmarkDialog(gtk.Dialog):
+	"""This dialog enables user to change data before adding new bookmark"""
+	
+	def __init__(self, application, path):
+		gtk.Dialog.__init__(self, parent=application)
+
+		self._application = application
+
+		self.set_title('Add bookmark')
+		self.set_default_size(340, 10)
+		self.set_resizable(True)
+		self.set_skip_taskbar_hint(True)
+		self.set_modal(True)
+		self.set_transient_for(application)
+
+		self.vbox.set_spacing(0)
+		
+		vbox = gtk.VBox(False, 5)
+		vbox.set_border_width(5)
+		
+		# bookmark name
+		label_name = gtk.Label('Name:')
+		label_name.set_alignment(0, 0.5)
+		self._entry_name = gtk.Entry()
+		self._entry_name.connect('activate', self._confirm_entry)
+		
+		vbox_name = gtk.VBox(False, 0)
+		
+		# bookmark path
+		label_path = gtk.Label('Location:')
+		label_path.set_alignment(0, 0.5)
+		self._entry_path = gtk.Entry()
+		self._entry_path.set_text(path)
+		self._entry_path.set_editable(False)
+		
+		vbox_path = gtk.VBox(False, 0)
+		
+		# controls
+		button_ok = gtk.Button(stock=gtk.STOCK_OK)
+		button_ok.connect('clicked', self._confirm_entry)
+		button_ok.set_can_default(True)
+
+		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
+
+		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self.action_area.pack_end(button_ok, False, False, 0)
+		self.set_default_response(gtk.RESPONSE_OK)
+		
+		# pack interface
+		vbox_name.pack_start(label_name, False, False, 0)
+		vbox_name.pack_start(self._entry_name, False, False, 0)
+		
+		vbox_path.pack_start(label_path, False, False, 0)
+		vbox_path.pack_start(self._entry_path, False, False, 0)
+
+		vbox.pack_start(vbox_name, False, False, 0)
+		vbox.pack_start(vbox_path, False, False, 0)
+		
+		self.vbox.pack_start(vbox, False, False, 0)
+		
+		self.show_all()
+		
+	def _confirm_entry(self, widget, data=None):
+		"""Enable user to confirm by pressing Enter"""
+		if self._entry_name.get_text() != '':
+			self.response(gtk.RESPONSE_OK)
+					
+	def get_response(self):
+		"""Return value and self-destruct
+
+		This method returns tupple with response code and
+		input text.
+
+		"""
+		code = self.run()
+		
+		name = self._entry_name.get_text()
+		path = self._entry_path.get_text()
+
+		self.destroy()
+
+		return (code, name, path)

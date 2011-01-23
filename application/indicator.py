@@ -71,6 +71,15 @@ class Indicator(object):
 													})
 		self._menu.append(self._menu_hide)
 		
+		# close window option
+		self._menu.append(self._parent.menu_manager.create_menu_item({'type': 'separator'}))
+		self._menu.append(self._parent.menu_manager.create_menu_item({
+														'label': 'E_xit',
+														'type': 'image',
+														'callback': self._parent._destroy,
+														'stock': gtk.STOCK_QUIT,
+													}))
+		
 		# separator
 		self._separator = self._parent.menu_manager.create_menu_item({'type': 'separator'})
 		self._menu.append(self._separator)
@@ -101,7 +110,7 @@ class Indicator(object):
 		
 	def add_operation(self, widget, callback, data):
 		"""Add operation to operations menu"""
-		menu_item = gtk.MenuItem(label=None)
+		menu_item = gtk.MenuItem()
 		menu_item.add(widget)
 		
 		if callback is not None:

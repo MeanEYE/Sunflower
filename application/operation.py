@@ -40,7 +40,7 @@ class Operation(Thread):
 	def _destroy_ui(self):
 		"""Destroy user interface"""
 		if self._dialog is not None:
-			self._dialog.hide()
+			self._dialog.destroy()
 
 	def pause(self):
 		"""Pause current operation"""
@@ -53,6 +53,10 @@ class Operation(Thread):
 	def cancel(self):
 		"""Set an abort switch"""
 		self._abort.set()
+		
+		# release lock set by the pause
+		if not self._can_continue.is_set():
+			self.resume()
 
 
 class CopyOperation(Operation):

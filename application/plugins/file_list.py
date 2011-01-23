@@ -942,6 +942,7 @@ class FileList(ItemList):
 
 		dirs = 0
 		files = 0
+		size = 0L
 
 		for row in self._store:
 			# set selection
@@ -955,9 +956,11 @@ class FileList(ItemList):
 					dirs += 1
 				else:
 					files += 1
+					size += row[COL_SIZE]
 
 		self._dirs['selected'] = dirs
 		self._files['selected'] = files
+		self._size['selected'] = size
 
 		self._update_status_with_statistis()
 
@@ -969,6 +972,7 @@ class FileList(ItemList):
 
 		dirs = 0
 		files = 0
+		size = 0L
 
 		for row in self._store:
 			# set selection
@@ -982,9 +986,11 @@ class FileList(ItemList):
 					dirs += 1
 				else:
 					files += 1
+					size += row[COL_SIZE]
 
 		self._dirs['selected'] = dirs
 		self._files['selected'] = files
+		self._size['selected'] = size
 
 		self._update_status_with_statistis();
 
@@ -995,6 +1001,7 @@ class FileList(ItemList):
 
 		dirs = 0
 		files = 0
+		size = 0L
 
 		for row in self._store:
 			# set selection
@@ -1012,9 +1019,11 @@ class FileList(ItemList):
 					dirs += 1
 				else:
 					files += 1
+					size += row[COL_SIZE]
 
 		self._dirs['selected'] = dirs
 		self._files['selected'] = files
+		self._size['selected'] = size
 
 		self._update_status_with_statistis();
 

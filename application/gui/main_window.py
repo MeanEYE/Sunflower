@@ -9,6 +9,7 @@ import locale
 import user
 
 from menus import MenuManager
+from mounts import MountsManager
 from input_dialog import InputDialog, AddBookmarkDialog
 
 from ConfigParser import RawConfigParser
@@ -39,6 +40,7 @@ class MainWindow(gtk.Window):
 		# create managers early
 		self.icon_manager = IconManager(self)
 		self.menu_manager = MenuManager(self)
+		self.mount_manager = None  # we'll create manager later
 		self.associations_manager = AssociationManager()
 
 		self.set_title('Sunflower')
@@ -63,10 +65,6 @@ class MainWindow(gtk.Window):
 		self.bookmark_options = None
 		self.toolbar_options = None
 		
-		# popup menus
-		self.menu_bookmarks = None
-		self.menu_mounts = None
-		
 		# location of all configuration files
 		self.config_path = None
 		
@@ -80,7 +78,7 @@ class MainWindow(gtk.Window):
 		else:
 			self.connect("delete-event", self._destroy)
 
-		# create other guis
+		# create other interfaces
 		self.indicator = Indicator(self)
 		self.about_window = AboutWindow(self)
 		self.options_window = OptionsWindow(self)
@@ -95,10 +93,10 @@ class MainWindow(gtk.Window):
 			{
 				'label': 'File',
 				'submenu': (
-					{
-						'label': 'Test dialog',
-						'callback': self.test
-					},
+#					{
+#						'label': 'Test dialog',
+#						'callback': self.test
+#					},
 					{
 						'label': 'E_xit',
 						'type': 'image',
@@ -245,6 +243,14 @@ class MainWindow(gtk.Window):
 						'no-show-all',
 						not self.options.getboolean('main', 'show_toolbar')
 					)
+		
+		# bookmarks menu
+		self.menu_bookmarks = gtk.Menu()
+		
+		# mounts menu
+		self._menu_item_mounts = gtk.MenuItem(label='Mounts')
+		self._menu_item_mounts.show()
+		self.mount_manager = MountsManager(self, self._menu_item_mounts)
 
 		# create notebooks
 		hbox = gtk.HBox(True, 3)
@@ -370,15 +376,16 @@ class MainWindow(gtk.Window):
 	
 	def _create_bookmarks_menu(self):
 		"""Create bookmarks menu as defined in options"""
-		if self.menu_bookmarks is None:
-			# menu does not exist, create it
-			self.menu_bookmarks = gtk.Menu()
-			
-		else:
-			# menu already exists, just remove items
-			for item in self.menu_bookmarks.get_children():
-				self.menu_bookmarks.remove(item)
+		for item in self.menu_bookmarks.get_children():  # remove existing items
+			self.menu_bookmarks.remove(item)
+
+		# create mounts if specified
+		if self.options.getboolean('main', 'show_mounts'):
+			self.menu_bookmarks.append(self._menu_item_mounts)
+			separator = self.menu_manager.create_menu_item({'type': 'separator'})
+			self.menu_bookmarks.append(separator)
 		
+		# create bookmark menu items
 		items = self.bookmark_options.options('bookmarks')
 		items.sort()
 		
@@ -394,8 +401,8 @@ class MainWindow(gtk.Window):
 			self.menu_bookmarks.append(menu_item)
 
 		# add separator
-		menu_item = self.menu_manager.create_menu_item({'type': 'separator'})
-		self.menu_bookmarks.append(menu_item)
+		separator = self.menu_manager.create_menu_item({'type': 'separator'})
+		self.menu_bookmarks.append(separator)
 		
 		# create additional options
 		menu_item = self.menu_manager.create_menu_item({
@@ -413,10 +420,6 @@ class MainWindow(gtk.Window):
 											) 
 									})
 		self.menu_bookmarks.append(menu_item)
-			
-		# create mounts if specified
-		if self.options.getboolean('main', 'show_mounts'):
-			self._create_mounts_menu()
 			
 	def _get_bookmarks_menu_position(self, menu, button):
 		"""Get bookmarks position"""
@@ -471,10 +474,6 @@ class MainWindow(gtk.Window):
 										)
 				dialog.run()
 				dialog.destroy()
-						
-	def _create_mounts_menu(self):
-		"""Create mounts menu"""
-		pass
 	
 	def _tab_moved(self, notebook, child, page_num):
 		"""Handle adding/moving tab accross notebooks"""

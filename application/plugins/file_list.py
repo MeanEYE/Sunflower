@@ -1116,7 +1116,7 @@ class LocalProvider(Provider):
 		"""Create empty file with specified mode set"""
 		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		open(real_path, 'w').close()
-		os.chmod(real_path, mode)
+		self.set_mode(real_path, mode)
 
 	def create_directory(self, path, mode=0755, relative_to=None):
 		"""Create directory with specified mode set"""
@@ -1132,6 +1132,17 @@ class LocalProvider(Provider):
 		"""Return file statistics"""
 		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		return os.stat(real_path)
+
+	def set_mode(self, path, mode, relative_to=None):
+		"""Set access mode to specified path"""
+		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		os.chmod(real_path, mode)
+	
+	def set_owner(self, path, owner, group, relative_to=None):
+		"""Set owner and/or group for specified path"""
+		# real_path = path if relative_to is None else os.path.join(relative_to, path)
+		# TODO: Add change owner code
+		pass
 
 	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""

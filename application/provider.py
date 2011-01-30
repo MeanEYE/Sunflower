@@ -58,6 +58,14 @@ class Provider:
 		"""Return parents path"""
 		return self._parent.path
 	
+	def set_mode(self, path, mode, relative_to=None):
+		"""Set access mode to specified path"""
+		pass
+	
+	def set_owner(self, path, owner, group, relative_to=None):
+		"""Set owner and/or group for specified path"""
+		pass
+	
 	def remove_path(self, path, recursive=True, relative_to=None):
 		"""Remove path"""
 		if self.is_link(path, relative_to):  # handle links

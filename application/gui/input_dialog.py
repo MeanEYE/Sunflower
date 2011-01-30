@@ -300,6 +300,8 @@ class CopyDialog(gtk.Dialog):
 		self.checkbox_mode = gtk.CheckButton('Set access mode on destination')
 		self.checkbox_silent = gtk.CheckButton('Silent mode')
 
+		self.checkbox_mode.set_active(True)
+
 		self.checkbox_silent.set_tooltip_text(
 										'Silent mode will enable operation to finish '
 										'without disturbing you. If any errors occur, '

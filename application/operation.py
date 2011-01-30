@@ -277,6 +277,16 @@ class CopyOperation(Operation):
 					gobject.idle_add(self._dialog.set_current_file_fraction, 1)
 
 			else:
+				sh.close()
+				dh.close()
+				
+				# set mode if required
+				if self._options[OPTION_SET_MODE]:
+					self._destination.set_mode(
+											file, 
+											stat.S_IMODE(file_stat.st_mode),
+											relative_to=self._destination_path
+										)
 				break
 
 	def _create_directories(self, list):

@@ -364,7 +364,22 @@ class FileList(ItemList):
 		result = dialog.get_response()
 
 		if result[0] == gtk.RESPONSE_OK:
-			self.get_provider().rename_path(selection, result[1])
+			if not self.get_provider().exists(result[1], relative_to=self.path):
+				self.get_provider().rename_path(selection, result[1])
+				
+			else:
+				# file/directory already exists
+				dialog = gtk.MessageDialog(
+										self._parent,
+										gtk.DIALOG_DESTROY_WITH_PARENT,
+										gtk.MESSAGE_ERROR,
+										gtk.BUTTONS_OK,
+										"File or directory with specified name already "
+										"exists in current directory. Item could not "
+										"be renamed."
+										)
+				dialog.run()
+				dialog.destroy()				
 
 	def _send_to(self, widget, data=None):
 		"""Nautilus Send To integration"""

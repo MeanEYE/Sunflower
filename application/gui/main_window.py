@@ -30,7 +30,7 @@ class MainWindow(gtk.Window):
 
 	# version
 	version = '0.1a'
-	build_number = '13'
+	build_number = '14'
 
 	def __init__(self):
 		# create main window and other widgets

@@ -62,7 +62,7 @@ class Provider:
 		"""Set access mode to specified path"""
 		pass
 	
-	def set_owner(self, path, owner, group, relative_to=None):
+	def set_owner(self, path, owner=-1, group=-1, relative_to=None):
 		"""Set owner and/or group for specified path"""
 		pass
 	

@@ -287,6 +287,15 @@ class CopyOperation(Operation):
 											stat.S_IMODE(file_stat.st_mode),
 											relative_to=self._destination_path
 										)
+					
+				# set owner if required
+				if self._options[OPTION_SET_OWNER]:
+					self._destination.set_owner(
+											file,
+											file_stat.st_uid,
+											file_stat.st_gid,
+											relative_to=self._destination_path
+										)
 				break
 
 	def _create_directories(self, list):
@@ -304,10 +313,15 @@ class CopyOperation(Operation):
 
 			# TODO: Handle errors!
 			self._destination.create_directory(dir, mode, relative_to=self._destination_path)
-
-			# try to set owner
+			
+			# set owner if requested
 			if self._options[OPTION_SET_OWNER]:
-				pass  # TODO: Implement set owner
+				self._destination.set_owner(
+										dir, 
+										file_stat.st_uid, 
+										file_stat.st_gid,
+										relative_to=self._destination_path
+									)
 
 	def _copy_file_list(self, list):
 		"""Copy list of files to destination path"""

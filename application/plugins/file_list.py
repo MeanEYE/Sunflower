@@ -1138,11 +1138,10 @@ class LocalProvider(Provider):
 		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		os.chmod(real_path, mode)
 	
-	def set_owner(self, path, owner, group, relative_to=None):
+	def set_owner(self, path, owner=-1, group=-1, relative_to=None):
 		"""Set owner and/or group for specified path"""
-		# real_path = path if relative_to is None else os.path.join(relative_to, path)
-		# TODO: Add change owner code
-		pass
+		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		os.chown(real_path, owner, group)
 
 	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""

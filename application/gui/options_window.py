@@ -12,6 +12,7 @@ class OptionsWindow(gtk.Window):
 		self.set_modal(True)
 		self.set_skip_taskbar_hint(True)
 		self.set_deletable(False)
+		self.set_transient_for(parent)
 
 		# create gui
 		vbox = gtk.VBox(False, 5)

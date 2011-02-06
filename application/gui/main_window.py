@@ -721,7 +721,8 @@ class MainWindow(gtk.Window):
 
 			# reset accelerator map
 			if config_version < 15:
-				if checkbox_reset_accel_map.get_active():
+				if checkbox_reset_accel_map.get_active()\
+				and os.path.isfile(os.path.join(self.config_path, 'accel_map')):
 					os.remove(os.path.join(self.config_path, 'accel_map'))
 
 			# set config version to current

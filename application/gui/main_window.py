@@ -41,6 +41,7 @@ class MainWindow(gtk.Window):
 	def __init__(self):
 		# create main window and other widgets
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
+		self.realize()
 
 		# create managers early
 		self.icon_manager = IconManager(self)

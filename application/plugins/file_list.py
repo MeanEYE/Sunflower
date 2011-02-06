@@ -256,7 +256,7 @@ class FileList(ItemList):
 				dialog.run()
 				dialog.destroy()
 
-	def _create_file(self, widget, data=None):
+	def _create_file(self, widget=None, data=None):
 		"""Prompt user and create empty file"""
 		dialog = FileCreateDialog(self._parent)
 
@@ -594,10 +594,11 @@ class FileList(ItemList):
 
 	def _directory_changed(self, monitor, file, other_file, event):
 		"""Callback method fired when contents of directory has been changed"""
+		show_hidden = self._parent.options.getboolean('main', 'show_hidden')
 
 		# node created
 		if event is gio.FILE_MONITOR_EVENT_CREATED:
-			self._add_item(file.get_path())
+			self._add_item(file.get_path(), show_hidden)
 
 		# node deleted
 		elif event is gio.FILE_MONITOR_EVENT_DELETED:

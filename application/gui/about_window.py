@@ -104,11 +104,11 @@ class AboutWindow(gtk.Window):
 		license_location = os.path.join('/', 'usr', 'share', 'common-licenses', 'GPL')
 		if not os.path.isfile(license_location):
 			license_location = os.path.join(
-										os.path.dirname(sys.argv[0]), 
-										'application', 
+										os.path.dirname(sys.argv[0]),
+										'application',
 										'GPL.txt'
 									)
-		
+
 		license_file = open(license_location, 'r')
 
 		if license_file:
@@ -146,10 +146,6 @@ class AboutWindow(gtk.Window):
 		btn_web2.connect('clicked', parent.goto_web, 'code.google.com/p/sunflower-fm')
 		hbox2.pack_start(btn_web2, False, False, 0)
 
-		btn_web3 = gtk.Button('Studio Spectra')
-		btn_web3.connect('clicked', parent.goto_web, 'www.studiospectra.com')
-		hbox2.pack_start(btn_web3, False, False, 0)
-
 		# pack ui
 		vbox.pack_start(frame, False, False, padding=0)
 		vbox.pack_start(vbox2, True, True, padding=0)
@@ -165,14 +161,14 @@ class AboutWindow(gtk.Window):
 	def _hide(self, widget, data=None):
 		self.hide()
 		return True  # return True so we get to keep our controls safe from GC
-	
+
 	def _create_statistics_tab(self):
 		"""Create tab for all the promotional sites"""
 		tab = gtk.Notebook()
 		tab.set_tab_pos(gtk.POS_RIGHT)
 		tab.set_border_width(5)
 		tab_label = gtk.Label('Statistics')
-		
+
 		# wakoopa statistics
 		tab_wakoopa = gtk.VBox(False, 5)
 		tab_wakoopa.set_border_width(10);
@@ -217,7 +213,7 @@ class AboutWindow(gtk.Window):
 									'alternativeto.png'
 								))
 		tab.append_page(tab_alternativeto, image_alternativeto)
-		
+
 		return (tab, tab_label)
 
 	def load_wakoopa_image(self, widget, data=None):

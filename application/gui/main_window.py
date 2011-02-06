@@ -98,6 +98,43 @@ class MainWindow(gtk.Window):
 #						'callback': self.test
 #					},
 					{
+						'label': 'New tab',
+						'type': 'image',
+						'image': 'tab-new',
+						'data': 'file',
+						'path': '<Sunflower>/File/NewTab',
+						'submenu': (
+							{
+								'label': 'File list',
+							},
+							{
+								'label': 'Terminal',
+							}
+						)
+					},
+					{
+						'type': 'separator',
+					},
+					{
+						'label': 'Create file',
+						'type': 'image',
+						'stock': gtk.STOCK_NEW,
+						'callback': self._command_create,
+						'data': 'file',
+						'path': '<Sunflower>/File/CreateFile',
+					},
+					{
+						'label': 'Create directory',
+						'type': 'image',
+						'image': 'folder-new',
+						'callback': self._command_create,
+						'data': 'directory',
+						'path': '<Sunflower>/File/CreateDirectory',
+					},
+					{
+						'type': 'separator',
+					},
+					{
 						'label': 'E_xit',
 						'type': 'image',
 						'stock': gtk.STOCK_QUIT,
@@ -140,22 +177,37 @@ class MainWindow(gtk.Window):
 					{'type': 'separator'},
 					{
 						'label': 'Compare _directories',
-						'type': 'image',
-						'stock': gtk.STOCK_DIRECTORY,
 						'path': '<Sunflower>/Mark/Compare',
 					}
 				)
 			},
 			{
-				'label': 'Settings',
+				'label': 'View',
 				'submenu': (
+					{
+						'label': 'Fullscreen',
+						'type': 'image',
+						'image': 'view-fullscreen',
+						'callback': self.toggle_fullscreen,
+						'path': '<Sunflower>/View/Fullscreen'
+					},
+					{
+						'label': 'Reload item list',
+						'type': 'image',
+						'image': 'reload',
+						'callback': self._command_reload,
+						'path': '<Sunflower>/View/Reload'
+					},
+					{
+						'type': 'separator',
+					},
 					{
 						'label': 'Show _hidden files',
 						'type': 'checkbox',
 						'active': self.options.getboolean('main', 'show_hidden'),
 						'callback': self._toggle_show_hidden_files,
 						'name': 'show_hidden_files',
-						'path': '<Sunflower>/Settings/ShowHidden',
+						'path': '<Sunflower>/View/ShowHidden',
 					},
 					{
 						'label': 'Show _toolbar',
@@ -163,7 +215,7 @@ class MainWindow(gtk.Window):
 						'active': self.options.getboolean('main', 'show_toolbar'),
 						'callback': self._toggle_show_toolbar,
 						'name': 'show_toolbar',
-						'path': '<Sunflower>/Settings/ShowToolbar',
+						'path': '<Sunflower>/View/ShowToolbar',
 					},
 					{
 						'label': 'Show _command bar',
@@ -171,14 +223,14 @@ class MainWindow(gtk.Window):
 						'active': self.options.getboolean('main', 'show_command_bar'),
 						'callback': self._toggle_show_command_bar,
 						'name': 'show_command_bar',
-						'path': '<Sunflower>/Settings/ShowCommandBar',
+						'path': '<Sunflower>/View/ShowCommandBar',
 					},
 					{'type': 'separator'},
 					{
 						'label': '_Options', 'type': 'image',
 						'stock': gtk.STOCK_PREFERENCES,
 						'callback': self.options_window._show,
-						'path': '<Sunflower>/Settings/Options',
+						'path': '<Sunflower>/View/Options',
 					},
 				)
 			},
@@ -200,6 +252,8 @@ class MainWindow(gtk.Window):
 					{'type': 'separator'},
 					{
 						'label': 'File a _bug report',
+						'type': 'image',
+						'image': 'lpi-bug',
 						'callback': self.goto_web,
 						'data': 'code.google.com/p/sunflower-fm/issues/entry',
 						'path': '<Sunflower>/Help/BugReport',
@@ -415,7 +469,7 @@ class MainWindow(gtk.Window):
 												{
 													'label': '_Edit bookmarks',
 													'callback': self.options_window._show,
-													'data': 3
+													'data': 4
 												},
 											)
 									})
@@ -570,8 +624,15 @@ class MainWindow(gtk.Window):
 		"""Handle command button click"""
 		active_object = self._get_active_object()
 
-		if hasattr(active_object, '_create_directory'):
-			active_object._create_directory()
+		if data is None or (data is not None and data == 'directory'):
+			# create directory
+			if hasattr(active_object, '_create_directory'):
+				active_object._create_directory()
+
+		else:
+			# create file
+			if hasattr(active_object, '_create_file'):
+				active_object._create_file()
 
 	def _command_delete(self, widget, data=None):
 		"""Handle command button click"""
@@ -727,7 +788,6 @@ class MainWindow(gtk.Window):
 
 		if sort_column is not None and sort_column != '':
 			# create plugin object with sort parameters
-			print sort_column
 			new_tab = plugin_class(self, notebook, path, int(sort_column), bool(int(sort_ascending)))
 
 		else:
@@ -905,18 +965,23 @@ class MainWindow(gtk.Window):
 	def load_accel_map(self, path):
 		"""Load menu accelerator map"""
 		if os.path.isfile(path):
+			# load accelerator map
 			gtk.accel_map_load(path)
 
 		else:
 			# no existing configuration, set default
 			accel_map = (
+						('<Sunflower>/File/CreateFile', 'F7', gtk.gdk.CONTROL_MASK),
+						('<Sunflower>/File/CreateDirectory', 'F7', 0),
 						('<Sunflower>/Mark/SelectAll', 'A', gtk.gdk.CONTROL_MASK),
 						('<Sunflower>/Mark/SelectPattern', 'KP_Add', 0),
 						('<Sunflower>/Mark/UnselectPattern', 'KP_Subtract', 0),
 						('<Sunflower>/Mark/InvertSelection', 'KP_Multiply', 0),
 						('<Sunflower>/Mark/Compare', 'F12', 0),
-						('<Sunflower>/Settings/ShowHidden', 'H', gtk.gdk.CONTROL_MASK),
-						('<Sunflower>/Settings/Options', 'P', gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK),
+						('<Sunflower>/View/Fullscreen', 'F11', 0),
+						('<Sunflower>/View/Reload', 'R', gtk.gdk.CONTROL_MASK),
+						('<Sunflower>/View/ShowHidden', 'H', gtk.gdk.CONTROL_MASK),
+						('<Sunflower>/View/Options', 'P', gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK),
 						)
 
 			for path, key, mask in accel_map:
@@ -951,7 +1016,6 @@ class MainWindow(gtk.Window):
 
 	def load_config(self):
 		"""Load configuration from file located in users home directory"""
-
 		self.options = RawConfigParser()
 		self.tab_options = RawConfigParser()
 		self.bookmark_options = RawConfigParser()
@@ -1002,7 +1066,7 @@ class MainWindow(gtk.Window):
 			if not self.options.has_option('main', option):
 				self.options.set('main', option, value)
 
-		# save default column sizes for file list
+		# set default column sizes for file list
 		if not self.options.has_section('FileList'):
 			self.options.add_section('FileList')
 			for i, size in enumerate([200, 50, 70, 50, 100]):

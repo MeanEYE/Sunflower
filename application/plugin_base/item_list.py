@@ -52,9 +52,6 @@ class ItemList(PluginBase):
 			'z': {
 					'100': self._create_terminal,
 				},
-			'r': {
-					'100': self.refresh_file_list,
-				},
 			'BackSpace': {
 					'000': self._parent_folder,
 				},
@@ -81,15 +78,8 @@ class ItemList(PluginBase):
 					'000': self._move_files,
 					'001': self._rename_file,
 				},
-			'F7': {
-					'000': self._create_directory,
-					'100': self._create_file,
-				},
 			'F8': {
 					'000': self._delete_files,
-				},
-			'F11': {
-					'000': self._parent.toggle_fullscreen,
 				},
 			'Menu': {
 					'000': self._show_popup_menu,

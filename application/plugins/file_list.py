@@ -42,8 +42,8 @@ COL_SELECTED 	= 13
 
 class FileList(ItemList):
 
-	def __init__(self, parent, notebook, path=None):
-		ItemList.__init__(self, parent, notebook)
+	def __init__(self, parent, notebook, path=None, sort_column=None, sort_ascending=True):
+		ItemList.__init__(self, parent, notebook, path, sort_column, sort_ascending)
 
 		# storage system for list items
 		self._store = gtk.ListStore(
@@ -61,7 +61,7 @@ class FileList(ItemList):
 								str,	# COL_COLOR
 								gtk.gdk.Pixbuf, # COL_ICON
 								gtk.gdk.Pixbuf  # COL_SELECTED
-								)
+							)
 
 		# set item list model
 		self._item_list.set_model(self._store)
@@ -149,26 +149,25 @@ class FileList(ItemList):
 
 		self._resize_columns(self._columns)
 
-		# connect click events for columns
-		col_file.connect('clicked',	self._set_sort_function, COL_NAME)
-		col_extension.connect('clicked', self._set_sort_function, COL_EXT)
-		col_size.connect('clicked',	self._set_sort_function, COL_SIZE)
-		col_mode.connect('clicked',	self._set_sort_function, COL_MODE)
-		col_date.connect('clicked',	self._set_sort_function, COL_DATE)
+		# create a list of columns
+		column_sort_data = {
+					COL_NAME: col_file,
+					COL_EXT: col_extension,
+					COL_SIZE: col_size,
+					COL_MODE: col_mode,
+					COL_DATE: col_date,
+				}
 
-		col_file.connect('notify::width', self._column_resized)
-		col_extension.connect('notify::width', self._column_resized)
-		col_size.connect('notify::width', self._column_resized)
-		col_mode.connect('notify::width', self._column_resized)
-		col_date.connect('notify::width', self._column_resized)
+		# configure and pack columns
+		for sort_data, column in column_sort_data.items():
+			# connect events
+			column.connect('clicked', self._set_sort_function, sort_data)
+			column.connect('notify::width', self._column_resized)
 
-		# append columns
-		self._item_list.append_column(col_file)
-		self._item_list.append_column(col_extension)
-		self._item_list.append_column(col_size)
-		self._item_list.append_column(col_mode)
-		self._item_list.append_column(col_date)
+			# add to the list
+			self._item_list.append_column(column)
 
+		# set list behavior
 		self._item_list.set_headers_clickable(True)
 		self._item_list.set_enable_search(True)
 		self._item_list.set_search_column(COL_NAME)
@@ -189,7 +188,13 @@ class FileList(ItemList):
 		self._icon.set_from_pixbuf(icon)
 
 		# set sort function
-		self._set_sort_function(col_file, COL_NAME)
+		if self._sort_column is None:
+			# defaultly sort by name
+			self._sort_column = COL_NAME
+			self._sort_ascending = True
+
+		self._sort_column_widget = column_sort_data[self._sort_column]
+		self._apply_sort_function()
 
 		# directory monitor
 		self._fs_monitor = None
@@ -197,6 +202,7 @@ class FileList(ItemList):
 		# change to initial path
 		try:
 			self.change_path(path)
+
 		except:
 			# fail-safe jump to user home directory
 			self.change_path(user.home)
@@ -366,7 +372,7 @@ class FileList(ItemList):
 		if result[0] == gtk.RESPONSE_OK:
 			if not self.get_provider().exists(result[1], relative_to=self.path):
 				self.get_provider().rename_path(selection, result[1])
-				
+
 			else:
 				# file/directory already exists
 				dialog = gtk.MessageDialog(
@@ -379,7 +385,7 @@ class FileList(ItemList):
 										"be renamed."
 										)
 				dialog.run()
-				dialog.destroy()				
+				dialog.destroy()
 
 	def _send_to(self, widget, data=None):
 		"""Nautilus Send To integration"""
@@ -545,15 +551,18 @@ class FileList(ItemList):
 				# set sorting column
 				self._sort_column = data
 
-		widget.set_sort_indicator(True)
+		self._apply_sort_function()
 
+	def _apply_sort_function(self):
+		"""Apply sort settings"""
 		# set sort indicator only on one column
 		for column in self._item_list.get_columns():
-			selected = column is widget
+			selected = column is self._sort_column_widget
 			column.set_sort_indicator(selected)
 
+		# apply sorting function
 		order = [gtk.SORT_DESCENDING, gtk.SORT_ASCENDING][self._sort_ascending]
-		widget.set_sort_order(order)
+		self._sort_column_widget.set_sort_order(order)
 
 		self._store.set_sort_func(self._sort_column, self._sort_list)
 		self._store.set_sort_column_id(self._sort_column, order)
@@ -598,7 +607,7 @@ class FileList(ItemList):
 		elif event is gio.FILE_MONITOR_EVENT_CHANGED:
 			self._update_item_details_by_name(file.get_path())
 
-		self._change_title_text()			
+		self._change_title_text()
 		self._update_status_with_statistis()
 
 	def _toggle_selection(self, widget, data=None, advance=True):
@@ -618,7 +627,7 @@ class FileList(ItemList):
 				self._dirs['selected'] += [1, -1][selected]
 			else:
 				self._files['selected'] += [1, -1][selected]
-				self._size['selected'] += [1, -1][selected] * size 
+				self._size['selected'] += [1, -1][selected] * size
 
 			# toggle selection
 			selected = not selected
@@ -731,7 +740,7 @@ class FileList(ItemList):
 
 				# don't allow extension splitting on directories
 				file_info = (file_name, '') if is_dir else os.path.splitext(file_name)
-				
+
 				formated_file_size = locale.format('%d', file_size, True) if not is_dir else '<DIR>'
 				formated_file_mode = oct(file_mode)
 				formated_file_date = time.strftime(format, time.gmtime(file_date))
@@ -876,16 +885,16 @@ class FileList(ItemList):
 		try:
 			for file_name in self.get_provider().list_dir(self.path):
 				full_name = os.path.join(self.path, file_name)
-	
+
 				new_item = self._add_item(full_name, show_hidden)
-	
+
 				if file_name == selected:
 					to_select = new_item
 
 			# if no errors occurred during path change,
 			# call parent method which handles history
 			ItemList.change_path(self, path)
-			
+
 		except OSError as error:
 			# problem with listing directory, ask user what to do
 			dialog = gtk.MessageDialog(
@@ -898,15 +907,15 @@ class FileList(ItemList):
 								)
 			result = dialog.run()
 			dialog.destroy()
-			
+
 			if result == gtk.RESPONSE_YES:
 				self.change_path(path)
-				
+
 			else:
 				self.change_path(self.history[0])
-				
+
 			return
-			
+
 		# update status bar
 		self._update_status_with_statistis()
 
@@ -1073,7 +1082,7 @@ class FileList(ItemList):
 class LocalProvider(Provider):
 	"""Content provider for local files"""
 	is_local = True
-	
+
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
 		real_path = path if relative_to is None else os.path.join(relative_to, path)
@@ -1088,7 +1097,7 @@ class LocalProvider(Provider):
 		"""Test if given path is a link"""
 		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		return os.path.islink(real_path)
-	
+
 	def exists(self, path, relative_to=None):
 		"""Test if given path exists"""
 		real_path = path if relative_to is None else os.path.join(relative_to, path)
@@ -1137,7 +1146,7 @@ class LocalProvider(Provider):
 		"""Set access mode to specified path"""
 		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		os.chmod(real_path, mode)
-	
+
 	def set_owner(self, path, owner=-1, group=-1, relative_to=None):
 		"""Set owner and/or group for specified path"""
 		real_path = path if relative_to is None else os.path.join(relative_to, path)
@@ -1151,7 +1160,7 @@ class LocalProvider(Provider):
 		else:
 			real_source = os.path.join(relative_to, source)
 			real_destination = os.path.join(relative_to, destination)
-			
+
 		os.rename(
 				os.path.join(self._parent.path, real_source),
 				os.path.join(self._parent.path, real_destination)

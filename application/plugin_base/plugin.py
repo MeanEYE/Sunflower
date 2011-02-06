@@ -11,8 +11,10 @@ class PluginBase(gtk.VBox):
 
 	"""
 
-	def __init__(self, parent, notebook):
+	def __init__(self, parent, notebook, path=None):
 		gtk.VBox.__init__(self, False, 0)
+
+		self.path = path
 
 		self._parent = parent  # parent is stored locally for later use
 		self._notebook = notebook
@@ -38,7 +40,7 @@ class PluginBase(gtk.VBox):
 		self._status_bar.set_alignment(0, 0.5)
 		self._status_bar.set_use_markup(True)
 		self._status_bar.set_ellipsize(pango.ELLIPSIZE_END)
-		
+
 		status_bar.add(self._status_bar)
 		status_bar.set_border_width(1)
 

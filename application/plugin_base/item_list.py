@@ -17,18 +17,17 @@ class ItemList(PluginBase):
 
 	"""
 
-	def __init__(self, parent, notebook):
+	def __init__(self, parent, notebook, path=None, sort_column=None, sort_ascending=True):
 		global _icon_theme
 
 		self._provider = None
 		self._open_with_menu = None
 		self._open_with_item = None
 
-		self.path = ''
 		self.history = []
 
 		# call parent constructor
-		PluginBase.__init__(self, parent, notebook)
+		PluginBase.__init__(self, parent, notebook, path)
 
 		# global key event handlers with modifier switches (control, alt, shift)
 		self._key_handlers = {
@@ -112,8 +111,8 @@ class ItemList(PluginBase):
 
 		self._is_updating = False
 
-		self._sort_column = None
-		self._sort_ascending = True
+		self._sort_column = sort_column
+		self._sort_ascending = sort_ascending
 		self._sort_column_widget = None
 		self._columns = None
 
@@ -613,14 +612,14 @@ class ItemList(PluginBase):
 		"""Set status bar text acording to dir/file stats"""
 
 		status = self._parent.options.get('main', 'status_text')
-		
+
 		status = status.replace('%dir_count', str(self._dirs['count']))
 		status = status.replace('%dir_sel', str(self._dirs['selected']))
 		status = status.replace('%file_count', str(self._files['count']))
 		status = status.replace('%file_sel', str(self._files['selected']))
 		status = status.replace('%size_total', locale.format('%d', self._size['total'], True))
 		status = status.replace('%size_sel', locale.format('%d', self._size['selected'], True))
-		
+
 		self.update_status(status)
 
 	def _toggle_selection(self, widget, data=None, advance=True):
@@ -678,7 +677,7 @@ class ItemList(PluginBase):
 		"""Public method for safe path change """
 		if not path in self.history:
 			self.history.insert(0, path)
-			
+
 		else:
 			i = self.history.index(path)
 			if not i == 0:

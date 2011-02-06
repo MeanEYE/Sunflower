@@ -9,9 +9,8 @@ class SystemTerminal(Terminal):
 	"""System terminal plugin"""
 
 	def __init__(self, parent, notebook, path=None):
-		Terminal.__init__(self, parent, notebook)
+		Terminal.__init__(self, parent, notebook, path)
 
-		self.path = path
 		shell_command = os.environ['SHELL']
 
 		# we need TERM environment variable set

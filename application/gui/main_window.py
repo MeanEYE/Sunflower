@@ -30,7 +30,7 @@ class MainWindow(gtk.Window):
 
 	# version
 	version = '0.1a'
-	build_number = '14'
+	build_number = '15'
 
 	def __init__(self):
 		# create main window and other widgets
@@ -44,11 +44,11 @@ class MainWindow(gtk.Window):
 		self.associations_manager = AssociationManager()
 
 		self.set_title('Sunflower')
-		
+
 		if self.icon_manager.has_icon('sunflower'):
 			# in case theme has its own icon, use that one
 			self.set_icon_name('sunflower')
-			
+
 		else:
 			self.set_icon_from_file(os.path.join(
 										os.path.dirname(sys.argv[0]),
@@ -58,18 +58,18 @@ class MainWindow(gtk.Window):
 
 		# set locale for international number formatting
 		locale.setlocale(locale.LC_ALL)
-	
+
 		# config parsers
-		self.options = None 
-		self.tab_options = None 
+		self.options = None
+		self.tab_options = None
 		self.bookmark_options = None
 		self.toolbar_options = None
-		
+
 		# location of all configuration files
 		self.config_path = None
-		
+
 		self.clipboard = gtk.Clipboard()
-	
+
 		# load config
 		self.load_config()
 
@@ -223,17 +223,17 @@ class MainWindow(gtk.Window):
 		# add items to main menu
 		for item in menu_items:
 			menu_bar.append(self.menu_manager.create_menu_item(item))
-			
+
 		# operations menu
 		self.menu_operations = gtk.Menu()
 
 		self._menu_item_operations = gtk.MenuItem(label='Operations')
 		self._menu_item_operations.set_sensitive(False)
 		self._menu_item_operations.set_submenu(self.menu_operations)
-		
+
 		menu_bar.insert(self._menu_item_operations, len(menu_items)-1)
 		self._operations_visible = 0
-			
+
 		# load accelerator map
 		self.load_accel_map(os.path.join(self.config_path, 'accel_map'))
 
@@ -243,10 +243,10 @@ class MainWindow(gtk.Window):
 						'no-show-all',
 						not self.options.getboolean('main', 'show_toolbar')
 					)
-		
+
 		# bookmarks menu
 		self.menu_bookmarks = gtk.Menu()
-		
+
 		# mounts menu
 		self._menu_item_mounts = gtk.MenuItem(label='Mounts')
 		self._menu_item_mounts.show()
@@ -366,14 +366,14 @@ class MainWindow(gtk.Window):
 		self.save_config()
 
 		gtk.main_quit()
-		
+
 	def _delete_event(self, widget, data=None):
 		"""Handle delete event"""
 		self.hide()
 		self.indicator.adjust_visibility_items(False)
-		
+
 		return True  # prevent default handler
-	
+
 	def _create_bookmarks_menu(self):
 		"""Create bookmarks menu as defined in options"""
 		for item in self.menu_bookmarks.get_children():  # remove existing items
@@ -384,11 +384,11 @@ class MainWindow(gtk.Window):
 			self.menu_bookmarks.append(self._menu_item_mounts)
 			separator = self.menu_manager.create_menu_item({'type': 'separator'})
 			self.menu_bookmarks.append(separator)
-		
+
 		# create bookmark menu items
 		items = self.bookmark_options.options('bookmarks')
 		items.sort()
-		
+
 		for item in items:
 			data = self.bookmark_options.get('bookmarks', item).split(';', 1)
 			item_data = {
@@ -397,13 +397,13 @@ class MainWindow(gtk.Window):
 					}
 			menu_item = self.menu_manager.create_menu_item(item_data)
 			menu_item.set_data('path', os.path.expanduser(data[1]))
-			
+
 			self.menu_bookmarks.append(menu_item)
 
 		# add separator
 		separator = self.menu_manager.create_menu_item({'type': 'separator'})
 		self.menu_bookmarks.append(separator)
-		
+
 		# create additional options
 		menu_item = self.menu_manager.create_menu_item({
 										'label': 'Options',
@@ -417,49 +417,49 @@ class MainWindow(gtk.Window):
 													'callback': self.options_window._show,
 													'data': 3
 												},
-											) 
+											)
 									})
 		self.menu_bookmarks.append(menu_item)
-			
+
 	def _get_bookmarks_menu_position(self, menu, button):
 		"""Get bookmarks position"""
 		window_x, window_y = self.window.get_position()
 		button_x, button_y = button.translate_coordinates(self, 0, 0)
 		button_h = button.get_allocation().height
-		
+
 		pos_x = window_x + button_x
 		pos_y = window_y + button_y + button_h
-		
+
 		return (pos_x, pos_y, True)
-	
+
 	def _add_bookmark(self, widget, data=None):
 		"""Show dialog for adding a new bookmark"""
-		item_list = self.menu_bookmarks.get_data('list')		
+		item_list = self.menu_bookmarks.get_data('list')
 		path = item_list.path
 		dialog = AddBookmarkDialog(self, path)
-		
+
 		response = dialog.get_response()
-		
+
 		if response[0] == gtk.RESPONSE_OK:
 			bookmarks = self.bookmark_options.options('bookmarks')
-			
+
 			name = 'b_{0}'.format(len(bookmarks) + 1)
 			value = '{0};{1}'.format(response[1], response[2])
-			
+
 			self.bookmark_options.set('bookmarks', name, value)
 			self._create_bookmarks_menu()
-	
+
 	def _handle_bookmarks_click(self, widget, data=None):
 		"""Handle clicks on bookmark menu"""
 		item_list = self.menu_bookmarks.get_data('list')
-		
+
 		if item_list is not None and hasattr(item_list, 'change_path'):
 			path = widget.get_data('path')
-			
+
 			if os.path.isdir(path):
 				# path is valid
 				item_list.change_path(path)
-				
+
 			else:
 				# invalid path, notify user
 				dialog = gtk.MessageDialog(
@@ -474,7 +474,7 @@ class MainWindow(gtk.Window):
 										)
 				dialog.run()
 				dialog.destroy()
-	
+
 	def _tab_moved(self, notebook, child, page_num):
 		"""Handle adding/moving tab accross notebooks"""
 		if hasattr(child, 'update_notebook'):
@@ -507,10 +507,10 @@ class MainWindow(gtk.Window):
 	def _toggle_show_command_bar(self, widget, data=None):
 		"""Show/hide command bar"""
 		show_command_bar = widget.get_active()
-		
+
 		self.options.set('main', 'show_command_bar', ('False', 'True')[show_command_bar])
 		self.command_bar.set_visible(show_command_bar)
-			
+
 	def _toggle_show_toolbar(self, widget, data=None):
 		"""Show/hide toolbar"""
 		show_toolbar = widget.get_active()
@@ -618,23 +618,23 @@ class MainWindow(gtk.Window):
 	def show_bookmarks_menu(self, widget=None, notebook=None):
 		"""Position bookmarks menu properly and show it"""
 		button = None
-		
+
 		if notebook is not None:
 			# show request was triggered by global shortcut
 			page = notebook.get_nth_page(notebook.get_current_page())
 			if hasattr(page, '_bookmarks_button'):
 				button = page._bookmarks_button
-				
+
 			self.menu_bookmarks.set_data('list', page)
-			
+
 		else:
 			# button called for menu
 			button = widget
-		
-		if button is not None:	
+
+		if button is not None:
 			self.menu_bookmarks.popup(
-									None, None, 
-									self._get_bookmarks_menu_position, 
+									None, None,
+									self._get_bookmarks_menu_position,
 									1, 0, button
 									)
 
@@ -721,18 +721,25 @@ class MainWindow(gtk.Window):
 			self.create_tab(self.right_notebook, FileList)
 
 		gtk.main()
-		
-	def create_tab(self, notebook, plugin_class=None, data=None):
-		"""Safe create tab"""
-		if data is None:
-			new_tab = plugin_class(self, notebook)
-		else:
-			new_tab = plugin_class(self, notebook, data)
 
+	def create_tab(self, notebook, plugin_class=None, path=None, sort_column=None, sort_ascending=None):
+		"""Safe create tab"""
+
+		if sort_column is not None and sort_column != '':
+			# create plugin object with sort parameters
+			print sort_column
+			new_tab = plugin_class(self, notebook, path, int(sort_column), bool(int(sort_ascending)))
+
+		else:
+			# create plugin object without sorting information
+			new_tab = plugin_class(self, notebook, path)
+
+		# add page to notebook
 		index = notebook.append_page(new_tab, new_tab._tab_label)
 		notebook.set_tab_reorderable(new_tab, True)
 		notebook.set_tab_detachable(new_tab, True)
 
+		# focus tab if needed
 		if self.options.getboolean('main', 'focus_new_tab'):
 			notebook.set_current_page(index)
 			new_tab._main_object.grab_focus()
@@ -743,15 +750,13 @@ class MainWindow(gtk.Window):
 
 	def close_tab(self, notebook, child):
 		"""Safely remove tab and it's children"""
-
 		if notebook.get_n_pages() > 1:
 			notebook.remove_page(notebook.page_num(child))
 
 			del child
-			
+
 	def next_tab(self, notebook):
 		"""Select next tab on given notebook"""
-
 		first_page = 0
 		last_page = notebook.get_n_pages() - 1
 
@@ -765,7 +770,6 @@ class MainWindow(gtk.Window):
 
 	def previous_tab(self, notebook):
 		"""Select previous tab on given notebook"""
-
 		first_page = 0
 		last_page = notebook.get_n_pages() - 1
 
@@ -783,7 +787,6 @@ class MainWindow(gtk.Window):
 
 	def goto_web(self, widget, data=None):
 		"""Open URL stored in data"""
-
 		if data is not None:
 			webbrowser.open_new_tab("http://%s" % data)
 
@@ -792,6 +795,7 @@ class MainWindow(gtk.Window):
 		if data is not None:
 			# process custom data
 			raw_command = data
+
 		else:
 			# no data is specified so we try to process command entry
 			raw_command = self.command_edit.get_text()
@@ -828,18 +832,33 @@ class MainWindow(gtk.Window):
 			tab_class = page.__class__.__name__
 			tab_path = page.path
 
+			if hasattr(page, '_sort_column'):
+				# file lists have sort column
+				tab_sort_column = page._sort_column
+				tab_sort_ascending = (0, 1)[page._sort_ascending]
+
+			else:
+				# other plugins might not have sort column
+				tab_sort_column = ''
+				tab_sort_ascending = ''
+
 			self.tab_options.set(
 							section,
 							'tab_{0}'.format(index),
-							'{0}:{1}'.format(tab_class, tab_path)
+							'{0}:{1}:{2}:{3}'.format(
+												tab_class,
+												tab_path,
+												tab_sort_column,
+												tab_sort_ascending
+											)
 						)
 
 		if not self.tab_options.has_section('options'):
 			self.tab_options.add_section('options')
-			
+
 		self.tab_options.set(
-					'options', 
-					'{0}_selected'.format(section), 
+					'options',
+					'{0}_selected'.format(section),
 					notebook.get_current_page()
 				)
 
@@ -851,20 +870,28 @@ class MainWindow(gtk.Window):
 			# if section exists, load it
 			tab_list = self.tab_options.options(section)
 			tab_list.sort()
-			
+
 			for tab in tab_list:
-				data = self.tab_options.get(section, tab).split(':', 1)
+				data = self.tab_options.get(section, tab).split(':', 3)
 
 				tab_class = data[0]
 				tab_path = data[1]
+				tab_sort_column = data[2]
+				tab_sort_ascending = data[3]
 
-				self.create_tab(notebook, globals()[tab_class], tab_path)
+				self.create_tab(
+							notebook,
+							globals()[tab_class],
+							tab_path,
+							tab_sort_column,
+							tab_sort_ascending
+						)
 
 			result = True
 
 			# set active tab
 			active_tab = self.tab_options.getint(
-										'options', 
+										'options',
 										'{0}_selected'.format(section)
 									)
 			self.set_active_tab(notebook, active_tab)
@@ -874,12 +901,12 @@ class MainWindow(gtk.Window):
 	def save_accel_map(self, path):
 		"""Save menu accelerator map"""
 		gtk.accel_map_save(path)
-	
+
 	def load_accel_map(self, path):
 		"""Load menu accelerator map"""
 		if os.path.isfile(path):
 			gtk.accel_map_load(path)
-		
+
 		else:
 			# no existing configuration, set default
 			accel_map = (
@@ -891,16 +918,16 @@ class MainWindow(gtk.Window):
 						('<Sunflower>/Settings/ShowHidden', 'H', gtk.gdk.CONTROL_MASK),
 						('<Sunflower>/Settings/Options', 'P', gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK),
 						)
-			
+
 			for path, key, mask in accel_map:
 				gtk.accel_map_change_entry(path, gtk.gdk.keyval_from_name(key), mask, True)
-	
+
 	def save_config(self):
 		"""Save configuration to file"""
 		try:
 			if not os.path.isdir(self.config_path):
 				os.makedirs(self.config_path)
-				
+
 			self.options.write(open(os.path.join(self.config_path, 'config'), 'w'))
 			self.tab_options.write(open(os.path.join(self.config_path, 'tabs'), 'w'))
 			self.bookmark_options.write(open(os.path.join(self.config_path, 'bookmarks'), 'w'))
@@ -929,13 +956,13 @@ class MainWindow(gtk.Window):
 		self.tab_options = RawConfigParser()
 		self.bookmark_options = RawConfigParser()
 		self.toolbar_options = RawConfigParser()
-		
-		# load configuration from right folder on systems that support it 
+
+		# load configuration from right folder on systems that support it
 		if os.path.isdir(os.path.join(user.home, '.config')):
 			self.config_path = os.path.join(user.home, '.config', 'sunflower')
 		else:
 			self.config_path = os.path.join(user.home, '.sunflower')
-	
+
 		self.options.read(os.path.join(self.config_path, 'config'))
 		self.tab_options.read(os.path.join(self.config_path, 'tabs'))
 		self.bookmark_options.read(os.path.join(self.config_path, 'bookmarks'))
@@ -944,7 +971,7 @@ class MainWindow(gtk.Window):
 		# set default values
 		if not self.options.has_section('main'):
 			self.options.add_section('main')
-			
+
 		if not self.bookmark_options.has_section('bookmarks'):
 			self.bookmark_options.add_section('bookmarks')
 
@@ -1023,49 +1050,48 @@ class MainWindow(gtk.Window):
 		else:
 			self.fullscreen()
 			self._in_fullscreen = True
-			
+
 	def add_operation(self, widget, callback, data=None):
 		"""Add operation to menu"""
 		item = gtk.MenuItem()
 		item.add(widget)
 		item.connect('activate', callback, data)
-		
+
 		item.show_all()
 		item.hide()
-		
+
 		self.menu_operations.append(item)
-		
+
 		return item
-	
+
 	def remove_operation(self, widget):
 		"""Remove operation item from menu"""
 		if widget.get_visible():
 			self.operation_hidden()
-			
+
 		self.menu_operations.remove(widget)
-	
+
 	def operation_displayed(self):
 		"""Increase count of visible operation menu items"""
 		self._operations_visible += 1
 		self._menu_item_operations.set_sensitive(True)
-		
+
 	def operation_hidden(self):
 		"""Decrease cound of visible operation menu items"""
 		self._operations_visible -= 1
-		
+
 		if self._operations_visible == 0:
 			self._menu_item_operations.set_sensitive(False)
 
 	def test(self, widget, data=None):
 		vbox = gtk.VBox(False, 0)
-		
+
 		label = gtk.Label('Copying: /var/files/home/njak')
 		label.set_alignment(0, 0.5)
 		progress = gtk.ProgressBar()
-		
+
 		vbox.pack_start(label, False, False, 0)
 		vbox.pack_start(progress, False, False, 0)
-		
+
 		self.add_operation(vbox, None, None)
-		
-		
+

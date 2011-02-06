@@ -18,11 +18,11 @@ class Terminal(PluginBase):
 	defining your own.
 
 	"""
-	
+
 	_vte_present = False
 
-	def __init__(self, parent, notebook):
-		PluginBase.__init__(self, parent, notebook)
+	def __init__(self, parent, notebook, path=None):
+		PluginBase.__init__(self, parent, notebook, path)
 
 		# global key event handlers with modifier switches (control, alt, shift)
 		self._key_handlers = {
@@ -73,7 +73,7 @@ class Terminal(PluginBase):
 		self.pack_start(container, True, True, 0)
 
 		self._connect_main_object(self._terminal)
-		
+
 	def _change_top_panel_color(self, state):
 		"""Modify coloring of top panel"""
 		PluginBase._change_top_panel_color(self, state)
@@ -89,7 +89,7 @@ class Terminal(PluginBase):
 		"""Update title with terminal window text"""
 		self._change_title_text(self._terminal.get_window_title())
 		return True
-	
+
 	def _recycle_terminal(self, widget, data=None):
 		"""Recycle terminal"""
 		pass
@@ -103,7 +103,7 @@ class Terminal(PluginBase):
 		"""Creates new tab with same path"""
 		PluginBase._duplicate_tab(self, None, self.path)
 		return True
-	
+
 	def feed_terminal(self, text):
 		"""Feed terminal process with specified text"""
 		self._terminal.feed_child(text)

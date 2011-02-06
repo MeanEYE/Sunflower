@@ -707,8 +707,12 @@ class MainWindow(gtk.Window):
 				checkbox_reset_accel_map = gtk.CheckButton('Reset accelerator map')
 				checkbox_reset_accel_map.set_active(True)
 
+				checkbox_reset_tabs = gtk.CheckButton('Clear open tabs')
+				checkbox_reset_tabs.set_active(True)
+
 				vbox_15.pack_start(label_15, False, False, 0)
 				vbox_15.pack_start(checkbox_reset_accel_map, False, False, 0)
+				vbox_15.pack_start(checkbox_reset_tabs, False, False, 0)
 
 				vbox.pack_start(vbox_15, False, False, 0)
 				mod_count += 1
@@ -724,6 +728,9 @@ class MainWindow(gtk.Window):
 				if checkbox_reset_accel_map.get_active()\
 				and os.path.isfile(os.path.join(self.config_path, 'accel_map')):
 					os.remove(os.path.join(self.config_path, 'accel_map'))
+
+				if checkbox_reset_tabs.get_active():
+					self.tab_options = RawConfigParser()
 
 			# set config version to current
 			self.options.set('main', 'last_version', current_version)

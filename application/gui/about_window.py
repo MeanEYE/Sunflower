@@ -18,7 +18,6 @@ class AboutWindow(gtk.Window):
 		self.set_deletable(False)
 		self.set_transient_for(parent)
 		self.realize()
-		style = self.get_style().copy()
 
 		# create gui
 		vbox = gtk.VBox(False, 0)
@@ -34,17 +33,17 @@ class AboutWindow(gtk.Window):
 		image.set_size_request(70, 70)
 
 		# program label
+		style = self.get_style().copy()
 		program_label = gtk.Label(
 							'<span color="{0}">'
 							'<span size="x-large" weight="bold">'
-							'Sunflower</span>\nVersion {1} <span size="small"><i>({2})</i></span>'
+							'Sunflower</span>\nVersion {1[major]}.{1[minor]}{1[stage]} '
+							'<span size="small"><i>({1[build]})</i></span>'
 							'</span>'.format(
 										style.fg[gtk.STATE_SELECTED].to_string(),
-										parent.version,
-										parent.build_number
+										parent.version
 										)
 							)
-
 		program_label.set_use_markup(True)
 
 		# top horizontal box containing image and program title
@@ -75,6 +74,7 @@ class AboutWindow(gtk.Window):
 						)
 		program_info.set_alignment(0,0)
 		program_info.set_line_wrap(True)
+		program_info.connect('size-allocate', self._adjust_label)
 		tab1.pack_start(program_info, False, True, 0)
 
 		developer_info = gtk.Label(
@@ -179,6 +179,7 @@ class AboutWindow(gtk.Window):
 		warning.set_use_markup(True)
 		warning.set_line_wrap(True)
 		warning.set_alignment(0,0)
+		warning.connect('size-allocate', self._adjust_label)
 
 		self._wakoopa_image = gtk.Image()
 
@@ -215,6 +216,10 @@ class AboutWindow(gtk.Window):
 		tab.append_page(tab_alternativeto, image_alternativeto)
 
 		return (tab, tab_label)
+
+	def _adjust_label(self, widget, data=None):
+		"""Adjust label size"""
+		widget.set_size_request(data.width-1, -1)
 
 	def load_wakoopa_image(self, widget, data=None):
 		"""Retrieve wakoopa statistics image"""

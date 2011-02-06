@@ -17,6 +17,7 @@ from ConfigParser import RawConfigParser
 # gui imports
 from about_window import AboutWindow
 from options_window import OptionsWindow
+from changelog_dialog import ChangeLogDialog
 from icons import IconManager
 from associations import AssociationManager
 from indicator import Indicator
@@ -28,14 +29,18 @@ from plugins import *
 class MainWindow(gtk.Window):
 	"""Main application class"""
 
-	# version
-	version = '0.1a'
-	build_number = '15'
+	# in order to ease version comparing build number will
+	# continue increasing and will never be reset.
+	version = {
+			'major': 0,
+			'minor': 1,
+			'build': 15,
+			'stage': 'a'
+		}
 
 	def __init__(self):
 		# create main window and other widgets
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
-		self.realize()
 
 		# create managers early
 		self.icon_manager = IconManager(self)
@@ -73,6 +78,10 @@ class MainWindow(gtk.Window):
 		# load config
 		self.load_config()
 
+		# call version specific actions
+		self._version_specific_actions()
+
+		# connect delete event to main window
 		if self.options.getboolean('main', 'hide_on_close'):
 			self.connect("delete-event", self._delete_event)
 		else:
@@ -374,11 +383,9 @@ class MainWindow(gtk.Window):
 				button.connect('clicked', callback)
 
 			button.set_tooltip_text(tooltip)
-			button.modify_bg(gtk.STATE_NORMAL, style.bg[gtk.STATE_NORMAL])
-			button.modify_fg(gtk.STATE_NORMAL, style.fg[gtk.STATE_NORMAL])
 			button.set_focus_on_click(False)
 
-			button.show()
+			button.show()  # we need to explicitly show in cases where toolbar is not visible
 
 			self.command_bar.pack_start(button, True, True, 0)
 
@@ -675,6 +682,52 @@ class MainWindow(gtk.Window):
 	def _restore_window_position(self):
 		"""Restore window position from config string"""
 		self.parse_geometry(self.options.get('main', 'window'))
+
+	def _version_specific_actions(self):
+		"""This method will provide user with some feedback and
+		backwards compatibility. Also it will show latest changelog"""
+		config_version = self.options.getint('main', 'last_version')
+		current_version = self.version['build']
+
+		# check if we need to show change log and optionally modify system
+		if config_version is None or current_version > config_version:
+			mod_count = 0
+			vbox = gtk.VBox(False, 10)
+			vbox.set_border_width(5)
+
+			# reset accelerator map due to menu changes
+			if config_version < 15:
+				vbox_15 = gtk.VBox(False, 0)
+
+				label_15 = gtk.Label('<b>Version 0.1a-15:</b>')
+				label_15.set_alignment(0, 0.5)
+				label_15.set_use_markup(True)
+
+				checkbox_reset_accel_map = gtk.CheckButton('Reset accelerator map')
+				checkbox_reset_accel_map.set_active(True)
+
+				vbox_15.pack_start(label_15, False, False, 0)
+				vbox_15.pack_start(checkbox_reset_accel_map, False, False, 0)
+
+				vbox.pack_start(vbox_15, False, False, 0)
+				mod_count += 1
+
+			# show dialog
+			change_log = ChangeLogDialog(self, vbox, not mod_count == 0)
+			change_log.run()
+
+			## apply selected changes in reverse order
+
+			# reset accelerator map
+			if config_version < 15:
+				if checkbox_reset_accel_map.get_active():
+					os.remove(os.path.join(self.config_path, 'accel_map'))
+
+			# set config version to current
+			self.options.set('main', 'last_version', current_version)
+
+			# kill dialog
+			change_log.destroy()
 
 	def show_bookmarks_menu(self, widget=None, notebook=None):
 		"""Position bookmarks menu properly and show it"""
@@ -1059,6 +1112,7 @@ class MainWindow(gtk.Window):
 				'history_file': '.bash_history',
 				'window': '950x450',
 				'hide_on_close': 'True',
+				'last_version': 0,
 			}
 
 		# set default options

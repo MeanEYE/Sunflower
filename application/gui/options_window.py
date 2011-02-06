@@ -6,6 +6,8 @@ class OptionsWindow(gtk.Window):
 
 	def __init__(self, parent):
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
+
+		# configure self
 		self.connect('delete_event', self._hide)
 		self.set_title('Options')
 		self.set_size_request(600, 500)

@@ -46,8 +46,7 @@ class Terminal(PluginBase):
 		}
 
 		# change list icon
-		icon = self._parent.icon_manager.get_icon_from_type('terminal', gtk.ICON_SIZE_LARGE_TOOLBAR)
-		self._icon.set_from_pixbuf(icon)
+		self._icon.set_from_icon_name('terminal', gtk.ICON_SIZE_LARGE_TOOLBAR)
 
 		# recycle button
 		self._recycle_button = gtk.Button(u'\u267B')

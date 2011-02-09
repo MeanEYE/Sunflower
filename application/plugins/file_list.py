@@ -184,8 +184,7 @@ class FileList(ItemList):
 		self._item_list.set_grid_lines(grid_lines)
 
 		# change list icon
-		icon = self._parent.icon_manager.get_icon_from_type('folder', gtk.ICON_SIZE_LARGE_TOOLBAR)
-		self._icon.set_from_pixbuf(icon)
+		self._icon.set_from_icon_name('folder', gtk.ICON_SIZE_LARGE_TOOLBAR)
 
 		# set sort function
 		if self._sort_column is None:

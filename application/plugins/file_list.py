@@ -198,6 +198,9 @@ class FileList(ItemList):
 		# directory monitor
 		self._fs_monitor = None
 
+		# variable that is used to set focus on newly created files and dirs
+		self._item_to_focus = None
+
 		# change to initial path
 		try:
 			self.change_path(path)
@@ -238,6 +241,9 @@ class FileList(ItemList):
 		# create dialog
 		if response[0] == gtk.RESPONSE_OK:
 			try:
+				# set this item to be focused on add
+				self._item_to_focus = response[1]
+
 				# try to create directories
 				self.get_provider().create_directory(response[1], mode, relative_to=self.path)
 
@@ -262,6 +268,7 @@ class FileList(ItemList):
 		# get response
 		response = dialog.get_response()
 		mode = dialog.get_mode()
+		edit_after = dialog.get_edit_file()
 
 		# release dialog
 		dialog.destroy()
@@ -270,14 +277,21 @@ class FileList(ItemList):
 		if response[0] == gtk.RESPONSE_OK:
 			try:
 				# try to create file
-				# TODO: Create file through provider
 				if os.path.isfile(os.path.join(self.path, response[1])):
 					raise OSError("File already exists: {0}".format(response[1]))
 
 				if os.path.isdir(os.path.join(self.path, response[1])):
 					raise OSError("Directory with same name exists: {0}".format(response[1]))
 
+				# set this item to be focused on add
+				self._item_to_focus = response[1]
+
+				# create file
 				self.get_provider().create_file(response[1], mode=mode, relative_to=self.path)
+
+				# if specified, edit file after creating it
+				if edit_after:
+					self._edit_filename(response[1])
 
 			except OSError as error:
 				# error creating, report to user
@@ -597,7 +611,14 @@ class FileList(ItemList):
 
 		# node created
 		if event is gio.FILE_MONITOR_EVENT_CREATED:
-			self._add_item(file.get_path(), show_hidden)
+
+			# temporarily fix problem with duplicating items when file was saved with GIO
+			# TODO: Test why this is happening
+			if self._find_iter_by_name(file.get_basename()) is None:
+				self._add_item(file.get_basename(), show_hidden)
+
+			else:
+				self._update_item_details_by_name(file.get_basename())
 
 		# node deleted
 		elif event is gio.FILE_MONITOR_EVENT_DELETED:
@@ -605,7 +626,7 @@ class FileList(ItemList):
 
 		# node changed
 		elif event is gio.FILE_MONITOR_EVENT_CHANGED:
-			self._update_item_details_by_name(file.get_path())
+			self._update_item_details_by_name(file.get_basename())
 
 		self._change_title_text()
 		self._update_status_with_statistis()
@@ -654,18 +675,21 @@ class FileList(ItemList):
 		is_dir = list.get_value(iter, COL_DIR)
 
 		if not is_dir and self.get_provider().is_local:
-			filename = list.get_value(iter, COL_NAME)
-			default_editor = self._parent.options.get('main', 'default_editor')
-
-			command = default_editor.format(os.path.join(self.path, filename))
-
-			# if we shouldn't wait for editor, add & at the end of command
-			if not self._parent.options.getboolean('main', 'wait_for_editor'):
-				command = '{0} &'.format(command)
-
-			os.system(command)
+			self._edit_filename(list.get_value(iter, COL_NAME))
 
 		return True
+
+	def _edit_filename(self, filename):
+		"""Open editor with specified filename and current path"""
+		default_editor = self._parent.options.get('main', 'default_editor')
+		filename = os.path.join(self.path, filename)
+		command = default_editor.format(filename)
+
+		# if we shouldn't wait for editor, add & at the end of command
+		if not self._parent.options.getboolean('main', 'wait_for_editor'):
+			command = '{0} &'.format(command)
+
+		os.system(command)
 
 	def _find_iter_by_name(self, name):
 		""" Find and return item by name"""
@@ -678,21 +702,20 @@ class FileList(ItemList):
 
 		return result
 
-	def _add_item(self, full_name, show_hidden=False):
+	def _add_item(self, filename, show_hidden=False):
 		"""Add item to the list"""
 		file_size = 0
 		file_mode = 0
 		file_date = 0
 
 		result = None
-		file_name = os.path.basename(full_name)
-		can_add = not (file_name[0] == '.' and not show_hidden)
+		can_add = not (filename[0] == '.' and not show_hidden)
 		provider = self.get_provider()
 
 		if can_add:
 			# directory
-			if provider.is_dir(full_name):
-				file_stat = provider.get_stat(full_name)
+			if provider.is_dir(filename, relative_to=self.path):
+				file_stat = provider.get_stat(filename, relative_to=self.path)
 
 				file_size = -1
 				file_mode = stat.S_IMODE(file_stat.st_mode)
@@ -702,8 +725,8 @@ class FileList(ItemList):
 				self._dirs['count'] += 1
 
 			# regular file
-			elif provider.is_file(full_name):
-				file_stat = provider.get_stat(full_name)
+			elif provider.is_file(filename, relative_to=self.path):
+				file_stat = provider.get_stat(filename, relative_to=self.path)
 
 				file_size = file_stat.st_size
 				file_mode = stat.S_IMODE(file_stat.st_mode)
@@ -714,10 +737,10 @@ class FileList(ItemList):
 				self._size['total'] += file_size
 
 			# link
-			elif provider.is_link(full_name):
+			elif provider.is_link(filename, relative_to=self.path):
 				# TODO: Finish!
 				try:
-					linked_name = os.path.join(self.path, os.readlink(full_name))
+					linked_name = os.path.join(self.path, os.readlink(filename))
 					file_stat = provider.get_stat(linked_name)
 
 					file_size = file_stat.st_size
@@ -739,7 +762,7 @@ class FileList(ItemList):
 				format = self._parent.options.get('main', 'time_format')
 
 				# don't allow extension splitting on directories
-				file_info = (file_name, '') if is_dir else os.path.splitext(file_name)
+				file_info = (filename, '') if is_dir else os.path.splitext(filename)
 
 				formated_file_size = locale.format('%d', file_size, True) if not is_dir else '<DIR>'
 				formated_file_mode = oct(file_mode)
@@ -748,10 +771,10 @@ class FileList(ItemList):
 				if is_dir:
 					icon = self._parent.icon_manager.get_icon_from_type('folder')
 				else:
-					icon = self._parent.icon_manager.get_icon_for_file(file_name)
+					icon = self._parent.icon_manager.get_icon_for_file(filename)
 
 				props = (
-						file_name,
+						filename,
 						file_info[0],
 						file_info[1][1:],
 						file_size,
@@ -766,7 +789,14 @@ class FileList(ItemList):
 						icon,
 						None
 					)
+
 				result = self._store.append(props)
+
+				# focus specified item
+				if self._item_to_focus == filename:
+					self._item_list.set_cursor(self._store.get_path(result))
+					self._item_to_focus = None
+
 			except:
 				pass
 
@@ -791,6 +821,7 @@ class FileList(ItemList):
 			# if currently hovered item was removed
 			if iter_name == selected_name:
 				next_iter = list.iter_next(selected_iter)
+
 				if next_iter is not None:
 					self._item_list.set_cursor(list.get_path(next_iter))
 
@@ -804,24 +835,32 @@ class FileList(ItemList):
 
 	def _update_item_details_by_name(self, name):
 		"""Update item details (size, time, etc.) on changed event"""
-		found_iter = self._find_iter_by_name(os.path.basename(name))
+		found_iter = self._find_iter_by_name(name)
+		provider = self.get_provider()
 
 		if found_iter is not None:
 			# get node stats
-			file_stat = os.stat(name)
+			is_dir = self._store.get_value(found_iter, COL_DIR)
+			file_stat = provider.get_stat(name, relative_to=self.path)
 
-			if os.path.isdir(name):
-				file_size = -1
-			else:
-				file_size = file_stat.st_size
-
+			file_size = file_stat.st_size
 			file_mode = stat.S_IMODE(file_stat.st_mode)
 			file_date = file_stat.st_mtime
+
+			# format values
+			format = self._parent.options.get('main', 'time_format')
+
+			formated_file_size = locale.format('%d', file_size, True) if not is_dir else '<DIR>'
+			formated_file_mode = oct(file_mode)
+			formated_file_date = time.strftime(format, time.gmtime(file_date))
 
 			# update list store
 			self._store.set_value(found_iter, COL_SIZE, file_size)
 			self._store.set_value(found_iter, COL_MODE, file_mode)
 			self._store.set_value(found_iter, COL_DATE, file_date)
+			self._store.set_value(found_iter, COL_FSIZE, formated_file_size)
+			self._store.set_value(found_iter, COL_FMODE, formated_file_mode)
+			self._store.set_value(found_iter, COL_FDATE, formated_file_date)
 
 	def _change_title_text(self, text=None):
 		"""Change title label text and add free space display"""
@@ -881,15 +920,13 @@ class FileList(ItemList):
 		self._size['total'] = 0L
 		self._size['selected'] = 0
 
+		# assign item for selection
+		self._item_to_focus = selected
+
 		# populate list
 		try:
-			for file_name in self.get_provider().list_dir(self.path):
-				full_name = os.path.join(self.path, file_name)
-
-				new_item = self._add_item(full_name, show_hidden)
-
-				if file_name == selected:
-					to_select = new_item
+			for filename in self.get_provider().list_dir(self.path):
+				new_item = self._add_item(filename, show_hidden)
 
 			# if no errors occurred during path change,
 			# call parent method which handles history
@@ -942,16 +979,12 @@ class FileList(ItemList):
 #		self._item_list.set_model(self._store)
 #		self._set_sort_function(self._sort_column_widget)
 
-		# select either first or previous item
-		if to_select is not None:
-			path = self._store.get_path(to_select)
-		else:
+		# if no item was specified, select first one
+		if selected is None:
 			path = self._store.get_path(self._store.get_iter_first())
+			self._item_list.set_cursor(path)
 
-		# select item
-		self._item_list.set_cursor(path)
-
-		# register file monitor
+		# create file monitor
 		if gio is not None and self.get_provider().is_local:
 			self._fs_monitor = gio.File(self.path).monitor_directory()
 			self._fs_monitor.connect('changed', self._directory_changed)

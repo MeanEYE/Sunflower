@@ -620,6 +620,10 @@ class ItemList(PluginBase):
 		"""Abstract method to edit currently selected item"""
 		pass
 
+	def _edit_filename(self, filename):
+		"""Open editor with specified filename and current path"""
+		pass
+
 	def _handle_path_inheritance(self, widget, event):
 		"""Handle inheriting or setting paths from/to other lists"""
 		result = False

@@ -32,10 +32,11 @@ class InputDialog(gtk.Dialog):
 
 		self.vbox.set_spacing(0)
 
-		vbox = gtk.VBox(False, 0)
-		vbox.set_border_width(5)
+		self._container = gtk.VBox(False, 0)
+		self._container.set_border_width(5)
 
 		# create interface
+		vbox = gtk.VBox(False, 0)
 		self._label = gtk.Label('Label')
 		self._label.set_alignment(0, 0.5)
 
@@ -52,11 +53,13 @@ class InputDialog(gtk.Dialog):
 		vbox.pack_start(self._label, False, False, 0)
 		vbox.pack_start(self._entry, False, False, 0)
 
+		self._container.pack_start(vbox, False, False, 0)
+
 		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
 		self.action_area.pack_end(button_ok, False, False, 0)
 		self.set_default_response(gtk.RESPONSE_OK)
 
-		self.vbox.pack_start(vbox, True, True, 0)
+		self.vbox.pack_start(self._container, True, True, 0)
 		self.show_all()
 
 	def _confirm_entry(self, widget, data=None):
@@ -95,12 +98,14 @@ class CreateDialog(InputDialog):
 
 		self._updating = False
 		self._mode = 0644
+		self._dialog_size = None
 
-		self.vbox.set_spacing(0)
+		self._container.set_spacing(5)
+
 		# create advanced options expander
 		expander = gtk.Expander('Advanced options')
 		expander.connect('activate', self._expander_event)
-		expander.set_border_width(5)
+		expander.set_border_width(0)
 
 		self._advanced = gtk.VBox(False, 5)
 		self._advanced.set_border_width(5)
@@ -173,7 +178,7 @@ class CreateDialog(InputDialog):
 		# pack interface
 		self._advanced.pack_start(table, False, False, 0)
 		expander.add(self._advanced)
-		self.vbox.pack_start(expander, False, False, 0)
+		self._container.pack_start(expander, False, False, 0)
 
 		self.update_mode()
 		expander.show_all()
@@ -209,7 +214,12 @@ class CreateDialog(InputDialog):
 	def _expander_event(self, widget, data=None):
 		"""Return dialog size back to normal"""
 		if widget.get_expanded():
-			self.resize(340, 100)
+			self.set_size_request(1, 1)
+			self.resize(*self._dialog_size)
+
+		else:
+			self._dialog_size = self.get_size()
+			self.set_size_request(-1, -1)
 
 	def get_mode(self):
 		"""Returns default directory/file creation mode"""
@@ -234,6 +244,16 @@ class FileCreateDialog(CreateDialog):
 		self.set_title('Create empty file')
 		self.set_label('Enter new file name:')
 
+		self._checkbox_edit_after = gtk.CheckButton('Open file in editor')
+		self._checkbox_edit_after.show()
+
+		self._container.pack_start(self._checkbox_edit_after, False, False, 0)
+		self._container.reorder_child(self._checkbox_edit_after, 1)
+
+	def get_edit_file(self):
+		"""Get state of 'edit after creating' checkbox"""
+		return self._checkbox_edit_after.get_active()
+
 
 class DirectoryCreateDialog(CreateDialog):
 
@@ -247,7 +267,6 @@ class DirectoryCreateDialog(CreateDialog):
 
 class CopyDialog(gtk.Dialog):
 	"""Dialog which will ask user for additional options before copying"""
-
 	_title = "Copy item(s)"
 	_operation_label = "Copy <b>{0}</b> item(s) to:"
 
@@ -672,7 +691,7 @@ class OverwriteDirectoryDialog(OverwriteDialog):
 
 class AddBookmarkDialog(gtk.Dialog):
 	"""This dialog enables user to change data before adding new bookmark"""
-	
+
 	def __init__(self, application, path):
 		gtk.Dialog.__init__(self, parent=application)
 
@@ -686,27 +705,27 @@ class AddBookmarkDialog(gtk.Dialog):
 		self.set_transient_for(application)
 
 		self.vbox.set_spacing(0)
-		
+
 		vbox = gtk.VBox(False, 5)
 		vbox.set_border_width(5)
-		
+
 		# bookmark name
 		label_name = gtk.Label('Name:')
 		label_name.set_alignment(0, 0.5)
 		self._entry_name = gtk.Entry()
 		self._entry_name.connect('activate', self._confirm_entry)
-		
+
 		vbox_name = gtk.VBox(False, 0)
-		
+
 		# bookmark path
 		label_path = gtk.Label('Location:')
 		label_path.set_alignment(0, 0.5)
 		self._entry_path = gtk.Entry()
 		self._entry_path.set_text(path)
 		self._entry_path.set_editable(False)
-		
+
 		vbox_path = gtk.VBox(False, 0)
-		
+
 		# controls
 		button_ok = gtk.Button(stock=gtk.STOCK_OK)
 		button_ok.connect('clicked', self._confirm_entry)
@@ -717,26 +736,26 @@ class AddBookmarkDialog(gtk.Dialog):
 		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
 		self.action_area.pack_end(button_ok, False, False, 0)
 		self.set_default_response(gtk.RESPONSE_OK)
-		
+
 		# pack interface
 		vbox_name.pack_start(label_name, False, False, 0)
 		vbox_name.pack_start(self._entry_name, False, False, 0)
-		
+
 		vbox_path.pack_start(label_path, False, False, 0)
 		vbox_path.pack_start(self._entry_path, False, False, 0)
 
 		vbox.pack_start(vbox_name, False, False, 0)
 		vbox.pack_start(vbox_path, False, False, 0)
-		
+
 		self.vbox.pack_start(vbox, False, False, 0)
-		
+
 		self.show_all()
-		
+
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""
 		if self._entry_name.get_text() != '':
 			self.response(gtk.RESPONSE_OK)
-					
+
 	def get_response(self):
 		"""Return value and self-destruct
 
@@ -745,7 +764,7 @@ class AddBookmarkDialog(gtk.Dialog):
 
 		"""
 		code = self.run()
-		
+
 		name = self._entry_name.get_text()
 		path = self._entry_path.get_text()
 

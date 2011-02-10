@@ -16,7 +16,7 @@ from ConfigParser import RawConfigParser
 
 # gui imports
 from about_window import AboutWindow
-from options_window import OptionsWindow
+from preferences_window import PreferencesWindow
 from changelog_dialog import ChangeLogDialog
 from icons import IconManager
 from associations import AssociationManager
@@ -93,7 +93,7 @@ class MainWindow(gtk.Window):
 		# create other interfaces
 		self.indicator = Indicator(self)
 		self.about_window = AboutWindow(self)
-		self.options_window = OptionsWindow(self)
+		self.preferences_window = PreferencesWindow(self)
 
 		# define local variables
 		self._in_fullscreen = False
@@ -147,11 +147,11 @@ class MainWindow(gtk.Window):
 						'type': 'separator',
 					},
 					{
-						'label': 'E_xit',
+						'label': '_Quit',
 						'type': 'image',
 						'stock': gtk.STOCK_QUIT,
 						'callback' : self._destroy,
-						'path': '<Sunflower>/File/Exit',
+						'path': '<Sunflower>/File/Quit',
 					},
 				)
 			},
@@ -197,14 +197,14 @@ class MainWindow(gtk.Window):
 				'label': 'View',
 				'submenu': (
 					{
-						'label': 'Fullscreen',
+						'label': 'Ful_lscreen',
 						'type': 'image',
 						'image': 'view-fullscreen',
 						'callback': self.toggle_fullscreen,
 						'path': '<Sunflower>/View/Fullscreen'
 					},
 					{
-						'label': 'Reload item list',
+						'label': 'Rel_oad item list',
 						'type': 'image',
 						'image': 'reload',
 						'callback': self._command_reload,
@@ -239,10 +239,10 @@ class MainWindow(gtk.Window):
 					},
 					{'type': 'separator'},
 					{
-						'label': '_Options', 'type': 'image',
+						'label': '_Preferences', 'type': 'image',
 						'stock': gtk.STOCK_PREFERENCES,
-						'callback': self.options_window._show,
-						'path': '<Sunflower>/View/Options',
+						'callback': self.preferences_window._show,
+						'path': '<Sunflower>/View/Preferences',
 					},
 				)
 			},
@@ -485,7 +485,7 @@ class MainWindow(gtk.Window):
 												},
 												{
 													'label': '_Edit bookmarks',
-													'callback': self.options_window._show,
+													'callback': self.preferences_window._show,
 													'data': 4
 												},
 											)
@@ -774,7 +774,24 @@ class MainWindow(gtk.Window):
 			vbox = gtk.VBox(False, 10)
 			vbox.set_border_width(5)
 
-			# reset accelerator map due to menu changes
+			# reset aceelerator map
+			if config_version < 16:
+				vbox_16 = gtk.VBox(False, 0)
+
+				label_16 = gtk.Label('<b>Version 0.1a-16:</b>')
+				label_16.set_alignment(0, 0.5)
+				label_16.set_use_markup(True)
+
+				checkbox_reset_accel_map = gtk.CheckButton('Reset accelerator map')
+				checkbox_reset_accel_map.set_active(True)
+
+				vbox_16.pack_start(label_16, False, False, 0)
+				vbox_16.pack_start(checkbox_reset_accel_map, False, False, 0)
+
+				vbox.pack_start(vbox_16, False, False, 0)
+				mod_count += 1
+
+			# clear tabs
 			if config_version < 15:
 				vbox_15 = gtk.VBox(False, 0)
 
@@ -782,14 +799,10 @@ class MainWindow(gtk.Window):
 				label_15.set_alignment(0, 0.5)
 				label_15.set_use_markup(True)
 
-				checkbox_reset_accel_map = gtk.CheckButton('Reset accelerator map')
-				checkbox_reset_accel_map.set_active(True)
-
 				checkbox_reset_tabs = gtk.CheckButton('Clear open tabs')
 				checkbox_reset_tabs.set_active(True)
 
 				vbox_15.pack_start(label_15, False, False, 0)
-				vbox_15.pack_start(checkbox_reset_accel_map, False, False, 0)
 				vbox_15.pack_start(checkbox_reset_tabs, False, False, 0)
 
 				vbox.pack_start(vbox_15, False, False, 0)
@@ -802,11 +815,13 @@ class MainWindow(gtk.Window):
 			## apply selected changes in reverse order
 
 			# reset accelerator map
-			if config_version < 15:
+			if config_version < 16:
 				if checkbox_reset_accel_map.get_active()\
 				and os.path.isfile(os.path.join(self.config_path, 'accel_map')):
 					os.remove(os.path.join(self.config_path, 'accel_map'))
 
+			# clear saved tabs
+			if config_version < 15:
 				if checkbox_reset_tabs.get_active():
 					self.tab_options = RawConfigParser()
 
@@ -1121,7 +1136,7 @@ class MainWindow(gtk.Window):
 						('<Sunflower>/View/Fullscreen', 'F11', 0),
 						('<Sunflower>/View/Reload', 'R', gtk.gdk.CONTROL_MASK),
 						('<Sunflower>/View/ShowHidden', 'H', gtk.gdk.CONTROL_MASK),
-						('<Sunflower>/View/Options', 'P', gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK),
+						('<Sunflower>/View/Preferences', 'P', gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK),
 						)
 
 			for path, key, mask in accel_map:

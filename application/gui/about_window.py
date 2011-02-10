@@ -15,7 +15,6 @@ class AboutWindow(gtk.Window):
 		self.set_resizable(False)
 		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)
-		self.set_deletable(False)
 		self.set_transient_for(parent)
 		self.realize()
 

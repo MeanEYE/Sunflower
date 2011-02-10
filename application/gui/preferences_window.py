@@ -2,18 +2,17 @@
 
 import gtk
 
-class OptionsWindow(gtk.Window):
+class PreferencesWindow(gtk.Window):
 
 	def __init__(self, parent):
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 
 		# configure self
 		self.connect('delete_event', self._hide)
-		self.set_title('Options')
+		self.set_title('Preferences')
 		self.set_size_request(600, 500)
 		self.set_modal(True)
 		self.set_skip_taskbar_hint(True)
-		self.set_deletable(False)
 		self.set_transient_for(parent)
 
 		# create gui

@@ -769,8 +769,11 @@ class FileList(ItemList):
 				formated_file_date = time.strftime(format, time.gmtime(file_date))
 
 				if is_dir:
+					# get universal folder icon
 					icon = self._parent.icon_manager.get_icon_from_type('folder')
+
 				else:
+					# guess mime type and set icon from that
 					icon = self._parent.icon_manager.get_icon_for_file(filename)
 
 				props = (

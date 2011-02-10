@@ -34,7 +34,7 @@ class MainWindow(gtk.Window):
 	version = {
 			'major': 0,
 			'minor': 1,
-			'build': 15,
+			'build': 16,
 			'stage': 'a'
 		}
 
@@ -70,10 +70,12 @@ class MainWindow(gtk.Window):
 		self.tab_options = None
 		self.bookmark_options = None
 		self.toolbar_options = None
+		self.tool_options = None
 
 		# location of all configuration files
 		self.config_path = None
 
+		# create a clipboard manager
 		self.clipboard = gtk.Clipboard()
 
 		# load config
@@ -245,9 +247,6 @@ class MainWindow(gtk.Window):
 				)
 			},
 			{
-				'label': 'Tools',
-			},
-			{
 				'label': 'Help',
 				'right': True,
 				'submenu': (
@@ -288,6 +287,15 @@ class MainWindow(gtk.Window):
 		for item in menu_items:
 			menu_bar.append(self.menu_manager.create_menu_item(item))
 
+		# tools menu
+		self.menu_tools = gtk.Menu()
+
+		self._menu_item_tools = gtk.MenuItem(label='Tools')
+		self._menu_item_tools.set_sensitive(False)
+		self._menu_item_tools.set_submenu(self.menu_tools)
+
+		menu_bar.insert(self._menu_item_tools, len(menu_items)-1)
+
 		# operations menu
 		self.menu_operations = gtk.Menu()
 
@@ -295,7 +303,7 @@ class MainWindow(gtk.Window):
 		self._menu_item_operations.set_sensitive(False)
 		self._menu_item_operations.set_submenu(self.menu_operations)
 
-		menu_bar.insert(self._menu_item_operations, len(menu_items)-1)
+		menu_bar.insert(self._menu_item_operations, len(menu_items))
 		self._operations_visible = 0
 
 		# load accelerator map
@@ -412,6 +420,9 @@ class MainWindow(gtk.Window):
 		# create bookmarks menu
 		self._create_bookmarks_menu()
 
+		# create tools menu
+		self._create_tools_menu()
+
 		# restore window size and position
 		self._restore_window_position()
 
@@ -448,19 +459,17 @@ class MainWindow(gtk.Window):
 			self.menu_bookmarks.append(separator)
 
 		# create bookmark menu items
-		items = self.bookmark_options.options('bookmarks')
-		items.sort()
+		raw_bookmarks = self.bookmark_options.options('bookmarks')
+		raw_bookmarks.sort()
 
-		for item in items:
+		for item in raw_bookmarks:
 			data = self.bookmark_options.get('bookmarks', item).split(';', 1)
-			item_data = {
-					'label': data[0],
-					'callback': self._handle_bookmarks_click,
-					}
-			menu_item = self.menu_manager.create_menu_item(item_data)
-			menu_item.set_data('path', os.path.expanduser(data[1]))
 
-			self.menu_bookmarks.append(menu_item)
+			bookmark = gtk.MenuItem(label=data[0])
+			bookmark.set_data('path', os.path.expanduser(data[1]))
+			bookmark.connect('activate', self._handle_bookmarks_click)
+
+			self.menu_bookmarks.append(bookmark)
 
 		# add separator
 		separator = self.menu_manager.create_menu_item({'type': 'separator'})
@@ -481,7 +490,40 @@ class MainWindow(gtk.Window):
 												},
 											)
 									})
+
 		self.menu_bookmarks.append(menu_item)
+		self.menu_bookmarks.show_all()
+
+	def _create_tools_menu(self):
+		"""Create tools main menu"""
+		for item in self.menu_tools.get_children():  # remove existing items
+			self.menu_tools.remove(item)
+
+		# get total tool items count
+		tool_count = (len(self.tool_options.options('tools')) / 2) + 1
+
+		# create each item from the list
+		for index in range(1, tool_count):
+			# get data from config
+			tool_title = self.tool_options.get('tools', 'title_{0}'.format(index))
+			tool_command = self.tool_options.get('tools', 'command_{0}'.format(index))
+
+			# create menu item
+			if tool_title != '-':
+				# normal menu item
+				tool = gtk.MenuItem(label=tool_title)
+				tool.connect('activate', self._handle_tool_click)
+				tool.set_data('command', tool_command)
+
+			else:
+				# separator
+				tool = gtk.SeparatorMenuItem()
+
+			# add item to the tools menu
+			self.menu_tools.append(tool)
+
+		self._menu_item_tools.set_sensitive(tool_count > 0)
+		self.menu_tools.show_all()
 
 	def _get_bookmarks_menu_position(self, menu, button):
 		"""Get bookmarks position"""
@@ -536,6 +578,42 @@ class MainWindow(gtk.Window):
 										)
 				dialog.run()
 				dialog.destroy()
+
+	def _handle_tool_click(self, widget, data=None):
+		"""Handle click on tool menu item"""
+		command = widget.get_data('command')
+
+		# grab active objects
+		left_object = self.left_notebook.get_nth_page(self.left_notebook.get_current_page())
+		right_object = self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
+
+		if hasattr(left_object, '_get_selection'):
+			# get selected item from the left list
+			left_selection_short = left_object._get_selection(True)
+			left_selection_long = left_object._get_selection(False)
+
+		if hasattr(right_object, '_get_selection'):
+			# get selected item from the left list
+			right_selection_short = right_object._get_selection(True)
+			right_selection_long = right_object._get_selection(False)
+
+		# get universal 'selected item' values
+		if self._active_object is left_object:
+			selection_short = left_selection_short
+			selection_long = left_selection_long
+		else:
+			selection_short = right_selection_short
+			selection_long = right_selection_long
+
+		# replace command
+		command = command.replace('%l', str(left_selection_short))
+		command = command.replace('%L', str(left_selection_long))
+		command = command.replace('%r', str(right_selection_short))
+		command = command.replace('%R', str(right_selection_long))
+		command = command.replace('%s', str(selection_short))
+		command = command.replace('%S', str(selection_long))
+
+		print command
 
 	def _tab_moved(self, notebook, child, page_num):
 		"""Handle adding/moving tab accross notebooks"""
@@ -1059,6 +1137,7 @@ class MainWindow(gtk.Window):
 			self.tab_options.write(open(os.path.join(self.config_path, 'tabs'), 'w'))
 			self.bookmark_options.write(open(os.path.join(self.config_path, 'bookmarks'), 'w'))
 			self.toolbar_options.write(open(os.path.join(self.config_path, 'toolbar'), 'w'))
+			self.tool_options.write(open(os.path.join(self.config_path, 'tools'), 'w'))
 			self.save_accel_map(os.path.join(self.config_path, 'accel_map'))
 
 		except IOError as error:
@@ -1082,6 +1161,7 @@ class MainWindow(gtk.Window):
 		self.tab_options = RawConfigParser()
 		self.bookmark_options = RawConfigParser()
 		self.toolbar_options = RawConfigParser()
+		self.tool_options = RawConfigParser()
 
 		# load configuration from right folder on systems that support it
 		if os.path.isdir(os.path.join(user.home, '.config')):
@@ -1093,6 +1173,7 @@ class MainWindow(gtk.Window):
 		self.tab_options.read(os.path.join(self.config_path, 'tabs'))
 		self.bookmark_options.read(os.path.join(self.config_path, 'bookmarks'))
 		self.toolbar_options.read(os.path.join(self.config_path, 'toolbar'))
+		self.tool_options.read(os.path.join(self.config_path, 'tools'))
 
 		# set default values
 		if not self.options.has_section('main'):
@@ -1100,6 +1181,9 @@ class MainWindow(gtk.Window):
 
 		if not self.bookmark_options.has_section('bookmarks'):
 			self.bookmark_options.add_section('bookmarks')
+
+		if not self.tool_options.has_section('tools'):
+			self.tool_options.add_section('tools')
 
 		# define default options
 		default_options = {
@@ -1130,6 +1214,7 @@ class MainWindow(gtk.Window):
 				self.options.set('main', option, value)
 
 		# set default column sizes for file list
+		# TODO: Move to FileList class
 		if not self.options.has_section('FileList'):
 			self.options.add_section('FileList')
 			for i, size in enumerate([200, 50, 70, 50, 100]):
@@ -1139,12 +1224,11 @@ class MainWindow(gtk.Window):
 		"""Sets focus on oposite item list"""
 
 		# get current tab container
-		container = self.left_notebook.get_nth_page(
-											self.left_notebook.get_current_page()
-										)
+		container = self.left_notebook.get_nth_page(self.left_notebook.get_current_page())
 
-		if container._main_object.get_property('has-focus'):
+		if container is self._active_object:
 			self.right_notebook.grab_focus()
+
 		else:
 			self.left_notebook.grab_focus()
 

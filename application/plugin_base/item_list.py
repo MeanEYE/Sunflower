@@ -600,7 +600,6 @@ class ItemList(PluginBase):
 
 	def _update_status_with_statistis(self):
 		"""Set status bar text acording to dir/file stats"""
-
 		status = self._parent.options.get('main', 'status_text')
 
 		status = status.replace('%dir_count', str(self._dirs['count']))

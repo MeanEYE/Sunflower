@@ -333,8 +333,8 @@ class FileList(ItemList):
 
 	def _copy_files(self, widget=None, data=None):
 		"""Copy selected files"""
-		list = self._get_selection_list()
-		if list is None: return
+		list_ = self._get_selection_list()
+		if list_ is None: return
 
 		dialog = CopyDialog(
 						self._parent,

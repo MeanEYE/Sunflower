@@ -613,7 +613,7 @@ class MainWindow(gtk.Window):
 		command = command.replace('%s', str(selection_short))
 		command = command.replace('%S', str(selection_long))
 
-		print command
+		os.system(command)
 
 	def _tab_moved(self, notebook, child, page_num):
 		"""Handle adding/moving tab accross notebooks"""

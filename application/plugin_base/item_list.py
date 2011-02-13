@@ -117,24 +117,39 @@ class ItemList(PluginBase):
 		self._bookmarks_button = gtk.Button(u'\u2318')
 		self._bookmarks_button.set_focus_on_click(False)
 		self._bookmarks_button.set_tooltip_text('Bookmarks')
+		self._bookmarks_button.set_relief((
+									gtk.RELIEF_NONE,
+									gtk.RELIEF_NORMAL
+									)[self._parent.options.getint('main', 'button_relief')])
 
 		self._bookmarks_button.connect('clicked', self._bookmarks_button_clicked)
+
 		self._top_hbox.pack_end(self._bookmarks_button, False, False, 0)
 
 		# history button
 		self._history_button = gtk.Button(u'\u2630')
 		self._history_button.set_focus_on_click(False)
 		self._history_button.set_tooltip_text('History')
+		self._history_button.set_relief((
+									gtk.RELIEF_NONE,
+									gtk.RELIEF_NORMAL
+									)[self._parent.options.getint('main', 'button_relief')])
 
 		self._history_button.connect('clicked', self._history_button_clicked)
+
 		self._top_hbox.pack_end(self._history_button, False, False, 0)
 
 		# terminal button
 		self._terminal_button = gtk.Button(u'\u2605')
 		self._terminal_button.set_focus_on_click(False)
 		self._terminal_button.set_tooltip_text('Terminal')
+		self._terminal_button.set_relief((
+									gtk.RELIEF_NONE,
+									gtk.RELIEF_NORMAL
+									)[self._parent.options.getint('main', 'button_relief')])
 
 		self._terminal_button.connect('clicked', self._create_terminal)
+
 		self._top_hbox.pack_end(self._terminal_button, False, False, 0)
 
 		# file list

@@ -52,8 +52,13 @@ class Terminal(PluginBase):
 		self._recycle_button = gtk.Button(u'\u267B')
 		self._recycle_button.set_focus_on_click(False)
 		self._recycle_button.set_tooltip_text('Recycle terminal')
+		self._recycle_button.set_relief((
+									gtk.RELIEF_NONE,
+									gtk.RELIEF_NORMAL
+									)[self._parent.options.getint('main', 'button_relief')])
 
 		self._recycle_button.connect('clicked', self._recycle_terminal)
+
 		self._top_hbox.pack_end(self._recycle_button, False, False, 0)
 
 		if vte is not None:
@@ -65,7 +70,12 @@ class Terminal(PluginBase):
 
 		container = gtk.ScrolledWindow()
 		container.set_shadow_type(gtk.SHADOW_IN)
-		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+
+		policy = (
+				gtk.POLICY_NEVER,
+				gtk.POLICY_AUTOMATIC
+			)[self._parent.options.getboolean('main', 'terminal_scrollbars')]
+		container.set_policy(policy, policy)
 
 		container.add(self._terminal)
 

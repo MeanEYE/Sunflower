@@ -32,6 +32,10 @@ class PreferencesWindow(gtk.Window):
 					gtk.Label('Item List')
 					)
 		self._tabs.append_page(
+					TerminalOptions(self, parent),
+					gtk.Label('Terminal')
+					)
+		self._tabs.append_page(
 					ViewEditOptions(self, parent),
 					gtk.Label('View & Edit')
 					)
@@ -133,23 +137,37 @@ class DisplayOptions(gtk.VBox):
 		vbox_main_window.set_border_width(5)
 
 		self._checkbox_hide_on_close = gtk.CheckButton('Hide main window on close')
-		self._checkbox_focus_new_tab = gtk.CheckButton('Focus new tab after opening')
 		self._checkbox_show_toolbar = gtk.CheckButton('Show toolbar')
 		self._checkbox_show_command_bar = gtk.CheckButton('Show command bar')
 
 		self._checkbox_hide_on_close.connect('toggled', self._parent.enable_save)
-		self._checkbox_focus_new_tab.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_toolbar.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_command_bar.connect('toggled', self._parent.enable_save)
 
+		# tab options
+		frame_tabs = gtk.Frame('Tabs')
+		vbox_tabs = gtk.VBox(False, 0)
+		vbox_tabs.set_border_width(5)
+
+		self._checkbox_focus_new_tab = gtk.CheckButton('Focus new tab after opening')
+		self._checkbox_button_relief = gtk.CheckButton('Show normal button relief')
+
+		self._checkbox_focus_new_tab.connect('toggled', self._parent.enable_save)
+		self._checkbox_button_relief.connect('toggled', self._parent.enable_save)
+
 		# pack ui
 		vbox_main_window.pack_start(self._checkbox_hide_on_close, False, False, 0)
-		vbox_main_window.pack_start(self._checkbox_focus_new_tab, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_toolbar, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_command_bar, False, False, 0)
 
+		vbox_tabs.pack_start(self._checkbox_focus_new_tab, False, False, 0)
+		vbox_tabs.pack_start(self._checkbox_button_relief, False, False, 0)
+
 		frame_main_window.add(vbox_main_window)
+		frame_tabs.add(vbox_tabs)
+
 		self.pack_start(frame_main_window, False, False, 0)
+		self.pack_start(frame_tabs, False, False, 0)
 
 	def _load_options(self):
 		"""Load display options"""
@@ -159,6 +177,7 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_focus_new_tab.set_active(options.getboolean('main', 'focus_new_tab'))
 		self._checkbox_show_toolbar.set_active(options.getboolean('main', 'show_toolbar'))
 		self._checkbox_show_command_bar.set_active(options.getboolean('main', 'show_command_bar'))
+		self._checkbox_button_relief.set_active(bool(options.getint('main', 'button_relief')))
 
 	def _save_options(self):
 		"""Save display options"""
@@ -172,6 +191,7 @@ class DisplayOptions(gtk.VBox):
 		options.set('main', 'focus_new_tab', _bool[self._checkbox_focus_new_tab.get_active()])
 		options.set('main', 'show_toolbar', _bool[self._checkbox_show_toolbar.get_active()])
 		options.set('main', 'show_command_bar', _bool[self._checkbox_show_command_bar.get_active()])
+		options.set('main', 'button_relief', int(self._checkbox_button_relief.get_active()))
 
 		# change ui states
 		show_command_bar = self._application.menu_manager.get_item_by_name('show_command_bar')
@@ -772,3 +792,37 @@ class ToolOptions(gtk.VBox):
 
 		# recreate tools menu
 		self._application._create_tools_menu()
+
+
+class TerminalOptions(gtk.VBox):
+	"""Bookmark options extension class"""
+
+	def __init__(self, parent, application):
+		gtk.VBox.__init__(self, False, 0)
+
+		self._parent = parent
+		self._application = application
+
+		# configure self
+		self.set_border_width(10)
+		self.set_spacing(5)
+
+		# create interface
+		self._checkbox_scrollbars_visible = gtk.CheckButton('Show scrollbars when needed')
+		self._checkbox_scrollbars_visible.connect('toggled', self._parent.enable_save)
+
+		# pack interface
+		self.pack_start(self._checkbox_scrollbars_visible, False, False, 0)
+
+	def _load_options(self):
+		"""Load terminal tab options"""
+		options = self._application.options
+
+		self._checkbox_scrollbars_visible.set_active(options.getboolean('main', 'terminal_scrollbars'))
+
+	def _save_options(self):
+		"""Save terminal tab options"""
+		options = self._application.options
+		_bool = ('False', 'True')
+
+		options.set('main', 'terminal_scrollbars', _bool[self._checkbox_scrollbars_visible.get_active()])

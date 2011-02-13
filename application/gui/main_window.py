@@ -484,7 +484,7 @@ class MainWindow(gtk.Window):
 												{
 													'label': '_Edit bookmarks',
 													'callback': self.preferences_window._show,
-													'data': 4
+													'data': 5
 												},
 											)
 									})
@@ -1219,6 +1219,8 @@ class MainWindow(gtk.Window):
 				'window': '950x450',
 				'hide_on_close': 'True',
 				'last_version': 0,
+				'button_relief': 0,
+				'terminal_scrollbars': 'True',
 			}
 
 		# set default options

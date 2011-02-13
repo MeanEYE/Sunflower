@@ -15,7 +15,7 @@ class MenuManager:
 
 	def __init__(self, application):
 		self._application = application
-		
+
 		self._accel_group = gtk.AccelGroup()
 		self._application.add_accel_group(self._accel_group)
 
@@ -28,7 +28,7 @@ class MenuManager:
 		active = item['active'] if 'active' in item else False
 		result = gtk.CheckMenuItem(label = item['label'], use_underline = True)
 		result.set_active(active)
-		
+
 		return result
 
 	def _item_radio(self, item):
@@ -52,7 +52,7 @@ class MenuManager:
 		icon_manager = self._application.icon_manager
 
 		if item.has_key('image'):
-			image.set_from_pixbuf(icon_manager.get_icon_from_type(item['image']))
+			image.set_from_icon_name(item['image'], gtk.ICON_SIZE_MENU)
 
 		elif item.has_key('stock'):
 			image.set_from_stock(item['stock'], gtk.ICON_SIZE_MENU)
@@ -84,7 +84,7 @@ class MenuManager:
 			result = self._named_items[name]
 		else:
 			result = None
-			
+
 		return result
 
 	def get_item_from_config(self, config_file, callback):
@@ -165,7 +165,7 @@ class MenuManager:
 		if item_type is not 'separator' and item.has_key('submenu'):
 			submenu = gtk.Menu()
 			submenu.set_accel_group(self._accel_group)
-			
+
 			for sub_item in item['submenu']:
 				submenu.append(self.create_menu_item(sub_item))
 			new_item.set_submenu(submenu)
@@ -186,19 +186,19 @@ class MenuManager:
 			else:
 				# connect on click event
 				new_item.connect('activate', item['callback'], data)
-				
-		elif not item.has_key('callback') and not item.has_key('submenu'):  
+
+		elif not item.has_key('callback') and not item.has_key('submenu'):
 			# item doesn't have a callback, so we disable it
 			new_item.set_sensitive(False)
 
 		# if menu should be right aligned
 		if item.has_key('right') and item['right']:
 			new_item.set_right_justified(item['right'])
-			
+
 		# add item if name is specified
 		if item.has_key('name'):
 			self._named_items[item['name']] = new_item
-			
+
 		# set accelerator path
 		if item.has_key('path'):
 			new_item.set_accel_path(item['path'])

@@ -5,6 +5,12 @@ import os
 from plugin_base.terminal import Terminal
 from plugins import FileList
 
+
+def register_classes(application):
+	"""Register plugin classes with application"""
+	pass
+
+
 class SystemTerminal(Terminal):
 	"""System terminal plugin"""
 
@@ -29,10 +35,6 @@ class SystemTerminal(Terminal):
 		self._change_tab_text('Terminal')
 
 		self.show_all()
-
-	def _update_terminal_status(self, widget, data=None):
-		"""Update status bar text with terminal data"""
-		self.update_status(self._terminal.get_status_line())
 
 	def _recycle_terminal(self, widget, data=None):
 		"""Recycle terminal"""

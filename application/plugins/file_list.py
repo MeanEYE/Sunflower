@@ -40,7 +40,20 @@ COL_COLOR 		= 11
 COL_ICON 		= 12
 COL_SELECTED 	= 13
 
+
+def register_classes(application):
+	"""Register plugin classes with application"""
+	pass
+
+
 class FileList(ItemList):
+	"""General file list plugin
+
+	This plugin was written with warious ussages in mind. If you need to write
+	plugin that will handle files it is strongly suggested that you inherit this class
+	and make your own content provider.
+
+	"""
 
 	def __init__(self, parent, notebook, path=None, sort_column=None, sort_ascending=True):
 		ItemList.__init__(self, parent, notebook, path, sort_column, sort_ascending)
@@ -172,9 +185,11 @@ class FileList(ItemList):
 		self._item_list.set_enable_search(True)
 		self._item_list.set_search_column(COL_NAME)
 
+		# set row hinting
 		row_hinting = self._parent.options.getboolean('main', 'row_hinting')
 		self._item_list.set_rules_hint(row_hinting)
 
+		# set grid lines
 		grid_lines = (
 					gtk.TREE_VIEW_GRID_LINES_NONE,
 					gtk.TREE_VIEW_GRID_LINES_HORIZONTAL,
@@ -219,12 +234,17 @@ class FileList(ItemList):
 		is_parent = list.get_value(iter, COL_PARENT)
 
 		if is_dir:
+			# selected item is directory, we need to change path
 			if is_parent:
+				# call specialized change path method
 				self._parent_folder(widget, data)
+
 			else:
+				# just change path
 				self.change_path(os.path.join(self.path, name))
 
 		elif self.get_provider().is_local:
+			# selected item is just a file, execute it
 			os.system("gnome-open '{0}'".format(self._get_selection()))
 
 	def _create_directory(self, widget=None, data=None):
@@ -551,7 +571,6 @@ class FileList(ItemList):
 		parameters using predefined column and order.
 
 		"""
-
 		if widget is not self._sort_column_widget:
 			self._sort_column_widget = widget
 
@@ -584,19 +603,26 @@ class FileList(ItemList):
 		self._item_list.grab_focus()
 
 	def _sort_list(self, list, iter1, iter2, data=None):
-		"""Sort list"""
+		"""Compare two items for sorting process"""
 		reverse = (1, -1)[self._sort_ascending]
+
+		value1 = list.get_value(iter1, self._sort_column)
+		value2 = list.get_value(iter2, self._sort_column)
+
+		if not self._sort_sensitive:
+			value1 = value1.lower()
+			value2 = value2.lower()
 
 		item1 = (
 				reverse * list.get_value(iter1, COL_PARENT),
 				reverse * list.get_value(iter1, COL_DIR),
-				list.get_value(iter1, self._sort_column)
+				value1
 				)
 
 		item2 = (
 				reverse * list.get_value(iter2, COL_PARENT),
 				reverse * list.get_value(iter2, COL_DIR),
-				list.get_value(iter2, self._sort_column)
+				value2
 				)
 
 		return cmp(item1, item2)
@@ -1092,7 +1118,7 @@ class FileList(ItemList):
 		selection = self._item_list.get_selection()
 		list, iter = selection.get_selected()
 
-		f_name = list.get_value(iter, COL_NAME)
+		f_name = list.get_value(iter, COL_NAME) if iter is not None else None
 		self.change_path(self.path, f_name)
 
 		return True
@@ -1113,6 +1139,26 @@ class FileList(ItemList):
 			self._provider = LocalProvider(self)
 
 		return self._provider
+
+	def apply_settings(self):
+		"""Apply file list settings"""
+		ItemList.apply_settings(self)  # let parent apply its own settings
+
+		# apply row hinting
+		row_hinting = self._parent.options.getboolean('main', 'row_hinting')
+		self._item_list.set_rules_hint(row_hinting)
+
+		# apply grid lines
+		grid_lines = (
+					gtk.TREE_VIEW_GRID_LINES_NONE,
+					gtk.TREE_VIEW_GRID_LINES_HORIZONTAL,
+					gtk.TREE_VIEW_GRID_LINES_VERTICAL,
+					gtk.TREE_VIEW_GRID_LINES_BOTH,
+				)[self._parent.options.getint('main', 'grid_lines')]
+		self._item_list.set_grid_lines(grid_lines)
+
+		# reload file list in order to apply time formatting, hidden files and other
+		self.refresh_file_list()
 
 
 class LocalProvider(Provider):

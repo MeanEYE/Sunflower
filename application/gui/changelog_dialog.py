@@ -72,14 +72,22 @@ class ChangeLogDialog(gtk.Dialog):
 
 			notebook.append_page(vbox, modifications_label)
 
-		# changelog
+		# change log
 		changelog = gtk.TextView()
 		changelog.set_editable(False)
 		changelog.set_cursor_visible(False)
 
-		data = open(os.path.join(os.path.dirname(sys.argv[0]), 'change.log'), 'r').read()
+		# load change log if it exists
+		changelog_file = os.path.join(os.path.dirname(sys.argv[0]), 'change.log')
+		if os.path.isfile(changelog_file):
+			data = open(changelog_file, 'r').read()
+		else:
+			# change log was not found
+			data = 'Change log was not found!'
+
 		changelog.get_buffer().set_text(data)
 
+		# create tab and container
 		changelog_label = gtk.Label('Change log')
 		changelog_window = gtk.ScrolledWindow()
 		changelog_window.set_shadow_type(gtk.SHADOW_IN)
@@ -121,7 +129,3 @@ class ChangeLogDialog(gtk.Dialog):
 	def _adjust_label(self, widget, data=None):
 		"""Adjust label size"""
 		widget.set_size_request(data.width-1, -1)
-
-	def _load_changelog(self):
-		"""Load changes from file and feed them to control"""
-		pass

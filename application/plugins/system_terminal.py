@@ -3,12 +3,12 @@
 import os
 
 from plugin_base.terminal import Terminal
-from plugins import FileList
+from plugins.file_list import FileList
 
 
-def register_classes(application):
+def register_plugin(application):
 	"""Register plugin classes with application"""
-	pass
+	application.register_class('System terminal', SystemTerminal)
 
 
 class SystemTerminal(Terminal):

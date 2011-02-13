@@ -26,7 +26,7 @@ class AboutWindow(gtk.Window):
 								os.path.dirname(sys.argv[0]),
 								'images',
 								'sunflower_hi-def_64x64.png'
-								)
+							)
 		image = gtk.Image()
 		image.set_from_file(image_file)
 		image.set_size_request(70, 70)

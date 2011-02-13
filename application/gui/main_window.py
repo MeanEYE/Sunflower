@@ -7,6 +7,7 @@ import pango
 import webbrowser
 import locale
 import user
+import fnmatch
 
 from menus import MenuManager
 from mounts import MountsManager
@@ -22,9 +23,6 @@ from icons import IconManager
 from associations import AssociationManager
 from indicator import Indicator
 
-# plugin imports
-# TODO: Load plugins dynamically
-from plugins import *
 
 class MainWindow(gtk.Window):
 	"""Main application class"""
@@ -42,6 +40,10 @@ class MainWindow(gtk.Window):
 		# create main window and other widgets
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 		self.realize()
+
+		# plugin containers
+		self.plugin_classes = {}
+		self.plugin_protected = ('file_list', 'system_terminal')
 
 		# create managers early
 		self.icon_manager = IconManager(self)
@@ -105,24 +107,14 @@ class MainWindow(gtk.Window):
 			{
 				'label': 'File',
 				'submenu': (
-#					{
-#						'label': 'Test dialog',
-#						'callback': self.test
-#					},
 					{
 						'label': 'New tab',
+						'name': 'new_tab',
 						'type': 'image',
 						'image': 'tab-new',
 						'data': 'file',
 						'path': '<Sunflower>/File/NewTab',
-						'submenu': (
-							{
-								'label': 'File list',
-							},
-							{
-								'label': 'Terminal',
-							}
-						)
+						'submenu': ()
 					},
 					{
 						'type': 'separator',
@@ -247,6 +239,14 @@ class MainWindow(gtk.Window):
 				)
 			},
 			{
+				'label': 'Tools',
+				'name': 'tools',
+			},
+			{
+				'label': 'Operations',
+				'name': 'operations',
+			},
+			{
 				'label': 'Help',
 				'submenu': (
 					{
@@ -289,20 +289,17 @@ class MainWindow(gtk.Window):
 		# tools menu
 		self.menu_tools = gtk.Menu()
 
-		self._menu_item_tools = gtk.MenuItem(label='Tools')
+		self._menu_item_tools = self.menu_manager.get_item_by_name('tools')
 		self._menu_item_tools.set_sensitive(False)
 		self._menu_item_tools.set_submenu(self.menu_tools)
-
-		menu_bar.insert(self._menu_item_tools, len(menu_items)-1)
 
 		# operations menu
 		self.menu_operations = gtk.Menu()
 
-		self._menu_item_operations = gtk.MenuItem(label='Operations')
+		self._menu_item_operations = self.menu_manager.get_item_by_name('operations')
 		self._menu_item_operations.set_sensitive(False)
 		self._menu_item_operations.set_submenu(self.menu_operations)
 
-		menu_bar.insert(self._menu_item_operations, len(menu_items))
 		self._operations_visible = 0
 
 		# load accelerator map
@@ -424,6 +421,9 @@ class MainWindow(gtk.Window):
 
 		# restore window size and position
 		self._restore_window_position()
+
+		# load plugins
+		self._load_plugins()
 
 		# show widgets
 		self.show_all()
@@ -613,6 +613,13 @@ class MainWindow(gtk.Window):
 
 		os.system(command)
 
+	def _handle_new_tab_click(self, widget, data=None):
+		"""Handle clicking on item from 'New tab' menu"""
+		notebook = self._active_object._notebook
+		plugin_class = widget.get_data('class')
+
+		self.create_tab(notebook, plugin_class)
+
 	def _tab_moved(self, notebook, child, page_num):
 		"""Handle adding/moving tab accross notebooks"""
 		if hasattr(child, 'update_notebook'):
@@ -675,6 +682,34 @@ class MainWindow(gtk.Window):
 				self.command_list.append((line.strip(),))
 		except:
 			pass
+
+	def _load_plugins(self):
+		"""Dynamically load plugins"""
+		# get plugin list
+		path = os.path.join(
+						os.path.dirname(sys.argv[0]),
+						'application',
+						'plugins'
+					)
+		list_ = fnmatch.filter(os.listdir(path), '*.py')
+
+		# list of enabled plugins
+		plugins_to_load = self.options.get('main', 'plugins').split(',')
+
+		# filter list for loading
+		list_ = filter(lambda file_: os.path.splitext(file_)[0] in plugins_to_load, list_)
+
+		# load plugins
+		for file_ in list_:
+			name = os.path.splitext(file_)[0]
+
+			# import module
+			__import__('plugins.{0}'.format(name))
+			plugin = sys.modules['plugins.{0}'.format(name)]
+
+			# call module register_plugin method
+			if hasattr(plugin, 'register_plugin'):
+				plugin.register_plugin(self)
 
 	def _command_reload(self, widget, data=None):
 		"""Handle command button click"""
@@ -925,7 +960,6 @@ class MainWindow(gtk.Window):
 
 	def run(self):
 		"""Main application loop"""
-
 		# load tabs in the left notebook
 		if not self.load_tabs(self.left_notebook, 'left_notebook'):
 			self.create_tab(self.left_notebook, FileList)
@@ -938,7 +972,6 @@ class MainWindow(gtk.Window):
 
 	def create_tab(self, notebook, plugin_class=None, path=None, sort_column=None, sort_ascending=None):
 		"""Safe create tab"""
-
 		if sort_column is not None and sort_column != '':
 			# create plugin object with sort parameters
 			new_tab = plugin_class(self, notebook, path, int(sort_column), bool(int(sort_ascending)))
@@ -1221,6 +1254,8 @@ class MainWindow(gtk.Window):
 				'last_version': 0,
 				'button_relief': 0,
 				'terminal_scrollbars': 'True',
+				'case_sensitive_sort': 'True',
+				'plugins': 'file_list,system_terminal',
 			}
 
 		# set default options
@@ -1309,15 +1344,60 @@ class MainWindow(gtk.Window):
 		if self._operations_visible == 0:
 			self._menu_item_operations.set_sensitive(False)
 
-	def test(self, widget, data=None):
-		vbox = gtk.VBox(False, 0)
+	def apply_settings(self):
+		"""Apply settings to all the pluggins and main window"""
+		# show or hide command bar depending on settings
+		show_command_bar = self.menu_manager.get_item_by_name('show_command_bar')
+		show_command_bar.set_active(self.options.getboolean('main', 'show_command_bar'))
 
-		label = gtk.Label('Copying: /var/files/home/njak')
-		label.set_alignment(0, 0.5)
-		progress = gtk.ProgressBar()
+		# show or hide toolbar depending on settings
+		show_toolbar = self.menu_manager.get_item_by_name('show_toolbar')
+		show_toolbar.set_active(self.options.getboolean('main', 'show_toolbar'))
 
-		vbox.pack_start(label, False, False, 0)
-		vbox.pack_start(progress, False, False, 0)
+		# show or hide hidden files
+		show_hidden = self.menu_manager.get_item_by_name('show_hidden_files')
+		show_hidden.set_active(self.options.getboolean('main', 'show_hidden'))
 
-		self.add_operation(vbox, None, None)
+		# recreate bookmarks menu
+		self._create_bookmarks_menu()
 
+		# recreate tools menu
+		self._create_tools_menu()
+
+		# apply settings for each tab in left notebook
+		for index in range(0, self.left_notebook.get_n_pages()):
+			page = self.left_notebook.get_nth_page(index)
+
+			if hasattr(page, 'apply_settings'):
+				page.apply_settings()
+
+		# apply settings for each tab in right notebook
+		for index in range(0, self.right_notebook.get_n_pages()):
+			page = self.right_notebook.get_nth_page(index)
+
+			if hasattr(page, 'apply_settings'):
+				page.apply_settings()
+
+	def register_class(self, name, plugin_class):
+		"""Register plugin class
+
+		Classes registered using this method will be displayed in 'New tab' menu.
+		Only plugins that provide tab components should be registered using this method!
+
+		"""
+		# add to plugin list
+		self.plugin_classes[name] = plugin_class
+
+		# create menu item and add it
+		menu_item = gtk.MenuItem(name)
+		menu_item.set_data('class', plugin_class)
+		menu_item.connect('activate', self._handle_new_tab_click)
+
+		menu_item.show()
+
+		# add menu item
+		menu = self.menu_manager.get_item_by_name('new_tab').get_submenu()
+		menu.append(menu_item)
+
+		# import class to globals
+		globals()[plugin_class.__name__] = plugin_class

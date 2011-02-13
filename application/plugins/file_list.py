@@ -22,7 +22,7 @@ try:
 except:
 	gio = None
 
-from application.plugin_base.item_list import ItemList
+from plugin_base.item_list import ItemList
 
 # constants
 COL_NAME 		= 0
@@ -41,9 +41,9 @@ COL_ICON 		= 12
 COL_SELECTED 	= 13
 
 
-def register_classes(application):
+def register_plugin(application):
 	"""Register plugin classes with application"""
-	pass
+	application.register_class('Local file list', FileList)
 
 
 class FileList(ItemList):

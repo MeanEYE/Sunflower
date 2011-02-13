@@ -21,8 +21,6 @@ class ItemList(PluginBase):
 		global _icon_theme
 
 		self._provider = None
-		self._open_with_menu = None
-		self._open_with_item = None
 
 		self.history = []
 
@@ -185,6 +183,9 @@ class ItemList(PluginBase):
 		self._open_with_menu = None
 		self._popup_menu = self._create_popup_menu()
 
+		# history menu
+		self._history_menu = gtk.Menu()
+
 		# pack gui
 		self.pack_start(container, True, True, 0)
 		self.pack_start(self._search_panel, False, False, 0)
@@ -282,6 +283,29 @@ class ItemList(PluginBase):
 
 		return result
 
+	def _handle_history_click(self, widget, data=None):
+		"""Handle clicks on bookmark menu"""
+		path = widget.get_data('path')
+
+		if os.path.isdir(path):
+			# path is valid
+			self.change_path(path)
+
+		else:
+			# invalid path, notify user
+			dialog = gtk.MessageDialog(
+									self,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_ERROR,
+									gtk.BUTTONS_OK,
+									"Directory does not exist anymore or is not "
+									"valid. If path is not local check if specified "
+									"volume is mounted."
+									"\n\n{0}".format(path)
+									)
+			dialog.run()
+			dialog.destroy()
+
 	def _start_search(self, key):
 		"""Shows quick search panel and starts searching"""
 		self._search_panel.show()
@@ -343,6 +367,19 @@ class ItemList(PluginBase):
 	def _get_popup_menu_position(self, menu, data=None):
 		"""Abstract method for positioning menu properly on given row"""
 		return (0, 0, True)
+
+	def _get_history_menu_position(self, menu, button):
+		"""Get history menu position"""
+		# get coordinates
+		window_x, window_y = self._parent.window.get_position()
+		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
+		button_h = button.get_allocation().height
+
+		# calculate absolute menu position
+		pos_x = window_x + button_x
+		pos_y = window_y + button_y + button_h
+
+		return (pos_x, pos_y, True)
 
 	def _get_other_provider(self):
 		"""Return provider from oposite list.
@@ -431,6 +468,8 @@ class ItemList(PluginBase):
 		item = menu_manager.create_menu_item({
 								'label': 'Send to...',
 								'callback': self._send_to,
+								'type': 'image',
+								'image': 'document-send'
 							})
 		result.append(item)
 		self._send_to_item = item
@@ -472,7 +511,7 @@ class ItemList(PluginBase):
 		item = menu_manager.create_menu_item({
 								'label': '_Properties',
 								'type': 'image',
-								'stock': gtk.STOCK_INFO,
+								'stock': gtk.STOCK_PROPERTIES,
 							})
 		result.append(item)
 		item.set_sensitive(False)
@@ -484,6 +523,35 @@ class ItemList(PluginBase):
 		# remove existing items
 		for item in self._open_with_menu.get_children():
 			self._open_with_menu.remove(item)
+
+	def _prepare_history_menu(self):
+		"""Prepare history menu contents"""
+		# remove existing items
+		for item in self._history_menu.get_children():
+			self._history_menu.remove(item)
+
+		# get menu data
+		item_count = 10
+		item_list = self.history[1:item_count]
+
+		if len(item_list) > 0:
+			# create items
+			for item in item_list:
+				menu_item = gtk.MenuItem(item)
+				menu_item.set_data('path', item)
+				menu_item.connect('activate', self._handle_history_click)
+
+				self._history_menu.append(menu_item)
+
+		else:
+			# no items to create, make blank item
+			menu_item = gtk.MenuItem('History is empty')
+			menu_item.set_sensitive(False)
+
+			self._history_menu.append(menu_item)
+
+		# show all menu items
+		self._history_menu.show_all()
 
 	def _show_open_with_menu(self, widget, data=None):
 		"""Show 'open with' menu"""
@@ -536,16 +604,20 @@ class ItemList(PluginBase):
 
 	def _change_top_panel_color(self, state):
 		"""Modify coloring of top panel"""
+		# call parent class method first
 		PluginBase._change_top_panel_color(self, state)
 
+		# get color style from parent
 		style = self._parent.get_style().copy()
 		background_color = style.bg[state]
 		text_color = style.text[state]
 
+		# change button background colors for normal state
 		self._bookmarks_button.modify_bg(gtk.STATE_NORMAL, background_color)
 		self._history_button.modify_bg(gtk.STATE_NORMAL, background_color)
 		self._terminal_button.modify_bg(gtk.STATE_NORMAL, background_color)
 
+		# change button text colors for normal state
 		self._bookmarks_button.child.modify_fg(gtk.STATE_NORMAL, text_color)
 		self._history_button.child.modify_fg(gtk.STATE_NORMAL, text_color)
 		self._terminal_button.child.modify_fg(gtk.STATE_NORMAL, text_color)
@@ -557,7 +629,15 @@ class ItemList(PluginBase):
 
 	def _history_button_clicked(self, widget, data=None):
 		"""History button click event"""
-		pass
+		# prepare menu for drawing
+		self._prepare_history_menu()
+
+		# show the menu on calculated location
+		self._history_menu.popup(
+								None, None,
+								self._get_history_menu_position,
+								1, 0, widget
+							)
 
 	def _duplicate_tab(self, widget, data=None):
 		"""Creates new tab with same path"""

@@ -248,7 +248,6 @@ class MainWindow(gtk.Window):
 			},
 			{
 				'label': 'Help',
-				'right': True,
 				'submenu': (
 					{
 						'label': '_Home page',
@@ -460,10 +459,9 @@ class MainWindow(gtk.Window):
 
 		# create bookmark menu items
 		raw_bookmarks = self.bookmark_options.options('bookmarks')
-		raw_bookmarks.sort()
 
-		for item in raw_bookmarks:
-			data = self.bookmark_options.get('bookmarks', item).split(';', 1)
+		for index in range(1, len(raw_bookmarks) + 1):
+			data = self.bookmark_options.get('bookmarks', 'b_{0}'.format(index)).split(';', 1)
 
 			bookmark = gtk.MenuItem(label=data[0])
 			bookmark.set_data('path', os.path.expanduser(data[1]))

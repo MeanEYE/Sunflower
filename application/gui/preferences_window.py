@@ -586,11 +586,11 @@ class BookmarkOptions(gtk.VBox):
 		# load and parse bookmars
 		if bookmark_options.has_section('bookmarks'):
 			item_list = bookmark_options.options('bookmarks')
-			item_list.sort()
+
 			self._bookmarks.clear()
 
-			for item in item_list:
-				bookmark = bookmark_options.get('bookmarks', item).split(';', 1)
+			for index in range(1, len(item_list) + 1):
+				bookmark = bookmark_options.get('bookmarks', 'b_{0}'.format(index)).split(';', 1)
 				self._bookmarks.append((bookmark[0], bookmark[1]))
 
 	def _save_options(self):

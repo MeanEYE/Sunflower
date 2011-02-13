@@ -93,15 +93,19 @@ class ItemList(PluginBase):
 				},
 			}
 
+		# list statistics
 		self._dirs = {'count': 0, 'selected': 0}
 		self._files = {'count': 0, 'selected': 0}
 		self._size = {'total': 0L, 'selected': 0}
 
+		# we use this variable to prevent dead loop during column resize
 		self._is_updating = False
 
+		# sort options
 		self._sort_column = sort_column
 		self._sort_ascending = sort_ascending
 		self._sort_column_widget = None
+		self._sort_sensitive = self._parent.options.getboolean('main', 'case_sensitive_sort')
 		self._columns = None
 
 		# idle spinner
@@ -794,3 +798,25 @@ class ItemList(PluginBase):
 	def get_povider(self):
 		"""Get list provider"""
 		return self._provider
+
+	def apply_settings(self):
+		"""Apply settings"""
+		# update status
+		self._update_status_with_statistis()
+
+		# change change sorting sensitivity
+		self._sort_sensitive = self._parent.options.getboolean('main', 'case_sensitive_sort')
+
+		# change button relief
+		self._bookmarks_button.set_relief((
+									gtk.RELIEF_NONE,
+									gtk.RELIEF_NORMAL
+									)[self._parent.options.getint('main', 'button_relief')])
+		self._history_button.set_relief((
+									gtk.RELIEF_NONE,
+									gtk.RELIEF_NORMAL
+									)[self._parent.options.getint('main', 'button_relief')])
+		self._terminal_button.set_relief((
+									gtk.RELIEF_NONE,
+									gtk.RELIEF_NORMAL
+									)[self._parent.options.getint('main', 'button_relief')])

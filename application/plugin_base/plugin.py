@@ -44,12 +44,14 @@ class PluginBase(gtk.VBox):
 		status_bar.add(self._status_bar)
 		status_bar.set_border_width(1)
 
+		# create title bar
 		self._title_label = gtk.Label()
 		self._title_label.set_alignment(0, 0.5)
 		self._title_label.set_use_markup(True)
 		self._title_label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
 		self._top_hbox.pack_start(self._title_label, True, True, 3)
 
+		# pack interface
 		self.pack_start(self._top_panel, False, False, 0)
 		self.pack_end(status_bar, False, False, 0)
 
@@ -135,6 +137,10 @@ class PluginBase(gtk.VBox):
 
 		return result
 
+	def apply_settings(self):
+		"""Method called after settings were changed"""
+		pass
+
 	def update_status(self, status):
 		"""Change status text"""
 		self._status_bar.set_markup(status)
@@ -143,3 +149,4 @@ class PluginBase(gtk.VBox):
 		"""Update notebook and/or page number"""
 		if notebook is not None:
 			self._notebook = notebook
+

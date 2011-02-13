@@ -68,18 +68,18 @@ class Terminal(PluginBase):
 		else:
 			self._terminal = gtk.Label('Python VTE module is not installed on this system!')
 
-		container = gtk.ScrolledWindow()
-		container.set_shadow_type(gtk.SHADOW_IN)
+		self._container = gtk.ScrolledWindow()
+		self._container.set_shadow_type(gtk.SHADOW_IN)
 
 		policy = (
 				gtk.POLICY_NEVER,
 				gtk.POLICY_AUTOMATIC
 			)[self._parent.options.getboolean('main', 'terminal_scrollbars')]
-		container.set_policy(policy, policy)
+		self._container.set_policy(policy, policy)
 
-		container.add(self._terminal)
+		self._container.add(self._terminal)
 
-		self.pack_start(container, True, True, 0)
+		self.pack_start(self._container, True, True, 0)
 
 		self._connect_main_object(self._terminal)
 
@@ -99,6 +99,10 @@ class Terminal(PluginBase):
 		self._change_title_text(self._terminal.get_window_title())
 		return True
 
+	def _update_terminal_status(self, widget, data=None):
+		"""Update status bar text with terminal data"""
+		self.update_status(self._terminal.get_status_line())
+
 	def _recycle_terminal(self, widget, data=None):
 		"""Recycle terminal"""
 		pass
@@ -116,3 +120,18 @@ class Terminal(PluginBase):
 	def feed_terminal(self, text):
 		"""Feed terminal process with specified text"""
 		self._terminal.feed_child(text)
+
+	def apply_settings(self):
+		"""Apply terminal settings"""
+		# button relief
+		self._recycle_button.set_relief((
+									gtk.RELIEF_NONE,
+									gtk.RELIEF_NORMAL
+									)[self._parent.options.getint('main', 'button_relief')])
+
+		# apply terminal scrollbar policy
+		policy = (
+				gtk.POLICY_NEVER,
+				gtk.POLICY_AUTOMATIC
+			)[self._parent.options.getboolean('main', 'terminal_scrollbars')]
+		self._container.set_policy(policy, policy)

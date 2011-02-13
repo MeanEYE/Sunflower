@@ -7,6 +7,8 @@ class PreferencesWindow(gtk.Window):
 	def __init__(self, parent):
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 
+		self._parent = parent
+
 		# configure self
 		self.connect('delete_event', self._hide)
 		self.set_title('Preferences')
@@ -49,7 +51,7 @@ class PreferencesWindow(gtk.Window):
 					)
 		self._tabs.append_page(
 					ToolOptions(self, parent),
-					gtk.Label('Tools')
+					gtk.Label('Tools Menu')
 					)
 
 		# create buttons
@@ -95,23 +97,30 @@ class PreferencesWindow(gtk.Window):
 
 	def _load_options(self):
 		"""Change interface to present current state of configuration"""
+		# call all tabs to load their options
 		for i in range(self._tabs.get_n_pages()):
 			page = self._tabs.get_nth_page(i)
 
 			if hasattr(page, '_load_options'):
 				page._load_options()
 
+		# disable save button
 		self._btn_save.set_sensitive(False)
 
 	def _save_options(self, widget, data=None):
 		"""Save options"""
+		# call all tabs to save their options
 		for i in range(self._tabs.get_n_pages()):
 			page = self._tabs.get_nth_page(i)
 
 			if hasattr(page, '_save_options'):
 				page._save_options()
 
+		# disable save button
 		self._btn_save.set_sensitive(False)
+
+		# call main window to propagate new settings
+		self._parent.apply_settings()
 
 	def enable_save(self, widget=None, data=None):
 		"""Enable save button"""
@@ -193,13 +202,6 @@ class DisplayOptions(gtk.VBox):
 		options.set('main', 'show_command_bar', _bool[self._checkbox_show_command_bar.get_active()])
 		options.set('main', 'button_relief', int(self._checkbox_button_relief.get_active()))
 
-		# change ui states
-		show_command_bar = self._application.menu_manager.get_item_by_name('show_command_bar')
-		show_command_bar.set_active(self._checkbox_show_command_bar.get_active())
-
-		show_toolbar = self._application.menu_manager.get_item_by_name('show_toolbar')
-		show_toolbar.set_active(self._checkbox_show_toolbar.get_active())
-
 
 class ItemListOptions(gtk.VBox):
 	"""Options related to item lists"""
@@ -217,9 +219,11 @@ class ItemListOptions(gtk.VBox):
 		# file list options
 		self._checkbox_row_hinting = gtk.CheckButton('Row hinting')
 		self._checkbox_show_hidden = gtk.CheckButton('Show hidden files')
+		self._checkbox_case_sensitive = gtk.CheckButton('Case sensitive item sorting')
 
 		self._checkbox_row_hinting.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
+		self._checkbox_case_sensitive.connect('toggled', self._parent.enable_save)
 
 		# grid lines
 		vbox_grid_lines = gtk.VBox(False, 0)
@@ -298,6 +302,7 @@ class ItemListOptions(gtk.VBox):
 
 		self.pack_start(self._checkbox_row_hinting, False, False, 0)
 		self.pack_start(self._checkbox_show_hidden, False, False, 0)
+		self.pack_start(self._checkbox_case_sensitive, False, False, 0)
 		self.pack_start(vbox_quick_search, False, False, 0)
 		self.pack_start(vbox_grid_lines, False, False, 0)
 		self.pack_start(vbox_time_format, False, False, 0)
@@ -308,8 +313,9 @@ class ItemListOptions(gtk.VBox):
 		options = self._application.options
 
 		self._checkbox_row_hinting.set_active(options.getboolean('main', 'row_hinting'))
-		self._combobox_grid_lines.set_active(options.getint('main', 'grid_lines'))
 		self._checkbox_show_hidden.set_active(options.getboolean('main', 'show_hidden'))
+		self._checkbox_case_sensitive.set_active(options.getboolean('main', 'case_sensitive_sort'))
+		self._combobox_grid_lines.set_active(options.getint('main', 'grid_lines'))
 		self._entry_time_format.set_text(options.get('main', 'time_format'))
 		self._entry_status_text.set_text(options.get('main', 'status_text'))
 
@@ -324,8 +330,9 @@ class ItemListOptions(gtk.VBox):
 		_bool = ('False', 'True')
 
 		options.set('main', 'row_hinting', _bool[self._checkbox_row_hinting.get_active()])
-		options.set('main', 'grid_lines', self._combobox_grid_lines.get_active())
 		options.set('main', 'show_hidden', _bool[self._checkbox_show_hidden.get_active()])
+		options.set('main', 'case_sensitive_sort', _bool[self._checkbox_case_sensitive.get_active()])
+		options.set('main', 'grid_lines', self._combobox_grid_lines.get_active())
 		options.set('main', 'time_format', self._entry_time_format.get_text())
 		options.set('main', 'status_text', self._entry_status_text.get_text())
 
@@ -335,10 +342,6 @@ class ItemListOptions(gtk.VBox):
 								self._checkbox_shift.get_active()
 							)
 		options.set('main', 'search_modifier', search_modifier)
-
-		# change interface states
-		show_hidden = self._application.menu_manager.get_item_by_name('show_hidden_files')
-		show_hidden.set_active(self._checkbox_show_hidden.get_active())
 
 
 class ViewEditOptions(gtk.VBox):
@@ -633,9 +636,6 @@ class BookmarkOptions(gtk.VBox):
 								'{0};{1}'.format(bookmark[0], bookmark[1])
 								)
 
-		# recreate bookmarks menu
-		self._application._create_bookmarks_menu()
-
 
 class ToolOptions(gtk.VBox):
 	"""Bookmark options extension class"""
@@ -789,9 +789,6 @@ class ToolOptions(gtk.VBox):
 		for index, tool in enumerate(self._tools, 1):
 			tool_options.set('tools', 'title_{0}'.format(index), tool[0])
 			tool_options.set('tools', 'command_{0}'.format(index), tool[1])
-
-		# recreate tools menu
-		self._application._create_tools_menu()
 
 
 class TerminalOptions(gtk.VBox):

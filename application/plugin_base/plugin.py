@@ -19,7 +19,9 @@ class PluginBase(gtk.VBox):
 		self._parent = parent  # parent is stored locally for later use
 		self._notebook = notebook
 
-		# create main container
+		self.set_spacing(1)
+
+		# create tab label
 		self._tab_label = gtk.Label('')
 
 		# create gui
@@ -35,7 +37,9 @@ class PluginBase(gtk.VBox):
 		self._top_hbox.pack_start(self._icon, False, False, 0)
 
 		# status bar
-		status_bar = gtk.EventBox()
+		status_bar = gtk.Frame()
+		status_bar.set_shadow_type(gtk.SHADOW_IN)
+
 		self._status_bar = gtk.Label()
 		self._status_bar.set_alignment(0, 0.5)
 		self._status_bar.set_use_markup(True)

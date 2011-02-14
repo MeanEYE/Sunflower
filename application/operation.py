@@ -34,7 +34,7 @@ class Operation(Thread):
 		self._source_path = self._source.get_path()
 		if self._destination is not None:
 			self._destination_path = self._destination.get_path()
-		
+
 		self._can_continue.set()
 
 	def _destroy_ui(self):
@@ -45,7 +45,7 @@ class Operation(Thread):
 	def pause(self):
 		"""Pause current operation"""
 		self._can_continue.clear()
-		
+
 	def resume(self):
 		"""Resume current operation"""
 		self._can_continue.set()
@@ -53,7 +53,7 @@ class Operation(Thread):
 	def cancel(self):
 		"""Set an abort switch"""
 		self._abort.set()
-		
+
 		# release lock set by the pause
 		if not self._can_continue.is_set():
 			self.resume()
@@ -70,6 +70,8 @@ class CopyOperation(Operation):
 
 		self._merge_all = None
 		self._overwrite_all = None
+
+		self._reserve_size = self._application.options.getboolean('main', 'reserve_size')
 
 	def _create_dialog(self):
 		"""Create progress dialog"""
@@ -108,9 +110,9 @@ class CopyOperation(Operation):
 		gtk.gdk.threads_leave()
 
 		merge = result[0] == gtk.RESPONSE_YES
-		
+
 		if result[1][OPTION_APPLY_TO_ALL]:
-			self._merge_all = merge 
+			self._merge_all = merge
 
 		# in case user canceled operation
 		if result[0] == gtk.RESPONSE_CANCEL:
@@ -145,7 +147,7 @@ class CopyOperation(Operation):
 		gtk.gdk.threads_leave()
 
 		overwrite = result[0] == gtk.RESPONSE_YES
-		
+
 		if result[1][OPTION_APPLY_TO_ALL]:
 			self._overwrite_all = overwrite
 
@@ -162,7 +164,7 @@ class CopyOperation(Operation):
 		for item in self._source.get_selection(relative=True):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()
-			
+
 			gobject.idle_add(self._dialog.set_current_file, item)
 
 			if self._source.is_dir(item, relative_to=self._source_path):
@@ -183,13 +185,13 @@ class CopyOperation(Operation):
 
 			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
 				can_procede = True
-				
+
 				if self._destination.exists(item, relative_to=self._destination_path):
 					if self._overwrite_all is not None:
 						can_procede = self._overwrite_all
 					else:
 						can_procede = self._get_overwrite_input(item)
-					
+
 				if can_procede:
 					stat = self._source.get_stat(item, relative_to=self._source_path)
 					gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
@@ -201,7 +203,7 @@ class CopyOperation(Operation):
 		for item in self._source.list_dir(directory, relative_to=self._source_path):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()
-			
+
 			gobject.idle_add(self._dialog.set_current_file, item)
 
 			full_name = os.path.join(directory, item)
@@ -225,13 +227,13 @@ class CopyOperation(Operation):
 
 			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
 				can_procede = True
-				
+
 				if self._destination.exists(full_name, relative_to=self._destination_path):
 					if self._overwrite_all is not None:
 						can_procede = self._overwrite_all
 					else:
 						can_procede = self._get_overwrite_input(full_name)
-					
+
 				if can_procede:
 					stat = self._source.get_stat(full_name, relative_to=self._source_path)
 					gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
@@ -249,12 +251,18 @@ class CopyOperation(Operation):
 
 		# reserve file size
 		try:
-			dh.truncate(file_stat.st_size)
+			if self._reserve_size:
+				# reserve file size in advance, can be slow on memory cards and network
+				dh.truncate(file_stat.st_size)
+
+			else:
+				# just truncate file to 0 size in case source file is smaller
+				dh.truncate()
 		except:
-			# not all file systems support this option,  
+			# not all file systems support this option,
 			# just ignore exception
 			pass
-		
+
 		dh.seek(0)
 
 		while True:
@@ -279,15 +287,15 @@ class CopyOperation(Operation):
 			else:
 				sh.close()
 				dh.close()
-				
+
 				# set mode if required
 				if self._options[OPTION_SET_MODE]:
 					self._destination.set_mode(
-											file, 
+											file,
 											stat.S_IMODE(file_stat.st_mode),
 											relative_to=self._destination_path
 										)
-					
+
 				# set owner if required
 				if self._options[OPTION_SET_OWNER]:
 					self._destination.set_owner(
@@ -313,12 +321,12 @@ class CopyOperation(Operation):
 
 			# TODO: Handle errors!
 			self._destination.create_directory(dir, mode, relative_to=self._destination_path)
-			
+
 			# set owner if requested
 			if self._options[OPTION_SET_OWNER]:
 				self._destination.set_owner(
-										dir, 
-										file_stat.st_uid, 
+										dir,
+										file_stat.st_uid,
 										file_stat.st_gid,
 										relative_to=self._destination_path
 									)
@@ -391,11 +399,11 @@ class MoveOperation(CopyOperation):
 		for number, item in enumerate(file_list, 0):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()
-			
+
 			gobject.idle_add(self._dialog.set_current_file, item)
 			self._source.remove_path(item, relative_to=self._source_path)
 			gobject.idle_add(self._dialog.set_current_file_fraction, float(number) / len(file_list))
-			
+
 		self._delete_directories(dir_list)
 
 	def _delete_directories(self, dir_list):
@@ -407,12 +415,12 @@ class MoveOperation(CopyOperation):
 		for number, directory in enumerate(dir_list, 0):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()
-			
+
 			if self._source.exists(directory, relative_to=self._source_path):
 				gobject.idle_add(self._dialog.set_current_file, directory)
 				self._source.remove_path(directory, relative_to=self._source_path)
 				gobject.idle_add(
-							self._dialog.set_current_file_fraction, 
+							self._dialog.set_current_file_fraction,
 							float(number) / len(dir_list)
 							)
 

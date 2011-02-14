@@ -1256,6 +1256,7 @@ class MainWindow(gtk.Window):
 				'terminal_scrollbars': 'True',
 				'case_sensitive_sort': 'True',
 				'plugins': 'file_list,system_terminal',
+				'reserve_size': 'False',
 			}
 
 		# set default options

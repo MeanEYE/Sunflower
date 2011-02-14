@@ -323,35 +323,35 @@ class ItemList(PluginBase):
 		self._item_list.grab_focus()
 		return False
 
-	def _execute_selected_item(self, widget, data=None):
+	def _execute_selected_item(self, widget=None, data=None):
 		"""Abstract method for handling execution of certain item"""
 		return True
 
-	def _create_directory(self, widget, data=None):
+	def _create_directory(self, widget=None, data=None):
 		"""Abstract method used to create directory"""
 		pass
 
-	def _create_file(self, widget, data=None):
+	def _create_file(self, widget=None, data=None):
 		"""Abstract method used to create file"""
 		pass
 
-	def _delete_files(self, widget, data=None):
+	def _delete_files(self, widget=None, data=None):
 		"""Abstract method used to delete files"""
 		pass
 
-	def _copy_files(self, widget, data=None):
+	def _copy_files(self, widget=None, data=None):
 		"""Abstract method used to copy files"""
 		pass
 
-	def _move_files(self, widget, data=None):
+	def _move_files(self, widget=None, data=None):
 		"""Abstract method used to move files"""
 		pass
 
-	def _rename_file(self, widget, data=None):
+	def _rename_file(self, widget=None, data=None):
 		"""Abstract method used to rename selection"""
 		pass
 
-	def _send_to(self, widget, data=None):
+	def _send_to(self, widget=None, data=None):
 		"""Abstract method for Send To Nautilus integration"""
 		pass
 
@@ -587,7 +587,7 @@ class ItemList(PluginBase):
 
 		return True
 
-	def _parent_folder(self, widget, data=None):
+	def _parent_folder(self, widget=None, data=None):
 		"""Move to parent folder"""
 		self.change_path(
 						os.path.dirname(self.path),

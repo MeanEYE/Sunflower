@@ -224,7 +224,7 @@ class FileList(ItemList):
 			# fail-safe jump to user home directory
 			self.change_path(user.home)
 
-	def _execute_selected_item(self, widget, data=None):
+	def _execute_selected_item(self, widget=None, data=None):
 		"""Execute/Open selected item/directory"""
 		selection = self._item_list.get_selection()
 		list, iter = selection.get_selected()

@@ -767,12 +767,14 @@ class ItemList(PluginBase):
 
 	def change_path(self, path=None):
 		"""Public method for safe path change """
-		if not path in self.history:
-			self.history.insert(0, path)
+		real_path = os.path.expanduser(path)
+
+		if not real_path in self.history:
+			self.history.insert(0, real_path)
 
 		else:
-			i = self.history.index(path)
-			if not i == 0:
+			i = self.history.index(real_path)
+			if i != 0:
 				self.history[0], self.history[i] = self.history[i], self.history[0]
 
 	def select_all(self, pattern=None):

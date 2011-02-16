@@ -86,6 +86,14 @@ class PluginBase(gtk.VBox):
 		"""List focus out event"""
 		self._change_top_panel_color(gtk.STATE_NORMAL)
 
+	def _enable_object_block(self, widget=None, data=None):
+		"""Block main object signals"""
+		self._main_object.handler_block_by_func(self._control_lost_focus)
+
+	def _disable_object_block(self, widget=None, data=None):
+		"""Block main object signals"""
+		self._main_object.handler_unblock_by_func(self._control_lost_focus)
+
 	def _change_top_panel_color(self, state):
 		"""Modify coloring of top panel"""
 		style = self._notebook.get_style().copy()
@@ -119,7 +127,6 @@ class PluginBase(gtk.VBox):
 
 	def _handle_key_press(self, widget, event):
 		"""Handles key events in item list"""
-
 		result = False
 
 		# if plugin has no key handlers defined
@@ -135,6 +142,9 @@ class PluginBase(gtk.VBox):
 
 		# retrieve human readable key representation
 		key_name = gtk.gdk.keyval_name(event.keyval)
+
+		# make letters lowercase for easier handling
+		if len(key_name) == 1: key_name = key_name.lower()
 
 		if self._key_handlers.has_key(key_name) and self._key_handlers[key_name].has_key(state):
 			# call specific key handler and set result

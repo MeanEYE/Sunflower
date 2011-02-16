@@ -189,6 +189,7 @@ class ItemList(PluginBase):
 
 		# history menu
 		self._history_menu = gtk.Menu()
+		self._history_menu.connect('hide', self._disable_object_block)
 
 		# pack gui
 		self.pack_start(container, True, True, 0)
@@ -241,8 +242,8 @@ class ItemList(PluginBase):
 
 	def _handle_key_press(self, widget, event):
 		"""Handles key events in item list"""
-
 		result = PluginBase._handle_key_press(self, widget, event)
+
 		if not result:
 			# generate state sting based on modifier state (control, alt, shift)
 			state = "%d%d%d" % (
@@ -253,6 +254,9 @@ class ItemList(PluginBase):
 
 			# retrieve human readable key representation
 			key_name = gtk.gdk.keyval_name(event.keyval)
+
+			# make letters lowercase for easier handling
+			if len(key_name) == 1: key_name = key_name.lower()
 
 			# handle searching for hidden files
 			if key_name == 'period': key_name = '.'
@@ -637,6 +641,7 @@ class ItemList(PluginBase):
 		self._prepare_history_menu()
 
 		# show the menu on calculated location
+		self._enable_object_block()
 		self._history_menu.popup(
 								None, None,
 								self._get_history_menu_position,

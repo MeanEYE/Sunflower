@@ -314,6 +314,7 @@ class MainWindow(gtk.Window):
 
 		# bookmarks menu
 		self.menu_bookmarks = gtk.Menu()
+		self.menu_bookmarks.connect('hide', self._handle_bookmarks_hide)
 
 		# mounts menu
 		self._menu_item_mounts = gtk.MenuItem(label='Mounts')
@@ -491,6 +492,15 @@ class MainWindow(gtk.Window):
 
 		self.menu_bookmarks.append(menu_item)
 		self.menu_bookmarks.show_all()
+
+	def _handle_bookmarks_hide(self, widget=None, data=None):
+		"""Handle hiding of bookmarks menu
+
+		This method will disable blocking of signals on specified list.
+
+		"""
+		list_ = self.menu_bookmarks.get_data('list')
+		list_._disable_object_block()
 
 	def _create_tools_menu(self):
 		"""Create tools main menu"""
@@ -881,6 +891,9 @@ class MainWindow(gtk.Window):
 			button = widget
 
 		if button is not None:
+			list_ = self.menu_bookmarks.get_data('list')
+			list_._enable_object_block()
+
 			self.menu_bookmarks.popup(
 									None, None,
 									self._get_bookmarks_menu_position,

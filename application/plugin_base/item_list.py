@@ -6,6 +6,12 @@ import locale
 
 from plugin import PluginBase
 
+# button text constants
+BUTTON_TEXT_BOOKMARKS	= u'\u2318'
+BUTTON_TEXT_HISTORY 	= u'\u2630'
+BUTTON_TEXT_TERMINAL	= u'\u2605'
+
+
 class ItemList(PluginBase):
 	"""General item list
 
@@ -116,7 +122,16 @@ class ItemList(PluginBase):
 		self._top_hbox.pack_start(self._spinner, False, False, 3)
 
 		# bookmarks button
-		self._bookmarks_button = gtk.Button(u'\u2318')
+		self._bookmarks_button = gtk.Button()
+
+		if self._parent.options.getboolean('main', 'tab_button_icons'):
+			image_bookmarks = gtk.Image()
+			image_bookmarks.set_from_icon_name('go-jump', gtk.ICON_SIZE_MENU)
+			self._bookmarks_button.set_image(image_bookmarks)
+
+		else:
+			self._bookmarks_button.set_label(BUTTON_TEXT_BOOKMARKS)
+
 		self._bookmarks_button.set_focus_on_click(False)
 		self._bookmarks_button.set_tooltip_text('Bookmarks')
 		self._bookmarks_button.set_relief((
@@ -129,7 +144,17 @@ class ItemList(PluginBase):
 		self._top_hbox.pack_end(self._bookmarks_button, False, False, 0)
 
 		# history button
-		self._history_button = gtk.Button(u'\u2630')
+		self._history_button = gtk.Button()
+
+		if self._parent.options.getboolean('main', 'tab_button_icons'):
+			# set icon
+			image_history = gtk.Image()
+			image_history.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
+			self._history_button.set_image(image_history)
+		else:
+			# set text
+			self._history_button.set_label(BUTTON_TEXT_HISTORY)
+
 		self._history_button.set_focus_on_click(False)
 		self._history_button.set_tooltip_text('History')
 		self._history_button.set_relief((
@@ -142,7 +167,17 @@ class ItemList(PluginBase):
 		self._top_hbox.pack_end(self._history_button, False, False, 0)
 
 		# terminal button
-		self._terminal_button = gtk.Button(u'\u2605')
+		self._terminal_button = gtk.Button()
+
+		if self._parent.options.getboolean('main', 'tab_button_icons'):
+			# set icon
+			image_terminal = gtk.Image()
+			image_terminal.set_from_icon_name('terminal', gtk.ICON_SIZE_MENU)
+			self._terminal_button.set_image(image_terminal)
+		else:
+			# set text
+			self._terminal_button.set_label(BUTTON_TEXT_TERMINAL)
+
 		self._terminal_button.set_focus_on_click(False)
 		self._terminal_button.set_tooltip_text('Terminal')
 		self._terminal_button.set_relief((

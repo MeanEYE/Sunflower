@@ -1270,6 +1270,7 @@ class MainWindow(gtk.Window):
 				'case_sensitive_sort': 'True',
 				'plugins': 'file_list,system_terminal',
 				'reserve_size': 'False',
+				'tab_button_icons': 'True',
 			}
 
 		# set default options

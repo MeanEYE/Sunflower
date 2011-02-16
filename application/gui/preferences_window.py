@@ -71,8 +71,15 @@ class PreferencesWindow(gtk.Window):
 					'code.google.com/p/sunflower-fm/wiki/WelcomePage?tm=6'
 				)
 
+		# restart label
+		self._label_restart = gtk.Label('<i>Program restart required!</i>')
+		self._label_restart.set_alignment(0.5, 0.5)
+		self._label_restart.set_use_markup(True)
+		self._label_restart.set_property('no-show-all', True)
+
 		# pack buttons
 		hbox.pack_start(btn_help, False, False, 0)
+		hbox.pack_start(self._label_restart, True, True, 0)
 		hbox.pack_end(btn_close, False, False, 0)
 		hbox.pack_end(self._btn_save, False, False, 0)
 
@@ -104,8 +111,9 @@ class PreferencesWindow(gtk.Window):
 			if hasattr(page, '_load_options'):
 				page._load_options()
 
-		# disable save button
+		# disable save button and hide label
 		self._btn_save.set_sensitive(False)
+		self._label_restart.hide()
 
 	def _save_options(self, widget, data=None):
 		"""Save options"""
@@ -122,9 +130,13 @@ class PreferencesWindow(gtk.Window):
 		# call main window to propagate new settings
 		self._parent.apply_settings()
 
-	def enable_save(self, widget=None, data=None):
+	def enable_save(self, widget=None, show_restart=None):
 		"""Enable save button"""
 		self._btn_save.set_sensitive(True)
+
+		# show label with message
+		if show_restart is not None and show_restart:
+			self._label_restart.show()
 
 
 class DisplayOptions(gtk.VBox):
@@ -160,9 +172,11 @@ class DisplayOptions(gtk.VBox):
 
 		self._checkbox_focus_new_tab = gtk.CheckButton('Focus new tab after opening')
 		self._checkbox_button_relief = gtk.CheckButton('Show normal button relief')
+		self._checkbox_button_icons = gtk.CheckButton('Show icons instead of text in tab buttons')
 
 		self._checkbox_focus_new_tab.connect('toggled', self._parent.enable_save)
 		self._checkbox_button_relief.connect('toggled', self._parent.enable_save)
+		self._checkbox_button_icons.connect('toggled', self._parent.enable_save, True)
 
 		# pack ui
 		vbox_main_window.pack_start(self._checkbox_hide_on_close, False, False, 0)
@@ -171,6 +185,7 @@ class DisplayOptions(gtk.VBox):
 
 		vbox_tabs.pack_start(self._checkbox_focus_new_tab, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_button_relief, False, False, 0)
+		vbox_tabs.pack_start(self._checkbox_button_icons, False, False, 0)
 
 		frame_main_window.add(vbox_main_window)
 		frame_tabs.add(vbox_tabs)
@@ -187,6 +202,7 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_show_toolbar.set_active(options.getboolean('main', 'show_toolbar'))
 		self._checkbox_show_command_bar.set_active(options.getboolean('main', 'show_command_bar'))
 		self._checkbox_button_relief.set_active(bool(options.getint('main', 'button_relief')))
+		self._checkbox_button_icons.set_active(options.getboolean('main', 'tab_button_icons'))
 
 	def _save_options(self):
 		"""Save display options"""
@@ -201,6 +217,7 @@ class DisplayOptions(gtk.VBox):
 		options.set('main', 'show_toolbar', _bool[self._checkbox_show_toolbar.get_active()])
 		options.set('main', 'show_command_bar', _bool[self._checkbox_show_command_bar.get_active()])
 		options.set('main', 'button_relief', int(self._checkbox_button_relief.get_active()))
+		options.set('main', 'tab_button_icons', _bool[self._checkbox_button_icons.get_active()])
 
 
 class ItemListOptions(gtk.VBox):

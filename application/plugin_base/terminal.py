@@ -9,6 +9,11 @@ except:
 
 from plugin import PluginBase
 
+# button text constants
+BUTTON_TEXT_MENU 	= u'\u2699'
+BUTTON_TEXT_RECYCLE = u'\u267B'
+
+
 class Terminal(PluginBase):
 	"""Base class for terminal based plugins
 
@@ -60,7 +65,17 @@ class Terminal(PluginBase):
 		self._icon.set_from_icon_name('terminal', gtk.ICON_SIZE_LARGE_TOOLBAR)
 
 		# recycle button
-		self._recycle_button = gtk.Button(u'\u267B')
+		self._recycle_button = gtk.Button()
+
+		if self._parent.options.getboolean('main', 'tab_button_icons'):
+			# set icon
+			image_recycle = gtk.Image()
+			image_recycle.set_from_icon_name('reload', gtk.ICON_SIZE_MENU)
+			self._recycle_button.set_image(image_recycle)
+		else:
+			# set text
+			self._recycle_button = gtk.Button(BUTTON_TEXT_RECYCLE)
+
 		self._recycle_button.set_focus_on_click(False)
 		self._recycle_button.set_tooltip_text('Recycle terminal')
 		self._recycle_button.set_relief((
@@ -71,7 +86,17 @@ class Terminal(PluginBase):
 		self._recycle_button.connect('clicked', self._recycle_terminal)
 
 		# terminal menu button
-		self._menu_button = gtk.Button(u'\u2699')
+		self._menu_button = gtk.Button()
+
+		if self._parent.options.getboolean('main', 'tab_button_icons'):
+			# set icon
+			image_menu = gtk.Image()
+			image_menu.set_from_icon_name(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
+			self._menu_button.set_image(image_menu)
+		else:
+			# set text
+			self._menu_button = gtk.Button(BUTTON_TEXT_MENU)
+
 		self._menu_button.set_focus_on_click(False)
 		self._menu_button.set_tooltip_text('Terminal menu')
 		self._menu_button.set_relief((

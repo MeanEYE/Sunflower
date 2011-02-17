@@ -32,7 +32,7 @@ class MainWindow(gtk.Window):
 	version = {
 			'major': 0,
 			'minor': 1,
-			'build': 16,
+			'build': 17,
 			'stage': 'a'
 		}
 
@@ -998,6 +998,10 @@ class MainWindow(gtk.Window):
 		notebook.set_tab_reorderable(new_tab, True)
 		notebook.set_tab_detachable(new_tab, True)
 
+		# show tabs if needed
+		if not self.options.getboolean('main', 'always_show_tabs'):
+			notebook.set_show_tabs(notebook.get_n_pages() > 1)
+
 		# focus tab if needed
 		if self.options.getboolean('main', 'focus_new_tab'):
 			notebook.set_current_page(index)
@@ -1010,8 +1014,14 @@ class MainWindow(gtk.Window):
 	def close_tab(self, notebook, child):
 		"""Safely remove tab and it's children"""
 		if notebook.get_n_pages() > 1:
+			# remove page from notebook
 			notebook.remove_page(notebook.page_num(child))
 
+			# hide tabs if needed
+			if not self.options.getboolean('main', 'always_show_tabs'):
+				notebook.set_show_tabs(notebook.get_n_pages() > 1)
+
+			# kill the component
 			del child
 
 	def next_tab(self, notebook):
@@ -1271,6 +1281,7 @@ class MainWindow(gtk.Window):
 				'plugins': 'file_list,system_terminal',
 				'reserve_size': 'False',
 				'tab_button_icons': 'True',
+				'always_show_tabs': 'True',
 			}
 
 		# set default options
@@ -1378,6 +1389,16 @@ class MainWindow(gtk.Window):
 
 		# recreate tools menu
 		self._create_tools_menu()
+
+		# show tabs if needed
+		self.left_notebook.set_show_tabs(
+								self.options.getboolean('main', 'always_show_tabs') or
+								self.left_notebook.get_n_pages() > 1
+							)
+		self.right_notebook.set_show_tabs(
+								self.options.getboolean('main', 'always_show_tabs') or
+								self.right_notebook.get_n_pages() > 1
+							)
 
 		# apply settings for each tab in left notebook
 		for index in range(0, self.left_notebook.get_n_pages()):

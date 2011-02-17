@@ -173,10 +173,12 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_focus_new_tab = gtk.CheckButton('Focus new tab after opening')
 		self._checkbox_button_relief = gtk.CheckButton('Show normal button relief')
 		self._checkbox_button_icons = gtk.CheckButton('Show icons instead of text in tab buttons')
+		self._checkbox_always_show_tabs = gtk.CheckButton('Show tab(s) even if there is only one')
 
 		self._checkbox_focus_new_tab.connect('toggled', self._parent.enable_save)
 		self._checkbox_button_relief.connect('toggled', self._parent.enable_save)
 		self._checkbox_button_icons.connect('toggled', self._parent.enable_save, True)
+		self._checkbox_always_show_tabs.connect('toggled', self._parent.enable_save)
 
 		# pack ui
 		vbox_main_window.pack_start(self._checkbox_hide_on_close, False, False, 0)
@@ -186,6 +188,7 @@ class DisplayOptions(gtk.VBox):
 		vbox_tabs.pack_start(self._checkbox_focus_new_tab, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_button_relief, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_button_icons, False, False, 0)
+		vbox_tabs.pack_start(self._checkbox_always_show_tabs, False, False, 0)
 
 		frame_main_window.add(vbox_main_window)
 		frame_tabs.add(vbox_tabs)
@@ -203,6 +206,7 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_show_command_bar.set_active(options.getboolean('main', 'show_command_bar'))
 		self._checkbox_button_relief.set_active(bool(options.getint('main', 'button_relief')))
 		self._checkbox_button_icons.set_active(options.getboolean('main', 'tab_button_icons'))
+		self._checkbox_always_show_tabs.set_active(options.getboolean('main', 'always_show_tabs'))
 
 	def _save_options(self):
 		"""Save display options"""
@@ -218,6 +222,7 @@ class DisplayOptions(gtk.VBox):
 		options.set('main', 'show_command_bar', _bool[self._checkbox_show_command_bar.get_active()])
 		options.set('main', 'button_relief', int(self._checkbox_button_relief.get_active()))
 		options.set('main', 'tab_button_icons', _bool[self._checkbox_button_icons.get_active()])
+		options.set('main', 'always_show_tabs', _bool[self._checkbox_always_show_tabs.get_active()])
 
 
 class ItemListOptions(gtk.VBox):

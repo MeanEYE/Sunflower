@@ -160,10 +160,12 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_hide_on_close = gtk.CheckButton('Hide main window on close')
 		self._checkbox_show_toolbar = gtk.CheckButton('Show toolbar')
 		self._checkbox_show_command_bar = gtk.CheckButton('Show command bar')
+		self._checkbox_show_command_entry = gtk.CheckButton('Show command entry')
 
 		self._checkbox_hide_on_close.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_toolbar.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_command_bar.connect('toggled', self._parent.enable_save)
+		self._checkbox_show_command_entry.connect('toggled', self._parent.enable_save)
 
 		# tab options
 		frame_tabs = gtk.Frame('Tabs')
@@ -184,6 +186,7 @@ class DisplayOptions(gtk.VBox):
 		vbox_main_window.pack_start(self._checkbox_hide_on_close, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_toolbar, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_command_bar, False, False, 0)
+		vbox_main_window.pack_start(self._checkbox_show_command_entry, False, False, 0)
 
 		vbox_tabs.pack_start(self._checkbox_focus_new_tab, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_button_relief, False, False, 0)
@@ -204,6 +207,7 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_focus_new_tab.set_active(options.getboolean('main', 'focus_new_tab'))
 		self._checkbox_show_toolbar.set_active(options.getboolean('main', 'show_toolbar'))
 		self._checkbox_show_command_bar.set_active(options.getboolean('main', 'show_command_bar'))
+		self._checkbox_show_command_entry.set_active(options.getboolean('main', 'show_command_entry'))
 		self._checkbox_button_relief.set_active(bool(options.getint('main', 'button_relief')))
 		self._checkbox_button_icons.set_active(options.getboolean('main', 'tab_button_icons'))
 		self._checkbox_always_show_tabs.set_active(options.getboolean('main', 'always_show_tabs'))
@@ -220,6 +224,7 @@ class DisplayOptions(gtk.VBox):
 		options.set('main', 'focus_new_tab', _bool[self._checkbox_focus_new_tab.get_active()])
 		options.set('main', 'show_toolbar', _bool[self._checkbox_show_toolbar.get_active()])
 		options.set('main', 'show_command_bar', _bool[self._checkbox_show_command_bar.get_active()])
+		options.set('main', 'show_command_entry', _bool[self._checkbox_show_command_entry.get_active()])
 		options.set('main', 'button_relief', int(self._checkbox_button_relief.get_active()))
 		options.set('main', 'tab_button_icons', _bool[self._checkbox_button_icons.get_active()])
 		options.set('main', 'always_show_tabs', _bool[self._checkbox_always_show_tabs.get_active()])

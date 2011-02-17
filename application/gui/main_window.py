@@ -229,6 +229,14 @@ class MainWindow(gtk.Window):
 						'name': 'show_command_bar',
 						'path': '<Sunflower>/View/ShowCommandBar',
 					},
+					{
+						'label': 'Show co_mmand entry',
+						'type': 'checkbox',
+						'active': self.options.getboolean('main', 'show_command_entry'),
+						'callback': self._toggle_show_command_entry,
+						'name': 'show_command_entry',
+						'path': '<Sunflower>/View/ShowCommandEntry',
+					},
 					{'type': 'separator'},
 					{
 						'label': '_Preferences', 'type': 'image',
@@ -340,7 +348,7 @@ class MainWindow(gtk.Window):
 		hbox.pack_start(self.right_notebook, True, True, 0)
 
 		# command line prompt
-		hbox2 = gtk.HBox(False, 0)
+		self.command_entry_bar = gtk.HBox(False, 0)
 
 		self.path_label = gtk.Label()
 		self.path_label.set_alignment(1, 0.5)
@@ -364,9 +372,13 @@ class MainWindow(gtk.Window):
 		# load history file
 		self._load_history()
 
-		hbox2.pack_start(self.path_label, True, True, 3)
-		hbox2.pack_start(self.command_edit, True, True, 0)
+		self.command_entry_bar.pack_start(self.path_label, True, True, 3)
+		self.command_entry_bar.pack_start(self.command_edit, True, True, 0)
 
+		self.command_entry_bar.set_property(
+						'no-show-all',
+						not self.options.getboolean('main', 'show_command_entry')
+					)
 		# command buttons bar
 		self.command_bar = gtk.HBox(True, 0)
 
@@ -408,7 +420,7 @@ class MainWindow(gtk.Window):
 		vbox2 = gtk.VBox(False, 3)
 		vbox2.set_border_width(3)
 		vbox2.pack_start(hbox, expand=True, fill=True, padding=0)
-		vbox2.pack_start(hbox2, expand=False, fill=False, padding=0)
+		vbox2.pack_start(self.command_entry_bar, expand=False, fill=False, padding=0)
 		vbox2.pack_start(self.command_bar, expand=False, fill=False, padding=0)
 
 		vbox.pack_start(vbox2, True, True, 0)
@@ -665,6 +677,13 @@ class MainWindow(gtk.Window):
 
 		self.options.set('main', 'show_command_bar', ('False', 'True')[show_command_bar])
 		self.command_bar.set_visible(show_command_bar)
+
+	def _toggle_show_command_entry(self, widget, data=None):
+		"""Show/hide command entry"""
+		show_command_entry = widget.get_active()
+
+		self.options.set('main', 'show_command_entry', ('False', 'True')[show_command_entry])
+		self.command_entry_bar.set_visible(show_command_entry)
 
 	def _toggle_show_toolbar(self, widget, data=None):
 		"""Show/hide toolbar"""
@@ -1265,6 +1284,7 @@ class MainWindow(gtk.Window):
 				'show_mounts': 'True',
 				'show_toolbar': 'False',
 				'show_command_bar': 'False',
+				'show_command_entry': 'True',
 				'search_modifier': '010',
 				'time_format': '%H:%M %d-%m-%y',
 				'focus_new_tab': 'True',
@@ -1375,6 +1395,10 @@ class MainWindow(gtk.Window):
 		# show or hide command bar depending on settings
 		show_command_bar = self.menu_manager.get_item_by_name('show_command_bar')
 		show_command_bar.set_active(self.options.getboolean('main', 'show_command_bar'))
+
+		# show or hide command bar depending on settings
+		show_command_entry = self.menu_manager.get_item_by_name('show_command_entry')
+		show_command_entry.set_active(self.options.getboolean('main', 'show_command_entry'))
 
 		# show or hide toolbar depending on settings
 		show_toolbar = self.menu_manager.get_item_by_name('show_toolbar')

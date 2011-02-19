@@ -24,6 +24,8 @@ class PluginBase(gtk.VBox):
 
 		# create tab label
 		self._tab_label = gtk.Label('')
+		self._tab_label.set_max_width_chars(20)
+		self._tab_label.set_ellipsize(pango.ELLIPSIZE_END)
 
 		# create gui
 		self._top_panel = gtk.EventBox()

@@ -49,14 +49,14 @@ class Indicator(object):
 		"""Create commonly used menu items in indicator"""
 		# bring to current desktop
 		self._bring_to_desktop = self._parent.menu_manager.create_menu_item({
-														'label': '_Bring to current desktop',
+														'label': _('_Bring to current desktop'),
 														'callback': self._bring_to_current_desktop
 													})
 		self._menu.append(self._bring_to_desktop)
 
 		# show window
 		self._menu_show = self._parent.menu_manager.create_menu_item({
-														'label': 'Sh_ow main window',
+														'label': _('Sh_ow main window'),
 														'callback': self._change_visibility,
 														'data': True,
 													})
@@ -65,7 +65,7 @@ class Indicator(object):
 
 		# hide window
 		self._menu_hide = self._parent.menu_manager.create_menu_item({
-														'label': '_Hide main window',
+														'label': _('_Hide main window'),
 														'callback': self._change_visibility,
 														'data': False,
 													})
@@ -74,7 +74,7 @@ class Indicator(object):
 		# close window option
 		self._menu.append(self._parent.menu_manager.create_menu_item({'type': 'separator'}))
 		self._menu.append(self._parent.menu_manager.create_menu_item({
-														'label': '_Quit',
+														'label': _('_Quit'),
 														'type': 'image',
 														'callback': self._parent._destroy,
 														'stock': gtk.STOCK_QUIT,

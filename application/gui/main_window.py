@@ -8,6 +8,7 @@ import webbrowser
 import locale
 import user
 import fnmatch
+import gettext
 
 from menus import MenuManager
 from mounts import MountsManager
@@ -22,6 +23,9 @@ from changelog_dialog import ChangeLogDialog
 from icons import IconManager
 from associations import AssociationManager
 from indicator import Indicator
+
+# load i18n
+gettext.install('sunflower')
 
 
 class MainWindow(gtk.Window):
@@ -51,7 +55,7 @@ class MainWindow(gtk.Window):
 		self.mount_manager = None  # we'll create manager later
 		self.associations_manager = AssociationManager()
 
-		self.set_title('Sunflower')
+		self.set_title(_('Sunflower'))
 
 		if self.icon_manager.has_icon('sunflower'):
 			# in case theme has its own icon, use that one
@@ -105,10 +109,10 @@ class MainWindow(gtk.Window):
 
 		menu_items = (
 			{
-				'label': 'File',
+				'label': _('File'),
 				'submenu': (
 					{
-						'label': 'New tab',
+						'label': _('New tab'),
 						'name': 'new_tab',
 						'type': 'image',
 						'image': 'tab-new',
@@ -120,7 +124,7 @@ class MainWindow(gtk.Window):
 						'type': 'separator',
 					},
 					{
-						'label': 'Create file',
+						'label': _('Create file'),
 						'type': 'image',
 						'stock': gtk.STOCK_NEW,
 						'callback': self._command_create,
@@ -128,7 +132,7 @@ class MainWindow(gtk.Window):
 						'path': '<Sunflower>/File/CreateFile',
 					},
 					{
-						'label': 'Create directory',
+						'label': _('Create directory'),
 						'type': 'image',
 						'image': 'folder-new',
 						'callback': self._command_create,
@@ -139,7 +143,7 @@ class MainWindow(gtk.Window):
 						'type': 'separator',
 					},
 					{
-						'label': '_Quit',
+						'label': _('_Quit'),
 						'type': 'image',
 						'stock': gtk.STOCK_QUIT,
 						'callback' : self._destroy,
@@ -148,55 +152,55 @@ class MainWindow(gtk.Window):
 				)
 			},
 			{
-				'label': 'Mark',
+				'label': _('Mark'),
 				'submenu': (
 					{
-						'label': '_Select all',
+						'label': _('_Select all'),
 						'type': 'image',
 						'stock': gtk.STOCK_SELECT_ALL,
 						'callback': self.select_all,
 						'path': '<Sunflower>/Mark/SelectAll',
 					},
 					{
-						'label': '_Unselect all',
+						'label': _('_Unselect all'),
 						'callback': self.unselect_all,
 						'path': '<Sunflower>/Mark/UnselectAll',
 					},
 					{
-						'label': 'Invert select_ion',
+						'label': _('Invert select_ion'),
 						'callback': self.invert_selection,
 						'path': '<Sunflower>/Mark/InvertSelection',
 					},
 					{'type': 'separator'},
 					{
-						'label': 'S_elect with pattern',
+						'label': _('S_elect with pattern'),
 						'callback': self.select_with_pattern,
 						'path': '<Sunflower>/Mark/SelectPattern',
 					},
 					{
-						'label': 'Unselect with pa_ttern',
+						'label': _('Unselect with pa_ttern'),
 						'callback': self.unselect_with_pattern,
 						'path': '<Sunflower>/Mark/UnselectPattern',
 					},
 					{'type': 'separator'},
 					{
-						'label': 'Compare _directories',
+						'label': _('Compare _directories'),
 						'path': '<Sunflower>/Mark/Compare',
 					}
 				)
 			},
 			{
-				'label': 'View',
+				'label': _('View'),
 				'submenu': (
 					{
-						'label': 'Ful_lscreen',
+						'label': _('Ful_lscreen'),
 						'type': 'image',
 						'image': 'view-fullscreen',
 						'callback': self.toggle_fullscreen,
 						'path': '<Sunflower>/View/Fullscreen'
 					},
 					{
-						'label': 'Rel_oad item list',
+						'label': _('Rel_oad item list'),
 						'type': 'image',
 						'image': 'reload',
 						'callback': self._command_reload,
@@ -206,7 +210,7 @@ class MainWindow(gtk.Window):
 						'type': 'separator',
 					},
 					{
-						'label': 'Show _hidden files',
+						'label': _('Show _hidden files'),
 						'type': 'checkbox',
 						'active': self.options.getboolean('main', 'show_hidden'),
 						'callback': self._toggle_show_hidden_files,
@@ -214,7 +218,7 @@ class MainWindow(gtk.Window):
 						'path': '<Sunflower>/View/ShowHidden',
 					},
 					{
-						'label': 'Show _toolbar',
+						'label': _('Show _toolbar'),
 						'type': 'checkbox',
 						'active': self.options.getboolean('main', 'show_toolbar'),
 						'callback': self._toggle_show_toolbar,
@@ -222,7 +226,7 @@ class MainWindow(gtk.Window):
 						'path': '<Sunflower>/View/ShowToolbar',
 					},
 					{
-						'label': 'Show _command bar',
+						'label': _('Show _command bar'),
 						'type': 'checkbox',
 						'active': self.options.getboolean('main', 'show_command_bar'),
 						'callback': self._toggle_show_command_bar,
@@ -230,7 +234,7 @@ class MainWindow(gtk.Window):
 						'path': '<Sunflower>/View/ShowCommandBar',
 					},
 					{
-						'label': 'Show co_mmand entry',
+						'label': _('Show co_mmand entry'),
 						'type': 'checkbox',
 						'active': self.options.getboolean('main', 'show_command_entry'),
 						'callback': self._toggle_show_command_entry,
@@ -239,7 +243,8 @@ class MainWindow(gtk.Window):
 					},
 					{'type': 'separator'},
 					{
-						'label': '_Preferences', 'type': 'image',
+						'label': _('_Preferences'),
+						'type': 'image',
 						'stock': gtk.STOCK_PREFERENCES,
 						'callback': self.preferences_window._show,
 						'path': '<Sunflower>/View/Preferences',
@@ -247,18 +252,18 @@ class MainWindow(gtk.Window):
 				)
 			},
 			{
-				'label': 'Tools',
+				'label': _('Tools'),
 				'name': 'tools',
 			},
 			{
-				'label': 'Operations',
+				'label': _('Operations'),
 				'name': 'operations',
 			},
 			{
-				'label': 'Help',
+				'label': _('Help'),
 				'submenu': (
 					{
-						'label': '_Home page',
+						'label': _('_Home page'),
 						'type': 'image',
 						'stock': gtk.STOCK_HOME,
 						'callback': self.goto_web,
@@ -267,7 +272,7 @@ class MainWindow(gtk.Window):
 					},
 					{'type': 'separator'},
 					{
-						'label': 'File a _bug report',
+						'label': _('File a _bug report'),
 						'type': 'image',
 						'image': 'lpi-bug',
 						'callback': self.goto_web,
@@ -275,12 +280,12 @@ class MainWindow(gtk.Window):
 						'path': '<Sunflower>/Help/BugReport',
 					},
 					{
-						'label': 'Check for _updates',
+						'label': _('Check for _updates'),
 						'path': '<Sunflower>/Help/CheckForUpdates',
 					},
 					{'type': 'separator'},
 					{
-						'label': '_About',
+						'label': _('_About'),
 						'type': 'image',
 						'stock': gtk.STOCK_ABOUT,
 						'callback': self.about_window._show,
@@ -325,7 +330,7 @@ class MainWindow(gtk.Window):
 		self.menu_bookmarks.connect('hide', self._handle_bookmarks_hide)
 
 		# mounts menu
-		self._menu_item_mounts = gtk.MenuItem(label='Mounts')
+		self._menu_item_mounts = gtk.MenuItem(label=_('Mounts'))
 		self._menu_item_mounts.show()
 		self.mount_manager = MountsManager(self, self._menu_item_mounts)
 
@@ -383,13 +388,13 @@ class MainWindow(gtk.Window):
 		self.command_bar = gtk.HBox(True, 0)
 
 		buttons = (
-				('Refresh', 'Reload active item list (CTRL+R)', self._command_reload),
-				('View', 'View selected file (F3)', None),
-				('Edit', 'Edit selected file (F4)', self._command_edit),
-				('Copy', 'Copy selected items from active to opposite list (F5)', self._command_copy),
-				('Move', 'Move selected items from active to opposite list (F6)', self._command_move),
-				('Create', 'Create new directory (F7)\nCreate new file (CTRL+F7)', self._command_create),
-				('Delete', 'Delete selected items (F8 or Delete)', self._command_delete)
+				(_('Refresh'), _('Reload active item list (CTRL+R)'), self._command_reload),
+				(_('View'), _('View selected file (F3)'), None),
+				(_('Edit'), _('Edit selected file (F4)'), self._command_edit),
+				(_('Copy'), _('Copy selected items from active to opposite list (F5)'), self._command_copy),
+				(_('Move'), _('Move selected items from active to opposite list (F6)'), self._command_move),
+				(_('Create'), _('Create new directory (F7)\nCreate new file (CTRL+F7)'), self._command_create),
+				(_('Delete'), _('Delete selected items (F8 or Delete)'), self._command_delete)
 			)
 		style = self.command_bar.get_style().copy()
 
@@ -488,14 +493,14 @@ class MainWindow(gtk.Window):
 
 		# create additional options
 		menu_item = self.menu_manager.create_menu_item({
-										'label': 'Options',
+										'label': _('Options'),
 										'submenu': (
 												{
-													'label': '_Add bookmark',
+													'label': _('_Add bookmark'),
 													'callback': self._add_bookmark,
 												},
 												{
-													'label': '_Edit bookmarks',
+													'label': _('_Edit bookmarks'),
 													'callback': self.preferences_window._show,
 													'data': 5
 												},
@@ -591,9 +596,9 @@ class MainWindow(gtk.Window):
 										gtk.DIALOG_DESTROY_WITH_PARENT,
 										gtk.MESSAGE_ERROR,
 										gtk.BUTTONS_OK,
-										"Bookmarked path does not exist or is not "
+										_("Bookmarked path does not exist or is not "
 										"valid. If path is not local check if specified "
-										"volume is mounted."
+										"volume is mounted.") +
 										"\n\n{0}".format(path)
 										)
 				dialog.run()
@@ -952,8 +957,8 @@ class MainWindow(gtk.Window):
 			# create dialog
 			dialog = InputDialog(self)
 
-			dialog.set_title('Select items')
-			dialog.set_label('Selection pattern (eg.: *.jpg):')
+			dialog.set_title(_('Select items'))
+			dialog.set_label(_('Selection pattern (eg.: *.jpg):'))
 			dialog.set_text('*')
 
 			# get response
@@ -976,8 +981,8 @@ class MainWindow(gtk.Window):
 			# create dialog
 			dialog = InputDialog(self)
 
-			dialog.set_title('Unselect items')
-			dialog.set_label('Selection pattern (eg.: *.jpg):')
+			dialog.set_title(_('Unselect items'))
+			dialog.set_label(_('Selection pattern (eg.: *.jpg):'))
 			dialog.set_text('*')
 
 			# get response
@@ -1106,7 +1111,7 @@ class MainWindow(gtk.Window):
 			handled = True
 
 		if not handled:
-			print "Unhandled command: {0}".format(command[0])
+			print 'Unhandled command: {0}'.format(command[0])
 
 	def save_tabs(self, notebook, section):
 		"""Save opened tabs"""
@@ -1235,11 +1240,12 @@ class MainWindow(gtk.Window):
 									gtk.DIALOG_DESTROY_WITH_PARENT,
 									gtk.MESSAGE_ERROR,
 									gtk.BUTTONS_OK,
-									"Error saving configuration to files"
-									"in your home directory. "
-									"Make sure you have enough permissions."
-									"\n\n{0}".format(error)
-									)
+									_(
+										"Error saving configuration to files"
+										"in your home directory. Make sure you have "
+										"enough permissions."
+									) +	"\n\n{0}".format(error)
+								)
 			dialog.run()
 			dialog.destroy()
 
@@ -1277,9 +1283,9 @@ class MainWindow(gtk.Window):
 		default_options = {
 				'default_editor': 'gedit "{0}"',
 				'wait_for_editor': 'False',
-				'status_text': 'Directories: %dir_sel/%dir_count   '
-							'Files: %file_sel/%file_count   '
-							'Size: %size_sel/%size_total',
+				'status_text': _('Directories:') + ' %dir_sel/%dir_count   ' +
+							_('Files:') + ' %file_sel/%file_count   ' +
+							_('Size:') + ' %size_sel/%size_total',
 				'show_hidden': 'False',
 				'show_mounts': 'True',
 				'show_toolbar': 'False',

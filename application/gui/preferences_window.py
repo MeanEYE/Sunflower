@@ -11,7 +11,7 @@ class PreferencesWindow(gtk.Window):
 
 		# configure self
 		self.connect('delete_event', self._hide)
-		self.set_title('Preferences')
+		self.set_title(_('Preferences'))
 		self.set_size_request(600, 500)
 		self.set_modal(True)
 		self.set_skip_taskbar_hint(True)
@@ -27,31 +27,31 @@ class PreferencesWindow(gtk.Window):
 
 		self._tabs.append_page(
 					DisplayOptions(self, parent),
-					gtk.Label('Display')
+					gtk.Label(_('Display'))
 					)
 		self._tabs.append_page(
 					ItemListOptions(self, parent),
-					gtk.Label('Item List')
+					gtk.Label(_('Item List'))
 					)
 		self._tabs.append_page(
 					TerminalOptions(self, parent),
-					gtk.Label('Terminal')
+					gtk.Label(_('Terminal'))
 					)
 		self._tabs.append_page(
 					ViewEditOptions(self, parent),
-					gtk.Label('View & Edit')
+					gtk.Label(_('View & Edit'))
 					)
 		self._tabs.append_page(
 					ToolbarOptions(self, parent),
-					gtk.Label('Toolbar')
+					gtk.Label(_('Toolbar'))
 					)
 		self._tabs.append_page(
 					BookmarkOptions(self, parent),
-					gtk.Label('Bookmarks')
+					gtk.Label(_('Bookmarks'))
 					)
 		self._tabs.append_page(
 					ToolOptions(self, parent),
-					gtk.Label('Tools Menu')
+					gtk.Label(_('Tools Menu'))
 					)
 
 		# create buttons
@@ -72,7 +72,7 @@ class PreferencesWindow(gtk.Window):
 				)
 
 		# restart label
-		self._label_restart = gtk.Label('<i>Program restart required!</i>')
+		self._label_restart = gtk.Label('<i>{0}</i>'.format(_('Program restart required!')))
 		self._label_restart.set_alignment(0.5, 0.5)
 		self._label_restart.set_use_markup(True)
 		self._label_restart.set_property('no-show-all', True)
@@ -153,14 +153,14 @@ class DisplayOptions(gtk.VBox):
 		self.set_spacing(5)
 
 		# main window options
-		frame_main_window = gtk.Frame('Main window')
+		frame_main_window = gtk.Frame(_('Main window'))
 		vbox_main_window = gtk.VBox(False, 0)
 		vbox_main_window.set_border_width(5)
 
-		self._checkbox_hide_on_close = gtk.CheckButton('Hide main window on close')
-		self._checkbox_show_toolbar = gtk.CheckButton('Show toolbar')
-		self._checkbox_show_command_bar = gtk.CheckButton('Show command bar')
-		self._checkbox_show_command_entry = gtk.CheckButton('Show command entry')
+		self._checkbox_hide_on_close = gtk.CheckButton(_('Hide main window on close'))
+		self._checkbox_show_toolbar = gtk.CheckButton(_('Show toolbar'))
+		self._checkbox_show_command_bar = gtk.CheckButton(_('Show command bar'))
+		self._checkbox_show_command_entry = gtk.CheckButton(_('Show command entry'))
 
 		self._checkbox_hide_on_close.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_toolbar.connect('toggled', self._parent.enable_save)
@@ -168,14 +168,14 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_show_command_entry.connect('toggled', self._parent.enable_save)
 
 		# tab options
-		frame_tabs = gtk.Frame('Tabs')
+		frame_tabs = gtk.Frame(_('Tabs'))
 		vbox_tabs = gtk.VBox(False, 0)
 		vbox_tabs.set_border_width(5)
 
-		self._checkbox_focus_new_tab = gtk.CheckButton('Focus new tab after opening')
-		self._checkbox_button_relief = gtk.CheckButton('Show normal button relief')
-		self._checkbox_button_icons = gtk.CheckButton('Show icons instead of text in tab buttons')
-		self._checkbox_always_show_tabs = gtk.CheckButton('Show tab(s) even if there is only one')
+		self._checkbox_focus_new_tab = gtk.CheckButton(_('Focus new tab after opening'))
+		self._checkbox_button_relief = gtk.CheckButton(_('Show normal button relief'))
+		self._checkbox_button_icons = gtk.CheckButton(_('Show icons instead of text in tab buttons'))
+		self._checkbox_always_show_tabs = gtk.CheckButton(_('Show tab(s) even if there is only one'))
 
 		self._checkbox_focus_new_tab.connect('toggled', self._parent.enable_save)
 		self._checkbox_button_relief.connect('toggled', self._parent.enable_save)
@@ -244,9 +244,9 @@ class ItemListOptions(gtk.VBox):
 		self.set_spacing(5)
 
 		# file list options
-		self._checkbox_row_hinting = gtk.CheckButton('Row hinting')
-		self._checkbox_show_hidden = gtk.CheckButton('Show hidden files')
-		self._checkbox_case_sensitive = gtk.CheckButton('Case sensitive item sorting')
+		self._checkbox_row_hinting = gtk.CheckButton(_('Row hinting'))
+		self._checkbox_show_hidden = gtk.CheckButton(_('Show hidden files'))
+		self._checkbox_case_sensitive = gtk.CheckButton(_('Case sensitive item sorting'))
 
 		self._checkbox_row_hinting.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
@@ -254,14 +254,14 @@ class ItemListOptions(gtk.VBox):
 
 		# grid lines
 		vbox_grid_lines = gtk.VBox(False, 0)
-		label_grid_lines = gtk.Label('Show grid lines:')
+		label_grid_lines = gtk.Label(_('Show grid lines:'))
 		label_grid_lines.set_alignment(0, 0.5)
 
 		list_grid_lines = gtk.ListStore(str, int)
-		list_grid_lines.append(('None', gtk.TREE_VIEW_GRID_LINES_NONE))
-		list_grid_lines.append(('Horizontal', gtk.TREE_VIEW_GRID_LINES_HORIZONTAL))
-		list_grid_lines.append(('Vertical', gtk.TREE_VIEW_GRID_LINES_VERTICAL))
-		list_grid_lines.append(('Both', gtk.TREE_VIEW_GRID_LINES_BOTH))
+		list_grid_lines.append((_('None'), gtk.TREE_VIEW_GRID_LINES_NONE))
+		list_grid_lines.append((_('Horizontal'), gtk.TREE_VIEW_GRID_LINES_HORIZONTAL))
+		list_grid_lines.append((_('Vertical'), gtk.TREE_VIEW_GRID_LINES_VERTICAL))
+		list_grid_lines.append((_('Both'), gtk.TREE_VIEW_GRID_LINES_BOTH))
 
 		cell_grid_lines = gtk.CellRendererText()
 
@@ -271,12 +271,12 @@ class ItemListOptions(gtk.VBox):
 		self._combobox_grid_lines.add_attribute(cell_grid_lines, 'text', 0)
 
 		# quick search
-		label_quick_search = gtk.Label('<b>Quick search combination:</b>')
+		label_quick_search = gtk.Label('<b>{0}</b>'.format(_('Quick search combination:')))
 		label_quick_search.set_alignment(0, 0.5)
 		label_quick_search.set_use_markup(True)
-		self._checkbox_control = gtk.CheckButton('Control')
-		self._checkbox_alt = gtk.CheckButton('Alt')
-		self._checkbox_shift = gtk.CheckButton('Shift')
+		self._checkbox_control = gtk.CheckButton(_('Control'))
+		self._checkbox_alt = gtk.CheckButton(_('Alt'))
+		self._checkbox_shift = gtk.CheckButton(_('Shift'))
 
 		self._checkbox_control.connect('toggled', self._parent.enable_save)
 		self._checkbox_alt.connect('toggled', self._parent.enable_save)
@@ -286,27 +286,27 @@ class ItemListOptions(gtk.VBox):
 		hbox_quick_search = gtk.HBox(False, 5)
 
 		vbox_time_format = gtk.VBox(False, 0)
-		label_time_format = gtk.Label('Date format:')
+		label_time_format = gtk.Label(_('Date format:'))
 		label_time_format.set_alignment(0, 0.5)
 		self._entry_time_format = gtk.Entry()
 		self._entry_time_format.set_tooltip_markup(
-								'<b>Time is formed using the format located at:</b>\n'
+								'<b>' + _('Time is formed using the format located at:') + '</b>\n'
 								'http://docs.python.org/library/time.html#time.strftime'
 								)
 		self._entry_time_format.connect('activate', self._parent.enable_save)
 
 		vbox_status_text = gtk.VBox(False, 0)
-		label_status_text = gtk.Label('Status text:')
+		label_status_text = gtk.Label(_('Status text:'))
 		label_status_text.set_alignment(0, 0.5)
 		self._entry_status_text = gtk.Entry()
 		self._entry_status_text.set_tooltip_markup(
-								'<b>Replacement strings:</b>\n'
-								'<i>%dir_count</i>\t\tTotal directory count\n'
-								'<i>%dir_sel</i>\t\tSelected directories count\n'
-								'<i>%file_count</i>\t\tTotal file count\n'
-								'<i>%file_sel</i>\t\tSelected file count\n'
-								'<i>%size_total</i>\t\tTotal size of files in directory\n'
-								'<i>%size_sel</i>\t\tTotal size of selected files'
+								'<b>' + _('Replacement strings:') + '</b>\n'
+								'<i>%dir_count</i>\t\t' + _('Total directory count') + '\n'
+								'<i>%dir_sel</i>\t\t' + _('Selected directories count') + '\n'
+								'<i>%file_count</i>\t\t' + _('Total file count') + '\n'
+								'<i>%file_sel</i>\t\t' + _('Selected file count') + '\n'
+								'<i>%size_total</i>\t\t' + _('Total size of files in directory') + '\n'
+								'<i>%size_sel</i>\t\t' + _('Total size of selected files')
 								)
 		self._entry_status_text.connect('activate', self._parent.enable_save)
 
@@ -385,36 +385,36 @@ class ViewEditOptions(gtk.VBox):
 		self.set_spacing(5)
 
 		# viewer options
-		frame_view = gtk.Frame('View')
+		frame_view = gtk.Frame(_('View'))
 
 		label_not_implemented = gtk.Label('This option is not implemented yet.')
 		label_not_implemented.set_sensitive(False)
 
 		# editor options
-		frame_edit = gtk.Frame('Edit')
+		frame_edit = gtk.Frame(_('Edit'))
 
 		vbox_edit = gtk.VBox(False, 0)
 		vbox_edit.set_border_width(5)
 
 		# external options
-		radio_external = gtk.RadioButton(label='Use external editor')
+		radio_external = gtk.RadioButton(label=_('Use external editor'))
 
 		vbox_external = gtk.VBox(False, 0)
 		vbox_external.set_border_width(10)
 
-		label_editor = gtk.Label('Command line:')
+		label_editor = gtk.Label(_('Command line:'))
 		label_editor.set_alignment(0, 0.5)
 		label_editor.set_use_markup(True)
 		self._entry_editor = gtk.Entry()
 		self._entry_editor.connect('activate', self._parent.enable_save)
 
-		self._checkbox_wait_for_editor = gtk.CheckButton('Wait for editor process to end')
+		self._checkbox_wait_for_editor = gtk.CheckButton(_('Wait for editor process to end'))
 		self._checkbox_wait_for_editor.connect('toggled', self._parent.enable_save)
 
 		# internal options
 		radio_internal = gtk.RadioButton(
 									group=radio_external,
-									label='Use internal editor (not implemented)'
+									label=_('Use internal editor') + ' (not implemented)'
 								)
 		radio_internal.set_sensitive(False)
 
@@ -481,8 +481,8 @@ class ToolbarOptions(gtk.VBox):
 		button_add = gtk.Button(stock=gtk.STOCK_ADD)
 		button_delete = gtk.Button(stock=gtk.STOCK_DELETE)
 
-		button_move_up = gtk.Button('Move Up')
-		button_move_down = gtk.Button('Move Down')
+		button_move_up = gtk.Button(_('Move Up'))
+		button_move_down = gtk.Button(_('Move Down'))
 
 		# pack ui
 		button_box.pack_start(button_add, False, False, 0)
@@ -511,7 +511,7 @@ class BookmarkOptions(gtk.VBox):
 		self.set_spacing(5)
 
 		# mounts checkbox
-		self._checkbox_show_mount_points = gtk.CheckButton('Show mount points in bookmarks menu')
+		self._checkbox_show_mount_points = gtk.CheckButton(_('Show mount points in bookmarks menu'))
 		self._checkbox_show_mount_points.connect('toggled', self._parent.enable_save)
 
 		# create list box
@@ -535,11 +535,11 @@ class BookmarkOptions(gtk.VBox):
 		cell_command.set_property('mode', gtk.CELL_RENDERER_MODE_EDITABLE)
 		cell_command.connect('edited', self._edited_bookmark, 1)
 
-		col_title = gtk.TreeViewColumn('Title', cell_title, text=0)
+		col_title = gtk.TreeViewColumn(_('Title'), cell_title, text=0)
 		col_title.set_min_width(200)
 		col_title.set_resizable(True)
 
-		col_command = gtk.TreeViewColumn('Location', cell_command, text=1)
+		col_command = gtk.TreeViewColumn(_('Location'), cell_command, text=1)
 		col_command.set_resizable(True)
 		col_command.set_expand(True)
 
@@ -558,10 +558,10 @@ class BookmarkOptions(gtk.VBox):
 		button_delete = gtk.Button(stock=gtk.STOCK_DELETE)
 		button_delete.connect('clicked', self._delete_bookmark)
 
-		button_move_up = gtk.Button('Move Up')
+		button_move_up = gtk.Button(_('Move Up'))
 		button_move_up.connect('clicked', self._move_bookmark, -1)
 
-		button_move_down = gtk.Button('Move Down')
+		button_move_down = gtk.Button(_('Move Down'))
 		button_move_down.connect('clicked', self._move_bookmark, 1)
 
 		# pack ui
@@ -700,11 +700,11 @@ class ToolOptions(gtk.VBox):
 		cell_command.connect('edited', self._edited_tool, 1)
 
 		# create and pack columns
-		col_title = gtk.TreeViewColumn('Title', cell_title, text=0)
+		col_title = gtk.TreeViewColumn(_('Title'), cell_title, text=0)
 		col_title.set_min_width(200)
 		col_title.set_resizable(True)
 
-		col_command = gtk.TreeViewColumn('Command', cell_command, text=1)
+		col_command = gtk.TreeViewColumn(_('Command'), cell_command, text=1)
 		col_command.set_resizable(True)
 		col_command.set_expand(True)
 
@@ -723,10 +723,10 @@ class ToolOptions(gtk.VBox):
 		button_delete = gtk.Button(stock=gtk.STOCK_DELETE)
 		button_delete.connect('clicked', self._delete_tool)
 
-		button_move_up = gtk.Button('Move Up')
+		button_move_up = gtk.Button(_('Move Up'))
 		button_move_up.connect('clicked', self._move_tool, -1)
 
-		button_move_down = gtk.Button('Move Down')
+		button_move_down = gtk.Button(_('Move Down'))
 		button_move_down.connect('clicked', self._move_tool, 1)
 
 		# pack ui
@@ -832,7 +832,7 @@ class TerminalOptions(gtk.VBox):
 		self.set_spacing(5)
 
 		# create interface
-		self._checkbox_scrollbars_visible = gtk.CheckButton('Show scrollbars when needed')
+		self._checkbox_scrollbars_visible = gtk.CheckButton(_('Show scrollbars when needed'))
 		self._checkbox_scrollbars_visible.connect('toggled', self._parent.enable_save)
 
 		# pack interface

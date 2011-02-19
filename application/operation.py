@@ -159,7 +159,7 @@ class CopyOperation(Operation):
 
 	def _get_lists(self, dir_list, file_list):
 		"""Find all files for copying"""
-		gobject.idle_add(self._update_status, "Searching for files...")
+		gobject.idle_add(self._update_status, _('Searching for files...'))
 
 		for item in self._source.get_selection(relative=True):
 			if self._abort.is_set(): break  # abort operation if requested
@@ -308,7 +308,7 @@ class CopyOperation(Operation):
 
 	def _create_directories(self, list):
 		"""Create all directories in list"""
-		gobject.idle_add(self._update_status, "Creating directories...")
+		gobject.idle_add(self._update_status, _('Creating directories...'))
 		for number, dir in enumerate(list, 0):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()
@@ -333,7 +333,7 @@ class CopyOperation(Operation):
 
 	def _copy_file_list(self, list):
 		"""Copy list of files to destination path"""
-		gobject.idle_add(self._update_status, "Copying files...")
+		gobject.idle_add(self._update_status, _('Copying files...'))
 		for file in list:
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()
@@ -375,7 +375,7 @@ class MoveOperation(CopyOperation):
 
 	def _move_file_list(self, list):
 		"""Move files from the list"""
-		gobject.idle_add(self._update_status, "Moving files...")
+		gobject.idle_add(self._update_status, _('Moving files...'))
 		for file in list:
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()
@@ -394,7 +394,7 @@ class MoveOperation(CopyOperation):
 
 	def _delete_file_list(self, file_list, dir_list):
 		"""Remove files from source list"""
-		gobject.idle_add(self._update_status, "Deleting source files...")
+		gobject.idle_add(self._update_status, _('Deleting source files...'))
 
 		for number, item in enumerate(file_list, 0):
 			if self._abort.is_set(): break  # abort operation if requested
@@ -408,7 +408,7 @@ class MoveOperation(CopyOperation):
 
 	def _delete_directories(self, dir_list):
 		"""Remove empty directories after moving files"""
-		gobject.idle_add(self._update_status, "Deleting source directories...")
+		gobject.idle_add(self._update_status, _('Deleting source directories...'))
 
 		dir_list.reverse()
 

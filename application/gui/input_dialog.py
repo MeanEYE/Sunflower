@@ -6,9 +6,11 @@ import time
 import locale
 import fnmatch
 
+# constants
 OPTION_RENAME		= 0
 OPTION_NEW_NAME		= 1
 OPTION_APPLY_TO_ALL	= 2
+
 
 class InputDialog(gtk.Dialog):
 	"""Simple input dialog
@@ -103,7 +105,7 @@ class CreateDialog(InputDialog):
 		self._container.set_spacing(5)
 
 		# create advanced options expander
-		expander = gtk.Expander('Advanced options')
+		expander = gtk.Expander(_('Advanced options'))
 		expander.connect('activate', self._expander_event)
 		expander.set_border_width(0)
 
@@ -113,59 +115,59 @@ class CreateDialog(InputDialog):
 		table = gtk.Table(4, 4, False)
 
 		# create widgets
-		label = gtk.Label("User:")
+		label = gtk.Label(_('User:'))
 		label.set_alignment(0, 0.5)
 		table.attach(label, 0, 1, 0, 1)
 
-		label = gtk.Label("Group:")
+		label = gtk.Label(_('Group:'))
 		label.set_alignment(0, 0.5)
 		table.attach(label, 0, 1, 1, 2)
 
-		label = gtk.Label("Others:")
+		label = gtk.Label(_('Others:'))
 		label.set_alignment(0, 0.5)
 		table.attach(label, 0, 1, 2, 3)
 
 		# owner checkboxes
-		self._owner_read = gtk.CheckButton('Read')
+		self._owner_read = gtk.CheckButton(_('Read'))
 		self._owner_read.connect('toggled', self._update_octal, (1 << 2) * 100)
 		table.attach(self._owner_read, 1, 2, 0, 1)
 
-		self._owner_write = gtk.CheckButton('Write')
+		self._owner_write = gtk.CheckButton(_('Write'))
 		self._owner_write.connect('toggled', self._update_octal, (1 << 1) * 100)
 		table.attach(self._owner_write, 2, 3, 0, 1)
 
-		self._owner_execute = gtk.CheckButton('Execute')
+		self._owner_execute = gtk.CheckButton(_('Execute'))
 		self._owner_execute.connect('toggled', self._update_octal, (1 << 0) * 100)
 		table.attach(self._owner_execute, 3, 4, 0, 1)
 
 		# group checkboxes
-		self._group_read = gtk.CheckButton('Read')
+		self._group_read = gtk.CheckButton(_('Read'))
 		self._group_read.connect('toggled', self._update_octal, (1 << 2) * 10)
 		table.attach(self._group_read, 1, 2, 1, 2)
 
-		self._group_write = gtk.CheckButton('Write')
+		self._group_write = gtk.CheckButton(_('Write'))
 		self._group_write.connect('toggled', self._update_octal, (1 << 1) * 10)
 		table.attach(self._group_write, 2, 3, 1, 2)
 
-		self._group_execute = gtk.CheckButton('Execute')
+		self._group_execute = gtk.CheckButton(_('Execute'))
 		self._group_execute.connect('toggled', self._update_octal, (1 << 0) * 10)
 		table.attach(self._group_execute, 3, 4, 1, 2)
 
 		# others checkboxes
-		self._others_read = gtk.CheckButton('Read')
+		self._others_read = gtk.CheckButton(_('Read'))
 		self._others_read.connect('toggled', self._update_octal, (1 << 2))
 		table.attach(self._others_read, 1, 2, 2, 3)
 
-		self._others_write = gtk.CheckButton('Write')
+		self._others_write = gtk.CheckButton(_('Write'))
 		self._others_write.connect('toggled', self._update_octal, (1 << 1))
 		table.attach(self._others_write, 2, 3, 2, 3)
 
-		self._others_execute = gtk.CheckButton('Execute')
+		self._others_execute = gtk.CheckButton(_('Execute'))
 		self._others_execute.connect('toggled', self._update_octal, (1 << 0))
 		table.attach(self._others_execute, 3, 4, 2, 3)
 
 		# octal representation
-		label = gtk.Label("Octal:")
+		label = gtk.Label(_('Octal:'))
 		label.set_alignment(0, 0.5)
 		table.attach(label, 0, 1, 3, 4)
 
@@ -241,10 +243,10 @@ class FileCreateDialog(CreateDialog):
 	def __init__(self, application):
 		CreateDialog.__init__(self, application)
 
-		self.set_title('Create empty file')
-		self.set_label('Enter new file name:')
+		self.set_title(_('Create empty file'))
+		self.set_label(_('Enter new file name:'))
 
-		self._checkbox_edit_after = gtk.CheckButton('Open file in editor')
+		self._checkbox_edit_after = gtk.CheckButton(_('Open file in editor'))
 		self._checkbox_edit_after.show()
 
 		self._container.pack_start(self._checkbox_edit_after, False, False, 0)
@@ -260,18 +262,19 @@ class DirectoryCreateDialog(CreateDialog):
 	def __init__(self, application):
 		CreateDialog.__init__(self, application)
 
-		self.set_title('Create directory')
-		self.set_label('Enter new directory name:')
+		self.set_title(_('Create directory'))
+		self.set_label(_('Enter new directory name:'))
 		self.set_mode(0755)
 
 
 class CopyDialog(gtk.Dialog):
 	"""Dialog which will ask user for additional options before copying"""
-	_title = "Copy item(s)"
-	_operation_label = "Copy <b>{0}</b> item(s) to:"
 
 	def __init__(self, application, provider, path):
 		gtk.Dialog.__init__(self, parent=application)
+
+		# set text variables for title and labels
+		self._set_text_variables()
 
 		self._application = application
 		self._provider = provider
@@ -300,7 +303,7 @@ class CopyDialog(gtk.Dialog):
 		self.entry_destination.connect('activate', self._confirm_entry)
 
 		# additional options
-		advanced = gtk.Frame('<span size="small">Advanced options</span>')
+		advanced = gtk.Frame('<span size="small">' + _('Advanced options') + '</span>')
 		advanced.set_label_align(1, 0.5)
 		label_advanced = advanced.get_label_widget()
 		label_advanced.set_use_markup(True)
@@ -308,24 +311,24 @@ class CopyDialog(gtk.Dialog):
 		vbox2 = gtk.VBox(False, 0)
 		vbox2.set_border_width(5)
 
-		label_type = gtk.Label("Only files of this type:")
+		label_type = gtk.Label(_('Only files of this type:'))
 		label_type.set_alignment(0, 0.5)
 
 		self.entry_type = gtk.Entry()
 		self.entry_type.set_text('*')
 		self.entry_type.connect('activate', self._update_label)
 
-		self.checkbox_owner = gtk.CheckButton('Set owner on destination')
-		self.checkbox_mode = gtk.CheckButton('Set access mode on destination')
-		self.checkbox_silent = gtk.CheckButton('Silent mode')
+		self.checkbox_owner = gtk.CheckButton(_('Set owner on destination'))
+		self.checkbox_mode = gtk.CheckButton(_('Set access mode on destination'))
+		self.checkbox_silent = gtk.CheckButton(_('Silent mode'))
 
 		self.checkbox_mode.set_active(True)
 
-		self.checkbox_silent.set_tooltip_text(
+		self.checkbox_silent.set_tooltip_text(_(
 										'Silent mode will enable operation to finish '
 										'without disturbing you. If any errors occur, '
 										'they will be presented to you after completion.'
-									)
+									))
 
 		self._create_buttons()
 
@@ -347,10 +350,15 @@ class CopyDialog(gtk.Dialog):
 		self.set_default_response(gtk.RESPONSE_OK)
 		self.show_all()
 
+	def _set_text_variables(self):
+		"""Set local text variables for dialog"""
+		self._title = _('Copy item(s)')
+		self._operation_label = _('Copy <b>{0}</b> item(s) to:')
+
 	def _create_buttons(self):
 		"""Create action buttons"""
-		button_cancel = gtk.Button('Cancel')
-		button_copy = gtk.Button("Copy")
+		button_cancel = gtk.Button(_('Cancel'))
+		button_copy = gtk.Button(_('Copy'))
 		button_copy.set_flags(gtk.CAN_DEFAULT)
 
 		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
@@ -399,13 +407,15 @@ class CopyDialog(gtk.Dialog):
 class MoveDialog(CopyDialog):
 	"""Dialog which will ask user for additional options before moving"""
 
-	_title = "Move item(s)"
-	_operation_label = "Move <b>{0}</b> item(s) to:"
+	def _set_text_variables(self):
+		"""Override default text variables"""
+		self._title = _('Move item(s)')
+		self._operation_label = _('Move <b>{0}</b> item(s) to:')
 
 	def _create_buttons(self):
 		"""Create action buttons"""
-		button_cancel = gtk.Button('Cancel')
-		button_move = gtk.Button("Move")
+		button_cancel = gtk.Button(_('Cancel'))
+		button_move = gtk.Button(_('Move'))
 		button_move.set_flags(gtk.CAN_DEFAULT)
 
 		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
@@ -418,8 +428,8 @@ class RenameDialog(InputDialog):
 	def __init__(self, application, selection):
 		InputDialog.__init__(self, application)
 
-		self.set_title('Rename file/directory')
-		self.set_label('Enter a new name for this item:')
+		self.set_title(_('Rename file/directory'))
+		self.set_label(_('Enter a new name for this item:'))
 		self.set_text(selection)
 
 		self._entry.select_region(0, len(os.path.splitext(selection)[0]))
@@ -479,17 +489,17 @@ class OverwriteDialog(gtk.Dialog):
 		self._label_source.set_alignment(0, 0.5)
 
 		# rename expander
-		self._expander_rename = gtk.Expander(label='Select a new name for the destination')
+		self._expander_rename = gtk.Expander(label=_('Select a new name for the destination'))
 		self._expander_rename.connect('activate', self._rename_toggled)
 		hbox_rename = gtk.HBox(False, 10)
 
 		self._entry_rename = gtk.Entry()
 		self._entry_rename.set_sensitive(False)
-		button_reset = gtk.Button('Reset')
+		button_reset = gtk.Button(_('Reset'))
 		button_reset.connect('clicked', self._reset_rename_field)
 
 		# apply to all check box
-		self._checkbox_apply_to_all = gtk.CheckButton('Apply this action to all files')
+		self._checkbox_apply_to_all = gtk.CheckButton(_('Apply this action to all files'))
 		self._checkbox_apply_to_all.connect('toggled', self._apply_to_all_toggled)
 
 		# pack interface
@@ -524,7 +534,7 @@ class OverwriteDialog(gtk.Dialog):
 	def _create_buttons(self):
 		"""Create basic buttons"""
 		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
-		button_skip = gtk.Button(label="Skip")
+		button_skip = gtk.Button(label=_('Skip'))
 
 		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
 		self.add_action_widget(button_skip, gtk.RESPONSE_NO)
@@ -583,9 +593,15 @@ class OverwriteDialog(gtk.Dialog):
 
 		self._icon_original.set_from_pixbuf(data[2])
 		self._label_original.set_markup(
-									'<b>Original</b>\n'
-									'<i>Size:</i>\t\t{0}\n'
-									'<i>Modified:</i>\t{1}'.format(*data[0:2])
+									'<b>{2}</b>\n'
+									'<i>{3}</i>\t\t{0}\n'
+									'<i>{4}</i>\t{1}'.format(
+																data[0],
+																data[1],
+																_('Original'),
+																_('Size:'),
+																_('Modified:')
+															)
 								)
 
 	def set_source(self, provider, path, relative_to=None):
@@ -594,9 +610,15 @@ class OverwriteDialog(gtk.Dialog):
 
 		self._icon_source.set_from_pixbuf(data[2])
 		self._label_source.set_markup(
-									'<b>Replace with</b>\n'
-									'<i>Size:</i>\t\t{0}\n'
-									'<i>Modified:</i>\t{1}'.format(*data[0:2])
+									'<b>{2}</b>\n'
+									'<i>{3}</i>\t\t{0}\n'
+									'<i>{4}</i>\t{1}'.format(
+																data[0],
+																data[1],
+																_('Replace with'),
+																_('Size:'),
+																_('Modified:')
+															)
 								)
 
 	def set_rename_value(self, name):
@@ -628,11 +650,11 @@ class OverwriteFileDialog(OverwriteDialog):
 	def __init__(self, application, parent):
 		OverwriteDialog.__init__(self, application, parent)
 
-		self.set_title('File conflict')
+		self.set_title(_('File conflict'))
 
 	def _create_buttons(self):
 		"""Create dialog specific button"""
-		button_replace = gtk.Button(label="Replace")
+		button_replace = gtk.Button(label=_('Replace'))
 		button_replace.set_can_default(True)
 
 		OverwriteDialog._create_buttons(self)
@@ -642,17 +664,19 @@ class OverwriteFileDialog(OverwriteDialog):
 
 	def set_title_element(self, element):
 		"""Set title label with appropriate formatting"""
-		self._label_title.set_markup(
-							'<span size="large" weight="bold">'
-							'Replace file "{0}"?</span>'.format(element)
-							)
+		message = _('Replace file "{0}"?')
+		message.format(element)
+
+		self._label_title.set_markup('<span size="large" weight="bold">{0}</span>'.format(message))
 
 	def set_message_element(self, element):
 		"""Set message element"""
-		self._label_message.set_text(
-							'Another file with the same name already exists in'
-							'"{0}". Replacing it will overwrite its content.'.format(element)
-							)
+		message = _(
+				'Another file with the same name already exists in '
+				'"{0}". Replacing it will overwrite its content.'
+			)
+
+		self._label_message.set_text(message.format(element))
 
 
 class OverwriteDirectoryDialog(OverwriteDialog):
@@ -660,11 +684,11 @@ class OverwriteDirectoryDialog(OverwriteDialog):
 	def __init__(self, application, parent):
 		OverwriteDialog.__init__(self, application, parent)
 
-		self.set_title('Directory conflict')
+		self.set_title(_('Directory conflict'))
 
 	def _create_buttons(self):
 		"""Create dialog specific button"""
-		button_merge = gtk.Button(label="Merge")
+		button_merge = gtk.Button(label=_('Merge'))
 		button_merge.set_can_default(True)
 
 		OverwriteDialog._create_buttons(self)
@@ -674,19 +698,21 @@ class OverwriteDirectoryDialog(OverwriteDialog):
 
 	def set_title_element(self, element):
 		"""Set title label with appropriate formatting"""
-		self._label_title.set_markup(
-							'<span size="large" weight="bold">'
-							'Merge directory "{0}"?</span>'.format(element)
-							)
+		message = _('Merge directory "{0}"?')
+		message.format(element)
+
+		self._label_title.set_markup('<span size="large" weight="bold">{0}</span>'.format(message))
 
 	def set_message_element(self, element):
 		"""Set message element"""
-		self._label_message.set_text(
-							'Directory with the same name already exists in '
-							'"{0}". Merging will ask for confirmation before '
-							'replacing any files in the directory that conflict '
-							'with the files being copied.'.format(element)
-							)
+		message = _(
+				'Directory with the same name already exists in '
+				'"{0}". Merging will ask for confirmation before '
+				'replacing any files in the directory that conflict '
+				'with the files being copied.'
+			)
+
+		self._label_message.set_text(message.format(element))
 
 
 class AddBookmarkDialog(gtk.Dialog):
@@ -697,7 +723,7 @@ class AddBookmarkDialog(gtk.Dialog):
 
 		self._application = application
 
-		self.set_title('Add bookmark')
+		self.set_title(_('Add bookmark'))
 		self.set_default_size(340, 10)
 		self.set_resizable(True)
 		self.set_skip_taskbar_hint(True)
@@ -710,7 +736,7 @@ class AddBookmarkDialog(gtk.Dialog):
 		vbox.set_border_width(5)
 
 		# bookmark name
-		label_name = gtk.Label('Name:')
+		label_name = gtk.Label(_('Name:'))
 		label_name.set_alignment(0, 0.5)
 		self._entry_name = gtk.Entry()
 		self._entry_name.connect('activate', self._confirm_entry)
@@ -718,7 +744,7 @@ class AddBookmarkDialog(gtk.Dialog):
 		vbox_name = gtk.VBox(False, 0)
 
 		# bookmark path
-		label_path = gtk.Label('Location:')
+		label_path = gtk.Label(_('Location:'))
 		label_path.set_alignment(0, 0.5)
 		self._entry_path = gtk.Entry()
 		self._entry_path.set_text(path)

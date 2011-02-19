@@ -41,18 +41,18 @@ class OperationDialog(gtk.Window):
 
 		# create interface
 		self._vbox = gtk.VBox(False, 10)
-		
+
 		# operation items
 		self._operation_label = gtk.Label()
 		self._operation_label.set_alignment(0, 0.5)
 		self._operation_progress = gtk.ProgressBar()
-		
+
 		vbox_operation = gtk.VBox(False, 0)
 		vbox_operation.pack_start(self._operation_label, False, False, 0)
 		vbox_operation.pack_start(self._operation_progress, False, False, 0)
-		
+
 		self._operation_item = self._application.add_operation(
-															vbox_operation, 
+															vbox_operation,
 															self._operation_click
 														)
 
@@ -69,8 +69,8 @@ class OperationDialog(gtk.Window):
 		table.set_col_spacing(0, 10)
 		table.set_row_spacing(0, 2)
 
-		self._label_source = gtk.Label('Source:')
-		self._label_destination = gtk.Label('Destination:')
+		self._label_source = gtk.Label(_('Source:'))
+		self._label_destination = gtk.Label(_('Destination:'))
 
 		self._value_source = gtk.Label()
 		self._value_destination = gtk.Label()
@@ -129,10 +129,10 @@ class OperationDialog(gtk.Window):
 		table = gtk.Table(2, 6, False)
 		table.set_border_width(7)
 
-		self._label_eta = gtk.Label('ETA:')
-		self._label_speed = gtk.Label('Speed:')
-		self._label_total_size = gtk.Label('Total size:')
-		self._label_total_count = gtk.Label('Total count:')
+		self._label_eta = gtk.Label(_('ETA:'))
+		self._label_speed = gtk.Label(_('Speed:'))
+		self._label_total_size = gtk.Label(_('Total size:'))
+		self._label_total_count = gtk.Label(_('Total count:'))
 
 		self._value_eta = gtk.Label()
 		self._value_speed = gtk.Label()
@@ -180,9 +180,9 @@ class OperationDialog(gtk.Window):
 		"""Add button bar"""
 		hbox = gtk.HBox(False, 5)
 
-		self._button_minimize = gtk.Button('Minimize')
-		self._button_pause = gtk.Button('Pause')
-		self._button_cancel = gtk.Button('Cancel')
+		self._button_minimize = gtk.Button(_('Minimize'))
+		self._button_pause = gtk.Button(_('Pause'))
+		self._button_cancel = gtk.Button(_('Cancel'))
 
 		self._button_minimize.connect('clicked', self._minimize_click)
 		self._button_pause.connect('clicked', self._pause_click)
@@ -216,25 +216,25 @@ class OperationDialog(gtk.Window):
 	def _pause_click(self, widget, data=None):
 		"""Lock threading object"""
 		self._paused = not self._paused
-		
+
 		if self._paused:
-			self._button_pause.set_label('Resume')
+			self._button_pause.set_label(_('Resume'))
 			self._thread.pause()
 		else:
-			self._button_pause.set_label('Pause')
+			self._button_pause.set_label(_('Pause'))
 			self._thread.resume()
 
 	def _cancel_click(self, widget, data=None):
 		"""Handle cancel button click event"""
-		if self._confirm_cancel("Are you sure about canceling current operation?"):
+		if self._confirm_cancel(_('Are you sure about canceling current operation?')):
 			self._thread.cancel()
-			
+
 	def _operation_click(self, widget, data=None):
 		"""Handle operation menu item click"""
 		self._operation_item.hide()
 		self._application.operation_hidden()
 		self.show()
-			
+
 	def _update_total_count(self):
 		"""Update progress bar and labels for total count"""
 		assert self._value_total_count is not None
@@ -243,7 +243,7 @@ class OperationDialog(gtk.Window):
 															self._total_count
 															))
 		self.set_total_count_fraction(float(self._current_count) / self._total_count)
-		
+
 	def _update_total_size(self):
 		"""Update progress bar and labels for total size"""
 		assert self._value_total_size is not None
@@ -252,7 +252,7 @@ class OperationDialog(gtk.Window):
 															locale.format('%d', self._total_size, True)
 															))
 		self.set_total_size_fraction(float(self._current_size) / self._total_size)
-		
+
 	def _destroy(self, widget, data=None):
 		"""Remove operation menu item on dialog destroy"""
 		self._application.remove_operation(self._operation_item)
@@ -272,10 +272,10 @@ class OperationDialog(gtk.Window):
 		"""Set current file progress bar position"""
 		assert self._pb_current_file is not None
 		self._pb_current_file.set_fraction(fraction)
-		
+
 		if not self._has_details:
 			self._operation_progress.set_fraction(fraction)
-		
+
 	def set_current_count(self, count):
 		"""Set current count value"""
 		assert self._value_total_count is not None
@@ -335,13 +335,13 @@ class OperationDialog(gtk.Window):
 		assert self._value_total_size is not None
 		self._current_size += value
 		self._update_total_size()
-		
+
 	def increment_total_count(self, value):
 		"""Increment total file count by value"""
 		assert self._value_total_count is not None
 		self._total_count += value
 		self._update_total_count()
-		
+
 	def increment_current_count(self, value):
 		"""Increment current file count by value"""
 		assert self._value_total_count is not None
@@ -362,17 +362,17 @@ class CopyDialog(OperationDialog):
 		self._add_buttons()
 
 		# configure layout
-		self.set_title('Copy Selection')
+		self.set_title(_('Copy Selection'))
 
-		
+
 class MoveDialog(CopyDialog):
 	"""Dialog used to display progress for moving files"""
 
 	def __init__(self, application, thread):
 		CopyDialog.__init__(self, application, thread)
-		
+
 		# configure layout
-		self.set_title('Move Selection')
+		self.set_title(_('Move Selection'))
 
 
 class DeleteDialog(OperationDialog):
@@ -386,6 +386,6 @@ class DeleteDialog(OperationDialog):
 		self._add_buttons()
 
 		# configure layout
-		self.set_title('Delete Selection')
-		self.set_status('Removing items...')
+		self.set_title(_('Delete Selection'))
+		self.set_status(_('Removing items...'))
 		self.set_current_file('')

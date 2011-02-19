@@ -10,7 +10,7 @@ class ChangeLogDialog(gtk.Dialog):
 	def __init__(self, parent, modifications, show_modifications=False):
 		gtk.Dialog.__init__(self)
 
-		self.set_title('Version Overview')
+		self.set_title(_('Version Overview'))
 		self.set_size_request(500, 400)
 		self.set_resizable(False)
 		self.set_modal(True)
@@ -35,12 +35,14 @@ class ChangeLogDialog(gtk.Dialog):
 		program_label = gtk.Label(
 							'<span color="{0}">'
 							'<span size="x-large" weight="bold">'
-							'Sunflower</span>\nVersion {1[major]}.{1[minor]}{1[stage]} '
+							'{2}</span>\n{3} {1[major]}.{1[minor]}{1[stage]} '
 							'<span size="small"><i>({1[build]})</i></span>'
 							'</span>'.format(
 										style.fg[gtk.STATE_SELECTED].to_string(),
-										parent.version
-										)
+										parent.version,
+										_('Sunflower'),
+										_('Version')
+									)
 							)
 		program_label.set_use_markup(True)
 
@@ -53,17 +55,17 @@ class ChangeLogDialog(gtk.Dialog):
 			vbox.set_border_width(5)
 
 			# label to give some more information
-			label_info = gtk.Label(
+			label_info = gtk.Label(_(
 								'Selected modifications will be applied before starting program. '
 								'All modifications should be selected but they are not required.'
-							)
+							))
 			label_info.set_alignment(0, 0.5)
 			label_info.set_justify(gtk.JUSTIFY_LEFT)
 			label_info.connect('size-allocate', self._adjust_label)
 			label_info.set_line_wrap(True)
 
 			# create viewport to hold all the options for modifications
-			modifications_label = gtk.Label('Modifications')
+			modifications_label = gtk.Label(_('Modifications'))
 			modifications_window = gtk.Viewport()
 			modifications_window.add(modifications)
 
@@ -83,12 +85,12 @@ class ChangeLogDialog(gtk.Dialog):
 			data = open(changelog_file, 'r').read()
 		else:
 			# change log was not found
-			data = 'Change log was not found!'
+			data = _('Change log was not found!')
 
 		changelog.get_buffer().set_text(data)
 
 		# create tab and container
-		changelog_label = gtk.Label('Change log')
+		changelog_label = gtk.Label(_('Change log'))
 		changelog_window = gtk.ScrolledWindow()
 		changelog_window.set_shadow_type(gtk.SHADOW_IN)
 		changelog_window.set_border_width(5)

@@ -10,7 +10,7 @@ class AboutWindow(gtk.Window):
 		# create main window
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 		self.connect('delete_event', self._hide)
-		self.set_title('About Sunflower')
+		self.set_title(_('About program'))
 		self.set_size_request(550, 350)
 		self.set_resizable(False)
 		self.set_skip_taskbar_hint(True)
@@ -36,12 +36,14 @@ class AboutWindow(gtk.Window):
 		program_label = gtk.Label(
 							'<span color="{0}">'
 							'<span size="x-large" weight="bold">'
-							'Sunflower</span>\nVersion {1[major]}.{1[minor]}{1[stage]} '
+							'{2}</span>\n{3} {1[major]}.{1[minor]}{1[stage]} '
 							'<span size="small"><i>({1[build]})</i></span>'
 							'</span>'.format(
 										style.fg[gtk.STATE_SELECTED].to_string(),
-										parent.version
-										)
+										parent.version,
+										_('Sunflower'),
+										_('Version')
+									)
 							)
 		program_label.set_use_markup(True)
 
@@ -65,19 +67,19 @@ class AboutWindow(gtk.Window):
 		tab1 = gtk.VBox(False, 10)
 		tab1.set_border_width(10)
 
-		program_info = gtk.Label(
+		program_info = gtk.Label(_(
 						'This software is being developed under GNU general '
 						'public license. If you would like to obtain source code '
 						'please visit our web site. Any bug reports, suggestions '
 						'or questions are more than welcome.'
-						)
+						))
 		program_info.set_alignment(0,0)
 		program_info.set_line_wrap(True)
 		program_info.connect('size-allocate', self._adjust_label)
 		tab1.pack_start(program_info, False, True, 0)
 
 		developer_info = gtk.Label(
-							'<b>Developer</b>\n\tMeanEYE, <i>'
+							'<b>' + _('Developer') + '</b>\n\tMeanEYE, <i>'
 							'<span size="small">RCF Group</span></i>'
 							)
 		developer_info.set_use_markup(True)
@@ -85,14 +87,14 @@ class AboutWindow(gtk.Window):
 		tab1.pack_start(developer_info, False, True, 0)
 
 		artist_info = gtk.Label(
-							'<b>Artist</b>\n\tMrakoslava, <i>'
+							'<b>' + _('Artist') + '</b>\n\tMrakoslava, <i>'
 							'<span size="small">Studio Spectra</span></i>'
 							)
 		artist_info.set_use_markup(True)
 		artist_info.set_alignment(0,0)
 		tab1.pack_start(artist_info, False, True, 0)
 
-		tab1_label = gtk.Label('Copyright')
+		tab1_label = gtk.Label(_('Copyright'))
 		notebook.append_page(tab1, tab1_label)
 
 		# license tab
@@ -124,7 +126,7 @@ class AboutWindow(gtk.Window):
 
 		tab2.add(license)
 
-		tab2_label = gtk.Label('License')
+		tab2_label = gtk.Label(_('License'))
 		notebook.append_page(tab2, tab2_label)
 
 		# create statistics tab
@@ -166,7 +168,7 @@ class AboutWindow(gtk.Window):
 		tab = gtk.Notebook()
 		tab.set_tab_pos(gtk.POS_RIGHT)
 		tab.set_border_width(5)
-		tab_label = gtk.Label('Statistics')
+		tab_label = gtk.Label(_('Statistics'))
 
 		# wakoopa statistics
 		tab_wakoopa = gtk.VBox(False, 5)

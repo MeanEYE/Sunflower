@@ -133,7 +133,7 @@ class ItemList(PluginBase):
 			self._bookmarks_button.set_label(BUTTON_TEXT_BOOKMARKS)
 
 		self._bookmarks_button.set_focus_on_click(False)
-		self._bookmarks_button.set_tooltip_text('Bookmarks')
+		self._bookmarks_button.set_tooltip_text(_('Bookmarks'))
 		self._bookmarks_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
@@ -156,7 +156,7 @@ class ItemList(PluginBase):
 			self._history_button.set_label(BUTTON_TEXT_HISTORY)
 
 		self._history_button.set_focus_on_click(False)
-		self._history_button.set_tooltip_text('History')
+		self._history_button.set_tooltip_text(_('History'))
 		self._history_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
@@ -179,7 +179,7 @@ class ItemList(PluginBase):
 			self._terminal_button.set_label(BUTTON_TEXT_TERMINAL)
 
 		self._terminal_button.set_focus_on_click(False)
-		self._terminal_button.set_tooltip_text('Terminal')
+		self._terminal_button.set_tooltip_text(_('Terminal'))
 		self._terminal_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
@@ -207,7 +207,7 @@ class ItemList(PluginBase):
 		# quick search
 		self._search_panel = gtk.HBox(False, 0)
 
-		label = gtk.Label('Search:')
+		label = gtk.Label(_('Search:'))
 
 		self._search_entry = gtk.Entry()
 		self._search_entry.connect('key-press-event', self._handle_search_key_press)
@@ -311,7 +311,6 @@ class ItemList(PluginBase):
 
 	def _handle_search_key_press(self, widget, event):
 		"""Handle return and escape keys for quick search"""
-
 		result = False
 		key_name = gtk.gdk.keyval_name(event.keyval)
 
@@ -341,11 +340,12 @@ class ItemList(PluginBase):
 									gtk.DIALOG_DESTROY_WITH_PARENT,
 									gtk.MESSAGE_ERROR,
 									gtk.BUTTONS_OK,
-									"Directory does not exist anymore or is not "
-									"valid. If path is not local check if specified "
-									"volume is mounted."
-									"\n\n{0}".format(path)
-									)
+									_(
+										"Directory does not exist anymore or is not "
+										"valid. If path is not local check if specified "
+										"volume is mounted."
+									) +	"\n\n{0}".format(path)
+								)
 			dialog.run()
 			dialog.destroy()
 
@@ -451,7 +451,7 @@ class ItemList(PluginBase):
 
 		# construct menu
 		item = menu_manager.create_menu_item({
-								'label': '_Open',
+								'label': _('_Open'),
 								'type': 'image',
 								'stock': gtk.STOCK_OPEN,
 								'callback': self._execute_selected_item
@@ -464,7 +464,7 @@ class ItemList(PluginBase):
 
 		# dynamic menu
 		item = menu_manager.create_menu_item({
-								'label': 'Open _with',
+								'label': _('Open _with'),
 								'type': 'image',
 								'stock': gtk.STOCK_EXECUTE,
 							})
@@ -480,7 +480,7 @@ class ItemList(PluginBase):
 
 		# cut/copy/paste
 		item = menu_manager.create_menu_item({
-								'label': 'Cu_t',
+								'label': _('Cu_t'),
 								'type': 'image',
 								'stock': gtk.STOCK_CUT,
 							})
@@ -488,7 +488,7 @@ class ItemList(PluginBase):
 		item.set_sensitive(False)
 
 		item = menu_manager.create_menu_item({
-								'label': '_Copy',
+								'label': _('_Copy'),
 								'type': 'image',
 								'stock': gtk.STOCK_COPY,
 							})
@@ -496,7 +496,7 @@ class ItemList(PluginBase):
 		item.set_sensitive(False)
 
 		item = menu_manager.create_menu_item({
-								'label': '_Paste',
+								'label': _('_Paste'),
 								'type': 'image',
 								'stock': gtk.STOCK_PASTE,
 							})
@@ -509,7 +509,7 @@ class ItemList(PluginBase):
 
 		# send to
 		item = menu_manager.create_menu_item({
-								'label': 'Send to...',
+								'label': _('Send to...'),
 								'callback': self._send_to,
 								'type': 'image',
 								'image': 'document-send'
@@ -519,13 +519,13 @@ class ItemList(PluginBase):
 
 		# link/rename
 		item = menu_manager.create_menu_item({
-								'label': 'Ma_ke link',
+								'label': _('Ma_ke link'),
 							})
 		result.append(item)
 		item.set_sensitive(False)
 
 		item = menu_manager.create_menu_item({
-								'label': '_Rename...',
+								'label': _('_Rename...'),
 								'callback': self._rename_file
 							})
 		result.append(item)
@@ -538,7 +538,7 @@ class ItemList(PluginBase):
 
 		# delete
 		item = menu_manager.create_menu_item({
-								'label': '_Delete',
+								'label': _('_Delete'),
 								'type': 'image',
 								'stock': gtk.STOCK_DELETE,
 								'callback': self._delete_files
@@ -552,7 +552,7 @@ class ItemList(PluginBase):
 
 		# properties
 		item = menu_manager.create_menu_item({
-								'label': '_Properties',
+								'label': _('_Properties'),
 								'type': 'image',
 								'stock': gtk.STOCK_PROPERTIES,
 							})
@@ -588,7 +588,7 @@ class ItemList(PluginBase):
 
 		else:
 			# no items to create, make blank item
-			menu_item = gtk.MenuItem('History is empty')
+			menu_item = gtk.MenuItem(_('History is empty'))
 			menu_item.set_sensitive(False)
 
 			self._history_menu.append(menu_item)
@@ -608,7 +608,7 @@ class ItemList(PluginBase):
 								self._get_popup_menu_position,
 								1,
 								data.time
-								)
+							)
 
 	def _show_popup_menu(self, widget, data=None):
 		"""Show item menu"""

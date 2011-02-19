@@ -77,7 +77,7 @@ class Terminal(PluginBase):
 			self._recycle_button = gtk.Button(BUTTON_TEXT_RECYCLE)
 
 		self._recycle_button.set_focus_on_click(False)
-		self._recycle_button.set_tooltip_text('Recycle terminal')
+		self._recycle_button.set_tooltip_text(_('Recycle terminal'))
 		self._recycle_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
@@ -98,7 +98,7 @@ class Terminal(PluginBase):
 			self._menu_button = gtk.Button(BUTTON_TEXT_MENU)
 
 		self._menu_button.set_focus_on_click(False)
-		self._menu_button.set_tooltip_text('Terminal menu')
+		self._menu_button.set_tooltip_text(_('Terminal menu'))
 		self._menu_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
@@ -115,7 +115,7 @@ class Terminal(PluginBase):
 			self._terminal = vte.Terminal()
 			self._terminal.connect('window-title-changed', self._update_title)
 		else:
-			self._terminal = gtk.Label('Python VTE module is not installed on this system!')
+			self._terminal = gtk.Label(_('Python VTE module is not installed on this system!'))
 
 		# terminal container
 		self._container = gtk.ScrolledWindow()

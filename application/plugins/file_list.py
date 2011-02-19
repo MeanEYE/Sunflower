@@ -43,7 +43,7 @@ COL_SELECTED 	= 13
 
 def register_plugin(application):
 	"""Register plugin classes with application"""
-	application.register_class('Local file list', FileList)
+	application.register_class(_('Local file list'), FileList)
 
 
 class FileList(ItemList):
@@ -106,11 +106,11 @@ class FileList(ItemList):
 		cell_date.set_property('size-points', 8)
 
 		# create columns
-		col_file = gtk.TreeViewColumn('Filename')
-		col_extension = gtk.TreeViewColumn('Ext')
-		col_size = gtk.TreeViewColumn('Size')
-		col_mode = gtk.TreeViewColumn('Mode')
-		col_date = gtk.TreeViewColumn('Date')
+		col_file = gtk.TreeViewColumn(_('Filename'))
+		col_extension = gtk.TreeViewColumn(_('Ext'))
+		col_size = gtk.TreeViewColumn(_('Size'))
+		col_mode = gtk.TreeViewColumn(_('Mode'))
+		col_date = gtk.TreeViewColumn(_('Date'))
 
 		# add cell renderer to columns
 		col_file.pack_start(cell_icon, False)
@@ -274,10 +274,11 @@ class FileList(ItemList):
 										gtk.DIALOG_DESTROY_WITH_PARENT,
 										gtk.MESSAGE_ERROR,
 										gtk.BUTTONS_OK,
-										"There was an error creating directory. "
-										"Make sure you have enough permissions. "
-										"\n\n{0}".format(error)
-										)
+										_(
+											"There was an error creating directory. "
+											"Make sure you have enough permissions. "
+										) + "\n\n{0}".format(error)
+									)
 				dialog.run()
 				dialog.destroy()
 
@@ -298,10 +299,10 @@ class FileList(ItemList):
 			try:
 				# try to create file
 				if os.path.isfile(os.path.join(self.path, response[1])):
-					raise OSError("File already exists: {0}".format(response[1]))
+					raise OSError(_("File already exists: {0}").format(response[1]))
 
 				if os.path.isdir(os.path.join(self.path, response[1])):
-					raise OSError("Directory with same name exists: {0}".format(response[1]))
+					raise OSError(_("Directory with same name exists: {0}").format(response[1]))
 
 				# set this item to be focused on add
 				self._item_to_focus = response[1]
@@ -320,26 +321,29 @@ class FileList(ItemList):
 										gtk.DIALOG_DESTROY_WITH_PARENT,
 										gtk.MESSAGE_ERROR,
 										gtk.BUTTONS_OK,
-										"There was an error creating file. "
-										"Make sure you have enough permissions. "
-										"\n\n{0}".format(error)
+										_(
+											"There was an error creating file. "
+											"Make sure you have enough permissions."
+										) + "\n\n{0}".format(error)
 										)
 				dialog.run()
 				dialog.destroy()
 
 	def _delete_files(self, widget=None, data=None):
 		"""Delete selected files"""
-		list = self._get_selection_list()
-		if list is None: return
+		list_ = self._get_selection_list()
+		if list_ is None: return
 
 		dialog = gtk.MessageDialog(
 								self._parent,
 								gtk.DIALOG_DESTROY_WITH_PARENT,
 								gtk.MESSAGE_QUESTION,
 								gtk.BUTTONS_YES_NO,
-								"You are about to remove {0} item(s).\n"
-								"Are you sure about this?".format(len(list))
-								)
+								_(
+									"You are about to remove {0} item(s).\n"
+									"Are you sure about this?"
+								).format(len(list_))
+							)
 		result = dialog.run()
 		dialog.destroy()
 
@@ -375,8 +379,7 @@ class FileList(ItemList):
 
 	def _move_files(self, widget=None, data=None):
 		"""Move selected files"""
-		list = self._get_selection_list()
-		if list is None: return
+		if self._get_selection_list() is None: return
 
 		dialog = MoveDialog(
 						self._parent,
@@ -392,7 +395,7 @@ class FileList(ItemList):
 									self.get_provider(),
 									self._get_other_provider(),
 									result[1]  # options from dialog
-									)
+								)
 			operation.start()
 
 	def _rename_file(self, widget=None, data=None):
@@ -417,10 +420,12 @@ class FileList(ItemList):
 										gtk.DIALOG_DESTROY_WITH_PARENT,
 										gtk.MESSAGE_ERROR,
 										gtk.BUTTONS_OK,
-										"File or directory with specified name already "
-										"exists in current directory. Item could not "
-										"be renamed."
+										_(
+											"File or directory with specified name already "
+											"exists in current directory. Item could not "
+											"be renamed."
 										)
+									)
 				dialog.run()
 				dialog.destroy()
 
@@ -442,12 +447,12 @@ class FileList(ItemList):
 		"""Return item with path under cursor"""
 		result = None
 		selection = self._item_list.get_selection()
-		list, iter = selection.get_selected()
+		list_, iter_ = selection.get_selected()
 
-		is_parent = list.get_value(iter, COL_PARENT)
+		is_parent = list_.get_value(iter_, COL_PARENT)
 
 		if not is_parent:
-			item = list.get_value(iter, COL_NAME)
+			item = list_.get_value(iter_, COL_NAME)
 			result = item if relative else os.path.join(self.path, item)
 
 		return result
@@ -486,10 +491,10 @@ class FileList(ItemList):
 	def _prepare_popup_menu(self):
 		"""Populate pop-up menu items"""
 		selection = self._item_list.get_selection()
-		list, iter = selection.get_selected()
+		list_, iter_ = selection.get_selected()
 
-		is_dir = list.get_value(iter, COL_DIR)
-		is_parent = list.get_value(iter, COL_PARENT)
+		is_dir = list_.get_value(iter_, COL_DIR)
+		is_parent = list_.get_value(iter_, COL_PARENT)
 
 		# get selected item
 		filename = self._get_selection()
@@ -505,14 +510,14 @@ class FileList(ItemList):
 			mime_type = mimetypes.guess_type(filename, False)[0]
 
 			try:
-				list = self._parent.associations_manager.get_user_list(mime_type)
-				if list is not None:
-					program_list.extend(list)
+				list_ = self._parent.associations_manager.get_user_list(mime_type)
+				if list_ is not None:
+					program_list.extend(list_)
 
 				# get default configuration
-				list = self._parent.associations_manager.get_default_list(mime_type)
-				if list is not None:
-					program_list.extend((list_item) for list_item in list if list_item not in program_list)
+				list_ = self._parent.associations_manager.get_default_list(mime_type)
+				if list_ is not None:
+					program_list.extend((list_item) for list_item in list_ if list_item not in program_list)
 
 				# filter out empty entries
 				program_list = filter(lambda x: x is not '', program_list)
@@ -543,10 +548,10 @@ class FileList(ItemList):
 	def _get_popup_menu_position(self, menu, data=None):
 		"""Positions menu properly for given row"""
 		selection = self._item_list.get_selection()
-		list, iter = selection.get_selected()
+		list_, iter_ = selection.get_selected()
 
 		# grab cell and tree rectangles
-		rect = self._item_list.get_cell_area(list.get_path(iter), self._columns[0])
+		rect = self._item_list.get_cell_area(list_.get_path(iter_), self._columns[0])
 		tree_rect = self._item_list.get_visible_rect()
 
 		# grab window coordinates
@@ -606,26 +611,26 @@ class FileList(ItemList):
 		# set focus to the list, we don't need it on column
 		self._item_list.grab_focus()
 
-	def _sort_list(self, list, iter1, iter2, data=None):
+	def _sort_list(self, list_, iter1, iter2, data=None):
 		"""Compare two items for sorting process"""
 		reverse = (1, -1)[self._sort_ascending]
 
-		value1 = list.get_value(iter1, self._sort_column)
-		value2 = list.get_value(iter2, self._sort_column)
+		value1 = list_.get_value(iter1, self._sort_column)
+		value2 = list_.get_value(iter2, self._sort_column)
 
 		if not self._sort_sensitive:
 			value1 = value1.lower()
 			value2 = value2.lower()
 
 		item1 = (
-				reverse * list.get_value(iter1, COL_PARENT),
-				reverse * list.get_value(iter1, COL_DIR),
+				reverse * list_.get_value(iter1, COL_PARENT),
+				reverse * list_.get_value(iter1, COL_DIR),
 				value1
 				)
 
 		item2 = (
-				reverse * list.get_value(iter2, COL_PARENT),
-				reverse * list.get_value(iter2, COL_DIR),
+				reverse * list_.get_value(iter2, COL_PARENT),
+				reverse * list_.get_value(iter2, COL_DIR),
 				value2
 				)
 
@@ -635,7 +640,7 @@ class FileList(ItemList):
 		"""Clear item list"""
 		self._store.clear()
 
-	def _directory_changed(self, monitor, file, other_file, event):
+	def _directory_changed(self, monitor, file_, other_file, event):
 		"""Callback method fired when contents of directory has been changed"""
 		show_hidden = self._parent.options.getboolean('main', 'show_hidden')
 
@@ -644,19 +649,19 @@ class FileList(ItemList):
 
 			# temporarily fix problem with duplicating items when file was saved with GIO
 			# TODO: Test why this is happening
-			if self._find_iter_by_name(file.get_basename()) is None:
-				self._add_item(file.get_basename(), show_hidden)
+			if self._find_iter_by_name(file_.get_basename()) is None:
+				self._add_item(file_.get_basename(), show_hidden)
 
 			else:
-				self._update_item_details_by_name(file.get_basename())
+				self._update_item_details_by_name(file_.get_basename())
 
 		# node deleted
 		elif event is gio.FILE_MONITOR_EVENT_DELETED:
-			self._delete_item_by_name(file.get_basename())
+			self._delete_item_by_name(file_.get_basename())
 
 		# node changed
 		elif event is gio.FILE_MONITOR_EVENT_CHANGED:
-			self._update_item_details_by_name(file.get_basename())
+			self._update_item_details_by_name(file_.get_basename())
 
 		self._change_title_text()
 		self._update_status_with_statistis()
@@ -664,15 +669,15 @@ class FileList(ItemList):
 	def _toggle_selection(self, widget, data=None, advance=True):
 		"""Toggle item selection"""
 		selection = self._item_list.get_selection()
-		list, iter = selection.get_selected()
+		list_, iter_ = selection.get_selected()
 
-		is_dir = list.get_value(iter, COL_DIR)
-		is_parent = list.get_value(iter, COL_PARENT)
-		size = list.get_value(iter, COL_SIZE)
+		is_dir = list_.get_value(iter_, COL_DIR)
+		is_parent = list_.get_value(iter_, COL_PARENT)
+		size = list_.get_value(iter_, COL_SIZE)
 
 		if not is_parent:
 			# get current status of iter
-			selected = list.get_value(iter, COL_COLOR) is not None
+			selected = list_.get_value(iter_, COL_COLOR) is not None
 
 			if is_dir:
 				self._dirs['selected'] += [1, -1][selected]
@@ -685,27 +690,27 @@ class FileList(ItemList):
 
 			value = (None, 'red')[selected]
 			image = (None, self._pixbuf_selection)[selected]
-			list.set_value(iter, COL_COLOR, value)
-			list.set_value(iter, COL_SELECTED, image)
+			list_.set_value(iter_, COL_COLOR, value)
+			list_.set_value(iter_, COL_SELECTED, image)
 
 		# update status bar
 		self._update_status_with_statistis()
 
 		if advance:
 			# select next item in the list
-			next_iter = list.iter_next(iter)
+			next_iter = list_.iter_next(iter_)
 			if next_iter is not None:
-				self._item_list.set_cursor(list.get_path(next_iter))
+				self._item_list.set_cursor(list_.get_path(next_iter))
 
 	def _edit_selected(self, widget=None, data=None):
 		"""Abstract method to edit currently selected item"""
 		selection = self._item_list.get_selection()
-		list, iter = selection.get_selected()
+		list_, iter_ = selection.get_selected()
 
-		is_dir = list.get_value(iter, COL_DIR)
+		is_dir = list_.get_value(iter_, COL_DIR)
 
 		if not is_dir and self.get_provider().is_local:
-			self._edit_filename(list.get_value(iter, COL_NAME))
+			self._edit_filename(list_.get_value(iter_, COL_NAME))
 
 		return True
 
@@ -905,7 +910,13 @@ class FileList(ItemList):
 
 		self._title_label.set_label(
 									'{0}\n<span size="x-small">'
-									'Free: {1} - Total: {2}</span>'.format(text, space_free, space_total)
+									'{3} {1} - {4} {2}</span>'.format(
+																		text,
+																		space_free,
+																		space_total,
+																		_('Free:'),
+																		_('Total:')
+																	)
 								)
 
 	def _format_size(self, size):
@@ -972,8 +983,10 @@ class FileList(ItemList):
 									gtk.DIALOG_DESTROY_WITH_PARENT,
 									gtk.MESSAGE_ERROR,
 									gtk.BUTTONS_YES_NO,
-									"Error changing working directory. "
-									"\n\n{0}\n\nWould you like to retry?".format(error)
+									_(
+										"Error changing working directory. "
+										"\n\n{0}\n\nWould you like to retry?"
+									).format(error)
 								)
 			result = dialog.run()
 			dialog.destroy()

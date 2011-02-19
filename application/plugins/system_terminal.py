@@ -8,7 +8,7 @@ from plugins.file_list import FileList
 
 def register_plugin(application):
 	"""Register plugin classes with application"""
-	application.register_class('System terminal', SystemTerminal)
+	application.register_class(_('System terminal'), SystemTerminal)
 
 
 class SystemTerminal(Terminal):
@@ -32,7 +32,7 @@ class SystemTerminal(Terminal):
 									directory=self.path
 								)
 
-		self._change_tab_text('Terminal')
+		self._change_tab_text(_('Terminal'))
 
 		self.show_all()
 

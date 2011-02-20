@@ -247,7 +247,7 @@ class ItemListOptions(gtk.VBox):
 		self._checkbox_row_hinting = gtk.CheckButton(_('Row hinting'))
 		self._checkbox_show_hidden = gtk.CheckButton(_('Show hidden files'))
 		self._checkbox_case_sensitive = gtk.CheckButton(_('Case sensitive item sorting'))
-		self._checkbox_right_click = gtk.CheckButton(_('Right click select items'))
+		self._checkbox_right_click = gtk.CheckButton(_('Right click selects items'))
 
 		self._checkbox_row_hinting.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)

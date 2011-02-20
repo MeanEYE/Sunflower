@@ -926,6 +926,17 @@ class FileList(ItemList):
 				return "%3.1f %s" % (size, x)
 			size /= 1024.0
 
+	def _get_supported_drag_types(self):
+		"""Return list of supported data for drag'n'drop events"""
+		return [
+				('text/plain', 0, 82),
+				('image/*', 0, 83),
+			]
+
+	def _get_supported_drag_actions(self):
+		"""Return integer representing supported drag'n'drop actions"""
+		return gtk.gdk.ACTION_COPY | gtk.gdk.ACTION_MOVE | gtk.gdk.ACTION_LINK
+
 	def change_path(self, path=None, selected=None):
 		"""Change file list path"""
 		self._show_spinner()

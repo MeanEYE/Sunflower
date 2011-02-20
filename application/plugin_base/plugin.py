@@ -70,14 +70,60 @@ class PluginBase(gtk.VBox):
 		"""Change tab text"""
 		self._tab_label.set_text(text)
 
-	def _connect_main_object(self, object):
+	def _connect_main_object(self, object_):
 		"""Create focus chain and connect basic events"""
-		object.connect('focus-in-event', self._control_got_focus)
-		object.connect('focus-out-event', self._control_lost_focus)
-		object.connect('key-press-event', self._handle_key_press)
+		self._main_object = object_
 
-		self.set_focus_chain((object,))
-		self._main_object = object
+		# connect events
+		self._main_object.connect('focus-in-event', self._control_got_focus)
+		self._main_object.connect('focus-out-event', self._control_lost_focus)
+		self._main_object.connect('key-press-event', self._handle_key_press)
+
+		# set focus chain only to main object
+		self.set_focus_chain((self._main_object,))
+
+		# configure drag and drop support
+		types = self._get_supported_drag_types()
+		actions = self._get_supported_drag_actions()
+
+		if actions is not None:
+			# configure drag and drop features
+			self._main_object.drag_dest_set(
+										gtk.DEST_DEFAULT_ALL,
+										types,
+										actions
+									)
+
+			# connect drag and drop events
+			self._main_object.connect('drag-motion', self._drag_motion)
+			self._main_object.connect('drag-drop', self._drag_drop)
+			self._main_object.connect('drag-data-received', self._drag_data_received)
+
+	def _drag_motion(self, widget, drag_context, x, y, timestamp):
+		"""Handle dragging data over widget"""
+		return True
+
+	def _drag_drop(self, widget, drag_context, x, y, timestamp):
+		"""Handle dropping data over widget"""
+		print widget
+		return True
+
+	def _drag_data_received(self, widget, drag_context, x, y, timestamp):
+		"""Handle drop of data"""
+		return True
+
+	def _get_supported_drag_types(self):
+		"""Return list of supported data for drag'n'drop events"""
+		return []
+
+	def _get_supported_drag_actions(self):
+		"""Return integer representing supported drag'n'drop actions
+
+		Returning None will disable drag and drop functionality for
+		specified main object.
+
+		"""
+		return None
 
 	def _control_got_focus(self, widget, data=None):
 		"""List focus in event"""

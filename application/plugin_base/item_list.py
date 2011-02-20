@@ -3,6 +3,7 @@
 import os
 import gtk
 import locale
+import threading
 
 from plugin import PluginBase
 
@@ -27,6 +28,7 @@ class ItemList(PluginBase):
 		global _icon_theme
 
 		self._provider = None
+		self._menu_timer = None
 
 		self.history = []
 
@@ -269,16 +271,27 @@ class ItemList(PluginBase):
 			result = True
 
 		# handle right click
-		elif event.button is 3 and event.type is gtk.gdk.BUTTON_RELEASE:
-			if not self._parent.options.getboolean('main', 'right_click_select'):
-				# show popup menu
-				self._show_popup_menu(widget)
+		elif event.button is 3:
+			if event.type is gtk.gdk.BUTTON_RELEASE:
+				# button was released, depending on options call specific method
+				if not self._parent.options.getboolean('main', 'right_click_select'):
+					# show popup menu
+					self._show_popup_menu(widget)
 
-			else:
-				# toggle item mark
-				self._toggle_selection(widget, advance=False)
+				else:
+					# toggle item mark
+					self._toggle_selection(widget, advance=False)
 
-			result = True
+					# if exists, cancel schedule
+					if self._menu_timer is not None:
+						self._menu_timer.cancel()
+
+				result = True
+
+			elif self._parent.options.getboolean('main', 'right_click_select'):
+				# in case where right click selects, we need to schedule menu popup
+				self._menu_timer = threading.Timer(1, self._show_popup_menu, [widget,])
+				self._menu_timer.start()
 
 		return result
 

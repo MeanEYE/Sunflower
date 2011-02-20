@@ -1308,6 +1308,7 @@ class MainWindow(gtk.Window):
 				'reserve_size': 'False',
 				'tab_button_icons': 'True',
 				'always_show_tabs': 'True',
+				'right_click_select': 'False',
 			}
 
 		# set default options

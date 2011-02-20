@@ -270,7 +270,14 @@ class ItemList(PluginBase):
 
 		# handle right click
 		elif event.button is 3 and event.type is gtk.gdk.BUTTON_RELEASE:
-			self._show_popup_menu(widget)
+			if not self._parent.options.getboolean('main', 'right_click_select'):
+				# show popup menu
+				self._show_popup_menu(widget)
+
+			else:
+				# toggle item mark
+				self._toggle_selection(widget, advance=False)
+
 			result = True
 
 		return result

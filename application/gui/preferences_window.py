@@ -247,10 +247,12 @@ class ItemListOptions(gtk.VBox):
 		self._checkbox_row_hinting = gtk.CheckButton(_('Row hinting'))
 		self._checkbox_show_hidden = gtk.CheckButton(_('Show hidden files'))
 		self._checkbox_case_sensitive = gtk.CheckButton(_('Case sensitive item sorting'))
+		self._checkbox_right_click = gtk.CheckButton(_('Right click select items'))
 
 		self._checkbox_row_hinting.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
 		self._checkbox_case_sensitive.connect('toggled', self._parent.enable_save)
+		self._checkbox_right_click.connect('toggled', self._parent.enable_save)
 
 		# grid lines
 		vbox_grid_lines = gtk.VBox(False, 0)
@@ -330,6 +332,7 @@ class ItemListOptions(gtk.VBox):
 		self.pack_start(self._checkbox_row_hinting, False, False, 0)
 		self.pack_start(self._checkbox_show_hidden, False, False, 0)
 		self.pack_start(self._checkbox_case_sensitive, False, False, 0)
+		self.pack_start(self._checkbox_right_click, False, False, 0)
 		self.pack_start(vbox_quick_search, False, False, 0)
 		self.pack_start(vbox_grid_lines, False, False, 0)
 		self.pack_start(vbox_time_format, False, False, 0)
@@ -342,6 +345,7 @@ class ItemListOptions(gtk.VBox):
 		self._checkbox_row_hinting.set_active(options.getboolean('main', 'row_hinting'))
 		self._checkbox_show_hidden.set_active(options.getboolean('main', 'show_hidden'))
 		self._checkbox_case_sensitive.set_active(options.getboolean('main', 'case_sensitive_sort'))
+		self._checkbox_right_click.set_active(options.getboolean('main', 'right_click_select'))
 		self._combobox_grid_lines.set_active(options.getint('main', 'grid_lines'))
 		self._entry_time_format.set_text(options.get('main', 'time_format'))
 		self._entry_status_text.set_text(options.get('main', 'status_text'))
@@ -359,6 +363,7 @@ class ItemListOptions(gtk.VBox):
 		options.set('main', 'row_hinting', _bool[self._checkbox_row_hinting.get_active()])
 		options.set('main', 'show_hidden', _bool[self._checkbox_show_hidden.get_active()])
 		options.set('main', 'case_sensitive_sort', _bool[self._checkbox_case_sensitive.get_active()])
+		options.set('main', 'right_click_select', _bool[self._checkbox_right_click.get_active()])
 		options.set('main', 'grid_lines', self._combobox_grid_lines.get_active())
 		options.set('main', 'time_format', self._entry_time_format.get_text())
 		options.set('main', 'status_text', self._entry_status_text.get_text())

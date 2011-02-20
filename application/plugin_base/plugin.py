@@ -108,7 +108,7 @@ class PluginBase(gtk.VBox):
 		print widget
 		return True
 
-	def _drag_data_received(self, widget, drag_context, x, y, timestamp):
+	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle drop of data"""
 		return True
 

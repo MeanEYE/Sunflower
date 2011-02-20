@@ -64,70 +64,14 @@ class AboutWindow(gtk.Window):
 		# middle content
 		notebook = gtk.Notebook()
 
-		tab1 = gtk.VBox(False, 10)
-		tab1.set_border_width(10)
-
-		program_info = gtk.Label(_(
-						'This software is being developed under GNU general '
-						'public license. If you would like to obtain source code '
-						'please visit our web site. Any bug reports, suggestions '
-						'or questions are more than welcome.'
-						))
-		program_info.set_alignment(0,0)
-		program_info.set_line_wrap(True)
-		program_info.connect('size-allocate', self._adjust_label)
-		tab1.pack_start(program_info, False, True, 0)
-
-		developer_info = gtk.Label(
-							'<b>' + _('Developer') + '</b>\n\tMeanEYE, <i>'
-							'<span size="small">RCF Group</span></i>'
-							)
-		developer_info.set_use_markup(True)
-		developer_info.set_alignment(0,0)
-		tab1.pack_start(developer_info, False, True, 0)
-
-		artist_info = gtk.Label(
-							'<b>' + _('Artist') + '</b>\n\tMrakoslava, <i>'
-							'<span size="small">Studio Spectra</span></i>'
-							)
-		artist_info.set_use_markup(True)
-		artist_info.set_alignment(0,0)
-		tab1.pack_start(artist_info, False, True, 0)
-
-		tab1_label = gtk.Label(_('Copyright'))
-		notebook.append_page(tab1, tab1_label)
+		# copyright tab
+		notebook.append_page(*self._create_copyright_tab())
 
 		# license tab
-		tab2 = gtk.ScrolledWindow()
-		tab2.set_border_width(5)
-		tab2.set_shadow_type(gtk.SHADOW_IN)
+		notebook.append_page(*self._create_license_tab())
 
-		license_location = os.path.join('/', 'usr', 'share', 'common-licenses', 'GPL')
-		if not os.path.isfile(license_location):
-			license_location = os.path.join(
-										os.path.dirname(sys.argv[0]),
-										'application',
-										'GPL.txt'
-									)
-
-		license_file = open(license_location, 'r')
-
-		if license_file:
-			license_text = license_file.read()
-			license_file.close()
-
-		license = gtk.TextView()
-		license.set_editable(False)
-		license.set_cursor_visible(False)
-
-		if license_text is not None:
-			buffer_ = license.get_buffer()
-			buffer_.set_text(license_text)
-
-		tab2.add(license)
-
-		tab2_label = gtk.Label(_('License'))
-		notebook.append_page(tab2, tab2_label)
+		# change log tab
+		notebook.append_page(*self._create_changelog_tab())
 
 		# create statistics tab
 		notebook.append_page(*self._create_statistics_tab())
@@ -162,6 +106,98 @@ class AboutWindow(gtk.Window):
 	def _hide(self, widget, data=None):
 		self.hide()
 		return True  # return True so we get to keep our controls safe from GC
+
+	def _create_copyright_tab(self):
+		"""Create copyright tab"""
+		tab = gtk.VBox(False, 10)
+		tab.set_border_width(10)
+		tab_label = gtk.Label(_('Copyright'))
+
+		program_info = gtk.Label(_(
+						'This software is being developed under GNU general '
+						'public license. If you would like to obtain source code '
+						'please visit our web site. Any bug reports, suggestions '
+						'or questions are more than welcome.'
+						))
+		program_info.set_alignment(0,0)
+		program_info.set_line_wrap(True)
+		program_info.connect('size-allocate', self._adjust_label)
+		tab.pack_start(program_info, False, True, 0)
+
+		developer_info = gtk.Label(
+							'<b>' + _('Developer') + '</b>\n\tMeanEYE, <i>'
+							'<span size="small">RCF Group</span></i>'
+							)
+		developer_info.set_use_markup(True)
+		developer_info.set_alignment(0,0)
+		tab.pack_start(developer_info, False, True, 0)
+
+		artist_info = gtk.Label(
+							'<b>' + _('Artist') + '</b>\n\tMrakoslava, <i>'
+							'<span size="small">Studio Spectra</span></i>'
+							)
+		artist_info.set_use_markup(True)
+		artist_info.set_alignment(0,0)
+		tab.pack_start(artist_info, False, True, 0)
+
+		return (tab, tab_label)
+
+	def _create_license_tab(self):
+		"""Create license tab"""
+		tab = gtk.ScrolledWindow()
+		tab.set_border_width(5)
+		tab.set_shadow_type(gtk.SHADOW_IN)
+		tab_label = gtk.Label(_('License'))
+
+		license_location = os.path.join('/', 'usr', 'share', 'common-licenses', 'GPL')
+		if not os.path.isfile(license_location):
+			license_location = os.path.join(
+										os.path.dirname(sys.argv[0]),
+										'application',
+										'GPL.txt'
+									)
+
+		license_file = open(license_location, 'r')
+
+		if license_file:
+			license_text = license_file.read()
+			license_file.close()
+
+		license_ = gtk.TextView()
+		license_.set_editable(False)
+		license_.set_cursor_visible(False)
+
+		if license_text is not None:
+			buffer_ = license_.get_buffer()
+			buffer_.set_text(license_text)
+
+		tab.add(license_)
+
+		return (tab, tab_label)
+
+	def _create_changelog_tab(self):
+		"""Create change log tab"""
+		tab = gtk.ScrolledWindow()
+		tab.set_border_width(5)
+		tab.set_shadow_type(gtk.SHADOW_IN)
+		tab_label = gtk.Label(_('Change log'))
+
+		data = ''
+		changelog_location = os.path.join(os.path.dirname(sys.argv[0]), 'change.log')
+
+		if os.path.isfile(changelog_location):
+			with open(changelog_location, 'r') as file_:
+				data = file_.read()
+
+		changelog = gtk.TextView()
+		changelog.set_editable(False)
+		changelog.set_cursor_visible(False)
+
+		changelog.get_buffer().set_text(data)
+
+		tab.add(changelog)
+
+		return (tab, tab_label)
 
 	def _create_statistics_tab(self):
 		"""Create tab for all the promotional sites"""

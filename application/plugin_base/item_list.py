@@ -117,11 +117,18 @@ class ItemList(PluginBase):
 		self._columns = None
 
 		# idle spinner
-		self._spinner = gtk.Spinner()
-		self._spinner.set_size_request(16, 16)
-		self._spinner.set_property('no-show-all', True)
+		try:
+			# try to create spinner element
+			self._spinner = gtk.Spinner()
 
-		self._top_hbox.pack_start(self._spinner, False, False, 3)
+			self._spinner.set_size_request(16, 16)
+			self._spinner.set_property('no-show-all', True)
+
+			self._top_hbox.pack_start(self._spinner, False, False, 3)
+
+		except:
+			# spinner is not required part of the program
+			self._spinner = None
 
 		# bookmarks button
 		self._bookmarks_button = gtk.Button()
@@ -239,8 +246,9 @@ class ItemList(PluginBase):
 
 	def _show_spinner(self):
 		"""Show spinner animation"""
-		self._spinner.start()
-		self._spinner.show()
+		if self._spinner is not None:
+			self._spinner.start()
+			self._spinner.show()
 
 	def _show_left_bookmarks(self, widget, data=None):
 		"""Show left bookmarks menu"""
@@ -252,8 +260,9 @@ class ItemList(PluginBase):
 
 	def _hide_spinner(self):
 		"""Hide spinner animation"""
-		self._spinner.hide()
-		self._spinner.stop()
+		if self._spinner is not None:
+			self._spinner.hide()
+			self._spinner.stop()
 
 	def _handle_button_press(self, widget, event):
 		"""Handles mouse events"""

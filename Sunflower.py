@@ -37,12 +37,14 @@ except:
 if __name__ == '__main__':
 	# add search path
 	path_application = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "application"))
-	sys.path.append(path_application)
+	sys.path.insert(1, path_application)
+
+	print sys.path
 
 	gtk.gdk.threads_init()
 
 	# construct main application object
-	from application.gui.main_window import MainWindow
+	from gui.main_window import MainWindow
 
 	app = MainWindow()
 	app.run()

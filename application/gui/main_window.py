@@ -185,6 +185,7 @@ class MainWindow(gtk.Window):
 					{'type': 'separator'},
 					{
 						'label': _('Compare _directories'),
+						'callback': self.compare_directories,
 						'path': '<Sunflower>/Mark/Compare',
 					}
 				)
@@ -994,6 +995,31 @@ class MainWindow(gtk.Window):
 			# commit selection
 			if response[0] == gtk.RESPONSE_OK:
 				list.unselect_all(response[1])
+
+	def compare_directories(self, widget=None, data=None):
+		"""Compare directories from left and right notebook"""
+		left_object = None
+		right_object = None
+
+		# get left object
+		if self.left_notebook.get_n_pages() > 0:
+			left_object = self.left_notebook.get_nth_page(self.left_notebook.get_current_page())
+
+		# get right object
+		if self.right_notebook.get_n_pages() > 0:
+			right_object = self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
+
+		# if both objects have selection methods and exist
+		if None not in (left_object, right_object) \
+		and hasattr(left_object, 'select_all') \
+		and hasattr(right_object, 'select_all'):
+			# get file lists
+			left_list = left_object.get_provider().list_dir(left_object.path)
+			right_list = right_object.get_provider().list_dir(right_object.path)
+
+			# mark missing files
+			left_object.select_all(exclude_list=right_list)
+			right_object.select_all(exclude_list=left_list)
 
 	def run(self):
 		"""Main application loop"""

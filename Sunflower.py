@@ -39,8 +39,6 @@ if __name__ == '__main__':
 	path_application = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "application"))
 	sys.path.insert(1, path_application)
 
-	print sys.path
-
 	gtk.gdk.threads_init()
 
 	# construct main application object

@@ -846,7 +846,7 @@ class ItemList(PluginBase):
 			if i != 0:
 				self.history[0], self.history[i] = self.history[i], self.history[0]
 
-	def select_all(self, pattern=None):
+	def select_all(self, pattern=None, exclude_list=None):
 		"""Select all items matching pattern"""
 		pass
 

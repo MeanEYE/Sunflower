@@ -930,12 +930,11 @@ class FileList(ItemList):
 		"""Return list of supported data for drag'n'drop events"""
 		return [
 				('text/plain', 0, 82),
-				('image/*', 0, 83),
 			]
 
 	def _get_supported_drag_actions(self):
 		"""Return integer representing supported drag'n'drop actions"""
-		return gtk.gdk.ACTION_COPY | gtk.gdk.ACTION_MOVE | gtk.gdk.ACTION_LINK
+		return gtk.gdk.ACTION_COPY | gtk.gdk.ACTION_MOVE  # | gtk.gdk.ACTION_LINK # add later
 
 	def change_path(self, path=None, selected=None):
 		"""Change file list path"""
@@ -1048,11 +1047,13 @@ class FileList(ItemList):
 
 		self._hide_spinner()
 
-	def select_all(self, pattern=None):
+	def select_all(self, pattern=None, exclude_list=None):
 		"""Select all items matching pattern """
-
 		if pattern is None:
 			pattern = "*"
+
+		if exclude_list is None:
+			exclude_list = ()
 
 		dirs = 0
 		files = 0
@@ -1060,9 +1061,17 @@ class FileList(ItemList):
 
 		for row in self._store:
 			# set selection
-			if not row[COL_PARENT] and fnmatch.fnmatch(row[COL_NAME], pattern):
-				row[COL_COLOR] = 'red'
+			if not row[COL_PARENT] \
+			and fnmatch.fnmatch(row[COL_NAME], pattern) \
+			and row[COL_NAME] not in exclude_list:
+				# select item that matched out cirteria
+				row[COL_COLOR] = self._parent.options.get('main', 'selection_color')
 				row[COL_SELECTED] = self._pixbuf_selection
+
+			elif len(exclude_list) > 0:
+				# if out exclude list has items, we need to deselect them
+				row[COL_COLOR] = None
+				row[COL_SELECTED] = None
 
 			# update dir/file count
 			if row[COL_COLOR] is not None:
@@ -1080,7 +1089,6 @@ class FileList(ItemList):
 
 	def unselect_all(self, pattern=None):
 		"""Unselect items matching the pattern"""
-
 		if pattern is None:
 			pattern = "*"
 

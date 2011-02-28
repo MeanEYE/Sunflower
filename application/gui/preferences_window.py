@@ -248,11 +248,13 @@ class ItemListOptions(gtk.VBox):
 		self._checkbox_show_hidden = gtk.CheckButton(_('Show hidden files'))
 		self._checkbox_case_sensitive = gtk.CheckButton(_('Case sensitive item sorting'))
 		self._checkbox_right_click = gtk.CheckButton(_('Right click selects items'))
+		self._checkbox_vim_bindings = gtk.CheckButton(_('Enable VIM bindings'))
 
 		self._checkbox_row_hinting.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
 		self._checkbox_case_sensitive.connect('toggled', self._parent.enable_save)
 		self._checkbox_right_click.connect('toggled', self._parent.enable_save)
+		self._checkbox_vim_bindings.connect('toggled', self._vim_bindings_toggled)
 
 		# grid lines
 		vbox_grid_lines = gtk.VBox(False, 0)
@@ -333,10 +335,39 @@ class ItemListOptions(gtk.VBox):
 		self.pack_start(self._checkbox_show_hidden, False, False, 0)
 		self.pack_start(self._checkbox_case_sensitive, False, False, 0)
 		self.pack_start(self._checkbox_right_click, False, False, 0)
+		self.pack_start(self._checkbox_vim_bindings, False, False, 0)
 		self.pack_start(vbox_quick_search, False, False, 0)
 		self.pack_start(vbox_grid_lines, False, False, 0)
 		self.pack_start(vbox_time_format, False, False, 0)
 		self.pack_start(vbox_status_text, False, False, 0)
+
+	def _vim_bindings_toggled(self, widget, data=None):
+		"""Handle toggling VIM bindings on or off"""
+		if widget.get_active() \
+		and self._application.options.get('main', 'search_modifier') == '000':
+			# user can't have this quick search combination with VIM bindings
+			dialog = gtk.MessageDialog(
+									self._application,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_WARNING,
+									gtk.BUTTONS_OK,
+									_(
+										'Quick search settings are in conflict with VIM '
+										'navigation style. To resolve this issue your '
+										'quick search settings were restored to default.'
+									)
+								)
+
+			dialog.run()
+			dialog.destroy()
+
+			# restore default search modifiers
+			self._checkbox_control.set_active(False)
+			self._checkbox_alt.set_active(True)
+			self._checkbox_shift.set_active(False)
+
+		# enable save button
+		self._parent.enable_save()
 
 	def _load_options(self):
 		"""Load item list options"""
@@ -346,6 +377,7 @@ class ItemListOptions(gtk.VBox):
 		self._checkbox_show_hidden.set_active(options.getboolean('main', 'show_hidden'))
 		self._checkbox_case_sensitive.set_active(options.getboolean('main', 'case_sensitive_sort'))
 		self._checkbox_right_click.set_active(options.getboolean('main', 'right_click_select'))
+		self._checkbox_vim_bindings.set_active(options.getboolean('main', 'vim_movement'))
 		self._combobox_grid_lines.set_active(options.getint('main', 'grid_lines'))
 		self._entry_time_format.set_text(options.get('main', 'time_format'))
 		self._entry_status_text.set_text(options.get('main', 'status_text'))
@@ -364,6 +396,7 @@ class ItemListOptions(gtk.VBox):
 		options.set('main', 'show_hidden', _bool[self._checkbox_show_hidden.get_active()])
 		options.set('main', 'case_sensitive_sort', _bool[self._checkbox_case_sensitive.get_active()])
 		options.set('main', 'right_click_select', _bool[self._checkbox_right_click.get_active()])
+		options.set('main', 'vim_movement', _bool[self._checkbox_vim_bindings.get_active()])
 		options.set('main', 'grid_lines', self._combobox_grid_lines.get_active())
 		options.set('main', 'time_format', self._entry_time_format.get_text())
 		options.set('main', 'status_text', self._entry_status_text.get_text())

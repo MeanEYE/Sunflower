@@ -247,6 +247,8 @@ class FileList(ItemList):
 			# selected item is just a file, execute it
 			os.system("gnome-open '{0}'".format(self._get_selection()))
 
+		return True  # to prevent command or quick search in single key bindings
+
 	def _create_directory(self, widget=None, data=None):
 		"""Prompt user and create directory"""
 		dialog = DirectoryCreateDialog(self._parent)

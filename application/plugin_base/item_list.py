@@ -101,6 +101,15 @@ class ItemList(PluginBase):
 				},
 			}
 
+		# if enabled bind VIM keys
+		if self._parent.options.getboolean('main', 'vim_movement'):
+			self._key_handlers.update({
+						'h': { '000': self._parent_folder, },
+						'l': { '000': self._execute_selected_item, },
+						'j': { '000': self._move_marker_down, },
+						'k': { '000': self._move_marker_up, }
+					})
+
 		# list statistics
 		self._dirs = {'count': 0, 'selected': 0}
 		self._files = {'count': 0, 'selected': 0}
@@ -264,6 +273,38 @@ class ItemList(PluginBase):
 			self._spinner.hide()
 			self._spinner.stop()
 
+	def _move_marker_up(self, widget, data=None):
+		"""Move marker up"""
+		selection = self._item_list.get_selection()
+		list_, iter_ = selection.get_selected()
+
+		if iter_ is not None:
+			# get current path
+			path = list_.get_path(iter_)[0]
+			previous = path - 1
+
+			# if selected item is not first, move selection
+			if previous >= 0:
+				selection.select_path(previous)
+
+		return True
+
+	def _move_marker_down(self, widget, data=None):
+		"""Move marker down"""
+		selection = self._item_list.get_selection()
+		list_, iter_ = selection.get_selected()
+
+		if iter_ is not None:
+			# get current path
+			path = list_.get_path(iter_)[0]
+			next_ = path + 1
+
+			# if selected item is not last, move selection
+			if next_ < len(list_):
+				selection.select_path(next_)
+
+		return True
+
 	def _handle_button_press(self, widget, event):
 		"""Handles mouse events"""
 		result = False
@@ -329,6 +370,7 @@ class ItemList(PluginBase):
 			if state == self._parent.options.get('main', 'search_modifier'):
 				self._start_search(key_name)
 				result = True
+
 			else:
 				result = False
 
@@ -661,6 +703,8 @@ class ItemList(PluginBase):
 						os.path.dirname(self.path),
 						os.path.basename(self.path)
 					)
+
+		return True  # to prevent command or quick search in single key bindings
 
 	def _focus_command_line(self, key):
 		"""Focus command-line control"""

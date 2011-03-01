@@ -36,7 +36,7 @@ class MainWindow(gtk.Window):
 	version = {
 			'major': 0,
 			'minor': 1,
-			'build': 17,
+			'build': 18,
 			'stage': 'a'
 		}
 
@@ -50,7 +50,7 @@ class MainWindow(gtk.Window):
 		self.provider_classes = {}
 
 		# list of protected plugins
-		self.plugin_protected = ('file_list', 'system_terminal')
+		self.protected_plugins = ('file_list', 'system_terminal')
 
 		# create managers early
 		self.icon_manager = IconManager(self)
@@ -721,29 +721,41 @@ class MainWindow(gtk.Window):
 		except:
 			pass
 
-	def _load_plugins(self):
-		"""Dynamically load plugins"""
+	def _get_plugin_list(self):
+		"""Get list of plugins"""
 		# get plugin list
 		path = os.path.join(
 						os.path.dirname(sys.argv[0]),
 						'application',
 						'plugins'
 					)
+
+		# get matching files
 		list_ = fnmatch.filter(os.listdir(path), '*.py')
+
+		# remove extension
+		list_ = [os.path.splitext(file_)[0] for file_ in list_]
+
+		# remove package initialized
+		list_.remove('__init__')
+
+		return list_
+
+	def _load_plugins(self):
+		"""Dynamically load plugins"""
+		# get plugin list
+		list_ = self._get_plugin_list()
 
 		# list of enabled plugins
 		plugins_to_load = self.options.get('main', 'plugins').split(',')
 
 		# filter list for loading
-		list_ = filter(lambda file_: os.path.splitext(file_)[0] in plugins_to_load, list_)
+		list_ = filter(lambda file_: file_ in plugins_to_load, list_)
 
-		# load plugins
 		for file_ in list_:
-			name = os.path.splitext(file_)[0]
-
 			# import module
-			__import__('plugins.{0}'.format(name))
-			plugin = sys.modules['plugins.{0}'.format(name)]
+			__import__('plugins.{0}'.format(file_))
+			plugin = sys.modules['plugins.{0}'.format(file_)]
 
 			# call module register_plugin method
 			if hasattr(plugin, 'register_plugin'):
@@ -1506,4 +1518,4 @@ class MainWindow(gtk.Window):
 		like drag and drop and system bookmark handling.
 
 		"""
-		self.plugin_classes[name] = plugin_class
+		self.provider_classes[protocol] = provider_class

@@ -1360,13 +1360,6 @@ class MainWindow(gtk.Window):
 			if not self.options.has_option('main', option):
 				self.options.set('main', option, value)
 
-		# set default column sizes for file list
-		# TODO: Move to FileList class
-		if not self.options.has_section('FileList'):
-			self.options.add_section('FileList')
-			for i, size in enumerate([200, 50, 70, 50, 100]):
-				self.options.set('FileList', 'size_{0}'.format(i), size)
-
 	def focus_oposite_list(self, widget, data=None):
 		"""Sets focus on oposite item list"""
 
@@ -1383,7 +1376,6 @@ class MainWindow(gtk.Window):
 
 	def update_column_sizes(self, column, sender=None):
 		"""Update column size on all tabs of specified class"""
-
 		# update left notebook
 		for index in range(0, self.left_notebook.get_n_pages()):
 			page = self.left_notebook.get_nth_page(index)

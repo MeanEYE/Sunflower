@@ -273,6 +273,19 @@ class ItemList(PluginBase):
 			self._spinner.hide()
 			self._spinner.stop()
 
+	def _create_default_column_sizes(self):
+		"""Create default column sizes section in main configuration file"""
+		options = self._parent.options
+		section = self.__class__.__name__
+
+		if not options.has_section(section):
+			# section doesn't exist, create one
+			options.add_section(section)
+
+			# store default column sizes
+			for i, size in enumerate(self._columns_size):
+				options.set(section, 'size_{0}'.format(i), size)
+
 	def _move_marker_up(self, widget, data=None):
 		"""Move marker up"""
 		selection = self._item_list.get_selection()
@@ -775,7 +788,6 @@ class ItemList(PluginBase):
 
 	def _column_resized(self, widget, data=None):
 		"""Resize all columns acordingly"""
-
 		new_width = widget.get_width()
 		existing_width = self._parent.options.getint(
 												self.__class__.__name__,
@@ -792,7 +804,6 @@ class ItemList(PluginBase):
 
 	def _resize_columns(self, columns):
 		"""Resize columns acording to global options"""
-
 		for index, column in columns.items():
 			# register column resize id
 			if not hasattr(column, 'size_id'):

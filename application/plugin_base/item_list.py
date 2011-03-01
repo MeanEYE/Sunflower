@@ -708,9 +708,12 @@ class ItemList(PluginBase):
 
 	def _focus_command_line(self, key):
 		"""Focus command-line control"""
-		self._parent.command_edit.grab_focus()
-		self._parent.command_edit.set_text(key)
-		self._parent.command_edit.set_position(len(key))
+		if self._parent.options.getboolean('main', 'show_command_entry'):
+			# focus command entry only if it's visible
+			self._parent.command_edit.grab_focus()
+			self._parent.command_edit.set_text(key)
+			self._parent.command_edit.set_position(len(key))
+
 		return True
 
 	def _control_got_focus(self, widget, data=None):

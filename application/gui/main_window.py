@@ -362,6 +362,7 @@ class MainWindow(gtk.Window):
 		self.path_label = gtk.Label()
 		self.path_label.set_alignment(1, 0.5)
 		self.path_label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
+		self.path_label.show()
 
 		# create history list
 		self.command_list = gtk.ListStore(str)
@@ -377,6 +378,7 @@ class MainWindow(gtk.Window):
 		self.command_edit.set_completion(self.command_completion)
 		self.command_edit.connect('activate', self.execute_command)
 		self.command_edit.connect('key-press-event', self._command_edit_key_press)
+		self.command_edit.show()
 
 		# load history file
 		self._load_history()

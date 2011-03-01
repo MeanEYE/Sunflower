@@ -285,7 +285,7 @@ class ItemList(PluginBase):
 
 			# if selected item is not first, move selection
 			if previous >= 0:
-				selection.select_path(previous)
+				self._item_list.set_cursor(previous)
 
 		return True
 
@@ -301,7 +301,7 @@ class ItemList(PluginBase):
 
 			# if selected item is not last, move selection
 			if next_ < len(list_):
-				selection.select_path(next_)
+				self._item_list.set_cursor(next_)
 
 		return True
 

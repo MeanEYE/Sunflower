@@ -57,7 +57,8 @@ class ChangeLogDialog(gtk.Dialog):
 			# label to give some more information
 			label_info = gtk.Label(_(
 								'Selected modifications will be applied before starting program. '
-								'All modifications should be selected but they are not required.'
+								'Applying all modifications is strongly suggested. If you manually '
+								'changed config files this is a good time to backup them.'
 							))
 			label_info.set_alignment(0, 0.5)
 			label_info.set_justify(gtk.JUSTIFY_LEFT)

@@ -45,8 +45,11 @@ class MainWindow(gtk.Window):
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 		self.realize()
 
-		# plugin containers
+		# containers
 		self.plugin_classes = {}
+		self.provider_classes = {}
+
+		# list of protected plugins
 		self.plugin_protected = ('file_list', 'system_terminal')
 
 		# create managers early
@@ -1495,3 +1498,12 @@ class MainWindow(gtk.Window):
 
 		# import class to globals
 		globals()[plugin_class.__name__] = plugin_class
+
+	def register_provider(self, protocol, provider_class):
+		"""Register file provider class for specified protocol
+
+		These classes will be used when handling all sorts of URI based operations
+		like drag and drop and system bookmark handling.
+
+		"""
+		self.plugin_classes[name] = plugin_class

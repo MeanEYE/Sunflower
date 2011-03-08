@@ -16,7 +16,7 @@ class IconManager:
 		"""Handle icon theme change"""
 		self._icon_cache.clear()
 		return True
-	
+
 	def has_icon(self, icon_name):
 		"""Check if icon with specified name exists in theme"""
 		return self._icon_theme.has_icon(icon_name)
@@ -39,7 +39,7 @@ class IconManager:
 			if icon_info is not None:
 				result = icon_info.load_icon()
 				self._icon_cache[key_name] = result
-				
+
 			else:
 				# in case icon does not exist we provide stock icons
 				stock_ids = {
@@ -49,8 +49,8 @@ class IconManager:
 						}
 
 				if mime_type in stock_ids.keys():
-					stock_id = stock_ids[mime_type] 
-				else: 
+					stock_id = stock_ids[mime_type]
+				else:
 					stock_id = stock_ids['document']
 
 				result = self._parent.render_icon(stock_id, icon_size, detail=None)
@@ -72,5 +72,19 @@ class IconManager:
 
 		if result is None:
 			result = self.get_icon_from_type('document', size)
+
+		return result
+
+	def get_mount_icon_name(self, icons):
+		"""Return existing icon name from the specified list"""
+		result = 'drive-harddisk'
+
+		# create a list of icons and filter non-existing
+		list_ = icons.split(' ')
+		list_ = filter(self.has_icon, list_)
+
+		# if list has items, grab first
+		if len(list_) > 0:
+			result = list_[0]
 
 		return result

@@ -46,7 +46,6 @@ class MenuManager:
 
 	def _item_image(self, item):
 		"""Create normal menu item with image"""
-
 		result = gtk.ImageMenuItem()
 		image = gtk.Image()
 		icon_manager = self._application.icon_manager

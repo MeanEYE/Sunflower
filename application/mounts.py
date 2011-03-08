@@ -63,6 +63,7 @@ class MountsManager:
 			device = data[COL_DEVICE]
 			mount_point = data[COL_MOUNT_POINT]
 			filesystem = data[COL_FILESYSTEM]
+			icon = self._application.icon_manager.get_mount_icon_name('')
 
 			if mount_point != '/':
 				label = os.path.basename(data[COL_MOUNT_POINT]).capitalize()
@@ -70,23 +71,29 @@ class MountsManager:
 				label = mount_point
 
 			if filesystem in self._filesystems:
-				self._add_item(label, mount_point, device)
+				self._add_item(label, mount_point, device, icon)
 
 	def _mount_added(self, sender, mount_id, data):
 		"""Handle adding of new device"""
 		label = data[1]
+		icon = self._application.icon_manager.get_mount_icon_name(data[2])
 		mount_point = data[4].split('://')[1]
 
-		self._add_item(label, mount_point, mount_id)
+		self._add_item(label, mount_point, mount_id, icon)
 
 	def _mount_removed(self, sender, mount_id, data):
 		"""Handle removal of device"""
 		mount_point = data[4].split('://')[1]
 		self._remove_item(mount_point)
 
-	def _add_item(self, text, path, device):
+	def _add_item(self, text, path, device, icon):
 		"""Add new menu item to the list"""
-		menu_item = gtk.MenuItem(text)
+		image = gtk.Image()
+		image.set_from_icon_name(icon, gtk.ICON_SIZE_MENU)
+
+		menu_item = gtk.ImageMenuItem()
+		menu_item.set_label(text)
+		menu_item.set_image(image)
 		menu_item.set_data('path', path)
 		menu_item.connect('activate', self._application._handle_bookmarks_click)
 		menu_item.show()

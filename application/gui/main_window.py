@@ -334,7 +334,12 @@ class MainWindow(gtk.Window):
 		self.menu_bookmarks.connect('hide', self._handle_bookmarks_hide)
 
 		# mounts menu
-		self._menu_item_mounts = gtk.MenuItem(label=_('Mounts'))
+		mounts_image = gtk.Image()
+		mounts_image.set_from_icon_name('computer', gtk.ICON_SIZE_MENU)
+
+		self._menu_item_mounts = gtk.ImageMenuItem()
+		self._menu_item_mounts.set_label(_('Mounts'))
+		self._menu_item_mounts.set_image(mounts_image)
 		self._menu_item_mounts.show()
 		self.mount_manager = MountsManager(self, self._menu_item_mounts)
 
@@ -487,7 +492,12 @@ class MainWindow(gtk.Window):
 		for index in range(1, len(raw_bookmarks) + 1):
 			data = self.bookmark_options.get('bookmarks', 'b_{0}'.format(index)).split(';', 1)
 
-			bookmark = gtk.MenuItem(label=data[0])
+			bookmark = gtk.ImageMenuItem()
+			image = gtk.Image()
+			image.set_from_icon_name('folder', gtk.ICON_SIZE_MENU)
+
+			bookmark.set_image(image)
+			bookmark.set_label(label=data[0])
 			bookmark.set_data('path', os.path.expanduser(data[1]))
 			bookmark.connect('activate', self._handle_bookmarks_click)
 
@@ -503,10 +513,14 @@ class MainWindow(gtk.Window):
 										'submenu': (
 												{
 													'label': _('_Add bookmark'),
+													'type': 'image',
+													'image': 'bookmark-new',
 													'callback': self._add_bookmark,
 												},
 												{
 													'label': _('_Edit bookmarks'),
+													'type': 'image',
+													'stock': gtk.STOCK_PREFERENCES,
 													'callback': self.preferences_window._show,
 													'data': 5
 												},

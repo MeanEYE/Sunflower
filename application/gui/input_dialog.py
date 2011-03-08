@@ -664,9 +664,7 @@ class OverwriteFileDialog(OverwriteDialog):
 
 	def set_title_element(self, element):
 		"""Set title label with appropriate formatting"""
-		message = _('Replace file "{0}"?')
-		message.format(element)
-
+		message = _('Replace file "{0}"?').format(element)
 		self._label_title.set_markup('<span size="large" weight="bold">{0}</span>'.format(message))
 
 	def set_message_element(self, element):
@@ -698,9 +696,7 @@ class OverwriteDirectoryDialog(OverwriteDialog):
 
 	def set_title_element(self, element):
 		"""Set title label with appropriate formatting"""
-		message = _('Merge directory "{0}"?')
-		message.format(element)
-
+		message = _('Merge directory "{0}"?').format(element)
 		self._label_title.set_markup('<span size="large" weight="bold">{0}</span>'.format(message))
 
 	def set_message_element(self, element):

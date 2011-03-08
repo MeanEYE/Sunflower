@@ -553,6 +553,17 @@ class MainWindow(gtk.Window):
 			# add item to the tools menu
 			self.menu_tools.append(tool)
 
+		# create separator
+		if tool_count > 0:
+			separator = gtk.SeparatorMenuItem()
+			self.menu_tools.append(separator)
+
+		# create option for editing tools
+		edit_tools = gtk.ImageMenuItem(stock_id=gtk.STOCK_PREFERENCES)
+		edit_tools.set_label(_('_Edit tools'))
+		edit_tools.connect('activate', self.preferences_window._show, 6)
+		self.menu_tools.append(edit_tools)
+
 		self._menu_item_tools.set_sensitive(tool_count > 0)
 		self.menu_tools.show_all()
 

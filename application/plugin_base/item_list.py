@@ -51,6 +51,7 @@ class ItemList(PluginBase):
 				},
 			't': {
 					'100': self._duplicate_tab,
+					'101': self._open_in_new_tab,
 				},
 			'w': {
 					'100': self._close_tab,
@@ -450,6 +451,10 @@ class ItemList(PluginBase):
 		"""Abstract method for handling execution of certain item"""
 		return True
 
+	def _open_in_new_tab(self, widget=None, data=None):
+		"""Open selected directory in new tab"""
+		return True
+
 	def _create_directory(self, widget=None, data=None):
 		"""Abstract method used to create directory"""
 		pass
@@ -541,6 +546,16 @@ class ItemList(PluginBase):
 								'callback': self._execute_selected_item
 							})
 		result.append(item)
+
+		# open directory in new tab
+		item = menu_manager.create_menu_item({
+								'label': _('Open in new ta_b'),
+								'type': 'image',
+								'stock': gtk.STOCK_OPEN,
+								'callback': self._open_in_new_tab
+							})
+		result.append(item)
+		self._open_new_tab_item = item
 
 		# separator
 		item = menu_manager.create_menu_item({'type': 'separator'})

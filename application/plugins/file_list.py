@@ -233,11 +233,11 @@ class FileList(ItemList):
 	def _execute_selected_item(self, widget=None, data=None):
 		"""Execute/Open selected item/directory"""
 		selection = self._item_list.get_selection()
-		list, iter = selection.get_selected()
+		list_, iter_ = selection.get_selected()
 
-		name = list.get_value(iter, COL_NAME)
-		is_dir = list.get_value(iter, COL_DIR)
-		is_parent = list.get_value(iter, COL_PARENT)
+		name = list_.get_value(iter_, COL_NAME)
+		is_dir = list_.get_value(iter_, COL_DIR)
+		is_parent = list_.get_value(iter_, COL_PARENT)
 
 		if is_dir:
 			# selected item is directory, we need to change path
@@ -254,6 +254,23 @@ class FileList(ItemList):
 			os.system("gnome-open '{0}'".format(self._get_selection()))
 
 		return True  # to prevent command or quick search in single key bindings
+
+	def _open_in_new_tab(self, widget=None, data=None):
+		"""Open selected directory in new tab"""
+		selection = self._item_list.get_selection()
+		list_, iter_ = selection.get_selected()
+
+		name = list_.get_value(iter_, COL_NAME)
+		is_dir = list_.get_value(iter_, COL_DIR)
+
+		if is_dir:
+			self._parent.create_tab(
+							self._notebook,
+							self.__class__,
+							os.path.join(self.path, name)
+						)
+
+		return True
 
 	def _create_directory(self, widget=None, data=None):
 		"""Prompt user and create directory"""
@@ -549,6 +566,7 @@ class FileList(ItemList):
 		# disable/enable items
 		has_items = len(self._open_with_menu.get_children()) > 0
 		self._open_with_item.set_sensitive(has_items and self.get_provider().is_local)
+		self._open_new_tab_item.set_visible(is_dir)
 		self._send_to_item.set_sensitive(self.get_provider().is_local and not is_parent)
 		self._delete_item.set_sensitive(not is_parent)
 		self._rename_item.set_sensitive(not is_parent)

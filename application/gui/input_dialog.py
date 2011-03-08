@@ -494,7 +494,6 @@ class OverwriteDialog(gtk.Dialog):
 		hbox_rename = gtk.HBox(False, 10)
 
 		self._entry_rename = gtk.Entry()
-		self._entry_rename.set_sensitive(False)
 		button_reset = gtk.Button(_('Reset'))
 		button_reset.connect('clicked', self._reset_rename_field)
 
@@ -682,6 +681,7 @@ class OverwriteDirectoryDialog(OverwriteDialog):
 	def __init__(self, application, parent):
 		OverwriteDialog.__init__(self, application, parent)
 
+		self._entry_rename.set_sensitive(False)
 		self.set_title(_('Directory conflict'))
 
 	def _create_buttons(self):

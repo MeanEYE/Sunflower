@@ -532,25 +532,28 @@ class FileList(ItemList):
 
 		if not is_dir:
 			# we need to prepare menu only for files
-			mime_type = mimetypes.guess_type(filename, False)[0]
+			mime_list = mimetypes.guess_type(filename, False)
 
-			try:
-				list_ = self._parent.associations_manager.get_user_list(mime_type)
-				if list_ is not None:
-					program_list.extend(list_)
+			# get program lists for all mime types
+			for mime_type in mime_list:
+				try:
+					# get programs from user configuration
+					list_ = self._parent.associations_manager.get_user_list(mime_type)
+					if list_ is not None:
+						program_list.extend(list_)
 
-				# get default configuration
-				list_ = self._parent.associations_manager.get_default_list(mime_type)
-				if list_ is not None:
-					program_list.extend((list_item) for list_item in list_ if list_item not in program_list)
+					# get default configuration
+					list_ = self._parent.associations_manager.get_default_list(mime_type)
+					if list_ is not None:
+						program_list.extend((list_item) for list_item in list_ if list_item not in program_list)
 
-				# filter out empty entries
-				program_list = filter(lambda x: x != '', program_list)
+					# filter out empty entries
+					program_list = filter(lambda x: x != '', program_list)
 
-			except:
-				# sometimes config parser raises exception for god knows what reason
-				# so this way we get around it just to be sure to display menu
-				pass
+				except:
+					# sometimes config parser raises exception for god knows what reason
+					# so this way we get around it just to be sure to display menu
+					pass
 
 		# add all items to menu
 		for config_file in program_list:

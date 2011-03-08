@@ -46,7 +46,6 @@ class AssociationManager:
 
 	def get_default_list(self, mime_type):
 		"""Returns system default file associtation"""
-
 		result = None
 
 		if self._config.has_section(self._default_section) \
@@ -60,7 +59,6 @@ class AssociationManager:
 
 	def get_association_config(self, file_name):
 		"""Return dictionary containing all the options"""
-
 		result = None
 		config = ConfigParser()
 
@@ -77,7 +75,6 @@ class AssociationManager:
 
 	def open_file_with_config(self, callback, config_file):
 		"""Open filename using config data"""
-
 		config = self.get_association_config(config_file)
 		get_file_list = callback
 

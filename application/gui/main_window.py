@@ -537,7 +537,10 @@ class MainWindow(gtk.Window):
 
 		"""
 		list_ = self.menu_bookmarks.get_data('list')
+		oposite_list = self.get_oposite_list(list_)
+
 		list_._disable_object_block()
+		oposite_list._disable_object_block()
 
 	def _create_tools_menu(self):
 		"""Create tools main menu"""
@@ -959,13 +962,16 @@ class MainWindow(gtk.Window):
 
 		if button is not None:
 			list_ = self.menu_bookmarks.get_data('list')
+			oposite_list = self.get_oposite_list(list_)
+
 			list_._enable_object_block()
+			oposite_list._enable_object_block()
 
 			self.menu_bookmarks.popup(
 									None, None,
 									self._get_bookmarks_menu_position,
 									1, 0, button
-									)
+								)
 
 	def select_all(self, widget, data=None):
 		"""Select all items in active list"""
@@ -1387,18 +1393,23 @@ class MainWindow(gtk.Window):
 
 	def focus_oposite_list(self, widget, data=None):
 		"""Sets focus on oposite item list"""
+		oposite_object = self.get_oposite_list(self._active_object)
+		oposite_object._main_object.grab_focus()
+
+		return True
+
+	def get_oposite_list(self, list_):
+		"""Return oposite object"""
 		left_object = self.left_notebook.get_nth_page(self.left_notebook.get_current_page())
 		right_object = self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
 
-		if right_object is self._active_object:
-			# focus left main object
-			left_object._main_object.grab_focus()
+		if list_ is left_object:
+			result = right_object
 
 		else:
-			# focus right main object
-			right_object._main_object.grab_focus()
+			result = left_object
 
-		return True
+		return result
 
 	def update_column_sizes(self, column, sender=None):
 		"""Update column size on all tabs of specified class"""

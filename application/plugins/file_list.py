@@ -1010,11 +1010,41 @@ class FileList(ItemList):
 
 		elif path == self.path:
 			# notify user that he's trying to drag and drop items in same directory
-			pass
+			dialog = gtk.MessageDialog(
+									self._parent,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_WARNING,
+									gtk.BUTTONS_OK,
+									_(
+										'Drag and drop functionality can not '
+										'be used if source and destination are same!'
+									)
+								)
+			dialog.run()
+			dialog.destroy()
+
+			# problem with paths, let source application know that
+			drag_context.finish(False, False, timestamp)
 
 		else:
 			# specified protocol can not be handled, show error
-			pass
+			dialog = gtk.MessageDialog(
+									self._parent,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_ERROR,
+									gtk.BUTTONS_OK,
+									_(
+										'Specified protocol ({0}) is not supported by '
+										'this application. Please check for available plugins '
+										'or create a feature request.'
+									).format(protocol)
+								)
+			dialog.run()
+			dialog.destroy()
+
+			# we don't support this protocol yet, let source application know that
+			drag_context.finish(False, False, timestamp)
+
 
 	def _drag_data_get(self, widget, drag_context, selection_data, info, time):
 		"""Handle data request from destination widget"""

@@ -1362,15 +1362,16 @@ class MainWindow(gtk.Window):
 
 	def focus_oposite_list(self, widget, data=None):
 		"""Sets focus on oposite item list"""
+		left_object = self.left_notebook.get_nth_page(self.left_notebook.get_current_page())
+		right_object = self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
 
-		# get current tab container
-		container = self.left_notebook.get_nth_page(self.left_notebook.get_current_page())
-
-		if container is self._active_object:
-			self.right_notebook.grab_focus()
+		if right_object is self._active_object:
+			# focus left main object
+			left_object._main_object.grab_focus()
 
 		else:
-			self.left_notebook.grab_focus()
+			# focus right main object
+			right_object._main_object.grab_focus()
 
 		return True
 

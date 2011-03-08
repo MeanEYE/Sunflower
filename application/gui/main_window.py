@@ -554,7 +554,7 @@ class MainWindow(gtk.Window):
 			self.menu_tools.append(tool)
 
 		# create separator
-		if tool_count > 0:
+		if tool_count > 1:
 			separator = gtk.SeparatorMenuItem()
 			self.menu_tools.append(separator)
 

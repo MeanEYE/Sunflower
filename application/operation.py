@@ -184,19 +184,10 @@ class CopyOperation(Operation):
 					self._scan_directory(dir_list, file_list, item)
 
 			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
-				can_procede = True
-
-				if self._destination.exists(item, relative_to=self._destination_path):
-					if self._overwrite_all is not None:
-						can_procede = self._overwrite_all
-					else:
-						can_procede = self._get_overwrite_input(item)
-
-				if can_procede:
-					stat = self._source.get_stat(item, relative_to=self._source_path)
-					gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
-					gobject.idle_add(self._dialog.increment_total_count, 1)
-					file_list.append(item)
+				stat = self._source.get_stat(item, relative_to=self._source_path)
+				gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
+				gobject.idle_add(self._dialog.increment_total_count, 1)
+				file_list.append(item)
 
 	def _scan_directory(self, dir_list, file_list, directory):
 		"""Recursively scan directory and populate list"""
@@ -226,28 +217,31 @@ class CopyOperation(Operation):
 					self._scan_directory(dir_list, file_list, full_name)
 
 			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
-				can_procede = True
+				stat = self._source.get_stat(full_name, relative_to=self._source_path)
+				gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
+				gobject.idle_add(self._dialog.increment_total_count, 1)
+				file_list.append(full_name)
 
-				if self._destination.exists(full_name, relative_to=self._destination_path):
-					if self._overwrite_all is not None:
-						can_procede = self._overwrite_all
-					else:
-						can_procede = self._get_overwrite_input(full_name)
-
-				if can_procede:
-					stat = self._source.get_stat(full_name, relative_to=self._source_path)
-					gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
-					gobject.idle_add(self._dialog.increment_total_count, 1)
-					file_list.append(full_name)
-
-	def _copy_file(self, file):
+	def _copy_file(self, file_):
 		"""Copy file content"""
+		can_procede = True
+
+		# check if destination file exists
+		if self._destination.exists(file_, relative_to=self._destination_path):
+			if self._overwrite_all is not None:
+				can_procede = self._overwrite_all
+			else:
+				can_procede = self._get_overwrite_input(file_)
+
+		# if user skipped this file return
+		if not can_procede: return
+
 		# TODO: Handle errors!
-		sh = self._source.get_file_handle(file, 'rb', relative_to=self._source_path)
-		dh = self._destination.get_file_handle(file, 'wb', relative_to=self._destination_path)
+		sh = self._source.get_file_handle(file_, 'rb', relative_to=self._source_path)
+		dh = self._destination.get_file_handle(file_, 'wb', relative_to=self._destination_path)
 
 		destination_size = 0L
-		file_stat = self._source.get_stat(file, relative_to=self._source_path)
+		file_stat = self._source.get_stat(file_, relative_to=self._source_path)
 
 		# reserve file size
 		try:
@@ -269,13 +263,13 @@ class CopyOperation(Operation):
 			if self._abort.is_set(): break
 			self._can_continue.wait()
 
-			buffer = sh.read(COPY_BUFFER)
+			buffer_ = sh.read(COPY_BUFFER)
 
-			if (buffer):
-				dh.write(buffer)
+			if (buffer_):
+				dh.write(buffer_)
 
-				destination_size += len(buffer)
-				gobject.idle_add(self._dialog.increment_current_size, len(buffer))
+				destination_size += len(buffer_)
+				gobject.idle_add(self._dialog.increment_current_size, len(buffer_))
 				if file_stat.st_size > 0:  # ensure we don't end up with error on 0 size files
 					gobject.idle_add(
 									self._dialog.set_current_file_fraction,
@@ -291,7 +285,7 @@ class CopyOperation(Operation):
 				# set mode if required
 				if self._options[OPTION_SET_MODE]:
 					self._destination.set_mode(
-											file,
+											file_,
 											stat.S_IMODE(file_stat.st_mode),
 											relative_to=self._destination_path
 										)
@@ -299,7 +293,7 @@ class CopyOperation(Operation):
 				# set owner if required
 				if self._options[OPTION_SET_OWNER]:
 					self._destination.set_owner(
-											file,
+											file_,
 											file_stat.st_uid,
 											file_stat.st_gid,
 											relative_to=self._destination_path

@@ -106,6 +106,7 @@ class OperationDialog(gtk.Window):
 		self._label_status = gtk.Label('Current status...')
 		self._label_current_file = gtk.Label()
 		self._pb_current_file = gtk.ProgressBar()
+		self._pb_current_file.set_pulse_step(0.005)
 
 		# pack interface
 		table.attach(self._label_status, 0, 1, 0, 1, gtk.FILL)
@@ -347,6 +348,11 @@ class OperationDialog(gtk.Window):
 		assert self._value_total_count is not None
 		self._current_count += value
 		self._update_total_count()
+
+	def pulse(self):
+		"""Pulse current progress bar"""
+		assert self._pb_current_file is not None
+		self._pb_current_file.pulse()
 
 
 class CopyDialog(OperationDialog):

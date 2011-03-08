@@ -171,6 +171,7 @@ class CopyOperation(Operation):
 			self._can_continue.wait()
 
 			gobject.idle_add(self._dialog.set_current_file, item)
+			gobject.idle_add(self._dialog.pulse)
 
 			if self._source.is_dir(item, relative_to=self._source_path):
 				can_procede = True
@@ -201,6 +202,7 @@ class CopyOperation(Operation):
 			self._can_continue.wait()
 
 			gobject.idle_add(self._dialog.set_current_file, item)
+			gobject.idle_add(self._dialog.pulse)
 
 			full_name = os.path.join(directory, item)
 

@@ -1514,3 +1514,12 @@ class MainWindow(gtk.Window):
 
 		"""
 		self.provider_classes[protocol] = provider_class
+
+	def get_provider_by_protocol(self, protocol):
+		"""Return provider class specified by protocol"""
+		result = None
+
+		if protocol in self.provider_classes.keys():
+			result = self.provider_classes[protocol]
+
+		return result

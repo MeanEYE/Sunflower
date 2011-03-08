@@ -94,10 +94,24 @@ class PluginBase(gtk.VBox):
 										actions
 									)
 
+			self._main_object.drag_source_set(
+										gtk.gdk.BUTTON1_MASK,
+										types,
+										actions
+									)
+
 			# connect drag and drop events
+			self._main_object.connect('drag-begin', self._drag_begin)
 			self._main_object.connect('drag-motion', self._drag_motion)
 			self._main_object.connect('drag-drop', self._drag_drop)
 			self._main_object.connect('drag-data-received', self._drag_data_received)
+			self._main_object.connect('drag-data-get', self._drag_data_get)
+			self._main_object.connect('drag-data-delete', self._drag_data_delete)
+			self._main_object.connect('drag-end', self._drag_end)
+
+	def _drag_begin(self, widget, drag_context):
+		"""Handle start of drag and drop operation"""
+		return True
 
 	def _drag_motion(self, widget, drag_context, x, y, timestamp):
 		"""Handle dragging data over widget"""
@@ -109,7 +123,18 @@ class PluginBase(gtk.VBox):
 
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle drop of data"""
-		print selection_data.data
+		return True
+
+	def _drag_data_get(self, widget, drag_context, selection_data, info, time):
+		"""Respont to get-data request from destination widget"""
+		return True
+
+	def _drag_data_delete(self, widget, drag_context):
+		"""Handle delete data after move operation"""
+		return True
+
+	def _drag_end(widget, drag_context, data=None):
+		"""Handle the end of drag and drop operation"""
 		return True
 
 	def _get_supported_drag_types(self):

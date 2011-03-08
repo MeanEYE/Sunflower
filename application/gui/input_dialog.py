@@ -371,11 +371,11 @@ class CopyDialog(gtk.Dialog):
 
 	def _get_item_count(self):
 		"""Count number of items to copy"""
-		list = self._provider.get_selection()
-		result = len(list)
+		list_ = self._provider.get_selection()
+		result = len(list_)
 
 		if hasattr(self, 'entry_type'):
-			matches = fnmatch.filter(list, self.entry_type.get_text())
+			matches = fnmatch.filter(list_, self.entry_type.get_text())
 			result = len(matches)
 
 		return result

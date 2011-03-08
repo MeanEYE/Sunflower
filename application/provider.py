@@ -2,9 +2,12 @@
 
 class Provider:
 	is_local = True  # if provider handles local files
-	
-	def __init__(self, parent):
+
+	def __init__(self, parent, path=None, selection=None):
 		self._parent = parent
+
+		self._path = path
+		self._selection = selection
 
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
@@ -17,7 +20,7 @@ class Provider:
 	def is_link(self, path, relative_to=None):
 		"""Test if given path is a link"""
 		pass
-	
+
 	def exists(self, path, relative_to=None):
 		"""Test if given path exists"""
 		pass
@@ -33,11 +36,11 @@ class Provider:
 	def remove_file(self, path, relative_to=None):
 		"""Remove file"""
 		pass
-	
+
 	def create_file(self, path, mode=None, relative_to=None):
 		"""Create empty file with specified mode set"""
 		pass
-	
+
 	def create_directory(self, path, mode=None, relative_to=None):
 		"""Create directory with specified mode set"""
 		pass
@@ -45,27 +48,43 @@ class Provider:
 	def get_file_handle(self, path, mode, relative_to=None):
 		"""Open path in specified mode and return its handle"""
 		pass
-	
+
 	def get_stat(self, path, relative_to=None):
 		"""Return file statistics"""
 		pass
 
 	def get_selection(self, relative=False):
 		"""Get list of selected items"""
-		return self._parent._get_selection_list(relative=relative)
-	
+		if self._selection is None:
+			# get selection from parent
+			result = self._parent._get_selection_list(relative=relative)
+
+		else:
+			# return predefined selection
+			result = self._selection
+
+		return result
+
 	def get_path(self):
 		"""Return parents path"""
-		return self._parent.path
-	
+		if self._path is None:
+			# return parent path
+			result = self._parent.path
+
+		else:
+			# return predefined path
+			result = self._path
+
+		return result
+
 	def set_mode(self, path, mode, relative_to=None):
 		"""Set access mode to specified path"""
 		pass
-	
+
 	def set_owner(self, path, owner=-1, group=-1, relative_to=None):
 		"""Set owner and/or group for specified path"""
 		pass
-	
+
 	def remove_path(self, path, recursive=True, relative_to=None):
 		"""Remove path"""
 		if self.is_link(path, relative_to):  # handle links
@@ -76,11 +95,11 @@ class Provider:
 
 		else:  # handle files
 			self.remove_file(path, relative_to)
-			
+
 	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""
 		pass
-			
+
 	def list_dir(self, path, relative_to=None):
 		"""Get directory list"""
 		pass

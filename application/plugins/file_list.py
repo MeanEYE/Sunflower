@@ -528,7 +528,7 @@ class FileList(ItemList):
 					program_list.extend((list_item) for list_item in list_ if list_item not in program_list)
 
 				# filter out empty entries
-				program_list = filter(lambda x: x is not '', program_list)
+				program_list = filter(lambda x: x != '', program_list)
 
 			except:
 				# sometimes config parser raises exception for god knows what reason
@@ -547,7 +547,7 @@ class FileList(ItemList):
 				self._open_with_menu.append(menu_item)
 
 		# disable/enable items
-		has_items = len(self._open_with_menu.get_children()) is not 0
+		has_items = len(self._open_with_menu.get_children()) > 0
 		self._open_with_item.set_sensitive(has_items and self.get_provider().is_local)
 		self._send_to_item.set_sensitive(self.get_provider().is_local and not is_parent)
 		self._delete_item.set_sensitive(not is_parent)
@@ -919,12 +919,12 @@ class FileList(ItemList):
 		self._title_label.set_label(
 									'{0}\n<span size="x-small">'
 									'{3} {1} - {4} {2}</span>'.format(
-																		text,
-																		space_free,
-																		space_total,
-																		_('Free:'),
-																		_('Total:')
-																	)
+																	text,
+																	space_free,
+																	space_total,
+																	_('Free:'),
+																	_('Total:')
+																)
 								)
 
 	def _format_size(self, size):
@@ -934,10 +934,69 @@ class FileList(ItemList):
 				return "%3.1f %s" % (size, x)
 			size /= 1024.0
 
+	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
+		"""Handle dropping files on file list"""
+		# TODO: Finish drag and drop support
+		list_ = selection_data.data.splitlines(False)
+
+		# prepare data for copying
+		data = list_[0].split('://', 1)
+		path = os.path.dirname(data[1])
+		protocol = data[0]
+		selection_list = [os.path.basename(item) for item in list_]
+
+		# get provider class
+		Provider = self._parent.get_provider_by_protocol(protocol)
+
+		if Provider is not None and path != self.path:
+			# create provider with specified path and selection
+			provider = Provider(self, path, selection_list)
+
+			# present a copy/move dialog
+			dialog = CopyDialog(
+							self._parent,
+							provider,
+							self.path
+						)
+			result = dialog.get_response()
+
+			if result[0] == gtk.RESPONSE_OK:
+				# user confirmed copying
+				operation = CopyOperation(
+										self._parent,
+										provider,
+										self.get_provider(),
+										result[1]  # options from dialog
+									)
+
+				# start the operation
+				operation.start()
+
+				# finish drag process
+				drag_context.finish(True, False, timestamp)
+
+			else:
+				# user canceled operation, let source application know that
+				drag_context.finish(False, False, timestamp)
+
+		elif path == self.path:
+			# notify user that he's trying to drag and drop items in same directory
+			pass
+
+		else:
+			# specified protocol can not be handled, show error
+			pass
+
+	def _drag_data_get(self, widget, drag_context, selection_data, info, time):
+		"""Handle data request from destination widget"""
+		selection = ['file://{0}'.format(file_) for file_ in self._get_selection_list()]
+		selection_data.set(selection_data.target, 8, '\n'.join(selection))
+		return True
+
 	def _get_supported_drag_types(self):
 		"""Return list of supported data for drag'n'drop events"""
 		return [
-				('text/plain', 0, 82),
+				('text/plain', 0, 0),
 			]
 
 	def _get_supported_drag_actions(self):

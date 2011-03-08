@@ -557,7 +557,7 @@ class ItemList(PluginBase):
 		item = menu_manager.create_menu_item({
 								'label': _('Open in new ta_b'),
 								'type': 'image',
-								'stock': gtk.STOCK_OPEN,
+								'image': 'tab-new',
 								'callback': self._open_in_new_tab
 							})
 		result.append(item)

@@ -199,9 +199,10 @@ class MainWindow(gtk.Window):
 					{
 						'label': _('Ful_lscreen'),
 						'type': 'image',
-						'image': 'view-fullscreen',
+						'stock': gtk.STOCK_FULLSCREEN,
 						'callback': self.toggle_fullscreen,
-						'path': '<Sunflower>/View/Fullscreen'
+						'path': '<Sunflower>/View/Fullscreen',
+						'name': 'fullscreen_toggle',
 					},
 					{
 						'label': _('Rel_oad item list'),
@@ -1429,7 +1430,6 @@ class MainWindow(gtk.Window):
 
 	def toggle_fullscreen(self, widget, data=None):
 		"""Toggle application fullscreen"""
-
 		if self._in_fullscreen:
 			self.unfullscreen()
 			self._in_fullscreen = False
@@ -1437,6 +1437,13 @@ class MainWindow(gtk.Window):
 		else:
 			self.fullscreen()
 			self._in_fullscreen = True
+
+		# adjust menu item image
+		stock = (gtk.STOCK_FULLSCREEN, gtk.STOCK_LEAVE_FULLSCREEN)[self._in_fullscreen]
+		menu_item = self.menu_manager.get_item_by_name('fullscreen_toggle')
+
+		image = menu_item.get_image()
+		image.set_from_stock(stock, gtk.ICON_SIZE_MENU)
 
 	def add_operation(self, widget, callback, data=None):
 		"""Add operation to menu"""

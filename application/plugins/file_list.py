@@ -869,12 +869,12 @@ class FileList(ItemList):
 	def _delete_item_by_name(self, name):
 		"""Removes item with 'name' from the list"""
 		selection = self._item_list.get_selection()
-		list, selected_iter = selection.get_selected()
+		list_, selected_iter = selection.get_selected()
 
 		# get currently selected name
 		selected_name = None
 		if selected_iter is not None:
-			selected_name = list.get_value(selected_iter, COL_NAME)
+			selected_name = list_.get_value(selected_iter, COL_NAME)
 
 		# find iter matching 'name'
 		found_iter = self._find_iter_by_name(name)
@@ -884,15 +884,26 @@ class FileList(ItemList):
 
 			# if currently hovered item was removed
 			if iter_name == selected_name:
-				next_iter = list.iter_next(selected_iter)
+				next_iter = list_.iter_next(selected_iter)
 
 				if next_iter is not None:
-					self._item_list.set_cursor(list.get_path(next_iter))
+					self._item_list.set_cursor(list_.get_path(next_iter))
 
-			if list.get_value(found_iter, COL_DIR):
+			if list_.get_value(found_iter, COL_DIR):
 				self._dirs['count'] -= 1
+
+				# update selected counters
+				if list_.get_value(found_iter, COL_SELECTED) is not None:
+					self._dirs['selected'] -= 1
+
 			else:
 				self._files['count'] -= 1
+				self._size['total'] -= list_.get_value(found_iter, COL_SIZE)
+
+				# update selected counters
+				if list_.get_value(found_iter, COL_SELECTED) is not None:
+					self._files['selected'] -= 1
+					self._size['selected'] -= list_.get_value(found_iter, COL_SIZE)
 
 			# remove
 			self._store.remove(found_iter)

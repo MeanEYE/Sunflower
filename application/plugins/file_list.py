@@ -251,7 +251,7 @@ class FileList(ItemList):
 
 		elif self.get_provider().is_local:
 			# selected item is just a file, execute it
-			os.system("gnome-open '{0}'".format(self._get_selection()))
+			os.system("xdg-open '{0}'".format(self._get_selection()))
 
 		return True  # to prevent command or quick search in single key bindings
 

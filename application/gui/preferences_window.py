@@ -556,8 +556,8 @@ class BookmarkOptions(gtk.VBox):
 		self._checkbox_show_mount_points = gtk.CheckButton(_('Show mount points in bookmarks menu'))
 		self._checkbox_show_mount_points.connect('toggled', self._parent.enable_save)
 
-		# mounts checkbox
-		self._checkbox_add_home = gtk.CheckButton(_('Add home directory to bookmarks'))
+		# bookmarks checkbox
+		self._checkbox_add_home = gtk.CheckButton(_('Add home directory to bookmarks menu'))
 		self._checkbox_add_home.connect('toggled', self._parent.enable_save)
 
 		# create list box

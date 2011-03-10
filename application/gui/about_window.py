@@ -73,9 +73,6 @@ class AboutWindow(gtk.Window):
 		# change log tab
 		notebook.append_page(*self._create_changelog_tab())
 
-		# create statistics tab
-		notebook.append_page(*self._create_statistics_tab())
-
 		# bottom button controls
 		hbox2 = gtk.HBox(False, 3)
 
@@ -196,61 +193,6 @@ class AboutWindow(gtk.Window):
 		changelog.get_buffer().set_text(data)
 
 		tab.add(changelog)
-
-		return (tab, tab_label)
-
-	def _create_statistics_tab(self):
-		"""Create tab for all the promotional sites"""
-		tab = gtk.Notebook()
-		tab.set_tab_pos(gtk.POS_RIGHT)
-		tab.set_border_width(5)
-		tab_label = gtk.Label(_('Statistics'))
-
-		# wakoopa statistics
-		tab_wakoopa = gtk.VBox(False, 5)
-		tab_wakoopa.set_border_width(10);
-
-		warning = gtk.Label('In order to avoid slow program starting and '
-			'unnecessary bandwidth usage, automatic <b>Wakoopa</b> statistics loading '
-			'has been disabled. Please click on <i>load</i> button to retrieve data. ')
-		warning.set_use_markup(True)
-		warning.set_line_wrap(True)
-		warning.set_alignment(0,0)
-		warning.connect('size-allocate', self._adjust_label)
-
-		self._wakoopa_image = gtk.Image()
-
-		hbox3 = gtk.HBox(False, 0)
-		load_button = gtk.Button('Load');
-		load_button.connect('clicked', self.load_wakoopa_image)
-
-		hbox3.pack_end(load_button, False, True, 0)
-
-		tab_wakoopa.pack_start(warning, False, True, 0)
-		tab_wakoopa.pack_start(self._wakoopa_image, False, True, 0)
-		tab_wakoopa.pack_end(hbox3, False, True, 0)
-
-		image_wakoopa = gtk.Image()
-		image_wakoopa.set_from_file(
-								os.path.join(
-									os.path.dirname(sys.argv[0]),
-									'images',
-									'wakoopa.png'
-								))
-		tab.append_page(tab_wakoopa, image_wakoopa)
-
-		# alternative to
-		tab_alternativeto = gtk.VBox(False, 5)
-		tab_alternativeto.set_border_width(10)
-
-		image_alternativeto = gtk.Image()
-		image_alternativeto.set_from_file(
-								os.path.join(
-									os.path.dirname(sys.argv[0]),
-									'images',
-									'alternativeto.png'
-								))
-		tab.append_page(tab_alternativeto, image_alternativeto)
 
 		return (tab, tab_label)
 

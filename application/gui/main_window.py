@@ -187,6 +187,12 @@ class MainWindow(gtk.Window):
 					},
 					{'type': 'separator'},
 					{
+						'label': _('Select with same e_xtension'),
+						'callback': self.select_with_same_extension,
+						'path': '<Sunflower>/Mark/SelectWithSameExtension',
+					},
+					{'type': 'separator'},
+					{
 						'label': _('Compare _directories'),
 						'callback': self.compare_directories,
 						'path': '<Sunflower>/Mark/Compare',
@@ -658,7 +664,7 @@ class MainWindow(gtk.Window):
 			right_selection_long = right_object._get_selection(False)
 
 		# get universal 'selected item' values
-		if self._active_object is left_object:
+		if self._get_active_object() is left_object:
 			selection_short = left_selection_short
 			selection_long = left_selection_long
 		else:
@@ -677,7 +683,7 @@ class MainWindow(gtk.Window):
 
 	def _handle_new_tab_click(self, widget, data=None):
 		"""Handle clicking on item from 'New tab' menu"""
-		notebook = self._active_object._notebook
+		notebook = self._get_active_object()._notebook
 		plugin_class = widget.get_data('class')
 
 		self.create_tab(notebook, plugin_class)
@@ -976,34 +982,33 @@ class MainWindow(gtk.Window):
 
 	def select_all(self, widget, data=None):
 		"""Select all items in active list"""
-		list = self._get_active_object()
+		list_ = self._get_active_object()
 
 		# ensure we don't make exception on terminal tabs
-		if hasattr(list, 'select_all'):
-			list.select_all()
+		if hasattr(list_, 'select_all'):
+			list_.select_all()
 
 	def unselect_all(self, widget, data=None):
 		"""Unselect all items in active list"""
-		list = self._get_active_object()
+		list_ = self._get_active_object()
 
 		# ensure we don't make exception on terminal tabs
-		if hasattr(list, 'unselect_all'):
-			list.unselect_all()
+		if hasattr(list_, 'unselect_all'):
+			list_.unselect_all()
 
 	def invert_selection(self, widget, data=None):
 		"""Invert selection in active list"""
-		list = self._get_active_object()
+		list_ = self._get_active_object()
 
-		if hasattr(list, 'invert_selection'):
-			list.invert_selection()
+		if hasattr(list_, 'invert_selection'):
+			list_.invert_selection()
 
 	def select_with_pattern(self, widget, data=None):
 		"""Ask user for selection pattern and
 		select matching items"""
+		list_ = self._get_active_object()
 
-		list = self._get_active_object()
-
-		if hasattr(list, 'select_all'):
+		if hasattr(list_, 'select_all'):
 			# create dialog
 			dialog = InputDialog(self)
 
@@ -1019,15 +1024,22 @@ class MainWindow(gtk.Window):
 
 			# commit selection
 			if response[0] == gtk.RESPONSE_OK:
-				list.select_all(response[1])
+				list_.select_all(response[1])
+
+	def select_with_same_extension(self, widget, data=None):
+		"""Select all items with same extension in active list"""
+		list_ = self._get_active_object()
+
+		if hasattr(list_, '_get_selection') and hasattr(list_, 'select_all'):
+			extension = os.path.splitext(list_._get_selection())[1]
+			list_.select_all('*{0}'.format(extension))
 
 	def unselect_with_pattern(self, widget, data=None):
 		"""Ask user for selection pattern and
 		select matching items"""
+		list_ = self._get_active_object()
 
-		list = self._get_active_object()
-
-		if hasattr(list, 'unselect_all'):
+		if hasattr(list_, 'unselect_all'):
 			# create dialog
 			dialog = InputDialog(self)
 
@@ -1043,7 +1055,7 @@ class MainWindow(gtk.Window):
 
 			# commit selection
 			if response[0] == gtk.RESPONSE_OK:
-				list.unselect_all(response[1])
+				list_.unselect_all(response[1])
 
 	def compare_directories(self, widget=None, data=None):
 		"""Compare directories from left and right notebook"""
@@ -1285,6 +1297,7 @@ class MainWindow(gtk.Window):
 						('<Sunflower>/Mark/SelectPattern', 'KP_Add', 0),
 						('<Sunflower>/Mark/UnselectPattern', 'KP_Subtract', 0),
 						('<Sunflower>/Mark/InvertSelection', 'KP_Multiply', 0),
+						('<Sunflower>/Mark/SelectWithSameExtension', 'KP_Add', gtk.gdk.MOD1_MASK),
 						('<Sunflower>/Mark/Compare', 'F12', 0),
 						('<Sunflower>/View/Fullscreen', 'F11', 0),
 						('<Sunflower>/View/Reload', 'R', gtk.gdk.CONTROL_MASK),
@@ -1394,7 +1407,7 @@ class MainWindow(gtk.Window):
 
 	def focus_oposite_list(self, widget, data=None):
 		"""Sets focus on oposite item list"""
-		oposite_object = self.get_oposite_list(self._active_object)
+		oposite_object = self.get_oposite_list(self._get_active_object())
 		oposite_object._main_object.grab_focus()
 
 		return True

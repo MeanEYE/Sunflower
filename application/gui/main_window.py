@@ -493,6 +493,19 @@ class MainWindow(gtk.Window):
 			separator = self.menu_manager.create_menu_item({'type': 'separator'})
 			self.menu_bookmarks.append(separator)
 
+		# add home if specified
+		if self.options.getboolean('main', 'add_home'):
+			bookmark = gtk.ImageMenuItem()
+			image = gtk.Image()
+			image.set_from_icon_name('user-home', gtk.ICON_SIZE_MENU)
+
+			bookmark.set_image(image)
+			bookmark.set_label(label=_('Home directory'))
+			bookmark.set_data('path', os.path.expanduser('~/'))
+			bookmark.connect('activate', self._handle_bookmarks_click)
+
+			self.menu_bookmarks.append(bookmark)
+
 		# create bookmark menu items
 		raw_bookmarks = self.bookmark_options.options('bookmarks')
 
@@ -1379,6 +1392,7 @@ class MainWindow(gtk.Window):
 				'show_toolbar': 'False',
 				'show_command_bar': 'False',
 				'show_command_entry': 'True',
+				'add_home': 'True',
 				'search_modifier': '010',
 				'time_format': '%H:%M %d-%m-%y',
 				'focus_new_tab': 'True',

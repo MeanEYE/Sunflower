@@ -556,6 +556,10 @@ class BookmarkOptions(gtk.VBox):
 		self._checkbox_show_mount_points = gtk.CheckButton(_('Show mount points in bookmarks menu'))
 		self._checkbox_show_mount_points.connect('toggled', self._parent.enable_save)
 
+		# mounts checkbox
+		self._checkbox_add_home = gtk.CheckButton(_('Add home directory to bookmarks'))
+		self._checkbox_add_home.connect('toggled', self._parent.enable_save)
+
 		# create list box
 		container = gtk.ScrolledWindow()
 		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
@@ -615,7 +619,13 @@ class BookmarkOptions(gtk.VBox):
 		button_box.set_child_secondary(button_move_up, True)
 		button_box.set_child_secondary(button_move_down, True)
 
-		self.pack_start(self._checkbox_show_mount_points, False, False, 0)
+		# pack checkboxes
+		vbox = gtk.VBox(False, 0)
+
+		vbox.pack_start(self._checkbox_show_mount_points, False, False, 0)
+		vbox.pack_start(self._checkbox_add_home, False, False, 0)
+
+		self.pack_start(vbox, False, False, 0)
 		self.pack_start(container, True, True, 0)
 		self.pack_start(button_box, False, False, 0)
 
@@ -672,8 +682,9 @@ class BookmarkOptions(gtk.VBox):
 		options = self._application.options
 		bookmark_options = self._application.bookmark_options
 
-		# get show mounts checkbox state
+		# get checkbox states
 		self._checkbox_show_mount_points.set_active(options.getboolean('main', 'show_mounts'))
+		self._checkbox_add_home.set_active(options.getboolean('main', 'add_home'))
 
 		# load and parse bookmars
 		if bookmark_options.has_section('bookmarks'):
@@ -693,6 +704,7 @@ class BookmarkOptions(gtk.VBox):
 
 		# save show mounts checkbox state
 		options.set('main', 'show_mounts', _bool[self._checkbox_show_mount_points.get_active()])
+		options.set('main', 'add_home', _bool[self._checkbox_add_home.get_active()])
 
 		# save bookmars
 		bookmark_options.remove_section('bookmarks')

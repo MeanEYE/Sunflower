@@ -107,7 +107,7 @@ class FileList(ItemList):
 		cell_date.set_property('size-points', 8)
 
 		# create columns
-		col_file = gtk.TreeViewColumn(_('Filename'))
+		col_file = gtk.TreeViewColumn(_('Name'))
 		col_extension = gtk.TreeViewColumn(_('Ext'))
 		col_size = gtk.TreeViewColumn(_('Size'))
 		col_mode = gtk.TreeViewColumn(_('Mode'))

@@ -206,6 +206,27 @@ class MainWindow(gtk.Window):
 					}
 				)
 			},
+		    {
+		        'label': _('Commands'),
+		        'name': 'commands_menu',
+		        'submenu': (
+		            {
+		                'label': _('Find files'),
+		                'type': 'image',
+		                'image': 'system-search',
+		                'path': '<Sunflower>/Commands/FindFiles'
+		            },
+		            {
+		                'label': _('Synchronize directories'),
+		                'path': '<Sunflower>/Commands/SynchronizeDirectories'
+		            },
+		            {'type': 'separator'},
+		            {
+		                'label': _('Advanced rename'),
+		                'path': '<Sunflower>/Commands/AdvancedRename'
+		            },
+		        )
+		    },
 			{
 				'label': _('View'),
 				'submenu': (
@@ -356,6 +377,10 @@ class MainWindow(gtk.Window):
 		self._menu_item_mounts.set_image(mounts_image)
 		self._menu_item_mounts.show()
 		self.mount_manager = MountsManager(self, self._menu_item_mounts)
+
+		# commands menu
+		menu_item_commands = self.menu_manager.get_item_by_name('commands_menu')
+		self.menu_commands = menu_item_commands.get_submenu()
 
 		# create notebooks
 		hbox = gtk.HBox(True, 3)
@@ -1319,6 +1344,9 @@ class MainWindow(gtk.Window):
 						('<Sunflower>/Mark/InvertSelection', 'KP_Multiply', 0),
 						('<Sunflower>/Mark/SelectWithSameExtension', 'KP_Add', gtk.gdk.MOD1_MASK),
 						('<Sunflower>/Mark/Compare', 'F12', 0),
+			            ('<Sunflower>/Commands/FindFiles', 'F7', gtk.gdk.MOD1_MASK),
+			            ('<Sunflower>/Commands/SynchronizeDirectories', 'F8', gtk.gdk.MOD1_MASK),
+			            ('<Sunflower>/Commands/AdvancedRename', 'M', gtk.gdk.CONTROL_MASK),
 						('<Sunflower>/View/Fullscreen', 'F11', 0),
 						('<Sunflower>/View/Reload', 'R', gtk.gdk.CONTROL_MASK),
 						('<Sunflower>/View/ShowHidden', 'H', gtk.gdk.CONTROL_MASK),

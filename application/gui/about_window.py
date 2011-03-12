@@ -1,7 +1,8 @@
 #!/usr/bin/env python
+# coding: utf-8
 
-import sys
 import os
+import sys
 import gtk
 import urllib
 
@@ -70,6 +71,9 @@ class AboutWindow(gtk.Window):
 		# license tab
 		notebook.append_page(*self._create_license_tab())
 
+		# contributors tab
+		notebook.append_page(*self._create_contributors_tab())
+
 		# change log tab
 		notebook.append_page(*self._create_changelog_tab())
 
@@ -110,6 +114,7 @@ class AboutWindow(gtk.Window):
 		tab.set_border_width(10)
 		tab_label = gtk.Label(_('Copyright'))
 
+		# program copyright
 		program_info = gtk.Label(_(
 						'This software is being developed under GNU general '
 						'public license. If you would like to obtain source code '
@@ -119,23 +124,27 @@ class AboutWindow(gtk.Window):
 		program_info.set_alignment(0,0)
 		program_info.set_line_wrap(True)
 		program_info.connect('size-allocate', self._adjust_label)
-		tab.pack_start(program_info, False, True, 0)
 
+		# developer info
 		developer_info = gtk.Label(
-							'<b>' + _('Developer') + '</b>\n\tMeanEYE, <i>'
+							'<b>' + _('Developer:') + '</b>\n\tMeanEYE, <i>'
 							'<span size="small">RCF Group</span></i>'
 							)
 		developer_info.set_use_markup(True)
 		developer_info.set_alignment(0,0)
-		tab.pack_start(developer_info, False, True, 0)
 
+		# artist info
 		artist_info = gtk.Label(
-							'<b>' + _('Artist') + '</b>\n\tMrakoslava, <i>'
+							'<b>' + _('Artist:') + '</b>\n\tMrakoslava, <i>'
 							'<span size="small">Studio Spectra</span></i>'
 							)
 		artist_info.set_use_markup(True)
 		artist_info.set_alignment(0,0)
-		tab.pack_start(artist_info, False, True, 0)
+
+		# pack interface
+		tab.pack_start(program_info, False, True, 0)
+		tab.pack_start(developer_info, False, False, 0)
+		tab.pack_start(artist_info, False, False, 0)
 
 		return (tab, tab_label)
 
@@ -169,6 +178,40 @@ class AboutWindow(gtk.Window):
 			buffer_.set_text(license_text)
 
 		tab.add(license_)
+
+		return (tab, tab_label)
+
+	def _create_contributors_tab(self):
+		"""Create license tab"""
+		tab = gtk.ScrolledWindow()
+		tab.set_border_width(5)
+		tab.set_shadow_type(gtk.SHADOW_IN)
+		tab.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+		tab_label = gtk.Label(_('Contributors'))
+
+		# container for all the lists
+		vbox = gtk.VBox(False, 0)
+		vbox.set_border_width(5)
+
+		# translators
+		label_translators = gtk.Label('<b>{0}</b>'.format(_('Translating:')))
+		label_translators.set_alignment(0, 0.1)
+		label_translators.set_use_markup(True)
+
+		vbox_translators = gtk.VBox(False, 0)
+
+		# add translators
+		label_name = gtk.Label('\tRadek Tříška\t\t<small>Czech</small>')
+		label_name.set_alignment(0, 0.1)
+		label_name.set_use_markup(True)
+
+		vbox_translators.pack_start(label_name, False, False, 0)
+
+		# pack interface
+		vbox.pack_start(label_translators, False, True, 0)
+		vbox.pack_start(vbox_translators, False, False, 0)
+
+		tab.add(vbox)
 
 		return (tab, tab_label)
 

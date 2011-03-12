@@ -130,7 +130,7 @@ class AboutWindow(gtk.Window):
 			license_file.close()
 
 		# create license container and configure it
-		font = pango.FontDescription('monospace 8')
+		font = pango.FontDescription('monospace 9')
 		license_ = gtk.TextView()
 		license_.set_editable(False)
 		license_.set_cursor_visible(False)
@@ -206,7 +206,11 @@ class AboutWindow(gtk.Window):
 		translators.pack_start(label_translating, False, False, 0)
 
 		# add translators
-		translator = gtk.Label('\tRadek Tříška <small>&lt;radek@fastlinux.eu&gt;</small>\t\tCzech language')
+		translator = gtk.Label(
+		                '\tRadek Tříška '
+		                '<small>&lt;radek@fastlinux.eu&gt;</small>'
+		                '\t\tCzech language'
+		            )
 		translator.set_alignment(0, 0.1)
 		translator.set_use_markup(True)
 		translator.set_selectable(True)
@@ -228,6 +232,7 @@ class AboutWindow(gtk.Window):
 		tab = gtk.ScrolledWindow()
 		tab.set_border_width(5)
 		tab.set_shadow_type(gtk.SHADOW_IN)
+		tab.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
 		tab_label = gtk.Label(_('Change log'))
 
 		data = ''
@@ -237,9 +242,12 @@ class AboutWindow(gtk.Window):
 			with open(changelog_location, 'r') as file_:
 				data = file_.read()
 
+		font = pango.FontDescription('monospace 9')
 		changelog = gtk.TextView()
 		changelog.set_editable(False)
 		changelog.set_cursor_visible(False)
+		changelog.set_wrap_mode(gtk.WRAP_WORD)
+		changelog.modify_font(font)
 
 		changelog.get_buffer().set_text(data)
 

@@ -74,9 +74,12 @@ class ChangeLogDialog(gtk.Dialog):
 			notebook.append_page(vbox, modifications_label)
 
 		# change log
+		font = pango.FontDescription('monospace 9')
 		changelog = gtk.TextView()
 		changelog.set_editable(False)
 		changelog.set_cursor_visible(False)
+		changelog.set_wrap_mode(gtk.WRAP_WORD)
+		changelog.modify_font(font)
 
 		# load change log if it exists
 		changelog_file = os.path.join(os.path.dirname(sys.argv[0]), 'change.log')
@@ -92,6 +95,7 @@ class ChangeLogDialog(gtk.Dialog):
 		changelog_label = gtk.Label(_('Change log'))
 		changelog_window = gtk.ScrolledWindow()
 		changelog_window.set_shadow_type(gtk.SHADOW_IN)
+		changelog_window.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
 		changelog_window.set_border_width(5)
 		changelog_window.add(changelog)
 

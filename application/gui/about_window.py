@@ -106,10 +106,9 @@ class AboutWindow(gtk.Window):
 
 	def _create_copyright_tab(self):
 		"""Create license tab"""
-		tab = gtk.ScrolledWindow()
+		tab = gtk.Viewport()
 		tab.set_border_width(5)
 		#tab.set_shadow_type(gtk.SHADOW_IN)
-		tab.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
 		tab_label = gtk.Label(_('Copyright'))
 
 		# container for all the lists

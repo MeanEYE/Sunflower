@@ -1,6 +1,7 @@
 import os
 import sys
 import gtk
+import pango
 
 class ChangeLogDialog(gtk.Dialog):
 	"""Window used to display application change log"""

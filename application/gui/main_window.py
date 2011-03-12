@@ -940,20 +940,20 @@ class MainWindow(gtk.Window):
 			vbox.set_border_width(5)
 
 			# reset aceelerator map
-			if config_version < 16:
-				vbox_16 = gtk.VBox(False, 0)
+			if config_version < 19:
+				vbox_accel_map = gtk.VBox(False, 0)
 
-				label_16 = gtk.Label('<b>Version 0.1a-16:</b>')
-				label_16.set_alignment(0, 0.5)
-				label_16.set_use_markup(True)
+				label_accel_map = gtk.Label('<b>Version 0.1a-19:</b>')
+				label_accel_map.set_alignment(0, 0.5)
+				label_accel_map.set_use_markup(True)
 
 				checkbox_reset_accel_map = gtk.CheckButton('Reset accelerator map')
 				checkbox_reset_accel_map.set_active(True)
 
-				vbox_16.pack_start(label_16, False, False, 0)
-				vbox_16.pack_start(checkbox_reset_accel_map, False, False, 0)
+				vbox_accel_map.pack_start(label_accel_map, False, False, 0)
+				vbox_accel_map.pack_start(checkbox_reset_accel_map, False, False, 0)
 
-				vbox.pack_start(vbox_16, False, False, 0)
+				vbox.pack_start(vbox_accel_map, False, False, 0)
 				mod_count += 1
 
 			# clear tabs
@@ -979,16 +979,16 @@ class MainWindow(gtk.Window):
 
 			## apply selected changes in reverse order
 
-			# reset accelerator map
-			if config_version < 16:
-				if checkbox_reset_accel_map.get_active()\
-				and os.path.isfile(os.path.join(self.config_path, 'accel_map')):
-					os.remove(os.path.join(self.config_path, 'accel_map'))
-
 			# clear saved tabs
 			if config_version < 15:
 				if checkbox_reset_tabs.get_active():
 					self.tab_options = RawConfigParser()
+
+			# reset accelerator map
+			if config_version < 19:
+				if checkbox_reset_accel_map.get_active()\
+				and os.path.isfile(os.path.join(self.config_path, 'accel_map')):
+					os.remove(os.path.join(self.config_path, 'accel_map'))
 
 			# set config version to current
 			self.options.set('main', 'last_version', current_version)

@@ -214,6 +214,9 @@ class ItemList(PluginBase):
 		self._item_list = gtk.TreeView()
 		self._item_list.set_fixed_height_mode(True)
 
+		headers_visible = self._parent.options.getboolean('main', 'headers_visible')
+		self._item_list.set_headers_visible(headers_visible)
+
 		self._item_list.connect('button-press-event', self._handle_button_press)
 		self._item_list.connect('button-release-event', self._handle_button_press)
 
@@ -954,6 +957,10 @@ class ItemList(PluginBase):
 		"""Apply settings"""
 		# update status
 		self._update_status_with_statistis()
+
+		# change headers visibility
+		headers_visible = self._parent.options.getboolean('main', 'headers_visible')
+		self._item_list.set_headers_visible(headers_visible)
 
 		# change change sorting sensitivity
 		self._sort_sensitive = self._parent.options.getboolean('main', 'case_sensitive_sort')

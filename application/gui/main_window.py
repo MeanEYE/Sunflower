@@ -1447,6 +1447,7 @@ class MainWindow(gtk.Window):
 				'always_show_tabs': 'True',
 				'right_click_select': 'False',
 				'vim_movement': 'False',
+				'headers_visible': 'True',
 			}
 
 		# set default options

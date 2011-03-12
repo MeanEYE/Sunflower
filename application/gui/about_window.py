@@ -4,7 +4,6 @@ import os
 import sys
 import gtk
 import pango
-import urllib
 
 class AboutWindow(gtk.Window):
 	def __init__(self, parent):
@@ -105,45 +104,6 @@ class AboutWindow(gtk.Window):
 		self.hide()
 		return True  # return True so we get to keep our controls safe from GC
 
-	def _create_license_tab(self):
-		"""Create license tab"""
-		tab = gtk.ScrolledWindow()
-		tab.set_border_width(5)
-		tab.set_shadow_type(gtk.SHADOW_IN)
-		tab.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-		tab_label = gtk.Label(_('License'))
-
-		# determine location of license file
-		license_location = os.path.join('/', 'usr', 'share', 'common-licenses', 'GPL')
-		if not os.path.isfile(license_location):
-			license_location = os.path.join(
-										os.path.dirname(sys.argv[0]),
-										'application',
-										'GPL.txt'
-									)
-
-		# load license file
-		license_file = open(license_location, 'r')
-
-		if license_file:
-			license_text = license_file.read()
-			license_file.close()
-
-		# create license container and configure it
-		font = pango.FontDescription('monospace 9')
-		license_ = gtk.TextView()
-		license_.set_editable(False)
-		license_.set_cursor_visible(False)
-		license_.modify_font(font)
-
-		if license_text is not None:
-			buffer_ = license_.get_buffer()
-			buffer_.set_text(license_text)
-
-		tab.add(license_)
-
-		return (tab, tab_label)
-
 	def _create_copyright_tab(self):
 		"""Create license tab"""
 		tab = gtk.ScrolledWindow()
@@ -191,9 +151,10 @@ class AboutWindow(gtk.Window):
 		artists.pack_start(label_art, False, False, 0)
 
 		# artists
-		artist = gtk.Label('\tMrakoslava, <small><i>Studio Specttra</i></small>')
+		artist = gtk.Label('\tMrakoslava <small>&lt;octogirl.design@gmail.com&gt;</small>')
 		artist.set_alignment(0, 0.5)
 		artist.set_use_markup(True)
+		artist.set_selectable(True)
 
 		artists.pack_start(artist, False, False, 0)
 
@@ -224,6 +185,45 @@ class AboutWindow(gtk.Window):
 		vbox.pack_start(translators, False, False, 0)
 
 		tab.add(vbox)
+
+		return (tab, tab_label)
+
+	def _create_license_tab(self):
+		"""Create license tab"""
+		tab = gtk.ScrolledWindow()
+		tab.set_border_width(5)
+		tab.set_shadow_type(gtk.SHADOW_IN)
+		tab.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+		tab_label = gtk.Label(_('License'))
+
+		# determine location of license file
+		license_location = os.path.join('/', 'usr', 'share', 'common-licenses', 'GPL')
+		if not os.path.isfile(license_location):
+			license_location = os.path.join(
+										os.path.dirname(sys.argv[0]),
+										'application',
+										'GPL.txt'
+									)
+
+		# load license file
+		license_file = open(license_location, 'r')
+
+		if license_file:
+			license_text = license_file.read()
+			license_file.close()
+
+		# create license container and configure it
+		font = pango.FontDescription('monospace 9')
+		license_ = gtk.TextView()
+		license_.set_editable(False)
+		license_.set_cursor_visible(False)
+		license_.modify_font(font)
+
+		if license_text is not None:
+			buffer_ = license_.get_buffer()
+			buffer_.set_text(license_text)
+
+		tab.add(license_)
 
 		return (tab, tab_label)
 
@@ -259,7 +259,3 @@ class AboutWindow(gtk.Window):
 		"""Adjust label size"""
 		widget.set_size_request(data.width-1, -1)
 
-	def load_wakoopa_image(self, widget, data=None):
-		"""Retrieve wakoopa statistics image"""
-		file_name = urllib.urlretrieve('http://wakoopa.com/software/sunflower-py/badge.png')[0]
-		self._wakoopa_image.set_from_file(file_name)

@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import os
 
 from urllib import quote
@@ -31,7 +29,6 @@ class AssociationManager:
 
 	def get_user_list(self, mime_type):
 		"""Returns user defined file association"""
-
 		result = None
 
 		# if section is loaded and mime type is defined get application list

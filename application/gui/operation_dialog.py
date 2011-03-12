@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import gtk
 import pango
 import locale

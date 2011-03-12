@@ -1,6 +1,6 @@
-#!/usr/bin/env python
-
 class Provider:
+	"""Abstract provider class used to manipulate items"""
+
 	is_local = True  # if provider handles local files
 
 	def __init__(self, parent, path=None, selection=None):

@@ -241,7 +241,10 @@ class CopyOperation(Operation):
 
 				# get new name if user specified
 				if options[OPTION_RENAME]:
-					dest_file = options[OPTION_NEW_NAME]
+					dest_file = os.path.join(
+					                    os.path.dirname(file_),
+					                    options[OPTION_NEW_NAME]
+					                )
 
 		# if user skipped this file return
 		if not can_procede: return
@@ -404,7 +407,10 @@ class MoveOperation(CopyOperation):
 
 				# get new name if user specified
 				if options[OPTION_RENAME]:
-					dest_file = options[OPTION_NEW_NAME]
+					dest_file = os.path.join(
+					                    os.path.dirname(file_),
+					                    options[OPTION_NEW_NAME]
+					                )
 
 		# if user skipped this file return
 		if not can_procede: return

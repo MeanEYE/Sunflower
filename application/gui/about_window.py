@@ -175,9 +175,10 @@ class AboutWindow(gtk.Window):
 		programmers.pack_start(label_programming, False, False, 0)
 
 		# developers
-		developer = gtk.Label('\tMeanEYE, <small><i>RCF Group</i></small>')
+		developer = gtk.Label('\tMeanEYE <small>&lt;meaneye.rcf@gmail.com&gt;</small>')
 		developer.set_alignment(0, 0.5)
 		developer.set_use_markup(True)
+		developer.set_selectable(True)
 
 		programmers.pack_start(developer, False, False, 0)
 
@@ -205,11 +206,12 @@ class AboutWindow(gtk.Window):
 		translators.pack_start(label_translating, False, False, 0)
 
 		# add translators
-		label_name = gtk.Label('\tCzech\t\tRadek Tříška')
-		label_name.set_alignment(0, 0.1)
-		label_name.set_use_markup(True)
+		translator = gtk.Label('\tRadek Tříška <small>&lt;radek@fastlinux.eu&gt;</small>\t\tCzech language')
+		translator.set_alignment(0, 0.1)
+		translator.set_use_markup(True)
+		translator.set_selectable(True)
 
-		translators.pack_start(label_name, False, False, 0)
+		translators.pack_start(translator, False, False, 0)
 
 		# pack interface
 		vbox.pack_start(program_info, False, False, 0)

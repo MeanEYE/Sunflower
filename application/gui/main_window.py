@@ -1095,8 +1095,11 @@ class MainWindow(gtk.Window):
 		list_ = self._get_active_object()
 
 		if hasattr(list_, '_get_selection') and hasattr(list_, 'select_all'):
-			extension = os.path.splitext(list_._get_selection())[1]
-			list_.select_all('*{0}'.format(extension))
+			selection = list_._get_selection()
+
+			if selection is not None:
+				extension = os.path.splitext(selection)[1]
+				list_.select_all('*{0}'.format(extension))
 
 	def unselect_with_pattern(self, widget, data=None):
 		"""Ask user for selection pattern and

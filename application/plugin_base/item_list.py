@@ -379,7 +379,8 @@ class ItemList(PluginBase):
 			if key_name == 'period': key_name = '.'
 
 			# give other handlers chance to process event
-			if state == self._parent.options.get('main', 'search_modifier'):
+			if state == self._parent.options.get('main', 'search_modifier') \
+			and len(key_name) == 1:
 				self._start_search(key_name)
 				result = True
 

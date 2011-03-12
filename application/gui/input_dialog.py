@@ -271,13 +271,9 @@ class CopyDialog(gtk.Dialog):
 	def __init__(self, application, provider, path):
 		gtk.Dialog.__init__(self, parent=application)
 
-		# set text variables for title and labels
-		self._set_text_variables()
-
 		self._application = application
 		self._provider = provider
 
-		self.set_title(self._title)
 		self.set_default_size(340, 10)
 		self.set_resizable(True)
 		self.set_skip_taskbar_hint(True)
@@ -348,12 +344,20 @@ class CopyDialog(gtk.Dialog):
 		self.set_default_response(gtk.RESPONSE_OK)
 		self.show_all()
 
-	def _set_text_variables(self):
-		"""Set local text variables for dialog"""
-		self._title = _('Copy item')
-		self._title_plural = _('Copy items')
-		self._operation_label = _('Copy <b>{0}</b> item to:')
-		self._operation_label_plural = _('Copy <b>{0}</b> items to:')
+	def _get_text_variables(self, count):
+		"""Get text variables for update"""
+		title = ngettext(
+					'Copy item',
+					'Copy items',
+					count
+				)
+		label = ngettext(
+					'Copy <b>{0}</b> item to:',
+					'Copy <b>{0}</b> items to:',
+					count
+				)
+
+		return title, label
 
 	def _create_buttons(self):
 		"""Create action buttons"""
@@ -386,8 +390,7 @@ class CopyDialog(gtk.Dialog):
 		item_count = self._get_item_count()
 
 		# get label text
-		title = _p(self._title, self._title_plural, item_count)
-		label = _p(self._operation_label, self._operation_label_plural, item_count)
+		title, label = self._get_text_variables(item_count)
 
 		# apply text
 		self.set_title(title)
@@ -416,12 +419,20 @@ class CopyDialog(gtk.Dialog):
 class MoveDialog(CopyDialog):
 	"""Dialog which will ask user for additional options before moving"""
 
-	def _set_text_variables(self):
-		"""Override default text variables"""
-		self._title = _('Move item')
-		self._title_plural = _('Move items')
-		self._operation_label = _('Move <b>{0}</b> item to:')
-		self._operation_label_plural = _('Move <b>{0}</b> items to:')
+	def _get_text_variables(self, count):
+		"""Get text variables for update"""
+		title = ngettext(
+					'Move item',
+					'Move items',
+					count
+				)
+		label = ngettext(
+					'Move <b>{0}</b> item to:',
+					'Move <b>{0}</b> items to:',
+					count
+				)
+
+		return title, label
 
 	def _create_buttons(self):
 		"""Create action buttons"""

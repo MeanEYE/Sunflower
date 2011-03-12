@@ -362,7 +362,7 @@ class FileList(ItemList):
 								gtk.DIALOG_DESTROY_WITH_PARENT,
 								gtk.MESSAGE_QUESTION,
 								gtk.BUTTONS_YES_NO,
-								_p(
+								ngettext(
 									"You are about to remove {0} item.\n"
 									"Are you sure about this?",
 									"You are about to remove {0} items.\n"

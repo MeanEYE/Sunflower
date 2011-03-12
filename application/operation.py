@@ -373,7 +373,7 @@ class CopyOperation(Operation):
 			notify_manager = self._application.notification_manager
 
 			title = _('Copy Operation')
-			message = _p(
+			message = ngettext(
 							'Copying of {0} item from "{1}" to "{2}" is completed!',
 							'Copying of {0} items from "{1}" to "{2}" is completed!',
 							len(file_list) + len(dir_list)
@@ -518,7 +518,7 @@ class MoveOperation(CopyOperation):
 			notify_manager = self._application.notification_manager
 
 			title = _('Move Operation')
-			message = _p(
+			message = ngettext(
 							'Moving of {0} item from "{1}" to "{2}" is completed!',
 							'Moving of {0} items from "{1}" to "{2}" is completed!',
 							len(file_list) + len(dir_list)
@@ -563,7 +563,7 @@ class DeleteOperation(Operation):
 			notify_manager = self._application.notification_manager
 
 			title = _('Delete Operation')
-			message = _p(
+			message = ngettext(
 							'Removal of {0} item from "{1}" is completed!',
 							'Removal of {0} items from "{1}" is completed!',
 							len(list_)

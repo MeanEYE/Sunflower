@@ -859,7 +859,7 @@ class MainWindow(gtk.Window):
 		# install global functions for translating
 		__builtins__.update({
 						'_': translation.gettext,
-						'_p': translation.ngettext
+						'ngettext': translation.ngettext
 					})
 
 	def _command_reload(self, widget, data=None):

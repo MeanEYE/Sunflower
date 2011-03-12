@@ -1436,7 +1436,7 @@ class MainWindow(gtk.Window):
 				'selection_color': 'red',
 				'history_file': '.bash_history',
 				'window': '950x450',
-				'hide_on_close': 'True',
+				'hide_on_close': 'False',
 				'last_version': 0,
 				'button_relief': 1,
 				'terminal_scrollbars': 'True',

@@ -372,22 +372,21 @@ class ItemList(PluginBase):
 			# retrieve human readable key representation
 			key_name = gtk.gdk.keyval_name(event.keyval)
 
-			# make letters lowercase for easier handling
-			if len(key_name) == 1: key_name = key_name.lower()
-
 			# handle searching for hidden files
 			if key_name == 'period': key_name = '.'
 
 			# give other handlers chance to process event
-			if state == self._parent.options.get('main', 'search_modifier') \
-			and len(key_name) == 1:
-				self._start_search(key_name)
-				result = True
+			if len(key_name) == 1:
+				# make letters lowercase for easier handling
+				key_name = key_name.lower()
 
-			else:
-				result = False
+				if state == self._parent.options.get('main', 'search_modifier'):
+					# start quick search if modifier combination is right
+					self._start_search(key_name)
+					result = True
 
-				if len(key_name) == 1:
+				else:
+					# otherwise focus command entry
 					self._focus_command_line(key_name)
 					result = True
 

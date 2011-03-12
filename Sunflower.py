@@ -2,7 +2,7 @@
 #
 #		Sunflower.py
 #
-#		Copyright (c) 2010. by MeanEYE[rcf]
+#		Copyright (c) 2011. by MeanEYE[rcf]
 #		RCF Group, http://rcf-group.com
 #
 #		This program is free software; you can redistribute it and/or modify

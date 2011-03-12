@@ -358,11 +358,28 @@ class CopyOperation(Operation):
 		self._dialog.set_source(self._source_path)
 		self._dialog.set_destination(self._destination_path)
 
+		# get list of items to copy
 		self._get_lists(dir_list, file_list)
 
+		# perform operation
 		self._create_directories(dir_list)
 		self._copy_file_list(file_list)
 
+		# notify user if window is not focused
+		if not self._application.is_active() and not self._dialog.is_active():
+			notify_manager = self._application.notification_manager
+
+			title = _('Copy Operation')
+			message = _('Copying of {0} item(s) from "{1}" to "{2}" is completed!').format(
+			        len(file_list) + len(dir_list),
+			        os.path.basename(self._source_path),
+			        os.path.basename(self._destination_path)
+			    )
+
+			# queue notification
+			gobject.idle_add(notify_manager.notify, title, message)
+
+		# destroy dialog
 		gobject.idle_add(self._destroy_ui)
 
 
@@ -486,6 +503,21 @@ class MoveOperation(CopyOperation):
 			self._copy_file_list(file_list)
 			self._delete_file_list(file_list, dir_list)
 
+		# notify user if window is not focused
+		if not self._application.is_active() and not self._dialog.is_active():
+			notify_manager = self._application.notification_manager
+
+			title = _('Move Operation')
+			message = _('Moving of {0} item(s) from "{1}" to "{2}" is completed!').format(
+			        len(file_list) + len(dir_list),
+			        os.path.basename(self._source_path),
+			        os.path.basename(self._destination_path)
+			    )
+
+			# queue notification
+			gobject.idle_add(notify_manager.notify, title, message)
+
+		# desctroy dialog
 		gobject.idle_add(self._destroy_ui)
 
 
@@ -500,14 +532,30 @@ class DeleteOperation(Operation):
 		"""Main thread method, this is where all the stuff is happening"""
 		self._dialog.show_all()
 
-		list = self._source.get_selection(relative=True)
+		# get selected items
+		list_ = self._source.get_selection(relative=True)
 
-		for index, item in enumerate(list, 1):
+		# remove them
+		for index, item in enumerate(list_, 1):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()
 
 			gobject.idle_add(self._dialog.set_current_file, item)
 			self._source.remove_path(item, relative_to=self._source_path)
-			gobject.idle_add(self._dialog.set_current_file_fraction, float(index) / len(list))
+			gobject.idle_add(self._dialog.set_current_file_fraction, float(index) / len(list_))
 
+		# notify user if window is not focused
+		if not self._application.is_active() and not self._dialog.is_active():
+			notify_manager = self._application.notification_manager
+
+			title = _('Delete Operation')
+			message = _('Removal of {0} item(s) from "{1}" is completed!').format(
+			        len(list_),
+			        os.path.basename(self._source_path)
+			    )
+
+			# queue notification
+			gobject.idle_add(notify_manager.notify, title, message)
+
+		# destroy dialog
 		gobject.idle_add(self._destroy_ui)

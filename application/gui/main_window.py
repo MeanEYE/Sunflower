@@ -10,7 +10,10 @@ import gettext
 
 from menus import MenuManager
 from mounts import MountsManager
-from input_dialog import InputDialog, AddBookmarkDialog
+from icons import IconManager
+from associations import AssociationManager
+from indicator import Indicator
+from notifications import NotificationManager
 
 from ConfigParser import RawConfigParser
 
@@ -18,9 +21,7 @@ from ConfigParser import RawConfigParser
 from about_window import AboutWindow
 from preferences_window import PreferencesWindow
 from changelog_dialog import ChangeLogDialog
-from icons import IconManager
-from associations import AssociationManager
-from indicator import Indicator
+from input_dialog import InputDialog, AddBookmarkDialog
 
 # load i18n
 translations_directory = os.path.join(os.path.dirname(sys.argv[0]), 'translations')
@@ -62,6 +63,7 @@ class MainWindow(gtk.Window):
 		self.menu_manager = MenuManager(self)
 		self.mount_manager = None  # we'll create manager later
 		self.associations_manager = AssociationManager()
+		self.notification_manager = NotificationManager(self)
 
 		self.set_title(_('Sunflower'))
 

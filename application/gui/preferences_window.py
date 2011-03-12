@@ -165,7 +165,7 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_show_command_bar = gtk.CheckButton(_('Show command bar'))
 		self._checkbox_show_command_entry = gtk.CheckButton(_('Show command entry'))
 
-		self._checkbox_hide_on_close.connect('toggled', self._parent.enable_save)
+		self._checkbox_hide_on_close.connect('toggled', self._parent.enable_save, True)
 		self._checkbox_show_toolbar.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_command_bar.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_command_entry.connect('toggled', self._parent.enable_save)

@@ -25,7 +25,14 @@ from associations import AssociationManager
 from indicator import Indicator
 
 # load i18n
-gettext.install('sunflower')
+translations_directory = os.path.join(os.path.dirname(sys.argv[0]), 'translations')
+
+if os.path.isdir(translations_directory):
+	# install translations from local directory
+	gettext.install('sunflower', translations_directory)
+else:
+	# install global translations
+	gettext.install('sunflower')
 
 
 class MainWindow(gtk.Window):

@@ -3,6 +3,7 @@ import gtk
 import time
 import locale
 import fnmatch
+import gettext
 
 # constants
 OPTION_RENAME		= 0
@@ -350,8 +351,10 @@ class CopyDialog(gtk.Dialog):
 
 	def _set_text_variables(self):
 		"""Set local text variables for dialog"""
-		self._title = _('Copy item(s)')
-		self._operation_label = _('Copy <b>{0}</b> item(s) to:')
+		self._title = _('Copy item')
+		self._title_plural = _('Copy items')
+		self._operation_label = _('Copy <b>{0}</b> item to:')
+		self._operation_label_plural = _('Copy <b>{0}</b> items to:')
 
 	def _create_buttons(self):
 		"""Create action buttons"""
@@ -380,7 +383,16 @@ class CopyDialog(gtk.Dialog):
 
 	def _update_label(self, widget=None, data=None):
 		"""Update label based on file type and selection"""
-		self.label_destination.set_markup(self._operation_label.format(self._get_item_count()))
+		# get item count
+		item_count = self._get_item_count()
+
+		# get label text
+		title = gettext.ngettext(self._title, self._title_plural, item_count)
+		label = gettext.ngettext(self._operation_label, self._operation_label_plural, item_count)
+
+		# apply text
+		self.set_title(title)
+		self.label_destination.set_markup(label.format(item_count))
 
 	def get_response(self):
 		"""Return value and self-destruct
@@ -407,8 +419,10 @@ class MoveDialog(CopyDialog):
 
 	def _set_text_variables(self):
 		"""Override default text variables"""
-		self._title = _('Move item(s)')
-		self._operation_label = _('Move <b>{0}</b> item(s) to:')
+		self._title = _('Move item')
+		self._title_plural = _('Move items')
+		self._operation_label = _('Move <b>{0}</b> item to:')
+		self._operation_label_plural = _('Move <b>{0}</b> items to:')
 
 	def _create_buttons(self):
 		"""Create action buttons"""

@@ -3,6 +3,7 @@ import gtk
 import stat
 import gobject
 import fnmatch
+import gettext
 
 from threading import Thread, Event
 from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog
@@ -373,11 +374,15 @@ class CopyOperation(Operation):
 			notify_manager = self._application.notification_manager
 
 			title = _('Copy Operation')
-			message = _('Copying of {0} item(s) from "{1}" to "{2}" is completed!').format(
-			        len(file_list) + len(dir_list),
-			        os.path.basename(self._source_path),
-			        os.path.basename(self._destination_path)
-			    )
+			message = gettext.ngettext(
+							'Copying of {0} item from "{1}" to "{2}" is completed!',
+							'Copying of {0} items from "{1}" to "{2}" is completed!',
+							len(file_list) + len(dir_list)
+						).format(
+							len(file_list) + len(dir_list),
+							os.path.basename(self._source_path),
+							os.path.basename(self._destination_path)
+						)
 
 			# queue notification
 			gobject.idle_add(notify_manager.notify, title, message)
@@ -514,11 +519,15 @@ class MoveOperation(CopyOperation):
 			notify_manager = self._application.notification_manager
 
 			title = _('Move Operation')
-			message = _('Moving of {0} item(s) from "{1}" to "{2}" is completed!').format(
-			        len(file_list) + len(dir_list),
-			        os.path.basename(self._source_path),
-			        os.path.basename(self._destination_path)
-			    )
+			message = gettext.ngettext(
+							'Moving of {0} item from "{1}" to "{2}" is completed!',
+							'Moving of {0} items from "{1}" to "{2}" is completed!',
+							len(file_list) + len(dir_list)
+						).format(
+							len(file_list) + len(dir_list),
+							os.path.basename(self._source_path),
+							os.path.basename(self._destination_path)
+						)
 
 			# queue notification
 			gobject.idle_add(notify_manager.notify, title, message)
@@ -555,7 +564,11 @@ class DeleteOperation(Operation):
 			notify_manager = self._application.notification_manager
 
 			title = _('Delete Operation')
-			message = _('Removal of {0} item(s) from "{1}" is completed!').format(
+			message = gettext.ngettext(
+							'Removal of {0} item from "{1}" is completed!',
+							'Removal of {0} items from "{1}" is completed!',
+							len(list_)
+						).format(
 			        len(list_),
 			        os.path.basename(self._source_path)
 			    )

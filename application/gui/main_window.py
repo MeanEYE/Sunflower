@@ -1377,7 +1377,7 @@ class MainWindow(gtk.Window):
 									gtk.MESSAGE_ERROR,
 									gtk.BUTTONS_OK,
 									_(
-										"Error saving configuration to files"
+										"Error saving configuration to files "
 										"in your home directory. Make sure you have "
 										"enough permissions."
 									) +	"\n\n{0}".format(error)

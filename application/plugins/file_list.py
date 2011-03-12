@@ -8,6 +8,7 @@ import stat
 import mimetypes
 import user
 import fnmatch
+import gettext
 
 from provider import Provider
 from operation import DeleteOperation, CopyOperation, MoveOperation
@@ -362,9 +363,12 @@ class FileList(ItemList):
 								gtk.DIALOG_DESTROY_WITH_PARENT,
 								gtk.MESSAGE_QUESTION,
 								gtk.BUTTONS_YES_NO,
-								_(
-									"You are about to remove {0} item(s).\n"
-									"Are you sure about this?"
+								gettext.ngettext(
+									"You are about to remove {0} item.\n"
+									"Are you sure about this?",
+									"You are about to remove {0} items.\n"
+									"Are you sure about this?",
+									len(list_)
 								).format(len(list_))
 							)
 		result = dialog.run()

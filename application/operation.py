@@ -3,7 +3,6 @@ import gtk
 import stat
 import gobject
 import fnmatch
-import gettext
 
 from threading import Thread, Event
 from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog
@@ -374,7 +373,7 @@ class CopyOperation(Operation):
 			notify_manager = self._application.notification_manager
 
 			title = _('Copy Operation')
-			message = gettext.ngettext(
+			message = _p(
 							'Copying of {0} item from "{1}" to "{2}" is completed!',
 							'Copying of {0} items from "{1}" to "{2}" is completed!',
 							len(file_list) + len(dir_list)
@@ -519,7 +518,7 @@ class MoveOperation(CopyOperation):
 			notify_manager = self._application.notification_manager
 
 			title = _('Move Operation')
-			message = gettext.ngettext(
+			message = _p(
 							'Moving of {0} item from "{1}" to "{2}" is completed!',
 							'Moving of {0} items from "{1}" to "{2}" is completed!',
 							len(file_list) + len(dir_list)
@@ -564,7 +563,7 @@ class DeleteOperation(Operation):
 			notify_manager = self._application.notification_manager
 
 			title = _('Delete Operation')
-			message = gettext.ngettext(
+			message = _p(
 							'Removal of {0} item from "{1}" is completed!',
 							'Removal of {0} items from "{1}" is completed!',
 							len(list_)

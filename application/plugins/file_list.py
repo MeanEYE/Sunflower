@@ -8,7 +8,6 @@ import stat
 import mimetypes
 import user
 import fnmatch
-import gettext
 
 from provider import Provider
 from operation import DeleteOperation, CopyOperation, MoveOperation
@@ -363,7 +362,7 @@ class FileList(ItemList):
 								gtk.DIALOG_DESTROY_WITH_PARENT,
 								gtk.MESSAGE_QUESTION,
 								gtk.BUTTONS_YES_NO,
-								gettext.ngettext(
+								_p(
 									"You are about to remove {0} item.\n"
 									"Are you sure about this?",
 									"You are about to remove {0} items.\n"

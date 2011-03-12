@@ -23,17 +23,6 @@ from preferences_window import PreferencesWindow
 from changelog_dialog import ChangeLogDialog
 from input_dialog import InputDialog, AddBookmarkDialog
 
-# load i18n
-translations_directory = os.path.join(os.path.dirname(sys.argv[0]), 'translations')
-
-if os.path.isdir(translations_directory):
-	# install translations from local directory
-	gettext.install('sunflower', translations_directory)
-else:
-	# install global translations
-	gettext.install('sunflower')
-
-
 class MainWindow(gtk.Window):
 	"""Main application class"""
 
@@ -50,6 +39,9 @@ class MainWindow(gtk.Window):
 		# create main window and other widgets
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 		self.realize()
+
+		# load translations
+		self._load_translation()
 
 		# containers
 		self.plugin_classes = {}
@@ -842,6 +834,33 @@ class MainWindow(gtk.Window):
 			# call module register_plugin method
 			if hasattr(plugin, 'register_plugin'):
 				plugin.register_plugin(self)
+
+	def _load_translation(self):
+		"""Load translation and install global functions"""
+		# get directory for translations
+		directory = os.path.join(
+				os.path.dirname(sys.argv[0]),
+				'translations'
+			)
+
+		# function params
+		params = {
+				'domain': 'sunflower',
+				'fallback': True
+			}
+
+		# install translations from local directory if needed
+		if os.path.isdir(directory):
+			params.update({'localedir': directory})
+
+		# get translation
+		translation = gettext.translation(**params)
+
+		# install global functions for translating
+		__builtins__.update({
+						'_': translation.gettext,
+						'_p': translation.ngettext
+					})
 
 	def _command_reload(self, widget, data=None):
 		"""Handle command button click"""

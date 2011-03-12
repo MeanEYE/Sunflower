@@ -3,7 +3,6 @@ import gtk
 import time
 import locale
 import fnmatch
-import gettext
 
 # constants
 OPTION_RENAME		= 0
@@ -387,8 +386,8 @@ class CopyDialog(gtk.Dialog):
 		item_count = self._get_item_count()
 
 		# get label text
-		title = gettext.ngettext(self._title, self._title_plural, item_count)
-		label = gettext.ngettext(self._operation_label, self._operation_label_plural, item_count)
+		title = _p(self._title, self._title_plural, item_count)
+		label = _p(self._operation_label, self._operation_label_plural, item_count)
 
 		# apply text
 		self.set_title(title)

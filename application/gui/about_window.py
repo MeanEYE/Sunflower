@@ -4,6 +4,7 @@
 import os
 import sys
 import gtk
+import pango
 import urllib
 
 class AboutWindow(gtk.Window):
@@ -71,9 +72,6 @@ class AboutWindow(gtk.Window):
 		# license tab
 		notebook.append_page(*self._create_license_tab())
 
-		# contributors tab
-		notebook.append_page(*self._create_contributors_tab())
-
 		# change log tab
 		notebook.append_page(*self._create_changelog_tab())
 
@@ -108,53 +106,15 @@ class AboutWindow(gtk.Window):
 		self.hide()
 		return True  # return True so we get to keep our controls safe from GC
 
-	def _create_copyright_tab(self):
-		"""Create copyright tab"""
-		tab = gtk.VBox(False, 10)
-		tab.set_border_width(10)
-		tab_label = gtk.Label(_('Copyright'))
-
-		# program copyright
-		program_info = gtk.Label(_(
-						'This software is being developed under GNU general '
-						'public license. If you would like to obtain source code '
-						'please visit our web site. Any bug reports, suggestions '
-						'or questions are more than welcome.'
-						))
-		program_info.set_alignment(0,0)
-		program_info.set_line_wrap(True)
-		program_info.connect('size-allocate', self._adjust_label)
-
-		# developer info
-		developer_info = gtk.Label(
-							'<b>' + _('Developer:') + '</b>\n\tMeanEYE, <i>'
-							'<span size="small">RCF Group</span></i>'
-							)
-		developer_info.set_use_markup(True)
-		developer_info.set_alignment(0,0)
-
-		# artist info
-		artist_info = gtk.Label(
-							'<b>' + _('Artist:') + '</b>\n\tMrakoslava, <i>'
-							'<span size="small">Studio Spectra</span></i>'
-							)
-		artist_info.set_use_markup(True)
-		artist_info.set_alignment(0,0)
-
-		# pack interface
-		tab.pack_start(program_info, False, True, 0)
-		tab.pack_start(developer_info, False, False, 0)
-		tab.pack_start(artist_info, False, False, 0)
-
-		return (tab, tab_label)
-
 	def _create_license_tab(self):
 		"""Create license tab"""
 		tab = gtk.ScrolledWindow()
 		tab.set_border_width(5)
 		tab.set_shadow_type(gtk.SHADOW_IN)
+		tab.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 		tab_label = gtk.Label(_('License'))
 
+		# determine location of license file
 		license_location = os.path.join('/', 'usr', 'share', 'common-licenses', 'GPL')
 		if not os.path.isfile(license_location):
 			license_location = os.path.join(
@@ -163,15 +123,19 @@ class AboutWindow(gtk.Window):
 										'GPL.txt'
 									)
 
+		# load license file
 		license_file = open(license_location, 'r')
 
 		if license_file:
 			license_text = license_file.read()
 			license_file.close()
 
+		# create license container and configure it
+		font = pango.FontDescription('monospace 8')
 		license_ = gtk.TextView()
 		license_.set_editable(False)
 		license_.set_cursor_visible(False)
+		license_.modify_font(font)
 
 		if license_text is not None:
 			buffer_ = license_.get_buffer()
@@ -181,35 +145,78 @@ class AboutWindow(gtk.Window):
 
 		return (tab, tab_label)
 
-	def _create_contributors_tab(self):
+	def _create_copyright_tab(self):
 		"""Create license tab"""
 		tab = gtk.ScrolledWindow()
 		tab.set_border_width(5)
-		tab.set_shadow_type(gtk.SHADOW_IN)
+		#tab.set_shadow_type(gtk.SHADOW_IN)
 		tab.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
-		tab_label = gtk.Label(_('Contributors'))
+		tab_label = gtk.Label(_('Copyright'))
 
 		# container for all the lists
-		vbox = gtk.VBox(False, 0)
+		vbox = gtk.VBox(False, 10)
 		vbox.set_border_width(5)
 
-		# translators
-		label_translators = gtk.Label('<b>{0}</b>'.format(_('Translating:')))
-		label_translators.set_alignment(0, 0.1)
-		label_translators.set_use_markup(True)
+		# program copyright
+		program_info = gtk.Label(_(
+						'This software is being developed under GNU General '
+						'Public License.\nBug reports, suggestions or questions '
+		                'are more than welcome.'
+						))
+		program_info.set_alignment(0,0)
+		program_info.set_line_wrap(True)
+		program_info.connect('size-allocate', self._adjust_label)
 
-		vbox_translators = gtk.VBox(False, 0)
+		# developer info
+		programmers = gtk.VBox(False, 0)
+
+		label_programming = gtk.Label('<b>{0}</b>'.format(_('Programming:')))
+		label_programming.set_alignment(0, 0.5)
+		label_programming.set_use_markup(True)
+		programmers.pack_start(label_programming, False, False, 0)
+
+		# developers
+		developer = gtk.Label('\tMeanEYE, <small><i>RCF Group</i></small>')
+		developer.set_alignment(0, 0.5)
+		developer.set_use_markup(True)
+
+		programmers.pack_start(developer, False, False, 0)
+
+		# artist info
+		artists = gtk.VBox(False, 0)
+
+		label_art = gtk.Label('<b>{0}</b>'.format(_('Artists:')))
+		label_art.set_alignment(0, 0.5)
+		label_art.set_use_markup(True)
+		artists.pack_start(label_art, False, False, 0)
+
+		# artists
+		artist = gtk.Label('\tMrakoslava, <small><i>Studio Specttra</i></small>')
+		artist.set_alignment(0, 0.5)
+		artist.set_use_markup(True)
+
+		artists.pack_start(artist, False, False, 0)
+
+		# translators
+		translators = gtk.VBox(False, 0)
+
+		label_translating = gtk.Label('<b>{0}</b>'.format(_('Translating:')))
+		label_translating.set_alignment(0, 0.5)
+		label_translating.set_use_markup(True)
+		translators.pack_start(label_translating, False, False, 0)
 
 		# add translators
-		label_name = gtk.Label('\tRadek Tříška\t\t<small>Czech</small>')
+		label_name = gtk.Label('\tCzech\t\tRadek Tříška')
 		label_name.set_alignment(0, 0.1)
 		label_name.set_use_markup(True)
 
-		vbox_translators.pack_start(label_name, False, False, 0)
+		translators.pack_start(label_name, False, False, 0)
 
 		# pack interface
-		vbox.pack_start(label_translators, False, True, 0)
-		vbox.pack_start(vbox_translators, False, False, 0)
+		vbox.pack_start(program_info, False, False, 0)
+		vbox.pack_start(programmers, False, True, 0)
+		vbox.pack_start(artists, False, False, 0)
+		vbox.pack_start(translators, False, False, 0)
 
 		tab.add(vbox)
 

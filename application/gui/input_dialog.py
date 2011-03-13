@@ -472,6 +472,7 @@ class OverwriteDialog(gtk.Dialog):
 		self.set_skip_taskbar_hint(False)
 		self.set_modal(True)
 		self.set_transient_for(application)
+		self.set_urgency_hint(True)
 
 		self.vbox.set_spacing(0)
 

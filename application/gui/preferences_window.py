@@ -521,23 +521,30 @@ class ToolbarOptions(gtk.VBox):
 		container.add(self._list)
 
 		# create controls
-		button_box = gtk.HButtonBox()
-		button_box.set_layout(gtk.BUTTONBOX_START)
+		button_box = gtk.HBox(False, 0)
 
 		button_add = gtk.Button(stock=gtk.STOCK_ADD)
 		button_delete = gtk.Button(stock=gtk.STOCK_DELETE)
 
-		button_move_up = gtk.Button(_('Move Up'))
-		button_move_down = gtk.Button(_('Move Down'))
+		image_up = gtk.Image()
+		image_up.set_from_stock(gtk.STOCK_GO_UP, gtk.ICON_SIZE_BUTTON)
+
+		button_move_up = gtk.Button(label=None)
+		button_move_up.add(image_up)
+		button_move_up.set_tooltip_text(_('Move Up'))
+
+		image_down = gtk.Image()
+		image_down.set_from_stock(gtk.STOCK_GO_DOWN, gtk.ICON_SIZE_BUTTON)
+
+		button_move_down = gtk.Button(label=None)
+		button_move_down.add(image_down)
+		button_move_down.set_tooltip_text(_('Move Down'))
 
 		# pack ui
 		button_box.pack_start(button_add, False, False, 0)
 		button_box.pack_start(button_delete, False, False, 0)
-		button_box.pack_start(button_move_up, False, False, 0)
-		button_box.pack_start(button_move_down, False, False, 0)
-
-		button_box.set_child_secondary(button_move_up, True)
-		button_box.set_child_secondary(button_move_down, True)
+		button_box.pack_end(button_move_down, False, False, 0)
+		button_box.pack_end(button_move_up, False, False, 0)
 
 		self.pack_start(container, True, True, 0)
 		self.pack_start(button_box, False, False, 0)
@@ -599,8 +606,7 @@ class BookmarkOptions(gtk.VBox):
 		container.add(self._list)
 
 		# create controls
-		button_box = gtk.HButtonBox()
-		button_box.set_layout(gtk.BUTTONBOX_START)
+		button_box = gtk.HBox(False, 0)
 
 		button_add = gtk.Button(stock=gtk.STOCK_ADD)
 		button_add.connect('clicked', self._add_bookmark)
@@ -608,20 +614,27 @@ class BookmarkOptions(gtk.VBox):
 		button_delete = gtk.Button(stock=gtk.STOCK_DELETE)
 		button_delete.connect('clicked', self._delete_bookmark)
 
-		button_move_up = gtk.Button(_('Move Up'))
+		image_up = gtk.Image()
+		image_up.set_from_stock(gtk.STOCK_GO_UP, gtk.ICON_SIZE_BUTTON)
+
+		button_move_up = gtk.Button(label=None)
+		button_move_up.add(image_up)
+		button_move_up.set_tooltip_text(_('Move Up'))
 		button_move_up.connect('clicked', self._move_bookmark, -1)
 
-		button_move_down = gtk.Button(_('Move Down'))
+		image_down = gtk.Image()
+		image_down.set_from_stock(gtk.STOCK_GO_DOWN, gtk.ICON_SIZE_BUTTON)
+
+		button_move_down = gtk.Button(label=None)
+		button_move_down.add(image_down)
+		button_move_down.set_tooltip_text(_('Move Down'))
 		button_move_down.connect('clicked', self._move_bookmark, 1)
 
 		# pack ui
 		button_box.pack_start(button_add, False, False, 0)
 		button_box.pack_start(button_delete, False, False, 0)
-		button_box.pack_start(button_move_up, False, False, 0)
-		button_box.pack_start(button_move_down, False, False, 0)
-
-		button_box.set_child_secondary(button_move_up, True)
-		button_box.set_child_secondary(button_move_down, True)
+		button_box.pack_end(button_move_down, False, False, 0)
+		button_box.pack_end(button_move_up, False, False, 0)
 
 		# pack checkboxes
 		vbox = gtk.VBox(False, 0)
@@ -772,8 +785,7 @@ class ToolOptions(gtk.VBox):
 		container.add(self._list)
 
 		# create controls
-		button_box = gtk.HButtonBox()
-		button_box.set_layout(gtk.BUTTONBOX_START)
+		button_box = gtk.HBox(False, 0)
 
 		button_add = gtk.Button(stock=gtk.STOCK_ADD)
 		button_add.connect('clicked', self._add_tool)
@@ -781,20 +793,27 @@ class ToolOptions(gtk.VBox):
 		button_delete = gtk.Button(stock=gtk.STOCK_DELETE)
 		button_delete.connect('clicked', self._delete_tool)
 
-		button_move_up = gtk.Button(_('Move Up'))
+		image_up = gtk.Image()
+		image_up.set_from_stock(gtk.STOCK_GO_UP, gtk.ICON_SIZE_BUTTON)
+
+		button_move_up = gtk.Button(label=None)
+		button_move_up.add(image_up)
+		button_move_up.set_tooltip_text(_('Move Up'))
 		button_move_up.connect('clicked', self._move_tool, -1)
 
-		button_move_down = gtk.Button(_('Move Down'))
+		image_down = gtk.Image()
+		image_down.set_from_stock(gtk.STOCK_GO_DOWN, gtk.ICON_SIZE_BUTTON)
+
+		button_move_down = gtk.Button(label=None)
+		button_move_down.add(image_down)
+		button_move_down.set_tooltip_text(_('Move Down'))
 		button_move_down.connect('clicked', self._move_tool, 1)
 
 		# pack ui
 		button_box.pack_start(button_add, False, False, 0)
 		button_box.pack_start(button_delete, False, False, 0)
-		button_box.pack_start(button_move_up, False, False, 0)
-		button_box.pack_start(button_move_down, False, False, 0)
-
-		button_box.set_child_secondary(button_move_up, True)
-		button_box.set_child_secondary(button_move_down, True)
+		button_box.pack_end(button_move_down, False, False, 0)
+		button_box.pack_end(button_move_up, False, False, 0)
 
 		self.pack_start(container, True, True, 0)
 		self.pack_start(button_box, False, False, 0)

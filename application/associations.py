@@ -19,7 +19,7 @@ class AssociationManager:
 		#system defined list
 		self._default_section = 'Default Applications'
 		self._default_path = '/usr/share/applications'
-		self._default_file = 'defaults.list'
+		self._default_file = 'mimeinfo.cache'
 
 		self._config = ConfigParser()
 		self._config.read([

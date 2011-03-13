@@ -233,6 +233,9 @@ class FileList(ItemList):
 		selection = self._item_list.get_selection()
 		list_, iter_ = selection.get_selected()
 
+		# we need selection for this
+		if iter_ is None: return
+
 		name = list_.get_value(iter_, COL_NAME)
 		is_dir = list_.get_value(iter_, COL_DIR)
 		is_parent = list_.get_value(iter_, COL_PARENT)

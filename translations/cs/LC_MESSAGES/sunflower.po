@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Sunfower 0.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-13 00:49+0100\n"
-"PO-Revision-Date: 2011-03-13 02:24+0100\n"
+"PO-Revision-Date: 2011-03-14 20:38+0100\n"
 "Last-Translator: Radek Tříška <radek@fastlinux.eu>\n"
 "Language-Team: Czech <radek@fastlinux.eu>\n"
 "Language: cs\n"
@@ -283,7 +283,7 @@ msgstr "Zobrazení"
 
 #: application/gui/preferences_window.py:33
 msgid "Item List"
-msgstr "Seznamu položek"
+msgstr "Seznam položek"
 
 #: application/gui/preferences_window.py:37
 #: application/plugins/system_terminal.py:33

@@ -200,7 +200,7 @@ class ItemList(PluginBase):
 		self._terminal_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
-									)[self._parent.options.getint('main', 'button_relief')])
+		                        )[self._parent.options.getint('main', 'button_relief')])
 
 		self._terminal_button.connect('clicked', self._create_terminal)
 

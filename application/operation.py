@@ -5,7 +5,7 @@ import gobject
 import fnmatch
 
 from threading import Thread, Event
-from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog
+from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OperationError
 from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog
 
 # import constants
@@ -74,6 +74,7 @@ class CopyOperation(Operation):
 		self._merge_all = None
 		self._overwrite_all = None
 
+		# cache settings
 		self._reserve_size = self._application.options.getboolean('main', 'reserve_size')
 
 	def _create_dialog(self):
@@ -160,6 +161,80 @@ class CopyOperation(Operation):
 
 		return overwrite, result[1]
 
+	def _get_write_error_input(self, error):
+		"""Get user response for write error"""
+		dialog = OperationError(self._application)
+
+		dialog.set_message(_(
+		        'There is a problem writing data to destination '
+		        'file. What would you like to do?'
+		    ))
+		dialog.set_error(str(error))
+
+		gtk.gdk.threads_enter()  # prevent deadlocks
+		response = dialog.get_response()
+		gtk.gdk.threads_leave()
+
+		# abort operation if user requested
+		if response == gtk.RESPONSE_CANCEL:
+			self._can_continue = False
+
+		return response
+
+
+	def _get_create_error_input(self, error, is_directory=False):
+		"""Get user response for create error"""
+		dialog = OperationError(self._application)
+
+		if not is_directory:
+			# set message for file
+			dialog.set_message(_(
+				'An error occurred while trying to create specified '
+				'file. What would you like to do?'
+			))
+
+		else:
+			# set message for directory
+			dialog.set_message(_(
+				'An error occurred while trying to create specified '
+				'directory. What would you like to do?'
+			))
+
+		dialog.set_error(str(error))
+
+		# get user response
+		gtk.gdk.threads_enter()  # prevent deadlocks
+		response = dialog.get_response()
+		gtk.gdk.threads_leave()
+
+		# abort operation if user requested
+		if response == gtk.RESPONSE_CANCEL:
+			self._can_continue = False
+
+		return response
+
+	def _get_mode_set_error_input(self, error):
+		"""Get user response for mode set error"""
+		dialog = OperationError(self._application)
+
+		dialog.set_message(_(
+	            'Problem with setting mode and/or owner for '
+	            'specified path. What would you like to do?'
+	        ))
+
+		dialog.set_error(str(error))
+
+		# get user response
+		gtk.gdk.threads_enter()  # prevent deadlocks
+		response = dialog.get_response()
+		gtk.gdk.threads_leave()
+
+		# abort operation if user requested
+		if response == gtk.RESPONSE_CANCEL:
+			self._can_continue = False
+
+		return response
+
 	def _get_lists(self, dir_list, file_list):
 		"""Find all files for copying"""
 		gobject.idle_add(self._update_status, _('Searching for files...'))
@@ -192,6 +267,49 @@ class CopyOperation(Operation):
 				gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
 				file_list.append(item)
+
+	def _set_mode(self, path, mode):
+		"""Set mode for specified path"""
+		if not self._options[OPTION_SET_MODE]: return
+
+		try:
+			# try to set mode for specified path
+			self._destination.set_mode(
+				                    path,
+				                    mode,
+				                    relative_to=self._destination_path
+				                )
+
+		except StandardError as error:
+			# problem setting mode, ask user
+			response = self._get_mode_set_error_input(error)
+
+			if response == gtk.RESPONSE_YES:
+				self._set_mode(path, mode)  # try to set mode again
+
+			return
+
+	def _set_owner(self, path, user_id, group_id):
+		"""Set owner and group for specified path"""
+		if not self._options[OPTION_SET_OWNER]: return
+
+		try:
+			# try set owner of specified path
+			self._destination.set_owner(
+				                    path,
+				                    user_id,
+				                    group_id,
+				                    relative_to=self._destination_path
+				                )
+
+		except StandardError as error:
+			# problem with setting owner, ask user
+			response = self._get_mode_set_error_input(path)
+
+			if response == gtk.RESPONSE_YES:
+				self._set_owner(path, user_id, group_id)  # try to set owner again
+
+			return
 
 	def _scan_directory(self, dir_list, file_list, directory):
 		"""Recursively scan directory and populate list"""
@@ -227,15 +345,45 @@ class CopyOperation(Operation):
 				gobject.idle_add(self._dialog.increment_total_count, 1)
 				file_list.append(full_name)
 
+	def _create_directory(self, directory):
+		"""Create specified directory"""
+		file_stat = self._source.get_stat(directory, relative_to=self._source_path)
+		mode = stat.S_IMODE(file_stat.st_mode) if self._options[OPTION_SET_MODE] else 0755
+
+		try:
+			# try to create a directory
+			self._destination.create_directory(
+			                                directory,
+			                                mode,
+			                                relative_to=self._destination_path
+			                            )
+
+		except StandardError as error:
+			# there was a problem creating directory
+			response = self._get_create_error_input(error, True)
+
+			# handle user response
+			if response == gtk.RESPONSE_YES:
+				self._create_directory(directory)
+
+			# exit method
+			return
+
+		# set owner
+		self._set_owner(directory, file_stat.st_uid, file_stat.st_gid)
+
 	def _copy_file(self, file_):
 		"""Copy file content"""
 		can_procede = True
 		dest_file = file_
+		sh = None
+		dh = None
 
 		# check if destination file exists
 		if self._destination.exists(file_, relative_to=self._destination_path):
 			if self._overwrite_all is not None:
 				can_procede = self._overwrite_all
+
 			else:
 				can_procede, options = self._get_overwrite_input(file_)
 
@@ -249,15 +397,15 @@ class CopyOperation(Operation):
 		# if user skipped this file return
 		if not can_procede: return
 
-		# TODO: Handle errors!
-		sh = self._source.get_file_handle(file_, 'rb', relative_to=self._source_path)
-		dh = self._destination.get_file_handle(dest_file, 'wb', relative_to=self._destination_path)
-
-		destination_size = 0L
-		file_stat = self._source.get_stat(file_, relative_to=self._source_path)
-
-		# reserve file size
 		try:
+			# get file handles
+			sh = self._source.get_file_handle(file_, 'rb', relative_to=self._source_path)
+			dh = self._destination.get_file_handle(dest_file, 'wb', relative_to=self._destination_path)
+
+			destination_size = 0L
+			file_stat = self._source.get_stat(file_, relative_to=self._source_path)
+
+			# reserve file size
 			if self._reserve_size:
 				# reserve file size in advance, can be slow on memory cards and network
 				dh.truncate(file_stat.st_size)
@@ -265,12 +413,22 @@ class CopyOperation(Operation):
 			else:
 				# just truncate file to 0 size in case source file is smaller
 				dh.truncate()
-		except:
-			# not all file systems support this option,
-			# just ignore exception
-			pass
 
-		dh.seek(0)
+			dh.seek(0)
+
+		except StandardError as error:
+			# close handles if they exist
+			if hasattr(sh, 'close'): sh.close()
+			if hasattr(dh, 'close'): sh.close()
+
+			response = self._get_create_error_input(error)
+
+			# handle user response
+			if response == gtk.RESPONSE_YES:
+				self._copy_file(dest_file)  # retry copying this file
+
+			# exit method
+			return
 
 		while True:
 			if self._abort.is_set(): break
@@ -287,7 +445,7 @@ class CopyOperation(Operation):
 					gobject.idle_add(
 									self._dialog.set_current_file_fraction,
 									destination_size / float(file_stat.st_size)
-									)
+								)
 				else:
 					gobject.idle_add(self._dialog.set_current_file_fraction, 1)
 
@@ -296,58 +454,40 @@ class CopyOperation(Operation):
 				dh.close()
 
 				# set mode if required
-				if self._options[OPTION_SET_MODE]:
-					self._destination.set_mode(
-											dest_file,
-											stat.S_IMODE(file_stat.st_mode),
-											relative_to=self._destination_path
-										)
+				self._set_mode(dest_file, stat.S_IMODE(file_stat.st_mode))
 
 				# set owner if required
-				if self._options[OPTION_SET_OWNER]:
-					self._destination.set_owner(
-											dest_file,
-											file_stat.st_uid,
-											file_stat.st_gid,
-											relative_to=self._destination_path
-										)
+				self._set_owner(dest_file, file_stat.st_uid, file_stat.st_gid)
 				break
 
-	def _create_directories(self, list):
+	def _create_directory_list(self, list_):
 		"""Create all directories in list"""
 		gobject.idle_add(self._update_status, _('Creating directories...'))
-		for number, dir in enumerate(list, 0):
+
+		for number, dir_ in enumerate(list_, 0):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()
 
-			gobject.idle_add(self._dialog.set_current_file, dir)
-			gobject.idle_add(self._dialog.set_current_file_fraction, float(number)/len(list))
+			gobject.idle_add(self._dialog.set_current_file, dir_)
+			self._create_directory(dir_)  # create directory
+			gobject.idle_add(self._dialog.set_current_file_fraction, float(number)/len(list_))
 
-			file_stat = self._source.get_stat(dir, relative_to=self._source_path)
-			mode = stat.S_IMODE(file_stat.st_mode) if self._options[OPTION_SET_MODE] else 0755
-
-			# TODO: Handle errors!
-			self._destination.create_directory(dir, mode, relative_to=self._destination_path)
-
-			# set owner if requested
-			if self._options[OPTION_SET_OWNER]:
-				self._destination.set_owner(
-										dir,
-										file_stat.st_uid,
-										file_stat.st_gid,
-										relative_to=self._destination_path
-									)
-
-	def _copy_file_list(self, list):
+	def _copy_file_list(self, list_):
 		"""Copy list of files to destination path"""
+		# update status
 		gobject.idle_add(self._update_status, _('Copying files...'))
-		for file in list:
-			if self._abort.is_set(): break  # abort operation if requested
+
+		# copy all the files in list
+		for file_ in list_:
+			# abort operation if requested
+			if self._abort.is_set(): break
 			self._can_continue.wait()
 
-			gobject.idle_add(self._dialog.set_current_file, file)
+			gobject.idle_add(self._dialog.set_current_file, file_)
 
-			self._copy_file(file)
+			# copy file
+			self._copy_file(file_)
+
 			gobject.idle_add(self._dialog.increment_current_count, 1)
 
 	def run(self):
@@ -365,7 +505,7 @@ class CopyOperation(Operation):
 		self._get_lists(dir_list, file_list)
 
 		# perform operation
-		self._create_directories(dir_list)
+		self._create_directory_list(dir_list)
 		self._copy_file_list(file_list)
 
 		# notify user if window is not focused
@@ -500,7 +640,7 @@ class MoveOperation(CopyOperation):
 		self._get_lists(dir_list, file_list)
 
 		# create directories
-		self._create_directories(dir_list)
+		self._create_directory_list(dir_list)
 
 		# copy/move files
 		if self._check_devices():

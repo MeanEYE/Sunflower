@@ -742,6 +742,7 @@ class AddBookmarkDialog(gtk.Dialog):
 
 		self._application = application
 
+		# configure dialog
 		self.set_title(_('Add bookmark'))
 		self.set_default_size(340, 10)
 		self.set_resizable(True)
@@ -751,6 +752,7 @@ class AddBookmarkDialog(gtk.Dialog):
 
 		self.vbox.set_spacing(0)
 
+		# create component container
 		vbox = gtk.VBox(False, 5)
 		vbox.set_border_width(5)
 
@@ -816,3 +818,85 @@ class AddBookmarkDialog(gtk.Dialog):
 		self.destroy()
 
 		return (code, name, path)
+
+
+class OperationError(gtk.Dialog):
+	"""Dialog used to ask user about error occured during certain operation."""
+
+	def __init__(self, application):
+		gtk.Dialog.__init__(self, parent=application)
+
+		self._application = application
+
+		# configure dialog
+		self.set_title(_('Operation error'))
+		self.set_default_size(340, 10)
+		self.set_resizable(True)
+		self.set_skip_taskbar_hint(True)
+		self.set_modal(True)
+		self.set_transient_for(application)
+
+		self.vbox.set_spacing(0)
+
+		# create component container
+		hbox = gtk.HBox(False, 10)
+		hbox.set_border_width(5)
+
+		vbox = gtk.VBox(False, 10)
+		vbox_icon = gtk.VBox(False, 0)
+
+		# create interface
+		icon = gtk.Image()
+		icon.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
+
+		self._label_message = gtk.Label()
+		self._label_message.set_alignment(0, 0)
+		self._label_message.set_use_markup(True)
+		self._label_message.set_line_wrap(True)
+		self._label_message.set_size_request(340, -1)
+
+		self._label_error = gtk.Label()
+		self._label_error.set_alignment(0,0)
+		self._label_error.set_line_wrap(True)
+		self._label_error.set_size_request(340, -1)
+
+		# create controls
+		button_cancel = gtk.Button(label=_('Cancel'))
+		button_skip = gtk.Button(label=_('Skip'))
+		button_retry = gtk.Button(label=_('Retry'))
+
+		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self.add_action_widget(button_skip, gtk.RESPONSE_NO)
+		self.add_action_widget(button_retry, gtk.RESPONSE_YES)
+
+		button_skip.set_can_default(True)
+		self.set_default_response(gtk.RESPONSE_NO)
+
+		# pack interface
+		vbox_icon.pack_start(icon, False, False, 0)
+
+		vbox.pack_start(self._label_message, False, False, 0)
+		vbox.pack_start(self._label_error, False, False, 0)
+
+		hbox.pack_start(vbox_icon, False, False, 0)
+		hbox.pack_start(vbox, True, True, 0)
+
+		self.vbox.pack_start(hbox, False, False, 0)
+
+		# show all components
+		self.show_all()
+
+	def set_message(self, message):
+		"""Set dialog message"""
+		self._label_message.set_markup(message)
+
+	def set_error(self, error):
+		"""Set error text"""
+		self._label_error.set_markup(error)
+
+	def get_response(self):
+		"""Return dialog response and self-destruct"""
+		code = self.run()
+		self.hide()
+
+		return code

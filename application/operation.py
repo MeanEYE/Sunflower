@@ -717,3 +717,21 @@ class DeleteOperation(Operation):
 
 		# destroy dialog
 		gobject.idle_add(self._destroy_ui)
+
+
+class PathChanger(Thread):
+	"""Thread used to scan specified path and get item properties"""
+
+	def __init__(self, application, parent, provider, path):
+		Thread.__init__(self, target=self)
+
+		self._application = application
+		self._parent = parent
+		self._provider = provider
+		self._path = path
+
+		self._items = []
+
+	def run(self):
+		"""Scan specified path and generate list"""
+		pass

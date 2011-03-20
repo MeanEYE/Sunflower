@@ -66,8 +66,9 @@ class ChangeLogDialog(gtk.Dialog):
 
 			# create viewport to hold all the options for modifications
 			modifications_label = gtk.Label(_('Modifications'))
-			modifications_window = gtk.Viewport()
-			modifications_window.add(modifications)
+			modifications_window = gtk.ScrolledWindow()
+			modifications_window.add_with_viewport(modifications)
+			modifications_window.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
 
 			vbox.pack_start(label_info, False, False, 0)
 			vbox.pack_start(modifications_window, True, True, 0)

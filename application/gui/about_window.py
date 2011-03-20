@@ -106,9 +106,9 @@ class AboutWindow(gtk.Window):
 
 	def _create_copyright_tab(self):
 		"""Create license tab"""
-		tab = gtk.Viewport()
+		tab = gtk.ScrolledWindow()
 		tab.set_border_width(5)
-		#tab.set_shadow_type(gtk.SHADOW_IN)
+		tab.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
 		tab_label = gtk.Label(_('Copyright'))
 
 		# container for all the lists
@@ -169,7 +169,18 @@ class AboutWindow(gtk.Window):
 		translator = gtk.Label(
 		                '\tRadek Tříška '
 		                '<small>&lt;radek@fastlinux.eu&gt;</small>'
-		                '\t\tCzech language'
+		                '\t\t\tCzech language'
+		            )
+		translator.set_alignment(0, 0.1)
+		translator.set_use_markup(True)
+		translator.set_selectable(True)
+
+		translators.pack_start(translator, False, False, 0)
+
+		translator = gtk.Label(
+		                '\tJakub Dyszkiewicz '
+		                '<small>&lt;144.kuba@gmail.com&gt;</small>'
+		                '\t\tPolish language'
 		            )
 		translator.set_alignment(0, 0.1)
 		translator.set_use_markup(True)
@@ -183,7 +194,7 @@ class AboutWindow(gtk.Window):
 		vbox.pack_start(artists, False, False, 0)
 		vbox.pack_start(translators, False, False, 0)
 
-		tab.add(vbox)
+		tab.add_with_viewport(vbox)
 
 		return (tab, tab_label)
 

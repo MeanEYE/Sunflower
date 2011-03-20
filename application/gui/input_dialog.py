@@ -900,3 +900,99 @@ class OperationError(gtk.Dialog):
 		self.hide()
 
 		return code
+
+
+class CreateToolbarWidgetDialog(gtk.Dialog):
+	"""Create widget persisten dialog."""
+
+	def __init__(self, application):
+		gtk.Dialog.__init__(self, parent=application)
+
+		self._application = application
+
+		# configure dialog
+		self.set_title(_('Add toolbar widget'))
+		self.set_default_size(340, 10)
+		self.set_resizable(True)
+		self.set_skip_taskbar_hint(True)
+		self.set_modal(True)
+		self.set_transient_for(application)
+
+		self.vbox.set_spacing(0)
+
+		# create component container
+		vbox = gtk.VBox(False, 5)
+		vbox.set_border_width(5)
+
+		# create interfacce
+		vbox_name = gtk.VBox(False, 0)
+
+		label_name = gtk.Label(_('Name:'))
+		label_name.set_alignment(0, 0.5)
+
+		self._entry_name = gtk.Entry(max=30)
+
+		vbox_type = gtk.VBox(False, 0)
+
+		label_type = gtk.Label(_('Type:'))
+		label_type.set_alignment(0, 0.5)
+
+		cell_renderer_text = gtk.CellRendererText()
+		self._type_list = gtk.ListStore(str, str)
+
+		self._combobox_type = gtk.ComboBox(self._type_list)
+		self._combobox_type.pack_start(cell_renderer_text)
+		self._combobox_type.add_attribute(cell_renderer_text, 'text', 1)
+
+		# create controls
+		button_add = gtk.Button(stock=gtk.STOCK_ADD)
+		button_add.set_can_default(True)
+		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
+
+		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self.add_action_widget(button_add, gtk.RESPONSE_ACCEPT)
+
+		self.set_default_response(gtk.RESPONSE_ACCEPT)
+
+		# pack interface
+		vbox_name.pack_start(label_name, False, False, 0)
+		vbox_name.pack_start(self._entry_name, False, False, 0)
+
+		vbox_type.pack_start(label_type, False, False, 0)
+		vbox_type.pack_start(self._combobox_type, False, False)
+
+		vbox.pack_start(vbox_name, False, False, 0)
+		vbox.pack_start(vbox_type, False, False, 0)
+
+		self.vbox.pack_start(vbox, False, False, 0)
+
+		# show all widgets
+		self.show_all()
+
+	def update_type_list(self, types):
+		"""Update type list store"""
+		self._type_list.clear()
+
+		for key, text in types:
+			self._type_list.append((key, text))
+
+	def get_response(self):
+		"""Return dialog response and self-destruct"""
+		name = None
+		widget_type = None
+
+		# clear text entry before showing
+		self._entry_name.set_text('')
+
+		# show dialog
+		code = self.run()
+
+		if code == gtk.RESPONSE_ACCEPT \
+		and len(self._type_list) > 0:
+			# get name and type
+			name = self._entry_name.get_text()
+			widget_type = self._type_list[self._combobox_type.get_active()][0]
+
+		self.destroy()
+
+		return code, name, widget_type

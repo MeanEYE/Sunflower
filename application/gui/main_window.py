@@ -14,6 +14,7 @@ from icons import IconManager
 from associations import AssociationManager
 from indicator import Indicator
 from notifications import NotificationManager
+from toolbar import ToolbarManager
 
 from ConfigParser import RawConfigParser
 
@@ -56,6 +57,7 @@ class MainWindow(gtk.Window):
 		self.mount_manager = None  # we'll create manager later
 		self.associations_manager = AssociationManager()
 		self.notification_manager = NotificationManager(self)
+		self.toolbar_manager = ToolbarManager(self)
 
 		self.set_title(_('Sunflower'))
 
@@ -350,8 +352,10 @@ class MainWindow(gtk.Window):
 		self.load_accel_map(os.path.join(self.config_path, 'accel_map'))
 
 		# create toolbar
-		self.toolbar = gtk.Toolbar()
-		self.toolbar.set_property(
+		self.toolbar_manager.load_config(self.toolbar_options)
+
+		toolbar = self.toolbar_manager.get_toolbar()
+		toolbar.set_property(
 						'no-show-all',
 						not self.options.getboolean('main', 'show_toolbar')
 					)
@@ -462,7 +466,7 @@ class MainWindow(gtk.Window):
 		# pack gui
 		vbox = gtk.VBox(False, 0)
 		vbox.pack_start(menu_bar, expand=False, fill=False, padding=0)
-		vbox.pack_start(self.toolbar, expand=False, fill=False, padding=0)
+		vbox.pack_start(self.toolbar_manager.get_toolbar(), expand=False, fill=False, padding=0)
 
 		vbox2 = gtk.VBox(False, 3)
 		vbox2.set_border_width(3)
@@ -484,6 +488,9 @@ class MainWindow(gtk.Window):
 
 		# load plugins
 		self._load_plugins()
+
+		# create toolbar widgets
+		self.toolbar_manager.create_widgets()
 
 		# show widgets
 		self.show_all()
@@ -774,7 +781,7 @@ class MainWindow(gtk.Window):
 		show_toolbar = widget.get_active()
 
 		self.options.set('main', 'show_toolbar', ('False', 'True')[show_toolbar])
-		self.toolbar.set_visible(show_toolbar)
+		self.toolbar_manager.get_toolbar().set_visible(show_toolbar)
 
 	def _get_active_object(self):
 		"""Return active notebook object"""
@@ -1587,6 +1594,9 @@ class MainWindow(gtk.Window):
 		# recreate tools menu
 		self._create_tools_menu()
 
+		# recreate toolbar widgets
+		self.toolbar_manager.create_widgets()
+
 		# show tabs if needed
 		self.left_notebook.set_show_tabs(
 								self.options.getboolean('main', 'always_show_tabs') or
@@ -1635,14 +1645,18 @@ class MainWindow(gtk.Window):
 		# import class to globals
 		globals()[plugin_class.__name__] = plugin_class
 
-	def register_provider(self, protocol, provider_class):
+	def register_provider(self, protocol, ProviderClass):
 		"""Register file provider class for specified protocol
 
 		These classes will be used when handling all sorts of URI based operations
 		like drag and drop and system bookmark handling.
 
 		"""
-		self.provider_classes[protocol] = provider_class
+		self.provider_classes[protocol] = ProviderClass
+
+	def register_toolbar_factory(self, FactoryClass):
+		"""Register and create toolbar widget factory"""
+		self.toolbar_manager.register_factory(FactoryClass)
 
 	def get_provider_by_protocol(self, protocol):
 		"""Return provider class specified by protocol"""

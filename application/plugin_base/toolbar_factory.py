@@ -19,15 +19,26 @@ class ToolbarFactory:
 		"""
 		pass
 
-	def create_widget(self, widget_type):
+	def create_widget(self, name, widget_type, transient_window=None):
 		"""Show dialog for creating a new widget. This method returns
-		dictionary with widget specific configuration"""
+		dictionary with widget specific configuration or None in case
+		user canceled.
+
+		result = {
+			'some_key': 'value to be stored',
+		}
+
+		"""
 		pass
 
-	def configure_widget(self, widget_type, config):
-		"""Present blockinig configuration dialog for specified widget type."""
+	def configure_widget(self, name, widget_type, config):
+		"""Present blocking configuration dialog for specified widget type.
+
+		Returns boolean representing user changes.
+
+		"""
 		pass
 
-	def get_widget(self, widget_type, config):
+	def get_widget(self, name, widget_type, config):
 		"""Return newly created widget based on type and configuration."""
 		pass

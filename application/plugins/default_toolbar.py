@@ -1,5 +1,6 @@
 import os
 import gtk
+import user
 
 from plugin_base.toolbar_factory import ToolbarFactory
 
@@ -16,6 +17,11 @@ class DefaultToolbar(ToolbarFactory):
 		ToolbarFactory.__init__(self, application)
 
 		self._widgets = {
+		        'home_folder_button': {
+		            'description': _('Home folder button'),
+		            'dialog': None,
+		            'class': HomeFolderButton,
+		        },
 		        'bookmark_button': {
 		            'description': _('Bookmark button'),
 		            'dialog': BookmarkButton_Dialog,
@@ -102,18 +108,33 @@ class BookmarkButton(gtk.ToolButton):
 	def __init__(self, application, name, config):
 		gtk.ToolButton.__init__(self)
 
-		self._path = os.path.expanduser(config['path'])
+		self._name = name
+		self._config = config
 		self._application = application
+		self._path = None
 
 		# configure button
-		self.set_label(name)
-		self.set_icon_name('folder')
-		self.set_tooltip_text(name)
+		self._set_label()
+		self._set_icon()
 
 		# show label if specified
-		self.set_is_important(config['show_label'] == 'True')
+		if self._config.has_key('show_label'):
+			self.set_is_important(self._config['show_label'] == 'True')
 
+		if self._config.has_key('path'):
+			self._path = os.path.expanduser(self._config['path'])
+
+		# connect signals
 		self.connect('clicked', self._clicked)
+
+	def _set_label(self):
+		"""Set button label"""
+		self.set_label(self._name)
+		self.set_tooltip_text(self._name)
+
+	def _set_icon(self):
+		"""Set button icon"""
+		self.set_icon_name('folder')
 
 	def _clicked(self, widget, data=None):
 		"""Handle click"""
@@ -121,6 +142,31 @@ class BookmarkButton(gtk.ToolButton):
 
 		if hasattr(active_object, 'change_path'):
 			active_object.change_path(self._path)
+
+
+class HomeFolderButton(BookmarkButton):
+	"""Home folder toolbar button"""
+
+	def __init__(self, application, name, config):
+		BookmarkButton.__init__(self, application, name, config)
+
+		self._path = user.home
+
+	def _set_label(self):
+		"""Set button label"""
+		self.set_label(_('Home directory'))
+		self.set_tooltip_text(_('Home directory'))
+
+	def _set_icon(self):
+		"""Set button icon"""
+		self.set_icon_name('user-home')
+
+
+class Separator(gtk.SeparatorToolItem):
+	"""Toolbar separator widget"""
+
+	def __init__(self, application, name, config):
+		gtk.SeparatorToolItem.__init__(self)
 
 
 class BookmarkButton_Dialog(gtk.Dialog):
@@ -210,10 +256,3 @@ class BookmarkButton_Dialog(gtk.Dialog):
 		self.destroy()
 
 		return config
-
-
-class Separator(gtk.SeparatorToolItem):
-	"""Toolbar separator widget"""
-
-	def __init__(self, application, name, config):
-		gtk.SeparatorToolItem.__init__(self)

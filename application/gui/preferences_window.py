@@ -64,8 +64,8 @@ class PreferencesWindow(gtk.Window):
 		btn_close = gtk.Button(stock=gtk.STOCK_CLOSE)
 		btn_close.connect('clicked', self._hide)
 
-		self._btn_save = gtk.Button(stock=gtk.STOCK_SAVE)
-		self._btn_save.connect('clicked', self._save_options)
+		self._button_save = gtk.Button(stock=gtk.STOCK_SAVE)
+		self._button_save.connect('clicked', self._save_options)
 
 		btn_help = gtk.Button(stock=gtk.STOCK_HELP)
 		btn_help.connect(
@@ -84,7 +84,7 @@ class PreferencesWindow(gtk.Window):
 		hbox.pack_start(btn_help, False, False, 0)
 		hbox.pack_start(self._label_restart, True, True, 0)
 		hbox.pack_end(btn_close, False, False, 0)
-		hbox.pack_end(self._btn_save, False, False, 0)
+		hbox.pack_end(self._button_save, False, False, 0)
 
 		# pack gui
 		vbox.pack_start(self._tabs, True, True, 0)
@@ -115,7 +115,7 @@ class PreferencesWindow(gtk.Window):
 				page._load_options()
 
 		# disable save button and hide label
-		self._btn_save.set_sensitive(False)
+		self._button_save.set_sensitive(False)
 		self._label_restart.hide()
 
 	def _save_options(self, widget, data=None):
@@ -128,14 +128,14 @@ class PreferencesWindow(gtk.Window):
 				page._save_options()
 
 		# disable save button
-		self._btn_save.set_sensitive(False)
+		self._button_save.set_sensitive(False)
 
 		# call main window to propagate new settings
 		self._parent.apply_settings()
 
 	def enable_save(self, widget=None, show_restart=None):
 		"""Enable save button"""
-		self._btn_save.set_sensitive(True)
+		self._button_save.set_sensitive(True)
 
 		# show label with message
 		if show_restart is not None and show_restart:

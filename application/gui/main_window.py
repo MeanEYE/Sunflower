@@ -674,11 +674,12 @@ class MainWindow(gtk.Window):
 										gtk.DIALOG_DESTROY_WITH_PARENT,
 										gtk.MESSAGE_ERROR,
 										gtk.BUTTONS_OK,
-										_("Bookmarked path does not exist or is not "
-										"valid. If path is not local check if specified "
-										"volume is mounted.") +
-										"\n\n{0}".format(path)
-										)
+										_(
+				                            "Specified path does not exist or is not "
+				                            "valid. If path is not local check if volume "
+				                            "is mounted."
+				                        ) + "\n\n{0}".format(path)
+				                    )
 				dialog.run()
 				dialog.destroy()
 

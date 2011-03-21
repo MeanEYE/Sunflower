@@ -56,7 +56,7 @@ class PluginBase(gtk.VBox):
 		self._title_label.set_use_markup(True)
 		self._title_label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
 
-		font = pango.FontDescription('7')
+		font = pango.FontDescription('8')
 		self._subtitle_label = gtk.Label()
 		self._subtitle_label.set_alignment(0, 0.5)
 		self._subtitle_label.set_use_markup(False)
@@ -185,6 +185,7 @@ class PluginBase(gtk.VBox):
 
 		self._top_panel.modify_bg(gtk.STATE_NORMAL, background_color)
 		self._title_label.modify_fg(gtk.STATE_NORMAL, text_color)
+		self._subtitle_label.modify_fg(gtk.STATE_NORMAL, text_color)
 
 	def _notebook_next_tab(self, widget, data=None):
 		"""Go to next tab in parent Notebook"""

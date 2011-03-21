@@ -17,8 +17,13 @@ class DefaultToolbar(ToolbarFactory):
 		ToolbarFactory.__init__(self, application)
 
 		self._widgets = {
-		        'home_folder_button': {
-		            'description': _('Home folder button'),
+		        'parent_directory_button': {
+		            'description': _('Parent directory button'),
+		            'dialog': None,
+		            'class': ParentDirectoryButton,
+		        },
+		        'home_directory_button': {
+		            'description': _('Home directory button'),
 		            'dialog': None,
 		            'class': HomeFolderButton,
 		        },
@@ -160,6 +165,30 @@ class HomeFolderButton(BookmarkButton):
 	def _set_icon(self):
 		"""Set button icon"""
 		self.set_icon_name('user-home')
+
+
+class ParentDirectoryButton(gtk.ToolButton):
+	"""Go to parent directory toolbar button"""
+
+	def __init__(self, application, name, config):
+		gtk.ToolButton.__init__(self)
+
+		self._name = name
+		self._config = config
+		self._application = application
+
+		self.set_label(_('Go to parent directory'))
+		self.set_tooltip_text(_('Go to parent directory'))
+		self.set_icon_name('go-up')
+
+		self.connect('clicked', self._clicked)
+
+	def _clicked(self, widget, data=None):
+		"""Handle button click"""
+		active_object = self._application._get_active_object()
+
+		if hasattr(active_object, '_parent_folder'):
+			active_object._parent_folder()
 
 
 class Separator(gtk.SeparatorToolItem):

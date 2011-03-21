@@ -34,7 +34,7 @@ class ToolbarFactory:
 	def configure_widget(self, name, widget_type, config):
 		"""Present blocking configuration dialog for specified widget type.
 
-		Returns boolean representing user changes.
+		Returns new config if changes were made otherwise None
 
 		"""
 		pass

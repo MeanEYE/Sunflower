@@ -35,7 +35,6 @@ class PluginBase(gtk.VBox):
 
 		# top folder icon as default
 		self._icon = gtk.Image()
-		self._top_hbox.pack_start(self._icon, False, False, 0)
 
 		# status bar
 		status_bar = gtk.Frame()
@@ -50,13 +49,26 @@ class PluginBase(gtk.VBox):
 		status_bar.set_border_width(1)
 
 		# create title bar
+		vbox = gtk.VBox(False, 1)
+
 		self._title_label = gtk.Label()
 		self._title_label.set_alignment(0, 0.5)
 		self._title_label.set_use_markup(True)
 		self._title_label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
-		self._top_hbox.pack_start(self._title_label, True, True, 3)
+
+		font = pango.FontDescription('7')
+		self._subtitle_label = gtk.Label()
+		self._subtitle_label.set_alignment(0, 0.5)
+		self._subtitle_label.set_use_markup(False)
+		self._subtitle_label.modify_font(font)
 
 		# pack interface
+		vbox.pack_start(self._title_label, True, True, 0)
+		vbox.pack_start(self._subtitle_label, False, False, 0)
+
+		self._top_hbox.pack_start(self._icon, False, False, 0)
+		self._top_hbox.pack_start(vbox, True, True, 3)
+
 		self.pack_start(self._top_panel, False, False, 0)
 		self.pack_end(status_bar, False, False, 0)
 

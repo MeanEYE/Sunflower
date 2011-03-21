@@ -952,15 +952,14 @@ class FileList(ItemList):
 		space_free = self._format_size(stat.f_bsize * stat.f_bavail)
 		space_total = self._format_size(stat.f_bsize * stat.f_blocks)
 
-		self._title_label.set_label(
-									'{0}\n<span size="x-small">'
-									'{3} {1} - {4} {2}</span>'.format(
-																	text,
-																	space_free,
-																	space_total,
-																	_('Free:'),
-																	_('Total:')
-																)
+		self._title_label.set_label(text)
+		self._subtitle_label.set_label(
+									'{2} {0} - {3} {1}'.format(
+															space_free,
+															space_total,
+															_('Free:'),
+															_('Total:')
+														)
 								)
 
 	def _format_size(self, size):

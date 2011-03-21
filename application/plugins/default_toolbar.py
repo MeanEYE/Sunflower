@@ -87,7 +87,7 @@ class DefaultToolbar(ToolbarFactory):
 		                            gtk.DIALOG_DESTROY_WITH_PARENT,
 		                            gtk.MESSAGE_INFO,
 		                            gtk.BUTTONS_OK,
-		                            _("This widget type has no configuration dialog.")
+		                            _("This widget has no configuration dialog.")
 		                        )
 			dialog.run()
 			dialog.destroy()

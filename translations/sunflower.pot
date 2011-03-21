@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-21 00:58+0100\n"
+"POT-Creation-Date: 2011-03-21 03:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -212,8 +212,8 @@ msgid "Delete selected items (F8 or Delete)"
 msgstr ""
 
 #: application/gui/main_window.py:534
-#: application/plugins/default_toolbar.py:157
-#: application/plugins/default_toolbar.py:158
+#: application/plugins/default_toolbar.py:162
+#: application/plugins/default_toolbar.py:163
 msgid "Home directory"
 msgstr ""
 
@@ -746,7 +746,7 @@ msgid "Add bookmark"
 msgstr ""
 
 #: application/gui/input_dialog.py:760 application/gui/input_dialog.py:930
-#: application/plugins/default_toolbar.py:197
+#: application/plugins/default_toolbar.py:226
 msgid "Name:"
 msgstr ""
 
@@ -929,27 +929,27 @@ msgid ""
 "Item could not be renamed."
 msgstr ""
 
-#: application/plugins/file_list.py:961
+#: application/plugins/file_list.py:960
 msgid "Free:"
 msgstr ""
 
-#: application/plugins/file_list.py:962
+#: application/plugins/file_list.py:961
 msgid "Total:"
 msgstr ""
 
-#: application/plugins/file_list.py:1026
+#: application/plugins/file_list.py:1025
 msgid ""
 "Drag and drop functionality can not be used if source and destination are "
 "same!"
 msgstr ""
 
-#: application/plugins/file_list.py:1044
+#: application/plugins/file_list.py:1043
 msgid ""
 "Specified protocol ({0}) is not supported by this application. Please check "
 "for available plugins or create a feature request."
 msgstr ""
 
-#: application/plugins/file_list.py:1130
+#: application/plugins/file_list.py:1129
 msgid ""
 "Error changing working directory. \n"
 "\n"
@@ -963,30 +963,39 @@ msgid "System terminal"
 msgstr ""
 
 #: application/plugins/default_toolbar.py:21
-msgid "Home folder button"
+msgid "Parent directory button"
 msgstr ""
 
 #: application/plugins/default_toolbar.py:26
-msgid "Bookmark button"
+msgid "Home directory button"
 msgstr ""
 
 #: application/plugins/default_toolbar.py:31
+msgid "Bookmark button"
+msgstr ""
+
+#: application/plugins/default_toolbar.py:36
 msgid "Separator"
 msgstr ""
 
-#: application/plugins/default_toolbar.py:85
+#: application/plugins/default_toolbar.py:90
 msgid "This widget type has no configuration dialog."
 msgstr ""
 
+#: application/plugins/default_toolbar.py:180
 #: application/plugins/default_toolbar.py:181
+msgid "Go to parent directory"
+msgstr ""
+
+#: application/plugins/default_toolbar.py:210
 msgid "Configure bookmark button"
 msgstr ""
 
-#: application/plugins/default_toolbar.py:207
+#: application/plugins/default_toolbar.py:236
 msgid "Path:"
 msgstr ""
 
-#: application/plugins/default_toolbar.py:211
+#: application/plugins/default_toolbar.py:240
 msgid "Show label"
 msgstr ""
 

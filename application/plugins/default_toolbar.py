@@ -124,7 +124,8 @@ class BookmarkButton(gtk.ToolButton):
 
 		# show label if specified
 		if self._config.has_key('show_label'):
-			self.set_is_important(self._config['show_label'] == 'True')
+			important = self._config['show_label'] in ('True', True)
+			self.set_is_important(important)
 
 		if self._config.has_key('path'):
 			self._path = os.path.expanduser(self._config['path'])

@@ -1471,7 +1471,7 @@ class MainWindow(gtk.Window):
 				'button_relief': 1,
 				'terminal_scrollbars': 'True',
 				'case_sensitive_sort': 'True',
-				'plugins': 'file_list,system_terminal',
+				'plugins': 'file_list,system_terminal,default_toolbar',
 				'reserve_size': 'False',
 				'tab_button_icons': 'True',
 				'always_show_tabs': 'True',

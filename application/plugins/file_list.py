@@ -5,7 +5,7 @@ import gtk
 import time
 import locale
 import stat
-import mimetypes
+import gnomevfs
 import user
 import fnmatch
 
@@ -528,46 +528,16 @@ class FileList(ItemList):
 		# get selected item
 		filename = self._get_selection()
 
-		# call parents method which removes existing menu items
+		# call parent method which removes existing menu items
 		ItemList._prepare_popup_menu(self)
 
-		# get user configuration
-		program_list = []
-
 		if not is_dir:
-			# we need to prepare menu only for files
-			mime_list = mimetypes.guess_type(filename, False)
+			# get associated programs
+			mime_type = gnomevfs.get_mime_type(filename)
+			program_list = self._parent.menu_manager.get_items_for_type(mime_type, self._get_selection_list)
 
-			# get program lists for all mime types
-			for mime_type in mime_list:
-				try:
-					# get programs from user configuration
-					list_ = self._parent.associations_manager.get_user_list(mime_type)
-					if list_ is not None:
-						program_list.extend(list_)
-
-					# get default configuration
-					list_ = self._parent.associations_manager.get_default_list(mime_type)
-					if list_ is not None:
-						program_list.extend((list_item) for list_item in list_ if list_item not in program_list)
-
-					# filter out empty entries
-					program_list = filter(lambda x: x != '', program_list)
-
-				except:
-					# sometimes config parser raises exception for god knows what reason
-					# so this way we get around it just to be sure to display menu
-					pass
-
-		# add all items to menu
-		for config_file in program_list:
-			menu_item =	self._parent.menu_manager.get_item_from_config(
-																	config_file,
-																	self._get_selection_list
-																	)
-
-			# if got menu item back as result, add it to the list
-			if menu_item is not None:
+			# create open with menu
+			for menu_item in program_list:
 				self._open_with_menu.append(menu_item)
 
 		# disable/enable items

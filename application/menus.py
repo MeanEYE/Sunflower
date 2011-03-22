@@ -7,7 +7,6 @@ class MenuManager:
 	menu.
 
 	"""
-	_cache = {}
 	_named_items = {}
 	_accel_group = None
 
@@ -71,7 +70,6 @@ class MenuManager:
 
 	def _open_with_callback(self, widget, data=None):
 		"""Callback event for menu items from 'open with' menu"""
-
 		if data is not None:
 			self._application.associations_manager.open_file_with_config(data['callback'], data['config'])
 
@@ -84,56 +82,49 @@ class MenuManager:
 
 		return result
 
-	def get_item_from_config(self, config_file, callback):
-		"""Retrieves menu item for selected config file
+	def get_items_for_type(self, mime_type, callback):
+		"""Get list of MenuItems for specified mime type
 
-		This method is used to populate "open with" menu. All
-		menu items are cached by the config name. Universal callback
-		method defined in main application window is used.
+		mime_type - detected mime type
+		callback - method used to get list selection
 
 		"""
-		result = None
+		program_list = self._application.associations_manager.get_program_list_for_type(mime_type)
+		result = []
 
-		if config_file in self._cache:
-			# cached menu item, return
-			result = self._cache[config_file]
+		for program in program_list:
+			# extract data
+			config_file = program[0]
+			name = program[1]
+			icon_name = None
 
-		else:
-			# get config
+			# get config file
 			config = self._application.associations_manager.get_association_config(config_file)
 
 			# parse the config
-			if config is not None:
-				# get icon name
-				if config.has_key('icon'):
-					icon_name = config['icon']
-				else:
-					icon_name = None
+			if config is not None and config.has_key('icon'):
+				icon_name = config['icon']
 
-				# get label
-				label = str(config['name'])
+			# create menu item
+			item = gtk.ImageMenuItem()
+			item.set_label(name)
 
-				# create menu item
-				if icon_name is not None:
-					result = self._item_image({
-											'image': icon_name,
-											'label': label,
-										})
-				else:
-					result = self._item_normal({
-											'label': label,
-										})
+			# create new image
+			if icon_name is not None:
+				image = gtk.Image()
+				image.set_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
+				item.set_image(image)
 
-				data = {
-					'config': config_file,
-					'callback': callback
-					}
+			data = {
+				'config': config_file,
+				'callback': callback
+				}
 
-				result.connect('activate', self._open_with_callback, data)
-				result.show()
+			# connect signals
+			item.connect('activate', self._open_with_callback, data)
+			item.show()
 
-				self._cache[config_file] = result
-
+			result.append(item)
 
 		return result
 

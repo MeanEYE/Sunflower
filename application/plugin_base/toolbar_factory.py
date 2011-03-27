@@ -8,12 +8,16 @@ class ToolbarFactory:
 	def get_types(self):
 		"""Return dictionary of widget types this factory can create.
 
-		Result needs to be dictionary with widget type and description.
+		Result needs to be dictionary with widget type as key and touple
+		containing icon name and description as value.
 		Type is used to provide factory with configuration for specified item
 		while description is user friendly representation of widget.
 
 		result = {
-			'bookmark_button': _('Bookmark button')
+			'bookmark_button': (
+						_('Bookmark button'),
+						icon_name
+					),
 		}
 
 		"""

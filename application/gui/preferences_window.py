@@ -518,21 +518,31 @@ class ToolbarOptions(gtk.VBox):
 		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 		container.set_shadow_type(gtk.SHADOW_IN)
 
-		self._store = gtk.ListStore(str, str, str)
+		self._store = gtk.ListStore(str, str, str, str)
 		self._list = gtk.TreeView()
 		self._list.set_model(self._store)
 
+		cell_icon = gtk.CellRendererPixbuf()
 		cell_name = gtk.CellRendererText()
 		cell_type = gtk.CellRendererText()
 
-		col_name = gtk.TreeViewColumn(_('Name'), cell_name, text=0)
+		# create name column
+		col_name = gtk.TreeViewColumn(_('Name'))
 		col_name.set_min_width(200)
 		col_name.set_resizable(True)
 
+		# pack and configure renderes
+		col_name.pack_start(cell_icon, False)
+		col_name.pack_start(cell_name, True)
+		col_name.add_attribute(cell_icon, 'icon-name', 3)
+		col_name.add_attribute(cell_name, 'text', 0)
+
+		# create type column
 		col_type = gtk.TreeViewColumn(_('Type'), cell_type, markup=1)
 		col_type.set_resizable(True)
 		col_type.set_expand(True)
 
+		# add columns to the list
 		self._list.append_column(col_name)
 		self._list.append_column(col_type)
 
@@ -578,13 +588,14 @@ class ToolbarOptions(gtk.VBox):
 
 	def _add_widget(self, widget, data=None):
 		"""Show dialog for creating toolbar widget"""
-		self._toolbar_manager.show_create_widget_dialog(self._parent)
+		widget_added = self._toolbar_manager.show_create_widget_dialog(self._parent)
 
-		# reload configuratin file
-		self._load_options()
+		if widget_added:
+			# reload configuratin file
+			self._load_options()
 
-		# enable save button
-		self._parent.enable_save()
+			# enable save button
+			self._parent.enable_save()
 
 	def _delete_widget(self, widget, data=None):
 		"""Delete selected toolbar widget"""
@@ -646,11 +657,17 @@ class ToolbarOptions(gtk.VBox):
 			name = toolbar_options.get('widgets', 'name_{0}'.format(number))
 			widget_type = toolbar_options.get('widgets', 'type_{0}'.format(number))
 
-			description = self._toolbar_manager.get_description(widget_type)
-			if description is None:  # failsafe, display raw widget type
+			data = self._toolbar_manager.get_widget_data(widget_type)
+
+			if data is not None:
+				icon = data[1]
+				description = data[0]
+
+			else:  # failsafe, display raw widget type
+				icon = ''
 				description = '{0} <small><i>({1})</i></small>'.format(widget_type, _('missing plugin'))
 
-			self._store.append((name, description, widget_type))
+			self._store.append((name, description, widget_type, icon))
 
 	def _save_options(self):
 		"""Save settings to config file"""

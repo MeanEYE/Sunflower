@@ -19,21 +19,25 @@ class DefaultToolbar(ToolbarFactory):
 		self._widgets = {
 		        'parent_directory_button': {
 		            'description': _('Parent directory button'),
+		            'icon': gtk.STOCK_GO_UP,
 		            'dialog': None,
 		            'class': ParentDirectoryButton,
 		        },
 		        'home_directory_button': {
 		            'description': _('Home directory button'),
+		            'icon': 'user-home',
 		            'dialog': None,
 		            'class': HomeFolderButton,
 		        },
 		        'bookmark_button': {
 		            'description': _('Bookmark button'),
+		            'icon': 'folder',
 		            'dialog': BookmarkButton_Dialog,
 		            'class': BookmarkButton,
 		        },
 		        'separator': {
 		            'description': _('Separator'),
+		            'icon': '',
 		            'dialog': None,
 		            'class': Separator,
 		        },
@@ -44,7 +48,7 @@ class DefaultToolbar(ToolbarFactory):
 		list_ = []
 
 		for key, data in self._widgets.items():
-			list_.append((key, data['description']))
+			list_.append((key, (data['description'], data['icon'])))
 
 		list_.sort()
 

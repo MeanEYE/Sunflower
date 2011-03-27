@@ -937,11 +937,15 @@ class CreateToolbarWidgetDialog(gtk.Dialog):
 		label_type = gtk.Label(_('Type:'))
 		label_type.set_alignment(0, 0.5)
 
+		cell_renderer_icon = gtk.CellRendererPixbuf()
 		cell_renderer_text = gtk.CellRendererText()
-		self._type_list = gtk.ListStore(str, str)
+		cell_renderer_text.set_property('xalign', 0)
+		self._type_list = gtk.ListStore(str, str, str)
 
 		self._combobox_type = gtk.ComboBox(self._type_list)
-		self._combobox_type.pack_start(cell_renderer_text)
+		self._combobox_type.pack_start(cell_renderer_icon, False)
+		self._combobox_type.pack_start(cell_renderer_text, True)
+		self._combobox_type.add_attribute(cell_renderer_icon, 'icon-name', 2)
 		self._combobox_type.add_attribute(cell_renderer_text, 'text', 1)
 
 		# create controls
@@ -969,12 +973,20 @@ class CreateToolbarWidgetDialog(gtk.Dialog):
 		# show all widgets
 		self.show_all()
 
-	def update_type_list(self, types):
+	def update_type_list(self, widgets):
 		"""Update type list store"""
 		self._type_list.clear()
 
-		for key, text in types:
-			self._type_list.append((key, text))
+		for key in widgets.keys():
+			# get data
+			data = widgets[key]
+
+			# extract data from tuple
+			text = data[0]
+			icon = data[1]
+
+			# add new item to the list
+			self._type_list.append((key, text, icon))
 
 	def get_response(self):
 		"""Return dialog response and self-destruct"""
@@ -993,6 +1005,6 @@ class CreateToolbarWidgetDialog(gtk.Dialog):
 			name = self._entry_name.get_text()
 			widget_type = self._type_list[self._combobox_type.get_active()][0]
 
-		self.destroy()
+		self.hide()
 
 		return code, name, widget_type

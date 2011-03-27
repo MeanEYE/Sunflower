@@ -32,6 +32,27 @@ class ToolbarManager:
 		return self._toolbar
 
 	def get_description(self, widget_type):
+		"""Get widget description for specified type"""
+		result = None
+
+		data = self.get_widget_data(widget_type)
+		if data is not None:
+			result = data[0]
+
+		return result
+
+	def get_icon(self, widget_type):
+		"""Get icon name for specified widget type"""
+		result = None
+
+		data = self.get_widget_data(widget_type)
+		if data is not None:
+			result = data[1]
+
+		return result
+
+	def get_widget_data(self, widget_type):
+		"""Get data for specified widget type"""
 		result = None
 
 		if self._widget_types.has_key(widget_type):
@@ -100,10 +121,11 @@ class ToolbarManager:
 
 	def show_create_widget_dialog(self, window=None):
 		"""Show dialog with type selection and name input"""
+		result = False
 		dialog = CreateToolbarWidgetDialog(self._application)
 
 		# update dialog type list
-		dialog.update_type_list(self._widget_types.items())
+		dialog.update_type_list(self._widget_types)
 
 		# set transient window if specified
 		if window is not None:
@@ -160,6 +182,10 @@ class ToolbarManager:
 
 					for key, value in config.items():
 						self._config.set(section_name, key, value)
+
+					result = True
+
+		return result
 
 	def show_configure_widget_dialog(self, name, widget_type, window=None):
 		"""Show blocking configuration dialog for specified widget"""

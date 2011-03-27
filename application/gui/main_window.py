@@ -59,18 +59,11 @@ class MainWindow(gtk.Window):
 		self.notification_manager = NotificationManager(self)
 		self.toolbar_manager = ToolbarManager(self)
 
+		# set window title
 		self.set_title(_('Sunflower'))
 
-		if self.icon_manager.has_icon('sunflower'):
-			# in case theme has its own icon, use that one
-			self.set_icon_name('sunflower')
-
-		else:
-			self.set_icon_from_file(os.path.join(
-										os.path.dirname(sys.argv[0]),
-										'images',
-										'sunflower_hi-def_64x64.png'
-									))
+		# set window icon
+		self.icon_manager.set_application_icon(self)
 
 		# set locale for international number formatting
 		locale.setlocale(locale.LC_ALL)

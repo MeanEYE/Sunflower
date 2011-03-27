@@ -31,11 +31,13 @@ class OperationDialog(gtk.Window):
 		self.set_title('Operation Dialog')
 		self.set_default_size(400, 10)
 		self.set_resizable(True)
-		self.set_skip_taskbar_hint(True)
-		self.set_transient_for(application)
+		self.set_skip_taskbar_hint(False)
 		self.set_border_width(7)
 		self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
 		self.connect('destroy', self._destroy)
+
+		# set icon
+		self._application.icon_manager.set_application_icon(self)
 
 		# create interface
 		self._vbox = gtk.VBox(False, 10)

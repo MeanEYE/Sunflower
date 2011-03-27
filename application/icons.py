@@ -1,3 +1,5 @@
+import os
+import sys
 import gtk
 import mimetypes
 
@@ -69,3 +71,16 @@ class IconManager:
 			result = list_[0]
 
 		return result
+
+	def set_application_icon(self, window):
+		"""Set application icon on specified window"""
+		if self.has_icon('sunflower'):
+			# in case theme has its own icon, use that one
+			window.set_icon_name('sunflower')
+
+		else:
+			window.set_icon_from_file(os.path.join(
+										os.path.dirname(sys.argv[0]),
+										'images',
+										'sunflower_hi-def_64x64.png'
+									))

@@ -344,8 +344,6 @@ class MainWindow(gtk.Window):
 
 		self.menu_operations = self._menu_item_operations.get_submenu()
 
-		self._operations_visible = 0
-
 		# load accelerator map
 		self.load_accel_map(os.path.join(self.config_path, 'accel_map'))
 
@@ -1560,17 +1558,19 @@ class MainWindow(gtk.Window):
 
 		self.menu_operations.remove(widget)
 
-	def operation_displayed(self):
+	def operation_menu_changed(self):
 		"""Increase count of visible operation menu items"""
-		self._operations_visible += 1
-		self._menu_item_no_operations.hide()
+		has_operations = False
 
-	def operation_hidden(self):
-		"""Decrease cound of visible operation menu items"""
-		self._operations_visible -= 1
+		# check if there are minimized operations
+		for operation_item in self.menu_operations.get_children():
+			if operation_item is not self._menu_item_no_operations \
+			and operation_item.get_visible():
+				has_operations = True
+				break;
 
-		if self._operations_visible == 0:
-			self._menu_item_no_operations.show()
+		# set "no operations" menu item visibility
+		self._menu_item_no_operations.set_visible(not has_operations)
 
 	def apply_settings(self):
 		"""Apply settings to all the pluggins and main window"""

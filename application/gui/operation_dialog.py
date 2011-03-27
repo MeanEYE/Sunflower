@@ -32,15 +32,19 @@ class OperationDialog(gtk.Window):
 		self.set_default_size(400, 10)
 		self.set_resizable(True)
 		self.set_skip_taskbar_hint(False)
-		self.set_border_width(7)
+		self.set_border_width(5)
 		self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+
+		# connect signals
 		self.connect('destroy', self._destroy)
+		self.connect('delete-event', self._cancel_click)
+		self.connect('window-state-event', self._window_state)
 
 		# set icon
 		self._application.icon_manager.set_application_icon(self)
 
 		# create interface
-		self._vbox = gtk.VBox(False, 10)
+		self._vbox = gtk.VBox(False, 5)
 
 		# operation items
 		self._operation_label = gtk.Label()
@@ -102,6 +106,7 @@ class OperationDialog(gtk.Window):
 		table = gtk.Table(2, 2, False)
 		table.set_border_width(7)
 		table.set_row_spacing(0, 2)
+		table.set_col_spacing(0, 10)
 
 		self._label_status = gtk.Label('Current status...')
 		self._label_current_file = gtk.Label()
@@ -182,8 +187,14 @@ class OperationDialog(gtk.Window):
 		hbox = gtk.HBox(False, 5)
 
 		self._button_minimize = gtk.Button(_('Minimize'))
-		self._button_pause = gtk.Button(_('Pause'))
 		self._button_cancel = gtk.Button(_('Cancel'))
+
+		image_pause = gtk.Image()
+		image_pause.set_from_stock(gtk.STOCK_MEDIA_PAUSE, gtk.ICON_SIZE_BUTTON)
+
+		self._button_pause = gtk.Button()
+		self._button_pause.add(image_pause)
+		self._button_pause.set_tooltip_text(_('Pause'))
 
 		self._button_minimize.connect('clicked', self._minimize_click)
 		self._button_pause.connect('clicked', self._pause_click)
@@ -210,19 +221,23 @@ class OperationDialog(gtk.Window):
 
 	def _minimize_click(self, widget, data=None):
 		"""Handle minimize click"""
-		self._operation_item.show()
-		self._application.operation_displayed()
-		self.hide()
+		self.iconify()
 
 	def _pause_click(self, widget, data=None):
 		"""Lock threading object"""
 		self._paused = not self._paused
+		image = self._button_pause.get_child()
 
 		if self._paused:
-			self._button_pause.set_label(_('Resume'))
+			# thread is active, pause it
+			image.set_from_stock(gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_BUTTON)
+			self._button_pause.set_tooltip_text(_('Resume'))
 			self._thread.pause()
+
 		else:
-			self._button_pause.set_label(_('Pause'))
+			# thread is paused, resume it
+			image.set_from_stock(gtk.STOCK_MEDIA_PAUSE, gtk.ICON_SIZE_BUTTON)
+			self._button_pause.set_tooltip_text(_('Pause'))
 			self._thread.resume()
 
 	def _cancel_click(self, widget, data=None):
@@ -230,11 +245,11 @@ class OperationDialog(gtk.Window):
 		if self._confirm_cancel(_('Are you sure about canceling current operation?')):
 			self._thread.cancel()
 
+		return True  # handle delete-event properly
+
 	def _operation_click(self, widget, data=None):
 		"""Handle operation menu item click"""
-		self._operation_item.hide()
-		self._application.operation_hidden()
-		self.show()
+		self.deiconify()
 
 	def _update_total_count(self):
 		"""Update progress bar and labels for total count"""
@@ -257,6 +272,18 @@ class OperationDialog(gtk.Window):
 	def _destroy(self, widget, data=None):
 		"""Remove operation menu item on dialog destroy"""
 		self._application.remove_operation(self._operation_item)
+
+	def _window_state(self, widget, event, data=None):
+		"""Handle change of window state"""
+		if event.new_window_state == gtk.gdk.WINDOW_STATE_ICONIFIED:
+			# window was iconified, show operations menu item
+			self._operation_item.show()
+			self._application.operation_menu_changed()
+
+		elif event.new_window_state == 0:
+			# normal window state or window was restored
+			self._operation_item.hide()
+			self._application.operation_menu_changed()
 
 	def set_status(self, status):
 		"""Set current status"""

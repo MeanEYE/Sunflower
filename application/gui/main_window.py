@@ -284,6 +284,12 @@ class MainWindow(gtk.Window):
 			{
 				'label': _('Operations'),
 				'name': 'operations',
+		        'submenu': (
+		            {
+		                'label': _('There are no minimized operations'),
+		                'name': 'no_operations',
+		            },
+		        )
 			},
 			{
 				'label': _('Help'),
@@ -333,11 +339,10 @@ class MainWindow(gtk.Window):
 		self._menu_item_tools.set_submenu(self.menu_tools)
 
 		# operations menu
-		self.menu_operations = gtk.Menu()
-
 		self._menu_item_operations = self.menu_manager.get_item_by_name('operations')
-		self._menu_item_operations.set_sensitive(False)
-		self._menu_item_operations.set_submenu(self.menu_operations)
+		self._menu_item_no_operations = self.menu_manager.get_item_by_name('no_operations')
+
+		self.menu_operations = self._menu_item_operations.get_submenu()
 
 		self._operations_visible = 0
 
@@ -1558,14 +1563,14 @@ class MainWindow(gtk.Window):
 	def operation_displayed(self):
 		"""Increase count of visible operation menu items"""
 		self._operations_visible += 1
-		self._menu_item_operations.set_sensitive(True)
+		self._menu_item_no_operations.hide()
 
 	def operation_hidden(self):
 		"""Decrease cound of visible operation menu items"""
 		self._operations_visible -= 1
 
 		if self._operations_visible == 0:
-			self._menu_item_operations.set_sensitive(False)
+			self._menu_item_no_operations.show()
 
 	def apply_settings(self):
 		"""Apply settings to all the pluggins and main window"""

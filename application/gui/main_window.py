@@ -1540,7 +1540,7 @@ class MainWindow(gtk.Window):
 
 	def add_operation(self, widget, callback, data=None):
 		"""Add operation to menu"""
-		item = gtk.MenuItem()
+		item = gtk.ImageMenuItem()
 		item.add(widget)
 		item.connect('activate', callback, data)
 

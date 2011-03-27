@@ -50,6 +50,8 @@ class OperationDialog(gtk.Window):
 		self._operation_label = gtk.Label()
 		self._operation_label.set_alignment(0, 0.5)
 		self._operation_progress = gtk.ProgressBar()
+		self._operation_image = gtk.Image()
+		self._set_operation_image()
 
 		vbox_operation = gtk.VBox(False, 0)
 		vbox_operation.pack_start(self._operation_label, False, False, 0)
@@ -59,6 +61,7 @@ class OperationDialog(gtk.Window):
 															vbox_operation,
 															self._operation_click
 														)
+		self._operation_item.set_image(self._operation_image)
 
 		# pack interface
 		self.add(self._vbox)
@@ -209,7 +212,6 @@ class OperationDialog(gtk.Window):
 
 	def _confirm_cancel(self, message):
 		"""Create confirmation dialog with specified message and return result"""
-
 		dialog = gtk.MessageDialog(self,
 							gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_QUESTION,
 							gtk.BUTTONS_YES_NO, message)
@@ -230,12 +232,14 @@ class OperationDialog(gtk.Window):
 
 		if self._paused:
 			# thread is active, pause it
+			self._set_operation_image(gtk.STOCK_MEDIA_PAUSE)
 			image.set_from_stock(gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_BUTTON)
 			self._button_pause.set_tooltip_text(_('Resume'))
 			self._thread.pause()
 
 		else:
 			# thread is paused, resume it
+			self._set_operation_image()
 			image.set_from_stock(gtk.STOCK_MEDIA_PAUSE, gtk.ICON_SIZE_BUTTON)
 			self._button_pause.set_tooltip_text(_('Pause'))
 			self._thread.resume()
@@ -284,6 +288,11 @@ class OperationDialog(gtk.Window):
 			# normal window state or window was restored
 			self._operation_item.hide()
 			self._application.operation_menu_changed()
+
+	def _set_operation_image(self, icon_name=None):
+		"""Set default or specified operation image"""
+		if icon_name is not None:
+			self._operation_image.set_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
 
 	def set_status(self, status):
 		"""Set current status"""
@@ -397,6 +406,14 @@ class CopyDialog(OperationDialog):
 		# configure layout
 		self.set_title(_('Copy Selection'))
 
+	def _set_operation_image(self, icon_name=None):
+		"""Set default or specified operation image"""
+		OperationDialog._set_operation_image(self, icon_name)
+
+		# set default icon
+		if icon_name is None:
+			self._operation_image.set_from_stock(gtk.STOCK_COPY, gtk.ICON_SIZE_MENU)
+
 
 class MoveDialog(CopyDialog):
 	"""Dialog used to display progress for moving files"""
@@ -406,6 +423,14 @@ class MoveDialog(CopyDialog):
 
 		# configure layout
 		self.set_title(_('Move Selection'))
+
+	def _set_operation_image(self, icon_name=None):
+		"""Set default or specified operation image"""
+		OperationDialog._set_operation_image(self, icon_name)
+
+		# set default icon
+		if icon_name is None:
+			self._operation_image.set_from_stock(gtk.STOCK_CUT, gtk.ICON_SIZE_MENU)
 
 
 class DeleteDialog(OperationDialog):
@@ -422,3 +447,12 @@ class DeleteDialog(OperationDialog):
 		self.set_title(_('Delete Selection'))
 		self.set_status(_('Removing items...'))
 		self.set_current_file('')
+
+	def _set_operation_image(self, icon_name=None):
+		"""Set default or specified operation image"""
+		OperationDialog._set_operation_image(self, icon_name)
+
+		# set default icon
+		if icon_name is None:
+			self._operation_image.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_MENU)
+

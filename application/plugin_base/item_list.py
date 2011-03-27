@@ -86,6 +86,9 @@ class ItemList(PluginBase):
 			'F8': {
 					'000': self._delete_files,
 				},
+		    'F10': {
+		            '001': self._show_popup_menu,
+		        },
 			'Menu': {
 					'000': self._show_popup_menu,
 					'100': self._show_open_with_menu,

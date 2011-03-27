@@ -1,8 +1,7 @@
 import gtk
-import dbus
-import os.path
 
-from dbus.mainloop.glib import DBusGMainLoop
+from urlparse import urlparse
+from gio import VolumeMonitor
 
 COL_DEVICE		= 0
 COL_MOUNT_POINT = 1
@@ -14,77 +13,35 @@ class MountsManager:
 	def __init__(self, application, menu_item):
 		self._application = application
 		self._menu_item = menu_item
-		self._filesystems = []
 
 		self._menu = gtk.Menu()
 		self._menu_item.set_submenu(self._menu)
 
-		# create dbus based monitor
-		dbus_loop = DBusGMainLoop()
-		self._session_bus = dbus.SessionBus(mainloop = dbus_loop)
+		# gnome volume monitor
+		self._volume_monitor = VolumeMonitor()
+		self._volume_monitor.connect('mount-added', self._add_mount)
+		self._volume_monitor.connect('mount-removed', self._remove_mount)
 
-		# connect dbus signals
-		self._session_bus.add_signal_receiver(
-										self._mount_added,
-										'MountAdded',
-										'org.gtk.Private.RemoteVolumeMonitor'
-									)
-		self._session_bus.add_signal_receiver(
-										self._mount_removed,
-										'MountRemoved',
-										'org.gtk.Private.RemoteVolumeMonitor'
-									)
+		# get initial list of mounted volumes
+		for mount in self._volume_monitor.get_mounts():
+			self._add_mount(self._volume_monitor, mount)
 
-		# load list of file systems recognized by the system
-		self._load_valid_filesystems()
+	def _add_mount(self, monitor, mount):
+		"""Catch volume-mounted singnal and update mounts menu"""
+		icon_names = mount.get_icon().to_string()
+		mount_icon = self._application.icon_manager.get_mount_icon_name(icon_names)
 
-		# load list of currently mounted file systems
-		self._load_mtab()
+		self._add_item(
+	            mount.get_name(),
+	            mount.get_root().get_path(),
+	            mount_icon
+	        )
 
-	def _load_valid_filesystems(self):
-		"""Load filesystems recognized by the host OS"""
-		with open('/proc/filesystems', 'r') as file:
-			data = file.read().splitlines(False)
+	def _remove_mount(self, monitor, mount):
+		"""Remove volume menu item from the mounts menu"""
+		self._remove_item(mount.get_root().get_path())
 
-		for item in data:
-			dev, name = item.split('\t')
-			if dev != 'nodev': self._filesystems.append(name)
-
-	def _load_mtab(self):
-		"""Load list of mounted filesystems"""
-		with open('/etc/mtab', 'r') as file:
-			raw = file.read().splitlines(False)
-
-		for item in raw:
-			data = item.split()
-
-			device = data[COL_DEVICE]
-			mount_point = data[COL_MOUNT_POINT]
-			filesystem = data[COL_FILESYSTEM]
-			icon = self._application.icon_manager.get_mount_icon_name('')
-
-			if mount_point != '/':
-				label = os.path.basename(data[COL_MOUNT_POINT]).capitalize()
-			else:
-				label = mount_point
-
-			if filesystem in self._filesystems:
-				self._add_item(label, mount_point, device, icon)
-
-	def _mount_added(self, sender, mount_id, data):
-		"""Handle adding of new device"""
-		label = data[1]
-		icon = self._application.icon_manager.get_mount_icon_name(data[2])
-		mount_point = data[4].split('://')[1]
-
-		self._add_item(label, mount_point, mount_id, icon)
-
-	def _mount_removed(self, sender, mount_id, data):
-		"""Handle removal of device"""
-		mount_point = data[4].split('://')[1]
-		self._remove_item(mount_point)
-
-	def _add_item(self, text, path, device, icon):
+	def _add_item(self, text, path, icon):
 		"""Add new menu item to the list"""
 		image = gtk.Image()
 		image.set_from_icon_name(icon, gtk.ICON_SIZE_MENU)

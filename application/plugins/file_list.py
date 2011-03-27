@@ -1153,8 +1153,13 @@ class FileList(ItemList):
 
 		# create file monitor
 		if gio is not None and self.get_provider().is_local:
-			self._fs_monitor = gio.File(self.path).monitor_directory()
-			self._fs_monitor.connect('changed', self._directory_changed)
+			try:
+				self._fs_monitor = gio.File(self.path).monitor_directory()
+				self._fs_monitor.connect('changed', self._directory_changed)
+
+			except gio.Error:
+				# monitoring is probably not supported by the backend
+				self._fs_monitor = None
 
 		self._hide_spinner()
 

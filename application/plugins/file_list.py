@@ -236,7 +236,6 @@ class FileList(ItemList):
 		# we need selection for this
 		if iter_ is None: return
 
-		name = list_.get_value(iter_, COL_NAME)
 		is_dir = list_.get_value(iter_, COL_DIR)
 		is_parent = list_.get_value(iter_, COL_PARENT)
 
@@ -248,11 +247,21 @@ class FileList(ItemList):
 
 			else:
 				# just change path
+				name = list_.get_value(iter_, COL_NAME)
 				self.change_path(os.path.join(self.path, name))
 
 		elif self.get_provider().is_local:
 			# selected item is just a file, execute it
-			os.system("xdg-open '{0}'".format(self._get_selection()))
+			selected_file = self._get_selection()
+			is_executable = gnomevfs.is_executable_command_string(selected_file)
+
+			if is_executable:
+				# file is executable
+				os.system('{0} &'.format(selected_file))
+
+			else:
+				# file does not have executable bit set, open with default application
+				os.system("xdg-open '{0}'".format(selected_file))
 
 		return True  # to prevent command or quick search in single key bindings
 

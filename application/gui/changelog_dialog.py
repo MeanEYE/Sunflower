@@ -13,11 +13,22 @@ class ChangeLogDialog(gtk.Dialog):
 		self.set_size_request(500, 400)
 		self.set_resizable(False)
 		self.set_modal(True)
-		self.set_skip_taskbar_hint(True)
 
 		self.realize()
 
-		self.vbox.set_spacing(5)
+		self.vbox.set_border_width(0)
+
+		# create dummy menu to get color style
+		main_menu = gtk.MenuBar()
+
+		# pack it and realize it
+		self.vbox.pack_start(main_menu)
+		main_menu.realize()
+
+		# grab style and destroy the menu
+		style = main_menu.get_style().copy()
+		self.vbox.remove(main_menu)
+		main_menu.destroy()
 
 		# program logo
 		image_file = os.path.join(
@@ -30,23 +41,22 @@ class ChangeLogDialog(gtk.Dialog):
 		image.set_size_request(70, 70)
 
 		# program label
-		style = self.get_style().copy()
 		program_label = gtk.Label(
-							'<span color="{0}">'
 							'<span size="x-large" weight="bold">'
-							'{2}</span>\n{3} {1[major]}.{1[minor]}{1[stage]} '
-							'<span size="small"><i>({1[build]})</i></span>'
+							'{1}</span>\n{2} {0[major]}.{0[minor]}{0[stage]} '
+							'<span size="small"><i>({0[build]})</i>'
 							'</span>'.format(
-										style.fg[gtk.STATE_SELECTED].to_string(),
 										parent.version,
 										_('Sunflower'),
 										_('Version')
 									)
 							)
 		program_label.set_use_markup(True)
+		program_label.modify_fg(gtk.STATE_NORMAL, style.fg[gtk.STATE_NORMAL])
 
 		# notebook which contains changelog and modifications tab
 		notebook = gtk.Notebook()
+		notebook.set_border_width(5)
 
 		# modifications
 		if show_modifications:
@@ -105,7 +115,7 @@ class ChangeLogDialog(gtk.Dialog):
 
 		# top horizontal box containing image and program title
 		frame = gtk.EventBox()
-		frame.modify_bg(gtk.STATE_NORMAL, style.bg[gtk.STATE_SELECTED])
+		frame.modify_bg(gtk.STATE_NORMAL, style.bg[gtk.STATE_NORMAL])
 
 		hbox1 = gtk.HBox(False, 0)
 		frame.add(hbox1)

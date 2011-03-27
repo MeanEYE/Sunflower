@@ -187,7 +187,7 @@ class Terminal(PluginBase):
 
 	def _prepare_menu(self):
 		"""Prepare terminal menu before showing"""
-		pass
+		self._menu_item_copy.set_sensitive(self._terminal.get_has_selection())
 
 	def _handle_menu_hide(self, widget, data=None):
 		"""Handle hide event for terminal menu"""
@@ -231,7 +231,9 @@ class Terminal(PluginBase):
 
 	def _copy_selection(self, widget, data=None):
 		"""Copy selection from terminal"""
-		self._terminal.copy_clipboard()
+		if self._terminal.get_has_selection():
+			self._terminal.copy_clipboard()
+
 		return True
 
 	def _paste_selection(self, widget, data=None):

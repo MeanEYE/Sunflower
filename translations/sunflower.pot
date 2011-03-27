@@ -7,7 +7,7 @@
 msgid   ""
 msgstr  "Project-Id-Version: PACKAGE VERSION\n"
         "Report-Msgid-Bugs-To: \n"
-        "POT-Creation-Date: 2011-03-27 21:59+0200\n"
+        "POT-Creation-Date: 2011-03-28 00:13+0200\n"
         "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
         "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
         "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr  "Project-Id-Version: PACKAGE VERSION\n"
         "Content-Transfer-Encoding: 8bit\n"
         "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: application/gui/main_window.py:63 application/gui/changelog_dialog.py:42
+#: application/gui/main_window.py:63 application/gui/changelog_dialog.py:50
 #: application/gui/about_window.py:47
 msgid   "Sunflower"
 msgstr  ""
@@ -91,7 +91,7 @@ msgid   "Advanced rename"
 msgstr  ""
 
 #: application/gui/main_window.py:218 application/gui/main_window.py:434
-#: application/gui/preferences_window.py:434
+#: application/gui/preferences_window.py:448
 msgid   "View"
 msgstr  ""
 
@@ -172,7 +172,7 @@ msgid   "View selected file (F3)"
 msgstr  ""
 
 #: application/gui/main_window.py:435
-#: application/gui/preferences_window.py:440
+#: application/gui/preferences_window.py:454
 msgid   "Edit"
 msgstr  ""
 
@@ -353,187 +353,195 @@ msgstr  ""
 msgid   "Show tab(s) even if there is only one"
 msgstr  ""
 
-#: application/gui/preferences_window.py:250
+#: application/gui/preferences_window.py:189
+msgid   "Operation"
+msgstr  ""
+
+#: application/gui/preferences_window.py:193
+msgid   "Hide operation window on minimize"
+msgstr  ""
+
+#: application/gui/preferences_window.py:264
 msgid   "Row hinting"
 msgstr  ""
 
-#: application/gui/preferences_window.py:251
+#: application/gui/preferences_window.py:265
 msgid   "Show hidden files"
 msgstr  ""
 
-#: application/gui/preferences_window.py:252
+#: application/gui/preferences_window.py:266
 msgid   "Case sensitive item sorting"
 msgstr  ""
 
-#: application/gui/preferences_window.py:253
+#: application/gui/preferences_window.py:267
 msgid   "Right click selects items"
 msgstr  ""
 
-#: application/gui/preferences_window.py:254
+#: application/gui/preferences_window.py:268
 msgid   "Enable VIM bindings"
 msgstr  ""
 
-#: application/gui/preferences_window.py:255
+#: application/gui/preferences_window.py:269
 msgid   "Show list headers"
 msgstr  ""
 
-#: application/gui/preferences_window.py:266
+#: application/gui/preferences_window.py:280
 msgid   "Show grid lines:"
 msgstr  ""
 
-#: application/gui/preferences_window.py:270
+#: application/gui/preferences_window.py:284
 msgid   "None"
 msgstr  ""
 
-#: application/gui/preferences_window.py:271
+#: application/gui/preferences_window.py:285
 msgid   "Horizontal"
 msgstr  ""
 
-#: application/gui/preferences_window.py:272
+#: application/gui/preferences_window.py:286
 msgid   "Vertical"
 msgstr  ""
 
-#: application/gui/preferences_window.py:273
+#: application/gui/preferences_window.py:287
 msgid   "Both"
 msgstr  ""
 
-#: application/gui/preferences_window.py:283
+#: application/gui/preferences_window.py:297
 msgid   "Quick search combination:"
 msgstr  ""
 
-#: application/gui/preferences_window.py:286
+#: application/gui/preferences_window.py:300
 msgid   "Control"
 msgstr  ""
 
-#: application/gui/preferences_window.py:287
+#: application/gui/preferences_window.py:301
 msgid   "Alt"
 msgstr  ""
 
-#: application/gui/preferences_window.py:288
+#: application/gui/preferences_window.py:302
 msgid   "Shift"
 msgstr  ""
 
-#: application/gui/preferences_window.py:298
+#: application/gui/preferences_window.py:312
 msgid   "Date format:"
 msgstr  ""
 
-#: application/gui/preferences_window.py:302
+#: application/gui/preferences_window.py:316
 msgid   "Time is formed using the format located at:"
 msgstr  ""
 
-#: application/gui/preferences_window.py:308
+#: application/gui/preferences_window.py:322
 msgid   "Status text:"
 msgstr  ""
 
-#: application/gui/preferences_window.py:312
+#: application/gui/preferences_window.py:326
 msgid   "Replacement strings:"
 msgstr  ""
 
-#: application/gui/preferences_window.py:313
+#: application/gui/preferences_window.py:327
 msgid   "Total directory count"
 msgstr  ""
 
-#: application/gui/preferences_window.py:314
+#: application/gui/preferences_window.py:328
 msgid   "Selected directories count"
 msgstr  ""
 
-#: application/gui/preferences_window.py:315
+#: application/gui/preferences_window.py:329
 msgid   "Total file count"
 msgstr  ""
 
-#: application/gui/preferences_window.py:316
+#: application/gui/preferences_window.py:330
 msgid   "Selected file count"
 msgstr  ""
 
-#: application/gui/preferences_window.py:317
+#: application/gui/preferences_window.py:331
 msgid   "Total size of files in directory"
 msgstr  ""
 
-#: application/gui/preferences_window.py:318
+#: application/gui/preferences_window.py:332
 msgid   "Total size of selected files"
 msgstr  ""
 
-#: application/gui/preferences_window.py:361
+#: application/gui/preferences_window.py:375
 msgid   "Quick search settings are in conflict with VIM navigation style. To "
         "resolve this issue your quick search settings were restored to "
         "default."
 msgstr  ""
 
-#: application/gui/preferences_window.py:446
+#: application/gui/preferences_window.py:460
 msgid   "Use external editor"
 msgstr  ""
 
-#: application/gui/preferences_window.py:451
+#: application/gui/preferences_window.py:465
 msgid   "Command line:"
 msgstr  ""
 
-#: application/gui/preferences_window.py:457
+#: application/gui/preferences_window.py:471
 msgid   "Wait for editor process to end"
 msgstr  ""
 
-#: application/gui/preferences_window.py:463
+#: application/gui/preferences_window.py:477
 msgid   "Use internal editor"
 msgstr  ""
 
-#: application/gui/preferences_window.py:530
+#: application/gui/preferences_window.py:544
 #: application/plugins/file_list.py:108
 msgid   "Name"
 msgstr  ""
 
-#: application/gui/preferences_window.py:541
+#: application/gui/preferences_window.py:555
 msgid   "Type"
 msgstr  ""
 
-#: application/gui/preferences_window.py:568
-#: application/gui/preferences_window.py:770
-#: application/gui/preferences_window.py:949
+#: application/gui/preferences_window.py:582
+#: application/gui/preferences_window.py:784
+#: application/gui/preferences_window.py:963
 msgid   "Move Up"
 msgstr  ""
 
-#: application/gui/preferences_window.py:576
-#: application/gui/preferences_window.py:778
-#: application/gui/preferences_window.py:957
+#: application/gui/preferences_window.py:590
+#: application/gui/preferences_window.py:792
+#: application/gui/preferences_window.py:971
 msgid   "Move Down"
 msgstr  ""
 
-#: application/gui/preferences_window.py:668
+#: application/gui/preferences_window.py:682
 msgid   "missing plugin"
 msgstr  ""
 
-#: application/gui/preferences_window.py:715
+#: application/gui/preferences_window.py:729
 msgid   "Show mount points in bookmarks menu"
 msgstr  ""
 
-#: application/gui/preferences_window.py:719
+#: application/gui/preferences_window.py:733
 msgid   "Add home directory to bookmarks menu"
 msgstr  ""
 
-#: application/gui/preferences_window.py:743
-#: application/gui/preferences_window.py:922
+#: application/gui/preferences_window.py:757
+#: application/gui/preferences_window.py:936
 msgid   "Title"
 msgstr  ""
 
-#: application/gui/preferences_window.py:747
+#: application/gui/preferences_window.py:761
 msgid   "Location"
 msgstr  ""
 
-#: application/gui/preferences_window.py:926
+#: application/gui/preferences_window.py:940
 msgid   "Command"
 msgstr  ""
 
-#: application/gui/preferences_window.py:1060
+#: application/gui/preferences_window.py:1074
 msgid   "Show scrollbars when needed"
 msgstr  ""
 
-#: application/gui/preferences_window.py:1111
+#: application/gui/preferences_window.py:1125
 msgid   "Active"
 msgstr  ""
 
-#: application/gui/preferences_window.py:1113
+#: application/gui/preferences_window.py:1127
 msgid   "Plugin file"
 msgstr  ""
 
-#: application/gui/preferences_window.py:1142
+#: application/gui/preferences_window.py:1156
 msgid   "Specified plugin ('{0}') is required for normal program operation "
         "and therefore can not be deactivated!"
 msgstr  ""
@@ -542,25 +550,25 @@ msgstr  ""
 msgid   "Version Overview"
 msgstr  ""
 
-#: application/gui/changelog_dialog.py:43 application/gui/about_window.py:48
+#: application/gui/changelog_dialog.py:51 application/gui/about_window.py:48
 msgid   "Version"
 msgstr  ""
 
-#: application/gui/changelog_dialog.py:58
+#: application/gui/changelog_dialog.py:68
 msgid   "Selected modifications will be applied before starting program. "
         "Applying all modifications is strongly suggested. If you manually "
         "changed config files this is a good time to backup them."
 msgstr  ""
 
-#: application/gui/changelog_dialog.py:68
+#: application/gui/changelog_dialog.py:78
 msgid   "Modifications"
 msgstr  ""
 
-#: application/gui/changelog_dialog.py:92
+#: application/gui/changelog_dialog.py:102
 msgid   "Change log was not found!"
 msgstr  ""
 
-#: application/gui/changelog_dialog.py:97 application/gui/about_window.py:267
+#: application/gui/changelog_dialog.py:107 application/gui/about_window.py:267
 msgid   "Change log"
 msgstr  ""
 
@@ -649,7 +657,7 @@ msgstr[0]       ""
 msgstr[1]       ""
 
 #: application/gui/input_dialog.py:364 application/gui/input_dialog.py:439
-#: application/gui/input_dialog.py:864 application/gui/operation_dialog.py:193
+#: application/gui/input_dialog.py:864 application/gui/operation_dialog.py:198
 msgid   "Cancel"
 msgstr  ""
 
@@ -765,60 +773,60 @@ msgstr  ""
 msgid   "Type:"
 msgstr  ""
 
-#: application/gui/operation_dialog.py:79
+#: application/gui/operation_dialog.py:84
 msgid   "Source:"
 msgstr  ""
 
-#: application/gui/operation_dialog.py:80
+#: application/gui/operation_dialog.py:85
 msgid   "Destination:"
 msgstr  ""
 
-#: application/gui/operation_dialog.py:141
+#: application/gui/operation_dialog.py:146
 msgid   "ETA:"
 msgstr  ""
 
-#: application/gui/operation_dialog.py:142
+#: application/gui/operation_dialog.py:147
 msgid   "Speed:"
 msgstr  ""
 
-#: application/gui/operation_dialog.py:143
+#: application/gui/operation_dialog.py:148
 msgid   "Total size:"
 msgstr  ""
 
-#: application/gui/operation_dialog.py:144
+#: application/gui/operation_dialog.py:149
 msgid   "Total count:"
 msgstr  ""
 
-#: application/gui/operation_dialog.py:192
+#: application/gui/operation_dialog.py:197
 msgid   "Minimize"
 msgstr  ""
 
-#: application/gui/operation_dialog.py:200
-#: application/gui/operation_dialog.py:244
+#: application/gui/operation_dialog.py:205
+#: application/gui/operation_dialog.py:255
 msgid   "Pause"
 msgstr  ""
 
-#: application/gui/operation_dialog.py:237
+#: application/gui/operation_dialog.py:248
 msgid   "Resume"
 msgstr  ""
 
-#: application/gui/operation_dialog.py:249
+#: application/gui/operation_dialog.py:260
 msgid   "Are you sure about canceling current operation?"
 msgstr  ""
 
-#: application/gui/operation_dialog.py:407
+#: application/gui/operation_dialog.py:424
 msgid   "Copy Selection"
 msgstr  ""
 
-#: application/gui/operation_dialog.py:425
+#: application/gui/operation_dialog.py:442
 msgid   "Move Selection"
 msgstr  ""
 
-#: application/gui/operation_dialog.py:447
+#: application/gui/operation_dialog.py:464
 msgid   "Delete Selection"
 msgstr  ""
 
-#: application/gui/operation_dialog.py:448
+#: application/gui/operation_dialog.py:465
 msgid   "Removing items..."
 msgstr  ""
 
@@ -891,25 +899,25 @@ msgstr  ""
 msgid   "Date"
 msgstr  ""
 
-#: application/plugins/file_list.py:319
+#: application/plugins/file_list.py:316
 msgid   "There was an error creating directory. Make sure you have enough "
         "permissions. "
 msgstr  ""
 
-#: application/plugins/file_list.py:343
+#: application/plugins/file_list.py:340
 msgid   "File already exists: {0}"
 msgstr  ""
 
-#: application/plugins/file_list.py:346
+#: application/plugins/file_list.py:343
 msgid   "Directory with same name exists: {0}"
 msgstr  ""
 
-#: application/plugins/file_list.py:372
+#: application/plugins/file_list.py:369
 msgid   "There was an error creating file. Make sure you have enough "
         "permissions."
 msgstr  ""
 
-#: application/plugins/file_list.py:390
+#: application/plugins/file_list.py:387
 msgid   "You are about to remove {0} item.\n"
         "Are you sure about this?"
 msgid_plural    "You are about to remove {0} items.\n"
@@ -917,30 +925,30 @@ msgid_plural    "You are about to remove {0} items.\n"
 msgstr[0]       ""
 msgstr[1]       ""
 
-#: application/plugins/file_list.py:474
+#: application/plugins/file_list.py:471
 msgid   "File or directory with specified name already exists in current "
         "directory. Item could not be renamed."
 msgstr  ""
 
-#: application/plugins/file_list.py:951
+#: application/plugins/file_list.py:948
 msgid   "Free:"
 msgstr  ""
 
-#: application/plugins/file_list.py:952
+#: application/plugins/file_list.py:949
 msgid   "Total:"
 msgstr  ""
 
-#: application/plugins/file_list.py:1016
+#: application/plugins/file_list.py:1013
 msgid   "Drag and drop functionality can not be used if source and "
         "destination are same!"
 msgstr  ""
 
-#: application/plugins/file_list.py:1034
+#: application/plugins/file_list.py:1031
 msgid   "Specified protocol ({0}) is not supported by this application. "
         "Please check for available plugins or create a feature request."
 msgstr  ""
 
-#: application/plugins/file_list.py:1120
+#: application/plugins/file_list.py:1117
 msgid   "Error changing working directory. \n"
         "\n"
         "{0}\n"

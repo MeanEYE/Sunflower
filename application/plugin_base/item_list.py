@@ -46,8 +46,11 @@ class ItemList(PluginBase):
 			'Return': {
 					'000': self._execute_selected_item,
 				},
+		    'b': {
+		            '100': self._edit_bookmarks,
+		        },
 		    'd': {
-		        '100': self._add_bookmark,
+		            '100': self._add_bookmark,
 		        },
 			't': {
 					'100': self._duplicate_tab,
@@ -925,6 +928,11 @@ class ItemList(PluginBase):
 	def _add_bookmark(self, widget, data=None):
 		"""Show dialog for adding current path to bookmarks"""
 		self._parent._add_bookmark(widget, self)
+		return True
+
+	def _edit_bookmarks(self, widget, data=None):
+		"""Open preferences window with bookmarks tab selected"""
+		self._parent.preferences_window._show(widget, 5)
 		return True
 
 	def change_path(self, path=None):

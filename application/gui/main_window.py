@@ -639,9 +639,12 @@ class MainWindow(gtk.Window):
 
 		return (pos_x, pos_y, True)
 
-	def _add_bookmark(self, widget, data=None):
+	def _add_bookmark(self, widget, item_list=None):
 		"""Show dialog for adding a new bookmark"""
-		item_list = self.menu_bookmarks.get_data('list')
+		if item_list is None:
+			# no list was specified
+			item_list = self.menu_bookmarks.get_data('list')
+
 		path = item_list.path
 		dialog = AddBookmarkDialog(self, path)
 
@@ -1361,6 +1364,7 @@ class MainWindow(gtk.Window):
 			accel_map = (
 						('<Sunflower>/File/CreateFile', 'F7', gtk.gdk.CONTROL_MASK),
 						('<Sunflower>/File/CreateDirectory', 'F7', 0),
+			            ('<Sunflower>/File/Quit', 'Q', gtk.gdk.CONTROL_MASK),
 						('<Sunflower>/Mark/SelectAll', 'A', gtk.gdk.CONTROL_MASK),
 						('<Sunflower>/Mark/SelectPattern', 'KP_Add', 0),
 						('<Sunflower>/Mark/UnselectPattern', 'KP_Subtract', 0),

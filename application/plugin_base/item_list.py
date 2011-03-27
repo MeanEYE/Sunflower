@@ -45,8 +45,10 @@ class ItemList(PluginBase):
 				},
 			'Return': {
 					'000': self._execute_selected_item,
-#					'100': pass
 				},
+		    'd': {
+		        '100': self._add_bookmark,
+		        },
 			't': {
 					'100': self._duplicate_tab,
 					'101': self._open_in_new_tab,
@@ -919,6 +921,11 @@ class ItemList(PluginBase):
 				result = True
 
 		return result
+
+	def _add_bookmark(self, widget, data=None):
+		"""Show dialog for adding current path to bookmarks"""
+		self._parent._add_bookmark(widget, self)
+		return True
 
 	def change_path(self, path=None):
 		"""Public method for safe path change """

@@ -229,6 +229,7 @@ class OperationDialog(gtk.Window):
 	def _minimize_click(self, widget, data=None):
 		"""Handle minimize click"""
 		self.iconify()
+		if self._hide_on_minimize: self.hide()
 
 	def _pause_click(self, widget, data=None):
 		"""Lock threading object"""
@@ -289,9 +290,6 @@ class OperationDialog(gtk.Window):
 			# window was iconified, show operations menu item
 			self._operation_item.show()
 			self._application.operation_menu_changed()
-
-			if self._hide_on_minimize:
-				self.hide()
 
 		elif event.new_window_state == 0:
 			# normal window state or window was restored

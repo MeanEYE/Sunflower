@@ -229,7 +229,12 @@ class OperationDialog(gtk.Window):
 	def _minimize_click(self, widget, data=None):
 		"""Handle minimize click"""
 		self.iconify()
-		if self._hide_on_minimize: self.hide()
+
+		# support for compositing window managers
+		if self._hide_on_minimize:
+			self._operation_item.show()
+			self._application.operation_menu_changed()
+			self.hide()
 
 	def _pause_click(self, widget, data=None):
 		"""Lock threading object"""
@@ -260,7 +265,12 @@ class OperationDialog(gtk.Window):
 	def _operation_click(self, widget, data=None):
 		"""Handle operation menu item click"""
 		self.deiconify()
-		if self._hide_on_minimize: self.show()
+
+		# support for compositing window managers
+		if self._hide_on_minimize:
+			self._operation_item.hide()
+			self._application.operation_menu_changed()
+			self.show()
 
 	def _update_total_count(self):
 		"""Update progress bar and labels for total count"""

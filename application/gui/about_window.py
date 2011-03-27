@@ -158,35 +158,41 @@ class AboutWindow(gtk.Window):
 		artists.pack_start(artist, False, False, 0)
 
 		# translators
-		translators = gtk.VBox(False, 0)
+		translators = gtk.Table(1, 2, False)
 
 		label_translating = gtk.Label('<b>{0}</b>'.format(_('Translating:')))
 		label_translating.set_alignment(0, 0.5)
 		label_translating.set_use_markup(True)
-		translators.pack_start(label_translating, False, False, 0)
+		translators.attach(label_translating, 0, 2, 0, 1)
 
 		# add translators
 		translator = gtk.Label(
 		                '\tRadek Tříška '
 		                '<small>&lt;radek@fastlinux.eu&gt;</small>'
-		                '\t\t\tCzech language'
 		            )
-		translator.set_alignment(0, 0.1)
+		translator.set_alignment(0, 0.5)
 		translator.set_use_markup(True)
 		translator.set_selectable(True)
 
-		translators.pack_start(translator, False, False, 0)
+		language = gtk.Label('Czech language')
+		language.set_alignment(0, 0.5)
+
+		translators.attach(translator, 0, 1, 1, 2)
+		translators.attach(language, 1, 2, 1, 2)
 
 		translator = gtk.Label(
 		                '\tJakub Dyszkiewicz '
 		                '<small>&lt;144.kuba@gmail.com&gt;</small>'
-		                '\t\tPolish language'
 		            )
-		translator.set_alignment(0, 0.1)
+		translator.set_alignment(0, 0.5)
 		translator.set_use_markup(True)
 		translator.set_selectable(True)
 
-		translators.pack_start(translator, False, False, 0)
+		language = gtk.Label('Polish language')
+		language.set_alignment(0, 0.5)
+
+		translators.attach(translator, 0, 1, 2, 3)
+		translators.attach(language, 1, 2, 2, 3)
 
 		# pack interface
 		vbox.pack_start(program_info, False, False, 0)

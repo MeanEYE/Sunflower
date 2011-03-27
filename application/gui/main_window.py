@@ -1553,10 +1553,8 @@ class MainWindow(gtk.Window):
 
 	def remove_operation(self, widget):
 		"""Remove operation item from menu"""
-		if widget.get_visible():
-			self.operation_hidden()
-
 		self.menu_operations.remove(widget)
+		self.operation_menu_changed()
 
 	def operation_menu_changed(self):
 		"""Increase count of visible operation menu items"""

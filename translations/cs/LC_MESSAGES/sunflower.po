@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Sunfower 0.2\n"
+"Project-Id-Version: Sunfower 0.1a\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-27 21:59+0200\n"
-"PO-Revision-Date: 2011-03-27 23:18+0100\n"
+"POT-Creation-Date: 2011-03-28 00:13+0200\n"
+"PO-Revision-Date: 2011-03-28 00:21+0100\n"
 "Last-Translator: Radek Tříška <radek@fastlinux.eu>\n"
 "Language-Team: Czech <radek@fastlinux.eu>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: application/gui/main_window.py:63
-#: application/gui/changelog_dialog.py:42
+#: application/gui/changelog_dialog.py:50
 #: application/gui/about_window.py:47
 msgid "Sunflower"
 msgstr "Sunflower"
@@ -95,7 +95,7 @@ msgstr "Pokročilé přejmenování"
 
 #: application/gui/main_window.py:218
 #: application/gui/main_window.py:434
-#: application/gui/preferences_window.py:434
+#: application/gui/preferences_window.py:448
 msgid "View"
 msgstr "Zobrazit"
 
@@ -176,7 +176,7 @@ msgid "View selected file (F3)"
 msgstr "Zobrazit vybraný soubor (F3)"
 
 #: application/gui/main_window.py:435
-#: application/gui/preferences_window.py:440
+#: application/gui/preferences_window.py:454
 msgid "Edit"
 msgstr "Upravit"
 
@@ -362,185 +362,193 @@ msgstr "Zobrazovat ikony místo textu u tlačítek karet."
 msgid "Show tab(s) even if there is only one"
 msgstr "Zobrazovat kartu i když bude jediná"
 
-#: application/gui/preferences_window.py:250
+#: application/gui/preferences_window.py:189
+msgid "Operation"
+msgstr "Operace"
+
+#: application/gui/preferences_window.py:193
+msgid "Hide operation window on minimize"
+msgstr "Skrýt okno při stisku tlačítka minimalizovat"
+
+#: application/gui/preferences_window.py:264
 msgid "Row hinting"
 msgstr "Prokládání řádků"
 
-#: application/gui/preferences_window.py:251
+#: application/gui/preferences_window.py:265
 msgid "Show hidden files"
 msgstr "Zobrazovat skryté soubory"
 
-#: application/gui/preferences_window.py:252
+#: application/gui/preferences_window.py:266
 msgid "Case sensitive item sorting"
 msgstr "Rozlišovat velikost písmen při řazení položek"
 
-#: application/gui/preferences_window.py:253
+#: application/gui/preferences_window.py:267
 msgid "Right click selects items"
 msgstr "Pravé tlačítko myši vybere položku"
 
-#: application/gui/preferences_window.py:254
+#: application/gui/preferences_window.py:268
 msgid "Enable VIM bindings"
 msgstr "Povolit klávesové zkratky ve stylu editoru VIM "
 
-#: application/gui/preferences_window.py:255
+#: application/gui/preferences_window.py:269
 msgid "Show list headers"
 msgstr "Zobrazovat nadpisy sloupců seznamu"
 
-#: application/gui/preferences_window.py:266
+#: application/gui/preferences_window.py:280
 msgid "Show grid lines:"
 msgstr "Zobrazovat čáry mřížky:"
 
-#: application/gui/preferences_window.py:270
+#: application/gui/preferences_window.py:284
 msgid "None"
 msgstr "Žádné"
 
-#: application/gui/preferences_window.py:271
+#: application/gui/preferences_window.py:285
 msgid "Horizontal"
 msgstr "Horizontální"
 
-#: application/gui/preferences_window.py:272
+#: application/gui/preferences_window.py:286
 msgid "Vertical"
 msgstr "Vertikální"
 
-#: application/gui/preferences_window.py:273
+#: application/gui/preferences_window.py:287
 msgid "Both"
 msgstr "Obě"
 
-#: application/gui/preferences_window.py:283
+#: application/gui/preferences_window.py:297
 msgid "Quick search combination:"
 msgstr "Klávesa pro rychlé hledání:"
 
-#: application/gui/preferences_window.py:286
+#: application/gui/preferences_window.py:300
 msgid "Control"
 msgstr "Control"
 
-#: application/gui/preferences_window.py:287
+#: application/gui/preferences_window.py:301
 msgid "Alt"
 msgstr "Alt"
 
-#: application/gui/preferences_window.py:288
+#: application/gui/preferences_window.py:302
 msgid "Shift"
 msgstr "Shift"
 
-#: application/gui/preferences_window.py:298
+#: application/gui/preferences_window.py:312
 msgid "Date format:"
 msgstr "Formát data:"
 
-#: application/gui/preferences_window.py:302
+#: application/gui/preferences_window.py:316
 msgid "Time is formed using the format located at:"
 msgstr "Formát času je tvořen pomocí struktury dostupné na: "
 
-#: application/gui/preferences_window.py:308
+#: application/gui/preferences_window.py:322
 msgid "Status text:"
 msgstr "Popis stavu:"
 
-#: application/gui/preferences_window.py:312
+#: application/gui/preferences_window.py:326
 msgid "Replacement strings:"
 msgstr "Řetězce náhrady:"
 
-#: application/gui/preferences_window.py:313
+#: application/gui/preferences_window.py:327
 msgid "Total directory count"
 msgstr "Celkový počet adresářů"
 
-#: application/gui/preferences_window.py:314
+#: application/gui/preferences_window.py:328
 msgid "Selected directories count"
 msgstr "Počet vybraných adresářů"
 
-#: application/gui/preferences_window.py:315
+#: application/gui/preferences_window.py:329
 msgid "Total file count"
 msgstr "Celkový počet souborů"
 
-#: application/gui/preferences_window.py:316
+#: application/gui/preferences_window.py:330
 msgid "Selected file count"
 msgstr "Počet vybraných souborů"
 
-#: application/gui/preferences_window.py:317
+#: application/gui/preferences_window.py:331
 msgid "Total size of files in directory"
 msgstr "Celková velikost souborů v adresáři"
 
-#: application/gui/preferences_window.py:318
+#: application/gui/preferences_window.py:332
 msgid "Total size of selected files"
 msgstr "Celková velikost vybraných souborů"
 
-#: application/gui/preferences_window.py:361
+#: application/gui/preferences_window.py:375
 msgid "Quick search settings are in conflict with VIM navigation style. To resolve this issue your quick search settings were restored to default."
 msgstr "Nastavení rychlého hledání je v konfliktu s navigačním stylem VIM. Pro vyřešení tohoto problému proběhne obnova nastavení rychlého hledání."
 
-#: application/gui/preferences_window.py:446
+#: application/gui/preferences_window.py:460
 msgid "Use external editor"
 msgstr "Použít externí editor"
 
-#: application/gui/preferences_window.py:451
+#: application/gui/preferences_window.py:465
 msgid "Command line:"
 msgstr "Příkazový řádek:"
 
-#: application/gui/preferences_window.py:457
+#: application/gui/preferences_window.py:471
 msgid "Wait for editor process to end"
 msgstr "Počkat na dokončení procesu editoru"
 
-#: application/gui/preferences_window.py:463
+#: application/gui/preferences_window.py:477
 msgid "Use internal editor"
 msgstr "Použít interní editor"
 
-#: application/gui/preferences_window.py:530
+#: application/gui/preferences_window.py:544
 #: application/plugins/file_list.py:108
 msgid "Name"
 msgstr "Název"
 
-#: application/gui/preferences_window.py:541
+#: application/gui/preferences_window.py:555
 msgid "Type"
 msgstr "Typ"
 
-#: application/gui/preferences_window.py:568
-#: application/gui/preferences_window.py:770
-#: application/gui/preferences_window.py:949
+#: application/gui/preferences_window.py:582
+#: application/gui/preferences_window.py:784
+#: application/gui/preferences_window.py:963
 msgid "Move Up"
 msgstr "Přesunout nahoru"
 
-#: application/gui/preferences_window.py:576
-#: application/gui/preferences_window.py:778
-#: application/gui/preferences_window.py:957
+#: application/gui/preferences_window.py:590
+#: application/gui/preferences_window.py:792
+#: application/gui/preferences_window.py:971
 msgid "Move Down"
 msgstr "Přesunout dolů"
 
-#: application/gui/preferences_window.py:668
+#: application/gui/preferences_window.py:682
 msgid "missing plugin"
 msgstr "chybějící modul"
 
-#: application/gui/preferences_window.py:715
+#: application/gui/preferences_window.py:729
 msgid "Show mount points in bookmarks menu"
 msgstr "Zobrazovat přípojné body v seznamu záložek"
 
-#: application/gui/preferences_window.py:719
+#: application/gui/preferences_window.py:733
 msgid "Add home directory to bookmarks menu"
 msgstr "Přidat domovský adresář do seznamu záložek"
 
-#: application/gui/preferences_window.py:743
-#: application/gui/preferences_window.py:922
+#: application/gui/preferences_window.py:757
+#: application/gui/preferences_window.py:936
 msgid "Title"
 msgstr "Název"
 
-#: application/gui/preferences_window.py:747
+#: application/gui/preferences_window.py:761
 msgid "Location"
 msgstr "Umístění"
 
-#: application/gui/preferences_window.py:926
+#: application/gui/preferences_window.py:940
 msgid "Command"
 msgstr "Příkaz"
 
-#: application/gui/preferences_window.py:1060
+#: application/gui/preferences_window.py:1074
 msgid "Show scrollbars when needed"
 msgstr "Zobrazovat posuvníky dle potřeby"
 
-#: application/gui/preferences_window.py:1111
+#: application/gui/preferences_window.py:1125
 msgid "Active"
 msgstr "Aktivní"
 
-#: application/gui/preferences_window.py:1113
+#: application/gui/preferences_window.py:1127
 msgid "Plugin file"
 msgstr "Soubor zásuvného modulu "
 
-#: application/gui/preferences_window.py:1142
+#: application/gui/preferences_window.py:1156
 msgid "Specified plugin ('{0}') is required for normal program operation and therefore can not be deactivated!"
 msgstr "Specifikovaný zásuvný modul ('{0}') je potřebný pro normální chod programu a proto ho nelze deaktivovat!"
 
@@ -548,24 +556,24 @@ msgstr "Specifikovaný zásuvný modul ('{0}') je potřebný pro normální chod
 msgid "Version Overview"
 msgstr "Přehled verze"
 
-#: application/gui/changelog_dialog.py:43
+#: application/gui/changelog_dialog.py:51
 #: application/gui/about_window.py:48
 msgid "Version"
 msgstr "Verze"
 
-#: application/gui/changelog_dialog.py:58
+#: application/gui/changelog_dialog.py:68
 msgid "Selected modifications will be applied before starting program. Applying all modifications is strongly suggested. If you manually changed config files this is a good time to backup them."
 msgstr "Vybrané úpravy budou použity před startem programu. Důrazně se doporučuje aplikovat všechny úpravy. Pokud jste manuálně upravili konfigurační soubory, zálohujte je."
 
-#: application/gui/changelog_dialog.py:68
+#: application/gui/changelog_dialog.py:78
 msgid "Modifications"
 msgstr "Úpravy"
 
-#: application/gui/changelog_dialog.py:92
+#: application/gui/changelog_dialog.py:102
 msgid "Change log was not found!"
 msgstr "Záznam o změnách nebyl nalezen!"
 
-#: application/gui/changelog_dialog.py:97
+#: application/gui/changelog_dialog.py:107
 #: application/gui/about_window.py:267
 msgid "Change log"
 msgstr "Záznam o změnách"
@@ -662,7 +670,7 @@ msgstr[2] "Kopírovat <b>{0}</b> položek do:"
 #: application/gui/input_dialog.py:364
 #: application/gui/input_dialog.py:439
 #: application/gui/input_dialog.py:864
-#: application/gui/operation_dialog.py:193
+#: application/gui/operation_dialog.py:198
 msgid "Cancel"
 msgstr "Zrušit"
 
@@ -780,60 +788,60 @@ msgstr "Přidat widget nástrojové lišty"
 msgid "Type:"
 msgstr "Typ:"
 
-#: application/gui/operation_dialog.py:79
+#: application/gui/operation_dialog.py:84
 msgid "Source:"
 msgstr "Zdroj:"
 
-#: application/gui/operation_dialog.py:80
+#: application/gui/operation_dialog.py:85
 msgid "Destination:"
 msgstr "Cíl:"
 
-#: application/gui/operation_dialog.py:141
+#: application/gui/operation_dialog.py:146
 msgid "ETA:"
 msgstr "ETA:"
 
-#: application/gui/operation_dialog.py:142
+#: application/gui/operation_dialog.py:147
 msgid "Speed:"
 msgstr "Rychlost:"
 
-#: application/gui/operation_dialog.py:143
+#: application/gui/operation_dialog.py:148
 msgid "Total size:"
 msgstr "Celková velikost:"
 
-#: application/gui/operation_dialog.py:144
+#: application/gui/operation_dialog.py:149
 msgid "Total count:"
 msgstr "Celkový počet: "
 
-#: application/gui/operation_dialog.py:192
+#: application/gui/operation_dialog.py:197
 msgid "Minimize"
 msgstr "Minimalizovat"
 
-#: application/gui/operation_dialog.py:200
-#: application/gui/operation_dialog.py:244
+#: application/gui/operation_dialog.py:205
+#: application/gui/operation_dialog.py:255
 msgid "Pause"
 msgstr "Pauza"
 
-#: application/gui/operation_dialog.py:237
+#: application/gui/operation_dialog.py:248
 msgid "Resume"
 msgstr "Pokračovat"
 
-#: application/gui/operation_dialog.py:249
+#: application/gui/operation_dialog.py:260
 msgid "Are you sure about canceling current operation?"
 msgstr "Opravdu chcete zrušit aktuální operaci?"
 
-#: application/gui/operation_dialog.py:407
+#: application/gui/operation_dialog.py:424
 msgid "Copy Selection"
 msgstr "Kopírovat výběr"
 
-#: application/gui/operation_dialog.py:425
+#: application/gui/operation_dialog.py:442
 msgid "Move Selection"
 msgstr "Přesunout výběr"
 
-#: application/gui/operation_dialog.py:447
+#: application/gui/operation_dialog.py:464
 msgid "Delete Selection"
 msgstr "Smazat výběr"
 
-#: application/gui/operation_dialog.py:448
+#: application/gui/operation_dialog.py:465
 msgid "Removing items..."
 msgstr "Mazání položek..."
 
@@ -903,24 +911,24 @@ msgstr "Režim"
 msgid "Date"
 msgstr "Datum"
 
-#: application/plugins/file_list.py:319
+#: application/plugins/file_list.py:316
 msgid "There was an error creating directory. Make sure you have enough permissions. "
 msgstr "Nastala chyba při vytváření adresáře. Ujistěte se že máte potřebná oprávnění."
 
-#: application/plugins/file_list.py:343
+#: application/plugins/file_list.py:340
 msgid "File already exists: {0}"
 msgstr "Soubor již existuje: {0}"
 
-#: application/plugins/file_list.py:346
+#: application/plugins/file_list.py:343
 msgid "Directory with same name exists: {0}"
 msgstr "Adresář se stejným názvem již existuje: {0}"
 
-#: application/plugins/file_list.py:372
+#: application/plugins/file_list.py:369
 msgid "There was an error creating file. Make sure you have enough permissions."
 msgstr "Nastala chyba při vytváření souboru. Ujistěte se že máte potřebná oprávnění."
 
 # plural
-#: application/plugins/file_list.py:390
+#: application/plugins/file_list.py:387
 msgid ""
 "You are about to remove {0} item.\n"
 "Are you sure about this?"
@@ -937,27 +945,27 @@ msgstr[2] ""
 "Chystáte se odstranit {0} položek.\n"
 "Jste si jisti?"
 
-#: application/plugins/file_list.py:474
+#: application/plugins/file_list.py:471
 msgid "File or directory with specified name already exists in current directory. Item could not be renamed."
 msgstr "V současném adresáři již existuje soubor nebo adresář stejného jména. Položku nelze přejmenovat."
 
-#: application/plugins/file_list.py:951
+#: application/plugins/file_list.py:948
 msgid "Free:"
 msgstr "Volné:"
 
-#: application/plugins/file_list.py:952
+#: application/plugins/file_list.py:949
 msgid "Total:"
 msgstr "Celkem:"
 
-#: application/plugins/file_list.py:1016
+#: application/plugins/file_list.py:1013
 msgid "Drag and drop functionality can not be used if source and destination are same!"
 msgstr "Funkci táhni a pusť nelze použít pokud je zdroj a cíl stejný!"
 
-#: application/plugins/file_list.py:1034
+#: application/plugins/file_list.py:1031
 msgid "Specified protocol ({0}) is not supported by this application. Please check for available plugins or create a feature request."
 msgstr "Specifikovaný protokol ({0}) není aplikací podporován. Prosím zkontrolujte dostupné zásuvné moduly nebo navrhněte zlepšení."
 
-#: application/plugins/file_list.py:1120
+#: application/plugins/file_list.py:1117
 msgid ""
 "Error changing working directory. \n"
 "\n"

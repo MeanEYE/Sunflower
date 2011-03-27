@@ -9,14 +9,20 @@ class AboutWindow(gtk.Window):
 	def __init__(self, parent):
 		# create main window
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
-		self.connect('delete_event', self._hide)
+
+		# store parent locally, we'll need it later
+		self._parent = parent
+
+		# configure dialog
 		self.set_title(_('About program'))
 		self.set_size_request(550, 450)
 		self.set_resizable(False)
 		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)
 		self.set_transient_for(parent)
-		self.realize()
+
+		# connect signals
+		self.connect('delete_event', self._hide)
 
 		# create gui
 		vbox = gtk.VBox(False, 0)
@@ -32,34 +38,30 @@ class AboutWindow(gtk.Window):
 		image.set_size_request(70, 70)
 
 		# program label
-		style = self.get_style().copy()
-		program_label = gtk.Label(
-							'<span color="{0}">'
-							'<span size="x-large" weight="bold">'
-							'{2}</span>\n{3} {1[major]}.{1[minor]}{1[stage]} '
-							'<span size="small"><i>({1[build]})</i></span>'
+		self._program_label = gtk.Label(
+							'<span size="x-large" weight="bold">{1}</span>\n'
+		                    '{2} {0[major]}.{0[minor]}{0[stage]} '
+							'<span size="small"><i>({0[build]})</i>'
 							'</span>'.format(
-										style.fg[gtk.STATE_SELECTED].to_string(),
 										parent.version,
 										_('Sunflower'),
 										_('Version')
 									)
 							)
-		program_label.set_use_markup(True)
+		self._program_label.set_use_markup(True)
 
 		# top horizontal box containing image and program title
 		frame = gtk.EventBox()
-		frame.modify_bg(gtk.STATE_NORMAL, style.bg[gtk.STATE_SELECTED])
 
 		hbox1 = gtk.HBox(False, 0)
 		frame.add(hbox1)
 
 		hbox1.pack_start(image, False, False, 0)
-		hbox1.pack_start(program_label, False, False, 5)
+		hbox1.pack_start(self._program_label, False, False, 5)
 
 		# bottom vbox
 		vbox2 = gtk.VBox(False, 5)
-		vbox2.set_border_width(10)
+		vbox2.set_border_width(5)
 
 		# middle content
 		notebook = gtk.Notebook()
@@ -98,9 +100,22 @@ class AboutWindow(gtk.Window):
 		self.add(vbox)
 
 	def _show(self, widget, data=None):
+		"""Show about dialog"""
+		# update color for header label
+		style = self._parent._menu_item_tools.get_style().copy()
+
+		label = self._program_label
+		parent = self._program_label.get_parent().get_parent()
+
+		label.modify_fg(gtk.STATE_NORMAL, style.fg[gtk.STATE_NORMAL])
+		parent.modify_bg(gtk.STATE_NORMAL, style.bg[gtk.STATE_NORMAL])
+
+
+		# show all widgets and dialog
 		self.show_all()
 
 	def _hide(self, widget, data=None):
+		"""Hide about dialog"""
 		self.hide()
 		return True  # return True so we get to keep our controls safe from GC
 

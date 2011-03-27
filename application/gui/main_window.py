@@ -32,7 +32,7 @@ class MainWindow(gtk.Window):
 	version = {
 			'major': 0,
 			'minor': 1,
-			'build': 20,
+			'build': 21,
 			'stage': 'a'
 		}
 
@@ -966,10 +966,10 @@ class MainWindow(gtk.Window):
 			vbox.set_border_width(5)
 
 			# reset aceelerator map
-			if config_version < 19:
+			if config_version < 21:
 				vbox_accel_map = gtk.VBox(False, 0)
 
-				label_accel_map = gtk.Label('<b>Version 0.1a-19:</b>')
+				label_accel_map = gtk.Label('<b>Version 0.1a-21:</b>')
 				label_accel_map.set_alignment(0, 0.5)
 				label_accel_map.set_use_markup(True)
 
@@ -1011,7 +1011,7 @@ class MainWindow(gtk.Window):
 					self.tab_options = RawConfigParser()
 
 			# reset accelerator map
-			if config_version < 19:
+			if config_version < 21:
 				if checkbox_reset_accel_map.get_active()\
 				and os.path.isfile(os.path.join(self.config_path, 'accel_map')):
 					os.remove(os.path.join(self.config_path, 'accel_map'))

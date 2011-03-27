@@ -11,7 +11,7 @@ class AboutWindow(gtk.Window):
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 		self.connect('delete_event', self._hide)
 		self.set_title(_('About program'))
-		self.set_size_request(550, 350)
+		self.set_size_request(550, 450)
 		self.set_resizable(False)
 		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)

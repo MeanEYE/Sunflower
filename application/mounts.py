@@ -14,8 +14,15 @@ class MountsManager:
 		self._application = application
 		self._menu_item = menu_item
 
+		# create mounts menu
 		self._menu = gtk.Menu()
 		self._menu_item.set_submenu(self._menu)
+
+		# create item for usage when there are no mounts
+		self._menu_item_no_mounts = gtk.MenuItem(label=_('Mount list is empty'))
+		self._menu_item_no_mounts.set_sensitive(False)
+		self._menu_item_no_mounts.set_property('no-show-all', True)
+		self._menu.append(self._menu_item_no_mounts)
 
 		# gnome volume monitor
 		self._volume_monitor = VolumeMonitor()
@@ -25,6 +32,8 @@ class MountsManager:
 		# get initial list of mounted volumes
 		for mount in self._volume_monitor.get_mounts():
 			self._add_mount(self._volume_monitor, mount)
+
+		self._menu_updated()
 
 	def _add_mount(self, monitor, mount):
 		"""Catch volume-mounted singnal and update mounts menu"""
@@ -37,9 +46,20 @@ class MountsManager:
 	            mount_icon
 	        )
 
+		# notify system about menu update
+		self._menu_updated()
+
 	def _remove_mount(self, monitor, mount):
 		"""Remove volume menu item from the mounts menu"""
 		self._remove_item(mount.get_root().get_path())
+
+		# notify system about menu update
+		self._menu_updated()
+
+	def _menu_updated(self):
+		"""Method called whenever menu is updated"""
+		has_mounts = len(self._menu.get_children()) > 1
+		self._menu_item_no_mounts.set_visible(not has_mounts)
 
 	def _add_item(self, text, path, icon):
 		"""Add new menu item to the list"""

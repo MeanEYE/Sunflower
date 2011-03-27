@@ -253,15 +253,12 @@ class FileList(ItemList):
 		elif self.get_provider().is_local:
 			# selected item is just a file, execute it
 			selected_file = self._get_selection()
-			is_executable = gnomevfs.is_executable_command_string(selected_file)
 
-			if is_executable:
-				# file is executable
-				os.system('{0} &'.format(selected_file))
+			# TODO: Test or ask user what to do with executable files
+			#is_executable = gnomevfs.is_executable_command_string(selected_file)
 
-			else:
-				# file does not have executable bit set, open with default application
-				os.system("xdg-open '{0}'".format(selected_file))
+			# file does not have executable bit set, open with default application
+			os.system("xdg-open '{0}'".format(selected_file))
 
 		return True  # to prevent command or quick search in single key bindings
 

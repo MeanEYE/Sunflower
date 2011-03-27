@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunfower 0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-13 00:49+0100\n"
-"PO-Revision-Date: 2011-03-14 20:38+0100\n"
+"POT-Creation-Date: 2011-03-27 21:59+0200\n"
+"PO-Revision-Date: 2011-03-27 23:18+0100\n"
 "Last-Translator: Radek Tříška <radek@fastlinux.eu>\n"
 "Language-Team: Czech <radek@fastlinux.eu>\n"
 "Language: cs\n"
@@ -17,141 +17,145 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: application/gui/main_window.py:60
+#: application/gui/main_window.py:63
 #: application/gui/changelog_dialog.py:42
-#: application/gui/about_window.py:44
+#: application/gui/about_window.py:47
 msgid "Sunflower"
 msgstr "Sunflower"
 
-#: application/gui/main_window.py:114
+#: application/gui/main_window.py:109
 msgid "File"
 msgstr "Soubor"
 
-#: application/gui/main_window.py:117
+#: application/gui/main_window.py:112
 msgid "New tab"
 msgstr "Nová karta"
 
-#: application/gui/main_window.py:129
+#: application/gui/main_window.py:124
 msgid "Create file"
 msgstr "Vytvořit soubor"
 
-#: application/gui/main_window.py:137
+#: application/gui/main_window.py:132
 #: application/gui/input_dialog.py:263
 msgid "Create directory"
 msgstr "Vytvořit adresář"
 
-#: application/gui/main_window.py:148
+#: application/gui/main_window.py:143
 #: application/indicator.py:75
 msgid "_Quit"
 msgstr "U_končit"
 
-#: application/gui/main_window.py:157
+#: application/gui/main_window.py:152
 msgid "Mark"
 msgstr "Označit"
 
-#: application/gui/main_window.py:160
+#: application/gui/main_window.py:155
 msgid "_Select all"
 msgstr "Vybrat vš_e"
 
-#: application/gui/main_window.py:167
+#: application/gui/main_window.py:162
 msgid "_Unselect all"
 msgstr "Zrušit výběr"
 
-#: application/gui/main_window.py:172
+#: application/gui/main_window.py:167
 msgid "Invert select_ion"
 msgstr "Invertovat výběr"
 
-#: application/gui/main_window.py:178
+#: application/gui/main_window.py:173
 msgid "S_elect with pattern"
 msgstr "Vybrat podl_e vzoru"
 
-#: application/gui/main_window.py:183
+#: application/gui/main_window.py:178
 msgid "Unselect with pa_ttern"
 msgstr "Zruši_t výběr podle vzoru"
 
-#: application/gui/main_window.py:189
+#: application/gui/main_window.py:184
 msgid "Select with same e_xtension"
 msgstr "Vybrat soubory se stejnou příponou"
 
-#: application/gui/main_window.py:195
+#: application/gui/main_window.py:190
 msgid "Compare _directories"
 msgstr "Porovnat a_dresáře"
 
-#: application/gui/main_window.py:202
+#: application/gui/main_window.py:197
 msgid "Commands"
 msgstr "Příkazy"
 
-#: application/gui/main_window.py:206
+#: application/gui/main_window.py:201
 msgid "Find files"
 msgstr "Hledat soubory"
 
-#: application/gui/main_window.py:212
+#: application/gui/main_window.py:207
 msgid "Synchronize directories"
 msgstr "Synchronizovat adresáře"
 
-#: application/gui/main_window.py:217
+#: application/gui/main_window.py:212
 msgid "Advanced rename"
 msgstr "Pokročilé přejmenování"
 
-#: application/gui/main_window.py:223
+#: application/gui/main_window.py:218
 #: application/gui/main_window.py:434
 #: application/gui/preferences_window.py:434
 msgid "View"
 msgstr "Zobrazit"
 
-#: application/gui/main_window.py:226
+#: application/gui/main_window.py:221
 msgid "Ful_lscreen"
 msgstr "Ce_lá obrazovka"
 
-#: application/gui/main_window.py:234
+#: application/gui/main_window.py:229
 msgid "Rel_oad item list"
 msgstr "Znovu načíst seznam položek"
 
-#: application/gui/main_window.py:244
+#: application/gui/main_window.py:239
 msgid "Show _hidden files"
 msgstr "Zobrazovat _skryté soubory"
 
-#: application/gui/main_window.py:252
+#: application/gui/main_window.py:247
 msgid "Show _toolbar"
 msgstr "Zobrazit panel nástrojů"
 
-#: application/gui/main_window.py:260
+#: application/gui/main_window.py:255
 msgid "Show _command bar"
 msgstr "Zobrazovat panel příkazů"
 
-#: application/gui/main_window.py:268
+#: application/gui/main_window.py:263
 msgid "Show co_mmand entry"
 msgstr "Zobrazovat příkazový řádek"
 
-#: application/gui/main_window.py:277
+#: application/gui/main_window.py:272
 msgid "_Preferences"
 msgstr "_Nastavení"
 
-#: application/gui/main_window.py:286
+#: application/gui/main_window.py:281
 msgid "Tools"
 msgstr "Nástroje"
 
-#: application/gui/main_window.py:290
+#: application/gui/main_window.py:285
 msgid "Operations"
 msgstr "Operace"
 
-#: application/gui/main_window.py:294
+#: application/gui/main_window.py:289
+msgid "There are no minimized operations"
+msgstr "Nejsou zde žádné minimalizované operace"
+
+#: application/gui/main_window.py:295
 msgid "Help"
 msgstr "Nápověda"
 
-#: application/gui/main_window.py:297
+#: application/gui/main_window.py:298
 msgid "_Home page"
 msgstr "Domovská stránka"
 
-#: application/gui/main_window.py:306
+#: application/gui/main_window.py:307
 msgid "File a _bug report"
 msgstr "Vytvořit hlášení o chybě"
 
-#: application/gui/main_window.py:314
+#: application/gui/main_window.py:315
 msgid "Check for _updates"
 msgstr "Zjistit, zda existují novější verze..."
 
-#: application/gui/main_window.py:319
+#: application/gui/main_window.py:320
 msgid "_About"
 msgstr "O programu"
 
@@ -218,58 +222,60 @@ msgstr "Smazat"
 msgid "Delete selected items (F8 or Delete)"
 msgstr "Smazat vybrané položky (F8 nebo Delete)"
 
-#: application/gui/main_window.py:527
+#: application/gui/main_window.py:530
+#: application/plugins/default_toolbar.py:167
+#: application/plugins/default_toolbar.py:168
 msgid "Home directory"
 msgstr "Domovský adresář"
 
-#: application/gui/main_window.py:556
+#: application/gui/main_window.py:559
 msgid "Options"
 msgstr "Volby"
 
-#: application/gui/main_window.py:559
+#: application/gui/main_window.py:562
 msgid "_Add bookmark"
 msgstr "Přid_at záložku"
 
-#: application/gui/main_window.py:565
+#: application/gui/main_window.py:568
 msgid "_Edit bookmarks"
 msgstr "Upravit záložky"
 
-#: application/gui/main_window.py:624
+#: application/gui/main_window.py:627
 msgid "_Edit tools"
 msgstr "Upravit nástroje"
 
-#: application/gui/main_window.py:677
-msgid "Bookmarked path does not exist or is not valid. If path is not local check if specified volume is mounted."
-msgstr "Cesta k záložce neexistuje nebo není správná. Jestliže není cesta lokální, zkontrolujte zda je svazek připojen."
+#: application/gui/main_window.py:684
+msgid "Specified path does not exist or is not valid. If path is not local check if volume is mounted."
+msgstr "Cesta, kterou jste zadali, neexistuje. Jestliže není cesta lokální, zkontrolujte zda je svazek připojen."
 
-#: application/gui/main_window.py:1079
+#: application/gui/main_window.py:1086
 msgid "Select items"
 msgstr "Vybrat položky"
 
-#: application/gui/main_window.py:1080
-#: application/gui/main_window.py:1114
+#: application/gui/main_window.py:1087
+#: application/gui/main_window.py:1121
 msgid "Selection pattern (eg.: *.jpg):"
 msgstr "Vzorek výběru (např. *.jpg):"
 
-#: application/gui/main_window.py:1113
+#: application/gui/main_window.py:1120
 msgid "Unselect items"
 msgstr "Zrušit výběr položek"
 
-#: application/gui/main_window.py:1402
+#: application/gui/main_window.py:1410
 msgid "Error saving configuration to files in your home directory. Make sure you have enough permissions."
 msgstr "Nastala chyba při ukádání konfiguračních souborů ve vašem domovském adresáři. Ujistěte se že máte potřebná oprávnění."
 
-#: application/gui/main_window.py:1444
+#: application/gui/main_window.py:1452
 msgid "Directories:"
 msgstr "Adresáře:"
 
-#: application/gui/main_window.py:1445
+#: application/gui/main_window.py:1453
 msgid "Files:"
 msgstr "Soubory:"
 
-#: application/gui/main_window.py:1446
-#: application/gui/input_dialog.py:623
-#: application/gui/input_dialog.py:640
+#: application/gui/main_window.py:1454
+#: application/gui/input_dialog.py:624
+#: application/gui/input_dialog.py:641
 msgid "Size:"
 msgstr "Velikost:"
 
@@ -287,7 +293,7 @@ msgstr "Seznam položek"
 
 #: application/gui/preferences_window.py:37
 #: application/plugins/system_terminal.py:33
-#: application/plugin_base/item_list.py:199
+#: application/plugin_base/item_list.py:207
 msgid "Terminal"
 msgstr "Terminál"
 
@@ -300,7 +306,7 @@ msgid "Toolbar"
 msgstr "Panel nástrojů"
 
 #: application/gui/preferences_window.py:49
-#: application/plugin_base/item_list.py:153
+#: application/plugin_base/item_list.py:161
 msgid "Bookmarks"
 msgstr "Záložky"
 
@@ -477,51 +483,64 @@ msgid "Use internal editor"
 msgstr "Použít interní editor"
 
 #: application/gui/preferences_window.py:530
-#: application/gui/preferences_window.py:611
-#: application/gui/preferences_window.py:784
+#: application/plugins/file_list.py:108
+msgid "Name"
+msgstr "Název"
+
+#: application/gui/preferences_window.py:541
+msgid "Type"
+msgstr "Typ"
+
+#: application/gui/preferences_window.py:568
+#: application/gui/preferences_window.py:770
+#: application/gui/preferences_window.py:949
 msgid "Move Up"
 msgstr "Přesunout nahoru"
 
-#: application/gui/preferences_window.py:531
-#: application/gui/preferences_window.py:614
-#: application/gui/preferences_window.py:787
+#: application/gui/preferences_window.py:576
+#: application/gui/preferences_window.py:778
+#: application/gui/preferences_window.py:957
 msgid "Move Down"
 msgstr "Přesunout dolů"
 
-#: application/gui/preferences_window.py:560
+#: application/gui/preferences_window.py:668
+msgid "missing plugin"
+msgstr "chybějící modul"
+
+#: application/gui/preferences_window.py:715
 msgid "Show mount points in bookmarks menu"
 msgstr "Zobrazovat přípojné body v seznamu záložek"
 
-#: application/gui/preferences_window.py:564
+#: application/gui/preferences_window.py:719
 msgid "Add home directory to bookmarks menu"
 msgstr "Přidat domovský adresář do seznamu záložek"
 
-#: application/gui/preferences_window.py:588
-#: application/gui/preferences_window.py:761
+#: application/gui/preferences_window.py:743
+#: application/gui/preferences_window.py:922
 msgid "Title"
 msgstr "Název"
 
-#: application/gui/preferences_window.py:592
+#: application/gui/preferences_window.py:747
 msgid "Location"
 msgstr "Umístění"
 
-#: application/gui/preferences_window.py:765
+#: application/gui/preferences_window.py:926
 msgid "Command"
 msgstr "Příkaz"
 
-#: application/gui/preferences_window.py:893
+#: application/gui/preferences_window.py:1060
 msgid "Show scrollbars when needed"
 msgstr "Zobrazovat posuvníky dle potřeby"
 
-#: application/gui/preferences_window.py:944
+#: application/gui/preferences_window.py:1111
 msgid "Active"
 msgstr "Aktivní"
 
-#: application/gui/preferences_window.py:946
+#: application/gui/preferences_window.py:1113
 msgid "Plugin file"
 msgstr "Soubor zásuvného modulu "
 
-#: application/gui/preferences_window.py:975
+#: application/gui/preferences_window.py:1142
 msgid "Specified plugin ('{0}') is required for normal program operation and therefore can not be deactivated!"
 msgstr "Specifikovaný zásuvný modul ('{0}') je potřebný pro normální chod programu a proto ho nelze deaktivovat!"
 
@@ -530,7 +549,7 @@ msgid "Version Overview"
 msgstr "Přehled verze"
 
 #: application/gui/changelog_dialog.py:43
-#: application/gui/about_window.py:45
+#: application/gui/about_window.py:48
 msgid "Version"
 msgstr "Verze"
 
@@ -542,12 +561,12 @@ msgstr "Vybrané úpravy budou použity před startem programu. Důrazně se dop
 msgid "Modifications"
 msgstr "Úpravy"
 
-#: application/gui/changelog_dialog.py:91
+#: application/gui/changelog_dialog.py:92
 msgid "Change log was not found!"
 msgstr "Záznam o změnách nebyl nalezen!"
 
-#: application/gui/changelog_dialog.py:96
-#: application/gui/about_window.py:235
+#: application/gui/changelog_dialog.py:97
+#: application/gui/about_window.py:267
 msgid "Change log"
 msgstr "Záznam o změnách"
 
@@ -642,7 +661,8 @@ msgstr[2] "Kopírovat <b>{0}</b> položek do:"
 
 #: application/gui/input_dialog.py:364
 #: application/gui/input_dialog.py:439
-#: application/gui/operation_dialog.py:184
+#: application/gui/input_dialog.py:864
+#: application/gui/operation_dialog.py:193
 msgid "Cancel"
 msgstr "Zrušit"
 
@@ -668,173 +688,204 @@ msgstr "Přejmenovat soubor/adresář"
 msgid "Enter a new name for this item:"
 msgstr "Zadat nový název této položky:"
 
-#: application/gui/input_dialog.py:514
+#: application/gui/input_dialog.py:515
 msgid "Select a new name for the destination"
 msgstr "Vybrat nový název cíle"
 
-#: application/gui/input_dialog.py:519
+#: application/gui/input_dialog.py:520
 msgid "Reset"
 msgstr "Obnovit"
 
-#: application/gui/input_dialog.py:523
+#: application/gui/input_dialog.py:524
 msgid "Apply this action to all files"
 msgstr "Použít tuto možnost na všechny soubory"
 
-#: application/gui/input_dialog.py:558
+#: application/gui/input_dialog.py:559
+#: application/gui/input_dialog.py:865
 msgid "Skip"
 msgstr "Přeskočit"
 
-#: application/gui/input_dialog.py:622
+#: application/gui/input_dialog.py:623
 msgid "Original"
 msgstr "Původní"
 
-#: application/gui/input_dialog.py:624
-#: application/gui/input_dialog.py:641
+#: application/gui/input_dialog.py:625
+#: application/gui/input_dialog.py:642
 msgid "Modified:"
 msgstr "Změněno:"
 
-#: application/gui/input_dialog.py:639
+#: application/gui/input_dialog.py:640
 msgid "Replace with"
 msgstr "Nahradit za"
 
-#: application/gui/input_dialog.py:674
+#: application/gui/input_dialog.py:675
 msgid "File conflict"
 msgstr "Konflikt souborů"
 
-#: application/gui/input_dialog.py:678
+#: application/gui/input_dialog.py:679
 msgid "Replace"
 msgstr "Nahradit"
 
-#: application/gui/input_dialog.py:688
+#: application/gui/input_dialog.py:689
 msgid "Replace file \"{0}\"?"
 msgstr "Nahradit soubor \"{0}\"?"
 
-#: application/gui/input_dialog.py:694
+#: application/gui/input_dialog.py:695
 msgid "Another file with the same name already exists in \"{0}\". Replacing it will overwrite its content."
 msgstr "V adresáři \"{0}\" již existuje soubor se stejným názvem. Nahrazením se přepíše jeho obsah."
 
-#: application/gui/input_dialog.py:707
+#: application/gui/input_dialog.py:708
 msgid "Directory conflict"
 msgstr "Konflikt adresářů"
 
-#: application/gui/input_dialog.py:711
+#: application/gui/input_dialog.py:712
 msgid "Merge"
 msgstr "Sloučit"
 
-#: application/gui/input_dialog.py:721
+#: application/gui/input_dialog.py:722
 msgid "Merge directory \"{0}\"?"
 msgstr "Sloučit adresář \"{0}\"?"
 
-#: application/gui/input_dialog.py:727
+#: application/gui/input_dialog.py:728
 msgid "Directory with the same name already exists in \"{0}\". Merging will ask for confirmation before replacing any files in the directory that conflict with the files being copied."
 msgstr "Adresář se stejným názvem již v \"{0}\" existuje. Sloučení požádá o potvrzení před nahrazením jakéhokoliv konfliktního souboru v adresářích."
 
-#: application/gui/input_dialog.py:744
+#: application/gui/input_dialog.py:746
 msgid "Add bookmark"
 msgstr "Přidat záložku"
 
-#: application/gui/input_dialog.py:757
+#: application/gui/input_dialog.py:760
+#: application/gui/input_dialog.py:930
+#: application/plugins/default_toolbar.py:231
 msgid "Name:"
 msgstr "Název:"
 
-#: application/gui/input_dialog.py:765
+#: application/gui/input_dialog.py:768
 msgid "Location:"
 msgstr "Umístění:"
 
-#: application/gui/operation_dialog.py:70
+#: application/gui/input_dialog.py:832
+msgid "Operation error"
+msgstr "Funkční chyba"
+
+#: application/gui/input_dialog.py:866
+msgid "Retry"
+msgstr "Znovu"
+
+#: application/gui/input_dialog.py:914
+msgid "Add toolbar widget"
+msgstr "Přidat widget nástrojové lišty"
+
+#: application/gui/input_dialog.py:937
+msgid "Type:"
+msgstr "Typ:"
+
+#: application/gui/operation_dialog.py:79
 msgid "Source:"
 msgstr "Zdroj:"
 
-#: application/gui/operation_dialog.py:71
+#: application/gui/operation_dialog.py:80
 msgid "Destination:"
 msgstr "Cíl:"
 
-#: application/gui/operation_dialog.py:131
+#: application/gui/operation_dialog.py:141
 msgid "ETA:"
 msgstr "ETA:"
 
-#: application/gui/operation_dialog.py:132
+#: application/gui/operation_dialog.py:142
 msgid "Speed:"
 msgstr "Rychlost:"
 
-#: application/gui/operation_dialog.py:133
+#: application/gui/operation_dialog.py:143
 msgid "Total size:"
 msgstr "Celková velikost:"
 
-#: application/gui/operation_dialog.py:134
+#: application/gui/operation_dialog.py:144
 msgid "Total count:"
 msgstr "Celkový počet: "
 
-#: application/gui/operation_dialog.py:182
+#: application/gui/operation_dialog.py:192
 msgid "Minimize"
 msgstr "Minimalizovat"
 
-#: application/gui/operation_dialog.py:183
-#: application/gui/operation_dialog.py:223
+#: application/gui/operation_dialog.py:200
+#: application/gui/operation_dialog.py:244
 msgid "Pause"
 msgstr "Pauza"
 
-#: application/gui/operation_dialog.py:220
+#: application/gui/operation_dialog.py:237
 msgid "Resume"
 msgstr "Pokračovat"
 
-#: application/gui/operation_dialog.py:228
+#: application/gui/operation_dialog.py:249
 msgid "Are you sure about canceling current operation?"
 msgstr "Opravdu chcete zrušit aktuální operaci?"
 
-#: application/gui/operation_dialog.py:369
+#: application/gui/operation_dialog.py:407
 msgid "Copy Selection"
 msgstr "Kopírovat výběr"
 
-#: application/gui/operation_dialog.py:379
+#: application/gui/operation_dialog.py:425
 msgid "Move Selection"
 msgstr "Přesunout výběr"
 
-#: application/gui/operation_dialog.py:393
+#: application/gui/operation_dialog.py:447
 msgid "Delete Selection"
 msgstr "Smazat výběr"
 
-#: application/gui/operation_dialog.py:394
+#: application/gui/operation_dialog.py:448
 msgid "Removing items..."
 msgstr "Mazání položek..."
 
-#: application/gui/about_window.py:13
+#: application/gui/about_window.py:17
 msgid "About program"
 msgstr "O programu"
 
-#: application/gui/about_window.py:112
+#: application/gui/about_window.py:127
 msgid "Copyright"
 msgstr "Autorská práva"
 
-#: application/gui/about_window.py:120
+#: application/gui/about_window.py:135
 msgid ""
 "This software is being developed under GNU General Public License.\n"
 "Bug reports, suggestions or questions are more than welcome."
 msgstr "Tento program je vyvíjen pod licencí GNU General Public Licence (GPL).  Hlášení chyb, doporučení nebo otázky jsou vítány."
 
-#: application/gui/about_window.py:131
+#: application/gui/about_window.py:146
 msgid "Programming:"
 msgstr "Vývojáři:"
 
-#: application/gui/about_window.py:147
+#: application/gui/about_window.py:162
 msgid "Artists:"
 msgstr "Umělci:"
 
-#: application/gui/about_window.py:163
+#: application/gui/about_window.py:178
 msgid "Translating:"
 msgstr "Překladatelé:"
 
-#: application/gui/about_window.py:196
+#: application/gui/about_window.py:228
 msgid "License"
 msgstr "Licence"
+
+#: application/mounts.py:22
+msgid "Mount list is empty"
+msgstr "Seznam přípojných bodů je prázdný"
+
+#: application/toolbar.py:146
+msgid "Error adding widget. You need to enter unique name and select widget type."
+msgstr "Chyba při vkládání widgetu. Zadejte jedinečný název a vyberte typ widgetu."
+
+#: application/toolbar.py:161
+msgid "Widget with specified name already exists. You need to enter unique name and select widget type."
+msgstr "Widget stejného jména již existuje. Zadejte jedinečný název a vyberte typ widgetu."
+
+#: application/toolbar.py:200
+msgid "Plugin used to create selected toolbar widget is not active or not present. In order to edit this entry you need to activate plugin used to create it."
+msgstr "Zásuvný modul pro tvorbu vybraného widgetu nástrojové lišty není aktivní nebo instalován. Pokud chcete upravit tuto volbu potřebujete aktivovat potřebný modul. "
 
 #: application/plugins/file_list.py:44
 msgid "Local file list"
 msgstr "Seznam lokálních souborů"
-
-#: application/plugins/file_list.py:108
-msgid "Name"
-msgstr "Název"
 
 #: application/plugins/file_list.py:109
 msgid "Ext"
@@ -852,24 +903,24 @@ msgstr "Režim"
 msgid "Date"
 msgstr "Datum"
 
-#: application/plugins/file_list.py:301
+#: application/plugins/file_list.py:319
 msgid "There was an error creating directory. Make sure you have enough permissions. "
 msgstr "Nastala chyba při vytváření adresáře. Ujistěte se že máte potřebná oprávnění."
 
-#: application/plugins/file_list.py:325
+#: application/plugins/file_list.py:343
 msgid "File already exists: {0}"
 msgstr "Soubor již existuje: {0}"
 
-#: application/plugins/file_list.py:328
+#: application/plugins/file_list.py:346
 msgid "Directory with same name exists: {0}"
 msgstr "Adresář se stejným názvem již existuje: {0}"
 
-#: application/plugins/file_list.py:348
+#: application/plugins/file_list.py:372
 msgid "There was an error creating file. Make sure you have enough permissions."
 msgstr "Nastala chyba při vytváření souboru. Ujistěte se že máte potřebná oprávnění."
 
 # plural
-#: application/plugins/file_list.py:366
+#: application/plugins/file_list.py:390
 msgid ""
 "You are about to remove {0} item.\n"
 "Are you sure about this?"
@@ -886,27 +937,27 @@ msgstr[2] ""
 "Chystáte se odstranit {0} položek.\n"
 "Jste si jisti?"
 
-#: application/plugins/file_list.py:450
+#: application/plugins/file_list.py:474
 msgid "File or directory with specified name already exists in current directory. Item could not be renamed."
 msgstr "V současném adresáři již existuje soubor nebo adresář stejného jména. Položku nelze přejmenovat."
 
-#: application/plugins/file_list.py:958
+#: application/plugins/file_list.py:951
 msgid "Free:"
 msgstr "Volné:"
 
-#: application/plugins/file_list.py:959
+#: application/plugins/file_list.py:952
 msgid "Total:"
 msgstr "Celkem:"
 
-#: application/plugins/file_list.py:1023
+#: application/plugins/file_list.py:1016
 msgid "Drag and drop functionality can not be used if source and destination are same!"
 msgstr "Funkci táhni a pusť nelze použít pokud je zdroj a cíl stejný!"
 
-#: application/plugins/file_list.py:1041
+#: application/plugins/file_list.py:1034
 msgid "Specified protocol ({0}) is not supported by this application. Please check for available plugins or create a feature request."
 msgstr "Specifikovaný protokol ({0}) není aplikací podporován. Prosím zkontrolujte dostupné zásuvné moduly nebo navrhněte zlepšení."
 
-#: application/plugins/file_list.py:1127
+#: application/plugins/file_list.py:1120
 msgid ""
 "Error changing working directory. \n"
 "\n"
@@ -924,6 +975,43 @@ msgstr ""
 msgid "System terminal"
 msgstr "Systémový terminál"
 
+#: application/plugins/default_toolbar.py:21
+msgid "Parent directory button"
+msgstr "Tlačítko rodičovského adresáře"
+
+#: application/plugins/default_toolbar.py:27
+msgid "Home directory button"
+msgstr "Tlačítko domovského adresáře"
+
+#: application/plugins/default_toolbar.py:33
+msgid "Bookmark button"
+msgstr "Tlačítko záložek"
+
+#: application/plugins/default_toolbar.py:39
+msgid "Separator"
+msgstr "Oddělovač"
+
+#: application/plugins/default_toolbar.py:94
+msgid "This widget has no configuration dialog."
+msgstr "Tento widget nemá dialogové okno nastavení."
+
+#: application/plugins/default_toolbar.py:185
+#: application/plugins/default_toolbar.py:186
+msgid "Go to parent directory"
+msgstr "Přejít do nadřazeného adresáře"
+
+#: application/plugins/default_toolbar.py:215
+msgid "Configure bookmark button"
+msgstr "Nastavit tlačítko záložek"
+
+#: application/plugins/default_toolbar.py:241
+msgid "Path:"
+msgstr "Cesta:"
+
+#: application/plugins/default_toolbar.py:245
+msgid "Show label"
+msgstr "Zobrazovat popisek"
+
 #: application/plugin_base/terminal.py:78
 msgid "Recycle terminal"
 msgstr "Obnovit terminál"
@@ -936,63 +1024,63 @@ msgstr "Nabídka terminálu"
 msgid "Python VTE module is not installed on this system!"
 msgstr "V systému není nainstalován VTE python modul!"
 
-#: application/plugin_base/item_list.py:176
+#: application/plugin_base/item_list.py:184
 msgid "History"
 msgstr "Historie"
 
-#: application/plugin_base/item_list.py:230
+#: application/plugin_base/item_list.py:238
 msgid "Search:"
 msgstr "Hledat:"
 
-#: application/plugin_base/item_list.py:430
+#: application/plugin_base/item_list.py:438
 msgid "Directory does not exist anymore or is not valid. If path is not local check if specified volume is mounted."
 msgstr "Adresář neexistuje. Jestliže není cesta k adresáři lokální, zkontrolujte zda je svazek připojen."
 
-#: application/plugin_base/item_list.py:550
+#: application/plugin_base/item_list.py:558
 msgid "_Open"
 msgstr "_Otevřít"
 
-#: application/plugin_base/item_list.py:559
+#: application/plugin_base/item_list.py:567
 msgid "Open in new ta_b"
 msgstr "Otevřít v nové kartě"
 
-#: application/plugin_base/item_list.py:573
+#: application/plugin_base/item_list.py:581
 msgid "Open _with"
 msgstr "Otevřít pomocí"
 
-#: application/plugin_base/item_list.py:589
+#: application/plugin_base/item_list.py:597
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: application/plugin_base/item_list.py:597
+#: application/plugin_base/item_list.py:605
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: application/plugin_base/item_list.py:605
+#: application/plugin_base/item_list.py:613
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: application/plugin_base/item_list.py:618
+#: application/plugin_base/item_list.py:626
 msgid "Send to..."
 msgstr "Poslat do..."
 
-#: application/plugin_base/item_list.py:628
+#: application/plugin_base/item_list.py:636
 msgid "Ma_ke link"
 msgstr "Vytvořit _odkaz"
 
-#: application/plugin_base/item_list.py:634
+#: application/plugin_base/item_list.py:642
 msgid "_Rename..."
 msgstr "Pře_jmenovat..."
 
-#: application/plugin_base/item_list.py:647
+#: application/plugin_base/item_list.py:655
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: application/plugin_base/item_list.py:661
+#: application/plugin_base/item_list.py:669
 msgid "_Properties"
 msgstr "_Vlastnosti"
 
-#: application/plugin_base/item_list.py:697
+#: application/plugin_base/item_list.py:705
 msgid "History is empty"
 msgstr "Historie je prázdná"
 
@@ -1008,57 +1096,73 @@ msgstr "Z_obrazit hlavní okno"
 msgid "_Hide main window"
 msgstr "Skrýt _hlavní okno"
 
-#: application/operation.py:165
+#: application/operation.py:169
+msgid "There is a problem writing data to destination file. What would you like to do?"
+msgstr "Během zapisování dat do souboru došlo k chybě. Co si přejete udělat?"
+
+#: application/operation.py:192
+msgid "An error occurred while trying to create specified file. What would you like to do?"
+msgstr "Během vytváření nového souboru došlo k chybě. Co si přejete udělat?"
+
+#: application/operation.py:199
+msgid "An error occurred while trying to create specified directory. What would you like to do?"
+msgstr "Během vytváření nového adresáře došlo k chybě. Co si přejete udělat?"
+
+#: application/operation.py:221
+msgid "Problem with setting mode and/or owner for specified path. What would you like to do?"
+msgstr "Problém s nastavením režimu a/nebo zadané cesty. Co si přejete udělat?"
+
+#: application/operation.py:240
 msgid "Searching for files..."
 msgstr "Hledání souborů..."
 
-#: application/operation.py:318
+#: application/operation.py:465
 msgid "Creating directories..."
 msgstr "Vytváření adresářů..."
 
-#: application/operation.py:343
+#: application/operation.py:478
 msgid "Copying files..."
 msgstr "Kopírování souborů..."
 
-#: application/operation.py:375
+#: application/operation.py:515
 msgid "Copy Operation"
 msgstr "Kopírování"
 
-#: application/operation.py:377
+#: application/operation.py:517
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] "Kopírování {0} položky z \"{1}\" je dokončeno!"
 msgstr[1] "Kopírování {0} položek ze \"{1}\" je dokončeno!"
 msgstr[2] "Kopírování {0} položek z \"{1}\" je dokončeno!"
 
-#: application/operation.py:431
+#: application/operation.py:571
 msgid "Moving files..."
 msgstr "Přesunování souborů..."
 
-#: application/operation.py:447
+#: application/operation.py:587
 msgid "Deleting source files..."
 msgstr "Mazání zdrojových souborů..."
 
-#: application/operation.py:461
+#: application/operation.py:601
 msgid "Deleting source directories..."
 msgstr "Mazání zdrojových adresářů..."
 
-#: application/operation.py:520
+#: application/operation.py:660
 msgid "Move Operation"
 msgstr "Přesun"
 
-#: application/operation.py:522
+#: application/operation.py:662
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] "Přesun {0} položky z \"{1}\" je dokončen!"
 msgstr[1] "Přesun {0} položek ze \"{1}\" je dokončen!"
 msgstr[2] "Přesun {0} položek z \"{1}\" je dokončeno!"
 
-#: application/operation.py:565
+#: application/operation.py:705
 msgid "Delete Operation"
 msgstr "Mazání"
 
-#: application/operation.py:567
+#: application/operation.py:707
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
 msgstr[0] "Mazání {0} položky z \"{1}\" je dokončeno!"

@@ -27,6 +27,11 @@ class OperationDialog(gtk.Window):
 		self._current_size = 0L
 		self._current_count = 0L
 
+		self._hide_on_minimize = application.options.getboolean(
+														'main',
+														'hide_operation_on_minimize'
+													)
+
 		# set window properties
 		self.set_title('Operation Dialog')
 		self.set_default_size(400, 10)
@@ -254,6 +259,7 @@ class OperationDialog(gtk.Window):
 	def _operation_click(self, widget, data=None):
 		"""Handle operation menu item click"""
 		self.deiconify()
+		if self._hide_on_minimize: self.show()
 
 	def _update_total_count(self):
 		"""Update progress bar and labels for total count"""
@@ -283,6 +289,9 @@ class OperationDialog(gtk.Window):
 			# window was iconified, show operations menu item
 			self._operation_item.show()
 			self._application.operation_menu_changed()
+
+			if self._hide_on_minimize:
+				self.hide()
 
 		elif event.new_window_state == 0:
 			# normal window state or window was restored

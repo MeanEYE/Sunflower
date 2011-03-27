@@ -1478,6 +1478,7 @@ class MainWindow(gtk.Window):
 				'right_click_select': 'False',
 				'vim_movement': 'False',
 				'headers_visible': 'True',
+				'hide_operation_on_minimize': 'False',
 			}
 
 		# set default options

@@ -185,6 +185,14 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_button_icons.connect('toggled', self._parent.enable_save, True)
 		self._checkbox_always_show_tabs.connect('toggled', self._parent.enable_save)
 
+		# operation options
+		frame_operation = gtk.Frame(_('Operation'))
+		vbox_operation = gtk.VBox(False, 0)
+		vbox_operation.set_border_width(5)
+
+		self._checkbox_hide_window_on_minimize = gtk.CheckButton(_('Hide operation window on minimize'))
+		self._checkbox_hide_window_on_minimize.connect('toggled', self._parent.enable_save)
+
 		# pack ui
 		vbox_main_window.pack_start(self._checkbox_hide_on_close, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_toolbar, False, False, 0)
@@ -196,11 +204,15 @@ class DisplayOptions(gtk.VBox):
 		vbox_tabs.pack_start(self._checkbox_button_icons, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_always_show_tabs, False, False, 0)
 
+		vbox_operation.pack_start(self._checkbox_hide_window_on_minimize, False, False, 0)
+
 		frame_main_window.add(vbox_main_window)
 		frame_tabs.add(vbox_tabs)
+		frame_operation.add(vbox_operation)
 
 		self.pack_start(frame_main_window, False, False, 0)
 		self.pack_start(frame_tabs, False, False, 0)
+		self.pack_start(frame_operation, False, False, 0)
 
 	def _load_options(self):
 		"""Load display options"""
@@ -214,6 +226,7 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_button_relief.set_active(bool(options.getint('main', 'button_relief')))
 		self._checkbox_button_icons.set_active(options.getboolean('main', 'tab_button_icons'))
 		self._checkbox_always_show_tabs.set_active(options.getboolean('main', 'always_show_tabs'))
+		self._checkbox_hide_window_on_minimize.set_active(options.getboolean('main', 'hide_operation_on_minimize'))
 
 	def _save_options(self):
 		"""Save display options"""
@@ -231,6 +244,7 @@ class DisplayOptions(gtk.VBox):
 		options.set('main', 'button_relief', int(self._checkbox_button_relief.get_active()))
 		options.set('main', 'tab_button_icons', _bool[self._checkbox_button_icons.get_active()])
 		options.set('main', 'always_show_tabs', _bool[self._checkbox_always_show_tabs.get_active()])
+		options.set('main', 'hide_operation_on_minimize', _bool[self._checkbox_hide_window_on_minimize.get_active()])
 
 
 class ItemListOptions(gtk.VBox):

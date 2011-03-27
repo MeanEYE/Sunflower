@@ -302,6 +302,12 @@ class FileList(ItemList):
 				# try to create directories
 				self.get_provider().create_directory(response[1], mode, relative_to=self.path)
 
+				# add directory manually to the list in case
+				# where directory monitoring is not supported
+				if self._fs_monitor is None:
+					show_hidden = self._parent.options.getboolean('main', 'show_hidden')
+					self._add_item(response[1], show_hidden)
+
 			except OSError as error:
 				# error creating, report to user
 				dialog = gtk.MessageDialog(
@@ -344,6 +350,12 @@ class FileList(ItemList):
 
 				# create file
 				self.get_provider().create_file(response[1], mode=mode, relative_to=self.path)
+
+				# add file manually to the list in case
+				# where directory monitoring is not supported
+				if self._fs_monitor is None:
+					show_hidden = self._parent.options.getboolean('main', 'show_hidden')
+					self._add_item(response[1], show_hidden)
 
 				# if specified, edit file after creating it
 				if edit_after:

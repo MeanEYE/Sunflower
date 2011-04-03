@@ -58,8 +58,7 @@ class PreferencesWindow(gtk.Window):
 					)
 
 		# create buttons
-		hbox = gtk.HBox(False, 2)
-		hbox.set_border_width(5)
+		hbox = gtk.HBox(False, 5)
 
 		btn_close = gtk.Button(stock=gtk.STOCK_CLOSE)
 		btn_close.connect('clicked', self._hide)
@@ -563,7 +562,7 @@ class ToolbarOptions(gtk.VBox):
 		container.add(self._list)
 
 		# create controls
-		button_box = gtk.HBox(False, 0)
+		button_box = gtk.HBox(False, 5)
 
 		button_add = gtk.Button(stock=gtk.STOCK_ADD)
 		button_add.connect('clicked', self._add_widget)
@@ -768,7 +767,7 @@ class BookmarkOptions(gtk.VBox):
 		container.add(self._list)
 
 		# create controls
-		button_box = gtk.HBox(False, 0)
+		button_box = gtk.HBox(False, 5)
 
 		button_add = gtk.Button(stock=gtk.STOCK_ADD)
 		button_add.connect('clicked', self._add_bookmark)
@@ -947,7 +946,7 @@ class ToolOptions(gtk.VBox):
 		container.add(self._list)
 
 		# create controls
-		button_box = gtk.HBox(False, 0)
+		button_box = gtk.HBox(False, 5)
 
 		button_add = gtk.Button(stock=gtk.STOCK_ADD)
 		button_add.connect('clicked', self._add_tool)

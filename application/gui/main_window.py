@@ -403,7 +403,7 @@ class MainWindow(gtk.Window):
 		# create history list
 		self.command_list = gtk.ListStore(str)
 
-		# create autocomplete entry
+		# create auto-complete entry
 		self.command_completion = gtk.EntryCompletion()
 		self.command_completion.set_model(self.command_list)
 		self.command_completion.set_minimum_key_length(2)
@@ -438,7 +438,6 @@ class MainWindow(gtk.Window):
 				(_('Create'), _('Create new directory (F7)\nCreate new file (CTRL+F7)'), self._command_create),
 				(_('Delete'), _('Delete selected items (F8 or Delete)'), self._command_delete)
 			)
-		style = self.command_bar.get_style().copy()
 
 		# create buttons and pack them
 		for text, tooltip, callback in buttons:

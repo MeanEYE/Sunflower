@@ -137,17 +137,15 @@ class Terminal(PluginBase):
 
 	def _change_top_panel_color(self, state):
 		"""Modify coloring of top panel"""
-		PluginBase._change_top_panel_color(self, state)
+		background, text = PluginBase._change_top_panel_color(self, state)
 
-		style = self._parent.get_style().copy()
-		background_color = style.bg[state]
-		text_color = style.text[state]
+		self._recycle_button.modify_bg(gtk.STATE_NORMAL, background)
+		self._recycle_button.child.modify_fg(gtk.STATE_NORMAL, text)
 
-		self._recycle_button.modify_bg(gtk.STATE_NORMAL, background_color)
-		self._recycle_button.child.modify_fg(gtk.STATE_NORMAL, text_color)
-
-		self._menu_button.modify_bg(gtk.STATE_NORMAL, background_color)
-		self._menu_button.child.modify_fg(gtk.STATE_NORMAL, text_color)
+		self._menu_button.modify_bg(gtk.STATE_NORMAL, background)
+		self._menu_button.child.modify_fg(gtk.STATE_NORMAL, text)
+		
+		return background, text
 
 	def _update_title(self, widget, data=None):
 		"""Update title with terminal window text"""
@@ -247,6 +245,9 @@ class Terminal(PluginBase):
 
 	def apply_settings(self):
 		"""Apply terminal settings"""
+		# let parent class do its work
+		PluginBase.apply_settings(self)
+		
 		# button relief
 		self._recycle_button.set_relief((
 									gtk.RELIEF_NONE,

@@ -45,6 +45,7 @@ class ItemList(PluginBase):
 				},
 			'Return': {
 					'000': self._execute_selected_item,
+					'010': self._item_properties,
 				},
 		    'b': {
 		            '100': self._edit_bookmarks,
@@ -497,6 +498,10 @@ class ItemList(PluginBase):
 	def _send_to(self, widget=None, data=None):
 		"""Abstract method for Send To Nautilus integration"""
 		pass
+	
+	def _item_properties(self, widget=None, data=None):
+		"""Abstract method that shows file/directory properties"""
+		pass
 
 	def _get_selection(self):
 		"""Return item with path under cursor"""
@@ -669,9 +674,10 @@ class ItemList(PluginBase):
 								'label': _('_Properties'),
 								'type': 'image',
 								'stock': gtk.STOCK_PROPERTIES,
+								'callback': self._item_properties
 							})
 		result.append(item)
-		item.set_sensitive(False)
+		self._properties_item = item
 
 		return result
 
@@ -767,22 +773,19 @@ class ItemList(PluginBase):
 	def _change_top_panel_color(self, state):
 		"""Modify coloring of top panel"""
 		# call parent class method first
-		PluginBase._change_top_panel_color(self, state)
-
-		# get color style from parent
-		style = self._parent.get_style().copy()
-		background_color = style.bg[state]
-		text_color = style.text[state]
+		background, text = PluginBase._change_top_panel_color(self, state)
 
 		# change button background colors for normal state
-		self._bookmarks_button.modify_bg(gtk.STATE_NORMAL, background_color)
-		self._history_button.modify_bg(gtk.STATE_NORMAL, background_color)
-		self._terminal_button.modify_bg(gtk.STATE_NORMAL, background_color)
+		self._bookmarks_button.modify_bg(gtk.STATE_NORMAL, background)
+		self._history_button.modify_bg(gtk.STATE_NORMAL, background)
+		self._terminal_button.modify_bg(gtk.STATE_NORMAL, background)
 
 		# change button text colors for normal state
-		self._bookmarks_button.child.modify_fg(gtk.STATE_NORMAL, text_color)
-		self._history_button.child.modify_fg(gtk.STATE_NORMAL, text_color)
-		self._terminal_button.child.modify_fg(gtk.STATE_NORMAL, text_color)
+		self._bookmarks_button.child.modify_fg(gtk.STATE_NORMAL, text)
+		self._history_button.child.modify_fg(gtk.STATE_NORMAL, text)
+		self._terminal_button.child.modify_fg(gtk.STATE_NORMAL, text)
+		
+		return background, text
 
 	def _bookmarks_button_clicked(self, widget, data=None):
 		"""Bookmarks button click event"""
@@ -973,6 +976,9 @@ class ItemList(PluginBase):
 
 	def apply_settings(self):
 		"""Apply settings"""
+		# let parent class do its work
+		PluginBase.apply_settings(self)
+		
 		# update status
 		self._update_status_with_statistis()
 

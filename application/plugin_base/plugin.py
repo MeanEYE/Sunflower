@@ -13,6 +13,7 @@ class PluginBase(gtk.VBox):
 		gtk.VBox.__init__(self, False, 0)
 
 		self.path = path
+		self._ubuntu_coloring = parent.options.getboolean('main', 'ubuntu_coloring')
 
 		self._parent = parent  # parent is stored locally for later use
 		self._notebook = notebook
@@ -136,14 +137,14 @@ class PluginBase(gtk.VBox):
 		return True
 
 	def _drag_data_get(self, widget, drag_context, selection_data, info, time):
-		"""Respont to get-data request from destination widget"""
+		"""Respond to get-data request from destination widget"""
 		return True
 
 	def _drag_data_delete(self, widget, drag_context):
 		"""Handle delete data after move operation"""
 		return True
 
-	def _drag_end(widget, drag_context, data=None):
+	def _drag_end(self, widget, drag_context, data=None):
 		"""Handle the end of drag and drop operation"""
 		return True
 
@@ -179,23 +180,32 @@ class PluginBase(gtk.VBox):
 
 	def _change_top_panel_color(self, state):
 		"""Modify coloring of top panel"""
-		style = self._notebook.get_style().copy()
-		background_color = style.bg[state]
-		text_color = style.text[state]
+		normal_style = self._notebook.get_style().copy()
+		ubuntu_style = self._parent._menu_item_tools.get_style().copy()
+		
+		if self._ubuntu_coloring and state is gtk.STATE_SELECTED:
+			# ubuntu coloring style
+			background_color = ubuntu_style.bg[gtk.STATE_NORMAL]
+			text_color = ubuntu_style.text[gtk.STATE_NORMAL]
+			
+		else:
+			# normal coloring style
+			background_color = normal_style.bg[state]
+			text_color = normal_style.text[state]
 
 		self._top_panel.modify_bg(gtk.STATE_NORMAL, background_color)
 		self._title_label.modify_fg(gtk.STATE_NORMAL, text_color)
 		self._subtitle_label.modify_fg(gtk.STATE_NORMAL, text_color)
+		
+		return background_color, text_color
 
 	def _notebook_next_tab(self, widget, data=None):
 		"""Go to next tab in parent Notebook"""
-
 		self._parent.next_tab(self._notebook)
 		return True
 
 	def _notebook_previous_tab(self, widget, data=None):
 		"""Go to previous tab in parent Notebook"""
-
 		self._parent.previous_tab(self._notebook)
 		return True
 
@@ -227,7 +237,7 @@ class PluginBase(gtk.VBox):
 		# retrieve human readable key representation
 		key_name = gtk.gdk.keyval_name(event.keyval)
 
-		# make letters lowercase for easier handling
+		# make letters lower case for easier handling
 		if len(key_name) == 1: key_name = key_name.lower()
 
 		if self._key_handlers.has_key(key_name) and self._key_handlers[key_name].has_key(state):
@@ -238,7 +248,13 @@ class PluginBase(gtk.VBox):
 
 	def apply_settings(self):
 		"""Method called after settings were changed"""
-		pass
+		self._ubuntu_coloring = self._parent.options.getboolean('main', 'ubuntu_coloring')
+		
+		if self._parent._get_active_object() is self:
+			self._change_top_panel_color(gtk.STATE_SELECTED)
+		
+		else:
+			self._change_top_panel_color(gtk.STATE_NORMAL)
 
 	def update_status(self, status):
 		"""Change status text"""

@@ -79,8 +79,8 @@ class IconManager:
 			window.set_icon_name('sunflower')
 
 		else:
-			window.set_icon_from_file(os.path.join(
-										os.path.dirname(sys.argv[0]),
+			window.set_icon_from_file(os.path.abspath(os.path.join(
 										'images',
 										'sunflower_hi-def_64x64.png'
-									))
+									)))
+

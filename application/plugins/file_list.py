@@ -81,11 +81,10 @@ class FileList(ItemList):
 
 		# selection image
 		image = gtk.Image()
-		image.set_from_file(os.path.join(
-									os.path.dirname(sys.argv[0]),
+		image.set_from_file(os.path.abspath(os.path.join(
 									'images',
 									'selection_arrow.png'
-								))
+								)))
 
 		self._pixbuf_selection = image.get_pixbuf()
 

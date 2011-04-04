@@ -31,11 +31,10 @@ class ChangeLogDialog(gtk.Dialog):
 		main_menu.destroy()
 
 		# program logo
-		image_file = os.path.join(
-								os.path.dirname(sys.argv[0]),
+		image_file = os.path.abspath(os.path.join(
 								'images',
 								'sunflower_hi-def_64x64.png'
-								)
+							))
 		image = gtk.Image()
 		image.set_from_file(image_file)
 		image.set_size_request(70, 70)
@@ -94,7 +93,7 @@ class ChangeLogDialog(gtk.Dialog):
 		changelog.modify_font(font)
 
 		# load change log if it exists
-		changelog_file = os.path.join(os.path.dirname(sys.argv[0]), 'change.log')
+		changelog_file = os.path.abspath('change.log')
 		if os.path.isfile(changelog_file):
 			data = open(changelog_file, 'r').read()
 		else:

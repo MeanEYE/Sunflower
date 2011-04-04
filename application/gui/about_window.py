@@ -28,11 +28,10 @@ class AboutWindow(gtk.Window):
 		vbox = gtk.VBox(False, 0)
 
 		# program logo
-		image_file = os.path.join(
-								os.path.dirname(sys.argv[0]),
+		image_file = os.path.abspath(os.path.join(
 								'images',
 								'sunflower_hi-def_64x64.png'
-							)
+							))
 		image = gtk.Image()
 		image.set_from_file(image_file)
 		image.set_size_request(70, 70)
@@ -267,7 +266,7 @@ class AboutWindow(gtk.Window):
 		tab_label = gtk.Label(_('Change log'))
 
 		data = ''
-		changelog_location = os.path.join(os.path.dirname(sys.argv[0]), 'change.log')
+		changelog_location = os.path.abspath('change.log')
 
 		if os.path.isfile(changelog_location):
 			with open(changelog_location, 'r') as file_:

@@ -32,7 +32,7 @@ class MainWindow(gtk.Window):
 	version = {
 			'major': 0,
 			'minor': 1,
-			'build': 21,
+			'build': 22,
 			'stage': 'a'
 		}
 
@@ -804,11 +804,7 @@ class MainWindow(gtk.Window):
 	def _get_plugin_list(self):
 		"""Get list of plugins"""
 		# get plugin list
-		path = os.path.join(
-						os.path.dirname(sys.argv[0]),
-						'application',
-						'plugins'
-					)
+		path = os.path.abspath(os.path.join('application', 'plugins'))
 
 		# get matching files
 		list_ = fnmatch.filter(os.listdir(path), '*.py')

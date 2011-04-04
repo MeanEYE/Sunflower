@@ -1,4 +1,4 @@
-#!/usr/bin/python2.6
+#!/usr/bin/env python
 #
 #		Sunflower.py
 #
@@ -22,27 +22,53 @@
 
 import os
 import sys
+import subprocess
 
-try:
-	# try to import GTK
-	import pygtk
-	pygtk.require20()
-	import gtk
+search_paths = os.environ["PATH"].split(os.pathsep)
+interpreter_list = ('python2.9', 'python2.8', 'python2.7', 'python2.6')
+application_file = os.path.join(os.path.dirname(sys.argv[0]), 'application', 'main.py')
 
-except:
-	# print error and die
-	print "Error starting Sunflower, missing GTK 2.0+"
-	sys.exit(1)
+def _can_execute(path):
+	"""Check if specified path can be executed"""
+	return os.path.exists(path) and os.access(path, os.X_OK)
 
-if __name__ == '__main__':
-	# add search path
-	path_application = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "application"))
-	sys.path.insert(1, path_application)
+def _check_interpreter(interpreter):
+	"""Check path for existing interpreters"""
+	result = None
 
-	gtk.gdk.threads_init()
+	for path in search_paths:
+		full_path = os.path.join(path, interpreter)
 
-	# construct main application object
-	from gui.main_window import MainWindow
+		if _can_execute(full_path):
+			# interpreter was found in specifed directory
+			result = full_path
+			break
 
-	app = MainWindow()
-	app.run()
+	return result
+
+def _get_interpreter():
+	"""Return latest interpreter"""
+	result = None
+
+	# check every interpreter in the list
+	for item in interpreter_list:
+		full_path = _check_interpreter(item)
+
+		if full_path is not None:
+			result = full_path
+			break
+
+	return result
+
+# get 2.x interpreter
+interpreter = _get_interpreter()
+
+if interpreter is not None:
+	"""We found valid interpreter on the system"""
+	code = subprocess.call((interpreter, application_file))
+	sys.exit(code)
+
+else:
+	"""No valid interpreters found, notify user"""
+	print ("No valid Python 2.x interpreter was found!")
+	sys.exit(2)

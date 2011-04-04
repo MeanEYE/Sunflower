@@ -136,10 +136,11 @@ class TitleBar(gtk.HBox):
 			x_offset -= border
 			y_offset -= border
 
-			context.set_source_rgb(
+			context.set_source_rgba(
 								normal_color.red_float,
 								normal_color.green_float,
-								normal_color.blue_float
+								normal_color.blue_float,
+								0.5
 							)
 			context.arc(x + self._radius, y + self._radius, self._radius, 2 * half_pi, 3 * half_pi)
 			context.arc(x_offset - self._radius, y + self._radius, self._radius, 3 * half_pi, 4 * half_pi)

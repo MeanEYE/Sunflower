@@ -167,7 +167,7 @@ class ItemList(PluginBase):
 
 		self._bookmarks_button.connect('clicked', self._bookmarks_button_clicked)
 
-		self._top_hbox.pack_end(self._bookmarks_button, False, False, 0)
+		self._title_bar.add_control(self._bookmarks_button)
 
 		# history button
 		self._history_button = gtk.Button()
@@ -190,7 +190,7 @@ class ItemList(PluginBase):
 
 		self._history_button.connect('clicked', self._history_button_clicked)
 
-		self._top_hbox.pack_end(self._history_button, False, False, 0)
+		self._title_bar.add_control(self._history_button)
 
 		# terminal button
 		self._terminal_button = gtk.Button()
@@ -213,7 +213,7 @@ class ItemList(PluginBase):
 
 		self._terminal_button.connect('clicked', self._create_terminal)
 
-		self._top_hbox.pack_end(self._terminal_button, False, False, 0)
+		self._title_bar.add_control(self._terminal_button)
 
 		# file list
 		container = gtk.ScrolledWindow()
@@ -258,8 +258,6 @@ class ItemList(PluginBase):
 		# pack gui
 		self.pack_start(container, True, True, 0)
 		self.pack_start(self._search_panel, False, False, 0)
-
-		self._change_top_panel_color(gtk.STATE_NORMAL)
 
 		self.show_all()
 		self._search_panel.hide()
@@ -498,7 +496,7 @@ class ItemList(PluginBase):
 	def _send_to(self, widget=None, data=None):
 		"""Abstract method for Send To Nautilus integration"""
 		pass
-	
+
 	def _item_properties(self, widget=None, data=None):
 		"""Abstract method that shows file/directory properties"""
 		pass
@@ -770,23 +768,6 @@ class ItemList(PluginBase):
 		PluginBase._control_got_focus(self, widget, data)
 		self._parent.path_label.set_text(self.path)
 
-	def _change_top_panel_color(self, state):
-		"""Modify coloring of top panel"""
-		# call parent class method first
-		background, text = PluginBase._change_top_panel_color(self, state)
-
-		# change button background colors for normal state
-		self._bookmarks_button.modify_bg(gtk.STATE_NORMAL, background)
-		self._history_button.modify_bg(gtk.STATE_NORMAL, background)
-		self._terminal_button.modify_bg(gtk.STATE_NORMAL, background)
-
-		# change button text colors for normal state
-		self._bookmarks_button.child.modify_fg(gtk.STATE_NORMAL, text)
-		self._history_button.child.modify_fg(gtk.STATE_NORMAL, text)
-		self._terminal_button.child.modify_fg(gtk.STATE_NORMAL, text)
-		
-		return background, text
-
 	def _bookmarks_button_clicked(self, widget, data=None):
 		"""Bookmarks button click event"""
 		self._parent.menu_bookmarks.set_data('list', self)
@@ -978,7 +959,7 @@ class ItemList(PluginBase):
 		"""Apply settings"""
 		# let parent class do its work
 		PluginBase.apply_settings(self)
-		
+
 		# update status
 		self._update_status_with_statistis()
 

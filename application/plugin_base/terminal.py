@@ -60,7 +60,7 @@ class Terminal(PluginBase):
 		}
 
 		# change list icon
-		self._icon.set_from_icon_name('terminal', gtk.ICON_SIZE_LARGE_TOOLBAR)
+		self._title_bar.set_icon_from_name('terminal')
 
 		# recycle button
 		self._recycle_button = gtk.Button()
@@ -105,8 +105,8 @@ class Terminal(PluginBase):
 		self._menu_button.connect('clicked', self._show_terminal_menu)
 
 		# pack buttons
-		self._top_hbox.pack_end(self._recycle_button, False, False, 0)
-		self._top_hbox.pack_end(self._menu_button, False, False, 0)
+		self._title_bar.add_control(self._recycle_button)
+		self._title_bar.add_control(self._menu_button)
 
 		if vte is not None:
 			self._vte_present = True
@@ -134,18 +134,6 @@ class Terminal(PluginBase):
 
 		# create menu
 		self._create_menu()
-
-	def _change_top_panel_color(self, state):
-		"""Modify coloring of top panel"""
-		background, text = PluginBase._change_top_panel_color(self, state)
-
-		self._recycle_button.modify_bg(gtk.STATE_NORMAL, background)
-		self._recycle_button.child.modify_fg(gtk.STATE_NORMAL, text)
-
-		self._menu_button.modify_bg(gtk.STATE_NORMAL, background)
-		self._menu_button.child.modify_fg(gtk.STATE_NORMAL, text)
-		
-		return background, text
 
 	def _update_title(self, widget, data=None):
 		"""Update title with terminal window text"""
@@ -247,7 +235,7 @@ class Terminal(PluginBase):
 		"""Apply terminal settings"""
 		# let parent class do its work
 		PluginBase.apply_settings(self)
-		
+
 		# button relief
 		self._recycle_button.set_relief((
 									gtk.RELIEF_NONE,

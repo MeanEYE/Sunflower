@@ -1,6 +1,9 @@
 import gtk
 import pango
 
+from widgets.title_bar import TitleBar
+
+
 class PluginBase(gtk.VBox):
 	"""Abstract plugin class
 
@@ -26,16 +29,8 @@ class PluginBase(gtk.VBox):
 		self._tab_label.set_max_width_chars(20)
 		self._tab_label.set_ellipsize(pango.ELLIPSIZE_END)
 
-		# create gui
-		self._top_panel = gtk.EventBox()
-
-		# top panel
-		self._top_hbox = gtk.HBox(False, 1)
-		self._top_hbox.set_border_width(3)
-		self._top_panel.add(self._top_hbox)
-
-		# top folder icon as default
-		self._icon = gtk.Image()
+		# title bar
+		self._title_bar = TitleBar(self._parent)
 
 		# status bar
 		status_bar = gtk.Frame()
@@ -49,33 +44,13 @@ class PluginBase(gtk.VBox):
 		status_bar.add(self._status_bar)
 		status_bar.set_border_width(1)
 
-		# create title bar
-		vbox = gtk.VBox(False, 1)
-
-		self._title_label = gtk.Label()
-		self._title_label.set_alignment(0, 0.5)
-		self._title_label.set_use_markup(True)
-		self._title_label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
-
-		font = pango.FontDescription('8')
-		self._subtitle_label = gtk.Label()
-		self._subtitle_label.set_alignment(0, 0.5)
-		self._subtitle_label.set_use_markup(False)
-		self._subtitle_label.modify_font(font)
-
 		# pack interface
-		vbox.pack_start(self._title_label, True, True, 0)
-		vbox.pack_start(self._subtitle_label, False, False, 0)
-
-		self._top_hbox.pack_start(self._icon, False, False, 0)
-		self._top_hbox.pack_start(vbox, True, True, 3)
-
-		self.pack_start(self._top_panel, False, False, 0)
+		self.pack_start(self._title_bar, False, False, 0)
 		self.pack_end(status_bar, False, False, 0)
 
 	def _change_title_text(self, text):
 		"""Change title label text"""
-		self._title_label.set_text(text)
+		self._title_bar.set_title(text)
 
 	def _change_tab_text(self, text):
 		"""Change tab text"""
@@ -163,12 +138,12 @@ class PluginBase(gtk.VBox):
 
 	def _control_got_focus(self, widget, data=None):
 		"""List focus in event"""
-		self._change_top_panel_color(gtk.STATE_SELECTED)
+		self._title_bar.set_state(gtk.STATE_SELECTED)
 		self._parent._set_active_object(self)
 
 	def _control_lost_focus(self, widget, data=None):
 		"""List focus out event"""
-		self._change_top_panel_color(gtk.STATE_NORMAL)
+		self._title_bar.set_state(gtk.STATE_NORMAL)
 
 	def _enable_object_block(self, widget=None, data=None):
 		"""Block main object signals"""
@@ -177,27 +152,6 @@ class PluginBase(gtk.VBox):
 	def _disable_object_block(self, widget=None, data=None):
 		"""Block main object signals"""
 		self._main_object.handler_unblock_by_func(self._control_lost_focus)
-
-	def _change_top_panel_color(self, state):
-		"""Modify coloring of top panel"""
-		normal_style = self._notebook.get_style().copy()
-		ubuntu_style = self._parent._menu_item_tools.get_style().copy()
-		
-		if self._ubuntu_coloring and state is gtk.STATE_SELECTED:
-			# ubuntu coloring style
-			background_color = ubuntu_style.bg[gtk.STATE_NORMAL]
-			text_color = ubuntu_style.text[gtk.STATE_NORMAL]
-			
-		else:
-			# normal coloring style
-			background_color = normal_style.bg[state]
-			text_color = normal_style.text[state]
-
-		self._top_panel.modify_bg(gtk.STATE_NORMAL, background_color)
-		self._title_label.modify_fg(gtk.STATE_NORMAL, text_color)
-		self._subtitle_label.modify_fg(gtk.STATE_NORMAL, text_color)
-		
-		return background_color, text_color
 
 	def _notebook_next_tab(self, widget, data=None):
 		"""Go to next tab in parent Notebook"""
@@ -248,13 +202,7 @@ class PluginBase(gtk.VBox):
 
 	def apply_settings(self):
 		"""Method called after settings were changed"""
-		self._ubuntu_coloring = self._parent.options.getboolean('main', 'ubuntu_coloring')
-		
-		if self._parent._get_active_object() is self:
-			self._change_top_panel_color(gtk.STATE_SELECTED)
-		
-		else:
-			self._change_top_panel_color(gtk.STATE_NORMAL)
+		self._title_bar.apply_settings()
 
 	def update_status(self, status):
 		"""Change status text"""

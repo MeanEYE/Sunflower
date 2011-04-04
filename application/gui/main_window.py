@@ -1467,7 +1467,7 @@ class MainWindow(gtk.Window):
 				'window': '950x450',
 				'hide_on_close': 'False',
 				'last_version': 0,
-				'button_relief': 1,
+				'button_relief': 0,
 				'terminal_scrollbars': 'True',
 				'case_sensitive_sort': 'True',
 				'plugins': 'file_list,system_terminal,default_toolbar',

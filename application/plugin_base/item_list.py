@@ -133,20 +133,6 @@ class ItemList(PluginBase):
 		self._sort_sensitive = self._parent.options.getboolean('main', 'case_sensitive_sort')
 		self._columns = None
 
-		# idle spinner
-		try:
-			# try to create spinner element
-			self._spinner = gtk.Spinner()
-
-			self._spinner.set_size_request(16, 16)
-			self._spinner.set_property('no-show-all', True)
-
-			self._top_hbox.pack_start(self._spinner, False, False, 3)
-
-		except:
-			# spinner is not required part of the program
-			self._spinner = None
-
 		# bookmarks button
 		self._bookmarks_button = gtk.Button()
 
@@ -262,12 +248,6 @@ class ItemList(PluginBase):
 		self.show_all()
 		self._search_panel.hide()
 
-	def _show_spinner(self):
-		"""Show spinner animation"""
-		if self._spinner is not None:
-			self._spinner.start()
-			self._spinner.show()
-
 	def _show_left_bookmarks(self, widget, data=None):
 		"""Show left bookmarks menu"""
 		self._parent.show_bookmarks_menu(None, self._parent.left_notebook)
@@ -275,12 +255,6 @@ class ItemList(PluginBase):
 	def _show_right_bookmarks(self, widget, data=None):
 		"""Show right bookmarks menu"""
 		self._parent.show_bookmarks_menu(None, self._parent.right_notebook)
-
-	def _hide_spinner(self):
-		"""Hide spinner animation"""
-		if self._spinner is not None:
-			self._spinner.hide()
-			self._spinner.stop()
 
 	def _create_default_column_sizes(self):
 		"""Create default column sizes section in main configuration file"""

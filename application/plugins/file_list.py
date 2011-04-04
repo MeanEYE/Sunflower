@@ -13,6 +13,7 @@ from provider import Provider
 from operation import DeleteOperation, CopyOperation, MoveOperation
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
+from gui.properties_window import PropertiesWindow
 
 # try to import I/O library
 try:
@@ -48,7 +49,7 @@ def register_plugin(application):
 class FileList(ItemList):
 	"""General file list plugin
 
-	This plugin was written with warious ussages in mind. If you need to write
+	This plugin was written with various usages in mind. If you need to write
 	plugin that will handle files it is strongly suggested that you inherit this class
 	and make your own content provider.
 
@@ -203,7 +204,7 @@ class FileList(ItemList):
 		self._item_list.set_grid_lines(grid_lines)
 
 		# change list icon
-		self._icon.set_from_icon_name('folder', gtk.ICON_SIZE_LARGE_TOOLBAR)
+		self._title_bar.set_icon_from_name('folder')
 
 		# set sort function
 		if self._sort_column is None:
@@ -490,6 +491,18 @@ class FileList(ItemList):
 			command = "nautilus-sendto {0}&".format(params)
 			os.system(command)
 
+	def _item_properties(self, widget=None, data=None):
+		"""Show file/directory properties"""
+		window = PropertiesWindow(
+								self._parent,
+								self.get_provider(),
+								self._get_selection()
+							)
+
+		window.show()
+
+		return True
+
 	def _get_selection(self, relative=False):
 		"""Return item with path under cursor"""
 		result = None
@@ -565,6 +578,7 @@ class FileList(ItemList):
 		self._send_to_item.set_sensitive(self.get_provider().is_local and not is_parent)
 		self._delete_item.set_sensitive(not is_parent)
 		self._rename_item.set_sensitive(not is_parent)
+		self._properties_item.set_sensitive(not is_parent)
 
 	def _get_popup_menu_position(self, menu, data=None):
 		"""Positions menu properly for given row"""
@@ -667,7 +681,6 @@ class FileList(ItemList):
 
 		# node created
 		if event is gio.FILE_MONITOR_EVENT_CREATED:
-
 			# temporarily fix problem with duplicating items when file was saved with GIO
 			# TODO: Test why this is happening
 			if self._find_iter_by_name(file_.get_basename()) is None:
@@ -940,8 +953,8 @@ class FileList(ItemList):
 		space_free = self._format_size(stat.f_bsize * stat.f_bavail)
 		space_total = self._format_size(stat.f_bsize * stat.f_blocks)
 
-		self._title_label.set_label(text)
-		self._subtitle_label.set_label(
+		self._title_bar.set_title(text)
+		self._title_bar.set_subtitle(
 									'{2} {0} - {3} {1}'.format(
 															space_free,
 															space_total,
@@ -1058,8 +1071,6 @@ class FileList(ItemList):
 
 	def change_path(self, path=None, selected=None):
 		"""Change file list path"""
-		self._show_spinner()
-
 		# cancel current directory monitor
 		if gio is not None and self._fs_monitor is not None:
 			self._fs_monitor.cancel()
@@ -1169,8 +1180,6 @@ class FileList(ItemList):
 			except gio.Error:
 				# monitoring is probably not supported by the backend
 				self._fs_monitor = None
-
-		self._hide_spinner()
 
 	def select_all(self, pattern=None, exclude_list=None):
 		"""Select all items matching pattern """

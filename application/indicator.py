@@ -16,7 +16,7 @@ class Indicator(object):
 	_icon = 'sunflower_hi-def'
 	_s_icon = 'sunflower_hi-def.png'  # status icon, when appindicator is not available
 	_icon_attention = 'indicator-messages-new'
-	_icon_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "images"))
+	_icon_path = os.path.abspath('images')
 	_indicator = None
 
 	def __init__(self, parent):

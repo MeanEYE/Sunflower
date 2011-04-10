@@ -1,6 +1,9 @@
 import os
 import gtk
 import gio
+import gnomevfs
+import locale
+import time
 
 
 class PropertiesWindow(gtk.Window):
@@ -13,27 +16,41 @@ class PropertiesWindow(gtk.Window):
 		self._application = application
 		self._provider = provider
 		self._path = path
+		self._is_file = self._provider.is_file(self._path)
 		
 		# file monitor, we'd like to update info if file changes
 		self._monitor = gio.File(self._path).monitor_file()
+		self._monitor.connect('changed', self._item_changes)
 		
 		# get item information
 		title = _('{0} Properties').format(os.path.basename(path))
 		
-		icon_manager = application.icon_manager 
-		icon_list = (
-					icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_MENU),
-					icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_BUTTON),
-					icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_SMALL_TOOLBAR),
-					icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_LARGE_TOOLBAR),
-					icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_DIALOG)
-				)
+		icon_manager = application.icon_manager
+		if self._is_file:
+			# get icon for specified file 
+			self._icon_list = (
+						icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_MENU),
+						icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_BUTTON),
+						icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_SMALL_TOOLBAR),
+						icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_LARGE_TOOLBAR),
+						icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_DIALOG)
+					)
+			
+		else:
+			# get folder icon
+			self._icon_list = (
+						icon_manager.get_icon_from_type('folder', gtk.ICON_SIZE_MENU),
+						icon_manager.get_icon_from_type('folder', gtk.ICON_SIZE_BUTTON),
+						icon_manager.get_icon_from_type('folder', gtk.ICON_SIZE_SMALL_TOOLBAR),
+						icon_manager.get_icon_from_type('folder', gtk.ICON_SIZE_LARGE_TOOLBAR),
+						icon_manager.get_icon_from_type('folder', gtk.ICON_SIZE_DIALOG)
+					)
 		
 		# configure window
 		self.set_title(title)
 		self.set_size_request(410, 410)
 		self.set_border_width(5)
-		self.set_icon_list(*icon_list)
+		self.set_icon_list(*self._icon_list)
 		
 		# create interface
 		vbox = gtk.VBox(False, 5)
@@ -67,6 +84,9 @@ class PropertiesWindow(gtk.Window):
 		
 		self.add(vbox)
 		
+		# update widgets to represent item state
+		self._update_data()
+		
 		# show all widgets
 		self.show_all()
 		
@@ -77,24 +97,77 @@ class PropertiesWindow(gtk.Window):
 		
 	def _item_changes(self, monitor, file, other_file, event, data=None):
 		"""Event triggered when monitored file changes"""
+		self._update_data()
+		
+	def _rename_item(self, widget=None, data=None):
+		"""Handle renaming item"""
 		pass
+	
+	def _update_data(self):
+		"""Update widgets to represent item state"""
+		mime_type = gnomevfs.get_mime_type(self._path)
+		format = self._application.options.get('main', 'time_format')
+		item_stat = self._provider.get_stat(self._path)
+		
+		# get item description
+		description = gnomevfs.mime_get_description(mime_type)
+
+		# get item size
+		if self._is_file:
+			# file size
+			item_size = ngettext(
+							'{0} byte',
+							'{0} bytes',
+							item_stat.st_size
+						).format(locale.format('%d', item_stat.st_size, True))
+			
+		else:
+			# directory size
+			dir_size = len(self._provider.list_dir(self._path))
+			item_size = ngettext(
+							'{0} item',
+							'{0} items',
+							dir_size
+						).format(dir_size)
+			
+		# format item time			
+		item_a_date = time.strftime(format, time.gmtime(item_stat.st_atime))
+		item_m_date = time.strftime(format, time.gmtime(item_stat.st_mtime))
+		
+		# get volume
+		try:
+			mount = gio.File(self._path).find_enclosing_mount()
+			volume_name = mount.get_name()
+			
+		except gio.Error:
+			# item is not on any known volume
+			volume_name = _('unknown')
+
+		# update widgets	
+		self._entry_name.set_text(os.path.basename(self._path))
+		self._label_type.set_text('{0}\n{1}'.format(description, mime_type))
+		self._label_size.set_text(item_size)
+		self._label_location.set_text(os.path.dirname(os.path.abspath(self._path)))
+		self._label_volume.set_text(volume_name)
+		self._label_accessed.set_text(item_a_date)
+		self._label_modified.set_text(item_m_date)
 		
 	def _create_basic_tab(self):
 		"""Create tab containing basic information"""
-		tab = gtk.Table(7, 3)
+		tab = gtk.VBox(False, 0)
+		table = gtk.Table(7, 3)
 		
 		# configure table
 		tab.set_border_width(10)
 		
 		# create icon
-		pixbuf = self._application.icon_manager.get_icon_for_file(
-															self._path,
-															gtk.ICON_SIZE_DIALOG 
-														)
+		pixbuf = self._icon_list[-1]
 		icon = gtk.Image()
 		icon.set_from_pixbuf(pixbuf)
 		
-		tab.attach(icon, 0, 1, 0, 7)
+		vbox_icon = gtk.VBox(False, 0)
+		vbox_icon.pack_start(icon, False, False)
+		table.attach(vbox_icon, 0, 1, 0, 7, xoptions=gtk.SHRINK)
 		
 		# labels
 		label_name = gtk.Label(_('Name:'))
@@ -105,27 +178,68 @@ class PropertiesWindow(gtk.Window):
 		label_accessed = gtk.Label(_('Accessed:'))
 		label_modified = gtk.Label(_('Modified:'))
 		
+		# configure labels
 		label_name.set_alignment(0, 0.5)
-		label_type.set_alignment(0, 0.5)
-		label_size.set_alignment(0, 0.5)
-		label_location.set_alignment(0, 0.5)
-		label_volume.set_alignment(0, 0.5)
-		label_accessed.set_alignment(0, 0.5)
-		label_modified.set_alignment(0, 0.5)
+		label_type.set_alignment(0, 0)
+		label_size.set_alignment(0, 0)
+		label_location.set_alignment(0, 0)
+		label_volume.set_alignment(0, 0)
+		label_accessed.set_alignment(0, 0)
+		label_modified.set_alignment(0, 0)
 		
-		tab.attach(label_name, 1, 2, 0, 1)
-		tab.attach(label_type, 1, 2, 1, 2)
-		tab.attach(label_size, 1, 2, 2, 3)
-		tab.attach(label_location, 1, 2, 3, 4)
-		tab.attach(label_volume, 1, 2, 4, 5)
-		tab.attach(label_accessed, 1, 2, 5, 6)
-		tab.attach(label_modified, 1, 2, 6, 7)
+		# pack labels
+		table.attach(label_name, 1, 2, 0, 1)
+		table.attach(label_type, 1, 2, 1, 2)
+		table.attach(label_size, 1, 2, 2, 3)
+		table.attach(label_location, 1, 2, 3, 4)
+		table.attach(label_volume, 1, 2, 4, 5)
+		table.attach(label_accessed, 1, 2, 5, 6)
+		table.attach(label_modified, 1, 2, 6, 7)
 		
-		# values
+		# value containers
 		self._entry_name = gtk.Entry()
 		self._label_type = gtk.Label()
 		self._label_size = gtk.Label()
+		self._label_location = gtk.Label()
+		self._label_volume = gtk.Label()
+		self._label_accessed = gtk.Label()
+		self._label_modified = gtk.Label()
 		
+		# configure labels
+		self._label_type.set_alignment(0, 0)
+		self._label_type.set_selectable(True)
+		self._label_size.set_alignment(0, 0)
+		self._label_size.set_selectable(True)
+		self._label_location.set_alignment(0, 0)
+		self._label_location.set_selectable(True)
+		self._label_volume.set_alignment(0, 0)
+		self._label_volume.set_selectable(True)
+		self._label_accessed.set_alignment(0, 0)
+		self._label_accessed.set_selectable(True)
+		self._label_modified.set_alignment(0, 0)
+		self._label_modified.set_selectable(True)
+		
+		# pack value containers
+		table.attach(self._entry_name, 2, 3, 0, 1)
+		table.attach(self._label_type, 2, 3, 1, 2)
+		table.attach(self._label_size, 2, 3, 2, 3)
+		table.attach(self._label_location, 2, 3, 3, 4)
+		table.attach(self._label_volume, 2, 3, 4, 5)
+		table.attach(self._label_accessed, 2, 3, 5, 6)
+		table.attach(self._label_modified, 2, 3, 6, 7)
+		
+		# connect events
+		self._entry_name.connect('activate', self._rename_item)
+		
+		# configure table
+		table.set_row_spacings(5)
+		table.set_row_spacing(2, 30)
+		table.set_row_spacing(4, 30)
+		table.set_col_spacing(0, 10)
+		table.set_col_spacing(1, 10)
+		
+		# pack table
+		tab.pack_start(table, False, False, 0)
 		
 		return tab
 	

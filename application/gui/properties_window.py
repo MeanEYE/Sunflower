@@ -92,11 +92,18 @@ class PropertiesWindow(gtk.Window):
 	def _close_window(self, widget=None, data=None):
 		"""Close properties window"""
 		self._monitor.cancel()
-		self.hide()
+		self.destroy()
 		
 	def _item_changes(self, monitor, file, other_file, event, data=None):
 		"""Event triggered when monitored file changes"""
-		self._update_data()
+		
+		if event is gio.FILE_MONITOR_EVENT_DELETED:
+			# item was removed, close dialog
+			self.destroy()
+			
+		else:
+			# item was changed, update data
+			self._update_data()
 		
 	def _rename_item(self, widget=None, data=None):
 		"""Handle renaming item"""

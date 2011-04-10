@@ -19,8 +19,7 @@ class PropertiesWindow(gtk.Window):
 		self._is_file = self._provider.is_file(self._path)
 		
 		# file monitor, we'd like to update info if file changes
-		self._monitor = gio.File(self._path).monitor_file()
-		self._monitor.connect('changed', self._item_changes)
+		self._create_monitor()
 		
 		# get item information
 		title = _('{0} Properties').format(os.path.basename(path))
@@ -101,8 +100,50 @@ class PropertiesWindow(gtk.Window):
 		
 	def _rename_item(self, widget=None, data=None):
 		"""Handle renaming item"""
-		pass
-	
+		item_exists = self._provider.exists(
+							self._entry_name.get_text(), 
+							relative_to=os.path.dirname(self._path)
+						)
+		
+		if item_exists:
+			# item with the same name already exists
+			dialog = gtk.MessageDialog(
+									self._parent,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_ERROR,
+									gtk.BUTTONS_OK,
+									_(
+										"File or directory with specified name already "
+										"exists in current directory. Item could not "
+										"be renamed."
+									)
+								)
+			dialog.run()
+			dialog.destroy()			
+
+			# restore old name
+			self._entry_name.set_text(os.path.basename(self._path))
+			
+		else:
+			# rename item
+			self._provider.rename_path(
+								os.path.basename(self._path), 
+								self._entry_name.get_text()
+							)
+			
+			self._path = os.path.join(
+								os.path.dirname(self._path), 
+								self._entry_name.get_text()
+							)
+			
+			# recreate item monitor
+			self._create_monitor()
+
+	def _create_monitor(self):
+		"""Create item monitor"""
+		self._monitor = gio.File(self._path).monitor_file()
+		self._monitor.connect('changed', self._item_changes)
+
 	def _update_data(self):
 		"""Update widgets to represent item state"""
 		mime_type = gnomevfs.get_mime_type(self._path)

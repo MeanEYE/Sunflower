@@ -454,12 +454,28 @@ class FileList(ItemList):
 
 		if result[0] == gtk.RESPONSE_OK:
 			if not self.get_provider().exists(result[1], relative_to=self.path):
-				# mark item for selection after rename
-				self._item_to_focus = result[1]
+				try:
+					# rename selected item
+					self.get_provider().rename_path(selection, result[1])
 
-				# rename selected item
-				self.get_provider().rename_path(selection, result[1])
+					# mark item for selection after rename
+					self._item_to_focus = result[1]
 
+				except IOError as error:
+					# problem renaming item
+					dialog = gtk.MessageDialog(
+											self,
+											gtk.DIALOG_DESTROY_WITH_PARENT,
+											gtk.MESSAGE_ERROR,
+											gtk.BUTTONS_OK,
+											_(
+												"Error renaming specified item. Make sure "
+												"you have enough permissions."
+											) +	"\n\n{0}".format(error)
+										)
+					dialog.run()
+					dialog.destroy()	
+					
 			else:
 				# file/directory already exists
 				dialog = gtk.MessageDialog(

@@ -108,7 +108,7 @@ class PropertiesWindow(gtk.Window):
 		if item_exists:
 			# item with the same name already exists
 			dialog = gtk.MessageDialog(
-									self._parent,
+									self,
 									gtk.DIALOG_DESTROY_WITH_PARENT,
 									gtk.MESSAGE_ERROR,
 									gtk.BUTTONS_OK,
@@ -126,18 +126,34 @@ class PropertiesWindow(gtk.Window):
 			
 		else:
 			# rename item
-			self._provider.rename_path(
-								os.path.basename(self._path), 
-								self._entry_name.get_text()
-							)
-			
-			self._path = os.path.join(
-								os.path.dirname(self._path), 
-								self._entry_name.get_text()
-							)
-			
-			# recreate item monitor
-			self._create_monitor()
+			try:
+				self._provider.rename_path(
+									os.path.basename(self._path), 
+									self._entry_name.get_text()
+								)
+				
+				self._path = os.path.join(
+									os.path.dirname(self._path), 
+									self._entry_name.get_text()
+								)
+				
+				# recreate item monitor
+				self._create_monitor()
+				
+			except IOError as error:
+				# problem renaming item
+				dialog = gtk.MessageDialog(
+										self,
+										gtk.DIALOG_DESTROY_WITH_PARENT,
+										gtk.MESSAGE_ERROR,
+										gtk.BUTTONS_OK,
+										_(
+											"Error renaming specified item. Make sure "
+											"you have enough permissions."
+										) +	"\n\n{0}".format(error)
+									)
+				dialog.run()
+				dialog.destroy()			
 
 	def _create_monitor(self):
 		"""Create item monitor"""

@@ -30,6 +30,8 @@ class SystemTerminal(Terminal):
 									directory=self.path
 								)
 
+			self._title_bar.set_subtitle(shell_command)
+
 		self._change_tab_text(_('Terminal'))
 
 		self.show_all()

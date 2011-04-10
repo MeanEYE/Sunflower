@@ -32,6 +32,9 @@ class Operation(Thread):
 		self._source = source
 		self._destination = destination
 		self._dialog = None
+		
+		self._dir_list = []
+		self._file_list = []
 
 		# store initial paths
 		self._source_path = self._source.get_path()
@@ -235,7 +238,7 @@ class CopyOperation(Operation):
 
 		return response
 
-	def _get_lists(self, dir_list, file_list):
+	def _get_lists(self):
 		"""Find all files for copying"""
 		gobject.idle_add(self._update_status, _('Searching for files...'))
 
@@ -259,14 +262,14 @@ class CopyOperation(Operation):
 						can_procede = self._get_merge_input(item)
 
 				if can_procede:
-					if can_create: dir_list.append(item)
-					self._scan_directory(dir_list, file_list, item)
+					if can_create: self._dir_list.append(item)
+					self._scan_directory(item)
 
 			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
 				stat = self._source.get_stat(item, relative_to=self._source_path)
 				gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
-				file_list.append(item)
+				self._file_list.append(item)
 
 	def _set_mode(self, path, mode):
 		"""Set mode for specified path"""
@@ -311,7 +314,7 @@ class CopyOperation(Operation):
 
 			return
 
-	def _scan_directory(self, dir_list, file_list, directory):
+	def _scan_directory(self, directory):
 		"""Recursively scan directory and populate list"""
 		for item in self._source.list_dir(directory, relative_to=self._source_path):
 			if self._abort.is_set(): break  # abort operation if requested
@@ -336,14 +339,14 @@ class CopyOperation(Operation):
 
 				if can_procede:
 					# allow processing specified directory
-					if can_create: dir_list.append(full_name)
-					self._scan_directory(dir_list, file_list, full_name)
+					if can_create: self._dir_list.append(full_name)
+					self._scan_directory(full_name)
 
 			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
 				stat = self._source.get_stat(full_name, relative_to=self._source_path)
 				gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
-				file_list.append(full_name)
+				self._file_list.append(full_name)
 
 	def _create_directory(self, directory):
 		"""Create specified directory"""
@@ -395,7 +398,9 @@ class CopyOperation(Operation):
 					                )
 
 		# if user skipped this file return
-		if not can_procede: return
+		if not can_procede:
+			self._file_list.pop(self._file_list.index(file_)) 
+			return
 
 		try:
 			# get file handles
@@ -426,6 +431,10 @@ class CopyOperation(Operation):
 			# handle user response
 			if response == gtk.RESPONSE_YES:
 				self._copy_file(dest_file)  # retry copying this file
+				
+			else:
+				# user didn't want to retry, remove file from list
+				self._file_list.pop(self._file_list.index(file_))
 
 			# exit method
 			return
@@ -460,25 +469,29 @@ class CopyOperation(Operation):
 				self._set_owner(dest_file, file_stat.st_uid, file_stat.st_gid)
 				break
 
-	def _create_directory_list(self, list_):
+	def _create_directory_list(self):
 		"""Create all directories in list"""
 		gobject.idle_add(self._update_status, _('Creating directories...'))
 
-		for number, dir_ in enumerate(list_, 0):
+		for number, dir_ in enumerate(self._dir_list, 0):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()
 
 			gobject.idle_add(self._dialog.set_current_file, dir_)
 			self._create_directory(dir_)  # create directory
-			gobject.idle_add(self._dialog.set_current_file_fraction, float(number)/len(list_))
+			
+			gobject.idle_add(
+						self._dialog.set_current_file_fraction, 
+						float(number)/len(self._dir_list)
+					)
 
-	def _copy_file_list(self, list_):
+	def _copy_file_list(self):
 		"""Copy list of files to destination path"""
 		# update status
 		gobject.idle_add(self._update_status, _('Copying files...'))
 
 		# copy all the files in list
-		for file_ in list_:
+		for file_ in self._file_list:
 			# abort operation if requested
 			if self._abort.is_set(): break
 			self._can_continue.wait()
@@ -494,19 +507,16 @@ class CopyOperation(Operation):
 		"""Main thread method, this is where all the stuff is happening"""
 		self._dialog.show_all()
 
-		dir_list = []
-		file_list = []
-
 		# set dialog info
 		self._dialog.set_source(self._source_path)
 		self._dialog.set_destination(self._destination_path)
 
 		# get list of items to copy
-		self._get_lists(dir_list, file_list)
+		self._get_lists()
 
 		# perform operation
-		self._create_directory_list(dir_list)
-		self._copy_file_list(file_list)
+		self._create_directory_list()
+		self._copy_file_list()
 
 		# notify user if window is not focused
 		if not self._dialog.is_active() and not self._abort.is_set():
@@ -516,9 +526,9 @@ class CopyOperation(Operation):
 			message = ngettext(
 							'Copying of {0} item from "{1}" to "{2}" is completed!',
 							'Copying of {0} items from "{1}" to "{2}" is completed!',
-							len(file_list) + len(dir_list)
+							len(self._file_list) + len(self._dir_list)
 						).format(
-							len(file_list) + len(dir_list),
+							len(self._file_list) + len(self._dir_list),
 							os.path.basename(self._source_path),
 							os.path.basename(self._destination_path)
 						)
@@ -566,10 +576,10 @@ class MoveOperation(CopyOperation):
 							relative_to=self._source_path
 						)
 
-	def _move_file_list(self, list_):
+	def _move_file_list(self):
 		"""Move files from the list"""
 		gobject.idle_add(self._update_status, _('Moving files...'))
-		for file_ in list_:
+		for file_ in self._file_list:
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()
 
@@ -578,28 +588,28 @@ class MoveOperation(CopyOperation):
 			self._move_file(file_)
 			gobject.idle_add(self._dialog.increment_current_count, 1)
 
-	def _copy_file_list(self, list):
-		"""Delete files after copying"""
-		CopyOperation._copy_file_list(self, list)
-
-	def _delete_file_list(self, file_list, dir_list):
+	def _delete_file_list(self):
 		"""Remove files from source list"""
 		gobject.idle_add(self._update_status, _('Deleting source files...'))
 
-		for number, item in enumerate(file_list, 0):
+		for number, item in enumerate(self._file_list, 0):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()
 
 			gobject.idle_add(self._dialog.set_current_file, item)
 			self._source.remove_path(item, relative_to=self._source_path)
-			gobject.idle_add(self._dialog.set_current_file_fraction, float(number) / len(file_list))
+			gobject.idle_add(
+						self._dialog.set_current_file_fraction, 
+						float(number) / len(self._file_list)
+					)
 
-		self._delete_directories(dir_list)
+		self._delete_directories()
 
-	def _delete_directories(self, dir_list):
+	def _delete_directories(self):
 		"""Remove empty directories after moving files"""
 		gobject.idle_add(self._update_status, _('Deleting source directories...'))
 
+		dir_list = self._dir_list
 		dir_list.reverse()
 
 		for number, directory in enumerate(dir_list, 0):
@@ -630,28 +640,25 @@ class MoveOperation(CopyOperation):
 		"""
 		self._dialog.show_all()
 
-		dir_list = []
-		file_list = []
-
 		# set dialog info
 		self._dialog.set_source(self._source_path)
 		self._dialog.set_destination(self._destination_path)
 
-		self._get_lists(dir_list, file_list)
+		self._get_lists()
 
 		# create directories
-		self._create_directory_list(dir_list)
+		self._create_directory_list()
 
 		# copy/move files
 		if self._check_devices():
 			# both paths are on the same file system, move instead of copy
-			self._move_file_list(file_list)
-			self._delete_directories(dir_list)
+			self._move_file_list()
+			self._delete_directories()
 
 		else:
 			# paths are located on different file systems, copy and remove
-			self._copy_file_list(file_list)
-			self._delete_file_list(file_list, dir_list)
+			self._copy_file_list()
+			self._delete_file_list()
 
 		# notify user if window is not focused
 		if not self._dialog.is_active() and not self._abort.is_set():
@@ -661,9 +668,9 @@ class MoveOperation(CopyOperation):
 			message = ngettext(
 							'Moving of {0} item from "{1}" to "{2}" is completed!',
 							'Moving of {0} items from "{1}" to "{2}" is completed!',
-							len(file_list) + len(dir_list)
+							len(self._file_list) + len(self._dir_list)
 						).format(
-							len(file_list) + len(dir_list),
+							len(self._file_list) + len(self._dir_list),
 							os.path.basename(self._source_path),
 							os.path.basename(self._destination_path)
 						)

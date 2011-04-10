@@ -288,7 +288,12 @@ class OperationDialog(gtk.Window):
 															locale.format('%d', self._current_size, True),
 															locale.format('%d', self._total_size, True)
 															))
-		self.set_total_size_fraction(float(self._current_size) / self._total_size)
+		
+		if self._total_size > 0:
+			self.set_total_size_fraction(float(self._current_size) / self._total_size)
+		
+		else:
+			self.set_total_size_fraction(1)
 
 	def _destroy(self, widget, data=None):
 		"""Remove operation menu item on dialog destroy"""

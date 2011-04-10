@@ -10,7 +10,7 @@ class NotificationManager:
 	def __init__(self, application):
 		self._application = application
 
-		# initialize os notification system
+		# initialize OS notification system
 		pynotify.init('sunflower')
 
 		# decide which icon to use
@@ -21,9 +21,8 @@ class NotificationManager:
 		else:
 			# use local icon
 			icon_file = os.path.abspath(os.path.join(
-			                    os.path.dirname(sys.argv[0]),
-			                    'images',
-			                    'sunflower_hi-def_64x64.png'
+								'images',
+								'sunflower_hi-def_64x64.png'
 			                ))
 			self._default_icon = 'file://{0}'.format(icon_file)
 

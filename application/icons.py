@@ -21,11 +21,11 @@ class IconManager:
 		"""Check if icon with specified name exists in theme"""
 		return self._icon_theme.has_icon(icon_name)
 
-	def get_icon_from_type(self, mime_type, icon_size=gtk.ICON_SIZE_MENU):
+	def get_icon_from_name(self, name, icon_size=gtk.ICON_SIZE_MENU):
 		"""Get icon based on MIME type and size"""
 		result = None
 		size = gtk.icon_size_lookup(icon_size)
-		key_name = "{0}_{1}".format(mime_type, size[0])  # create MIME type/size based key
+		key_name = "{0}_{1}".format(name, size[0])  # create MIME type/size based key
 
 		if self._icon_cache.has_key(key_name):
 			# icon is cached and we return already loaded image
@@ -33,7 +33,7 @@ class IconManager:
 
 		else:
 			# get information about the icon
-			icon_info = self._icon_theme.lookup_icon(mime_type, size[0], 0)
+			icon_info = self._icon_theme.lookup_icon(name, size[0], 0)
 
 			if icon_info is not None:
 				# load icon and cache it
@@ -50,11 +50,11 @@ class IconManager:
 		if mime_type is not None:
 			# get icon from file type
 			mime_type = mime_type.replace('/', '-')
-			result = self.get_icon_from_type(mime_type, size)
+			result = self.get_icon_from_name(mime_type, size)
 
 		if result is None:
 			# get default icon
-			result = self.get_icon_from_type('document', size)
+			result = self.get_icon_from_name('document', size)
 
 		return result
 
@@ -72,8 +72,8 @@ class IconManager:
 
 		return result
 
-	def set_application_icon(self, window):
-		"""Set application icon on specified window"""
+	def set_window_icon(self, window):
+		"""Set window icon"""
 		if self.has_icon('sunflower'):
 			# in case theme has its own icon, use that one
 			window.set_icon_name('sunflower')

@@ -854,7 +854,7 @@ class FileList(ItemList):
 
 				if is_dir:
 					# get universal folder icon
-					icon = self._parent.icon_manager.get_icon_from_type('folder')
+					icon = self._parent.icon_manager.get_icon_from_name('folder')
 
 				else:
 					# guess mime type and set icon from that
@@ -1172,7 +1172,7 @@ class FileList(ItemList):
 							True,
 							True,
 							None,
-							self._parent.icon_manager.get_icon_from_type('up'),
+							self._parent.icon_manager.get_icon_from_name('up'),
 							None
 						))
 

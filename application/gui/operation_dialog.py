@@ -46,7 +46,7 @@ class OperationDialog(gtk.Window):
 		self.connect('window-state-event', self._window_state)
 
 		# set icon
-		self._application.icon_manager.set_application_icon(self)
+		self._application.icon_manager.set_window_icon(self)
 
 		# create interface
 		self._vbox = gtk.VBox(False, 5)

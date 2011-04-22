@@ -18,7 +18,7 @@ class AssociationManager:
 
 	def get_default_program_for_type(self, mime_type):
 		"""Get default application for specified type"""
-		return gnomevfs.mime_get_default_application(mime_type)[1]
+		return gnomevfs.mime_get_default_application(mime_type)
 
 	def get_association_config(self, file_name):
 		"""Return dictionary containing all the options"""

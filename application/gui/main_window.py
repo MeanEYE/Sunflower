@@ -63,7 +63,7 @@ class MainWindow(gtk.Window):
 		self.set_title(_('Sunflower'))
 
 		# set window icon
-		self.icon_manager.set_application_icon(self)
+		self.icon_manager.set_window_icon(self)
 
 		# set locale for international number formatting
 		locale.setlocale(locale.LC_ALL)

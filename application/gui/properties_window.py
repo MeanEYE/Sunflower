@@ -1,6 +1,7 @@
 import os
 import gtk
 import gio
+import pango
 import gnomevfs
 import locale
 import time
@@ -38,11 +39,11 @@ class PropertiesWindow(gtk.Window):
 		else:
 			# get folder icon
 			self._icon_list = (
-						icon_manager.get_icon_from_type('folder', gtk.ICON_SIZE_MENU),
-						icon_manager.get_icon_from_type('folder', gtk.ICON_SIZE_BUTTON),
-						icon_manager.get_icon_from_type('folder', gtk.ICON_SIZE_SMALL_TOOLBAR),
-						icon_manager.get_icon_from_type('folder', gtk.ICON_SIZE_LARGE_TOOLBAR),
-						icon_manager.get_icon_from_type('folder', gtk.ICON_SIZE_DIALOG)
+						icon_manager.get_icon_from_name('folder', gtk.ICON_SIZE_MENU),
+						icon_manager.get_icon_from_name('folder', gtk.ICON_SIZE_BUTTON),
+						icon_manager.get_icon_from_name('folder', gtk.ICON_SIZE_SMALL_TOOLBAR),
+						icon_manager.get_icon_from_name('folder', gtk.ICON_SIZE_LARGE_TOOLBAR),
+						icon_manager.get_icon_from_name('folder', gtk.ICON_SIZE_DIALOG)
 					)
 		
 		# configure window
@@ -166,6 +167,36 @@ class PropertiesWindow(gtk.Window):
 		"""Create item monitor"""
 		self._monitor = gio.File(self._path).monitor_file()
 		self._monitor.connect('changed', self._item_changes)
+		
+	def _load_associated_applications(self):
+		"""Get associated applications with file/directory"""
+		mime_type = gnomevfs.get_mime_type(self._path)
+		associations_manager = self._application.associations_manager
+		list_ = associations_manager.get_program_list_for_type(mime_type)
+		default_application = associations_manager.get_default_program_for_type(mime_type)
+		
+		# clear existing list
+		self._store.clear()
+		
+		# add all applications to the list
+		for item in list_:
+			config_file = item[0]
+			name = item[1]
+			icon = None
+			selected = config_file in default_application
+
+			# get application configuration file			
+			config = self._application.associations_manager.get_association_config(config_file)
+			
+			# get application icon
+			if config is not None and config.has_key('icon'):
+				icon_name = config['icon']
+				icon = self._application.icon_manager.get_icon_from_name(
+																	icon_name,
+																	gtk.ICON_SIZE_LARGE_TOOLBAR 
+																)
+			
+			self._store.append((selected, icon, name, config_file))
 
 	def _update_data(self):
 		"""Update widgets to represent item state"""
@@ -216,6 +247,9 @@ class PropertiesWindow(gtk.Window):
 		self._label_accessed.set_text(item_a_date)
 		self._label_modified.set_text(item_m_date)
 		
+		# update "open with" list
+		self._load_associated_applications()
+		
 	def _create_basic_tab(self):
 		"""Create tab containing basic information"""
 		tab = gtk.VBox(False, 0)
@@ -231,7 +265,7 @@ class PropertiesWindow(gtk.Window):
 		
 		vbox_icon = gtk.VBox(False, 0)
 		vbox_icon.pack_start(icon, False, False)
-		table.attach(vbox_icon, 0, 1, 0, 7, xoptions=gtk.SHRINK)
+		table.attach(vbox_icon, 0, 1, 0, 7, gtk.SHRINK)
 		
 		# labels
 		label_name = gtk.Label(_('Name:'))
@@ -276,6 +310,7 @@ class PropertiesWindow(gtk.Window):
 		self._label_size.set_selectable(True)
 		self._label_location.set_alignment(0, 0)
 		self._label_location.set_selectable(True)
+		self._label_location.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
 		self._label_volume.set_alignment(0, 0)
 		self._label_volume.set_selectable(True)
 		self._label_accessed.set_alignment(0, 0)
@@ -316,6 +351,37 @@ class PropertiesWindow(gtk.Window):
 	def _create_open_with_tab(self):
 		"""Create tab containing list of applications that can open this file"""
 		tab = gtk.VBox(False, 5)
+		
+		# create application list
+		container = gtk.Viewport()
+		
+		self._store = gtk.ListStore(bool, gtk.gdk.Pixbuf, str, str)
+		self._list = gtk.TreeView()
+		self._list.set_model(self._store)
+		
+		cell_radio = gtk.CellRendererToggle()
+		cell_radio.set_radio(True)
+		cell_icon = gtk.CellRendererPixbuf()
+		cell_name = gtk.CellRendererText()
+		
+		# create column
+		column = gtk.TreeViewColumn()
+		
+		# pack renderer
+		column.pack_start(cell_radio, False)
+		column.pack_start(cell_icon, False)
+		column.pack_start(cell_name, True)
+		
+		# configure renderer
+		column.add_attribute(cell_radio, 'active', 0)
+		column.add_attribute(cell_icon, 'pixbuf', 1)
+		column.add_attribute(cell_name, 'text', 2)
+		
+		# add column to the list
+		self._list.append_column(column)
+		
+		container.add(self._list)
+		tab.pack_start(container, True, True, 0)
 		
 		return tab
 

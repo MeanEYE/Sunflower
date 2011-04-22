@@ -581,7 +581,7 @@ class OverwriteDialog(gtk.Dialog):
 
 		if provider.is_dir(path, relative_to=relative_to):
 			size = len(provider.list_dir(path, relative_to=relative_to))
-			icon = self._application.icon_manager.get_icon_from_type(
+			icon = self._application.icon_manager.get_icon_from_name(
 																'folder',
 																gtk.ICON_SIZE_DIALOG
 															)

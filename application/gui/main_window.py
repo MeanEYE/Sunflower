@@ -16,6 +16,7 @@ from indicator import Indicator
 from notifications import NotificationManager
 from toolbar import ToolbarManager
 
+from argparse import ArgumentParser
 from ConfigParser import RawConfigParser
 
 # gui imports
@@ -43,7 +44,11 @@ class MainWindow(gtk.Window):
 
 		# load translations
 		self._load_translation()
-
+		
+		# parse arguments
+		self.arguments = None
+		self._parse_arguments()
+		
 		# containers
 		self.plugin_classes = {}
 		self.provider_classes = {}
@@ -486,12 +491,12 @@ class MainWindow(gtk.Window):
 
 		# create toolbar widgets
 		self.toolbar_manager.create_widgets()
-
+		
 		# show widgets
 		self.show_all()
 
 	def _destroy(self, widget, data=None):
-		"""Application desctructor"""
+		"""Application destructor"""
 		self.save_tabs(self.left_notebook, 'left_notebook')
 		self.save_tabs(self.right_notebook, 'right_notebook')
 
@@ -1017,6 +1022,51 @@ class MainWindow(gtk.Window):
 
 			# kill dialog
 			change_log.destroy()
+			
+	def _parse_arguments(self):
+		"""Parse command-line arguments passed to the application"""
+		parser = ArgumentParser(
+							description=_('Sunflower file manager'),
+							prog='Sunflower.py'
+						)
+		
+		# add parameters to parser
+		parser.add_argument(
+						'-v', '--version',
+						action='version',
+						version=(
+								'{0} {1[major]}.{1[minor]}'
+								'{1[stage]} ({1[build]})'
+							).format(
+								_('Sunflower'),
+								self.version
+							),
+						help=_('print version and exit')
+					)
+		parser.add_argument(
+						'-t', '--no-load-tabs',
+						action='store_true',
+						help=_('skip loading saved tabs'),
+						dest='dont_load_tabs'
+					)
+		parser.add_argument(
+						'-l', '--left-tab',
+						action='append',
+						help=_('open new tab on the left notebook'),
+						metavar='PATH',
+						dest='left_tabs'
+					)
+		parser.add_argument(
+						'-r', '--right-tab',
+						action='append',
+						help=_('open new tab on the right notebook'),
+						metavar='PATH',
+						dest='right_tabs'
+					)
+		
+		self.arguments = parser.parse_args()
+		
+		print self.arguments
 
 	def show_bookmarks_menu(self, widget=None, notebook=None):
 		"""Position bookmarks menu properly and show it"""
@@ -1153,15 +1203,33 @@ class MainWindow(gtk.Window):
 			right_object.select_all(exclude_list=left_list)
 
 	def run(self):
-		"""Main application loop"""
-		# load tabs in the left notebook
-		if not self.load_tabs(self.left_notebook, 'left_notebook'):
-			self.create_tab(self.left_notebook, FileList)
+		"""Start application"""
+		if self.arguments.dont_load_tabs:
+			# if specified tab list is empty, create default
+			if self.arguments.left_tabs is None:
+				self.create_tab(self.left_notebook, FileList)
+				
+			if self.arguments.right_tabs is None:
+				self.create_tab(self.right_notebook, FileList)
+			
+		else:
+			# load tabs in the left notebook
+			if not self.load_tabs(self.left_notebook, 'left_notebook'):
+				self.create_tab(self.left_notebook, FileList)
+	
+			# load tabs in the right notebook
+			if not self.load_tabs(self.right_notebook, 'right_notebook'):
+				self.create_tab(self.right_notebook, FileList)
+				
+		# create additional tabs
+		if self.arguments.left_tabs is not None:
+			for path in self.arguments.left_tabs:
+				self.create_tab(self.left_notebook, FileList, path)
 
-		# load tabs in the right notebook
-		if not self.load_tabs(self.right_notebook, 'right_notebook'):
-			self.create_tab(self.right_notebook, FileList)
-
+		if self.arguments.right_tabs is not None:
+			for path in self.arguments.right_tabs:
+				self.create_tab(self.right_notebook, FileList, path)
+				
 		gtk.main()
 
 	def create_tab(self, notebook, plugin_class=None, path=None, sort_column=None, sort_ascending=None):

@@ -40,7 +40,7 @@ def _check_interpreter(interpreter):
 		full_path = os.path.join(path, interpreter)
 
 		if _can_execute(full_path):
-			# interpreter was found in specifed directory
+			# interpreter was found in specified directory
 			result = full_path
 			break
 
@@ -64,11 +64,15 @@ def _get_interpreter():
 interpreter = _get_interpreter()
 
 if interpreter is not None:
-	"""We found valid interpreter on the system"""
-	code = subprocess.call((interpreter, application_file))
+	# interpreter found, form startup parameters
+	params = [interpreter, application_file]
+	params.extend(sys.argv[1:])
+	
+	# create new process with specified parameters
+	code = subprocess.call(params)
 	sys.exit(code)
 
 else:
-	"""No valid interpreters found, notify user"""
+	# no valid interpreters found, notify user
 	print ("No valid Python 2.x interpreter was found!")
 	sys.exit(2)

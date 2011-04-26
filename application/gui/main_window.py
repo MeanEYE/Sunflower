@@ -1383,6 +1383,7 @@ class MainWindow(gtk.Window):
 	def load_tabs(self, notebook, section):
 		"""Load saved tabs"""
 		result = False
+		count = 0
 
 		if self.tab_options.has_section(section):
 			# if section exists, load it
@@ -1408,18 +1409,21 @@ class MainWindow(gtk.Window):
 								tab_sort_ascending
 							)
 					
+					count += 1
+					
 				else:
 					# print error to console
 					print 'Error: Unknown plugin class "{0}". Tab skipped!'.format(tab_class)
 
-			result = True
+			result = count > 0
 
 			# set active tab
-			active_tab = self.tab_options.getint(
-										'options',
-										'{0}_selected'.format(section)
-									)
-			self.set_active_tab(notebook, active_tab)
+			if result:
+				active_tab = self.tab_options.getint(
+											'options',
+											'{0}_selected'.format(section)
+										)
+				self.set_active_tab(notebook, active_tab)
 
 		return result
 

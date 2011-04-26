@@ -1320,18 +1320,21 @@ class MainWindow(gtk.Window):
 			for tab in tab_list:
 				data = self.tab_options.get(section, tab).split(':', 3)
 
+				# extract data
 				tab_class = data[0]
 				tab_path = data[1]
 				tab_sort_column = data[2]
 				tab_sort_ascending = data[3]
 
-				self.create_tab(
-							notebook,
-							globals()[tab_class],
-							tab_path,
-							tab_sort_column,
-							tab_sort_ascending
-						)
+				# create tab if class exists
+				if self.plugin_classes.has_key(tab_class):
+					self.create_tab(
+								notebook,
+								globals()[tab_class],
+								tab_path,
+								tab_sort_column,
+								tab_sort_ascending
+							)
 
 			result = True
 

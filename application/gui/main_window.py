@@ -829,13 +829,17 @@ class MainWindow(gtk.Window):
 		list_ = filter(lambda file_: file_ in plugins_to_load, list_)
 
 		for file_ in list_:
-			# import module
-			__import__('plugins.{0}'.format(file_))
-			plugin = sys.modules['plugins.{0}'.format(file_)]
-
-			# call module register_plugin method
-			if hasattr(plugin, 'register_plugin'):
-				plugin.register_plugin(self)
+			try:
+				# import module
+				__import__('plugins.{0}'.format(file_))
+				plugin = sys.modules['plugins.{0}'.format(file_)]
+	
+				# call module register_plugin method
+				if hasattr(plugin, 'register_plugin'):
+					plugin.register_plugin(self)
+					
+			except:
+				print 'Error: Unable to load plugin "{0}"'.format(file_)
 
 	def _load_translation(self):
 		"""Load translation and install global functions"""
@@ -1326,8 +1330,8 @@ class MainWindow(gtk.Window):
 				tab_sort_column = data[2]
 				tab_sort_ascending = data[3]
 
-				# create tab if class exists
 				if self.plugin_class_exists(tab_class):
+					# create new tab with specified data
 					self.create_tab(
 								notebook,
 								globals()[tab_class],
@@ -1335,6 +1339,10 @@ class MainWindow(gtk.Window):
 								tab_sort_column,
 								tab_sort_ascending
 							)
+					
+				else:
+					# print error to console
+					print 'Error: Unknown plugin class "{0}". Tab skipped!'.format(tab_class)
 
 			result = True
 

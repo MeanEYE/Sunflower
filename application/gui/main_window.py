@@ -1327,7 +1327,7 @@ class MainWindow(gtk.Window):
 				tab_sort_ascending = data[3]
 
 				# create tab if class exists
-				if self.plugin_classes.has_key(tab_class):
+				if self.plugin_class_exists(tab_class):
 					self.create_tab(
 								notebook,
 								globals()[tab_class],
@@ -1654,6 +1654,17 @@ class MainWindow(gtk.Window):
 	def register_toolbar_factory(self, FactoryClass):
 		"""Register and create toolbar widget factory"""
 		self.toolbar_manager.register_factory(FactoryClass)
+		
+	def plugin_class_exists(self, class_name):
+		"""Check if specified class name exists in active plugins"""
+		result = False
+		
+		for PluginClass in self.plugin_classes.values():
+			if PluginClass.__name__ == class_name:
+				result = True
+				break;
+			
+		return result
 
 	def get_provider_by_protocol(self, protocol):
 		"""Return provider class specified by protocol"""

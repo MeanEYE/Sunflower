@@ -254,7 +254,7 @@ class PropertiesWindow(gtk.Window):
 		self._label_modified.set_text(item_m_date)
 		
 		# update permissions list
-		self._permission_update_mode()
+		self._permission_update_mode(initial_update=True)
 		
 		# update "open with" list
 		self._load_associated_applications()
@@ -287,13 +287,14 @@ class PropertiesWindow(gtk.Window):
 		self._mode = int(widget.get_text(), 8)
 		self._permission_update_mode()
 
-	def _permission_update_mode(self):
+	def _permission_update_mode(self, initial_update=False):
 		"""Update widgets"""
 		self._permission_octal_entry.set_text('{0}'.format(oct(self._mode)))
 		self._permission_update_checkboxes()
 		
 		# set file mode
-		self._provider.set_mode(self._path, self._mode)
+		if not initial_update:
+			self._provider.set_mode(self._path, self._mode)
 		
 	def _change_default_application(self, renderer, path, data=None):
 		"""Handle changing default application"""

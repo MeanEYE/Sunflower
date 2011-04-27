@@ -96,7 +96,7 @@ class CreateDialog(InputDialog):
 	def __init__(self, application):
 		InputDialog.__init__(self, application)
 
-		self._updating = False
+		self._permission_updating = False
 		self._mode = 0644
 		self._dialog_size = None
 
@@ -126,53 +126,53 @@ class CreateDialog(InputDialog):
 		table.attach(label, 0, 1, 2, 3)
 
 		# owner checkboxes
-		self._owner_read = gtk.CheckButton(_('Read'))
-		self._owner_read.connect('toggled', self._update_octal, (1 << 2) * 100)
-		table.attach(self._owner_read, 1, 2, 0, 1)
+		self._permission_owner_read = gtk.CheckButton(_('Read'))
+		self._permission_owner_read.connect('toggled', self._update_octal, (1 << 2) * 100)
+		table.attach(self._permission_owner_read, 1, 2, 0, 1)
 
-		self._owner_write = gtk.CheckButton(_('Write'))
-		self._owner_write.connect('toggled', self._update_octal, (1 << 1) * 100)
-		table.attach(self._owner_write, 2, 3, 0, 1)
+		self._permission_owner_write = gtk.CheckButton(_('Write'))
+		self._permission_owner_write.connect('toggled', self._update_octal, (1 << 1) * 100)
+		table.attach(self._permission_owner_write, 2, 3, 0, 1)
 
-		self._owner_execute = gtk.CheckButton(_('Execute'))
-		self._owner_execute.connect('toggled', self._update_octal, (1 << 0) * 100)
-		table.attach(self._owner_execute, 3, 4, 0, 1)
+		self._permission_owner_execute = gtk.CheckButton(_('Execute'))
+		self._permission_owner_execute.connect('toggled', self._update_octal, (1 << 0) * 100)
+		table.attach(self._permission_owner_execute, 3, 4, 0, 1)
 
 		# group checkboxes
-		self._group_read = gtk.CheckButton(_('Read'))
-		self._group_read.connect('toggled', self._update_octal, (1 << 2) * 10)
-		table.attach(self._group_read, 1, 2, 1, 2)
+		self._permission_group_read = gtk.CheckButton(_('Read'))
+		self._permission_group_read.connect('toggled', self._update_octal, (1 << 2) * 10)
+		table.attach(self._permission_group_read, 1, 2, 1, 2)
 
-		self._group_write = gtk.CheckButton(_('Write'))
-		self._group_write.connect('toggled', self._update_octal, (1 << 1) * 10)
-		table.attach(self._group_write, 2, 3, 1, 2)
+		self._permission_group_write = gtk.CheckButton(_('Write'))
+		self._permission_group_write.connect('toggled', self._update_octal, (1 << 1) * 10)
+		table.attach(self._permission_group_write, 2, 3, 1, 2)
 
-		self._group_execute = gtk.CheckButton(_('Execute'))
-		self._group_execute.connect('toggled', self._update_octal, (1 << 0) * 10)
-		table.attach(self._group_execute, 3, 4, 1, 2)
+		self._permission_group_execute = gtk.CheckButton(_('Execute'))
+		self._permission_group_execute.connect('toggled', self._update_octal, (1 << 0) * 10)
+		table.attach(self._permission_group_execute, 3, 4, 1, 2)
 
 		# others checkboxes
-		self._others_read = gtk.CheckButton(_('Read'))
-		self._others_read.connect('toggled', self._update_octal, (1 << 2))
-		table.attach(self._others_read, 1, 2, 2, 3)
+		self._permission_others_read = gtk.CheckButton(_('Read'))
+		self._permission_others_read.connect('toggled', self._update_octal, (1 << 2))
+		table.attach(self._permission_others_read, 1, 2, 2, 3)
 
-		self._others_write = gtk.CheckButton(_('Write'))
-		self._others_write.connect('toggled', self._update_octal, (1 << 1))
-		table.attach(self._others_write, 2, 3, 2, 3)
+		self._permission_others_write = gtk.CheckButton(_('Write'))
+		self._permission_others_write.connect('toggled', self._update_octal, (1 << 1))
+		table.attach(self._permission_others_write, 2, 3, 2, 3)
 
-		self._others_execute = gtk.CheckButton(_('Execute'))
-		self._others_execute.connect('toggled', self._update_octal, (1 << 0))
-		table.attach(self._others_execute, 3, 4, 2, 3)
+		self._permission_others_execute = gtk.CheckButton(_('Execute'))
+		self._permission_others_execute.connect('toggled', self._update_octal, (1 << 0))
+		table.attach(self._permission_others_execute, 3, 4, 2, 3)
 
 		# octal representation
 		label = gtk.Label(_('Octal:'))
 		label.set_alignment(0, 0.5)
 		table.attach(label, 0, 1, 3, 4)
 
-		self._octal_entry = gtk.Entry(4)
-		self._octal_entry.set_width_chars(5)
-		self._octal_entry.connect('activate', self._entry_activate)
-		table.attach(self._octal_entry, 1, 2, 3, 4)
+		self._permission_octal_entry = gtk.Entry(4)
+		self._permission_octal_entry.set_width_chars(5)
+		self._permission_octal_entry.connect('activate', self._entry_activate)
+		table.attach(self._permission_octal_entry, 1, 2, 3, 4)
 		table.set_row_spacing(2, 10)
 
 		# pack interface
@@ -190,7 +190,7 @@ class CreateDialog(InputDialog):
 
 	def _update_octal(self, widget, data=None):
 		"""Update octal entry box"""
-		if self._updating: return
+		if self._permission_updating: return
 
 		data = int(str(data), 8)
 		self._mode += (-1, 1)[widget.get_active()] * data
@@ -199,17 +199,17 @@ class CreateDialog(InputDialog):
 
 	def _update_checkboxes(self, widget=None, data=None):
 		"""Update checkboxes accordingly"""
-		self._updating = True
-		self._owner_read.set_active(self._mode & 0b100000000)
-		self._owner_write.set_active(self._mode & 0b010000000)
-		self._owner_execute.set_active(self._mode & 0b001000000)
-		self._group_read.set_active(self._mode & 0b000100000)
-		self._group_write.set_active(self._mode & 0b000010000)
-		self._group_execute.set_active(self._mode & 0b000001000)
-		self._others_read.set_active(self._mode & 0b000000100)
-		self._others_write.set_active(self._mode & 0b000000010)
-		self._others_execute.set_active(self._mode & 0b000000001)
-		self._updating = False
+		self._permission_updating = True
+		self._permission_owner_read.set_active(self._mode & 0b100000000)
+		self._permission_owner_write.set_active(self._mode & 0b010000000)
+		self._permission_owner_execute.set_active(self._mode & 0b001000000)
+		self._permission_group_read.set_active(self._mode & 0b000100000)
+		self._permission_group_write.set_active(self._mode & 0b000010000)
+		self._permission_group_execute.set_active(self._mode & 0b000001000)
+		self._permission_others_read.set_active(self._mode & 0b000000100)
+		self._permission_others_write.set_active(self._mode & 0b000000010)
+		self._permission_others_execute.set_active(self._mode & 0b000000001)
+		self._permission_updating = False
 
 	def _expander_event(self, widget, data=None):
 		"""Return dialog size back to normal"""
@@ -232,7 +232,7 @@ class CreateDialog(InputDialog):
 
 	def update_mode(self):
 		"""Update widgets"""
-		self._octal_entry.set_text('{0}'.format(oct(self._mode)))
+		self._permission_octal_entry.set_text('{0}'.format(oct(self._mode)))
 		self._update_checkboxes()
 
 

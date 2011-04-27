@@ -1065,8 +1065,6 @@ class MainWindow(gtk.Window):
 					)
 		
 		self.arguments = parser.parse_args()
-		
-		print self.arguments
 
 	def show_bookmarks_menu(self, widget=None, notebook=None):
 		"""Position bookmarks menu properly and show it"""
@@ -1642,7 +1640,7 @@ class MainWindow(gtk.Window):
 			if operation_item is not self._menu_item_no_operations \
 			and operation_item.get_visible():
 				has_operations = True
-				break;
+				break
 
 		# set "no operations" menu item visibility
 		self._menu_item_no_operations.set_visible(not has_operations)
@@ -1742,7 +1740,7 @@ class MainWindow(gtk.Window):
 		for PluginClass in self.plugin_classes.values():
 			if PluginClass.__name__ == class_name:
 				result = True
-				break;
+				break
 			
 		return result
 

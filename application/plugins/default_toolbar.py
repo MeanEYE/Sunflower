@@ -184,6 +184,7 @@ class BookmarksButton(gtk.ToolButton):
 		"""Handle click"""
 		self._application.show_bookmarks_menu(widget=self)
 
+
 class HomeFolderButton(BookmarkButton):
 	"""Home folder toolbar button"""
 

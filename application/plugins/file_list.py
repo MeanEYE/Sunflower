@@ -882,6 +882,7 @@ class FileList(ItemList):
 				# focus specified item
 				if self._item_to_focus == filename:
 					self._item_list.set_cursor(self._store.get_path(result))
+					self._item_list.scroll_to_cell(self._store.get_path(result))
 					self._item_to_focus = None
 
 			except:

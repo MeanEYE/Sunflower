@@ -71,7 +71,7 @@ class MainWindow(gtk.Window):
 		self.icon_manager.set_window_icon(self)
 
 		# set locale for international number formatting
-		locale.setlocale(locale.LC_ALL)
+		locale.setlocale(locale.LC_ALL, '')
 
 		# config parsers
 		self.options = None
@@ -1081,14 +1081,17 @@ class MainWindow(gtk.Window):
 		else:
 			# button called for menu
 			button = widget
+			self.menu_bookmarks.set_data('list', self._get_active_object())
 
 		if button is not None:
+			# disable color changing on tab title bar
 			list_ = self.menu_bookmarks.get_data('list')
 			oposite_list = self.get_oposite_list(list_)
 
 			list_._enable_object_block()
 			oposite_list._enable_object_block()
 
+			# show bookmarks menu
 			self.menu_bookmarks.popup(
 									None, None,
 									self._get_bookmarks_menu_position,

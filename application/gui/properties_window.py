@@ -5,6 +5,7 @@ import pango
 import gnomevfs
 import locale
 import time
+import stat
 
 
 class PropertiesWindow(gtk.Window):
@@ -18,6 +19,8 @@ class PropertiesWindow(gtk.Window):
 		self._provider = provider
 		self._path = path
 		self._is_file = self._provider.is_file(self._path)
+		self._permission_updating = False
+		self._mode = None
 		
 		# file monitor, we'd like to update info if file changes
 		self._create_monitor()
@@ -225,6 +228,9 @@ class PropertiesWindow(gtk.Window):
 							dir_size
 						).format(dir_size)
 			
+		# set mode
+		self._mode = stat.S_IMODE(item_stat.st_mode)
+			
 		# format item time			
 		item_a_date = time.strftime(format, time.gmtime(item_stat.st_atime))
 		item_m_date = time.strftime(format, time.gmtime(item_stat.st_mtime))
@@ -247,8 +253,58 @@ class PropertiesWindow(gtk.Window):
 		self._label_accessed.set_text(item_a_date)
 		self._label_modified.set_text(item_m_date)
 		
+		# update permissions list
+		self._permission_update_mode()
+		
 		# update "open with" list
 		self._load_associated_applications()
+		
+	def _permission_update_octal(self, widget, data=None):
+		"""Update octal entry box"""
+		if self._permission_updating: return
+
+		data = int(str(data), 8)
+		self._mode += (-1, 1)[widget.get_active()] * data
+
+		self._permission_update_mode()
+
+	def _permission_update_checkboxes(self, widget=None, data=None):
+		"""Update checkboxes accordingly"""
+		self._permission_updating = True
+		self._permission_owner_read.set_active(self._mode & 0b100000000)
+		self._permission_owner_write.set_active(self._mode & 0b010000000)
+		self._permission_owner_execute.set_active(self._mode & 0b001000000)
+		self._permission_group_read.set_active(self._mode & 0b000100000)
+		self._permission_group_write.set_active(self._mode & 0b000010000)
+		self._permission_group_execute.set_active(self._mode & 0b000001000)
+		self._permission_others_read.set_active(self._mode & 0b000000100)
+		self._permission_others_write.set_active(self._mode & 0b000000010)
+		self._permission_others_execute.set_active(self._mode & 0b000000001)
+		self._permission_updating = False
+
+	def _permission_entry_activate(self, widget, data=None):
+		"""Handle octal mode change"""
+		self._mode = int(widget.get_text(), 8)
+		self._permission_update_mode()
+
+	def _permission_update_mode(self):
+		"""Update widgets"""
+		self._permission_octal_entry.set_text('{0}'.format(oct(self._mode)))
+		self._permission_update_checkboxes()
+		
+		# set file mode
+		self._provider.set_mode(self._path, self._mode)
+		
+	def _change_default_application(self, renderer, path, data=None):
+		"""Handle changing default application"""
+		active_item = self._store[path]
+		
+		# get data
+		mime_type = gnomevfs.get_mime_type(self._path)
+		application = active_item[3]
+		
+		# set default application
+#		gnomevfs.mime_set_default_application(mime_type, application)
 		
 	def _create_basic_tab(self):
 		"""Create tab containing basic information"""
@@ -344,13 +400,106 @@ class PropertiesWindow(gtk.Window):
 	
 	def _create_permissions_tab(self):
 		"""Create tab containing item permissions and ownership"""
-		tab = gtk.Table()
+		tab = gtk.VBox(False, 5)
+		tab.set_border_width(5)
 		
+		frame_access = gtk.Frame()
+		frame_access.set_label(_('Access'))
+		
+		table = gtk.Table(4, 4, False)
+		table.set_border_width(5)
+
+		# create widgets
+		label = gtk.Label(_('User:'))
+		label.set_alignment(0, 0.5)
+		table.attach(label, 0, 1, 0, 1)
+
+		label = gtk.Label(_('Group:'))
+		label.set_alignment(0, 0.5)
+		table.attach(label, 0, 1, 1, 2)
+
+		label = gtk.Label(_('Others:'))
+		label.set_alignment(0, 0.5)
+		table.attach(label, 0, 1, 2, 3)
+
+		# owner checkboxes
+		self._permission_owner_read = gtk.CheckButton(_('Read'))
+		self._permission_owner_read.connect('toggled', self._permission_update_octal, (1 << 2) * 100)
+		table.attach(self._permission_owner_read, 1, 2, 0, 1)
+
+		self._permission_owner_write = gtk.CheckButton(_('Write'))
+		self._permission_owner_write.connect('toggled', self._permission_update_octal, (1 << 1) * 100)
+		table.attach(self._permission_owner_write, 2, 3, 0, 1)
+
+		self._permission_owner_execute = gtk.CheckButton(_('Execute'))
+		self._permission_owner_execute.connect('toggled', self._permission_update_octal, (1 << 0) * 100)
+		table.attach(self._permission_owner_execute, 3, 4, 0, 1)
+
+		# group checkboxes
+		self._permission_group_read = gtk.CheckButton(_('Read'))
+		self._permission_group_read.connect('toggled', self._permission_update_octal, (1 << 2) * 10)
+		table.attach(self._permission_group_read, 1, 2, 1, 2)
+
+		self._permission_group_write = gtk.CheckButton(_('Write'))
+		self._permission_group_write.connect('toggled', self._permission_update_octal, (1 << 1) * 10)
+		table.attach(self._permission_group_write, 2, 3, 1, 2)
+
+		self._permission_group_execute = gtk.CheckButton(_('Execute'))
+		self._permission_group_execute.connect('toggled', self._permission_update_octal, (1 << 0) * 10)
+		table.attach(self._permission_group_execute, 3, 4, 1, 2)
+
+		# others checkboxes
+		self._permission_others_read = gtk.CheckButton(_('Read'))
+		self._permission_others_read.connect('toggled', self._permission_update_octal, (1 << 2))
+		table.attach(self._permission_others_read, 1, 2, 2, 3)
+
+		self._permission_others_write = gtk.CheckButton(_('Write'))
+		self._permission_others_write.connect('toggled', self._permission_update_octal, (1 << 1))
+		table.attach(self._permission_others_write, 2, 3, 2, 3)
+
+		self._permission_others_execute = gtk.CheckButton(_('Execute'))
+		self._permission_others_execute.connect('toggled', self._permission_update_octal, (1 << 0))
+		table.attach(self._permission_others_execute, 3, 4, 2, 3)
+
+		# octal representation
+		label = gtk.Label(_('Octal:'))
+		label.set_alignment(0, 0.5)
+		table.attach(label, 0, 1, 3, 4)
+
+		self._permission_octal_entry = gtk.Entry(4)
+		self._permission_octal_entry.set_width_chars(5)
+		self._permission_octal_entry.connect('activate', self._permission_entry_activate)
+		table.attach(self._permission_octal_entry, 1, 2, 3, 4)
+		table.set_row_spacing(2, 10)
+
+		# pack interface
+		frame_access.add(table)
+		
+		tab.pack_start(frame_access, False, False, 0)
+			
 		return tab
 	
 	def _create_open_with_tab(self):
 		"""Create tab containing list of applications that can open this file"""
 		tab = gtk.VBox(False, 5)
+		tab.set_border_width(5)
+		
+		# get item description
+		mime_type = gnomevfs.get_mime_type(self._path)
+		description = gnomevfs.mime_get_description(mime_type)
+		
+		# create label
+		text = _(
+				'Select an application to open <i>{0}</i> and '
+				'other files of type "{1}"'
+			).format(
+				os.path.basename(self._path),
+				description
+			)
+		label = gtk.Label(text)
+		label.set_alignment(0, 0)
+		label.set_line_wrap(True)
+		label.set_use_markup(True)
 		
 		# create application list
 		container = gtk.Viewport()
@@ -358,29 +507,34 @@ class PropertiesWindow(gtk.Window):
 		self._store = gtk.ListStore(bool, gtk.gdk.Pixbuf, str, str)
 		self._list = gtk.TreeView()
 		self._list.set_model(self._store)
+		self._list.set_headers_visible(False)
 		
 		cell_radio = gtk.CellRendererToggle()
 		cell_radio.set_radio(True)
+		cell_radio.connect('toggled', self._change_default_application)
 		cell_icon = gtk.CellRendererPixbuf()
 		cell_name = gtk.CellRendererText()
 		
-		# create column
-		column = gtk.TreeViewColumn()
+		# create column_name
+		column_radio = gtk.TreeViewColumn()
+		column_name = gtk.TreeViewColumn()
 		
 		# pack renderer
-		column.pack_start(cell_radio, False)
-		column.pack_start(cell_icon, False)
-		column.pack_start(cell_name, True)
+		column_radio.pack_start(cell_radio, False)
+		column_name.pack_start(cell_icon, False)
+		column_name.pack_start(cell_name, True)
 		
 		# configure renderer
-		column.add_attribute(cell_radio, 'active', 0)
-		column.add_attribute(cell_icon, 'pixbuf', 1)
-		column.add_attribute(cell_name, 'text', 2)
+		column_radio.add_attribute(cell_radio, 'active', 0)
+		column_name.add_attribute(cell_icon, 'pixbuf', 1)
+		column_name.add_attribute(cell_name, 'text', 2)
 		
-		# add column to the list
-		self._list.append_column(column)
+		# add column_name to the list
+		self._list.append_column(column_radio)
+		self._list.append_column(column_name)
 		
 		container.add(self._list)
+		tab.pack_start(label, False, False, 0)
 		tab.pack_start(container, True, True, 0)
 		
 		return tab

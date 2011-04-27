@@ -175,6 +175,7 @@ class BookmarksButton(gtk.ToolButton):
 		self.set_label(_('Bookmarks'))
 		self.set_tooltip_text(_('Bookmarks'))
 		self.set_icon_name('go-jump')
+		self.set_is_important(True)
 		
 		# connect events
 		self.connect('clicked', self._clicked)

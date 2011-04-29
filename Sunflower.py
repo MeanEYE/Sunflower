@@ -46,30 +46,42 @@ def _check_interpreter(interpreter):
 
 	return result
 
-def _get_interpreter():
-	"""Return latest interpreter"""
-	result = None
+def _get_interpreters():
+	"""Return available interpreters"""
+	result = []
 
 	# check every interpreter in the list
 	for item in interpreter_list:
 		full_path = _check_interpreter(item)
 
 		if full_path is not None:
-			result = full_path
-			break
+			result.append(full_path)
 
 	return result
 
 # get 2.x interpreter
-interpreter = _get_interpreter()
+interpreters = _get_interpreters()
 
-if interpreter is not None:
-	# interpreter found, form startup parameters
-	params = [interpreter, application_file]
-	params.extend(sys.argv[1:])
+if len(interpreters) > 0:
+	code = 2
 	
-	# create new process with specified parameters
-	code = subprocess.call(params)
+	# try with all interpreters
+	for interpreter in interpreters:
+		params = [interpreter, application_file]
+		params.extend(sys.argv[1:])
+
+		# print interpreter version
+		print "Trying with {0}...".format(os.path.basename(interpreter))
+
+		# execute interpreted
+		code = subprocess.call(params)
+		
+		if code == 0:
+			# if interpreter manages to run
+			# we don't need to execute others
+			print "Worked!"
+			break
+			
 	sys.exit(code)
 
 else:

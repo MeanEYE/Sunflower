@@ -103,3 +103,7 @@ class Provider:
 	def list_dir(self, path, relative_to=None):
 		"""Get directory list"""
 		pass
+	
+	def get_parent(self):
+		"""Return parent list"""
+		return self._parent

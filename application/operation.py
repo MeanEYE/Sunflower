@@ -40,7 +40,7 @@ class Operation(Thread):
 		self._source_path = self._source.get_path()
 		if self._destination is not None:
 			self._destination_path = self._destination.get_path()
-
+			
 		self._can_continue.set()
 
 	def _destroy_ui(self):
@@ -270,6 +270,11 @@ class CopyOperation(Operation):
 				gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
 				self._file_list.append(item)
+				
+		# clear selection on source directory
+		parent = self._source.get_parent()
+		if self._source_path == parent.path:
+			parent.unselect_all()
 
 	def _set_mode(self, path, mode):
 		"""Set mode for specified path"""
@@ -695,6 +700,11 @@ class DeleteOperation(Operation):
 
 		# get selected items
 		list_ = self._source.get_selection(relative=True)
+		
+		# clear selection on source directory
+		parent = self._source.get_parent()
+		if self._source_path == parent.path:
+			parent.unselect_all()
 
 		# remove them
 		for index, item in enumerate(list_, 1):

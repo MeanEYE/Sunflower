@@ -1755,3 +1755,42 @@ class MainWindow(gtk.Window):
 			result = self.provider_classes[protocol]
 
 		return result
+	
+	def set_clipboard_text(self, text):
+		"""Set text data to clipboard"""
+		self.clipboard.set_text(text)
+	
+	def set_clipboard_item_list(self, operation, list):
+		"""Set clipboard to contain list of items
+		
+		operation - 'copy' or 'cut' string representing operation
+		list - list of URIs
+		"""
+		targets = [
+				('x-special/gnome-copied-files', 0, 0), 
+				("text/uri-list", 0, 0)
+			]
+		raw_data = '{0}\n'.format(operation) + '\n'.join(list)
+		
+		def get_func(clipboard, selection, info, data):
+			"""Handle request from application"""
+			target = selection.get_target()
+			selection.set(target, 8, raw_data)
+			
+		# set clipboard and return result 
+		return self.clipboard.set_with_data(targets, get_func, None)
+	
+	def get_clipboard_text(self):
+		"""Get text from clipboard"""
+		return self.clipboard.wait_for_text()
+	
+	def get_clipboard_item_list(self):
+		"""Get item list from clipboard"""
+		targets = [
+				('x-special/gnome-copied-files', 0, 0), 
+				("text/uri-list", 0, 0)
+			]
+		
+		data = self.clipboard.wait_for_contents(targets)
+
+		print data

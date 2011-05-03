@@ -1782,7 +1782,6 @@ class MainWindow(gtk.Window):
 			"""Clear function"""
 			pass
 			
-		print operation, list
 		# set clipboard and return result 
 		return self.clipboard.set_with_data(targets, get_func, clear_func)
 	

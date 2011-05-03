@@ -8,7 +8,11 @@ class Provider:
 		self._parent = parent
 
 		self._path = path
-		self._selection = selection
+		self._selection = None
+		
+		# we need only existing items in selection list
+		if selection is not None:
+			self._selection = filter(self.exists, selection)
 
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""

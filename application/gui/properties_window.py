@@ -407,7 +407,7 @@ class PropertiesWindow(gtk.Window):
 	def _create_permissions_tab(self):
 		"""Create tab containing item permissions and ownership"""
 		tab = gtk.VBox(False, 5)
-		tab.set_border_width(5)
+		tab.set_border_width(10)
 		
 		frame_access = gtk.Frame()
 		frame_access.set_label(_('Access'))
@@ -488,7 +488,7 @@ class PropertiesWindow(gtk.Window):
 	def _create_open_with_tab(self):
 		"""Create tab containing list of applications that can open this file"""
 		tab = gtk.VBox(False, 5)
-		tab.set_border_width(5)
+		tab.set_border_width(10)
 		
 		# get item description
 		mime_type = gnomevfs.get_mime_type(self._path)

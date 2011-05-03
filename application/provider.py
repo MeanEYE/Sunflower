@@ -2,6 +2,7 @@ class Provider:
 	"""Abstract provider class used to manipulate items"""
 
 	is_local = True  # if provider handles local files
+	protocols = ()  # list of supported protocols
 
 	def __init__(self, parent, path=None, selection=None):
 		self._parent = parent

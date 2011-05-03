@@ -174,6 +174,7 @@ class Terminal(PluginBase):
 	def _prepare_menu(self):
 		"""Prepare terminal menu before showing"""
 		self._menu_item_copy.set_sensitive(self._terminal.get_has_selection())
+		self._menu_item_paste.set_sensitive(self._parent.is_clipboard_text())
 
 	def _handle_menu_hide(self, widget, data=None):
 		"""Handle hide event for terminal menu"""

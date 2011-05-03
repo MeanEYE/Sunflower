@@ -1078,7 +1078,7 @@ class FileList(ItemList):
 	def _get_supported_drag_types(self):
 		"""Return list of supported data for drag'n'drop events"""
 		return [
-				('text/plain', 0, 0),
+				('text/uri-list', 0, 0),
 			]
 
 	def _get_supported_drag_actions(self):

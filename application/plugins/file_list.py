@@ -992,49 +992,36 @@ class FileList(ItemList):
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""
 		# TODO: Finish drag and drop support
-		list_ = selection_data.data.splitlines(False)
+		list = selection_data.data.splitlines(False)
 
 		# prepare data for copying
-		data = list_[0].split('://', 1)
-		path = os.path.dirname(data[1])
-		protocol = data[0]
-		selection_list = [os.path.basename(item) for item in list_]
+		protocol, path = list[0].split('://', 1)
+		list = [urllib.unquote(item.split('://')[1]) for item in list]
 
-		# get provider class
-		Provider = self._parent.get_provider_by_protocol(protocol)
-
-		if Provider is not None and path != self.path:
-			# create provider with specified path and selection
-			provider = Provider(self, path, selection_list)
-
-			# present a copy/move dialog
-			dialog = CopyDialog(
-							self._parent,
-							provider,
-							self.path
-						)
-			result = dialog.get_response()
-
-			if result[0] == gtk.RESPONSE_OK:
-				# user confirmed copying
-				operation = CopyOperation(
-										self._parent,
-										provider,
-										self.get_provider(),
-										result[1]  # options from dialog
-									)
-
-				# start the operation
-				operation.start()
-
-				# finish drag process
-				drag_context.finish(True, False, timestamp)
-
-			else:
-				# user canceled operation, let source application know that
-				drag_context.finish(False, False, timestamp)
-
-		elif path == self.path:
+		if path != self.path:
+			# handle data
+			if drag_context.action in (gtk.gdk.ACTION_COPY, gtk.gdk.ACTION_MOVE):
+				# handle copy and move operations
+				operation = {
+							gtk.gdk.ACTION_COPY: 'copy',
+							gtk.gdk.ACTION_MOVE: 'move'
+						}
+				
+				result = self._handle_external_data(
+												operation[drag_context.action], 
+												protocol, 
+												list
+											)
+				
+			elif drag_context.action is gtk.gdk.ACTION_LINK:
+				# handle linking
+				# TODO: Finish linking code!
+				result = False
+			
+			# notify source application about operation outcome
+			drag_context.finish(result, False, timestamp)
+			
+		else:
 			# notify user that he's trying to drag and drop items in same directory
 			dialog = gtk.MessageDialog(
 									self._parent,
@@ -1051,26 +1038,6 @@ class FileList(ItemList):
 
 			# problem with paths, let source application know that
 			drag_context.finish(False, False, timestamp)
-
-		else:
-			# specified protocol can not be handled, show error
-			dialog = gtk.MessageDialog(
-									self._parent,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_ERROR,
-									gtk.BUTTONS_OK,
-									_(
-										'Specified protocol ({0}) is not supported by '
-										'this application. Please check for available plugins '
-										'or create a feature request.'
-									).format(protocol)
-								)
-			dialog.run()
-			dialog.destroy()
-
-			# we don't support this protocol yet, let source application know that
-			drag_context.finish(False, False, timestamp)
-
 
 	def _drag_data_get(self, widget, drag_context, selection_data, info, time):
 		"""Handle data request from destination widget"""

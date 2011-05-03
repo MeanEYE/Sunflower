@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-28 09:53+0200\n"
+"POT-Creation-Date: 2011-05-04 00:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -309,7 +309,7 @@ msgstr ""
 
 #: application/gui/preferences_window.py:37
 #: application/plugins/system_terminal.py:35
-#: application/plugin_base/item_list.py:194
+#: application/plugin_base/item_list.py:208
 msgid "Terminal"
 msgstr ""
 
@@ -324,7 +324,7 @@ msgstr ""
 #: application/gui/preferences_window.py:49
 #: application/plugins/default_toolbar.py:175
 #: application/plugins/default_toolbar.py:176
-#: application/plugin_base/item_list.py:148
+#: application/plugin_base/item_list.py:162
 msgid "Bookmarks"
 msgstr ""
 
@@ -1044,27 +1044,21 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/plugins/file_list.py:977
+#: application/plugins/file_list.py:980
 msgid "Free:"
 msgstr ""
 
-#: application/plugins/file_list.py:978
+#: application/plugins/file_list.py:981
 msgid "Total:"
 msgstr ""
 
-#: application/plugins/file_list.py:1042
+#: application/plugins/file_list.py:1032
 msgid ""
 "Drag and drop functionality can not be used if source and destination are "
 "same!"
 msgstr ""
 
-#: application/plugins/file_list.py:1060
-msgid ""
-"Specified protocol ({0}) is not supported by this application. Please check "
-"for available plugins or create a feature request."
-msgstr ""
-
-#: application/plugins/file_list.py:1144
+#: application/plugins/file_list.py:1119
 msgid ""
 "Error changing working directory. \n"
 "\n"
@@ -1130,65 +1124,77 @@ msgstr ""
 msgid "Python VTE module is not installed on this system!"
 msgstr ""
 
-#: application/plugin_base/item_list.py:171
+#: application/plugin_base/item_list.py:185
 msgid "History"
 msgstr ""
 
-#: application/plugin_base/item_list.py:225
+#: application/plugin_base/item_list.py:239
 msgid "Search:"
 msgstr ""
 
-#: application/plugin_base/item_list.py:411
+#: application/plugin_base/item_list.py:425
 msgid ""
 "Directory does not exist anymore or is not valid. If path is not local check "
 "if specified volume is mounted."
 msgstr ""
 
-#: application/plugin_base/item_list.py:535
+#: application/plugin_base/item_list.py:470
+msgid ""
+"Specified protocol ({0}) is not supported by this application. Please check "
+"for available plugins or create a feature request."
+msgstr ""
+
+#: application/plugin_base/item_list.py:497
+msgid ""
+"Application is unable to handle specified data. Check if source items still "
+"exist."
+msgstr ""
+
+#: application/plugin_base/item_list.py:679
 msgid "_Open"
 msgstr ""
 
-#: application/plugin_base/item_list.py:544
+#: application/plugin_base/item_list.py:688
 msgid "Open in new ta_b"
 msgstr ""
 
-#: application/plugin_base/item_list.py:558
+#: application/plugin_base/item_list.py:702
 msgid "Open _with"
 msgstr ""
 
-#: application/plugin_base/item_list.py:574
+#: application/plugin_base/item_list.py:718
 msgid "Cu_t"
 msgstr ""
 
-#: application/plugin_base/item_list.py:582
+#: application/plugin_base/item_list.py:727
 msgid "_Copy"
 msgstr ""
 
-#: application/plugin_base/item_list.py:590
+#: application/plugin_base/item_list.py:736
 msgid "_Paste"
 msgstr ""
 
-#: application/plugin_base/item_list.py:603
+#: application/plugin_base/item_list.py:750
 msgid "Send to..."
 msgstr ""
 
-#: application/plugin_base/item_list.py:613
+#: application/plugin_base/item_list.py:760
 msgid "Ma_ke link"
 msgstr ""
 
-#: application/plugin_base/item_list.py:619
+#: application/plugin_base/item_list.py:766
 msgid "_Rename..."
 msgstr ""
 
-#: application/plugin_base/item_list.py:632
+#: application/plugin_base/item_list.py:779
 msgid "_Delete"
 msgstr ""
 
-#: application/plugin_base/item_list.py:646
+#: application/plugin_base/item_list.py:793
 msgid "_Properties"
 msgstr ""
 
-#: application/plugin_base/item_list.py:683
+#: application/plugin_base/item_list.py:830
 msgid "History is empty"
 msgstr ""
 
@@ -1232,51 +1238,51 @@ msgstr ""
 msgid "Searching for files..."
 msgstr ""
 
-#: application/operation.py:474
+#: application/operation.py:479
 msgid "Creating directories..."
 msgstr ""
 
-#: application/operation.py:491
+#: application/operation.py:496
 msgid "Copying files..."
 msgstr ""
 
-#: application/operation.py:525
+#: application/operation.py:530
 msgid "Copy Operation"
 msgstr ""
 
-#: application/operation.py:527
+#: application/operation.py:532
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/operation.py:581
+#: application/operation.py:586
 msgid "Moving files..."
 msgstr ""
 
-#: application/operation.py:593
+#: application/operation.py:598
 msgid "Deleting source files..."
 msgstr ""
 
-#: application/operation.py:610
+#: application/operation.py:615
 msgid "Deleting source directories..."
 msgstr ""
 
-#: application/operation.py:667
+#: application/operation.py:672
 msgid "Move Operation"
 msgstr ""
 
-#: application/operation.py:669
+#: application/operation.py:674
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/operation.py:712
+#: application/operation.py:722
 msgid "Delete Operation"
 msgstr ""
 
-#: application/operation.py:714
+#: application/operation.py:724
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
 msgstr[0] ""

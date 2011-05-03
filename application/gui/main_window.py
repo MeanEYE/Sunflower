@@ -1723,14 +1723,15 @@ class MainWindow(gtk.Window):
 		# import class to globals
 		globals()[plugin_class.__name__] = plugin_class
 
-	def register_provider(self, protocol, ProviderClass):
+	def register_provider(self, ProviderClass):
 		"""Register file provider class for specified protocol
 
 		These classes will be used when handling all sorts of URI based operations
 		like drag and drop and system bookmark handling.
 
 		"""
-		self.provider_classes[protocol] = ProviderClass
+		for protocol in ProviderClass.protocols: 
+			self.provider_classes[protocol] = ProviderClass
 
 	def register_toolbar_factory(self, FactoryClass):
 		"""Register and create toolbar widget factory"""

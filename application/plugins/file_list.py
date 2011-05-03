@@ -1,5 +1,4 @@
 import os
-import sys
 import shutil
 import gtk
 import time
@@ -8,6 +7,7 @@ import stat
 import gnomevfs
 import user
 import fnmatch
+import urllib
 
 from provider import Provider
 from operation import DeleteOperation, CopyOperation, MoveOperation
@@ -1072,7 +1072,11 @@ class FileList(ItemList):
 	def _drag_data_get(self, widget, drag_context, selection_data, info, time):
 		"""Handle data request from destination widget"""
 		protocol = self.get_provider().protocols[0]
-		selection = ['{0}://{1}'.format(protocol, file_) for file_ in self._get_selection_list()]
+		
+		selection = []
+		for file_ in self._get_selection_list():
+			selection.append('{0}://{1}'.format(protocol, urllib.quote(file_)))
+		
 		selection_data.set(selection_data.target, 8, '\n'.join(selection))
 		return True
 

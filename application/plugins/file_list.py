@@ -43,7 +43,7 @@ COL_SELECTED 	= 13
 def register_plugin(application):
 	"""Register plugin classes with application"""
 	application.register_class(_('Local file list'), FileList)
-	application.register_provider('file', LocalProvider)
+	application.register_provider(LocalProvider)
 
 
 class FileList(ItemList):
@@ -1071,7 +1071,8 @@ class FileList(ItemList):
 
 	def _drag_data_get(self, widget, drag_context, selection_data, info, time):
 		"""Handle data request from destination widget"""
-		selection = ['file://{0}'.format(file_) for file_ in self._get_selection_list()]
+		protocol = self.get_provider().protocols[0]
+		selection = ['{0}://{1}'.format(protocol, file_) for file_ in self._get_selection_list()]
 		selection_data.set(selection_data.target, 8, '\n'.join(selection))
 		return True
 
@@ -1349,6 +1350,7 @@ class FileList(ItemList):
 class LocalProvider(Provider):
 	"""Content provider for local files"""
 	is_local = True
+	protocols = ('file', )
 
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""

@@ -590,9 +590,12 @@ class FileList(ItemList):
 		has_items = len(self._open_with_menu.get_children()) > 0
 		self._open_with_item.set_sensitive(has_items and self.get_provider().is_local)
 		self._open_new_tab_item.set_visible(is_dir)
+		self._cut_item.set_sensitive(not is_parent)
+		self._copy_item.set_sensitive(not is_parent)
+		self._paste_item.set_sensitive(self._parent.is_clipboard_item_list())
 		self._send_to_item.set_sensitive(self.get_provider().is_local and not is_parent)
-		self._delete_item.set_sensitive(not is_parent)
 		self._rename_item.set_sensitive(not is_parent)
+		self._delete_item.set_sensitive(not is_parent)
 		self._properties_item.set_sensitive(not is_parent)
 
 	def _get_popup_menu_position(self, menu, data=None):

@@ -2,8 +2,13 @@ import os
 import gtk
 import locale
 import threading
+import urllib
 
 from plugin import PluginBase
+
+from operation import CopyOperation, MoveOperation
+from gui.input_dialog import CopyDialog, MoveDialog
+
 
 # button text constants
 BUTTON_TEXT_BOOKMARKS	= u'\u2318'
@@ -50,6 +55,9 @@ class ItemList(PluginBase):
 		    'b': {
 		            '100': self._edit_bookmarks,
 		        },
+			'c': {
+					'100': self._copy_files_to_clipboard,
+				},
 		    'd': {
 		            '100': self._add_bookmark,
 		        },
@@ -57,11 +65,17 @@ class ItemList(PluginBase):
 					'100': self._duplicate_tab,
 					'101': self._open_in_new_tab,
 				},
+			'v': {
+					'100': self._paste_files_from_clipboard,
+				},
 			'w': {
 					'100': self._close_tab,
 				},
 			'z': {
 					'100': self._create_terminal,
+				},
+			'x': {
+					'100': self._cut_files_to_clipboard,
 				},
 			'BackSpace': {
 					'000': self._parent_folder,
@@ -421,6 +435,99 @@ class ItemList(PluginBase):
 		self._disable_object_block()
 		oposite_list = self._parent.get_oposite_list(self)
 		oposite_list._disable_object_block()
+		
+	def _handle_external_data(self, operation, protocol, list_):
+		"""Handle data coming from a different application"""
+		result = False
+		
+		dialog_classes = {
+					'copy': CopyDialog,
+					'cut': MoveDialog,
+					'move': MoveDialog
+				}
+		operation_classes = {
+					'copy': CopyOperation,
+					'cut': MoveOperation,
+					'move': MoveOperation
+				}
+		
+		# make sure operation is valid
+		assert operation in dialog_classes.keys()
+
+		# get classes	
+		Provider = self._parent.get_provider_by_protocol(protocol)
+		Dialog = dialog_classes[operation]
+		Operation = operation_classes[operation]
+		
+		if Provider is None:
+			# no provider was found for specified protocol
+			dialog = gtk.MessageDialog(
+									self._parent,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_ERROR,
+									gtk.BUTTONS_OK,
+									_(
+										'Specified protocol ({0}) is not supported by '
+										'this application. Please check for available plugins '
+										'or create a feature request.'
+									).format(protocol)
+								)
+			dialog.run()
+			dialog.destroy()
+			
+			# abort handling data
+			return result
+						
+		# handle data
+		path = os.path.dirname(list_[0])
+		selection = [os.path.basename(item) for item in list_]
+		
+		# create provider
+		provider = Provider(self, path, selection)
+
+		# check if we actually have data to handle
+		if len(provider.get_selection()) == 0:
+			# no provider was found for specified protocol
+			dialog = gtk.MessageDialog(
+									self._parent,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_ERROR,
+									gtk.BUTTONS_OK,
+									_(
+										'Application is unable to handle specified data. '
+										'Check if source items still exist.' 
+									)
+								)
+			dialog.run()
+			dialog.destroy()
+			
+			# abort handling data
+			return result
+		
+		# show operation dialog
+		dialog = Dialog(
+					self._parent,
+					provider,
+					self.path
+				)
+		dialog_result = dialog.get_response()
+
+		# check user response			
+		if dialog_result[0] == gtk.RESPONSE_OK:
+			# user confirmed copying
+			operation = Operation(
+								self._parent,
+								provider,
+								self.get_provider(),
+								dialog_result[1]  # options from dialog
+							)
+
+			# start the operation
+			operation.start()
+			
+			result = True
+			
+		return result 
 
 	def _start_search(self, key):
 		"""Shows quick search panel and starts searching"""
@@ -470,16 +577,53 @@ class ItemList(PluginBase):
 	def _send_to(self, widget=None, data=None):
 		"""Abstract method for Send To Nautilus integration"""
 		pass
+	
+	def _cut_files_to_clipboard(self, widget=None, data=None):
+		"""Cut selected files to clipboard"""
+		self._copy_files_to_clipboard(operation='cut')
+		return True
+	
+	def _copy_files_to_clipboard(self, widget=None, data=None, operation='copy'):
+		"""Copy selected files to clipboard"""
+		list = self._get_selection_list(relative=False)
+		provider = self.get_provider()
+		protocol = provider.protocols[0]
+		
+		# modify list to form URI
+		list = ['{0}://{1}'.format(protocol, urllib.quote(item)) for item in list]
+		
+		# set clipboard data
+		self._parent.set_clipboard_item_list(operation, list)
+
+		return True
+	
+	def _paste_files_from_clipboard(self, widget=None, data=None):
+		"""Paste files from clipboard"""
+		data = self._parent.get_clipboard_item_list()
+		
+		# clipboard data contains URI list
+		if data is not None:
+			operation = data[0]
+			list_ = data[1]
+			protocol = list_[0].split('://')[0]
+			
+			# convert URI to normal path
+			list_ = [urllib.unquote(item.split('://')[1]) for item in list_]
+			
+			# call handler
+			self._handle_external_data(operation, protocol, list_)
+			
+		return True
 
 	def _item_properties(self, widget=None, data=None):
 		"""Abstract method that shows file/directory properties"""
 		pass
 
-	def _get_selection(self):
+	def _get_selection(self, relative=False):
 		"""Return item with path under cursor"""
 		pass
 
-	def _get_selection_list(self):
+	def _get_selection_list(self, under_cursor=False, relative=False):
 		"""Return list of selected items
 
 		This list is used by many other methods inside this program,
@@ -535,7 +679,7 @@ class ItemList(PluginBase):
 								'label': _('_Open'),
 								'type': 'image',
 								'stock': gtk.STOCK_OPEN,
-								'callback': self._execute_selected_item
+								'callback': self._execute_selected_item,
 							})
 		result.append(item)
 
@@ -544,7 +688,7 @@ class ItemList(PluginBase):
 								'label': _('Open in new ta_b'),
 								'type': 'image',
 								'image': 'tab-new',
-								'callback': self._open_in_new_tab
+								'callback': self._open_in_new_tab,
 							})
 		result.append(item)
 		self._open_new_tab_item = item
@@ -574,25 +718,28 @@ class ItemList(PluginBase):
 								'label': _('Cu_t'),
 								'type': 'image',
 								'stock': gtk.STOCK_CUT,
+								'callback': self._cut_files_to_clipboard,
 							})
 		result.append(item)
-		item.set_sensitive(False)
+		self._cut_item = item
 
 		item = menu_manager.create_menu_item({
 								'label': _('_Copy'),
 								'type': 'image',
 								'stock': gtk.STOCK_COPY,
+								'callback': self._copy_files_to_clipboard,
 							})
 		result.append(item)
-		item.set_sensitive(False)
+		self._copy_item = item
 
 		item = menu_manager.create_menu_item({
 								'label': _('_Paste'),
 								'type': 'image',
 								'stock': gtk.STOCK_PASTE,
+								'callback': self._paste_files_from_clipboard,
 							})
 		result.append(item)
-		item.set_sensitive(False)
+		self._paste_item = item
 
 		# separator
 		item = menu_manager.create_menu_item({'type': 'separator'})
@@ -603,7 +750,7 @@ class ItemList(PluginBase):
 								'label': _('Send to...'),
 								'callback': self._send_to,
 								'type': 'image',
-								'image': 'document-send'
+								'image': 'document-send',
 							})
 		result.append(item)
 		self._send_to_item = item
@@ -617,7 +764,7 @@ class ItemList(PluginBase):
 
 		item = menu_manager.create_menu_item({
 								'label': _('_Rename...'),
-								'callback': self._rename_file
+								'callback': self._rename_file,
 							})
 		result.append(item)
 		item.set_sensitive(False)
@@ -632,7 +779,7 @@ class ItemList(PluginBase):
 								'label': _('_Delete'),
 								'type': 'image',
 								'stock': gtk.STOCK_DELETE,
-								'callback': self._delete_files
+								'callback': self._delete_files,
 							})
 		result.append(item)
 		self._delete_item = item

@@ -1778,8 +1778,13 @@ class MainWindow(gtk.Window):
 			target = selection.get_target()
 			selection.set(target, 8, raw_data)
 			
+		def clear_func(clipboard, data):
+			"""Clear function"""
+			pass
+			
+		print operation, list
 		# set clipboard and return result 
-		return self.clipboard.set_with_data(targets, get_func, None)
+		return self.clipboard.set_with_data(targets, get_func, clear_func)
 	
 	def get_clipboard_text(self):
 		"""Get text from clipboard"""
@@ -1787,11 +1792,24 @@ class MainWindow(gtk.Window):
 	
 	def get_clipboard_item_list(self):
 		"""Get item list from clipboard"""
-		targets = [
-				('x-special/gnome-copied-files', 0, 0), 
-				("text/uri-list", 0, 0)
-			]
+		result = None
+		selection = self.clipboard.wait_for_contents('x-special/gnome-copied-files')
 		
-		data = self.clipboard.wait_for_contents(targets)
+		# in case there is something to paste
+		if selection is not None:
+			data = selection.data.splitlines(False)
+			
+			operation = data[0]
+			list = data[1:]
+			
+			result = (operation, list)
 
-		print data
+		return result
+	
+	def is_clipboard_text(self):
+		"""Check if clipboard data is text"""
+		return self.clipboard.wait_is_text_available()
+	
+	def is_clipboard_item_list(self):
+		"""Check if clipboard data is URI list"""
+		return self.clipboard.wait_is_uris_available()

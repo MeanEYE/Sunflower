@@ -10,7 +10,7 @@ import stat
 
 class PropertiesWindow(gtk.Window):
 	"""Properties window for files and directories"""
-	
+
 	def __init__(self, application, provider, path):
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 
@@ -21,16 +21,16 @@ class PropertiesWindow(gtk.Window):
 		self._is_file = self._provider.is_file(self._path)
 		self._permission_updating = False
 		self._mode = None
-		
+
 		# file monitor, we'd like to update info if file changes
 		self._create_monitor()
-		
+
 		# get item information
 		title = _('{0} Properties').format(os.path.basename(path))
-		
+
 		icon_manager = application.icon_manager
 		if self._is_file:
-			# get icon for specified file 
+			# get icon for specified file
 			self._icon_list = (
 						icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_MENU),
 						icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_BUTTON),
@@ -38,7 +38,7 @@ class PropertiesWindow(gtk.Window):
 						icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_LARGE_TOOLBAR),
 						icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_DIALOG)
 					)
-			
+
 		else:
 			# get folder icon
 			self._icon_list = (
@@ -48,18 +48,18 @@ class PropertiesWindow(gtk.Window):
 						icon_manager.get_icon_from_name('folder', gtk.ICON_SIZE_LARGE_TOOLBAR),
 						icon_manager.get_icon_from_name('folder', gtk.ICON_SIZE_DIALOG)
 					)
-		
+
 		# configure window
 		self.set_title(title)
 		self.set_size_request(410, 410)
 		self.set_border_width(5)
 		self.set_icon_list(*self._icon_list)
-		
+
 		# create interface
 		vbox = gtk.VBox(False, 5)
-		
+
 		self._notebook = gtk.Notebook()
-		
+
 		self._notebook.append_page(
 								self._create_basic_tab(),
 								gtk.Label(_('Basic'))
@@ -72,50 +72,50 @@ class PropertiesWindow(gtk.Window):
 								self._create_open_with_tab(),
 								gtk.Label(_('Open With'))
 							)
-		
+
 		# create buttons
 		hbox_buttons = gtk.HBox(False, 5)
-		
+
 		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
 		button_close.connect('clicked', self._close_window)
-		
+
 		# pack interface
 		hbox_buttons.pack_end(button_close, False, False, 0)
-		
+
 		vbox.pack_start(self._notebook, True, True, 0)
 		vbox.pack_start(hbox_buttons, False, False, 0)
-		
+
 		self.add(vbox)
-		
+
 		# update widgets to represent item state
 		self._update_data()
-		
+
 		# show all widgets
 		self.show_all()
-		
+
 	def _close_window(self, widget=None, data=None):
 		"""Close properties window"""
 		self._monitor.cancel()
 		self.destroy()
-		
+
 	def _item_changes(self, monitor, file, other_file, event, data=None):
 		"""Event triggered when monitored file changes"""
-		
+
 		if event is gio.FILE_MONITOR_EVENT_DELETED:
 			# item was removed, close dialog
 			self.destroy()
-			
+
 		else:
 			# item was changed, update data
 			self._update_data()
-		
+
 	def _rename_item(self, widget=None, data=None):
 		"""Handle renaming item"""
 		item_exists = self._provider.exists(
-							self._entry_name.get_text(), 
+							self._entry_name.get_text(),
 							relative_to=os.path.dirname(self._path)
 						)
-		
+
 		if item_exists:
 			# item with the same name already exists
 			dialog = gtk.MessageDialog(
@@ -130,27 +130,27 @@ class PropertiesWindow(gtk.Window):
 									)
 								)
 			dialog.run()
-			dialog.destroy()			
+			dialog.destroy()
 
 			# restore old name
 			self._entry_name.set_text(os.path.basename(self._path))
-			
+
 		else:
 			# rename item
 			try:
 				self._provider.rename_path(
-									os.path.basename(self._path), 
+									os.path.basename(self._path),
 									self._entry_name.get_text()
 								)
-				
+
 				self._path = os.path.join(
-									os.path.dirname(self._path), 
+									os.path.dirname(self._path),
 									self._entry_name.get_text()
 								)
-				
+
 				# recreate item monitor
 				self._create_monitor()
-				
+
 			except IOError as error:
 				# problem renaming item
 				dialog = gtk.MessageDialog(
@@ -164,23 +164,23 @@ class PropertiesWindow(gtk.Window):
 										) +	"\n\n{0}".format(error)
 									)
 				dialog.run()
-				dialog.destroy()			
+				dialog.destroy()
 
 	def _create_monitor(self):
 		"""Create item monitor"""
 		self._monitor = gio.File(self._path).monitor_file()
 		self._monitor.connect('changed', self._item_changes)
-		
+
 	def _load_associated_applications(self):
 		"""Get associated applications with file/directory"""
 		mime_type = gnomevfs.get_mime_type(self._path)
 		associations_manager = self._application.associations_manager
 		list_ = associations_manager.get_program_list_for_type(mime_type)
 		default_application = associations_manager.get_default_program_for_type(mime_type)
-		
+
 		# clear existing list
 		self._store.clear()
-		
+
 		# add all applications to the list
 		for item in list_:
 			config_file = item[0]
@@ -188,17 +188,17 @@ class PropertiesWindow(gtk.Window):
 			icon = None
 			selected = config_file in default_application
 
-			# get application configuration file			
+			# get application configuration file
 			config = self._application.associations_manager.get_association_config(config_file)
-			
+
 			# get application icon
 			if config is not None and config.has_key('icon'):
 				icon_name = config['icon']
 				icon = self._application.icon_manager.get_icon_from_name(
 																	icon_name,
-																	gtk.ICON_SIZE_LARGE_TOOLBAR 
+																	gtk.ICON_SIZE_LARGE_TOOLBAR
 																)
-			
+
 			self._store.append((selected, icon, name, config_file))
 
 	def _update_data(self):
@@ -206,45 +206,43 @@ class PropertiesWindow(gtk.Window):
 		mime_type = gnomevfs.get_mime_type(self._path)
 		format = self._application.options.get('main', 'time_format')
 		item_stat = self._provider.get_stat(self._path)
-		
+
 		# get item description
 		description = gnomevfs.mime_get_description(mime_type)
 
 		# get item size
 		if self._is_file:
 			# file size
-			item_size = ngettext(
-							'{0} byte',
-							'{0} bytes',
-							item_stat.st_size
-						).format(locale.format('%d', item_stat.st_size, True))
-			
+			item_size = '{0} {1}'.format(
+								locale.format('%d', item_stat.st_size, True),
+								ngettext('byte', 'bytes', item_stat.st_size)
+							)
+
 		else:
 			# directory size
 			dir_size = len(self._provider.list_dir(self._path))
-			item_size = ngettext(
-							'{0} item',
-							'{0} items',
-							dir_size
-						).format(dir_size)
-			
+			item_size = '{0} {1}'.format(
+								locale.format('%d', dir_size, True),
+								ngettext('item', 'items', dir_size)
+							)
+
 		# set mode
 		self._mode = stat.S_IMODE(item_stat.st_mode)
-			
-		# format item time			
+
+		# format item time
 		item_a_date = time.strftime(format, time.gmtime(item_stat.st_atime))
 		item_m_date = time.strftime(format, time.gmtime(item_stat.st_mtime))
-		
+
 		# get volume
 		try:
 			mount = gio.File(self._path).find_enclosing_mount()
 			volume_name = mount.get_name()
-			
+
 		except gio.Error:
 			# item is not on any known volume
 			volume_name = _('unknown')
 
-		# update widgets	
+		# update widgets
 		self._entry_name.set_text(os.path.basename(self._path))
 		self._label_type.set_text('{0}\n{1}'.format(description, mime_type))
 		self._label_size.set_text(item_size)
@@ -252,13 +250,13 @@ class PropertiesWindow(gtk.Window):
 		self._label_volume.set_text(volume_name)
 		self._label_accessed.set_text(item_a_date)
 		self._label_modified.set_text(item_m_date)
-		
+
 		# update permissions list
 		self._permission_update_mode(initial_update=True)
-		
+
 		# update "open with" list
 		self._load_associated_applications()
-		
+
 	def _permission_update_octal(self, widget, data=None):
 		"""Update octal entry box"""
 		if self._permission_updating: return
@@ -291,44 +289,44 @@ class PropertiesWindow(gtk.Window):
 		"""Update widgets"""
 		self._permission_octal_entry.set_text('{0}'.format(oct(self._mode)))
 		self._permission_update_checkboxes()
-		
+
 		# set file mode
 		if not initial_update:
 			self._provider.set_mode(self._path, self._mode)
-		
+
 	def _change_default_application(self, renderer, path, data=None):
 		"""Handle changing default application"""
 		active_item = self._store[path]
-		
+
 		# get data
 		mime_type = gnomevfs.get_mime_type(self._path)
 		application = active_item[3]
-		
+
 		# set default application
 #		command = 'xdg-mime default {0} {1}'.format(application, mime_type)
 #		os.system(command)
-		
+
 		# select active item
 #		for item in self._store:
 #			item[0] = item.path == active_item.path
-		
+
 	def _create_basic_tab(self):
 		"""Create tab containing basic information"""
 		tab = gtk.VBox(False, 0)
 		table = gtk.Table(7, 3)
-		
+
 		# configure table
 		tab.set_border_width(10)
-		
+
 		# create icon
 		pixbuf = self._icon_list[-1]
 		icon = gtk.Image()
 		icon.set_from_pixbuf(pixbuf)
-		
+
 		vbox_icon = gtk.VBox(False, 0)
 		vbox_icon.pack_start(icon, False, False)
 		table.attach(vbox_icon, 0, 1, 0, 7, gtk.SHRINK)
-		
+
 		# labels
 		label_name = gtk.Label(_('Name:'))
 		label_type = gtk.Label(_('Type:'))
@@ -337,7 +335,7 @@ class PropertiesWindow(gtk.Window):
 		label_volume = gtk.Label(_('Volume:'))
 		label_accessed = gtk.Label(_('Accessed:'))
 		label_modified = gtk.Label(_('Modified:'))
-		
+
 		# configure labels
 		label_name.set_alignment(0, 0.5)
 		label_type.set_alignment(0, 0)
@@ -346,7 +344,7 @@ class PropertiesWindow(gtk.Window):
 		label_volume.set_alignment(0, 0)
 		label_accessed.set_alignment(0, 0)
 		label_modified.set_alignment(0, 0)
-		
+
 		# pack labels
 		table.attach(label_name, 1, 2, 0, 1)
 		table.attach(label_type, 1, 2, 1, 2)
@@ -355,7 +353,7 @@ class PropertiesWindow(gtk.Window):
 		table.attach(label_volume, 1, 2, 4, 5)
 		table.attach(label_accessed, 1, 2, 5, 6)
 		table.attach(label_modified, 1, 2, 6, 7)
-		
+
 		# value containers
 		self._entry_name = gtk.Entry()
 		self._label_type = gtk.Label()
@@ -364,7 +362,7 @@ class PropertiesWindow(gtk.Window):
 		self._label_volume = gtk.Label()
 		self._label_accessed = gtk.Label()
 		self._label_modified = gtk.Label()
-		
+
 		# configure labels
 		self._label_type.set_alignment(0, 0)
 		self._label_type.set_selectable(True)
@@ -379,7 +377,7 @@ class PropertiesWindow(gtk.Window):
 		self._label_accessed.set_selectable(True)
 		self._label_modified.set_alignment(0, 0)
 		self._label_modified.set_selectable(True)
-		
+
 		# pack value containers
 		table.attach(self._entry_name, 2, 3, 0, 1)
 		table.attach(self._label_type, 2, 3, 1, 2)
@@ -388,30 +386,30 @@ class PropertiesWindow(gtk.Window):
 		table.attach(self._label_volume, 2, 3, 4, 5)
 		table.attach(self._label_accessed, 2, 3, 5, 6)
 		table.attach(self._label_modified, 2, 3, 6, 7)
-		
+
 		# connect events
 		self._entry_name.connect('activate', self._rename_item)
-		
+
 		# configure table
 		table.set_row_spacings(5)
 		table.set_row_spacing(2, 30)
 		table.set_row_spacing(4, 30)
 		table.set_col_spacing(0, 10)
 		table.set_col_spacing(1, 10)
-		
+
 		# pack table
 		tab.pack_start(table, False, False, 0)
-		
+
 		return tab
-	
+
 	def _create_permissions_tab(self):
 		"""Create tab containing item permissions and ownership"""
 		tab = gtk.VBox(False, 5)
 		tab.set_border_width(10)
-		
+
 		frame_access = gtk.Frame()
 		frame_access.set_label(_('Access'))
-		
+
 		table = gtk.Table(4, 4, False)
 		table.set_border_width(5)
 
@@ -480,20 +478,20 @@ class PropertiesWindow(gtk.Window):
 
 		# pack interface
 		frame_access.add(table)
-		
+
 		tab.pack_start(frame_access, False, False, 0)
-			
+
 		return tab
-	
+
 	def _create_open_with_tab(self):
 		"""Create tab containing list of applications that can open this file"""
 		tab = gtk.VBox(False, 5)
 		tab.set_border_width(10)
-		
+
 		# get item description
 		mime_type = gnomevfs.get_mime_type(self._path)
 		description = gnomevfs.mime_get_description(mime_type)
-		
+
 		# create label
 		text = _(
 				'Select an application to open <i>{0}</i> and '
@@ -506,43 +504,43 @@ class PropertiesWindow(gtk.Window):
 		label.set_alignment(0, 0)
 		label.set_line_wrap(True)
 		label.set_use_markup(True)
-		
+
 		# create application list
 		container = gtk.Viewport()
-		
+
 		self._store = gtk.ListStore(bool, gtk.gdk.Pixbuf, str, str)
 		self._list = gtk.TreeView()
 		self._list.set_model(self._store)
 		self._list.set_headers_visible(False)
-		
+
 		cell_radio = gtk.CellRendererToggle()
 		cell_radio.set_radio(True)
 		cell_radio.connect('toggled', self._change_default_application)
 		cell_icon = gtk.CellRendererPixbuf()
 		cell_name = gtk.CellRendererText()
-		
+
 		# create column_name
 		column_radio = gtk.TreeViewColumn()
 		column_name = gtk.TreeViewColumn()
-		
+
 		# pack renderer
 		column_radio.pack_start(cell_radio, False)
 		column_name.pack_start(cell_icon, False)
 		column_name.pack_start(cell_name, True)
-		
+
 		# configure renderer
 		column_radio.add_attribute(cell_radio, 'active', 0)
 		column_name.add_attribute(cell_icon, 'pixbuf', 1)
 		column_name.add_attribute(cell_name, 'text', 2)
-		
+
 		# add column_name to the list
 		self._list.append_column(column_radio)
 		self._list.append_column(column_name)
-		
+
 		container.add(self._list)
 		tab.pack_start(label, False, False, 0)
 		tab.pack_start(container, True, True, 0)
-		
+
 		return tab
 
 

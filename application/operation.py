@@ -48,7 +48,7 @@ class Operation(Thread):
 		if self._dialog is not None:
 			gtk.gdk.threads_enter()  # prevent deadlocks
 			self._dialog.destroy()
-			gtk.gdk.threads_leave()  # prevent deadlocks
+			gtk.gdk.threads_leave()
 
 	def pause(self):
 		"""Pause current operation"""

@@ -288,10 +288,10 @@ class OperationDialog(gtk.Window):
 															locale.format('%d', self._current_size, True),
 															locale.format('%d', self._total_size, True)
 															))
-		
+
 		if self._total_size > 0:
 			self.set_total_size_fraction(float(self._current_size) / self._total_size)
-		
+
 		else:
 			self.set_total_size_fraction(1)
 

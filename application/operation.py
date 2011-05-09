@@ -32,7 +32,7 @@ class Operation(Thread):
 		self._source = source
 		self._destination = destination
 		self._dialog = None
-		
+
 		self._dir_list = []
 		self._file_list = []
 
@@ -40,13 +40,15 @@ class Operation(Thread):
 		self._source_path = self._source.get_path()
 		if self._destination is not None:
 			self._destination_path = self._destination.get_path()
-			
+
 		self._can_continue.set()
 
 	def _destroy_ui(self):
 		"""Destroy user interface"""
 		if self._dialog is not None:
+			gtk.gdk.threads_enter()  # prevent deadlocks
 			self._dialog.destroy()
+			gtk.gdk.threads_leave()  # prevent deadlocks
 
 	def pause(self):
 		"""Pause current operation"""
@@ -270,7 +272,7 @@ class CopyOperation(Operation):
 				gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
 				self._file_list.append(item)
-				
+
 		# clear selection on source directory
 		parent = self._source.get_parent()
 		if self._source_path == parent.path:
@@ -404,7 +406,7 @@ class CopyOperation(Operation):
 
 		# if user skipped this file return
 		if not can_procede:
-			self._file_list.pop(self._file_list.index(file_)) 
+			self._file_list.pop(self._file_list.index(file_))
 			return
 
 		try:
@@ -436,7 +438,7 @@ class CopyOperation(Operation):
 			# handle user response
 			if response == gtk.RESPONSE_YES:
 				self._copy_file(dest_file)  # retry copying this file
-				
+
 			else:
 				# user didn't want to retry, remove file from list
 				self._file_list.pop(self._file_list.index(file_))
@@ -484,9 +486,9 @@ class CopyOperation(Operation):
 
 			gobject.idle_add(self._dialog.set_current_file, dir_)
 			self._create_directory(dir_)  # create directory
-			
+
 			gobject.idle_add(
-						self._dialog.set_current_file_fraction, 
+						self._dialog.set_current_file_fraction,
 						float(number)/len(self._dir_list)
 					)
 
@@ -604,7 +606,7 @@ class MoveOperation(CopyOperation):
 			gobject.idle_add(self._dialog.set_current_file, item)
 			self._source.remove_path(item, relative_to=self._source_path)
 			gobject.idle_add(
-						self._dialog.set_current_file_fraction, 
+						self._dialog.set_current_file_fraction,
 						float(number) / len(self._file_list)
 					)
 
@@ -700,7 +702,7 @@ class DeleteOperation(Operation):
 
 		# get selected items
 		list_ = self._source.get_selection(relative=True)
-		
+
 		# clear selection on source directory
 		parent = self._source.get_parent()
 		if self._source_path == parent.path:

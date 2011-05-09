@@ -686,7 +686,7 @@ class OverwriteFileDialog(OverwriteDialog):
 
 	def set_title_element(self, element):
 		"""Set title label with appropriate formatting"""
-		message = _('Replace file "{0}"?').format(element)
+		message = _('Replace file "{0}"?').format(element.replace('&', '&amp;'))
 		self._label_title.set_markup('<span size="large" weight="bold">{0}</span>'.format(message))
 
 	def set_message_element(self, element):

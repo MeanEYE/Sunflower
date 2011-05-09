@@ -1,6 +1,7 @@
 import gtk
 import pango
 import locale
+import gobject
 
 class OperationDialog(gtk.Window):
 	"""Dialog for operations
@@ -11,6 +12,8 @@ class OperationDialog(gtk.Window):
 	unpredictable behavior.
 
 	"""
+
+	MAX_SPEED_POINTS = 20  # how many points to aggregate
 
 	def __init__(self, application, thread):
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
@@ -27,7 +30,7 @@ class OperationDialog(gtk.Window):
 		self._current_size = 0L
 		self._current_count = 0L
 
-		# agregate speeds to provide acurate time prediction
+		# aggregate speeds to provide acurate time prediction
 		self._speeds = []
 		self._total_checkpoint = 0
 
@@ -194,6 +197,9 @@ class OperationDialog(gtk.Window):
 		table.set_row_spacing(4, 2)
 		table.set_col_spacing(0, 10)
 
+		# add periodical updates for dialog
+		gobject.timeout_add(1000, self._update_speed)
+
 	def _add_buttons(self):
 		"""Add button bar"""
 		hbox = gtk.HBox(False, 5)
@@ -296,6 +302,67 @@ class OperationDialog(gtk.Window):
 
 		else:
 			self.set_total_size_fraction(1)
+
+	def _update_speed(self):
+		"""Aggregate speed and update ETA label
+
+		This method is automatically called by the gobject timeout.
+		Don't call this method automatically!
+
+		"""
+		speed = self._current_size - self._total_checkpoint  # get current speed
+		self._total_checkpoint = self._current_size
+
+		# update aggregates speeds list
+		if len(self._speeds) > self.MAX_SPEED_POINTS:
+			self._speeds.pop(0)
+
+		self._speeds.append(speed)
+
+		# calculate average speed
+		average = sum(self._speeds) / len(self._speeds)
+
+		# update labels
+		if average > 0:
+			# calculate time based on average speed
+			remainder = (self._total_size - self._current_size) / average
+			hours, remainder = divmod(remainder, 3600)
+			minutes, seconds = divmod(remainder, 60)
+
+			time_text = '{0} {1}'.format(
+									seconds,
+									ngettext('second', 'seconds', seconds)
+								)
+
+			if minutes > 0:
+				time_text = '{0} {1}, {2}'.format(
+									minutes,
+									ngettext('minute', 'minutes', minutes),
+									time_text
+								)
+
+			if hours > 0:
+				time_text = '{0} {1}, {2}'.format(
+									hours,
+									ngettext('hour', 'hours', hours),
+									time_text
+								)
+
+		else:
+			# we don't have average speed yet
+			time_text = _('unknown')
+
+		speed_text = '{0} {1}/{2}'.format(
+							locale.format('%d', average, True),
+							ngettext('byte', 'bytes', average),
+							_('second')
+						)
+
+		self._value_eta.set_text(time_text)
+		self._value_speed.set_text(speed_text)
+
+		# make sure we keep updating
+		return True
 
 	def _destroy(self, widget, data=None):
 		"""Remove operation menu item on dialog destroy"""

@@ -27,6 +27,10 @@ class OperationDialog(gtk.Window):
 		self._current_size = 0L
 		self._current_count = 0L
 
+		# agregate speeds to provide acurate time prediction
+		self._speeds = []
+		self._total_checkpoint = 0
+
 		self._hide_on_minimize = application.options.getboolean(
 														'main',
 														'hide_operation_on_minimize'
@@ -274,7 +278,6 @@ class OperationDialog(gtk.Window):
 
 	def _update_total_count(self):
 		"""Update progress bar and labels for total count"""
-		assert self._value_total_count is not None
 		self._value_total_count.set_label(self._count_format.format(
 															self._current_count,
 															self._total_count
@@ -283,7 +286,6 @@ class OperationDialog(gtk.Window):
 
 	def _update_total_size(self):
 		"""Update progress bar and labels for total size"""
-		assert self._value_total_size is not None
 		self._value_total_size.set_label(self._size_format.format(
 															locale.format('%d', self._current_size, True),
 															locale.format('%d', self._total_size, True)
@@ -318,18 +320,15 @@ class OperationDialog(gtk.Window):
 
 	def set_status(self, status):
 		"""Set current status"""
-		assert self._label_status is not None
 		self._label_status.set_label(status)
 		self._operation_label.set_text(status)
 
 	def set_current_file(self, path):
 		"""Set current file name"""
-		assert self._label_current_file is not None
 		self._label_current_file.set_label(path)
 
 	def set_current_file_fraction(self, fraction):
 		"""Set current file progress bar position"""
-		assert self._pb_current_file is not None
 		self._pb_current_file.set_fraction(fraction)
 
 		if not self._has_details:
@@ -337,79 +336,65 @@ class OperationDialog(gtk.Window):
 
 	def set_current_count(self, count):
 		"""Set current count value"""
-		assert self._value_total_count is not None
 		self._current_count = count
 		self._update_total_count()
 
 	def set_source(self, source):
 		"""Set the content of source label"""
-		assert self._value_source is not None
 		self._value_source.set_label(source)
 
 	def set_destination(self, destination):
 		"""Set the content of destination label"""
-		assert self._value_destination is not None
 		self._value_destination.set_label(destination)
 
 	def set_eta(self, eta):
 		"""Set the content of eta label"""
-		assert self._value_eta is not None
 		self._value_eta.set_label(eta)
 
 	def set_speed(self, speed):
 		"""Set the content of speed label"""
-		assert self._value_speed is not None
 		self._value_speed.set_label(speed)
 
 	def set_total_size(self, size):
 		"""Set total size label"""
-		assert self._value_total_size is not None
 		self._value_total_size.set_label(size)
 
 	def set_total_size_fraction(self, fraction):
 		"""Set total size progress bar position"""
-		assert self._pb_total_size is not None
 		self._pb_total_size.set_fraction(fraction)
 		self._operation_progress.set_fraction(fraction)
 
 	def set_total_count(self, count):
 		"""Set total count label"""
-		assert self._value_total_count is not None
 		self._total_count = count
 		self._update_total_count()
 
 	def set_total_count_fraction(self, fraction):
 		"""Set total size progress bar position"""
-		assert self._pb_total_count is not None
 		self._pb_total_count.set_fraction(fraction)
 
 	def increment_total_size(self, value):
 		"""Increment total file size"""
-		assert self._value_total_size is not None
 		self._total_size += value
 		self._update_total_size()
 
 	def increment_current_size(self, value):
 		"""Increment current summed file size"""
-		assert self._value_total_size is not None
 		self._current_size += value
 		self._update_total_size()
 
 	def increment_total_count(self, value):
 		"""Increment total file count by value"""
-		assert self._value_total_count is not None
 		self._total_count += value
 		self._update_total_count()
 
 	def increment_current_count(self, value):
 		"""Increment current file count by value"""
-		assert self._value_total_count is not None
 		self._current_count += value
 		self._update_total_count()
 
 	def pulse(self):
 		"""Pulse current progress bar"""
-		assert self._pb_current_file is not None
 		self._pb_current_file.pulse()
 
 

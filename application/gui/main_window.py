@@ -44,11 +44,11 @@ class MainWindow(gtk.Window):
 
 		# load translations
 		self._load_translation()
-		
+
 		# parse arguments
 		self.arguments = None
 		self._parse_arguments()
-		
+
 		# containers
 		self.plugin_classes = {}
 		self.provider_classes = {}
@@ -491,7 +491,7 @@ class MainWindow(gtk.Window):
 
 		# create toolbar widgets
 		self.toolbar_manager.create_widgets()
-		
+
 		# show widgets
 		self.show_all()
 
@@ -838,11 +838,11 @@ class MainWindow(gtk.Window):
 				# import module
 				__import__('plugins.{0}'.format(file_))
 				plugin = sys.modules['plugins.{0}'.format(file_)]
-	
+
 				# call module register_plugin method
 				if hasattr(plugin, 'register_plugin'):
 					plugin.register_plugin(self)
-					
+
 			except:
 				print 'Error: Unable to load plugin "{0}"'.format(file_)
 
@@ -1022,14 +1022,14 @@ class MainWindow(gtk.Window):
 
 			# kill dialog
 			change_log.destroy()
-			
+
 	def _parse_arguments(self):
 		"""Parse command-line arguments passed to the application"""
 		parser = ArgumentParser(
 							description=_('Sunflower file manager'),
 							prog='Sunflower.py'
 						)
-		
+
 		# add parameters to parser
 		parser.add_argument(
 						'-v', '--version',
@@ -1063,7 +1063,7 @@ class MainWindow(gtk.Window):
 						metavar='PATH',
 						dest='right_tabs'
 					)
-		
+
 		self.arguments = parser.parse_args()
 
 	def show_bookmarks_menu(self, widget=None, notebook=None):
@@ -1209,19 +1209,19 @@ class MainWindow(gtk.Window):
 			# if specified tab list is empty, create default
 			if self.arguments.left_tabs is None:
 				self.create_tab(self.left_notebook, FileList)
-				
+
 			if self.arguments.right_tabs is None:
 				self.create_tab(self.right_notebook, FileList)
-			
+
 		else:
 			# load tabs in the left notebook
 			if not self.load_tabs(self.left_notebook, 'left_notebook'):
 				self.create_tab(self.left_notebook, FileList)
-	
+
 			# load tabs in the right notebook
 			if not self.load_tabs(self.right_notebook, 'right_notebook'):
 				self.create_tab(self.right_notebook, FileList)
-				
+
 		# create additional tabs
 		if self.arguments.left_tabs is not None:
 			for path in self.arguments.left_tabs:
@@ -1230,7 +1230,7 @@ class MainWindow(gtk.Window):
 		if self.arguments.right_tabs is not None:
 			for path in self.arguments.right_tabs:
 				self.create_tab(self.right_notebook, FileList, path)
-				
+
 		gtk.main()
 
 	def create_tab(self, notebook, plugin_class=None, path=None, sort_column=None, sort_ascending=None):
@@ -1409,9 +1409,9 @@ class MainWindow(gtk.Window):
 								tab_sort_column,
 								tab_sort_ascending
 							)
-					
+
 					count += 1
-					
+
 				else:
 					# print error to console
 					print 'Error: Unknown plugin class "{0}". Tab skipped!'.format(tab_class)
@@ -1730,22 +1730,22 @@ class MainWindow(gtk.Window):
 		like drag and drop and system bookmark handling.
 
 		"""
-		for protocol in ProviderClass.protocols: 
+		for protocol in ProviderClass.protocols:
 			self.provider_classes[protocol] = ProviderClass
 
 	def register_toolbar_factory(self, FactoryClass):
 		"""Register and create toolbar widget factory"""
 		self.toolbar_manager.register_factory(FactoryClass)
-		
+
 	def plugin_class_exists(self, class_name):
 		"""Check if specified class name exists in active plugins"""
 		result = False
-		
+
 		for PluginClass in self.plugin_classes.values():
 			if PluginClass.__name__ == class_name:
 				result = True
 				break
-			
+
 		return result
 
 	def get_provider_by_protocol(self, protocol):
@@ -1756,59 +1756,59 @@ class MainWindow(gtk.Window):
 			result = self.provider_classes[protocol]
 
 		return result
-	
+
 	def set_clipboard_text(self, text):
 		"""Set text data to clipboard"""
 		self.clipboard.set_text(text)
-	
+
 	def set_clipboard_item_list(self, operation, list):
 		"""Set clipboard to contain list of items
-		
+
 		operation - 'copy' or 'cut' string representing operation
 		list - list of URIs
 		"""
 		targets = [
-				('x-special/gnome-copied-files', 0, 0), 
+				('x-special/gnome-copied-files', 0, 0),
 				("text/uri-list", 0, 0)
 			]
 		raw_data = '{0}\n'.format(operation) + '\n'.join(list)
-		
+
 		def get_func(clipboard, selection, info, data):
 			"""Handle request from application"""
 			target = selection.get_target()
 			selection.set(target, 8, raw_data)
-			
+
 		def clear_func(clipboard, data):
 			"""Clear function"""
 			pass
-			
-		# set clipboard and return result 
+
+		# set clipboard and return result
 		return self.clipboard.set_with_data(targets, get_func, clear_func)
-	
+
 	def get_clipboard_text(self):
 		"""Get text from clipboard"""
 		return self.clipboard.wait_for_text()
-	
+
 	def get_clipboard_item_list(self):
 		"""Get item list from clipboard"""
 		result = None
 		selection = self.clipboard.wait_for_contents('x-special/gnome-copied-files')
-		
+
 		# in case there is something to paste
 		if selection is not None:
 			data = selection.data.splitlines(False)
-			
+
 			operation = data[0]
 			list = data[1:]
-			
+
 			result = (operation, list)
 
 		return result
-	
+
 	def is_clipboard_text(self):
 		"""Check if clipboard data is text"""
 		return self.clipboard.wait_is_text_available()
-	
+
 	def is_clipboard_item_list(self):
 		"""Check if clipboard data is URI list"""
 		return self.clipboard.wait_is_uris_available()

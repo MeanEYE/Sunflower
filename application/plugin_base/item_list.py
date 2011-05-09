@@ -1,8 +1,8 @@
 import os
 import gtk
 import locale
-import threading
 import urllib
+import gobject
 
 from plugin import PluginBase
 
@@ -318,6 +318,7 @@ class ItemList(PluginBase):
 	def _handle_button_press(self, widget, event):
 		"""Handles mouse events"""
 		result = False
+		right_click_select = self._parent.options.getboolean('main', 'right_click_select')
 
 		# handle single click
 		if event.button is 1 and event.type is gtk.gdk.BUTTON_RELEASE and \
@@ -332,9 +333,15 @@ class ItemList(PluginBase):
 
 		# handle right click
 		elif event.button is 3:
-			if event.type is gtk.gdk.BUTTON_RELEASE:
+			if event.type is gtk.gdk.BUTTON_PRESS:
+				# record mouse down timestamp
+				self._popup_timestamp = event.get_time()
+
+			elif event.type is gtk.gdk.BUTTON_RELEASE:
 				# button was released, depending on options call specific method
-				if not self._parent.options.getboolean('main', 'right_click_select'):
+				time_valid = event.get_time() - self._popup_timestamp > 500
+
+				if not right_click_select or (right_click_select and time_valid):
 					# show popup menu
 					self._show_popup_menu(widget)
 
@@ -342,16 +349,7 @@ class ItemList(PluginBase):
 					# toggle item mark
 					self._toggle_selection(widget, advance=False)
 
-					# if exists, cancel schedule
-					if self._menu_timer is not None:
-						self._menu_timer.cancel()
-
 				result = True
-
-			elif self._parent.options.getboolean('main', 'right_click_select'):
-				# in case where right click selects, we need to schedule menu popup
-				self._menu_timer = threading.Timer(1, self._show_popup_menu, [widget,])
-				self._menu_timer.start()
 
 		return result
 
@@ -435,11 +433,11 @@ class ItemList(PluginBase):
 		self._disable_object_block()
 		oposite_list = self._parent.get_oposite_list(self)
 		oposite_list._disable_object_block()
-		
+
 	def _handle_external_data(self, operation, protocol, list_):
 		"""Handle data coming from a different application"""
 		result = False
-		
+
 		dialog_classes = {
 					'copy': CopyDialog,
 					'cut': MoveDialog,
@@ -450,15 +448,15 @@ class ItemList(PluginBase):
 					'cut': MoveOperation,
 					'move': MoveOperation
 				}
-		
+
 		# make sure operation is valid
 		assert operation in dialog_classes.keys()
 
-		# get classes	
+		# get classes
 		Provider = self._parent.get_provider_by_protocol(protocol)
 		Dialog = dialog_classes[operation]
 		Operation = operation_classes[operation]
-		
+
 		if Provider is None:
 			# no provider was found for specified protocol
 			dialog = gtk.MessageDialog(
@@ -474,14 +472,14 @@ class ItemList(PluginBase):
 								)
 			dialog.run()
 			dialog.destroy()
-			
+
 			# abort handling data
 			return result
-						
+
 		# handle data
 		path = os.path.dirname(list_[0])
 		selection = [os.path.basename(item) for item in list_]
-		
+
 		# create provider
 		provider = Provider(self, path, selection)
 
@@ -495,15 +493,15 @@ class ItemList(PluginBase):
 									gtk.BUTTONS_OK,
 									_(
 										'Application is unable to handle specified data. '
-										'Check if source items still exist.' 
+										'Check if source items still exist.'
 									)
 								)
 			dialog.run()
 			dialog.destroy()
-			
+
 			# abort handling data
 			return result
-		
+
 		# show operation dialog
 		dialog = Dialog(
 					self._parent,
@@ -512,7 +510,7 @@ class ItemList(PluginBase):
 				)
 		dialog_result = dialog.get_response()
 
-		# check user response			
+		# check user response
 		if dialog_result[0] == gtk.RESPONSE_OK:
 			# user confirmed copying
 			operation = Operation(
@@ -524,10 +522,10 @@ class ItemList(PluginBase):
 
 			# start the operation
 			operation.start()
-			
+
 			result = True
-			
-		return result 
+
+		return result
 
 	def _start_search(self, key):
 		"""Shows quick search panel and starts searching"""
@@ -577,42 +575,42 @@ class ItemList(PluginBase):
 	def _send_to(self, widget=None, data=None):
 		"""Abstract method for Send To Nautilus integration"""
 		pass
-	
+
 	def _cut_files_to_clipboard(self, widget=None, data=None):
 		"""Cut selected files to clipboard"""
 		self._copy_files_to_clipboard(operation='cut')
 		return True
-	
+
 	def _copy_files_to_clipboard(self, widget=None, data=None, operation='copy'):
 		"""Copy selected files to clipboard"""
 		list = self._get_selection_list(relative=False)
 		provider = self.get_provider()
 		protocol = provider.protocols[0]
-		
+
 		# modify list to form URI
 		list = ['{0}://{1}'.format(protocol, urllib.quote(item)) for item in list]
-		
+
 		# set clipboard data
 		self._parent.set_clipboard_item_list(operation, list)
 
 		return True
-	
+
 	def _paste_files_from_clipboard(self, widget=None, data=None):
 		"""Paste files from clipboard"""
 		data = self._parent.get_clipboard_item_list()
-		
+
 		# clipboard data contains URI list
 		if data is not None:
 			operation = data[0]
 			list_ = data[1]
 			protocol = list_[0].split('://')[0]
-			
+
 			# convert URI to normal path
 			list_ = [urllib.unquote(item.split('://')[1]) for item in list_]
-			
+
 			# call handler
 			self._handle_external_data(operation, protocol, list_)
-			
+
 		return True
 
 	def _item_properties(self, widget=None, data=None):
@@ -849,9 +847,8 @@ class ItemList(PluginBase):
 								data.time
 							)
 
-	def _show_popup_menu(self, widget, data=None):
+	def _show_popup_menu(self, widget=None, data=None):
 		"""Show item menu"""
-
 		# prepare elements in popup menu
 		self._prepare_popup_menu()
 

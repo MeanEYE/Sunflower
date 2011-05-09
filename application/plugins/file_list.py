@@ -474,8 +474,8 @@ class FileList(ItemList):
 											) +	"\n\n{0}".format(error)
 										)
 					dialog.run()
-					dialog.destroy()	
-					
+					dialog.destroy()
+
 			else:
 				# file/directory already exists
 				dialog = gtk.MessageDialog(
@@ -1006,21 +1006,21 @@ class FileList(ItemList):
 							gtk.gdk.ACTION_COPY: 'copy',
 							gtk.gdk.ACTION_MOVE: 'move'
 						}
-				
+
 				result = self._handle_external_data(
-												operation[drag_context.action], 
-												protocol, 
+												operation[drag_context.action],
+												protocol,
 												list
 											)
-				
+
 			elif drag_context.action is gtk.gdk.ACTION_LINK:
 				# handle linking
 				# TODO: Finish linking code!
 				result = False
-			
+
 			# notify source application about operation outcome
 			drag_context.finish(result, False, timestamp)
-			
+
 		else:
 			# notify user that he's trying to drag and drop items in same directory
 			dialog = gtk.MessageDialog(
@@ -1042,11 +1042,11 @@ class FileList(ItemList):
 	def _drag_data_get(self, widget, drag_context, selection_data, info, time):
 		"""Handle data request from destination widget"""
 		protocol = self.get_provider().protocols[0]
-		
+
 		selection = []
 		for file_ in self._get_selection_list():
 			selection.append('{0}://{1}'.format(protocol, urllib.quote(file_)))
-		
+
 		selection_data.set(selection_data.target, 8, '\n'.join(selection))
 		return True
 

@@ -961,7 +961,7 @@ class MainWindow(gtk.Window):
 		current_version = self.version['build']
 
 		# check if we need to show change log and optionally modify system
-		if config_version is None or current_version > config_version:
+		if config_version is None or current_version > config_version and config_version > 0:
 			mod_count = 0
 			vbox = gtk.VBox(False, 10)
 			vbox.set_border_width(5)

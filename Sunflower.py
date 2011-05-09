@@ -64,24 +64,25 @@ interpreters = _get_interpreters()
 
 if len(interpreters) > 0:
 	code = 2
-	
+
 	# try with all interpreters
 	for interpreter in interpreters:
-		params = [interpreter, application_file]
+		params = [os.path.abspath(sys.argv[0]), application_file]
 		params.extend(sys.argv[1:])
 
 		# print interpreter version
 		print "Trying with {0}...".format(os.path.basename(interpreter))
 
 		# execute interpreted
-		code = subprocess.call(params)
-		
-		if code == 0:
+		process = subprocess.Popen(params, executable=interpreter)
+		process.wait()
+
+		if process.returncode == 0:
 			# if interpreter manages to run
 			# we don't need to execute others
 			print "Worked!"
 			break
-			
+
 	sys.exit(code)
 
 else:

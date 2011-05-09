@@ -321,9 +321,25 @@ class ItemList(PluginBase):
 		right_click_select = self._parent.options.getboolean('main', 'right_click_select')
 
 		# handle single click
-		if event.button is 1 and event.type is gtk.gdk.BUTTON_RELEASE and \
-		event.state & gtk.gdk.CONTROL_MASK:
-			self._toggle_selection(widget, event, advance=False)
+		if event.button is 1 \
+		and event.state & gtk.gdk.CONTROL_MASK \
+		and event.type in (gtk.gdk.BUTTON_PRESS, gtk.gdk.BUTTON_RELEASE):
+			# we handle left mouse press and release in order to prevent
+			# default widget behavior which leads to unpredictable results
+
+			if event.type is gtk.gdk.BUTTON_PRESS:
+				# focus clicked item on button press
+				item = self._item_list.get_path_at_pos(int(event.x), int(event.y))
+
+				if item is not None:
+					path = item[0]
+					self._item_list.set_cursor(path)
+					self._item_list.scroll_to_cell(path)
+
+			else:
+				# toggle selection on button release
+				self._toggle_selection(widget, event, advance=False)
+
 			result = True
 
 		# handle double click
@@ -336,6 +352,10 @@ class ItemList(PluginBase):
 			if event.type is gtk.gdk.BUTTON_PRESS:
 				# record mouse down timestamp
 				self._popup_timestamp = event.get_time()
+
+				# prevent CTRL+RightClick from generating exceptions
+				if event.state & gtk.gdk.CONTROL_MASK:
+					result = True
 
 			elif event.type is gtk.gdk.BUTTON_RELEASE:
 				# button was released, depending on options call specific method

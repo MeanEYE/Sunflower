@@ -22,7 +22,7 @@ class PluginBase(gtk.VBox):
 		self._notebook = notebook
 
 		self.set_border_width(2)
-		self.set_spacing(1)
+		self.set_spacing(2)
 
 		# create tab label
 		self._tab_label = gtk.Label('')

@@ -263,6 +263,20 @@ class ItemListOptions(gtk.VBox):
 		# configure self
 		self.set_border_width(10)
 		self.set_spacing(5)
+		
+		# create frames
+		frame_look_and_feel = gtk.Frame()
+		frame_look_and_feel.set_label(_('Look & feel'))
+
+		frame_operation = gtk.Frame()
+		frame_operation.set_label(_('Operation'))
+		
+		# vertical boxes
+		vbox_look_and_feel = gtk.VBox(False, 0)
+		vbox_operation = gtk.VBox(False, 0)
+
+		vbox_look_and_feel.set_border_width(5)
+		vbox_operation.set_border_width(5)
 
 		# file list options
 		self._checkbox_row_hinting = gtk.CheckButton(_('Row hinting'))
@@ -300,7 +314,7 @@ class ItemListOptions(gtk.VBox):
 		self._combobox_grid_lines.add_attribute(cell_grid_lines, 'text', 0)
 
 		# quick search
-		label_quick_search = gtk.Label('<b>{0}</b>'.format(_('Quick search combination:')))
+		label_quick_search = gtk.Label(_('Quick search combination:'))
 		label_quick_search.set_alignment(0, 0.5)
 		label_quick_search.set_use_markup(True)
 		self._checkbox_control = gtk.CheckButton(_('Control'))
@@ -311,7 +325,6 @@ class ItemListOptions(gtk.VBox):
 		self._checkbox_alt.connect('toggled', self._parent.enable_save)
 		self._checkbox_shift.connect('toggled', self._parent.enable_save)
 
-		vbox_quick_search = gtk.VBox(False, 0)
 		hbox_quick_search = gtk.HBox(False, 5)
 
 		vbox_time_format = gtk.VBox(False, 0)
@@ -340,12 +353,10 @@ class ItemListOptions(gtk.VBox):
 		self._entry_status_text.connect('activate', self._parent.enable_save)
 
 		# pack interface
+		hbox_quick_search.pack_start(label_quick_search, False, False, 0)
 		hbox_quick_search.pack_start(self._checkbox_control, False, False, 0)
 		hbox_quick_search.pack_start(self._checkbox_alt, False, False, 0)
 		hbox_quick_search.pack_start(self._checkbox_shift, False, False, 0)
-
-		vbox_quick_search.pack_start(label_quick_search, False, False, 0)
-		vbox_quick_search.pack_start(hbox_quick_search, False, False, 0)
 
 		vbox_grid_lines.pack_start(label_grid_lines, False, False, 0)
 		vbox_grid_lines.pack_start(self._combobox_grid_lines, False, False, 0)
@@ -356,17 +367,24 @@ class ItemListOptions(gtk.VBox):
 		vbox_status_text.pack_start(label_status_text, False, False, 0)
 		vbox_status_text.pack_start(self._entry_status_text, False, False, 0)
 
-		self.pack_start(self._checkbox_row_hinting, False, False, 0)
-		self.pack_start(self._checkbox_show_hidden, False, False, 0)
-		self.pack_start(self._checkbox_case_sensitive, False, False, 0)
-		self.pack_start(self._checkbox_right_click, False, False, 0)
-		self.pack_start(self._checkbox_vim_bindings, False, False, 0)
-		self.pack_start(self._checkbox_show_headers, False, False, 0)
-		self.pack_start(self._checkbox_media_preview, False, False, 0)
-		self.pack_start(vbox_quick_search, False, False, 0)
-		self.pack_start(vbox_grid_lines, False, False, 0)
-		self.pack_start(vbox_time_format, False, False, 0)
-		self.pack_start(vbox_status_text, False, False, 0)
+		vbox_look_and_feel.pack_start(self._checkbox_row_hinting, False, False, 0)
+		vbox_look_and_feel.pack_start(self._checkbox_show_headers, False, False, 0)
+		vbox_look_and_feel.pack_start(self._checkbox_media_preview, False, False, 0)
+		vbox_look_and_feel.pack_start(self._checkbox_show_hidden, False, False, 0)
+		
+		vbox_operation.pack_start(self._checkbox_case_sensitive, False, False, 0)
+		vbox_operation.pack_start(self._checkbox_right_click, False, False, 0)
+		vbox_operation.pack_start(self._checkbox_vim_bindings, False, False, 0)
+		vbox_operation.pack_start(hbox_quick_search, False, False, 5)
+		vbox_operation.pack_start(vbox_grid_lines, False, False, 5)
+		vbox_operation.pack_start(vbox_time_format, False, False, 5)
+		vbox_operation.pack_start(vbox_status_text, False, False, 5)
+		
+		frame_look_and_feel.add(vbox_look_and_feel)
+		frame_operation.add(vbox_operation)
+		
+		self.pack_start(frame_look_and_feel, False, False, 0)
+		self.pack_start(frame_operation, False, False, 0)
 
 	def _vim_bindings_toggled(self, widget, data=None):
 		"""Handle toggling VIM bindings on or off"""

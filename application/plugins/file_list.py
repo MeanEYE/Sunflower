@@ -214,7 +214,7 @@ class FileList(ItemList):
 
 		self._sort_column_widget = column_sort_data[self._sort_column]
 		self._apply_sort_function()
-
+		
 		# directory monitor
 		self._fs_monitor = None
 		

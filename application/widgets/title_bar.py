@@ -1,5 +1,4 @@
 import gtk
-import cairo
 import pango
 
 from math import pi
@@ -117,7 +116,7 @@ class TitleBar(gtk.HBox):
 								color.blue_float
 							)
 
-			# draw rounded rect
+			# draw rounded rectangle
 			context.arc(x + self._radius, y + self._radius, self._radius, 2 * half_pi, 3 * half_pi)
 			context.arc(x_offset - self._radius, y + self._radius, self._radius, 3 * half_pi, 4 * half_pi)
 			context.arc(x_offset - self._radius, y_offset - self._radius, self._radius, 0 * half_pi, 1 * half_pi)

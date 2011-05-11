@@ -33,7 +33,7 @@ class MainWindow(gtk.Window):
 	version = {
 			'major': 0,
 			'minor': 1,
-			'build': 24,
+			'build': 25,
 			'stage': 'a'
 		}
 
@@ -517,6 +517,7 @@ class MainWindow(gtk.Window):
 		self.save_tabs(self.right_notebook, 'right_notebook')
 
 		self._save_window_position()
+		self._save_active_notebook()
 
 		self.save_config()
 
@@ -983,6 +984,13 @@ class MainWindow(gtk.Window):
 		geometry = '{0}x{1}+{2}+{3}'.format(size[0], size[1], position[0], position[1])
 
 		self.options.set('main', 'window', geometry)
+		
+	def _save_active_notebook(self):
+		"""Save active notebook to config"""
+		object = self._get_active_object()
+		is_left = object._notebook is self.left_notebook
+		
+		self.options.set('main', 'active_notebook', (1, 0)[is_left])
 
 	def _restore_window_position(self):
 		"""Restore window position from config string"""
@@ -1001,10 +1009,10 @@ class MainWindow(gtk.Window):
 			vbox.set_border_width(5)
 
 			# reset aceelerator map
-			if config_version < 21:
+			if config_version < 25:
 				vbox_accel_map = gtk.VBox(False, 0)
 
-				label_accel_map = gtk.Label('<b>Version 0.1a-21:</b>')
+				label_accel_map = gtk.Label('<b>Version 0.1a-25:</b>')
 				label_accel_map.set_alignment(0, 0.5)
 				label_accel_map.set_use_markup(True)
 
@@ -1046,16 +1054,17 @@ class MainWindow(gtk.Window):
 					self.tab_options = RawConfigParser()
 
 			# reset accelerator map
-			if config_version < 21:
+			if config_version < 25:
 				if checkbox_reset_accel_map.get_active()\
 				and os.path.isfile(os.path.join(self.config_path, 'accel_map')):
 					os.remove(os.path.join(self.config_path, 'accel_map'))
 
-			# set config version to current
-			self.options.set('main', 'last_version', current_version)
-
 			# kill dialog
 			change_log.destroy()
+			
+		# set config version to current
+		if config_version is None or current_version > config_version:
+			self.options.set('main', 'last_version', current_version)
 
 	def _parse_arguments(self):
 		"""Parse command-line arguments passed to the application"""
@@ -1276,6 +1285,13 @@ class MainWindow(gtk.Window):
 			for path in self.arguments.right_tabs:
 				self.create_tab(self.right_notebook, FileList, path)
 
+		# focus active notebook
+		active_notebook_index = self.options.getint('main', 'active_notebook')
+		notebook = (self.left_notebook, self.right_notebook)[active_notebook_index]
+		
+		notebook.grab_focus()
+
+		# enter main loop
 		gtk.main()
 
 	def create_tab(self, notebook, plugin_class=None, path=None, sort_column=None, sort_ascending=None):
@@ -1604,6 +1620,7 @@ class MainWindow(gtk.Window):
 				'hide_operation_on_minimize': 'False',
 				'ubuntu_coloring': 'False',
 				'media_preview': 'False',
+				'active_notebook': 0,
 			}
 
 		# set default options

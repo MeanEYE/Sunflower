@@ -190,6 +190,11 @@ class MainWindow(gtk.Window):
 						'callback': self.select_with_same_extension,
 						'path': '<Sunflower>/Mark/SelectWithSameExtension',
 					},
+					{
+						'label': _('Unselect with same exte_nsion'),
+						'callback': self.unselect_with_same_extension,
+						'path': '<Sunflower>/Mark/UnselectWithSameExtension',
+					},
 					{'type': 'separator'},
 					{
 						'label': _('Compare _directories'),
@@ -1155,6 +1160,17 @@ class MainWindow(gtk.Window):
 				extension = os.path.splitext(selection)[1]
 				list_.select_all('*{0}'.format(extension))
 
+	def unselect_with_same_extension(self, widget, data=None):
+		"""Select all items with same extension in active list"""
+		list_ = self._get_active_object()
+
+		if hasattr(list_, '_get_selection') and hasattr(list_, 'select_all'):
+			selection = list_._get_selection()
+
+			if selection is not None:
+				extension = os.path.splitext(selection)[1]
+				list_.unselect_all('*{0}'.format(extension))
+
 	def unselect_with_pattern(self, widget, data=None):
 		"""Ask user for selection pattern and
 		select matching items"""
@@ -1449,6 +1465,7 @@ class MainWindow(gtk.Window):
 						('<Sunflower>/Mark/UnselectPattern', 'KP_Subtract', 0),
 						('<Sunflower>/Mark/InvertSelection', 'KP_Multiply', 0),
 						('<Sunflower>/Mark/SelectWithSameExtension', 'KP_Add', gtk.gdk.MOD1_MASK),
+						('<Sunflower>/Mark/UnselectWithSameExtension', 'KP_Subtract', gtk.gdk.MOD1_MASK),
 						('<Sunflower>/Mark/Compare', 'F12', 0),
 			            ('<Sunflower>/Commands/FindFiles', 'F7', gtk.gdk.MOD1_MASK),
 			            ('<Sunflower>/Commands/SynchronizeDirectories', 'F8', gtk.gdk.MOD1_MASK),

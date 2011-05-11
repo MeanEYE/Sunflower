@@ -228,6 +228,7 @@ class ItemList(PluginBase):
 
 		self._item_list.connect('button-press-event', self._handle_button_press)
 		self._item_list.connect('button-release-event', self._handle_button_press)
+		self._item_list.connect('cursor-changed', self._handle_cursor_change)
 
 		self._connect_main_object(self._item_list)
 
@@ -546,6 +547,10 @@ class ItemList(PluginBase):
 			result = True
 
 		return result
+	
+	def _handle_cursor_change(self, widget=None, data=None):
+		"""Handle cursor change"""
+		pass
 
 	def _start_search(self, key):
 		"""Shows quick search panel and starts searching"""

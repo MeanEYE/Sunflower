@@ -238,7 +238,7 @@ class FileList(ItemList):
 		ItemList._control_got_focus(self, widget, data)
 
 		if self._enable_media_preview:
-			self._thumbnail_view.show()
+			self._handle_cursor_change()
 			
 	def _control_lost_focus(self, widget, data=None):
 		"""Handle control loosing focus"""

@@ -266,6 +266,7 @@ class FileList(ItemList):
 		
 		# show preview if thumbnail exists
 		if not is_dir and not is_parent \
+		and self.get_provider().exists(file_name) \
 		and self._thumbnail_view.can_have_thumbnail(uri):
 			# get position of popup menu, we'll use 
 			# these coordinates to show thumbnail

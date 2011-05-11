@@ -14,6 +14,7 @@ from operation import DeleteOperation, CopyOperation, MoveOperation
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
 from gui.properties_window import PropertiesWindow
+from widgets.thumbnail_view import ThumbnailView 
 
 # try to import I/O library
 try:
@@ -216,6 +217,10 @@ class FileList(ItemList):
 
 		# directory monitor
 		self._fs_monitor = None
+		
+		# thumbnail view
+		self._thumbnail_view = ThumbnailView(self)
+		self._enable_media_preview = self._parent.options.getboolean('main', 'media_preview')
 
 		# variable that is used to set focus on newly created files and dirs
 		self._item_to_focus = None
@@ -227,6 +232,53 @@ class FileList(ItemList):
 		except:
 			# fail-safe jump to user home directory
 			self.change_path(user.home)
+			
+	def _control_got_focus(self, widget, data=None):
+		"""Handle control gaining focus"""
+		ItemList._control_got_focus(self, widget, data)
+
+		if self._enable_media_preview:
+			self._thumbnail_view.show()
+			
+	def _control_lost_focus(self, widget, data=None):
+		"""Handle control loosing focus"""
+		ItemList._control_lost_focus(self, widget, data)
+		
+		if self._enable_media_preview:
+			self._thumbnail_view.hide()
+			
+	def _handle_cursor_change(self, widget=None, data=None):
+		"""Handle cursor change"""
+		if not self._enable_media_preview \
+		or not self._item_list.has_focus(): return
+		
+		selection = self._item_list.get_selection()
+		list_, iter_ = selection.get_selected()
+
+		# we need selection for this
+		if iter_ is None: return
+
+		is_dir = list_.get_value(iter_, COL_DIR)
+		is_parent = list_.get_value(iter_, COL_PARENT)
+		file_name = self._get_selection(relative=False)
+		protocol = self.get_provider().protocols[0]
+		uri = '{0}://{1}'.format(protocol, file_name)
+		
+		# show preview if thumbnail exists
+		if not is_dir and not is_parent \
+		and self._thumbnail_view.can_have_thumbnail(uri):
+			# get position of popup menu, we'll use 
+			# these coordinates to show thumbnail
+			position = self._get_popup_menu_position()
+			column_width = self._columns[0].get_width()
+			
+			self._thumbnail_view.show_thumbnail(uri)
+			self._thumbnail_view.move(position[0] + column_width, position[1])
+			self._thumbnail_view.show()
+			
+		else:
+			# hide preview if item thumbnail is not available
+			self._thumbnail_view.hide()
 
 	def _execute_selected_item(self, widget=None, data=None):
 		"""Execute/Open selected item/directory"""
@@ -598,7 +650,7 @@ class FileList(ItemList):
 		self._delete_item.set_sensitive(not is_parent)
 		self._properties_item.set_sensitive(not is_parent)
 
-	def _get_popup_menu_position(self, menu, data=None):
+	def _get_popup_menu_position(self, menu=None, data=None):
 		"""Positions menu properly for given row"""
 		selection = self._item_list.get_selection()
 		list_, iter_ = selection.get_selected()
@@ -700,7 +752,6 @@ class FileList(ItemList):
 		# node created
 		if event is gio.FILE_MONITOR_EVENT_CREATED:
 			# temporarily fix problem with duplicating items when file was saved with GIO
-			# TODO: Test why this is happening
 			if self._find_iter_by_name(file_.get_basename()) is None:
 				self._add_item(file_.get_basename(), show_hidden)
 
@@ -1066,7 +1117,12 @@ class FileList(ItemList):
 		if gio is not None and self._fs_monitor is not None:
 			self._fs_monitor.cancel()
 
+		# clear list
 		self._clear_list()
+		
+		# hide thumbnail
+		if self._enable_media_preview:
+			self._thumbnail_view.hide()
 
 		# change path
 		if path is not None:
@@ -1319,6 +1375,18 @@ class FileList(ItemList):
 
 		# reload file list in order to apply time formatting, hidden files and other
 		self.refresh_file_list()
+		
+	def apply_media_preview_settings(self):
+		"""Apply settings related to image_preview"""
+		self._enable_media_preview = self._parent.options.getboolean('main', 'media_preview')
+
+		if self._enable_media_preview:
+			# force showing thumbnail
+			self._handle_cursor_change()
+					
+		else:
+			# hide thumbnail
+			self._thumbnail_view.hide()
 
 
 class LocalProvider(Provider):

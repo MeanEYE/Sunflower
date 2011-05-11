@@ -246,6 +246,17 @@ class MainWindow(gtk.Window):
 						'type': 'separator',
 					},
 					{
+						'label': _('Fast m_edia preview'),
+						'type': 'checkbox',
+						'active': self.options.getboolean('main', 'media_preview'),
+						'callback': self._toggle_media_preview,
+						'name': 'fast_media_preview',
+						'path': '<Sunflower>/View/FastMediaPreview',
+					},
+					{
+						'type': 'separator',
+					},
+					{
 						'label': _('Show _hidden files'),
 						'type': 'checkbox',
 						'active': self.options.getboolean('main', 'show_hidden'),
@@ -790,6 +801,24 @@ class MainWindow(gtk.Window):
 
 		self.options.set('main', 'show_toolbar', ('False', 'True')[show_toolbar])
 		self.toolbar_manager.get_toolbar().set_visible(show_toolbar)
+		
+	def _toggle_media_preview(self, widget, data=None):
+		"""Enable/disable fast image preview"""
+		self.options.set('main', 'media_preview', ('False', 'True')[widget.get_active()])
+		
+		# update left notebook
+		for index in range(0, self.left_notebook.get_n_pages()):
+			page = self.left_notebook.get_nth_page(index)
+
+			if hasattr(page, 'apply_media_preview_settings'):
+				page.apply_media_preview_settings()
+
+		# update right notebook
+		for index in range(0, self.right_notebook.get_n_pages()):
+			page = self.right_notebook.get_nth_page(index)
+
+			if hasattr(page, 'apply_media_preview_settings'):
+				page.apply_media_preview_settings()		
 
 	def _get_active_object(self):
 		"""Return active notebook object"""
@@ -1457,24 +1486,25 @@ class MainWindow(gtk.Window):
 		else:
 			# no existing configuration, set default
 			accel_map = (
-						('<Sunflower>/File/CreateFile', 'F7', gtk.gdk.CONTROL_MASK),
-						('<Sunflower>/File/CreateDirectory', 'F7', 0),
-			            ('<Sunflower>/File/Quit', 'Q', gtk.gdk.CONTROL_MASK),
-						('<Sunflower>/Mark/SelectAll', 'A', gtk.gdk.CONTROL_MASK),
-						('<Sunflower>/Mark/SelectPattern', 'KP_Add', 0),
-						('<Sunflower>/Mark/UnselectPattern', 'KP_Subtract', 0),
-						('<Sunflower>/Mark/InvertSelection', 'KP_Multiply', 0),
-						('<Sunflower>/Mark/SelectWithSameExtension', 'KP_Add', gtk.gdk.MOD1_MASK),
-						('<Sunflower>/Mark/UnselectWithSameExtension', 'KP_Subtract', gtk.gdk.MOD1_MASK),
-						('<Sunflower>/Mark/Compare', 'F12', 0),
-			            ('<Sunflower>/Commands/FindFiles', 'F7', gtk.gdk.MOD1_MASK),
-			            ('<Sunflower>/Commands/SynchronizeDirectories', 'F8', gtk.gdk.MOD1_MASK),
-			            ('<Sunflower>/Commands/AdvancedRename', 'M', gtk.gdk.CONTROL_MASK),
-						('<Sunflower>/View/Fullscreen', 'F11', 0),
-						('<Sunflower>/View/Reload', 'R', gtk.gdk.CONTROL_MASK),
-						('<Sunflower>/View/ShowHidden', 'H', gtk.gdk.CONTROL_MASK),
-						('<Sunflower>/View/Preferences', 'P', gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK),
-						)
+					('<Sunflower>/File/CreateFile', 'F7', gtk.gdk.CONTROL_MASK),
+					('<Sunflower>/File/CreateDirectory', 'F7', 0),
+		            ('<Sunflower>/File/Quit', 'Q', gtk.gdk.CONTROL_MASK),
+					('<Sunflower>/Mark/SelectAll', 'A', gtk.gdk.CONTROL_MASK),
+					('<Sunflower>/Mark/SelectPattern', 'KP_Add', 0),
+					('<Sunflower>/Mark/UnselectPattern', 'KP_Subtract', 0),
+					('<Sunflower>/Mark/InvertSelection', 'KP_Multiply', 0),
+					('<Sunflower>/Mark/SelectWithSameExtension', 'KP_Add', gtk.gdk.MOD1_MASK),
+					('<Sunflower>/Mark/UnselectWithSameExtension', 'KP_Subtract', gtk.gdk.MOD1_MASK),
+					('<Sunflower>/Mark/Compare', 'F12', 0),
+		            ('<Sunflower>/Commands/FindFiles', 'F7', gtk.gdk.MOD1_MASK),
+		            ('<Sunflower>/Commands/SynchronizeDirectories', 'F8', gtk.gdk.MOD1_MASK),
+		            ('<Sunflower>/Commands/AdvancedRename', 'M', gtk.gdk.CONTROL_MASK),
+					('<Sunflower>/View/Fullscreen', 'F11', 0),
+					('<Sunflower>/View/Reload', 'R', gtk.gdk.CONTROL_MASK),
+					('<Sunflower>/View/FastMediaPreview', 'F3', gtk.gdk.MOD1_MASK),
+					('<Sunflower>/View/ShowHidden', 'H', gtk.gdk.CONTROL_MASK),
+					('<Sunflower>/View/Preferences', 'P', gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK),
+				)
 
 			for path, key, mask in accel_map:
 				gtk.accel_map_change_entry(path, gtk.gdk.keyval_from_name(key), mask, True)
@@ -1573,6 +1603,7 @@ class MainWindow(gtk.Window):
 				'headers_visible': 'True',
 				'hide_operation_on_minimize': 'False',
 				'ubuntu_coloring': 'False',
+				'media_preview': 'False',
 			}
 
 		# set default options
@@ -1682,6 +1713,10 @@ class MainWindow(gtk.Window):
 		# show or hide hidden files
 		show_hidden = self.menu_manager.get_item_by_name('show_hidden_files')
 		show_hidden.set_active(self.options.getboolean('main', 'show_hidden'))
+
+		# apply media preview settings
+		media_preview = self.menu_manager.get_item_by_name('fast_media_preview')
+		media_preview.set_active(self.options.getboolean('main', 'media_preview'))
 
 		# recreate bookmarks menu
 		self._create_bookmarks_menu()

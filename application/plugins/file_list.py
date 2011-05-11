@@ -964,8 +964,10 @@ class FileList(ItemList):
 			if iter_name == selected_name:
 				next_iter = list_.iter_next(selected_iter)
 
-				if next_iter is not None:
-					self._item_list.set_cursor(list_.get_path(next_iter))
+				if next_iter is None:  # make sure we select something
+					next_iter = list_[-2].iter
+
+				self._item_list.set_cursor(list_.get_path(next_iter))
 
 			if list_.get_value(found_iter, COL_DIR):
 				self._dirs['count'] -= 1

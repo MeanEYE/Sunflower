@@ -71,7 +71,7 @@ if len(interpreters) > 0:
 		params.extend(sys.argv[1:])
 
 		# print interpreter version
-		print "Trying with {0}...".format(os.path.basename(interpreter))
+		print("Trying with {0}...".format(os.path.basename(interpreter)))
 
 		# execute interpreted
 		process = subprocess.Popen(params, executable=interpreter)
@@ -80,12 +80,12 @@ if len(interpreters) > 0:
 		if process.returncode == 0:
 			# if interpreter manages to run
 			# we don't need to execute others
-			print "Worked!"
+			print("Worked!")
 			break
 
 	sys.exit(code)
 
 else:
 	# no valid interpreters found, notify user
-	print ("No valid Python 2.x interpreter was found!")
+	print("No valid Python 2.x interpreter was found!")
 	sys.exit(2)

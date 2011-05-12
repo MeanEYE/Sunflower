@@ -802,11 +802,11 @@ class MainWindow(gtk.Window):
 
 		self.options.set('main', 'show_toolbar', ('False', 'True')[show_toolbar])
 		self.toolbar_manager.get_toolbar().set_visible(show_toolbar)
-		
+
 	def _toggle_media_preview(self, widget, data=None):
 		"""Enable/disable fast image preview"""
 		self.options.set('main', 'media_preview', ('False', 'True')[widget.get_active()])
-		
+
 		# update left notebook
 		for index in range(0, self.left_notebook.get_n_pages()):
 			page = self.left_notebook.get_nth_page(index)
@@ -819,7 +819,7 @@ class MainWindow(gtk.Window):
 			page = self.right_notebook.get_nth_page(index)
 
 			if hasattr(page, 'apply_media_preview_settings'):
-				page.apply_media_preview_settings()		
+				page.apply_media_preview_settings()
 
 	def _get_active_object(self):
 		"""Return active notebook object"""
@@ -878,8 +878,17 @@ class MainWindow(gtk.Window):
 				if hasattr(plugin, 'register_plugin'):
 					plugin.register_plugin(self)
 
-			except:
+			except Exception as (error_string, error_data):
 				print 'Error: Unable to load plugin "{0}"'.format(file_)
+				print '  description: {0}'.format(error_string)
+				print '  file:        {0}'.format(os.path.basename(error_data[0]))
+				print '  location:    {0}, {1}'.format(error_data[1], error_data[2])
+				print '  source:      {0}'.format(error_data[3].strip())
+
+				# in case plugin is protected, complain and exit
+				if file_ in self.protected_plugins:
+					print '\nFatal error! Failed to load required plugin, exiting!'
+					sys.exit(3)
 
 	def _load_translation(self):
 		"""Load translation and install global functions"""
@@ -984,12 +993,12 @@ class MainWindow(gtk.Window):
 		geometry = '{0}x{1}+{2}+{3}'.format(size[0], size[1], position[0], position[1])
 
 		self.options.set('main', 'window', geometry)
-		
+
 	def _save_active_notebook(self):
 		"""Save active notebook to config"""
 		object = self._get_active_object()
 		is_left = object._notebook is self.left_notebook
-		
+
 		self.options.set('main', 'active_notebook', (1, 0)[is_left])
 
 	def _restore_window_position(self):
@@ -1061,7 +1070,7 @@ class MainWindow(gtk.Window):
 
 			# kill dialog
 			change_log.destroy()
-			
+
 		# set config version to current
 		if config_version is None or current_version > config_version:
 			self.options.set('main', 'last_version', current_version)
@@ -1288,7 +1297,7 @@ class MainWindow(gtk.Window):
 		# focus active notebook
 		active_notebook_index = self.options.getint('main', 'active_notebook')
 		notebook = (self.left_notebook, self.right_notebook)[active_notebook_index]
-		
+
 		notebook.grab_focus()
 
 		# enter main loop

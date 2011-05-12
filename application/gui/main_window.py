@@ -878,12 +878,8 @@ class MainWindow(gtk.Window):
 				if hasattr(plugin, 'register_plugin'):
 					plugin.register_plugin(self)
 
-			except Exception as (error_string, error_data):
-				print 'Error: Unable to load plugin "{0}"'.format(file_)
-				print '  description: {0}'.format(error_string)
-				print '  file:        {0}'.format(os.path.basename(error_data[0]))
-				print '  location:    {0}, {1}'.format(error_data[1], error_data[2])
-				print '  source:      {0}'.format(error_data[3].strip())
+			except Exception as error:
+				print 'Error: Unable to load plugin "{0}": {1}'.format(file_, error)
 
 				# in case plugin is protected, complain and exit
 				if file_ in self.protected_plugins:

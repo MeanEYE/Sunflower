@@ -20,7 +20,7 @@ class ThumbnailView(gtk.Window):
 
 	"""
 
-	def __init__(self, parent, size=gnome.ui.THUMBNAIL_SIZE_NORMAL):
+	def __init__(self, parent, size=None):
 		gtk.Window.__init__(self, gtk.WINDOW_POPUP)
 
 		self.set_keep_above(True)
@@ -37,6 +37,11 @@ class ThumbnailView(gtk.Window):
 
 		# create thumbnail factory
 		if USE_FACTORY:
+			# set default thumbnail size
+			if self._thumbnail_size is None:
+				self._thumbnail_size = gnome.ui.THUMBNAIL_SIZE_NORMAL
+
+			# create a factory
 			self._factory = gnome.ui.ThumbnailFactory(self._thumbnail_size)
 
 		else:

@@ -23,6 +23,8 @@ class OperationDialog(gtk.Window):
 		self._thread = thread
 		self._size_format = '{0} / {1}'
 		self._count_format = '{0} / {1}'
+		self._has_source_destination = False
+		self._has_current_file = False
 		self._has_details = False
 
 		self._total_size = 0L
@@ -44,7 +46,6 @@ class OperationDialog(gtk.Window):
 		self.set_default_size(400, 10)
 		self.set_resizable(True)
 		self.set_skip_taskbar_hint(False)
-		self.set_border_width(5)
 		self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
 
 		# connect signals
@@ -80,9 +81,7 @@ class OperationDialog(gtk.Window):
 
 	def _add_source_destination(self):
 		"""Add source and destination labels to the GUI"""
-		frame = gtk.Frame()
-		frame.set_shadow_type(gtk.SHADOW_OUT)
-
+		self._has_source_destination = True
 		table = gtk.Table(2, 2, False)
 		table.set_border_width(7)
 		table.set_col_spacing(0, 10)
@@ -101,8 +100,7 @@ class OperationDialog(gtk.Window):
 		table.attach(self._value_source, 1, 2, 0, 1)
 		table.attach(self._value_destination, 1, 2, 1, 2)
 
-		frame.add(table)
-		self._vbox.pack_start(frame, False, False, 0)
+		self._vbox.pack_start(table, False, False, 0)
 
 		# configure components
 		self._label_source.set_alignment(0, 0.5)
@@ -115,9 +113,7 @@ class OperationDialog(gtk.Window):
 
 	def _add_current_file(self):
 		"""Add 'current file' progress to the GUI"""
-		frame = gtk.Frame()
-		frame.set_shadow_type(gtk.SHADOW_OUT)
-
+		self._has_current_file = True
 		table = gtk.Table(2, 2, False)
 		table.set_border_width(7)
 		table.set_row_spacing(0, 2)
@@ -133,8 +129,10 @@ class OperationDialog(gtk.Window):
 		table.attach(self._label_current_file, 1, 2, 0, 1)
 		table.attach(self._pb_current_file, 0, 2, 1, 2)
 
-		frame.add(table)
-		self._vbox.pack_start(frame, False, False, 0)
+		if self._has_source_destination:
+			separator = gtk.HSeparator()
+			self._vbox.pack_start(separator, False, False, 0)
+		self._vbox.pack_start(table, False, False, 0)
 
 		# configure components
 		self._label_status.set_alignment(0, 0.5)
@@ -144,9 +142,6 @@ class OperationDialog(gtk.Window):
 	def _add_details(self):
 		"""Add ETA to the dialog"""
 		self._has_details = True
-		frame = gtk.Frame()
-		frame.set_shadow_type(gtk.SHADOW_OUT)
-
 		table = gtk.Table(2, 6, False)
 		table.set_border_width(7)
 
@@ -176,8 +171,9 @@ class OperationDialog(gtk.Window):
 		table.attach(self._value_total_count, 1, 2, 4, 5)
 		table.attach(self._pb_total_count, 0, 2, 5, 6)
 
-		frame.add(table)
-		self._vbox.pack_start(frame, False, False, 0)
+		separator = gtk.HSeparator()
+		self._vbox.pack_start(separator, False, False, 0)
+		self._vbox.pack_start(table, False, False, 0)
 
 		# configure components
 		self._label_eta.set_alignment(0, 0.5)
@@ -203,6 +199,7 @@ class OperationDialog(gtk.Window):
 	def _add_buttons(self):
 		"""Add button bar"""
 		hbox = gtk.HBox(False, 5)
+		hbox.set_border_width(7)
 
 		self._button_minimize = gtk.Button(_('Minimize'))
 		self._button_cancel = gtk.Button(_('Cancel'))
@@ -223,7 +220,9 @@ class OperationDialog(gtk.Window):
 		hbox.pack_start(self._button_pause, False, False, 0)
 		hbox.pack_end(self._button_cancel, False, False, 0)
 
+		separator = gtk.HSeparator()
 		self._vbox.pack_end(hbox, False, False, 0)
+		self._vbox.pack_end(separator, False, False, 0)
 
 	def _confirm_cancel(self, message):
 		"""Create confirmation dialog with specified message and return result"""

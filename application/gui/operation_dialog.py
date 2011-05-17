@@ -310,6 +310,8 @@ class OperationDialog(gtk.Window):
 		Don't call this method automatically!
 
 		"""
+		if self._paused: return  # don't update speed when paused
+		
 		speed = self._current_size - self._total_checkpoint  # get current speed
 		self._total_checkpoint = self._current_size
 

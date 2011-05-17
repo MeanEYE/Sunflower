@@ -140,7 +140,7 @@ class Operation(Thread):
 
 		# abort operation if user requested
 		if response == gtk.RESPONSE_CANCEL:
-			self._can_continue = False
+			self.cancel()
 
 		return response
 
@@ -171,7 +171,7 @@ class Operation(Thread):
 
 		# abort operation if user requested
 		if response == gtk.RESPONSE_CANCEL:
-			self._can_continue = False
+			self.cancel()
 
 		return response
 
@@ -193,7 +193,7 @@ class Operation(Thread):
 
 		# abort operation if user requested
 		if response == gtk.RESPONSE_CANCEL:
-			self._can_continue = False
+			self.cancel()
 
 		return response
 	
@@ -213,7 +213,7 @@ class Operation(Thread):
 
 		# abort operation if user requested
 		if response == gtk.RESPONSE_CANCEL:
-			self._can_continue = False
+			self.cancel()
 
 		return response
 	
@@ -233,7 +233,7 @@ class Operation(Thread):
 
 		# abort operation if user requested
 		if response == gtk.RESPONSE_CANCEL:
-			self._can_continue = False
+			self.cancel()
 
 		return response
 

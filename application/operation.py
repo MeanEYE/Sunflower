@@ -392,7 +392,8 @@ class CopyOperation(Operation):
 
 				if can_procede:
 					# allow processing specified directory
-					if can_create: self._dir_list.append(full_name)
+					self._dir_list.append(full_name)
+					if can_create: self._dir_list_create.append(full_name)
 					self._scan_directory(full_name)
 
 			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):

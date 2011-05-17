@@ -262,7 +262,7 @@ class FileList(ItemList):
 		is_parent = list_.get_value(iter_, COL_PARENT)
 		file_name = self._get_selection(relative=False)
 		protocol = self.get_provider().protocols[0]
-		uri = '{0}://{1}'.format(protocol, file_name)
+		uri = urllib.quote('{0}://{1}'.format(protocol, file_name))
 
 		# show preview if thumbnail exists
 		if not is_dir and not is_parent \
@@ -1045,7 +1045,6 @@ class FileList(ItemList):
 
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""
-		# TODO: Finish drag and drop support
 		list = selection_data.data.splitlines(False)
 
 		# prepare data for copying

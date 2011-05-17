@@ -50,6 +50,193 @@ class Operation(Thread):
 			self._dialog.destroy()
 			gtk.gdk.threads_leave()
 
+	def _get_merge_input(self, path):
+		"""Get merge confirmation"""
+		gtk.gdk.threads_enter()  # prevent deadlocks
+		dialog = OverwriteDirectoryDialog(self._application, self._dialog)
+
+		title_element = os.path.basename(path)
+		message_element = os.path.basename(os.path.dirname(
+							os.path.join(self._destination.get_path(), path)))
+
+		dialog.set_title_element(title_element)
+		dialog.set_message_element(message_element)
+		dialog.set_rename_value(title_element)
+		dialog.set_source(
+						self._source,
+						path,
+						relative_to=self._source_path
+						)
+		dialog.set_original(
+						self._destination,
+						path,
+						relative_to=self._destination_path
+						)
+
+		result = dialog.get_response()
+		gtk.gdk.threads_leave()
+
+		merge = result[0] == gtk.RESPONSE_YES
+
+		if result[1][OPTION_APPLY_TO_ALL]:
+			self._merge_all = merge
+
+		# in case user canceled operation
+		if result[0] == gtk.RESPONSE_CANCEL:
+			self.cancel()
+
+		return merge  # return only response for current directory
+
+	def _get_overwrite_input(self, path):
+		"""Get overwrite confirmation"""
+		gtk.gdk.threads_enter()  # prevent deadlocks
+		dialog = OverwriteFileDialog(self._application, self._dialog)
+
+		title_element = os.path.basename(path)
+		message_element = os.path.basename(os.path.dirname(
+							os.path.join(self._destination.get_path(), path)))
+
+		dialog.set_title_element(title_element)
+		dialog.set_message_element(message_element)
+		dialog.set_rename_value(title_element)
+		dialog.set_source(
+						self._source,
+						path,
+						relative_to=self._source_path
+						)
+		dialog.set_original(
+						self._destination,
+						path,
+						relative_to=self._destination_path
+						)
+
+		result = dialog.get_response()
+		gtk.gdk.threads_leave()
+
+		overwrite = result[0] == gtk.RESPONSE_YES
+
+		if result[1][OPTION_APPLY_TO_ALL]:
+			self._overwrite_all = overwrite
+
+		# in case user canceled operation
+		if result[0] == gtk.RESPONSE_CANCEL:
+			self.cancel()
+
+		return overwrite, result[1]
+
+	def _get_write_error_input(self, error):
+		"""Get user response for write error"""
+		gtk.gdk.threads_enter()  # prevent deadlocks
+		dialog = OperationError(self._application)
+
+		dialog.set_message(_(
+		        'There is a problem writing data to destination '
+		        'file. What would you like to do?'
+		    ))
+		dialog.set_error(str(error))
+
+		response = dialog.get_response()
+		gtk.gdk.threads_leave()
+
+		# abort operation if user requested
+		if response == gtk.RESPONSE_CANCEL:
+			self._can_continue = False
+
+		return response
+
+	def _get_create_error_input(self, error, is_directory=False):
+		"""Get user response for create error"""
+		gtk.gdk.threads_enter()  # prevent deadlocks
+		dialog = OperationError(self._application)
+
+		if not is_directory:
+			# set message for file
+			dialog.set_message(_(
+				'An error occurred while trying to create specified '
+				'file. What would you like to do?'
+			))
+
+		else:
+			# set message for directory
+			dialog.set_message(_(
+				'An error occurred while trying to create specified '
+				'directory. What would you like to do?'
+			))
+
+		dialog.set_error(str(error))
+
+		# get user response
+		response = dialog.get_response()
+		gtk.gdk.threads_leave()
+
+		# abort operation if user requested
+		if response == gtk.RESPONSE_CANCEL:
+			self._can_continue = False
+
+		return response
+
+	def _get_mode_set_error_input(self, error):
+		"""Get user response for mode set error"""
+		gtk.gdk.threads_enter()  # prevent deadlocks
+		dialog = OperationError(self._application)
+
+		dialog.set_message(_(
+	            'Problem with setting mode and/or owner for '
+	            'specified path. What would you like to do?'
+	        ))
+
+		dialog.set_error(str(error))
+
+		# get user response
+		response = dialog.get_response()
+		gtk.gdk.threads_leave()
+
+		# abort operation if user requested
+		if response == gtk.RESPONSE_CANCEL:
+			self._can_continue = False
+
+		return response
+	
+	def _get_remove_error_input(self, error):
+		"""Get user response for remove error"""
+		gtk.gdk.threads_enter()  # prevent deadlocks
+		dialog = OperationError(self._application)
+
+		dialog.set_message(_(
+		        'There was a problem removing specified path. '
+		        'What would you like to do?'
+		    ))
+		dialog.set_error(str(error))
+
+		response = dialog.get_response()
+		gtk.gdk.threads_leave()
+
+		# abort operation if user requested
+		if response == gtk.RESPONSE_CANCEL:
+			self._can_continue = False
+
+		return response
+	
+	def _get_move_error_input(self, error):
+		"""Get user response for move error"""
+		gtk.gdk.threads_enter()  # prevent deadlocks
+		dialog = OperationError(self._application)
+
+		dialog.set_message(_(
+		        'There was a problem moving specified path. '
+		        'What would you like to do?'
+		    ))
+		dialog.set_error(str(error))
+
+		response = dialog.get_response()
+		gtk.gdk.threads_leave()
+
+		# abort operation if user requested
+		if response == gtk.RESPONSE_CANCEL:
+			self._can_continue = False
+
+		return response
+
 	def pause(self):
 		"""Pause current operation"""
 		self._can_continue.clear()
@@ -78,6 +265,7 @@ class CopyOperation(Operation):
 
 		self._merge_all = None
 		self._overwrite_all = None
+		self._dir_list_create = []
 
 		# cache settings
 		self._reserve_size = self._application.options.getboolean('main', 'reserve_size')
@@ -92,169 +280,24 @@ class CopyOperation(Operation):
 		self._dialog.set_current_file("")
 		self._dialog.set_current_file_fraction(0)
 
-	def _get_merge_input(self, path):
-		"""Get merge confirmation"""
-		dialog = OverwriteDirectoryDialog(self._application, self._dialog)
-
-		title_element = os.path.basename(path)
-		message_element = os.path.basename(os.path.dirname(
-							os.path.join(self._destination.get_path(), path)))
-
-		dialog.set_title_element(title_element)
-		dialog.set_message_element(message_element)
-		dialog.set_rename_value(title_element)
-		dialog.set_source(
-						self._source,
-						path,
-						relative_to=self._source_path
-						)
-		dialog.set_original(
-						self._destination,
-						path,
-						relative_to=self._destination_path
-						)
-
-		gtk.gdk.threads_enter()  # prevent deadlocks
-		result = dialog.get_response()
-		gtk.gdk.threads_leave()
-
-		merge = result[0] == gtk.RESPONSE_YES
-
-		if result[1][OPTION_APPLY_TO_ALL]:
-			self._merge_all = merge
-
-		# in case user canceled operation
-		if result[0] == gtk.RESPONSE_CANCEL:
-			self.cancel()
-
-		return merge  # return only response for current directory
-
-	def _get_overwrite_input(self, path):
-		"""Get overwrite confirmation"""
-		dialog = OverwriteFileDialog(self._application, self._dialog)
-
-		title_element = os.path.basename(path)
-		message_element = os.path.basename(os.path.dirname(
-							os.path.join(self._destination.get_path(), path)))
-
-		dialog.set_title_element(title_element)
-		dialog.set_message_element(message_element)
-		dialog.set_rename_value(title_element)
-		dialog.set_source(
-						self._source,
-						path,
-						relative_to=self._source_path
-						)
-		dialog.set_original(
-						self._destination,
-						path,
-						relative_to=self._destination_path
-						)
-
-		gtk.gdk.threads_enter()  # prevent deadlocks
-		result = dialog.get_response()
-		gtk.gdk.threads_leave()
-
-		overwrite = result[0] == gtk.RESPONSE_YES
-
-		if result[1][OPTION_APPLY_TO_ALL]:
-			self._overwrite_all = overwrite
-
-		# in case user canceled operation
-		if result[0] == gtk.RESPONSE_CANCEL:
-			self.cancel()
-
-		return overwrite, result[1]
-
-	def _get_write_error_input(self, error):
-		"""Get user response for write error"""
-		dialog = OperationError(self._application)
-
-		dialog.set_message(_(
-		        'There is a problem writing data to destination '
-		        'file. What would you like to do?'
-		    ))
-		dialog.set_error(str(error))
-
-		gtk.gdk.threads_enter()  # prevent deadlocks
-		response = dialog.get_response()
-		gtk.gdk.threads_leave()
-
-		# abort operation if user requested
-		if response == gtk.RESPONSE_CANCEL:
-			self._can_continue = False
-
-		return response
-
-
-	def _get_create_error_input(self, error, is_directory=False):
-		"""Get user response for create error"""
-		dialog = OperationError(self._application)
-
-		if not is_directory:
-			# set message for file
-			dialog.set_message(_(
-				'An error occurred while trying to create specified '
-				'file. What would you like to do?'
-			))
-
-		else:
-			# set message for directory
-			dialog.set_message(_(
-				'An error occurred while trying to create specified '
-				'directory. What would you like to do?'
-			))
-
-		dialog.set_error(str(error))
-
-		# get user response
-		gtk.gdk.threads_enter()  # prevent deadlocks
-		response = dialog.get_response()
-		gtk.gdk.threads_leave()
-
-		# abort operation if user requested
-		if response == gtk.RESPONSE_CANCEL:
-			self._can_continue = False
-
-		return response
-
-	def _get_mode_set_error_input(self, error):
-		"""Get user response for mode set error"""
-		dialog = OperationError(self._application)
-
-		dialog.set_message(_(
-	            'Problem with setting mode and/or owner for '
-	            'specified path. What would you like to do?'
-	        ))
-
-		dialog.set_error(str(error))
-
-		# get user response
-		gtk.gdk.threads_enter()  # prevent deadlocks
-		response = dialog.get_response()
-		gtk.gdk.threads_leave()
-
-		# abort operation if user requested
-		if response == gtk.RESPONSE_CANCEL:
-			self._can_continue = False
-
-		return response
-
 	def _get_lists(self):
 		"""Find all files for copying"""
 		gobject.idle_add(self._update_status, _('Searching for files...'))
 
 		for item in self._source.get_selection(relative=True):
 			if self._abort.is_set(): break  # abort operation if requested
-			self._can_continue.wait()
+			self._can_continue.wait()  # pause lock
 
+			# update current file label
 			gobject.idle_add(self._dialog.set_current_file, item)
 			gobject.idle_add(self._dialog.pulse)
 
 			if self._source.is_dir(item, relative_to=self._source_path):
+				# item is directory
 				can_procede = True
 				can_create = True
 
+				# check if directory exists on destination
 				if self._destination.exists(item, relative_to=self._destination_path):
 					can_create = False
 
@@ -263,11 +306,14 @@ class CopyOperation(Operation):
 					else:
 						can_procede = self._get_merge_input(item)
 
+				# if user didn't skip directory, scan and update lists
 				if can_procede:
-					if can_create: self._dir_list.append(item)
+					self._dir_list.append(item)
+					if can_create: self._dir_list_create.append(item)
 					self._scan_directory(item)
-
+					
 			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
+				# item is a file, get stats and update lists
 				stat = self._source.get_stat(item, relative_to=self._source_path)
 				gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
@@ -325,7 +371,7 @@ class CopyOperation(Operation):
 		"""Recursively scan directory and populate list"""
 		for item in self._source.list_dir(directory, relative_to=self._source_path):
 			if self._abort.is_set(): break  # abort operation if requested
-			self._can_continue.wait()
+			self._can_continue.wait()  # pause lock
 
 			gobject.idle_add(self._dialog.set_current_file, item)
 			gobject.idle_add(self._dialog.pulse)
@@ -448,7 +494,7 @@ class CopyOperation(Operation):
 
 		while True:
 			if self._abort.is_set(): break
-			self._can_continue.wait()
+			self._can_continue.wait()  # pause lock
 
 			buffer_ = sh.read(COPY_BUFFER)
 
@@ -480,9 +526,9 @@ class CopyOperation(Operation):
 		"""Create all directories in list"""
 		gobject.idle_add(self._update_status, _('Creating directories...'))
 
-		for number, dir_ in enumerate(self._dir_list, 0):
+		for number, dir_ in enumerate(self._dir_list_create, 0):
 			if self._abort.is_set(): break  # abort operation if requested
-			self._can_continue.wait()
+			self._can_continue.wait()  # pause lock
 
 			gobject.idle_add(self._dialog.set_current_file, dir_)
 			self._create_directory(dir_)  # create directory
@@ -497,17 +543,17 @@ class CopyOperation(Operation):
 		# update status
 		gobject.idle_add(self._update_status, _('Copying files...'))
 
+		list_ = self._file_list[:]
+		
 		# copy all the files in list
-		for file_ in self._file_list:
+		for file_ in list_:
 			# abort operation if requested
 			if self._abort.is_set(): break
-			self._can_continue.wait()
-
-			gobject.idle_add(self._dialog.set_current_file, file_)
+			self._can_continue.wait()  # pause lock
 
 			# copy file
+			gobject.idle_add(self._dialog.set_current_file, file_)
 			self._copy_file(file_)
-
 			gobject.idle_add(self._dialog.increment_current_count, 1)
 
 	def run(self):
@@ -520,7 +566,7 @@ class CopyOperation(Operation):
 
 		# get list of items to copy
 		self._get_lists()
-
+		
 		# perform operation
 		self._create_directory_list()
 		self._copy_file_list()
@@ -550,6 +596,24 @@ class CopyOperation(Operation):
 class MoveOperation(CopyOperation):
 	"""Operation thread used for moving files"""
 
+	def _remove_path(self, path, list):
+		"""Remove path"""
+		try:
+			# try removing specified path
+			self._source.remove_path(path, relative_to=self._source_path)
+			
+		except StandardError as error:
+			# problem removing path, ask user what to do
+			response = self._get_remove_error_input(error)
+
+			# handle user response
+			if response == gtk.RESPONSE_YES:
+				self._remove_path(path, list)  # retry removing path
+				
+			else:
+				# user didn't want to retry, remove path from list
+				list.pop(list.index(path))
+	
 	def _create_dialog(self):
 		"""Create progress dialog"""
 		self._dialog = MoveDialog(self._application, self)
@@ -574,24 +638,45 @@ class MoveOperation(CopyOperation):
 					                )
 
 		# if user skipped this file return
-		if not can_procede: return
+		if not can_procede:
+			self._file_list.pop(self._file_list.index(file_)) 
+			return
 
 		# move file
-		self._source.rename_path(
-							file_,
-							os.path.join(self._destination_path, dest_file),
-							relative_to=self._source_path
-						)
+		try:
+			self._source.rename_path(
+								file_,
+								os.path.join(self._destination_path, dest_file),
+								relative_to=self._source_path
+							)
+			
+		except StandardError as error:
+			# problem with moving file, ask user what to do
+			response = self._get_move_error_input(error)
+
+			# handle user response
+			if response == gtk.RESPONSE_YES:
+				self._move_file(dest_file)  # retry copying this file
+
+			else:
+				# user didn't want to retry, remove file from list
+				self._file_list.pop(self._file_list.index(file_))
+
+			# exit method
+			return
 
 	def _move_file_list(self):
 		"""Move files from the list"""
 		gobject.idle_add(self._update_status, _('Moving files...'))
-		for file_ in self._file_list:
+		
+		list_ = self._file_list[:]
+		
+		for file_ in list_:
 			if self._abort.is_set(): break  # abort operation if requested
-			self._can_continue.wait()
+			self._can_continue.wait()  # pause lock
 
+			# move file
 			gobject.idle_add(self._dialog.set_current_file, file_)
-
 			self._move_file(file_)
 			gobject.idle_add(self._dialog.increment_current_count, 1)
 
@@ -599,15 +684,20 @@ class MoveOperation(CopyOperation):
 		"""Remove files from source list"""
 		gobject.idle_add(self._update_status, _('Deleting source files...'))
 
-		for number, item in enumerate(self._file_list, 0):
-			if self._abort.is_set(): break  # abort operation if requested
-			self._can_continue.wait()
+		list_ = self._file_list[:]
 
+		for number, item in enumerate(list_, 0):
+			if self._abort.is_set(): break  # abort operation if requested
+			self._can_continue.wait()  # pause lock
+
+			# remove path
 			gobject.idle_add(self._dialog.set_current_file, item)
-			self._source.remove_path(item, relative_to=self._source_path)
+			self._remove_path(item, self._file_list)
+			
+			# update current count
 			gobject.idle_add(
 						self._dialog.set_current_file_fraction,
-						float(number) / len(self._file_list)
+						float(number) / len(list_)
 					)
 
 		self._delete_directories()
@@ -616,20 +706,30 @@ class MoveOperation(CopyOperation):
 		"""Remove empty directories after moving files"""
 		gobject.idle_add(self._update_status, _('Deleting source directories...'))
 
-		dir_list = self._dir_list
-		dir_list.reverse()
+		dir_list = self._dir_list[:]
+		dir_list.reverse()  # remove deepest directories first
 
 		for number, directory in enumerate(dir_list, 0):
 			if self._abort.is_set(): break  # abort operation if requested
-			self._can_continue.wait()
+			self._can_continue.wait()  # pause lock
 
 			if self._source.exists(directory, relative_to=self._source_path):
 				gobject.idle_add(self._dialog.set_current_file, directory)
-				self._source.remove_path(directory, relative_to=self._source_path)
-				gobject.idle_add(
-							self._dialog.set_current_file_fraction,
-							float(number) / len(dir_list)
+				
+				# remove directory only if it's empty
+				if len(self._source.list_dir(directory, relative_to=self._source_path)) == 0:
+					self._remove_path(directory, dir_list)
+				
+				# update current count
+				if len(dir_list) > 0:
+					gobject.idle_add(
+								self._dialog.set_current_file_fraction,
+								float(number) / len(dir_list)
 							)
+					
+				else:
+					# prevent division by zero
+					gobject.idle_add(self._dialog.set_current_file_fraction, 1)
 
 	def _check_devices(self):
 		"""Check if source and destination are on the same file system"""
@@ -685,7 +785,7 @@ class MoveOperation(CopyOperation):
 			# queue notification
 			gobject.idle_add(notify_manager.notify, title, message)
 
-		# desctroy dialog
+		# destroy dialog
 		gobject.idle_add(self._destroy_ui)
 
 
@@ -695,13 +795,31 @@ class DeleteOperation(Operation):
 	def __init__(self, application, provider):
 		Operation.__init__(self, application, provider)
 		self._dialog = DeleteDialog(application, self)
+		
+	def _remove_path(self, path):
+		"""Remove path"""
+		try:
+			# try removing specified path
+			self._source.remove_path(path, relative_to=self._source_path)
+			
+		except StandardError as error:
+			# problem removing path, ask user what to do
+			response = self._get_remove_error_input(error)
 
+			# handle user response
+			if response == gtk.RESPONSE_YES:
+				self._remove_path(path)  # retry removing path
+				
+			else:
+				# user didn't want to retry, remove path from list
+				self._file_list.pop(self._file_list.index(path))
+				
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
 		self._dialog.show_all()
 
 		# get selected items
-		list_ = self._source.get_selection(relative=True)
+		self._file_list = self._source.get_selection(relative=True)
 
 		# clear selection on source directory
 		parent = self._source.get_parent()
@@ -709,13 +827,23 @@ class DeleteOperation(Operation):
 			parent.unselect_all()
 
 		# remove them
-		for index, item in enumerate(list_, 1):
+		for index, item in enumerate(self._file_list, 1):
 			if self._abort.is_set(): break  # abort operation if requested
-			self._can_continue.wait()
+			self._can_continue.wait()  # pause lock
 
 			gobject.idle_add(self._dialog.set_current_file, item)
-			self._source.remove_path(item, relative_to=self._source_path)
-			gobject.idle_add(self._dialog.set_current_file_fraction, float(index) / len(list_))
+			self._remove_path(item)
+			
+			# update current count 
+			if len(self._file_list) > 0:
+				gobject.idle_add(
+							self._dialog.set_current_file_fraction, 
+							float(index) / len(self._file_list)
+						)
+				
+			else:
+				# prevent division by zero
+				gobject.idle_add(self._dialog.set_current_file_fraction, 1)
 
 		# notify user if window is not focused
 		if not self._dialog.is_active() and not self._abort.is_set():
@@ -725,9 +853,9 @@ class DeleteOperation(Operation):
 			message = ngettext(
 							'Removal of {0} item from "{1}" is completed!',
 							'Removal of {0} items from "{1}" is completed!',
-							len(list_)
+							len(self._file_list)
 						).format(
-			        len(list_),
+			        len(self._file_list),
 			        os.path.basename(self._source_path)
 			    )
 

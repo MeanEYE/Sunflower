@@ -454,15 +454,20 @@ class CopyOperation(Operation):
 		# if user skipped this file return
 		if not can_procede:
 			self._file_list.pop(self._file_list.index(file_))
+
+			# update total size
+			file_stat = self._source.get_stat(file_, relative_to=self._source_path)
+			gobject.idle_add(self._dialog.increment_current_size, file_stat.st_size)
 			return
 
 		try:
+			# get file stats
+			destination_size = 0L
+			file_stat = self._source.get_stat(file_, relative_to=self._source_path)
+
 			# get file handles
 			sh = self._source.get_file_handle(file_, 'rb', relative_to=self._source_path)
 			dh = self._destination.get_file_handle(dest_file, 'wb', relative_to=self._destination_path)
-
-			destination_size = 0L
-			file_stat = self._source.get_stat(file_, relative_to=self._source_path)
 
 			# reserve file size
 			if self._reserve_size:
@@ -489,6 +494,9 @@ class CopyOperation(Operation):
 			else:
 				# user didn't want to retry, remove file from list
 				self._file_list.pop(self._file_list.index(file_))
+
+			# remove amount of copied bytes from total size
+			gobject.idle_add(self._dialog.increment_current_size, -destination_size)
 
 			# exit method
 			return
@@ -536,7 +544,7 @@ class CopyOperation(Operation):
 
 			gobject.idle_add(
 						self._dialog.set_current_file_fraction,
-						float(number)/len(self._dir_list)
+						float(number) / len(self._dir_list)
 					)
 
 	def _copy_file_list(self):

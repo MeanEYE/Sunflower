@@ -145,6 +145,30 @@ class MainWindow(gtk.Window):
 						'type': 'separator',
 					},
 					{
+						'label': _('_Open'),
+						'type': 'image',
+						'stock': gtk.STOCK_OPEN,
+						'path': '<Sunflower>/File/Open',
+					},
+					{
+						'label': _('Open in new ta_b'),
+						'type': 'image',
+						'image': 'tab-new',
+						'path': '<Sunflower>/File/OpenInNewTab',
+					},
+					{
+						'type': 'separator',
+					},
+					{
+						'label': _('_Properties'),
+						'type': 'image',
+						'stock': gtk.STOCK_PROPERTIES,
+						'path': '<Sunflower>/File/Properties',
+					},
+					{
+						'type': 'separator',
+					},
+					{
 						'label': _('_Quit'),
 						'type': 'image',
 						'stock': gtk.STOCK_QUIT,
@@ -152,6 +176,65 @@ class MainWindow(gtk.Window):
 						'path': '<Sunflower>/File/Quit',
 					},
 				)
+			},
+			{
+				'label': _('Edit'),
+				'submenu': (
+					{
+						'label': _('Cu_t'),
+						'type': 'image',
+						'stock': gtk.STOCK_CUT,
+						'path': '<Sunflower>/Edit/Cut',
+					},
+					{
+						'label': _('_Copy'),
+						'type': 'image',
+						'stock': gtk.STOCK_COPY,
+						'path': '<Sunflower>/Edit/Copy',
+					},
+					{
+						'label': _('_Paste'),
+						'type': 'image',
+						'stock': gtk.STOCK_PASTE,
+						'path': '<Sunflower>/Edit/Paste',
+					},
+					{
+						'type': 'separator',
+					},
+					{
+						'label': _('_Delete'),
+						'type': 'image',
+						'stock': gtk.STOCK_DELETE,
+						'path': '<Sunflower>/Edit/Delete',
+					},
+					{
+						'type': 'separator',
+					},
+					{
+						'label': _('Send to...'),
+						'type': 'image',
+						'image': 'document-send',
+						'path': '<Sunflower>/Edit/SendTo',
+					},
+					{
+						'label': _('Ma_ke link'),
+						'path': '<Sunflower>/Edit/MakeLink',
+					},
+					{
+						'label': _('_Rename...'),
+						'path': '<Sunflower>/Edit/Rename',
+					},
+					{
+						'type': 'separator',
+					},
+					{
+						'label': _('_Preferences'),
+						'type': 'image',
+						'stock': gtk.STOCK_PREFERENCES,
+						'callback': self.preferences_window._show,
+						'path': '<Sunflower>/Edit/Preferences',
+					},
+				),
 			},
 			{
 				'label': _('Mark'),
@@ -287,14 +370,6 @@ class MainWindow(gtk.Window):
 						'callback': self._toggle_show_command_entry,
 						'name': 'show_command_entry',
 						'path': '<Sunflower>/View/ShowCommandEntry',
-					},
-					{'type': 'separator'},
-					{
-						'label': _('_Preferences'),
-						'type': 'image',
-						'stock': gtk.STOCK_PREFERENCES,
-						'callback': self.preferences_window._show,
-						'path': '<Sunflower>/View/Preferences',
 					},
 				)
 			},
@@ -1510,6 +1585,10 @@ class MainWindow(gtk.Window):
 					('<Sunflower>/File/CreateFile', 'F7', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/File/CreateDirectory', 'F7', 0),
 		            ('<Sunflower>/File/Quit', 'Q', gtk.gdk.CONTROL_MASK),
+					('<Sunflower>/Edit/Cut', 'X', gtk.gdk.CONTROL_MASK),
+					('<Sunflower>/Edit/Copy', 'C', gtk.gdk.CONTROL_MASK),
+					('<Sunflower>/Edit/Paste', 'V', gtk.gdk.CONTROL_MASK),
+					('<Sunflower>/Edit/Preferences', 'P', gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK),
 					('<Sunflower>/Mark/SelectAll', 'A', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/Mark/SelectPattern', 'KP_Add', 0),
 					('<Sunflower>/Mark/UnselectPattern', 'KP_Subtract', 0),
@@ -1524,7 +1603,6 @@ class MainWindow(gtk.Window):
 					('<Sunflower>/View/Reload', 'R', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/View/FastMediaPreview', 'F3', gtk.gdk.MOD1_MASK),
 					('<Sunflower>/View/ShowHidden', 'H', gtk.gdk.CONTROL_MASK),
-					('<Sunflower>/View/Preferences', 'P', gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK),
 				)
 
 			for path, key, mask in accel_map:

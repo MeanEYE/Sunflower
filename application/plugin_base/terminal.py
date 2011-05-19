@@ -48,6 +48,12 @@ class Terminal(PluginBase):
 			'z': {
 					'100': self._create_terminal,
 				},
+			'c': {
+					'101': self._copy_selection,
+				},
+			'v': {
+					'101': self._paste_selection,
+				},
 			'F11': {
 					'000': self._parent.toggle_fullscreen
 				},
@@ -153,12 +159,12 @@ class Terminal(PluginBase):
 
 		# copy
 		self._menu_item_copy = gtk.ImageMenuItem(stock_id=gtk.STOCK_COPY)
-		self._menu_item_copy.connect('activate', self._copy)
+		self._menu_item_copy.connect('activate', self._copy_selection)
 		self._menu.append(self._menu_item_copy)
 
 		# paste
 		self._menu_item_paste = gtk.ImageMenuItem(stock_id=gtk.STOCK_PASTE)
-		self._menu_item_paste.connect('activate', self._paste)
+		self._menu_item_paste.connect('activate', self._paste_selection)
 		self._menu.append(self._menu_item_paste)
 
 		# show all items
@@ -210,14 +216,14 @@ class Terminal(PluginBase):
 						1, 0, widget
 					)
 
-	def _copy(self, widget=None, data=None):
+	def _copy_selection(self, widget, data=None):
 		"""Copy selection from terminal"""
 		if self._terminal.get_has_selection():
 			self._terminal.copy_clipboard()
 
 		return True
 
-	def _paste(self, widget=None, data=None):
+	def _paste_selection(self, widget, data=None):
 		"""Paste selection from terminal"""
 		self._terminal.paste_clipboard()
 		return True

@@ -1061,22 +1061,22 @@ class MainWindow(gtk.Window):
 		"""Copy selected items from active list to clipboard"""
 		active_object = self._get_active_object()
 
-		if hasattr(active_object, '_cut'):
-			active_object._cut()
+		if hasattr(active_object, '_cut_files_to_clipboard'):
+			active_object._cut_files_to_clipboard()
 
 	def _command_copy_to_clipboard(self, widget=None, data=None):
 		"""Copy selected items from active list to clipboard"""
 		active_object = self._get_active_object()
 
-		if hasattr(active_object, '_copy'):
-			active_object._copy()
+		if hasattr(active_object, '_copy_files_to_clipboard'):
+			active_object._copy_files_to_clipboard()
 
 	def _command_paste_from_clipboard(self, widget=None, data=None):
 		"""Copy selected items from active list to clipboard"""
 		active_object = self._get_active_object()
 
-		if hasattr(active_object, '_paste'):
-			active_object._paste()
+		if hasattr(active_object, '_paste_files_from_clipboard'):
+			active_object._paste_files_from_clipboard()
 
 	def _command_properties(self, widget=None, data=None):
 		"""Show properties for selected item in active list"""

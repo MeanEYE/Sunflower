@@ -1069,14 +1069,24 @@ class MainWindow(gtk.Window):
 		active_object = self._get_active_object()
 
 		if hasattr(active_object, '_copy_files_to_clipboard'):
+			# ItemList object
 			active_object._copy_files_to_clipboard()
+
+		elif hasattr(active_object, '_copy_selection'):
+			# Terminal object
+			active_object._copy_selection()
 
 	def _command_paste_from_clipboard(self, widget=None, data=None):
 		"""Copy selected items from active list to clipboard"""
 		active_object = self._get_active_object()
 
 		if hasattr(active_object, '_paste_files_from_clipboard'):
+			# ItemList object
 			active_object._paste_files_from_clipboard()
+
+		elif hasattr(active_object, '_paste_selection'):
+			# Terminal object
+			active_object._paste_selection()
 
 	def _command_properties(self, widget=None, data=None):
 		"""Show properties for selected item in active list"""

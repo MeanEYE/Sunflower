@@ -608,15 +608,18 @@ class ItemList(PluginBase):
 
 	def _copy_files_to_clipboard(self, widget=None, data=None, operation='copy'):
 		"""Copy selected files to clipboard"""
-		list = self._get_selection_list(relative=False)
-		provider = self.get_provider()
-		protocol = provider.protocols[0]
+		list_ = self._get_selection_list(relative=False)
 
-		# modify list to form URI
-		list = ['{0}://{1}'.format(protocol, urllib.quote(item)) for item in list]
+		# make sure list actually contains something
+		if list_ is not None:
+			provider = self.get_provider()
+			protocol = provider.protocols[0]
 
-		# set clipboard data
-		self._parent.set_clipboard_item_list(operation, list)
+			# modify list to form URI
+			list_ = ['{0}://{1}'.format(protocol, urllib.quote(item)) for item in list_]
+
+			# set clipboard data
+			self._parent.set_clipboard_item_list(operation, list_)
 
 		return True
 

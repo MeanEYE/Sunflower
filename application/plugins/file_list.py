@@ -1046,13 +1046,13 @@ class FileList(ItemList):
 
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""
-		list = selection_data.data.splitlines(False)
+		list_ = selection_data.data.splitlines(False)
 
 		# prepare data for copying
-		protocol, path = list[0].split('://', 1)
-		list = [urllib.unquote(item.split('://')[1]) for item in list]
+		protocol, path = list_[0].split('://', 1)
+		list_ = [urllib.unquote(item.split('://')[1]) for item in list_]
 
-		if path != self.path:
+		if os.path.dirname(path) != self.path:
 			# handle data
 			if drag_context.action in (gtk.gdk.ACTION_COPY, gtk.gdk.ACTION_MOVE):
 				# handle copy and move operations
@@ -1064,7 +1064,7 @@ class FileList(ItemList):
 				result = self._handle_external_data(
 												operation[drag_context.action],
 												protocol,
-												list
+												list_
 											)
 
 			elif drag_context.action is gtk.gdk.ACTION_LINK:

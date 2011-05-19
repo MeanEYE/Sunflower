@@ -48,6 +48,18 @@ class PluginBase(gtk.VBox):
 		self.pack_start(self._title_bar, False, False, 0)
 		self.pack_end(status_bar, False, False, 0)
 
+	def _cut(self, widget=None, data=None):
+		"""Cut operation"""
+		pass
+
+	def _copy(self, widget=None, data=None):
+		"""Copy operation"""
+		pass
+
+	def _paste(self, widget=None, data=None):
+		"""Paste operation"""
+		pass
+
 	def _change_title_text(self, text):
 		"""Change title label text"""
 		self._title_bar.set_title(text)

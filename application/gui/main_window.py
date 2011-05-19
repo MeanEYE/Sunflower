@@ -1061,22 +1061,22 @@ class MainWindow(gtk.Window):
 		"""Copy selected items from active list to clipboard"""
 		active_object = self._get_active_object()
 
-		if hasattr(active_object, '_cut_files_to_clipboard'):
-			active_object._cut_files_to_clipboard()
+		if hasattr(active_object, '_cut'):
+			active_object._cut()
 
 	def _command_copy_to_clipboard(self, widget=None, data=None):
 		"""Copy selected items from active list to clipboard"""
 		active_object = self._get_active_object()
 
-		if hasattr(active_object, '_copy_files_to_clipboard'):
-			active_object._copy_files_to_clipboard()
+		if hasattr(active_object, '_copy'):
+			active_object._copy()
 
 	def _command_paste_from_clipboard(self, widget=None, data=None):
 		"""Copy selected items from active list to clipboard"""
 		active_object = self._get_active_object()
 
-		if hasattr(active_object, '_paste_files_from_clipboard'):
-			active_object._paste_files_from_clipboard()
+		if hasattr(active_object, '_paste'):
+			active_object._paste()
 
 	def _command_properties(self, widget=None, data=None):
 		"""Show properties for selected item in active list"""
@@ -1153,10 +1153,10 @@ class MainWindow(gtk.Window):
 			vbox.set_border_width(5)
 
 			# reset aceelerator map
-			if config_version < 25:
+			if config_version < 26:
 				vbox_accel_map = gtk.VBox(False, 0)
 
-				label_accel_map = gtk.Label('<b>Version 0.1a-25:</b>')
+				label_accel_map = gtk.Label('<b>Version 0.1a-26:</b>')
 				label_accel_map.set_alignment(0, 0.5)
 				label_accel_map.set_use_markup(True)
 
@@ -1198,7 +1198,7 @@ class MainWindow(gtk.Window):
 					self.tab_options = RawConfigParser()
 
 			# reset accelerator map
-			if config_version < 25:
+			if config_version < 26:
 				if checkbox_reset_accel_map.get_active()\
 				and os.path.isfile(os.path.join(self.config_path, 'accel_map')):
 					os.remove(os.path.join(self.config_path, 'accel_map'))

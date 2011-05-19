@@ -55,9 +55,6 @@ class ItemList(PluginBase):
 		    'b': {
 		            '100': self._edit_bookmarks,
 		        },
-			'c': {
-					'100': self._copy_files_to_clipboard,
-				},
 		    'd': {
 		            '100': self._add_bookmark,
 		        },
@@ -65,17 +62,11 @@ class ItemList(PluginBase):
 					'100': self._duplicate_tab,
 					'101': self._open_in_new_tab,
 				},
-			'v': {
-					'100': self._paste_files_from_clipboard,
-				},
 			'w': {
 					'100': self._close_tab,
 				},
 			'z': {
 					'100': self._create_terminal,
-				},
-			'x': {
-					'100': self._cut_files_to_clipboard,
 				},
 			'BackSpace': {
 					'000': self._parent_folder,
@@ -601,12 +592,12 @@ class ItemList(PluginBase):
 		"""Abstract method for Send To Nautilus integration"""
 		pass
 
-	def _cut_files_to_clipboard(self, widget=None, data=None):
+	def _cut(self, widget=None, data=None):
 		"""Cut selected files to clipboard"""
-		self._copy_files_to_clipboard(operation='cut')
+		self._copy(operation='cut')
 		return True
 
-	def _copy_files_to_clipboard(self, widget=None, data=None, operation='copy'):
+	def _copy(self, widget=None, data=None, operation='copy'):
 		"""Copy selected files to clipboard"""
 		list_ = self._get_selection_list(relative=False)
 
@@ -623,7 +614,7 @@ class ItemList(PluginBase):
 
 		return True
 
-	def _paste_files_from_clipboard(self, widget=None, data=None):
+	def _paste(self, widget=None, data=None):
 		"""Paste files from clipboard"""
 		data = self._parent.get_clipboard_item_list()
 
@@ -744,7 +735,7 @@ class ItemList(PluginBase):
 								'label': _('Cu_t'),
 								'type': 'image',
 								'stock': gtk.STOCK_CUT,
-								'callback': self._cut_files_to_clipboard,
+								'callback': self._cut,
 							})
 		result.append(item)
 		self._cut_item = item
@@ -753,7 +744,7 @@ class ItemList(PluginBase):
 								'label': _('_Copy'),
 								'type': 'image',
 								'stock': gtk.STOCK_COPY,
-								'callback': self._copy_files_to_clipboard,
+								'callback': self._copy,
 							})
 		result.append(item)
 		self._copy_item = item
@@ -762,7 +753,7 @@ class ItemList(PluginBase):
 								'label': _('_Paste'),
 								'type': 'image',
 								'stock': gtk.STOCK_PASTE,
-								'callback': self._paste_files_from_clipboard,
+								'callback': self._paste,
 							})
 		result.append(item)
 		self._paste_item = item

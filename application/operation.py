@@ -373,7 +373,7 @@ class CopyOperation(Operation):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
-			gobject.idle_add(self._dialog.set_current_file, item)
+			gobject.idle_add(self._dialog.set_current_file, os.path.join(directory, item))
 			gobject.idle_add(self._dialog.pulse)
 
 			full_name = os.path.join(directory, item)

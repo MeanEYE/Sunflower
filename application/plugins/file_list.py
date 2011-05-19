@@ -1219,6 +1219,7 @@ class FileList(ItemList):
 		if selected is None:
 			path = self._store.get_path(self._store.get_iter_first())
 			self._item_list.set_cursor(path)
+			self._item_list.scroll_to_cell(path)
 
 		# create file monitor
 		if gio is not None and self.get_provider().is_local:

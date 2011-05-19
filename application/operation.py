@@ -581,7 +581,7 @@ class CopyOperation(Operation):
 		self._copy_file_list()
 
 		# notify user if window is not focused
-		if not self._dialog.is_active() and not self._abort.is_set():
+		if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 			notify_manager = self._application.notification_manager
 
 			title = _('Copy Operation')
@@ -777,7 +777,7 @@ class MoveOperation(CopyOperation):
 			self._delete_file_list()
 
 		# notify user if window is not focused
-		if not self._dialog.is_active() and not self._abort.is_set():
+		if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 			notify_manager = self._application.notification_manager
 
 			title = _('Move Operation')
@@ -855,7 +855,7 @@ class DeleteOperation(Operation):
 				gobject.idle_add(self._dialog.set_current_file_fraction, 1)
 
 		# notify user if window is not focused
-		if not self._dialog.is_active() and not self._abort.is_set():
+		if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 			notify_manager = self._application.notification_manager
 
 			title = _('Delete Operation')

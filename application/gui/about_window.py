@@ -143,13 +143,13 @@ class AboutWindow(gtk.Window):
 		programmers = gtk.VBox(False, 0)
 
 		label_programming = gtk.Label('<b>{0}</b>'.format(_('Programming:')))
-		label_programming.set_alignment(0, 0.5)
+		label_programming.set_alignment(0, 0)
 		label_programming.set_use_markup(True)
 		programmers.pack_start(label_programming, False, False, 0)
 
 		# developers
-		developer = gtk.Label('\tMeanEYE <small>&lt;meaneye.rcf@gmail.com&gt;</small>')
-		developer.set_alignment(0, 0.5)
+		developer = gtk.Label('\tMeanEYE <small>meaneye.rcf@gmail.com</small>')
+		developer.set_alignment(0, 0)
 		developer.set_use_markup(True)
 		developer.set_selectable(True)
 
@@ -159,54 +159,65 @@ class AboutWindow(gtk.Window):
 		artists = gtk.VBox(False, 0)
 
 		label_art = gtk.Label('<b>{0}</b>'.format(_('Artists:')))
-		label_art.set_alignment(0, 0.5)
+		label_art.set_alignment(0, 0)
 		label_art.set_use_markup(True)
 		artists.pack_start(label_art, False, False, 0)
 
 		# artists
-		artist = gtk.Label('\tMrakoslava <small>&lt;octogirl.design@gmail.com&gt;</small>')
-		artist.set_alignment(0, 0.5)
+		artist = gtk.Label('\tMrakoslava <small>octogirl.design@gmail.com</small>')
+		artist.set_alignment(0, 0)
 		artist.set_use_markup(True)
 		artist.set_selectable(True)
 
 		artists.pack_start(artist, False, False, 0)
 
 		# translators
-		translators = gtk.Table(1, 2, False)
+		translators = gtk.Table(2, 2, False)
 
 		label_translating = gtk.Label('<b>{0}</b>'.format(_('Translating:')))
-		label_translating.set_alignment(0, 0.5)
+		label_translating.set_alignment(0, 0)
 		label_translating.set_use_markup(True)
-		translators.attach(label_translating, 0, 2, 0, 1)
+		translators.attach(label_translating, 0, 3, 0, 1)
 
 		# add translators
-		translator = gtk.Label(
-		                '\tRadek Tříška '
-		                '<small>&lt;radek@fastlinux.eu&gt;</small>'
-		            )
-		translator.set_alignment(0, 0.5)
+		translator = gtk.Label('\tRadek Tříška')
+		translator.set_alignment(0, 0)
 		translator.set_use_markup(True)
 		translator.set_selectable(True)
+
+		email = gtk.Label(
+		                '<small>radek@fastlinux.eu</small>\n'
+						'<small>http://fastlinux.eu</small>'
+					)
+		email.set_alignment(0, 0)
+		email.set_use_markup(True)
+		email.set_selectable(True)
 
 		language = gtk.Label('Czech language')
-		language.set_alignment(0, 0.5)
+		language.set_alignment(0, 0)
 
 		translators.attach(translator, 0, 1, 1, 2)
-		translators.attach(language, 1, 2, 1, 2)
+		translators.attach(email, 1, 2, 1, 2)
+		translators.attach(language, 2, 3, 1, 2)
 
-		translator = gtk.Label(
-		                '\tJakub Dyszkiewicz '
-		                '<small>&lt;144.kuba@gmail.com&gt;</small>'
-		            )
-		translator.set_alignment(0, 0.5)
+		translator = gtk.Label('\tJakub Dyszkiewicz ')
+		translator.set_alignment(0, 0)
 		translator.set_use_markup(True)
 		translator.set_selectable(True)
 
+		email = gtk.Label(
+		                '<small>144.kuba@gmail.com</small>'
+					)
+		email.set_alignment(0, 0)
+		email.set_use_markup(True)
+		email.set_selectable(True)
+		                
 		language = gtk.Label('Polish language')
-		language.set_alignment(0, 0.5)
+		language.set_alignment(0, 0)
 
 		translators.attach(translator, 0, 1, 2, 3)
-		translators.attach(language, 1, 2, 2, 3)
+		translators.attach(email, 1, 2, 2, 3)
+		translators.attach(language, 2, 3, 2, 3)
 
 		# pack interface
 		vbox.pack_start(program_info, False, False, 0)

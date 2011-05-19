@@ -768,6 +768,20 @@ class ItemList(PluginBase):
 		item = menu_manager.create_menu_item({'type': 'separator'})
 		result.append(item)
 
+		# delete
+		item = menu_manager.create_menu_item({
+								'label': _('_Delete'),
+								'type': 'image',
+								'stock': gtk.STOCK_DELETE,
+								'callback': self._delete_files,
+							})
+		result.append(item)
+		self._delete_item = item
+
+		# separator
+		item = menu_manager.create_menu_item({'type': 'separator'})
+		result.append(item)
+
 		# send to
 		item = menu_manager.create_menu_item({
 								'label': _('Send to...'),
@@ -792,20 +806,6 @@ class ItemList(PluginBase):
 		result.append(item)
 		item.set_sensitive(False)
 		self._rename_item = item
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		# delete
-		item = menu_manager.create_menu_item({
-								'label': _('_Delete'),
-								'type': 'image',
-								'stock': gtk.STOCK_DELETE,
-								'callback': self._delete_files,
-							})
-		result.append(item)
-		self._delete_item = item
 
 		# separator
 		item = menu_manager.create_menu_item({'type': 'separator'})

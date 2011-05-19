@@ -16,7 +16,7 @@ class PreferencesWindow(gtk.Window):
 		self.set_skip_taskbar_hint(True)
 		self.set_transient_for(parent)
 
-		# create gui
+		# create GUI
 		vbox = gtk.VBox(False, 5)
 		vbox.set_border_width(5)
 

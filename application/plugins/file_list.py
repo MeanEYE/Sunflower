@@ -14,7 +14,7 @@ from operation import DeleteOperation, CopyOperation, MoveOperation
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
 from gui.properties_window import PropertiesWindow
-from widgets.thumbnail_view import ThumbnailView 
+from widgets.thumbnail_view import ThumbnailView
 
 # try to import I/O library
 try:
@@ -214,10 +214,10 @@ class FileList(ItemList):
 
 		self._sort_column_widget = column_sort_data[self._sort_column]
 		self._apply_sort_function()
-		
+
 		# directory monitor
 		self._fs_monitor = None
-		
+
 		# thumbnail view
 		self._thumbnail_view = ThumbnailView(self)
 		self._enable_media_preview = self._parent.options.getboolean('main', 'media_preview')
@@ -232,26 +232,26 @@ class FileList(ItemList):
 		except:
 			# fail-safe jump to user home directory
 			self.change_path(user.home)
-			
+
 	def _control_got_focus(self, widget, data=None):
 		"""Handle control gaining focus"""
 		ItemList._control_got_focus(self, widget, data)
 
 		if self._enable_media_preview:
 			self._handle_cursor_change()
-			
+
 	def _control_lost_focus(self, widget, data=None):
 		"""Handle control loosing focus"""
 		ItemList._control_lost_focus(self, widget, data)
-		
+
 		if self._enable_media_preview:
 			self._thumbnail_view.hide()
-			
+
 	def _handle_cursor_change(self, widget=None, data=None):
 		"""Handle cursor change"""
 		if not self._enable_media_preview \
 		or not self._item_list.has_focus(): return
-		
+
 		selection = self._item_list.get_selection()
 		list_, iter_ = selection.get_selected()
 
@@ -260,23 +260,24 @@ class FileList(ItemList):
 
 		is_dir = list_.get_value(iter_, COL_DIR)
 		is_parent = list_.get_value(iter_, COL_PARENT)
+
+		# create URI from item name and protocol
 		file_name = self._get_selection(relative=False)
 		protocol = self.get_provider().protocols[0]
-		uri = '{0}://{1}'.format(protocol, file_name)
+		uri = '{0}://{1}'.format(protocol, urllib.quote(file_name)) if not is_parent else None
 		
 		# show preview if thumbnail exists
 		if not is_dir and not is_parent \
 		and self.get_provider().exists(file_name) \
 		and self._thumbnail_view.can_have_thumbnail(uri):
-			# get position of popup menu, we'll use 
-			# these coordinates to show thumbnail
+			# get position of popup menu, we use these coordinates to show thumbnail
 			position = self._get_popup_menu_position()
 			column_width = self._columns[0].get_width()
-			
+
 			self._thumbnail_view.show_thumbnail(uri)
 			self._thumbnail_view.move(position[0] + column_width, position[1])
 			self._thumbnail_view.show()
-			
+
 		else:
 			# hide preview if item thumbnail is not available
 			self._thumbnail_view.hide()
@@ -1045,7 +1046,6 @@ class FileList(ItemList):
 
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""
-		# TODO: Finish drag and drop support
 		list = selection_data.data.splitlines(False)
 
 		# prepare data for copying
@@ -1122,7 +1122,7 @@ class FileList(ItemList):
 
 		# clear list
 		self._clear_list()
-		
+
 		# hide thumbnail
 		if self._enable_media_preview:
 			self._thumbnail_view.hide()
@@ -1140,7 +1140,6 @@ class FileList(ItemList):
 		self._change_title_text(self.path)
 		self._parent.path_label.set_text(self.path)
 
-		to_select = None
 		show_hidden = self._parent.options.getboolean('main', 'show_hidden')
 
 		# disconnect store from widget to speed up the process
@@ -1161,7 +1160,7 @@ class FileList(ItemList):
 		# populate list
 		try:
 			for filename in self.get_provider().list_dir(self.path):
-				new_item = self._add_item(filename, show_hidden)
+				self._add_item(filename, show_hidden)
 
 			# if no errors occurred during path change,
 			# call parent method which handles history
@@ -1248,7 +1247,7 @@ class FileList(ItemList):
 			if not row[COL_PARENT] \
 			and fnmatch.fnmatch(row[COL_NAME], pattern) \
 			and row[COL_NAME] not in exclude_list:
-				# select item that matched out cirteria
+				# select item that matched out criteria
 				row[COL_COLOR] = self._parent.options.get('main', 'selection_color')
 				row[COL_SELECTED] = self._pixbuf_selection
 
@@ -1378,7 +1377,7 @@ class FileList(ItemList):
 
 		# reload file list in order to apply time formatting, hidden files and other
 		self.refresh_file_list()
-		
+
 	def apply_media_preview_settings(self):
 		"""Apply settings related to image_preview"""
 		self._enable_media_preview = self._parent.options.getboolean('main', 'media_preview')
@@ -1386,7 +1385,7 @@ class FileList(ItemList):
 		if self._enable_media_preview:
 			# force showing thumbnail
 			self._handle_cursor_change()
-					
+
 		else:
 			# hide thumbnail
 			self._thumbnail_view.hide()

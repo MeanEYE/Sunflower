@@ -148,12 +148,14 @@ class MainWindow(gtk.Window):
 						'label': _('_Open'),
 						'type': 'image',
 						'stock': gtk.STOCK_OPEN,
+						'callback': self._command_open,
 						'path': '<Sunflower>/File/Open',
 					},
 					{
 						'label': _('Open in new ta_b'),
 						'type': 'image',
 						'image': 'tab-new',
+						'callback': self._command_open_in_new_tab,
 						'path': '<Sunflower>/File/OpenInNewTab',
 					},
 					{
@@ -163,6 +165,7 @@ class MainWindow(gtk.Window):
 						'label': _('_Properties'),
 						'type': 'image',
 						'stock': gtk.STOCK_PROPERTIES,
+						'callback': self._command_properties,
 						'path': '<Sunflower>/File/Properties',
 					},
 					{
@@ -184,18 +187,21 @@ class MainWindow(gtk.Window):
 						'label': _('Cu_t'),
 						'type': 'image',
 						'stock': gtk.STOCK_CUT,
+						'callback': self._command_cut_to_clipboard,
 						'path': '<Sunflower>/Edit/Cut',
 					},
 					{
 						'label': _('_Copy'),
 						'type': 'image',
 						'stock': gtk.STOCK_COPY,
+						'callback': self._command_copy_to_clipboard,
 						'path': '<Sunflower>/Edit/Copy',
 					},
 					{
 						'label': _('_Paste'),
 						'type': 'image',
 						'stock': gtk.STOCK_PASTE,
+						'callback': self._command_paste_from_clipboard,
 						'path': '<Sunflower>/Edit/Paste',
 					},
 					{
@@ -205,6 +211,7 @@ class MainWindow(gtk.Window):
 						'label': _('_Delete'),
 						'type': 'image',
 						'stock': gtk.STOCK_DELETE,
+						'callback': self._command_delete,
 						'path': '<Sunflower>/Edit/Delete',
 					},
 					{
@@ -214,6 +221,7 @@ class MainWindow(gtk.Window):
 						'label': _('Send to...'),
 						'type': 'image',
 						'image': 'document-send',
+						'callback': self._command_send_to,
 						'path': '<Sunflower>/Edit/SendTo',
 					},
 					{
@@ -222,6 +230,7 @@ class MainWindow(gtk.Window):
 					},
 					{
 						'label': _('_Rename...'),
+						'callback': self._command_rename,
 						'path': '<Sunflower>/Edit/Rename',
 					},
 					{
@@ -985,35 +994,35 @@ class MainWindow(gtk.Window):
 						'ngettext': translation.ngettext
 					})
 
-	def _command_reload(self, widget, data=None):
+	def _command_reload(self, widget=None, data=None):
 		"""Handle command button click"""
 		active_object = self._get_active_object()
 
 		if hasattr(active_object, 'refresh_file_list'):
 			active_object.refresh_file_list()
 
-	def _command_edit(self, widget, data=None):
+	def _command_edit(self, widget=None, data=None):
 		"""Handle command button click"""
 		active_object = self._get_active_object()
 
 		if hasattr(active_object, '_edit_selected'):
 			active_object._edit_selected()
 
-	def _command_copy(self, widget, data=None):
+	def _command_copy(self, widget=None, data=None):
 		"""Handle command button click"""
 		active_object = self._get_active_object()
 
 		if hasattr(active_object, '_copy_files'):
 			active_object._copy_files()
 
-	def _command_move(self, widget, data=None):
+	def _command_move(self, widget=None, data=None):
 		"""Handle command button click"""
 		active_object = self._get_active_object()
 
 		if hasattr(active_object, '_move_files'):
 			active_object._move_files()
 
-	def _command_create(self, widget, data=None):
+	def _command_create(self, widget=None, data=None):
 		"""Handle command button click"""
 		active_object = self._get_active_object()
 
@@ -1027,16 +1036,71 @@ class MainWindow(gtk.Window):
 			if hasattr(active_object, '_create_file'):
 				active_object._create_file()
 
-	def _command_delete(self, widget, data=None):
+	def _command_delete(self, widget=None, data=None):
 		"""Handle command button click"""
 		active_object = self._get_active_object()
 
 		if hasattr(active_object, '_delete_files'):
 			active_object._delete_files()
 
+	def _command_open(self, widget=None, data=None):
+		"""Execute selected item in active list"""
+		active_object = self._get_active_object()
+
+		if hasattr(active_object, '_execute_selected_item'):
+			active_object._execute_selected_item()
+
+	def _command_open_in_new_tab(self, widget=None, data=None):
+		"""Open selected directory from active list in new tab"""
+		active_object = self._get_active_object()
+
+		if hasattr(active_object, '_open_in_new_tab'):
+			active_object._open_in_new_tab()
+
+	def _command_cut_to_clipboard(self, widget=None, data=None):
+		"""Copy selected items from active list to clipboard"""
+		active_object = self._get_active_object()
+
+		if hasattr(active_object, '_cut_files_to_clipboard'):
+			active_object._cut_files_to_clipboard()
+
+	def _command_copy_to_clipboard(self, widget=None, data=None):
+		"""Copy selected items from active list to clipboard"""
+		active_object = self._get_active_object()
+
+		if hasattr(active_object, '_copy_files_to_clipboard'):
+			active_object._copy_files_to_clipboard()
+
+	def _command_paste_from_clipboard(self, widget=None, data=None):
+		"""Copy selected items from active list to clipboard"""
+		active_object = self._get_active_object()
+
+		if hasattr(active_object, '_paste_files_from_clipboard'):
+			active_object._paste_files_from_clipboard()
+
+	def _command_properties(self, widget=None, data=None):
+		"""Show properties for selected item in active list"""
+		active_object = self._get_active_object()
+
+		if hasattr(active_object, '_item_properties'):
+			active_object._item_properties()
+
+	def _command_send_to(self, widget=None, data=None):
+		"""Show 'send to' dialog for selected items in active list"""
+		active_object = self._get_active_object()
+
+		if hasattr(active_object, '_send_to'):
+			active_object._send_to()
+
+	def _command_rename(self, widget=None, data=None):
+		"""Rename selected item in active list"""
+		active_object = self._get_active_object()
+
+		if hasattr(active_object, '_rename_file'):
+			active_object._rename_file()
+	
 	def _command_edit_key_press(self, widget, event):
 		"""Handle key press in command edit"""
-
 		result = False
 
 		# generate state sting based on modifier state (control, alt, shift)
@@ -1585,9 +1649,6 @@ class MainWindow(gtk.Window):
 					('<Sunflower>/File/CreateFile', 'F7', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/File/CreateDirectory', 'F7', 0),
 		            ('<Sunflower>/File/Quit', 'Q', gtk.gdk.CONTROL_MASK),
-					('<Sunflower>/Edit/Cut', 'X', gtk.gdk.CONTROL_MASK),
-					('<Sunflower>/Edit/Copy', 'C', gtk.gdk.CONTROL_MASK),
-					('<Sunflower>/Edit/Paste', 'V', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/Edit/Preferences', 'P', gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK),
 					('<Sunflower>/Mark/SelectAll', 'A', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/Mark/SelectPattern', 'KP_Add', 0),

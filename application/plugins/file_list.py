@@ -546,7 +546,7 @@ class FileList(ItemList):
 				dialog.run()
 				dialog.destroy()
 
-	def _send_to(self, widget, data=None):
+	def _send_to(self, widget=None, data=None):
 		"""Nautilus Send To integration"""
 		selection = self._get_selection_list()
 

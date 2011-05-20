@@ -2,18 +2,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sunflower-fm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-12 00:16+0200\n"
+"POT-Creation-Date: 2011-05-20 00:41+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Vladimir Kolev <vladi@vladimirkolev.com>\n"
-"Language-Team: Vladimir Kolev <vladimir.r.kolev@gmail.com>\n"
+"Language-Team: Bulgarian <vladimir.r.kolev@gmail.com>\n"
+"Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Bulgarian\n"
-"X-Poedit-Country: BULGARIA\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: application/gui/main_window.py:68
-#: application/gui/main_window.py:1084
+#: application/gui/main_window.py:1238
 #: application/gui/changelog_dialog.py:49
 #: application/gui/about_window.py:46
 msgid "Sunflower"
@@ -37,181 +37,231 @@ msgid "Create directory"
 msgstr "Създай директория"
 
 #: application/gui/main_window.py:148
+#: application/plugin_base/item_list.py:705
+msgid "_Open"
+msgstr "Отвори"
+
+#: application/gui/main_window.py:155
+#: application/plugin_base/item_list.py:714
+msgid "Open in new ta_b"
+msgstr "Отвори в нов таб"
+
+#: application/gui/main_window.py:165
+#: application/plugin_base/item_list.py:819
+msgid "_Properties"
+msgstr "Свойства"
+
+#: application/gui/main_window.py:175
 #: application/indicator.py:75
 msgid "_Quit"
 msgstr "Из_ход"
 
-#: application/gui/main_window.py:157
-msgid "Mark"
-msgstr "Маркирай"
-
-#: application/gui/main_window.py:160
-msgid "_Select all"
-msgstr "Избери всички"
-
-#: application/gui/main_window.py:167
-msgid "_Unselect all"
-msgstr "Размаркирай всички"
-
-#: application/gui/main_window.py:172
-msgid "Invert select_ion"
-msgstr "Откажи маркиране"
-
-#: application/gui/main_window.py:178
-msgid "S_elect with pattern"
-msgstr "Маркирай с образец"
-
-#: application/gui/main_window.py:183
-msgid "Unselect with pa_ttern"
-msgstr "Размаркирай с образец"
-
-#: application/gui/main_window.py:189
-msgid "Select with same e_xtension"
-msgstr "Маркирай със същото разширение"
-
-#: application/gui/main_window.py:194
-#, fuzzy
-msgid "Unselect with same exte_nsion"
-msgstr "Маркирай със същото разширение"
-
-#: application/gui/main_window.py:200
-msgid "Compare _directories"
-msgstr "Сравни директории"
-
-#: application/gui/main_window.py:207
-msgid "Commands"
-msgstr "Команди"
-
-#: application/gui/main_window.py:211
-msgid "Find files"
-msgstr "Намери файлове"
-
-#: application/gui/main_window.py:217
-msgid "Synchronize directories"
-msgstr "Синхронизирай директории"
-
-#: application/gui/main_window.py:222
-msgid "Advanced rename"
-msgstr "Разширено преименуване"
-
-#: application/gui/main_window.py:228
-#: application/gui/main_window.py:455
-#: application/gui/preferences_window.py:475
-msgid "View"
-msgstr "Изглед"
-
-#: application/gui/main_window.py:231
-msgid "Ful_lscreen"
-msgstr "Цял екреан"
-
-#: application/gui/main_window.py:239
-msgid "Rel_oad item list"
-msgstr "Презареди списъка с елементи"
-
-#: application/gui/main_window.py:249
-msgid "Fast m_edia preview"
-msgstr "Бърз преглед на медия"
-
-#: application/gui/main_window.py:260
-msgid "Show _hidden files"
-msgstr "Покажи скрити файлове"
-
-#: application/gui/main_window.py:268
-msgid "Show _toolbar"
-msgstr "Покажи лента с инструменти"
-
-#: application/gui/main_window.py:276
-msgid "Show _command bar"
-msgstr "Покажи командна лента"
-
-#: application/gui/main_window.py:284
-msgid "Show co_mmand entry"
-msgstr "Покажи команден ред"
-
-#: application/gui/main_window.py:293
-msgid "_Preferences"
-msgstr "Настройки"
-
-#: application/gui/main_window.py:302
-msgid "Tools"
-msgstr "Инструменти"
-
-#: application/gui/main_window.py:306
-msgid "Operations"
-msgstr "Операции"
-
-#: application/gui/main_window.py:310
-msgid "There are no minimized operations"
-msgstr "Няма минимизирани операции"
-
-#: application/gui/main_window.py:316
-msgid "Help"
-msgstr "Помощ"
-
-#: application/gui/main_window.py:319
-msgid "_Home page"
-msgstr "Уеб-страница"
-
-#: application/gui/main_window.py:328
-msgid "File a _bug report"
-msgstr "Изпрати съобщение за грешка"
-
-#: application/gui/main_window.py:336
-msgid "Check for _updates"
-msgstr "Провери за обновления"
-
-#: application/gui/main_window.py:341
-msgid "_About"
-msgstr "Относно"
-
-#: application/gui/main_window.py:389
-msgid "Mounts"
-msgstr "Монтирани"
-
-#: application/gui/main_window.py:454
-msgid "Refresh"
-msgstr "Обнови"
-
-#: application/gui/main_window.py:454
-msgid "Reload active item list (CTRL+R)"
-msgstr "Презареди активния списък с елементи (CTRL+R)"
-
-#: application/gui/main_window.py:455
-msgid "View selected file (F3)"
-msgstr "Виж избраните файлове (F3)"
-
-#: application/gui/main_window.py:456
-#: application/gui/preferences_window.py:481
+#: application/gui/main_window.py:184
+#: application/gui/main_window.py:540
+#: application/gui/preferences_window.py:484
 msgid "Edit"
 msgstr "Редактирай"
 
-#: application/gui/main_window.py:456
+#: application/gui/main_window.py:187
+#: application/plugin_base/item_list.py:744
+msgid "Cu_t"
+msgstr "Изрежи"
+
+#: application/gui/main_window.py:194
+#: application/plugin_base/item_list.py:753
+msgid "_Copy"
+msgstr "Копирай"
+
+#: application/gui/main_window.py:201
+#: application/plugin_base/item_list.py:762
+msgid "_Paste"
+msgstr "Вмъкни"
+
+#: application/gui/main_window.py:211
+#: application/plugin_base/item_list.py:776
+msgid "_Delete"
+msgstr "Изтрий"
+
+#: application/gui/main_window.py:221
+#: application/plugin_base/item_list.py:790
+msgid "Send to..."
+msgstr "Изпрати до..."
+
+#: application/gui/main_window.py:228
+#: application/plugin_base/item_list.py:800
+msgid "Ma_ke link"
+msgstr "Създай в_ръзка"
+
+#: application/gui/main_window.py:232
+#: application/plugin_base/item_list.py:806
+msgid "_Rename..."
+msgstr "Преименувай"
+
+#: application/gui/main_window.py:240
+msgid "_Preferences"
+msgstr "Настройки"
+
+#: application/gui/main_window.py:249
+msgid "Mark"
+msgstr "Маркирай"
+
+#: application/gui/main_window.py:252
+msgid "_Select all"
+msgstr "Избери всички"
+
+#: application/gui/main_window.py:259
+msgid "_Unselect all"
+msgstr "Размаркирай всички"
+
+#: application/gui/main_window.py:264
+msgid "Invert select_ion"
+msgstr "Откажи маркиране"
+
+#: application/gui/main_window.py:270
+msgid "S_elect with pattern"
+msgstr "Маркирай с образец"
+
+#: application/gui/main_window.py:275
+msgid "Unselect with pa_ttern"
+msgstr "Размаркирай с образец"
+
+#: application/gui/main_window.py:281
+msgid "Select with same e_xtension"
+msgstr "Маркирай със същото разширение"
+
+#: application/gui/main_window.py:286
+msgid "Unselect with same exte_nsion"
+msgstr "Маркирай със същото разширение"
+
+#: application/gui/main_window.py:292
+msgid "Compare _directories"
+msgstr "Сравни директории"
+
+#: application/gui/main_window.py:299
+msgid "Commands"
+msgstr "Команди"
+
+#: application/gui/main_window.py:303
+msgid "Find files"
+msgstr "Намери файлове"
+
+#: application/gui/main_window.py:309
+msgid "Synchronize directories"
+msgstr "Синхронизирай директории"
+
+#: application/gui/main_window.py:314
+msgid "Advanced rename"
+msgstr "Разширено преименуване"
+
+#: application/gui/main_window.py:320
+#: application/gui/main_window.py:539
+#: application/gui/preferences_window.py:478
+msgid "View"
+msgstr "Изглед"
+
+#: application/gui/main_window.py:323
+msgid "Ful_lscreen"
+msgstr "Цял екреан"
+
+#: application/gui/main_window.py:331
+msgid "Rel_oad item list"
+msgstr "Презареди списъка с елементи"
+
+#: application/gui/main_window.py:341
+msgid "Fast m_edia preview"
+msgstr "Бърз преглед на медия"
+
+#: application/gui/main_window.py:352
+msgid "Show _hidden files"
+msgstr "Покажи скрити файлове"
+
+#: application/gui/main_window.py:360
+msgid "Show _toolbar"
+msgstr "Покажи лента с инструменти"
+
+#: application/gui/main_window.py:368
+msgid "Show _command bar"
+msgstr "Покажи командна лента"
+
+#: application/gui/main_window.py:376
+msgid "Show co_mmand entry"
+msgstr "Покажи команден ред"
+
+#: application/gui/main_window.py:386
+msgid "Tools"
+msgstr "Инструменти"
+
+#: application/gui/main_window.py:390
+msgid "Operations"
+msgstr "Операции"
+
+#: application/gui/main_window.py:394
+msgid "There are no minimized operations"
+msgstr "Няма минимизирани операции"
+
+#: application/gui/main_window.py:400
+msgid "Help"
+msgstr "Помощ"
+
+#: application/gui/main_window.py:403
+msgid "_Home page"
+msgstr "Уеб-страница"
+
+#: application/gui/main_window.py:412
+msgid "File a _bug report"
+msgstr "Изпрати съобщение за грешка"
+
+#: application/gui/main_window.py:420
+msgid "Check for _updates"
+msgstr "Провери за обновления"
+
+#: application/gui/main_window.py:425
+msgid "_About"
+msgstr "Относно"
+
+#: application/gui/main_window.py:473
+msgid "Mounts"
+msgstr "Монтирани"
+
+#: application/gui/main_window.py:538
+msgid "Refresh"
+msgstr "Обнови"
+
+#: application/gui/main_window.py:538
+msgid "Reload active item list (CTRL+R)"
+msgstr "Презареди активния списък с елементи (CTRL+R)"
+
+#: application/gui/main_window.py:539
+msgid "View selected file (F3)"
+msgstr "Виж избраните файлове (F3)"
+
+#: application/gui/main_window.py:540
 msgid "Edit selected file (F4)"
 msgstr "Редактирай избраните файлове (F4)"
 
-#: application/gui/main_window.py:457
+#: application/gui/main_window.py:541
 #: application/gui/input_dialog.py:365
 msgid "Copy"
 msgstr "Копирай"
 
-#: application/gui/main_window.py:457
+#: application/gui/main_window.py:541
 msgid "Copy selected items from active to opposite list (F5)"
 msgstr "Копирай избраните елементи от активния в противоположния списък (F5)"
 
-#: application/gui/main_window.py:458
+#: application/gui/main_window.py:542
 #: application/gui/input_dialog.py:440
 msgid "Move"
 msgstr "Премести"
 
-#: application/gui/main_window.py:458
+#: application/gui/main_window.py:542
 msgid "Move selected items from active to opposite list (F6)"
 msgstr "Премести избраните елементи от активния в противоположния списък (F6)"
 
-#: application/gui/main_window.py:459
+#: application/gui/main_window.py:543
 msgid "Create"
 msgstr "Създай"
 
-#: application/gui/main_window.py:459
+#: application/gui/main_window.py:543
 msgid ""
 "Create new directory (F7)\n"
 "Create new file (CTRL+F7)"
@@ -219,86 +269,86 @@ msgstr ""
 "Създай нова директория (F7)\n"
 "Създай нов файл (CTRL+F7)"
 
-#: application/gui/main_window.py:460
+#: application/gui/main_window.py:544
 msgid "Delete"
 msgstr "Изтрий"
 
-#: application/gui/main_window.py:460
+#: application/gui/main_window.py:544
 msgid "Delete selected items (F8 or Delete)"
 msgstr "Изтрий избраните елементи (F8 или Delete)"
 
-#: application/gui/main_window.py:551
+#: application/gui/main_window.py:635
 #: application/plugins/default_toolbar.py:198
 #: application/plugins/default_toolbar.py:199
 msgid "Home directory"
 msgstr "Лична директория"
 
-#: application/gui/main_window.py:580
+#: application/gui/main_window.py:664
 msgid "Options"
 msgstr "Опции"
 
-#: application/gui/main_window.py:583
+#: application/gui/main_window.py:667
 msgid "_Add bookmark"
 msgstr "Добави отметка"
 
-#: application/gui/main_window.py:589
+#: application/gui/main_window.py:673
 msgid "_Edit bookmarks"
 msgstr "Редактирай отметка"
 
-#: application/gui/main_window.py:648
+#: application/gui/main_window.py:732
 msgid "_Edit tools"
 msgstr "Редактирай инструменти"
 
-#: application/gui/main_window.py:705
+#: application/gui/main_window.py:789
 msgid "Specified path does not exist or is not valid. If path is not local check if volume is mounted."
 msgstr "Посоченият път не съществува или е невалиден. Ако пътят не е локален проверете дали дялът е монтиран."
 
-#: application/gui/main_window.py:1072
+#: application/gui/main_window.py:1226
 msgid "Sunflower file manager"
 msgstr "Sunflower файлов мениджър"
 
-#: application/gui/main_window.py:1087
+#: application/gui/main_window.py:1241
 msgid "print version and exit"
 msgstr "Изписва версията и излиза"
 
-#: application/gui/main_window.py:1092
+#: application/gui/main_window.py:1246
 msgid "skip loading saved tabs"
 msgstr "пропускане зареждането на запазените табове"
 
-#: application/gui/main_window.py:1098
+#: application/gui/main_window.py:1252
 msgid "open new tab on the left notebook"
 msgstr "отвори нов таб в левия панел"
 
-#: application/gui/main_window.py:1105
+#: application/gui/main_window.py:1259
 msgid "open new tab on the right notebook"
 msgstr "отвори нов таб в десния панел"
 
-#: application/gui/main_window.py:1176
+#: application/gui/main_window.py:1330
 msgid "Select items"
 msgstr "Избрани елементи"
 
-#: application/gui/main_window.py:1177
-#: application/gui/main_window.py:1222
+#: application/gui/main_window.py:1331
+#: application/gui/main_window.py:1376
 msgid "Selection pattern (eg.: *.jpg):"
 msgstr "Образец за маркиране (н.пр.: *.jpg):"
 
-#: application/gui/main_window.py:1221
+#: application/gui/main_window.py:1375
 msgid "Unselect items"
 msgstr "Неизбрани елементи"
 
-#: application/gui/main_window.py:1549
+#: application/gui/main_window.py:1703
 msgid "Error saving configuration to files in your home directory. Make sure you have enough permissions."
 msgstr "Грешка при записване на конфигурацията във файлове във вашата домашна директория. Уверете се, че имате достатъчно права."
 
-#: application/gui/main_window.py:1591
+#: application/gui/main_window.py:1745
 msgid "Directories:"
 msgstr "Директории:"
 
-#: application/gui/main_window.py:1592
+#: application/gui/main_window.py:1746
 msgid "Files:"
 msgstr "Файлове:"
 
-#: application/gui/main_window.py:1593
+#: application/gui/main_window.py:1747
 #: application/gui/properties_window.py:333
 #: application/gui/input_dialog.py:624
 #: application/gui/input_dialog.py:641
@@ -350,246 +400,246 @@ msgstr "Добавки"
 msgid "Program restart required!"
 msgstr "Необходимо е рестартиране на програмата!"
 
-#: application/gui/preferences_window.py:158
+#: application/gui/preferences_window.py:161
 msgid "Main window"
 msgstr "Главен прозорец"
 
-#: application/gui/preferences_window.py:162
+#: application/gui/preferences_window.py:165
 msgid "Hide main window on close"
 msgstr "Скривай главния прозорец при затваряне"
 
-#: application/gui/preferences_window.py:163
+#: application/gui/preferences_window.py:166
 msgid "Show toolbar"
 msgstr "Показвай лента с инструменти"
 
-#: application/gui/preferences_window.py:164
+#: application/gui/preferences_window.py:167
 msgid "Show command bar"
 msgstr "Показвай командна лента"
 
-#: application/gui/preferences_window.py:165
+#: application/gui/preferences_window.py:168
 msgid "Show command entry"
 msgstr "Показвай команден ред"
 
-#: application/gui/preferences_window.py:173
+#: application/gui/preferences_window.py:176
 msgid "Tabs"
 msgstr "Табове"
 
-#: application/gui/preferences_window.py:177
+#: application/gui/preferences_window.py:180
 msgid "Focus new tab after opening"
 msgstr "Фокусирай новия таб след отваряне"
 
-#: application/gui/preferences_window.py:178
+#: application/gui/preferences_window.py:181
 msgid "Show normal button relief"
 msgstr "Показвай нормален релеф на бутона"
 
-#: application/gui/preferences_window.py:179
+#: application/gui/preferences_window.py:182
 msgid "Show icons instead of text in tab buttons"
 msgstr "Показвай икони вместо текст в таб бутоните"
 
-#: application/gui/preferences_window.py:180
+#: application/gui/preferences_window.py:183
 msgid "Show tab(s) even if there is only one"
 msgstr "Показвай таб(ове) дори ако има само един"
 
-#: application/gui/preferences_window.py:181
+#: application/gui/preferences_window.py:184
 msgid "Use Ubuntu coloring method for tab title bars"
 msgstr "Използвай метода на Ubuntu за оцветяване на заглавията на табове"
 
-#: application/gui/preferences_window.py:190
-#: application/gui/preferences_window.py:272
+#: application/gui/preferences_window.py:193
+#: application/gui/preferences_window.py:275
 msgid "Operation"
 msgstr "Операция"
 
-#: application/gui/preferences_window.py:194
+#: application/gui/preferences_window.py:197
 msgid "Hide operation window on minimize"
 msgstr "Скрий прозореца на операцията при минимизиране"
 
-#: application/gui/preferences_window.py:269
+#: application/gui/preferences_window.py:272
 msgid "Look & feel"
 msgstr "Изглед & усещане"
 
-#: application/gui/preferences_window.py:282
+#: application/gui/preferences_window.py:285
 msgid "Row hinting"
 msgstr "Подсказване за ред"
 
-#: application/gui/preferences_window.py:283
+#: application/gui/preferences_window.py:286
 msgid "Show hidden files"
 msgstr "Покажи скрити файлове"
 
-#: application/gui/preferences_window.py:284
+#: application/gui/preferences_window.py:287
 msgid "Case sensitive item sorting"
 msgstr "Сортиране на елементи, зачитайки малки/големи"
 
-#: application/gui/preferences_window.py:285
+#: application/gui/preferences_window.py:288
 msgid "Right click selects items"
 msgstr "Десен бутон избира елементи"
 
-#: application/gui/preferences_window.py:286
+#: application/gui/preferences_window.py:289
 msgid "Enable VIM bindings"
 msgstr "Разреши VIM връзки"
 
-#: application/gui/preferences_window.py:287
+#: application/gui/preferences_window.py:290
 msgid "Show list headers"
 msgstr "Показвай заглавията на списъка"
 
-#: application/gui/preferences_window.py:288
+#: application/gui/preferences_window.py:291
 msgid "Fast media preview"
 msgstr "Бър преглед на медия"
 
-#: application/gui/preferences_window.py:300
+#: application/gui/preferences_window.py:303
 msgid "Show grid lines:"
 msgstr "Показвай линии на решетката:"
 
-#: application/gui/preferences_window.py:304
+#: application/gui/preferences_window.py:307
 msgid "None"
 msgstr "Без"
 
-#: application/gui/preferences_window.py:305
+#: application/gui/preferences_window.py:308
 msgid "Horizontal"
 msgstr "Хоризонтално"
 
-#: application/gui/preferences_window.py:306
+#: application/gui/preferences_window.py:309
 msgid "Vertical"
 msgstr "Вертикално"
 
-#: application/gui/preferences_window.py:307
+#: application/gui/preferences_window.py:310
 msgid "Both"
 msgstr "И двете"
 
-#: application/gui/preferences_window.py:317
+#: application/gui/preferences_window.py:320
 msgid "Quick search combination:"
 msgstr "Комбинация за бързо търсене:"
 
-#: application/gui/preferences_window.py:320
+#: application/gui/preferences_window.py:323
 msgid "Control"
 msgstr "Control"
 
-#: application/gui/preferences_window.py:321
+#: application/gui/preferences_window.py:324
 msgid "Alt"
 msgstr "Alt"
 
-#: application/gui/preferences_window.py:322
+#: application/gui/preferences_window.py:325
 msgid "Shift"
 msgstr "Shift"
 
-#: application/gui/preferences_window.py:331
+#: application/gui/preferences_window.py:334
 msgid "Date format:"
 msgstr "Формат на датата:"
 
-#: application/gui/preferences_window.py:335
+#: application/gui/preferences_window.py:338
 msgid "Time is formed using the format located at:"
 msgstr "Времето е форматирано използвайки форматът посочен в:"
 
-#: application/gui/preferences_window.py:341
+#: application/gui/preferences_window.py:344
 msgid "Status text:"
 msgstr "Статус текст"
 
-#: application/gui/preferences_window.py:345
+#: application/gui/preferences_window.py:348
 msgid "Replacement strings:"
 msgstr "Заменящи низове"
 
-#: application/gui/preferences_window.py:346
+#: application/gui/preferences_window.py:349
 msgid "Total directory count"
 msgstr "Общ брой на директории"
 
-#: application/gui/preferences_window.py:347
+#: application/gui/preferences_window.py:350
 msgid "Selected directories count"
 msgstr "Брой на избраните директории"
 
-#: application/gui/preferences_window.py:348
+#: application/gui/preferences_window.py:351
 msgid "Total file count"
 msgstr "Общ брой файлове"
 
-#: application/gui/preferences_window.py:349
+#: application/gui/preferences_window.py:352
 msgid "Selected file count"
 msgstr "Брой на избраните файлове"
 
-#: application/gui/preferences_window.py:350
+#: application/gui/preferences_window.py:353
 msgid "Total size of files in directory"
 msgstr "Общ брой на файлове в директория"
 
-#: application/gui/preferences_window.py:351
+#: application/gui/preferences_window.py:354
 msgid "Total size of selected files"
 msgstr "Общ размер на избраните файлове"
 
-#: application/gui/preferences_window.py:400
+#: application/gui/preferences_window.py:403
 msgid "Quick search settings are in conflict with VIM navigation style. To resolve this issue your quick search settings were restored to default."
 msgstr "Настройките за бързо търсене са в конфликт с VIM стилът за навигиране. За да разрешите този проблем настройките ви за бързо търсене са върнати към стандартните."
 
-#: application/gui/preferences_window.py:487
+#: application/gui/preferences_window.py:490
 msgid "Use external editor"
 msgstr "Използвай външен редактор"
 
-#: application/gui/preferences_window.py:492
+#: application/gui/preferences_window.py:495
 msgid "Command line:"
 msgstr "Команден ред:"
 
-#: application/gui/preferences_window.py:498
+#: application/gui/preferences_window.py:501
 msgid "Wait for editor process to end"
 msgstr "Изчакване процеса на редактора да приключи"
 
-#: application/gui/preferences_window.py:504
+#: application/gui/preferences_window.py:507
 msgid "Use internal editor"
 msgstr "Използвай вграден редактор"
 
-#: application/gui/preferences_window.py:571
+#: application/gui/preferences_window.py:574
 #: application/plugins/file_list.py:109
 msgid "Name"
 msgstr "Име"
 
-#: application/gui/preferences_window.py:582
+#: application/gui/preferences_window.py:585
 msgid "Type"
 msgstr "Тип"
 
-#: application/gui/preferences_window.py:609
-#: application/gui/preferences_window.py:811
-#: application/gui/preferences_window.py:990
+#: application/gui/preferences_window.py:612
+#: application/gui/preferences_window.py:814
+#: application/gui/preferences_window.py:993
 msgid "Move Up"
 msgstr "Премести нагоре"
 
-#: application/gui/preferences_window.py:617
-#: application/gui/preferences_window.py:819
-#: application/gui/preferences_window.py:998
+#: application/gui/preferences_window.py:620
+#: application/gui/preferences_window.py:822
+#: application/gui/preferences_window.py:1001
 msgid "Move Down"
 msgstr "Премести надолу"
 
-#: application/gui/preferences_window.py:709
+#: application/gui/preferences_window.py:712
 msgid "missing plugin"
 msgstr "липсваща добавка"
 
-#: application/gui/preferences_window.py:756
+#: application/gui/preferences_window.py:759
 msgid "Show mount points in bookmarks menu"
 msgstr "Показвай точките на монтиране в менюто с предпочитани"
 
-#: application/gui/preferences_window.py:760
+#: application/gui/preferences_window.py:763
 msgid "Add home directory to bookmarks menu"
 msgstr "Добави домашната директория в менюто с предпочитани"
 
-#: application/gui/preferences_window.py:784
-#: application/gui/preferences_window.py:963
+#: application/gui/preferences_window.py:787
+#: application/gui/preferences_window.py:966
 msgid "Title"
 msgstr "Заглавие"
 
-#: application/gui/preferences_window.py:788
+#: application/gui/preferences_window.py:791
 msgid "Location"
 msgstr "Място"
 
-#: application/gui/preferences_window.py:967
+#: application/gui/preferences_window.py:970
 msgid "Command"
 msgstr "Команда"
 
-#: application/gui/preferences_window.py:1101
+#: application/gui/preferences_window.py:1104
 msgid "Show scrollbars when needed"
 msgstr "Показване на плъзгачи при необходимост"
 
-#: application/gui/preferences_window.py:1152
+#: application/gui/preferences_window.py:1155
 msgid "Active"
 msgstr "Активен"
 
-#: application/gui/preferences_window.py:1154
+#: application/gui/preferences_window.py:1157
 msgid "Plugin file"
 msgstr "Файл на добавка"
 
-#: application/gui/preferences_window.py:1183
+#: application/gui/preferences_window.py:1186
 msgid "Specified plugin ('{0}') is required for normal program operation and therefore can not be deactivated!"
 msgstr "Посочената добавка ('{0}') е необходима за нормалната работа на програмата и за това не може да бъде деактивирана!"
 
@@ -610,32 +660,30 @@ msgid "Open With"
 msgstr "Отвори с"
 
 #: application/gui/properties_window.py:127
-#: application/plugins/file_list.py:540
+#: application/plugins/file_list.py:541
 msgid "File or directory with specified name already exists in current directory. Item could not be renamed."
 msgstr "Файл или директория с определено име вече съществува в настоящата директория. Елементът не може да бъде преименуван."
 
 #: application/gui/properties_window.py:162
-#: application/plugins/file_list.py:525
+#: application/plugins/file_list.py:526
 msgid "Error renaming specified item. Make sure you have enough permissions."
 msgstr "Грешка при преименуването на определения елемент. Уверете се, че имате достатъчно права."
 
 #: application/gui/properties_window.py:218
-#: application/gui/operation_dialog.py:357
-#, fuzzy
-msgid "byte"
-msgid_plural "bytes"
-msgstr[0] "{0} байт"
-msgstr[1] "{0} байта"
+#: application/gui/operation_dialog.py:358
+msgid "{0} byte"
+msgid_plural "{0} bytes"
+msgstr[0] "{0} байта"
+msgstr[1] "{0} байт"
 
 #: application/gui/properties_window.py:226
-#, fuzzy
-msgid "item"
-msgid_plural "items"
-msgstr[0] "Заглавие"
-msgstr[1] "Заглавие"
+msgid "{0} item"
+msgid_plural " {0} items"
+msgstr[0] "{0} елемента"
+msgstr[1] "{0} елемент"
 
 #: application/gui/properties_window.py:243
-#: application/gui/operation_dialog.py:353
+#: application/gui/operation_dialog.py:354
 msgid "unknown"
 msgstr "непознат"
 
@@ -747,7 +795,7 @@ msgid "Change log was not found!"
 msgstr "Не е открит списък с промени!"
 
 #: application/gui/changelog_dialog.py:106
-#: application/gui/about_window.py:262
+#: application/gui/about_window.py:289
 msgid "Change log"
 msgstr "Списък с промени"
 
@@ -807,7 +855,7 @@ msgstr[1] "Копиране <b>{0}</b> елемента към:"
 #: application/gui/input_dialog.py:364
 #: application/gui/input_dialog.py:439
 #: application/gui/input_dialog.py:864
-#: application/gui/operation_dialog.py:208
+#: application/gui/operation_dialog.py:205
 msgid "Cancel"
 msgstr "Отказ"
 
@@ -904,79 +952,79 @@ msgstr "Отново"
 msgid "Add toolbar widget"
 msgstr "Добави джаджа към лентата с инструменти"
 
-#: application/gui/operation_dialog.py:91
+#: application/gui/operation_dialog.py:90
 msgid "Source:"
 msgstr "Източник:"
 
-#: application/gui/operation_dialog.py:92
+#: application/gui/operation_dialog.py:91
 msgid "Destination:"
 msgstr "Дестинация:"
 
-#: application/gui/operation_dialog.py:153
+#: application/gui/operation_dialog.py:148
 msgid "ETA:"
 msgstr "Остава:"
 
-#: application/gui/operation_dialog.py:154
+#: application/gui/operation_dialog.py:149
 msgid "Speed:"
 msgstr "Скорост:"
 
-#: application/gui/operation_dialog.py:155
+#: application/gui/operation_dialog.py:150
 msgid "Total size:"
 msgstr "Общ размер:"
 
-#: application/gui/operation_dialog.py:156
+#: application/gui/operation_dialog.py:151
 msgid "Total count:"
 msgstr "Общ брой:"
 
-#: application/gui/operation_dialog.py:207
+#: application/gui/operation_dialog.py:204
 msgid "Minimize"
 msgstr "Минимизирай"
 
-#: application/gui/operation_dialog.py:215
-#: application/gui/operation_dialog.py:265
+#: application/gui/operation_dialog.py:212
+#: application/gui/operation_dialog.py:264
 msgid "Pause"
 msgstr "Пауза"
 
-#: application/gui/operation_dialog.py:258
+#: application/gui/operation_dialog.py:257
 msgid "Resume"
 msgstr "Възобновяване"
 
-#: application/gui/operation_dialog.py:270
+#: application/gui/operation_dialog.py:269
 msgid "Are you sure about canceling current operation?"
 msgstr "Сигурни ли сте в отказването на настоящата операция?"
 
-#: application/gui/operation_dialog.py:334
-#: application/gui/operation_dialog.py:358
+#: application/gui/operation_dialog.py:335
+#: application/gui/operation_dialog.py:359
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] "секунда"
 msgstr[1] "секунди"
 
-#: application/gui/operation_dialog.py:340
+#: application/gui/operation_dialog.py:341
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "минута"
 msgstr[1] "минути"
 
-#: application/gui/operation_dialog.py:347
+#: application/gui/operation_dialog.py:348
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "час"
 msgstr[1] "часа"
 
-#: application/gui/operation_dialog.py:481
+#: application/gui/operation_dialog.py:482
 msgid "Copy Selection"
 msgstr "Копиране на избраните"
 
-#: application/gui/operation_dialog.py:499
+#: application/gui/operation_dialog.py:500
 msgid "Move Selection"
 msgstr "Преместване на избраните"
 
-#: application/gui/operation_dialog.py:521
+#: application/gui/operation_dialog.py:522
 msgid "Delete Selection"
 msgstr "Изтривани на избраните"
 
-#: application/gui/operation_dialog.py:522
+#: application/gui/operation_dialog.py:523
 msgid "Removing items..."
 msgstr "Премахване на елементи..."
 
@@ -996,19 +1044,19 @@ msgstr ""
 "Този софтуер е разработван под GNU General Public License.\n"
 "Съобщения за грешки, предложения или въпроси са добре дошли."
 
-#: application/gui/about_window.py:145
+#: application/gui/about_window.py:147
 msgid "Programming:"
 msgstr "Програмиране:"
 
-#: application/gui/about_window.py:161
+#: application/gui/about_window.py:170
 msgid "Artists:"
 msgstr "Артисти:"
 
-#: application/gui/about_window.py:177
+#: application/gui/about_window.py:193
 msgid "Translating:"
 msgstr "Превод:"
 
-#: application/gui/about_window.py:227
+#: application/gui/about_window.py:254
 msgid "License"
 msgstr "Лиценз"
 
@@ -1048,23 +1096,23 @@ msgstr "Режим"
 msgid "Date"
 msgstr "Дата"
 
-#: application/plugins/file_list.py:369
+#: application/plugins/file_list.py:370
 msgid "There was an error creating directory. Make sure you have enough permissions. "
 msgstr "Възникна грешка при създаването на директория. Уверете се, че имате достатъчно права. "
 
-#: application/plugins/file_list.py:393
+#: application/plugins/file_list.py:394
 msgid "File already exists: {0}"
 msgstr "Файлът вече съществува: {0}"
 
-#: application/plugins/file_list.py:396
+#: application/plugins/file_list.py:397
 msgid "Directory with same name exists: {0}"
 msgstr "Директория със същото име съществува: {0}"
 
-#: application/plugins/file_list.py:422
+#: application/plugins/file_list.py:423
 msgid "There was an error creating file. Make sure you have enough permissions."
 msgstr "Възникна грешка при създаването на файла. Уверете се, че имате достатъчно права."
 
-#: application/plugins/file_list.py:440
+#: application/plugins/file_list.py:441
 msgid ""
 "You are about to remove {0} item.\n"
 "Are you sure about this?"
@@ -1078,11 +1126,11 @@ msgstr[1] ""
 "На път сте да премахнете {0} елемента.\n"
 "Сигурни ли сте?"
 
-#: application/plugins/file_list.py:1034
+#: application/plugins/file_list.py:1035
 msgid "Free:"
 msgstr "Свободно:"
 
-#: application/plugins/file_list.py:1035
+#: application/plugins/file_list.py:1036
 msgid "Total:"
 msgstr "Общо:"
 
@@ -1090,7 +1138,7 @@ msgstr "Общо:"
 msgid "Drag and drop functionality can not be used if source and destination are same!"
 msgstr "Премести и пусни функционалността не може да бъде използвана ако източника и дестинацията са еднакви"
 
-#: application/plugins/file_list.py:1178
+#: application/plugins/file_list.py:1177
 msgid ""
 "Error changing working directory. \n"
 "\n"
@@ -1181,51 +1229,11 @@ msgstr "Посоченият протокол ({0}) не се поддържа �
 msgid "Application is unable to handle specified data. Check if source items still exist."
 msgstr "Приложението не може да обработи посочените данни. Проверете дали изходните елементи все още съществуват."
 
-#: application/plugin_base/item_list.py:702
-msgid "_Open"
-msgstr "Отвори"
-
-#: application/plugin_base/item_list.py:711
-msgid "Open in new ta_b"
-msgstr "Отвори в нов таб"
-
-#: application/plugin_base/item_list.py:725
+#: application/plugin_base/item_list.py:728
 msgid "Open _with"
 msgstr "Отвори _с"
 
-#: application/plugin_base/item_list.py:741
-msgid "Cu_t"
-msgstr "Изрежи"
-
-#: application/plugin_base/item_list.py:750
-msgid "_Copy"
-msgstr "Копирай"
-
-#: application/plugin_base/item_list.py:759
-msgid "_Paste"
-msgstr "Вмъкни"
-
-#: application/plugin_base/item_list.py:773
-msgid "Send to..."
-msgstr "Изпрати до..."
-
-#: application/plugin_base/item_list.py:783
-msgid "Ma_ke link"
-msgstr "Създай в_ръзка"
-
-#: application/plugin_base/item_list.py:789
-msgid "_Rename..."
-msgstr "Преименувай"
-
-#: application/plugin_base/item_list.py:802
-msgid "_Delete"
-msgstr "Изтрий"
-
-#: application/plugin_base/item_list.py:816
-msgid "_Properties"
-msgstr "Свойства"
-
-#: application/plugin_base/item_list.py:853
+#: application/plugin_base/item_list.py:856
 msgid "History is empty"
 msgstr "Историята е празна"
 
@@ -1241,78 +1249,81 @@ msgstr "Покажи главен прозорец"
 msgid "_Hide main window"
 msgstr "Скрий главен прозорец"
 
-#: application/operation.py:174
+#: application/operation.py:133
 msgid "There is a problem writing data to destination file. What would you like to do?"
 msgstr "Има проблем с записването на данните в избрания файл. Какво бихте искали да направите?"
 
-#: application/operation.py:197
+#: application/operation.py:155
 msgid "An error occurred while trying to create specified file. What would you like to do?"
 msgstr "Възникна грешка при опит за копиране на избрания файл. Какво бихте искали да направите?"
 
-#: application/operation.py:204
+#: application/operation.py:162
 msgid "An error occurred while trying to create specified directory. What would you like to do?"
 msgstr "Възникна грешка при опит за създаване на определената директория. Какво бихте искали да направите?"
 
-#: application/operation.py:226
+#: application/operation.py:184
 msgid "Problem with setting mode and/or owner for specified path. What would you like to do?"
 msgstr "Проблем със ззадаването на режим и/или собственик за определения път. Какво бихте искали да направите?"
 
-#: application/operation.py:245
+#: application/operation.py:206
+msgid "There was a problem removing specified path. What would you like to do?"
+msgstr "Има проблем с премахването на посочения път. Какво бихте искали да направите?"
+
+#: application/operation.py:226
+msgid "There was a problem moving specified path. What would you like to do?"
+msgstr "Има проблем с преместването на посочения път. Какво бихте искали да направите?"
+
+#: application/operation.py:285
 msgid "Searching for files..."
 msgstr "Търсене за файлове..."
 
-#: application/operation.py:481
+#: application/operation.py:536
 msgid "Creating directories..."
 msgstr "Създаване на директории..."
 
-#: application/operation.py:498
+#: application/operation.py:553
 msgid "Copying files..."
 msgstr "Копиране на файлове..."
 
-#: application/operation.py:532
+#: application/operation.py:587
 msgid "Copy Operation"
 msgstr "Операция копиране"
 
-#: application/operation.py:534
+#: application/operation.py:589
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] "Копирането на {0} елемент от \"{1}\" към \"{2}\" приключи!"
 msgstr[1] "Копирането на {0} елементи от \"{1}\" към \"{2}\" приключи!"
 
-#: application/operation.py:588
+#: application/operation.py:679
 msgid "Moving files..."
 msgstr "Преместване на файлове..."
 
-#: application/operation.py:600
+#: application/operation.py:694
 msgid "Deleting source files..."
 msgstr "Изтриване на изходни файлове..."
 
-#: application/operation.py:617
+#: application/operation.py:716
 msgid "Deleting source directories..."
 msgstr "Изтриване на изходни директории..."
 
-#: application/operation.py:674
+#: application/operation.py:783
 msgid "Move Operation"
 msgstr "Операция преместване"
 
-#: application/operation.py:676
+#: application/operation.py:785
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] "Преместването на {0} елемент от \"{1}\" към \"{2}\" приключи!"
 msgstr[1] "Преместването на {0} елемент от \"{1}\" към \"{2}\" приключи!"
 
-#: application/operation.py:724
+#: application/operation.py:861
 msgid "Delete Operation"
 msgstr "Операция изтриване"
 
-#: application/operation.py:726
+#: application/operation.py:863
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
 msgstr[0] "Премахването на {0} елемент от \"{1}\" приключи!"
 msgstr[1] "Премахването на {0} елементи от \"{1}\" приключи!"
-
-#~ msgid "{0} item"
-#~ msgid_plural "{0} items"
-#~ msgstr[0] "{0} елемент"
-#~ msgstr[1] "{0} елемента"
 

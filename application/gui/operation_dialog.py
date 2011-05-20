@@ -43,7 +43,7 @@ class OperationDialog(gtk.Window):
 
 		# set window properties
 		self.set_title('Operation Dialog')
-		self.set_default_size(400, 10)
+		self.set_default_size(500, 10)
 		self.set_resizable(True)
 		self.set_skip_taskbar_hint(False)
 		self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)

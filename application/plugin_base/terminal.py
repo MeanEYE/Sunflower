@@ -216,14 +216,14 @@ class Terminal(PluginBase):
 						1, 0, widget
 					)
 
-	def _copy_selection(self, widget, data=None):
+	def _copy_selection(self, widget=None, data=None):
 		"""Copy selection from terminal"""
 		if self._terminal.get_has_selection():
 			self._terminal.copy_clipboard()
 
 		return True
 
-	def _paste_selection(self, widget, data=None):
+	def _paste_selection(self, widget=None, data=None):
 		"""Paste selection from terminal"""
 		self._terminal.paste_clipboard()
 		return True

@@ -140,78 +140,105 @@ class AboutWindow(gtk.Window):
 		program_info.connect('size-allocate', self._adjust_label)
 
 		# developer info
-		programmers = gtk.VBox(False, 0)
+		programmers = gtk.Table(2, 2, False)
+		programmers.set_row_spacings(7)
+		programmers.set_row_spacing(0, 3)
 
 		label_programming = gtk.Label('<b>{0}</b>'.format(_('Programming:')))
-		label_programming.set_alignment(0, 0.5)
+		label_programming.set_alignment(0, 0)
 		label_programming.set_use_markup(True)
-		programmers.pack_start(label_programming, False, False, 0)
+
+		programmers.attach(label_programming, 0, 2, 0, 1)
 
 		# developers
-		developer = gtk.Label('\tMeanEYE <small>&lt;meaneye.rcf@gmail.com&gt;</small>')
-		developer.set_alignment(0, 0.5)
-		developer.set_use_markup(True)
+		developer = gtk.Label('\tMeanEYE')
+		developer.set_alignment(0, 0)
 		developer.set_selectable(True)
 
-		programmers.pack_start(developer, False, False, 0)
+		email = gtk.Label('meaneye.rcf@gmail.com')
+		email.set_alignment(0, 0)
+		email.set_selectable(True)
+
+		programmers.attach(developer, 0, 1, 1, 2)
+		programmers.attach(email, 1, 2, 1, 2)
 
 		# artist info
-		artists = gtk.VBox(False, 0)
+		artists = gtk.Table(1, 2, False)
+		artists.set_row_spacings(7)
+		artists.set_row_spacing(0, 3)
 
 		label_art = gtk.Label('<b>{0}</b>'.format(_('Artists:')))
-		label_art.set_alignment(0, 0.5)
+		label_art.set_alignment(0, 0)
 		label_art.set_use_markup(True)
-		artists.pack_start(label_art, False, False, 0)
+
+		artists.attach(label_art, 0, 2, 0, 1)
 
 		# artists
-		artist = gtk.Label('\tMrakoslava <small>&lt;octogirl.design@gmail.com&gt;</small>')
-		artist.set_alignment(0, 0.5)
-		artist.set_use_markup(True)
+		artist = gtk.Label('\tMrakoslava')
+		artist.set_alignment(0, 0)
 		artist.set_selectable(True)
 
-		artists.pack_start(artist, False, False, 0)
+		email = gtk.Label('octogirl.design@gmail.com')
+		email.set_alignment(0, 0)
+		email.set_selectable(True)
+
+		artists.attach(artist, 0, 1, 1, 2)
+		artists.attach(email, 1, 2, 1, 2)
 
 		# translators
-		translators = gtk.Table(1, 2, False)
+		translators = gtk.Table(2, 3, False)
+		translators.set_row_spacings(7)
+		translators.set_row_spacing(0, 3)
 
 		label_translating = gtk.Label('<b>{0}</b>'.format(_('Translating:')))
-		label_translating.set_alignment(0, 0.5)
+		label_translating.set_alignment(0, 0)
 		label_translating.set_use_markup(True)
-		translators.attach(label_translating, 0, 2, 0, 1)
+		translators.attach(label_translating, 0, 3, 0, 1)
 
 		# add translators
-		translator = gtk.Label(
-		                '\tRadek Tříška '
-		                '<small>&lt;radek@fastlinux.eu&gt;</small>'
-		            )
-		translator.set_alignment(0, 0.5)
-		translator.set_use_markup(True)
+		translator = gtk.Label('\tRadek Tříška')
+		translator.set_alignment(0, 0)
 		translator.set_selectable(True)
+
+		email = gtk.Label(
+		                'radek@fastlinux.eu\n'
+						'www.fastlinux.eu'
+					)
+		email.set_alignment(0, 0)
+		email.set_selectable(True)
 
 		language = gtk.Label('Czech language')
-		language.set_alignment(0, 0.5)
+		language.set_alignment(0, 0)
 
 		translators.attach(translator, 0, 1, 1, 2)
-		translators.attach(language, 1, 2, 1, 2)
+		translators.attach(email, 1, 2, 1, 2)
+		translators.attach(language, 2, 3, 1, 2)
 
-		translator = gtk.Label(
-		                '\tJakub Dyszkiewicz '
-		                '<small>&lt;144.kuba@gmail.com&gt;</small>'
-		            )
-		translator.set_alignment(0, 0.5)
-		translator.set_use_markup(True)
+		translator = gtk.Label('\tJakub Dyszkiewicz ')
+		translator.set_alignment(0, 0)
 		translator.set_selectable(True)
 
+		email = gtk.Label('144.kuba@gmail.com')
+		email.set_alignment(0, 0)
+		email.set_selectable(True)
+		                
 		language = gtk.Label('Polish language')
-		language.set_alignment(0, 0.5)
+		language.set_alignment(0, 0)
 
 		translators.attach(translator, 0, 1, 2, 3)
-		translators.attach(language, 1, 2, 2, 3)
+		translators.attach(email, 1, 2, 2, 3)
+		translators.attach(language, 2, 3, 2, 3)
+
+		# separators
+		separator1 = gtk.HSeparator()
+		separator2 = gtk.HSeparator()
 
 		# pack interface
 		vbox.pack_start(program_info, False, False, 0)
-		vbox.pack_start(programmers, False, True, 0)
+		vbox.pack_start(programmers, False, False, 0)
+		vbox.pack_start(separator1, False, False, 0)
 		vbox.pack_start(artists, False, False, 0)
+		vbox.pack_start(separator2, False, False, 0)
 		vbox.pack_start(translators, False, False, 0)
 
 		tab.add_with_viewport(vbox)

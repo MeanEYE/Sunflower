@@ -608,15 +608,18 @@ class ItemList(PluginBase):
 
 	def _copy_files_to_clipboard(self, widget=None, data=None, operation='copy'):
 		"""Copy selected files to clipboard"""
-		list = self._get_selection_list(relative=False)
-		provider = self.get_provider()
-		protocol = provider.protocols[0]
+		list_ = self._get_selection_list(relative=False)
 
-		# modify list to form URI
-		list = ['{0}://{1}'.format(protocol, urllib.quote(item)) for item in list]
+		# make sure list actually contains something
+		if list_ is not None:
+			provider = self.get_provider()
+			protocol = provider.protocols[0]
 
-		# set clipboard data
-		self._parent.set_clipboard_item_list(operation, list)
+			# modify list to form URI
+			list_ = ['{0}://{1}'.format(protocol, urllib.quote(item)) for item in list_]
+
+			# set clipboard data
+			self._parent.set_clipboard_item_list(operation, list_)
 
 		return True
 
@@ -768,6 +771,20 @@ class ItemList(PluginBase):
 		item = menu_manager.create_menu_item({'type': 'separator'})
 		result.append(item)
 
+		# delete
+		item = menu_manager.create_menu_item({
+								'label': _('_Delete'),
+								'type': 'image',
+								'stock': gtk.STOCK_DELETE,
+								'callback': self._delete_files,
+							})
+		result.append(item)
+		self._delete_item = item
+
+		# separator
+		item = menu_manager.create_menu_item({'type': 'separator'})
+		result.append(item)
+
 		# send to
 		item = menu_manager.create_menu_item({
 								'label': _('Send to...'),
@@ -792,20 +809,6 @@ class ItemList(PluginBase):
 		result.append(item)
 		item.set_sensitive(False)
 		self._rename_item = item
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		# delete
-		item = menu_manager.create_menu_item({
-								'label': _('_Delete'),
-								'type': 'image',
-								'stock': gtk.STOCK_DELETE,
-								'callback': self._delete_files,
-							})
-		result.append(item)
-		self._delete_item = item
 
 		# separator
 		item = menu_manager.create_menu_item({'type': 'separator'})

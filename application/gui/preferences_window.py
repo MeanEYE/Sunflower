@@ -131,6 +131,9 @@ class PreferencesWindow(gtk.Window):
 
 		# call main window to propagate new settings
 		self._parent.apply_settings()
+		
+		# write changes to config file
+		self._parent.save_config()
 
 	def enable_save(self, widget=None, show_restart=None):
 		"""Enable save button"""

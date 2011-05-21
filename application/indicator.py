@@ -1,7 +1,6 @@
 import os
 import sys
 import gtk
-import wnck
 
 try:
 	import appindicator
@@ -23,7 +22,6 @@ class Indicator(object):
 		self._parent = parent
 		self._menu = gtk.Menu()
 		self._create_menu_items()
-		self._screen = wnck.screen_get_default()
 
 		if appindicator is not None:
 			self._indicator = appindicator.Indicator(

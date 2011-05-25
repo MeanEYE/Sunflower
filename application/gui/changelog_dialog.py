@@ -13,7 +13,8 @@ class ChangeLogDialog(gtk.Dialog):
 		self.set_size_request(500, 400)
 		self.set_resizable(False)
 		self.set_modal(True)
-		
+		self.set_wmclass('Sunflower', 'Sunflower')
+	
 		self.vbox.set_border_width(0)
 
 		# set window icon

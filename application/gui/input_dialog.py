@@ -29,6 +29,7 @@ class InputDialog(gtk.Dialog):
 		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)
 		self.set_transient_for(application)
+		self.set_wmclass('Sunflower', 'Sunflower')
 
 		self.vbox.set_spacing(0)
 

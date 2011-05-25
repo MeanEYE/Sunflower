@@ -47,6 +47,7 @@ class OperationDialog(gtk.Window):
 		self.set_resizable(True)
 		self.set_skip_taskbar_hint(False)
 		self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+		self.set_wmclass('Sunflower', 'Sunflower')
 
 		# connect signals
 		self.connect('destroy', self._destroy)

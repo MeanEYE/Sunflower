@@ -54,6 +54,7 @@ class PropertiesWindow(gtk.Window):
 		self.set_size_request(410, 410)
 		self.set_border_width(5)
 		self.set_icon_list(*self._icon_list)
+		self.set_wmclass('Sunflower', 'Sunflower')
 
 		# create interface
 		vbox = gtk.VBox(False, 5)

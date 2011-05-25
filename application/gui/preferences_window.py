@@ -15,6 +15,7 @@ class PreferencesWindow(gtk.Window):
 		self.set_modal(True)
 		self.set_skip_taskbar_hint(True)
 		self.set_transient_for(parent)
+		self.set_wmclass('Sunflower', 'Sunflower')
 
 		# create GUI
 		vbox = gtk.VBox(False, 5)

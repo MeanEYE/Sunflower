@@ -20,6 +20,7 @@ class AboutWindow(gtk.Window):
 		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)
 		self.set_transient_for(parent)
+		self.set_wmclass('Sunflower', 'Sunflower')
 
 		# connect signals
 		self.connect('delete_event', self._hide)

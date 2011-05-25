@@ -65,7 +65,7 @@ class MainWindow(gtk.Window):
 
 		# set window title
 		self.set_title(_('Sunflower'))
-		self.set_wmclass(_('Sunflower'), 'sunflower')
+		self.set_wmclass('Sunflower', 'Sunflower')
 
 		# set window icon
 		self.icon_manager.set_window_icon(self)

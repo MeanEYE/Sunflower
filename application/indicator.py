@@ -43,13 +43,6 @@ class Indicator(object):
 
 	def _create_menu_items(self):
 		"""Create commonly used menu items in indicator"""
-		# bring to current desktop
-		self._bring_to_desktop = self._parent.menu_manager.create_menu_item({
-														'label': _('_Bring to current desktop'),
-														'callback': self._bring_to_current_desktop
-													})
-		self._menu.append(self._bring_to_desktop)
-
 		# show window
 		self._menu_show = self._parent.menu_manager.create_menu_item({
 														'label': _('Sh_ow main window'),
@@ -94,10 +87,6 @@ class Indicator(object):
 		"""Change main window visibility"""
 		self._parent.set_visible(visible)
 		self.adjust_visibility_items(visible)
-
-	def _bring_to_current_desktop(self, widget, data=None):
-		"""Bring main window to current desktop"""
-		self._parent.window.move_to_current_desktop()
 
 	def adjust_visibility_items(self, visible):
 		"""Adjust show/hide menu items"""

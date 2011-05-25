@@ -40,7 +40,6 @@ class MainWindow(gtk.Window):
 	def __init__(self):
 		# create main window and other widgets
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
-		self.realize()
 
 		# load translations
 		self._load_translation()
@@ -66,6 +65,7 @@ class MainWindow(gtk.Window):
 
 		# set window title
 		self.set_title(_('Sunflower'))
+		self.set_wmclass(_('Sunflower'), 'sunflower')
 
 		# set window icon
 		self.icon_manager.set_window_icon(self)

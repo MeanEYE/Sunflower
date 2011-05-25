@@ -13,10 +13,11 @@ class ChangeLogDialog(gtk.Dialog):
 		self.set_size_request(500, 400)
 		self.set_resizable(False)
 		self.set_modal(True)
-
-		self.realize()
-
+		
 		self.vbox.set_border_width(0)
+
+		# set window icon
+		parent.icon_manager.set_window_icon(self)
 
 		# create dummy menu to get color style
 		main_menu = gtk.MenuBar()

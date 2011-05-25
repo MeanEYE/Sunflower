@@ -2,7 +2,7 @@ import gtk
 import pango
 
 from widgets.title_bar import TitleBar
-
+from widgets.tab_label import TabLabel
 
 class PluginBase(gtk.VBox):
 	"""Abstract plugin class
@@ -25,9 +25,7 @@ class PluginBase(gtk.VBox):
 		self.set_spacing(2)
 
 		# create tab label
-		self._tab_label = gtk.Label('')
-		self._tab_label.set_max_width_chars(20)
-		self._tab_label.set_ellipsize(pango.ELLIPSIZE_END)
+		self._tab_label = TabLabel(self._parent, self)
 
 		# title bar
 		self._title_bar = TitleBar(self._parent)
@@ -203,6 +201,7 @@ class PluginBase(gtk.VBox):
 	def apply_settings(self):
 		"""Method called after settings were changed"""
 		self._title_bar.apply_settings()
+		self._tab_label.apply_settings()
 
 	def update_status(self, status):
 		"""Change status text"""

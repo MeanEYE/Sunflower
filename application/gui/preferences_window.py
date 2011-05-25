@@ -180,12 +180,14 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_focus_new_tab = gtk.CheckButton(_('Focus new tab after opening'))
 		self._checkbox_button_relief = gtk.CheckButton(_('Show normal button relief'))
 		self._checkbox_button_icons = gtk.CheckButton(_('Show icons instead of text in tab buttons'))
+		self._checkbox_tab_close_button = gtk.CheckButton(_('Show tab close button'))
 		self._checkbox_always_show_tabs = gtk.CheckButton(_('Show tab(s) even if there is only one'))
 		self._checkbox_ubuntu_coloring = gtk.CheckButton(_('Use Ubuntu coloring method for tab title bars'))
 
 		self._checkbox_focus_new_tab.connect('toggled', self._parent.enable_save)
 		self._checkbox_button_relief.connect('toggled', self._parent.enable_save)
 		self._checkbox_button_icons.connect('toggled', self._parent.enable_save, True)
+		self._checkbox_tab_close_button.connect('toggled', self._parent.enable_save)
 		self._checkbox_always_show_tabs.connect('toggled', self._parent.enable_save)
 		self._checkbox_ubuntu_coloring.connect('toggled', self._parent.enable_save)
 
@@ -206,6 +208,7 @@ class DisplayOptions(gtk.VBox):
 		vbox_tabs.pack_start(self._checkbox_focus_new_tab, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_button_relief, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_button_icons, False, False, 0)
+		vbox_tabs.pack_start(self._checkbox_tab_close_button, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_always_show_tabs, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_ubuntu_coloring, False, False, 0)
 
@@ -230,6 +233,7 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_show_command_entry.set_active(options.getboolean('main', 'show_command_entry'))
 		self._checkbox_button_relief.set_active(bool(options.getint('main', 'button_relief')))
 		self._checkbox_button_icons.set_active(options.getboolean('main', 'tab_button_icons'))
+		self._checkbox_tab_close_button.set_active(options.getboolean('main', 'tab_close_button'))
 		self._checkbox_always_show_tabs.set_active(options.getboolean('main', 'always_show_tabs'))
 		self._checkbox_ubuntu_coloring.set_active(options.getboolean('main', 'ubuntu_coloring'))
 		self._checkbox_hide_window_on_minimize.set_active(options.getboolean('main', 'hide_operation_on_minimize'))
@@ -249,6 +253,7 @@ class DisplayOptions(gtk.VBox):
 		options.set('main', 'show_command_entry', _bool[self._checkbox_show_command_entry.get_active()])
 		options.set('main', 'button_relief', int(self._checkbox_button_relief.get_active()))
 		options.set('main', 'tab_button_icons', _bool[self._checkbox_button_icons.get_active()])
+		options.set('main', 'tab_close_button', _bool[self._checkbox_tab_close_button.get_active()])
 		options.set('main', 'always_show_tabs', _bool[self._checkbox_always_show_tabs.get_active()])
 		options.set('main', 'ubuntu_coloring', _bool[self._checkbox_ubuntu_coloring.get_active()])
 		options.set('main', 'hide_operation_on_minimize', _bool[self._checkbox_hide_window_on_minimize.get_active()])

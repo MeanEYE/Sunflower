@@ -1775,6 +1775,7 @@ class MainWindow(gtk.Window):
 				'ubuntu_coloring': 'False',
 				'media_preview': 'False',
 				'active_notebook': 0,
+				'tab_close_button': 'False',
 			}
 
 		# set default options

@@ -16,8 +16,15 @@ from indicator import Indicator
 from notifications import NotificationManager
 from toolbar import ToolbarManager
 
-from argparse import ArgumentParser
 from ConfigParser import RawConfigParser
+try:
+	# try to import argument parser
+	from argparse import ArgumentParser
+	USE_ARGPARSE = True
+	
+except:
+	USE_ARGPARSE = False
+	
 
 # gui imports
 from about_window import AboutWindow
@@ -1222,6 +1229,8 @@ class MainWindow(gtk.Window):
 
 	def _parse_arguments(self):
 		"""Parse command-line arguments passed to the application"""
+		if not USE_ARGPARSE: return
+		
 		parser = ArgumentParser(
 							description=_('Sunflower file manager'),
 							prog='Sunflower.py'
@@ -1413,7 +1422,7 @@ class MainWindow(gtk.Window):
 
 	def run(self):
 		"""Start application"""
-		if self.arguments.dont_load_tabs:
+		if self.arguments is not None and self.arguments.dont_load_tabs:
 			# if specified tab list is empty, create default
 			if self.arguments.left_tabs is None:
 				self.create_tab(self.left_notebook, FileList)
@@ -1431,13 +1440,14 @@ class MainWindow(gtk.Window):
 				self.create_tab(self.right_notebook, FileList)
 
 		# create additional tabs
-		if self.arguments.left_tabs is not None:
-			for path in self.arguments.left_tabs:
-				self.create_tab(self.left_notebook, FileList, path)
+		if self.arguments is not None:
+			if self.arguments.left_tabs is not None:
+				for path in self.arguments.left_tabs:
+					self.create_tab(self.left_notebook, FileList, path)
 
-		if self.arguments.right_tabs is not None:
-			for path in self.arguments.right_tabs:
-				self.create_tab(self.right_notebook, FileList, path)
+			if self.arguments.right_tabs is not None:
+				for path in self.arguments.right_tabs:
+					self.create_tab(self.right_notebook, FileList, path)
 
 		# focus active notebook
 		active_notebook_index = self.options.getint('main', 'active_notebook')

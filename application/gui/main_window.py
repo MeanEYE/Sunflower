@@ -1776,6 +1776,7 @@ class MainWindow(gtk.Window):
 				'media_preview': 'False',
 				'active_notebook': 0,
 				'tab_close_button': 'False',
+				'show_status_bar': 0,
 			}
 
 		# set default options

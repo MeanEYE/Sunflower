@@ -799,6 +799,7 @@ class FileList(ItemList):
 			list_.set_value(iter_, COL_SELECTED, image)
 
 		# update status bar
+		ItemList._toggle_selection(self, widget, data, advance)
 		self._update_status_with_statistis()
 
 		if advance:
@@ -1269,6 +1270,8 @@ class FileList(ItemList):
 		self._files['selected'] = files
 		self._size['selected'] = size
 
+		# update status bar
+		ItemList.select_all(self, pattern, exclude_list)
 		self._update_status_with_statistis()
 
 	def unselect_all(self, pattern=None):
@@ -1298,6 +1301,8 @@ class FileList(ItemList):
 		self._files['selected'] = files
 		self._size['selected'] = size
 
+		# update status bar
+		ItemList.select_all(self, pattern)
 		self._update_status_with_statistis();
 
 	def invert_selection(self, pattern=None):
@@ -1331,6 +1336,8 @@ class FileList(ItemList):
 		self._files['selected'] = files
 		self._size['selected'] = size
 
+		# update status bar
+		ItemList.select_all(self, pattern)
 		self._update_status_with_statistis();
 
 	def refresh_file_list(self, widget=None, data=None):

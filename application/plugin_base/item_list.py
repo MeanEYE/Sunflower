@@ -8,6 +8,7 @@ from plugin import PluginBase
 
 from operation import CopyOperation, MoveOperation
 from gui.input_dialog import CopyDialog, MoveDialog
+from gui.preferences_window import VISIBLE_ALWAYS, VISIBLE_WHEN_NEEDED, VISIBLE_NEVER
 
 
 # button text constants
@@ -1001,7 +1002,9 @@ class ItemList(PluginBase):
 
 	def _toggle_selection(self, widget, data=None, advance=True):
 		"""Abstract method for toggling item selection"""
-		pass
+		if self._parent.options.getint('main', 'show_status_bar') == VISIBLE_WHEN_NEEDED:
+			selected_items = self._dirs['selected'] + self._files['selected']
+			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
 	def _edit_selected(self, widget, data=None):
 		"""Abstract method to edit currently selected item"""
@@ -1076,17 +1079,28 @@ class ItemList(PluginBase):
 			if i != 0:
 				self.history[0], self.history[i] = self.history[i], self.history[0]
 
+		# update status bar visibility
+		if self._parent.options.getint('main', 'show_status_bar') == VISIBLE_WHEN_NEEDED:
+			selected_items = self._dirs['selected'] + self._files['selected']
+			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
+
 	def select_all(self, pattern=None, exclude_list=None):
 		"""Select all items matching pattern"""
-		pass
+		if self._parent.options.getint('main', 'show_status_bar') == VISIBLE_WHEN_NEEDED:
+			selected_items = self._dirs['selected'] + self._files['selected']
+			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
 	def unselect_all(self, pattern=None):
 		"""Unselect items matching the pattern"""
-		pass
+		if self._parent.options.getint('main', 'show_status_bar') == VISIBLE_WHEN_NEEDED:
+			selected_items = self._dirs['selected'] + self._files['selected']
+			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
 	def invert_selection(self, pattern=None):
 		"""Invert selection on matching items"""
-		pass
+		if self._parent.options.getint('main', 'show_status_bar') == VISIBLE_WHEN_NEEDED:
+			selected_items = self._dirs['selected'] + self._files['selected']
+			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
 	def refresh_file_list(self, widget=None, data=None):
 		"""Reload file list for current directory"""
@@ -1128,3 +1142,16 @@ class ItemList(PluginBase):
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
 									)[self._parent.options.getint('main', 'button_relief')])
+									
+		# change status bar visibility
+		show_status_bar = self._parent.options.getint('main', 'show_status_bar')
+		
+		if show_status_bar == VISIBLE_ALWAYS:
+			self._show_status_bar()
+			
+		elif show_status_bar == VISIBLE_WHEN_NEEDED:
+			selected_items = self._dirs['selected'] + self._files['selected']
+			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
+			
+		elif show_status_bar == VISIBLE_NEVER:
+			self._hide_status_bar()

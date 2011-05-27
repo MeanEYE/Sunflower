@@ -854,11 +854,13 @@ class OperationError(gtk.Dialog):
 		self._label_message.set_use_markup(True)
 		self._label_message.set_line_wrap(True)
 		self._label_message.set_size_request(340, -1)
+		self._label_message.set_selectable(True)
 
 		self._label_error = gtk.Label()
 		self._label_error.set_alignment(0,0)
 		self._label_error.set_line_wrap(True)
 		self._label_error.set_size_request(340, -1)
+		self._label_error.set_selectable(True)
 
 		# create controls
 		button_cancel = gtk.Button(label=_('Cancel'))

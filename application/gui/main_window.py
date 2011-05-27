@@ -244,6 +244,19 @@ class MainWindow(gtk.Window):
 						'type': 'separator',
 					},
 					{
+						'label': _('_Unmount'),
+						'name': 'unmount_menu',
+						'submenu': (
+							{
+								'label': _('Mount list is empty'),
+								'name': 'mount_list_empty',
+							},
+						),
+					},
+					{
+						'type': 'separator',
+					},
+					{
 						'label': _('_Preferences'),
 						'type': 'image',
 						'stock': gtk.STOCK_PREFERENCES,
@@ -628,8 +641,8 @@ class MainWindow(gtk.Window):
 
 		# create mounts if specified
 		if self.options.getboolean('main', 'show_mounts'):
-			self.menu_bookmarks.append(self._menu_item_mounts)
 			separator = self.menu_manager.create_menu_item({'type': 'separator'})
+			self.menu_bookmarks.append(self._menu_item_mounts)
 			self.menu_bookmarks.append(separator)
 
 		# add home if specified

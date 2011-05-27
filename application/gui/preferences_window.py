@@ -1,5 +1,9 @@
 import gtk
 
+VISIBLE_ALWAYS		= 0
+VISIBLE_WHEN_NEEDED	= 1
+VISIBLE_NEVER		= 2
+
 
 class PreferencesWindow(gtk.Window):
 
@@ -181,7 +185,7 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_focus_new_tab = gtk.CheckButton(_('Focus new tab after opening'))
 		self._checkbox_button_relief = gtk.CheckButton(_('Show normal button relief'))
 		self._checkbox_button_icons = gtk.CheckButton(_('Show icons instead of text in tab buttons'))
-		self._checkbox_tab_close_button = gtk.CheckButton(_('Show tab close button'))
+		self._checkbox_tab_close_button = gtk.CheckButton(_('Show close button'))
 		self._checkbox_always_show_tabs = gtk.CheckButton(_('Show tab(s) even if there is only one'))
 		self._checkbox_ubuntu_coloring = gtk.CheckButton(_('Use Ubuntu coloring method for tab title bars'))
 
@@ -191,6 +195,24 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_tab_close_button.connect('toggled', self._parent.enable_save)
 		self._checkbox_always_show_tabs.connect('toggled', self._parent.enable_save)
 		self._checkbox_ubuntu_coloring.connect('toggled', self._parent.enable_save)
+		
+		vbox_status_bar = gtk.VBox(False, 0)
+		vbox_status_bar.set_border_width(5)
+		
+		label_status_bar = gtk.Label(_('Show status bar:'))
+		label_status_bar.set_alignment(0, 0.5)
+		
+		list_status_bar = gtk.ListStore(str, int)
+		list_status_bar.append((_('Always'), VISIBLE_ALWAYS))
+		list_status_bar.append((_('When needed'), VISIBLE_WHEN_NEEDED))
+		list_status_bar.append((_('Never'), VISIBLE_NEVER))
+		
+		cell_status_bar = gtk.CellRendererText()
+
+		self._combobox_status_bar = gtk.ComboBox(list_status_bar)
+		self._combobox_status_bar.connect('changed', self._parent.enable_save)
+		self._combobox_status_bar.pack_start(cell_status_bar)
+		self._combobox_status_bar.add_attribute(cell_status_bar, 'text', 0)
 
 		# operation options
 		frame_operation = gtk.Frame(_('Operation'))
@@ -201,6 +223,9 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_hide_window_on_minimize.connect('toggled', self._parent.enable_save)
 
 		# pack ui
+		vbox_status_bar.pack_start(label_status_bar, False, False, 0)
+		vbox_status_bar.pack_start(self._combobox_status_bar, False, False, 0)
+		
 		vbox_main_window.pack_start(self._checkbox_hide_on_close, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_toolbar, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_command_bar, False, False, 0)
@@ -212,6 +237,7 @@ class DisplayOptions(gtk.VBox):
 		vbox_tabs.pack_start(self._checkbox_tab_close_button, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_always_show_tabs, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_ubuntu_coloring, False, False, 0)
+		vbox_tabs.pack_start(vbox_status_bar, False, False, 0)
 
 		vbox_operation.pack_start(self._checkbox_hide_window_on_minimize, False, False, 0)
 
@@ -238,6 +264,7 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_always_show_tabs.set_active(options.getboolean('main', 'always_show_tabs'))
 		self._checkbox_ubuntu_coloring.set_active(options.getboolean('main', 'ubuntu_coloring'))
 		self._checkbox_hide_window_on_minimize.set_active(options.getboolean('main', 'hide_operation_on_minimize'))
+		self._combobox_status_bar.set_active(options.getint('main', 'show_status_bar'))
 
 	def _save_options(self):
 		"""Save display options"""
@@ -258,6 +285,7 @@ class DisplayOptions(gtk.VBox):
 		options.set('main', 'always_show_tabs', _bool[self._checkbox_always_show_tabs.get_active()])
 		options.set('main', 'ubuntu_coloring', _bool[self._checkbox_ubuntu_coloring.get_active()])
 		options.set('main', 'hide_operation_on_minimize', _bool[self._checkbox_hide_window_on_minimize.get_active()])
+		options.set('main', 'show_status_bar', self._combobox_status_bar.get_active())
 
 
 class ItemListOptions(gtk.VBox):

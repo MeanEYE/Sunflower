@@ -136,7 +136,7 @@ class PreferencesWindow(gtk.Window):
 
 		# call main window to propagate new settings
 		self._parent.apply_settings()
-		
+
 		# write changes to config file
 		self._parent.save_config()
 
@@ -195,18 +195,18 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_tab_close_button.connect('toggled', self._parent.enable_save)
 		self._checkbox_always_show_tabs.connect('toggled', self._parent.enable_save)
 		self._checkbox_ubuntu_coloring.connect('toggled', self._parent.enable_save)
-		
+
 		vbox_status_bar = gtk.VBox(False, 0)
 		vbox_status_bar.set_border_width(5)
-		
+
 		label_status_bar = gtk.Label(_('Show status bar:'))
 		label_status_bar.set_alignment(0, 0.5)
-		
+
 		list_status_bar = gtk.ListStore(str, int)
 		list_status_bar.append((_('Always'), VISIBLE_ALWAYS))
 		list_status_bar.append((_('When needed'), VISIBLE_WHEN_NEEDED))
 		list_status_bar.append((_('Never'), VISIBLE_NEVER))
-		
+
 		cell_status_bar = gtk.CellRendererText()
 
 		self._combobox_status_bar = gtk.ComboBox(list_status_bar)
@@ -215,17 +215,20 @@ class DisplayOptions(gtk.VBox):
 		self._combobox_status_bar.add_attribute(cell_status_bar, 'text', 0)
 
 		# operation options
-		frame_operation = gtk.Frame(_('Operation'))
+		frame_operation = gtk.Frame(_('Other'))
 		vbox_operation = gtk.VBox(False, 0)
 		vbox_operation.set_border_width(5)
 
 		self._checkbox_hide_window_on_minimize = gtk.CheckButton(_('Hide operation window on minimize'))
+		self._checkbox_human_readable_size = gtk.CheckButton(_('Show sizes in human readable format'))
+
 		self._checkbox_hide_window_on_minimize.connect('toggled', self._parent.enable_save)
+		self._checkbox_human_readable_size.connect('toggled', self._parent.enable_save)
 
 		# pack ui
 		vbox_status_bar.pack_start(label_status_bar, False, False, 0)
 		vbox_status_bar.pack_start(self._combobox_status_bar, False, False, 0)
-		
+
 		vbox_main_window.pack_start(self._checkbox_hide_on_close, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_toolbar, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_command_bar, False, False, 0)
@@ -240,6 +243,7 @@ class DisplayOptions(gtk.VBox):
 		vbox_tabs.pack_start(vbox_status_bar, False, False, 0)
 
 		vbox_operation.pack_start(self._checkbox_hide_window_on_minimize, False, False, 0)
+		vbox_operation.pack_start(self._checkbox_human_readable_size, False, False, 0)
 
 		frame_main_window.add(vbox_main_window)
 		frame_tabs.add(vbox_tabs)
@@ -264,6 +268,7 @@ class DisplayOptions(gtk.VBox):
 		self._checkbox_always_show_tabs.set_active(options.getboolean('main', 'always_show_tabs'))
 		self._checkbox_ubuntu_coloring.set_active(options.getboolean('main', 'ubuntu_coloring'))
 		self._checkbox_hide_window_on_minimize.set_active(options.getboolean('main', 'hide_operation_on_minimize'))
+		self._checkbox_human_readable_size.set_active(options.getboolean('main', 'human_readable_size'))
 		self._combobox_status_bar.set_active(options.getint('main', 'show_status_bar'))
 
 	def _save_options(self):
@@ -285,6 +290,7 @@ class DisplayOptions(gtk.VBox):
 		options.set('main', 'always_show_tabs', _bool[self._checkbox_always_show_tabs.get_active()])
 		options.set('main', 'ubuntu_coloring', _bool[self._checkbox_ubuntu_coloring.get_active()])
 		options.set('main', 'hide_operation_on_minimize', _bool[self._checkbox_hide_window_on_minimize.get_active()])
+		options.set('main', 'human_readable_size', _bool[self._checkbox_human_readable_size.get_active()])
 		options.set('main', 'show_status_bar', self._combobox_status_bar.get_active())
 
 
@@ -300,14 +306,14 @@ class ItemListOptions(gtk.VBox):
 		# configure self
 		self.set_border_width(10)
 		self.set_spacing(5)
-		
+
 		# create frames
 		frame_look_and_feel = gtk.Frame()
 		frame_look_and_feel.set_label(_('Look & feel'))
 
 		frame_operation = gtk.Frame()
 		frame_operation.set_label(_('Operation'))
-		
+
 		# vertical boxes
 		vbox_look_and_feel = gtk.VBox(False, 0)
 		vbox_operation = gtk.VBox(False, 0)
@@ -408,7 +414,7 @@ class ItemListOptions(gtk.VBox):
 		vbox_look_and_feel.pack_start(self._checkbox_show_headers, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_media_preview, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_show_hidden, False, False, 0)
-		
+
 		vbox_operation.pack_start(self._checkbox_case_sensitive, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_right_click, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_vim_bindings, False, False, 0)
@@ -416,10 +422,10 @@ class ItemListOptions(gtk.VBox):
 		vbox_operation.pack_start(vbox_grid_lines, False, False, 5)
 		vbox_operation.pack_start(vbox_time_format, False, False, 5)
 		vbox_operation.pack_start(vbox_status_text, False, False, 5)
-		
+
 		frame_look_and_feel.add(vbox_look_and_feel)
 		frame_operation.add(vbox_operation)
-		
+
 		self.pack_start(frame_look_and_feel, False, False, 0)
 		self.pack_start(frame_operation, False, False, 0)
 

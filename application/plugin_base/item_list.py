@@ -3,6 +3,7 @@ import gtk
 import locale
 import urllib
 import gobject
+import common
 
 from plugin import PluginBase
 
@@ -137,6 +138,9 @@ class ItemList(PluginBase):
 		self._dirs = {'count': 0, 'selected': 0}
 		self._files = {'count': 0, 'selected': 0}
 		self._size = {'total': 0L, 'selected': 0}
+
+		# local human readable cache
+		self._human_readable = self._parent.options.getboolean('main', 'human_readable_size')
 
 		# we use this variable to prevent dead loop during column resize
 		self._is_updating = False
@@ -548,7 +552,7 @@ class ItemList(PluginBase):
 			result = True
 
 		return result
-	
+
 	def _handle_cursor_change(self, widget=None, data=None):
 		"""Handle cursor change"""
 		pass
@@ -991,12 +995,21 @@ class ItemList(PluginBase):
 		"""Set status bar text acording to dir/file stats"""
 		status = self._parent.options.get('main', 'status_text')
 
+		# format size
+		if self._human_readable:
+			total_text = common.format_size(self._size['total'])
+			selected_text = common.format_size(self._size['selected'])
+
+		else:
+			total_text = locale.format('%d', self._size['total'], True)
+			selected_text = locale.format('%d', self._size['selected'], True)
+
 		status = status.replace('%dir_count', str(self._dirs['count']))
 		status = status.replace('%dir_sel', str(self._dirs['selected']))
 		status = status.replace('%file_count', str(self._files['count']))
 		status = status.replace('%file_sel', str(self._files['selected']))
-		status = status.replace('%size_total', locale.format('%d', self._size['total'], True))
-		status = status.replace('%size_sel', locale.format('%d', self._size['selected'], True))
+		status = status.replace('%size_total', total_text)
+		status = status.replace('%size_sel', selected_text)
 
 		self.update_status(status)
 
@@ -1142,16 +1155,19 @@ class ItemList(PluginBase):
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
 									)[self._parent.options.getint('main', 'button_relief')])
-									
+
+		# apply size formatting
+		self._human_readable = self._parent.options.getboolean('main', 'human_readable_size')
+
 		# change status bar visibility
 		show_status_bar = self._parent.options.getint('main', 'show_status_bar')
-		
+
 		if show_status_bar == VISIBLE_ALWAYS:
 			self._show_status_bar()
-			
+
 		elif show_status_bar == VISIBLE_WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
-			
+
 		elif show_status_bar == VISIBLE_NEVER:
 			self._hide_status_bar()

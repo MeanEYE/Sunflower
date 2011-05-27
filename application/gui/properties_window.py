@@ -6,6 +6,7 @@ import gnomevfs
 import locale
 import time
 import stat
+import common
 
 
 class PropertiesWindow(gtk.Window):
@@ -206,6 +207,7 @@ class PropertiesWindow(gtk.Window):
 		"""Update widgets to represent item state"""
 		mime_type = gnomevfs.get_mime_type(self._path)
 		format = self._application.options.get('main', 'time_format')
+		human_readable = self._application.options.getboolean('main', 'human_readable_size')
 		item_stat = self._provider.get_stat(self._path)
 
 		# get item description
@@ -214,10 +216,14 @@ class PropertiesWindow(gtk.Window):
 		# get item size
 		if self._is_file:
 			# file size
-			item_size = '{0} {1}'.format(
-								locale.format('%d', item_stat.st_size, True),
-								ngettext('byte', 'bytes', item_stat.st_size)
-							)
+			if human_readable:
+				item_size = common.format_size(item_stat.st_size)
+
+			else:
+				item_size = '{0} {1}'.format(
+									locale.format('%d', item_stat.st_size, True),
+									ngettext('byte', 'bytes', item_stat.st_size)
+								)
 
 		else:
 			# directory size

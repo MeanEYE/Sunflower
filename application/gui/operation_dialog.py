@@ -2,6 +2,7 @@ import gtk
 import pango
 import locale
 import gobject
+import common
 
 class OperationDialog(gtk.Window):
 	"""Dialog for operations
@@ -26,6 +27,7 @@ class OperationDialog(gtk.Window):
 		self._has_source_destination = False
 		self._has_current_file = False
 		self._has_details = False
+		self._human_readable = self._application.options.getboolean('main', 'human_readable_size')
 
 		self._total_size = 0L
 		self._total_count = 0L
@@ -292,10 +294,19 @@ class OperationDialog(gtk.Window):
 
 	def _update_total_size(self):
 		"""Update progress bar and labels for total size"""
-		self._value_total_size.set_label(self._size_format.format(
-															locale.format('%d', self._current_size, True),
-															locale.format('%d', self._total_size, True)
-															))
+		if self._human_readable:
+			formated_size = self._size_format.format(
+												common.format_size(self._current_size),
+												common.format_size(self._total_size)
+											)
+		else:
+			formated_size = self._size_format.format(
+												locale.format('%d', self._current_size, True),
+												locale.format('%d', self._total_size, True)
+											)
+
+		# update lable
+		self._value_total_size.set_label(formated_size)
 
 		if self._total_size > 0:
 			self.set_total_size_fraction(float(self._current_size) / self._total_size)
@@ -311,7 +322,7 @@ class OperationDialog(gtk.Window):
 
 		"""
 		if self._paused: return  # don't update speed when paused
-		
+
 		speed = self._current_size - self._total_checkpoint  # get current speed
 		self._total_checkpoint = self._current_size
 
@@ -354,11 +365,16 @@ class OperationDialog(gtk.Window):
 			# we don't have average speed yet
 			time_text = _('unknown')
 
-		speed_text = '{0} {1}/{2}'.format(
-							locale.format('%d', average, True),
-							ngettext('byte', 'bytes', average),
-							_('second')
-						)
+		if self._human_readable:
+			average_text = common.format_size(average)
+
+		else:
+			average_text = '{0} {1}'.format(
+								locale.format('%d', average, True),
+								ngettext('byte', 'bytes', average)
+							)
+
+		speed_text = '{0}/{1}'.format(average_text, _('second'))
 
 		self._value_eta.set_text(time_text)
 		self._value_speed.set_text(speed_text)

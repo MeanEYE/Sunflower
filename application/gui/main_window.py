@@ -21,10 +21,10 @@ try:
 	# try to import argument parser
 	from argparse import ArgumentParser
 	USE_ARGPARSE = True
-	
+
 except:
 	USE_ARGPARSE = False
-	
+
 
 # gui imports
 from about_window import AboutWindow
@@ -1115,7 +1115,7 @@ class MainWindow(gtk.Window):
 
 		if hasattr(active_object, '_rename_file'):
 			active_object._rename_file()
-	
+
 	def _command_edit_key_press(self, widget, event):
 		"""Handle key press in command edit"""
 		result = False
@@ -1230,7 +1230,7 @@ class MainWindow(gtk.Window):
 	def _parse_arguments(self):
 		"""Parse command-line arguments passed to the application"""
 		if not USE_ARGPARSE: return
-		
+
 		parser = ArgumentParser(
 							description=_('Sunflower file manager'),
 							prog='Sunflower.py'
@@ -1787,6 +1787,7 @@ class MainWindow(gtk.Window):
 				'active_notebook': 0,
 				'tab_close_button': 'False',
 				'show_status_bar': 0,
+				'human_readable_size': 'True',
 			}
 
 		# set default options

@@ -8,6 +8,7 @@ import gnomevfs
 import user
 import fnmatch
 import urllib
+import common
 
 from provider import Provider
 from operation import DeleteOperation, CopyOperation, MoveOperation
@@ -265,7 +266,7 @@ class FileList(ItemList):
 		file_name = self._get_selection(relative=False)
 		protocol = self.get_provider().protocols[0]
 		uri = '{0}://{1}'.format(protocol, urllib.quote(file_name)) if not is_parent else None
-		
+
 		# show preview if thumbnail exists
 		if not is_dir and not is_parent \
 		and self.get_provider().exists(file_name) \
@@ -905,9 +906,20 @@ class FileList(ItemList):
 				# don't allow extension splitting on directories
 				file_info = (filename, '') if is_dir else os.path.splitext(filename)
 
-				formated_file_size = locale.format('%d', file_size, True) if not is_dir else '<DIR>'
 				formated_file_mode = oct(file_mode)
 				formated_file_date = time.strftime(format, time.gmtime(file_date))
+
+				if not is_dir:
+					# item is a file
+					if self._human_readable:
+						formated_file_size = common.format_size(file_size)
+
+					else:
+						formated_file_size = locale.format('%d', file_size, True)
+
+				else:
+					# item is a directory
+					formated_file_size = '<DIR>'
 
 				if is_dir:
 					# get universal folder icon
@@ -1025,8 +1037,8 @@ class FileList(ItemList):
 		if text is None: text = self.path
 		stat = os.statvfs(self.path)
 
-		space_free = self._format_size(stat.f_bsize * stat.f_bavail)
-		space_total = self._format_size(stat.f_bsize * stat.f_blocks)
+		space_free = common.format_size(stat.f_bsize * stat.f_bavail)
+		space_total = common.format_size(stat.f_bsize * stat.f_blocks)
 
 		self._title_bar.set_title(text)
 		self._title_bar.set_subtitle(
@@ -1037,13 +1049,6 @@ class FileList(ItemList):
 															_('Total:')
 														)
 								)
-
-	def _format_size(self, size):
-		"""Convert size to more human readable format"""
-		for x in ['B','kB','MB','GB','TB']:
-			if size < 1024.0:
-				return "%3.1f %s" % (size, x)
-			size /= 1024.0
 
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""

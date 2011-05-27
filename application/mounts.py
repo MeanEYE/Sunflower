@@ -136,7 +136,7 @@ class MountsManager:
 									gtk.DIALOG_DESTROY_WITH_PARENT,
 									gtk.MESSAGE_WARNING,
 									gtk.BUTTONS_OK,
-									_("Specified item can not be unmounted. ")
+									_("Specified item can not be unmounted.")
 								)
 			dialog.run()
 			dialog.destroy()

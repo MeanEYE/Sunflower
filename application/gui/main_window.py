@@ -652,6 +652,7 @@ class MainWindow(gtk.Window):
 			image.set_from_icon_name('user-home', gtk.ICON_SIZE_MENU)
 
 			bookmark.set_image(image)
+			bookmark.set_always_show_image(True)
 			bookmark.set_label(label=_('Home directory'))
 			bookmark.set_data('path', os.path.expanduser('~/'))
 			bookmark.connect('activate', self._handle_bookmarks_click)
@@ -669,6 +670,7 @@ class MainWindow(gtk.Window):
 			image.set_from_icon_name('folder', gtk.ICON_SIZE_MENU)
 
 			bookmark.set_image(image)
+			bookmark.set_always_show_image(True)
 			bookmark.set_label(label=data[0])
 			bookmark.set_data('path', os.path.expanduser(data[1]))
 			bookmark.connect('activate', self._handle_bookmarks_click)

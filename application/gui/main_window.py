@@ -696,7 +696,7 @@ class MainWindow(gtk.Window):
 													'type': 'image',
 													'stock': gtk.STOCK_PREFERENCES,
 													'callback': self.preferences_window._show,
-													'data': 5
+													'data': 'bookmarks'
 												},
 											)
 									})
@@ -752,7 +752,7 @@ class MainWindow(gtk.Window):
 		# create option for editing tools
 		edit_tools = gtk.ImageMenuItem(stock_id=gtk.STOCK_PREFERENCES)
 		edit_tools.set_label(_('_Edit tools'))
-		edit_tools.connect('activate', self.preferences_window._show, 6)
+		edit_tools.connect('activate', self.preferences_window._show, 'tools')
 		self.menu_tools.append(edit_tools)
 
 		self._menu_item_tools.set_sensitive(tool_count > 0)

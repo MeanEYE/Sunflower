@@ -1,7 +1,6 @@
 # coding: utf-8
 
 import os
-import sys
 import gtk
 import pango
 
@@ -49,19 +48,21 @@ class AboutWindow(gtk.Window):
 									)
 							)
 		self._program_label.set_use_markup(True)
+		self._program_label.set_alignment(0, 0.5)
 
 		# top horizontal box containing image and program title
-		frame = gtk.EventBox()
-
 		hbox1 = gtk.HBox(False, 0)
+		hbox1.set_border_width(5)
+		
+		hbox1.pack_start(image, False, False, 0)
+		hbox1.pack_start(self._program_label, True, True, 5)
+		
+		frame = gtk.EventBox()
 		frame.add(hbox1)
 
-		hbox1.pack_start(image, False, False, 0)
-		hbox1.pack_start(self._program_label, False, False, 5)
-
 		# bottom vbox
-		vbox2 = gtk.VBox(False, 5)
-		vbox2.set_border_width(5)
+		vbox2 = gtk.VBox(False, 10)
+		vbox2.set_border_width(10)
 
 		# middle content
 		notebook = gtk.Notebook()

@@ -17,7 +17,7 @@ class SettingsPage(gtk.VBox):
 		self.set_border_width(0)
 		
 		# add page to preferences window
-		self._parent.add_tab(self._page_title, self)
+		self._parent.add_tab(self._page_name, self._page_title, self)
 		
 	def _load_options(self):
 		"""Load options and update interface"""

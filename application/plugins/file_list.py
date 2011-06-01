@@ -726,7 +726,7 @@ class FileList(ItemList):
 		value1 = list_.get_value(iter1, self._sort_column)
 		value2 = list_.get_value(iter2, self._sort_column)
 
-		if not self._sort_sensitive:
+		if not self._sort_sensitive and self._sort_column in (COL_NAME, COL_EXT):
 			value1 = value1.lower()
 			value2 = value2.lower()
 

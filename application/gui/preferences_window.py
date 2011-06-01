@@ -4,6 +4,9 @@ VISIBLE_ALWAYS		= 0
 VISIBLE_WHEN_NEEDED	= 1
 VISIBLE_NEVER		= 2
 
+COL_NAME	= 0
+COL_WIDGET	= 1
+
 
 class PreferencesWindow(gtk.Window):
 
@@ -15,55 +18,54 @@ class PreferencesWindow(gtk.Window):
 		# configure self
 		self.connect('delete_event', self._hide)
 		self.set_title(_('Preferences'))
-		self.set_size_request(600, 500)
+		self.set_size_request(640, 500)
 		self.set_modal(True)
 		self.set_skip_taskbar_hint(True)
 		self.set_transient_for(parent)
 		self.set_wmclass('Sunflower', 'Sunflower')
 
 		# create GUI
-		vbox = gtk.VBox(False, 5)
-		vbox.set_border_width(5)
+		vbox = gtk.VBox(False, 10)
+		vbox.set_border_width(10)
+		
+		hbox = gtk.HBox(False, 10)
+
+		# create tab label container
+		label_container = gtk.ScrolledWindow()
+		label_container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+		label_container.set_shadow_type(gtk.SHADOW_IN)
+		label_container.set_size_request(130, -1)
+		
+		self._labels = gtk.ListStore(str, int)
+		self._tab_labels = gtk.TreeView(self._labels)
+
+		cell_label = gtk.CellRendererText()
+		col_label = gtk.TreeViewColumn(None, cell_label, text=COL_NAME)
+		
+		self._tab_labels.append_column(col_label)
+		self._tab_labels.set_headers_visible(False)
+		self._tab_labels.connect('cursor-changed', self._handle_cursor_change)
 
 		# create tabs
 		self._tabs = gtk.Notebook()
-		self._tabs.set_tab_pos(gtk.POS_LEFT)
+		self._tabs.set_show_tabs(False)
+		self._tabs.set_show_border(False)
+		self._tabs.connect('switch-page', self._handle_page_switch)
 
-		self._tabs.append_page(
-					DisplayOptions(self, parent),
-					gtk.Label(_('Display'))
-					)
-		self._tabs.append_page(
-					ItemListOptions(self, parent),
-					gtk.Label(_('Item List'))
-					)
-		self._tabs.append_page(
-					TerminalOptions(self, parent),
-					gtk.Label(_('Terminal'))
-					)
-		self._tabs.append_page(
-					ViewEditOptions(self, parent),
-					gtk.Label(_('View & Edit'))
-					)
-		self._tabs.append_page(
-					ToolbarOptions(self, parent),
-					gtk.Label(_('Toolbar'))
-					)
-		self._tabs.append_page(
-					BookmarkOptions(self, parent),
-					gtk.Label(_('Bookmarks'))
-					)
-		self._tabs.append_page(
-					ToolOptions(self, parent),
-					gtk.Label(_('Tools Menu'))
-					)
-		self._tabs.append_page(
-					PluginOptions(self, parent),
-					gtk.Label(_('Plugins'))
-					)
+		self.add_tab(_('Display'), DisplayOptions(self, parent))
+		self.add_tab(_('Item List'), ItemListOptions(self, parent))
+		self.add_tab(_('Terminal'), TerminalOptions(self, parent))
+		self.add_tab(_('View & Edit'), ViewEditOptions(self, parent))
+		self.add_tab(_('Toolbar'), ToolbarOptions(self, parent))
+		self.add_tab(_('Bookmarks'), BookmarkOptions(self, parent))
+		self.add_tab(_('Tools Menu'), ToolOptions(self, parent))
+		self.add_tab(_('Plugins'), PluginOptions(self, parent))
+
+		# select first tab
+		self._tab_labels.set_cursor((0,))
 
 		# create buttons
-		hbox = gtk.HBox(False, 5)
+		hbox_controls = gtk.HBox(False, 5)
 
 		btn_close = gtk.Button(stock=gtk.STOCK_CLOSE)
 		btn_close.connect('clicked', self._hide)
@@ -85,14 +87,19 @@ class PreferencesWindow(gtk.Window):
 		self._label_restart.set_property('no-show-all', True)
 
 		# pack buttons
-		hbox.pack_start(btn_help, False, False, 0)
-		hbox.pack_start(self._label_restart, True, True, 0)
-		hbox.pack_end(btn_close, False, False, 0)
-		hbox.pack_end(self._button_save, False, False, 0)
+		label_container.add(self._tab_labels)
+		
+		hbox.pack_start(label_container, False, False, 0)
+		hbox.pack_start(self._tabs, True, True, 0)
+		
+		hbox_controls.pack_start(btn_help, False, False, 0)
+		hbox_controls.pack_start(self._label_restart, True, True, 0)
+		hbox_controls.pack_end(btn_close, False, False, 0)
+		hbox_controls.pack_end(self._button_save, False, False, 0)
 
-		# pack gui
-		vbox.pack_start(self._tabs, True, True, 0)
-		vbox.pack_start(hbox, False, False, 0)
+		# pack UI
+		vbox.pack_start(hbox, True, True, 0)
+		vbox.pack_start(hbox_controls, False, False, 0)
 
 		self.add(vbox)
 
@@ -137,8 +144,26 @@ class PreferencesWindow(gtk.Window):
 		# call main window to propagate new settings
 		self._parent.apply_settings()
 
-		# write changes to config file
+		# write changes to configuration file
 		self._parent.save_config()
+		
+	def _handle_cursor_change(self, widget, data=None):
+		"""Change active tab when cursor is changed"""
+		selection = self._tab_labels.get_selection()
+		list_, iter_ = selection.get_selected()
+
+		if iter_ is not None:
+			new_tab = list_.get_value(iter_, COL_WIDGET)
+
+			self._tabs.handler_block_by_func(self._handle_page_switch)
+			self._tabs.set_current_page(new_tab)
+			self._tabs.handler_unblock_by_func(self._handle_page_switch)
+			
+	def _handle_page_switch(self, widget, page, page_num, data=None):
+		"""Handle changing page without user interaction"""
+		self._tab_labels.handler_block_by_func(self._handle_cursor_change)
+		self._tab_labels.set_cursor((page_num,))
+		self._tab_labels.handler_unblock_by_func(self._handle_cursor_change)
 
 	def enable_save(self, widget=None, show_restart=None):
 		"""Enable save button"""
@@ -147,6 +172,11 @@ class PreferencesWindow(gtk.Window):
 		# show label with message
 		if show_restart is not None and show_restart:
 			self._label_restart.show()
+			
+	def add_tab(self, label, tab):
+		"""Add new tab to preferences window"""
+		self._labels.append((label, self._tabs.get_n_pages()))
+		self._tabs.append_page(tab)
 
 
 class DisplayOptions(gtk.VBox):
@@ -159,7 +189,6 @@ class DisplayOptions(gtk.VBox):
 		self._application = application
 
 		# configure self
-		self.set_border_width(10)
 		self.set_spacing(5)
 
 		# main window options
@@ -304,7 +333,6 @@ class ItemListOptions(gtk.VBox):
 		self._application = application
 
 		# configure self
-		self.set_border_width(10)
 		self.set_spacing(5)
 
 		# create frames
@@ -511,7 +539,6 @@ class ViewEditOptions(gtk.VBox):
 		self._application = application
 
 		# configure self
-		self.set_border_width(10)
 		self.set_spacing(5)
 
 		# viewer options
@@ -594,7 +621,6 @@ class ToolbarOptions(gtk.VBox):
 		self._toolbar_manager = self._application.toolbar_manager
 
 		# configure self
-		self.set_border_width(10)
 		self.set_spacing(5)
 
 		# create list box
@@ -792,7 +818,6 @@ class BookmarkOptions(gtk.VBox):
 		self._application = application
 
 		# configure self
-		self.set_border_width(10)
 		self.set_spacing(5)
 
 		# mounts checkbox
@@ -977,7 +1002,6 @@ class ToolOptions(gtk.VBox):
 		self._application = application
 
 		# configure self
-		self.set_border_width(10)
 		self.set_spacing(5)
 
 		# create list box
@@ -1137,7 +1161,6 @@ class TerminalOptions(gtk.VBox):
 		self._application = application
 
 		# configure self
-		self.set_border_width(10)
 		self.set_spacing(5)
 
 		# create interface
@@ -1171,7 +1194,6 @@ class PluginOptions(gtk.VBox):
 		self._application = application
 
 		# configure self
-		self.set_border_width(10)
 		self.set_spacing(5)
 
 		# create interface

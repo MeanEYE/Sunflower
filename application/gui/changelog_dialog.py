@@ -14,7 +14,7 @@ class ChangeLogDialog(gtk.Dialog):
 		self.set_resizable(False)
 		self.set_modal(True)
 		self.set_wmclass('Sunflower', 'Sunflower')
-	
+
 		self.vbox.set_border_width(0)
 
 		# set window icon
@@ -54,6 +54,7 @@ class ChangeLogDialog(gtk.Dialog):
 							)
 		program_label.set_use_markup(True)
 		program_label.modify_fg(gtk.STATE_NORMAL, style.fg[gtk.STATE_NORMAL])
+		program_label.set_alignment(0, 0.5)
 
 		# notebook which contains changelog and modifications tab
 		notebook = gtk.Notebook()
@@ -61,8 +62,8 @@ class ChangeLogDialog(gtk.Dialog):
 
 		# modifications
 		if show_modifications:
-			vbox = gtk.VBox(False, 5)
-			vbox.set_border_width(5)
+			vbox = gtk.VBox(False, 7)
+			vbox.set_border_width(7)
 
 			# label to give some more information
 			label_info = gtk.Label(_(
@@ -117,12 +118,13 @@ class ChangeLogDialog(gtk.Dialog):
 		# top horizontal box containing image and program title
 		frame = gtk.EventBox()
 		frame.modify_bg(gtk.STATE_NORMAL, style.bg[gtk.STATE_NORMAL])
-
-		hbox1 = gtk.HBox(False, 0)
 		frame.add(hbox1)
 
+		hbox1 = gtk.HBox(False, 0)
+		hbox1.set_border_width(5)
+
 		hbox1.pack_start(image, False, False, 0)
-		hbox1.pack_start(program_label, False, False, 5)
+		hbox1.pack_start(program_label, True, True, 5)
 
 		# actions buttons
 		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)

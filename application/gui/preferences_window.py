@@ -185,7 +185,7 @@ class PreferencesWindow(gtk.Window):
 		"""
 		tab_number = self._tabs.get_n_pages()
 		
-		self._tab_names[name, tab_number]
+		self._tab_names[name] = tab_number
 		self._labels.append((label, tab_number))
 		self._tabs.append_page(tab)
 

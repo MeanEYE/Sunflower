@@ -18,6 +18,7 @@ class TabLabel(gtk.HBox):
 		image = gtk.Image()
 		image.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU)
 		image_width, image_height = gtk.icon_size_lookup(gtk.ICON_SIZE_MENU)
+		image.show()
 
 		style = gtk.RcStyle()
 		style.xthickness = 0
@@ -25,11 +26,12 @@ class TabLabel(gtk.HBox):
 
 		self._button = gtk.Button()
 		self._button.set_focus_on_click(False)
-		self._button.set_image(image)
+		self._button.add(image)
 		self._button.set_relief(gtk.RELIEF_NONE)
 		self._button.modify_style(style)
 		self._button.connect('clicked', self._close_tab)
 		self._button.set_property('no-show-all', True)
+		self._button.set_size_request(image_width + 2, image_height + 2)
 
 		# pack interface
 		self.pack_start(self._label, True, True, 0)

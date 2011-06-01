@@ -1,6 +1,6 @@
 import gtk
 
-from widgets.settings_page import SettingsPage 
+from widgets.settings_page import SettingsPage
 
 VISIBLE_ALWAYS		= 0
 VISIBLE_WHEN_NEEDED	= 1
@@ -28,23 +28,23 @@ class PreferencesWindow(gtk.Window):
 		self.set_wmclass('Sunflower', 'Sunflower')
 
 		# create GUI
-		vbox = gtk.VBox(False, 10)
-		vbox.set_border_width(10)
-		
-		hbox = gtk.HBox(False, 10)
+		vbox = gtk.VBox(False, 7)
+		vbox.set_border_width(7)
+
+		hbox = gtk.HBox(False, 7)
 
 		# create tab label container
 		label_container = gtk.ScrolledWindow()
 		label_container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
 		label_container.set_shadow_type(gtk.SHADOW_IN)
 		label_container.set_size_request(130, -1)
-		
+
 		self._labels = gtk.ListStore(str, int)
 		self._tab_labels = gtk.TreeView(self._labels)
 
 		cell_label = gtk.CellRendererText()
 		col_label = gtk.TreeViewColumn(None, cell_label, text=COL_NAME)
-		
+
 		self._tab_labels.append_column(col_label)
 		self._tab_labels.set_headers_visible(False)
 		self._tab_labels.connect('cursor-changed', self._handle_cursor_change)
@@ -91,10 +91,10 @@ class PreferencesWindow(gtk.Window):
 
 		# pack buttons
 		label_container.add(self._tab_labels)
-		
+
 		hbox.pack_start(label_container, False, False, 0)
 		hbox.pack_start(self._tabs, True, True, 0)
-		
+
 		hbox_controls.pack_start(btn_help, False, False, 0)
 		hbox_controls.pack_start(self._label_restart, True, True, 0)
 		hbox_controls.pack_end(btn_close, False, False, 0)
@@ -149,7 +149,7 @@ class PreferencesWindow(gtk.Window):
 
 		# write changes to configuration file
 		self._parent.save_config()
-		
+
 	def _handle_cursor_change(self, widget, data=None):
 		"""Change active tab when cursor is changed"""
 		selection = self._tab_labels.get_selection()
@@ -161,7 +161,7 @@ class PreferencesWindow(gtk.Window):
 			self._tabs.handler_block_by_func(self._handle_page_switch)
 			self._tabs.set_current_page(new_tab)
 			self._tabs.handler_unblock_by_func(self._handle_page_switch)
-			
+
 	def _handle_page_switch(self, widget, page, page_num, data=None):
 		"""Handle changing page without user interaction"""
 		self._tab_labels.handler_block_by_func(self._handle_cursor_change)
@@ -175,16 +175,16 @@ class PreferencesWindow(gtk.Window):
 		# show label with message
 		if show_restart is not None and show_restart:
 			self._label_restart.show()
-			
+
 	def add_tab(self, name, label, tab):
 		"""Add new tab to preferences window
-		
+
 		If you are using SettingsPage class there's no need to call this
 		method manually, class constructor will do it automatically for you!
-		
+
 		"""
 		tab_number = self._tabs.get_n_pages()
-		
+
 		self._tab_names[name] = tab_number
 		self._labels.append((label, tab_number))
 		self._tabs.append_page(tab)

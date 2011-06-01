@@ -53,16 +53,16 @@ class AboutWindow(gtk.Window):
 		# top horizontal box containing image and program title
 		hbox1 = gtk.HBox(False, 0)
 		hbox1.set_border_width(5)
-		
+
 		hbox1.pack_start(image, False, False, 0)
 		hbox1.pack_start(self._program_label, True, True, 5)
-		
+
 		frame = gtk.EventBox()
 		frame.add(hbox1)
 
 		# bottom vbox
-		vbox2 = gtk.VBox(False, 10)
-		vbox2.set_border_width(10)
+		vbox2 = gtk.VBox(False, 7)
+		vbox2.set_border_width(7)
 
 		# middle content
 		notebook = gtk.Notebook()

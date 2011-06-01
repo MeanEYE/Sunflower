@@ -1,5 +1,7 @@
 import gtk
 
+from widgets.settings_page import SettingsPage 
+
 VISIBLE_ALWAYS		= 0
 VISIBLE_WHEN_NEEDED	= 1
 VISIBLE_NEVER		= 2
@@ -14,6 +16,7 @@ class PreferencesWindow(gtk.Window):
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 
 		self._parent = parent
+		self._tab_names = {}
 
 		# configure self
 		self.connect('delete_event', self._hide)
@@ -52,14 +55,14 @@ class PreferencesWindow(gtk.Window):
 		self._tabs.set_show_border(False)
 		self._tabs.connect('switch-page', self._handle_page_switch)
 
-		self.add_tab(_('Display'), DisplayOptions(self, parent))
-		self.add_tab(_('Item List'), ItemListOptions(self, parent))
-		self.add_tab(_('Terminal'), TerminalOptions(self, parent))
-		self.add_tab(_('View & Edit'), ViewEditOptions(self, parent))
-		self.add_tab(_('Toolbar'), ToolbarOptions(self, parent))
-		self.add_tab(_('Bookmarks'), BookmarkOptions(self, parent))
-		self.add_tab(_('Tools Menu'), ToolOptions(self, parent))
-		self.add_tab(_('Plugins'), PluginOptions(self, parent))
+		DisplayOptions(self, parent)
+		ItemListOptions(self, parent)
+		TerminalOptions(self, parent)
+		ViewEditOptions(self, parent)
+		ToolbarOptions(self, parent)
+		BookmarkOptions(self, parent)
+		ToolOptions(self, parent)
+		PluginOptions(self, parent)
 
 		# select first tab
 		self._tab_labels.set_cursor((0,))
@@ -103,13 +106,13 @@ class PreferencesWindow(gtk.Window):
 
 		self.add(vbox)
 
-	def _show(self, widget, data=None):
+	def _show(self, widget, tab_name=None):
 		"""Show dialog and reload options"""
 		self._load_options()
 		self.show_all()
 
-		if data is not None:
-			self._tabs.set_current_page(data)
+		if tab_name is not None and self._tab_names.has_key(tab_name):
+			self._tabs.set_current_page(self._tab_names[tab_name])
 
 	def _hide(self, widget, data=None):
 		"""Hide dialog"""
@@ -173,23 +176,25 @@ class PreferencesWindow(gtk.Window):
 		if show_restart is not None and show_restart:
 			self._label_restart.show()
 			
-	def add_tab(self, label, tab):
-		"""Add new tab to preferences window"""
-		self._labels.append((label, self._tabs.get_n_pages()))
+	def add_tab(self, name, label, tab):
+		"""Add new tab to preferences window
+		
+		If you are using SettingsPage class there's no need to call this
+		method manually, class constructor will do it automatically for you!
+		
+		"""
+		tab_number = self._tabs.get_n_pages()
+		
+		self._tab_names[name, tab_number]
+		self._labels.append((label, tab_number))
 		self._tabs.append_page(tab)
 
 
-class DisplayOptions(gtk.VBox):
+class DisplayOptions(SettingsPage):
 	"""Display options extension class"""
 
 	def __init__(self, parent, application):
-		gtk.VBox.__init__(self, False, 0)
-
-		self._parent = parent
-		self._application = application
-
-		# configure self
-		self.set_spacing(5)
+		SettingsPage.__init__(self, parent, application, 'display', _('Display'))
 
 		# main window options
 		frame_main_window = gtk.Frame(_('Main window'))
@@ -323,17 +328,11 @@ class DisplayOptions(gtk.VBox):
 		options.set('main', 'show_status_bar', self._combobox_status_bar.get_active())
 
 
-class ItemListOptions(gtk.VBox):
+class ItemListOptions(SettingsPage):
 	"""Options related to item lists"""
 
 	def __init__(self, parent, application):
-		gtk.VBox.__init__(self, False, 0)
-
-		self._parent = parent
-		self._application = application
-
-		# configure self
-		self.set_spacing(5)
+		SettingsPage.__init__(self, parent, application, 'item_list', _('Item List'))
 
 		# create frames
 		frame_look_and_feel = gtk.Frame()
@@ -529,17 +528,11 @@ class ItemListOptions(gtk.VBox):
 		options.set('main', 'search_modifier', search_modifier)
 
 
-class ViewEditOptions(gtk.VBox):
+class ViewEditOptions(SettingsPage):
 	"""View & Edit options extension class"""
 
 	def __init__(self, parent, application):
-		gtk.VBox.__init__(self, False, 0)
-
-		self._parent = parent
-		self._application = application
-
-		# configure self
-		self.set_spacing(5)
+		SettingsPage.__init__(self, parent, application, 'view_and_edit', _('View & Edit'))
 
 		# viewer options
 		frame_view = gtk.Frame(_('View'))
@@ -610,18 +603,13 @@ class ViewEditOptions(gtk.VBox):
 		options.set('main', 'wait_for_editor', bool[self._checkbox_wait_for_editor.get_active()])
 
 
-class ToolbarOptions(gtk.VBox):
+class ToolbarOptions(SettingsPage):
 	"""Toolbar options extension class"""
 
 	def __init__(self, parent, application):
-		gtk.VBox.__init__(self, False, 0)
+		SettingsPage.__init__(self, parent, application, 'toolbar', _('Toolbar'))
 
-		self._parent = parent
-		self._application = application
 		self._toolbar_manager = self._application.toolbar_manager
-
-		# configure self
-		self.set_spacing(5)
 
 		# create list box
 		container = gtk.ScrolledWindow()
@@ -808,17 +796,11 @@ class ToolbarOptions(gtk.VBox):
 			toolbar_options.remove_section(section)
 
 
-class BookmarkOptions(gtk.VBox):
+class BookmarkOptions(SettingsPage):
 	"""Bookmark options extension class"""
 
 	def __init__(self, parent, application):
-		gtk.VBox.__init__(self, False, 0)
-
-		self._parent = parent
-		self._application = application
-
-		# configure self
-		self.set_spacing(5)
+		SettingsPage.__init__(self, parent, application, 'bookmarks', _('Bookmarks'))
 
 		# mounts checkbox
 		self._checkbox_show_mount_points = gtk.CheckButton(_('Show mount points in bookmarks menu'))
@@ -992,17 +974,11 @@ class BookmarkOptions(gtk.VBox):
 								)
 
 
-class ToolOptions(gtk.VBox):
+class ToolOptions(SettingsPage):
 	"""Tools options extension class"""
 
 	def __init__(self, parent, application):
-		gtk.VBox.__init__(self, False, 0)
-
-		self._parent = parent
-		self._application = application
-
-		# configure self
-		self.set_spacing(5)
+		SettingsPage.__init__(self, parent, application, 'tools', _('Tools Menu'))
 
 		# create list box
 		container = gtk.ScrolledWindow()
@@ -1151,17 +1127,11 @@ class ToolOptions(gtk.VBox):
 			tool_options.set('tools', 'command_{0}'.format(index), tool[1])
 
 
-class TerminalOptions(gtk.VBox):
+class TerminalOptions(SettingsPage):
 	"""Terminal options extension class"""
 
 	def __init__(self, parent, application):
-		gtk.VBox.__init__(self, False, 0)
-
-		self._parent = parent
-		self._application = application
-
-		# configure self
-		self.set_spacing(5)
+		SettingsPage.__init__(self, parent, application, 'terminal', _('Terminal'))
 
 		# create interface
 		self._checkbox_scrollbars_visible = gtk.CheckButton(_('Show scrollbars when needed'))
@@ -1184,17 +1154,11 @@ class TerminalOptions(gtk.VBox):
 		options.set('main', 'terminal_scrollbars', _bool[self._checkbox_scrollbars_visible.get_active()])
 
 
-class PluginOptions(gtk.VBox):
+class PluginOptions(SettingsPage):
 	"""Plugins options extension class"""
 
 	def __init__(self, parent, application):
-		gtk.VBox.__init__(self, False, 0)
-
-		self._parent = parent
-		self._application = application
-
-		# configure self
-		self.set_spacing(5)
+		SettingsPage.__init__(self, parent, application, 'plugins', _('Plugins'))
 
 		# create interface
 		container = gtk.ScrolledWindow()

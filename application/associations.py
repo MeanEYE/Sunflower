@@ -42,29 +42,37 @@ class AssociationManager:
 
 		return result
 
-	def open_file_with_config(self, callback, config_file):
+	def open_file_with_config(self, selection, config_file):
 		"""Open filename using config data"""
 		config = self.get_association_config(config_file)
-		get_file_list = callback
-
 		if config is None: return
 
 		exec_string = config['exec']
 
-		file_list = get_file_list()
-
-		if file_list is not None:
-			exec_string = exec_string.replace('%f', "'{0}'".format(file_list[0]))
-			exec_string = exec_string.replace('%F', " ".join("'{0}'".format(file) for file in file_list))
-			exec_string = exec_string.replace('%u', 'file://{0}'.format(quote(file_list[0])))
-			exec_string = exec_string.replace('%U', " ".join('file://{0}'.format(quote(file)) for file in file_list))
-			exec_string = exec_string.replace('%d', "'{0}'".format(os.path.dirname(file_list[0])))
-			exec_string = exec_string.replace('%D', " ".join("'{0}'".format(os.path.dirname(file) for file in file_list)))
-			exec_string = exec_string.replace('%n', "'{0}'".format(os.path.basename(file_list[0])))
-			exec_string = exec_string.replace('%N', " ".join("'{0}'".format(os.path.basename(file) for file in file_list)))
+		if selection is not None:
+			exec_string = exec_string.replace('%f', "'{0}'".format(selection[0]))
+			exec_string = exec_string.replace('%F', " ".join("'{0}'".format(file) for file in selection))
+			exec_string = exec_string.replace('%u', 'file://{0}'.format(quote(selection[0])))
+			exec_string = exec_string.replace('%U', " ".join('file://{0}'.format(quote(file)) for file in selection))
+			exec_string = exec_string.replace('%d', "'{0}'".format(os.path.dirname(selection[0])))
+			exec_string = exec_string.replace('%D', " ".join("'{0}'".format(os.path.dirname(file) for file in selection)))
+			exec_string = exec_string.replace('%n', "'{0}'".format(os.path.basename(selection[0])))
+			exec_string = exec_string.replace('%N', " ".join("'{0}'".format(os.path.basename(file) for file in selection)))
 
 			os.system('{0} &'.format(exec_string))
 
 	def execute_file(self, path):
 		"""Execute specified item"""
-		pass
+		mime_type = gnomevfs.get_mime_type(path)
+		is_executable = gnomevfs.is_executable_command_string(path)
+
+		if mime_type in self.executable_types and is_executable:
+			# file is executable type and has executable bit set
+			os.system('{0} &'.format(path))
+
+		else:
+			# file does not have executable bit set, open with default application
+			default_program = self.get_default_program_for_type(mime_type)
+			config_file = default_program[0]
+
+			self.open_file_with_config((path,), config_file)

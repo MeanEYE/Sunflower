@@ -23,23 +23,24 @@ class Indicator(object):
 		self._menu = gtk.Menu()
 		self._create_menu_items()
 
-		if appindicator is not None:
-			self._indicator = appindicator.Indicator(
-												self._name,
-												self._icon,
-												appindicator.CATEGORY_APPLICATION_STATUS,
-												self._icon_path
-												)
+		if self._parent.options.getboolean('main', 'hide_on_close'):
+			if appindicator is not None:
+				self._indicator = appindicator.Indicator(
+													self._name,
+													self._icon,
+													appindicator.CATEGORY_APPLICATION_STATUS,
+													self._icon_path
+													)
 
-			self._indicator.set_status(appindicator.STATUS_ACTIVE)
-			self._indicator.set_attention_icon (self._icon_attention)
-			self._indicator.set_menu(self._menu)
-		else:
-			self._indicator = gtk.StatusIcon()
+				self._indicator.set_status(appindicator.STATUS_ACTIVE)
+				self._indicator.set_attention_icon (self._icon_attention)
+				self._indicator.set_menu(self._menu)
+			else:
+				self._indicator = gtk.StatusIcon()
 
-			self._indicator.set_from_file(os.path.join(self._icon_path, self._s_icon))
-			self._indicator.connect('activate', self._status_icon_activate)
-			self._indicator.connect('popup-menu', self._status_icon_popup_menu)
+				self._indicator.set_from_file(os.path.join(self._icon_path, self._s_icon))
+				self._indicator.connect('activate', self._status_icon_activate)
+				self._indicator.connect('popup-menu', self._status_icon_popup_menu)
 
 	def _create_menu_items(self):
 		"""Create commonly used menu items in indicator"""

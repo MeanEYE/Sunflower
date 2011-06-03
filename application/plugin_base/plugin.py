@@ -5,6 +5,7 @@ from widgets.title_bar import TitleBar
 from widgets.tab_label import TabLabel
 from gui.preferences.display import VISIBLE_ALWAYS
 
+
 class PluginBase(gtk.VBox):
 	"""Abstract plugin class
 

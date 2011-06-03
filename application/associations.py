@@ -4,8 +4,14 @@ import gnomevfs
 from urllib import quote
 from ConfigParser import ConfigParser
 
+
 class AssociationManager:
 	"""Class that provides 'Open With' menu"""
+
+	executable_types = (
+					'application/x-executable',
+					'application/x-shellscript',
+				)
 
 	def __init__(self):
 		self._config_section = 'Desktop Entry'
@@ -58,3 +64,7 @@ class AssociationManager:
 			exec_string = exec_string.replace('%N', " ".join("'{0}'".format(os.path.basename(file) for file in file_list)))
 
 			os.system('{0} &'.format(exec_string))
+
+	def execute_file(self, path):
+		"""Execute specified item"""
+		pass

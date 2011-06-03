@@ -9,8 +9,7 @@ from plugin import PluginBase
 
 from operation import CopyOperation, MoveOperation
 from gui.input_dialog import CopyDialog, MoveDialog
-from gui.preferences_window import VISIBLE_ALWAYS, VISIBLE_WHEN_NEEDED, VISIBLE_NEVER
-
+from gui.preferences.display import VISIBLE_ALWAYS, VISIBLE_WHEN_NEEDED, VISIBLE_NEVER
 
 # button text constants
 BUTTON_TEXT_BOOKMARKS	= u'\u2318'

@@ -3,7 +3,7 @@ import pango
 
 from widgets.title_bar import TitleBar
 from widgets.tab_label import TabLabel
-from gui.preferences_window import VISIBLE_ALWAYS
+from gui.preferences.display import VISIBLE_ALWAYS
 
 class PluginBase(gtk.VBox):
 	"""Abstract plugin class
@@ -35,7 +35,7 @@ class PluginBase(gtk.VBox):
 		self._status_bar_container = gtk.Frame()
 		self._status_bar_container.set_shadow_type(gtk.SHADOW_IN)
 		self._status_bar_container.set_property('no-show-all', True)
-		
+
 		# show status bar if needed
 		if self._parent.options.getint('main', 'show_status_bar') == VISIBLE_ALWAYS:
 			self._status_bar_container.show()
@@ -167,11 +167,11 @@ class PluginBase(gtk.VBox):
 		"""Go to previous tab in parent Notebook"""
 		self._parent.previous_tab(self._notebook)
 		return True
-		
+
 	def _show_status_bar(self):
 		"""Show status bar"""
 		self._status_bar_container.show()
-		
+
 	def _hide_status_bar(self):
 		"""Hide status bar"""
 		self._status_bar_container.hide()

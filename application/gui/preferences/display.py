@@ -13,8 +13,10 @@ class DisplayOptions(SettingsPage):
 	def __init__(self, parent, application):
 		SettingsPage.__init__(self, parent, application, 'display', _('Display'))
 
+		notebook = gtk.Notebook()
+
 		# main window options
-		frame_main_window = gtk.Frame(_('Main window'))
+		label_main_window = gtk.Label(_('Main window'))
 		vbox_main_window = gtk.VBox(False, 0)
 		vbox_main_window.set_border_width(5)
 
@@ -29,7 +31,7 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_show_command_entry.connect('toggled', self._parent.enable_save)
 
 		# tab options
-		frame_tabs = gtk.Frame(_('Tabs'))
+		label_tabs = gtk.Label(_('Tabs'))
 		vbox_tabs = gtk.VBox(False, 0)
 		vbox_tabs.set_border_width(5)
 
@@ -66,9 +68,9 @@ class DisplayOptions(SettingsPage):
 		self._combobox_status_bar.add_attribute(cell_status_bar, 'text', 0)
 
 		# operation options
-		frame_operation = gtk.Frame(_('Other'))
-		vbox_operation = gtk.VBox(False, 0)
-		vbox_operation.set_border_width(5)
+		label_other = gtk.Label(_('Other'))
+		vbox_other = gtk.VBox(False, 0)
+		vbox_other.set_border_width(5)
 
 		self._checkbox_hide_window_on_minimize = gtk.CheckButton(_('Hide operation window on minimize'))
 		self._checkbox_human_readable_size = gtk.CheckButton(_('Show sizes in human readable format'))
@@ -93,16 +95,14 @@ class DisplayOptions(SettingsPage):
 		vbox_tabs.pack_start(self._checkbox_ubuntu_coloring, False, False, 0)
 		vbox_tabs.pack_start(vbox_status_bar, False, False, 0)
 
-		vbox_operation.pack_start(self._checkbox_hide_window_on_minimize, False, False, 0)
-		vbox_operation.pack_start(self._checkbox_human_readable_size, False, False, 0)
+		vbox_other.pack_start(self._checkbox_hide_window_on_minimize, False, False, 0)
+		vbox_other.pack_start(self._checkbox_human_readable_size, False, False, 0)
 
-		frame_main_window.add(vbox_main_window)
-		frame_tabs.add(vbox_tabs)
-		frame_operation.add(vbox_operation)
+		notebook.append_page(vbox_main_window, label_main_window)
+		notebook.append_page(vbox_tabs, label_tabs)
+		notebook.append_page(vbox_other, label_other)
 
-		self.pack_start(frame_main_window, False, False, 0)
-		self.pack_start(frame_tabs, False, False, 0)
-		self.pack_start(frame_operation, False, False, 0)
+		self.pack_start(notebook, True, True, 0)
 
 	def _load_options(self):
 		"""Load display options"""

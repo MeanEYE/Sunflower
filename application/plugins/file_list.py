@@ -308,12 +308,7 @@ class FileList(ItemList):
 		elif self.get_provider().is_local:
 			# selected item is just a file, execute it
 			selected_file = self._get_selection()
-
-			# TODO: Test or ask user what to do with executable files
-			#is_executable = gnomevfs.is_executable_command_string(selected_file)
-
-			# file does not have executable bit set, open with default application
-			os.system("xdg-open '{0}'".format(selected_file))
+			self._parent.associations_manager.execute_file(selected_file)
 
 		return True  # to prevent command or quick search in single key bindings
 
@@ -635,7 +630,7 @@ class FileList(ItemList):
 		if not is_dir:
 			# get associated programs
 			mime_type = gnomevfs.get_mime_type(filename)
-			program_list = self._parent.menu_manager.get_items_for_type(mime_type, self._get_selection_list)
+			program_list = self._parent.menu_manager.get_items_for_type(mime_type, self._get_selection_list())
 
 			# create open with menu
 			for menu_item in program_list:

@@ -27,10 +27,11 @@ except:
 
 
 # gui imports
-from about_window import AboutWindow
-from preferences_window import PreferencesWindow
-from changelog_dialog import ChangeLogDialog
-from input_dialog import InputDialog, AddBookmarkDialog
+from gui.about_window import AboutWindow
+from gui.preferences_window import PreferencesWindow
+from gui.preferences.display import EXPAND_ACTIVE, EXPAND_ALL, EXPAND_NONE
+from gui.changelog_dialog import ChangeLogDialog
+from gui.input_dialog import InputDialog, AddBookmarkDialog
 
 class MainWindow(gtk.Window):
 	"""Main application class"""
@@ -505,13 +506,15 @@ class MainWindow(gtk.Window):
 		self.left_notebook = gtk.Notebook()
 		self.left_notebook.set_scrollable(True)
 		self.left_notebook.connect('focus-in-event', self._transfer_focus)
-		self.left_notebook.connect('page-added', self._tab_moved)
+		self.left_notebook.connect('page-added', self._page_added)
+		self.left_notebook.connect('switch-page', self._page_switched)
 		self.left_notebook.set_group_id(0)
 
 		self.right_notebook = gtk.Notebook()
 		self.right_notebook.set_scrollable(True)
 		self.right_notebook.connect('focus-in-event', self._transfer_focus)
-		self.right_notebook.connect('page-added', self._tab_moved)
+		self.right_notebook.connect('page-added', self._page_added)
+		self.right_notebook.connect('switch-page', self._page_switched)
 		self.right_notebook.set_group_id(0)
 
 		hbox.pack_start(self.left_notebook, True, True, 0)
@@ -859,10 +862,22 @@ class MainWindow(gtk.Window):
 
 		self.create_tab(notebook, plugin_class)
 
-	def _tab_moved(self, notebook, child, page_num):
+	def _page_added(self, notebook, child, page_num):
 		"""Handle adding/moving tab accross notebooks"""
 		if hasattr(child, 'update_notebook'):
 			child.update_notebook(notebook)
+
+		if self.options.getint('main', 'expand_tabs') == EXPAND_ALL:
+			notebook.child_set_property(child, 'tab-expand', True)
+
+	def _page_switched(self, notebook, page, page_num, data=None):
+		"""Handle switching pages"""
+		current_page = notebook.get_nth_page(notebook.get_current_page())
+		new_page = notebook.get_nth_page(page_num)
+
+		if self.options.getint('main', 'expand_tabs') == EXPAND_ACTIVE:
+			notebook.child_set_property(current_page, 'tab-expand', False)
+			notebook.child_set_property(new_page, 'tab-expand', True)
 
 	def _transfer_focus(self, notebook, data=None):
 		"""Transfer focus from notebook to child widget in active tab"""
@@ -1803,6 +1818,7 @@ class MainWindow(gtk.Window):
 				'tab_close_button': 'False',
 				'show_status_bar': 0,
 				'human_readable_size': 'True',
+				'expand_tabs': 0,
 			}
 
 		# set default options
@@ -1936,17 +1952,40 @@ class MainWindow(gtk.Window):
 								self.right_notebook.get_n_pages() > 1
 							)
 
-		# apply settings for each tab in left notebook
+		# apply settings for all tabs
+		expand_tabs = self.options.getint('main', 'expand_tabs')
+
 		for index in range(0, self.left_notebook.get_n_pages()):
 			page = self.left_notebook.get_nth_page(index)
 
+			# apply tab-expand
+			if expand_tabs == EXPAND_NONE:
+				self.left_notebook.child_set_property(page, 'tab-expand', False)
+
+			elif expand_tabs == EXPAND_ACTIVE:
+				self.left_notebook.child_set_property(page, 'tab-expand', page is self._get_active_object())
+
+			else:
+				self.left_notebook.child_set_property(page, 'tab-expand', True)
+
+			# call plugin apply_settings
 			if hasattr(page, 'apply_settings'):
 				page.apply_settings()
 
-		# apply settings for each tab in right notebook
 		for index in range(0, self.right_notebook.get_n_pages()):
 			page = self.right_notebook.get_nth_page(index)
 
+			# apply tab-expand
+			if expand_tabs == EXPAND_NONE:
+				self.right_notebook.child_set_property(page, 'tab-expand', False)
+
+			elif expand_tabs == EXPAND_ACTIVE:
+				self.right_notebook.child_set_property(page, 'tab-expand', page is self._get_active_object())
+
+			else:
+				self.right_notebook.child_set_property(page, 'tab-expand', True)
+
+			# call plugin apply_settings
 			if hasattr(page, 'apply_settings'):
 				page.apply_settings()
 

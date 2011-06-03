@@ -40,7 +40,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_media_preview.connect('toggled', self._parent.enable_save)
 
 		# grid lines
-		vbox_grid_lines = gtk.VBox(False, 0)
+		hbox_grid_lines = gtk.HBox(False, 5)
 		label_grid_lines = gtk.Label(_('Show grid lines:'))
 		label_grid_lines.set_alignment(0, 0.5)
 
@@ -102,8 +102,8 @@ class ItemListOptions(SettingsPage):
 		hbox_quick_search.pack_start(self._checkbox_alt, False, False, 0)
 		hbox_quick_search.pack_start(self._checkbox_shift, False, False, 0)
 
-		vbox_grid_lines.pack_start(label_grid_lines, False, False, 0)
-		vbox_grid_lines.pack_start(self._combobox_grid_lines, False, False, 0)
+		hbox_grid_lines.pack_start(label_grid_lines, False, False, 0)
+		hbox_grid_lines.pack_start(self._combobox_grid_lines, False, False, 0)
 
 		vbox_time_format.pack_start(label_time_format, False, False, 0)
 		vbox_time_format.pack_start(self._entry_time_format, False, False, 0)
@@ -115,7 +115,7 @@ class ItemListOptions(SettingsPage):
 		vbox_look_and_feel.pack_start(self._checkbox_show_headers, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_media_preview, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_show_hidden, False, False, 0)
-		vbox_look_and_feel.pack_start(vbox_grid_lines, False, False, 5)
+		vbox_look_and_feel.pack_start(hbox_grid_lines, False, False, 5)
 
 		vbox_operation.pack_start(self._checkbox_case_sensitive, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_right_click, False, False, 0)

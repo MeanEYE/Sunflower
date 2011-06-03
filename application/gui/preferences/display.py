@@ -6,6 +6,10 @@ VISIBLE_ALWAYS		= 0
 VISIBLE_WHEN_NEEDED	= 1
 VISIBLE_NEVER		= 2
 
+EXPAND_NONE 	= 0
+EXPAND_ACTIVE	= 1
+EXPAND_ALL		= 2
+
 
 class DisplayOptions(SettingsPage):
 	"""Display options extension class"""
@@ -49,8 +53,10 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_always_show_tabs.connect('toggled', self._parent.enable_save)
 		self._checkbox_ubuntu_coloring.connect('toggled', self._parent.enable_save)
 
-		vbox_status_bar = gtk.VBox(False, 0)
-		vbox_status_bar.set_border_width(5)
+		# status bar
+		table = gtk.Table(2, 2, False)
+		table.set_col_spacing(0, 5)
+		table.set_row_spacings(5)
 
 		label_status_bar = gtk.Label(_('Show status bar:'))
 		label_status_bar.set_alignment(0, 0.5)
@@ -67,6 +73,22 @@ class DisplayOptions(SettingsPage):
 		self._combobox_status_bar.pack_start(cell_status_bar)
 		self._combobox_status_bar.add_attribute(cell_status_bar, 'text', 0)
 
+		# expand tabs
+		label_expand_tab = gtk.Label(_('Expanded tabs:'))
+		label_expand_tab.set_alignment(0, 0.5)
+
+		list_expand_tab = gtk.ListStore(str, int)
+		list_expand_tab.append((_('None'), EXPAND_NONE))
+		list_expand_tab.append((_('Active'), EXPAND_ACTIVE))
+		list_expand_tab.append((_('All'), EXPAND_ALL))
+
+		cell_expand_tab = gtk.CellRendererText()
+
+		self._combobox_expand_tabs = gtk.ComboBox(list_expand_tab)
+		self._combobox_expand_tabs.connect('changed', self._parent.enable_save)
+		self._combobox_expand_tabs.pack_start(cell_expand_tab)
+		self._combobox_expand_tabs.add_attribute(cell_expand_tab, 'text', 0)
+
 		# operation options
 		label_other = gtk.Label(_('Other'))
 		vbox_other = gtk.VBox(False, 0)
@@ -79,8 +101,11 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_human_readable_size.connect('toggled', self._parent.enable_save)
 
 		# pack ui
-		vbox_status_bar.pack_start(label_status_bar, False, False, 0)
-		vbox_status_bar.pack_start(self._combobox_status_bar, False, False, 0)
+		table.attach(label_status_bar, 0, 1, 0, 1, xoptions=gtk.FILL)
+		table.attach(self._combobox_status_bar, 1, 2, 0, 1, xoptions=gtk.FILL)
+
+		table.attach(label_expand_tab, 0, 1, 1, 2, xoptions=gtk.FILL)
+		table.attach(self._combobox_expand_tabs, 1, 2, 1, 2, xoptions=gtk.FILL)
 
 		vbox_main_window.pack_start(self._checkbox_hide_on_close, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_toolbar, False, False, 0)
@@ -93,7 +118,7 @@ class DisplayOptions(SettingsPage):
 		vbox_tabs.pack_start(self._checkbox_tab_close_button, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_always_show_tabs, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_ubuntu_coloring, False, False, 0)
-		vbox_tabs.pack_start(vbox_status_bar, False, False, 0)
+		vbox_tabs.pack_start(table, False, False, 5)
 
 		vbox_other.pack_start(self._checkbox_hide_window_on_minimize, False, False, 0)
 		vbox_other.pack_start(self._checkbox_human_readable_size, False, False, 0)
@@ -121,6 +146,7 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_hide_window_on_minimize.set_active(options.getboolean('main', 'hide_operation_on_minimize'))
 		self._checkbox_human_readable_size.set_active(options.getboolean('main', 'human_readable_size'))
 		self._combobox_status_bar.set_active(options.getint('main', 'show_status_bar'))
+		self._combobox_expand_tabs.set_active(options.getint('main', 'expand_tabs'))
 
 	def _save_options(self):
 		"""Save display options"""
@@ -143,3 +169,4 @@ class DisplayOptions(SettingsPage):
 		options.set('main', 'hide_operation_on_minimize', _bool[self._checkbox_hide_window_on_minimize.get_active()])
 		options.set('main', 'human_readable_size', _bool[self._checkbox_human_readable_size.get_active()])
 		options.set('main', 'show_status_bar', self._combobox_status_bar.get_active())
+		options.set('main', 'expand_tabs', self._combobox_expand_tabs.get_active())

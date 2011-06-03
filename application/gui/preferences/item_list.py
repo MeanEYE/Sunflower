@@ -9,12 +9,11 @@ class ItemListOptions(SettingsPage):
 	def __init__(self, parent, application):
 		SettingsPage.__init__(self, parent, application, 'item_list', _('Item List'))
 
-		# create frames
-		frame_look_and_feel = gtk.Frame()
-		frame_look_and_feel.set_label(_('Look & feel'))
+		notebook = gtk.Notebook()
 
-		frame_operation = gtk.Frame()
-		frame_operation.set_label(_('Operation'))
+		# create frames
+		label_look_and_feel = gtk.Label(_('Look & feel'))
+		label_operation = gtk.Label(_('Operation'))
 
 		# vertical boxes
 		vbox_look_and_feel = gtk.VBox(False, 0)
@@ -116,20 +115,19 @@ class ItemListOptions(SettingsPage):
 		vbox_look_and_feel.pack_start(self._checkbox_show_headers, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_media_preview, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_show_hidden, False, False, 0)
+		vbox_look_and_feel.pack_start(vbox_grid_lines, False, False, 5)
 
 		vbox_operation.pack_start(self._checkbox_case_sensitive, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_right_click, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_vim_bindings, False, False, 0)
 		vbox_operation.pack_start(hbox_quick_search, False, False, 5)
-		vbox_operation.pack_start(vbox_grid_lines, False, False, 5)
 		vbox_operation.pack_start(vbox_time_format, False, False, 5)
 		vbox_operation.pack_start(vbox_status_text, False, False, 5)
 
-		frame_look_and_feel.add(vbox_look_and_feel)
-		frame_operation.add(vbox_operation)
+		notebook.append_page(vbox_look_and_feel, label_look_and_feel)
+		notebook.append_page(vbox_operation, label_operation)
 
-		self.pack_start(frame_look_and_feel, False, False, 0)
-		self.pack_start(frame_operation, False, False, 0)
+		self.pack_start(notebook, True, True, 0)
 
 	def _vim_bindings_toggled(self, widget, data=None):
 		"""Handle toggling VIM bindings on or off"""

@@ -68,10 +68,9 @@ class MenuManager:
 
 		return result
 
-	def _open_with_callback(self, widget, data=None):
+	def _open_with_callback(self, widget, data):
 		"""Callback event for menu items from 'open with' menu"""
-		if data is not None:
-			self._application.associations_manager.open_file_with_config(data['callback'], data['config'])
+		self._application.associations_manager.open_file_with_config(data['selection'], data['config'])
 
 	def get_item_by_name(self, name):
 		"""Get menu by specified name"""
@@ -82,7 +81,7 @@ class MenuManager:
 
 		return result
 
-	def get_items_for_type(self, mime_type, callback):
+	def get_items_for_type(self, mime_type, selection):
 		"""Get list of MenuItems for specified mime type
 
 		mime_type - detected mime type
@@ -117,7 +116,7 @@ class MenuManager:
 
 			data = {
 				'config': config_file,
-				'callback': callback
+				'selection': selection
 				}
 
 			# connect signals

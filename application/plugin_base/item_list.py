@@ -10,6 +10,7 @@ from plugin import PluginBase
 from operation import CopyOperation, MoveOperation
 from gui.input_dialog import CopyDialog, MoveDialog
 from gui.preferences.display import VISIBLE_ALWAYS, VISIBLE_WHEN_NEEDED, VISIBLE_NEVER
+from gui.history_list import HistoryList
 
 # button text constants
 BUTTON_TEXT_BOOKMARKS	= u'\u2318'
@@ -80,6 +81,7 @@ class ItemList(PluginBase):
 				},
 			'BackSpace': {
 					'000': self._parent_folder,
+					'100': self._show_history_window,
 				},
 			'Insert': {
 					'000': self._toggle_selection,
@@ -275,6 +277,10 @@ class ItemList(PluginBase):
 		"""Show right bookmarks menu"""
 		self._parent.show_bookmarks_menu(None, self._parent.right_notebook)
 
+	def _show_history_window(self, widget, data=None):
+		"""Show history browser"""
+		history = HistoryList(self, self._parent)
+
 	def _create_default_column_sizes(self):
 		"""Create default column sizes section in main configuration file"""
 		options = self._parent.options
@@ -429,10 +435,12 @@ class ItemList(PluginBase):
 
 		return result
 
-	def _handle_history_click(self, widget, data=None):
+	def _handle_history_click(self, widget=None, data=None, path=None):
 		"""Handle clicks on bookmark menu"""
-		path = widget.get_data('path')
+		if path is None:
+			path = widget.get_data('path')
 
+		print path
 		if os.path.isdir(path):
 			# path is valid
 			self.change_path(path)
@@ -854,6 +862,19 @@ class ItemList(PluginBase):
 				menu_item.connect('activate', self._handle_history_click)
 
 				self._history_menu.append(menu_item)
+
+			# add entry to show complete history
+			separator = gtk.SeparatorMenuItem()
+			self._history_menu.append(separator)
+
+			image = gtk.Image()
+			image.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
+
+			menu_item = gtk.ImageMenuItem()
+			menu_item.set_image(image)
+			menu_item.set_label(_('View complete history...'))
+			menu_item.connect('activate', self._show_history_window)
+			self._history_menu.append(menu_item)
 
 		else:
 			# no items to create, make blank item

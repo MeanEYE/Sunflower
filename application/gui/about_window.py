@@ -5,6 +5,7 @@ import gtk
 import pango
 
 class AboutWindow(gtk.Window):
+
 	def __init__(self, parent):
 		# create main window
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)

@@ -440,7 +440,6 @@ class ItemList(PluginBase):
 		if path is None:
 			path = widget.get_data('path')
 
-		print path
 		if os.path.isdir(path):
 			# path is valid
 			self.change_path(path)

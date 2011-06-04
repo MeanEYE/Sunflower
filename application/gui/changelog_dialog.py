@@ -116,11 +116,11 @@ class ChangeLogDialog(gtk.Dialog):
 		notebook.append_page(changelog_window, changelog_label)
 
 		# top horizontal box containing image and program title
+		hbox1 = gtk.HBox(False, 0)
 		frame = gtk.EventBox()
 		frame.modify_bg(gtk.STATE_NORMAL, style.bg[gtk.STATE_NORMAL])
 		frame.add(hbox1)
 
-		hbox1 = gtk.HBox(False, 0)
 		hbox1.set_border_width(5)
 
 		hbox1.pack_start(image, False, False, 0)

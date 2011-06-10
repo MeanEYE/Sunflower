@@ -3,6 +3,7 @@ import gtk
 import time
 import locale
 import fnmatch
+import user
 
 # constants
 OPTION_RENAME		= 0
@@ -245,15 +246,85 @@ class FileCreateDialog(CreateDialog):
 		self.set_title(_('Create empty file'))
 		self.set_label(_('Enter new file name:'))
 
+		# create option to open file in editor
 		self._checkbox_edit_after = gtk.CheckButton(_('Open file in editor'))
-		self._checkbox_edit_after.show()
+
+		# create template list
+		vbox_templates = gtk.VBox(False, 0)
+		label_templates = gtk.Label(_('Template:'))
+		label_templates.set_alignment(0, 0.5)
+
+		cell_icon = gtk.CellRendererPixbuf()
+		cell_name = gtk.CellRendererText()
+
+		self._templates = gtk.ListStore(str, str, str)
+		self._template_list = gtk.ComboBox(self._templates)
+		self._template_list.set_row_separator_func(self._row_is_separator)
+		self._template_list.pack_start(cell_icon, False)
+		self._template_list.pack_start(cell_name, True)
+
+		self._template_list.add_attribute(cell_icon, 'icon-name', 2)
+		self._template_list.add_attribute(cell_name, 'text', 0)
+
+		# pack interface
+		vbox_templates.pack_start(label_templates, False, False, 0)
+		vbox_templates.pack_start(self._template_list, False, False, 0)
 
 		self._container.pack_start(self._checkbox_edit_after, False, False, 0)
+		self._container.pack_start(vbox_templates, False, False, 0)
+
 		self._container.reorder_child(self._checkbox_edit_after, 1)
+		self._container.reorder_child(vbox_templates, 1)
+
+		# populate template list
+		self._populate_templates()
+
+		# show all widgets
+		self.show_all()
+
+	def _populate_templates(self):
+		"""Populate templates list"""
+		self._templates.clear()
+
+		# add empty file
+		self._templates.append((_('Empty File'), '', 'document'))
+		self._templates.append(('', '', ''))  # separator
+
+		# add items from templates directory
+		file_list = os.listdir(os.path.join(user.home, 'Templates'))
+		file_list = filter(lambda file_: file_[0] != '.', file_list)  # skip hidden files
+
+		for file_ in file_list:
+			name = os.path.splitext(file_)[0]
+			full_path = os.path.join(user.home, 'Templates', file_)
+			icon_name = self._application.icon_manager.get_icon_name_for_file(full_path)
+
+			self._templates.append((name, full_path, icon_name))
+
+		# select default item
+		self._template_list.set_active(0)
+
+	def _row_is_separator(self, model, row, data=None):
+		"""Determine if row being drawn is a separator"""
+		return model.get_value(row, 0) == ''
 
 	def get_edit_file(self):
 		"""Get state of 'edit after creating' checkbox"""
 		return self._checkbox_edit_after.get_active()
+
+	def get_template_file(self):
+		"""Return full path to template file
+
+		In case when 'Empty File' is selected, return None
+
+		"""
+		result = None
+		active_item = self._template_list.get_active()
+
+		if active_item > 0:
+			result = self._templates[active_item][1]
+
+		return result
 
 
 class DirectoryCreateDialog(CreateDialog):

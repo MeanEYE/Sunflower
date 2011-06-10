@@ -1,11 +1,11 @@
 import os
 import sys
 import gtk
+import gio
 import mimetypes
 
 class IconManager:
 	_icon_theme = None
-	_icon_cache = {}
 
 	def __init__(self, parent):
 		self._parent = parent
@@ -21,40 +21,20 @@ class IconManager:
 		"""Check if icon with specified name exists in theme"""
 		return self._icon_theme.has_icon(icon_name)
 
-	def get_icon_from_name(self, name, icon_size=gtk.ICON_SIZE_MENU):
-		"""Get icon based on MIME type and size"""
-		result = None
-		size = gtk.icon_size_lookup(icon_size)
-		key_name = "{0}_{1}".format(name, size[0])  # create MIME type/size based key
-
-		if self._icon_cache.has_key(key_name):
-			# icon is cached and we return already loaded image
-			result = self._icon_cache[key_name]
-
-		else:
-			# get information about the icon
-			icon_info = self._icon_theme.lookup_icon(name, size[0], 0)
-
-			if icon_info is not None:
-				# load icon and cache it
-				result = icon_info.load_icon()
-				self._icon_cache[key_name] = result
-
-		return result
-
 	def get_icon_for_file(self, filename, size=gtk.ICON_SIZE_MENU):
-		"""Load icon for specified file type"""
-		result = None
+		"""Load icon for specified file"""
+		result = 'document'
 		mime_type = mimetypes.guess_type(filename, False)[0]
 
-		if mime_type is not None:
-			# get icon from file type
-			mime_type = mime_type.replace('/', '-')
-			result = self.get_icon_from_name(mime_type, size)
+		# get icon names
+		themed_icon = gio.content_type_get_icon(mime_type)
 
-		if result is None:
-			# get default icon
-			result = self.get_icon_from_name('document', size)
+		if themed_icon is not None:
+			icon_list = themed_icon.get_names()
+			icon_list = filter(self.has_icon, icon_list)
+
+			if len(icon_list) > 0:
+				result = icon_list[0]
 
 		return result
 

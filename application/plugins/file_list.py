@@ -74,7 +74,7 @@ class FileList(ItemList):
 								bool,	# COL_DIR
 								bool,	# COL_PARENT
 								str,	# COL_COLOR
-								gtk.gdk.Pixbuf, # COL_ICON
+								str, 	# COL_ICON
 								gtk.gdk.Pixbuf  # COL_SELECTED
 							)
 
@@ -129,7 +129,7 @@ class FileList(ItemList):
 		col_date.add_attribute(cell_date, 'foreground', COL_COLOR)
 
 		col_file.add_attribute(cell_selected, 'pixbuf', COL_SELECTED)
-		col_file.add_attribute(cell_icon, 'pixbuf', COL_ICON)
+		col_file.add_attribute(cell_icon, 'icon-name', COL_ICON)
 		col_file.add_attribute(cell_name, 'text', COL_FNAME)
 		col_extension.add_attribute(cell_extension, 'text', COL_EXT)
 		col_size.add_attribute(cell_size, 'text', COL_FSIZE)
@@ -918,7 +918,7 @@ class FileList(ItemList):
 
 				if is_dir:
 					# get universal folder icon
-					icon = self._parent.icon_manager.get_icon_from_name('folder')
+					icon = 'folder'
 
 				else:
 					# guess mime type and set icon from that
@@ -1207,7 +1207,7 @@ class FileList(ItemList):
 							True,
 							True,
 							None,
-							self._parent.icon_manager.get_icon_from_name('up'),
+							'up',
 							None
 						))
 

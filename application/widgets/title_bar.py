@@ -180,6 +180,7 @@ class TitleBar(gtk.HBox):
 		self._title_label.set_markup(text.replace('&', '&amp;'))
 
 	def set_subtitle(self, text):
+		"""Set subtitle text"""
 		self._subtitle_label.set_text(text.replace('&', '&amp;'))
 
 	def set_icon_from_name(self, icon_name):

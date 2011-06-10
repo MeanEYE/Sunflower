@@ -177,10 +177,10 @@ class TitleBar(gtk.HBox):
 
 	def set_title(self, text):
 		"""Set title text"""
-		self._title_label.set_markup(text)
+		self._title_label.set_markup(text.replace('&', '&amp;'))
 
 	def set_subtitle(self, text):
-		self._subtitle_label.set_text(text)
+		self._subtitle_label.set_text(text.replace('&', '&amp;'))
 
 	def set_icon_from_name(self, icon_name):
 		"""Set icon from specified name"""

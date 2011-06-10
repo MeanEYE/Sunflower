@@ -208,7 +208,8 @@ class PluginBase(gtk.VBox):
 		# make letters lower case for easier handling
 		if len(key_name) == 1: key_name = key_name.lower()
 
-		if self._key_handlers.has_key(key_name) and self._key_handlers[key_name].has_key(state):
+		if self._key_handlers.has_key(key_name) \
+		and self._key_handlers[key_name].has_key(state):
 			# call specific key handler and set result
 			result = self._key_handlers[key_name][state](widget, event)
 

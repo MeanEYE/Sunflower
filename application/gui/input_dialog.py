@@ -297,7 +297,7 @@ class FileCreateDialog(CreateDialog):
 		for file_ in file_list:
 			name = os.path.splitext(file_)[0]
 			full_path = os.path.join(user.home, 'Templates', file_)
-			icon_name = self._application.icon_manager.get_icon_name_for_file(full_path)
+			icon_name = self._application.icon_manager.get_icon_for_file(full_path)
 
 			self._templates.append((name, full_path, icon_name))
 

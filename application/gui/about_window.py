@@ -276,7 +276,7 @@ class AboutWindow(gtk.Window):
 		# determine location of license file
 		license_location = os.path.join('/', 'usr', 'share', 'common-licenses', 'GPL')
 		if not os.path.isfile(license_location):
-			license_location = os.path.abspath(os.path.join('application', 'GPL.txt'))
+			license_location = os.path.abspath(os.path.join('docs', 'license'))
 
 		# load license file
 		license_file = open(license_location, 'r')

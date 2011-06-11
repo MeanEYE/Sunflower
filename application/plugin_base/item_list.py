@@ -41,15 +41,6 @@ class ItemList(PluginBase):
 		# call parent constructor
 		PluginBase.__init__(self, parent, notebook, path)
 
-		# if enabled bind VIM keys
-		if self._parent.options.getboolean('main', 'vim_movement'):
-			self._key_handlers.update({
-						'h': { '000': self._parent_directory, },
-						'l': { '000': self._execute_selected_item, },
-						'j': { '000': self._move_marker_down, },
-						'k': { '000': self._move_marker_up, }
-					})
-
 		# list statistics
 		self._dirs = {'count': 0, 'selected': 0}
 		self._files = {'count': 0, 'selected': 0}

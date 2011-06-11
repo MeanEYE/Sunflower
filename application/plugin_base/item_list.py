@@ -8,6 +8,7 @@ import common
 from plugin import PluginBase
 
 from operation import CopyOperation, MoveOperation
+from accelerator_group import AcceleratorGroup
 from gui.input_dialog import CopyDialog, MoveDialog
 from gui.preferences.display import VISIBLE_ALWAYS, VISIBLE_WHEN_NEEDED, VISIBLE_NEVER
 from gui.history_list import HistoryList
@@ -40,96 +41,10 @@ class ItemList(PluginBase):
 		# call parent constructor
 		PluginBase.__init__(self, parent, notebook, path)
 
-		# global key event handlers with modifier switches (control, alt, shift)
-		self._key_handlers = {
-			'Tab': {
-					'000': self._parent.focus_oposite_list,
-					'100': self._notebook_next_tab,
-					'101': self._notebook_previous_tab,
-				},
-			'ISO_Left_Tab': {  # CTRL+SHIFT+Tab produces ISO_Left_Tab
-					'101': self._notebook_previous_tab,
-				},
-			'Return': {
-					'000': self._execute_selected_item,
-					'010': self._item_properties,
-				},
-		    'b': {
-		            '100': self._edit_bookmarks,
-		        },
-			'c': {
-					'100': self._copy_files_to_clipboard,
-				},
-		    'd': {
-		            '100': self._add_bookmark,
-		        },
-			't': {
-					'100': self._duplicate_tab,
-					'101': self._open_in_new_tab,
-				},
-			'v': {
-					'100': self._paste_files_from_clipboard,
-				},
-			'w': {
-					'100': self._close_tab,
-				},
-			'z': {
-					'100': self._create_terminal,
-				},
-			'x': {
-					'100': self._cut_files_to_clipboard,
-				},
-			'BackSpace': {
-					'000': self._parent_folder,
-					'100': self._show_history_window,
-				},
-			'Insert': {
-					'000': self._toggle_selection,
-				},
-			'Delete': {
-					'000': self._delete_files,
-				},
-			'F1': {
-					'100': self._show_left_bookmarks,
-				},
-			'F2': {
-					'000': self._rename_file,
-					'100': self._show_right_bookmarks,
-				},
-			'F4': {
-					'000': self._edit_selected,
-				},
-			'F5': {
-					'000': self._copy_files,
-				},
-			'F6': {
-					'000': self._move_files,
-					'001': self._rename_file,
-				},
-			'F8': {
-					'000': self._delete_files,
-				},
-		    'F10': {
-		            '001': self._show_popup_menu,
-		        },
-			'Menu': {
-					'000': self._show_popup_menu,
-					'100': self._show_open_with_menu,
-				},
-			'Left': {
-					'000': self._parent_folder,
-					'100': self._handle_path_inheritance,
-				},
-			'Right': {
-					'100': self._handle_path_inheritance,
-					'000': self._execute_selected_item,
-				},
-			}
-
 		# if enabled bind VIM keys
 		if self._parent.options.getboolean('main', 'vim_movement'):
 			self._key_handlers.update({
-						'h': { '000': self._parent_folder, },
+						'h': { '000': self._parent_directory, },
 						'l': { '000': self._execute_selected_item, },
 						'j': { '000': self._move_marker_down, },
 						'k': { '000': self._move_marker_up, }
@@ -269,6 +184,71 @@ class ItemList(PluginBase):
 		self.show_all()
 		self._search_panel.hide()
 
+	def _configure_accelerators(self):
+		"""Configure accelerator group"""
+		group = AcceleratorGroup(self._parent)
+		keyval = gtk.gdk.keyval_from_name
+
+		# give parent chance to register its own accelerator group
+		PluginBase._configure_accelerators(self)
+
+		# configure accelerator group
+		group.set_name('item_list')
+		group.set_title(_('Item List'))
+
+		# add all methods to group
+		group.add_method('execute_item', _('Execute selected item'), self._execute_selected_item)
+		group.add_method('item_properties', _('Show selected item properties'), self._item_properties)
+		group.add_method('add_bookmark', _('Bookmark current directory'), self._add_bookmark)
+		group.add_method('edit_bookmarks', _('Edit bookmarks'), self._edit_bookmarks)
+		group.add_method('cut_to_clipboard', _('Cut selection to clipboard'), self._cut_files_to_clipboard)
+		group.add_method('copy_to_clipboard', _('Copy selection to clipboard'), self._copy_files_to_clipboard)
+		group.add_method('paste_from_clipboard', _('Paste items from clipboard'), self._paste_files_from_clipboard)
+		group.add_method('open_in_new_tab', _('Open selected directory in new tab'), self._open_in_new_tab)
+		group.add_method('create_terminal', _('Create terminal tab'), self._create_terminal)
+		group.add_method('parent_directory', _('Go to parent directory'), self._parent_directory)
+		group.add_method('show_history', _('Show history browser'), self._show_history_window)
+		group.add_method('toggle_selection', _('Toggle selection'), self._toggle_selection)
+		group.add_method('delete_files', _('Delete selected items'), self._delete_files)
+		group.add_method('show_left_bookmarks', _('Show bookmarks for left list'), self._show_left_bookmarks)
+		group.add_method('show_right_bookmarks', _('Show bookmarks for right list'), self._show_right_bookmarks)
+		group.add_method('rename_file', _('Rename selected item'), self._rename_file)
+		group.add_method('edit_selected', _('Edit selected item'), self._edit_selected)
+		group.add_method('copy_files', _('Copy selected items'), self._copy_files)
+		group.add_method('move_files', _('Move selected items'), self._move_files)
+		group.add_method('show_popup_menu', _('Show context menu'), self._show_popup_menu)
+		group.add_method('show_open_with_menu', _('Show "open with" menu'), self._show_open_with_menu)
+		group.add_method('inherit_path', _('Assign path to/from oposite list'), self._handle_path_inheritance)
+		group.add_method('move_marker_up', _('Move selection marker up'), self._move_marker_up)
+		group.add_method('move_marker_down', _('Move selection marker down'), self._move_marker_down)
+
+		# configure accelerators
+		group.set_accelerator('execute_item', keyval('Return'), 0)
+		group.set_accelerator('item_properties', keyval('Return'), gtk.gdk.MOD1_MASK)
+		group.set_accelerator('add_bookmark', keyval('d'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('edit_bookmarks', keyval('b'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('cut_to_clipboard', keyval('x'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('copy_to_clipboard', keyval('c'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('paste_from_clipboard', keyval('v'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('open_in_new_tab', keyval('t'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
+		group.set_accelerator('create_terminal', keyval('z'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('parent_directory', keyval('BackSpace'), 0)
+		group.set_accelerator('show_history', keyval('BackSpace'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('toggle_selection', keyval('Insert'), 0)
+		group.set_accelerator('delete_files', keyval('Delete'), 0)
+		group.set_accelerator('show_left_bookmarks', keyval('F1'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('show_right_bookmarks', keyval('F2'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('rename_file', keyval('F2'), 0)
+		group.set_accelerator('edit_selected', keyval('F4'), 0)
+		group.set_accelerator('copy_files', keyval('F5'), 0)
+		group.set_accelerator('move_files', keyval('F6'), 0)
+		group.set_accelerator('show_popup_menu', keyval('Menu'), 0)
+		group.set_accelerator('show_open_with_menu', keyval('Menu'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('inherit_path', keyval('Left'), gtk.gdk.CONTROL_MASK)
+
+		# add accelerator group to the list
+		self._accelerator_groups.append(group)
+
 	def _show_left_bookmarks(self, widget, data=None):
 		"""Show left bookmarks menu"""
 		self._parent.show_bookmarks_menu(None, self._parent.left_notebook)
@@ -389,23 +369,19 @@ class ItemList(PluginBase):
 		result = PluginBase._handle_key_press(self, widget, event)
 
 		if not result:
-			# generate state sting based on modifier state (control, alt, shift)
-			state = "%d%d%d" % (
-						bool(event.state & gtk.gdk.CONTROL_MASK),
-						bool(event.state & gtk.gdk.MOD1_MASK),
-						bool(event.state & gtk.gdk.SHIFT_MASK)
-					)
-
 			# retrieve human readable key representation
 			key_name = gtk.gdk.keyval_name(event.keyval)
 
 			# handle searching for hidden files
 			if key_name == 'period': key_name = '.'
 
-			# give other handlers chance to process event
 			if len(key_name) == 1:
-				# make letters lowercase for easier handling
-				key_name = key_name.lower()
+				# generate state sting based on modifier state (control, alt, shift)
+				state = "%d%d%d" % (
+							bool(event.state & gtk.gdk.CONTROL_MASK),
+							bool(event.state & gtk.gdk.MOD1_MASK),
+							bool(event.state & gtk.gdk.SHIFT_MASK)
+						)
 
 				if state == self._parent.options.get('main', 'search_modifier'):
 					# start quick search if modifier combination is right
@@ -914,7 +890,7 @@ class ItemList(PluginBase):
 
 		return True
 
-	def _parent_folder(self, widget=None, data=None):
+	def _parent_directory(self, widget=None, data=None):
 		"""Move to parent folder"""
 		self.change_path(
 						os.path.dirname(self.path),
@@ -1046,10 +1022,10 @@ class ItemList(PluginBase):
 		"""Open editor with specified filename and current path"""
 		pass
 
-	def _handle_path_inheritance(self, widget, event):
+	def _handle_path_inheritance(self, widget, keyval):
 		"""Handle inheriting or setting paths from/to other lists"""
 		result = False
-		key_name = gtk.gdk.keyval_name(event.keyval)
+		key_name = gtk.gdk.keyval_name(keyval)
 
 		if self._notebook is self._parent.left_notebook:
 			# handle if we are on the left side

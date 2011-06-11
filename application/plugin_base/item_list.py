@@ -874,8 +874,8 @@ class ItemList(PluginBase):
 		self._prepare_popup_menu()
 
 		if data is not None:
-			# if this method is called by Menu key data is actually event object
-			self._popup_menu.popup(None, None, self._get_popup_menu_position, 1, data.time)
+			# if this method is called by accelerator data is actually keyval
+			self._popup_menu.popup(None, None, self._get_popup_menu_position, 1, 0)
 
 		else:
 			# if called by mouse, we don't have the need to position the menu manually

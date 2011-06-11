@@ -150,8 +150,8 @@ class Terminal(PluginBase):
 	def _handle_menu_hide(self, widget, data=None):
 		"""Handle hide event for terminal menu"""
 		self._disable_object_block()
-		oposite_list = self._parent.get_oposite_list(self)
-		oposite_list._disable_object_block()
+		oposite_object = self._parent.get_oposite_object(self)
+		oposite_object._disable_object_block()
 
 	def _duplicate_tab(self, widget, data=None):
 		"""Creates new tab with same path"""
@@ -178,8 +178,8 @@ class Terminal(PluginBase):
 
 		# show the menu on calculated location
 		self._enable_object_block()
-		oposite_list = self._parent.get_oposite_list(self)
-		oposite_list._enable_object_block()
+		oposite_object = self._parent.get_oposite_object(self)
+		oposite_object._enable_object_block()
 
 		self._menu.popup(
 						None, None,
@@ -194,6 +194,10 @@ class Terminal(PluginBase):
 
 		# give parent chance to register its own accelerator group
 		PluginBase._configure_accelerators(self)
+
+		# modify plugin accelerator group so we can have terminal autocomplete with tab
+		plugin_group = self._accelerator_groups[0]
+		plugin_group.set_accelerator('focus_oposite_object', keyval('Tab'), gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK)
 
 		# configure accelerator group
 		group.set_name('item_list')

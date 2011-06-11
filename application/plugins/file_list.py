@@ -381,8 +381,6 @@ class FileList(ItemList):
 		edit_after = dialog.get_edit_file()
 		template = dialog.get_template_file()
 
-		print 'came'
-
 		# release dialog
 		dialog.destroy()
 

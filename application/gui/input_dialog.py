@@ -287,13 +287,14 @@ class FileCreateDialog(CreateDialog):
 		"""Populate templates list"""
 		self._templates.clear()
 
-		# add empty file
-		self._templates.append((_('Empty File'), '', 'document'))
-		self._templates.append(('', '', ''))  # separator
-
 		# add items from templates directory
 		file_list = os.listdir(os.path.join(user.home, 'Templates'))
 		file_list = filter(lambda file_: file_[0] != '.', file_list)  # skip hidden files
+
+		# add empty file
+		self._templates.append((_('Empty File'), '', 'document'))
+		if len(file_list) > 0:
+			self._templates.append(('', '', ''))  # separator
 
 		for file_ in file_list:
 			name = os.path.splitext(file_)[0]

@@ -27,7 +27,6 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_show_hidden = gtk.CheckButton(_('Show hidden files'))
 		self._checkbox_case_sensitive = gtk.CheckButton(_('Case sensitive item sorting'))
 		self._checkbox_right_click = gtk.CheckButton(_('Right click selects items'))
-		self._checkbox_vim_bindings = gtk.CheckButton(_('Enable VIM bindings'))
 		self._checkbox_show_headers = gtk.CheckButton(_('Show list headers'))
 		self._checkbox_media_preview = gtk.CheckButton(_('Fast media preview'))
 
@@ -35,7 +34,6 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
 		self._checkbox_case_sensitive.connect('toggled', self._parent.enable_save)
 		self._checkbox_right_click.connect('toggled', self._parent.enable_save)
-		self._checkbox_vim_bindings.connect('toggled', self._vim_bindings_toggled)
 		self._checkbox_show_headers.connect('toggled', self._parent.enable_save)
 		self._checkbox_media_preview.connect('toggled', self._parent.enable_save)
 
@@ -119,7 +117,6 @@ class ItemListOptions(SettingsPage):
 
 		vbox_operation.pack_start(self._checkbox_case_sensitive, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_right_click, False, False, 0)
-		vbox_operation.pack_start(self._checkbox_vim_bindings, False, False, 0)
 		vbox_operation.pack_start(hbox_quick_search, False, False, 5)
 		vbox_operation.pack_start(vbox_time_format, False, False, 5)
 		vbox_operation.pack_start(vbox_status_text, False, False, 5)
@@ -165,7 +162,6 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_show_hidden.set_active(options.getboolean('main', 'show_hidden'))
 		self._checkbox_case_sensitive.set_active(options.getboolean('main', 'case_sensitive_sort'))
 		self._checkbox_right_click.set_active(options.getboolean('main', 'right_click_select'))
-		self._checkbox_vim_bindings.set_active(options.getboolean('main', 'vim_movement'))
 		self._checkbox_show_headers.set_active(options.getboolean('main', 'headers_visible'))
 		self._checkbox_media_preview.set_active(options.getboolean('main', 'media_preview'))
 		self._combobox_grid_lines.set_active(options.getint('main', 'grid_lines'))
@@ -186,7 +182,6 @@ class ItemListOptions(SettingsPage):
 		options.set('main', 'show_hidden', _bool[self._checkbox_show_hidden.get_active()])
 		options.set('main', 'case_sensitive_sort', _bool[self._checkbox_case_sensitive.get_active()])
 		options.set('main', 'right_click_select', _bool[self._checkbox_right_click.get_active()])
-		options.set('main', 'vim_movement', _bool[self._checkbox_vim_bindings.get_active()])
 		options.set('main', 'headers_visible', _bool[self._checkbox_show_headers.get_active()])
 		options.set('main', 'media_preview', _bool[self._checkbox_media_preview.get_active()])
 		options.set('main', 'grid_lines', self._combobox_grid_lines.get_active())

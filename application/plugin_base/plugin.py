@@ -1,6 +1,7 @@
 import gtk
 import pango
 
+from accelerator_group import AcceleratorGroup
 from widgets.title_bar import TitleBar
 from widgets.tab_label import TabLabel
 from gui.preferences.display import VISIBLE_ALWAYS
@@ -22,6 +23,11 @@ class PluginBase(gtk.VBox):
 		self._parent = parent  # parent is stored locally for later use
 		self._notebook = notebook
 
+		# accelerator groups
+		self._accelerator_groups = []
+		self._configure_accelerators()
+
+		# configure self
 		self.set_border_width(2)
 		self.set_spacing(2)
 
@@ -100,6 +106,32 @@ class PluginBase(gtk.VBox):
 			self._main_object.connect('drag-data-delete', self._drag_data_delete)
 			self._main_object.connect('drag-end', self._drag_end)
 
+	def _configure_accelerators(self):
+		"""Configure accelerator group"""
+		group = AcceleratorGroup(self._parent)
+		keyval = gtk.gdk.keyval_from_name
+
+		# configure accelerator group
+		group.set_name('plugin_base')
+		group.set_title(_('Plugin Base'))
+
+		# add all methods to group
+		group.add_method('focus_oposite_list', _('Focus oposite list'), self._parent.focus_oposite_list)
+		group.add_method('next_tab', _('Next tab'), self._notebook_next_tab)
+		group.add_method('previous_tab', _('Previous tab'), self._notebook_previous_tab)
+		group.add_method('duplicate_tab', _('Duplicate tab'), self._duplicate_tab)
+		group.add_method('close_tab', _('Close tab'), self._close_tab)
+
+		# configure accelerators
+		group.set_accelerator('focus_oposite_list', keyval('Tab'), 0)
+		group.set_accelerator('next_tab', keyval('Tab'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('previous_tab', keyval('Tab'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
+		group.set_accelerator('duplicate_tab', keyval('t'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('close_tab', keyval('w'), gtk.gdk.CONTROL_MASK)
+
+		# add accelerator group to the list
+		self._accelerator_groups.append(group)
+
 	def _drag_begin(self, widget, drag_context):
 		"""Handle start of drag and drop operation"""
 		return True
@@ -146,9 +178,17 @@ class PluginBase(gtk.VBox):
 		self._title_bar.set_state(gtk.STATE_SELECTED)
 		self._parent._set_active_object(self)
 
+		# activate accelerators
+		for group in self._accelerator_groups:
+			self._parent.add_accel_group(group.get_accel_group())
+
 	def _control_lost_focus(self, widget, data=None):
 		"""List focus out event"""
 		self._title_bar.set_state(gtk.STATE_NORMAL)
+
+		# deactivate accelerators
+		for group in self._accelerator_groups:
+			self._parent.remove_accel_group(group.get_accel_group())
 
 	def _enable_object_block(self, widget=None, data=None):
 		"""Block main object signals"""
@@ -190,27 +230,12 @@ class PluginBase(gtk.VBox):
 		"""Handles key events in item list"""
 		result = False
 
-		# if plugin has no key handlers defined
-		if self._key_handlers is None:
-			return result
+		if gtk.gdk.keyval_name(event.keyval) == 'Tab':
+			for group in self._accelerator_groups:
+				result = group.trigger_accelerator(self, event.keyval, event.state)
 
-		# generate state sting based on modifier state (control, alt, shift)
-		state = "%d%d%d" % (
-					bool(event.state & gtk.gdk.CONTROL_MASK),
-					bool(event.state & gtk.gdk.MOD1_MASK),
-					bool(event.state & gtk.gdk.SHIFT_MASK)
-				)
-
-		# retrieve human readable key representation
-		key_name = gtk.gdk.keyval_name(event.keyval)
-
-		# make letters lower case for easier handling
-		if len(key_name) == 1: key_name = key_name.lower()
-
-		if self._key_handlers.has_key(key_name) \
-		and self._key_handlers[key_name].has_key(state):
-			# call specific key handler and set result
-			result = self._key_handlers[key_name][state](widget, event)
+				if result:
+					break;
 
 		return result
 

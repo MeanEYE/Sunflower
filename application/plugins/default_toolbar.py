@@ -154,29 +154,29 @@ class BookmarkButton(gtk.ToolButton):
 
 	def _clicked(self, widget, data=None):
 		"""Handle click"""
-		active_object = self._application._get_active_object()
+		active_object = self._application.get_active_object()
 
 		if hasattr(active_object, 'change_path'):
 			active_object.change_path(self._path)
-			
-			
+
+
 class BookmarksButton(gtk.ToolButton):
 	"""Toolbar control used to popup bookmarks menu"""
 
 	def __init__(self, application, name, config):
 		gtk.ToolButton.__init__(self)
-		
+
 		# store parameters locally
 		self._name = name
 		self._config = config
 		self._application = application
-		
+
 		# configure
 		self.set_label(_('Bookmarks'))
 		self.set_tooltip_text(_('Bookmarks'))
 		self.set_icon_name('go-jump')
 		self.set_is_important(True)
-		
+
 		# connect events
 		self.connect('clicked', self._clicked)
 
@@ -221,7 +221,7 @@ class ParentDirectoryButton(gtk.ToolButton):
 
 	def _clicked(self, widget, data=None):
 		"""Handle button click"""
-		active_object = self._application._get_active_object()
+		active_object = self._application.get_active_object()
 
 		if hasattr(active_object, '_parent_folder'):
 			active_object._parent_folder()

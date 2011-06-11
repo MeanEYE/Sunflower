@@ -18,7 +18,6 @@ class PluginBase(gtk.VBox):
 		gtk.VBox.__init__(self, False, 0)
 
 		self.path = path
-		self._ubuntu_coloring = parent.options.getboolean('main', 'ubuntu_coloring')
 
 		self._parent = parent  # parent is stored locally for later use
 		self._notebook = notebook

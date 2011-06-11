@@ -209,8 +209,8 @@ class ItemList(PluginBase):
 		group.add_method('move_files', _('Move selected items'), self._move_files)
 		group.add_method('show_popup_menu', _('Show context menu'), self._show_popup_menu)
 		group.add_method('show_open_with_menu', _('Show "open with" menu'), self._show_open_with_menu)
-		group.add_method('inherit_left_path', _('Assign path from left list'), self._handle_path_inheritance)
-		group.add_method('inherit_right_path', _('Assign path from right list'), self._handle_path_inheritance)
+		group.add_method('inherit_left_path', _('Assign path from left list'), self._inherit_left_path)
+		group.add_method('inherit_right_path', _('Assign path from right list'), self._inherit_right_path)
 		group.add_method('move_marker_up', _('Move selection marker up'), self._move_marker_up)
 		group.add_method('move_marker_down', _('Move selection marker down'), self._move_marker_down)
 
@@ -1017,54 +1017,31 @@ class ItemList(PluginBase):
 
 	def _inherit_left_path(self, widget, data=None):
 		"""Inherit path in right list from left"""
-		pass
+		oposite_object = self._parent.get_oposite_object(self)
+
+		if self._notebook is self._parent.left_notebook:
+			if hasattr(oposite_object, 'change_path'):
+				oposite_object.change_path(self.path)
+
+			elif hasattr(oposite_object, 'feed_terminal'):
+				oposite_object.feed_terminal(self.path)
+
+		else:
+			self.change_path(oposite_object.path)
 
 	def _inherit_right_path(self, widget, data=None):
 		"""Inherit path in left list from right"""
-		pass
+		oposite_object = self._parent.get_oposite_object(self)
 
-	def _handle_path_inheritance(self, widget, keyval):
-		"""Handle inheriting or setting paths from/to other lists"""
-		result = False
-		key_name = gtk.gdk.keyval_name(keyval)
+		if self._notebook is self._parent.right_notebook:
+			if hasattr(oposite_object, 'change_path'):
+				oposite_object.change_path(self.path)
 
-		if self._notebook is self._parent.left_notebook:
-			# handle if we are on the left side
-			oposite_object = self._parent.right_notebook.get_nth_page(
-												self._parent.right_notebook.get_current_page()
-											)
-
-			if key_name == 'Right':
-				if hasattr(oposite_object, 'feed_terminal'):
-					oposite_object.feed_terminal(os.path.basename(self._get_selection()))
-				else:
-					oposite_object.change_path(self.path)
-
-				result = True
-
-			elif key_name == 'Left':
-				self.change_path(oposite_object.path)
-				result = True
+			elif hasattr(oposite_object, 'feed_terminal'):
+				oposite_object.feed_terminal(self.path)
 
 		else:
-			# handle if we are on the right side
-			oposite_object = self._parent.left_notebook.get_nth_page(
-												self._parent.left_notebook.get_current_page()
-											)
-
-			if key_name == 'Right':
-				self.change_path(oposite_object.path)
-				result = True
-
-			elif key_name == 'Left':
-				if hasattr(oposite_object, 'feed_terminal'):
-					oposite_object.feed_terminal(os.path.basename(self._get_selection()))
-				else:
-					oposite_object.change_path(self.path)
-
-				result = True
-
-		return result
+			self.change_path(oposite_object.path)
 
 	def _add_bookmark(self, widget, data=None):
 		"""Show dialog for adding current path to bookmarks"""

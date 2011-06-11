@@ -558,13 +558,13 @@ class MainWindow(gtk.Window):
 		self.command_bar = gtk.HBox(True, 0)
 
 		buttons = (
-				(_('Refresh'), _('Reload active item list (CTRL+R)'), self._command_reload),
-				(_('View'), _('View selected file (F3)'), None),
-				(_('Edit'), _('Edit selected file (F4)'), self._command_edit),
-				(_('Copy'), _('Copy selected items from active to opposite list (F5)'), self._command_copy),
-				(_('Move'), _('Move selected items from active to opposite list (F6)'), self._command_move),
-				(_('Create'), _('Create new directory (F7)\nCreate new file (CTRL+F7)'), self._command_create),
-				(_('Delete'), _('Delete selected items (F8 or Delete)'), self._command_delete)
+				(_('Refresh'), _('Reload active item list'), self._command_reload),
+				(_('View'), _('View selected file'), None),
+				(_('Edit'), _('Edit selected file'), self._command_edit),
+				(_('Copy'), _('Copy selected items from active to opposite list'), self._command_copy),
+				(_('Move'), _('Move selected items from active to opposite list'), self._command_move),
+				(_('Create'), _('Create new directory'), self._command_create),
+				(_('Delete'), _('Delete selected items'), self._command_delete)
 			)
 
 		# create buttons and pack them

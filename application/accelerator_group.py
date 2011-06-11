@@ -78,10 +78,11 @@ class AcceleratorGroup:
 	def trigger_accelerator(self, widget, key, mods):
 		"""Manually trigger accelerator"""
 		result = False
-		label = gtk.accelerator_get_label(key, mods)
+		default_mods = gtk.accelerator_get_default_mod_mask()  # filter out unneeded mods
+		label = gtk.accelerator_get_label(key, mods & default_mods)
 
 		# trigger accelerator only if we have method connected
 		if self._method_names.has_key(label):
-			result = self._handle_accelerator_activate(self._accels, widget, key, mods)
+			result = self._handle_accelerator_activate(self._accels, widget, key, mods & default_mods)
 
 		return result

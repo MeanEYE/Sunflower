@@ -209,7 +209,8 @@ class ItemList(PluginBase):
 		group.add_method('move_files', _('Move selected items'), self._move_files)
 		group.add_method('show_popup_menu', _('Show context menu'), self._show_popup_menu)
 		group.add_method('show_open_with_menu', _('Show "open with" menu'), self._show_open_with_menu)
-		group.add_method('inherit_path', _('Assign path to/from oposite list'), self._handle_path_inheritance)
+		group.add_method('inherit_left_path', _('Assign path from left list'), self._handle_path_inheritance)
+		group.add_method('inherit_right_path', _('Assign path from right list'), self._handle_path_inheritance)
 		group.add_method('move_marker_up', _('Move selection marker up'), self._move_marker_up)
 		group.add_method('move_marker_down', _('Move selection marker down'), self._move_marker_down)
 
@@ -235,7 +236,8 @@ class ItemList(PluginBase):
 		group.set_accelerator('move_files', keyval('F6'), 0)
 		group.set_accelerator('show_popup_menu', keyval('Menu'), 0)
 		group.set_accelerator('show_open_with_menu', keyval('Menu'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('inherit_path', keyval('Left'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('inherit_left_path', keyval('Right'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('inherit_right_path', keyval('Left'), gtk.gdk.CONTROL_MASK)
 
 		# add accelerator group to the list
 		self._accelerator_groups.append(group)
@@ -430,8 +432,8 @@ class ItemList(PluginBase):
 	def _handle_history_hide(self, widget, data=None):
 		"""Handle history menu hide event"""
 		self._disable_object_block()
-		oposite_list = self._parent.get_oposite_list(self)
-		oposite_list._disable_object_block()
+		oposite_object = self._parent.get_oposite_object(self)
+		oposite_object._disable_object_block()
 
 	def _handle_external_data(self, operation, protocol, list_):
 		"""Handle data coming from a different application"""
@@ -916,8 +918,8 @@ class ItemList(PluginBase):
 
 		# show the menu on calculated location
 		self._enable_object_block()
-		oposite_list = self._parent.get_oposite_list(self)
-		oposite_list._enable_object_block()
+		oposite_object = self._parent.get_oposite_object(self)
+		oposite_object._enable_object_block()
 
 		self._history_menu.popup(
 								None, None,
@@ -1011,6 +1013,14 @@ class ItemList(PluginBase):
 
 	def _edit_filename(self, filename):
 		"""Open editor with specified filename and current path"""
+		pass
+
+	def _inherit_left_path(self, widget, data=None):
+		"""Inherit path in right list from left"""
+		pass
+
+	def _inherit_right_path(self, widget, data=None):
+		"""Inherit path in left list from right"""
 		pass
 
 	def _handle_path_inheritance(self, widget, keyval):

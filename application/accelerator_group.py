@@ -27,7 +27,9 @@ class AcceleratorGroup:
 		name = self._method_names[label]
 
 		# call user method
-		self._methods[name]['callback'](widget)
+		result = self._methods[name]['callback'](widget, keyval)
+
+		return result
 
 	def set_name(self, name):
 		"""Set accelerator group name
@@ -52,7 +54,7 @@ class AcceleratorGroup:
 						'callback': callback
 					}
 
-	def set_accelerator(self, name, key, mods):
+	def set_accelerator(self, name, keyval, modifier):
 		"""Set accelerator for specified method name
 
 		key - Integer value for a key
@@ -63,12 +65,23 @@ class AcceleratorGroup:
 			raise InvalidMethodError('Specified method name ({0}) is not valid!'.format(name))
 
 		# connect method name to accelerator label
-		label = gtk.accelerator_get_label(key, mods)
+		label = gtk.accelerator_get_label(keyval, modifier)
 		self._method_names[label] = name
 
 		# connect accelerator to local method
-		self._accels.connect_group(key, mods, 0, self._handle_accelerator_activate)
+		self._accels.connect_group(keyval, modifier, 0, self._handle_accelerator_activate)
 
 	def get_accel_group(self):
 		"""Return GTK+ accel group"""
 		return self._accels
+
+	def trigger_accelerator(self, widget, key, mods):
+		"""Manually trigger accelerator"""
+		result = False
+		label = gtk.accelerator_get_label(key, mods)
+
+		# trigger accelerator only if we have method connected
+		if self._method_names.has_key(label):
+			result = self._handle_accelerator_activate(self._accels, widget, key, mods)
+
+		return result

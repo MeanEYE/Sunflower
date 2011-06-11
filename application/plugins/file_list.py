@@ -298,7 +298,7 @@ class FileList(ItemList):
 			# selected item is directory, we need to change path
 			if is_parent:
 				# call specialized change path method
-				self._parent_folder(widget, data)
+				self._parent_directory(widget, data)
 
 			else:
 				# just change path

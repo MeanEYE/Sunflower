@@ -25,10 +25,13 @@ class IconManager:
 		"""Load icon for specified file"""
 		result = 'document'
 		mime_type = mimetypes.guess_type(filename, False)[0]
+		themed_icon = None
 
 		# get icon names
-		themed_icon = gio.content_type_get_icon(mime_type)
+		if mime_type is not None:
+			themed_icon = gio.content_type_get_icon(mime_type)
 
+		# get only valid icon names
 		if themed_icon is not None:
 			icon_list = themed_icon.get_names()
 			icon_list = filter(self.has_icon, icon_list)

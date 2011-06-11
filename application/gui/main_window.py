@@ -714,10 +714,10 @@ class MainWindow(gtk.Window):
 
 		"""
 		list_ = self.menu_bookmarks.get_data('list')
-		oposite_list = self.get_oposite_list(list_)
+		oposite_object = self.get_oposite_object(list_)
 
 		list_._disable_object_block()
-		oposite_list._disable_object_block()
+		oposite_object._disable_object_block()
 
 	def _create_tools_menu(self):
 		"""Create tools main menu"""
@@ -838,7 +838,7 @@ class MainWindow(gtk.Window):
 			right_selection_long = right_object._get_selection(False)
 
 		# get universal 'selected item' values
-		if self._get_active_object() is left_object:
+		if self.get_active_object() is left_object:
 			selection_short = left_selection_short
 			selection_long = left_selection_long
 		else:
@@ -857,7 +857,7 @@ class MainWindow(gtk.Window):
 
 	def _handle_new_tab_click(self, widget, data=None):
 		"""Handle clicking on item from 'New tab' menu"""
-		notebook = self._get_active_object()._notebook
+		notebook = self.get_active_object()._notebook
 		plugin_class = widget.get_data('class')
 
 		self.create_tab(notebook, plugin_class)
@@ -941,10 +941,6 @@ class MainWindow(gtk.Window):
 
 			if hasattr(page, 'apply_media_preview_settings'):
 				page.apply_media_preview_settings()
-
-	def _get_active_object(self):
-		"""Return active notebook object"""
-		return self._active_object
 
 	def _set_active_object(self, object):
 		"""Set active object"""
@@ -1033,35 +1029,35 @@ class MainWindow(gtk.Window):
 
 	def _command_reload(self, widget=None, data=None):
 		"""Handle command button click"""
-		active_object = self._get_active_object()
+		active_object = self.get_active_object()
 
 		if hasattr(active_object, 'refresh_file_list'):
 			active_object.refresh_file_list()
 
 	def _command_edit(self, widget=None, data=None):
 		"""Handle command button click"""
-		active_object = self._get_active_object()
+		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_edit_selected'):
 			active_object._edit_selected()
 
 	def _command_copy(self, widget=None, data=None):
 		"""Handle command button click"""
-		active_object = self._get_active_object()
+		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_copy_files'):
 			active_object._copy_files()
 
 	def _command_move(self, widget=None, data=None):
 		"""Handle command button click"""
-		active_object = self._get_active_object()
+		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_move_files'):
 			active_object._move_files()
 
 	def _command_create(self, widget=None, data=None):
 		"""Handle command button click"""
-		active_object = self._get_active_object()
+		active_object = self.get_active_object()
 
 		if data is None or (data is not None and data == 'directory'):
 			# create directory
@@ -1075,35 +1071,35 @@ class MainWindow(gtk.Window):
 
 	def _command_delete(self, widget=None, data=None):
 		"""Handle command button click"""
-		active_object = self._get_active_object()
+		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_delete_files'):
 			active_object._delete_files()
 
 	def _command_open(self, widget=None, data=None):
 		"""Execute selected item in active list"""
-		active_object = self._get_active_object()
+		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_execute_selected_item'):
 			active_object._execute_selected_item()
 
 	def _command_open_in_new_tab(self, widget=None, data=None):
 		"""Open selected directory from active list in new tab"""
-		active_object = self._get_active_object()
+		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_open_in_new_tab'):
 			active_object._open_in_new_tab()
 
 	def _command_cut_to_clipboard(self, widget=None, data=None):
 		"""Copy selected items from active list to clipboard"""
-		active_object = self._get_active_object()
+		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_cut_files_to_clipboard'):
 			active_object._cut_files_to_clipboard()
 
 	def _command_copy_to_clipboard(self, widget=None, data=None):
 		"""Copy selected items from active list to clipboard"""
-		active_object = self._get_active_object()
+		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_copy_files_to_clipboard'):
 			# ItemList object
@@ -1115,7 +1111,7 @@ class MainWindow(gtk.Window):
 
 	def _command_paste_from_clipboard(self, widget=None, data=None):
 		"""Copy selected items from active list to clipboard"""
-		active_object = self._get_active_object()
+		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_paste_files_from_clipboard'):
 			# ItemList object
@@ -1127,21 +1123,21 @@ class MainWindow(gtk.Window):
 
 	def _command_properties(self, widget=None, data=None):
 		"""Show properties for selected item in active list"""
-		active_object = self._get_active_object()
+		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_item_properties'):
 			active_object._item_properties()
 
 	def _command_send_to(self, widget=None, data=None):
 		"""Show 'send to' dialog for selected items in active list"""
-		active_object = self._get_active_object()
+		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_send_to'):
 			active_object._send_to()
 
 	def _command_rename(self, widget=None, data=None):
 		"""Rename selected item in active list"""
-		active_object = self._get_active_object()
+		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_rename_file'):
 			active_object._rename_file()
@@ -1161,7 +1157,7 @@ class MainWindow(gtk.Window):
 		key_name = gtk.gdk.keyval_name(event.keyval)
 
 		if (key_name == 'Up' or key_name == 'Escape') and state == '000':
-			self._get_active_object()._main_object.grab_focus()
+			self.get_active_object()._main_object.grab_focus()
 			result = True
 
 		return result
@@ -1178,7 +1174,7 @@ class MainWindow(gtk.Window):
 
 	def _save_active_notebook(self):
 		"""Save active notebook to config"""
-		object = self._get_active_object()
+		object = self.get_active_object()
 		is_left = object._notebook is self.left_notebook
 
 		self.options.set('main', 'active_notebook', (1, 0)[is_left])
@@ -1317,15 +1313,15 @@ class MainWindow(gtk.Window):
 		else:
 			# button called for menu
 			button = widget
-			self.menu_bookmarks.set_data('list', self._get_active_object())
+			self.menu_bookmarks.set_data('list', self.get_active_object())
 
 		if button is not None:
 			# disable color changing on tab title bar
 			list_ = self.menu_bookmarks.get_data('list')
-			oposite_list = self.get_oposite_list(list_)
+			oposite_object = self.get_oposite_object(list_)
 
 			list_._enable_object_block()
-			oposite_list._enable_object_block()
+			oposite_object._enable_object_block()
 
 			# show bookmarks menu
 			self.menu_bookmarks.popup(
@@ -1336,7 +1332,7 @@ class MainWindow(gtk.Window):
 
 	def select_all(self, widget, data=None):
 		"""Select all items in active list"""
-		list_ = self._get_active_object()
+		list_ = self.get_active_object()
 
 		# ensure we don't make exception on terminal tabs
 		if hasattr(list_, 'select_all'):
@@ -1344,7 +1340,7 @@ class MainWindow(gtk.Window):
 
 	def unselect_all(self, widget, data=None):
 		"""Unselect all items in active list"""
-		list_ = self._get_active_object()
+		list_ = self.get_active_object()
 
 		# ensure we don't make exception on terminal tabs
 		if hasattr(list_, 'unselect_all'):
@@ -1352,7 +1348,7 @@ class MainWindow(gtk.Window):
 
 	def invert_selection(self, widget, data=None):
 		"""Invert selection in active list"""
-		list_ = self._get_active_object()
+		list_ = self.get_active_object()
 
 		if hasattr(list_, 'invert_selection'):
 			list_.invert_selection()
@@ -1360,7 +1356,7 @@ class MainWindow(gtk.Window):
 	def select_with_pattern(self, widget, data=None):
 		"""Ask user for selection pattern and
 		select matching items"""
-		list_ = self._get_active_object()
+		list_ = self.get_active_object()
 
 		if hasattr(list_, 'select_all'):
 			# create dialog
@@ -1382,7 +1378,7 @@ class MainWindow(gtk.Window):
 
 	def select_with_same_extension(self, widget, data=None):
 		"""Select all items with same extension in active list"""
-		list_ = self._get_active_object()
+		list_ = self.get_active_object()
 
 		if hasattr(list_, '_get_selection') and hasattr(list_, 'select_all'):
 			selection = list_._get_selection()
@@ -1393,7 +1389,7 @@ class MainWindow(gtk.Window):
 
 	def unselect_with_same_extension(self, widget, data=None):
 		"""Select all items with same extension in active list"""
-		list_ = self._get_active_object()
+		list_ = self.get_active_object()
 
 		if hasattr(list_, '_get_selection') and hasattr(list_, 'select_all'):
 			selection = list_._get_selection()
@@ -1405,7 +1401,7 @@ class MainWindow(gtk.Window):
 	def unselect_with_pattern(self, widget, data=None):
 		"""Ask user for selection pattern and
 		select matching items"""
-		list_ = self._get_active_object()
+		list_ = self.get_active_object()
 
 		if hasattr(list_, 'unselect_all'):
 			# create dialog
@@ -1577,7 +1573,7 @@ class MainWindow(gtk.Window):
 			self.command_edit.set_text('')
 
 		handled = False
-		active_object = self._get_active_object()
+		active_object = self.get_active_object()
 		command = raw_command.split(' ', 1)
 
 		# return if we don't have anything to parse
@@ -1825,19 +1821,23 @@ class MainWindow(gtk.Window):
 			if not self.options.has_option('main', option):
 				self.options.set('main', option, value)
 
-	def focus_oposite_list(self, widget, data=None):
+	def focus_oposite_object(self, widget, data=None):
 		"""Sets focus on oposite item list"""
-		oposite_object = self.get_oposite_list(self._get_active_object())
+		oposite_object = self.get_oposite_object(self.get_active_object())
 		oposite_object._main_object.grab_focus()
 
 		return True
 
-	def get_oposite_list(self, list_):
+	def get_active_object(self):
+		"""Return active object"""
+		return self._active_object
+
+	def get_oposite_object(self, object_):
 		"""Return oposite object"""
 		left_object = self.left_notebook.get_nth_page(self.left_notebook.get_current_page())
 		right_object = self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
 
-		if list_ is left_object:
+		if object_ is left_object:
 			result = right_object
 
 		else:
@@ -1962,7 +1962,7 @@ class MainWindow(gtk.Window):
 				self.left_notebook.child_set_property(page, 'tab-expand', False)
 
 			elif expand_tabs == EXPAND_ACTIVE:
-				self.left_notebook.child_set_property(page, 'tab-expand', page is self._get_active_object())
+				self.left_notebook.child_set_property(page, 'tab-expand', page is self.get_active_object())
 
 			else:
 				self.left_notebook.child_set_property(page, 'tab-expand', True)
@@ -1979,7 +1979,7 @@ class MainWindow(gtk.Window):
 				self.right_notebook.child_set_property(page, 'tab-expand', False)
 
 			elif expand_tabs == EXPAND_ACTIVE:
-				self.right_notebook.child_set_property(page, 'tab-expand', page is self._get_active_object())
+				self.right_notebook.child_set_property(page, 'tab-expand', page is self.get_active_object())
 
 			else:
 				self.right_notebook.child_set_property(page, 'tab-expand', True)

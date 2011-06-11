@@ -260,6 +260,7 @@ class FileCreateDialog(CreateDialog):
 		self._templates = gtk.ListStore(str, str, str)
 		self._template_list = gtk.ComboBox(self._templates)
 		self._template_list.set_row_separator_func(self._row_is_separator)
+		self._template_list.connect('changed', self._template_changed)
 		self._template_list.pack_start(cell_icon, False)
 		self._template_list.pack_start(cell_name, True)
 
@@ -307,6 +308,16 @@ class FileCreateDialog(CreateDialog):
 	def _row_is_separator(self, model, row, data=None):
 		"""Determine if row being drawn is a separator"""
 		return model.get_value(row, 0) == ''
+
+	def _template_changed(self, widget, data=None):
+		"""Handle changing template"""
+		file_name = os.path.splitext(self._entry.get_text())
+		active_item = self._template_list.get_active()
+
+		# change extension only if specific template is selected
+		if active_item > 0:
+			extension = os.path.splitext(self._templates[active_item][1])[1]
+			self._entry.set_text('{0}{1}'.format(file_name[0], extension))
 
 	def get_edit_file(self):
 		"""Get state of 'edit after creating' checkbox"""

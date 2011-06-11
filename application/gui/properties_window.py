@@ -32,29 +32,17 @@ class PropertiesWindow(gtk.Window):
 		icon_manager = application.icon_manager
 		if self._is_file:
 			# get icon for specified file
-			self._icon_list = (
-						icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_MENU),
-						icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_BUTTON),
-						icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_SMALL_TOOLBAR),
-						icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_LARGE_TOOLBAR),
-						icon_manager.get_icon_for_file(path, gtk.ICON_SIZE_DIALOG)
-					)
+			self._icon_name = icon_manager.get_icon_for_file(path)
 
 		else:
 			# get folder icon
-			self._icon_list = (
-						icon_manager.get_icon_from_name('folder', gtk.ICON_SIZE_MENU),
-						icon_manager.get_icon_from_name('folder', gtk.ICON_SIZE_BUTTON),
-						icon_manager.get_icon_from_name('folder', gtk.ICON_SIZE_SMALL_TOOLBAR),
-						icon_manager.get_icon_from_name('folder', gtk.ICON_SIZE_LARGE_TOOLBAR),
-						icon_manager.get_icon_from_name('folder', gtk.ICON_SIZE_DIALOG)
-					)
+			self._icon_name = 'folder'
 
 		# configure window
 		self.set_title(title)
 		self.set_size_request(410, 410)
 		self.set_border_width(5)
-		self.set_icon_list(*self._icon_list)
+		self.set_icon_name(self._icon_name)
 		self.set_wmclass('Sunflower', 'Sunflower')
 
 		# create interface
@@ -186,20 +174,11 @@ class PropertiesWindow(gtk.Window):
 		# add all applications to the list
 		for item in list_:
 			config_file = item[0]
-			name = item[1]
-			icon = None
-			selected = config_file in default_application
-
-			# get application configuration file
 			config = self._application.associations_manager.get_association_config(config_file)
 
-			# get application icon
-			if config is not None and config.has_key('icon'):
-				icon_name = config['icon']
-				icon = self._application.icon_manager.get_icon_from_name(
-																	icon_name,
-																	gtk.ICON_SIZE_LARGE_TOOLBAR
-																)
+			name = item[1]
+			icon = config['icon']
+			selected = config_file in default_application
 
 			self._store.append((selected, icon, name, config_file))
 
@@ -326,9 +305,8 @@ class PropertiesWindow(gtk.Window):
 		tab.set_border_width(10)
 
 		# create icon
-		pixbuf = self._icon_list[-1]
 		icon = gtk.Image()
-		icon.set_from_pixbuf(pixbuf)
+		icon.set_from_icon_name(self._icon_name, gtk.ICON_SIZE_DIALOG)
 
 		vbox_icon = gtk.VBox(False, 0)
 		vbox_icon.pack_start(icon, False, False)
@@ -515,7 +493,7 @@ class PropertiesWindow(gtk.Window):
 		# create application list
 		container = gtk.Viewport()
 
-		self._store = gtk.ListStore(bool, gtk.gdk.Pixbuf, str, str)
+		self._store = gtk.ListStore(bool, str, str, str)
 		self._list = gtk.TreeView()
 		self._list.set_model(self._store)
 		self._list.set_headers_visible(False)
@@ -537,7 +515,7 @@ class PropertiesWindow(gtk.Window):
 
 		# configure renderer
 		column_radio.add_attribute(cell_radio, 'active', 0)
-		column_name.add_attribute(cell_icon, 'pixbuf', 1)
+		column_name.add_attribute(cell_icon, 'icon-name', 1)
 		column_name.add_attribute(cell_name, 'text', 2)
 
 		# add column_name to the list

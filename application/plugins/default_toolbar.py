@@ -223,8 +223,8 @@ class ParentDirectoryButton(gtk.ToolButton):
 		"""Handle button click"""
 		active_object = self._application.get_active_object()
 
-		if hasattr(active_object, '_parent_folder'):
-			active_object._parent_folder()
+		if hasattr(active_object, '_parent_directory'):
+			active_object._parent_directory()
 
 
 class Separator(gtk.SeparatorToolItem):

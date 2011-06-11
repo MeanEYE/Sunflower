@@ -373,11 +373,15 @@ class FileList(ItemList):
 	def _create_file(self, widget=None, data=None):
 		"""Prompt user and create empty file"""
 		dialog = FileCreateDialog(self._parent)
+		provider = self.get_provider()
 
 		# get response
 		response = dialog.get_response()
 		mode = dialog.get_mode()
 		edit_after = dialog.get_edit_file()
+		template = dialog.get_template_file()
+
+		print 'came'
 
 		# release dialog
 		dialog.destroy()
@@ -386,23 +390,33 @@ class FileList(ItemList):
 		if response[0] == gtk.RESPONSE_OK:
 			try:
 				# try to create file
-				if os.path.isfile(os.path.join(self.path, response[1])):
+				if provider.is_file(os.path.join(self.path, response[1])):
 					raise OSError(_("File already exists: {0}").format(response[1]))
 
-				if os.path.isdir(os.path.join(self.path, response[1])):
+				if provider.is_dir(os.path.join(self.path, response[1])):
 					raise OSError(_("Directory with same name exists: {0}").format(response[1]))
 
 				# set this item to be focused on add
 				self._item_to_focus = response[1]
 
 				# create file
-				self.get_provider().create_file(response[1], mode=mode, relative_to=self.path)
+				provider.create_file(response[1], mode=mode, relative_to=self.path)
 
 				# add file manually to the list in case
 				# where directory monitoring is not supported
 				if self._fs_monitor is None:
 					show_hidden = self._parent.options.getboolean('main', 'show_hidden')
 					self._add_item(response[1], show_hidden)
+
+				# create file from template
+				if template is not None:
+					with open(template, 'rb') as raw_file:
+						data = raw_file.read()
+
+					new_file = provider.get_file_handle(response[1], 'wb', relative_to=self.path)
+					new_file.truncate()
+					new_file.write(data)
+					new_file.close()
 
 				# if specified, edit file after creating it
 				if edit_after:
@@ -949,8 +963,8 @@ class FileList(ItemList):
 					self._item_list.scroll_to_cell(self._store.get_path(result))
 					self._item_to_focus = None
 
-			except:
-				pass
+			except Exception as error:
+				print 'Error: {0} - {1}'.format(filename, str(error))
 
 		return result
 

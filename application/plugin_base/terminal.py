@@ -5,7 +5,8 @@ try:
 except:
 	vte = None
 
-from plugin import PluginBase
+from plugin_base.plugin import PluginBase
+from accelerator_group import AcceleratorGroup
 
 # button text constants
 BUTTON_TEXT_MENU 	= u'\u2699'
@@ -28,36 +29,6 @@ class Terminal(PluginBase):
 		PluginBase.__init__(self, parent, notebook, path)
 
 		self._menu = None
-
-		# global key event handlers with modifier switches (control, alt, shift)
-		self._key_handlers = {
-			'Tab': {
-					'001': self._parent.focus_oposite_list,
-					'100': self._notebook_next_tab,
-					'101': self._notebook_previous_tab,
-				},
-			'ISO_Left_Tab': {  # CTRL+SHIFT+Tab produces ISO_Left_Tab
-					'101': self._notebook_previous_tab,
-				},
-			'w': {
-					'100': self._close_tab,
-				},
-			't': {
-					'100': self._duplicate_tab,
-				},
-			'z': {
-					'100': self._create_terminal,
-				},
-			'c': {
-					'101': self._copy_selection,
-				},
-			'v': {
-					'101': self._paste_selection,
-				},
-			'F11': {
-					'000': self._parent.toggle_fullscreen
-				},
-		}
 
 		# change list icon
 		self._title_bar.set_icon_from_name('terminal')
@@ -215,6 +186,31 @@ class Terminal(PluginBase):
 						self._get_menu_position,
 						1, 0, widget
 					)
+
+	def _configure_accelerators(self):
+		"""Configure accelerator group"""
+		group = AcceleratorGroup(self._parent)
+		keyval = gtk.gdk.keyval_from_name
+
+		# give parent chance to register its own accelerator group
+		PluginBase._configure_accelerators(self)
+
+		# configure accelerator group
+		group.set_name('item_list')
+		group.set_title(_('Item List'))
+
+		# add all methods to group
+		group.add_method('create_terminal', _('Create terminal tab'), self._create_terminal)
+		group.add_method('copy_to_clipboard', _('Copy selection to clipboard'), self._copy_selection)
+		group.add_method('paste_from_clipboard', _('Paste from clipboard'), self._paste_selection)
+
+		# configure accelerators
+		group.set_accelerator('create_terminal', keyval('z'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('copy_to_clipboard', keyval('c'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
+		group.set_accelerator('paste_from_clipboard', keyval('v'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
+
+		# add accelerator group to the list
+		self._accelerator_groups.append(group)
 
 	def _copy_selection(self, widget=None, data=None):
 		"""Copy selection from terminal"""

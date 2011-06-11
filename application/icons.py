@@ -10,12 +10,6 @@ class IconManager:
 	def __init__(self, parent):
 		self._parent = parent
 		self._icon_theme = gtk.icon_theme_get_default()
-		self._icon_theme.connect('changed', self._theme_changed)
-
-	def _theme_changed(self, widget, data=None):
-		"""Handle icon theme change"""
-		self._icon_cache.clear()
-		return True
 
 	def has_icon(self, icon_name):
 		"""Check if icon with specified name exists in theme"""

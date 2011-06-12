@@ -180,7 +180,7 @@ class PluginBase(gtk.VBox):
 
 		# activate accelerators
 		for group in self._accelerator_groups:
-			self._parent.add_accel_group(group.get_accel_group())
+			group.activate(self._parent)
 
 	def _control_lost_focus(self, widget, data=None):
 		"""List focus out event"""
@@ -188,7 +188,7 @@ class PluginBase(gtk.VBox):
 
 		# deactivate accelerators
 		for group in self._accelerator_groups:
-			self._parent.remove_accel_group(group.get_accel_group())
+			group.deactivate()
 
 	def _enable_object_block(self, widget=None, data=None):
 		"""Block main object signals"""
@@ -232,10 +232,10 @@ class PluginBase(gtk.VBox):
 
 		if gtk.gdk.keyval_name(event.keyval) == 'Tab':
 			for group in self._accelerator_groups:
-				result = group.trigger_accelerator(self, event.keyval, event.state)
+				result = group.trigger_accelerator(event.keyval, event.state)
 
 				if result:
-					break;
+					break
 
 		return result
 

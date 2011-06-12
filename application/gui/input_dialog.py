@@ -665,10 +665,7 @@ class OverwriteDialog(gtk.Dialog):
 
 		if provider.is_dir(path, relative_to=relative_to):
 			size = len(provider.list_dir(path, relative_to=relative_to))
-			icon = self._application.icon_manager.get_icon_from_name(
-																'folder',
-																gtk.ICON_SIZE_DIALOG
-															)
+			icon = 'folder'
 
 		else:
 			size = stat.st_size
@@ -676,9 +673,7 @@ class OverwriteDialog(gtk.Dialog):
 																os.path.join(
 																			provider.get_path(),
 																			path
-																			),
-																gtk.ICON_SIZE_DIALOG
-															)
+																		))
 
 		str_size = locale.format('%d', size, True)
 		str_date = time.strftime(self._time_format, time.gmtime(stat.st_mtime))
@@ -697,7 +692,7 @@ class OverwriteDialog(gtk.Dialog):
 		"""Set original element data"""
 		data = self._get_data(provider, path, relative_to)
 
-		self._icon_original.set_from_pixbuf(data[2])
+		self._icon_original.set_from_icon_name(data[2], gtk.ICON_SIZE_DIALOG)
 		self._label_original.set_markup(
 									'<b>{2}</b>\n'
 									'<i>{3}</i>\t\t{0}\n'
@@ -714,7 +709,7 @@ class OverwriteDialog(gtk.Dialog):
 		"""Set source element data"""
 		data = self._get_data(provider, path, relative_to)
 
-		self._icon_source.set_from_pixbuf(data[2])
+		self._icon_source.set_from_icon_name(data[2], gtk.ICON_SIZE_DIALOG)
 		self._label_source.set_markup(
 									'<b>{2}</b>\n'
 									'<i>{3}</i>\t\t{0}\n'

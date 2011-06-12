@@ -197,6 +197,7 @@ class Terminal(PluginBase):
 
 		# modify plugin accelerator group so we can have terminal autocomplete with tab
 		plugin_group = self._accelerator_groups[0]
+		plugin_group.reset_accelerator('focus_oposite_object')
 		plugin_group.set_accelerator('focus_oposite_object', keyval('Tab'), gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK)
 
 		# configure accelerator group

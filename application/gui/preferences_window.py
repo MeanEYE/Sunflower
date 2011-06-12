@@ -67,7 +67,7 @@ class PreferencesWindow(gtk.Window):
 		BookmarksOptions(self, parent)
 		ToolsOptions(self, parent)
 		PluginsOptions(self, parent)
-		AcceleratorOptions(self, parent)
+		#AcceleratorOptions(self, parent)
 
 		# select first tab
 		self._tab_labels.set_cursor((0,))

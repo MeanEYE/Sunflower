@@ -1774,7 +1774,7 @@ class MainWindow(gtk.Window):
 		self.accel_options.read(os.path.join(self.config_path, 'accelerators'))
 
 		# load accelerators
-		self.accelerator_manager.load()
+		self.accelerator_manager.load(self.accel_options)
 
 		# set default values
 		if not self.options.has_section('main'):

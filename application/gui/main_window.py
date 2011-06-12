@@ -15,6 +15,7 @@ from associations import AssociationManager
 from indicator import Indicator
 from notifications import NotificationManager
 from toolbar import ToolbarManager
+from accelerator_manager import AcceleratorManager
 
 from ConfigParser import RawConfigParser
 try:
@@ -70,6 +71,7 @@ class MainWindow(gtk.Window):
 		self.associations_manager = AssociationManager()
 		self.notification_manager = NotificationManager(self)
 		self.toolbar_manager = ToolbarManager(self)
+		self.accelerator_manager = AcceleratorManager(self)
 
 		# set window title
 		self.set_title(_('Sunflower'))
@@ -87,6 +89,7 @@ class MainWindow(gtk.Window):
 		self.bookmark_options = None
 		self.toolbar_options = None
 		self.tool_options = None
+		self.accel_options = None
 
 		# location of all configuration files
 		self.config_path = None
@@ -1726,6 +1729,10 @@ class MainWindow(gtk.Window):
 			self.bookmark_options.write(open(os.path.join(self.config_path, 'bookmarks'), 'w'))
 			self.toolbar_options.write(open(os.path.join(self.config_path, 'toolbar'), 'w'))
 			self.tool_options.write(open(os.path.join(self.config_path, 'tools'), 'w'))
+			self.accel_options.write(open(os.path.join(self.config_path, 'accelerators'), 'w'))
+
+			# save accelerators
+			self.accelerator_manager.save()
 			self.save_accel_map(os.path.join(self.config_path, 'accel_map'))
 
 		except IOError as error:
@@ -1751,6 +1758,7 @@ class MainWindow(gtk.Window):
 		self.bookmark_options = RawConfigParser()
 		self.toolbar_options = RawConfigParser()
 		self.tool_options = RawConfigParser()
+		self.accel_options = RawConfigParser()
 
 		# load configuration from right folder on systems that support it
 		if os.path.isdir(os.path.join(user.home, '.config')):
@@ -1763,6 +1771,10 @@ class MainWindow(gtk.Window):
 		self.bookmark_options.read(os.path.join(self.config_path, 'bookmarks'))
 		self.toolbar_options.read(os.path.join(self.config_path, 'toolbar'))
 		self.tool_options.read(os.path.join(self.config_path, 'tools'))
+		self.accel_options.read(os.path.join(self.config_path, 'accelerators'))
+
+		# load accelerators
+		self.accelerator_manager.load()
 
 		# set default values
 		if not self.options.has_section('main'):

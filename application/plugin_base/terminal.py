@@ -197,22 +197,23 @@ class Terminal(PluginBase):
 
 		# modify plugin accelerator group so we can have terminal autocomplete with tab
 		plugin_group = self._accelerator_groups[0]
-		plugin_group.reset_accelerator('focus_oposite_object')
-		plugin_group.set_accelerator('focus_oposite_object', keyval('Tab'), gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK)
+		plugin_group.disable_accelerator('focus_oposite_object')
 
 		# configure accelerator group
-		group.set_name('item_list')
-		group.set_title(_('Item List'))
+		group.set_name('terminal')
+		group.set_title(_('Terminal'))
 
 		# add all methods to group
 		group.add_method('create_terminal', _('Create terminal tab'), self._create_terminal)
 		group.add_method('copy_to_clipboard', _('Copy selection to clipboard'), self._copy_selection)
 		group.add_method('paste_from_clipboard', _('Paste from clipboard'), self._paste_selection)
+		group.add_method('focus_oposite_object', _('Focus oposite object'), self._parent.focus_oposite_object)
 
 		# configure accelerators
 		group.set_accelerator('create_terminal', keyval('z'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('copy_to_clipboard', keyval('c'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('paste_from_clipboard', keyval('v'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
+		group.set_accelerator('focus_oposite_object', keyval('Tab'), gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK)
 
 		# add accelerator group to the list
 		self._accelerator_groups.append(group)

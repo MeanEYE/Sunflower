@@ -127,6 +127,11 @@ class ItemList(PluginBase):
 
 		self._title_bar.add_control(self._terminal_button)
 
+		# configure status bar
+		self._status_bar.add_group_with_icon('dirs', 'folder', '0/0')
+		self._status_bar.add_group_with_icon('files', 'document', '0/0')
+		self._status_bar.add_group_with_icon('size', 'terminal', '0/0')
+
 		# file list
 		container = gtk.ScrolledWindow()
 		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
@@ -994,6 +999,27 @@ class ItemList(PluginBase):
 		else:
 			total_text = locale.format('%d', self._size['total'], True)
 			selected_text = locale.format('%d', self._size['selected'], True)
+
+		self._status_bar.set_text(
+							'{0}/{1}'.format(
+								self._dirs['selected'],
+								self._dirs['count']
+							),
+							'dirs')
+
+		self._status_bar.set_text(
+							'{0}/{1}'.format(
+								self._files['selected'],
+								self._files['count']
+							),
+							'files')
+
+		self._status_bar.set_text(
+							'{0}/{1}'.format(
+								selected_text,
+								total_text
+							),
+							'size')
 
 		status = status.replace('%dir_count', str(self._dirs['count']))
 		status = status.replace('%dir_sel', str(self._dirs['selected']))

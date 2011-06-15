@@ -16,7 +16,7 @@ class PluginBase(gtk.VBox):
 	"""
 
 	def __init__(self, parent, notebook, path=None):
-		gtk.VBox.__init__(self, False, 0)
+		gtk.VBox.__init__(self, False, 3)
 
 		self.path = path
 
@@ -29,7 +29,6 @@ class PluginBase(gtk.VBox):
 
 		# configure self
 		self.set_border_width(2)
-		self.set_spacing(2)
 
 		# create tab label
 		self._tab_label = TabLabel(self._parent, self)

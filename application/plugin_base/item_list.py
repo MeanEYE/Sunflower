@@ -130,7 +130,7 @@ class ItemList(PluginBase):
 		# configure status bar
 		self._status_bar.add_group_with_icon('dirs', 'folder', '0/0')
 		self._status_bar.add_group_with_icon('files', 'document', '0/0')
-		self._status_bar.add_group_with_icon('size', 'terminal', '0/0')
+		self._status_bar.add_group_with_icon('size', 'add', '0/0')
 
 		# file list
 		container = gtk.ScrolledWindow()
@@ -1028,7 +1028,7 @@ class ItemList(PluginBase):
 		status = status.replace('%size_total', total_text)
 		status = status.replace('%size_sel', selected_text)
 
-		self.update_status(status)
+		#self.update_status(status)
 
 	def _toggle_selection(self, widget, data=None, advance=True):
 		"""Abstract method for toggling item selection"""

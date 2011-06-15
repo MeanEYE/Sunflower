@@ -111,7 +111,6 @@ class MainWindow(gtk.Window):
 
 		# create other interfaces
 		self.indicator = Indicator(self)
-		self.about_window = AboutWindow(self)
 		self.preferences_window = PreferencesWindow(self)
 
 		# define local variables
@@ -449,7 +448,7 @@ class MainWindow(gtk.Window):
 						'label': _('_About'),
 						'type': 'image',
 						'stock': gtk.STOCK_ABOUT,
-						'callback': self.about_window._show,
+						'callback': self.show_about_window,
 						'path': '<Sunflower>/Help/About',
 					}
 				)
@@ -2113,3 +2112,8 @@ class MainWindow(gtk.Window):
 	def is_clipboard_item_list(self):
 		"""Check if clipboard data is URI list"""
 		return self.clipboard.wait_is_uris_available()
+
+	def show_about_window(self, widget=None, data=None):
+		"""Show about window"""
+		window = AboutWindow(self)
+		window._show()

@@ -101,7 +101,7 @@ class AboutWindow(gtk.Window):
 
 		self.add(vbox)
 
-	def _show(self, widget, data=None):
+	def _show(self, widget=None, data=None):
 		"""Show about dialog"""
 		# update color for header label
 		style = self._parent._menu_item_tools.get_style().copy()
@@ -118,8 +118,7 @@ class AboutWindow(gtk.Window):
 
 	def _hide(self, widget, data=None):
 		"""Hide about dialog"""
-		self.hide()
-		return True  # return True so we get to keep our controls safe from GC
+		self.destroy()
 
 	def _create_copyright_tab(self):
 		"""Create license tab"""

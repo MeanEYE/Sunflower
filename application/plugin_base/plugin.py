@@ -3,6 +3,7 @@ import pango
 
 from accelerator_group import AcceleratorGroup
 from widgets.title_bar import TitleBar
+from widgets.status_bar import StatusBar
 from widgets.tab_label import TabLabel
 from gui.preferences.display import VISIBLE_ALWAYS
 
@@ -38,26 +39,15 @@ class PluginBase(gtk.VBox):
 		self._title_bar = TitleBar(self._parent)
 
 		# status bar
-		self._status_bar_container = gtk.Frame()
-		self._status_bar_container.set_shadow_type(gtk.SHADOW_IN)
-		self._status_bar_container.set_property('no-show-all', True)
+		self._status_bar = StatusBar()
 
 		# show status bar if needed
 		if self._parent.options.getint('main', 'show_status_bar') == VISIBLE_ALWAYS:
-			self._status_bar_container.show()
-
-		self._status_bar = gtk.Label()
-		self._status_bar.set_alignment(0, 0.5)
-		self._status_bar.set_use_markup(True)
-		self._status_bar.set_ellipsize(pango.ELLIPSIZE_END)
-		self._status_bar.show()
-
-		self._status_bar_container.add(self._status_bar)
-		self._status_bar_container.set_border_width(1)
+			self._status_bar.show()
 
 		# pack interface
 		self.pack_start(self._title_bar, False, False, 0)
-		self.pack_end(self._status_bar_container, False, False, 0)
+		self.pack_end(self._status_bar, False, False, 0)
 
 	def _change_title_text(self, text):
 		"""Change title label text"""
@@ -210,11 +200,11 @@ class PluginBase(gtk.VBox):
 
 	def _show_status_bar(self):
 		"""Show status bar"""
-		self._status_bar_container.show()
+		self._status_bar.show()
 
 	def _hide_status_bar(self):
 		"""Hide status bar"""
-		self._status_bar_container.hide()
+		self._status_bar.hide()
 
 	def _duplicate_tab(self, widget, data=None):
 		"""Creates new tab with same path"""
@@ -246,7 +236,7 @@ class PluginBase(gtk.VBox):
 
 	def update_status(self, status):
 		"""Change status text"""
-		self._status_bar.set_markup(status)
+		self._status_bar.set_text(status)
 
 	def update_notebook(self, notebook=None):
 		"""Update notebook and/or page number"""

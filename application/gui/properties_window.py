@@ -289,12 +289,12 @@ class PropertiesWindow(gtk.Window):
 		application = active_item[3]
 
 		# set default application
-#		command = 'xdg-mime default {0} {1}'.format(application, mime_type)
-#		os.system(command)
+		command = 'xdg-mime default {0} {1}'.format(application, mime_type)
+		os.system(command)
 
 		# select active item
-#		for item in self._store:
-#			item[0] = item.path == active_item.path
+		for item in self._store:
+			item[0] = item.path == active_item.path
 
 	def _create_basic_tab(self):
 		"""Create tab containing basic information"""

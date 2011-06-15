@@ -5,6 +5,8 @@ import locale
 import fnmatch
 import user
 
+from common import get_user_directory, USER_TEMPLATES_DIR
+
 # constants
 OPTION_RENAME		= 0
 OPTION_NEW_NAME		= 1
@@ -288,8 +290,12 @@ class FileCreateDialog(CreateDialog):
 		self._templates.clear()
 
 		# add items from templates directory
-		file_list = os.listdir(os.path.join(user.home, 'Templates'))
-		file_list = filter(lambda file_: file_[0] != '.', file_list)  # skip hidden files
+		directory = get_user_directory(USER_TEMPLATES_DIR)
+		file_list = []
+
+		if directory is not None:
+			file_list = os.listdir(directory)
+			file_list = filter(lambda file_: file_[0] != '.', file_list)  # skip hidden files
 
 		# add empty file
 		self._templates.append((_('Empty File'), '', 'document'))

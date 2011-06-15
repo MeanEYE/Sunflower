@@ -7,10 +7,13 @@ class StatusBar(gtk.HBox):
 	def __init__(self):
 		gtk.HBox.__init__(self, False, 3)
 
+		self.set_property('no-show-all', True)
+
 		# create default label
 		self._label = gtk.Label()
 		self._label.set_use_markup(True)
 		self._label.set_alignment(0, 0.5)
+		self._label.show()
 
 		# pack interface
 		self.pack_end(self._label, True, True, 0)

@@ -47,18 +47,43 @@ class AssociationManager:
 		config = self.get_association_config(config_file)
 		if config is None: return
 
-		exec_string = config['exec']
+		command = config['exec']
+		exec_string = command
 
 		if selection is not None:
-			exec_string = exec_string.replace('%f', "'{0}'".format(selection[0]))
-			exec_string = exec_string.replace('%F', " ".join("'{0}'".format(file) for file in selection))
-			exec_string = exec_string.replace('%u', 'file://{0}'.format(quote(selection[0])))
-			exec_string = exec_string.replace('%U', " ".join('file://{0}'.format(quote(file)) for file in selection))
-			exec_string = exec_string.replace('%d', "'{0}'".format(os.path.dirname(selection[0])))
-			exec_string = exec_string.replace('%D', " ".join("'{0}'".format(os.path.dirname(file) for file in selection)))
-			exec_string = exec_string.replace('%n', "'{0}'".format(os.path.basename(selection[0])))
-			exec_string = exec_string.replace('%N', " ".join("'{0}'".format(os.path.basename(file) for file in selection)))
+			# prepare lists
+			normal_list = ["'{0}'".format(item) for item in selection]
+			uri_list = ['file://{0}'.format(quote(item.encode('utf-8'))) for item in selection]
+			dir_list = ["'{0}'".format(os.path.dirname(item) for item in selection)]
+			names_list = ["'{0}'".format(os.path.basename(item) for item in selection)]
 
+			# prepare single line selection
+			if '%f' in command:
+				exec_string = exec_string.replace('%f', "'{0}'".format(selection[0]))
+
+			if '%u' in command:
+				exec_string = exec_string.replace('%u', 'file://{0}'.format(quote(selection[0].encode('utf-8'))))
+
+			if '%d' in command:
+				exec_string = exec_string.replace('%d', "'{0}'".format(os.path.dirname(selection[0])))
+
+			if '%n' in command:
+				exec_string = exec_string.replace('%n', "'{0}'".format(os.path.basename(selection[0])))
+
+			# prepare multiple selection
+			if '%F' in command:
+				exec_string = exec_string.replace('%F', ' '.join(normal_list))
+
+			if '%U' in command:
+				exec_string = exec_string.replace('%U', ' '.join(uri_list))
+
+			if '%D' in command:
+				exec_string = exec_string.replace('%D', ' '.join(dir_list))
+
+			if '%N' in command:
+				exec_string = exec_string.replace('%N', ' '.join(names_list))
+
+			# open selected file(s)
 			os.system('{0} &'.format(exec_string))
 
 	def execute_file(self, path):

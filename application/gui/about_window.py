@@ -112,7 +112,6 @@ class AboutWindow(gtk.Window):
 		label.modify_fg(gtk.STATE_NORMAL, style.fg[gtk.STATE_NORMAL])
 		parent.modify_bg(gtk.STATE_NORMAL, style.bg[gtk.STATE_NORMAL])
 
-
 		# show all widgets and dialog
 		self.show_all()
 

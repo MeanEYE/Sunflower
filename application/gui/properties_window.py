@@ -176,10 +176,15 @@ class PropertiesWindow(gtk.Window):
 			config_file = item[0]
 			config = self._application.associations_manager.get_association_config(config_file)
 
+			# skip adding application if config doesn't exist
+			if config is None:
+				continue
+
 			name = item[1]
 			icon = config['icon']
 			selected = config_file in default_application
 
+			# add application to the list
 			self._store.append((selected, icon, name, config_file))
 
 	def _update_data(self):

@@ -50,6 +50,8 @@ class MainWindow(gtk.Window):
 		# create main window and other widgets
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 
+		self._geometry = None
+
 		# load translations
 		self._load_translation()
 
@@ -105,9 +107,11 @@ class MainWindow(gtk.Window):
 
 		# connect delete event to main window
 		if self.options.getboolean('main', 'hide_on_close'):
-			self.connect("delete-event", self._delete_event)
+			self.connect('delete-event', self._delete_event)
 		else:
-			self.connect("delete-event", self._destroy)
+			self.connect('delete-event', self._destroy)
+
+		self.connect('configure-event', self._handle_configure_event)
 
 		# create other interfaces
 		self.indicator = Indicator(self)
@@ -864,6 +868,11 @@ class MainWindow(gtk.Window):
 
 		self.create_tab(notebook, plugin_class)
 
+	def _handle_configure_event(self, widget, event):
+		"""Handle window resizing"""
+		if self.window.get_state() == 0:
+			self._geometry = self.get_size() + self.get_position()
+
 	def _page_added(self, notebook, child, page_num):
 		"""Handle adding/moving tab accross notebooks"""
 		if hasattr(child, 'update_notebook'):
@@ -1166,11 +1175,21 @@ class MainWindow(gtk.Window):
 
 	def _save_window_position(self):
 		"""Save window position to config"""
-		self.unfullscreen()
-		self.unmaximize()
-		size = self.get_size()
-		position = self.get_position()
-		geometry = '{0}x{1}+{2}+{3}'.format(size[0], size[1], position[0], position[1])
+		state = self.window.get_state()
+		window_state = 0
+
+		if state & gtk.gdk.WINDOW_STATE_FULLSCREEN:
+			# window is in fullscreen
+			window_state = 2
+
+		elif state & gtk.gdk.WINDOW_STATE_MAXIMIZED:
+			# window is maximized
+			window_state = 1
+
+		self.options.set('main', 'window_state', window_state)
+
+		# save window size and position
+		geometry = '{0}x{1}+{2}+{3}'.format(*self._geometry)
 
 		self.options.set('main', 'window', geometry)
 
@@ -1184,6 +1203,16 @@ class MainWindow(gtk.Window):
 	def _restore_window_position(self):
 		"""Restore window position from config string"""
 		self.parse_geometry(self.options.get('main', 'window'))
+		self._geometry = self.get_size() + self.get_position()
+
+		# restore window state
+		window_state = self.options.getint('main', 'window_state')
+
+		if window_state == 1:
+			self.maximize()
+
+		elif window_state == 2:
+			self.fullscreen()
 
 	def _version_specific_actions(self):
 		"""This method will provide user with some feedback and
@@ -1806,6 +1835,7 @@ class MainWindow(gtk.Window):
 				'selection_color': 'red',
 				'history_file': '.bash_history',
 				'window': '950x450',
+				'window_state': 0,
 				'hide_on_close': 'False',
 				'last_version': 0,
 				'button_relief': 0,

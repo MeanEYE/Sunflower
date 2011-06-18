@@ -70,9 +70,6 @@ if len(interpreters) > 0:
 		params = [os.path.abspath(sys.argv[0]), application_file]
 		params.extend(sys.argv[1:])
 
-		# print interpreter version
-		print("Trying with {0}...".format(os.path.basename(interpreter)))
-
 		# execute interpreted
 		process = subprocess.Popen(params, executable=interpreter)
 		process.wait()
@@ -80,8 +77,11 @@ if len(interpreters) > 0:
 		if process.returncode == 0:
 			# if interpreter manages to run
 			# we don't need to execute others
-			print("Worked!")
 			break
+
+		else:
+			# print interpreter error
+			print("Failed running with {0}".format(os.path.basename(interpreter)))
 
 	sys.exit(code)
 

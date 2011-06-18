@@ -112,6 +112,7 @@ class MainWindow(gtk.Window):
 			self.connect('delete-event', self._destroy)
 
 		self.connect('configure-event', self._handle_configure_event)
+		self.connect('window-state-event', self._handle_window_state_event)
 
 		# create other interfaces
 		self.indicator = Indicator(self)
@@ -872,6 +873,17 @@ class MainWindow(gtk.Window):
 		"""Handle window resizing"""
 		if self.window.get_state() == 0:
 			self._geometry = self.get_size() + self.get_position()
+
+	def _handle_window_state_event(self, widget, event):
+		"""Handle window state change"""
+		in_fullscreen = event.new_window_state is gtk.gdk.WINDOW_STATE_FULLSCREEN
+		stock = (gtk.STOCK_FULLSCREEN, gtk.STOCK_LEAVE_FULLSCREEN)[in_fullscreen]
+
+		# update main menu item
+		menu_item = self.menu_manager.get_item_by_name('fullscreen_toggle')
+
+		image = menu_item.get_image()
+		image.set_from_stock(stock, gtk.ICON_SIZE_MENU)
 
 	def _page_added(self, notebook, child, page_num):
 		"""Handle adding/moving tab accross notebooks"""
@@ -1904,20 +1916,11 @@ class MainWindow(gtk.Window):
 
 	def toggle_fullscreen(self, widget, data=None):
 		"""Toggle application fullscreen"""
-		if self._in_fullscreen:
+		if self.window.get_state() is gtk.gdk.WINDOW_STATE_FULLSCREEN:
 			self.unfullscreen()
-			self._in_fullscreen = False
 
 		else:
 			self.fullscreen()
-			self._in_fullscreen = True
-
-		# adjust menu item image
-		stock = (gtk.STOCK_FULLSCREEN, gtk.STOCK_LEAVE_FULLSCREEN)[self._in_fullscreen]
-		menu_item = self.menu_manager.get_item_by_name('fullscreen_toggle')
-
-		image = menu_item.get_image()
-		image.set_from_stock(stock, gtk.ICON_SIZE_MENU)
 
 	def add_operation(self, widget, callback, data=None):
 		"""Add operation to menu"""

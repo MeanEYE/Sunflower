@@ -87,7 +87,7 @@ class TitleBar(gtk.HBox):
 			result += controls[index].allocation.width
 
 		return result
-
+		
 	def __expose_event(self, widget=None, event=None):
 		"""We use this event to paint backgrounds"""
 		x, y, w, h = self.allocation
@@ -117,10 +117,11 @@ class TitleBar(gtk.HBox):
 							)
 
 			# draw rounded rectangle
-			context.arc(x + self._radius, y + self._radius, self._radius, 2 * half_pi, 3 * half_pi)
-			context.arc(x_offset - self._radius, y + self._radius, self._radius, 3 * half_pi, 4 * half_pi)
-			context.arc(x_offset - self._radius, y_offset - self._radius, self._radius, 0 * half_pi, 1 * half_pi)
-			context.arc(x + self._radius, y_offset - self._radius, self._radius, 1 * half_pi, 2 * half_pi)
+			radius = self._radius + 1
+			context.arc(x + radius, y + radius, radius, 2 * half_pi, 3 * half_pi)
+			context.arc(x_offset - radius, y + radius, radius, 3 * half_pi, 4 * half_pi)
+			context.arc(x_offset - radius, y_offset - radius, radius, 0 * half_pi, 1 * half_pi)
+			context.arc(x + radius, y_offset - radius, radius, 1 * half_pi, 2 * half_pi)
 			context.close_path()
 			context.fill()
 

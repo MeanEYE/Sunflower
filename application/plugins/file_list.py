@@ -331,7 +331,6 @@ class FileList(ItemList):
 
 	def _create_directory(self, widget=None, data=None):
 		"""Prompt user and create directory"""
-		gtk.gdk.threads_enter()  # prevent deadlocks
 		dialog = DirectoryCreateDialog(self._parent)
 
 		# get response
@@ -339,8 +338,7 @@ class FileList(ItemList):
 		mode = dialog.get_mode()
 
 		# release dialog
-		dialog.destroy()
-		gtk.gdk.threads_leave()  # prevent deadlocks
+		#dialog.destroy()
 
 		# create dialog
 		if response[0] == gtk.RESPONSE_OK:

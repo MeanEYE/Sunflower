@@ -181,7 +181,7 @@ class PropertiesWindow(gtk.Window):
 				continue
 
 			name = item[1]
-			icon = config['icon']
+			icon = config['icon'] if config.has_key('icon') else 'image-missing'
 			selected = config_file in default_application
 
 			# add application to the list

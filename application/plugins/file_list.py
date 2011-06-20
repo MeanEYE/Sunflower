@@ -338,7 +338,7 @@ class FileList(ItemList):
 		mode = dialog.get_mode()
 
 		# release dialog
-		#dialog.destroy()
+		dialog.destroy()
 
 		# create dialog
 		if response[0] == gtk.RESPONSE_OK:

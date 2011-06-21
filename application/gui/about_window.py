@@ -259,6 +259,22 @@ class AboutWindow(gtk.Window):
 		translators.attach(email, 1, 2, 4, 5)
 		translators.attach(language, 2, 3, 4, 5)
 
+		# Hungarian
+		translator = gtk.Label('\tKeringer László')
+		translator.set_alignment(0, 0)
+		translator.set_selectable(True)
+
+		email = gtk.Label('keringer.laszlo@gmail.com')
+		email.set_alignment(0, 0)
+		email.set_selectable(True)
+
+		language = gtk.Label('Hungarian language')
+		language.set_alignment(0, 0)
+
+		translators.attach(translator, 0, 1, 5, 6)
+		translators.attach(email, 1, 2, 5, 6)
+		translators.attach(language, 2, 3, 5, 6)
+
 		# separators
 		separator1 = gtk.HSeparator()
 		separator2 = gtk.HSeparator()

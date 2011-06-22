@@ -1146,7 +1146,7 @@ msgid ""
 "\n"
 "Would you like to retry?"
 msgstr ""
-"Грешка при смяна на работната директория. \n"
+"Szeretné újra? \n"
 "\n"
 "{0}\n"
 "\n"
@@ -1178,7 +1178,7 @@ msgstr "Elválasztó"
 
 #: application/plugins/default_toolbar.py:100
 msgid "This widget has no configuration dialog."
-msgstr "Тази джаджа няма конфигурационен диалог."
+msgstr "A widgetnek nincs konfigurációs ablaka."
 
 #: application/plugins/default_toolbar.py:216
 #: application/plugins/default_toolbar.py:217
@@ -1219,7 +1219,7 @@ msgstr "Keresés:"
 
 #: application/plugin_base/item_list.py:444
 msgid "Directory does not exist anymore or is not valid. If path is not local check if specified volume is mounted."
-msgstr "Директорията вече не съществува или не е валидна. Ако пътят не е локален, проверете дали съответния дял е монтиран"
+msgstr "Könyvtár nem létezik, vagy nem érvényes. Ha az útvonal nem helyi ellenőrizni kell, hogy csatlakoztatva van."
 
 #: application/plugin_base/item_list.py:489
 msgid "Specified protocol ({0}) is not supported by this application. Please check for available plugins or create a feature request."

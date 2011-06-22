@@ -508,7 +508,7 @@ class MainWindow(gtk.Window):
 		self.menu_commands = menu_item_commands.get_submenu()
 
 		# create notebooks
-		hbox = gtk.HBox(True, 3)
+		hbox = gtk.HBox(True, 4)
 
 		self.left_notebook = gtk.Notebook()
 		self.left_notebook.set_scrollable(True)
@@ -598,7 +598,7 @@ class MainWindow(gtk.Window):
 		vbox.pack_start(menu_bar, expand=False, fill=False, padding=0)
 		vbox.pack_start(self.toolbar_manager.get_toolbar(), expand=False, fill=False, padding=0)
 
-		vbox2 = gtk.VBox(False, 3)
+		vbox2 = gtk.VBox(False, 4)
 		vbox2.set_border_width(3)
 		vbox2.pack_start(hbox, expand=True, fill=True, padding=0)
 		vbox2.pack_start(self.command_entry_bar, expand=False, fill=False, padding=0)

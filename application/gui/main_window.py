@@ -1169,17 +1169,13 @@ class MainWindow(gtk.Window):
 		"""Handle key press in command edit"""
 		result = False
 
-		# generate state sting based on modifier state (control, alt, shift)
-		state = "%d%d%d" % (
-					bool(event.state & gtk.gdk.CONTROL_MASK),
-					bool(event.state & gtk.gdk.MOD1_MASK),
-					bool(event.state & gtk.gdk.SHIFT_MASK)
-				)
+		# get state of modifiers
+		modifier = event.state & gtk.accelerator_get_default_mod_mask()  # filter out unneeded mods
 
 		# retrieve human readable key representation
 		key_name = gtk.gdk.keyval_name(event.keyval)
 
-		if (key_name == 'Up' or key_name == 'Escape') and state == '000':
+		if (key_name == 'Up' or key_name == 'Escape') and modifier == 0:
 			self.get_active_object()._main_object.grab_focus()
 			result = True
 

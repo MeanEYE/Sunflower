@@ -664,9 +664,9 @@ class ItemList(PluginBase):
 		return (pos_x, pos_y, True)
 
 	def _get_other_provider(self):
-		"""Return provider from oposite list.
+		"""Return provider from opposite list.
 
-		If oposite tab is not ItemList or does not have a provider
+		If opposite tab is not ItemList or does not have a provider
 		return None.
 
 		"""
@@ -950,7 +950,7 @@ class ItemList(PluginBase):
 		pass
 
 	def _column_resized(self, widget, data=None):
-		"""Resize all columns acordingly"""
+		"""Resize all columns accordingly"""
 		new_width = widget.get_width()
 		existing_width = self._parent.options.getint(
 												self.__class__.__name__,
@@ -988,9 +988,7 @@ class ItemList(PluginBase):
 		pass
 
 	def _update_status_with_statistis(self):
-		"""Set status bar text acording to dir/file stats"""
-		status = self._parent.options.get('main', 'status_text')
-
+		"""Set status bar text according to dir/file stats"""
 		# format size
 		if self._human_readable:
 			total_text = common.format_size(self._size['total'])
@@ -1020,15 +1018,6 @@ class ItemList(PluginBase):
 								total_text
 							),
 							'size')
-
-		status = status.replace('%dir_count', str(self._dirs['count']))
-		status = status.replace('%dir_sel', str(self._dirs['selected']))
-		status = status.replace('%file_count', str(self._files['count']))
-		status = status.replace('%file_sel', str(self._files['selected']))
-		status = status.replace('%size_total', total_text)
-		status = status.replace('%size_sel', selected_text)
-
-		#self.update_status(status)
 
 	def _toggle_selection(self, widget, data=None, advance=True):
 		"""Abstract method for toggling item selection"""

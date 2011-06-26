@@ -1826,9 +1826,6 @@ class MainWindow(gtk.Window):
 		default_options = {
 				'default_editor': 'gedit "{0}"',
 				'wait_for_editor': 'False',
-				'status_text': _('Directories:') + ' %dir_sel/%dir_count   ' +
-							_('Files:') + ' %file_sel/%file_count   ' +
-							_('Size:') + ' %size_sel/%size_total',
 				'show_hidden': 'False',
 				'show_mounts': 'True',
 				'show_toolbar': 'False',

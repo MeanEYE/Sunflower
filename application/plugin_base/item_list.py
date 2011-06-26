@@ -260,7 +260,7 @@ class ItemList(PluginBase):
 
 	def _show_history_window(self, widget, data=None):
 		"""Show history browser"""
-		history = HistoryList(self, self._parent)
+		HistoryList(self, self._parent)
 
 	def _create_default_column_sizes(self):
 		"""Create default column sizes section in main configuration file"""

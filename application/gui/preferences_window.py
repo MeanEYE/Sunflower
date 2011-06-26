@@ -8,7 +8,7 @@ from gui.preferences.toolbar import ToolbarOptions
 from gui.preferences.bookmarks import BookmarksOptions
 from gui.preferences.tools import ToolsOptions
 from gui.preferences.plugins import PluginsOptions
-from gui.preferences.accelerators import AcceleratorOptions
+#from gui.preferences.accelerators import AcceleratorOptions
 
 COL_NAME	= 0
 COL_WIDGET	= 1

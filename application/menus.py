@@ -45,7 +45,6 @@ class MenuManager:
 		"""Create normal menu item with image"""
 		result = gtk.ImageMenuItem()
 		image = gtk.Image()
-		icon_manager = self._application.icon_manager
 
 		if item.has_key('image'):
 			image.set_from_icon_name(item['image'], gtk.ICON_SIZE_MENU)

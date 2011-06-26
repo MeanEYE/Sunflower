@@ -1,11 +1,11 @@
 import gtk
 
-from urlparse import urlparse
 from gio import VolumeMonitor
 
 COL_DEVICE		= 0
 COL_MOUNT_POINT = 1
 COL_FILESYSTEM	= 2
+
 
 class MountsManager:
 	"""Class used for monitoring and managing mounts menu"""

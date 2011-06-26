@@ -682,7 +682,7 @@ class OverwriteDialog(gtk.Dialog):
 																		))
 
 		str_size = locale.format('%d', size, True)
-		str_date = time.strftime(self._time_format, time.gmtime(stat.st_mtime))
+		str_date = time.strftime(self._time_format, time.localtime(stat.st_mtime))
 
 		return (str_size, str_date, icon)
 

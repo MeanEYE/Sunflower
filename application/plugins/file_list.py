@@ -914,7 +914,7 @@ class FileList(ItemList):
 				file_info = (filename, '') if is_dir else os.path.splitext(filename)
 
 				formated_file_mode = oct(file_mode)
-				formated_file_date = time.strftime(format, time.gmtime(file_date))
+				formated_file_date = time.strftime(format, time.localtime(file_date))
 
 				if not is_dir:
 					# item is a file
@@ -1029,7 +1029,7 @@ class FileList(ItemList):
 
 			formated_file_size = locale.format('%d', file_size, True) if not is_dir else '<DIR>'
 			formated_file_mode = oct(file_mode)
-			formated_file_date = time.strftime(format, time.gmtime(file_date))
+			formated_file_date = time.strftime(format, time.localtime(file_date))
 
 			# update list store
 			self._store.set_value(found_iter, COL_SIZE, file_size)

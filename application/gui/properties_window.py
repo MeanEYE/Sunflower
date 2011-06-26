@@ -221,8 +221,8 @@ class PropertiesWindow(gtk.Window):
 		self._mode = stat.S_IMODE(item_stat.st_mode)
 
 		# format item time
-		item_a_date = time.strftime(format, time.gmtime(item_stat.st_atime))
-		item_m_date = time.strftime(format, time.gmtime(item_stat.st_mtime))
+		item_a_date = time.strftime(format, time.localtime(item_stat.st_atime))
+		item_m_date = time.strftime(format, time.localtime(item_stat.st_mtime))
 
 		# get volume
 		try:

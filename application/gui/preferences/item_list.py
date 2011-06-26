@@ -79,21 +79,6 @@ class ItemListOptions(SettingsPage):
 								)
 		self._entry_time_format.connect('activate', self._parent.enable_save)
 
-		vbox_status_text = gtk.VBox(False, 0)
-		label_status_text = gtk.Label(_('Status text:'))
-		label_status_text.set_alignment(0, 0.5)
-		self._entry_status_text = gtk.Entry()
-		self._entry_status_text.set_tooltip_markup(
-								'<b>' + _('Replacement strings:') + '</b>\n'
-								'<i>%dir_count</i>\t\t' + _('Total directory count') + '\n'
-								'<i>%dir_sel</i>\t\t' + _('Selected directories count') + '\n'
-								'<i>%file_count</i>\t\t' + _('Total file count') + '\n'
-								'<i>%file_sel</i>\t\t' + _('Selected file count') + '\n'
-								'<i>%size_total</i>\t\t' + _('Total size of files in directory') + '\n'
-								'<i>%size_sel</i>\t\t' + _('Total size of selected files')
-								)
-		self._entry_status_text.connect('activate', self._parent.enable_save)
-
 		# pack interface
 		hbox_quick_search.pack_start(label_quick_search, False, False, 0)
 		hbox_quick_search.pack_start(self._checkbox_control, False, False, 0)
@@ -106,9 +91,6 @@ class ItemListOptions(SettingsPage):
 		vbox_time_format.pack_start(label_time_format, False, False, 0)
 		vbox_time_format.pack_start(self._entry_time_format, False, False, 0)
 
-		vbox_status_text.pack_start(label_status_text, False, False, 0)
-		vbox_status_text.pack_start(self._entry_status_text, False, False, 0)
-
 		vbox_look_and_feel.pack_start(self._checkbox_row_hinting, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_show_headers, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_media_preview, False, False, 0)
@@ -119,7 +101,6 @@ class ItemListOptions(SettingsPage):
 		vbox_operation.pack_start(self._checkbox_right_click, False, False, 0)
 		vbox_operation.pack_start(hbox_quick_search, False, False, 5)
 		vbox_operation.pack_start(vbox_time_format, False, False, 5)
-		vbox_operation.pack_start(vbox_status_text, False, False, 5)
 
 		notebook.append_page(vbox_look_and_feel, label_look_and_feel)
 		notebook.append_page(vbox_operation, label_operation)
@@ -166,7 +147,6 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_media_preview.set_active(options.getboolean('main', 'media_preview'))
 		self._combobox_grid_lines.set_active(options.getint('main', 'grid_lines'))
 		self._entry_time_format.set_text(options.get('main', 'time_format'))
-		self._entry_status_text.set_text(options.get('main', 'status_text'))
 
 		search_modifier = options.get('main', 'search_modifier')
 		self._checkbox_control.set_active(search_modifier[0] == '1')
@@ -186,7 +166,6 @@ class ItemListOptions(SettingsPage):
 		options.set('main', 'media_preview', _bool[self._checkbox_media_preview.get_active()])
 		options.set('main', 'grid_lines', self._combobox_grid_lines.get_active())
 		options.set('main', 'time_format', self._entry_time_format.get_text())
-		options.set('main', 'status_text', self._entry_status_text.get_text())
 
 		search_modifier = "%d%d%d" % (
 								self._checkbox_control.get_active(),

@@ -34,7 +34,7 @@ class OperationDialog(gtk.Window):
 		self._current_size = 0L
 		self._current_count = 0L
 
-		# aggregate speeds to provide acurate time prediction
+		# aggregate speeds to provide accurate time prediction
 		self._speeds = []
 		self._total_checkpoint = 0
 
@@ -432,7 +432,7 @@ class OperationDialog(gtk.Window):
 		self._value_destination.set_label(destination)
 
 	def set_eta(self, eta):
-		"""Set the content of eta label"""
+		"""Set the content of ETA label"""
 		self._value_eta.set_label(eta)
 
 	def set_speed(self, speed):

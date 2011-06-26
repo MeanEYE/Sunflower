@@ -1,5 +1,4 @@
 import os
-import sys
 import gtk
 import pango
 
@@ -56,7 +55,7 @@ class ChangeLogDialog(gtk.Dialog):
 		program_label.modify_fg(gtk.STATE_NORMAL, style.fg[gtk.STATE_NORMAL])
 		program_label.set_alignment(0, 0.5)
 
-		# notebook which contains changelog and modifications tab
+		# notebook which contains change log and modifications tab
 		notebook = gtk.Notebook()
 		notebook.set_border_width(5)
 
@@ -69,7 +68,7 @@ class ChangeLogDialog(gtk.Dialog):
 			label_info = gtk.Label(_(
 								'Selected modifications will be applied before starting program. '
 								'Applying all modifications is strongly suggested. If you manually '
-								'changed config files this is a good time to backup them.'
+								'changed configuration files this is a good time to backup them.'
 							))
 			label_info.set_alignment(0, 0.5)
 			label_info.set_justify(gtk.JUSTIFY_LEFT)

@@ -41,6 +41,7 @@ class PropertiesWindow(gtk.Window):
 		# configure window
 		self.set_title(title)
 		self.set_size_request(410, 410)
+		self.set_position(gtk.WIN_POS_CENTER)
 		self.set_border_width(5)
 		self.set_icon_name(self._icon_name)
 		self.set_wmclass('Sunflower', 'Sunflower')

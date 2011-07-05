@@ -102,6 +102,9 @@ class Terminal(PluginBase):
 
 		# connect events to main object
 		self._connect_main_object(self._terminal)
+		
+		# unset drag source
+		self._terminal.drag_source_unset()
 
 		# create menu
 		self._create_menu()
@@ -229,6 +232,45 @@ class Terminal(PluginBase):
 		"""Paste selection from terminal"""
 		self._terminal.paste_clipboard()
 		return True
+
+	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
+		"""Handle dropping files on file list"""
+		text = selection_data.data
+		
+		# ask user what to do with data
+		dialog = gtk.MessageDialog(
+								self._parent,
+								gtk.DIALOG_DESTROY_WITH_PARENT,
+								gtk.MESSAGE_QUESTION,
+								gtk.BUTTONS_YES_NO,
+								_(
+									'You are about to feed child process with '
+									'following data. Are you sure?\n\n{0}'
+								).format(text)
+							)
+		result = dialog.run()
+		dialog.destroy()
+		
+		if result == gtk.RESPONSE_YES:
+			self.feed_terminal(text)
+
+		# notify source application about operation outcome
+		drag_context.finish(result, False, timestamp)
+
+	def _get_supported_drag_types(self):
+		"""Return list of supported data for drag'n'drop events"""
+		return [
+				('text/plain', 0, 0),
+			]
+
+	def _get_supported_drag_actions(self):
+		"""Return integer representing supported drag'n'drop actions
+
+		Returning None will disable drag and drop functionality for
+		specified main object.
+
+		"""
+		return gtk.gdk.ACTION_COPY
 
 	def feed_terminal(self, text):
 		"""Feed terminal process with specified text"""

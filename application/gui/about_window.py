@@ -16,6 +16,7 @@ class AboutWindow(gtk.Window):
 		# configure dialog
 		self.set_title(_('About program'))
 		self.set_size_request(550, 450)
+		self.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.set_resizable(False)
 		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)

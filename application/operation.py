@@ -567,7 +567,9 @@ class CopyOperation(Operation):
 
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
+		gtk.threads_enter()
 		self._dialog.show_all()
+		gtk.threads_leave()
 
 		# set dialog info
 		self._dialog.set_source(self._source_path)
@@ -754,7 +756,9 @@ class MoveOperation(CopyOperation):
 		a bit smarter move operation.
 
 		"""
+		gtk.threads_enter()
 		self._dialog.show_all()
+		gtk.threads_leave()
 
 		# set dialog info
 		self._dialog.set_source(self._source_path)

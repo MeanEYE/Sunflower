@@ -46,8 +46,10 @@ class OperationDialog(gtk.Window):
 		# set window properties
 		self.set_title('Operation Dialog')
 		self.set_default_size(500, 10)
+		self.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.set_resizable(True)
 		self.set_skip_taskbar_hint(False)
+		self.set_parent(application)
 		self.set_wmclass('Sunflower', 'Sunflower')
 
 		# connect signals

@@ -24,7 +24,7 @@ class Operation(Thread):
 	"""Parent class for all operation threads"""
 
 	def __init__(self, application, source, destination=None):
-		Thread.__init__(self, target=self)
+		super(Operation, self).__init__(target=self)
 
 		self._can_continue = Event()
 		self._abort = Event()
@@ -66,12 +66,12 @@ class Operation(Thread):
 						self._source,
 						path,
 						relative_to=self._source_path
-						)
+					)
 		dialog.set_original(
 						self._destination,
 						path,
 						relative_to=self._destination_path
-						)
+					)
 
 		result = dialog.get_response()
 		gtk.gdk.threads_leave()
@@ -258,7 +258,7 @@ class CopyOperation(Operation):
 	"""Operation thread used for copying files"""
 
 	def __init__(self, application, source, destination, options):
-		Operation.__init__(self, application, source, destination)
+		super(CopyOperation, self).__init__(application, source, destination)
 
 		self._create_dialog()
 		self._options = options
@@ -802,7 +802,7 @@ class DeleteOperation(Operation):
 	"""Operation thread used for deleting files"""
 
 	def __init__(self, application, provider):
-		Operation.__init__(self, application, provider)
+		super(DeleteOperation, self).__init__(application, provider)
 		self._dialog = DeleteDialog(application, self)
 		
 	def _remove_path(self, path):
@@ -825,7 +825,9 @@ class DeleteOperation(Operation):
 				
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
+		gtk.threads_enter()
 		self._dialog.show_all()
+		gtk.threads_leave()
 
 		# get selected items
 		self._file_list = self._source.get_selection(relative=True)
@@ -879,7 +881,7 @@ class PathChanger(Thread):
 	"""Thread used to scan specified path and get item properties"""
 
 	def __init__(self, application, parent, provider, path):
-		Thread.__init__(self, target=self)
+		super(PathChanger, self).__init__(target=self)
 
 		self._application = application
 		self._parent = parent

@@ -10,6 +10,7 @@ class ChangeLogDialog(gtk.Dialog):
 
 		self.set_title(_('Version Overview'))
 		self.set_size_request(500, 400)
+		self.set_position(gtk.WIN_POS_CENTER)
 		self.set_resizable(False)
 		self.set_modal(True)
 		self.set_wmclass('Sunflower', 'Sunflower')

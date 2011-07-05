@@ -20,6 +20,7 @@ class HistoryList(gtk.Window):
 		# configure dialog
 		self.set_title(_('History'))
 		self.set_size_request(500, 300)
+		self.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.set_resizable(True)
 		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)

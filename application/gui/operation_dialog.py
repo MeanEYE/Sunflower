@@ -49,7 +49,7 @@ class OperationDialog(gtk.Window):
 		self.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.set_resizable(True)
 		self.set_skip_taskbar_hint(False)
-		self.set_parent(application)
+		self.set_transient_for(application)
 		self.set_wmclass('Sunflower', 'Sunflower')
 
 		# connect signals

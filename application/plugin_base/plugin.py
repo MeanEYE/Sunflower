@@ -1,11 +1,10 @@
 import gtk
-import pango
 
 from accelerator_group import AcceleratorGroup
 from widgets.title_bar import TitleBar
 from widgets.status_bar import StatusBar
 from widgets.tab_label import TabLabel
-from gui.preferences.display import VISIBLE_ALWAYS
+from gui.preferences.display import StatusVisible
 
 
 class PluginBase(gtk.VBox):
@@ -41,7 +40,7 @@ class PluginBase(gtk.VBox):
 		self._status_bar = StatusBar()
 
 		# show status bar if needed
-		if self._parent.options.getint('main', 'show_status_bar') == VISIBLE_ALWAYS:
+		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.ALWAYS:
 			self._status_bar.show()
 
 		# pack interface

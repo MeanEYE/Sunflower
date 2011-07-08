@@ -83,7 +83,9 @@ class Terminal(PluginBase):
 			self._vte_present = True
 			self._terminal = vte.Terminal()
 			self._terminal.connect('window-title-changed', self._update_title)
+			
 		else:
+			# failsafe when VTE module is not present
 			self._terminal = gtk.Label(_('Python VTE module is not installed on this system!'))
 
 		# terminal container
@@ -198,7 +200,7 @@ class Terminal(PluginBase):
 		# give parent chance to register its own accelerator group
 		PluginBase._configure_accelerators(self)
 
-		# modify plugin accelerator group so we can have terminal autocomplete with tab
+		# modify plugin accelerator group so we can have terminal auto-complete with tab
 		plugin_group = self._accelerator_groups[0]
 		plugin_group.disable_accelerator('focus_oposite_object')
 
@@ -264,12 +266,7 @@ class Terminal(PluginBase):
 			]
 
 	def _get_supported_drag_actions(self):
-		"""Return integer representing supported drag'n'drop actions
-
-		Returning None will disable drag and drop functionality for
-		specified main object.
-
-		"""
+		"""Return integer representing supported drag'n'drop actions"""
 		return gtk.gdk.ACTION_COPY
 
 	def feed_terminal(self, text):
@@ -292,7 +289,7 @@ class Terminal(PluginBase):
 									gtk.RELIEF_NORMAL
 									)[self._parent.options.getint('main', 'button_relief')])
 
-		# apply terminal scrollbar policy
+		# apply terminal scroll bar policy
 		policy = (
 				gtk.POLICY_NEVER,
 				gtk.POLICY_AUTOMATIC

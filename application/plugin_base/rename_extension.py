@@ -28,21 +28,29 @@ class RenameExtension(gtk.VBox):
 		"""Toggle extension active property"""
 		self._active = widget.get_active()
 		
+	def _update_parent_list(self, widget=None, data=None):
+		"""Update parent list"""
+		self._parent.update_list()
+		
+	def is_active(self):
+		"""Return boolean representing extension state"""
+		return self._active
+		
 	def get_title(self):
 		"""Return i18n title for extension"""
 		return None
 		
-	def get_new_name(self, file_name, old_name):
+	def get_new_name(self, old_name, new_name):
 		"""Generate and return new name for specified file.
 		
 		If you don't make any modifications to the name make sure
-		you return old_name instead. In cases where extension needs
+		you return new_name instead. In cases where extension needs
 		to file (or file contents) you can use self._parent._provider
 		object.
 		
 		Parameters:
-		file_name - original (unchanged) file name
-		old_name - name modified by previous extensions
+		old_name - original (unchanged) file name
+		new_name - name modified by previous extensions
 		
 		"""
-		return old_name
+		return new_name

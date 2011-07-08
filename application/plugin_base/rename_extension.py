@@ -35,6 +35,10 @@ class RenameExtension(gtk.VBox):
 	def is_active(self):
 		"""Return boolean representing extension state"""
 		return self._active
+	
+	def reset(self):
+		"""Method called before iterating through parents list"""
+		pass
 		
 	def get_title(self):
 		"""Return i18n title for extension"""

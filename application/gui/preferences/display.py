@@ -2,13 +2,17 @@ import gtk
 
 from widgets.settings_page import SettingsPage
 
-VISIBLE_ALWAYS		= 0
-VISIBLE_WHEN_NEEDED	= 1
-VISIBLE_NEVER		= 2
 
-EXPAND_NONE 	= 0
-EXPAND_ACTIVE	= 1
-EXPAND_ALL		= 2
+class StatusVisible:
+	ALWAYS = 0
+	WHEN_NEEDED = 1
+	NEVER = 2
+
+
+class TabExpand:
+	NONE = 0
+	ACTIVE = 1
+	ALL = 2
 
 
 class DisplayOptions(SettingsPage):
@@ -62,9 +66,9 @@ class DisplayOptions(SettingsPage):
 		label_status_bar.set_alignment(0, 0.5)
 
 		list_status_bar = gtk.ListStore(str, int)
-		list_status_bar.append((_('Always'), VISIBLE_ALWAYS))
-		list_status_bar.append((_('When needed'), VISIBLE_WHEN_NEEDED))
-		list_status_bar.append((_('Never'), VISIBLE_NEVER))
+		list_status_bar.append((_('Always'), StatusVisible.ALWAYS))
+		list_status_bar.append((_('When needed'), StatusVisible.WHEN_NEEDED))
+		list_status_bar.append((_('Never'), StatusVisible.NEVER))
 
 		cell_status_bar = gtk.CellRendererText()
 
@@ -78,9 +82,9 @@ class DisplayOptions(SettingsPage):
 		label_expand_tab.set_alignment(0, 0.5)
 
 		list_expand_tab = gtk.ListStore(str, int)
-		list_expand_tab.append((_('None'), EXPAND_NONE))
-		list_expand_tab.append((_('Active'), EXPAND_ACTIVE))
-		list_expand_tab.append((_('All'), EXPAND_ALL))
+		list_expand_tab.append((_('None'), TabExpand.NONE))
+		list_expand_tab.append((_('Active'), TabExpand.ACTIVE))
+		list_expand_tab.append((_('All'), TabExpand.ALL))
 
 		cell_expand_tab = gtk.CellRendererText()
 

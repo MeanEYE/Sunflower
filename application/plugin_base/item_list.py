@@ -2,7 +2,6 @@ import os
 import gtk
 import locale
 import urllib
-import gobject
 import common
 
 from plugin import PluginBase
@@ -10,7 +9,7 @@ from plugin import PluginBase
 from operation import CopyOperation, MoveOperation
 from accelerator_group import AcceleratorGroup
 from gui.input_dialog import CopyDialog, MoveDialog
-from gui.preferences.display import VISIBLE_ALWAYS, VISIBLE_WHEN_NEEDED, VISIBLE_NEVER
+from gui.preferences.display import StatusVisible
 from gui.history_list import HistoryList
 
 # button text constants
@@ -1021,7 +1020,7 @@ class ItemList(PluginBase):
 
 	def _toggle_selection(self, widget, data=None, advance=True):
 		"""Abstract method for toggling item selection"""
-		if self._parent.options.getint('main', 'show_status_bar') == VISIBLE_WHEN_NEEDED:
+		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
@@ -1084,25 +1083,25 @@ class ItemList(PluginBase):
 				self.history[0], self.history[i] = self.history[i], self.history[0]
 
 		# update status bar visibility
-		if self._parent.options.getint('main', 'show_status_bar') == VISIBLE_WHEN_NEEDED:
+		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
 	def select_all(self, pattern=None, exclude_list=None):
 		"""Select all items matching pattern"""
-		if self._parent.options.getint('main', 'show_status_bar') == VISIBLE_WHEN_NEEDED:
+		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
 	def unselect_all(self, pattern=None):
 		"""Unselect items matching the pattern"""
-		if self._parent.options.getint('main', 'show_status_bar') == VISIBLE_WHEN_NEEDED:
+		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
 	def invert_selection(self, pattern=None):
 		"""Invert selection on matching items"""
-		if self._parent.options.getint('main', 'show_status_bar') == VISIBLE_WHEN_NEEDED:
+		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
@@ -1153,12 +1152,12 @@ class ItemList(PluginBase):
 		# change status bar visibility
 		show_status_bar = self._parent.options.getint('main', 'show_status_bar')
 
-		if show_status_bar == VISIBLE_ALWAYS:
+		if show_status_bar == StatusVisible.ALWAYS:
 			self._show_status_bar()
 
-		elif show_status_bar == VISIBLE_WHEN_NEEDED:
+		elif show_status_bar == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
-		elif show_status_bar == VISIBLE_NEVER:
+		elif show_status_bar == StatusVisible.NEVER:
 			self._hide_status_bar()

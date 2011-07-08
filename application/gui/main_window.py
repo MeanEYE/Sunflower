@@ -336,6 +336,10 @@ class MainWindow(gtk.Window):
 		                'path': '<Sunflower>/Commands/FindFiles'
 		            },
 		            {
+		                'label': _('Find duplicate files'),
+		                'path': '<Sunflower>/Commands/FindDuplicateFiles'
+		            },
+		            {
 		                'label': _('Synchronize directories'),
 		                'path': '<Sunflower>/Commands/SynchronizeDirectories'
 		            },

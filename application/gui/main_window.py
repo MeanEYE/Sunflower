@@ -16,6 +16,8 @@ from indicator import Indicator
 from notifications import NotificationManager
 from toolbar import ToolbarManager
 from accelerator_manager import AcceleratorManager
+from plugin_base.item_list import ItemList
+from tools.advanced_rename import AdvancedRename
 
 from ConfigParser import RawConfigParser
 try:
@@ -48,7 +50,7 @@ class MainWindow(gtk.Window):
 
 	def __init__(self):
 		# create main window and other widgets
-		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
+		super(MainWindow, self).__init__(type=gtk.WINDOW_TOPLEVEL)
 
 		self._geometry = None
 
@@ -340,7 +342,8 @@ class MainWindow(gtk.Window):
 		            {'type': 'separator'},
 		            {
 		                'label': _('Advanced rename'),
-		                'path': '<Sunflower>/Commands/AdvancedRename'
+		                'path': '<Sunflower>/Commands/AdvancedRename',
+		                'callback': self.show_advanced_rename,
 		            },
 		        )
 		    },
@@ -2143,3 +2146,11 @@ class MainWindow(gtk.Window):
 		"""Show about window"""
 		window = AboutWindow(self)
 		window._show()
+		
+	def show_advanced_rename(self, widget, data=None):
+		"""Show advanced rename tool for active list"""
+		object = self.get_active_object()
+		
+		if issubclass(object.__class__, ItemList):
+			AdvancedRename(object, self)
+

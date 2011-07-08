@@ -64,6 +64,7 @@ class MainWindow(gtk.Window):
 		# containers
 		self.plugin_classes = {}
 		self.provider_classes = {}
+		self.advanced_rename_classes = {}
 
 		# list of protected plugins
 		self.protected_plugins = ('file_list', 'system_terminal')
@@ -1494,32 +1495,34 @@ class MainWindow(gtk.Window):
 
 	def run(self):
 		"""Start application"""
+		DefaultList = self.plugin_classes['file_list']
+		
 		if self.arguments is not None and self.arguments.dont_load_tabs:
 			# if specified tab list is empty, create default
 			if self.arguments.left_tabs is None:
-				self.create_tab(self.left_notebook, FileList)
+				self.create_tab(self.left_notebook, DefaultList)
 
 			if self.arguments.right_tabs is None:
-				self.create_tab(self.right_notebook, FileList)
+				self.create_tab(self.right_notebook, DefaultList)
 
 		else:
 			# load tabs in the left notebook
 			if not self.load_tabs(self.left_notebook, 'left_notebook'):
-				self.create_tab(self.left_notebook, FileList)
+				self.create_tab(self.left_notebook, DefaultList)
 
 			# load tabs in the right notebook
 			if not self.load_tabs(self.right_notebook, 'right_notebook'):
-				self.create_tab(self.right_notebook, FileList)
+				self.create_tab(self.right_notebook, DefaultList)
 
 		# create additional tabs
 		if self.arguments is not None:
 			if self.arguments.left_tabs is not None:
 				for path in self.arguments.left_tabs:
-					self.create_tab(self.left_notebook, FileList, path)
+					self.create_tab(self.left_notebook, DefaultList, path)
 
 			if self.arguments.right_tabs is not None:
 				for path in self.arguments.right_tabs:
-					self.create_tab(self.right_notebook, FileList, path)
+					self.create_tab(self.right_notebook, DefaultList, path)
 
 		# focus active notebook
 		active_notebook_index = self.options.getint('main', 'active_notebook')
@@ -2032,7 +2035,7 @@ class MainWindow(gtk.Window):
 			if hasattr(page, 'apply_settings'):
 				page.apply_settings()
 
-	def register_class(self, name, plugin_class):
+	def register_class(self, name, title, plugin_class):
 		"""Register plugin class
 
 		Classes registered using this method will be displayed in 'New tab' menu.
@@ -2043,7 +2046,7 @@ class MainWindow(gtk.Window):
 		self.plugin_classes[name] = plugin_class
 
 		# create menu item and add it
-		menu_item = gtk.MenuItem(name)
+		menu_item = gtk.MenuItem(title)
 		menu_item.set_data('class', plugin_class)
 		menu_item.connect('activate', self._handle_new_tab_click)
 

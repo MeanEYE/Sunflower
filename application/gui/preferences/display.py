@@ -156,7 +156,7 @@ class DisplayOptions(SettingsPage):
 		"""Save display options"""
 		options = self._application.options
 
-		# for config parser to get boolean, you need to set string :/. makes sense?
+		# for configuration parser to get boolean, you need to set string :/. makes sense?
 		_bool = ('False', 'True')
 
 		# save options

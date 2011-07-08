@@ -16,7 +16,9 @@ from indicator import Indicator
 from notifications import NotificationManager
 from toolbar import ToolbarManager
 from accelerator_manager import AcceleratorManager
+
 from plugin_base.item_list import ItemList
+from plugin_base.rename_extension import RenameExtension
 from tools.advanced_rename import AdvancedRename
 
 from ConfigParser import RawConfigParser
@@ -64,7 +66,7 @@ class MainWindow(gtk.Window):
 		# containers
 		self.plugin_classes = {}
 		self.provider_classes = {}
-		self.advanced_rename_classes = {}
+		self.rename_extension_classes = {}
 
 		# list of protected plugins
 		self.protected_plugins = ('file_list', 'system_terminal')
@@ -2035,7 +2037,7 @@ class MainWindow(gtk.Window):
 			if hasattr(page, 'apply_settings'):
 				page.apply_settings()
 
-	def register_class(self, name, title, plugin_class):
+	def register_class(self, name, title, PluginClass):
 		"""Register plugin class
 
 		Classes registered using this method will be displayed in 'New tab' menu.
@@ -2043,11 +2045,11 @@ class MainWindow(gtk.Window):
 
 		"""
 		# add to plugin list
-		self.plugin_classes[name] = plugin_class
+		self.plugin_classes[name] = PluginClass
 
 		# create menu item and add it
 		menu_item = gtk.MenuItem(title)
-		menu_item.set_data('class', plugin_class)
+		menu_item.set_data('class', PluginClass)
 		menu_item.connect('activate', self._handle_new_tab_click)
 
 		menu_item.show()
@@ -2057,7 +2059,7 @@ class MainWindow(gtk.Window):
 		menu.append(menu_item)
 
 		# import class to globals
-		globals()[plugin_class.__name__] = plugin_class
+		globals()[PluginClass.__name__] = PluginClass
 
 	def register_provider(self, ProviderClass):
 		"""Register file provider class for specified protocol
@@ -2072,6 +2074,11 @@ class MainWindow(gtk.Window):
 	def register_toolbar_factory(self, FactoryClass):
 		"""Register and create toolbar widget factory"""
 		self.toolbar_manager.register_factory(FactoryClass)
+		
+	def register_rename_extension(self, title, ExtensionClass):
+		"""Register class to be used in advanced rename tool"""
+		if issubclass(ExtensionClass, RenameExtension):
+			self.rename_extension_classes[title] = ExtensionClass
 
 	def plugin_class_exists(self, class_name):
 		"""Check if specified class name exists in active plugins"""

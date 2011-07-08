@@ -29,10 +29,10 @@ except:
 	USE_ARGPARSE = False
 
 
-# gui imports
+# GUI imports
 from gui.about_window import AboutWindow
 from gui.preferences_window import PreferencesWindow
-from gui.preferences.display import EXPAND_ACTIVE, EXPAND_ALL, EXPAND_NONE
+from gui.preferences.display import TabExpand
 from gui.changelog_dialog import ChangeLogDialog
 from gui.input_dialog import InputDialog, AddBookmarkDialog
 
@@ -897,7 +897,7 @@ class MainWindow(gtk.Window):
 		if hasattr(child, 'update_notebook'):
 			child.update_notebook(notebook)
 
-		if self.options.getint('main', 'expand_tabs') == EXPAND_ALL:
+		if self.options.getint('main', 'expand_tabs') == TabExpand.ALL:
 			notebook.child_set_property(child, 'tab-expand', True)
 
 	def _page_switched(self, notebook, page, page_num, data=None):
@@ -905,7 +905,7 @@ class MainWindow(gtk.Window):
 		current_page = notebook.get_nth_page(notebook.get_current_page())
 		new_page = notebook.get_nth_page(page_num)
 
-		if self.options.getint('main', 'expand_tabs') == EXPAND_ACTIVE:
+		if self.options.getint('main', 'expand_tabs') == TabExpand.ACTIVE:
 			notebook.child_set_property(current_page, 'tab-expand', False)
 			notebook.child_set_property(new_page, 'tab-expand', True)
 
@@ -2002,10 +2002,10 @@ class MainWindow(gtk.Window):
 			page = self.left_notebook.get_nth_page(index)
 
 			# apply tab-expand
-			if expand_tabs == EXPAND_NONE:
+			if expand_tabs == TabExpand.NONE:
 				self.left_notebook.child_set_property(page, 'tab-expand', False)
 
-			elif expand_tabs == EXPAND_ACTIVE:
+			elif expand_tabs == TabExpand.ACTIVE:
 				self.left_notebook.child_set_property(page, 'tab-expand', page is self.get_active_object())
 
 			else:
@@ -2019,10 +2019,10 @@ class MainWindow(gtk.Window):
 			page = self.right_notebook.get_nth_page(index)
 
 			# apply tab-expand
-			if expand_tabs == EXPAND_NONE:
+			if expand_tabs == TabExpand.NONE:
 				self.right_notebook.child_set_property(page, 'tab-expand', False)
 
-			elif expand_tabs == EXPAND_ACTIVE:
+			elif expand_tabs == TabExpand.ACTIVE:
 				self.right_notebook.child_set_property(page, 'tab-expand', page is self.get_active_object())
 
 			else:

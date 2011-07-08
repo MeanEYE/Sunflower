@@ -27,6 +27,7 @@ class RenameExtension(gtk.VBox):
 	def __toggle_active(self, widget, data=None):
 		"""Toggle extension active property"""
 		self._active = widget.get_active()
+		self._update_parent_list()
 		
 	def _update_parent_list(self, widget=None, data=None):
 		"""Update parent list"""

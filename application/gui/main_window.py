@@ -2075,10 +2075,20 @@ class MainWindow(gtk.Window):
 		"""Register and create toolbar widget factory"""
 		self.toolbar_manager.register_factory(FactoryClass)
 		
-	def register_rename_extension(self, title, ExtensionClass):
+	def register_rename_extension(self, name, ExtensionClass):
 		"""Register class to be used in advanced rename tool"""
-		if issubclass(ExtensionClass, RenameExtension):
-			self.rename_extension_classes[title] = ExtensionClass
+		if issubclass(ExtensionClass, RenameExtension) \
+		and not self.rename_extension_classes.has_key(name):
+			# register class
+			self.rename_extension_classes[name] = ExtensionClass
+			
+		else:
+			# report error to console
+			if self.rename_extension_classes.has_key(name):
+				print 'Error: Extension with name "{0}" is already registered!'
+				
+			if not issubclass(ExtensionClass, RenameExtension):
+				print 'Error: Invalid object class!'
 
 	def plugin_class_exists(self, class_name):
 		"""Check if specified class name exists in active plugins"""

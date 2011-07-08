@@ -44,7 +44,7 @@ COL_SELECTED 	= 13
 
 def register_plugin(application):
 	"""Register plugin classes with application"""
-	application.register_class(_('Local file list'), FileList)
+	application.register_class('file_list', _('Local file list'), FileList)
 	application.register_provider(LocalProvider)
 
 

@@ -9,7 +9,7 @@ from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, Oper
 from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog, RenameDialog
 
 # import constants
-from gui.input_dialog import OPTION_APPLY_TO_ALL, OPTION_RENAME, OPTION_NEW_NAME
+from gui.input_dialog import OverwriteOption
 
 # constants
 OPTION_FILE_TYPE   = 0
@@ -78,7 +78,7 @@ class Operation(Thread):
 
 		merge = result[0] == gtk.RESPONSE_YES
 
-		if result[1][OPTION_APPLY_TO_ALL]:
+		if result[1][OverwriteOption.APPLY_TO_ALL]:
 			self._merge_all = merge
 
 		# in case user canceled operation
@@ -115,7 +115,7 @@ class Operation(Thread):
 
 		overwrite = result[0] == gtk.RESPONSE_YES
 
-		if result[1][OPTION_APPLY_TO_ALL]:
+		if result[1][OverwriteOption.APPLY_TO_ALL]:
 			self._overwrite_all = overwrite
 
 		# in case user canceled operation
@@ -465,10 +465,10 @@ class CopyOperation(Operation):
 				can_procede, options = self._get_overwrite_input(file_)
 
 				# get new name if user specified
-				if options[OPTION_RENAME]:
+				if options[OverwriteOption.RENAME]:
 					dest_file = os.path.join(
 					                    os.path.dirname(file_),
-					                    options[OPTION_NEW_NAME]
+					                    options[OverwriteOption.NEW_NAME]
 					                )
 
 		# if user skipped this file return
@@ -662,10 +662,10 @@ class MoveOperation(CopyOperation):
 				can_procede, options = self._get_overwrite_input(file_)
 
 				# get new name if user specified
-				if options[OPTION_RENAME]:
+				if options[OverwriteOption.RENAME]:
 					dest_file = os.path.join(
 					                    os.path.dirname(file_),
-					                    options[OPTION_NEW_NAME]
+					                    options[OverwriteOption.NEW_NAME]
 					                )
 
 		# if user skipped this file return

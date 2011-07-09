@@ -10,8 +10,9 @@ from gui.preferences.tools import ToolsOptions
 from gui.preferences.plugins import PluginsOptions
 #from gui.preferences.accelerators import AcceleratorOptions
 
-COL_NAME	= 0
-COL_WIDGET	= 1
+class Column:
+	NAME = 0
+	WIDGET = 1
 
 
 class PreferencesWindow(gtk.Window):
@@ -48,7 +49,7 @@ class PreferencesWindow(gtk.Window):
 		self._tab_labels = gtk.TreeView(self._labels)
 
 		cell_label = gtk.CellRendererText()
-		col_label = gtk.TreeViewColumn(None, cell_label, text=COL_NAME)
+		col_label = gtk.TreeViewColumn(None, cell_label, text=Column.NAME)
 
 		self._tab_labels.append_column(col_label)
 		self._tab_labels.set_headers_visible(False)
@@ -162,7 +163,7 @@ class PreferencesWindow(gtk.Window):
 		list_, iter_ = selection.get_selected()
 
 		if iter_ is not None:
-			new_tab = list_.get_value(iter_, COL_WIDGET)
+			new_tab = list_.get_value(iter_, Column.WIDGET)
 
 			self._tabs.handler_block_by_func(self._handle_page_switch)
 			self._tabs.set_current_page(new_tab)

@@ -8,9 +8,10 @@ except:
 from plugin_base.plugin import PluginBase
 from accelerator_group import AcceleratorGroup
 
-# button text constants
-BUTTON_TEXT_MENU 	= u'\u2699'
-BUTTON_TEXT_RECYCLE = u'\u267B'
+
+class ButtonText:
+	MENU = u'\u2699'
+	RECYCLE = u'\u267B'
 
 
 class Terminal(PluginBase):
@@ -43,7 +44,7 @@ class Terminal(PluginBase):
 			self._recycle_button.set_image(image_recycle)
 		else:
 			# set text
-			self._recycle_button = gtk.Button(BUTTON_TEXT_RECYCLE)
+			self._recycle_button = gtk.Button(ButtonText.RECYCLE)
 
 		self._recycle_button.set_focus_on_click(False)
 		self._recycle_button.set_tooltip_text(_('Recycle terminal'))
@@ -64,7 +65,7 @@ class Terminal(PluginBase):
 			self._menu_button.set_image(image_menu)
 		else:
 			# set text
-			self._menu_button = gtk.Button(BUTTON_TEXT_MENU)
+			self._menu_button = gtk.Button(ButtonText.MENU)
 
 		self._menu_button.set_focus_on_click(False)
 		self._menu_button.set_tooltip_text(_('Terminal menu'))

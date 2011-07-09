@@ -5,12 +5,13 @@ import locale
 import fnmatch
 import user
 
-from common import get_user_directory, USER_TEMPLATES_DIR
+from common import get_user_directory, UserDirectory
 
 # constants
-OPTION_RENAME		= 0
-OPTION_NEW_NAME		= 1
-OPTION_APPLY_TO_ALL	= 2
+class OverwriteOption:
+	RENAME = 0
+	NEW_NAME = 1
+	APPLY_TO_ALL = 2
 
 
 class InputDialog(gtk.Dialog):
@@ -290,7 +291,7 @@ class FileCreateDialog(CreateDialog):
 		self._templates.clear()
 
 		# add items from templates directory
-		directory = get_user_directory(USER_TEMPLATES_DIR)
+		directory = get_user_directory(UserDirectory.TEMPLATES)
 		file_list = []
 
 		if directory is not None:

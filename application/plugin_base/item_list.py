@@ -12,10 +12,11 @@ from gui.input_dialog import CopyDialog, MoveDialog
 from gui.preferences.display import StatusVisible
 from gui.history_list import HistoryList
 
-# button text constants
-BUTTON_TEXT_BOOKMARKS	= u'\u2318'
-BUTTON_TEXT_HISTORY 	= u'\u2630'
-BUTTON_TEXT_TERMINAL	= u'\u2605'
+
+class ButtonText:
+	BOOKMARKS = u'\u2318'
+	HISTORY = u'\u2630'
+	TERMINAL = u'\u2605'
 
 
 class ItemList(PluginBase):
@@ -67,7 +68,7 @@ class ItemList(PluginBase):
 			self._bookmarks_button.set_image(image_bookmarks)
 
 		else:
-			self._bookmarks_button.set_label(BUTTON_TEXT_BOOKMARKS)
+			self._bookmarks_button.set_label(ButtonText.BOOKMARKS)
 
 		self._bookmarks_button.set_focus_on_click(False)
 		self._bookmarks_button.set_tooltip_text(_('Bookmarks'))
@@ -90,7 +91,7 @@ class ItemList(PluginBase):
 			self._history_button.set_image(image_history)
 		else:
 			# set text
-			self._history_button.set_label(BUTTON_TEXT_HISTORY)
+			self._history_button.set_label(ButtonText.HISTORY)
 
 		self._history_button.set_focus_on_click(False)
 		self._history_button.set_tooltip_text(_('History'))
@@ -113,7 +114,7 @@ class ItemList(PluginBase):
 			self._terminal_button.set_image(image_terminal)
 		else:
 			# set text
-			self._terminal_button.set_label(BUTTON_TEXT_TERMINAL)
+			self._terminal_button.set_label(ButtonText.TERMINAL)
 
 		self._terminal_button.set_focus_on_click(False)
 		self._terminal_button.set_tooltip_text(_('Terminal'))

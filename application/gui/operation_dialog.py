@@ -549,3 +549,26 @@ class DeleteDialog(OperationDialog):
 		if icon_name is None:
 			self._operation_image.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_MENU)
 
+
+class RenameDialog(OperationDialog):
+	"""Dialog displayed during rename procedure"""
+
+	def __init__(self, application, thread):
+		super(RenameDialog, self).__init__(application, thread)
+
+		# create additional controls
+		self._add_current_file()
+		self._add_buttons()
+
+		# configure layout
+		self.set_title(_('Rename Items'))
+		self.set_status(_('Renaming items...'))
+		self.set_current_file('')
+
+	def _set_operation_image(self, icon_name=None):
+		"""Set default or specified operation image"""
+		super(RenameDialog, self)._set_operation_image(icon_name)
+
+		# set default icon
+		if icon_name is None:
+			self._operation_image.set_from_icon_name('edit-find-replace', gtk.ICON_SIZE_MENU)

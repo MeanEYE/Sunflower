@@ -17,7 +17,7 @@ class OperationDialog(gtk.Window):
 	MAX_SPEED_POINTS = 20  # how many points to aggregate
 
 	def __init__(self, application, thread):
-		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
+		super(OperationDialog, self).__init__(type=gtk.WINDOW_TOPLEVEL)
 
 		self._paused = False
 		self._application = application
@@ -488,7 +488,7 @@ class CopyDialog(OperationDialog):
 	"""Dialog used to display progress for copying files"""
 
 	def __init__(self, application, thread):
-		OperationDialog.__init__(self, application, thread)
+		super(CopyDialog, self).__init__(application, thread)
 
 		# create additional controls
 		self._add_source_destination()
@@ -501,7 +501,7 @@ class CopyDialog(OperationDialog):
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
-		OperationDialog._set_operation_image(self, icon_name)
+		super(CopyDialog, self)._set_operation_image(icon_name)
 
 		# set default icon
 		if icon_name is None:
@@ -512,14 +512,14 @@ class MoveDialog(CopyDialog):
 	"""Dialog used to display progress for moving files"""
 
 	def __init__(self, application, thread):
-		CopyDialog.__init__(self, application, thread)
+		super(MoveDialog, self).__init__(application, thread)
 
 		# configure layout
 		self.set_title(_('Move Selection'))
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
-		OperationDialog._set_operation_image(self, icon_name)
+		super(MoveDialog, self)._set_operation_image(icon_name)
 
 		# set default icon
 		if icon_name is None:
@@ -530,7 +530,7 @@ class DeleteDialog(OperationDialog):
 	"""Dialog displayed during delete procedure"""
 
 	def __init__(self, application, thread):
-		OperationDialog.__init__(self, application, thread)
+		super(DeleteDialog, self).__init__(application, thread)
 
 		# create additional controls
 		self._add_current_file()
@@ -543,7 +543,7 @@ class DeleteDialog(OperationDialog):
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
-		OperationDialog._set_operation_image(self, icon_name)
+		super(DeleteDialog, self)._set_operation_image(icon_name)
 
 		# set default icon
 		if icon_name is None:

@@ -2173,13 +2173,29 @@ class MainWindow(gtk.Window):
 		
 	def show_advanced_rename(self, widget, data=None):
 		"""Show advanced rename tool for active list"""
-		if len(self.rename_extension_classes) > 0:
+		if len(self.rename_extension_classes) > 0 \
+		and issubclass(self._active_object.__class__, ItemList):
 			object = self.get_active_object()
 			
 			if issubclass(object.__class__, ItemList):
 				AdvancedRename(object, self)
 
-		else:
+		elif not issubclass(self._active_object.__class__, ItemList):
+			# active object is not item list
+			dialog = gtk.MessageDialog(
+								self,
+								gtk.DIALOG_DESTROY_WITH_PARENT,
+								gtk.MESSAGE_INFO,
+								gtk.BUTTONS_OK,
+								_(
+									'Active object is not item list. Advanced '
+									'rename tool needs files and directories.'
+								)
+							)
+			dialog.run()
+			dialog.destroy()
+
+		elif len(self.rename_extension_classes) == 0:
 			# no extensions found, report error to user
 			dialog = gtk.MessageDialog(
 								self,

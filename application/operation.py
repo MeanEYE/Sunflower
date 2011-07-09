@@ -587,9 +587,9 @@ class CopyOperation(Operation):
 
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
-		gtk.threads_enter()
+		gtk.gdk.threads_enter()
 		self._dialog.show_all()
-		gtk.threads_leave()
+		gtk.gdk.threads_leave()
 
 		# set dialog info
 		self._dialog.set_source(self._source_path)
@@ -776,9 +776,9 @@ class MoveOperation(CopyOperation):
 		a bit smarter move operation.
 
 		"""
-		gtk.threads_enter()
+		gtk.gdk.threads_enter()
 		self._dialog.show_all()
-		gtk.threads_leave()
+		gtk.gdk.threads_leave()
 
 		# set dialog info
 		self._dialog.set_source(self._source_path)
@@ -849,9 +849,9 @@ class DeleteOperation(Operation):
 				
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
-		gtk.threads_enter()
+		gtk.gdk.threads_enter()
 		self._dialog.show_all()
-		gtk.threads_leave()
+		gtk.gdk.threads_leave()
 
 		# get selected items
 		self._file_list = self._source.get_selection(relative=True)
@@ -931,9 +931,9 @@ class RenameOperation(Operation):
 					
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
-		gtk.threads_enter()
+		gtk.gdk.threads_enter()
 		self._dialog.show_all()
-		gtk.threads_leave()
+		gtk.gdk.threads_leave()
 
 		# remove them
 		for index, item in enumerate(self._file_list, 1):

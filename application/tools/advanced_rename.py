@@ -197,7 +197,7 @@ class AdvancedRename(gtk.Window):
 			for item in self._list:
 				item_list.append((item[Column.OLD_NAME], item[Column.NEW_NAME]))
 			
-			# create thred and start operation
+			# create thread and start operation
 			operation = RenameOperation(
 									self._application, 
 									self._provider, 

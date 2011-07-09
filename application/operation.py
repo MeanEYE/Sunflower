@@ -6,7 +6,7 @@ import fnmatch
 
 from threading import Thread, Event
 from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OperationError
-from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog
+from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog, RenameDialog
 
 # import constants
 from gui.input_dialog import OPTION_APPLY_TO_ALL, OPTION_RENAME, OPTION_NEW_NAME
@@ -224,6 +224,26 @@ class Operation(Thread):
 
 		dialog.set_message(_(
 		        'There was a problem moving specified path. '
+		        'What would you like to do?'
+		    ))
+		dialog.set_error(str(error))
+
+		response = dialog.get_response()
+		gtk.gdk.threads_leave()
+
+		# abort operation if user requested
+		if response == gtk.RESPONSE_CANCEL:
+			self.cancel()
+
+		return response
+	
+	def _get_rename_error_input(self, error):
+		"""Get user response for rename error"""
+		gtk.gdk.threads_enter()  # prevent deadlocks
+		dialog = OperationError(self._application)
+
+		dialog.set_message(_(
+		        'There was a problem renaming specified path. '
 		        'What would you like to do?'
 		    ))
 		dialog.set_error(str(error))
@@ -868,6 +888,80 @@ class DeleteOperation(Operation):
 			message = ngettext(
 							'Removal of {0} item from "{1}" is completed!',
 							'Removal of {0} items from "{1}" is completed!',
+							len(self._file_list)
+						).format(
+			        len(self._file_list),
+			        os.path.basename(self._source_path)
+			    )
+
+			# queue notification
+			gobject.idle_add(notify_manager.notify, title, message)
+
+		# destroy dialog
+		gobject.idle_add(self._destroy_ui)
+		
+		
+class RenameOperation(Operation):
+	"""Thread used for rename of large number of files"""
+	
+	def __init__(self, application, provider, path, file_list):
+		super(RenameOperation, self).__init__(application, provider)
+		
+		self._dialog = RenameDialog(application, self)
+		self._source_path = path
+		self._file_list = file_list
+		
+	def _rename_path(self, old_name, new_name, index):
+		"""Rename specified path"""
+		try:
+			# try renaming specified path
+			self._source.rename_path(old_name, new_name, relative_to=self._source_path)
+			
+		except StandardError as error:
+			# problem renaming path, ask user what to do
+			response = self._get_rename_error_input(error)
+
+			# handle user response
+			if response == gtk.RESPONSE_YES:
+				self._remove_path(old_name, new_name, index)  # retry renaming path
+				
+			else:
+				# user didn't want to retry, remove path from list
+				self._file_list.pop(index)
+					
+	def run(self):
+		"""Main thread method, this is where all the stuff is happening"""
+		gtk.threads_enter()
+		self._dialog.show_all()
+		gtk.threads_leave()
+
+		# remove them
+		for index, item in enumerate(self._file_list, 1):
+			if self._abort.is_set(): break  # abort operation if requested
+			self._can_continue.wait()  # pause lock
+
+			gobject.idle_add(self._dialog.set_current_file, item[0])
+			self._rename_path(item[0], item[1], index-1)
+			
+			# update current count 
+			if len(self._file_list) > 0:
+				gobject.idle_add(
+							self._dialog.set_current_file_fraction, 
+							float(index) / len(self._file_list)
+						)
+				
+			else:
+				# prevent division by zero
+				gobject.idle_add(self._dialog.set_current_file_fraction, 1)
+
+		# notify user if window is not focused
+		if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
+			notify_manager = self._application.notification_manager
+
+			title = _('Rename Operation')
+			message = ngettext(
+							'Rename of {0} item from "{1}" is completed!',
+							'Rename of {0} items from "{1}" is completed!',
 							len(self._file_list)
 						).format(
 			        len(self._file_list),

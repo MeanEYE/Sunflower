@@ -380,7 +380,7 @@ class CopyOperation(Operation):
 
 		except StandardError as error:
 			# problem with setting owner, ask user
-			response = self._get_mode_set_error_input(path)
+			response = self._get_mode_set_error_input(error)
 
 			if response == gtk.RESPONSE_YES:
 				self._set_owner(path, user_id, group_id)  # try to set owner again

@@ -82,7 +82,7 @@ class InputDialog(gtk.Dialog):
 	def get_response(self):
 		"""Return value and self-destruct
 
-		This method returns tupple with response code and
+		This method returns tuple with response code and
 		input text.
 
 		"""
@@ -1092,6 +1092,30 @@ class CreateToolbarWidgetDialog(gtk.Dialog):
 			name = self._entry_name.get_text()
 			widget_type = self._type_list[self._combobox_type.get_active()][0]
 
-		self.hide()
+		self.destroy()
 
 		return code, name, widget_type
+	
+
+class InputRangeDialog(InputDialog):
+	"""Dialog used for getting selection range"""
+	
+	def __init__(self, application, text):
+		super(InputRangeDialog, self).__init__(application)
+
+		# set labels
+		self.set_title(_('Select range'))
+		self.set_label(_('Select part of the text:'))
+
+		# configure entry		
+		self._entry.set_editable(False)
+		self._entry.set_text(text)
+		
+	def get_response(self):
+		"""Return selection range and self-destruct"""
+		code = self.run()
+		range = self._entry.get_selection_bounds()
+		
+		self.destroy()
+		
+		return code, range

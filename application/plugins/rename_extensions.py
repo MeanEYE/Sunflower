@@ -3,6 +3,8 @@ import os
 import gtk
 
 from plugin_base.rename_extension import RenameExtension
+from gui.input_dialog import InputRangeDialog
+from tools.advanced_rename import Column as RenameColumn
 
 
 def register_plugin(application):
@@ -50,6 +52,7 @@ class DefaultRename(RenameExtension):
 		
 		# template
 		vbox_template = gtk.VBox(False, 0)
+		hbox_template = gtk.HBox(False, 2)
 		
 		label_template = gtk.Label(_('Template:'))
 		label_template.set_alignment(0, 0.5)
@@ -58,6 +61,49 @@ class DefaultRename(RenameExtension):
 		self._entry_template.set_text(self._template)
 		self._entry_template.connect('activate', self.__template_changed)
 		
+		style = gtk.RcStyle()
+		style.xthickness = 0
+		style.ythickness = 0
+		
+		image_add = gtk.Image()
+		image_add.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_BUTTON)
+		button_add = gtk.Button()
+		button_add.set_image(image_add)
+		button_add.modify_style(style)
+		button_add.connect('clicked', self.__button_add_clicked)
+		
+		# create popup menu
+		self._add_menu = gtk.Menu()
+		
+		item_add_name = gtk.MenuItem(label=_('Name'))
+		item_add_name.connect('activate', self.__add_to_template, 'N')
+		
+		item_add_name_part = gtk.MenuItem(label=_('Part of name'))
+		item_add_name_part.connect('activate', self.__add_range_to_template, 'N')
+		
+		item_separator1 = gtk.SeparatorMenuItem()
+
+		item_add_extension = gtk.MenuItem(label=_('Extension'))
+		item_add_extension.connect('activate', self.__add_to_template, 'E')
+
+		item_add_extension_part = gtk.MenuItem(label=_('Part of extension'))
+		item_add_extension_part.connect('activate', self.__add_range_to_template, 'E')
+		
+		item_separator2 = gtk.SeparatorMenuItem()
+		
+		item_add_counter = gtk.MenuItem(label=_('Counter'))
+		item_add_counter.connect('activate', self.__add_to_template, 'C')
+		
+		self._add_menu.append(item_add_name)
+		self._add_menu.append(item_add_name_part)
+		self._add_menu.append(item_separator1)
+		self._add_menu.append(item_add_extension)
+		self._add_menu.append(item_add_extension_part)
+		self._add_menu.append(item_separator2)
+		self._add_menu.append(item_add_counter)
+		
+		self._add_menu.show_all()
+	
 		# counter
 		frame_counter = gtk.Frame(label=_('Counter'))
 		
@@ -100,8 +146,11 @@ class DefaultRename(RenameExtension):
 		
 		frame_counter.add(table_counter)
 		
+		hbox_template.pack_start(self._entry_template, True, True, 0)
+		hbox_template.pack_start(button_add, False, False, 0)
+		
 		vbox_template.pack_start(label_template, False, False, 0)
-		vbox_template.pack_start(self._entry_template, False, False, 0)
+		vbox_template.pack_start(hbox_template, False, False, 0)
 		
 		vbox_left.pack_start(vbox_template, False, False, 0)
 		vbox_left.pack_start(frame_counter, False, False, 0)
@@ -130,6 +179,91 @@ class DefaultRename(RenameExtension):
 		
 		self._update_parent_list()
 		
+	def __button_add_clicked(self, widget, data=None):
+		"""Handle clicking on add button"""
+		self._add_menu.popup(
+						None, None,
+						self.__get_menu_position,
+						1, 0, widget
+					)
+	
+	def __get_menu_position(self, menu, button):
+		"""Get history menu position"""
+		# get coordinates
+		window_x, window_y = self._parent.window.get_position()
+		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
+		button_h = button.get_allocation().height
+
+		# calculate absolute menu position
+		pos_x = window_x + button_x
+		pos_y = window_y + button_y + button_h
+
+		return (pos_x, pos_y, True)
+	
+	def __add_to_template(self, widget, type):
+		"""Add variable to template"""
+		position = self._entry_template.get_property('cursor-position')
+		self._entry_template.insert_text('[{0}]'.format(type), position)
+
+		# update parent list		
+		self._template = self._entry_template.get_text()
+		self._update_parent_list()
+		
+	def __add_range_to_template(self, widget, type):
+		"""Add variable range to template"""
+		if len(self._parent._list) > 0:
+			# get selection from parent list
+			selection = self._parent._names.get_selection()
+			list_, iter_ = selection.get_selected()
+
+			# ensure we have something to select
+			if iter_ is None:
+				iter_ = list_.get_iter_first()
+				
+			# get text for range selection and position of cursor in template
+			name, extension = os.path.splitext(list_.get_value(iter_, RenameColumn.OLD_NAME))
+			text = name if type == 'N' else extension
+			position = self._entry_template.get_property('cursor-position')
+			
+			# get response from user
+			dialog = InputRangeDialog(self._parent._application, text)
+			code, range = dialog.get_response()
+			
+			if code == gtk.RESPONSE_OK:
+				# user confirmed range selection, proceed
+				
+				if len(range) == 2:
+					# get range from dialog
+					start = range[0]
+					end = range[1]
+					
+				else:
+					# make sure we have range
+					start = 0
+					end = len(text)
+				
+				# insert text	
+				self._entry_template.insert_text('[{0}{1}-{2}]'.format(type, start, end), position)
+		
+				# update parent list		
+				self._template = self._entry_template.get_text()
+				self._update_parent_list()
+				
+		else:
+			# list is empty, notify user
+			dialog = gtk.MessageDialog(
+									self._parent,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_INFO,
+									gtk.BUTTONS_OK,
+									_(
+										'Item list is empty. Unable to get '
+										'item for range selection!'
+									)
+								)
+			dialog.run()
+			dialog.destroy()
+				
 	def reset(self):
 		"""Reset counter"""
 		self._counter = self._counter_start

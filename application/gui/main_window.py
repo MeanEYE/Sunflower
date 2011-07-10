@@ -46,7 +46,7 @@ class MainWindow(gtk.Window):
 	version = {
 			'major': 0,
 			'minor': 1,
-			'build': 30,
+			'build': 31,
 			'stage': 'a'
 		}
 
@@ -1498,7 +1498,7 @@ class MainWindow(gtk.Window):
 	def run(self):
 		"""Start application"""
 		DefaultList = self.plugin_classes['file_list']
-		
+
 		if self.arguments is not None and self.arguments.dont_load_tabs:
 			# if specified tab list is empty, create default
 			if self.arguments.left_tabs is None:
@@ -2074,19 +2074,19 @@ class MainWindow(gtk.Window):
 	def register_toolbar_factory(self, FactoryClass):
 		"""Register and create toolbar widget factory"""
 		self.toolbar_manager.register_factory(FactoryClass)
-		
+
 	def register_rename_extension(self, name, ExtensionClass):
 		"""Register class to be used in advanced rename tool"""
 		if issubclass(ExtensionClass, RenameExtension) \
 		and not self.rename_extension_classes.has_key(name):
 			# register class
 			self.rename_extension_classes[name] = ExtensionClass
-			
+
 		else:
 			# report error to console
 			if self.rename_extension_classes.has_key(name):
 				print 'Error: Extension with name "{0}" is already registered!'
-				
+
 			if not issubclass(ExtensionClass, RenameExtension):
 				print 'Error: Invalid object class!'
 
@@ -2170,13 +2170,13 @@ class MainWindow(gtk.Window):
 		"""Show about window"""
 		window = AboutWindow(self)
 		window._show()
-		
+
 	def show_advanced_rename(self, widget, data=None):
 		"""Show advanced rename tool for active list"""
 		if len(self.rename_extension_classes) > 0 \
 		and issubclass(self._active_object.__class__, ItemList):
 			object = self.get_active_object()
-			
+
 			if issubclass(object.__class__, ItemList):
 				AdvancedRename(object, self)
 

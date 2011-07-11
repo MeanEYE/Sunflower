@@ -503,6 +503,7 @@ class MainWindow(gtk.Window):
 		# bookmarks menu
 		self.menu_bookmarks = gtk.Menu()
 		self.menu_bookmarks.connect('hide', self._handle_bookmarks_hide)
+		self.menu_bookmarks.set_accel_group(self.menu_manager.get_accel_group())
 
 		# mounts menu
 		mounts_image = gtk.Image()
@@ -695,6 +696,10 @@ class MainWindow(gtk.Window):
 			bookmark.set_label(label=data[0])
 			bookmark.set_data('path', os.path.expanduser(data[1]))
 			bookmark.connect('activate', self._handle_bookmarks_click)
+
+			# add accelerator path to the first 10 bookmarks
+			if index <= 10:
+				bookmark.set_accel_path('<Sunflower>/Bookmarks/{0}'.format(index))
 
 			self.menu_bookmarks.append(bookmark)
 
@@ -1762,6 +1767,16 @@ class MainWindow(gtk.Window):
 					('<Sunflower>/View/Reload', 'R', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/View/FastMediaPreview', 'F3', gtk.gdk.MOD1_MASK),
 					('<Sunflower>/View/ShowHidden', 'H', gtk.gdk.CONTROL_MASK),
+					('<Sunflower>/Bookmarks/1', '1', gtk.gdk.MOD1_MASK),
+					('<Sunflower>/Bookmarks/2', '2', gtk.gdk.MOD1_MASK),
+					('<Sunflower>/Bookmarks/3', '3', gtk.gdk.MOD1_MASK),
+					('<Sunflower>/Bookmarks/4', '4', gtk.gdk.MOD1_MASK),
+					('<Sunflower>/Bookmarks/5', '5', gtk.gdk.MOD1_MASK),
+					('<Sunflower>/Bookmarks/6', '6', gtk.gdk.MOD1_MASK),
+					('<Sunflower>/Bookmarks/7', '7', gtk.gdk.MOD1_MASK),
+					('<Sunflower>/Bookmarks/8', '8', gtk.gdk.MOD1_MASK),
+					('<Sunflower>/Bookmarks/9', '9', gtk.gdk.MOD1_MASK),
+					('<Sunflower>/Bookmarks/10', '10', gtk.gdk.MOD1_MASK),
 				)
 
 			for path, key, mask in accel_map:
@@ -2071,7 +2086,7 @@ class MainWindow(gtk.Window):
 		"""
 		for protocol in ProviderClass.protocols:
 			self.provider_classes[protocol] = ProviderClass
-			
+
 		for archive_type in ProviderClass.archives:
 			self.archive_provider_classes[archive_type] = ProviderClass
 

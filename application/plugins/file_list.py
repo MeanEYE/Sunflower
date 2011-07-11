@@ -462,7 +462,7 @@ class FileList(ItemList):
 			operation = DeleteOperation(
 									self._parent,
 									self.get_provider()
-									)
+								)
 			operation.start()
 
 	def _copy_files(self, widget=None, data=None):
@@ -988,9 +988,9 @@ class FileList(ItemList):
 			is_dir = self._store.get_value(found_iter, Column.IS_DIR)
 			file_stat = provider.get_stat(name, relative_to=self.path)
 
-			file_size = file_stat.st_size
-			file_mode = stat.S_IMODE(file_stat.st_mode)
-			file_date = file_stat.st_mtime
+			file_size = file_stat.size
+			file_mode = file_stat.mode
+			file_date = file_stat.time_modify
 
 			# format values
 			format = self._parent.options.get('main', 'time_format')

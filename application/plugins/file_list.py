@@ -10,7 +10,7 @@ import fnmatch
 import urllib
 import common
 
-from provider import Provider
+from provider import Provider, FileType, FileInfo, FileInfoExtended
 from operation import DeleteOperation, CopyOperation, MoveOperation
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
@@ -25,27 +25,28 @@ except:
 
 from plugin_base.item_list import ItemList
 
-# constants
-COL_NAME 		= 0
-COL_FNAME 		= 1
-COL_EXT 		= 2
-COL_SIZE 		= 3
-COL_FSIZE 		= 4
-COL_MODE 		= 5
-COL_FMODE 		= 6
-COL_DATE 		= 7
-COL_FDATE 		= 8
-COL_DIR			= 9
-COL_PARENT 		= 10
-COL_COLOR 		= 11
-COL_ICON 		= 12
-COL_SELECTED 	= 13
-
 
 def register_plugin(application):
 	"""Register plugin classes with application"""
 	application.register_class('file_list', _('Local file list'), FileList)
 	application.register_provider(LocalProvider)
+
+
+class Column:
+	NAME = 0
+	FORMATED_NAME = 1
+	EXTENSION = 2
+	SIZE = 3
+	FORMATED_SIZE = 4
+	MODE = 5
+	FORMATED_MODE = 6
+	TIME = 7
+	FORMATED_TIME = 8
+	IS_DIR = 9
+	IS_PARENT_DIR = 10
+	COLOR = 11
+	ICON = 12
+	SELECTED = 13
 
 
 class FileList(ItemList):
@@ -62,20 +63,20 @@ class FileList(ItemList):
 
 		# storage system for list items
 		self._store = gtk.ListStore(
-								str,	# COL_NAME
-								str,	# COL_FNAME
-								str,	# COL_EXT
-								float,	# COL_SIZE
-								str,	# COL_FSIZE
-								int,	# COL_MODE
-								str,	# COL_FMODE
-								int,	# COL_DATE
-								str,	# COL_FDATE
-								bool,	# COL_DIR
-								bool,	# COL_PARENT
-								str,	# COL_COLOR
-								str, 	# COL_ICON
-								gtk.gdk.Pixbuf  # COL_SELECTED
+								str,	# Column.NAME
+								str,	# Column.FORMATED_NAME
+								str,	# Column.EXTENSION
+								float,	# Column.SIZE
+								str,	# Column.FORMATED_SIZE
+								int,	# Column.MODE
+								str,	# Column.FORMATED_MODE
+								int,	# Column.DATE
+								str,	# Column.FORMATED_DATE
+								bool,	# Column.IS_DIR
+								bool,	# Column.IS_PARENT_DIR
+								str,	# Column.COLOR
+								str, 	# Column.ICON
+								gtk.gdk.Pixbuf  # Column.SELECTED
 							)
 
 		# set item list model
@@ -122,19 +123,19 @@ class FileList(ItemList):
 		col_mode.pack_start(cell_mode, True)
 		col_date.pack_start(cell_date, True)
 
-		col_file.add_attribute(cell_name, 'foreground', COL_COLOR)
-		col_extension.add_attribute(cell_extension, 'foreground', COL_COLOR)
-		col_size.add_attribute(cell_size, 'foreground', COL_COLOR)
-		col_mode.add_attribute(cell_mode, 'foreground', COL_COLOR)
-		col_date.add_attribute(cell_date, 'foreground', COL_COLOR)
+		col_file.add_attribute(cell_name, 'foreground', Column.COLOR)
+		col_extension.add_attribute(cell_extension, 'foreground', Column.COLOR)
+		col_size.add_attribute(cell_size, 'foreground', Column.COLOR)
+		col_mode.add_attribute(cell_mode, 'foreground', Column.COLOR)
+		col_date.add_attribute(cell_date, 'foreground', Column.COLOR)
 
-		col_file.add_attribute(cell_selected, 'pixbuf', COL_SELECTED)
-		col_file.add_attribute(cell_icon, 'icon-name', COL_ICON)
-		col_file.add_attribute(cell_name, 'text', COL_FNAME)
-		col_extension.add_attribute(cell_extension, 'text', COL_EXT)
-		col_size.add_attribute(cell_size, 'text', COL_FSIZE)
-		col_mode.add_attribute(cell_mode, 'text', COL_FMODE)
-		col_date.add_attribute(cell_date, 'text', COL_FDATE)
+		col_file.add_attribute(cell_selected, 'pixbuf', Column.SELECTED)
+		col_file.add_attribute(cell_icon, 'icon-name', Column.ICON)
+		col_file.add_attribute(cell_name, 'text', Column.FORMATED_NAME)
+		col_extension.add_attribute(cell_extension, 'text', Column.EXTENSION)
+		col_size.add_attribute(cell_size, 'text', Column.FORMATED_SIZE)
+		col_mode.add_attribute(cell_mode, 'text', Column.FORMATED_MODE)
+		col_date.add_attribute(cell_date, 'text', Column.FORMATED_TIME)
 
 		col_file.set_resizable(True)
 		col_file.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
@@ -170,11 +171,11 @@ class FileList(ItemList):
 
 		# create a list of columns
 		column_sort_data = {
-					COL_NAME: col_file,
-					COL_EXT: col_extension,
-					COL_SIZE: col_size,
-					COL_MODE: col_mode,
-					COL_DATE: col_date,
+					Column.NAME: col_file,
+					Column.EXTENSION: col_extension,
+					Column.SIZE: col_size,
+					Column.MODE: col_mode,
+					Column.TIME: col_date,
 				}
 
 		# configure and pack columns
@@ -189,7 +190,7 @@ class FileList(ItemList):
 		# set list behavior
 		self._item_list.set_headers_clickable(True)
 		self._item_list.set_enable_search(True)
-		self._item_list.set_search_column(COL_NAME)
+		self._item_list.set_search_column(Column.NAME)
 
 		# set row hinting
 		row_hinting = self._parent.options.getboolean('main', 'row_hinting')
@@ -209,8 +210,8 @@ class FileList(ItemList):
 
 		# set sort function
 		if self._sort_column is None:
-			# defaultly sort by name
-			self._sort_column = COL_NAME
+			# default sort by name
+			self._sort_column = Column.NAME
 			self._sort_ascending = True
 
 		self._sort_column_widget = column_sort_data[self._sort_column]
@@ -259,8 +260,8 @@ class FileList(ItemList):
 		# we need selection for this
 		if iter_ is None: return
 
-		is_dir = list_.get_value(iter_, COL_DIR)
-		is_parent = list_.get_value(iter_, COL_PARENT)
+		is_dir = list_.get_value(iter_, Column.IS_DIR)
+		is_parent = list_.get_value(iter_, Column.IS_PARENT_DIR)
 
 		# create URI from item name and protocol
 		file_name = self._get_selection(relative=False)
@@ -291,8 +292,8 @@ class FileList(ItemList):
 		# we need selection for this
 		if iter_ is None: return
 
-		is_dir = list_.get_value(iter_, COL_DIR)
-		is_parent = list_.get_value(iter_, COL_PARENT)
+		is_dir = list_.get_value(iter_, Column.IS_DIR)
+		is_parent = list_.get_value(iter_, Column.IS_PARENT_DIR)
 
 		if is_dir:
 			# selected item is directory, we need to change path
@@ -302,7 +303,7 @@ class FileList(ItemList):
 
 			else:
 				# just change path
-				name = list_.get_value(iter_, COL_NAME)
+				name = list_.get_value(iter_, Column.NAME)
 				self.change_path(os.path.join(self.path, name))
 
 		elif self.get_provider().is_local:
@@ -317,8 +318,8 @@ class FileList(ItemList):
 		selection = self._item_list.get_selection()
 		list_, iter_ = selection.get_selected()
 
-		name = list_.get_value(iter_, COL_NAME)
-		is_dir = list_.get_value(iter_, COL_DIR)
+		name = list_.get_value(iter_, Column.NAME)
+		is_dir = list_.get_value(iter_, Column.IS_DIR)
 
 		if is_dir:
 			self._parent.create_tab(
@@ -586,10 +587,10 @@ class FileList(ItemList):
 		selection = self._item_list.get_selection()
 		list_, iter_ = selection.get_selected()
 
-		is_parent = list_.get_value(iter_, COL_PARENT)
+		is_parent = list_.get_value(iter_, Column.IS_PARENT_DIR)
 
 		if not is_parent:
-			item = list_.get_value(iter_, COL_NAME)
+			item = list_.get_value(iter_, Column.NAME)
 			result = item if relative else os.path.join(self.path, item)
 
 		return result
@@ -612,8 +613,8 @@ class FileList(ItemList):
 
 		else:
 			for row in self._store:
-				if row[COL_COLOR] is not None:
-					value = row[COL_NAME] if relative else os.path.join(self.path, row[COL_NAME])
+				if row[Column.COLOR] is not None:
+					value = row[Column.NAME] if relative else os.path.join(self.path, row[Column.NAME])
 					result.append(value)
 
 		if len(result) is 0:
@@ -630,8 +631,8 @@ class FileList(ItemList):
 		selection = self._item_list.get_selection()
 		list_, iter_ = selection.get_selected()
 
-		is_dir = list_.get_value(iter_, COL_DIR)
-		is_parent = list_.get_value(iter_, COL_PARENT)
+		is_dir = list_.get_value(iter_, Column.IS_DIR)
+		is_parent = list_.get_value(iter_, Column.IS_PARENT_DIR)
 
 		# get selected item
 		filename = self._get_selection()
@@ -733,19 +734,19 @@ class FileList(ItemList):
 		value1 = list_.get_value(iter1, self._sort_column)
 		value2 = list_.get_value(iter2, self._sort_column)
 
-		if not self._sort_sensitive and self._sort_column in (COL_NAME, COL_EXT):
+		if not self._sort_sensitive and self._sort_column in (Column.NAME, Column.EXTENSION):
 			value1 = value1.lower()
 			value2 = value2.lower()
 
 		item1 = (
-				reverse * list_.get_value(iter1, COL_PARENT),
-				reverse * list_.get_value(iter1, COL_DIR),
+				reverse * list_.get_value(iter1, Column.IS_PARENT_DIR),
+				reverse * list_.get_value(iter1, Column.IS_DIR),
 				value1
 				)
 
 		item2 = (
-				reverse * list_.get_value(iter2, COL_PARENT),
-				reverse * list_.get_value(iter2, COL_DIR),
+				reverse * list_.get_value(iter2, Column.IS_PARENT_DIR),
+				reverse * list_.get_value(iter2, Column.IS_DIR),
 				value2
 				)
 
@@ -784,13 +785,13 @@ class FileList(ItemList):
 		selection = self._item_list.get_selection()
 		list_, iter_ = selection.get_selected()
 
-		is_dir = list_.get_value(iter_, COL_DIR)
-		is_parent = list_.get_value(iter_, COL_PARENT)
-		size = list_.get_value(iter_, COL_SIZE)
+		is_dir = list_.get_value(iter_, Column.IS_DIR)
+		is_parent = list_.get_value(iter_, Column.IS_PARENT_DIR)
+		size = list_.get_value(iter_, Column.SIZE)
 
 		if not is_parent:
 			# get current status of iter
-			selected = list_.get_value(iter_, COL_COLOR) is not None
+			selected = list_.get_value(iter_, Column.COLOR) is not None
 
 			if is_dir:
 				self._dirs['selected'] += [1, -1][selected]
@@ -803,8 +804,8 @@ class FileList(ItemList):
 
 			value = (None, 'red')[selected]
 			image = (None, self._pixbuf_selection)[selected]
-			list_.set_value(iter_, COL_COLOR, value)
-			list_.set_value(iter_, COL_SELECTED, image)
+			list_.set_value(iter_, Column.COLOR, value)
+			list_.set_value(iter_, Column.SELECTED, image)
 
 		# update status bar
 		ItemList._toggle_selection(self, widget, data, advance)
@@ -821,10 +822,10 @@ class FileList(ItemList):
 		selection = self._item_list.get_selection()
 		list_, iter_ = selection.get_selected()
 
-		is_dir = list_.get_value(iter_, COL_DIR)
+		is_dir = list_.get_value(iter_, Column.IS_DIR)
 
 		if not is_dir and self.get_provider().is_local:
-			self._edit_filename(list_.get_value(iter_, COL_NAME))
+			self._edit_filename(list_.get_value(iter_, Column.NAME))
 
 		return True
 
@@ -845,7 +846,7 @@ class FileList(ItemList):
 		result = None
 
 		for row in self._store:
-			if row[COL_NAME] == name:
+			if row[Column.NAME] == name:
 				result = row.iter
 				break
 
@@ -862,47 +863,19 @@ class FileList(ItemList):
 		provider = self.get_provider()
 
 		if can_add:
+			file_stat = provider.get_stat(filename, relative_to=self.path)
+
+			file_size = file_stat.size
+			file_mode = file_stat.mode
+			file_date = file_stat.time_modify
+			is_dir = file_stat.type is FileType.DIRECTORY
+
 			# directory
-			if provider.is_dir(filename, relative_to=self.path):
-				file_stat = provider.get_stat(filename, relative_to=self.path)
-
-				file_size = -1
-				file_mode = stat.S_IMODE(file_stat.st_mode)
-				file_date = file_stat.st_mtime
-
-				is_dir = True
+			if file_stat.type is FileType.DIRECTORY:
 				self._dirs['count'] += 1
 
 			# regular file
 			elif provider.is_file(filename, relative_to=self.path):
-				file_stat = provider.get_stat(filename, relative_to=self.path)
-
-				file_size = file_stat.st_size
-				file_mode = stat.S_IMODE(file_stat.st_mode)
-				file_date = file_stat.st_mtime
-
-				is_dir = False
-				self._files['count'] += 1
-				self._size['total'] += file_size
-
-			# link
-			elif provider.is_link(filename, relative_to=self.path):
-				# TODO: Finish!
-				try:
-					linked_name = os.path.join(self.path, os.readlink(filename))
-					file_stat = provider.get_stat(linked_name)
-
-					file_size = file_stat.st_size
-					file_mode = stat.S_IMODE(file_stat.st_mode)
-					file_date = file_stat.st_mtime
-
-				except:
-					# handle bad links
-					file_size = 0
-					file_mode = 0
-					file_date = 0
-
-				is_dir = False
 				self._files['count'] += 1
 				self._size['total'] += file_size
 
@@ -924,17 +897,12 @@ class FileList(ItemList):
 					else:
 						formated_file_size = locale.format('%d', file_size, True)
 
+					icon = self._parent.icon_manager.get_icon_for_file(filename)
+
 				else:
 					# item is a directory
 					formated_file_size = '<DIR>'
-
-				if is_dir:
-					# get universal folder icon
 					icon = 'folder'
-
-				else:
-					# guess mime type and set icon from that
-					icon = self._parent.icon_manager.get_icon_for_file(filename)
 
 				props = (
 						filename,
@@ -974,13 +942,13 @@ class FileList(ItemList):
 		# get currently selected name
 		selected_name = None
 		if selected_iter is not None:
-			selected_name = list_.get_value(selected_iter, COL_NAME)
+			selected_name = list_.get_value(selected_iter, Column.NAME)
 
 		# find iter matching 'name'
 		found_iter = self._find_iter_by_name(name)
 
 		if found_iter is not None:
-			iter_name = self._store.get_value(found_iter, COL_NAME)
+			iter_name = self._store.get_value(found_iter, Column.NAME)
 
 			# if currently hovered item was removed
 			if iter_name == selected_name:
@@ -991,21 +959,21 @@ class FileList(ItemList):
 
 				self._item_list.set_cursor(list_.get_path(next_iter))
 
-			if list_.get_value(found_iter, COL_DIR):
+			if list_.get_value(found_iter, Column.IS_DIR):
 				self._dirs['count'] -= 1
 
 				# update selected counters
-				if list_.get_value(found_iter, COL_SELECTED) is not None:
+				if list_.get_value(found_iter, Column.SELECTED) is not None:
 					self._dirs['selected'] -= 1
 
 			else:
 				self._files['count'] -= 1
-				self._size['total'] -= list_.get_value(found_iter, COL_SIZE)
+				self._size['total'] -= list_.get_value(found_iter, Column.SIZE)
 
 				# update selected counters
-				if list_.get_value(found_iter, COL_SELECTED) is not None:
+				if list_.get_value(found_iter, Column.SELECTED) is not None:
 					self._files['selected'] -= 1
-					self._size['selected'] -= list_.get_value(found_iter, COL_SIZE)
+					self._size['selected'] -= list_.get_value(found_iter, Column.SIZE)
 
 			# remove
 			self._store.remove(found_iter)
@@ -1017,7 +985,7 @@ class FileList(ItemList):
 
 		if found_iter is not None:
 			# get node stats
-			is_dir = self._store.get_value(found_iter, COL_DIR)
+			is_dir = self._store.get_value(found_iter, Column.IS_DIR)
 			file_stat = provider.get_stat(name, relative_to=self.path)
 
 			file_size = file_stat.st_size
@@ -1032,12 +1000,12 @@ class FileList(ItemList):
 			formated_file_date = time.strftime(format, time.localtime(file_date))
 
 			# update list store
-			self._store.set_value(found_iter, COL_SIZE, file_size)
-			self._store.set_value(found_iter, COL_MODE, file_mode)
-			self._store.set_value(found_iter, COL_DATE, file_date)
-			self._store.set_value(found_iter, COL_FSIZE, formated_file_size)
-			self._store.set_value(found_iter, COL_FMODE, formated_file_mode)
-			self._store.set_value(found_iter, COL_FDATE, formated_file_date)
+			self._store.set_value(found_iter, Column.SIZE, file_size)
+			self._store.set_value(found_iter, Column.MODE, file_mode)
+			self._store.set_value(found_iter, Column.TIME, file_date)
+			self._store.set_value(found_iter, Column.FORMATED_SIZE, formated_file_size)
+			self._store.set_value(found_iter, Column.FORMATED_MODE, formated_file_mode)
+			self._store.set_value(found_iter, Column.FORMATED_TIME, formated_file_date)
 
 	def _change_title_text(self, text=None):
 		"""Change title label text and add free space display"""
@@ -1258,25 +1226,25 @@ class FileList(ItemList):
 
 		for row in self._store:
 			# set selection
-			if not row[COL_PARENT] \
-			and fnmatch.fnmatch(row[COL_NAME], pattern) \
-			and row[COL_NAME] not in exclude_list:
+			if not row[Column.IS_PARENT_DIR] \
+			and fnmatch.fnmatch(row[Column.NAME], pattern) \
+			and row[Column.NAME] not in exclude_list:
 				# select item that matched out criteria
-				row[COL_COLOR] = self._parent.options.get('main', 'selection_color')
-				row[COL_SELECTED] = self._pixbuf_selection
+				row[Column.COLOR] = self._parent.options.get('main', 'selection_color')
+				row[Column.SELECTED] = self._pixbuf_selection
 
 			elif len(exclude_list) > 0:
 				# if out exclude list has items, we need to deselect them
-				row[COL_COLOR] = None
-				row[COL_SELECTED] = None
+				row[Column.COLOR] = None
+				row[Column.SELECTED] = None
 
 			# update dir/file count
-			if row[COL_COLOR] is not None:
-				if row[COL_DIR]:
+			if row[Column.COLOR] is not None:
+				if row[Column.IS_DIR]:
 					dirs += 1
 				else:
 					files += 1
-					size += row[COL_SIZE]
+					size += row[Column.SIZE]
 
 		self._dirs['selected'] = dirs
 		self._files['selected'] = files
@@ -1297,17 +1265,17 @@ class FileList(ItemList):
 
 		for row in self._store:
 			# set selection
-			if not row[COL_PARENT] and fnmatch.fnmatch(row[COL_NAME], pattern):
-				row[COL_COLOR] = None
-				row[COL_SELECTED] = None
+			if not row[Column.IS_PARENT_DIR] and fnmatch.fnmatch(row[Column.NAME], pattern):
+				row[Column.COLOR] = None
+				row[Column.SELECTED] = None
 
 			# update dir/file count
-			if row[COL_COLOR] is not None:
-				if row[COL_DIR]:
+			if row[Column.COLOR] is not None:
+				if row[Column.IS_DIR]:
 					dirs += 1
 				else:
 					files += 1
-					size += row[COL_SIZE]
+					size += row[Column.SIZE]
 
 		self._dirs['selected'] = dirs
 		self._files['selected'] = files
@@ -1328,21 +1296,21 @@ class FileList(ItemList):
 
 		for row in self._store:
 			# set selection
-			if not row[COL_PARENT] and fnmatch.fnmatch(row[COL_NAME], pattern):
-				if row[COL_COLOR] is None:
-					row[COL_COLOR] = 'red'
-					row[COL_SELECTED] = self._pixbuf_selection
+			if not row[Column.IS_PARENT_DIR] and fnmatch.fnmatch(row[Column.NAME], pattern):
+				if row[Column.COLOR] is None:
+					row[Column.COLOR] = 'red'
+					row[Column.SELECTED] = self._pixbuf_selection
 				else:
-					row[COL_COLOR] = None
-					row[COL_SELECTED] = None
+					row[Column.COLOR] = None
+					row[Column.SELECTED] = None
 
 			# update dir/file count
-			if row[COL_COLOR] is not None:
-				if row[COL_DIR]:
+			if row[Column.COLOR] is not None:
+				if row[Column.IS_DIR]:
 					dirs += 1
 				else:
 					files += 1
-					size += row[COL_SIZE]
+					size += row[Column.SIZE]
 
 		self._dirs['selected'] = dirs
 		self._files['selected'] = files
@@ -1357,7 +1325,7 @@ class FileList(ItemList):
 		selection = self._item_list.get_selection()
 		list, iter = selection.get_selected()
 
-		f_name = list.get_value(iter, COL_NAME) if iter is not None else None
+		f_name = list.get_value(iter, Column.NAME) if iter is not None else None
 		self.change_path(self.path, f_name)
 
 		return True
@@ -1470,10 +1438,56 @@ class LocalProvider(Provider):
 		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		return open(real_path, mode)
 
-	def get_stat(self, path, relative_to=None):
+	def get_stat(self, path, relative_to=None, extended=False):
 		"""Return file statistics"""
 		real_path = path if relative_to is None else os.path.join(relative_to, path)
-		return os.stat(real_path)
+		file_stat = os.stat(real_path)
+
+		# get file type
+		item_type = FileType.REGULAR
+		
+		if stat.S_ISDIR(file_stat.st_mode):
+			item_type = FileType.DIRECTORY
+			
+		elif stat.S_ISLNK(file_stat.st_mode):
+			item_type = FileType.LINK
+
+		elif stat.S_ISBLK(file_stat.st_mode):
+			item_type = FileType.DEVICE_BLOCK
+
+		elif stat.S_ISCHR(file_stat.st_mode):
+			item_type = FileType.DEVICE_CHARACTER
+			
+		elif stat.S_ISSOCK(file_stat.st_mode):
+			item_type = FileType.SOCKET
+			
+		if not extended:
+			# create normal file information
+			result = FileInfo(
+						size = file_stat.st_size,
+						mode = stat.S_IMODE(file_stat.st_mode),
+						user_id = file_stat.st_uid,
+						group_id = file_stat.st_gid,
+						time_modify = file_stat.st_mtime,
+						type = item_type,
+					)
+		else:
+			# create extended file information
+			result = FileInfoExtended(
+						size = file_stat.st_size,
+						mode = stat.S_IMODE(file_stat.st_mode),
+						i_mode = file_stat.st_mode,
+						user_id = file_stat.st_uid,
+						group_id = file_stat.st_gid,
+						time_access = file_stat.st_atime,
+						time_modify = file_stat.st_mtime,
+						time_create = file_stat.st_ctime,
+						type = item_type,
+						device = file_stat.st_dev,
+						inode = file_stat.st_ino
+					)
+		
+		return result
 
 	def set_mode(self, path, mode, relative_to=None):
 		"""Set access mode to specified path"""

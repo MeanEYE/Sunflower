@@ -981,10 +981,13 @@ class MainWindow(gtk.Window):
 			if hasattr(page, 'apply_media_preview_settings'):
 				page.apply_media_preview_settings()
 
-	def _set_active_object(self, object):
+	def _set_active_object(self, object_):
 		"""Set active object"""
-		if object is not None:
-			self._active_object = object
+		if object_ is not None:
+			self._active_object = object_
+
+			# set bookmarks target so accels could work
+			self.menu_bookmarks.set_data('list', object_)
 
 	def _load_history(self):
 		"""Load history file and populate the command list"""
@@ -1368,7 +1371,6 @@ class MainWindow(gtk.Window):
 		else:
 			# button called for menu
 			button = widget
-			self.menu_bookmarks.set_data('list', self.get_active_object())
 
 		if button is not None:
 			# disable color changing on tab title bar

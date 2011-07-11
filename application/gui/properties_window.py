@@ -193,7 +193,7 @@ class PropertiesWindow(gtk.Window):
 		mime_type = gnomevfs.get_mime_type(self._path)
 		format = self._application.options.get('main', 'time_format')
 		human_readable = self._application.options.getboolean('main', 'human_readable_size')
-		item_stat = self._provider.get_stat(self._path)
+		item_stat = self._provider.get_stat(self._path, extended=True)
 
 		# get item description
 		description = gnomevfs.mime_get_description(mime_type)
@@ -202,12 +202,12 @@ class PropertiesWindow(gtk.Window):
 		if self._is_file:
 			# file size
 			if human_readable:
-				item_size = common.format_size(item_stat.st_size)
+				item_size = common.format_size(item_stat.size)
 
 			else:
 				item_size = '{0} {1}'.format(
-									locale.format('%d', item_stat.st_size, True),
-									ngettext('byte', 'bytes', item_stat.st_size)
+									locale.format('%d', item_stat.size, True),
+									ngettext('byte', 'bytes', item_stat.size)
 								)
 
 		else:
@@ -219,11 +219,11 @@ class PropertiesWindow(gtk.Window):
 							)
 
 		# set mode
-		self._mode = stat.S_IMODE(item_stat.st_mode)
+		self._mode = item_stat.mode
 
 		# format item time
-		item_a_date = time.strftime(format, time.localtime(item_stat.st_atime))
-		item_m_date = time.strftime(format, time.localtime(item_stat.st_mtime))
+		item_a_date = time.strftime(format, time.localtime(item_stat.time_access))
+		item_m_date = time.strftime(format, time.localtime(item_stat.time_modify))
 
 		# get volume
 		try:

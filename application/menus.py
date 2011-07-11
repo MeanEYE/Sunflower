@@ -71,6 +71,10 @@ class MenuManager:
 		"""Callback event for menu items from 'open with' menu"""
 		self._application.associations_manager.open_file_with_config(data['selection'], data['config'])
 
+	def get_accel_group(self):
+		"""Return accelerator group"""
+		return self._accel_group
+
 	def get_item_by_name(self, name):
 		"""Get menu by specified name"""
 		if name in self._named_items:

@@ -334,8 +334,8 @@ class CopyOperation(Operation):
 					
 			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
 				# item is a file, get stats and update lists
-				stat = self._source.get_stat(item, relative_to=self._source_path)
-				gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
+				item_stat = self._source.get_stat(item, relative_to=self._source_path)
+				gobject.idle_add(self._dialog.increment_total_size, item_stat.size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
 				self._file_list.append(item)
 
@@ -417,15 +417,15 @@ class CopyOperation(Operation):
 					self._scan_directory(full_name)
 
 			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
-				stat = self._source.get_stat(full_name, relative_to=self._source_path)
-				gobject.idle_add(self._dialog.increment_total_size, stat.st_size)
+				item_stat = self._source.get_stat(full_name, relative_to=self._source_path)
+				gobject.idle_add(self._dialog.increment_total_size, item_stat.size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
 				self._file_list.append(full_name)
 
 	def _create_directory(self, directory):
 		"""Create specified directory"""
 		file_stat = self._source.get_stat(directory, relative_to=self._source_path)
-		mode = stat.S_IMODE(file_stat.st_mode) if self._options[OPTION_SET_MODE] else 0755
+		mode = file_stat.mode if self._options[OPTION_SET_MODE] else 0755
 
 		try:
 			# try to create a directory
@@ -447,7 +447,7 @@ class CopyOperation(Operation):
 			return
 
 		# set owner
-		self._set_owner(directory, file_stat.st_uid, file_stat.st_gid)
+		self._set_owner(directory, file_stat.user_id, file_stat.group_id)
 
 	def _copy_file(self, file_):
 		"""Copy file content"""
@@ -477,7 +477,7 @@ class CopyOperation(Operation):
 
 			# update total size
 			file_stat = self._source.get_stat(file_, relative_to=self._source_path)
-			gobject.idle_add(self._dialog.increment_current_size, file_stat.st_size)
+			gobject.idle_add(self._dialog.increment_current_size, file_stat.size)
 			return
 
 		try:
@@ -492,7 +492,7 @@ class CopyOperation(Operation):
 			# reserve file size
 			if self._reserve_size:
 				# reserve file size in advance, can be slow on memory cards and network
-				dh.truncate(file_stat.st_size)
+				dh.truncate(file_stat.size)
 
 			else:
 				# just truncate file to 0 size in case source file is smaller
@@ -532,10 +532,10 @@ class CopyOperation(Operation):
 
 				destination_size += len(buffer_)
 				gobject.idle_add(self._dialog.increment_current_size, len(buffer_))
-				if file_stat.st_size > 0:  # ensure we don't end up with error on 0 size files
+				if file_stat.size > 0:  # ensure we don't end up with error on 0 size files
 					gobject.idle_add(
 									self._dialog.set_current_file_fraction,
-									destination_size / float(file_stat.st_size)
+									destination_size / float(file_stat.size)
 								)
 				else:
 					gobject.idle_add(self._dialog.set_current_file_fraction, 1)
@@ -545,10 +545,10 @@ class CopyOperation(Operation):
 				dh.close()
 
 				# set mode if required
-				self._set_mode(dest_file, stat.S_IMODE(file_stat.st_mode))
+				self._set_mode(dest_file, file_stat.mode)
 
 				# set owner if required
-				self._set_owner(dest_file, file_stat.st_uid, file_stat.st_gid)
+				self._set_owner(dest_file, file_stat.user_id, file_stat.group_id)
 				break
 
 	def _create_directory_list(self):

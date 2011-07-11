@@ -697,10 +697,6 @@ class MainWindow(gtk.Window):
 			bookmark.set_data('path', os.path.expanduser(data[1]))
 			bookmark.connect('activate', self._handle_bookmarks_click)
 
-			# add accelerator path to the first 10 bookmarks
-			if index <= 10:
-				bookmark.set_accel_path('<Sunflower>/Bookmarks/{0}'.format(index))
-
 			self.menu_bookmarks.append(bookmark)
 
 		# add separator
@@ -1356,6 +1352,22 @@ class MainWindow(gtk.Window):
 
 		self.arguments = parser.parse_args()
 
+	def activate_bookmark(self, widget=None, index=1):
+		"""Activate bookmark by index"""
+		result = False
+		items = self.bookmark_options.options('bookmarks')
+		active_object = self.get_active_object()
+
+		# check if bookmark index and active object are valid
+		if index < len(items) \
+		and hasattr(active_object, 'change_path'):
+			data = self.bookmark_options.get('bookmarks', 'b_{0}'.format(index)).split(';', 1)
+			active_object.change_path(data[1])
+
+			result = True
+
+		return result
+
 	def show_bookmarks_menu(self, widget=None, notebook=None):
 		"""Position bookmarks menu properly and show it"""
 		button = None
@@ -1769,16 +1781,6 @@ class MainWindow(gtk.Window):
 					('<Sunflower>/View/Reload', 'R', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/View/FastMediaPreview', 'F3', gtk.gdk.MOD1_MASK),
 					('<Sunflower>/View/ShowHidden', 'H', gtk.gdk.CONTROL_MASK),
-					('<Sunflower>/Bookmarks/1', '1', gtk.gdk.MOD1_MASK),
-					('<Sunflower>/Bookmarks/2', '2', gtk.gdk.MOD1_MASK),
-					('<Sunflower>/Bookmarks/3', '3', gtk.gdk.MOD1_MASK),
-					('<Sunflower>/Bookmarks/4', '4', gtk.gdk.MOD1_MASK),
-					('<Sunflower>/Bookmarks/5', '5', gtk.gdk.MOD1_MASK),
-					('<Sunflower>/Bookmarks/6', '6', gtk.gdk.MOD1_MASK),
-					('<Sunflower>/Bookmarks/7', '7', gtk.gdk.MOD1_MASK),
-					('<Sunflower>/Bookmarks/8', '8', gtk.gdk.MOD1_MASK),
-					('<Sunflower>/Bookmarks/9', '9', gtk.gdk.MOD1_MASK),
-					('<Sunflower>/Bookmarks/10', '10', gtk.gdk.MOD1_MASK),
 				)
 
 			for path, key, mask in accel_map:

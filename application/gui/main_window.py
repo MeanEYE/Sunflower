@@ -1366,12 +1366,12 @@ class MainWindow(gtk.Window):
 
 		# read all bookmarks
 		bookmark_count = len(self.bookmark_options.options('bookmarks'))
-		for bookmark in range(1, bookmark_count+1):
-			path = self.bookmark_options.get('bookmarks', 'b_{0}'.format(index)).split(';', 1)[1]
+		for number in range(1, bookmark_count+1):
+			path = self.bookmark_options.get('bookmarks', 'b_{0}'.format(number)).split(';', 1)[1]
 			items.append(path)
 
 		# check if bookmark index and active object are valid
-		if index < len(items) \
+		if index-1 < len(items) \
 		and hasattr(active_object, 'change_path'):
 			active_object.change_path(items[index-1])
 			result = True

@@ -72,8 +72,17 @@ class AcceleratorGroup:
 		label = gtk.accelerator_get_label(keyval, modifier)
 		name = self._method_names[label]
 
+		data = self._methods[name]['data']
+		callback_method = self._methods[name]['callback']
+
 		# call user method
-		return self._methods[name]['callback'](widget, label)
+		if data is None:
+			result = callback_method(widget, label)
+
+		else:
+			result = callback_method(widget, data)
+
+		return result
 
 	def activate(self, window):
 		"""Activate accelerator group for specified window"""
@@ -105,11 +114,12 @@ class AcceleratorGroup:
 		"""Set accelerator group title"""
 		self._title = title
 
-	def add_method(self, name, title, callback):
+	def add_method(self, name, title, callback, data=None):
 		"""Add new method to group"""
 		self._methods[name] = {
 						'title': title,
-						'callback': callback
+						'callback': callback,
+						'data': data
 					}
 
 	def set_accelerator(self, name, keyval, modifier):

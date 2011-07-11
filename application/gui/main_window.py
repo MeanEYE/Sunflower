@@ -66,6 +66,7 @@ class MainWindow(gtk.Window):
 		# containers
 		self.plugin_classes = {}
 		self.provider_classes = {}
+		self.archive_provider_classes = {}
 		self.rename_extension_classes = {}
 
 		# list of protected plugins
@@ -2070,6 +2071,9 @@ class MainWindow(gtk.Window):
 		"""
 		for protocol in ProviderClass.protocols:
 			self.provider_classes[protocol] = ProviderClass
+			
+		for archive_type in ProviderClass.archives:
+			self.archive_provider_classes[archive_type] = ProviderClass
 
 	def register_toolbar_factory(self, FactoryClass):
 		"""Register and create toolbar widget factory"""

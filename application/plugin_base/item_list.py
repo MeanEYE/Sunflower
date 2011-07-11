@@ -251,7 +251,7 @@ class ItemList(PluginBase):
 		for number in range(1, 11):
 			group.add_method(
 						'bookmark_{0}'.format(number),
-						_('Activate bookmark number {0}').format(number),
+						_("Go to '{0}'"),
 						self._parent.activate_bookmark,
 						number
 					)

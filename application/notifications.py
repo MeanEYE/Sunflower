@@ -21,7 +21,7 @@ class NotificationManager:
 			# use local icon
 			icon_file = os.path.abspath(os.path.join(
 								'images',
-								'sunflower_hi-def_64x64.png'
+								'sunflower_64.png'
 			                ))
 			self._default_icon = 'file://{0}'.format(icon_file)
 

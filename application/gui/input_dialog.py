@@ -5,6 +5,7 @@ import locale
 import fnmatch
 import user
 
+from provider import FileType
 from common import get_user_directory, UserDirectory
 
 # constants
@@ -668,14 +669,14 @@ class OverwriteDialog(gtk.Dialog):
 
 	def _get_data(self, provider, path, relative_to=None):
 		"""Return information for specified path using provider"""
-		stat = provider.get_stat(path, relative_to=relative_to)
+		item_stat = provider.get_stat(path, relative_to=relative_to)
 
-		if provider.is_dir(path, relative_to=relative_to):
+		if item_stat.type is FileType.DIRECTORY:
 			size = len(provider.list_dir(path, relative_to=relative_to))
 			icon = 'folder'
 
 		else:
-			size = stat.st_size
+			size = item_stat.size
 			icon = self._application.icon_manager.get_icon_for_file(
 																os.path.join(
 																			provider.get_path(),
@@ -683,7 +684,7 @@ class OverwriteDialog(gtk.Dialog):
 																		))
 
 		str_size = locale.format('%d', size, True)
-		str_date = time.strftime(self._time_format, time.localtime(stat.st_mtime))
+		str_date = time.strftime(self._time_format, time.localtime(item_stat.time_modify))
 
 		return (str_size, str_date, icon)
 
@@ -1096,11 +1097,11 @@ class CreateToolbarWidgetDialog(gtk.Dialog):
 		self.destroy()
 
 		return code, name, widget_type
-	
+
 
 class InputRangeDialog(InputDialog):
 	"""Dialog used for getting selection range"""
-	
+
 	def __init__(self, application, text):
 		super(InputRangeDialog, self).__init__(application)
 
@@ -1108,15 +1109,15 @@ class InputRangeDialog(InputDialog):
 		self.set_title(_('Select range'))
 		self.set_label(_('Select part of the text:'))
 
-		# configure entry		
+		# configure entry
 		self._entry.set_editable(False)
 		self._entry.set_text(text)
-		
+
 	def get_response(self):
 		"""Return selection range and self-destruct"""
 		code = self.run()
 		range = self._entry.get_selection_bounds()
-		
+
 		self.destroy()
-		
+
 		return code, range

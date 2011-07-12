@@ -5,7 +5,7 @@ import gtk
 class Indicator(object):
 	"""This class provides access to application indicators in Gnome envirnoments"""
 
-	_icon = 'sunflower_hi-def.png'
+	_icon = 'sunflower_64.png'
 	_icon_path = os.path.abspath('images')
 	_indicator = None
 

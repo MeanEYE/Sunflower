@@ -57,6 +57,6 @@ class IconManager:
 		else:
 			window.set_icon_from_file(os.path.abspath(os.path.join(
 										'images',
-										'sunflower_hi-def_64x64.png'
+										'sunflower_64.png'
 									)))
 

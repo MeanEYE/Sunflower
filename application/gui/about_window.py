@@ -32,7 +32,7 @@ class AboutWindow(gtk.Window):
 		# program logo
 		image_file = os.path.abspath(os.path.join(
 								'images',
-								'sunflower_hi-def_64x64.png'
+								'sunflower_64.png'
 							))
 		image = gtk.Image()
 		image.set_from_file(image_file)

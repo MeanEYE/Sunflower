@@ -2,9 +2,9 @@ from collections import namedtuple
 
 
 FileInfo = namedtuple(
-				'FileInfo', 
+				'FileInfo',
 				[
-					'size',  # file size 
+					'size',  # file size
 					'mode',  # file access mode
 					'user_id',  # user id
 					'group_id',  # group id
@@ -14,9 +14,9 @@ FileInfo = namedtuple(
 
 
 FileInfoExtended = namedtuple(
-				'FileInfo', 
+				'FileInfo',
 				[
-					'size',  # file size 
+					'size',  # file size
 					'mode',  # file access mode
 					'i_mode',  # inode protection mode
 					'user_id',  # user id
@@ -31,6 +31,7 @@ FileInfoExtended = namedtuple(
 
 
 class FileType:
+	INVALID = -1
 	REGULAR = 0
 	DIRECTORY = 1
 	LINK = 2
@@ -51,7 +52,7 @@ class Provider:
 
 		self._path = path
 		self._selection = None
-		
+
 		# we need only existing items in selection list
 		if selection is not None:
 			self._selection = [item for item in selection if self.exists(item, path)]
@@ -150,7 +151,7 @@ class Provider:
 	def list_dir(self, path, relative_to=None):
 		"""Get directory list"""
 		pass
-	
+
 	def get_parent(self):
 		"""Return parent list"""
 		return self._parent

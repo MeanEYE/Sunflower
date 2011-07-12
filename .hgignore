@@ -1,0 +1,9 @@
+syntax: glob
+!_*
+change.log
+clones.txt
+get_text.sh
+make_release.sh
+.*
+*.pyc
+application/plugins/example.py

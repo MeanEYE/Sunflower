@@ -764,8 +764,8 @@ class MoveOperation(CopyOperation):
 
 	def _check_devices(self):
 		"""Check if source and destination are on the same file system"""
-		dev_source = self._source.get_stat(self._source.get_path()).st_dev
-		dev_destination = self._destination.get_stat(self._destination.get_path()).st_dev
+		dev_source = self._source.get_stat(self._source.get_path(), extended=True).device
+		dev_destination = self._destination.get_stat(self._destination.get_path(), extended=True).device
 
 		return dev_source == dev_destination
 

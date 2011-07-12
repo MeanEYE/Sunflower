@@ -873,11 +873,18 @@ class FileList(ItemList):
 			# directory
 			if file_stat.type is FileType.DIRECTORY:
 				self._dirs['count'] += 1
+				icon = 'folder'
 
 			# regular file
-			elif provider.is_file(filename, relative_to=self.path):
+			elif file_stat.type is FileType.REGULAR:
 				self._files['count'] += 1
 				self._size['total'] += file_size
+				icon = self._parent.icon_manager.get_icon_for_file(filename)
+
+			# invalid links or files
+			elif file_stat.type is FileType.INVALID:
+				self._files['count'] += 1
+				icon = 'image-missing'
 
 			# add item to the list
 			try:
@@ -897,12 +904,10 @@ class FileList(ItemList):
 					else:
 						formated_file_size = locale.format('%d', file_size, True)
 
-					icon = self._parent.icon_manager.get_icon_for_file(filename)
 
 				else:
 					# item is a directory
 					formated_file_size = '<DIR>'
-					icon = 'folder'
 
 				props = (
 						filename,
@@ -1441,14 +1446,30 @@ class LocalProvider(Provider):
 	def get_stat(self, path, relative_to=None, extended=False):
 		"""Return file statistics"""
 		real_path = path if relative_to is None else os.path.join(relative_to, path)
-		file_stat = os.stat(real_path)
+
+		try:
+			# try getting file stats
+			file_stat = os.stat(real_path)
+
+		except:
+			# handle invalid files/links
+			result = FileInfo(
+						size = 0,
+						mode = 0,
+						user_id = 0,
+						group_id = 0,
+						time_modify = 0,
+						type = FileType.INVALID,
+					)
+
+			return result
 
 		# get file type
 		item_type = FileType.REGULAR
-		
+
 		if stat.S_ISDIR(file_stat.st_mode):
 			item_type = FileType.DIRECTORY
-			
+
 		elif stat.S_ISLNK(file_stat.st_mode):
 			item_type = FileType.LINK
 
@@ -1457,10 +1478,10 @@ class LocalProvider(Provider):
 
 		elif stat.S_ISCHR(file_stat.st_mode):
 			item_type = FileType.DEVICE_CHARACTER
-			
+
 		elif stat.S_ISSOCK(file_stat.st_mode):
 			item_type = FileType.SOCKET
-			
+
 		if not extended:
 			# create normal file information
 			result = FileInfo(
@@ -1486,7 +1507,7 @@ class LocalProvider(Provider):
 						device = file_stat.st_dev,
 						inode = file_stat.st_ino
 					)
-		
+
 		return result
 
 	def set_mode(self, path, mode, relative_to=None):

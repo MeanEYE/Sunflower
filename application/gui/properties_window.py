@@ -488,7 +488,7 @@ class PropertiesWindow(gtk.Window):
 				'Select an application to open <i>{0}</i> and '
 				'other files of type "{1}"'
 			).format(
-				os.path.basename(self._path),
+				os.path.basename(self._path).replace('&', '&amp;'),
 				description
 			)
 		label = gtk.Label(text)

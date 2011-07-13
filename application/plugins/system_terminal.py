@@ -18,9 +18,13 @@ class SystemTerminal(Terminal):
 		shell_command = os.environ['SHELL']
 
 		# we need TERM environment variable set
-		if 'TERM' not in os.environ:
+		if not os.environ.has_key('TERM'):
 			os.environ['TERM'] = 'xterm'
 			os.environ['COLORTERM'] = 'gnome-terminal'
+
+		# force shell to update terminal title
+		if not os.environ.has_key('PROMPT_COMMAND'):
+			os.environ['PROMPT_COMMAND'] = 'echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
 
 		if self._vte_present:
 			self._terminal.connect('child-exited', self._close_tab)

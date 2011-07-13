@@ -86,15 +86,16 @@ class AcceleratorGroup:
 
 	def activate(self, window):
 		"""Activate accelerator group for specified window"""
-		self._window = window
-
-		# connect accelerators if they are not already
-		if self._accel_group is None:
-			self._create_group()
-
-		# add accelerator group to specified window
-		self._window.add_accel_group(self._accel_group)
-		self._active = True
+		if not self._active:
+			self._window = window
+	
+			# connect accelerators if they are not already
+			if self._accel_group is None:
+				self._create_group()
+	
+			# add accelerator group to specified window
+			self._window.add_accel_group(self._accel_group)
+			self._active = True
 
 	def deactivate(self):
 		"""Deactivate accelerator group"""

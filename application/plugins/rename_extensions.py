@@ -360,15 +360,15 @@ class LetterCaseRename(RenameExtension):
 		self._combo_extension.set_active(0)
 
 		# pack gui
-		table = gtk.Table(2, 2)
+		table = gtk.Table(2, 2, False)
 		table.set_col_spacing(0, 5)
 		table.set_row_spacings(5)
 
 		table.attach(label_basename, 0, 1, 0, 1, xoptions=gtk.FILL)
 		table.attach(label_extension, 0, 1, 1, 2, xoptions=gtk.FILL)
 
-		table.attach(self._combo_basename, 1, 2, 0, 1)
-		table.attach(self._combo_extension, 1, 2, 1, 2)
+		table.attach(self._combo_basename, 1, 2, 0, 1, xoptions=gtk.FILL)
+		table.attach(self._combo_extension, 1, 2, 1, 2, xoptions=gtk.FILL)
 
 		self.pack_start(table, False, False, 0)
 

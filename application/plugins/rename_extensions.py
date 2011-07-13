@@ -361,8 +361,12 @@ class LetterCaseRename(RenameExtension):
 
 		# pack gui
 		table = gtk.Table(2, 2)
-		table.attach(label_basename, 0, 1, 0, 1, xpadding=4, xoptions=(not gtk.EXPAND))
-		table.attach(label_extension, 0, 1, 1, 2, xpadding=4, xoptions=(not gtk.EXPAND))
+		table.set_col_spacing(0, 5)
+		table.set_row_spacings(5)
+
+		table.attach(label_basename, 0, 1, 0, 1, xoptions=gtk.FILL)
+		table.attach(label_extension, 0, 1, 1, 2, xoptions=gtk.FILL)
+
 		table.attach(self._combo_basename, 1, 2, 0, 1)
 		table.attach(self._combo_extension, 1, 2, 1, 2)
 

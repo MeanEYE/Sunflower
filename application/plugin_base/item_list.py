@@ -256,9 +256,10 @@ class ItemList(PluginBase):
 						number
 					)
 
+			key_number = number if number < 10 else 0
 			group.set_accelerator(
 						'bookmark_{0}'.format(number),
-						keyval(str(number)),
+						keyval(str(key_number)),
 						gtk.gdk.MOD1_MASK
 					)
 

@@ -4,12 +4,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-20 16:20+0200\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Vladimir Kolev <vladi@vladimirkolev.com>\n"
+"Last-Translator: Vladimir Kolev <vladimir.r.kolev@gmail.com>\n"
 "Language-Team: Bulgarian <vladimir.r.kolev@gmail.com>\n"
+"Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: bg\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: application/gui/preferences/terminal.py:10
@@ -1525,10 +1525,12 @@ msgstr[1] "Премахването на {0} елементи от \"{1}\" пр�
 #~ msgstr ""
 #~ "Създай нова директория (F7)\n"
 #~ "Създай нов файл (CTRL+F7)"
+
 #~ msgid "{0} item"
+
 #~ msgid_plural " {0} items"
 #~ msgstr[0] "{0} елемента"
 #~ msgstr[1] "{0} елемент"
+
 #~ msgid "_Bring to current desktop"
 #~ msgstr "_Покажи в настоящия десктоп"
-

@@ -442,7 +442,7 @@ class AudioMetadataRename(RenameExtension):
 		label_tip = gtk.Label()
 		label_tip.set_alignment(0, 0)
 		label_tip.set_use_markup(True)
-		label_tip.set_markup('<b>{0}</b>{1}'.format(_('Template syntax'),
+		label_tip.set_markup('<b>{0}</b>\n{1}'.format(_('Template syntax'),
 			'\n'.join(['{0}\t{1}'.format(k, v[1]) for k, v in self._templates.iteritems()])))
 		
 		# create boxes
@@ -463,6 +463,7 @@ class AudioMetadataRename(RenameExtension):
 		hbox_replace.pack_start(self._entry_replace, True, True, 0)
 		hbox_replace.pack_start(label_replace2, True, True, 0)
 		hbox_replace.pack_start(self._combo_replace, True, True, 0)
+		hbox_replace.set_border_width(5)
 		frame_replace.add(hbox_replace)
 		
 		vbox_left.pack_start(self._checkbox_active, False, True, 0)
@@ -474,7 +475,6 @@ class AudioMetadataRename(RenameExtension):
 		hbox.pack_start(vbox_right, False, False, 0)
 		self.pack_start(hbox, False, False, 0)
 		self.pack_start(frame_replace, False, False, 0)
-
 				
 		self._entry_template.connect('changed', self._update_parent_list)
 		self._entry_replace.connect('changed', self._update_parent_list)

@@ -2,8 +2,13 @@ import re
 import os
 import gtk
 import string
-import mutagen
 
+try:
+	import mutagen
+	use_mutagen = True
+except ImportError:
+	use_mutagen = False
+ 
 from plugin_base.rename_extension import RenameExtension
 from gui.input_dialog import InputRangeDialog
 from tools.advanced_rename import Column as RenameColumn
@@ -13,7 +18,8 @@ def register_plugin(application):
 	"""Register plugin classes with application"""
 	application.register_rename_extension('default', DefaultRename)
 	application.register_rename_extension('lettercase', LetterCaseRename)
-	application.register_rename_extension('music', AudioMetadataRename)
+	if use_mutagen:
+		application.register_rename_extension('music', AudioMetadataRename)
 
 
 class DefaultRename(RenameExtension):

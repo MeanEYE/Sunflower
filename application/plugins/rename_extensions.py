@@ -2,6 +2,7 @@ import re
 import os
 import gtk
 import string
+import mutagen
 
 from plugin_base.rename_extension import RenameExtension
 from gui.input_dialog import InputRangeDialog
@@ -12,6 +13,7 @@ def register_plugin(application):
 	"""Register plugin classes with application"""
 	application.register_rename_extension('default', DefaultRename)
 	application.register_rename_extension('lettercase', LetterCaseRename)
+	application.register_rename_extension('music', AudioMetadataRename)
 
 
 class DefaultRename(RenameExtension):
@@ -402,4 +404,108 @@ class LetterCaseRename(RenameExtension):
 		new_basename = self._basename_methods[self._combo_basename.get_active()][1](basename)
 		new_extension = self._extension_methods[self._combo_extension.get_active()][1](extension)
 		return "{0}{1}".format(new_basename, new_extension)
+
+
+class AudioMetadataRename(RenameExtension):
+	"""Song tags rename extension"""
+
+	def __init__(self, parent):
+		super(AudioMetadataRename, self).__init__(parent)
+		
+		self._templates = {
+					'[a]': ('album', _('Album')),
+					'[A]': ('artist', _('Artist')),
+					'[T]': ('title', _('Title')),
+					'[G]': ('genre', _('Genre')),
+					'[D]': ('date', _('Date')),
+					'[t]': ('tracknumber', _('Track number')),
+				}
+				
+		# create entries
+		self._entry_template = gtk.Entry()
+		self._entry_template.set_text('[[t]] [A] - [T]')
+		
+		self._entry_replace = gtk.Entry()
+		self._entry_replace.set_text(',?/')
+		
+		# create combo boxes
+		self._combo_replace = gtk.combo_box_entry_new_text()
+		for str_rep in ('_', '-', ''):
+			self._combo_replace.append_text(str_rep)
+		
+		# create labels
+		label_replace1 = gtk.Label(_('Replace following characters'))
+		label_replace1.set_alignment(0.5, 0.5)
+		label_replace2 = gtk.Label(_('with'))
+		label_replace2.set_alignment(0.5, 0.5)
+		
+		label_tip = gtk.Label()
+		label_tip.set_alignment(0, 0)
+		label_tip.set_use_markup(True)
+		label_tip.set_markup('<b>{0}</b>{1}'.format(_('Template syntax'),
+			'\n'.join(['{0}\t{1}'.format(k, v[1]) for k, v in self._templates.iteritems()])))
+		
+		# create boxes
+		hbox = gtk.HBox()
+		vbox_left = gtk.VBox()
+		vbox_right = gtk.VBox()
+		hbox_replace = gtk.HBox()
+		
+		vbox_left.set_spacing(5)
+		hbox.set_spacing(5)
+		
+		frame_replace = gtk.Frame(label=_('Replace'))
+		
+		# pack gui
+		self.remove(self._checkbox_active)
+		
+		hbox_replace.pack_start(label_replace1, True, True, 0)
+		hbox_replace.pack_start(self._entry_replace, True, True, 0)
+		hbox_replace.pack_start(label_replace2, True, True, 0)
+		hbox_replace.pack_start(self._combo_replace, True, True, 0)
+		frame_replace.add(hbox_replace)
+		
+		vbox_left.pack_start(self._checkbox_active, False, True, 0)
+		vbox_left.pack_start(self._entry_template, False, True, 0)
+
+		vbox_right.pack_start(label_tip, False, False, 0)
+		
+		hbox.pack_start(vbox_left, True, True, 0)
+		hbox.pack_start(vbox_right, False, False, 0)
+		self.pack_start(hbox, False, False, 0)
+		self.pack_start(frame_replace, False, False, 0)
+
+				
+		self._entry_template.connect('changed', self._update_parent_list)
+		self._entry_replace.connect('changed', self._update_parent_list)
+		self._combo_replace.connect('changed', self._update_parent_list)
+
+	def get_title(self):
+		"""Return extension title"""
+		return _('Music')
+
+	def get_new_name(self, old_name, new_name):
+		"""Get modified name"""
+		basename, extension = os.path.splitext(new_name)
+		path = os.path.join(self._parent._parent._parent.get_active_object().path, old_name)
+		template = self._entry_template.get_text()
+		tags = mutagen.File(path, easy=True)
+		
+		# check if filetype is supported by mutagen
+		if tags == None:
+			return new_name
+		
+		# fill template
+		for k, v in self._templates.iteritems():
+			try:
+				template = string.replace(template, k, tags[v[0]][0])
+			except KeyError:
+				template = string.replace(template, k, '')
+				
+		# replace unwanted characters
+		str_rep = self._combo_replace.get_active_text()
+		for c in self._entry_replace.get_text():
+			template = string.replace(template, c, str_rep)
+		
+		return '{0}{1}'.format(template, extension)
 

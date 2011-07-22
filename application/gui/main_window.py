@@ -1596,6 +1596,10 @@ class MainWindow(gtk.Window):
 	def close_tab(self, notebook, child):
 		"""Safely remove tab and it's children"""
 		if notebook.get_n_pages() > 1:
+			# call tab close handle method
+			if hasattr(child, '_handle_tab_close'):
+				child._handle_tab_close()
+
 			# remove page from notebook
 			notebook.remove_page(notebook.page_num(child))
 

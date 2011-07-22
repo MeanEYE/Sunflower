@@ -464,6 +464,7 @@ class AudioMetadataRename(RenameExtension):
 		hbox = gtk.HBox(True, 15)
 		vbox_left = gtk.VBox(False, 5)
 		vbox_right = gtk.VBox(False, 0)
+		vbox_template = gtk.VBox(False, 0)
 		table_replace = gtk.Table(2, 2, False)
 		table_replace.set_border_width(5)
 
@@ -480,6 +481,9 @@ class AudioMetadataRename(RenameExtension):
 		label_warning.set_property('no-show-all', USE_MUTAGEN)
 
 		# pack gui
+		vbox_template.pack_start(label_template, False, False, 0)
+		vbox_template.pack_start(self._entry_template, False, False, 0)
+
 		self.remove(self._checkbox_active)
 
 		table_replace.attach(label_replace1, 0, 1, 0, 1)
@@ -489,9 +493,9 @@ class AudioMetadataRename(RenameExtension):
 
 		frame_replace.add(table_replace)
 
-		vbox_left.pack_start(self._checkbox_active, False, True, 0)
-		vbox_left.pack_start(self._entry_template, False, True, 0)
-		vbox_left.pack_start(frame_replace, False, True, 0)
+		vbox_left.pack_start(self._checkbox_active, False, False, 0)
+		vbox_left.pack_start(vbox_template, False, False, 0)
+		vbox_left.pack_start(frame_replace, False, False, 0)
 
 		vbox_right.pack_start(label_tip, False, False, 0)
 

@@ -1594,7 +1594,7 @@ class MainWindow(gtk.Window):
 		self.create_tab(notebook, SystemTerminal, path)
 
 	def close_tab(self, notebook, child):
-		"""Safely remove tab and it's children"""
+		"""Safely remove tab and its children"""
 		if notebook.get_n_pages() > 1:
 			# call tab close handle method
 			if hasattr(child, '_handle_tab_close'):
@@ -1608,7 +1608,7 @@ class MainWindow(gtk.Window):
 				notebook.set_show_tabs(notebook.get_n_pages() > 1)
 
 			# kill the component
-			del child
+			child.destroy()
 
 	def next_tab(self, notebook):
 		"""Select next tab on given notebook"""

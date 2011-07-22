@@ -227,6 +227,11 @@ class PluginBase(gtk.VBox):
 
 		return result
 
+	def _handle_tab_close(self):
+		"""Method called before tab is removed"""
+		for group in self._accelerator_groups:
+			group.deactivate()
+
 	def apply_settings(self):
 		"""Method called after settings were changed"""
 		self._title_bar.apply_settings()

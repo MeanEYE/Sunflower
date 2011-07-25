@@ -35,6 +35,7 @@ class AdvancedRename(gtk.Window):
 		
 		# create modifiers notebook
 		self._extension_list = gtk.Notebook()
+		self._extension_list.connect('page-reordered', self.__handle_reorder)
 		
 		# create list
 		self._list = gtk.ListStore(str, str, str)
@@ -123,6 +124,7 @@ class AdvancedRename(gtk.Window):
 		
 			# add tab	
 			self._extension_list.append_page(extension, gtk.Label(title))
+			self._extension_list.set_tab_reorderable(extension, True)
 			
 			# store extension for later use
 			self._extensions.append(extension)
@@ -147,7 +149,11 @@ class AdvancedRename(gtk.Window):
 			icon = self._application.icon_manager.get_icon_for_file(item)
 			
 			self._list.append((icon, name, ''))
-		
+
+	def __handle_reorder(self, notebook, child, page_number, data=None):
+		"""Handle extension reordering"""
+		self.update_list()
+
 	def _close_window(self, widget=None, data=None):
 		"""Close window"""
 		self.destroy()
@@ -156,7 +162,7 @@ class AdvancedRename(gtk.Window):
 		"""Update file list"""
 		active_extensions = filter(  # get only active extensions
 								lambda ext: ext.is_active(), 
-								self._extensions
+								self._extension_list.get_children()
 							)
 		
 		# call reset on all extensions

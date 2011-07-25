@@ -11,9 +11,9 @@ class DefaultFindFiles(FindExtension):
 
 	def __init__(self, parent):
 		super(DefaultFindFiles, self).__init__(parent)
-
-		# remove "active" checkbox
-
+	
+		# enabled by default
+		self._checkbox_active.set_active(True)
 
 	def get_title(self):
 		"""Return i18n title for extension"""

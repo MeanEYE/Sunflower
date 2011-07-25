@@ -55,31 +55,32 @@ class FindFiles(gtk.Window):
 		self._names = gtk.TreeView(model=self._list)
 
 		cell_icon = gtk.CellRendererPixbuf()
-		cell_old_name = gtk.CellRendererText()
-		cell_new_name = gtk.CellRendererText()
+		cell_name = gtk.CellRendererText()
+		cell_directory = gtk.CellRendererText()
 		
-		col_old_name = gtk.TreeViewColumn(_('Old name'))
-		col_old_name.set_expand(True)
+		col_name = gtk.TreeViewColumn(_('Name'))
+		col_name.set_expand(True)
 		
-		col_new_name = gtk.TreeViewColumn(_('New name'))
-		col_new_name.set_expand(True)
+		col_directory = gtk.TreeViewColumn(_('Location'))
+		col_directory.set_expand(True)
 		
 		# pack renderer
-		col_old_name.pack_start(cell_icon, False)
-		col_old_name.pack_start(cell_old_name, True)
-		col_new_name.pack_start(cell_new_name, True)
+		col_name.pack_start(cell_icon, False)
+		col_name.pack_start(cell_name, True)
+		col_directory.pack_start(cell_directory, True)
 		
 		# connect renderer attributes
-		col_old_name.add_attribute(cell_icon, 'icon-name', Column.ICON)
-		col_old_name.add_attribute(cell_old_name, 'text', Column.NAME)
-		col_new_name.add_attribute(cell_new_name, 'text', Column.DIRECTORY)
+		col_name.add_attribute(cell_icon, 'icon-name', Column.ICON)
+		col_name.add_attribute(cell_name, 'text', Column.NAME)
+		col_directory.add_attribute(cell_directory, 'text', Column.DIRECTORY)
 		
-		self._names.append_column(col_old_name)
-		self._names.append_column(col_new_name)
+		self._names.append_column(col_name)
+		self._names.append_column(col_directory)
 		
 		container = gtk.ScrolledWindow()
 		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 		container.set_shadow_type(gtk.SHADOW_IN)
+
 		# create controls
 		hbox_controls = gtk.HBox(False, 5)
 
@@ -98,6 +99,8 @@ class FindFiles(gtk.Window):
 		table_basic.attach(self._entry_path, 1, 2, 0, 1, xoptions=gtk.EXPAND|gtk.FILL)
 		table_basic.attach(button_browse, 2, 3, 0, 1, xoptions=gtk.SHRINK|gtk.FILL)
 		table_basic.attach(self._checkbox_recursive, 1, 2, 1, 2)
+
+		container.add(self._names)
 
 		hbox_controls.pack_end(button_find, False, False, 0)
 		hbox_controls.pack_end(button_stop, False, False, 0)

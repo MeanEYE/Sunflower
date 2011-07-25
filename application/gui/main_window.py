@@ -2140,10 +2140,10 @@ class MainWindow(gtk.Window):
 
 		else:
 			# report error to console
-			if self.rename_extension_classes.has_key(name):
+			if self.find_extension_classes.has_key(name):
 				print 'Error: Extension with name "{0}" is already registered!'
 
-			if not issubclass(ExtensionClass, RenameExtension):
+			if not issubclass(ExtensionClass, FindExtension):
 				print 'Error: Invalid object class!'
 
 	def plugin_class_exists(self, class_name):

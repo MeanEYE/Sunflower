@@ -3,6 +3,12 @@ import gtk
 import user
 
 
+class Column:
+	ICON = 0
+	NAME = 1
+	DIRECTORY = 2
+
+
 class FindFiles(gtk.Window):
 	"""Find files tool"""
 
@@ -26,9 +32,54 @@ class FindFiles(gtk.Window):
 		# create interface
 		vbox = gtk.VBox(False, 7)
 
-		# create modifiers notebook
+		# create path and basic options
+		table_basic = gtk.Table(3, 2, False)
+		table_basic.set_col_spacings(5)
+		table_basic.set_row_spacings(2)
+
+		label_path = gtk.Label(_('Search in:'))
+		label_path.set_alignment(0, 0.5)
+
+		self._entry_path = gtk.Entry()
+
+		button_browse = gtk.Button(label=_('Browse'))
+
+		self._checkbox_recursive = gtk.CheckButton(label=_('Search recursively'))
+		self._checkbox_recursive.set_active(True)
+
+		# create extensions notebook
 		self._extension_list = gtk.Notebook()
 
+		# create list
+		self._list = gtk.ListStore(str, str, str)
+		self._names = gtk.TreeView(model=self._list)
+
+		cell_icon = gtk.CellRendererPixbuf()
+		cell_old_name = gtk.CellRendererText()
+		cell_new_name = gtk.CellRendererText()
+		
+		col_old_name = gtk.TreeViewColumn(_('Old name'))
+		col_old_name.set_expand(True)
+		
+		col_new_name = gtk.TreeViewColumn(_('New name'))
+		col_new_name.set_expand(True)
+		
+		# pack renderer
+		col_old_name.pack_start(cell_icon, False)
+		col_old_name.pack_start(cell_old_name, True)
+		col_new_name.pack_start(cell_new_name, True)
+		
+		# connect renderer attributes
+		col_old_name.add_attribute(cell_icon, 'icon-name', Column.ICON)
+		col_old_name.add_attribute(cell_old_name, 'text', Column.NAME)
+		col_new_name.add_attribute(cell_new_name, 'text', Column.DIRECTORY)
+		
+		self._names.append_column(col_old_name)
+		self._names.append_column(col_new_name)
+		
+		container = gtk.ScrolledWindow()
+		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+		container.set_shadow_type(gtk.SHADOW_IN)
 		# create controls
 		hbox_controls = gtk.HBox(False, 5)
 
@@ -43,21 +94,31 @@ class FindFiles(gtk.Window):
 		button_cancel.connect('clicked', self._close_window)
 		
 		# pack interface
+		table_basic.attach(label_path, 0, 1, 0, 1, xoptions=gtk.SHRINK|gtk.FILL)
+		table_basic.attach(self._entry_path, 1, 2, 0, 1, xoptions=gtk.EXPAND|gtk.FILL)
+		table_basic.attach(button_browse, 2, 3, 0, 1, xoptions=gtk.SHRINK|gtk.FILL)
+		table_basic.attach(self._checkbox_recursive, 1, 2, 1, 2)
+
 		hbox_controls.pack_end(button_find, False, False, 0)
 		hbox_controls.pack_end(button_stop, False, False, 0)
 		hbox_controls.pack_end(button_cancel, False, False, 0)
 
-		vbox.pack_end(self._extension_list, False, False, 0) 
+		vbox.pack_start(table_basic, False, False, 0) 
+		vbox.pack_start(self._extension_list, False, False, 0) 
 		vbox.pack_end(hbox_controls, False, False, 0)
+		vbox.pack_end(container, True, True, 0)
 
 		self.add(vbox)
+
+		# create extensions
+		self.__create_extensions()
 
 		# show all widgets
 		self.show_all()
 
 	def __create_extensions(self):
 		"""Create rename extensions"""
-		for ExtensionClass in self._application.rename_extension_classes.values():
+		for ExtensionClass in self._application.find_extension_classes.values():
 			extension = ExtensionClass(self)
 			title = extension.get_title()
 		

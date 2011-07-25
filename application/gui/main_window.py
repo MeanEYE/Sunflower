@@ -19,7 +19,9 @@ from accelerator_manager import AcceleratorManager
 
 from plugin_base.item_list import ItemList
 from plugin_base.rename_extension import RenameExtension
+from plugin_base.find_extension import FindExtension
 from tools.advanced_rename import AdvancedRename
+from tools.find_files import FindFiles
 
 from ConfigParser import RawConfigParser
 try:
@@ -68,6 +70,7 @@ class MainWindow(gtk.Window):
 		self.provider_classes = {}
 		self.archive_provider_classes = {}
 		self.rename_extension_classes = {}
+		self.find_extension_classes = {}
 
 		# list of protected plugins
 		self.protected_plugins = ('file_list', 'system_terminal')
@@ -337,7 +340,8 @@ class MainWindow(gtk.Window):
 		                'label': _('Find files'),
 		                'type': 'image',
 		                'image': 'system-search',
-		                'path': '<Sunflower>/Commands/FindFiles'
+		                'path': '<Sunflower>/Commands/FindFiles',
+						'callback': self.show_find_files
 		            },
 		            {
 		                'label': _('Find duplicate files'),
@@ -2127,6 +2131,21 @@ class MainWindow(gtk.Window):
 			if not issubclass(ExtensionClass, RenameExtension):
 				print 'Error: Invalid object class!'
 
+	def register_find_extension(self, name, ExtensionClass):
+		"""Register class to be used in find files tool"""
+		if issubclass(ExtensionClass, FindExtension) \
+		and not self.find_extension_classes.has_key(name):
+			# register extension
+			self.find_extension_classes[name] = ExtensionClass
+
+		else:
+			# report error to console
+			if self.rename_extension_classes.has_key(name):
+				print 'Error: Extension with name "{0}" is already registered!'
+
+			if not issubclass(ExtensionClass, RenameExtension):
+				print 'Error: Invalid object class!'
+
 	def plugin_class_exists(self, class_name):
 		"""Check if specified class name exists in active plugins"""
 		result = False
@@ -2250,3 +2269,28 @@ class MainWindow(gtk.Window):
 
 			# show preferences window
 			self.preferences_window._show(None, tab_name='plugins')
+
+	def show_find_files(self, widget=None, data=None):
+		"""Show find files tool"""
+		if len(self.find_extension_classes) > 0:
+			# create find files window
+			FindFiles(self._active_object, self)
+
+		else:
+			# no extensions found, report error to user
+			dialog = gtk.MessageDialog(
+								self,
+								gtk.DIALOG_DESTROY_WITH_PARENT,
+								gtk.MESSAGE_INFO,
+								gtk.BUTTONS_OK,
+								_(
+									'No extensions for finding files were found. Please '
+									'enable "find_file_extensions" plugin and try again.'
+								)
+							)
+			dialog.run()
+			dialog.destroy()
+
+			# show preferences window
+			self.preferences_window._show(None, tab_name='plugins')
+

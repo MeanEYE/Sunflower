@@ -27,6 +27,7 @@ class FindFiles(gtk.Window):
 		self.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.set_transient_for(application)
 		self.set_border_width(7)
+		self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
 		self.set_wmclass('Sunflower', 'Sunflower')
 		
 		# create interface

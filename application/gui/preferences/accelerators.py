@@ -35,6 +35,9 @@ class AcceleratorOptions(SettingsPage):
 		cell_primary = gtk.CellRendererAccel()
 		cell_secondary = gtk.CellRendererAccel()
 
+		cell_primary.set_property('accel-mode', gtk.CELL_RENDERER_ACCEL_MODE_OTHER)
+		cell_secondary.set_property('accel-mode', gtk.CELL_RENDERER_ACCEL_MODE_OTHER)
+
 		# create and pack columns
 		col_name = gtk.TreeViewColumn(_('Description'), cell_name, markup=Column.NAME)
 		col_name.set_min_width(200)

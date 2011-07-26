@@ -1594,6 +1594,8 @@ class MainWindow(gtk.Window):
 			notebook.set_current_page(index)
 			new_tab._main_object.grab_focus()
 
+		return new_tab
+
 	def create_terminal_tab(self, notebook, path=None):
 		"""Create terminal tab on selected notebook"""
 		self.create_tab(notebook, SystemTerminal, path)
@@ -1678,10 +1680,14 @@ class MainWindow(gtk.Window):
 			handled = True
 
 		if not handled:
+			# try executing command
 			try:
 				if common.is_x_app(command[0]):
+					# command is X based, just execute it
 					os.system('{0} &'.format(raw_command))
+
 				else:
+					# command is console based, create terminal tab and fork it
 					def callback(terminal, data):
 						"""Sends command to terminal when it's ready"""
 						self.get_active_object()._terminal.disconnect(data[1])
@@ -1693,6 +1699,7 @@ class MainWindow(gtk.Window):
 					data.append(handler)
 					
 				handled = True
+
 			except OSError:
 				handled = False
 

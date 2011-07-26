@@ -31,6 +31,7 @@ class PreferencesWindow(gtk.Window):
 		self.set_modal(True)
 		self.set_skip_taskbar_hint(True)
 		self.set_transient_for(parent)
+		self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
 		self.set_wmclass('Sunflower', 'Sunflower')
 
 		# create GUI

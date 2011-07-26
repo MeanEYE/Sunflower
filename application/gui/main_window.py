@@ -878,7 +878,8 @@ class MainWindow(gtk.Window):
 		command = command.replace('%s', str(selection_short))
 		command = command.replace('%S', str(selection_long))
 
-		os.system(command)
+		# execute command using programs default handler
+		self.execute_command(widget, command)
 
 	def _handle_new_tab_click(self, widget, data=None):
 		"""Handle clicking on item from 'New tab' menu"""

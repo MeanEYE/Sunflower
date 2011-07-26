@@ -505,7 +505,7 @@ class CopyDialog(OperationDialog):
 
 		# set default icon
 		if icon_name is None:
-			self._operation_image.set_from_icon_name('folder-copy', gtk.ICON_SIZE_MENU)
+			self._operation_image.set_from_stock(gtk.STOCK_COPY, gtk.ICON_SIZE_MENU)
 
 
 class MoveDialog(CopyDialog):
@@ -523,7 +523,7 @@ class MoveDialog(CopyDialog):
 
 		# set default icon
 		if icon_name is None:
-			self._operation_image.set_from_icon_name('folder-move', gtk.ICON_SIZE_MENU)
+			self._operation_image.set_from_stock(gtk.STOCK_CUT, gtk.ICON_SIZE_MENU)
 
 
 class DeleteDialog(OperationDialog):

@@ -19,6 +19,7 @@ from toolbar import ToolbarManager
 from accelerator_manager import AcceleratorManager
 
 from plugin_base.item_list import ItemList
+from plugin_base.terminal import Terminal
 from plugin_base.rename_extension import RenameExtension
 from plugin_base.find_extension import FindExtension
 from tools.advanced_rename import AdvancedRename
@@ -1598,7 +1599,7 @@ class MainWindow(gtk.Window):
 
 	def create_terminal_tab(self, notebook, path=None):
 		"""Create terminal tab on selected notebook"""
-		self.create_tab(notebook, SystemTerminal, path)
+		return self.create_tab(notebook, SystemTerminal, path)
 
 	def close_tab(self, notebook, child):
 		"""Safely remove tab and its children"""
@@ -1688,16 +1689,12 @@ class MainWindow(gtk.Window):
 
 				else:
 					# command is console based, create terminal tab and fork it
-					def callback(terminal, data):
-						"""Sends command to terminal when it's ready"""
-						self.get_active_object()._terminal.disconnect(data[1])
-						terminal.feed_child("{0}\n".format(data[0]))
+					tab = self.create_terminal_tab(active_object._notebook)
+					tab._terminal.fork_command(
+									command=raw_command,
+									directory=active_object.path
+								)
 
-					data = [raw_command]
-					self.create_terminal_tab(self._active_object._notebook, self._active_object.path)
-					handler = self.get_active_object()._terminal.connect("window-title-changed" , callback, data)
-					data.append(handler)
-					
 				handled = True
 
 			except OSError:

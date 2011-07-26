@@ -27,6 +27,8 @@ class AcceleratorOptions(SettingsPage):
 		self._list = gtk.TreeView()
 		self._list.set_model(self._accels)
 		self._list.set_rules_hint(True)
+		self._list.set_enable_search(True)
+		self._list.set_search_column(Column.NAME)
 
 		# create and configure cell renderers
 		cell_name = gtk.CellRendererText()

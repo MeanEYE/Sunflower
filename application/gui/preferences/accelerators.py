@@ -5,10 +5,11 @@ from widgets.settings_page import SettingsPage
 
 class Column:
 	NAME = 0
-	PRIMARY_KEY = 1
-	PRIMARY_MODS = 2
-	SECONDARY_KEY = 3
-	SECONDARY_MODS = 4
+	TITLE = 1
+	PRIMARY_KEY = 2
+	PRIMARY_MODS = 3
+	SECONDARY_KEY = 4
+	SECONDARY_MODS = 5
 
 
 class AcceleratorOptions(SettingsPage):
@@ -22,13 +23,13 @@ class AcceleratorOptions(SettingsPage):
 		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 		container.set_shadow_type(gtk.SHADOW_IN)
 
-		self._accels = gtk.TreeStore(str, int, int, int, int)
+		self._accels = gtk.TreeStore(str, str, int, int, int, int)
 
 		self._list = gtk.TreeView()
 		self._list.set_model(self._accels)
 		self._list.set_rules_hint(True)
 		self._list.set_enable_search(True)
-		self._list.set_search_column(Column.NAME)
+		self._list.set_search_column(Column.TITLE)
 
 		# create and configure cell renderers
 		cell_name = gtk.CellRendererText()
@@ -39,7 +40,7 @@ class AcceleratorOptions(SettingsPage):
 		cell_secondary.set_property('accel-mode', gtk.CELL_RENDERER_ACCEL_MODE_OTHER)
 
 		# create and pack columns
-		col_name = gtk.TreeViewColumn(_('Description'), cell_name, markup=Column.NAME)
+		col_name = gtk.TreeViewColumn(_('Description'), cell_name, markup=Column.TITLE)
 		col_name.set_min_width(200)
 		col_name.set_resizable(True)
 
@@ -105,7 +106,7 @@ class AcceleratorOptions(SettingsPage):
 			method_names.sort()
 
 			# add group and save iter for later use
-			group_iter = self._accels.append(None, ('<i>{0}</i>'.format(title), 0, 0, 0 ,0))
+			group_iter = self._accels.append(None, (group_name, '<b>{0}</b>'.format(title), 0, 0, 0 ,0))
 
 			for method_name in method_names:
 				# add all methods from the group
@@ -128,7 +129,8 @@ class AcceleratorOptions(SettingsPage):
 					secondary = (0, 0)
 
 				# append to the list
-				self._accels.append(group_iter, (title, primary[0], primary[1], secondary[0], secondary[1]))
+				data = (method_name, title, primary[0], primary[1], secondary[0], secondary[1])
+				self._accels.append(group_iter, data)
 
 	def _load_options(self):
 		"""Load options and update interface"""

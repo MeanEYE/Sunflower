@@ -15,6 +15,7 @@ class SystemTerminal(Terminal):
 	def __init__(self, parent, notebook, path=None):
 		Terminal.__init__(self, parent, notebook, path)
 
+		self._close_on_child_exit = True
 		shell_command = os.environ['SHELL']
 
 		# we need TERM environment variable set
@@ -27,7 +28,8 @@ class SystemTerminal(Terminal):
 			os.environ['PROMPT_COMMAND'] = 'echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
 
 		if self._vte_present:
-			self._terminal.connect('child-exited', self._close_tab)
+			# fork default shell 
+			self._terminal.connect('child-exited', self.__child_exited)
 			self._terminal.connect('status-line-changed', self._update_terminal_status)
 			self._terminal.fork_command(
 									command=shell_command,
@@ -36,13 +38,22 @@ class SystemTerminal(Terminal):
 
 			self._title_bar.set_subtitle(shell_command)
 
+		# change tab label text
 		self._change_tab_text(_('Terminal'))
 
 		self.show_all()
 
+	def __child_exited(self, widget, data=None):
+		"""Handle child process termination"""
+		if self._close_on_child_exit:
+			self._close_tab()
+
 	def _recycle_terminal(self, widget, data=None):
 		"""Recycle terminal"""
 		if not self._vte_present: return
+
+		# enable close on exit
+		self._close_on_child_exit = True
 
 		shell_command = os.environ['SHELL']
 		self._terminal.reset(True, True)
@@ -51,9 +62,9 @@ class SystemTerminal(Terminal):
 								directory=self.path
 							)
 
-	def _close_tab(self, widget, data=None):
+	def _close_tab(self, widget=None, data=None):
 		"""Provide additional functionality"""
 		if self._notebook.get_n_pages() == 1:
 			self._parent.create_tab(self._notebook, FileList, self.path)
 
-		Terminal._close_tab(self, widget, data)
+		super(SystemTerminal, self)._close_tab(widget, data)

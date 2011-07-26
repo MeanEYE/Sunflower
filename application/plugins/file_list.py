@@ -571,13 +571,19 @@ class FileList(ItemList):
 
 	def _item_properties(self, widget=None, data=None):
 		"""Show file/directory properties"""
-		window = PropertiesWindow(
-								self._parent,
-								self.get_provider(),
-								self._get_selection()
-							)
+		selection = self._item_list.get_selection()
+		list_, iter_ = selection.get_selected()
 
-		window.show()
+		is_parent = list_.get_value(iter_, Column.IS_PARENT_DIR)
+
+		if not is_parent:
+			window = PropertiesWindow(
+									self._parent,
+									self.get_provider(),
+									self._get_selection()
+								)
+
+			window.show()
 
 		return True
 

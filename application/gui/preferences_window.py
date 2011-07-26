@@ -8,7 +8,7 @@ from gui.preferences.toolbar import ToolbarOptions
 from gui.preferences.bookmarks import BookmarksOptions
 from gui.preferences.tools import ToolsOptions
 from gui.preferences.plugins import PluginsOptions
-#from gui.preferences.accelerators import AcceleratorOptions
+from gui.preferences.accelerators import AcceleratorOptions
 
 class Column:
 	NAME = 0
@@ -70,7 +70,7 @@ class PreferencesWindow(gtk.Window):
 		BookmarksOptions(self, parent)
 		ToolsOptions(self, parent)
 		PluginsOptions(self, parent)
-		#AcceleratorOptions(self, parent)
+		AcceleratorOptions(self, parent)
 
 		# select first tab
 		self._tab_labels.set_cursor((0,))

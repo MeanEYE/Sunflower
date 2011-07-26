@@ -131,6 +131,16 @@ class AcceleratorGroup:
 		"""Set secondary accelerator for specified method name"""
 		self._secondary[name] = (keyval, modifier)
 
+	def get_accelerator(self, name, primary=True):
+		"""Get accelerator for specified method"""
+		result = None
+		group = (self._secondary, self._primary)[primary]
+
+		if group.has_key(name):
+			result = group[name]
+
+		return result
+
 	def reset_accelerator(self, name):
 		"""Resets accelerator shortcuts"""
 		if self._primary.has_key(name):

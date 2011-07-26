@@ -19,7 +19,6 @@ from toolbar import ToolbarManager
 from accelerator_manager import AcceleratorManager
 
 from plugin_base.item_list import ItemList
-from plugin_base.terminal import Terminal
 from plugin_base.rename_extension import RenameExtension
 from plugin_base.find_extension import FindExtension
 from tools.advanced_rename import AdvancedRename

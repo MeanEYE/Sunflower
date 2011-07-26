@@ -7,6 +7,7 @@ import locale
 import user
 import fnmatch
 import gettext
+import common
 
 from menus import MenuManager
 from mounts import MountsManager
@@ -1665,16 +1666,35 @@ class MainWindow(gtk.Window):
 		active_object = self.get_active_object()
 		command = raw_command.split(' ', 1)
 
-		# return if we don't have anything to parse
-		if len(command) < 2: return
-
 		if command[0] == 'cd' and hasattr(active_object, 'change_path'):
 			# handle CD command
+			if len(command) < 2:
+				command.append(os.path.expanduser('~'))
+
 			if os.path.isdir(os.path.join(active_object.path, command[1])):
 				active_object.change_path(os.path.join(active_object.path, command[1]))
 				active_object._main_object.grab_focus()
 
 			handled = True
+
+		if not handled:
+			try:
+				if common.is_x_app(command[0]):
+					os.system('{0} &'.format(raw_command))
+				else:
+					def callback(terminal, data):
+						"""Sends command to terminal when it's ready"""
+						self.get_active_object()._terminal.disconnect(data[1])
+						terminal.feed_child("{0}\n".format(data[0]))
+
+					data = [raw_command]
+					self.create_terminal_tab(self._active_object._notebook, self._active_object.path)
+					handler = self.get_active_object()._terminal.connect("window-title-changed" , callback, data)
+					data.append(handler)
+					
+				handled = True
+			except OSError:
+				handled = False
 
 		if not handled:
 			print 'Unhandled command: {0}'.format(command[0])

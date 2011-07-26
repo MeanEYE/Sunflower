@@ -8,6 +8,7 @@ import user
 import fnmatch
 import gettext
 import common
+import shlex
 
 from menus import MenuManager
 from mounts import MountsManager
@@ -1666,7 +1667,7 @@ class MainWindow(gtk.Window):
 
 		handled = False
 		active_object = self.get_active_object()
-		command = raw_command.split(' ', 1)
+		command = shlex.split(raw_command)
 
 		if command[0] == 'cd' and hasattr(active_object, 'change_path'):
 			# handle CD command
@@ -1692,7 +1693,8 @@ class MainWindow(gtk.Window):
 
 					tab._close_on_child_exit = False
 					tab._terminal.fork_command(
-									command=raw_command,
+									command=command[0],
+									argv=command,
 									directory=active_object.path
 								)
 

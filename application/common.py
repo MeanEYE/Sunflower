@@ -1,6 +1,8 @@
 import os
 import user
 
+from subprocess import check_output
+
 
 # user directories
 class UserDirectory:
@@ -41,3 +43,14 @@ def get_user_directory(directory):
 				break
 
 	return result
+	
+def is_x_app(command):
+	"""Checks if command uses grafical user interfaces.
+	
+	Throws exception if command is not found.
+	"""
+	try:
+		return 'libX11.so' in check_output(command, env={'LD_TRACE_LOADED_OBJECTS':'1'})
+	except OSError as error:
+		raise error
+

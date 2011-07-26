@@ -1690,6 +1690,8 @@ class MainWindow(gtk.Window):
 				else:
 					# command is console based, create terminal tab and fork it
 					tab = self.create_terminal_tab(active_object._notebook)
+
+					tab._close_on_child_exit = False
 					tab._terminal.fork_command(
 									command=raw_command,
 									directory=active_object.path

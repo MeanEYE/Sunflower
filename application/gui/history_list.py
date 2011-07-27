@@ -51,33 +51,38 @@ class HistoryList(gtk.Window):
 		# create controls
 		hbox_controls = gtk.HBox(False, 5)
 
-		btn_close = gtk.Button(stock=gtk.STOCK_CLOSE)
-		btn_close.connect('clicked', self._close)
+		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
+		button_close.connect('clicked', self._close)
 
 		image_jump = gtk.Image()
 		image_jump.set_from_icon_name('go-jump', gtk.ICON_SIZE_BUTTON)
 
-		btn_jump = gtk.Button()
-		btn_jump.set_image(image_jump)
-		btn_jump.set_label(_('Go to'))
-		btn_jump.set_can_default(True)
-		btn_jump.connect('clicked', self._change_path)
+		button_jump = gtk.Button()
+		button_jump.set_image(image_jump)
+		button_jump.set_label(_('Go to'))
+		button_jump.set_can_default(True)
+		button_jump.connect('clicked', self._change_path)
 
 		image_new_tab = gtk.Image()
 		image_new_tab.set_from_icon_name('tab-new', gtk.ICON_SIZE_BUTTON)
 
-		btn_new_tab = gtk.Button()
-		btn_new_tab.set_image(image_new_tab)
-		btn_new_tab.set_label(_('New tab'))
-		btn_new_tab.set_tooltip_text(_('Open selected path in new tab'))
-		btn_new_tab.connect('clicked', self._open_in_new_tab)
+		button_new_tab = gtk.Button()
+		button_new_tab.set_image(image_new_tab)
+		button_new_tab.set_label(_('New tab'))
+		button_new_tab.set_tooltip_text(_('Open selected path in new tab'))
+		button_new_tab.connect('clicked', self._open_in_new_tab)
+
+		button_oposite = gtk.Button(label=_('Oposite list'))
+		button_oposite.set_tooltip_text(_('Open selected path in oposite list'))
+		button_oposite.connect('clicked', self._open_in_oposite_list)
 
 		# pack UI
 		list_container.add(self._history_list)
 
-		hbox_controls.pack_end(btn_close, False, False, 0)
-		hbox_controls.pack_end(btn_jump, False, False, 0)
-		hbox_controls.pack_start(btn_new_tab, False, False, 0)
+		hbox_controls.pack_end(button_close, False, False, 0)
+		hbox_controls.pack_end(button_jump, False, False, 0)
+		hbox_controls.pack_start(button_new_tab, False, False, 0)
+		hbox_controls.pack_start(button_oposite, False, False, 0)
 
 		vbox.pack_start(list_container, True, True, 0)
 		vbox.pack_start(hbox_controls, False, False, 0)
@@ -127,6 +132,24 @@ class HistoryList(gtk.Window):
 
 			# close dialog
 			self._close()
+
+	def _open_in_oposite_list(self, widget=None, data=None):
+		"""Open selected item in oposite list"""
+		selection = self._history_list.get_selection()
+		list_, iter_ = selection.get_selected()
+
+		# if selection is valid, change to selected path
+		if iter_ is not None:
+			path = list_.get_value(iter_, COL_PATH)
+
+			# open in oposite list
+			oposite_object = self._application.get_oposite_object(self._application.get_active_object())
+			if hasattr(oposite_object, 'change_path'):
+				oposite_object.change_path(path)
+
+			# close dialog
+			self._close()
+
 
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys in history list"""

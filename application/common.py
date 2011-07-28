@@ -44,13 +44,17 @@ def get_user_directory(directory):
 	return result
 	
 def is_x_app(command):
-	"""Checks if command uses grafical user interfaces.
-	
-	Throws exception if command is not found.
-	"""
+	"""Checks if command uses grafical user interfaces."""
 	try:
-		output = subprocess.Popen([command], env={'LD_TRACE_LOADED_OBJECTS':'1'}, stdout=subprocess.PIPE).communicate()
+		output = subprocess.Popen(
+							[command], 
+							env={'LD_TRACE_LOADED_OBJECTS':'1'}, 
+							stdout=subprocess.PIPE
+						).communicate()
+
 	except OSError as error:
+		# report error to user
 		raise error
+
 	return 'libX11.so' in output[0]
 

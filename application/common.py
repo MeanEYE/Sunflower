@@ -1,7 +1,6 @@
 import os
 import user
-
-from subprocess import check_output
+import subprocess
 
 
 # user directories
@@ -50,7 +49,8 @@ def is_x_app(command):
 	Throws exception if command is not found.
 	"""
 	try:
-		return 'libX11.so' in check_output(command, env={'LD_TRACE_LOADED_OBJECTS':'1'})
+		output = subprocess.Popen([command], env={'LD_TRACE_LOADED_OBJECTS':'1'}, stdout=subprocess.PIPE).communicate()
 	except OSError as error:
 		raise error
+	return 'libX11.so' in output[0]
 

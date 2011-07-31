@@ -14,7 +14,7 @@ class RenameExtension:
 
 		# create and configure container
 		self.vbox = gtk.VBox(False, 5)
-		self.set_border_width(7)
+		self.vbox.set_border_width(7)
 
 		# create activity toggle
 		self._active = False

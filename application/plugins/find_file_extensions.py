@@ -1,4 +1,5 @@
 import gtk
+import fnmatch
 
 from plugin_base.find_extension import FindExtension
 
@@ -13,6 +14,9 @@ class DefaultFindFiles(FindExtension):
 
 	def __init__(self, parent):
 		FindExtension.__init__(self, parent)
+
+		self._pattern = '*'
+		self._compare_method = fnmatch.fnmatch
 	
 		# enabled by default
 		self._checkbox_active.set_active(True)
@@ -36,24 +40,26 @@ class DefaultFindFiles(FindExtension):
 		vbox_right = gtk.VBox(False, 0)
 
 		# create interface
-		vbox_entry = gtk.VBox(False, 0)
+		vbox_pattern = gtk.VBox(False, 0)
 
-		label_entry = gtk.Label(_('Search for:'))
-		label_entry.set_alignment(0, 0.5)
+		label_pattern = gtk.Label(_('Search for:'))
+		label_pattern.set_alignment(0, 0.5)
 		
-		self._entry = gtk.Entry()
-		self._entry.set_text('*')
+		self._pattern = gtk.Entry()
+		self._pattern.set_text('*')
+		self._pattern.connect('changed', self.__handle_pattern_change)
 
 		self._checkbox_case_sensitive = gtk.CheckButton(_('Case sensitive'))
+		self._checkbox_case_sensitive.connect('toggled', self.__handle_case_sensitive_toggle)
 
 		# pack interface
 		self.vbox.remove(self._checkbox_active)
 
-		vbox_entry.pack_start(label_entry, False, False, 0)
-		vbox_entry.pack_start(self._entry, False, False, 0)
+		vbox_pattern.pack_start(label_pattern, False, False, 0)
+		vbox_pattern.pack_start(self._pattern, False, False, 0)
 
 		vbox_left.pack_start(self._checkbox_active, False, False, 0)
-		vbox_left.pack_start(vbox_entry, False, False, 0)
+		vbox_left.pack_start(vbox_pattern, False, False, 0)
 		vbox_left.pack_start(self._checkbox_case_sensitive, False, False, 0)
 
 		vbox_right.pack_start(label_help, True, True, 0)
@@ -63,10 +69,21 @@ class DefaultFindFiles(FindExtension):
 
 		self.vbox.pack_start(hbox, True, True, 0)
 
+	def __handle_case_sensitive_toggle(self, widget, data=None):
+		"""Handle toggling case sensitive check box"""
+		self._compare_method = (
+							fnmatch.fnmatch,
+							fnmatch.fnmatchcase
+						)[widget.get_active()]
+
+	def __handle_pattern_change(self, widget, data=None):
+		"""Handle changing pattern"""
+		self._pattern = widget.get_text()
+
 	def get_title(self):
 		"""Return i18n title for extension"""
 		return _('Basic')
 
 	def is_file_ok(self, path):
 		"""Check is specified path fits the cirteria"""
-		return True
+		return self._compare_method(path, self._pattern)

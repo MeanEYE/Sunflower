@@ -1,7 +1,7 @@
 import gtk
 
 
-class FindExtension(gtk.VBox):
+class FindExtension:
 	"""Base class for extending find files tool.
 
 	Use this class to provide find files tool with additional
@@ -10,11 +10,12 @@ class FindExtension(gtk.VBox):
 	"""
 
 	def __init__(self, parent):
-		super(FindExtension, self).__init__(False, 5)
 
 		self._parent = parent
 
-		self.set_border_width(7)
+		# create and configure container
+		self.vbox = gtk.VBox(False, 5)
+		self.vbox.set_border_width(7)
 
 		# create activity toggle
 		self._active = False
@@ -22,7 +23,7 @@ class FindExtension(gtk.VBox):
 		self._checkbox_active.connect('toggled', self.__toggle_active)
 		self._checkbox_active.show()
 
-		self.pack_start(self._checkbox_active, False, False, 0)
+		self.vbox.pack_start(self._checkbox_active, False, False, 0)
 
 	def __toggle_active(self, widget, data=None):
 		"""Toggle extension active property"""
@@ -35,6 +36,10 @@ class FindExtension(gtk.VBox):
 	def get_title(self):
 		"""Return i18n title for extension"""
 		return None
+
+	def get_container(self):
+		"""Return widget container"""
+		return self.vbox
 
 	def is_file_ok(self, path):
 		"""Check is specified path fits the cirteria

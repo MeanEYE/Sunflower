@@ -122,10 +122,11 @@ class AdvancedRename(gtk.Window):
 		for ExtensionClass in self._application.rename_extension_classes.values():
 			extension = ExtensionClass(self)
 			title = extension.get_title()
+			container = extension.get_container()
 		
 			# add tab	
-			self._extension_list.append_page(extension, gtk.Label(title))
-			self._extension_list.set_tab_reorderable(extension, True)
+			self._extension_list.append_page(container, gtk.Label(title))
+			self._extension_list.set_tab_reorderable(container, True)
 			
 			# store extension for later use
 			self._extensions.append(extension)

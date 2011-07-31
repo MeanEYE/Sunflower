@@ -1,7 +1,7 @@
 import gtk
 
 
-class RenameExtension(gtk.VBox):
+class RenameExtension:
 	"""Base class for extending advanced rename tool.
 
 	Use this class to provide advanced rename tool with additional
@@ -10,10 +10,10 @@ class RenameExtension(gtk.VBox):
 	"""
 
 	def __init__(self, parent):
-		super(RenameExtension, self).__init__(False, 5)
-
 		self._parent = parent
 
+		# create and configure container
+		self.vbox = gtk.VBox(False, 5)
 		self.set_border_width(7)
 
 		# create activity toggle
@@ -22,7 +22,7 @@ class RenameExtension(gtk.VBox):
 		self._checkbox_active.connect('toggled', self.__toggle_active)
 		self._checkbox_active.show()
 
-		self.pack_start(self._checkbox_active, False, False, 0)
+		self.vbox.pack_start(self._checkbox_active, False, False, 0)
 
 	def __toggle_active(self, widget, data=None):
 		"""Toggle extension active property"""
@@ -44,6 +44,10 @@ class RenameExtension(gtk.VBox):
 	def get_title(self):
 		"""Return i18n title for extension"""
 		return None
+
+	def get_container(self):
+		"""Return widget container"""
+		return self.vbox
 
 	def get_new_name(self, old_name, new_name):
 		"""Generate and return new name for specified file.

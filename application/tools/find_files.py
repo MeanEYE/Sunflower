@@ -127,7 +127,7 @@ class FindFiles(gtk.Window):
 			title = extension.get_title()
 		
 			# add tab	
-			self._extension_list.append_page(extension, gtk.Label(title))
+			self._extension_list.append_page(extension.get_container(), gtk.Label(title))
 			
 			# store extension for later use
 			self._extensions.append(extension)

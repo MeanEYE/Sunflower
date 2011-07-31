@@ -26,7 +26,7 @@ class DefaultRename(RenameExtension):
 	"""Default rename extension support"""
 
 	def __init__(self, parent):
-		super(DefaultRename, self).__init__(parent)
+		RenameExtension.__init__(self, parent)
 
 		# default option needs to be active by default
 		self._checkbox_active.set_active(True)
@@ -143,7 +143,7 @@ class DefaultRename(RenameExtension):
 		self._entry_digits.connect('value-changed', self.__counter_changed)
 
 		# repack 'active' check box
-		self.remove(self._checkbox_active)
+		self.vbox.remove(self._checkbox_active)
 		vbox_left.pack_start(self._checkbox_active, False, False, 0)
 
 		# pack interface
@@ -170,9 +170,9 @@ class DefaultRename(RenameExtension):
 		hbox.pack_start(vbox_left, True, True, 0)
 		hbox.pack_start(vbox_right, True, True, 0)
 
-		self.pack_start(hbox, True, True, 0)
+		self.vbox.pack_start(hbox, True, True, 0)
 
-		self.show_all()
+		self.vbox.show_all()
 
 	def __template_changed(self, widget, data=None):
 		"""Handle template string change"""
@@ -327,10 +327,10 @@ class LetterCaseRename(RenameExtension):
 	"""Letter case rename extension support"""
 
 	def __init__(self, parent):
-		super(LetterCaseRename, self).__init__(parent)
+		RenameExtension.__init__(self, parent)
 
 		self._basename_methods = (
-					(_('Do nothing'), self.__do_nothig),
+					(_('Do nothing'), self.__do_nothing),
 					(_('Capitalize'), self.__capitalize),
 					(_('Upper case'), self.__upper),
 					(_('Lower case'), self.__lower),
@@ -338,7 +338,7 @@ class LetterCaseRename(RenameExtension):
 				)
 
 		self._extension_methods = (
-					(_('Do nothing'), self.__do_nothig),
+					(_('Do nothing'), self.__do_nothing),
 					(_('Upper case'), self.__upper),
 					(_('Lower case'), self.__lower),
 				)
@@ -378,9 +378,9 @@ class LetterCaseRename(RenameExtension):
 		table.attach(self._combo_basename, 1, 2, 0, 1, xoptions=gtk.FILL)
 		table.attach(self._combo_extension, 1, 2, 1, 2, xoptions=gtk.FILL)
 
-		self.pack_start(table, False, False, 0)
+		self.vbox.pack_start(table, False, False, 0)
 
-	def __do_nothig(self, name):
+	def __do_nothing(self, name):
 		"""Return the same string"""
 		return name
 
@@ -416,7 +416,7 @@ class AudioMetadataRename(RenameExtension):
 	"""Song tags rename extension"""
 
 	def __init__(self, parent):
-		super(AudioMetadataRename, self).__init__(parent)
+		RenameExtension.__init__(self, parent)
 
 		self._templates = {
 					'[a]': ('album', _('Album')),
@@ -484,7 +484,7 @@ class AudioMetadataRename(RenameExtension):
 		vbox_template.pack_start(label_template, False, False, 0)
 		vbox_template.pack_start(self._entry_template, False, False, 0)
 
-		self.remove(self._checkbox_active)
+		self.vbox.remove(self._checkbox_active)
 
 		table_replace.attach(label_replace1, 0, 1, 0, 1)
 		table_replace.attach(self._entry_replace, 1, 2, 0, 1, xoptions=gtk.FILL)
@@ -502,8 +502,8 @@ class AudioMetadataRename(RenameExtension):
 		hbox.pack_start(vbox_left, True, True, 0)
 		hbox.pack_start(vbox_right, True, True, 0)
 
-		self.pack_start(hbox, False, False, 0)
-		self.pack_end(label_warning, False, False, 0)
+		self.vbox.pack_start(hbox, False, False, 0)
+		self.vbox.pack_end(label_warning, False, False, 0)
 
 	def get_title(self):
 		"""Return extension title"""

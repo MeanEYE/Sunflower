@@ -10,7 +10,7 @@ class DefaultFindFiles(FindExtension):
 	"""Default extension for find files tool"""
 
 	def __init__(self, parent):
-		super(DefaultFindFiles, self).__init__(parent)
+		FindExtension.__init__(self, parent)
 	
 		# enabled by default
 		self._checkbox_active.set_active(True)

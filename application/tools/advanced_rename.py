@@ -10,26 +10,27 @@ class Column:
 	NEW_NAME = 2
 
 
-class AdvancedRename(gtk.Window):
+class AdvancedRename:
 	"""Advanced rename tool"""
 	
 	def __init__(self, parent, application):
-		super(AdvancedRename, self).__init__(type=gtk.WINDOW_TOPLEVEL)
-		
+		# store parameters	
 		self._parent = parent
 		self._provider = self._parent.get_provider()
 		self._application = application
 		self._extensions = []
 		self._path = self._parent.path
 		
-		# configure window
-		self.set_title(_('Advanced rename'))
-		self.set_default_size(640, 600)
-		self.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
-		self.set_transient_for(application)
-		self.set_border_width(7)
-		self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
-		self.set_wmclass('Sunflower', 'Sunflower')
+		# create and configure window
+		self.window = gtk.Window(type=gtk.WINDOW_TOPLEVEL)
+
+		self.window.set_title(_('Advanced rename'))
+		self.window.set_default_size(640, 600)
+		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+		self.window.set_transient_for(application)
+		self.window.set_border_width(7)
+		self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+		self.window.set_wmclass('Sunflower', 'Sunflower')
 		
 		# create interface
 		vbox = gtk.VBox(False, 7)
@@ -105,7 +106,7 @@ class AdvancedRename(gtk.Window):
 		vbox.pack_end(vbox_location, False, False, 0)
 		vbox.pack_end(container, True, True, 0)
 		
-		self.add(vbox)
+		self.window.add(vbox)
 		
 		# prepare UI
 		self.__create_extensions()
@@ -115,7 +116,7 @@ class AdvancedRename(gtk.Window):
 		self.update_list()
 
 		# show all widgets
-		self.show_all()
+		self.window.show_all()
 	
 	def __create_extensions(self):
 		"""Create rename extensions"""
@@ -158,7 +159,7 @@ class AdvancedRename(gtk.Window):
 
 	def _close_window(self, widget=None, data=None):
 		"""Close window"""
-		self.destroy()
+		self.window.destroy()
 
 	def update_list(self):
 		"""Update file list"""
@@ -184,7 +185,7 @@ class AdvancedRename(gtk.Window):
 	def rename_files(self, widget=None, data=None):
 		"""Rename selected files"""
 		dialog = gtk.MessageDialog(
-								self,
+								self.window,
 								gtk.DIALOG_DESTROY_WITH_PARENT,
 								gtk.MESSAGE_QUESTION,
 								gtk.BUTTONS_YES_NO,

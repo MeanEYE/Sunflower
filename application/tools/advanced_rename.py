@@ -163,21 +163,21 @@ class AdvancedRename:
 
 	def update_list(self):
 		"""Update file list"""
-		active_extensions = filter(  # get only active extensions
-								lambda ext: ext.is_active(), 
+		active_children = filter(  # get only active extensions
+								lambda child: child.get_data('extension').is_active(), 
 								self._extension_list.get_children()
 							)
 		
 		# call reset on all extensions
-		map(lambda ext: ext.reset(), active_extensions)
+		map(lambda child: child.get_data('extension').reset(), active_children)
 		
 		for row in self._list:
 			old_name = row[Column.OLD_NAME]
 			new_name = old_name
 			
 			# run new name through extensions
-			for extension in active_extensions:
-				new_name = extension.get_new_name(old_name, new_name)
+			for child in active_children:
+				new_name = child.get_data('extension').get_new_name(old_name, new_name)
 	
 			# store new name to list
 			row[Column.NEW_NAME] = new_name

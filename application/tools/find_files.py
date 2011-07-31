@@ -9,26 +9,30 @@ class Column:
 	DIRECTORY = 2
 
 
-class FindFiles(gtk.Window):
+class FindFiles:
 	"""Find files tool"""
 
 	def __init__(self, parent, application):
-		super(FindFiles, self).__init__(type=gtk.WINDOW_TOPLEVEL)
-
+		# store parameters
 		self._parent = parent
-		self._provider = self._parent.get_provider()
 		self._application = application
 		self._extensions = []
 		self._path = self._parent.path
+		self._provider = None
+
+		if hasattr(self._parent, 'get_provider'):
+			self._provider = self._parent.get_provider()
 		
 		# configure window
-		self.set_title(_('Find files'))
-		self.set_default_size(550, 500)
-		self.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
-		self.set_transient_for(application)
-		self.set_border_width(7)
-		self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
-		self.set_wmclass('Sunflower', 'Sunflower')
+		self.window = gtk.Window(type=gtk.WINDOW_TOPLEVEL)
+
+		self.window.set_title(_('Find files'))
+		self.window.set_default_size(550, 500)
+		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+		self.window.set_transient_for(application)
+		self.window.set_border_width(7)
+		self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+		self.window.set_wmclass('Sunflower', 'Sunflower')
 		
 		# create interface
 		vbox = gtk.VBox(False, 7)
@@ -42,6 +46,14 @@ class FindFiles(gtk.Window):
 		label_path.set_alignment(0, 0.5)
 
 		self._entry_path = gtk.Entry()
+
+		if hasattr(self._parent, 'path'):
+			# get path from the parent
+			self._entry_path.set_text(self._parent.path)
+
+		else:
+			# parent has no path, set user home directory
+			self._entry_path.set_text(os.path.expanduser(user.home))
 
 		button_browse = gtk.Button(label=_('Browse'))
 
@@ -112,13 +124,13 @@ class FindFiles(gtk.Window):
 		vbox.pack_end(hbox_controls, False, False, 0)
 		vbox.pack_end(container, True, True, 0)
 
-		self.add(vbox)
+		self.window.add(vbox)
 
 		# create extensions
 		self.__create_extensions()
 
 		# show all widgets
-		self.show_all()
+		self.window.show_all()
 
 	def __create_extensions(self):
 		"""Create rename extensions"""
@@ -134,7 +146,7 @@ class FindFiles(gtk.Window):
 
 	def _close_window(self, widget=None, data=None):
 		"""Close window"""
-		self.destroy()
+		self.window.destroy()
 
 	def stop_search(self, widget=None, data=None):
 		"""Stop searching for files"""
@@ -142,4 +154,27 @@ class FindFiles(gtk.Window):
 
 	def find_files(self, widget=None, data=None):
 		"""Start searching for files"""
-		pass
+		path = self._entry_path.get_text()
+
+		# make sure we have a valid provider
+		if self._provider is None:
+			ProviderClass = self._application.get_provider_by_protocol('file')
+			self._provider = ProviderClass(self._parent)
+
+		# check if specified path exists
+		if not self._provider.is_dir(path):
+			dialog = gtk.MessageDialog(
+								self.window,
+								gtk.DIALOG_DESTROY_WITH_PARENT,
+								gtk.MESSAGE_ERROR,
+								gtk.BUTTONS_OK,
+								_(
+									'Specified path is not valid or doesn\'t '
+									'exist anymore. Please check your selection '
+									'and try again.'
+								)
+							)
+			dialog.run()
+			dialog.destroy()
+
+			return

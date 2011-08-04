@@ -1,3 +1,4 @@
+import os
 import gtk
 import fnmatch
 
@@ -45,9 +46,9 @@ class DefaultFindFiles(FindExtension):
 		label_pattern = gtk.Label(_('Search for:'))
 		label_pattern.set_alignment(0, 0.5)
 		
-		self._pattern = gtk.Entry()
-		self._pattern.set_text('*')
-		self._pattern.connect('changed', self.__handle_pattern_change)
+		self._entry_pattern = gtk.Entry()
+		self._entry_pattern.set_text('*')
+		self._entry_pattern.connect('changed', self.__handle_pattern_change)
 
 		self._checkbox_case_sensitive = gtk.CheckButton(_('Case sensitive'))
 		self._checkbox_case_sensitive.connect('toggled', self.__handle_case_sensitive_toggle)
@@ -56,7 +57,7 @@ class DefaultFindFiles(FindExtension):
 		self.vbox.remove(self._checkbox_active)
 
 		vbox_pattern.pack_start(label_pattern, False, False, 0)
-		vbox_pattern.pack_start(self._pattern, False, False, 0)
+		vbox_pattern.pack_start(self._entry_pattern, False, False, 0)
 
 		vbox_left.pack_start(self._checkbox_active, False, False, 0)
 		vbox_left.pack_start(vbox_pattern, False, False, 0)
@@ -84,6 +85,7 @@ class DefaultFindFiles(FindExtension):
 		"""Return i18n title for extension"""
 		return _('Basic')
 
-	def is_file_ok(self, path):
+	def is_path_ok(self, path):
 		"""Check is specified path fits the cirteria"""
-		return self._compare_method(path, self._pattern)
+		file_name = os.path.basename(path)
+		return self._compare_method(file_name, self._pattern)

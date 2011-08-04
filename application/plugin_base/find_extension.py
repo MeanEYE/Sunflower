@@ -16,6 +16,7 @@ class FindExtension:
 		# create and configure container
 		self.vbox = gtk.VBox(False, 5)
 		self.vbox.set_border_width(7)
+		self.vbox.set_data('extension', self)
 
 		# create activity toggle
 		self._active = False
@@ -41,7 +42,7 @@ class FindExtension:
 		"""Return widget container"""
 		return self.vbox
 
-	def is_file_ok(self, path):
+	def is_path_ok(self, path):
 		"""Check is specified path fits the cirteria
 
 		You can access provider using self._parent._provider object.

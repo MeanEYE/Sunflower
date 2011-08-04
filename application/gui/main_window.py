@@ -26,6 +26,7 @@ from tools.advanced_rename import AdvancedRename
 from tools.find_files import FindFiles
 
 from ConfigParser import RawConfigParser
+
 try:
 	# try to import argument parser
 	from argparse import ArgumentParser
@@ -33,7 +34,6 @@ try:
 
 except:
 	USE_ARGPARSE = False
-
 
 # GUI imports
 from gui.about_window import AboutWindow

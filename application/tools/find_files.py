@@ -97,6 +97,8 @@ class FindFiles:
 		
 		self._names.append_column(col_name)
 		self._names.append_column(col_directory)
+
+		self._names.connect('button-press-event', self.__handle_button_press)
 		
 		container = gtk.ScrolledWindow()
 		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
@@ -146,6 +148,51 @@ class FindFiles:
 
 		# show all widgets
 		self.window.show_all()
+
+	def __handle_button_press(self, widget, event):
+		"""Handle clicking on list"""
+		result = False
+
+		if event.button == 1 and event.type is gtk.gdk._2BUTTON_PRESS:
+			result = True
+
+			# get list selection
+			selection = self._names.get_selection()
+			list_, iter_ = selection.get_selected()
+
+			# we need selection for this
+			if iter_ is None: return
+
+			name = list_.get_value(iter_, Column.NAME)
+			path = list_.get_value(iter_, Column.DIRECTORY)
+
+			# get active object
+			active_object = self._application.get_active_object()
+
+			if hasattr(active_object, 'change_path'):
+				# change path
+				active_object.change_path(path, name)
+
+				# close window
+				self._close_window()
+
+			else:
+				# notify user about active object
+				dialog = gtk.MessageDialog(
+									self.window,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_INFO,
+									gtk.BUTTONS_OK,
+									_(
+										'Active object doesn\'t support changing '
+										'path. Set focus on a different object, '
+										'preferably file list, and try again.'
+									)
+								)
+				dialog.run()
+				dialog.destroy()
+
+		return result
 
 	def __create_extensions(self):
 		"""Create rename extensions"""

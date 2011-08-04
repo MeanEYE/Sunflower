@@ -1087,7 +1087,7 @@ class ItemList(PluginBase):
 		self._parent.preferences_window._show(widget, 'bookmarks')
 		return True
 
-	def change_path(self, path=None):
+	def change_path(self, path=None, selected=None):
 		"""Public method for safe path change """
 		real_path = os.path.expanduser(path)
 

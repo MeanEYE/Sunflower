@@ -742,7 +742,9 @@ class FileList(ItemList):
 
 		if not self._sort_sensitive and self._sort_column in (Column.NAME, Column.EXTENSION):
 			value1 = value1.lower()
-			value2 = value2.lower()
+
+			if value2 is not None:  # make sure we have extension to make lowercase
+				value2 = value2.lower()
 
 		item1 = (
 				reverse * list_.get_value(iter1, Column.IS_PARENT_DIR),

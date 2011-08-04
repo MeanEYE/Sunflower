@@ -1,6 +1,10 @@
 import os
 import gtk
 import user
+import pango
+import gobject
+
+from threading import Thread, Event
 
 
 class Column:
@@ -19,6 +23,10 @@ class FindFiles:
 		self._extensions = []
 		self._path = self._parent.path
 		self._provider = None
+		self._running = False
+
+		# thread control object
+		self._abort = Event()
 
 		if hasattr(self._parent, 'get_provider'):
 			self._provider = self._parent.get_provider()
@@ -38,9 +46,9 @@ class FindFiles:
 		vbox = gtk.VBox(False, 7)
 
 		# create path and basic options
-		table_basic = gtk.Table(3, 2, False)
-		table_basic.set_col_spacings(5)
-		table_basic.set_row_spacings(2)
+		self._table_basic = gtk.Table(3, 2, False)
+		self._table_basic.set_col_spacings(5)
+		self._table_basic.set_row_spacings(2)
 
 		label_path = gtk.Label(_('Search in:'))
 		label_path.set_alignment(0, 0.5)
@@ -94,34 +102,41 @@ class FindFiles:
 		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 		container.set_shadow_type(gtk.SHADOW_IN)
 
+		# create status label
+		self._status = gtk.Label()
+		self._status.set_alignment(0, 0.5)
+		self._status.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
+		self._status.set_property('no-show-all', True)
+
 		# create controls
 		hbox_controls = gtk.HBox(False, 5)
 
-		button_find = gtk.Button(stock=gtk.STOCK_FIND)
-		button_find.connect('clicked', self.find_files)
+		self._image_find = gtk.Image()
+		self._image_find.set_from_stock(gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_BUTTON)
 
-		button_stop = gtk.Button(stock=gtk.STOCK_STOP)
-		button_stop.set_sensitive(False)
-		button_stop.connect('clicked', self.stop_search)
+		self._button_find = gtk.Button()
+		self._button_find.set_label(_('Start'))
+		self._button_find.set_image(self._image_find)
+		self._button_find.connect('clicked', self.find_files)
 
 		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
 		button_cancel.connect('clicked', self._close_window)
 		
 		# pack interface
-		table_basic.attach(label_path, 0, 1, 0, 1, xoptions=gtk.SHRINK|gtk.FILL)
-		table_basic.attach(self._entry_path, 1, 2, 0, 1, xoptions=gtk.EXPAND|gtk.FILL)
-		table_basic.attach(button_browse, 2, 3, 0, 1, xoptions=gtk.SHRINK|gtk.FILL)
-		table_basic.attach(self._checkbox_recursive, 1, 2, 1, 2)
+		self._table_basic.attach(label_path, 0, 1, 0, 1, xoptions=gtk.SHRINK|gtk.FILL)
+		self._table_basic.attach(self._entry_path, 1, 2, 0, 1, xoptions=gtk.EXPAND|gtk.FILL)
+		self._table_basic.attach(button_browse, 2, 3, 0, 1, xoptions=gtk.SHRINK|gtk.FILL)
+		self._table_basic.attach(self._checkbox_recursive, 1, 2, 1, 2)
 
 		container.add(self._names)
 
-		hbox_controls.pack_end(button_find, False, False, 0)
-		hbox_controls.pack_end(button_stop, False, False, 0)
+		hbox_controls.pack_end(self._button_find, False, False, 0)
 		hbox_controls.pack_end(button_cancel, False, False, 0)
 
-		vbox.pack_start(table_basic, False, False, 0) 
+		vbox.pack_start(self._table_basic, False, False, 0) 
 		vbox.pack_start(self._extension_list, False, False, 0) 
 		vbox.pack_end(hbox_controls, False, False, 0)
+		vbox.pack_end(self._status, False, False, 0)
 		vbox.pack_end(container, True, True, 0)
 
 		self.window.add(vbox)
@@ -144,8 +159,98 @@ class FindFiles:
 			# store extension for later use
 			self._extensions.append(extension)
 
+	def __update_status_label(self, path):
+		"""Update status label with current scanning path"""
+		self._status.set_text(path)
+
+	def __update_status(self, running=True):
+		"""Update button status"""
+		self._running = running
+
+		if running:
+			# disable interface to prevent changes during search
+			self._table_basic.set_sensitive(False)
+			self._extension_list.set_sensitive(False)
+
+			# show status bar
+			self._status.show()
+
+			# update find button
+			self._image_find.set_from_stock(gtk.STOCK_MEDIA_STOP, gtk.ICON_SIZE_BUTTON)
+			self._button_find.set_label(_('Stop'))
+
+		else:
+			# enable interface to prevent changes during search
+			self._table_basic.set_sensitive(True)
+			self._extension_list.set_sensitive(True)
+
+			# hide status bar
+			self._status.hide()
+
+			# update find button
+			self._image_find.set_from_stock(gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_BUTTON)
+			self._button_find.set_label(_('Start'))
+
+	def __find_files(self, path, extensions, scan_recursively):
+		"""Threaded find files method"""
+		# update thread status
+		gobject.idle_add(self.__update_status, True)
+		gobject.idle_add(self.__update_status_label, path)
+
+		scan_queue = []
+
+		# add current path to scan queue
+		try:
+			item_list = self._provider.list_dir(path)
+			item_list = map(lambda new_item: os.path.join(path, new_item), item_list)
+			scan_queue.extend(item_list)
+
+		except:
+			pass
+
+		# traverse through directories
+		while not self._abort.is_set() and len(scan_queue) > 0:
+			# get next item in queue
+			item = scan_queue.pop(0)
+
+			if self._provider.is_dir(item) and scan_recursively:
+				# extend scan queue with directory content
+				gobject.idle_add(self.__update_status_label, item)
+
+				try:
+					item_list = self._provider.list_dir(item)
+					item_list = map(lambda new_item: os.path.join(item, new_item), item_list)
+
+					scan_queue.extend(item_list)
+
+				except:
+					pass
+
+			# check if item fits cirteria
+			path_score = 0
+
+			for child in extensions:
+				extension = child.get_data('extension')
+
+				if not extension.is_path_ok(item):
+					break 
+
+				path_score += 1
+
+			# add item if score is right
+			if path_score == len(extensions):
+				name = os.path.basename(item)
+				path = os.path.dirname(item)
+				icon = self._application.icon_manager.get_icon_for_file(item)
+
+				self._list.append((icon, name, path))
+
+		# update thread status
+		gobject.idle_add(self.__update_status, False)
+
 	def _close_window(self, widget=None, data=None):
 		"""Close window"""
+		self._abort.set()  # notify search thread we are terminating
 		self.window.destroy()
 
 	def stop_search(self, widget=None, data=None):
@@ -154,27 +259,71 @@ class FindFiles:
 
 	def find_files(self, widget=None, data=None):
 		"""Start searching for files"""
-		path = self._entry_path.get_text()
+		if not self._running:
+			# thread is not running, start it	
+			path = self._entry_path.get_text()
 
-		# make sure we have a valid provider
-		if self._provider is None:
-			ProviderClass = self._application.get_provider_by_protocol('file')
-			self._provider = ProviderClass(self._parent)
+			# make sure we have a valid provider
+			if self._provider is None:
+				ProviderClass = self._application.get_provider_by_protocol('file')
+				self._provider = ProviderClass(self._parent)
 
-		# check if specified path exists
-		if not self._provider.is_dir(path):
-			dialog = gtk.MessageDialog(
-								self.window,
-								gtk.DIALOG_DESTROY_WITH_PARENT,
-								gtk.MESSAGE_ERROR,
-								gtk.BUTTONS_OK,
-								_(
-									'Specified path is not valid or doesn\'t '
-									'exist anymore. Please check your selection '
-									'and try again.'
+			# check if specified path exists
+			if not self._provider.is_dir(path):
+				dialog = gtk.MessageDialog(
+									self.window,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_ERROR,
+									gtk.BUTTONS_OK,
+									_(
+										'Specified path is not valid or doesn\'t '
+										'exist anymore. Please check your selection '
+										'and try again.'
+									)
 								)
-							)
-			dialog.run()
-			dialog.destroy()
+				dialog.run()
+				dialog.destroy()
 
-			return
+				return
+
+			# get list of active extensions
+			active_children = filter(
+									lambda child: child.get_data('extension').is_active(), 
+									self._extension_list.get_children()
+								)
+
+			if len(active_children) == 0:
+				dialog = gtk.MessageDialog(
+									self.window,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_WARNING,
+									gtk.BUTTONS_OK,
+									_(
+										'You need to enable at least one extension '
+										'in order to find files and directories!'
+									)
+								)
+				dialog.run()
+				dialog.destroy()
+
+				return
+
+
+			# set thread control objects
+			self._abort.clear()
+
+			# clear existing list
+			self._list.clear()
+
+			# start the thread
+			params = {
+					'path': path,
+					'extensions': active_children,
+					'scan_recursively': self._checkbox_recursive.get_active()
+				}
+			thread = Thread(target=self.__find_files, kwargs=params)
+			thread.start()
+
+		else:
+			# thread is running, set abort event
+			self._abort.set()

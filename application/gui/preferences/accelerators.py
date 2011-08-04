@@ -37,7 +37,16 @@ class AcceleratorOptions(SettingsPage):
 		cell_secondary = gtk.CellRendererAccel()
 
 		cell_primary.set_property('accel-mode', gtk.CELL_RENDERER_ACCEL_MODE_OTHER)
+		cell_primary.set_property('editable', True)
+        
+		cell_primary.connect('accel-edited', self.__accel_edited, True)
+		cell_primary.connect('accel-cleared', self.__accel_cleared, True)
+
 		cell_secondary.set_property('accel-mode', gtk.CELL_RENDERER_ACCEL_MODE_OTHER)
+		cell_secondary.set_property('editable', True)
+
+		cell_secondary.connect('accel-edited', self.__accel_edited, False)
+		cell_secondary.connect('accel-cleared', self.__accel_cleared, False)
 
 		# create and pack columns
 		col_name = gtk.TreeViewColumn(_('Description'), cell_name, markup=Column.TITLE)
@@ -64,10 +73,52 @@ class AcceleratorOptions(SettingsPage):
 		self._list.append_column(col_primary)
 		self._list.append_column(col_secondary)
 
+		# warning label
+		label_warning = gtk.Label(_(
+							'<b>Note:</b> You can only edit accelerators from '
+							'objects created at least once since Sunflower was '
+							'started. To disable accelerator assign press <i>Backspace</i>.'
+						))
+		label_warning.set_alignment(0, 0)
+		label_warning.set_use_markup(True)
+		label_warning.set_line_wrap(True)
+		label_warning.connect('size-allocate', self._adjust_label)
+
 		# pack interface
 		container.add(self._list)
 
+		self.pack_start(label_warning, False, False, 0)
 		self.pack_start(container, True, True, 0)
+
+	def __accel_edited(self, widget, path, key, mods, hwcode, primary):
+		"""Handle editing accelerator"""
+		accel_iter = self._accels.get_iter(path)
+
+		if accel_iter is not None:
+			column_key = Column.PRIMARY_KEY if primary else Column.SECONDARY_KEY
+			column_mods = Column.PRIMARY_MODS if primary else Column.SECONDARY_MODS
+
+			# save changes to local list
+			self._accels.set_value(accel_iter, column_key, key)
+			self._accels.set_value(accel_iter, column_mods, mods)
+
+			# enable save button
+			self._parent.enable_save()
+
+	def __accel_cleared(self, widget, path, primary):
+		"""Handle clearing accelerator"""
+		accel_iter = self._accels.get_iter(path)
+
+		if accel_iter is not None:
+			column_key = Column.PRIMARY_KEY if primary else Column.SECONDARY_KEY
+			column_mods = Column.PRIMARY_MODS if primary else Column.SECONDARY_MODS
+
+			# save changes to local list
+			self._accels.set_value(accel_iter, column_key, 0)
+			self._accels.set_value(accel_iter, column_mods, 0)
+
+			# enable save button
+			self._parent.enable_save()
 
 	def _populate_list(self):
 		"""Update accelerator list"""
@@ -131,6 +182,10 @@ class AcceleratorOptions(SettingsPage):
 				# append to the list
 				data = (method_name, title, primary[0], primary[1], secondary[0], secondary[1])
 				self._accels.append(group_iter, data)
+
+	def _adjust_label(self, widget, data=None):
+		"""Adjust label size"""
+		widget.set_size_request(data.width-1, -1)
 
 	def _load_options(self):
 		"""Load options and update interface"""

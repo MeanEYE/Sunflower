@@ -154,7 +154,7 @@ class AboutWindow(gtk.Window):
 		programmers.attach(label_programming, 0, 2, 0, 1)
 
 		# developers
-		developer = gtk.Label('\tMeanEYE')
+		developer = gtk.Label('\tMladen Mijatov')
 		developer.set_alignment(0, 0)
 		developer.set_selectable(True)
 

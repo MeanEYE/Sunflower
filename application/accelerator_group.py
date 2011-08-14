@@ -43,10 +43,10 @@ class AcceleratorGroup:
 
 	def _create_accelerators(self, primary=True):
 		"""Create accelerators from specified list"""
-		list_ = self._primary if primary else self._secondary
+		list_ = (self._secondary, self._primary)[primary]
 
 		# connect all methods in list
-		for method_name in list_:
+		for method_name in self._methods.keys():
 			if method_name in self._disabled:
 				continue  # skip if method is disabled
 
@@ -54,18 +54,20 @@ class AcceleratorGroup:
 			accelerator = self._manager.get_accelerator(self._name, method_name, primary)
 
 			# if we don't have saved key combination, use default
-			if accelerator is None:
+			if accelerator is None and list_.has_key(method_name):
 				accelerator = list_[method_name]
 
-			keyval = accelerator[0]
-			modifier = accelerator[1]
-
-			# create method name cache based on key combination
-			label = gtk.accelerator_get_label(keyval, modifier)
-			self._method_names[label] = method_name
-
-			# connect accelerator
-			self._accel_group.connect_group(keyval, modifier, 0, self._handle_activate)
+			# finally connect accelerator to specified method
+			if accelerator is not None:
+				keyval = accelerator[0]
+				modifier = accelerator[1]
+	
+				# create method name cache based on key combination
+				label = gtk.accelerator_get_label(keyval, modifier)
+				self._method_names[label] = method_name
+	
+				# connect accelerator
+				self._accel_group.connect_group(keyval, modifier, 0, self._handle_activate)
 
 	def _handle_activate(self, group, widget, keyval, modifier):
 		"""Handle accelerator activation"""

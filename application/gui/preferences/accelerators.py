@@ -76,8 +76,9 @@ class AcceleratorOptions(SettingsPage):
 		# warning label
 		label_warning = gtk.Label(_(
 							'<b>Note:</b> You can only edit accelerators from '
-							'objects created at least once since Sunflower was '
-							'started. To disable accelerator assign press <i>Backspace</i>.'
+							'objects created at least once in current session. '
+							'To disable accelerator press <i>Backspace</i> '
+							'in assign mode.'
 						))
 		label_warning.set_alignment(0, 0)
 		label_warning.set_use_markup(True)

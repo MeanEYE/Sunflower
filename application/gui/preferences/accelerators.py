@@ -38,7 +38,7 @@ class AcceleratorOptions(SettingsPage):
 
 		cell_primary.set_property('accel-mode', gtk.CELL_RENDERER_ACCEL_MODE_OTHER)
 		cell_primary.set_property('editable', True)
-        
+
 		cell_primary.connect('accel-edited', self.__accel_edited, True)
 		cell_primary.connect('accel-cleared', self.__accel_cleared, True)
 
@@ -193,4 +193,38 @@ class AcceleratorOptions(SettingsPage):
 
 	def _save_options(self):
 		"""Method called when save button is clicked"""
-		pass
+		manager = self._application.accelerator_manager
+		
+		# iterate over groups
+		for row in self._accels:
+			group_name = self._accels.get_value(row.iter, Column.NAME)
+			children = row.iterchildren()
+			
+			# store accelerators for current group\
+			for child in children:
+				name = self._accels.get_value(child.iter, Column.NAME)
+
+				# save primary accelerator
+				manager._save_accelerator(
+									group_name,
+									name,
+									(
+										self._accels.get_value(child.iter, Column.PRIMARY_KEY),
+										self._accels.get_value(child.iter, Column.PRIMARY_MODS)
+									),
+									primary=True,
+									can_overwrite=True
+								)
+				
+				# save secondary accelerator
+				manager._save_accelerator(
+									group_name,
+									name,
+									(
+										self._accels.get_value(child.iter, Column.SECONDARY_KEY),
+										self._accels.get_value(child.iter, Column.SECONDARY_MODS)
+									),
+									primary=False,
+									can_overwrite=True
+								)
+				

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-04 23:07+0200\n"
+"POT-Creation-Date: 2011-08-14 22:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,16 +98,23 @@ msgstr ""
 msgid "Keybindings"
 msgstr ""
 
-#: application/gui/preferences/accelerators.py:43
+#: application/gui/preferences/accelerators.py:52
 msgid "Description"
 msgstr ""
 
-#: application/gui/preferences/accelerators.py:48
+#: application/gui/preferences/accelerators.py:57
 msgid "Primary"
 msgstr ""
 
-#: application/gui/preferences/accelerators.py:56
+#: application/gui/preferences/accelerators.py:65
 msgid "Secondary"
+msgstr ""
+
+#: application/gui/preferences/accelerators.py:78
+msgid ""
+"<b>Note:</b> You can only edit accelerators from objects created at least "
+"once in current session. To disable accelerator press <i>Backspace</i> in "
+"assign mode."
 msgstr ""
 
 #: application/gui/preferences/view_and_edit.py:10

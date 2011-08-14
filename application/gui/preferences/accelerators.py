@@ -103,7 +103,7 @@ class AcceleratorOptions(SettingsPage):
 			self._accels.set_value(accel_iter, column_mods, mods)
 
 			# enable save button
-			self._parent.enable_save()
+			self._parent.enable_save(show_restart=True)
 
 	def __accel_cleared(self, widget, path, primary):
 		"""Handle clearing accelerator"""
@@ -118,7 +118,7 @@ class AcceleratorOptions(SettingsPage):
 			self._accels.set_value(accel_iter, column_mods, 0)
 
 			# enable save button
-			self._parent.enable_save()
+			self._parent.enable_save(show_restart=True)
 
 	def _populate_list(self):
 		"""Update accelerator list"""

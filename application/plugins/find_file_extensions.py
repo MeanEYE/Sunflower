@@ -3,12 +3,14 @@ import gtk
 import fnmatch
 
 from plugin_base.find_extension import FindExtension
+from provider import FileType
 
 
 def register_plugin(application):
 	"""register plugin classes with application"""
 	application.register_find_extension('default', DefaultFindFiles)
 	application.register_find_extension('size', SizeFindFiles)
+	application.register_find_extension('contents', ContentsFindFiles)
 
 
 class DefaultFindFiles(FindExtension):
@@ -148,4 +150,39 @@ class SizeFindFiles(FindExtension):
 		size_max = self._entry_max.get_value() * 1048576
 		size_min = self._entry_min.get_value() * 1048576
 		return size_min < size < size_max
+
+
+class ContentsFindFiles(FindExtension):
+	"""Extension for finding specified contents in files"""
+
+	def __init__(self, parent):
+		FindExtension.__init__(self, parent)
+
+		self._buffer = gtk.TextBuffer()
+		self._text_view = gtk.TextView(self._buffer)
+
+		scrolled_window = gtk.ScrolledWindow()
+		scrolled_window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+		
+		scrolled_window.add(self._text_view)
+		self.vbox.pack_start(scrolled_window, True, True, 5)
+
+	def get_title(self):
+		"""Return i18n title for extension"""
+		return _('Contents')
+
+	def is_path_ok(self, path):
+		"""Check is specified path fits the cirteria"""
+		if not self._parent._provider.is_local:
+			return False
+
+		if self._parent._provider.get_stat(path).type is FileType.DIRECTORY:
+			return False
+
+		start = self._buffer.get_start_iter()
+		end = self._buffer.get_end_iter()
+		try:
+			return self._buffer.get_text(start, end) in open(path).read()
+		except IOError:
+			return False
 

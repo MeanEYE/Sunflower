@@ -21,7 +21,7 @@ class DefaultFindFiles(FindExtension):
 
 		self._pattern = '*'
 		self._compare_method = fnmatch.fnmatch
-	
+
 		# enabled by default
 		self._checkbox_active.set_active(True)
 
@@ -48,7 +48,7 @@ class DefaultFindFiles(FindExtension):
 
 		label_pattern = gtk.Label(_('Search for:'))
 		label_pattern.set_alignment(0, 0.5)
-		
+
 		self._entry_pattern = gtk.Entry()
 		self._entry_pattern.set_text('*')
 		self._entry_pattern.connect('changed', self.__handle_pattern_change)
@@ -100,45 +100,52 @@ class SizeFindFiles(FindExtension):
 	def __init__(self, parent):
 		FindExtension.__init__(self, parent)
 
+		# create container
+		table =  gtk.Table(2, 4, False)
+		table.set_border_width(5)
+		table.set_col_spacings(5)
+
 		# create interface
-		self._adj_max = gtk.Adjustment(value=50.0, lower=0.0, upper=100000.0, step_incr=0.1, page_incr=10.0)
-		self._adj_min = gtk.Adjustment(value=0.0, lower=0.0, upper=10.0, step_incr=0.1, page_incr=10.0)
+		self._adjustment_max = gtk.Adjustment(value=50.0, lower=0.0, upper=100000.0, step_incr=0.1, page_incr=10.0)
+		self._adjustment_min = gtk.Adjustment(value=0.0, lower=0.0, upper=10.0, step_incr=0.1, page_incr=10.0)
 
-		label = gtk.Label(_('Search for files:'))
+		label = gtk.Label('<b>{0}</b>'.format(_('Match file size')))
 		label.set_alignment(0.0, 0.5)
-		label_max1 = gtk.Label(_('smaller than'))
-		label_max2 = gtk.Label(_('MB'))
-		label_min1 = gtk.Label(_('bigger than'))
-		label_min2 = gtk.Label(_('MB'))
+		label.set_use_markup(True)
 
-		self._entry_max = gtk.SpinButton(adjustment=self._adj_max, digits=2)
-		self._entry_min = gtk.SpinButton(adjustment=self._adj_min, digits=2)
+		label_min = gtk.Label(_('Minimum:'))
+		label_min.set_alignment(0, 0.5)
+		label_min_unit = gtk.Label(_('MB'))
+
+		label_max = gtk.Label(_('Maximum:'))
+		label_max.set_alignment(0, 0.5)
+		label_max_unit = gtk.Label(_('MB'))
+
+		self._entry_max = gtk.SpinButton(adjustment=self._adjustment_max, digits=2)
+		self._entry_min = gtk.SpinButton(adjustment=self._adjustment_min, digits=2)
 		self._entry_max.connect('value-changed', self._max_value_changed)
 		self._entry_min.connect('value-changed', self._min_value_changed)
 
 		# pack interface
-		table =  gtk.Table(3, 3, False)
-		table.set_border_width(5)
-		table.set_col_spacings(5)
-		table.set_row_spacings(5)
-
 		table.attach(label, 0, 3, 0, 1, xoptions=gtk.FILL)
 
-		table.attach(label_max1, 0, 1, 1, 2, xoptions=gtk.FILL)
-		table.attach(self._entry_max,  1, 2, 1, 2, xoptions=gtk.FILL)
-		table.attach(label_max2, 2, 3, 1, 2, xoptions=gtk.FILL)
+		table.attach(label_min, 0, 1, 1, 2, xoptions=gtk.FILL)
+		table.attach(self._entry_min,  1, 2, 1, 2, xoptions=gtk.FILL)
+		table.attach(label_min_unit, 2, 3, 1, 2, xoptions=gtk.FILL)
 
-		table.attach(label_min1, 0, 1, 2, 3, xoptions=gtk.FILL)
-		table.attach(self._entry_min,  1, 2, 2, 3, xoptions=gtk.FILL)
-		table.attach(label_min2, 2, 3, 2, 3, xoptions=gtk.FILL)
+		table.attach(label_max, 0, 1, 2, 3, xoptions=gtk.FILL)
+		table.attach(self._entry_max,  1, 2, 2, 3, xoptions=gtk.FILL)
+		table.attach(label_max_unit, 2, 3, 2, 3, xoptions=gtk.FILL)
 
 		self.vbox.pack_start(table, False, False, 0)
 
 	def _max_value_changed(self, entry):
-		self._adj_min.set_upper(entry.get_value());
+		"""Assign value to adjustment handler"""
+		self._adjustment_min.set_upper(entry.get_value());
 
 	def _min_value_changed(self, entry):
-		self._adj_max.set_lower(entry.get_value());
+		"""Assign value to adjustment handler"""
+		self._adjustment_max.set_lower(entry.get_value());
 
 	def get_title(self):
 		"""Return i18n title for extension"""
@@ -158,31 +165,48 @@ class ContentsFindFiles(FindExtension):
 	def __init__(self, parent):
 		FindExtension.__init__(self, parent)
 
+		# create container
+		vbox = gtk.VBox(False, 0)
+
+		viewport = gtk.ScrolledWindow()
+		viewport.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+		viewport.set_shadow_type(gtk.SHADOW_IN)
+
+		# create entry widget
+		label_content = gtk.Label(_('Search for:'))
+		label_content.set_alignment(0, 0.5)
+
 		self._buffer = gtk.TextBuffer()
 		self._text_view = gtk.TextView(self._buffer)
 
-		scrolled_window = gtk.ScrolledWindow()
-		scrolled_window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-		
-		scrolled_window.add(self._text_view)
-		self.vbox.pack_start(scrolled_window, True, True, 5)
+		# pack interface
+		viewport.add(self._text_view)
+
+		vbox.pack_start(label_content, False, False, 0)
+		vbox.pack_start(viewport, True, True, 0)
+
+		self.vbox.pack_start(vbox, True, True, 0)
 
 	def get_title(self):
 		"""Return i18n title for extension"""
-		return _('Contents')
+		return _('Content')
 
 	def is_path_ok(self, path):
 		"""Check is specified path fits the cirteria"""
-		if not self._parent._provider.is_local:
-			return False
+		result = False
+		file_type = self._parent._provider.get_stat(path).type
 
-		if self._parent._provider.get_stat(path).type is FileType.DIRECTORY:
-			return False
+		if file_type is FileType.REGULAR:
+			# get buffer
+			text = self._buffer.get_text(*self._buffer.get_bounds())
 
-		start = self._buffer.get_start_iter()
-		end = self._buffer.get_end_iter()
-		try:
-			return self._buffer.get_text(start, end) in open(path).read()
-		except IOError:
-			return False
+			# try finding content in file
+			try:
+				with open(path, 'r') as raw_file:  # make sure file is closed afterwards
+					result = text in raw_file.read()
+
+			except IOError:
+				pass
+
+		return result
 

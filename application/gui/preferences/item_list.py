@@ -77,7 +77,7 @@ class ItemListOptions(SettingsPage):
 								'<b>' + _('Time is formed using the format located at:') + '</b>\n'
 								'http://docs.python.org/library/time.html#time.strftime'
 								)
-		self._entry_time_format.connect('activate', self._parent.enable_save)
+		self._entry_time_format.connect('changed', self._parent.enable_save)
 
 		# pack interface
 		hbox_quick_search.pack_start(label_quick_search, False, False, 0)

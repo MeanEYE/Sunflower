@@ -31,7 +31,7 @@ class ViewEditOptions(SettingsPage):
 		label_editor.set_alignment(0, 0.5)
 		label_editor.set_use_markup(True)
 		self._entry_editor = gtk.Entry()
-		self._entry_editor.connect('activate', self._parent.enable_save)
+		self._entry_editor.connect('changed', self._parent.enable_save)
 
 		self._checkbox_wait_for_editor = gtk.CheckButton(_('Wait for editor process to end'))
 		self._checkbox_wait_for_editor.connect('toggled', self._parent.enable_save)

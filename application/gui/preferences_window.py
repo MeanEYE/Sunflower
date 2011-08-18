@@ -84,6 +84,9 @@ class PreferencesWindow(gtk.Window):
 		self._button_save = gtk.Button(stock=gtk.STOCK_SAVE)
 		self._button_save.connect('clicked', self._save_options)
 
+		self._button_revert = gtk.Button(stock=gtk.STOCK_REVERT_TO_SAVED)
+		self._button_revert.connect('clicked', self._load_options)
+
 		btn_help = gtk.Button(stock=gtk.STOCK_HELP)
 		btn_help.connect(
 					'clicked',
@@ -107,6 +110,7 @@ class PreferencesWindow(gtk.Window):
 		hbox_controls.pack_start(self._label_restart, True, True, 0)
 		hbox_controls.pack_end(btn_close, False, False, 0)
 		hbox_controls.pack_end(self._button_save, False, False, 0)
+		hbox_controls.pack_end(self._button_revert, False, False, 0)
 
 		# pack UI
 		vbox.pack_start(hbox, True, True, 0)
@@ -127,7 +131,7 @@ class PreferencesWindow(gtk.Window):
 		self.hide()
 		return True  # avoid destroying components
 
-	def _load_options(self):
+	def _load_options(self, widget=None, data=None):
 		"""Change interface to present current state of configuration"""
 		# call all tabs to load their options
 		for i in range(self._tabs.get_n_pages()):
@@ -138,9 +142,10 @@ class PreferencesWindow(gtk.Window):
 
 		# disable save button and hide label
 		self._button_save.set_sensitive(False)
+		self._button_revert.set_sensitive(False)
 		self._label_restart.hide()
 
-	def _save_options(self, widget, data=None):
+	def _save_options(self, widget=None, data=None):
 		"""Save options"""
 		# call all tabs to save their options
 		for i in range(self._tabs.get_n_pages()):
@@ -179,6 +184,7 @@ class PreferencesWindow(gtk.Window):
 	def enable_save(self, widget=None, show_restart=None):
 		"""Enable save button"""
 		self._button_save.set_sensitive(True)
+		self._button_revert.set_sensitive(True)
 
 		# show label with message
 		if show_restart is not None and show_restart:

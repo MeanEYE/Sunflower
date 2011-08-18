@@ -289,7 +289,7 @@ class AboutWindow(gtk.Window):
 		translators.attach(language, 2, 3, 5, 6)
 
 		# Russian
-		translator = gtk.Label('\tSergey Malkini')
+		translator = gtk.Label('\tSergey Malkin')
 		translator.set_alignment(0, 0)
 		translator.set_selectable(True)
 

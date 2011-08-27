@@ -113,7 +113,7 @@ class FileList(ItemList):
 		col_size = gtk.TreeViewColumn(_('Size'))
 		col_mode = gtk.TreeViewColumn(_('Mode'))
 		col_date = gtk.TreeViewColumn(_('Date'))
-
+		
 		# add cell renderer to columns
 		col_file.pack_start(cell_icon, False)
 		col_file.pack_start(cell_name, True)
@@ -183,6 +183,7 @@ class FileList(ItemList):
 			# connect events
 			column.connect('clicked', self._set_sort_function, sort_data)
 			column.connect('notify::width', self._column_resized)
+			column.set_reorderable(True)
 
 			# add to the list
 			self._item_list.append_column(column)

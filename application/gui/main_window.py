@@ -1600,7 +1600,14 @@ class MainWindow(gtk.Window):
 
 	def create_terminal_tab(self, notebook, path=None):
 		"""Create terminal tab on selected notebook"""
-		return self.create_tab(notebook, SystemTerminal, path)
+		result = None
+		
+		if self.plugin_classes.has_key('system_terminal'):
+			# only create tab if specified plugin is activated
+			SystemTerminal = self.plugin_classes['system_terminal']
+			result = self.create_tab(notebook, SystemTerminal, path)
+		
+		return result
 
 	def close_tab(self, notebook, child):
 		"""Safely remove tab and its children"""

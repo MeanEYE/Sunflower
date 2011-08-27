@@ -2,10 +2,6 @@ import gtk
 
 from gio import VolumeMonitor
 
-COL_DEVICE		= 0
-COL_MOUNT_POINT = 1
-COL_FILESYSTEM	= 2
-
 
 class MountsManager:
 	"""Class used for monitoring and managing mounts menu"""
@@ -31,7 +27,7 @@ class MountsManager:
 		self._menu_item_no_mounts2 = menu_manager.get_item_by_name('mount_list_empty')
 		self._menu_item_no_mounts2.set_property('no-show-all', True)
 
-		# gnome volume monitor
+		# create volume monitor
 		self._volume_monitor = VolumeMonitor()
 		self._volume_monitor.connect('mount-added', self._add_mount)
 		self._volume_monitor.connect('mount-removed', self._remove_mount)
@@ -43,7 +39,7 @@ class MountsManager:
 		self._menu_updated()
 
 	def _add_mount(self, monitor, mount):
-		"""Catch volume-mounted singnal and update mounts menu"""
+		"""Catch volume-mounted signal and update mounts menu"""
 		icon_names = mount.get_icon().to_string()
 		mount_icon = self._application.icon_manager.get_mount_icon_name(icon_names)
 

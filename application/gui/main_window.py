@@ -101,7 +101,7 @@ class MainWindow(gtk.Window):
 		self.tab_options = None
 		self.bookmark_options = None
 		self.toolbar_options = None
-		self.tool_options = None
+		self.command_options = None
 		self.accel_options = None
 
 		# location of all configuration files
@@ -335,28 +335,28 @@ class MainWindow(gtk.Window):
 				)
 			},
 		    {
-		        'label': _('Commands'),
-		        'name': 'commands_menu',
+		        'label': _('Tools'),
+		        'name': 'tools',
 		        'submenu': (
 		            {
 		                'label': _('Find files'),
 		                'type': 'image',
 		                'image': 'system-search',
-		                'path': '<Sunflower>/Commands/FindFiles',
+		                'path': '<Sunflower>/Tools/FindFiles',
 						'callback': self.show_find_files
 		            },
 		            {
 		                'label': _('Find duplicate files'),
-		                'path': '<Sunflower>/Commands/FindDuplicateFiles'
+		                'path': '<Sunflower>/Tools/FindDuplicateFiles'
 		            },
 		            {
 		                'label': _('Synchronize directories'),
-		                'path': '<Sunflower>/Commands/SynchronizeDirectories'
+		                'path': '<Sunflower>/Tools/SynchronizeDirectories'
 		            },
 		            {'type': 'separator'},
 		            {
 		                'label': _('Advanced rename'),
-		                'path': '<Sunflower>/Commands/AdvancedRename',
+		                'path': '<Sunflower>/Tools/AdvancedRename',
 		                'callback': self.show_advanced_rename,
 		            },
 		        )
@@ -428,8 +428,8 @@ class MainWindow(gtk.Window):
 				)
 			},
 			{
-				'label': _('Tools'),
-				'name': 'tools',
+				'label': _('Commands'),
+				'name': 'commands',
 			},
 			{
 				'label': _('Operations'),
@@ -481,12 +481,12 @@ class MainWindow(gtk.Window):
 		for item in menu_items:
 			menu_bar.append(self.menu_manager.create_menu_item(item))
 
-		# tools menu
-		self.menu_tools = gtk.Menu()
+		# commands menu
+		self.menu_commands = gtk.Menu()
 
-		self._menu_item_tools = self.menu_manager.get_item_by_name('tools')
-		self._menu_item_tools.set_sensitive(False)
-		self._menu_item_tools.set_submenu(self.menu_tools)
+		self._menu_item_commands = self.menu_manager.get_item_by_name('commands')
+		self._menu_item_commands.set_sensitive(False)
+		self._menu_item_commands.set_submenu(self.menu_commands)
 
 		# operations menu
 		self._menu_item_operations = self.menu_manager.get_item_by_name('operations')
@@ -521,9 +521,9 @@ class MainWindow(gtk.Window):
 		self._menu_item_mounts.show()
 		self.mount_manager = MountsManager(self, self._menu_item_mounts)
 
-		# commands menu
-		menu_item_commands = self.menu_manager.get_item_by_name('commands_menu')
-		self.menu_commands = menu_item_commands.get_submenu()
+		# tools menu
+		menu_item_tools = self.menu_manager.get_item_by_name('tools')
+		self.menu_tools = menu_item_tools.get_submenu()
 
 		# create notebooks
 		hbox = gtk.HBox(True, 4)
@@ -629,7 +629,7 @@ class MainWindow(gtk.Window):
 		self._create_bookmarks_menu()
 
 		# create tools menu
-		self._create_tools_menu()
+		self._create_commands_menu()
 
 		# restore window size and position
 		self._restore_window_position()
@@ -744,25 +744,28 @@ class MainWindow(gtk.Window):
 		list_._disable_object_block()
 		oposite_object._disable_object_block()
 
-	def _create_tools_menu(self):
-		"""Create tools main menu"""
-		for item in self.menu_tools.get_children():  # remove existing items
-			self.menu_tools.remove(item)
+	def _create_commands_menu(self):
+		"""Create commands main menu"""
+		if not self.command_options.has_section('commands'): 
+			return
+		
+		for item in self.menu_commands.get_children():  # remove existing items
+			self.menu_commands.remove(item)
 
 		# get total tool items count
-		tool_count = (len(self.tool_options.options('tools')) / 2) + 1
+		tool_count = (len(self.command_options.options('commands')) / 2) + 1
 
 		# create each item from the list
 		for index in range(1, tool_count):
 			# get data from config
-			tool_title = self.tool_options.get('tools', 'title_{0}'.format(index))
-			tool_command = self.tool_options.get('tools', 'command_{0}'.format(index))
+			tool_title = self.command_options.get('commands', 'title_{0}'.format(index))
+			tool_command = self.command_options.get('commands', 'command_{0}'.format(index))
 
 			# create menu item
 			if tool_title != '-':
 				# normal menu item
 				tool = gtk.MenuItem(label=tool_title)
-				tool.connect('activate', self._handle_tool_click)
+				tool.connect('activate', self._handle_command_click)
 				tool.set_data('command', tool_command)
 
 			else:
@@ -770,21 +773,21 @@ class MainWindow(gtk.Window):
 				tool = gtk.SeparatorMenuItem()
 
 			# add item to the tools menu
-			self.menu_tools.append(tool)
+			self.menu_commands.append(tool)
 
 		# create separator
 		if tool_count > 1:
 			separator = gtk.SeparatorMenuItem()
-			self.menu_tools.append(separator)
+			self.menu_commands.append(separator)
 
 		# create option for editing tools
-		edit_tools = gtk.ImageMenuItem(stock_id=gtk.STOCK_PREFERENCES)
-		edit_tools.set_label(_('_Edit tools'))
-		edit_tools.connect('activate', self.preferences_window._show, 'tools')
-		self.menu_tools.append(edit_tools)
+		edit_commands = gtk.ImageMenuItem(stock_id=gtk.STOCK_PREFERENCES)
+		edit_commands.set_label(_('_Edit commands'))
+		edit_commands.connect('activate', self.preferences_window._show, 'commands')
+		self.menu_commands.append(edit_commands)
 
-		self._menu_item_tools.set_sensitive(tool_count > 0)
-		self.menu_tools.show_all()
+		self._menu_item_commands.set_sensitive(tool_count > 0)
+		self.menu_commands.show_all()
 
 	def _get_bookmarks_menu_position(self, menu, button):
 		"""Get bookmarks position"""
@@ -844,8 +847,8 @@ class MainWindow(gtk.Window):
 				dialog.run()
 				dialog.destroy()
 
-	def _handle_tool_click(self, widget, data=None):
-		"""Handle click on tool menu item"""
+	def _handle_command_click(self, widget, data=None):
+		"""Handle click on command menu item"""
 		command = widget.get_data('command')
 
 		# grab active objects
@@ -1256,23 +1259,28 @@ class MainWindow(gtk.Window):
 			vbox = gtk.VBox(False, 10)
 			vbox.set_border_width(5)
 
-			# reset aceelerator map
-			if config_version < 26:
+			if config_version < 34:
 				vbox_accel_map = gtk.VBox(False, 0)
 
 				label_accel_map = gtk.Label('<b>Version 0.1a-26:</b>')
 				label_accel_map.set_alignment(0, 0.5)
 				label_accel_map.set_use_markup(True)
 
+				# reset accelerator map
 				checkbox_reset_accel_map = gtk.CheckButton('Reset accelerator map')
 				checkbox_reset_accel_map.set_active(True)
 
+				# convert tools menu
+				checkbox_convert_tools_menu = gtk.CheckButton('Convert saved tools menu')
+				checkbox_convert_tools_menu.set_active(True)
+
 				vbox_accel_map.pack_start(label_accel_map, False, False, 0)
 				vbox_accel_map.pack_start(checkbox_reset_accel_map, False, False, 0)
+				vbox_accel_map.pack_start(checkbox_convert_tools_menu, False, False, 0)
 
 				vbox.pack_start(vbox_accel_map, False, False, 0)
 				mod_count += 1
-
+				
 			# clear tabs
 			if config_version < 15:
 				vbox_15 = gtk.VBox(False, 0)
@@ -1301,11 +1309,32 @@ class MainWindow(gtk.Window):
 				if checkbox_reset_tabs.get_active():
 					self.tab_options = RawConfigParser()
 
-			# reset accelerator map
-			if config_version < 26:
-				if checkbox_reset_accel_map.get_active()\
+			if config_version < 34:
+				# reset accelerator map
+				if checkbox_reset_accel_map.get_active() \
 				and os.path.isfile(os.path.join(self.config_path, 'accel_map')):
 					os.remove(os.path.join(self.config_path, 'accel_map'))
+				
+				# convert tools menu	
+				if checkbox_convert_tools_menu.get_active():
+					# open old configuration file
+					old_menu = RawConfigParser()
+					old_menu.read(os.path.join(self.config_path, 'tools'))
+					
+					if not self.command_options.has_section('tools'):
+						return
+					
+					# create section in new configuration file if it doesn't exist
+					if not self.command_options.has_section('commands'):
+						self.command_options.add_section('commands')
+				
+					# transfer items
+					for key in old_menu.options('tools'):
+						value = old_menu.get('tools', key)
+						self.command_options.set('commands', key, value)
+						
+					# remove old configuration file
+					os.unlink(os.path.join(self.config_path, 'tools'))				
 
 			# kill dialog
 			change_log.destroy()
@@ -1827,9 +1856,9 @@ class MainWindow(gtk.Window):
 					('<Sunflower>/Mark/SelectWithSameExtension', 'KP_Add', gtk.gdk.MOD1_MASK),
 					('<Sunflower>/Mark/UnselectWithSameExtension', 'KP_Subtract', gtk.gdk.MOD1_MASK),
 					('<Sunflower>/Mark/Compare', 'F12', 0),
-		            ('<Sunflower>/Commands/FindFiles', 'F7', gtk.gdk.MOD1_MASK),
-		            ('<Sunflower>/Commands/SynchronizeDirectories', 'F8', gtk.gdk.MOD1_MASK),
-		            ('<Sunflower>/Commands/AdvancedRename', 'M', gtk.gdk.CONTROL_MASK),
+		            ('<Sunflower>/Tools/FindFiles', 'F7', gtk.gdk.MOD1_MASK),
+		            ('<Sunflower>/Tools/SynchronizeDirectories', 'F8', gtk.gdk.MOD1_MASK),
+		            ('<Sunflower>/Tools/AdvancedRename', 'M', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/View/Fullscreen', 'F11', 0),
 					('<Sunflower>/View/Reload', 'R', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/View/FastMediaPreview', 'F3', gtk.gdk.MOD1_MASK),
@@ -1849,7 +1878,7 @@ class MainWindow(gtk.Window):
 			self.tab_options.write(open(os.path.join(self.config_path, 'tabs'), 'w'))
 			self.bookmark_options.write(open(os.path.join(self.config_path, 'bookmarks'), 'w'))
 			self.toolbar_options.write(open(os.path.join(self.config_path, 'toolbar'), 'w'))
-			self.tool_options.write(open(os.path.join(self.config_path, 'tools'), 'w'))
+			self.command_options.write(open(os.path.join(self.config_path, 'commands'), 'w'))
 			self.accel_options.write(open(os.path.join(self.config_path, 'accelerators'), 'w'))
 
 			# save accelerators
@@ -1878,7 +1907,7 @@ class MainWindow(gtk.Window):
 		self.tab_options = RawConfigParser()
 		self.bookmark_options = RawConfigParser()
 		self.toolbar_options = RawConfigParser()
-		self.tool_options = RawConfigParser()
+		self.command_options = RawConfigParser()
 		self.accel_options = RawConfigParser()
 
 		# load configuration from right folder on systems that support it
@@ -1891,7 +1920,7 @@ class MainWindow(gtk.Window):
 		self.tab_options.read(os.path.join(self.config_path, 'tabs'))
 		self.bookmark_options.read(os.path.join(self.config_path, 'bookmarks'))
 		self.toolbar_options.read(os.path.join(self.config_path, 'toolbar'))
-		self.tool_options.read(os.path.join(self.config_path, 'tools'))
+		self.command_options.read(os.path.join(self.config_path, 'commands'))
 		self.accel_options.read(os.path.join(self.config_path, 'accelerators'))
 
 		# load accelerators
@@ -1904,8 +1933,8 @@ class MainWindow(gtk.Window):
 		if not self.bookmark_options.has_section('bookmarks'):
 			self.bookmark_options.add_section('bookmarks')
 
-		if not self.tool_options.has_section('tools'):
-			self.tool_options.add_section('tools')
+		if not self.command_options.has_section('tools'):
+			self.command_options.add_section('tools')
 
 		# define default options
 		default_options = {
@@ -2058,7 +2087,7 @@ class MainWindow(gtk.Window):
 		self._create_bookmarks_menu()
 
 		# recreate tools menu
-		self._create_tools_menu()
+		self._create_commands_menu()
 
 		# recreate toolbar widgets
 		self.toolbar_manager.create_widgets()

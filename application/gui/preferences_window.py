@@ -6,7 +6,7 @@ from gui.preferences.terminal import TerminalOptions
 from gui.preferences.view_and_edit import ViewEditOptions
 from gui.preferences.toolbar import ToolbarOptions
 from gui.preferences.bookmarks import BookmarksOptions
-from gui.preferences.tools import ToolsOptions
+from gui.preferences.commands import CommandsOptions
 from gui.preferences.plugins import PluginsOptions
 from gui.preferences.accelerators import AcceleratorOptions
 
@@ -68,7 +68,7 @@ class PreferencesWindow(gtk.Window):
 		ViewEditOptions(self, parent)
 		ToolbarOptions(self, parent)
 		BookmarksOptions(self, parent)
-		ToolsOptions(self, parent)
+		CommandsOptions(self, parent)
 		PluginsOptions(self, parent)
 		AcceleratorOptions(self, parent)
 

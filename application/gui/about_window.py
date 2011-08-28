@@ -106,7 +106,7 @@ class AboutWindow(gtk.Window):
 	def _show(self, widget=None, data=None):
 		"""Show about dialog"""
 		# update color for header label
-		style = self._parent._menu_item_tools.get_style().copy()
+		style = self._parent._menu_item_commands.get_style().copy()
 
 		label = self._program_label
 		parent = self._program_label.get_parent().get_parent()

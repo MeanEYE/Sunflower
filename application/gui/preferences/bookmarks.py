@@ -124,7 +124,7 @@ class BookmarksOptions(SettingsPage):
 			self._parent.enable_save()
 
 	def _move_bookmark(self, widget, direction):
-		"""Move selected bookmark up"""
+		"""Move selected bookmark up or down"""
 		selection = self._list.get_selection()
 		list_, iter_ = selection.get_selected()
 
@@ -169,7 +169,7 @@ class BookmarksOptions(SettingsPage):
 		options.set('main', 'show_mounts', _bool[self._checkbox_show_mount_points.get_active()])
 		options.set('main', 'add_home', _bool[self._checkbox_add_home.get_active()])
 
-		# save bookmars
+		# save bookmarks
 		bookmark_options.remove_section('bookmarks')
 		bookmark_options.add_section('bookmarks')
 

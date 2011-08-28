@@ -50,7 +50,7 @@ class MainWindow(gtk.Window):
 	version = {
 			'major': 0,
 			'minor': 1,
-			'build': 33,
+			'build': 34,
 			'stage': 'a'
 		}
 
@@ -1262,7 +1262,7 @@ class MainWindow(gtk.Window):
 			if config_version < 34:
 				vbox_accel_map = gtk.VBox(False, 0)
 
-				label_accel_map = gtk.Label('<b>Version 0.1a-26:</b>')
+				label_accel_map = gtk.Label('<b>Version 0.1a-34:</b>')
 				label_accel_map.set_alignment(0, 0.5)
 				label_accel_map.set_use_markup(True)
 
@@ -1279,7 +1279,7 @@ class MainWindow(gtk.Window):
 				vbox_accel_map.pack_start(checkbox_convert_tools_menu, False, False, 0)
 
 				vbox.pack_start(vbox_accel_map, False, False, 0)
-				mod_count += 1
+				mod_count += 2
 				
 			# clear tabs
 			if config_version < 15:

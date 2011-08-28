@@ -58,7 +58,7 @@ class TitleBar(gtk.HBox):
 			# selected state
 			if self._ubuntu_coloring:
 				# ubuntu coloring method
-				style = self._application._menu_item_tools.get_style().copy()
+				style = self._application._menu_item_commands.get_style().copy()
 				background = style.bg[gtk.STATE_NORMAL]
 				foreground = style.fg[gtk.STATE_NORMAL]
 

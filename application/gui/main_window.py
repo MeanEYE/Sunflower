@@ -2023,7 +2023,7 @@ class MainWindow(gtk.Window):
 
 	def toggle_fullscreen(self, widget, data=None):
 		"""Toggle application fullscreen"""
-		if self.window.get_state() is gtk.gdk.WINDOW_STATE_FULLSCREEN:
+		if self.window.get_state() & gtk.gdk.WINDOW_STATE_FULLSCREEN:
 			self.unfullscreen()
 
 		else:

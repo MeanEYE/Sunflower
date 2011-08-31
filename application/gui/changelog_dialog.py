@@ -96,7 +96,7 @@ class ChangeLogDialog(gtk.Dialog):
 		changelog.modify_font(font)
 
 		# load change log if it exists
-		changelog_file = os.path.abspath('change.log')
+		changelog_file = os.path.abspath('CHANGES')
 		if os.path.isfile(changelog_file):
 			data = open(changelog_file, 'r').read()
 		else:

@@ -1,0 +1,366 @@
+Version 0.1a-34
+  + New find extensions for content and size matching
+  + Created 'revert' button in preferences window
+  + Added Russian translation
+  * Fixed behavior of 'date format' and 'editor command' entries
+  * Changed Commands menu to Tools
+
+Version 0.1a-33
+  + Rename extension: Audio metadata
+  + Support for rename extension reordering
+  + Find files tool
+  + Keybindings editor
+  + Open path from history browser in oposite list
+  * Issue #76 - Notify user when rename fails
+  * Issue #78 - Fixed exception when sort is set for extension column
+  * Fixed problem with loading secondary accelerator
+  * Properly execute commands and tools
+  * Properties window throws exception
+
+Version 0.1a-32
+  + Rename extension: Letter case
+  + Bookmark accelerators
+  + New file information container
+  + Archive provider support
+  * Updated Bulgarian translation
+  * Force shell to update terminal title
+  * Properties window will handle items with ampersend in its name
+  - Ubuntu appindicator support, not needed anymore
+
+Version 0.1a-31
+  + Base class for rename tool extension
+  + Advanced rename tool
+  + Terminal drag and drop support
+  + Added Hungarian translation
+  * Fixed crashes with operation dialogs
+  * Place windows centered on main window
+  * Fixed time formatting issues
+
+Version 0.1a-30
+  + New status bar look
+  + Handle window state correctly
+  * Changed images for minimized copy and move operations
+  * Fixed problem with opening files that have unicode characters
+  * Properties window will open if application doesn't have config file (issue 64)
+  * Re-enabled setting default application in file properties dialog
+  * Properly detect location of templates
+  * Fixed overwrite dialog issues
+  * Updated Bulgarian translation
+  * Updated Polish translation
+
+Version 0.1a-29
+  + Configurable keyboard shortcuts
+  + Create file from predefined templates
+  * Fixed edit bookmarks shortcut
+  * Fixed operation dialog minimize
+  * Shortcuts work in other keyboard layouts
+  * Fixed icon loading issues
+  * Improved directory loading performance
+  * Changed icon handling method
+  * Updated Czech translation
+  * Updated Bulgarian translation
+
+Version 0.1a-28
+  + Ability to show complete history list
+  + Option to expand tabs
+  + Preferences page base class
+  * Executing files work properly now
+  * Notification icon is enabled only when main window is hidden on close
+  * Made mount and bookmark item images always visible
+  * Fixed padding on tab close button
+  * Changed preferences window from tab to list based interface
+  * Fixed sorting bug when case sensitive sorting is not active
+
+Version 0.1a-27
+  + Bulgarian translation
+  + Tab close buttons
+  + Display sizes in more friendly format
+  + Ability to unmount items
+  * Optional command line paramters
+  * Optional plugin status bars
+  * Set WM_CLASS to fix issues with global menu
+  - Unused indicator entries and dependencies
+
+Version 0.1a-26
+  + Added context menu items to main menu
+  * Fixed regression bug when dragging files from same location
+  * Prevent notification from showing on short lasting operations
+  * Focus first item properly when changing directory
+  * Save settings to config file after applying
+  * Operation total size is updated correctly when user cancels file
+  * Changed operation dialog look to be more eye-pleasing
+  * Speed is not updated if operation is paused
+  * Improved handling of files and directories in operations
+  * Quote URI before getting thumbnail
+  * Made media preview optional for users without Gnome installed
+
+Version 0.1a-25
+  + Remember focused notebook
+  + Fast media preview using Gnome thumbnail factory
+  + Unselect with same extension option
+  + Added time estimation to operation dialogs
+  + Added thread control methods to fix some of the lockups
+  * Reorganized item list options
+  * Properly select last item on removal from the list
+  * Changed identification string to address AWN/Docky issues
+  * Fixed selection using CTRL and left mouse button
+  * Properly handle overwrite dialog title when item name contains ampersend
+  * Popup menu works properly when right mouse button selection is turned on
+
+Version 0.1a-24
+  + Move operation for drag and drop
+  + Cut, copy and paste items using keyboard
+  * Updated Polish translation
+  * Fixed drag and drop behavior
+  * Clear selection on source list after operation has started
+  * Modified startup method to be even more robust
+  * Fixed regression bug with bookmarks menu
+  * Increas plugin border width to fix issues on some themes (eg. Equinox)
+  * Fixed language template so Poedit can use it
+
+Version 0.1a-23
+  + Command line arguments
+  + Added toolbar button for bookmarks menu
+  * Handle errors when trying to load missing plugin
+  * Additional changes to file/directory properties dialog
+  * Fixed return value for default application
+  * Fixed focus behavior in list when changing directories
+  * Test if plugin class exists before creating tab
+
+Version 0.1a-22
+  + Added Ubuntu coloring method for tab title bars
+  + New title bar drawing method. Much nicer and cleaner
+  + Terminal command in tab subtitle
+  + Basic tab in file/directory properties dialog
+  * Handle errors occurred during rename operation
+  * Fixed file move bug
+  * Tweaked preferences window button spacing
+  * Changed startup method. Application should work on all 2.x interpreters
+  * Fixed operation dialog division by zero
+  - Removed spinner control
+
+Version 0.1a-21
+  + Added icon to operation menu items
+  + Respect executable bit (disabled, problems with remote files)
+  + Bookmark editor icons
+  + Bookmark current directory keyboard shortcut
+  + Edit bookmarks keyboard shortcut
+  + Quit application keyboard shortcut
+  + Manually add item to the list if directory monitoring is not possible
+  * Switched from DBus based mount monitoring to GIO
+  * Properly show notifications
+  * Update terminal menu properly
+  * Prevent copying to clipboard if there is no active selection
+  * Modified about dialog
+  * Modified operation dialog behavior
+  * Modified interface to obey HIG better
+  * Fixed file association resolving
+
+Version 0.1a-20
+  + Added subtitle to plugin base class
+  + Parent directory, bookmark and home directory toolbar buttons
+  + Toolbar system
+  + Translation to Polish
+  + Partial error handling in operations
+  * Updated Czech translation
+
+Version 0.1a-19
+  + Ability to hide list headers
+  + OS specific notification for copy, move and delete operations
+  + Czech translation by Radek Tříška
+  + Add home directory to bookmarks menu
+  + Mark items with same extension
+  + Icons in bookmarks menu
+  + Edit tools option in tools menu.
+  + Option to open selected directory in new tab
+  + Initial drag and drop support (really buggy atm)
+  + Rename file on overwrite
+  * Fixed quick search bug
+  * Optimized icon lookup code
+  * Fixed problem for distributions that have Python 3.0 as default
+  * Use of xdg-open instead of gnome-open
+  * Open with list didn't show all associated programs
+  * Fixed popup menu behavior
+  * Fixed bug #28: Focus oposite notebook with hidden tabs
+  * Update fullscreen menu image properly
+  * Proper directory statistics update on item removal
+
+Version 0.1a-18
+  + Interface for easy plugin management
+  + Protocol based provider storage
+  + VIM style navigation
+  + Compare directories
+  + Popup menu support in cases when right click marks items
+  + Added template for translation
+  * Fixed command entry behavior
+  * Fixed problem with package resolving in some distros (eg. Ubuntu Studio)
+  * Spinner is optionally created to enable users with python-gtk2 < 2.20 to run program
+  * Program will use selection color from config file
+
+Version 0.1a-17
+  + Added i18n support.
+  + Show and hide command entry
+  + Hide tabs when there is only one tab open
+  + Tab buttons can contain either icons (default) or text
+  + Copy and paste options for terminal tabs
+  + Option to select items by right clicking on them
+  * Handle tabs with long names
+  * Minor interface tweak to fit other themes better
+  * Reserving file space in copy/move operations is optional
+  * Fixed history bug (#24) which created weird menus
+  * Renamed item will remain selected
+  * Showing tab menu will no longer "steal" focus from main object
+  * Fixed potential bug with keyboard mappings
+
+Version 0.1a-16
+  + Loading plugins dynamically
+  + History menu
+  + Terminal scrollbars option
+  + Changed tab buttons look. Added option to revert to old look.
+  + Tools menu with options
+  + Creating file or directory will focus item in list
+  + Option to open file in editor after creating
+  + Case sensitive item sorting is optional now
+  * All options are applied correctly now
+  * Fixed name based icons in menus
+  * Tab icon didn't change with theme
+  * Renamed some main menu items (thanks Andrew Steele)
+  * Fixed expander bug on create file/directory dialog
+  * Changed directory monitor to use data provider
+  * Fixed file properties update bug
+  * Temporarily fix bug with directory monitor which duplicated entries
+  * Fixed potential bug with larger number of bookmarks
+
+Version 0.1a-15
+  + Added many options to main menu
+  + Sort column and direction is saved and restored with other tab data
+  + Change dialog with optional config modifications
+  * Reorganized options dialog
+  * Fixed bug in directory monitor which prevented adding hidden items to the list
+  * Reverted color of command buttons to theme default
+
+Version 0.1a-14
+  + Mount points are available via bookmarks menu
+  + Set owner on copy/move
+  * Copy and move operations set file mode correctly
+  * Options window can't be thrown behind main window anymore
+  * Rename will not overwrite existing files
+
+Version 0.1a-13
+  + Added quick search modifier to options dialog
+  + Minimize was added to all operations
+  + Bookmark current directory option
+  + Exit option in indicator menu
+  * Paused operations can be canceled
+  * Select/unselect with pattern updates size statistics
+  * Potential memory leak with operations dialog
+
+Version 0.1a-12
+  + Pause and resume operations
+  + File list statistic supports total/selected file size and Pango markup
+  + Support for theme icon ('sunflower')
+  * File list font reverted to system defined
+  * Fixed displaying directory names with dot (.)
+  * Changed formatting method for file list statistics
+  * Fixed bug which caused exception when changing paths during copy/move operation
+
+Version 0.1a-11
+  + Overwrite dialogs
+  + Global keyboard shortcuts added
+  + Added bookmark menus (CTRL + F1, CTRL + F2)
+  + Retry dialog on failed directory listing
+  * List display speed update, you should have even snappier experience now
+  * Dropped support for Windows
+  * Move is working properly with files on same device/file system
+  * Directory monitor updates statistics correctly now
+  * Default file list tab is created when only terminal tab exits
+
+Version 0.1a-10
+  + Display options
+  + Editor options
+  + Bookmark editor
+  + Save options to separate files
+  * Hidden items (starting with period) can be quick searches
+  * Fixed problem with Ubuntu 10.10 and missing TERM environment string
+  * Fixed some typographical errors
+  * Changed default config location to ~/.config/sunflower or ~/.sunflower/
+
+Version 0.1a-9
+  + Selected items have green marker on them
+  + CTRL+Left/Right will feeds terminal with selected file
+  + Hide main window on close option
+  + Lynx style movement
+  + Initial AppIndicator Support
+  + Added terminal button on file list
+  + Added option to recycle terminal
+  + Rename file/directory (F2 or SHIFT+F6)
+  * Copy/Move operation can be started by pressing Enter
+  * Copying of large files can now be canceled
+  * Fixed tab handling
+
+Version 0.1a-8
+  + Copy/Move works now
+  + Added bug report menu item
+  + Right click menu item "Delete" is now functional
+  * Default create modes for file (0644) and directory (0755)
+  * Directory monitoring works only for local file systems
+  * Fixed copy/move/delete dialog bug which caused window to be resized
+  * Fixed directory/file creation mode input bug
+
+Version 0.1a-7
+  + Added terminal status bar
+  + Reload list icons on theme change
+  + Saving window size and position
+  + Free/total space display
+  + Added setting/getting path from oposite list (CTRL+Left CTRL+Right)
+  + Pressing Up (or Escape) in command edit will focus last used list
+  * Changed status bar type to fit system theme natively
+  * Fixed handling of `cd` command
+
+Version 0.1a-6
+  + Deleting files (F8 or Del)
+  + Handling of `cd` command
+  + Connected command history with shell history
+  * Command path label no longer resizes window
+  * Fixed bug which prevented showing command bar
+
+Version 0.1a-5
+  + Create file advanced options
+  + Create directory advanced options
+  + Detachable tabs (drag-and-drop to other side)
+  + Created command button bar
+  + Tab order can be changed
+  * Added failsafe change_path to home directory
+  * Fixed windows config bug
+
+Version 0.1a-4
+  + Saving tabs in configuration file
+  + Configuration is saved to file
+  + Nautilus send to integration
+  + Invert selection, select/unselect with pattern
+  + Terminal has duplicate tab (CTRL+T) and new tab (CTRL+Z) shortcuts
+  + Create directory (F7)
+  + Create empty file (CTRL+F7)
+  * Show hidden menu item is working now
+  * Edit no longer works on directories
+  * Selection counters
+  * Terminal tab no longer resizes main window
+  * Icons in file list are now the same size
+
+Version 0.1a-3
+  + Select/Unselect all
+  + Switch to fullscreen (F11)
+  + Copy/Move/Delete dialogs (implementation still missing)
+  * Column resizing
+  * Windows icon display
+
+Version 0.1a-2
+  + Column resizing
+  + Navigation with mouse
+  + Item menu (Menu)
+  + Open with menu (CTRL+Menu)
+  + Directory monitoring (delete/create/change)
+  * File size thousands separator
+  * File size aligned to the right
+  * Date is not displayed to parent folder [..]
+  * Large files caused problems on path change

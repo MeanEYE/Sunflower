@@ -364,7 +364,7 @@ class AboutWindow(gtk.Window):
 		tab_label = gtk.Label(_('Change log'))
 
 		data = ''
-		changelog_location = os.path.abspath('change.log')
+		changelog_location = os.path.abspath('CHANGES')
 
 		if os.path.isfile(changelog_location):
 			with open(changelog_location, 'r') as file_:

@@ -1,0 +1,51 @@
+- Directory monitoring doesn't catch on mount event
+
+- Tab menu: Lock, close, close others
+
+- Monitor history file and reload when needed
+
+- Remove duplicates from history file when loading
+
+- Show rename when moving a single file in same directory
+
+- Change path should operate in separate thread
+
+- Mark symbolic links somehow
+
+- Space counts directory size in separate thread
+
+- Breadcrumb trail for tab title bar
+
+- Upon receiving focus file list should check validity of it's current path
+
+- Terminal tab without scrollbars forces window size
+
+- Check if nautilus-sendto exists and set menu item sensitivity appropriately
+
+- Set tooltip text for long filenames in file list
+
+- Configurable toolbar look
+
+- Letter accelerators on labels
+
+- On select/deselect return number of affected items
+
+- When comparing directories using option from Mark menu notify user when directories are identical
+
+- Create GObject signals for main windows
+
+- Migrate from inheriting gtk.Window to creating self.window
+
+ - Directory synchronization
+
+- Duplicate files finder
+
+- View text files
+
+- Internal editor
+
+- Make file_list module provider agnostic
+
+- Create mount manager
+
+- Terminal options

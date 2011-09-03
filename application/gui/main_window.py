@@ -1675,6 +1675,10 @@ class MainWindow(gtk.Window):
 			if not self.options.getboolean('main', 'always_show_tabs'):
 				notebook.set_show_tabs(notebook.get_n_pages() > 1)
 
+			# block signal when destroying plugin with columns
+			if hasattr(child, '_column_changed'):
+				child._item_list.handler_block_by_func(child._column_changed)
+				
 			# kill the component
 			child.destroy()
 

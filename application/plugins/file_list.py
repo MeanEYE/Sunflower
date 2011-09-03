@@ -897,13 +897,13 @@ class FileList(ItemList):
 
 			# add item to the list
 			try:
-				format = self._parent.options.get('main', 'time_format')
+				time_format = self._parent.options.get('main', 'time_format')
 
 				# don't allow extension splitting on directories
 				file_info = (filename, '') if is_dir else os.path.splitext(filename)
 
 				formated_file_mode = oct(file_mode)
-				formated_file_date = time.strftime(format, time.localtime(file_date))
+				formated_file_date = time.strftime(time_format, time.localtime(file_date))
 
 				if not is_dir:
 					# item is a file
@@ -1006,12 +1006,12 @@ class FileList(ItemList):
 			file_mode = file_stat.mode
 			file_date = file_stat.time_modify
 
-			# format values
-			format = self._parent.options.get('main', 'time_format')
+			# time_format values
+			time_format = self._parent.options.get('main', 'time_format')
 
 			formated_file_size = locale.format('%d', file_size, True) if not is_dir else '<DIR>'
 			formated_file_mode = oct(file_mode)
-			formated_file_date = time.strftime(format, time.localtime(file_date))
+			formated_file_date = time.strftime(time_format, time.localtime(file_date))
 
 			# update list store
 			self._store.set_value(found_iter, Column.SIZE, file_size)
@@ -1335,11 +1335,11 @@ class FileList(ItemList):
 		self._update_status_with_statistis();
 
 	def refresh_file_list(self, widget=None, data=None):
-		"""Reload file list for current directory"""
+		"""Reload file list_ for current directory"""
 		selection = self._item_list.get_selection()
-		list, iter = selection.get_selected()
+		list_, iter_ = selection.get_selected()
 
-		f_name = list.get_value(iter, Column.NAME) if iter is not None else None
+		f_name = list_.get_value(iter_, Column.NAME) if iter_ is not None else None
 		self.change_path(self.path, f_name)
 
 		return True

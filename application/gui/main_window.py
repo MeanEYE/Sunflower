@@ -1249,7 +1249,7 @@ class MainWindow(gtk.Window):
 
 	def _version_specific_actions(self):
 		"""This method will provide user with some feedback and
-		backwards compatibility. Also it will show latest changelog"""
+		backwards compatibility. Also it will show latest change log"""
 		config_version = self.options.getint('main', 'last_version')
 		current_version = self.version['build']
 
@@ -1273,13 +1273,18 @@ class MainWindow(gtk.Window):
 				# convert tools menu
 				checkbox_convert_tools_menu = gtk.CheckButton('Convert saved tools menu')
 				checkbox_convert_tools_menu.set_active(True)
+				
+				# convert saved column sizes
+				checkbox_convert_column_sizes = gtk.CheckButton('Convert column sizes to new format')
+				checkbox_convert_column_sizes.set_active(True)
 
 				vbox_accel_map.pack_start(label_accel_map, False, False, 0)
 				vbox_accel_map.pack_start(checkbox_reset_accel_map, False, False, 0)
 				vbox_accel_map.pack_start(checkbox_convert_tools_menu, False, False, 0)
+				vbox_accel_map.pack_start(checkbox_convert_column_sizes, False, False, 0)
 
 				vbox.pack_start(vbox_accel_map, False, False, 0)
-				mod_count += 2
+				mod_count += 3
 				
 			# clear tabs
 			if config_version < 15:
@@ -1334,7 +1339,25 @@ class MainWindow(gtk.Window):
 						self.command_options.set('commands', key, value)
 						
 					# remove old configuration file
-					os.unlink(os.path.join(self.config_path, 'tools'))				
+					os.unlink(os.path.join(self.config_path, 'tools'))
+					
+				# convert column sizes
+				if checkbox_convert_column_sizes.get_active():
+					columns = {
+							0: 'name', 
+							1: 'extension', 
+							2: 'size', 
+							3: 'mode',
+							4: 'date'
+						}
+					
+					for index, name in columns.items():
+						# save size to a new option
+						size = self.options.getint('FileList', 'size_{0}'.format(index))
+						self.options.set('FileList', 'size_{0}'.format(name), size)
+						
+						# remove old option
+						self.options.remove_option('FileList', 'size_{0}'.format(index))
 
 			# kill dialog
 			change_log.destroy()

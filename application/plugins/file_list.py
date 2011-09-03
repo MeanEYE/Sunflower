@@ -177,6 +177,9 @@ class FileList(ItemList):
 					Column.MODE: col_mode,
 					Column.TIME: col_date,
 				}
+		
+		# block columns-changed signal while adding columns
+		self._item_list.handler_block_by_func(self._column_changed)
 
 		# configure and pack columns
 		for sort_data, column in column_sort_data.items():
@@ -187,6 +190,10 @@ class FileList(ItemList):
 
 			# add to the list
 			self._item_list.append_column(column)
+			
+		# release signal block
+		self._item_list.handler_unblock_by_func(self._column_changed)
+		
 
 		# set list behavior
 		self._item_list.set_headers_clickable(True)

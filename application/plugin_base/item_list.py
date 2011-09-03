@@ -968,36 +968,39 @@ class ItemList(PluginBase):
 
 	def _column_resized(self, widget, data=None):
 		"""Resize all columns accordingly"""
-		new_width = widget.get_width()
-		existing_width = self._parent.options.getint(
-												self.__class__.__name__,
-												'size_{0}'.format(widget.size_id)
-												)
+		column_width = widget.get_width()
+		column_name = widget.get_data('name')
+		section_name = self.__class__.__name__
+		option_name = 'size_{0}'.format(column_name)
+		
+		# get stored column width
+		if self._parent.options.has_option(section_name, option_name):
+			existing_width = self._parent.options.getint(section_name, option_name)
+			
+		else:
+			existing_width = -1
 
-		if not new_width == existing_width:
-			self._parent.options.set(
-									self.__class__.__name__,
-									'size_{0}'.format(widget.size_id),
-									new_width
-									)
+		# if current width is not the same as stored one, save
+		if not column_width == existing_width:
+			self._parent.options.set(section_name, option_name,	column_width)
 			self._parent.update_column_sizes(widget, self)
 			
 	def _column_changed(self, widget, data=None):
 		"""Handle adding, removing and reordering columns"""
 		columns = self._item_list.get_columns()
-		print columns
+		column_names = map(lambda column: column.get_data('name'), columns)
+		
+		print self.__class__.__name__
+		
+		print column_names
 
 	def _resize_columns(self, columns):
 		"""Resize columns according to global options"""
-		for index, column in columns.items():
-			# register column resize id
-			if not hasattr(column, 'size_id'):
-				column.size_id = index
-
+		for column in columns:
 			# set column size
 			width = self._parent.options.getint(
 											self.__class__.__name__,
-											'size_{0}'.format(index)
+											'size_{0}'.format(column.get_data('name'))
 											)
 			column.set_fixed_width(width)
 
@@ -1132,7 +1135,7 @@ class ItemList(PluginBase):
 		"""Reload file list for current directory"""
 		self.change_path(self.path)
 
-	def update_column_size(self, size_id):
+	def update_column_size(self, name):
 		"""Update column sizes"""
 		pass
 

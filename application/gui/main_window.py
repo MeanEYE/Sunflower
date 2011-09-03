@@ -1228,8 +1228,8 @@ class MainWindow(gtk.Window):
 
 	def _save_active_notebook(self):
 		"""Save active notebook to config"""
-		object = self.get_active_object()
-		is_left = object._notebook is self.left_notebook
+		active_object = self.get_active_object()
+		is_left = active_object._notebook is self.left_notebook
 
 		self.options.set('main', 'active_notebook', (1, 0)[is_left])
 
@@ -2035,14 +2035,14 @@ class MainWindow(gtk.Window):
 			page = self.left_notebook.get_nth_page(index)
 
 			if isinstance(page, sender.__class__) and page is not sender:
-				page.update_column_size(column.size_id)
+				page.update_column_size(column.get_data('name'))
 
 		# update right notebook
 		for index in range(0, self.right_notebook.get_n_pages()):
 			page = self.right_notebook.get_nth_page(index)
 
 			if isinstance(page, sender.__class__) and page is not sender:
-				page.update_column_size(column.size_id)
+				page.update_column_size(column.get_data('name'))
 
 	def toggle_fullscreen(self, widget, data=None):
 		"""Toggle application fullscreen"""

@@ -108,44 +108,44 @@ class FileList(ItemList):
 		cell_date.set_property('size-points', 8)
 
 		# create columns
-		col_file = gtk.TreeViewColumn(_('Name'))
+		col_name = gtk.TreeViewColumn(_('Name'))
 		col_extension = gtk.TreeViewColumn(_('Ext'))
 		col_size = gtk.TreeViewColumn(_('Size'))
 		col_mode = gtk.TreeViewColumn(_('Mode'))
 		col_date = gtk.TreeViewColumn(_('Date'))
 		
 		# set column names
-		col_file.set_data('name', 'name')
+		col_name.set_data('name', 'name')
 		col_extension.set_data('name', 'extension')
 		col_size.set_data('name', 'size')
 		col_mode.set_data('name', 'mode')
 		col_date.set_data('name', 'date')
 		
 		# add cell renderer to columns
-		col_file.pack_start(cell_icon, False)
-		col_file.pack_start(cell_name, True)
-		col_file.pack_start(cell_selected, False)
+		col_name.pack_start(cell_icon, False)
+		col_name.pack_start(cell_name, True)
+		col_name.pack_start(cell_selected, False)
 		col_extension.pack_start(cell_extension, True)
 		col_size.pack_start(cell_size, True)
 		col_mode.pack_start(cell_mode, True)
 		col_date.pack_start(cell_date, True)
 
-		col_file.add_attribute(cell_name, 'foreground', Column.COLOR)
+		col_name.add_attribute(cell_name, 'foreground', Column.COLOR)
 		col_extension.add_attribute(cell_extension, 'foreground', Column.COLOR)
 		col_size.add_attribute(cell_size, 'foreground', Column.COLOR)
 		col_mode.add_attribute(cell_mode, 'foreground', Column.COLOR)
 		col_date.add_attribute(cell_date, 'foreground', Column.COLOR)
 
-		col_file.add_attribute(cell_selected, 'pixbuf', Column.SELECTED)
-		col_file.add_attribute(cell_icon, 'icon-name', Column.ICON)
-		col_file.add_attribute(cell_name, 'text', Column.FORMATED_NAME)
+		col_name.add_attribute(cell_selected, 'pixbuf', Column.SELECTED)
+		col_name.add_attribute(cell_icon, 'icon-name', Column.ICON)
+		col_name.add_attribute(cell_name, 'text', Column.FORMATED_NAME)
 		col_extension.add_attribute(cell_extension, 'text', Column.EXTENSION)
 		col_size.add_attribute(cell_size, 'text', Column.FORMATED_SIZE)
 		col_mode.add_attribute(cell_mode, 'text', Column.FORMATED_MODE)
 		col_date.add_attribute(cell_date, 'text', Column.FORMATED_TIME)
 
-		col_file.set_resizable(True)
-		col_file.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+		col_name.set_resizable(True)
+		col_name.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
 
 		col_extension.set_resizable(True)
 		col_extension.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
@@ -166,7 +166,7 @@ class FileList(ItemList):
 
 		# register columns
 		self._columns = {
-					0: col_file,
+					0: col_name,
 					1: col_extension,
 					2: col_size,
 					3: col_mode,
@@ -178,7 +178,7 @@ class FileList(ItemList):
 
 		# create a list of columns
 		column_sort_data = {
-					Column.NAME: col_file,
+					Column.NAME: col_name,
 					Column.EXTENSION: col_extension,
 					Column.SIZE: col_size,
 					Column.MODE: col_mode,

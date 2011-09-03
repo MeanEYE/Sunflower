@@ -1138,6 +1138,14 @@ class ItemList(PluginBase):
 	def update_column_size(self, name):
 		"""Update column sizes"""
 		pass
+	
+	def update_column_order(self, column, after):
+		"""Update column order"""
+		pass
+	
+	def update_column_visibility(self, column):
+		"""Update column visibility"""
+		pass
 
 	def get_povider(self):
 		"""Get list provider"""

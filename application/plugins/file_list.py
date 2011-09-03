@@ -165,13 +165,7 @@ class FileList(ItemList):
 		self._create_default_column_sizes()
 
 		# register columns
-		self._columns = {
-					0: col_name,
-					1: col_extension,
-					2: col_size,
-					3: col_mode,
-					4: col_date
-				}
+		self._columns = (col_name, col_extension, col_size, col_mode, col_date)
 
 		# resize columns to saved values
 		self._resize_columns(self._columns)
@@ -1357,13 +1351,13 @@ class FileList(ItemList):
 
 		return True
 
-	def update_column_size(self, size_id):
+	def update_column_size(self, name):
 		"""Update column size with global value"""
-		column = self._columns[size_id]
+		column = filter(lambda item: item.get_data('name') == name, self._columns)[0]
 		width = self._parent.options.getint(
 										self.__class__.__name__,
-										'size_{0}'.format(size_id)
-										)
+										'size_{0}'.format(name)
+									)
 		column.set_fixed_width(width)
 
 	def get_provider(self):

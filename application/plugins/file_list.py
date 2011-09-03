@@ -114,6 +114,13 @@ class FileList(ItemList):
 		col_mode = gtk.TreeViewColumn(_('Mode'))
 		col_date = gtk.TreeViewColumn(_('Date'))
 		
+		# set column names
+		col_file.set_data('name', 'name')
+		col_extension.set_data('name', 'extension')
+		col_size.set_data('name', 'size')
+		col_mode.set_data('name', 'mode')
+		col_date.set_data('name', 'date')
+		
 		# add cell renderer to columns
 		col_file.pack_start(cell_icon, False)
 		col_file.pack_start(cell_name, True)
@@ -193,7 +200,6 @@ class FileList(ItemList):
 			
 		# release signal block
 		self._item_list.handler_unblock_by_func(self._column_changed)
-		
 
 		# set list behavior
 		self._item_list.set_headers_clickable(True)

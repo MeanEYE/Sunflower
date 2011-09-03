@@ -146,6 +146,7 @@ class ItemList(PluginBase):
 		self._item_list.connect('button-press-event', self._handle_button_press)
 		self._item_list.connect('button-release-event', self._handle_button_press)
 		self._item_list.connect('cursor-changed', self._handle_cursor_change)
+		self._item_list.connect('columns-changed', self._column_changed)
 
 		self._connect_main_object(self._item_list)
 
@@ -690,10 +691,10 @@ class ItemList(PluginBase):
 								if self._notebook is self._parent.right_notebook \
 								else self._parent.right_notebook
 
-		object = notebook.get_nth_page(notebook.get_current_page())
+		current_object = notebook.get_nth_page(notebook.get_current_page())
 
-		if hasattr(object, "get_provider"):
-			result = object.get_provider()
+		if hasattr(current_object, "get_provider"):
+			result = current_object.get_provider()
 		else:
 			result = None
 
@@ -980,9 +981,14 @@ class ItemList(PluginBase):
 									new_width
 									)
 			self._parent.update_column_sizes(widget, self)
+			
+	def _column_changed(self, widget, data=None):
+		"""Handle adding, removing and reordering columns"""
+		columns = self._item_list.get_columns()
+		print columns
 
 	def _resize_columns(self, columns):
-		"""Resize columns acording to global options"""
+		"""Resize columns according to global options"""
 		for index, column in columns.items():
 			# register column resize id
 			if not hasattr(column, 'size_id'):

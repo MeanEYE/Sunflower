@@ -1,3 +1,7 @@
+- Ability to extend popup menu
+
+- Ability to extend file list columns
+
 - Directory monitoring doesn't catch on mount event
 
 - Tab menu: Lock, close, close others
@@ -36,7 +40,7 @@
 
 - Migrate from inheriting gtk.Window to creating self.window
 
- - Directory synchronization
+- Directory synchronization
 
 - Duplicate files finder
 

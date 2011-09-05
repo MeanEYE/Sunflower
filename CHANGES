@@ -2,6 +2,7 @@ Version 0.1a-34
   + New find extensions for content and size matching
   + Created 'revert' button in preferences window
   + Added Russian translation
+  * Assign proper icons to directories in advanced rename tool
   * Fixed behavior of 'date format' and 'editor command' entries
   * Changed Commands menu to Tools
 

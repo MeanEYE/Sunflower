@@ -28,7 +28,7 @@ class SystemTerminal(Terminal):
 			os.environ['PROMPT_COMMAND'] = 'echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
 
 		if self._vte_present:
-			# fork default shell 
+			# fork default shell
 			self._terminal.connect('child-exited', self.__child_exited)
 			self._terminal.connect('status-line-changed', self._update_terminal_status)
 			self._terminal.fork_command(
@@ -67,4 +67,4 @@ class SystemTerminal(Terminal):
 		if self._notebook.get_n_pages() == 1:
 			self._parent.create_tab(self._notebook, FileList, self.path)
 
-		super(SystemTerminal, self)._close_tab(widget, data)
+		Terminal._close_tab(self, widget, data)

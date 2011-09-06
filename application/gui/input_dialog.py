@@ -25,7 +25,7 @@ class InputDialog(gtk.Dialog):
 	"""
 
 	def __init__(self, application):
-		super(InputDialog, self).__init__(parent=application)
+		gtk.Dialog.__init__(self, parent=application)
 
 		self._application = application
 
@@ -100,7 +100,7 @@ class CreateDialog(InputDialog):
 	"""Generic create file/directory dialog"""
 
 	def __init__(self, application):
-		super(CreateDialog, self).__init__(application)
+		InputDialog.__init__(self, application)
 
 		self._permission_updating = False
 		self._mode = 0644
@@ -245,7 +245,7 @@ class CreateDialog(InputDialog):
 class FileCreateDialog(CreateDialog):
 
 	def __init__(self, application):
-		super(FileCreateDialog, self).__init__(application)
+		CreateDialog.__init__(self, application)
 
 		self.set_title(_('Create empty file'))
 		self.set_label(_('Enter new file name:'))
@@ -350,7 +350,7 @@ class FileCreateDialog(CreateDialog):
 class DirectoryCreateDialog(CreateDialog):
 
 	def __init__(self, application):
-		super(DirectoryCreateDialog, self).__init__(application)
+		CreateDialog.__init__(self, application)
 
 		self.set_title(_('Create directory'))
 		self.set_label(_('Enter new directory name:'))
@@ -361,7 +361,7 @@ class CopyDialog(gtk.Dialog):
 	"""Dialog which will ask user for additional options before copying"""
 
 	def __init__(self, application, provider, path):
-		super(CopyDialog, self).__init__(parent=application)
+		gtk.Dialog.__init__(self, parent=application)
 
 		self._application = application
 		self._provider = provider
@@ -540,7 +540,7 @@ class RenameDialog(InputDialog):
 	"""Dialog used for renaming file/directory"""
 
 	def __init__(self, application, selection):
-		super(RenameDialog, self).__init__(application)
+		InputDialog.__init__(self, application)
 
 		self.set_title(_('Rename file/directory'))
 		self.set_label(_('Enter a new name for this item:'))
@@ -553,7 +553,7 @@ class OverwriteDialog(gtk.Dialog):
 	"""Dialog used for confirmation of file/directory overwrite"""
 
 	def __init__(self, application, parent):
-		super(OverwriteDialog, self).__init__(parent=parent)
+		gtk.Dialog.__init__(self, parent=parent)
 
 		self._application = application
 		self._rename_value = ''
@@ -757,7 +757,7 @@ class OverwriteDialog(gtk.Dialog):
 class OverwriteFileDialog(OverwriteDialog):
 
 	def __init__(self, application, parent):
-		super(OverwriteFileDialog, self).__init__(application, parent)
+		OverwriteDialog.__init__(self, application, parent)
 
 		self.set_title(_('File conflict'))
 
@@ -766,7 +766,7 @@ class OverwriteFileDialog(OverwriteDialog):
 		button_replace = gtk.Button(label=_('Replace'))
 		button_replace.set_can_default(True)
 
-		super(OverwriteFileDialog, self)._create_buttons()
+		OverwriteDialog._create_buttons(self)
 		self.add_action_widget(button_replace, gtk.RESPONSE_YES)
 
 		self.set_default_response(gtk.RESPONSE_YES)
@@ -789,7 +789,7 @@ class OverwriteFileDialog(OverwriteDialog):
 class OverwriteDirectoryDialog(OverwriteDialog):
 
 	def __init__(self, application, parent):
-		super(OverwriteDirectoryDialog, self).__init__(application, parent)
+		OverwriteDialog.__init__(self, application, parent)
 
 		self._entry_rename.set_sensitive(False)
 		self.set_title(_('Directory conflict'))
@@ -799,7 +799,7 @@ class OverwriteDirectoryDialog(OverwriteDialog):
 		button_merge = gtk.Button(label=_('Merge'))
 		button_merge.set_can_default(True)
 
-		super(OverwriteDirectoryDialog, self)._create_buttons()
+		OverwriteDialog._create_buttons(self)
 		self.add_action_widget(button_merge, gtk.RESPONSE_YES)
 
 		self.set_default_response(gtk.RESPONSE_YES)
@@ -825,7 +825,7 @@ class AddBookmarkDialog(gtk.Dialog):
 	"""This dialog enables user to change data before adding new bookmark"""
 
 	def __init__(self, application, path):
-		super(AddBookmarkDialog, self).__init__(parent=application)
+		gtk.Dialog.__init__(self, parent=application)
 
 		self._application = application
 
@@ -911,7 +911,7 @@ class OperationError(gtk.Dialog):
 	"""Dialog used to ask user about error occured during certain operation."""
 
 	def __init__(self, application):
-		super(OperationError, self).__init__(parent=application)
+		gtk.Dialog.__init__(self, parent=application)
 
 		self._application = application
 
@@ -995,7 +995,7 @@ class CreateToolbarWidgetDialog(gtk.Dialog):
 	"""Create widget persisten dialog."""
 
 	def __init__(self, application):
-		super(CreateToolbarWidgetDialog, self).__init__(parent=application)
+		gtk.Dialog.__init__(self, parent=application)
 
 		self._application = application
 
@@ -1103,7 +1103,7 @@ class InputRangeDialog(InputDialog):
 	"""Dialog used for getting selection range"""
 
 	def __init__(self, application, text):
-		super(InputRangeDialog, self).__init__(application)
+		InputDialog.__init__(self, application)
 
 		# set labels
 		self.set_title(_('Select range'))

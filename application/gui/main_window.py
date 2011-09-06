@@ -56,7 +56,7 @@ class MainWindow(gtk.Window):
 
 	def __init__(self):
 		# create main window and other widgets
-		super(MainWindow, self).__init__(type=gtk.WINDOW_TOPLEVEL)
+		gtk.Window.__init__(self, type=gtk.WINDOW_TOPLEVEL)
 
 		self._geometry = None
 
@@ -645,14 +645,18 @@ class MainWindow(gtk.Window):
 
 	def _destroy(self, widget, data=None):
 		"""Application destructor"""
+		# save tabs
 		self.save_tabs(self.left_notebook, 'left_notebook')
 		self.save_tabs(self.right_notebook, 'right_notebook')
 
+		# save window properties
 		self._save_window_position()
 		self._save_active_notebook()
 
+		# save config changes
 		self.save_config()
 
+		# exit main loop
 		gtk.main_quit()
 
 	def _delete_event(self, widget, data=None):
@@ -746,9 +750,9 @@ class MainWindow(gtk.Window):
 
 	def _create_commands_menu(self):
 		"""Create commands main menu"""
-		if not self.command_options.has_section('commands'): 
+		if not self.command_options.has_section('commands'):
 			return
-		
+
 		for item in self.menu_commands.get_children():  # remove existing items
 			self.menu_commands.remove(item)
 
@@ -1273,7 +1277,7 @@ class MainWindow(gtk.Window):
 				# convert tools menu
 				checkbox_convert_tools_menu = gtk.CheckButton('Convert saved tools menu')
 				checkbox_convert_tools_menu.set_active(True)
-				
+
 				# convert saved column sizes
 				checkbox_convert_column_sizes = gtk.CheckButton('Convert column sizes to new format')
 				checkbox_convert_column_sizes.set_active(True)
@@ -1285,7 +1289,7 @@ class MainWindow(gtk.Window):
 
 				vbox.pack_start(vbox_accel_map, False, False, 0)
 				mod_count += 3
-				
+
 			# clear tabs
 			if config_version < 15:
 				vbox_15 = gtk.VBox(False, 0)
@@ -1319,43 +1323,43 @@ class MainWindow(gtk.Window):
 				if checkbox_reset_accel_map.get_active() \
 				and os.path.isfile(os.path.join(self.config_path, 'accel_map')):
 					os.remove(os.path.join(self.config_path, 'accel_map'))
-				
-				# convert tools menu	
+
+				# convert tools menu
 				if checkbox_convert_tools_menu.get_active():
 					# open old configuration file
 					old_menu = RawConfigParser()
 					old_menu.read(os.path.join(self.config_path, 'tools'))
-					
+
 					if not self.command_options.has_section('tools'):
 						return
-					
+
 					# create section in new configuration file if it doesn't exist
 					if not self.command_options.has_section('commands'):
 						self.command_options.add_section('commands')
-				
+
 					# transfer items
 					for key in old_menu.options('tools'):
 						value = old_menu.get('tools', key)
 						self.command_options.set('commands', key, value)
-						
+
 					# remove old configuration file
 					os.unlink(os.path.join(self.config_path, 'tools'))
-					
+
 				# convert column sizes
 				if checkbox_convert_column_sizes.get_active():
 					columns = {
-							0: 'name', 
-							1: 'extension', 
-							2: 'size', 
+							0: 'name',
+							1: 'extension',
+							2: 'size',
 							3: 'mode',
 							4: 'date'
 						}
-					
+
 					for index, name in columns.items():
 						# save size to a new option
 						size = self.options.getint('FileList', 'size_{0}'.format(index))
 						self.options.set('FileList', 'size_{0}'.format(name), size)
-						
+
 						# remove old option
 						self.options.remove_option('FileList', 'size_{0}'.format(index))
 
@@ -1653,12 +1657,12 @@ class MainWindow(gtk.Window):
 	def create_terminal_tab(self, notebook, path=None):
 		"""Create terminal tab on selected notebook"""
 		result = None
-		
+
 		if self.plugin_classes.has_key('system_terminal'):
 			# only create tab if specified plugin is activated
 			SystemTerminal = self.plugin_classes['system_terminal']
 			result = self.create_tab(notebook, SystemTerminal, path)
-		
+
 		return result
 
 	def close_tab(self, notebook, child):
@@ -1678,7 +1682,7 @@ class MainWindow(gtk.Window):
 			# block signal when destroying plugin with columns
 			if hasattr(child, '_column_changed'):
 				child._item_list.handler_block_by_func(child._column_changed)
-				
+
 			# kill the component
 			child.destroy()
 
@@ -1772,7 +1776,6 @@ class MainWindow(gtk.Window):
 
 	def save_tabs(self, notebook, section):
 		"""Save opened tabs"""
-
 		self.tab_options.remove_section(section)
 		self.tab_options.add_section(section)
 

@@ -24,7 +24,7 @@ class Operation(Thread):
 	"""Parent class for all operation threads"""
 
 	def __init__(self, application, source, destination=None):
-		super(Operation, self).__init__(target=self)
+		Thread.__init__(self, target=self)
 
 		self._can_continue = Event()
 		self._abort = Event()
@@ -196,7 +196,7 @@ class Operation(Thread):
 			self.cancel()
 
 		return response
-	
+
 	def _get_remove_error_input(self, error):
 		"""Get user response for remove error"""
 		gtk.gdk.threads_enter()  # prevent deadlocks
@@ -216,7 +216,7 @@ class Operation(Thread):
 			self.cancel()
 
 		return response
-	
+
 	def _get_move_error_input(self, error):
 		"""Get user response for move error"""
 		gtk.gdk.threads_enter()  # prevent deadlocks
@@ -236,7 +236,7 @@ class Operation(Thread):
 			self.cancel()
 
 		return response
-	
+
 	def _get_rename_error_input(self, error):
 		"""Get user response for rename error"""
 		gtk.gdk.threads_enter()  # prevent deadlocks
@@ -278,7 +278,7 @@ class CopyOperation(Operation):
 	"""Operation thread used for copying files"""
 
 	def __init__(self, application, source, destination, options):
-		super(CopyOperation, self).__init__(application, source, destination)
+		Operation.__init__(self, application, source, destination)
 
 		self._create_dialog()
 		self._options = options
@@ -331,7 +331,7 @@ class CopyOperation(Operation):
 					self._dir_list.append(item)
 					if can_create: self._dir_list_create.append(item)
 					self._scan_directory(item)
-					
+
 			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
 				# item is a file, get stats and update lists
 				item_stat = self._source.get_stat(item, relative_to=self._source_path)
@@ -573,7 +573,7 @@ class CopyOperation(Operation):
 		gobject.idle_add(self._update_status, _('Copying files...'))
 
 		list_ = self._file_list[:]
-		
+
 		# copy all the files in list
 		for file_ in list_:
 			# abort operation if requested
@@ -597,7 +597,7 @@ class CopyOperation(Operation):
 
 		# get list of items to copy
 		self._get_lists()
-		
+
 		# perform operation
 		self._create_directory_list()
 		self._copy_file_list()
@@ -632,7 +632,7 @@ class MoveOperation(CopyOperation):
 		try:
 			# try removing specified path
 			self._source.remove_path(path, relative_to=self._source_path)
-			
+
 		except StandardError as error:
 			# problem removing path, ask user what to do
 			response = self._get_remove_error_input(error)
@@ -640,11 +640,11 @@ class MoveOperation(CopyOperation):
 			# handle user response
 			if response == gtk.RESPONSE_YES:
 				self._remove_path(path, list)  # retry removing path
-				
+
 			else:
 				# user didn't want to retry, remove path from list
 				list.pop(list.index(path))
-	
+
 	def _create_dialog(self):
 		"""Create progress dialog"""
 		self._dialog = MoveDialog(self._application, self)
@@ -670,7 +670,7 @@ class MoveOperation(CopyOperation):
 
 		# if user skipped this file return
 		if not can_procede:
-			self._file_list.pop(self._file_list.index(file_)) 
+			self._file_list.pop(self._file_list.index(file_))
 			return
 
 		# move file
@@ -680,7 +680,7 @@ class MoveOperation(CopyOperation):
 								os.path.join(self._destination_path, dest_file),
 								relative_to=self._source_path
 							)
-			
+
 		except StandardError as error:
 			# problem with moving file, ask user what to do
 			response = self._get_move_error_input(error)
@@ -699,9 +699,9 @@ class MoveOperation(CopyOperation):
 	def _move_file_list(self):
 		"""Move files from the list"""
 		gobject.idle_add(self._update_status, _('Moving files...'))
-		
+
 		list_ = self._file_list[:]
-		
+
 		for file_ in list_:
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
@@ -724,7 +724,7 @@ class MoveOperation(CopyOperation):
 			# remove path
 			gobject.idle_add(self._dialog.set_current_file, item)
 			self._remove_path(item, self._file_list)
-			
+
 			# update current count
 			gobject.idle_add(
 						self._dialog.set_current_file_fraction,
@@ -746,18 +746,18 @@ class MoveOperation(CopyOperation):
 
 			if self._source.exists(directory, relative_to=self._source_path):
 				gobject.idle_add(self._dialog.set_current_file, directory)
-				
+
 				# remove directory only if it's empty
 				if len(self._source.list_dir(directory, relative_to=self._source_path)) == 0:
 					self._remove_path(directory, dir_list)
-				
+
 				# update current count
 				if len(dir_list) > 0:
 					gobject.idle_add(
 								self._dialog.set_current_file_fraction,
 								float(number) / len(dir_list)
 							)
-					
+
 				else:
 					# prevent division by zero
 					gobject.idle_add(self._dialog.set_current_file_fraction, 1)
@@ -826,15 +826,15 @@ class DeleteOperation(Operation):
 	"""Operation thread used for deleting files"""
 
 	def __init__(self, application, provider):
-		super(DeleteOperation, self).__init__(application, provider)
+		Operation.__init__(self, application, provider)
 		self._dialog = DeleteDialog(application, self)
-		
+
 	def _remove_path(self, path):
 		"""Remove path"""
 		try:
 			# try removing specified path
 			self._source.remove_path(path, relative_to=self._source_path)
-			
+
 		except StandardError as error:
 			# problem removing path, ask user what to do
 			response = self._get_remove_error_input(error)
@@ -842,11 +842,11 @@ class DeleteOperation(Operation):
 			# handle user response
 			if response == gtk.RESPONSE_YES:
 				self._remove_path(path)  # retry removing path
-				
+
 			else:
 				# user didn't want to retry, remove path from list
 				self._file_list.pop(self._file_list.index(path))
-				
+
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
 		gtk.gdk.threads_enter()
@@ -868,14 +868,14 @@ class DeleteOperation(Operation):
 
 			gobject.idle_add(self._dialog.set_current_file, item)
 			self._remove_path(item)
-			
-			# update current count 
+
+			# update current count
 			if len(self._file_list) > 0:
 				gobject.idle_add(
-							self._dialog.set_current_file_fraction, 
+							self._dialog.set_current_file_fraction,
 							float(index) / len(self._file_list)
 						)
-				
+
 			else:
 				# prevent division by zero
 				gobject.idle_add(self._dialog.set_current_file_fraction, 1)
@@ -899,24 +899,24 @@ class DeleteOperation(Operation):
 
 		# destroy dialog
 		gobject.idle_add(self._destroy_ui)
-		
-		
+
+
 class RenameOperation(Operation):
 	"""Thread used for rename of large number of files"""
-	
+
 	def __init__(self, application, provider, path, file_list):
-		super(RenameOperation, self).__init__(application, provider)
-		
+		Operation.__init__(self, application, provider)
+
 		self._dialog = RenameDialog(application, self)
 		self._source_path = path
 		self._file_list = file_list
-		
+
 	def _rename_path(self, old_name, new_name, index):
 		"""Rename specified path"""
 		try:
 			# try renaming specified path
 			self._source.rename_path(old_name, new_name, relative_to=self._source_path)
-			
+
 		except StandardError as error:
 			# problem renaming path, ask user what to do
 			response = self._get_rename_error_input(error)
@@ -924,11 +924,11 @@ class RenameOperation(Operation):
 			# handle user response
 			if response == gtk.RESPONSE_YES:
 				self._remove_path(old_name, new_name, index)  # retry renaming path
-				
+
 			else:
 				# user didn't want to retry, remove path from list
 				self._file_list.pop(index)
-					
+
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
 		gtk.gdk.threads_enter()
@@ -942,14 +942,14 @@ class RenameOperation(Operation):
 
 			gobject.idle_add(self._dialog.set_current_file, item[0])
 			self._rename_path(item[0], item[1], index-1)
-			
-			# update current count 
+
+			# update current count
 			if len(self._file_list) > 0:
 				gobject.idle_add(
-							self._dialog.set_current_file_fraction, 
+							self._dialog.set_current_file_fraction,
 							float(index) / len(self._file_list)
 						)
-				
+
 			else:
 				# prevent division by zero
 				gobject.idle_add(self._dialog.set_current_file_fraction, 1)
@@ -979,7 +979,7 @@ class PathChanger(Thread):
 	"""Thread used to scan specified path and get item properties"""
 
 	def __init__(self, application, parent, provider, path):
-		super(PathChanger, self).__init__(target=self)
+		Thread.__init__(self, target=self)
 
 		self._application = application
 		self._parent = parent

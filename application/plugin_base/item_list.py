@@ -983,14 +983,12 @@ class ItemList(PluginBase):
 		# if current width is not the same as stored one, save
 		if not column_width == existing_width:
 			self._parent.options.set(section_name, option_name,	column_width)
-			self._parent.update_column_sizes(widget, self)
+			self._parent.delegate_to_objects(self, 'update_column_size', column_name)
 			
 	def _column_changed(self, widget, data=None):
 		"""Handle adding, removing and reordering columns"""
 		columns = self._item_list.get_columns()
 		column_names = map(lambda column: column.get_data('name'), columns)
-		
-		print self.__class__.__name__
 		
 		print column_names
 

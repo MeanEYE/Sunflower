@@ -2034,22 +2034,30 @@ class MainWindow(gtk.Window):
 			result = left_object
 
 		return result
+	
+	def delegate_to_objects(self, caller, method_name, *args):
+		"""Call specified method_name on all active objects of same class as caller
+		
+		Params:
+		caller - object
+		method_name - string
+		args - arguments to be passed to specified methods
+		
+		"""
+		# get all objects
+		objects = self.left_notebook.get_children()
+		objects.extend(self.right_notebook.get_children())
 
-	def update_column_sizes(self, column, sender=None):
-		"""Update column size on all tabs of specified class"""
-		# update left notebook
-		for index in range(0, self.left_notebook.get_n_pages()):
-			page = self.left_notebook.get_nth_page(index)
+		# get only objects of specified class that are not caller
+		filter_objects = lambda item: item.__class__ is caller.__class__ and item is not caller
+		objects = filter(filter_objects, objects)
 
-			if isinstance(page, sender.__class__) and page is not sender:
-				page.update_column_size(column.get_data('name'))
-
-		# update right notebook
-		for index in range(0, self.right_notebook.get_n_pages()):
-			page = self.right_notebook.get_nth_page(index)
-
-			if isinstance(page, sender.__class__) and page is not sender:
-				page.update_column_size(column.get_data('name'))
+		# call specified method_name
+		for item in objects:
+			method = getattr(item, method_name)
+			
+			if callable(method):
+				method(*args)
 
 	def toggle_fullscreen(self, widget, data=None):
 		"""Toggle application fullscreen"""

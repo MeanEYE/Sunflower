@@ -2272,17 +2272,17 @@ class MainWindow(gtk.Window):
 		"""Set text data to clipboard"""
 		self.clipboard.set_text(text)
 
-	def set_clipboard_item_list(self, operation, list):
+	def set_clipboard_item_list(self, operation, uri_list):
 		"""Set clipboard to contain list of items
 
 		operation - 'copy' or 'cut' string representing operation
-		list - list of URIs
+		uri_list - list of URIs
 		"""
 		targets = [
 				('x-special/gnome-copied-files', 0, 0),
 				("text/uri-list", 0, 0)
 			]
-		raw_data = '{0}\n'.format(operation) + '\n'.join(list)
+		raw_data = '{0}\n'.format(operation) + '\n'.join(uri_list)
 
 		def get_func(clipboard, selection, info, data):
 			"""Handle request from application"""
@@ -2310,9 +2310,9 @@ class MainWindow(gtk.Window):
 			data = selection.data.splitlines(False)
 
 			operation = data[0]
-			list = data[1:]
+			uri_list = data[1:]
 
-			result = (operation, list)
+			result = (operation, uri_list)
 
 		return result
 
@@ -2333,10 +2333,10 @@ class MainWindow(gtk.Window):
 		"""Show advanced rename tool for active list"""
 		if len(self.rename_extension_classes) > 0 \
 		and issubclass(self._active_object.__class__, ItemList):
-			object = self.get_active_object()
+			active_object = self.get_active_object()
 
-			if issubclass(object.__class__, ItemList):
-				AdvancedRename(object, self)
+			if issubclass(active_object.__class__, ItemList):
+				AdvancedRename(active_object, self)
 
 		elif not issubclass(self._active_object.__class__, ItemList):
 			# active object is not item list

@@ -1,7 +1,6 @@
 import os
 
 from plugin_base.terminal import Terminal
-from plugins.file_list import FileList
 
 
 def register_plugin(application):
@@ -65,6 +64,7 @@ class SystemTerminal(Terminal):
 	def _close_tab(self, widget=None, data=None):
 		"""Provide additional functionality"""
 		if self._notebook.get_n_pages() == 1:
-			self._parent.create_tab(self._notebook, FileList, self.path)
+			DefaultList = self._parent.plugin_classes['file_list']
+			self._parent.create_tab(self._notebook, DefaultList, self.path)
 
 		Terminal._close_tab(self, widget, data)

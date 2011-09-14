@@ -1015,14 +1015,8 @@ class MainWindow(gtk.Window):
 		# get plugin list
 		path = os.path.abspath(os.path.join('application', 'plugins'))
 
-		# get matching files
-		list_ = fnmatch.filter(os.listdir(path), '*.py')
-
-		# remove extension
-		list_ = [os.path.splitext(file_)[0] for file_ in list_]
-
-		# remove package initialized
-		list_.remove('__init__')
+		# get matching directories
+		list_ = filter(lambda item: os.path.isdir(os.path.join(path, item)), os.listdir(path))
 
 		return list_
 
@@ -1040,8 +1034,8 @@ class MainWindow(gtk.Window):
 		for file_ in list_:
 			try:
 				# import module
-				__import__('plugins.{0}'.format(file_))
-				plugin = sys.modules['plugins.{0}'.format(file_)]
+				__import__('plugins.{0}.plugin'.format(file_))
+				plugin = sys.modules['plugins.{0}.plugin'.format(file_)]
 
 				# call module register_plugin method
 				if hasattr(plugin, 'register_plugin'):
@@ -2034,15 +2028,15 @@ class MainWindow(gtk.Window):
 			result = left_object
 
 		return result
-	
+
 	def delegate_to_objects(self, caller, method_name, *args):
 		"""Call specified method_name on all active objects of same class as caller
-		
+
 		Params:
 		caller - object
 		method_name - string
 		args - arguments to be passed to specified methods
-		
+
 		"""
 		# get all objects
 		objects = self.left_notebook.get_children()
@@ -2055,7 +2049,7 @@ class MainWindow(gtk.Window):
 		# call specified method_name
 		for item in objects:
 			method = getattr(item, method_name)
-			
+
 			if callable(method):
 				method(*args)
 

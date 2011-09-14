@@ -5,6 +5,7 @@ Version 0.1a-34
   * Assign proper icons to directories in advanced rename tool
   * Fixed behavior of 'date format' and 'editor command' entries
   * Changed Commands menu to Tools
+  * New plugin format to allow better structuring of plugins
 
 Version 0.1a-33
   + Rename extension: Audio metadata

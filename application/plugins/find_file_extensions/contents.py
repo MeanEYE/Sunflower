@@ -2,6 +2,7 @@ import os
 import gtk
 import fnmatch
 
+from provider import FileType
 from plugin_base.find_extension import FindExtension
 
 

@@ -351,6 +351,37 @@ class ItemList(PluginBase):
 
 			result = True
 
+		# handle range select
+		elif event.button is 1 \
+		and event.state & gtk.gdk.SHIFT_MASK \
+		and event.type is gtk.gdk.BUTTON_PRESS:
+			start_path = None
+			end_path = None
+			current_status = False
+
+			# get source path
+			selection = self._item_list.get_selection()
+			item_list, start_iter = selection.get_selected()
+
+			if start_iter is not None:
+				start_path = item_list.get_path(start_iter)
+
+			# get destination path
+			item = self._item_list.get_path_at_pos(int(event.x), int(event.y))
+
+			if item is not None:
+				end_path = item[0]
+
+			# select items in between
+			if start_path and end_path:
+				self._select_range(start_path, end_path)
+
+				# select end item
+				self._item_list.set_cursor(end_path)
+				self._item_list.scroll_to_cell(end_path)
+
+			result = True
+
 		# handle double click
 		elif event.button is 1 and event.type is gtk.gdk._2BUTTON_PRESS:
 			self._execute_selected_item(widget)
@@ -972,11 +1003,11 @@ class ItemList(PluginBase):
 		column_name = widget.get_data('name')
 		section_name = self.__class__.__name__
 		option_name = 'size_{0}'.format(column_name)
-		
+
 		# get stored column width
 		if self._parent.options.has_option(section_name, option_name):
 			existing_width = self._parent.options.getint(section_name, option_name)
-			
+
 		else:
 			existing_width = -1
 
@@ -984,12 +1015,12 @@ class ItemList(PluginBase):
 		if not column_width == existing_width:
 			self._parent.options.set(section_name, option_name,	column_width)
 			self._parent.delegate_to_objects(self, 'update_column_size', column_name)
-			
+
 	def _column_changed(self, widget, data=None):
 		"""Handle adding, removing and reordering columns"""
 		columns = self._item_list.get_columns()
 		column_names = map(lambda column: column.get_data('name'), columns)
-		
+
 		print column_names
 
 	def _resize_columns(self, columns):
@@ -1044,6 +1075,12 @@ class ItemList(PluginBase):
 
 	def _toggle_selection(self, widget, data=None, advance=True):
 		"""Abstract method for toggling item selection"""
+		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.WHEN_NEEDED:
+			selected_items = self._dirs['selected'] + self._files['selected']
+			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
+
+	def _select_range(self, start_path, end_path):
+		"""Set items in range to status oposite from frist item in selection"""
 		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
@@ -1136,11 +1173,11 @@ class ItemList(PluginBase):
 	def update_column_size(self, name):
 		"""Update column sizes"""
 		pass
-	
+
 	def update_column_order(self, column, after):
 		"""Update column order"""
 		pass
-	
+
 	def update_column_visibility(self, column):
 		"""Update column visibility"""
 		pass

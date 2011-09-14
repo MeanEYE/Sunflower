@@ -24,7 +24,7 @@
 
 - Breadcrumb trail for tab title bar
 
-- Upon receiving focus file list should check validity of it's current path
+- Upon receiving focus file list should check validity of its current path
 
 - Terminal tab without scrollbars forces window size
 

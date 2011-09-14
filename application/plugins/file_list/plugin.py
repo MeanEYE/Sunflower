@@ -832,7 +832,56 @@ class FileList(ItemList):
 			# select next item in the list
 			next_iter = list_.iter_next(iter_)
 			if next_iter is not None:
-				self._item_list.set_cursor(list_.get_path(next_iter))
+				path = list_.get_path(next_iter)
+				self._item_list.set_cursor(path)
+				self._item_list.scroll_to_cell(path)
+
+	def _select_range(self, start_path, end_path):
+		"""Set items in range to status oposite from frist item in selection"""
+		if len(self._store) == 1:  # exit when list doesn't have items
+			return
+
+		# get current selection
+		start_iter = self._store.get_iter(start_path)
+		new_status = not (self._store.get_value(start_iter, Column.COLOR) is not None)
+
+		# swap paths if selecting from bottom up
+		if start_path[0] > end_path[0]:
+			start_path, end_path = end_path, start_path
+
+		# make sure start path is not parent
+		if start_path[0] == 0:
+			start_path = (1, )
+
+		# values to be set in columns
+		value = (None, 'red')[new_status]
+		image = (None, self._pixbuf_selection)[new_status]
+
+		for index in xrange(start_path[0], end_path[0] + 1):
+			current_iter = self._store.get_iter((index,))
+
+			# get current iter information
+			size = self._store.get_value(current_iter, Column.SIZE)
+			is_dir = self._store.get_value(current_iter, Column.IS_DIR)
+			status = self._store.get_value(current_iter, Column.COLOR) is not None
+
+			# set selection
+			self._store.set_value(current_iter, Column.COLOR, value)
+			self._store.set_value(current_iter, Column.SELECTED, image)
+
+			# modify counters only when status is changed
+			if new_status is not status:
+				if is_dir:
+					self._dirs['selected'] += [1, -1][status]
+				else:
+					self._files['selected'] += [1, -1][status]
+					self._size['selected'] += [1, -1][status] * size
+
+		# call parent method
+		ItemList._select_range(self, start_path, end_path)
+
+		# update status
+		self._update_status_with_statistis()
 
 	def _edit_selected(self, widget=None, data=None):
 		"""Abstract method to edit currently selected item"""
@@ -947,8 +996,13 @@ class FileList(ItemList):
 
 				# focus specified item
 				if self._item_to_focus == filename:
-					self._item_list.set_cursor(self._store.get_path(result))
-					self._item_list.scroll_to_cell(self._store.get_path(result))
+					path = self._store.get_path(result)
+
+					# set cursor position and scroll ti make it visible
+					self._item_list.set_cursor(path)
+					self._item_list.scroll_to_cell(path)
+
+					# reset local variable
 					self._item_to_focus = None
 
 			except Exception as error:

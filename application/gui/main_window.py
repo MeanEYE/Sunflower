@@ -1016,9 +1016,10 @@ class MainWindow(gtk.Window):
 		path = os.path.abspath(os.path.join('application', 'plugins'))
 
 		# get matching directories
-		list_ = filter(lambda item: os.path.isdir(os.path.join(path, item)), os.listdir(path))
+		plugin_list = filter(lambda item: os.path.isdir(os.path.join(path, item)), os.listdir(path))
+		plugin_list = filter(lambda item: os.path.exists(os.path.join(path, item, 'plugin.py')), plugin_list)
 
-		return list_
+		return plugin_list
 
 	def _load_plugins(self):
 		"""Dynamically load plugins"""

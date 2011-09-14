@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-14 22:13+0200\n"
+"POT-Creation-Date: 2011-09-14 23:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: application/gui/preferences/terminal.py:10
-#: application/plugins/system_terminal.py:42
+#: application/plugins/system_terminal/plugin.py:41
 #: application/plugin_base/terminal.py:210
 #: application/plugin_base/item_list.py:120
 msgid "Terminal"
@@ -27,6 +27,33 @@ msgstr ""
 
 #: application/gui/preferences/terminal.py:13
 msgid "Show scrollbars when needed"
+msgstr ""
+
+#: application/gui/preferences/commands.py:10
+#: application/gui/main_window.py:431
+msgid "Commands"
+msgstr ""
+
+#: application/gui/preferences/commands.py:35
+#: application/gui/preferences/bookmarks.py:41
+#: application/plugins/rename_extensions/audio_metadata.py:25
+msgid "Title"
+msgstr ""
+
+#: application/gui/preferences/commands.py:39
+msgid "Command"
+msgstr ""
+
+#: application/gui/preferences/commands.py:62
+#: application/gui/preferences/bookmarks.py:68
+#: application/gui/preferences/toolbar.py:66
+msgid "Move Up"
+msgstr ""
+
+#: application/gui/preferences/commands.py:70
+#: application/gui/preferences/bookmarks.py:76
+#: application/gui/preferences/toolbar.py:74
+msgid "Move Down"
 msgstr ""
 
 #: application/gui/preferences/plugins.py:10
@@ -49,8 +76,8 @@ msgid ""
 msgstr ""
 
 #: application/gui/preferences/bookmarks.py:10
-#: application/plugins/default_toolbar.py:175
-#: application/plugins/default_toolbar.py:176
+#: application/plugins/default_toolbar/bookmarks_button.py:16
+#: application/plugins/default_toolbar/bookmarks_button.py:17
 #: application/plugin_base/item_list.py:74
 msgid "Bookmarks"
 msgstr ""
@@ -63,35 +90,9 @@ msgstr ""
 msgid "Add home directory to bookmarks menu"
 msgstr ""
 
-#: application/gui/preferences/bookmarks.py:41
-#: application/gui/preferences/tools.py:35
-#: application/plugins/rename_extensions.py:424
-msgid "Title"
-msgstr ""
-
 #: application/gui/preferences/bookmarks.py:45
 #: application/tools/find_files.py:85
 msgid "Location"
-msgstr ""
-
-#: application/gui/preferences/bookmarks.py:68
-#: application/gui/preferences/tools.py:62
-#: application/gui/preferences/toolbar.py:66
-msgid "Move Up"
-msgstr ""
-
-#: application/gui/preferences/bookmarks.py:76
-#: application/gui/preferences/tools.py:70
-#: application/gui/preferences/toolbar.py:74
-msgid "Move Down"
-msgstr ""
-
-#: application/gui/preferences/tools.py:10
-msgid "Tools Menu"
-msgstr ""
-
-#: application/gui/preferences/tools.py:39
-msgid "Command"
 msgstr ""
 
 #: application/gui/preferences/accelerators.py:19
@@ -153,8 +154,9 @@ msgstr ""
 
 #: application/gui/preferences/toolbar.py:28
 #: application/gui/history_list.py:43
-#: application/plugins/rename_extensions.py:88
-#: application/plugins/file_list.py:111 application/tools/find_files.py:82
+#: application/plugins/file_list/plugin.py:112
+#: application/plugins/rename_extensions/default.py:73
+#: application/tools/find_files.py:82
 msgid "Name"
 msgstr ""
 
@@ -260,7 +262,7 @@ msgid "Show sizes in human readable format"
 msgstr ""
 
 #: application/gui/preferences/item_list.py:10
-#: application/plugin_base/item_list.py:193
+#: application/plugin_base/item_list.py:194
 msgid "Item List"
 msgstr ""
 
@@ -342,7 +344,7 @@ msgid ""
 "this issue your quick search settings were restored to default."
 msgstr ""
 
-#: application/gui/main_window.py:90 application/gui/main_window.py:1334
+#: application/gui/main_window.py:90 application/gui/main_window.py:1385
 #: application/gui/changelog_dialog.py:51 application/gui/about_window.py:49
 msgid "Sunflower"
 msgstr ""
@@ -363,15 +365,15 @@ msgstr ""
 msgid "Create directory"
 msgstr ""
 
-#: application/gui/main_window.py:174 application/plugin_base/item_list.py:709
+#: application/gui/main_window.py:174 application/plugin_base/item_list.py:741
 msgid "_Open"
 msgstr ""
 
-#: application/gui/main_window.py:181 application/plugin_base/item_list.py:718
+#: application/gui/main_window.py:181 application/plugin_base/item_list.py:750
 msgid "Open in new ta_b"
 msgstr ""
 
-#: application/gui/main_window.py:191 application/plugin_base/item_list.py:823
+#: application/gui/main_window.py:191 application/plugin_base/item_list.py:855
 msgid "_Properties"
 msgstr ""
 
@@ -379,31 +381,31 @@ msgstr ""
 msgid "_Quit"
 msgstr ""
 
-#: application/gui/main_window.py:213 application/plugin_base/item_list.py:748
+#: application/gui/main_window.py:213 application/plugin_base/item_list.py:780
 msgid "Cu_t"
 msgstr ""
 
-#: application/gui/main_window.py:220 application/plugin_base/item_list.py:757
+#: application/gui/main_window.py:220 application/plugin_base/item_list.py:789
 msgid "_Copy"
 msgstr ""
 
-#: application/gui/main_window.py:227 application/plugin_base/item_list.py:766
+#: application/gui/main_window.py:227 application/plugin_base/item_list.py:798
 msgid "_Paste"
 msgstr ""
 
-#: application/gui/main_window.py:237 application/plugin_base/item_list.py:780
+#: application/gui/main_window.py:237 application/plugin_base/item_list.py:812
 msgid "_Delete"
 msgstr ""
 
-#: application/gui/main_window.py:247 application/plugin_base/item_list.py:794
+#: application/gui/main_window.py:247 application/plugin_base/item_list.py:826
 msgid "Send to..."
 msgstr ""
 
-#: application/gui/main_window.py:254 application/plugin_base/item_list.py:804
+#: application/gui/main_window.py:254 application/plugin_base/item_list.py:836
 msgid "Ma_ke link"
 msgstr ""
 
-#: application/gui/main_window.py:258 application/plugin_base/item_list.py:810
+#: application/gui/main_window.py:258 application/plugin_base/item_list.py:842
 msgid "_Rename..."
 msgstr ""
 
@@ -411,7 +413,7 @@ msgstr ""
 msgid "_Unmount"
 msgstr ""
 
-#: application/gui/main_window.py:270 application/mounts.py:26
+#: application/gui/main_window.py:270 application/mounts.py:22
 msgid "Mount list is empty"
 msgstr ""
 
@@ -456,7 +458,7 @@ msgid "Compare _directories"
 msgstr ""
 
 #: application/gui/main_window.py:338
-msgid "Commands"
+msgid "Tools"
 msgstr ""
 
 #: application/gui/main_window.py:342 application/tools/find_files.py:37
@@ -501,10 +503,6 @@ msgstr ""
 
 #: application/gui/main_window.py:421
 msgid "Show co_mmand entry"
-msgstr ""
-
-#: application/gui/main_window.py:431
-msgid "Tools"
 msgstr ""
 
 #: application/gui/main_window.py:435
@@ -583,89 +581,89 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: application/gui/main_window.py:592 application/plugin_base/item_list.py:208
+#: application/gui/main_window.py:592 application/plugin_base/item_list.py:209
 msgid "Delete selected items"
 msgstr ""
 
-#: application/gui/main_window.py:684
-#: application/plugins/default_toolbar.py:198
-#: application/plugins/default_toolbar.py:199
+#: application/gui/main_window.py:688
+#: application/plugins/default_toolbar/home_directory_button.py:17
+#: application/plugins/default_toolbar/home_directory_button.py:18
 msgid "Home directory"
 msgstr ""
 
-#: application/gui/main_window.py:714
+#: application/gui/main_window.py:718
 msgid "Options"
 msgstr ""
 
-#: application/gui/main_window.py:717
+#: application/gui/main_window.py:721
 msgid "_Add bookmark"
 msgstr ""
 
-#: application/gui/main_window.py:723
+#: application/gui/main_window.py:727
 msgid "_Edit bookmarks"
 msgstr ""
 
-#: application/gui/main_window.py:782
-msgid "_Edit tools"
+#: application/gui/main_window.py:789
+msgid "_Edit commands"
 msgstr ""
 
-#: application/gui/main_window.py:839
+#: application/gui/main_window.py:846
 msgid ""
 "Specified path does not exist or is not valid. If path is not local check if "
 "volume is mounted."
 msgstr ""
 
-#: application/gui/main_window.py:1322
+#: application/gui/main_window.py:1373
 msgid "Sunflower file manager"
 msgstr ""
 
-#: application/gui/main_window.py:1337
+#: application/gui/main_window.py:1388
 msgid "print version and exit"
 msgstr ""
 
-#: application/gui/main_window.py:1342
+#: application/gui/main_window.py:1393
 msgid "skip loading saved tabs"
 msgstr ""
 
-#: application/gui/main_window.py:1348
+#: application/gui/main_window.py:1399
 msgid "open new tab on the left notebook"
 msgstr ""
 
-#: application/gui/main_window.py:1355
+#: application/gui/main_window.py:1406
 msgid "open new tab on the right notebook"
 msgstr ""
 
-#: application/gui/main_window.py:1451
+#: application/gui/main_window.py:1502
 msgid "Select items"
 msgstr ""
 
-#: application/gui/main_window.py:1452 application/gui/main_window.py:1497
+#: application/gui/main_window.py:1503 application/gui/main_window.py:1548
 msgid "Selection pattern (eg.: *.jpg):"
 msgstr ""
 
-#: application/gui/main_window.py:1496
+#: application/gui/main_window.py:1547
 msgid "Unselect items"
 msgstr ""
 
-#: application/gui/main_window.py:1860
+#: application/gui/main_window.py:1921
 msgid ""
 "Error saving configuration to files in your home directory. Make sure you "
 "have enough permissions."
 msgstr ""
 
-#: application/gui/main_window.py:2275
+#: application/gui/main_window.py:2344
 msgid ""
 "Active object is not item list. Advanced rename tool needs files and "
 "directories."
 msgstr ""
 
-#: application/gui/main_window.py:2290
+#: application/gui/main_window.py:2359
 msgid ""
 "No rename extensions were found. Please enable \"rename_extensions\" plugin "
 "and try again."
 msgstr ""
 
-#: application/gui/main_window.py:2315
+#: application/gui/main_window.py:2384
 msgid ""
 "No extensions for finding files were found. Please enable "
 "\"find_file_extensions\" plugin and try again."
@@ -675,7 +673,7 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
-#: application/gui/preferences_window.py:95
+#: application/gui/preferences_window.py:98
 msgid "Program restart required!"
 msgstr ""
 
@@ -708,8 +706,8 @@ msgid "{0} Properties"
 msgstr ""
 
 #: application/gui/properties_window.py:56
-#: application/plugins/rename_extensions.py:283
-#: application/plugins/find_file_extensions.py:86
+#: application/plugins/rename_extensions/default.py:268
+#: application/plugins/find_file_extensions/default.py:81
 msgid "Basic"
 msgstr ""
 
@@ -722,14 +720,14 @@ msgid "Open With"
 msgstr ""
 
 #: application/gui/properties_window.py:118
-#: application/plugins/file_list.py:550
+#: application/plugins/file_list/plugin.py:559
 msgid ""
 "File or directory with specified name already exists in current directory. "
 "Item could not be renamed."
 msgstr ""
 
 #: application/gui/properties_window.py:153
-#: application/plugins/file_list.py:535
+#: application/plugins/file_list/plugin.py:544
 msgid "Error renaming specified item. Make sure you have enough permissions."
 msgstr ""
 
@@ -753,7 +751,7 @@ msgstr ""
 
 #: application/gui/properties_window.py:322
 #: application/gui/input_dialog.py:847 application/gui/input_dialog.py:1019
-#: application/plugins/default_toolbar.py:262
+#: application/plugins/default_toolbar/bookmark_button.py:73
 msgid "Name:"
 msgstr ""
 
@@ -861,7 +859,7 @@ msgstr ""
 msgid "Change log was not found!"
 msgstr ""
 
-#: application/gui/changelog_dialog.py:109 application/gui/about_window.py:348
+#: application/gui/changelog_dialog.py:109 application/gui/about_window.py:364
 msgid "Change log"
 msgstr ""
 
@@ -882,8 +880,8 @@ msgid "Open file in editor"
 msgstr ""
 
 #: application/gui/input_dialog.py:258
-#: application/plugins/rename_extensions.py:67
-#: application/plugins/rename_extensions.py:431
+#: application/plugins/rename_extensions/default.py:52
+#: application/plugins/rename_extensions/audio_metadata.py:32
 msgid "Template:"
 msgstr ""
 
@@ -1149,11 +1147,11 @@ msgstr ""
 msgid "Translating:"
 msgstr ""
 
-#: application/gui/about_window.py:313
+#: application/gui/about_window.py:329
 msgid "License"
 msgstr ""
 
-#: application/mounts.py:141
+#: application/mounts.py:137
 msgid "Specified item can not be unmounted."
 msgstr ""
 
@@ -1174,7 +1172,166 @@ msgid ""
 "In order to edit this entry you need to activate plugin used to create it."
 msgstr ""
 
-#: application/plugins/rename_extensions.py:55
+#: application/plugins/default_toolbar/parent_directory_button.py:14
+#: application/plugins/default_toolbar/parent_directory_button.py:15
+#: application/plugin_base/item_list.py:206
+msgid "Go to parent directory"
+msgstr ""
+
+#: application/plugins/default_toolbar/bookmark_button.py:57
+msgid "Configure bookmark button"
+msgstr ""
+
+#: application/plugins/default_toolbar/bookmark_button.py:83
+msgid "Path:"
+msgstr ""
+
+#: application/plugins/default_toolbar/bookmark_button.py:87
+msgid "Show label"
+msgstr ""
+
+#: application/plugins/default_toolbar/plugin.py:28
+msgid "Parent directory button"
+msgstr ""
+
+#: application/plugins/default_toolbar/plugin.py:34
+msgid "Home directory button"
+msgstr ""
+
+#: application/plugins/default_toolbar/plugin.py:40
+msgid "Bookmark button"
+msgstr ""
+
+#: application/plugins/default_toolbar/plugin.py:46
+msgid "Bookmarks menu"
+msgstr ""
+
+#: application/plugins/default_toolbar/plugin.py:52
+msgid "Separator"
+msgstr ""
+
+#: application/plugins/default_toolbar/plugin.py:107
+msgid "This widget has no configuration dialog."
+msgstr ""
+
+#: application/plugins/file_list/plugin.py:32
+msgid "Local file list"
+msgstr ""
+
+#: application/plugins/file_list/plugin.py:113
+msgid "Ext"
+msgstr ""
+
+#: application/plugins/file_list/plugin.py:114
+#: application/plugins/find_file_extensions/size.py:63
+msgid "Size"
+msgstr ""
+
+#: application/plugins/file_list/plugin.py:115
+msgid "Mode"
+msgstr ""
+
+#: application/plugins/file_list/plugin.py:116
+#: application/plugins/rename_extensions/audio_metadata.py:27
+msgid "Date"
+msgstr ""
+
+#: application/plugins/file_list/plugin.py:376
+msgid ""
+"There was an error creating directory. Make sure you have enough "
+"permissions. "
+msgstr ""
+
+#: application/plugins/file_list/plugin.py:402
+msgid "File already exists: {0}"
+msgstr ""
+
+#: application/plugins/file_list/plugin.py:405
+msgid "Directory with same name exists: {0}"
+msgstr ""
+
+#: application/plugins/file_list/plugin.py:441
+msgid ""
+"There was an error creating file. Make sure you have enough permissions."
+msgstr ""
+
+#: application/plugins/file_list/plugin.py:459
+msgid ""
+"You are about to remove {0} item.\n"
+"Are you sure about this?"
+msgid_plural ""
+"You are about to remove {0} items.\n"
+"Are you sure about this?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: application/plugins/file_list/plugin.py:1099
+msgid "Free:"
+msgstr ""
+
+#: application/plugins/file_list/plugin.py:1100
+msgid "Total:"
+msgstr ""
+
+#: application/plugins/file_list/plugin.py:1143
+msgid ""
+"Drag and drop functionality can not be used if source and destination are "
+"same!"
+msgstr ""
+
+#: application/plugins/file_list/plugin.py:1234
+msgid ""
+"Error changing working directory. \n"
+"\n"
+"{0}\n"
+"\n"
+"Would you like to retry?"
+msgstr ""
+
+#: application/plugins/file_list/local_provider.py:166
+msgid ""
+"Unable to rename specified item. Check if you have permission to access "
+"specified path.\n"
+"\n"
+"{0}"
+msgstr ""
+
+#: application/plugins/rename_extensions/letter_case.py:16
+#: application/plugins/rename_extensions/letter_case.py:24
+msgid "Do nothing"
+msgstr ""
+
+#: application/plugins/rename_extensions/letter_case.py:17
+msgid "Capitalize"
+msgstr ""
+
+#: application/plugins/rename_extensions/letter_case.py:18
+#: application/plugins/rename_extensions/letter_case.py:25
+msgid "Upper case"
+msgstr ""
+
+#: application/plugins/rename_extensions/letter_case.py:19
+#: application/plugins/rename_extensions/letter_case.py:26
+msgid "Lower case"
+msgstr ""
+
+#: application/plugins/rename_extensions/letter_case.py:20
+msgid "Swap case"
+msgstr ""
+
+#: application/plugins/rename_extensions/letter_case.py:30
+msgid "Item name:"
+msgstr ""
+
+#: application/plugins/rename_extensions/letter_case.py:33
+msgid "Extension:"
+msgstr ""
+
+#: application/plugins/rename_extensions/letter_case.py:88
+msgid "Letter Case"
+msgstr ""
+
+#: application/plugins/rename_extensions/default.py:40
 msgid ""
 "<b>Template syntax</b>\n"
 "[N]\tItem name\n"
@@ -1185,121 +1342,98 @@ msgid ""
 "use range in format [N#-#]."
 msgstr ""
 
-#: application/plugins/rename_extensions.py:91
+#: application/plugins/rename_extensions/default.py:76
 msgid "Part of name"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:96
+#: application/plugins/rename_extensions/default.py:81
 msgid "Extension"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:99
+#: application/plugins/rename_extensions/default.py:84
 msgid "Part of extension"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:104
-#: application/plugins/rename_extensions.py:118
+#: application/plugins/rename_extensions/default.py:89
+#: application/plugins/rename_extensions/default.py:103
 msgid "Counter"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:124
+#: application/plugins/rename_extensions/default.py:109
 msgid "Start:"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:131
+#: application/plugins/rename_extensions/default.py:116
 msgid "Step:"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:138
+#: application/plugins/rename_extensions/default.py:123
 msgid "Digits:"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:270
+#: application/plugins/rename_extensions/default.py:255
 msgid "Item list is empty. Unable to get item for range selection!"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:333
-#: application/plugins/rename_extensions.py:341
-msgid "Do nothing"
-msgstr ""
-
-#: application/plugins/rename_extensions.py:334
-msgid "Capitalize"
-msgstr ""
-
-#: application/plugins/rename_extensions.py:335
-#: application/plugins/rename_extensions.py:342
-msgid "Upper case"
-msgstr ""
-
-#: application/plugins/rename_extensions.py:336
-#: application/plugins/rename_extensions.py:343
-msgid "Lower case"
-msgstr ""
-
-#: application/plugins/rename_extensions.py:337
-msgid "Swap case"
-msgstr ""
-
-#: application/plugins/rename_extensions.py:347
-msgid "Item name:"
-msgstr ""
-
-#: application/plugins/rename_extensions.py:350
-msgid "Extension:"
-msgstr ""
-
-#: application/plugins/rename_extensions.py:405
-msgid "Letter Case"
-msgstr ""
-
-#: application/plugins/rename_extensions.py:422
+#: application/plugins/rename_extensions/audio_metadata.py:23
 msgid "Album"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:423
+#: application/plugins/rename_extensions/audio_metadata.py:24
 msgid "Artist"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:425
+#: application/plugins/rename_extensions/audio_metadata.py:26
 msgid "Genre"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:426
-#: application/plugins/file_list.py:115
-msgid "Date"
-msgstr ""
-
-#: application/plugins/rename_extensions.py:427
+#: application/plugins/rename_extensions/audio_metadata.py:28
 msgid "Track number"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:439
+#: application/plugins/rename_extensions/audio_metadata.py:40
 msgid "Replace:"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:447
+#: application/plugins/rename_extensions/audio_metadata.py:48
 msgid "With:"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:460
+#: application/plugins/rename_extensions/audio_metadata.py:61
 msgid "Template syntax"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:471
+#: application/plugins/rename_extensions/audio_metadata.py:72
 msgid "Character replacement"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:478
+#: application/plugins/rename_extensions/audio_metadata.py:79
 msgid ""
 "In order to use this extension you need <b>mutagen</b> module installed!"
 msgstr ""
 
-#: application/plugins/rename_extensions.py:510
+#: application/plugins/rename_extensions/audio_metadata.py:111
 msgid "Audio Metadata"
 msgstr ""
 
-#: application/plugins/find_file_extensions.py:31
+#: application/plugins/find_file_extensions/size.py:23
+msgid "Match file size"
+msgstr ""
+
+#: application/plugins/find_file_extensions/size.py:27
+msgid "Minimum:"
+msgstr ""
+
+#: application/plugins/find_file_extensions/size.py:29
+#: application/plugins/find_file_extensions/size.py:33
+msgid "MB"
+msgstr ""
+
+#: application/plugins/find_file_extensions/size.py:31
+msgid "Maximum:"
+msgstr ""
+
+#: application/plugins/find_file_extensions/default.py:26
 msgid ""
 "<b>Pattern matching</b>\n"
 "*\t\tEverything\n"
@@ -1308,134 +1442,21 @@ msgid ""
 "[!seq]\tAny character <u>not</u> in <i>seq</i>"
 msgstr ""
 
-#: application/plugins/find_file_extensions.py:46
+#: application/plugins/find_file_extensions/default.py:41
+#: application/plugins/find_file_extensions/contents.py:23
 msgid "Search for:"
 msgstr ""
 
-#: application/plugins/find_file_extensions.py:53
+#: application/plugins/find_file_extensions/default.py:48
 msgid "Case sensitive"
 msgstr ""
 
-#: application/plugins/file_list.py:31
-msgid "Local file list"
+#: application/plugins/find_file_extensions/contents.py:39
+msgid "Content"
 msgstr ""
 
-#: application/plugins/file_list.py:112
-msgid "Ext"
-msgstr ""
-
-#: application/plugins/file_list.py:113
-msgid "Size"
-msgstr ""
-
-#: application/plugins/file_list.py:114
-msgid "Mode"
-msgstr ""
-
-#: application/plugins/file_list.py:367
-msgid ""
-"There was an error creating directory. Make sure you have enough "
-"permissions. "
-msgstr ""
-
-#: application/plugins/file_list.py:393
-msgid "File already exists: {0}"
-msgstr ""
-
-#: application/plugins/file_list.py:396
-msgid "Directory with same name exists: {0}"
-msgstr ""
-
-#: application/plugins/file_list.py:432
-msgid ""
-"There was an error creating file. Make sure you have enough permissions."
-msgstr ""
-
-#: application/plugins/file_list.py:450
-msgid ""
-"You are about to remove {0} item.\n"
-"Are you sure about this?"
-msgid_plural ""
-"You are about to remove {0} items.\n"
-"Are you sure about this?"
-msgstr[0] ""
-msgstr[1] ""
-
-#: application/plugins/file_list.py:1036
-msgid "Free:"
-msgstr ""
-
-#: application/plugins/file_list.py:1037
-msgid "Total:"
-msgstr ""
-
-#: application/plugins/file_list.py:1080
-msgid ""
-"Drag and drop functionality can not be used if source and destination are "
-"same!"
-msgstr ""
-
-#: application/plugins/file_list.py:1171
-msgid ""
-"Error changing working directory. \n"
-"\n"
-"{0}\n"
-"\n"
-"Would you like to retry?"
-msgstr ""
-
-#: application/plugins/file_list.py:1554
-msgid ""
-"Unable to rename specified item. Check if you have permission to access "
-"specified path.\n"
-"\n"
-"{0}"
-msgstr ""
-
-#: application/plugins/system_terminal.py:9
+#: application/plugins/system_terminal/plugin.py:8
 msgid "System terminal"
-msgstr ""
-
-#: application/plugins/default_toolbar.py:21
-msgid "Parent directory button"
-msgstr ""
-
-#: application/plugins/default_toolbar.py:27
-msgid "Home directory button"
-msgstr ""
-
-#: application/plugins/default_toolbar.py:33
-msgid "Bookmark button"
-msgstr ""
-
-#: application/plugins/default_toolbar.py:39
-msgid "Bookmarks menu"
-msgstr ""
-
-#: application/plugins/default_toolbar.py:45
-msgid "Separator"
-msgstr ""
-
-#: application/plugins/default_toolbar.py:100
-msgid "This widget has no configuration dialog."
-msgstr ""
-
-#: application/plugins/default_toolbar.py:216
-#: application/plugins/default_toolbar.py:217
-#: application/plugin_base/item_list.py:205
-msgid "Go to parent directory"
-msgstr ""
-
-#: application/plugins/default_toolbar.py:246
-msgid "Configure bookmark button"
-msgstr ""
-
-#: application/plugins/default_toolbar.py:272
-msgid "Path:"
-msgstr ""
-
-#: application/plugins/default_toolbar.py:276
-msgid "Show label"
 msgstr ""
 
 #: application/plugin_base/rename_extension.py:22
@@ -1481,12 +1502,12 @@ msgid "Python VTE module is not installed on this system!"
 msgstr ""
 
 #: application/plugin_base/terminal.py:213
-#: application/plugin_base/item_list.py:204
+#: application/plugin_base/item_list.py:205
 msgid "Create terminal tab"
 msgstr ""
 
 #: application/plugin_base/terminal.py:214
-#: application/plugin_base/item_list.py:201
+#: application/plugin_base/item_list.py:202
 msgid "Copy selection to clipboard"
 msgstr ""
 
@@ -1501,125 +1522,125 @@ msgid ""
 "{0}"
 msgstr ""
 
-#: application/plugin_base/item_list.py:157
+#: application/plugin_base/item_list.py:158
 msgid "Search:"
 msgstr ""
 
-#: application/plugin_base/item_list.py:196
+#: application/plugin_base/item_list.py:197
 msgid "Execute selected item"
 msgstr ""
 
-#: application/plugin_base/item_list.py:197
+#: application/plugin_base/item_list.py:198
 msgid "Show selected item properties"
 msgstr ""
 
-#: application/plugin_base/item_list.py:198
+#: application/plugin_base/item_list.py:199
 msgid "Bookmark current directory"
 msgstr ""
 
-#: application/plugin_base/item_list.py:199
+#: application/plugin_base/item_list.py:200
 msgid "Edit bookmarks"
 msgstr ""
 
-#: application/plugin_base/item_list.py:200
+#: application/plugin_base/item_list.py:201
 msgid "Cut selection to clipboard"
 msgstr ""
 
-#: application/plugin_base/item_list.py:202
+#: application/plugin_base/item_list.py:203
 msgid "Paste items from clipboard"
 msgstr ""
 
-#: application/plugin_base/item_list.py:203
+#: application/plugin_base/item_list.py:204
 msgid "Open selected directory in new tab"
 msgstr ""
 
-#: application/plugin_base/item_list.py:206
+#: application/plugin_base/item_list.py:207
 msgid "Show history browser"
 msgstr ""
 
-#: application/plugin_base/item_list.py:207
+#: application/plugin_base/item_list.py:208
 msgid "Toggle selection"
 msgstr ""
 
-#: application/plugin_base/item_list.py:209
+#: application/plugin_base/item_list.py:210
 msgid "Show bookmarks for left list"
 msgstr ""
 
-#: application/plugin_base/item_list.py:210
+#: application/plugin_base/item_list.py:211
 msgid "Show bookmarks for right list"
 msgstr ""
 
-#: application/plugin_base/item_list.py:211
+#: application/plugin_base/item_list.py:212
 msgid "Rename selected item"
 msgstr ""
 
-#: application/plugin_base/item_list.py:212
+#: application/plugin_base/item_list.py:213
 msgid "Edit selected item"
 msgstr ""
 
-#: application/plugin_base/item_list.py:213
+#: application/plugin_base/item_list.py:214
 msgid "Copy selected items"
 msgstr ""
 
-#: application/plugin_base/item_list.py:214
+#: application/plugin_base/item_list.py:215
 msgid "Move selected items"
 msgstr ""
 
-#: application/plugin_base/item_list.py:215
+#: application/plugin_base/item_list.py:216
 msgid "Show context menu"
 msgstr ""
 
-#: application/plugin_base/item_list.py:216
+#: application/plugin_base/item_list.py:217
 msgid "Show \"open with\" menu"
 msgstr ""
 
-#: application/plugin_base/item_list.py:217
+#: application/plugin_base/item_list.py:218
 msgid "Assign path from left list"
 msgstr ""
 
-#: application/plugin_base/item_list.py:218
+#: application/plugin_base/item_list.py:219
 msgid "Assign path from right list"
 msgstr ""
 
-#: application/plugin_base/item_list.py:219
+#: application/plugin_base/item_list.py:220
 msgid "Move selection marker up"
 msgstr ""
 
-#: application/plugin_base/item_list.py:220
+#: application/plugin_base/item_list.py:221
 msgid "Move selection marker down"
 msgstr ""
 
-#: application/plugin_base/item_list.py:254
+#: application/plugin_base/item_list.py:255
 msgid "Go to '{0}'"
 msgstr ""
 
-#: application/plugin_base/item_list.py:448
+#: application/plugin_base/item_list.py:480
 msgid ""
 "Directory does not exist anymore or is not valid. If path is not local check "
 "if specified volume is mounted."
 msgstr ""
 
-#: application/plugin_base/item_list.py:493
+#: application/plugin_base/item_list.py:525
 msgid ""
 "Specified protocol ({0}) is not supported by this application. Please check "
 "for available plugins or create a feature request."
 msgstr ""
 
-#: application/plugin_base/item_list.py:520
+#: application/plugin_base/item_list.py:552
 msgid ""
 "Application is unable to handle specified data. Check if source items still "
 "exist."
 msgstr ""
 
-#: application/plugin_base/item_list.py:732
+#: application/plugin_base/item_list.py:764
 msgid "Open _with"
 msgstr ""
 
-#: application/plugin_base/item_list.py:867
+#: application/plugin_base/item_list.py:899
 msgid "View complete history..."
 msgstr ""
 
-#: application/plugin_base/item_list.py:873
+#: application/plugin_base/item_list.py:905
 msgid "History is empty"
 msgstr ""
 
@@ -1785,7 +1806,7 @@ msgstr ""
 msgid "Rename"
 msgstr ""
 
-#: application/tools/advanced_rename.py:193
+#: application/tools/advanced_rename.py:198
 msgid ""
 "You are about to rename {0} item.\n"
 "Are you sure about this?"

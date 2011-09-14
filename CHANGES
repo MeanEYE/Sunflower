@@ -1,5 +1,5 @@
 Version 0.1a-34
-  + New find extensions for content and size matching
+  + New find file extensions for content and size matching
   + Created 'revert' button in preferences window
   + Added Russian translation
   + Range selection with mouse and SHIFT key

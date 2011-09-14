@@ -1,5 +1,5 @@
 - Prevent columns-changed signal for emitting on application close
-y
+
 - Lazy accelerator switch (should fix some of the crash problems)
 
 - Ability to extend popup menu

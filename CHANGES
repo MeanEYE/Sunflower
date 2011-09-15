@@ -7,6 +7,8 @@ Version 0.1a-34
   * Fixed behavior of 'date format' and 'editor command' entries
   * Changed Commands menu to Tools
   * New plugin format to allow better structuring of plugins
+  * Updated Bulgarian translation
+  * Updated Hungarian translation
 
 Version 0.1a-33
   + Rename extension: Audio metadata

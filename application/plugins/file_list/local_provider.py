@@ -1,5 +1,6 @@
 import os
 import stat
+import shutil
 
 from provider import Provider, FileType, FileInfo, FileInfoExtended
 

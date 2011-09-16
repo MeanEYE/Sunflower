@@ -161,12 +161,12 @@ class FileList(ItemList):
 		col_date.set_resizable(True)
 		col_date.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
 
-		# set default column sizes for file list
-		self._columns_size = [200, 50, 70, 50, 100]
-		self._create_default_column_sizes()
-
 		# register columns
 		self._columns = (col_name, col_extension, col_size, col_mode, col_date)
+
+		# set default column sizes for file list
+		self._columns_size = (200, 50, 70, 50, 100)
+		self._create_default_column_sizes()
 
 		# resize columns to saved values
 		self._resize_columns(self._columns)

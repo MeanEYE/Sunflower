@@ -9,6 +9,8 @@ Version 0.1a-34
   * New plugin format to allow better structuring of plugins
   * Updated Bulgarian translation
   * Updated Hungarian translation
+  * Fixed commands menu behavior
+  * Changed default window size and column widths
 
 Version 0.1a-33
   + Rename extension: Audio metadata

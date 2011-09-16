@@ -1978,7 +1978,7 @@ class MainWindow(gtk.Window):
 				'grid_lines': 0,
 				'selection_color': 'red',
 				'history_file': '.bash_history',
-				'window': '950x450',
+				'window': '960x550',
 				'window_state': 0,
 				'hide_on_close': 'False',
 				'last_version': 0,

@@ -485,7 +485,6 @@ class MainWindow(gtk.Window):
 		self.menu_commands = gtk.Menu()
 
 		self._menu_item_commands = self.menu_manager.get_item_by_name('commands')
-		self._menu_item_commands.set_sensitive(False)
 		self._menu_item_commands.set_submenu(self.menu_commands)
 
 		# operations menu
@@ -628,7 +627,7 @@ class MainWindow(gtk.Window):
 		# create bookmarks menu
 		self._create_bookmarks_menu()
 
-		# create tools menu
+		# create commands menu
 		self._create_commands_menu()
 
 		# restore window size and position
@@ -750,14 +749,15 @@ class MainWindow(gtk.Window):
 
 	def _create_commands_menu(self):
 		"""Create commands main menu"""
-		if not self.command_options.has_section('commands'):
-			return
-
 		for item in self.menu_commands.get_children():  # remove existing items
 			self.menu_commands.remove(item)
 
 		# get total tool items count
-		tool_count = (len(self.command_options.options('commands')) / 2) + 1
+		if self.command_options.has_section('commands'):
+			tool_count = (len(self.command_options.options('commands')) / 2) + 1
+
+		else:
+			tool_count = 0
 
 		# create each item from the list
 		for index in range(1, tool_count):
@@ -790,7 +790,7 @@ class MainWindow(gtk.Window):
 		edit_commands.connect('activate', self.preferences_window._show, 'commands')
 		self.menu_commands.append(edit_commands)
 
-		self._menu_item_commands.set_sensitive(tool_count > 0)
+		self._menu_item_commands.set_sensitive(True)
 		self.menu_commands.show_all()
 
 	def _get_bookmarks_menu_position(self, menu, button):

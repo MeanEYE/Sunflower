@@ -289,8 +289,11 @@ class ItemList(PluginBase):
 			options.add_section(section)
 
 			# store default column sizes
-			for i, size in enumerate(self._columns_size):
-				options.set(section, 'size_{0}'.format(i), size)
+			for index, column in enumerate(self._columns):
+				name = column.get_data('name')
+				size = self._columns_size[index]
+
+				options.set(section, 'size_{0}'.format(name), size)
 
 	def _move_marker_up(self, widget, data=None):
 		"""Move marker up"""

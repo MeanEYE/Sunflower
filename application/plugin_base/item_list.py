@@ -1024,7 +1024,7 @@ class ItemList(PluginBase):
 		columns = self._item_list.get_columns()
 		column_names = map(lambda column: column.get_data('name'), columns)
 
-		print column_names
+		#print column_names
 
 	def _resize_columns(self, columns):
 		"""Resize columns according to global options"""
@@ -1033,7 +1033,7 @@ class ItemList(PluginBase):
 			width = self._parent.options.getint(
 											self.__class__.__name__,
 											'size_{0}'.format(column.get_data('name'))
-											)
+										)
 			column.set_fixed_width(width)
 
 	def _sort_list(self, ascending=True):

@@ -1,3 +1,7 @@
+! Use of gtk.gdk.lock instead of threads_enter/leave
+
+! Use gtk.gdk.lock on every GTK+ method called outside main thread except those called with gobject.idle_add
+
 - Prevent columns-changed signal for emitting on application close
 
 - Lazy accelerator switch (should fix some of the crash problems)

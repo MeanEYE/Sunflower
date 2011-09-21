@@ -5,7 +5,6 @@ import pango
 import webbrowser
 import locale
 import user
-import fnmatch
 import gettext
 import common
 import shlex
@@ -41,6 +40,7 @@ from gui.preferences_window import PreferencesWindow
 from gui.preferences.display import TabExpand
 from gui.changelog_dialog import ChangeLogDialog
 from gui.input_dialog import InputDialog, AddBookmarkDialog
+
 
 class MainWindow(gtk.Window):
 	"""Main application class"""

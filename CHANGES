@@ -1,3 +1,6 @@
+Version 0.1a-35
+  * Optimized directory loading, heavy gains in time
+
 Version 0.1a-34
   + New find file extensions for content and size matching
   + Created 'revert' button in preferences window

@@ -63,7 +63,11 @@ class FileList(ItemList):
 		
 		# event object controling path change thread
 		self._thread_active = Event()
-
+		
+		# preload variables
+		self._preload_count = 0
+		self._preload_size = 0
+		
 		# storage system for list items
 		self._store = gtk.ListStore(
 								str,	# Column.NAME
@@ -782,8 +786,9 @@ class FileList(ItemList):
 		# node created
 		if event is gio.FILE_MONITOR_EVENT_CREATED:
 			# temporarily fix problem with duplicating items when file was saved with GIO
-			if self._find_iter_by_name(file_.get_basename()) is None:
-				self._add_item(file_.get_basename(), show_hidden)
+			if self._find_iter_by_name(file_.get_basename()) is None \
+			and (file_.get_basename()[0] == '.' and not show_hidden):
+				self._add_item(file_.get_basename())
 
 			else:
 				self._update_item_details_by_name(file_.get_basename())
@@ -920,95 +925,93 @@ class FileList(ItemList):
 
 		return result
 
-	def _add_item(self, filename, show_hidden=False):
+	def _add_item(self, filename):
 		"""Add item to the list"""
 		file_size = 0
 		file_mode = 0
 		file_date = 0
 
 		result = None
-		can_add = not (filename[0] == '.' and not show_hidden)
 		provider = self.get_provider()
 
-		if can_add:
-			file_stat = provider.get_stat(filename, relative_to=self.path)
+		file_stat = provider.get_stat(filename, relative_to=self.path)
 
-			file_size = file_stat.size
-			file_mode = file_stat.mode
-			file_date = file_stat.time_modify
-			is_dir = file_stat.type is FileType.DIRECTORY
+		file_size = file_stat.size
+		file_mode = file_stat.mode
+		file_date = file_stat.time_modify
+		is_dir = file_stat.type is FileType.DIRECTORY
 
-			# directory
-			if file_stat.type is FileType.DIRECTORY:
-				self._dirs['count'] += 1
-				icon = 'folder'
+		# directory
+		if file_stat.type is FileType.DIRECTORY:
+			self._dirs['count'] += 1
+			icon = 'folder'
 
-			# regular file
-			elif file_stat.type is FileType.REGULAR:
-				self._files['count'] += 1
-				self._size['total'] += file_size
-				icon = self._parent.icon_manager.get_icon_for_file(filename)
+		# regular file
+		elif file_stat.type is FileType.REGULAR:
+			self._files['count'] += 1
+			self._size['total'] += file_size
+			icon = self._parent.icon_manager.get_icon_for_file(filename)
 
-			# invalid links or files
-			elif file_stat.type is FileType.INVALID:
-				self._files['count'] += 1
-				icon = 'image-missing'
+		# invalid links or files
+		elif file_stat.type is FileType.INVALID:
+			self._files['count'] += 1
+			icon = 'image-missing'
 
-			# add item to the list
-			try:
-				time_format = self._parent.options.get('main', 'time_format')
+		# add item to the list
+		try:
+			time_format = self._parent.options.get('main', 'time_format')
 
-				# don't allow extension splitting on directories
-				file_info = (filename, '') if is_dir else os.path.splitext(filename)
+			# don't allow extension splitting on directories
+			file_info = (filename, '') if is_dir else os.path.splitext(filename)
 
-				formated_file_mode = oct(file_mode)
-				formated_file_date = time.strftime(time_format, time.localtime(file_date))
+			formated_file_mode = oct(file_mode)
+			formated_file_date = time.strftime(time_format, time.localtime(file_date))
 
-				if not is_dir:
-					# item is a file
-					if self._human_readable:
-						formated_file_size = common.format_size(file_size)
-
-					else:
-						formated_file_size = locale.format('%d', file_size, True)
-
+			if not is_dir:
+				# item is a file
+				if self._human_readable:
+					formated_file_size = common.format_size(file_size)
 
 				else:
-					# item is a directory
-					formated_file_size = '<DIR>'
+					formated_file_size = locale.format('%d', file_size, True)
 
-				props = (
-						filename,
-						file_info[0],
-						file_info[1][1:],
-						file_size,
-						formated_file_size,
-						file_mode,
-						formated_file_mode,
-						file_date,
-						formated_file_date,
-						is_dir,
-						False,
-						None,
-						icon,
-						None
-					)
 
-				result = self._store.append(props)
+			else:
+				# item is a directory
+				formated_file_size = '<DIR>'
 
-				# focus specified item
-				if self._item_to_focus == filename:
-					path = self._store.get_path(result)
+			props = (
+					filename,
+					file_info[0],
+					file_info[1][1:],
+					file_size,
+					formated_file_size,
+					file_mode,
+					formated_file_mode,
+					file_date,
+					formated_file_date,
+					is_dir,
+					False,
+					None,
+					icon,
+					None
+				)
 
-					# set cursor position and scroll ti make it visible
-					self._item_list.set_cursor(path)
-					self._item_list.scroll_to_cell(path)
+			result = self._store.append(props)
 
-					# reset local variable
-					self._item_to_focus = None
+			# focus specified item
+			if self._item_to_focus == filename:
+				path = self._store.get_path(result)
 
-			except Exception as error:
-				print 'Error: {0} - {1}'.format(filename, str(error))
+				# set cursor position and scroll ti make it visible
+				self._item_list.set_cursor(path)
+				self._item_list.scroll_to_cell(path)
+
+				# reset local variable
+				self._item_to_focus = None
+
+		except Exception as error:
+			print 'Error: {0} - {1}'.format(filename, str(error))
 
 		return result
 
@@ -1184,25 +1187,17 @@ class FileList(ItemList):
 			self._thread_active.clear()
 						
 		# get number of items to preload
-		if len(self._store) > 0:
+		if len(self._store) > 0 and self._item_list.allocation.height != self._preload_size:
 			cell_area = self._item_list.get_cell_area(
 										self._store.get_path(self._store.get_iter_first()),
 										self._columns[0]
 									)
-			tree_size = self._item_list.get_allocation().height
+			tree_size = self._item_list.allocation.height
 			
+			# calculate number of items to preload
 			if len(cell_area) >= 4 and cell_area[3] > 0:
-				# calculate number of items to preload
-				preload_count = (tree_size / cell_area[3]) + 1
-				
-			else: 
-				# failsafe mode, disable preload
-				preload_count = 0 
-			
-		else:
-			# turn off preload for first path change 
-			preload_count = 0
-			
+				self._preload_count = (tree_size / cell_area[3]) + 1
+				self._preload_size = tree_size
 
 		# clear list
 		self._clear_list()
@@ -1245,31 +1240,36 @@ class FileList(ItemList):
 		# populate list
 		try:
 			item_list = provider.list_dir(self.path)
+			
+			# removed 
+			item_list = filter(lambda item_name: not (item_name[0] == '.' and not show_hidden), item_list)
 			item_list.sort()
 			
 			# split items among lists
-			preload_list = item_list[:preload_count]
-			item_list = item_list[preload_count:]
+			preload_list = item_list[:self._preload_count]
+			item_list = item_list[self._preload_count:]
 			
 			# preload items
 			for item_name in preload_list:
-				self._add_item(item_name, show_hidden)
+				self._add_item(item_name)
 			
 			# let the rest of items load in a separate thread
-			def thread_method():
-				# set event to active
-				self._thread_active.set()
-				
-				for item_name in item_list:
-					# check if we are allowed to continue
-					if not self._thread_active.is_set():
-						break;
+			if len(item_list) > 0:
+				def thread_method():
+					# set event to active
+					self._thread_active.set()
 					
-					# add item to the list
-					self._add_item(item_name, show_hidden)
-			
-			self._change_path_thread = Thread(target=thread_method)
-			self._change_path_thread.start()
+					for item_name in item_list:
+						# check if we are allowed to continue
+						if not self._thread_active.is_set():
+							break;
+						
+						# add item to the list
+						with gtk.gdk.lock:
+							self._add_item(item_name)
+				
+				self._change_path_thread = Thread(target=thread_method)
+				self._change_path_thread.start()
 
 			# if no errors occurred during path change,
 			# call parent method which handles history

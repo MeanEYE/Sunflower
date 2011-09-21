@@ -786,9 +786,9 @@ class FileList(ItemList):
 		# node created
 		if event is gio.FILE_MONITOR_EVENT_CREATED:
 			# temporarily fix problem with duplicating items when file was saved with GIO
-			if self._find_iter_by_name(file_.get_basename()) is None \
-			and (file_.get_basename()[0] == '.' and not show_hidden):
-				self._add_item(file_.get_basename())
+			if self._find_iter_by_name(file_.get_basename()) is None:
+				if not file_.get_basename()[0] == '.' and not show_hidden:
+					self._add_item(file_.get_basename())
 
 			else:
 				self._update_item_details_by_name(file_.get_basename())

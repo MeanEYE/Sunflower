@@ -371,7 +371,7 @@ class CopyDialog(gtk.Dialog):
 		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)
 		self.set_transient_for(application)
-
+		
 		self.vbox.set_spacing(0)
 
 		# create additional UI

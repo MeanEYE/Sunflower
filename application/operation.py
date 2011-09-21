@@ -32,8 +32,6 @@ class Operation(Thread):
 		self._source = source
 		self._destination = destination
 
-		print "Created 1"
-		
 		# create operation dialog
 		self._dialog = None
 		self._create_dialog()
@@ -41,16 +39,12 @@ class Operation(Thread):
 		self._dir_list = []
 		self._file_list = []
 
-		print "Created 2"
-
 		# store initial paths
 		self._source_path = self._source.get_path()
 		if self._destination is not None:
 			self._destination_path = self._destination.get_path()
 
 		self._can_continue.set()
-		
-		print "Created 3"
 		
 	def _create_dialog(self):
 		"""Create operation dialog"""
@@ -611,9 +605,9 @@ class CopyOperation(Operation):
 
 		# notify user if window is not focused
 		with gtk.gdk.lock:
-			notify_manager = self._application.notification_manager
-
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
+				notify_manager = self._application.notification_manager
+				
 				title = _('Copy Operation')
 				message = ngettext(
 								'Copying of {0} item from "{1}" to "{2}" is completed!',
@@ -625,8 +619,8 @@ class CopyOperation(Operation):
 								os.path.basename(self._destination_path)
 							)
 	
-			# queue notification
-			notify_manager.notify(title, message)
+				# queue notification
+				notify_manager.notify(title, message)
 
 		# destroy dialog
 		self._destroy_ui()
@@ -807,9 +801,9 @@ class MoveOperation(CopyOperation):
 
 		# notify user if window is not focused
 		with gtk.gdk.lock:
-			notify_manager = self._application.notification_manager
-			
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
+				notify_manager = self._application.notification_manager
+				
 				title = _('Move Operation')
 				message = ngettext(
 								'Moving of {0} item from "{1}" to "{2}" is completed!',
@@ -862,10 +856,10 @@ class DeleteOperation(Operation):
 		with gtk.gdk.lock:
 			self._file_list = self._source.get_selection(relative=True)
 
-		# clear selection on source directory
-		parent = self._source.get_parent()
-		if self._source_path == parent.path:
-			parent.unselect_all()
+			# clear selection on source directory
+			parent = self._source.get_parent()
+			if self._source_path == parent.path:
+				parent.unselect_all()
 
 		# remove them
 		for index, item in enumerate(self._file_list, 1):
@@ -888,9 +882,9 @@ class DeleteOperation(Operation):
 
 		# notify user if window is not focused
 		with gtk.gdk.lock:
-			notify_manager = self._application.notification_manager
-
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
+				notify_manager = self._application.notification_manager
+				
 				title = _('Delete Operation')
 				message = ngettext(
 								'Removal of {0} item from "{1}" is completed!',
@@ -962,9 +956,9 @@ class RenameOperation(Operation):
 
 		# notify user if window is not focused
 		with gtk.gdk.lock:
-			notify_manager = self._application.notification_manager
-	
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
+				notify_manager = self._application.notification_manager
+				
 				title = _('Rename Operation')
 				message = ngettext(
 								'Rename of {0} item from "{1}" is completed!',

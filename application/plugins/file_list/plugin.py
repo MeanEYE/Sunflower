@@ -927,10 +927,6 @@ class FileList(ItemList):
 
 	def _add_item(self, filename):
 		"""Add item to the list"""
-		file_size = 0
-		file_mode = 0
-		file_date = 0
-
 		result = None
 		provider = self.get_provider()
 
@@ -1181,11 +1177,11 @@ class FileList(ItemList):
 		# cancel current directory monitor
 		if gio is not None and self._fs_monitor is not None:
 			self._fs_monitor.cancel()
-			
+
 		# if there is already active thread, stop it
 		if self._thread_active.is_set():
 			self._thread_active.clear()
-						
+			
 		# get number of items to preload
 		if len(self._store) > 0 and self._item_list.allocation.height != self._preload_size:
 			cell_area = self._item_list.get_cell_area(

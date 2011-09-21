@@ -1,6 +1,5 @@
 import os
 import gtk
-import stat
 import gobject
 import fnmatch
 
@@ -12,12 +11,13 @@ from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog, RenameDia
 from gui.input_dialog import OverwriteOption
 
 # constants
-OPTION_FILE_TYPE   = 0
-OPTION_DESTINATION = 1
-OPTION_SET_OWNER   = 2
-OPTION_SET_MODE    = 3
-
 COPY_BUFFER = 100 * 1024
+
+class Option:
+	FILE_TYPE = 0
+	DESTINATION = 1
+	SET_OWNER = 2
+	SET_MODE = 3
 
 
 class Operation(Thread):
@@ -31,10 +31,17 @@ class Operation(Thread):
 		self._application = application
 		self._source = source
 		self._destination = destination
+
+		print "Created 1"
+		
+		# create operation dialog
 		self._dialog = None
+		self._create_dialog()
 
 		self._dir_list = []
 		self._file_list = []
+
+		print "Created 2"
 
 		# store initial paths
 		self._source_path = self._source.get_path()
@@ -42,41 +49,44 @@ class Operation(Thread):
 			self._destination_path = self._destination.get_path()
 
 		self._can_continue.set()
+		
+		print "Created 3"
+		
+	def _create_dialog(self):
+		"""Create operation dialog"""
+		pass
 
 	def _destroy_ui(self):
 		"""Destroy user interface"""
 		if self._dialog is not None:
-			gtk.gdk.threads_enter()  # prevent deadlocks
-			self._dialog.destroy()
-			gtk.gdk.threads_leave()
+			with gtk.gdk.lock:
+				self._dialog.destroy()
 
 	def _get_merge_input(self, path):
 		"""Get merge confirmation"""
-		gtk.gdk.threads_enter()  # prevent deadlocks
-		dialog = OverwriteDirectoryDialog(self._application, self._dialog)
-
-		title_element = os.path.basename(path)
-		message_element = os.path.basename(os.path.dirname(
-							os.path.join(self._destination.get_path(), path)))
-
-		dialog.set_title_element(title_element)
-		dialog.set_message_element(message_element)
-		dialog.set_rename_value(title_element)
-		dialog.set_source(
-						self._source,
-						path,
-						relative_to=self._source_path
-					)
-		dialog.set_original(
-						self._destination,
-						path,
-						relative_to=self._destination_path
-					)
-
-		result = dialog.get_response()
-		gtk.gdk.threads_leave()
-
-		merge = result[0] == gtk.RESPONSE_YES
+		with gtk.gdk.lock:
+			dialog = OverwriteDirectoryDialog(self._application, self._dialog)
+	
+			title_element = os.path.basename(path)
+			message_element = os.path.basename(os.path.dirname(
+								os.path.join(self._destination.get_path(), path)))
+	
+			dialog.set_title_element(title_element)
+			dialog.set_message_element(message_element)
+			dialog.set_rename_value(title_element)
+			dialog.set_source(
+							self._source,
+							path,
+							relative_to=self._source_path
+						)
+			dialog.set_original(
+							self._destination,
+							path,
+							relative_to=self._destination_path
+						)
+	
+			result = dialog.get_response()
+			merge = result[0] == gtk.RESPONSE_YES
 
 		if result[1][OverwriteOption.APPLY_TO_ALL]:
 			self._merge_all = merge
@@ -89,31 +99,29 @@ class Operation(Thread):
 
 	def _get_overwrite_input(self, path):
 		"""Get overwrite confirmation"""
-		gtk.gdk.threads_enter()  # prevent deadlocks
-		dialog = OverwriteFileDialog(self._application, self._dialog)
-
-		title_element = os.path.basename(path)
-		message_element = os.path.basename(os.path.dirname(
-							os.path.join(self._destination.get_path(), path)))
-
-		dialog.set_title_element(title_element)
-		dialog.set_message_element(message_element)
-		dialog.set_rename_value(title_element)
-		dialog.set_source(
-						self._source,
-						path,
-						relative_to=self._source_path
-						)
-		dialog.set_original(
-						self._destination,
-						path,
-						relative_to=self._destination_path
-						)
-
-		result = dialog.get_response()
-		gtk.gdk.threads_leave()
-
-		overwrite = result[0] == gtk.RESPONSE_YES
+		with gtk.gdk.lock:
+			dialog = OverwriteFileDialog(self._application, self._dialog)
+	
+			title_element = os.path.basename(path)
+			message_element = os.path.basename(os.path.dirname(
+								os.path.join(self._destination.get_path(), path)))
+	
+			dialog.set_title_element(title_element)
+			dialog.set_message_element(message_element)
+			dialog.set_rename_value(title_element)
+			dialog.set_source(
+							self._source,
+							path,
+							relative_to=self._source_path
+							)
+			dialog.set_original(
+							self._destination,
+							path,
+							relative_to=self._destination_path
+							)
+	
+			result = dialog.get_response()
+			overwrite = result[0] == gtk.RESPONSE_YES
 
 		if result[1][OverwriteOption.APPLY_TO_ALL]:
 			self._overwrite_all = overwrite
@@ -126,134 +134,128 @@ class Operation(Thread):
 
 	def _get_write_error_input(self, error):
 		"""Get user response for write error"""
-		gtk.gdk.threads_enter()  # prevent deadlocks
-		dialog = OperationError(self._application)
-
-		dialog.set_message(_(
-		        'There is a problem writing data to destination '
-		        'file. What would you like to do?'
-		    ))
-		dialog.set_error(str(error))
-
-		response = dialog.get_response()
-		gtk.gdk.threads_leave()
-
-		# abort operation if user requested
-		if response == gtk.RESPONSE_CANCEL:
-			self.cancel()
+		with gtk.gdk.lock:
+			dialog = OperationError(self._application)
+	
+			dialog.set_message(_(
+			        'There is a problem writing data to destination '
+			        'file. What would you like to do?'
+			    ))
+			dialog.set_error(str(error))
+	
+			response = dialog.get_response()
+	
+			# abort operation if user requested
+			if response == gtk.RESPONSE_CANCEL:
+				self.cancel()
 
 		return response
 
 	def _get_create_error_input(self, error, is_directory=False):
 		"""Get user response for create error"""
-		gtk.gdk.threads_enter()  # prevent deadlocks
-		dialog = OperationError(self._application)
-
-		if not is_directory:
-			# set message for file
-			dialog.set_message(_(
-				'An error occurred while trying to create specified '
-				'file. What would you like to do?'
-			))
-
-		else:
-			# set message for directory
-			dialog.set_message(_(
-				'An error occurred while trying to create specified '
-				'directory. What would you like to do?'
-			))
-
-		dialog.set_error(str(error))
-
-		# get user response
-		response = dialog.get_response()
-		gtk.gdk.threads_leave()
-
-		# abort operation if user requested
-		if response == gtk.RESPONSE_CANCEL:
-			self.cancel()
+		with gtk.gdk.lock:
+			dialog = OperationError(self._application)
+	
+			if not is_directory:
+				# set message for file
+				dialog.set_message(_(
+					'An error occurred while trying to create specified '
+					'file. What would you like to do?'
+				))
+	
+			else:
+				# set message for directory
+				dialog.set_message(_(
+					'An error occurred while trying to create specified '
+					'directory. What would you like to do?'
+				))
+	
+			dialog.set_error(str(error))
+	
+			# get user response
+			response = dialog.get_response()
+	
+			# abort operation if user requested
+			if response == gtk.RESPONSE_CANCEL:
+				self.cancel()
 
 		return response
 
 	def _get_mode_set_error_input(self, error):
 		"""Get user response for mode set error"""
-		gtk.gdk.threads_enter()  # prevent deadlocks
-		dialog = OperationError(self._application)
-
-		dialog.set_message(_(
-	            'Problem with setting mode and/or owner for '
-	            'specified path. What would you like to do?'
-	        ))
-
-		dialog.set_error(str(error))
-
-		# get user response
-		response = dialog.get_response()
-		gtk.gdk.threads_leave()
-
-		# abort operation if user requested
-		if response == gtk.RESPONSE_CANCEL:
-			self.cancel()
+		with gtk.gdk.lock:
+			dialog = OperationError(self._application)
+	
+			dialog.set_message(_(
+		            'Problem with setting mode and/or owner for '
+		            'specified path. What would you like to do?'
+		        ))
+	
+			dialog.set_error(str(error))
+	
+			# get user response
+			response = dialog.get_response()
+	
+			# abort operation if user requested
+			if response == gtk.RESPONSE_CANCEL:
+				self.cancel()
 
 		return response
 
 	def _get_remove_error_input(self, error):
 		"""Get user response for remove error"""
-		gtk.gdk.threads_enter()  # prevent deadlocks
-		dialog = OperationError(self._application)
-
-		dialog.set_message(_(
-		        'There was a problem removing specified path. '
-		        'What would you like to do?'
-		    ))
-		dialog.set_error(str(error))
-
-		response = dialog.get_response()
-		gtk.gdk.threads_leave()
-
-		# abort operation if user requested
-		if response == gtk.RESPONSE_CANCEL:
-			self.cancel()
+		with gtk.gdk.lock:
+			dialog = OperationError(self._application)
+	
+			dialog.set_message(_(
+			        'There was a problem removing specified path. '
+			        'What would you like to do?'
+			    ))
+			dialog.set_error(str(error))
+	
+			response = dialog.get_response()
+	
+			# abort operation if user requested
+			if response == gtk.RESPONSE_CANCEL:
+				self.cancel()
 
 		return response
 
 	def _get_move_error_input(self, error):
 		"""Get user response for move error"""
-		gtk.gdk.threads_enter()  # prevent deadlocks
-		dialog = OperationError(self._application)
-
-		dialog.set_message(_(
-		        'There was a problem moving specified path. '
-		        'What would you like to do?'
-		    ))
-		dialog.set_error(str(error))
-
-		response = dialog.get_response()
-		gtk.gdk.threads_leave()
-
-		# abort operation if user requested
-		if response == gtk.RESPONSE_CANCEL:
-			self.cancel()
+		with gtk.gdk.lock:
+			dialog = OperationError(self._application)
+	
+			dialog.set_message(_(
+			        'There was a problem moving specified path. '
+			        'What would you like to do?'
+			    ))
+			dialog.set_error(str(error))
+	
+			response = dialog.get_response()
+	
+			# abort operation if user requested
+			if response == gtk.RESPONSE_CANCEL:
+				self.cancel()
 
 		return response
 
 	def _get_rename_error_input(self, error):
 		"""Get user response for rename error"""
-		gtk.gdk.threads_enter()  # prevent deadlocks
-		dialog = OperationError(self._application)
-
-		dialog.set_message(_(
-		        'There was a problem renaming specified path. '
-		        'What would you like to do?'
-		    ))
-		dialog.set_error(str(error))
-
-		response = dialog.get_response()
-		gtk.gdk.threads_leave()
-
-		# abort operation if user requested
-		if response == gtk.RESPONSE_CANCEL:
-			self.cancel()
+		with gtk.gdk.lock:
+			dialog = OperationError(self._application)
+	
+			dialog.set_message(_(
+			        'There was a problem renaming specified path. '
+			        'What would you like to do?'
+			    ))
+			dialog.set_error(str(error))
+	
+			response = dialog.get_response()
+	
+			# abort operation if user requested
+			if response == gtk.RESPONSE_CANCEL:
+				self.cancel()
 
 		return response
 
@@ -280,9 +282,7 @@ class CopyOperation(Operation):
 	def __init__(self, application, source, destination, options):
 		Operation.__init__(self, application, source, destination)
 
-		self._create_dialog()
 		self._options = options
-
 		self._merge_all = None
 		self._overwrite_all = None
 		self._dir_list_create = []
@@ -303,8 +303,13 @@ class CopyOperation(Operation):
 	def _get_lists(self):
 		"""Find all files for copying"""
 		gobject.idle_add(self._update_status, _('Searching for files...'))
+		
+		# safely get selection list from parent
+		with gtk.gdk.lock:
+			item_list = self._source.get_selection(relative=True)
 
-		for item in self._source.get_selection(relative=True):
+		# traverse through the rest of the items
+		for item in item_list:
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
@@ -332,7 +337,7 @@ class CopyOperation(Operation):
 					if can_create: self._dir_list_create.append(item)
 					self._scan_directory(item)
 
-			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
+			elif fnmatch.fnmatch(item, self._options[Option.FILE_TYPE]):
 				# item is a file, get stats and update lists
 				item_stat = self._source.get_stat(item, relative_to=self._source_path)
 				gobject.idle_add(self._dialog.increment_total_size, item_stat.size)
@@ -346,7 +351,7 @@ class CopyOperation(Operation):
 
 	def _set_mode(self, path, mode):
 		"""Set mode for specified path"""
-		if not self._options[OPTION_SET_MODE]: return
+		if not self._options[Option.SET_MODE]: return
 
 		try:
 			# try to set mode for specified path
@@ -367,7 +372,7 @@ class CopyOperation(Operation):
 
 	def _set_owner(self, path, user_id, group_id):
 		"""Set owner and group for specified path"""
-		if not self._options[OPTION_SET_OWNER]: return
+		if not self._options[Option.SET_OWNER]: return
 
 		try:
 			# try set owner of specified path
@@ -416,7 +421,7 @@ class CopyOperation(Operation):
 					if can_create: self._dir_list_create.append(full_name)
 					self._scan_directory(full_name)
 
-			elif fnmatch.fnmatch(item, self._options[OPTION_FILE_TYPE]):
+			elif fnmatch.fnmatch(item, self._options[Option.FILE_TYPE]):
 				item_stat = self._source.get_stat(full_name, relative_to=self._source_path)
 				gobject.idle_add(self._dialog.increment_total_size, item_stat.size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
@@ -425,7 +430,7 @@ class CopyOperation(Operation):
 	def _create_directory(self, directory):
 		"""Create specified directory"""
 		file_stat = self._source.get_stat(directory, relative_to=self._source_path)
-		mode = file_stat.mode if self._options[OPTION_SET_MODE] else 0755
+		mode = file_stat.mode if self._options[Option.SET_MODE] else 0755
 
 		try:
 			# try to create a directory
@@ -491,8 +496,13 @@ class CopyOperation(Operation):
 
 			# reserve file size
 			if self._reserve_size:
-				# reserve file size in advance, can be slow on memory cards and network
-				dh.truncate(file_stat.size)
+				# try to reserve file size in advance, 
+				# can be slow on memory cards and network
+				try:
+					dh.truncate(file_stat.size)
+					
+				except:
+					dh.truncate()
 
 			else:
 				# just truncate file to 0 size in case source file is smaller
@@ -587,13 +597,10 @@ class CopyOperation(Operation):
 
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
-		gtk.gdk.threads_enter()
-		self._dialog.show_all()
-		gtk.gdk.threads_leave()
-
 		# set dialog info
-		self._dialog.set_source(self._source_path)
-		self._dialog.set_destination(self._destination_path)
+		with gtk.gdk.lock:
+			self._dialog.set_source(self._source_path)
+			self._dialog.set_destination(self._destination_path)
 
 		# get list of items to copy
 		self._get_lists()
@@ -603,31 +610,32 @@ class CopyOperation(Operation):
 		self._copy_file_list()
 
 		# notify user if window is not focused
-		if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
+		with gtk.gdk.lock:
 			notify_manager = self._application.notification_manager
 
-			title = _('Copy Operation')
-			message = ngettext(
-							'Copying of {0} item from "{1}" to "{2}" is completed!',
-							'Copying of {0} items from "{1}" to "{2}" is completed!',
-							len(self._file_list) + len(self._dir_list)
-						).format(
-							len(self._file_list) + len(self._dir_list),
-							os.path.basename(self._source_path),
-							os.path.basename(self._destination_path)
-						)
-
+			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
+				title = _('Copy Operation')
+				message = ngettext(
+								'Copying of {0} item from "{1}" to "{2}" is completed!',
+								'Copying of {0} items from "{1}" to "{2}" is completed!',
+								len(self._file_list) + len(self._dir_list)
+							).format(
+								len(self._file_list) + len(self._dir_list),
+								os.path.basename(self._source_path),
+								os.path.basename(self._destination_path)
+							)
+	
 			# queue notification
-			gobject.idle_add(notify_manager.notify, title, message)
+			notify_manager.notify(title, message)
 
 		# destroy dialog
-		gobject.idle_add(self._destroy_ui)
+		self._destroy_ui()
 
 
 class MoveOperation(CopyOperation):
 	"""Operation thread used for moving files"""
 
-	def _remove_path(self, path, list):
+	def _remove_path(self, path, item_list):
 		"""Remove path"""
 		try:
 			# try removing specified path
@@ -639,11 +647,11 @@ class MoveOperation(CopyOperation):
 
 			# handle user response
 			if response == gtk.RESPONSE_YES:
-				self._remove_path(path, list)  # retry removing path
+				self._remove_path(path, item_list)  # retry removing path
 
 			else:
-				# user didn't want to retry, remove path from list
-				list.pop(list.index(path))
+				# user didn't want to retry, remove path from item_list
+				item_list.pop(item_list.index(path))
 
 	def _create_dialog(self):
 		"""Create progress dialog"""
@@ -776,13 +784,10 @@ class MoveOperation(CopyOperation):
 		a bit smarter move operation.
 
 		"""
-		gtk.gdk.threads_enter()
-		self._dialog.show_all()
-		gtk.gdk.threads_leave()
-
 		# set dialog info
-		self._dialog.set_source(self._source_path)
-		self._dialog.set_destination(self._destination_path)
+		with gtk.gdk.lock:
+			self._dialog.set_source(self._source_path)
+			self._dialog.set_destination(self._destination_path)
 
 		self._get_lists()
 
@@ -801,25 +806,26 @@ class MoveOperation(CopyOperation):
 			self._delete_file_list()
 
 		# notify user if window is not focused
-		if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
+		with gtk.gdk.lock:
 			notify_manager = self._application.notification_manager
-
-			title = _('Move Operation')
-			message = ngettext(
-							'Moving of {0} item from "{1}" to "{2}" is completed!',
-							'Moving of {0} items from "{1}" to "{2}" is completed!',
-							len(self._file_list) + len(self._dir_list)
-						).format(
-							len(self._file_list) + len(self._dir_list),
-							os.path.basename(self._source_path),
-							os.path.basename(self._destination_path)
-						)
-
-			# queue notification
-			gobject.idle_add(notify_manager.notify, title, message)
+			
+			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
+				title = _('Move Operation')
+				message = ngettext(
+								'Moving of {0} item from "{1}" to "{2}" is completed!',
+								'Moving of {0} items from "{1}" to "{2}" is completed!',
+								len(self._file_list) + len(self._dir_list)
+							).format(
+								len(self._file_list) + len(self._dir_list),
+								os.path.basename(self._source_path),
+								os.path.basename(self._destination_path)
+							)
+	
+				# queue notification
+				notify_manager.notify(title, message)
 
 		# destroy dialog
-		gobject.idle_add(self._destroy_ui)
+		self._destroy_ui()
 
 
 class DeleteOperation(Operation):
@@ -827,7 +833,10 @@ class DeleteOperation(Operation):
 
 	def __init__(self, application, provider):
 		Operation.__init__(self, application, provider)
-		self._dialog = DeleteDialog(application, self)
+		
+	def _create_dialog(self):
+		"""Create operation dialog"""
+		self._dialog = DeleteDialog(self._application, self)
 
 	def _remove_path(self, path):
 		"""Remove path"""
@@ -849,12 +858,9 @@ class DeleteOperation(Operation):
 
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
-		gtk.gdk.threads_enter()
-		self._dialog.show_all()
-		gtk.gdk.threads_leave()
-
 		# get selected items
-		self._file_list = self._source.get_selection(relative=True)
+		with gtk.gdk.lock:
+			self._file_list = self._source.get_selection(relative=True)
 
 		# clear selection on source directory
 		parent = self._source.get_parent()
@@ -881,24 +887,25 @@ class DeleteOperation(Operation):
 				gobject.idle_add(self._dialog.set_current_file_fraction, 1)
 
 		# notify user if window is not focused
-		if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
+		with gtk.gdk.lock:
 			notify_manager = self._application.notification_manager
 
-			title = _('Delete Operation')
-			message = ngettext(
-							'Removal of {0} item from "{1}" is completed!',
-							'Removal of {0} items from "{1}" is completed!',
-							len(self._file_list)
-						).format(
-			        len(self._file_list),
-			        os.path.basename(self._source_path)
-			    )
-
-			# queue notification
-			gobject.idle_add(notify_manager.notify, title, message)
+			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
+				title = _('Delete Operation')
+				message = ngettext(
+								'Removal of {0} item from "{1}" is completed!',
+								'Removal of {0} items from "{1}" is completed!',
+								len(self._file_list)
+							).format(
+				        len(self._file_list),
+				        os.path.basename(self._source_path)
+				    )
+	
+				# queue notification
+				notify_manager.notify(title, message)
 
 		# destroy dialog
-		gobject.idle_add(self._destroy_ui)
+		self._destroy_ui()
 
 
 class RenameOperation(Operation):
@@ -907,9 +914,12 @@ class RenameOperation(Operation):
 	def __init__(self, application, provider, path, file_list):
 		Operation.__init__(self, application, provider)
 
-		self._dialog = RenameDialog(application, self)
 		self._source_path = path
 		self._file_list = file_list
+		
+	def _create_dialog(self):
+		"""Create operation dialog"""
+		self._dialog = RenameDialog(self._application, self)
 
 	def _rename_path(self, old_name, new_name, index):
 		"""Rename specified path"""
@@ -931,10 +941,6 @@ class RenameOperation(Operation):
 
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
-		gtk.gdk.threads_enter()
-		self._dialog.show_all()
-		gtk.gdk.threads_leave()
-
 		# remove them
 		for index, item in enumerate(self._file_list, 1):
 			if self._abort.is_set(): break  # abort operation if requested
@@ -955,39 +961,22 @@ class RenameOperation(Operation):
 				gobject.idle_add(self._dialog.set_current_file_fraction, 1)
 
 		# notify user if window is not focused
-		if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
+		with gtk.gdk.lock:
 			notify_manager = self._application.notification_manager
-
-			title = _('Rename Operation')
-			message = ngettext(
-							'Rename of {0} item from "{1}" is completed!',
-							'Rename of {0} items from "{1}" is completed!',
-							len(self._file_list)
-						).format(
-			        len(self._file_list),
-			        os.path.basename(self._source_path)
-			    )
-
-			# queue notification
-			gobject.idle_add(notify_manager.notify, title, message)
+	
+			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
+				title = _('Rename Operation')
+				message = ngettext(
+								'Rename of {0} item from "{1}" is completed!',
+								'Rename of {0} items from "{1}" is completed!',
+								len(self._file_list)
+							).format(
+				        len(self._file_list),
+				        os.path.basename(self._source_path)
+				    )
+	
+				# queue notification
+				notify_manager.notify(title, message)
 
 		# destroy dialog
-		gobject.idle_add(self._destroy_ui)
-
-
-class PathChanger(Thread):
-	"""Thread used to scan specified path and get item properties"""
-
-	def __init__(self, application, parent, provider, path):
-		Thread.__init__(self, target=self)
-
-		self._application = application
-		self._parent = parent
-		self._provider = provider
-		self._path = path
-
-		self._items = []
-
-	def run(self):
-		"""Scan specified path and generate list"""
-		pass
+		self._destroy_ui()

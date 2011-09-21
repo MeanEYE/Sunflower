@@ -1,9 +1,7 @@
 import os
-import shutil
 import gtk
 import time
 import locale
-import stat
 import gnomevfs
 import user
 import fnmatch

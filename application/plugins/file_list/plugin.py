@@ -15,6 +15,7 @@ from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
 from gui.properties_window import PropertiesWindow
 from widgets.thumbnail_view import ThumbnailView
+from threading import Thread
 
 # try to import I/O library
 try:
@@ -1174,34 +1175,59 @@ class FileList(ItemList):
 		# cancel current directory monitor
 		if gio is not None and self._fs_monitor is not None:
 			self._fs_monitor.cancel()
+			
+		# get number of items to preload
+		if len(self._store) > 0:
+			cell_area = self._item_list.get_cell_area(
+										self._store.get_path(self._store.get_iter_first()),
+										self._columns[0]
+									)
+			tree_size = self._item_list.get_allocation().height
+			
+			if len(cell_area) >= 4 and cell_area[3] > 0:
+				# calculate number of items to preload
+				preload_count = (tree_size / cell_area[3]) + 1
+				
+			else: 
+				# failsafe mode, disable preload
+				preload_count = 0 
+			
+		else:
+			# turn off preload for first path change 
+			preload_count = 0
+			
 
 		# clear list
 		self._clear_list()
+
+		# cache objects and settings		
+		provider = self.get_provider()
+		show_hidden = self._parent.options.getboolean('main', 'show_hidden')
+		
+		# assign item for selection
+		self._item_to_focus = selected
 
 		# hide thumbnail
 		if self._enable_media_preview:
 			self._thumbnail_view.hide()
 
 		# change path
-		if path is not None:
+		if path is not None and provider.is_dir(path):
 			self.path = os.path.abspath(path)
+			
 		else:
 			self.path = user.home
 
+		# update GTK controls
 		path_name = os.path.basename(self.path)
-		if path_name == "": path_name = os.path.abspath(self.path)
+		if path_name == "": 
+			path_name = os.path.abspath(self.path)
 
 		self._change_tab_text(path_name)
 		self._change_title_text(self.path)
 		self._parent.path_label.set_text(self.path)
 
-		show_hidden = self._parent.options.getboolean('main', 'show_hidden')
-
-		# disconnect store from widget to speed up the process
-		# disabled: not required atm
-#		self._item_list.set_model(None)
-#		self._store.set_default_sort_func(None)
-
+		# reset directory statistics
 		self._dirs['count'] = 0
 		self._dirs['selected'] = 0
 		self._files['count'] = 0
@@ -1209,13 +1235,26 @@ class FileList(ItemList):
 		self._size['total'] = 0L
 		self._size['selected'] = 0
 
-		# assign item for selection
-		self._item_to_focus = selected
-
 		# populate list
 		try:
-			for filename in self.get_provider().list_dir(self.path):
-				self._add_item(filename, show_hidden)
+			item_list = provider.list_dir(self.path)
+			item_list.sort()
+			
+			# split items among lists
+			preload_list = item_list[:preload_count]
+			item_list = item_list[preload_count:]
+			
+			# preload items
+			for item_name in preload_list:
+				self._add_item(item_name, show_hidden)
+			
+			# let the rest of items load in a separate thread
+			def thread_method():
+				for item_name in item_list:
+					self._add_item(item_name, show_hidden)
+			
+			thread = Thread(target=thread_method)
+			thread.start()
 
 			# if no errors occurred during path change,
 			# call parent method which handles history
@@ -1264,11 +1303,6 @@ class FileList(ItemList):
 							'up',
 							None
 						))
-
-		# restore model and sort function
-		# disabled: not required atm
-#		self._item_list.set_model(self._store)
-#		self._set_sort_function(self._sort_column_widget)
 
 		# if no item was specified, select first one
 		if selected is None:

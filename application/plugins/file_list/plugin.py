@@ -15,7 +15,7 @@ from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
 from gui.properties_window import PropertiesWindow
 from widgets.thumbnail_view import ThumbnailView
-from threading import Thread
+from threading import Thread, Event
 
 # try to import I/O library
 try:
@@ -60,6 +60,9 @@ class FileList(ItemList):
 
 	def __init__(self, parent, notebook, path=None, sort_column=None, sort_ascending=True):
 		ItemList.__init__(self, parent, notebook, path, sort_column, sort_ascending)
+		
+		# event object controling path change thread
+		self._thread_active = Event()
 
 		# storage system for list items
 		self._store = gtk.ListStore(
@@ -1176,6 +1179,10 @@ class FileList(ItemList):
 		if gio is not None and self._fs_monitor is not None:
 			self._fs_monitor.cancel()
 			
+		# if there is already active thread, stop it
+		if self._thread_active.is_set():
+			self._thread_active.clear()
+						
 		# get number of items to preload
 		if len(self._store) > 0:
 			cell_area = self._item_list.get_cell_area(
@@ -1250,11 +1257,19 @@ class FileList(ItemList):
 			
 			# let the rest of items load in a separate thread
 			def thread_method():
+				# set event to active
+				self._thread_active.set()
+				
 				for item_name in item_list:
+					# check if we are allowed to continue
+					if not self._thread_active.is_set():
+						break;
+					
+					# add item to the list
 					self._add_item(item_name, show_hidden)
 			
-			thread = Thread(target=thread_method)
-			thread.start()
+			self._change_path_thread = Thread(target=thread_method)
+			self._change_path_thread.start()
 
 			# if no errors occurred during path change,
 			# call parent method which handles history

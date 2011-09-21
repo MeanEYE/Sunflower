@@ -498,6 +498,9 @@ class CopyDialog(OperationDialog):
 
 		# configure layout
 		self.set_title(_('Copy Selection'))
+		
+		# show all elements
+		self.show_all()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
@@ -516,6 +519,9 @@ class MoveDialog(CopyDialog):
 
 		# configure layout
 		self.set_title(_('Move Selection'))
+		
+		# show all elements
+		self.show_all()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
@@ -540,6 +546,9 @@ class DeleteDialog(OperationDialog):
 		self.set_title(_('Delete Selection'))
 		self.set_status(_('Removing items...'))
 		self.set_current_file('')
+		
+		# show all elements
+		self.show_all()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
@@ -564,6 +573,9 @@ class RenameDialog(OperationDialog):
 		self.set_title(_('Rename Items'))
 		self.set_status(_('Renaming items...'))
 		self.set_current_file('')
+		
+		# show all elements
+		self.show_all()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""

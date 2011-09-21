@@ -1237,13 +1237,34 @@ class FileList(ItemList):
 		try:
 			item_list = provider.list_dir(self.path)
 			
-			# removed 
+			# remove hidden files if we don't need them
 			item_list = filter(lambda item_name: not (item_name[0] == '.' and not show_hidden), item_list)
+			
+			# sort list to prevent messing up list while
+			# adding items from a separate thread
 			item_list.sort()
 			
 			# split items among lists
 			preload_list = item_list[:self._preload_count]
 			item_list = item_list[self._preload_count:]
+			
+			# add parent option for parent directory
+			self._store.append((
+							os.path.pardir,
+							os.path.pardir,
+							'',
+							-2,
+							'<DIR>',
+							-1,
+							'',
+							-1,
+							'',
+							True,
+							True,
+							None,
+							'up',
+							None
+						))
 			
 			# preload items
 			for item_name in preload_list:
@@ -1296,24 +1317,6 @@ class FileList(ItemList):
 
 		# update status bar
 		self._update_status_with_statistis()
-
-		# add parent option for parent directory
-		self._store.insert(0, (
-							os.path.pardir,
-							os.path.pardir,
-							'',
-							-2,
-							'<DIR>',
-							-1,
-							'',
-							-1,
-							'',
-							True,
-							True,
-							None,
-							'up',
-							None
-						))
 
 		# if no item was specified, select first one
 		if selected is None:

@@ -24,7 +24,7 @@ gunzip ~/Desktop/$file_home_page
 echo -e "\t- Removing unneeded files"
 tar --delete --wildcards --file=$HOME/Desktop/$tar_file_home_page Sunflower/.hg*
 tar --delete --wildcards --file=$HOME/Desktop/$tar_file_home_page Sunflower/images/*.xcf
-tar --delete --wildcards --file=$HOME/Desktop/$tar_file_home_page Sunflower/images/*.svg
+tar --delete --wildcards --file=$HOME/Desktop/$tar_file_home_page Sunflower/images/selection_arrow.svg
 
 echo -e "\t- Repacking gzip archive"
 gzip --best ~/Desktop/$tar_file_home_page

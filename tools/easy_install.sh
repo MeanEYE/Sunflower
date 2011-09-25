@@ -19,26 +19,26 @@ echo -e "\033[1mSunflower Installer $installer_version\033[0m\n"
 echo "Hello and thank you for choosing Sunflower! This script will help you"
 echo -e "to install or remove Sunflower with ease.\n"
 
-function check_priviledges() {
+function check_privileges() {
 	# check whether we're running under super-user
 	if [ "$( id -u )" = "0" ]; then
-		echo " * Okay, we have superuser priviledges."
+		echo " * Okay, we have superuser privileges."
 		superuser=1
 
 	else
 		shared_path="$HOME/.local"
 
 		if [ $operation = "install" ]; then
-			echo " * No superuser priviledges! We'll skip installing launcher."
+			echo " * No superuser privileges! We'll skip installing launcher."
 		else
-			echo " * No superuser priviledges! We'll skip removing launcher."
+			echo " * No superuser privileges! We'll skip removing launcher."
 		fi
 	fi
 }
 
 function remove_program() {
-	# first check if we have superuser priviledges
-	check_priviledges
+	# first check if we have superuser privileges
+	check_privileges
 
 	echo " * Removing program:"
 
@@ -79,8 +79,8 @@ function remove_program() {
 }
 
 function install_program() {
-	# first check if we have superuser priviledges
-	check_priviledges
+	# first check if we have superuser privileges
+	check_privileges
 
 	# make sure destination directory exists
 	if [ ! -d $location ]; then
@@ -95,7 +95,7 @@ function install_program() {
 			mkdir -p $location > /dev/null 2>&1
 
 			if [ "$?" -ne "0" ]; then
-				echo -e "\nWe need superuser priviledges to install in specified directory!"
+				echo -e "\nWe need superuser privileges to install in specified directory!"
 				exit 6
 			fi
 		fi
@@ -133,7 +133,7 @@ function install_program() {
 
 	touch sunflower.tgz > /dev/null 2>&1
 	if [ "$?" -ne "0" ]; then
-		echo -e "\nWe need superuser priviledges to install in specified directory!"
+		echo -e "\nWe need superuser privileges to install in specified directory!"
 		exit 6
 	fi
 

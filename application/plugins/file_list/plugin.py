@@ -60,14 +60,14 @@ class FileList(ItemList):
 
 	def __init__(self, parent, notebook, path=None, sort_column=None, sort_ascending=True):
 		ItemList.__init__(self, parent, notebook, path, sort_column, sort_ascending)
-		
+
 		# event object controling path change thread
 		self._thread_active = Event()
-		
+
 		# preload variables
 		self._preload_count = 0
 		self._preload_size = 0
-		
+
 		# storage system for list items
 		self._store = gtk.ListStore(
 								str,	# Column.NAME
@@ -670,6 +670,18 @@ class FileList(ItemList):
 			for menu_item in program_list:
 				self._open_with_menu.append(menu_item)
 
+			# add separator if there are other menu items
+			if len(program_list) > 0:
+				separator = gtk.SeparatorMenuItem()
+				separator.show()
+				self._open_with_menu.append(separator)
+
+			# create an option for opening selection with custom command
+			open_with_other = gtk.MenuItem(_('Other application...'))
+			open_with_other.show()
+
+			self._open_with_menu.append(open_with_other)
+
 		# disable/enable items
 		has_items = len(self._open_with_menu.get_children()) > 0
 		self._open_with_item.set_sensitive(has_items and self.get_provider().is_local)
@@ -1181,7 +1193,7 @@ class FileList(ItemList):
 		# if there is already active thread, stop it
 		if self._thread_active.is_set():
 			self._thread_active.clear()
-			
+
 		# get number of items to preload
 		if len(self._store) > 0 and self._item_list.allocation.height != self._preload_size:
 			cell_area = self._item_list.get_cell_area(
@@ -1189,7 +1201,7 @@ class FileList(ItemList):
 										self._columns[0]
 									)
 			tree_size = self._item_list.allocation.height
-			
+
 			# calculate number of items to preload
 			if len(cell_area) >= 4 and cell_area[3] > 0:
 				self._preload_count = (tree_size / cell_area[3]) + 1
@@ -1198,10 +1210,10 @@ class FileList(ItemList):
 		# clear list
 		self._clear_list()
 
-		# cache objects and settings		
+		# cache objects and settings
 		provider = self.get_provider()
 		show_hidden = self._parent.options.getboolean('main', 'show_hidden')
-		
+
 		# assign item for selection
 		self._item_to_focus = selected
 
@@ -1212,13 +1224,13 @@ class FileList(ItemList):
 		# change path
 		if path is not None and provider.is_dir(path):
 			self.path = os.path.abspath(path)
-			
+
 		else:
 			self.path = user.home
 
 		# update GTK controls
 		path_name = os.path.basename(self.path)
-		if path_name == "": 
+		if path_name == "":
 			path_name = os.path.abspath(self.path)
 
 		self._change_tab_text(path_name)
@@ -1236,18 +1248,18 @@ class FileList(ItemList):
 		# populate list
 		try:
 			item_list = provider.list_dir(self.path)
-			
+
 			# remove hidden files if we don't need them
 			item_list = filter(lambda item_name: not (item_name[0] == '.' and not show_hidden), item_list)
-			
+
 			# sort list to prevent messing up list while
 			# adding items from a separate thread
 			item_list.sort()
-			
+
 			# split items among lists
 			preload_list = item_list[:self._preload_count]
 			item_list = item_list[self._preload_count:]
-			
+
 			# add parent option for parent directory
 			self._store.append((
 							os.path.pardir,
@@ -1265,26 +1277,26 @@ class FileList(ItemList):
 							'up',
 							None
 						))
-			
+
 			# preload items
 			for item_name in preload_list:
 				self._add_item(item_name)
-			
+
 			# let the rest of items load in a separate thread
 			if len(item_list) > 0:
 				def thread_method():
 					# set event to active
 					self._thread_active.set()
-					
+
 					for item_name in item_list:
 						# check if we are allowed to continue
 						if not self._thread_active.is_set():
 							break;
-						
+
 						# add item to the list
 						with gtk.gdk.lock:
 							self._add_item(item_name)
-				
+
 				self._change_path_thread = Thread(target=thread_method)
 				self._change_path_thread.start()
 

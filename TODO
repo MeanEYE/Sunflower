@@ -1,6 +1,8 @@
-! Use of gtk.gdk.lock instead of threads_enter/leave
-
 ! Use gtk.gdk.lock on every GTK+ method called outside main thread except those called with gobject.idle_add
+
+- Add spinned if it exists and show him on directory loading
+
+- Complete open with other application menu item
 
 - Prevent columns-changed signal for emitting on application close
 

@@ -1084,7 +1084,18 @@ class FileList(ItemList):
 			# time_format values
 			time_format = self._parent.options.get('main', 'time_format')
 
-			formated_file_size = locale.format('%d', file_size, True) if not is_dir else '<DIR>'
+			if not is_dir:
+				# format file size
+				if self._human_readable:
+					formated_file_size = common.format_size(file_size)
+
+				else:
+					formated_file_size = locale.format('%d', file_size, True)
+					
+			else:
+				# item is a directory
+				formated_file_size = '<DIR>'
+
 			formated_file_mode = oct(file_mode)
 			formated_file_date = time.strftime(time_format, time.localtime(file_date))
 

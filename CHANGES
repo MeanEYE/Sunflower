@@ -1,5 +1,8 @@
 Version 0.1a-35
+  + Added "Other application..." menu item in "Open with" menu
   * Optimized directory loading, heavy gains in time
+  * Updated Czech translation
+  * Fixed bug with items being updated by directory monitor
 
 Version 0.1a-34
   + New find file extensions for content and size matching

@@ -93,6 +93,7 @@ class Terminal(PluginBase):
 			self._terminal.get_buffer().set_text(text)
 			self._terminal.set_editable(False)
 			self._terminal.set_justification(gtk.JUSTIFY_CENTER)
+			self._terminal.set_wrap_mode(gtk.WRAP_WORD)
 
 		# terminal container
 		self._container = gtk.ScrolledWindow()

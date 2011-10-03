@@ -87,7 +87,12 @@ class Terminal(PluginBase):
 			
 		else:
 			# failsafe when VTE module is not present
-			self._terminal = gtk.Label(_('Python VTE module is not installed on this system!'))
+			# NOTE: Cursor need to be visible for 'close tab' accelerator.
+			self._terminal = gtk.TextView()
+			text = _('\n\nPython VTE module is not installed on this system!')
+			self._terminal.get_buffer().set_text(text)
+			self._terminal.set_editable(False)
+			self._terminal.set_justification(gtk.JUSTIFY_CENTER)
 
 		# terminal container
 		self._container = gtk.ScrolledWindow()

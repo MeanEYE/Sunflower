@@ -17,12 +17,36 @@ class AssociationManager:
 		self._config_section = 'Desktop Entry'
 		self._application_config_path = '/usr/share/applications'
 		self._user_path = os.path.expanduser('~/.local/share/applications')
+		
+	def get_mime_type(self, path):
+		"""Get mime type for specified path"""
+		return gnomevfs.get_mime_type(path)
+	
+	def get_mime_description(self, mime_type):
+		"""Get description from mime type"""
+		return gnomevfs.mime_get_description(mime_type)
 
-	def get_program_list_for_type(self, mime_type):
+	def get_all_configs(self):
+		"""Return list of all applications"""
+		system_list = os.listdir(self._application_config_path)
+		system_list = map(lambda item: os.path.join(self._application_config_path, item), system_list)
+		
+		user_list = os.listdir(self._user_path)
+		user_list = map(lambda item: os.path.join(self._user_path, item), user_list)
+		
+		result = []
+		result.extend(system_list)
+		result.extend(user_list)
+		
+		result = filter(lambda item: os.path.splitext(item)[1] == '.desktop', result)
+		
+		return result
+
+	def get_application_list_for_type(self, mime_type):
 		"""Get list of associated programs for specified type"""
 		return gnomevfs.mime_get_all_applications(mime_type)
 
-	def get_default_program_for_type(self, mime_type):
+	def get_default_application_for_type(self, mime_type):
 		"""Get default application for specified type"""
 		return gnomevfs.mime_get_default_application(mime_type)
 
@@ -88,7 +112,7 @@ class AssociationManager:
 
 	def execute_file(self, path):
 		"""Execute specified item"""
-		mime_type = gnomevfs.get_mime_type(path)
+		mime_type = self.get_mime_type(path)
 		is_executable = gnomevfs.is_executable_command_string(path)
 
 		if mime_type in self.executable_types and is_executable:
@@ -97,7 +121,7 @@ class AssociationManager:
 
 		else:
 			# file does not have executable bit set, open with default application
-			default_program = self.get_default_program_for_type(mime_type)
+			default_program = self.get_default_application_for_type(mime_type)
 			config_file = default_program[0]
 
 			self.open_file_with_config((path,), config_file)

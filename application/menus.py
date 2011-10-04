@@ -91,7 +91,7 @@ class MenuManager:
 		callback - method used to get list selection
 
 		"""
-		program_list = self._application.associations_manager.get_program_list_for_type(mime_type)
+		program_list = self._application.associations_manager.get_application_list_for_type(mime_type)
 		result = []
 
 		for program in program_list:

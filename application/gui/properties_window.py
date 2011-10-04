@@ -5,7 +5,6 @@ import pango
 import gnomevfs
 import locale
 import time
-import stat
 import common
 
 
@@ -164,10 +163,10 @@ class PropertiesWindow(gtk.Window):
 
 	def _load_associated_applications(self):
 		"""Get associated applications with file/directory"""
-		mime_type = gnomevfs.get_mime_type(self._path)
 		associations_manager = self._application.associations_manager
-		list_ = associations_manager.get_program_list_for_type(mime_type)
-		default_application = associations_manager.get_default_program_for_type(mime_type)
+		mime_type = associations_manager.get_mime_type(self._path)
+		list_ = associations_manager.get_application_list_for_type(mime_type)
+		default_application = associations_manager.get_default_application_for_type(mime_type)
 
 		# clear existing list
 		self._store.clear()
@@ -190,8 +189,8 @@ class PropertiesWindow(gtk.Window):
 
 	def _update_data(self):
 		"""Update widgets to represent item state"""
-		mime_type = gnomevfs.get_mime_type(self._path)
-		format = self._application.options.get('main', 'time_format')
+		mime_type = self._application.associations_manager.get_mime_type(self._path)
+		time_format = self._application.options.get('main', 'time_format')
 		human_readable = self._application.options.getboolean('main', 'human_readable_size')
 		item_stat = self._provider.get_stat(self._path, extended=True)
 
@@ -221,9 +220,9 @@ class PropertiesWindow(gtk.Window):
 		# set mode
 		self._mode = item_stat.mode
 
-		# format item time
-		item_a_date = time.strftime(format, time.localtime(item_stat.time_access))
-		item_m_date = time.strftime(format, time.localtime(item_stat.time_modify))
+		# time_format item time
+		item_a_date = time.strftime(time_format, time.localtime(item_stat.time_access))
+		item_m_date = time.strftime(time_format, time.localtime(item_stat.time_modify))
 
 		# get volume
 		try:
@@ -291,7 +290,7 @@ class PropertiesWindow(gtk.Window):
 		active_item = self._store[path]
 
 		# get data
-		mime_type = gnomevfs.get_mime_type(self._path)
+		mime_type = self._application.associations_manager.get_mime_type(self._path)
 		application = active_item[3]
 
 		# set default application
@@ -480,8 +479,8 @@ class PropertiesWindow(gtk.Window):
 		tab.set_border_width(10)
 
 		# get item description
-		mime_type = gnomevfs.get_mime_type(self._path)
-		description = gnomevfs.mime_get_description(mime_type)
+		mime_type = self._application.associations_manager.get_mime_type(self._path)
+		description = self._application.associations_manager.get_mime_description(mime_type)
 
 		# create label
 		text = _(
@@ -497,7 +496,9 @@ class PropertiesWindow(gtk.Window):
 		label.set_use_markup(True)
 
 		# create application list
-		container = gtk.Viewport()
+		container = gtk.ScrolledWindow()
+		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+		container.set_shadow_type(gtk.SHADOW_IN)
 
 		self._store = gtk.ListStore(bool, str, str, str)
 		self._list = gtk.TreeView()

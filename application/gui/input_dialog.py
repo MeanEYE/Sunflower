@@ -7,6 +7,8 @@ import user
 
 from provider import FileType
 from common import get_user_directory, UserDirectory
+from threading import Thread
+from ConfigParser import ConfigParser
 
 # constants
 class OverwriteOption:
@@ -1121,3 +1123,168 @@ class InputRangeDialog(InputDialog):
 		self.destroy()
 
 		return code, range
+
+
+class ApplicationSelectDialog(gtk.Dialog):
+	"""Provides user with a list of installed applications and
+	option to enter command"""
+	
+	help_url = 'http://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables'
+	
+	def __init__(self, application, path=None):
+		gtk.Dialog.__init__(self, parent=application)
+		
+		self._application = application
+		self.path = path
+
+		# configure dialog
+		self.set_title(_('Open With'))
+		self.set_default_size(500, 400)
+		self.set_resizable(True)
+		self.set_skip_taskbar_hint(True)
+		self.set_modal(True)
+		self.set_transient_for(application)
+		self.set_wmclass('Sunflower', 'Sunflower')
+
+		self.vbox.set_spacing(0)
+		self.vbox.set_border_width(0)
+		
+		self._container = gtk.VBox(False, 5)
+		self._container.set_border_width(5)
+
+		# create interface		
+		vbox_list = gtk.VBox(False, 0)
+		
+		label_open_with = gtk.Label()
+		label_open_with.set_use_markup(True)
+		label_open_with.set_alignment(0, 0.5)
+		if path is None:
+			label_open_with.set_label(_('Select application:'))
+			
+		else:
+			label_open_with.set_label(_('Open <i>{0}</i> with:').format(os.path.basename(path)))
+			
+		# create application list
+		list_container = gtk.ScrolledWindow()
+		list_container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+		list_container.set_shadow_type(gtk.SHADOW_IN)
+		
+		self._store = gtk.ListStore(str, str, str, str, str)
+		self._list = gtk.TreeView(model=self._store)
+	
+		cell_icon = gtk.CellRendererPixbuf()
+		cell_name = gtk.CellRendererText()
+		cell_generic = gtk.CellRendererText()
+		
+		column_application = gtk.TreeViewColumn()
+		column_application.pack_start(cell_icon, False)
+		column_application.pack_start(cell_name, True)
+		column_application.add_attribute(cell_icon, 'icon-name', 0)
+		column_application.add_attribute(cell_name, 'text', 1)
+		column_application.set_expand(True)
+		
+		column_generic = gtk.TreeViewColumn()
+		column_generic.pack_start(cell_generic, True)
+		column_generic.add_attribute(cell_generic, 'markup', 4)
+		
+		self._list.append_column(column_application)
+		self._list.append_column(column_generic)
+		self._list.set_headers_visible(False)
+		self._list.set_search_column(1)
+		self._list.set_enable_search(True)
+		self._list.connect('cursor-changed', self.__handle_cursor_change)
+		
+		self._store.set_sort_column_id(1, gtk.SORT_ASCENDING)
+		
+		# create custom command entry
+		self._expander_custom = gtk.Expander(label=_('Use a custom command'))
+		
+		hbox_custom = gtk.HBox(False, 7)
+		
+		self._entry_custom = gtk.Entry()
+		
+		# pack interface
+		list_container.add(self._list)
+		vbox_list.pack_start(label_open_with, False, False, 0)
+		vbox_list.pack_start(list_container, True, True, 0)
+		
+		hbox_custom.pack_start(self._entry_custom, True, True, 0)
+		self._expander_custom.add(hbox_custom)
+		
+		self._container.pack_start(vbox_list, True, True, 0)
+		self._container.pack_start(self._expander_custom, False, False, 0)
+		
+		self.vbox.pack_start(self._container, True, True, 0)
+				
+		# create controls
+		button_help = gtk.Button(stock=gtk.STOCK_HELP)
+		
+		button_open = gtk.Button(stock=gtk.STOCK_OPEN)
+		button_open.set_can_default(True)
+		
+		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
+		
+		self.action_area.pack_start(button_help, False, False, 0)
+		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self.action_area.pack_end(button_open, False, False, 0)
+		self.set_default_response(gtk.RESPONSE_OK)
+		
+		# populate content
+		self._load_applications()
+
+		self.show_all()
+		
+	def __handle_cursor_change(self, widget, data=None):
+		"""Handle setting or changing list cursor"""
+		selection = widget.get_selection()
+		item_store, selected_iter = selection.get_selected()
+		
+		if selected_iter is not None:
+			command = item_store.get_value(selected_iter, 3)
+			self._entry_custom.set_text(command)
+		
+	def __parse_configuration_files(self, config_list):
+		"""Parse application desktop file from a separate thread"""
+		executables = []
+		section = self._application.associations_manager._config_section
+
+		# parse all configuration files		
+		for config_file in config_list:
+			config = ConfigParser()
+			config.read(config_file)
+			
+			if config.has_section(section) \
+			and config.get(section, 'type') == 'Application':
+				# desktop file has section we need
+				executable = config.get(section, 'exec')
+				name = config.get(section, 'name')
+				icon_path = ''
+				generic_name = ''
+				
+				if config.has_option(section, 'genericname'):
+					generic_name = config.get(section, 'genericname')
+				
+				if config.has_option(section, 'icon'):
+					icon_path = config.get(section, 'icon')
+				
+				# add new item to the list
+				if executable not in executables\
+				and '%' in executable:  # allow only configs that accept params
+					executables.append(executable)
+					
+					with gtk.gdk.lock:
+						self._store.append((
+									icon_path, 
+									name, 
+									config_file, 
+									executable,
+									'<small>{0}</small>'.format(generic_name)
+								))
+		
+	def _load_applications(self):
+		"""Populate application list from config files"""
+		config_list = self._application.associations_manager.get_all_configs()
+			
+		# parse all configuration files in separate thread
+		thread = Thread(target=self.__parse_configuration_files, args=(config_list,))
+		thread.start()

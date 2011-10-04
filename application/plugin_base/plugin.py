@@ -1,3 +1,4 @@
+# coding:utf-8 vi:noet:ts=4
 import gtk
 
 from accelerator_group import AcceleratorGroup

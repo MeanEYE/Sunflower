@@ -13,6 +13,7 @@ from local_provider import LocalProvider
 from operation import DeleteOperation, CopyOperation, MoveOperation
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
+from gui.input_dialog import ApplicationSelectDialog 
 from gui.properties_window import PropertiesWindow
 from widgets.thumbnail_view import ThumbnailView
 from threading import Thread, Event
@@ -61,7 +62,7 @@ class FileList(ItemList):
 	def __init__(self, parent, notebook, path=None, sort_column=None, sort_ascending=True):
 		ItemList.__init__(self, parent, notebook, path, sort_column, sort_ascending)
 
-		# event object controling path change thread
+		# event object controlling path change thread
 		self._thread_active = Event()
 
 		# preload variables
@@ -300,7 +301,7 @@ class FileList(ItemList):
 			self._thumbnail_view.hide()
 
 	def _execute_selected_item(self, widget=None, data=None):
-		"""Execute/Open selected item/directory"""
+		"""Execute/Open selected item"""
 		selection = self._item_list.get_selection()
 		list_, iter_ = selection.get_selected()
 
@@ -327,6 +328,11 @@ class FileList(ItemList):
 			self._parent.associations_manager.execute_file(selected_file)
 
 		return True  # to prevent command or quick search in single key bindings
+	
+	def _execute_with_application(self, widget=None, data=None):
+		"""Execute/Open selected item with application user selects from the list"""
+		dialog = ApplicationSelectDialog(self._parent, '/home/meaneye/pi.py')
+		dialog.show()
 
 	def _open_in_new_tab(self, widget=None, data=None):
 		"""Open selected directory in new tab"""
@@ -663,7 +669,7 @@ class FileList(ItemList):
 
 		if not is_dir:
 			# get associated programs
-			mime_type = gnomevfs.get_mime_type(filename)
+			mime_type = self._parent.associations_manager.get_mime_type(filename)
 			program_list = self._parent.menu_manager.get_items_for_type(mime_type, self._get_selection_list())
 
 			# create open with menu
@@ -678,6 +684,7 @@ class FileList(ItemList):
 
 			# create an option for opening selection with custom command
 			open_with_other = gtk.MenuItem(_('Other application...'))
+			open_with_other.connect('activate', self._execute_with_application)
 			open_with_other.show()
 
 			self._open_with_menu.append(open_with_other)

@@ -156,6 +156,7 @@ class PreferencesWindow(gtk.Window):
 
 		# disable save button
 		self._button_save.set_sensitive(False)
+		self._button_revert.set_sensitive(False)
 
 		# call main window to propagate new settings
 		self._parent.apply_settings()

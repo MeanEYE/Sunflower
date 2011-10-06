@@ -1,9 +1,11 @@
 Version 0.1a-35
   + Added "Other application..." menu item in "Open with" menu
   + Added support for plugin configuration files
+  + Added spinner animation while directory content is being loaded
   * Optimized directory loading, heavy gains in time
   * Updated Czech translation
   * Fixed bug with items being updated by directory monitor
+  * Disable revert button on save
 
 Version 0.1a-34
   + New find file extensions for content and size matching

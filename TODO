@@ -1,5 +1,3 @@
-- Preferences: Plugins: Rename "plugin file" to "plugin name". Read name from text file.
-
 ! Use gtk.gdk.lock on every GTK+ method called outside main thread except those called with gobject.idle_add
 
 - Add spinned if it exists and show him on directory loading

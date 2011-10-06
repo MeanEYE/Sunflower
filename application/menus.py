@@ -69,7 +69,7 @@ class MenuManager:
 
 	def _open_with_callback(self, widget, data):
 		"""Callback event for menu items from 'open with' menu"""
-		self._application.associations_manager.open_file_with_config(data['selection'], data['config'])
+		self._application.associations_manager.open_file(data['selection'], data['config'])
 
 	def get_accel_group(self):
 		"""Return accelerator group"""

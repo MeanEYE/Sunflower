@@ -176,6 +176,17 @@ class AboutWindow(gtk.Window):
 		programmers.attach(developer, 0, 1, 2, 3)
 		programmers.attach(email, 1, 2, 2, 3)
 
+		developer = gtk.Label('\tGrigory Petrov')
+		developer.set_alignment(0, 0)
+		developer.set_selectable(True)
+
+		email = gtk.Label('grigory.v.p@gmail.com')
+		email.set_alignment(0, 0)
+		email.set_selectable(True)
+
+		programmers.attach(developer, 0, 1, 3, 4)
+		programmers.attach(email, 1, 2, 3, 4)
+
 		# artist info
 		artists = gtk.Table(1, 2, False)
 		artists.set_row_spacings(7)

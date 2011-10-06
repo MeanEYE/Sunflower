@@ -29,7 +29,7 @@ class PluginsOptions(SettingsPage):
 		# create and pack columns
 		col_active = gtk.TreeViewColumn(_('Active'), cell_active, active=0)
 
-		col_name = gtk.TreeViewColumn(_('Plugin file'), cell_name, text=1)
+		col_name = gtk.TreeViewColumn(_('Plugin name'), cell_name, text=1)
 		col_name.set_resizable(True)
 		col_name.set_expand(True)
 

@@ -1,5 +1,6 @@
 Version 0.1a-35
   + Added "Other application..." menu item in "Open with" menu
+  + Added support for plugin configuration files
   * Optimized directory loading, heavy gains in time
   * Updated Czech translation
   * Fixed bug with items being updated by directory monitor

@@ -126,7 +126,7 @@ class ItemList(PluginBase):
 		self._terminal_button.connect('clicked', self._create_terminal)
 
 		self._title_bar.add_control(self._terminal_button)
-
+		
 		# configure status bar
 		self._status_bar.add_group_with_icon('dirs', 'folder', '0/0')
 		self._status_bar.add_group_with_icon('files', 'document', '0/0')
@@ -361,7 +361,6 @@ class ItemList(PluginBase):
 		and event.type is gtk.gdk.BUTTON_PRESS:
 			start_path = None
 			end_path = None
-			current_status = False
 
 			# get source path
 			selection = self._item_list.get_selection()

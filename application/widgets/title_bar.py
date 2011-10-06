@@ -1,7 +1,6 @@
 import gtk
+import math
 import pango
-
-from math import pi
 
 
 class TitleBar(gtk.HBox):
@@ -38,6 +37,12 @@ class TitleBar(gtk.HBox):
 		self._subtitle_label.set_alignment(0, 0.5)
 		self._subtitle_label.set_use_markup(False)
 		self._subtitle_label.modify_font(font)
+		
+		# create spinner control if it exists
+		if hasattr(gtk, 'Spinner'):
+			self._spinner = gtk.Spinner()
+			self._spinner.set_size_request(20, 20)
+			self._spinner.set_visible(False)
 
 		# pack interface
 		vbox.pack_start(self._title_label, True, True, 0)
@@ -45,6 +50,9 @@ class TitleBar(gtk.HBox):
 
 		self.pack_start(self._icon, False, False, 0)
 		self.pack_start(vbox, True, True, 3)
+		
+		if self._spinner is not None:
+			self.pack_start(self._spinner, False, False, 5)
 
 	def __get_colors(self, normal_style=False):
 		"""Get copy of the style for current state"""
@@ -93,7 +101,7 @@ class TitleBar(gtk.HBox):
 		x, y, w, h = self.allocation
 		x_offset = x + w
 		y_offset = y + h
-		half_pi = pi / 2
+		half_pi = math.pi / 2
 
 		context = self.window.cairo_create()
 
@@ -157,6 +165,10 @@ class TitleBar(gtk.HBox):
 		# apply text color to labels
 		self._title_label.modify_fg(gtk.STATE_NORMAL, color)
 		self._subtitle_label.modify_fg(gtk.STATE_NORMAL, color)
+		
+		# apply spinner color
+		if self._spinner is not None:
+			self._spinner.modify_fg(gtk.STATE_NORMAL, color)
 
 	def add_control(self, widget):
 		"""Add button control"""
@@ -187,6 +199,18 @@ class TitleBar(gtk.HBox):
 	def set_icon_from_name(self, icon_name):
 		"""Set icon from specified name"""
 		self._icon.set_from_icon_name(icon_name, gtk.ICON_SIZE_LARGE_TOOLBAR)
+		
+	def show_spinner(self):
+		"""Show spinner widget"""
+		if self._spinner is not None:
+			self._spinner.show()
+			self._spinner.start()
+			
+	def hide_spinner(self):
+		"""Hide spinner widget"""
+		if self._spinner is not None:
+			self._spinner.stop()
+			self._spinner.hide()
 
 	def apply_settings(self):
 		"""Method called when system applies new settings"""

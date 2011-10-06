@@ -2357,7 +2357,7 @@ class MainWindow(gtk.Window):
 								gtk.BUTTONS_OK,
 								_(
 									'No rename extensions were found. Please '
-									'enable "rename_extensions" plugin and try '
+									'enable basic rename options plugin and try '
 									'again.'
 								)
 							)
@@ -2382,7 +2382,7 @@ class MainWindow(gtk.Window):
 								gtk.BUTTONS_OK,
 								_(
 									'No extensions for finding files were found. Please '
-									'enable "find_file_extensions" plugin and try again.'
+									'enable basic find file options plugin and try again.'
 								)
 							)
 			dialog.run()

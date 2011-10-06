@@ -195,6 +195,7 @@ class ItemList(PluginBase):
 
 		# add all methods to group
 		group.add_method('execute_item', _('Execute selected item'), self._execute_selected_item)
+		group.add_method('execute_with_application', _('Select application and execute item'), self._execute_with_application)
 		group.add_method('item_properties', _('Show selected item properties'), self._item_properties)
 		group.add_method('add_bookmark', _('Bookmark current directory'), self._add_bookmark)
 		group.add_method('edit_bookmarks', _('Edit bookmarks'), self._edit_bookmarks)
@@ -605,7 +606,11 @@ class ItemList(PluginBase):
 		return False
 
 	def _execute_selected_item(self, widget=None, data=None):
-		"""Abstract method for handling execution of certain item"""
+		"""Execute selected item"""
+		return True
+	
+	def _execute_with_application(self, widget=None, data=None):
+		"""Show application selection dialog and then execute item"""
 		return True
 
 	def _open_in_new_tab(self, widget=None, data=None):

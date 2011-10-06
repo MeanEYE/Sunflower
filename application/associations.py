@@ -66,12 +66,29 @@ class AssociationManager:
 
 		return result
 
-	def open_file_with_config(self, selection, config_file):
-		"""Open filename using config data"""
-		config = self.get_association_config(config_file)
-		if config is None: return
-
-		command = config['exec']
+	def open_file(self, selection, config_file=None, exec_command=None):
+		"""Open filename using config file or specified execute command"""
+		if config_file is not None:
+			# get command from config file
+			config = self.get_association_config(config_file)
+			
+			if config is None \
+			and not config.has_option(self._config_section, 'exec'): 
+				return
+	
+			command = config['exec']
+			
+		elif exec_command is not None:
+			# use specified command
+			command = exec_command
+		
+		else:
+			# raise exception, we need at least one argument
+			raise AttributeError('We need either config_file or command to be specified!')
+		
+		# we modify exec_string and use 
+		# command for testing to avoid problem
+		# with Unicode characters in URI
 		exec_string = command
 
 		if selection is not None:
@@ -81,7 +98,7 @@ class AssociationManager:
 			dir_list = ["'{0}'".format(os.path.dirname(item) for item in selection)]
 			names_list = ["'{0}'".format(os.path.basename(item) for item in selection)]
 
-			# prepare single line selection
+			# prepare single item selection
 			if '%f' in command:
 				exec_string = exec_string.replace('%f', "'{0}'".format(selection[0]))
 
@@ -124,4 +141,4 @@ class AssociationManager:
 			default_program = self.get_default_application_for_type(mime_type)
 			config_file = default_program[0]
 
-			self.open_file_with_config((path,), config_file)
+			self.open_file((path,), config_file)

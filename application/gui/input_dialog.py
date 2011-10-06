@@ -93,7 +93,7 @@ class InputDialog(gtk.Dialog):
 		code = self.run()
 		result = self._entry.get_text()
 
-		self.destroy()
+		self.hide()
 
 		return (code, result)
 
@@ -505,7 +505,7 @@ class CopyDialog(gtk.Dialog):
 				self.checkbox_mode.get_active()
 				)
 
-		self.destroy()
+		self.hide()
 
 		return (code, options)
 
@@ -751,7 +751,7 @@ class OverwriteDialog(gtk.Dialog):
 				self._checkbox_apply_to_all.get_active()
 				)
 
-		self.destroy()
+		self.hide()
 
 		return (code, options)
 
@@ -904,7 +904,7 @@ class AddBookmarkDialog(gtk.Dialog):
 		name = self._entry_name.get_text()
 		path = self._entry_path.get_text()
 
-		self.destroy()
+		self.hide()
 
 		return (code, name, path)
 
@@ -1096,7 +1096,7 @@ class CreateToolbarWidgetDialog(gtk.Dialog):
 			name = self._entry_name.get_text()
 			widget_type = self._type_list[self._combobox_type.get_active()][0]
 
-		self.destroy()
+		self.hide()
 
 		return code, name, widget_type
 
@@ -1120,7 +1120,7 @@ class InputRangeDialog(InputDialog):
 		code = self.run()
 		range = self._entry.get_selection_bounds()
 
-		self.destroy()
+		self.hide()
 
 		return code, range
 
@@ -1129,7 +1129,7 @@ class ApplicationSelectDialog(gtk.Dialog):
 	"""Provides user with a list of installed applications and
 	option to enter command"""
 	
-	help_url = 'http://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables'
+	help_url = 'standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables'
 	
 	def __init__(self, application, path=None):
 		gtk.Dialog.__init__(self, parent=application)
@@ -1218,6 +1218,7 @@ class ApplicationSelectDialog(gtk.Dialog):
 				
 		# create controls
 		button_help = gtk.Button(stock=gtk.STOCK_HELP)
+		button_help.connect('clicked', self._application.goto_web, self.help_url)
 		
 		button_open = gtk.Button(stock=gtk.STOCK_OPEN)
 		button_open.set_can_default(True)
@@ -1226,7 +1227,7 @@ class ApplicationSelectDialog(gtk.Dialog):
 		
 		self.action_area.pack_start(button_help, False, False, 0)
 		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
-		self.action_area.pack_end(button_open, False, False, 0)
+		self.add_action_widget(button_open, gtk.RESPONSE_OK)
 		self.set_default_response(gtk.RESPONSE_OK)
 		
 		# populate content
@@ -1288,3 +1289,13 @@ class ApplicationSelectDialog(gtk.Dialog):
 		# parse all configuration files in separate thread
 		thread = Thread(target=self.__parse_configuration_files, args=(config_list,))
 		thread.start()
+		
+	def get_response(self):
+		"""Get response and destroy dialog"""
+		code = self.run()
+		is_custom = self._expander_custom.get_expanded()
+		command = self._entry_custom.get_text()
+		
+		self.hide()
+
+		return code, is_custom, command

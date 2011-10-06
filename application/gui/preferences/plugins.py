@@ -139,11 +139,12 @@ class PluginsOptions(SettingsPage):
 
 	def _toggle_plugin(self, cell, path):
 		"""Handle changing plugin state"""
-		plugin = self._plugins[path][1]
+		plugin = self._plugins[path][Column.LOCATION]
+		plugin_name = self._plugins[path][Column.NAME]
 
 		if plugin not in self._application.protected_plugins:
 			# plugin is not protected, toggle it's state
-			self._plugins[path][0] = not self._plugins[path][0]
+			self._plugins[path][Column.ACTIVE] = not self._plugins[path][Column.ACTIVE]
 
 			# enable save button
 			self._parent.enable_save(show_restart=True)
@@ -156,10 +157,10 @@ class PluginsOptions(SettingsPage):
 									gtk.MESSAGE_INFO,
 									gtk.BUTTONS_OK,
 									_(
-										"Specified plugin ('{0}') is required for "
+										"{0} is required for "
 										"normal program operation and therefore can "
 										"not be deactivated!"
-									).format(plugin)
+									).format(plugin_name)
 								)
 
 			dialog.run()

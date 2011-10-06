@@ -16,7 +16,7 @@ class AcceleratorOptions(SettingsPage):
 	"""Accelerator options extension class"""
 
 	def __init__(self, parent, application):
-		SettingsPage.__init__(self, parent, application, 'accelerators', _('Keybindings'))
+		SettingsPage.__init__(self, parent, application, 'accelerators', _('Key bindings'))
 
 		# create list box
 		container = gtk.ScrolledWindow()

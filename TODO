@@ -4,8 +4,6 @@
 
 - Add spinned if it exists and show him on directory loading
 
-- Complete open with other application menu item
-
 - Prevent columns-changed signal for emitting on application close
 
 - Lazy accelerator switch (should fix some of the crash problems)

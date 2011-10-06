@@ -1301,7 +1301,7 @@ class FileList(ItemList):
 							'up',
 							None
 						))
-
+			
 			# preload items
 			for item_name in preload_list:
 				self._add_item(item_name)
@@ -1311,7 +1311,11 @@ class FileList(ItemList):
 				def thread_method():
 					# set event to active
 					self._thread_active.set()
-
+					
+					# show spinner animation
+					with gtk.gdk.lock:
+						self._title_bar.show_spinner()
+					
 					for item_name in item_list:
 						# check if we are allowed to continue
 						if not self._thread_active.is_set():
@@ -1320,10 +1324,14 @@ class FileList(ItemList):
 						# add item to the list
 						with gtk.gdk.lock:
 							self._add_item(item_name)
+						
+					# hide spinner animation	
+					with gtk.gdk.lock:
+						self._title_bar.hide_spinner()
 
 				self._change_path_thread = Thread(target=thread_method)
 				self._change_path_thread.start()
-
+				
 			# if no errors occurred during path change,
 			# call parent method which handles history
 			ItemList.change_path(self, path)

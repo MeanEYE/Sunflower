@@ -180,7 +180,7 @@ class PluginsOptions(SettingsPage):
 		plugins_to_load = options.get('main', 'plugins').split(',')
 
 		# extract current locale
-		language = localge.getdefaultlocale()[0]
+		language = locale.getdefaultlocale()[0]
 
 		# populate list
 		for plugin in plugin_list:

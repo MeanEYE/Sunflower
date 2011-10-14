@@ -1,6 +1,5 @@
 import os
 import gtk
-import gnomevfs
 
 try:
 	# try to import module

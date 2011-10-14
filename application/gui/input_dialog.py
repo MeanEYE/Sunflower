@@ -7,8 +7,6 @@ import user
 
 from provider import FileType
 from common import get_user_directory, UserDirectory
-from threading import Thread
-from ConfigParser import ConfigParser
 
 # constants
 class OverwriteOption:
@@ -1116,13 +1114,13 @@ class InputRangeDialog(InputDialog):
 		self._entry.set_text(text)
 
 	def get_response(self):
-		"""Return selection range and self-destruct"""
+		"""Return selection selection_range and self-destruct"""
 		code = self.run()
-		range = self._entry.get_selection_bounds()
+		selection_range = self._entry.get_selection_bounds()
 
 		self.hide()
 
-		return code, range
+		return code, selection_range
 
 
 class ApplicationSelectDialog(gtk.Dialog):
@@ -1244,51 +1242,19 @@ class ApplicationSelectDialog(gtk.Dialog):
 			command = item_store.get_value(selected_iter, 3)
 			self._entry_custom.set_text(command)
 		
-	def __parse_configuration_files(self, config_list):
-		"""Parse application desktop file from a separate thread"""
-		executables = []
-		section = self._application.associations_manager._config_section
-
-		# parse all configuration files		
-		for config_file in config_list:
-			config = ConfigParser()
-			config.read(config_file)
-			
-			if config.has_section(section) \
-			and config.get(section, 'type') == 'Application':
-				# desktop file has section we need
-				executable = config.get(section, 'exec')
-				name = config.get(section, 'name')
-				icon_path = ''
-				generic_name = ''
-				
-				if config.has_option(section, 'genericname'):
-					generic_name = config.get(section, 'genericname')
-				
-				if config.has_option(section, 'icon'):
-					icon_path = config.get(section, 'icon')
-				
-				# add new item to the list
-				if executable not in executables\
-				and '%' in executable:  # allow only configs that accept params
-					executables.append(executable)
-					
-					with gtk.gdk.lock:
-						self._store.append((
-									icon_path, 
-									name, 
-									config_file, 
-									executable,
-									'<small>{0}</small>'.format(generic_name)
-								))
-		
 	def _load_applications(self):
 		"""Populate application list from config files"""
-		config_list = self._application.associations_manager.get_all_configs()
-			
-		# parse all configuration files in separate thread
-		thread = Thread(target=self.__parse_configuration_files, args=(config_list,))
-		thread.start()
+		application_list = self._application.associations_manager.get_all()
+
+		for application in application_list:
+			if '%' in application.command_line:
+				self._store.append((
+							application.icon, 
+							application.name, 
+							application.id, 
+							application.command_line,
+							'<small>{0}</small>'.format(application.description)
+						))
 		
 	def get_response(self):
 		"""Get response and destroy dialog"""

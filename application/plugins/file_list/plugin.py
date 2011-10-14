@@ -2,7 +2,6 @@ import os
 import gtk
 import time
 import locale
-import gnomevfs
 import user
 import fnmatch
 import urllib

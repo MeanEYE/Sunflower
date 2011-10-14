@@ -2,10 +2,14 @@ Version 0.1a-35
   + Added "Other application..." menu item in "Open with" menu
   + Added support for plugin configuration files
   + Added spinner animation while directory content is being loaded
+  + Added German translation
   * Optimized directory loading, heavy gains in time
   * Updated Czech translation
+  * Updated Russian translation
   * Fixed bug with items being updated by directory monitor
   * Disable revert button on save
+  * Use GIO to get associated applications
+  - Usage of deprecated gnomevfs module
 
 Version 0.1a-34
   + New find file extensions for content and size matching

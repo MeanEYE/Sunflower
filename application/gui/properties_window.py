@@ -2,7 +2,6 @@ import os
 import gtk
 import gio
 import pango
-import gnomevfs
 import locale
 import time
 import common
@@ -165,37 +164,28 @@ class PropertiesWindow(gtk.Window):
 		"""Get associated applications with file/directory"""
 		associations_manager = self._application.associations_manager
 		mime_type = associations_manager.get_mime_type(self._path)
-		list_ = associations_manager.get_application_list_for_type(mime_type)
+		application_list = associations_manager.get_application_list_for_type(mime_type)
 		default_application = associations_manager.get_default_application_for_type(mime_type)
 
 		# clear existing list
 		self._store.clear()
 
 		# add all applications to the list
-		for item in list_:
-			config_file = item[0]
-			config = self._application.associations_manager.get_association_config(config_file)
-
-			# skip adding application if config doesn't exist
-			if config is None:
-				continue
-
-			name = item[1]
-			icon = config['icon'] if config.has_key('icon') else 'image-missing'
-			selected = config_file in default_application
-
-			# add application to the list
-			self._store.append((selected, icon, name, config_file))
+		for application in application_list:
+			self._store.append((
+							application.id == default_application.id, 
+							application.icon, 
+							application.name, 
+							application.id
+						))
 
 	def _update_data(self):
 		"""Update widgets to represent item state"""
 		mime_type = self._application.associations_manager.get_mime_type(self._path)
+		description = self._application.associations_manager.get_mime_description(mime_type)
 		time_format = self._application.options.get('main', 'time_format')
 		human_readable = self._application.options.getboolean('main', 'human_readable_size')
 		item_stat = self._provider.get_stat(self._path, extended=True)
-
-		# get item description
-		description = gnomevfs.mime_get_description(mime_type)
 
 		# get item size
 		if self._is_file:

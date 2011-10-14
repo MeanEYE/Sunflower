@@ -16,8 +16,6 @@
 
 - Show rename when moving a single file in same directory
 
-- Change path should operate in separate thread
-
 - Mark symbolic links somehow
 
 - Space counts directory size in separate thread

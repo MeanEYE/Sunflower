@@ -82,7 +82,7 @@ msgstr "Версия"
 
 #: application/gui/preferences/plugins.py:86
 msgid "Contact"
-msgstr "Контактная информация"
+msgstr "Связаться с разработчиком"
 
 #: application/gui/preferences/plugins.py:95
 msgid "Visit site"

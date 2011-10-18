@@ -44,6 +44,9 @@ class TitleBar(gtk.HBox):
 			self._spinner.set_size_request(20, 20)
 			self._spinner.set_property('no-show-all', True)
 
+		else:
+			self._spinner = None
+
 		# pack interface
 		vbox.pack_start(self._title_label, True, True, 0)
 		vbox.pack_start(self._subtitle_label, False, False, 0)

@@ -1,3 +1,5 @@
+- Make icons in open with menu always visible
+
 - Prevent columns-changed signal for emitting on application close
 
 - Lazy accelerator switch (should fix some of the crash problems)

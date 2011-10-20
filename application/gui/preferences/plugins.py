@@ -198,7 +198,7 @@ class PluginsOptions(SettingsPage):
 				config = ConfigParser()
 				config.read(plugin_config_file)
 
-				if config.has_section(Section.NAME):
+				if config.has_section(Section.NAME) and language is not None:
 					if config.has_option(Section.NAME, language):
 						# try to get plugin name for current language
 						plugin_name = config.get(Section.NAME, language)

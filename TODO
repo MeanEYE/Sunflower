@@ -1,3 +1,5 @@
+- Create methods for getting total and free space from a specific provider
+
 - Make icons in open with menu always visible
 
 - Prevent columns-changed signal for emitting on application close

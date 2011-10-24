@@ -1,3 +1,9 @@
+Version 0.1a-36
+  * Properly handle cases when locale can not be detected
+
+Version 0.1a-35-1
+  * Fixed problem with starting Sunflower on systems with older PyGTK
+
 Version 0.1a-35
   + Added "Other application..." menu item in "Open with" menu
   + Added support for plugin configuration files

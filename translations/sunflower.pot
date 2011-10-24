@@ -361,6 +361,10 @@ msgid ""
 "this issue your quick search settings were restored to default."
 msgstr ""
 
+#: application/gui/preferences/accelerators.py:19
+msgid "Key bindings"
+msgstr ""
+
 #: application/gui/main_window.py:90 application/gui/main_window.py:1385
 #: application/gui/changelog_dialog.py:51 application/gui/about_window.py:49
 msgid "Sunflower"

@@ -125,7 +125,7 @@ class PluginsOptions(SettingsPage):
 
 		if selected_iter is not None:
 			email = item_store.get_value(selected_iter, Column.CONTACT)
-			email = 'gnome-open mailto:{0}'.format(email)
+			email = 'xdg-open mailto:{0}'.format(email)
 
 			os.system(email)
 

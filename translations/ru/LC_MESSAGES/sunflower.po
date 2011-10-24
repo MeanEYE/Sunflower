@@ -117,7 +117,7 @@ msgid "Location"
 msgstr "Расположение"
 
 #: application/gui/preferences/accelerators.py:19
-msgid "Keybindings"
+msgid "Key bindings"
 msgstr "Комбинации клавиш"
 
 #: application/gui/preferences/accelerators.py:52
@@ -707,7 +707,7 @@ msgid ""
 "options plugin and try again."
 msgstr ""
 "Модули поиска файлов не найдены. Пожалуйста, активируйте "
-"модуль \"Basic find file options\" и попробуйте снова."
+"модуль \"find_file_extensions\" и попробуйте снова."
 
 #: application/gui/preferences_window.py:28
 msgid "Preferences"
@@ -1575,7 +1575,7 @@ msgstr "Системный терминал"
 msgid "Use this extension"
 msgstr "Использовать это расширение"
 
-#: application/plugin_base/plugin.py:104
+#: application/plugin_base/plugin.py:105
 msgid "Plugin Base"
 msgstr "База модулей"
 
@@ -1652,7 +1652,6 @@ msgstr "Выполнить выделенный объект"
 
 #: application/plugin_base/item_list.py:198
 msgid "Select application and execute item"
-msgstr "Выбрать приложение и выполнить файл"
 
 #: application/plugin_base/item_list.py:199
 msgid "Show selected item properties"

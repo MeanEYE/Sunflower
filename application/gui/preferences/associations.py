@@ -20,6 +20,11 @@ class AssociationsOptions(SettingsPage):
 		# create add menu
 		self._add_menu = gtk.Menu()
 		
+		item_add_mime_type = gtk.MenuItem(label=_('Add mime type'))
+		item_add_application = gtk.MenuItem(label=_('Add application to mime type'))
+		
+		self._add_menu.append(item_add_mime_type)
+		self._add_menu.append(item_add_application)
 		
 		self._add_menu.show_all()
 		
@@ -48,8 +53,8 @@ class AssociationsOptions(SettingsPage):
 	def __get_menu_position(self, menu, button):
 		"""Get history menu position"""
 		# get coordinates
-		window_x, window_y = self._parent.window.window.get_position()
-		button_x, button_y = button.translate_coordinates(self._parent.window, 0, 0)
+		window_x, window_y = self._parent.window.get_position()
+		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
 		button_h = button.get_allocation().height
 
 		# calculate absolute menu position

@@ -5,7 +5,7 @@ import urllib
 import common
 
 from plugin import PluginBase
-
+from common import executable_exists
 from operation import CopyOperation, MoveOperation
 from accelerator_group import AcceleratorGroup
 from gui.input_dialog import CopyDialog, MoveDialog
@@ -837,6 +837,9 @@ class ItemList(PluginBase):
 							})
 		result.append(item)
 		self._send_to_item = item
+		
+		if not executable_exists('nautilus-sendto'):
+			self._send_to_item.set_visible(False)
 
 		# link/rename
 		item = menu_manager.create_menu_item({

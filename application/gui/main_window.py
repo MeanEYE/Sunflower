@@ -54,7 +54,7 @@ class MainWindow(gtk.Window):
 			'stage': 'a'
 		}
 
-	NAUTILUS_INSTALLED = common.executable_exists('nautilus-sendwto')
+	NAUTILUS_SEND_TO_INSTALLED = common.executable_exists('nautilus-sendwto')
 		
 	def __init__(self):
 		# create main window and other widgets
@@ -251,7 +251,7 @@ class MainWindow(gtk.Window):
 						'image': 'document-send',
 						'callback': self._command_send_to,
 						'path': '<Sunflower>/Edit/SendTo',
-						'visible': self.NAUTILUS_INSTALLED,
+						'visible': self.NAUTILUS_SEND_TO_INSTALLED,
 					},
 					{
 						'label': _('Ma_ke link'),

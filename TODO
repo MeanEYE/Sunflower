@@ -30,8 +30,6 @@
 
 - Terminal tab without scrollbars forces window size
 
-- Check if nautilus-sendto exists and set menu item sensitivity appropriately
-
 - Set tooltip text for long filenames in file list
 
 - Configurable toolbar look

@@ -1,8 +1,9 @@
 import os
 import stat
 import shutil
+import common
 
-from provider import Provider, FileType, FileInfo, FileInfoExtended
+from provider import Provider, FileType, FileInfo, FileInfoExtended, SystemSize
 
 
 class LocalProvider(Provider):
@@ -176,3 +177,30 @@ class LocalProvider(Provider):
 		"""Get directory list"""
 		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		return os.listdir(real_path)
+
+	def get_system_size(self, path):
+		"""Return system size information"""
+		try:
+			stat = os.statvfs(path)
+
+			space_free = common.format_size(stat.f_bsize * stat.f_bavail)
+			space_total = common.format_size(stat.f_bsize * stat.f_blocks)
+
+			result = SystemSize(
+						block_size = stat.f_bsize,
+						block_total = stat.f_blocks, 
+						block_available = stat.f_bavail,
+						size_total = space_total,
+						size_available = space_free
+					)
+
+		except:
+			result = SystemSize(
+						block_size = 0,
+						block_total = 0, 
+						block_available = 0,
+						size_total = 0,
+						size_available = 0
+					)
+
+		return result

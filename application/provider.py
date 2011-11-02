@@ -28,6 +28,17 @@ FileInfoExtended = namedtuple(
 					'device',  # device inode resides on
 					'inode'  # inode number
 				])
+				
+
+SystemSize = namedtuple(
+				'SystemSize',
+				[
+					'block_size',  # block size in bytes
+					'block_total',  # total block on specified system
+					'block_available',  # available blocks
+					'size_total',  # total system size in bytes
+					'size_available'  # available size in bytes
+				])
 
 
 class FileType:
@@ -155,3 +166,7 @@ class Provider:
 	def get_parent(self):
 		"""Return parent list"""
 		return self._parent
+
+	def get_system_size(self, path):
+		"""Return system size information"""
+		pass

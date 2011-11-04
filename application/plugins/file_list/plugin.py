@@ -809,7 +809,6 @@ class FileList(ItemList):
 
 		# node created
 		if event is gio.FILE_MONITOR_EVENT_CREATED:
-			print 'came'
 			# temporarily fix problem with duplicating items when file was saved with GIO
 			if self._find_iter_by_name(file_.get_basename()) is None:
 				if file_.get_basename()[0] == '.' and not show_hidden:
@@ -957,7 +956,6 @@ class FileList(ItemList):
 		result = None
 		provider = self.get_provider()
 
-		print 'add came'
 		file_stat = provider.get_stat(filename, relative_to=self.path)
 
 		file_size = file_stat.size

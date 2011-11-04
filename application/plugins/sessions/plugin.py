@@ -1,10 +1,10 @@
 import gtk
+import os
 
 from widgets.settings_page import SettingsPage
 
 main_window = None
 item_sessions = None
-menu_sessions = None
 config = None
 
 class SessionsOptions(SettingsPage):
@@ -12,6 +12,7 @@ class SessionsOptions(SettingsPage):
 
 	def __init__(self, parent, application):
 		SettingsPage.__init__(self, parent, application, 'sessions', _('Sessions'))
+		self._tab_options = application.tab_options
 
 		# create list box
 		container = gtk.ScrolledWindow()
@@ -73,32 +74,79 @@ class SessionsOptions(SettingsPage):
 	def _load_options(self):
 		"""Load options and update interface"""
 		self._session_store.clear()
-		sessions = _get_sessions_list(self._application)
+		sessions = _get_sessions_list(self._tab_options)
 		for session in sessions:
-			self.add_session(_get_session_name(self._application, session), session)
+			self._session_store.append((_get_session_name(self._tab_options, session), session))
 
 	def _save_options(self):
 		"""Method called when save button is clicked"""
-		pass
+		# prepere data in convince format
+		sessions = {}
+		order = ''
+		for session in self._session_store:
+			sessions[session[0]] = session[1]
+			order += str(session[1]) + ':'
+		actual_sessions = _get_sessions_list(self._tab_options)
 
-	def add_session(self, name, identifier):
-		"""Adds session to the store"""
-		self._session_store.append((name, identifier))
+		# save names
+		for name, identifier in sessions.iteritems():
+			self._tab_options.set('names', 'session_{0}'.format(identifier), name)
+
+		# delete old sesions
+		for identifier in actual_sessions:
+			if identifier not in sessions.values():
+				self._tab_options.remove_section('left_{0}'.format(identifier))
+				self._tab_options.remove_section('right_{0}'.format(identifier))
+				self._tab_options.remove_option('options', 'left_{0}_selected'.format(identifier))
+				self._tab_options.remove_option('options', 'right_{0}_selected'.format(identifier))
+				self._tab_options.remove_option('names', 'session_{0}'.format(identifier))
+				
+		# add new sessions
+		for identifier in sessions.values():
+			if identifier not in actual_sessions:
+				try:
+					self._tab_options.add_section('left_{0}'.format(identifier))
+					self._tab_options.add_section('right_{0}'.format(identifier))
+				except:
+					pass
+				self._tab_options.set('options', 'left_{0}_selected'.format(identifier), '0')
+				self._tab_options.set('options', 'right_{0}_selected'.format(identifier), '0')
+				home_tab = 'FileList:{0}:0:1'.format(os.path.expanduser('~'))
+				self._tab_options.set('left_{0}'.format(identifier), 'tab_0', home_tab)
+				self._tab_options.set('right_{0}'.format(identifier), 'tab_0', home_tab)
+				
+		# save new order
+		self._tab_options.set('sessions', 'session_order', order[:-1])
+		
+		# recreate menu
+		item_sessions.remove_submenu()
+		_create_menu()
 
 	def _handle_edited_name(self, cell, path, text, column):
 		"""Filter new names"""
-		if not text in _get_sessions_name_list(self._application):
-			iter_ = self._session_store.get_iter(path)
-			self._session_store.set_value(iter_, column, text)
+		# check if name already exists
+		for session in self._session_store:
+			if text == session[0]:
+				return
+		
+		# change name
+		iter_ = self._session_store.get_iter(path)
+		self._session_store.set_value(iter_, column, text)
 
-			# enable save button
-			self._parent.enable_save()
+		# enable save button
+		self._parent.enable_save()
 	
 	def _handle_add_session(self, widget, data=None):
 		"""Add new session to the store"""
-		# generate new identifier
-		identifier = 100
-		self.add_session(_('New session'), identifier)
+		# generate unique identifier
+		identifier = 0
+		for session in self._session_store:
+			if int(session[1]) > identifier:
+				identifier = int(session[1])
+		identifier += 1
+			
+		# add session
+		self._session_store.append((_('New session') + str(identifier), identifier))
 
 		# enable save button
 		self._parent.enable_save()
@@ -162,8 +210,10 @@ def save_current_session():
 
 def _close_tabs(notebook, num):
 	"""Closes first 'num' pages in 'notebook'"""
+	page = notebook.get_current_page()
 	for i in range(num):
 		main_window.close_tab(notebook, notebook.get_nth_page(0))
+	main_window.set_active_tab(notebook, page)
 
 def _first_start_specific_actions():
 	"""Adds required options to configuration if they are not present"""
@@ -175,21 +225,32 @@ def _first_start_specific_actions():
 		main_window.tab_options.set('sessions', 'session_order', '0')
 		main_window.tab_options.set('sessions', 'current', '0')
 
-def _get_session_name(application, identifier):
-	"""Returns sesions name basing on its identifier"""
-	return application.tab_options.get('names', 'session_{0}'.format(identifier))
+def _create_menu():
+	"""Creates menu"""
+	menu_sessions = gtk.Menu()
+	item_manage = gtk.MenuItem(_('Manage sessions'))
+	item_separator = gtk.MenuItem()
+		
+	# pack menus and connect signals
+	menu_sessions.append(item_manage)
+	menu_sessions.append(item_separator)	
+	for session in _get_sessions_list(main_window.tab_options):
+		item = gtk.MenuItem(_get_session_name(main_window.tab_options, session))
+		menu_sessions.append(item)
+		item.connect('activate', change_session, session)
+	item_sessions.set_submenu(menu_sessions)
+	item_manage.connect('activate', show_sessions_manager)
 
-def _get_sessions_list(application):
+	# add to file menu and show it
+	item_sessions.show_all()
+
+def _get_session_name(tab_options, identifier):
+	"""Returns sesions name basing on its identifier"""
+	return tab_options.get('names', 'session_{0}'.format(identifier))
+
+def _get_sessions_list(tab_options):
 	"""Returns ordered list of sessions"""
-	return application.tab_options.get('sessions', 'session_order').split(':')
-	
-def _get_sessions_name_list(application):
-	"""Return ordered list of sessions names"""
-	result = []
-	ids = _get_sessions_list(application)
-	for session in ids:
-		result.append(_get_session_name(application, session))
-	return result
+	return tab_options.get('sessions', 'session_order').split(':')
 
 def register_plugin(application):
 	"""Method that Sunflower calls once plugin is loaded"""
@@ -197,27 +258,12 @@ def register_plugin(application):
 	main_window = application
 	_first_start_specific_actions()
 	save_current_session()
-	sessions = _get_sessions_list(main_window)
 	
 	# create menu
-	menu_sessions = gtk.Menu()
+	global item_sessions
 	item_sessions = gtk.MenuItem(_('Sessions'))
-	item_manage = gtk.MenuItem(_('Manage sessions'))
-	item_separator = gtk.MenuItem()
-		
-	# pack menus and connect signals
-	menu_sessions.append(item_manage)
-	menu_sessions.append(item_separator)	
-	for session in sessions:
-		item = gtk.MenuItem(_get_session_name(main_window, session))
-		menu_sessions.append(item)
-		item.connect('activate', change_session, session)
-	item_sessions.set_submenu(menu_sessions)
-	item_manage.connect('activate', show_sessions_manager)
-
-	# add to file menu and show it
+	_create_menu()
 	main_window.menu_manager.get_item_by_name('file').get_submenu().insert(item_sessions, 1)
-	item_sessions.show_all()
 	
 	# add configuration
 	global config

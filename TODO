@@ -1,4 +1,5 @@
-- Create methods for getting total and free space from a specific provider
+- On copy/move operation when checking whether the remote directory or file exists we should
+check how many parts of path exist and cache that and skip the rest of the files.
 
 - Make icons in open with menu always visible
 

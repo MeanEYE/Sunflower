@@ -809,10 +809,13 @@ class FileList(ItemList):
 
 		# node created
 		if event is gio.FILE_MONITOR_EVENT_CREATED:
+			print 'came'
 			# temporarily fix problem with duplicating items when file was saved with GIO
 			if self._find_iter_by_name(file_.get_basename()) is None:
-				if not file_.get_basename()[0] == '.' and not show_hidden:
-					self._add_item(file_.get_basename())
+				if file_.get_basename()[0] == '.' and not show_hidden:
+					return
+					
+				self._add_item(file_.get_basename())
 
 			else:
 				self._update_item_details_by_name(file_.get_basename())
@@ -954,6 +957,7 @@ class FileList(ItemList):
 		result = None
 		provider = self.get_provider()
 
+		print 'add came'
 		file_stat = provider.get_stat(filename, relative_to=self.path)
 
 		file_size = file_stat.size
@@ -1122,22 +1126,14 @@ class FileList(ItemList):
 	def _change_title_text(self, text=None):
 		"""Change title label text and add free space display"""
 		if text is None: text = self.path
-		
-		try:
-			stat = os.statvfs(self.path)
 
-			space_free = common.format_size(stat.f_bsize * stat.f_bavail)
-			space_total = common.format_size(stat.f_bsize * stat.f_blocks)
-			
-		except:
-			space_free = 0;
-			space_total = 0;
+		system_size = self.get_provider().get_system_size(self.path)
 
 		self._title_bar.set_title(text)
 		self._title_bar.set_subtitle(
 									'{2} {0} - {3} {1}'.format(
-															space_free,
-															space_total,
+															system_size.size_available,
+															system_size.size_total,
 															_('Free:'),
 															_('Total:')
 														)

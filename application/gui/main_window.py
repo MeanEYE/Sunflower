@@ -140,6 +140,7 @@ class MainWindow(gtk.Window):
 		menu_items = (
 			{
 				'label': _('File'),
+		        'name': 'file',
 				'submenu': (
 					{
 						'label': _('New tab'),

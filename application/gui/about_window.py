@@ -38,6 +38,11 @@ class AboutWindow(gtk.Window):
 			email = 'grigory.v.p@gmail.com',
 			website = None,
 		),
+		Contributor(
+			name = 'Sebastian Gaul',
+			email = 'sebastian@dev.mgvmedia.com',
+			website = 'http://sgaul.de',
+		),
 	]
 
 	# list of artists
@@ -265,16 +270,16 @@ class AboutWindow(gtk.Window):
 		"""Splits the list of contributors by language"""
 		groups = []
 		lang_dict = {}
-		
+
 		for contributor in contributors:
 			if not contributor.language in lang_dict:
 				lang_dict[contributor.language] = []
-				
+
 			lang_dict[contributor.language].append(contributor)
 
 		for lang in lang_dict:
 			groups.append((lang, lang_dict[lang]))
-			
+
 		return groups
 
 	def _create_contributor_table(self, caption, contributors):
@@ -282,7 +287,7 @@ class AboutWindow(gtk.Window):
 		table = gtk.Table(2, 3, False)
 		table.set_row_spacings(5)
 		table.set_col_spacings(3)
-		
+
 		return self._add_contributors_to_table(table, caption, contributors)
 
 	def _add_contributors_to_table(self, table, caption, contributors):
@@ -302,7 +307,10 @@ class AboutWindow(gtk.Window):
 		for group in contributors:
 			# add group language (e.g. language)
 			if group[0]:
-				lang = gtk.Label('\t<u>' + group[0] + '</u>')
+				table.attach(gtk.HSeparator(), 0, 3, row_index + 1, row_index + 2)
+				row_index += 1
+
+				lang = gtk.Label('\t' + group[0])
 				lang.set_alignment(0, 0)
 				lang.set_selectable(True)
 				lang.set_use_markup(True)
@@ -337,7 +345,7 @@ class AboutWindow(gtk.Window):
 
 		# store current row_index for upcoming method calls
 		self.table_row_index = row_index
-		
+
 		return table
 
 	def _create_license_tab(self):

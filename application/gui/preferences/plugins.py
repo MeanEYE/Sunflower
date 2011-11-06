@@ -125,7 +125,7 @@ class PluginsOptions(SettingsPage):
 
 		if selected_iter is not None:
 			email = item_store.get_value(selected_iter, Column.CONTACT)
-			email = 'gnome-open mailto:{0}'.format(email)
+			email = 'xdg-open mailto:{0}'.format(email)
 
 			os.system(email)
 
@@ -198,7 +198,7 @@ class PluginsOptions(SettingsPage):
 				config = ConfigParser()
 				config.read(plugin_config_file)
 
-				if config.has_section(Section.NAME):
+				if config.has_section(Section.NAME) and language is not None:
 					if config.has_option(Section.NAME, language):
 						# try to get plugin name for current language
 						plugin_name = config.get(Section.NAME, language)

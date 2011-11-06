@@ -1,3 +1,11 @@
+- Create option to duplicate selected file with new name. In cases where both left and right path
+are same and only one file is selected offer this option by default.
+
+- On copy/move operation when checking whether the remote directory or file exists we should
+check how many parts of path exist and cache that and skip the rest of the files.
+
+- Make icons in open with menu always visible
+
 - Prevent columns-changed signal for emitting on application close
 
 - Lazy accelerator switch (should fix some of the crash problems)
@@ -25,8 +33,6 @@
 - Upon receiving focus file list should check validity of its current path
 
 - Terminal tab without scrollbars forces window size
-
-- Check if nautilus-sendto exists and set menu item sensitivity appropriately
 
 - Set tooltip text for long filenames in file list
 

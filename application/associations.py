@@ -79,14 +79,21 @@ class AssociationManager:
 	def get_default_application_for_type(self, mime_type):
 		"""Get default application for specified type"""
 		app_info = gio.app_info_get_default_for_type(mime_type, must_support_uris=False)
-		application = ApplicationInfo(
-								id = app_info.get_id(),
-								name = app_info.get_name(),
-								description = app_info.get_description(),
-								executable = app_info.get_executable(),
-								command_line = app_info.get_commandline(),
-								icon = self.__get_icon(app_info.get_icon())
-							)
+		
+		if app_info is not None:
+			# create application container
+			application = ApplicationInfo(
+									id = app_info.get_id(),
+									name = app_info.get_name(),
+									description = app_info.get_description(),
+									executable = app_info.get_executable(),
+									command_line = app_info.get_commandline(),
+									icon = self.__get_icon(app_info.get_icon())
+								)
+								
+		else:
+			# return None if there is no default application for this type
+			application = None
 					
 		return application
 

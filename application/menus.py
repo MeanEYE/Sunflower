@@ -181,5 +181,11 @@ class MenuManager:
 		if item.has_key('path'):
 			new_item.set_accel_path(item['path'])
 
-		new_item.show_all()
+		# set initial item visibility
+		item_visible = item['visible'] if item.has_key('visible') else True
+		new_item.set_visible(item_visible)
+		
+		if not item_visible:
+			new_item.set_property('no-show-all', True)
+		
 		return new_item

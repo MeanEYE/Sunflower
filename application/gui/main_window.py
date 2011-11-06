@@ -54,6 +54,8 @@ class MainWindow(gtk.Window):
 			'stage': 'a'
 		}
 
+	NAUTILUS_SEND_TO_INSTALLED = common.executable_exists('nautilus-sendwto')
+		
 	def __init__(self):
 		# create main window and other widgets
 		gtk.Window.__init__(self, type=gtk.WINDOW_TOPLEVEL)
@@ -138,6 +140,7 @@ class MainWindow(gtk.Window):
 		menu_items = (
 			{
 				'label': _('File'),
+		        'name': 'file',
 				'submenu': (
 					{
 						'label': _('New tab'),
@@ -249,6 +252,7 @@ class MainWindow(gtk.Window):
 						'image': 'document-send',
 						'callback': self._command_send_to,
 						'path': '<Sunflower>/Edit/SendTo',
+						'visible': self.NAUTILUS_SEND_TO_INSTALLED,
 					},
 					{
 						'label': _('Ma_ke link'),

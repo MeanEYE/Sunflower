@@ -5,7 +5,6 @@ import urllib
 import common
 
 from plugin import PluginBase
-
 from operation import CopyOperation, MoveOperation
 from accelerator_group import AcceleratorGroup
 from gui.input_dialog import CopyDialog, MoveDialog
@@ -834,6 +833,7 @@ class ItemList(PluginBase):
 								'callback': self._send_to,
 								'type': 'image',
 								'image': 'document-send',
+								'visible': self._parent.NAUTILUS_SEND_TO_INSTALLED,
 							})
 		result.append(item)
 		self._send_to_item = item

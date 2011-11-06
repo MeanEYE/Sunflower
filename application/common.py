@@ -58,3 +58,14 @@ def is_x_app(command):
 
 	return 'libX11.so' in output[0]
 
+def executable_exists(command):
+	"""Check if specified command exists in search path"""
+	paths = os.environ["PATH"].split(os.pathsep)
+	result = False
+
+	for path in paths:
+		if os.path.exists(os.path.join(path, command)):
+			result = True
+			break
+		
+	return result

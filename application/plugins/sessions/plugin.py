@@ -81,20 +81,20 @@ class SessionsOptions(SettingsPage):
 	def _save_options(self):
 		"""Method called when save button is clicked"""
 		# prepere data in convince format
-		sessions = {}
-		order = ''
+		identifiers = list()
+		names = list()		
 		for session in self._session_store:
-			sessions[session[0]] = session[1]
-			order += str(session[1]) + ':'
+			names.append(session[0])
+			identifiers.append(session[1])
 		actual_sessions = _get_sessions_list(self._tab_options)
 
 		# save names
-		for name, identifier in sessions.iteritems():
+		for name, identifier in zip(names, identifiers):
 			self._tab_options.set('names', 'session_{0}'.format(identifier), name)
 
 		# delete old sesions
 		for identifier in actual_sessions:
-			if identifier not in sessions.values():
+			if identifier not in identifiers:
 				self._tab_options.remove_section('left_{0}'.format(identifier))
 				self._tab_options.remove_section('right_{0}'.format(identifier))
 				self._tab_options.remove_option('options', 'left_{0}_selected'.format(identifier))
@@ -102,7 +102,7 @@ class SessionsOptions(SettingsPage):
 				self._tab_options.remove_option('names', 'session_{0}'.format(identifier))
 				
 		# add new sessions
-		for identifier in sessions.values():
+		for identifier in identifiers:
 			if identifier not in actual_sessions:
 				try:
 					self._tab_options.add_section('left_{0}'.format(identifier))
@@ -116,7 +116,7 @@ class SessionsOptions(SettingsPage):
 				self._tab_options.set('right_{0}'.format(identifier), 'tab_0', home_tab)
 				
 		# save new order
-		self._tab_options.set('sessions', 'session_order', order[:-1])
+		self._tab_options.set('sessions', 'session_order', ':'.join(identifiers))
 		
 		# recreate menu
 		item_sessions.remove_submenu()
@@ -230,14 +230,19 @@ def _create_menu():
 	menu_sessions = gtk.Menu()
 	item_manage = gtk.MenuItem(_('Manage sessions'))
 	item_separator = gtk.MenuItem()
+	current_session = main_window.tab_options.get('sessions', 'current')
 		
 	# pack menus and connect signals
+	group = None
 	menu_sessions.append(item_manage)
 	menu_sessions.append(item_separator)	
 	for session in _get_sessions_list(main_window.tab_options):
-		item = gtk.MenuItem(_get_session_name(main_window.tab_options, session))
+		item = gtk.RadioMenuItem(group, _get_session_name(main_window.tab_options, session))
 		menu_sessions.append(item)
 		item.connect('activate', change_session, session)
+		if session == current_session:
+			item.set_active(True)
+		group = item
 	item_sessions.set_submenu(menu_sessions)
 	item_manage.connect('activate', show_sessions_manager)
 

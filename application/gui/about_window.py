@@ -302,15 +302,18 @@ class AboutWindow(gtk.Window):
 		table.set_row_spacing(row_index, 10)
 		if row_index > 0:
 			table.set_row_spacing(row_index - 1, 15)
+		first_group = True
 
 		# add contributors
 		for group in contributors:
 			# add group language (e.g. language)
 			if group[0]:
-				table.attach(gtk.HSeparator(), 0, 3, row_index + 1, row_index + 2)
-				row_index += 1
+				if not first_group:
+					table.attach(gtk.HSeparator(), 0, 3, row_index + 1, row_index + 2)
+					row_index += 1
+				first_group = False
 
-				lang = gtk.Label('\t' + group[0])
+				lang = gtk.Label('\t<i>' + group[0] + '</i>')
 				lang.set_alignment(0, 0)
 				lang.set_selectable(True)
 				lang.set_use_markup(True)

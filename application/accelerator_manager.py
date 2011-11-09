@@ -35,10 +35,7 @@ class AcceleratorManager:
 		# try to load only if config has accelerator specified
 		if self._config.has_section(section) \
 		and self._config.has_option(section, name):
-			accelerator = gtk.accelerator_parse(self._config.get(section, name))
-
-			if gtk.accelerator_valid(*accelerator):
-				result = accelerator
+			result = gtk.accelerator_parse(self._config.get(section, name))
 
 		return result
 

@@ -98,6 +98,7 @@ class MenuManager:
 			# create menu item
 			item = gtk.ImageMenuItem()
 			item.set_label(application.name)
+			item.set_always_show_image(True)
 
 			# create new image
 			if application.icon:

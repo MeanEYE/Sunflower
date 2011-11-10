@@ -110,6 +110,7 @@ class PluginBase(gtk.VBox):
 		group.add_method('previous_tab', _('Previous tab'), self._notebook_previous_tab)
 		group.add_method('duplicate_tab', _('Duplicate tab'), self._duplicate_tab)
 		group.add_method('close_tab', _('Close tab'), self._close_tab)
+		group.add_method('focus_command_entry', _('Focus command entry'), self._focus_command_entry)
 
 		# configure accelerators
 		group.set_accelerator('focus_oposite_object', keyval('Tab'), 0)
@@ -117,6 +118,7 @@ class PluginBase(gtk.VBox):
 		group.set_accelerator('previous_tab', keyval('Tab'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('duplicate_tab', keyval('t'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('close_tab', keyval('w'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('focus_command_entry', keyval('Down'), gtk.gdk.MOD1_MASK)
 
 		# add accelerator group to the list
 		self._accelerator_groups.append(group)
@@ -195,6 +197,11 @@ class PluginBase(gtk.VBox):
 	def _notebook_previous_tab(self, widget, data=None):
 		"""Go to previous tab in parent Notebook"""
 		self._parent.previous_tab(self._notebook)
+		return True
+
+	def _focus_command_entry(self, widget=None, data=None):
+		"""Focus command entry in main window"""
+		self._parent.focus_command_entry()
 		return True
 
 	def _show_status_bar(self):

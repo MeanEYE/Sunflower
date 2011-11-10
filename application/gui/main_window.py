@@ -2017,6 +2017,24 @@ class MainWindow(gtk.Window):
 
 		return True
 
+	def focus_command_entry(self, widget=None, data=None):
+		"""Focus main command entry widget"""
+		self.command_edit.grab_focus()
+
+	def focus_left_object(self, widget=None, data=None):
+		"""Focus object in the left notebook"""
+		left_object = self.left_notebook.get_nth_page(self.left_notebook.get_current_page())
+
+		if left_object is not None:
+			left_object._main_object.grab_focus()
+
+	def focus_right_object(self, widget=None, data=None):
+		"""Focus object in the right notebook"""
+		right_object = self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
+
+		if right_object is not None:
+			right_object._main_object.grab_focus()
+
 	def get_active_object(self):
 		"""Return active object"""
 		return self._active_object
@@ -2394,7 +2412,3 @@ class MainWindow(gtk.Window):
 
 			# show preferences window
 			self.preferences_window._show(None, tab_name='plugins')
-
-	def focus_command_entry(self, widget=None, data=None):
-		"""Focus main command entry widget"""
-		self.command_edit.grab_focus()

@@ -2395,3 +2395,6 @@ class MainWindow(gtk.Window):
 			# show preferences window
 			self.preferences_window._show(None, tab_name='plugins')
 
+	def focus_command_entry(self, widget=None, data=None):
+		"""Focus main command entry widget"""
+		self.command_edit.grab_focus()

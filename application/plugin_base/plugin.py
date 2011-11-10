@@ -111,6 +111,8 @@ class PluginBase(gtk.VBox):
 		group.add_method('duplicate_tab', _('Duplicate tab'), self._duplicate_tab)
 		group.add_method('close_tab', _('Close tab'), self._close_tab)
 		group.add_method('focus_command_entry', _('Focus command entry'), self._focus_command_entry)
+		group.add_method('focus_left_object', _('Focus left object'), self._focus_left_object)
+		group.add_method('focus_right_object', _('Focus right object'), self._focus_right_object)
 
 		# configure accelerators
 		group.set_accelerator('focus_oposite_object', keyval('Tab'), 0)
@@ -119,6 +121,8 @@ class PluginBase(gtk.VBox):
 		group.set_accelerator('duplicate_tab', keyval('t'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('close_tab', keyval('w'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('focus_command_entry', keyval('Down'), gtk.gdk.MOD1_MASK)
+		group.set_accelerator('focus_left_object', keyval('Left'), gtk.gdk.MOD1_MASK)
+		group.set_accelerator('focus_right_object', keyval('Right'), gtk.gdk.MOD1_MASK)
 
 		# add accelerator group to the list
 		self._accelerator_groups.append(group)
@@ -202,6 +206,16 @@ class PluginBase(gtk.VBox):
 	def _focus_command_entry(self, widget=None, data=None):
 		"""Focus command entry in main window"""
 		self._parent.focus_command_entry()
+		return True
+
+	def _focus_left_object(self, widget=None, data=None):
+		"""Focus left object"""
+		self._parent.focus_left_object()
+		return True
+
+	def _focus_right_object(self, widget=None, data=None):
+		"""Focus right object"""
+		self._parent.focus_right_object()
 		return True
 
 	def _show_status_bar(self):

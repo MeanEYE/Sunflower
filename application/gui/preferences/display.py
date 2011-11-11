@@ -100,9 +100,11 @@ class DisplayOptions(SettingsPage):
 
 		self._checkbox_hide_window_on_minimize = gtk.CheckButton(_('Hide operation window on minimize'))
 		self._checkbox_human_readable_size = gtk.CheckButton(_('Show sizes in human readable format'))
+		self._checkbox_show_notifications = gtk.CheckButton(_('Show notifications'))
 
 		self._checkbox_hide_window_on_minimize.connect('toggled', self._parent.enable_save)
 		self._checkbox_human_readable_size.connect('toggled', self._parent.enable_save)
+		self._checkbox_show_notifications.connect('toggled', self._parent.enable_save)
 
 		# pack ui
 		table.attach(label_status_bar, 0, 1, 0, 1, xoptions=gtk.FILL)
@@ -126,6 +128,7 @@ class DisplayOptions(SettingsPage):
 
 		vbox_other.pack_start(self._checkbox_hide_window_on_minimize, False, False, 0)
 		vbox_other.pack_start(self._checkbox_human_readable_size, False, False, 0)
+		vbox_other.pack_start(self._checkbox_show_notifications, False, False, 0)
 
 		notebook.append_page(vbox_main_window, label_main_window)
 		notebook.append_page(vbox_tabs, label_tabs)
@@ -149,6 +152,7 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_ubuntu_coloring.set_active(options.getboolean('main', 'ubuntu_coloring'))
 		self._checkbox_hide_window_on_minimize.set_active(options.getboolean('main', 'hide_operation_on_minimize'))
 		self._checkbox_human_readable_size.set_active(options.getboolean('main', 'human_readable_size'))
+		self._checkbox_show_notifications.set_active(options.getboolean('main', 'show_notifications'))
 		self._combobox_status_bar.set_active(options.getint('main', 'show_status_bar'))
 		self._combobox_expand_tabs.set_active(options.getint('main', 'expand_tabs'))
 
@@ -172,5 +176,7 @@ class DisplayOptions(SettingsPage):
 		options.set('main', 'ubuntu_coloring', _bool[self._checkbox_ubuntu_coloring.get_active()])
 		options.set('main', 'hide_operation_on_minimize', _bool[self._checkbox_hide_window_on_minimize.get_active()])
 		options.set('main', 'human_readable_size', _bool[self._checkbox_human_readable_size.get_active()])
+		options.set('main', 'show_notifications', _bool[self._checkbox_show_notifications.get_active()])
 		options.set('main', 'show_status_bar', self._combobox_status_bar.get_active())
 		options.set('main', 'expand_tabs', self._combobox_expand_tabs.get_active())
+

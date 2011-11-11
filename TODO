@@ -1,3 +1,7 @@
+- Loading directory items from separate thread doesn't update directory stats.
+
+- Fix Shift+Tab combination
+
 - Create option to duplicate selected file with new name. In cases where both left and right path
 are same and only one file is selected offer this option by default.
 

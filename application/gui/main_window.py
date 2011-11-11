@@ -2003,6 +2003,7 @@ class MainWindow(gtk.Window):
 				'show_status_bar': 0,
 				'human_readable_size': 'True',
 				'expand_tabs': 0,
+				'show_notifications': 'True',
 			}
 
 		# set default options

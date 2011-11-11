@@ -30,8 +30,13 @@ class NotificationManager:
 		if icon is None:  # make sure we show notification with icon
 			icon = self._default_icon
 
-		# create notification object
-		notification = pynotify.Notification(title, text, icon)
+		try:
+			# create notification object
+			notification = pynotify.Notification(title, text, icon)
 
-		# show notification
-		notification.show()
+			# show notification
+			notification.show()
+
+		except:
+			# we don't need to handle errors from notification daemon
+			pass

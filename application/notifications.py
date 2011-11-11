@@ -27,6 +27,9 @@ class NotificationManager:
 
 	def notify(self, title, text, icon=None):
 		"""Make system notification"""
+		if not self._application.options.getboolean('main', 'show_notifications'):
+			return  # if notifications are disabled
+
 		if icon is None:  # make sure we show notification with icon
 			icon = self._default_icon
 

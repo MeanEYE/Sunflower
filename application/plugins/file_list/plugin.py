@@ -330,14 +330,29 @@ class FileList(ItemList):
 	
 	def _execute_with_application(self, widget=None, data=None):
 		"""Execute/Open selected item with application user selects from the list"""
-		dialog = ApplicationSelectDialog(self._parent, '/home/meaneye/pi.py')
-		response = dialog.get_response()
-		
-		if response[0] == gtk.RESPONSE_OK:
-			self._parent.associations_manager.open_file(
-													self._get_selection_list(), 
-													exec_command=response[2]
-												)
+		selection = self._get_selection_list()
+
+		if selection is not None and len(selection) > 0:
+			dialog = ApplicationSelectDialog(self._parent, selection[0])
+			response = dialog.get_response()
+
+			if response[0] == gtk.RESPONSE_OK:
+				self._parent.associations_manager.open_file(
+														selection, 
+														exec_command=response[2]
+													)
+
+		else:
+			# invalid selection, warn user
+			dialog = gtk.MessageDialog(
+									self._parent,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_WARNING,
+									gtk.BUTTONS_OK,
+									_('Invalid selection!') 
+								)
+			dialog.run()
+			dialog.destroy()
 
 	def _open_in_new_tab(self, widget=None, data=None):
 		"""Open selected directory in new tab"""

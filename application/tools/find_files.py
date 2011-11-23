@@ -304,7 +304,7 @@ class FindFiles:
 	def _choose_directory(self, widget=None, data=None):
 		"""Show 'FileChooser' dialog"""
 		dialog = gtk.FileChooserDialog(
-							title=None,
+							title=_('Find files'),
 							parent=self._application,
 							action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
 							buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)

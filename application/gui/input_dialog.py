@@ -1191,6 +1191,7 @@ class ApplicationSelectDialog(gtk.Dialog):
 		self._list.set_search_column(1)
 		self._list.set_enable_search(True)
 		self._list.connect('cursor-changed', self.__handle_cursor_change)
+		self._list.connect('row-activated', self.__handle_row_activated)
 		
 		self._store.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		
@@ -1241,6 +1242,10 @@ class ApplicationSelectDialog(gtk.Dialog):
 		if selected_iter is not None:
 			command = item_store.get_value(selected_iter, 3)
 			self._entry_custom.set_text(command)
+			
+	def __handle_row_activated(self, path=None, view_column=None, data=None):
+		"""Handle choosing application by presing 'Enter'"""
+		self.response(gtk.RESPONSE_OK)
 		
 	def _load_applications(self):
 		"""Populate application list from config files"""

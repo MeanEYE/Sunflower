@@ -307,12 +307,19 @@ class FindFiles:
 							title=_('Find files'),
 							parent=self._application,
 							action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
-							buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)
+							buttons=(
+								gtk.STOCK_CANCEL, 
+								gtk.RESPONSE_REJECT, 
+								gtk.STOCK_OK, 
+								gtk.RESPONSE_ACCEPT
+							)
 						)
 		dialog.set_filename(self._entry_path.get_text())
 		response = dialog.run()
+
 		if response == gtk.RESPONSE_ACCEPT:
 			self._entry_path.set_text(dialog.get_filename())
+
 		dialog.destroy()
 
 	def stop_search(self, widget=None, data=None):

@@ -64,6 +64,7 @@ class FindFiles:
 			self._entry_path.set_text(os.path.expanduser(user.home))
 
 		button_browse = gtk.Button(label=_('Browse'))
+		button_browse.connect('clicked', self._choose_directory)
 
 		self._checkbox_recursive = gtk.CheckButton(label=_('Search recursively'))
 		self._checkbox_recursive.set_active(True)
@@ -299,6 +300,20 @@ class FindFiles:
 		"""Close window"""
 		self._abort.set()  # notify search thread we are terminating
 		self.window.destroy()
+		
+	def _choose_directory(self, widget=None, data=None):
+		"""Show 'FileChooser' dialog"""
+		dialog = gtk.FileChooserDialog(
+							title=None,
+							parent=self._application,
+							action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
+							buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)
+						)
+		dialog.set_filename(self._entry_path.get_text())
+		response = dialog.run()
+		if response == gtk.RESPONSE_ACCEPT:
+			self._entry_path.set_text(dialog.get_filename())
+		dialog.destroy()
 
 	def stop_search(self, widget=None, data=None):
 		"""Stop searching for files"""

@@ -1,6 +1,12 @@
 import gtk
 
+from gui.input_dialog import InputDialog
 from widgets.settings_page import SettingsPage
+
+
+class Column:
+	NAME = 0
+	COMMAND = 1
 
 
 class AssociationsOptions(SettingsPage):
@@ -14,14 +20,33 @@ class AssociationsOptions(SettingsPage):
 		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 		container.set_shadow_type(gtk.SHADOW_IN)
 
-		self._associations = gtk.TreeStore(str, int, str)
+		self._associations = gtk.TreeStore(str, str)
 		self._list = gtk.TreeView(model=self._associations)
-		
+		self._list.set_rules_hint(True)
+		self._list.set_headers_visible(False)
+
+		cell_title = gtk.CellRendererText()
+		cell_command = gtk.CellRendererText()
+
+		col_title = gtk.TreeViewColumn(None, cell_title, text=0)
+		col_title.set_min_width(200)
+		col_title.set_resizable(True)
+
+		col_command = gtk.TreeViewColumn(None, cell_command, text=1)
+		col_command.set_resizable(True)
+		col_command.set_expand(True)
+
+		self._list.append_column(col_title)
+		self._list.append_column(col_command)
+
 		# create add menu
 		self._add_menu = gtk.Menu()
 		
 		item_add_mime_type = gtk.MenuItem(label=_('Add mime type'))
+		item_add_mime_type.connect('activate', self.__add_mime_type)
+
 		item_add_application = gtk.MenuItem(label=_('Add application to mime type'))
+		item_add_application.connect('activate', self.__add_application)
 		
 		self._add_menu.append(item_add_mime_type)
 		self._add_menu.append(item_add_application)
@@ -49,6 +74,39 @@ class AssociationsOptions(SettingsPage):
 						self.__get_menu_position,
 						1, 0, widget
 					)
+
+	def __add_mime_type(self, widget, data=None):
+		"""Show dialog for adding mime type"""
+		dialog = InputDialog(self._application)
+		dialog.set_title(_('Add mime type'))
+		dialog.set_label(_('Enter MIME type (eg. image/png):'))
+
+		response = dialog.get_response()
+
+		# add new mime type to the table
+		if response[0] == gtk.RESPONSE_OK:
+			mime_type = response[1]
+			description = self._application.associations_manager.get_mime_description(mime_type)
+			self._associations.append(None, (description, mime_type))
+
+	def __add_application(self, widget, data=None):
+		"""Show dialog for adding application to mime type"""
+		selection = self._list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		if selected_iter is not None:
+			level = item_list.iter_depth(selected_iter)
+
+			if level == 0:
+				parent = selected_iter
+			
+			else:
+				parent = selected_iter.parent_iter
+
+			print parent
+
+		else:
+			pass
 					
 	def __get_menu_position(self, menu, button):
 		"""Get history menu position"""

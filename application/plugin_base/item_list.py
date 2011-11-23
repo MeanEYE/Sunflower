@@ -924,11 +924,9 @@ class ItemList(PluginBase):
 
 		# if this method is called by Menu key data is actually event object
 		self._open_with_menu.popup(
-								None,
-								None,
+								None, None,
 								self._get_popup_menu_position,
-								1,
-								data.time
+								1, 0
 							)
 
 	def _show_popup_menu(self, widget=None, data=None):

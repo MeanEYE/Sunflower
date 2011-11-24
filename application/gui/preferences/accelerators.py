@@ -201,7 +201,7 @@ class AcceleratorOptions(SettingsPage):
 			group_name = self._accels.get_value(row.iter, Column.NAME)
 			children = row.iterchildren()
 			
-			# store accelerators for current group\
+			# store accelerators for current group
 			for child in children:
 				name = self._accels.get_value(child.iter, Column.NAME)
 

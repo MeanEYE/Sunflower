@@ -1123,6 +1123,47 @@ class InputRangeDialog(InputDialog):
 		return code, selection_range
 
 
+class ApplicationInputDialog(InputDialog):
+	"""Input dialog for associations manager. Offers two fiels
+	for entry: application name and command."""
+
+	def __init__(self, application):
+		InputDialog.__init__(self, application)
+
+		# configure existing components
+		self.set_title(_('Add application'))
+		self.set_label(_('Application name:'))
+
+		# create additional components
+		vbox_command = gtk.VBox(False, 0)
+
+		label_command = gtk.Label('Command:')
+		label_command.set_alignment(0, 0.5)
+
+		self._entry_command = gtk.Entry()
+		
+		# pack interface
+		vbox_command.pack_start(label_command, False, False, 0)
+		vbox_command.pack_start(self._entry_command, False, False, 0)
+
+		self._container.pack_start(vbox_command, False, False, 0)
+		self._container.set_spacing(5)
+
+		# show components
+		self.show_all()
+
+	def get_response(self):
+		"""Get response from dialog"""
+		code = self.run()
+
+		name = self._entry.get_text()
+		command = self._entry_command.get_text()
+
+		self.hide()
+
+		return code, name, command
+
+
 class ApplicationSelectDialog(gtk.Dialog):
 	"""Provides user with a list of installed applications and
 	option to enter command"""

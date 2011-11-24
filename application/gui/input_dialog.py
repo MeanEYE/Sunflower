@@ -1136,21 +1136,37 @@ class ApplicationInputDialog(InputDialog):
 
 		# create additional components
 		vbox_command = gtk.VBox(False, 0)
+		hbox_command = gtk.HBox(False, 5)
 
 		label_command = gtk.Label('Command:')
 		label_command.set_alignment(0, 0.5)
 
+		button_select = gtk.Button()
+		button_select.set_label(_('Select'))
+		button_select.connect('clicked', self.__select_application)
+
 		self._entry_command = gtk.Entry()
 		
 		# pack interface
+		hbox_command.pack_start(self._entry_command, True, True, 0)
+		hbox_command.pack_start(button_select, False, False, 0)
+
 		vbox_command.pack_start(label_command, False, False, 0)
-		vbox_command.pack_start(self._entry_command, False, False, 0)
+		vbox_command.pack_start(hbox_command, False, False, 0)
 
 		self._container.pack_start(vbox_command, False, False, 0)
 		self._container.set_spacing(5)
 
 		# show components
 		self.show_all()
+
+	def __select_application(self, widget, data=None):
+		"""Select application using ApplicationSelectDialog"""
+		dialog = ApplicationSelectDialog(self._application)
+		response = dialog.get_response()
+
+		if response[0] == gtk.RESPONSE_OK:
+			self._entry_command.set_text(response[2])
 
 	def get_response(self):
 		"""Get response from dialog"""
@@ -1260,14 +1276,19 @@ class ApplicationSelectDialog(gtk.Dialog):
 		button_help = gtk.Button(stock=gtk.STOCK_HELP)
 		button_help.connect('clicked', self._application.goto_web, self.help_url)
 		
-		button_open = gtk.Button(stock=gtk.STOCK_OPEN)
-		button_open.set_can_default(True)
+		if path is not None:
+			button_ok = gtk.Button(stock=gtk.STOCK_OPEN)
+
+		else:
+			button_ok = gtk.Button(stock=gtk.STOCK_OK)
+
+		button_ok.set_can_default(True)
 		
 		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
 		
 		self.action_area.pack_start(button_help, False, False, 0)
 		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
-		self.add_action_widget(button_open, gtk.RESPONSE_OK)
+		self.add_action_widget(button_ok, gtk.RESPONSE_OK)
 		self.set_default_response(gtk.RESPONSE_OK)
 		
 		# populate content

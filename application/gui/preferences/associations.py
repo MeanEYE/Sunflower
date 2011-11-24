@@ -1,6 +1,6 @@
 import gtk
 
-from gui.input_dialog import InputDialog
+from gui.input_dialog import InputDialog, ApplicationInputDialog
 from widgets.settings_page import SettingsPage
 
 
@@ -87,7 +87,12 @@ class AssociationsOptions(SettingsPage):
 		if response[0] == gtk.RESPONSE_OK:
 			mime_type = response[1]
 			description = self._application.associations_manager.get_mime_description(mime_type)
+
+			# add item to the store
 			self._associations.append(None, (description, mime_type))
+
+			# enable save button on parent
+			self._parent.enable_save()
 
 	def __add_application(self, widget, data=None):
 		"""Show dialog for adding application to mime type"""
@@ -101,12 +106,37 @@ class AssociationsOptions(SettingsPage):
 				parent = selected_iter
 			
 			else:
-				parent = selected_iter.parent_iter
+				parent = item_list.iter_parent(selected_iter)
 
-			print parent
+			dialog = ApplicationInputDialog(self._application)
+			response = dialog.get_response()
+
+			# add new mime type to the table
+			if response[0] == gtk.RESPONSE_OK:
+				name = response[1]
+				command = response[2]
+
+				# add data to store
+				self._associations.append(parent, (name, command))
+
+				# enable save button on parent
+				self._parent.enable_save()
 
 		else:
-			pass
+			# warn user about selection
+			dialog = gtk.MessageDialog(
+									self._parent,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_INFO,
+									gtk.BUTTONS_OK,
+									_(
+										'You need to select mime type to which application '
+										'will be added. You can also select another application '
+										'in which case new one will be added to its parent.'
+									) 
+								)
+			dialog.run()
+			dialog.destroy()
 					
 	def __get_menu_position(self, menu, button):
 		"""Get history menu position"""
@@ -120,3 +150,53 @@ class AssociationsOptions(SettingsPage):
 		pos_y = window_y + button_y + button_h
 
 		return (pos_x, pos_y, True)
+
+	def _load_options(self):
+		"""Load options and update interface"""
+		config = self._application.association_options
+		manager = self._application.associations_manager
+
+		# clear the storage
+		self._associations.clear()
+
+		# get all mime types from config file
+		mime_types = config.sections()
+
+		for mime_type in mime_types:
+			# add mime type to the list
+			description = manager.get_mime_description(mime_type)
+			parent = self._associations.append(None, (description, mime_type))
+
+			# get all applications
+			applications = config.options(mime_type)
+			count = len(applications) / 2
+
+			for index in range(1, count + 1):
+				name = config.get(mime_type, 'name_{0}'.format(index))
+				command = config.get(mime_type, 'command_{0}'.format(index))
+				self._associations.append(parent, (name, command))
+
+	def _save_options(self):
+		"""Method called when save button is clicked"""
+		config = self._application.association_options
+		
+		# iterate over groups
+		for row in self._associations:
+			mime_type = self._associations.get_value(row.iter, Column.COMMAND)
+			children = row.iterchildren()
+
+			# create a new section
+			if config.has_section(mime_type):
+				config.remove_section(mime_type)
+
+			config.add_section(mime_type)
+			
+			# store accelerators for current group
+			index = 0
+			for child in children:
+				index += 1
+				name = self._associations.get_value(child.iter, Column.NAME)
+				command = self._associations.get_value(child.iter, Column.COMMAND)
+
+				config.set(mime_type, 'name_{0}'.format(index), name)
+				config.set(mime_type, 'command_{0}'.format(index), command)

@@ -105,6 +105,7 @@ class MainWindow(gtk.Window):
 		self.toolbar_options = None
 		self.command_options = None
 		self.accel_options = None
+		self.association_options = None
 
 		# location of all configuration files
 		self.config_path = None
@@ -1909,6 +1910,7 @@ class MainWindow(gtk.Window):
 			self.toolbar_options.write(open(os.path.join(self.config_path, 'toolbar'), 'w'))
 			self.command_options.write(open(os.path.join(self.config_path, 'commands'), 'w'))
 			self.accel_options.write(open(os.path.join(self.config_path, 'accelerators'), 'w'))
+			self.association_options.write(open(os.path.join(self.config_path, 'associations'), 'w'))
 
 			# save accelerators
 			self.accelerator_manager.save()
@@ -1938,6 +1940,7 @@ class MainWindow(gtk.Window):
 		self.toolbar_options = RawConfigParser()
 		self.command_options = RawConfigParser()
 		self.accel_options = RawConfigParser()
+		self.association_options = RawConfigParser()
 
 		# load configuration from right folder on systems that support it
 		if os.path.isdir(os.path.join(user.home, '.config')):
@@ -1951,6 +1954,7 @@ class MainWindow(gtk.Window):
 		self.toolbar_options.read(os.path.join(self.config_path, 'toolbar'))
 		self.command_options.read(os.path.join(self.config_path, 'commands'))
 		self.accel_options.read(os.path.join(self.config_path, 'accelerators'))
+		self.association_options.read(os.path.join(self.config_path, 'associations'))
 
 		# load accelerators
 		self.accelerator_manager.load(self.accel_options)

@@ -69,7 +69,11 @@ class MenuManager:
 
 	def _open_with_callback(self, widget, data):
 		"""Callback event for menu items from 'open with' menu"""
-		self._application.associations_manager.open_file(data['selection'], data['application'])
+		self._application.associations_manager.open_file(data['selection'], application_info=data['application'])
+	
+	def _open_with_custom_callback(self, widget, data):
+		"""Callback event for menu items from custom 'open with' menu"""
+		self._application.associations_manager.open_file(data['selection'], exec_command=data['command'])
 
 	def get_accel_group(self):
 		"""Return accelerator group"""
@@ -85,12 +89,7 @@ class MenuManager:
 		return result
 
 	def get_items_for_type(self, mime_type, selection):
-		"""Get list of MenuItems for specified mime type
-
-		mime_type - detected mime type
-		callback - method used to get list selection
-
-		"""
+		"""Get list of MenuItems for specified mime type"""
 		application_list = self._application.associations_manager.get_application_list_for_type(mime_type)
 		result = []
 
@@ -107,8 +106,8 @@ class MenuManager:
 				item.set_image(image)
 
 			data = {
-				'application': application,
-				'selection': selection
+				'selection': selection,
+				'application': application
 				}
 
 			# connect signals
@@ -116,6 +115,39 @@ class MenuManager:
 			item.show()
 
 			result.append(item)
+
+		return result
+
+	def get_custom_items_for_type(self, mime_type, selection):
+		"""Get list of MenuItems for custom mime type"""
+		result = []
+
+		# local variable pointing to options
+		associations = self._application.association_options
+
+		# create custom open with menu
+		if associations.has_section(mime_type):
+			item_count = len(associations.options(mime_type)) / 2
+
+			# add options for mime type
+			for index in xrange(1, item_count + 1):
+				name = associations.get(mime_type, 'name_{0}'.format(index))
+				command = associations.get(mime_type, 'command_{0}'.format(index))
+
+				# create menu item
+				menu_item = gtk.MenuItem(name)
+				menu_item.show()
+
+				# prepare data for item
+				data = {
+					'selection': selection,
+					'command': command
+					}
+
+				# connect an event
+				menu_item.connect('activate', self._open_with_custom_callback, data)
+
+				result.append(menu_item)
 
 		return result
 

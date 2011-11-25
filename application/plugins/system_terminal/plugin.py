@@ -15,6 +15,9 @@ class SystemTerminal(Terminal):
 	def __init__(self, parent, notebook, path=None):
 		Terminal.__init__(self, parent, notebook, path)
 
+		# variable to store process id
+		self._pid = None
+
 		# make sure we open in a good path
 		if self.path is None:
 			self.path = user.home
@@ -35,7 +38,7 @@ class SystemTerminal(Terminal):
 			# fork default shell
 			self._terminal.connect('child-exited', self.__child_exited)
 			self._terminal.connect('status-line-changed', self._update_terminal_status)
-			self._terminal.fork_command(
+			self._pid = self._terminal.fork_command(
 									command=shell_command,
 									directory=self.path
 								)
@@ -51,6 +54,11 @@ class SystemTerminal(Terminal):
 		"""Handle child process termination"""
 		if self._close_on_child_exit:
 			self._close_tab()
+
+	def __update_path_from_pid(self):
+		"""Update terminal path from child process"""
+		if self._pid is not None and os.path.isdir('/proc/{0}'.format(self._pid)):
+			self.path = os.readlink('/proc/{0}/cwd'.format(self._pid))
 
 	def _recycle_terminal(self, widget, data=None):
 		"""Recycle terminal"""
@@ -73,3 +81,8 @@ class SystemTerminal(Terminal):
 			self._parent.create_tab(self._notebook, DefaultList, self.path)
 
 		Terminal._close_tab(self, widget, data)
+
+	def _handle_tab_close(self):
+		"""Clean up before closing tab"""
+		Terminal._handle_tab_close(self)
+		self.__update_path_from_pid()

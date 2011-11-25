@@ -8,8 +8,6 @@ are same and only one file is selected offer this option by default.
 - On copy/move operation when checking whether the remote directory or file exists we should
 check how many parts of path exist and cache that and skip the rest of the files.
 
-- Prevent columns-changed signal for emitting on application close
-
 - Lazy accelerator switch (should fix some of the crash problems)
 
 - Ability to extend popup menu

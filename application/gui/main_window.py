@@ -1782,6 +1782,10 @@ class MainWindow(gtk.Window):
 		for index in range(0, notebook.get_n_pages()):
 			page = notebook.get_nth_page(index)
 
+			# give plugin a chance to clean up
+			if hasattr(page, '_handle_tab_close'):
+				page._handle_tab_close()
+
 			tab_class = page.__class__.__name__
 			tab_path = page.path
 

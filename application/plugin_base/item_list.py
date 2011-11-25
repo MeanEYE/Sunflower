@@ -446,6 +446,13 @@ class ItemList(PluginBase):
 
 		return result
 
+	def _handle_tab_close(self):
+		"""Clean up before tab close"""
+		PluginBase._handle_tab_close(self)
+		self._main_object.handler_block_by_func(self._column_changed)
+
+		return True
+
 	def _handle_search_key_press(self, widget, event):
 		"""Handle return and escape keys for quick search"""
 		result = False
@@ -1026,7 +1033,7 @@ class ItemList(PluginBase):
 		columns = self._item_list.get_columns()
 		column_names = map(lambda column: column.get_data('name'), columns)
 
-		#print column_names
+		print column_names
 
 	def _resize_columns(self, columns):
 		"""Resize columns according to global options"""

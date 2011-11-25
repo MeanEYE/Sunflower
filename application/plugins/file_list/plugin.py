@@ -676,10 +676,10 @@ class FileList(ItemList):
 	def _prepare_popup_menu(self):
 		"""Populate pop-up menu items"""
 		selection = self._item_list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
-		is_dir = list_.get_value(iter_, Column.IS_DIR)
-		is_parent = list_.get_value(iter_, Column.IS_PARENT_DIR)
+		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
+		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
 
 		# get selected item
 		filename = self._get_selection()
@@ -689,8 +689,10 @@ class FileList(ItemList):
 
 		if not is_dir:
 			# get associated programs
+			selection = self._get_selection_list()
 			mime_type = self._parent.associations_manager.get_mime_type(filename)
-			program_list = self._parent.menu_manager.get_items_for_type(mime_type, self._get_selection_list())
+			program_list = self._parent.menu_manager.get_items_for_type(mime_type, selection)
+			custom_list = self._parent.menu_manager.get_custom_items_for_type(mime_type, selection)
 
 			# create open with menu
 			for menu_item in program_list:
@@ -701,6 +703,17 @@ class FileList(ItemList):
 				separator = gtk.SeparatorMenuItem()
 				separator.show()
 				self._open_with_menu.append(separator)
+
+			# add custom menu items if needed
+			if len(custom_list) > 0:
+				for menu_item in custom_list:
+					self._open_with_menu.append(menu_item)
+
+				# add separator if needed
+				if len(program_list) > 0:
+					separator = gtk.SeparatorMenuItem()
+					separator.show()
+					self._open_with_menu.append(separator)
 
 			# create an option for opening selection with custom command
 			open_with_other = gtk.MenuItem(_('Other application...'))

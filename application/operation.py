@@ -470,6 +470,9 @@ class CopyOperation(Operation):
 					                    options[OverwriteOption.NEW_NAME]
 					                )
 
+				elif self._source_path == self._destination_path:
+					can_procede = False
+
 		# if user skipped this file return
 		if not can_procede:
 			self._file_list.pop(self._file_list.index(file_))

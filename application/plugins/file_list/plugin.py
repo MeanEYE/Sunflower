@@ -1361,7 +1361,7 @@ class FileList(ItemList):
 				
 			# if no errors occurred during path change,
 			# call parent method which handles history
-			ItemList.change_path(self, path)
+			ItemList.change_path(self, self.path)
 
 		except OSError as error:
 			# problem with listing directory, ask user what to do

@@ -1,4 +1,5 @@
 import os
+import user
 
 from plugin_base.terminal import Terminal
 
@@ -13,6 +14,10 @@ class SystemTerminal(Terminal):
 
 	def __init__(self, parent, notebook, path=None):
 		Terminal.__init__(self, parent, notebook, path)
+
+		# make sure we open in a good path
+		if self.path is None:
+			self.path = user.home
 
 		self._close_on_child_exit = True
 		shell_command = os.environ['SHELL']

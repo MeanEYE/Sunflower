@@ -1,5 +1,29 @@
 Version 0.1a-36
+  + New sessions plugin
+  + Added associations editor for customizing 'open with' menu.
+  + Added method for focusing command entry.
+  + Added methods for focusing left and right objects.
+  + Added option for turning off notifications.
   * Properly handle cases when locale can not be detected
+  * Fix preferences window crash when locale can not be detected.
+  * Handle possible problems when trying to get free space.
+  * Updated Czech translation.
+  * Updated Russian translation
+  * Changed gnome-open to xdg-open to support other desktop environments.
+  * Handle cases where specified mime type doesn't have default application set.
+  * Show "Send to..." menu option only when nautilus-sendto is installed.
+  * Fixed problem with file monitor.
+  * Made open with menu items always show images.
+  * Handle arrows as accelerators in custom key bindings.
+  * Fixed crash when notification daemon is not working.
+  * Fix for issue #109: CTRL+Menu combination yields AttributeError
+  * Fix for issue #94: "Browse" button in the search dialog does not work
+  * Handle choosing application by presing 'Enter'
+  * Fixed problem with opening file with specified application.
+  * Added ability to select application from the list in ApplicationInputDialog.
+  * Remember path from child process in terminal tab on application close.
+  * Fix for issue #107: Opening a new file list tab results in duplicates in that file list
+  * Fix for issue #118: Copy/move file from same location as destination caused files to be removed
 
 Version 0.1a-35-1
   * Fixed problem with starting Sunflower on systems with older PyGTK

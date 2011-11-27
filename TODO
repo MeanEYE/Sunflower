@@ -1,3 +1,7 @@
+- Make get_monitor method in provider
+
+- Make our own signals for monitor events
+
 - Loading directory items from separate thread doesn't update directory stats.
 
 - Fix Shift+Tab combination

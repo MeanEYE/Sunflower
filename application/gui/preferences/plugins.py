@@ -14,10 +14,12 @@ class Column:
 	VERSION = 4
 	CONTACT = 5
 	SITE = 6
+	DESCRIPTION = 7
 
 
 class Section:
 	NAME = 'Name'
+	DESCRIPTION = 'Description'
 	VERSION = 'Version'
 	AUTHOR = 'Author'
 
@@ -44,7 +46,8 @@ class PluginsOptions(SettingsPage):
 									str,	# author
 									str,	# version
 									str,	# contact
-									str		# site
+									str,	# site
+									str		# description
 								)
 
 		self._list = gtk.TreeView()
@@ -76,6 +79,17 @@ class PluginsOptions(SettingsPage):
 		self._list.append_column(col_author)
 		self._list.append_column(col_version)
 
+		# create description
+		self._label_description = gtk.Label()
+		self._label_description.set_use_markup(True)
+		self._label_description.set_line_wrap(True)
+		self._label_description.set_selectable(True)
+		self._label_description.set_padding(5, 5)
+		self._label_description.connect('size-allocate', self.__adjust_label)
+
+		self._expander_description = gtk.Expander(_('Description'))
+		self._expander_description.add(self._label_description)
+
 		# create controls
 		hbox_controls = gtk.HBox(False, 5)
 
@@ -104,6 +118,7 @@ class PluginsOptions(SettingsPage):
 		hbox_controls.pack_start(self._button_home_page, False, False, 0)
 
 		self.pack_start(container, True, True, 0)
+		self.pack_start(self._expander_description, False, False, 0)
 		self.pack_start(hbox_controls, False, False, 0)
 
 	def __handle_cursor_change(self, widget, data=None):
@@ -112,12 +127,14 @@ class PluginsOptions(SettingsPage):
 		item_store, selected_iter = selection.get_selected()
 
 		if selected_iter is not None:
+			self._label_description.set_text(item_store.get_value(selected_iter, Column.DESCRIPTION))
+
 			has_contact = item_store.get_value(selected_iter, Column.CONTACT) is not None
 			has_site = item_store.get_value(selected_iter, Column.SITE) is not None
 
 			self._button_contact.set_sensitive(has_contact)
 			self._button_home_page.set_sensitive(has_site)
-
+		
 	def __handle_contact_button_click(self, widget, data=None):
 		"""Create new contact email"""
 		selection = self._list.get_selection()
@@ -137,6 +154,10 @@ class PluginsOptions(SettingsPage):
 		if selected_iter is not None:
 			url = item_store.get_value(selected_iter, Column.SITE)
 			self._application.goto_web(self, url)
+
+	def __adjust_label(self, widget, data=None):
+		"""Adjust label size"""
+		widget.set_size_request(data.width-1, -1)
 
 	def _toggle_plugin(self, cell, path):
 		"""Handle changing plugin state"""
@@ -190,6 +211,7 @@ class PluginsOptions(SettingsPage):
 			plugin_version = ''
 			plugin_site = None
 			plugin_contact = None
+			plugin_description = _('This plugin has no description')
 
 			plugin_config_file = os.path.join(plugin_path, plugin, 'plugin.conf')
 
@@ -219,6 +241,15 @@ class PluginsOptions(SettingsPage):
 					if config.has_option(Section.AUTHOR, 'site'):
 						plugin_site = config.get(Section.AUTHOR, 'site')
 
+				if config.has_section(Section.DESCRIPTION) and language is not None:
+					if config.has_option(Section.DESCRIPTION, language):
+						# try to get plugin description for current language
+						plugin_description = config.get(Section.DESCRIPTION, language)
+
+					elif config.has_option(Section.DESCRIPTION, 'en'):
+						# try to get plugin description for default language
+						plugin_description = config.get(Section.DESCRIPTION, 'en')
+
 			# add plugin data to list
 			self._plugins.append((
 							plugin in plugins_to_load,
@@ -227,8 +258,13 @@ class PluginsOptions(SettingsPage):
 							plugin_author,
 							plugin_version,
 							plugin_contact,
-							plugin_site
+							plugin_site,
+							plugin_description
 						))
+
+			# clear description
+			self._label_description.set_text(_('No plugin selected'))
+			self._expander_description.set_expanded(False)
 
 	def _save_options(self):
 		"""Save terminal tab options"""

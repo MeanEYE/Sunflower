@@ -305,13 +305,13 @@ class FileList(ItemList):
 	def _execute_selected_item(self, widget=None, data=None):
 		"""Execute/Open selected item"""
 		selection = self._item_list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
 		# we need selection for this
-		if iter_ is None: return
+		if selected_iter is None: return
 
-		is_dir = list_.get_value(iter_, Column.IS_DIR)
-		is_parent = list_.get_value(iter_, Column.IS_PARENT_DIR)
+		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
+		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
 
 		if is_dir:
 			# selected item is directory, we need to change path
@@ -321,7 +321,7 @@ class FileList(ItemList):
 
 			else:
 				# just change path
-				name = list_.get_value(iter_, Column.NAME)
+				name = item_list.get_value(selected_iter, Column.NAME)
 				self.change_path(os.path.join(self.path, name))
 
 		elif self.get_provider().is_local:
@@ -371,6 +371,30 @@ class FileList(ItemList):
 							self.__class__,
 							os.path.join(self.path, name)
 						)
+
+		return True
+
+	def _open_directory(self, widget=None, data=None):
+		"""Open selected directory"""
+		selection = self._item_list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		# we need selection for this
+		if selected_iter is None: return
+
+		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
+		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
+
+		if is_dir:
+			# selected item is directory, we need to change path
+			if is_parent:
+				# call specialized change path method
+				self._parent_directory(widget, data)
+
+			else:
+				# just change path
+				name = item_list.get_value(selected_iter, Column.NAME)
+				self.change_path(os.path.join(self.path, name))
 
 		return True
 

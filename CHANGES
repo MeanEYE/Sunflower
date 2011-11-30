@@ -1,3 +1,7 @@
+Version 0.1a-37
+  + Reorderable columns
+  + Open directory key binding
+
 Version 0.1a-36
   + New sessions plugin
   + Added associations editor for customizing 'open with' menu.

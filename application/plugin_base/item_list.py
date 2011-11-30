@@ -279,6 +279,44 @@ class ItemList(PluginBase):
 		"""Show history browser"""
 		HistoryList(self, self._parent)
 
+	def _reorder_columns(self, order=None):
+		"""Apply column order and visibility"""
+		options = self._parent.options
+		section = self.__class__.__name__
+
+		# make sure we have column order
+		if order is None:
+			if options.has_section(section) \
+			and options.has_option(section, 'columns'):
+				# load column order from config
+				order = options.get(section, 'columns').split(',')
+
+			else:
+				# we don't have column order, just exit
+				return
+
+		columns = self._item_list.get_columns()
+		names = [column.get_data('name') for column in columns]
+
+		# make sure order contains only valid names
+		order = filter(lambda name: name in names, order[:])
+
+		# show columns in specified order
+		base_index = names.index(order[0])
+		for column_name in order[1:]:
+			# get column index
+			index = names.index(column_name)
+
+			# get column objects
+			column = columns[index]
+			base_column = columns[base_index]
+
+			# move specified column
+			self._item_list.move_column_after(column, base_column)
+
+			# update base index
+			base_index = index
+
 	def _create_default_column_sizes(self):
 		"""Create default column sizes section in main configuration file"""
 		options = self._parent.options
@@ -1033,7 +1071,15 @@ class ItemList(PluginBase):
 		columns = self._item_list.get_columns()
 		column_names = map(lambda column: column.get_data('name'), columns)
 
-		print column_names
+		# apply column change to other objects
+		self._parent.delegate_to_objects(self, '_reorder_columns', column_names)
+
+		# save column order
+		self._parent.options.set(
+							self.__class__.__name__,
+							'columns',
+							','.join(column_names)
+						)
 
 	def _resize_columns(self, columns):
 		"""Resize columns according to global options"""

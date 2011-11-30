@@ -202,6 +202,7 @@ class ItemList(PluginBase):
 		group.add_method('copy_to_clipboard', _('Copy selection to clipboard'), self._copy_files_to_clipboard)
 		group.add_method('paste_from_clipboard', _('Paste items from clipboard'), self._paste_files_from_clipboard)
 		group.add_method('open_in_new_tab', _('Open selected directory in new tab'), self._open_in_new_tab)
+		group.add_method('open_directory', _('Open selected directory'), self._open_directory)
 		group.add_method('create_terminal', _('Create terminal tab'), self._create_terminal)
 		group.add_method('parent_directory', _('Go to parent directory'), self._parent_directory)
 		group.add_method('show_history', _('Show history browser'), self._show_history_window)
@@ -651,13 +652,17 @@ class ItemList(PluginBase):
 	def _execute_selected_item(self, widget=None, data=None):
 		"""Execute selected item"""
 		return True
-	
+
 	def _execute_with_application(self, widget=None, data=None):
 		"""Show application selection dialog and then execute item"""
 		return True
 
 	def _open_in_new_tab(self, widget=None, data=None):
 		"""Open selected directory in new tab"""
+		return True
+
+	def _open_directory(self, widget=None, data=None):
+		"""Open selected directory"""
 		return True
 
 	def _create_directory(self, widget=None, data=None):

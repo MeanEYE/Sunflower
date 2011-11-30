@@ -199,6 +199,9 @@ class FileList(ItemList):
 			# add to the list
 			self._item_list.append_column(column)
 
+		# set column order
+		self._reorder_columns()
+
 		# release signal block
 		self._item_list.handler_unblock_by_func(self._column_changed)
 

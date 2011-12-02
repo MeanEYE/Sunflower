@@ -460,12 +460,9 @@ class ItemList(PluginBase):
 
 		if not result:
 			# retrieve human readable key representation
-			key_name = gtk.gdk.keyval_name(event.keyval)
+			key_value = gtk.gdk.keyval_to_unicode(event.keyval)
 
-			# handle searching for hidden files
-			if key_name == 'period': key_name = '.'
-
-			if len(key_name) == 1:
+			if not result and key_value > 0:
 				# generate state sting based on modifier state (control, alt, shift)
 				state = "%d%d%d" % (
 							bool(event.state & gtk.gdk.CONTROL_MASK),
@@ -475,12 +472,12 @@ class ItemList(PluginBase):
 
 				if state == self._parent.options.get('main', 'search_modifier'):
 					# start quick search if modifier combination is right
-					self._start_search(key_name)
+					self._start_search(unichr(key_value))
 					result = True
 
 				else:
 					# otherwise focus command entry
-					self._focus_command_line(key_name)
+					self._focus_command_line(unichr(key_value))
 					result = True
 
 		return result

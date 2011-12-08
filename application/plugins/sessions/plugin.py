@@ -239,9 +239,9 @@ def _create_menu():
 	for session in _get_sessions_list(main_window.tab_options):
 		item = gtk.RadioMenuItem(group, _get_session_name(main_window.tab_options, session))
 		menu_sessions.append(item)
-		item.connect('activate', change_session, session)
 		if session == current_session:
 			item.set_active(True)
+		item.connect('activate', change_session, session)
 		group = item
 	item_sessions.set_submenu(menu_sessions)
 	item_manage.connect('activate', show_sessions_manager)

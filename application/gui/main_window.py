@@ -54,7 +54,7 @@ class MainWindow(gtk.Window):
 			'stage': 'a'
 		}
 
-	NAUTILUS_SEND_TO_INSTALLED = common.executable_exists('nautilus-sendwto')
+	NAUTILUS_SEND_TO_INSTALLED = common.executable_exists('nautilus-sendto')
 		
 	def __init__(self):
 		# create main window and other widgets

@@ -30,17 +30,32 @@ class MountManager(gtk.Window):
 		container = gtk.ScrolledWindow() 
 		container.set_shadow_type(gtk.SHADOW_IN)
 		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+
+		self._store = gtk.TreeStore(str, str)
 		
-		self._list = gtk.TreeView()
+		self._list = gtk.TreeView(model=self._store)
 		self._list.connect('key-press-event', self._handle_key_press)
 
 		# create controls
 		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
 		button_close.connect('clicked', self._hide)
 		
+		image_add = gtk.Image()
+		image_add.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_BUTTON)
+		button_add = gtk.Button()
+		button_add.set_image(image_add)
+		
+		image_remove = gtk.Image()
+		image_remove.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_BUTTON)
+		button_remove = gtk.Button()
+		button_remove.set_image(image_remove)
+
+		
 		# pack user interface
 		container.add(self._list)
 
+		hbox_controls.pack_start(button_add, False, False, 0)
+		hbox_controls.pack_start(button_remove, False, False, 0)
 		hbox_controls.pack_end(button_close, False, False, 0)
 		
 		vbox.pack_start(container, True, True, 0)

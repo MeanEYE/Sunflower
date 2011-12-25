@@ -16,12 +16,13 @@ class MountManager(gtk.Window):
 		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)
 		self.set_transient_for(application)
-		self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
 		self.set_wmclass('Sunflower', 'Sunflower')
+		self.set_border_width(7)
+
+		self.connect('delete-event', self._hide)
 		
 		# create user interface
 		vbox = gtk.VBox(False, 5)
-		vbox.set_border_width(7)
 		
 		hbox_controls = gtk.HBox(False, 5)
 		
@@ -31,6 +32,7 @@ class MountManager(gtk.Window):
 		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 		
 		self._list = gtk.TreeView()
+		self._list.connect('key-press-event', self._handle_key_press)
 
 		# create controls
 		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
@@ -49,6 +51,22 @@ class MountManager(gtk.Window):
 	def _hide(self, widget=None, data=None):
 		"""Hide mount manager"""
 		self.hide()
+
+		return True
+
+	def _handle_key_press(self, widget, event, data=None):
+		"""Handle pressing keys in mount manager list"""
+		result = False
+
+		if event.keyval == gtk.keysyms.Return:
+			result = True
+
+		elif event.keyval == gtk.keysyms.Escape:
+			# hide window on escape
+			self._hide()
+			result = True
+
+		return result
 				
 	def show(self, widget=None, data=None):
 		"""Show mount manager"""

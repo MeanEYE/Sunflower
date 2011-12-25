@@ -1271,16 +1271,30 @@ class MainWindow(gtk.Window):
 			vbox = gtk.VBox(False, 10)
 			vbox.set_border_width(5)
 
-			if config_version < 34:
-				vbox_accel_map = gtk.VBox(False, 0)
+			if config_version < 37:
+				vbox_version_37 = gtk.VBox(False, 0)
 
-				label_accel_map = gtk.Label('<b>Version 0.1a-34:</b>')
-				label_accel_map.set_alignment(0, 0.5)
-				label_accel_map.set_use_markup(True)
+				label_version_37 = gtk.Label('<b>Version 0.1a-37:</b>')
+				label_version_37.set_alignment(0, 0.5)
+				label_version_37.set_use_markup(True)
 
 				# reset accelerator map
 				checkbox_reset_accel_map = gtk.CheckButton('Reset accelerator map')
 				checkbox_reset_accel_map.set_active(True)
+
+				# pack controls
+				vbox_version_37.pack_start(label_version_37, False, False, 0)
+				vbox_version_37.pack_start(checkbox_reset_accel_map, False, False, 0)
+
+				vbox.pack_start(vbox_version_37, False, False, 0)
+				mod_count += 1
+
+			if config_version < 34:
+				vbox_version_34 = gtk.VBox(False, 0)
+
+				label_version_34 = gtk.Label('<b>Version 0.1a-34:</b>')
+				label_version_34.set_alignment(0, 0.5)
+				label_version_34.set_use_markup(True)
 
 				# convert tools menu
 				checkbox_convert_tools_menu = gtk.CheckButton('Convert saved tools menu')
@@ -1290,29 +1304,28 @@ class MainWindow(gtk.Window):
 				checkbox_convert_column_sizes = gtk.CheckButton('Convert column sizes to new format')
 				checkbox_convert_column_sizes.set_active(True)
 
-				vbox_accel_map.pack_start(label_accel_map, False, False, 0)
-				vbox_accel_map.pack_start(checkbox_reset_accel_map, False, False, 0)
-				vbox_accel_map.pack_start(checkbox_convert_tools_menu, False, False, 0)
-				vbox_accel_map.pack_start(checkbox_convert_column_sizes, False, False, 0)
+				vbox_version_34.pack_start(label_version_34, False, False, 0)
+				vbox_version_34.pack_start(checkbox_convert_tools_menu, False, False, 0)
+				vbox_version_34.pack_start(checkbox_convert_column_sizes, False, False, 0)
 
-				vbox.pack_start(vbox_accel_map, False, False, 0)
-				mod_count += 3
+				vbox.pack_start(vbox_version_34, False, False, 0)
+				mod_count += 2
 
 			# clear tabs
 			if config_version < 15:
-				vbox_15 = gtk.VBox(False, 0)
+				vbox_version_15 = gtk.VBox(False, 0)
 
-				label_15 = gtk.Label('<b>Version 0.1a-15:</b>')
-				label_15.set_alignment(0, 0.5)
-				label_15.set_use_markup(True)
+				label_version_15 = gtk.Label('<b>Version 0.1a-15:</b>')
+				label_version_15.set_alignment(0, 0.5)
+				label_version_15.set_use_markup(True)
 
 				checkbox_reset_tabs = gtk.CheckButton('Clear open tabs')
 				checkbox_reset_tabs.set_active(True)
 
-				vbox_15.pack_start(label_15, False, False, 0)
-				vbox_15.pack_start(checkbox_reset_tabs, False, False, 0)
+				vbox_version_15.pack_start(label_version_15, False, False, 0)
+				vbox_version_15.pack_start(checkbox_reset_tabs, False, False, 0)
 
-				vbox.pack_start(vbox_15, False, False, 0)
+				vbox.pack_start(vbox_version_15, False, False, 0)
 				mod_count += 1
 
 			# show dialog
@@ -1321,17 +1334,12 @@ class MainWindow(gtk.Window):
 
 			## apply selected changes in reverse order
 
-			# clear saved tabs
 			if config_version < 15:
+				# clear saved tabs
 				if checkbox_reset_tabs.get_active():
 					self.tab_options = RawConfigParser()
 
 			if config_version < 34:
-				# reset accelerator map
-				if checkbox_reset_accel_map.get_active() \
-				and os.path.isfile(os.path.join(self.config_path, 'accel_map')):
-					os.remove(os.path.join(self.config_path, 'accel_map'))
-
 				# convert tools menu
 				if checkbox_convert_tools_menu.get_active():
 					# open old configuration file
@@ -1370,6 +1378,12 @@ class MainWindow(gtk.Window):
 
 						# remove old option
 						self.options.remove_option('FileList', 'size_{0}'.format(index))
+
+			if config_version < 37:
+				# reset accelerator map
+				if checkbox_reset_accel_map.get_active() \
+				and os.path.isfile(os.path.join(self.config_path, 'accel_map')):
+					os.remove(os.path.join(self.config_path, 'accel_map'))
 
 			# kill dialog
 			change_log.destroy()
@@ -1901,6 +1915,7 @@ class MainWindow(gtk.Window):
 					('<Sunflower>/Tools/FindFiles', 'F7', gtk.gdk.MOD1_MASK),
 					('<Sunflower>/Tools/SynchronizeDirectories', 'F8', gtk.gdk.MOD1_MASK),
 					('<Sunflower>/Tools/AdvancedRename', 'M', gtk.gdk.CONTROL_MASK),
+					('<Sunflower>/Tools/MountManager', 'O', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/View/Fullscreen', 'F11', 0),
 					('<Sunflower>/View/Reload', 'R', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/View/FastMediaPreview', 'F3', gtk.gdk.MOD1_MASK),

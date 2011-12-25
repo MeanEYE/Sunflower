@@ -240,7 +240,15 @@ class PluginBase(gtk.VBox):
 		"""Handles key events in item list"""
 		result = False
 
-		if gtk.gdk.keyval_name(event.keyval) in ('Tab', 'Left', 'Right', 'Up', 'Down'):
+		special_keys = (
+				gtk.keysyms.Tab,
+				gtk.keysyms.Left,
+				gtk.keysyms.Right,
+				gtk.keysyms.Up,
+				gtk.keysyms.Down
+			)
+
+		if event.keyval in special_keys:
 			for group in self._accelerator_groups:
 				result = group.trigger_accelerator(event.keyval, event.state)
 

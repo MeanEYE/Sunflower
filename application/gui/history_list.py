@@ -154,9 +154,8 @@ class HistoryList(gtk.Window):
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys in history list"""
 		result = False
-		key_name = gtk.gdk.keyval_name(event.keyval)
 
-		if key_name == 'Return':
+		if event.keyval == gtk.keysyms.Return:
 			if event.state & gtk.gdk.CONTROL_MASK:
 				# open path in new tab
 				self._open_in_new_tab()
@@ -167,7 +166,7 @@ class HistoryList(gtk.Window):
 
 			result = True
 
-		elif key_name == 'Escape':
+		elif event.keyval == gtk.keysyms.Escape:
 			# close window on escape
 			self._close()
 			result = True

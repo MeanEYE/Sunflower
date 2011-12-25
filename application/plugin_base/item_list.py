@@ -492,15 +492,14 @@ class ItemList(PluginBase):
 	def _handle_search_key_press(self, widget, event):
 		"""Handle return and escape keys for quick search"""
 		result = False
-		key_name = gtk.gdk.keyval_name(event.keyval)
 
-		if key_name == 'Escape':
-			self._stop_search()
-			result = True
-
-		if key_name == 'Return':
+		if event.keyval == gtk.keysyms.Return:
 			self._stop_search()
 			self._execute_selected_item(widget)
+			result = True
+
+		elif event.keyval == gtk.keysyms.Escape:
+			self._stop_search()
 			result = True
 
 		return result

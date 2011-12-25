@@ -23,6 +23,7 @@ from plugin_base.rename_extension import RenameExtension
 from plugin_base.find_extension import FindExtension
 from tools.advanced_rename import AdvancedRename
 from tools.find_files import FindFiles
+from tools.mount_manager import MountManager
 
 from ConfigParser import RawConfigParser
 
@@ -87,6 +88,7 @@ class MainWindow(gtk.Window):
 		self.notification_manager = NotificationManager(self)
 		self.toolbar_manager = ToolbarManager(self)
 		self.accelerator_manager = AcceleratorManager(self)
+		self.mount_manager = MountManager(self)
 
 		# set window title
 		self.set_title(_('Sunflower'))
@@ -141,7 +143,7 @@ class MainWindow(gtk.Window):
 		menu_items = (
 			{
 				'label': _('File'),
-		        'name': 'file',
+				'name': 'file',
 				'submenu': (
 					{
 						'label': _('New tab'),
@@ -339,33 +341,39 @@ class MainWindow(gtk.Window):
 					}
 				)
 			},
-		    {
-		        'label': _('Tools'),
-		        'name': 'tools',
-		        'submenu': (
-		            {
-		                'label': _('Find files'),
-		                'type': 'image',
-		                'image': 'system-search',
-		                'path': '<Sunflower>/Tools/FindFiles',
+			{
+				'label': _('Tools'),
+				'name': 'tools',
+				'submenu': (
+					{
+						'label': _('Find files'),
+						'type': 'image',
+						'image': 'system-search',
+						'path': '<Sunflower>/Tools/FindFiles',
 						'callback': self.show_find_files
-		            },
-		            {
-		                'label': _('Find duplicate files'),
-		                'path': '<Sunflower>/Tools/FindDuplicateFiles'
-		            },
-		            {
-		                'label': _('Synchronize directories'),
-		                'path': '<Sunflower>/Tools/SynchronizeDirectories'
-		            },
-		            {'type': 'separator'},
-		            {
-		                'label': _('Advanced rename'),
-		                'path': '<Sunflower>/Tools/AdvancedRename',
-		                'callback': self.show_advanced_rename,
-		            },
-		        )
-		    },
+					},
+					{
+						'label': _('Find duplicate files'),
+						'path': '<Sunflower>/Tools/FindDuplicateFiles'
+					},
+					{
+						'label': _('Synchronize directories'),
+						'path': '<Sunflower>/Tools/SynchronizeDirectories'
+					},
+					{'type': 'separator'},
+					{
+						'label': _('Advanced rename'),
+						'path': '<Sunflower>/Tools/AdvancedRename',
+						'callback': self.show_advanced_rename,
+					},
+					{'type': 'separator'},
+					{
+						'label': _('Mount manager'),
+						'path': '<Sunflower>/Tools/MountManager',
+						'callback': self.mount_manager.show,
+					}
+				)
+			},
 			{
 				'label': _('View'),
 				'submenu': (
@@ -439,12 +447,12 @@ class MainWindow(gtk.Window):
 			{
 				'label': _('Operations'),
 				'name': 'operations',
-		        'submenu': (
-		            {
-		                'label': _('There are no minimized operations'),
-		                'name': 'no_operations',
-		            },
-		        )
+				'submenu': (
+					{
+						'label': _('There are no minimized operations'),
+						'name': 'no_operations',
+					},
+				)
 			},
 			{
 				'label': _('Help'),
@@ -848,11 +856,11 @@ class MainWindow(gtk.Window):
 										gtk.MESSAGE_ERROR,
 										gtk.BUTTONS_OK,
 										_(
-				                            "Specified path does not exist or is not "
-				                            "valid. If path is not local check if volume "
-				                            "is mounted."
-				                        ) + "\n\n{0}".format(path)
-				                    )
+											"Specified path does not exist or is not "
+											"valid. If path is not local check if volume "
+											"is mounted."
+										) + "\n\n{0}".format(path)
+									)
 				dialog.run()
 				dialog.destroy()
 
@@ -1881,7 +1889,7 @@ class MainWindow(gtk.Window):
 			accel_map = (
 					('<Sunflower>/File/CreateFile', 'F7', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/File/CreateDirectory', 'F7', 0),
-		            ('<Sunflower>/File/Quit', 'Q', gtk.gdk.CONTROL_MASK),
+					('<Sunflower>/File/Quit', 'Q', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/Edit/Preferences', 'P', gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK),
 					('<Sunflower>/Mark/SelectAll', 'A', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/Mark/SelectPattern', 'KP_Add', 0),
@@ -1890,9 +1898,9 @@ class MainWindow(gtk.Window):
 					('<Sunflower>/Mark/SelectWithSameExtension', 'KP_Add', gtk.gdk.MOD1_MASK),
 					('<Sunflower>/Mark/UnselectWithSameExtension', 'KP_Subtract', gtk.gdk.MOD1_MASK),
 					('<Sunflower>/Mark/Compare', 'F12', 0),
-		            ('<Sunflower>/Tools/FindFiles', 'F7', gtk.gdk.MOD1_MASK),
-		            ('<Sunflower>/Tools/SynchronizeDirectories', 'F8', gtk.gdk.MOD1_MASK),
-		            ('<Sunflower>/Tools/AdvancedRename', 'M', gtk.gdk.CONTROL_MASK),
+					('<Sunflower>/Tools/FindFiles', 'F7', gtk.gdk.MOD1_MASK),
+					('<Sunflower>/Tools/SynchronizeDirectories', 'F8', gtk.gdk.MOD1_MASK),
+					('<Sunflower>/Tools/AdvancedRename', 'M', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/View/Fullscreen', 'F11', 0),
 					('<Sunflower>/View/Reload', 'R', gtk.gdk.CONTROL_MASK),
 					('<Sunflower>/View/FastMediaPreview', 'F3', gtk.gdk.MOD1_MASK),

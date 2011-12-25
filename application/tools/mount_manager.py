@@ -31,14 +31,24 @@ class MountManager(gtk.Window):
 		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 		
 		self._list = gtk.TreeView()
+
+		# create controls
+		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
+		button_close.connect('clicked', self._hide)
 		
 		# pack user interface
 		container.add(self._list)
+
+		hbox_controls.pack_end(button_close, False, False, 0)
 		
 		vbox.pack_start(container, True, True, 0)
 		vbox.pack_start(hbox_controls, False, False, 0)
 		
 		self.add(vbox)
+
+	def _hide(self, widget=None, data=None):
+		"""Hide mount manager"""
+		self.hide()
 				
 	def show(self, widget=None, data=None):
 		"""Show mount manager"""

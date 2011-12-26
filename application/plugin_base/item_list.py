@@ -218,6 +218,7 @@ class ItemList(PluginBase):
 		group.add_method('show_open_with_menu', _('Show "open with" menu'), self._show_open_with_menu)
 		group.add_method('inherit_left_path', _('Assign path from left list'), self._inherit_left_path)
 		group.add_method('inherit_right_path', _('Assign path from right list'), self._inherit_right_path)
+		group.add_method('swap_paths', _('Swap right and left paths'), self._swap_paths)
 		group.add_method('move_marker_up', _('Move selection marker up'), self._move_marker_up)
 		group.add_method('move_marker_down', _('Move selection marker down'), self._move_marker_down)
 
@@ -248,6 +249,7 @@ class ItemList(PluginBase):
 		group.set_accelerator('show_open_with_menu', keyval('Menu'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('inherit_left_path', keyval('Right'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('inherit_right_path', keyval('Left'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('swap_paths', keyval('U'), gtk.gdk.CONTROL_MASK)
 
 		# create bookmark accelerators
 		for number in range(1, 11):
@@ -1179,6 +1181,20 @@ class ItemList(PluginBase):
 
 		else:
 			self.change_path(oposite_object.path)
+
+	def _swap_paths(self, widget, data=None):
+		"""Swap left and right paths"""
+		oposite_object = self._parent.get_oposite_object(self)
+
+		if (hasattr(oposite_object, 'change_path')):
+			# get path from oposite object
+			new_path = oposite_object.path
+
+			# change paths
+			oposite_object.change_path(self.path)
+			self.change_path(new_path)
+
+		return True
 
 	def _add_bookmark(self, widget, data=None):
 		"""Show dialog for adding current path to bookmarks"""

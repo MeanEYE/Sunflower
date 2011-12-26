@@ -1,5 +1,3 @@
-- Use gdk.keysym.Tab instead of getting key name
-
 - Improve file search and multi-rename windows. Filters on the left.
 
 - Make get_monitor method in provider

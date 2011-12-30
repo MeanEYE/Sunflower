@@ -1383,6 +1383,9 @@ class FileList(ItemList):
 					with gtk.gdk.lock:
 						self._title_bar.hide_spinner()
 
+						# update status bar
+						self._update_status_with_statistis()
+
 				self._change_path_thread = Thread(target=thread_method)
 				self._change_path_thread.start()
 				

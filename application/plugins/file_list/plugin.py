@@ -859,7 +859,7 @@ class FileList(ItemList):
 		"""Clear item list"""
 		self._store.clear()
 
-	def _directory_changed(self, monitor, path, other_path, event):
+	def _directory_changed(self, monitor, event, path, other_path):
 		"""Callback method fired when contents of directory has been changed"""
 		show_hidden = self._parent.options.getboolean('main', 'show_hidden')
 
@@ -867,10 +867,10 @@ class FileList(ItemList):
 		if event is MonitorSignals.CREATED:
 			# temporarily fix problem with duplicating items when file was saved with GIO
 			if self._find_iter_by_name(path) is None:
-				if file_.get_basename()[0] == '.' and not show_hidden:
+				if path[0] == '.' and not show_hidden:
 					return
 					
-				self._add_item(file_.get_basename())
+				self._add_item(path)
 
 			else:
 				self._update_item_details_by_name(path)
@@ -1428,7 +1428,7 @@ class FileList(ItemList):
 
 		# create file monitor
 		try:
-			self._fs_monitor = self.get_provider().get_monitor(path)
+			self._fs_monitor = self.get_provider().get_monitor(self.path)
 
 			if self._fs_monitor is not None:
 				self._fs_monitor.connect('changed', self._directory_changed)

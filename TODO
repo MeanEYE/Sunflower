@@ -3,12 +3,6 @@ check how many parts of path exist and cache that and skip the rest of the files
 
 - Improve file search and multi-rename windows. Filters on the left.
 
-- Make get_monitor method in provider
-
-- Make our own signals for monitor events
-
-- Loading directory items from separate thread doesn't update directory stats.
-
 - Fix Shift+Tab combination
 
 - Create option to duplicate selected file with new name. In cases where both left and right path

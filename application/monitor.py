@@ -1,6 +1,9 @@
 import gobject
 
 
+class MonitorError(Exception): pass
+
+
 class MonitorSignals:
 	CHANGED = 0  # file changed
 	CHANGES_DONE = 1  # a hint that this was probably the last change in a set

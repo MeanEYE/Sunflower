@@ -20,15 +20,18 @@ class LocalMonitor(Monitor):
 		}
 
 	def __init__(self, provider, path):
-		Monitor.__init__(self, provider)
+		Monitor.__init__(self, provider, path)
 
 		if os.path.exists(self._path):
 			# create file/directory monitor
-			if os.path.is_dir(self._path):
+			if os.path.isdir(self._path):
 				self._monitor = gio.File(path).monitor_directory()
 
 			else:
 				self._monitor = gio.File(path).monitor_file()
+
+			# connect signal
+			self._monitor.connect('changed', self._changed)
 
 		else:
 			# invalid path, raise exception
@@ -37,6 +40,12 @@ class LocalMonitor(Monitor):
 	def _changed(self, monitor, path, other_path, event_type):
 		"""Handle GIO signal"""
 		signal = self._signal_table[event_type]
+		if path is not None:
+			path = path.get_basename()
+
+		if other_path is not None:
+			other_path = other_path.get_basename()
+
 		self._emit_signal(signal, path, other_path)
 
 	def cancel(self):

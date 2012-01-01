@@ -44,7 +44,8 @@ class Monitor(gobject.GObject):
 		"""Notify connected objects that monitored path was changed.
 
 		Use other_path in cases where it seems logical, like moving files.
-		Otherwise None should be used instead
+		Otherwise None should be used instead. Paths needs to be relative to
+		path specified in constructor.
 		
 		"""
 		if not self._paused.is_set():

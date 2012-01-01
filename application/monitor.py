@@ -1,5 +1,7 @@
 import gobject
 
+from threading import Event
+
 
 class MonitorError(Exception): pass
 
@@ -36,6 +38,7 @@ class Monitor(gobject.GObject):
 		self._path = path
 		self._provider = provider
 		self._monitor = None
+		self._paused = Event()
 
 	def _emit_signal(self, signal, path, other_path):
 		"""Notify connected objects that monitored path was changed.
@@ -44,4 +47,17 @@ class Monitor(gobject.GObject):
 		Otherwise None should be used instead
 		
 		"""
-		self.emit('changed', signal, path, other_path)
+		if not self._paused.is_set():
+			self.emit('changed', signal, path, other_path)
+
+	def pause(self):
+		"""Pause monitoring"""
+		self._paused.set()
+
+	def resume(self):
+		"""Resume monitoring"""
+		self._paused.clear()
+
+	def cancel(self):
+		"""Cancel monitoring"""
+		pass

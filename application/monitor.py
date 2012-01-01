@@ -24,10 +24,19 @@ class Monitor(gobject.GObject):
 
 	__gtype_name__ = 'Sunflower_Monitor'	
 	__gsignals__ = {
-				'changed': (gobject.SIGNAL_RUN_LAST, None, ()),
+				'changed': (gobject.SIGNAL_RUN_LAST, None, (int, str, str)),
 			}
 	
 	def __init__(self, provider):
 		gobject.GObject.__init__(self)
 
 		self._provider = provider
+
+	def _emit_signal(self, signal, path, other_path):
+		"""Notify connected objects that monitored path was changed.
+
+		Use other_path in cases where it seems logical, like moving files.
+		Otherwise None should be used instead
+		
+		"""
+		self.emit('changed', signal, path, other_path)

@@ -39,6 +39,9 @@ class Monitor(gobject.GObject):
 		self._provider = provider
 		self._monitor = None
 		self._paused = Event()
+		
+		# clear initial value
+		self._paused.clear()
 
 	def _emit_signal(self, signal, path, other_path):
 		"""Notify connected objects that monitored path was changed.

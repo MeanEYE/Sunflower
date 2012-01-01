@@ -32,6 +32,7 @@ class Monitor(gobject.GObject):
 
 		self._path = path
 		self._provider = provider
+		self._monitor = None
 
 	def _emit_signal(self, signal, path, other_path):
 		"""Notify connected objects that monitored path was changed.

@@ -27,9 +27,10 @@ class Monitor(gobject.GObject):
 				'changed': (gobject.SIGNAL_RUN_LAST, None, (int, str, str)),
 			}
 	
-	def __init__(self, provider):
+	def __init__(self, provider, path):
 		gobject.GObject.__init__(self)
 
+		self._path = path
 		self._provider = provider
 
 	def _emit_signal(self, signal, path, other_path):

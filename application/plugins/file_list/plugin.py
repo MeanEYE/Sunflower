@@ -8,6 +8,7 @@ import urllib
 import common
 
 from provider import FileType
+from monitor import MonitorSignals
 from local_provider import LocalProvider
 from operation import DeleteOperation, CopyOperation, MoveOperation
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
@@ -422,7 +423,7 @@ class FileList(ItemList):
 				# where directory monitoring is not supported
 				if self._fs_monitor is None:
 					show_hidden = self._parent.options.getboolean('main', 'show_hidden')
-					self._add_item(response[1], show_hidden)
+					self._add_item(response[1])
 
 			except OSError as error:
 				# error creating, report to user
@@ -473,7 +474,7 @@ class FileList(ItemList):
 				# where directory monitoring is not supported
 				if self._fs_monitor is None:
 					show_hidden = self._parent.options.getboolean('main', 'show_hidden')
-					self._add_item(response[1], show_hidden)
+					self._add_item(response[1])
 
 				# create file from template
 				if template is not None:
@@ -858,29 +859,29 @@ class FileList(ItemList):
 		"""Clear item list"""
 		self._store.clear()
 
-	def _directory_changed(self, monitor, file_, other_file, event):
+	def _directory_changed(self, monitor, path, other_path, event):
 		"""Callback method fired when contents of directory has been changed"""
 		show_hidden = self._parent.options.getboolean('main', 'show_hidden')
 
 		# node created
-		if event is gio.FILE_MONITOR_EVENT_CREATED:
+		if event is MonitorSignals.CREATED:
 			# temporarily fix problem with duplicating items when file was saved with GIO
-			if self._find_iter_by_name(file_.get_basename()) is None:
+			if self._find_iter_by_name(path) is None:
 				if file_.get_basename()[0] == '.' and not show_hidden:
 					return
 					
 				self._add_item(file_.get_basename())
 
 			else:
-				self._update_item_details_by_name(file_.get_basename())
+				self._update_item_details_by_name(path)
 
 		# node deleted
-		elif event is gio.FILE_MONITOR_EVENT_DELETED:
-			self._delete_item_by_name(file_.get_basename())
+		elif event is MonitorSignals.DELETED:
+			self._delete_item_by_name(path)
 
 		# node changed
-		elif event is gio.FILE_MONITOR_EVENT_CHANGED:
-			self._update_item_details_by_name(file_.get_basename())
+		elif event is MonitorSignals.CHANGED:
+			self._update_item_details_by_name(path)
 
 		self._change_title_text()
 		self._update_status_with_statistis()
@@ -1265,7 +1266,7 @@ class FileList(ItemList):
 	def change_path(self, path=None, selected=None):
 		"""Change file list path"""
 		# cancel current directory monitor
-		if gio is not None and self._fs_monitor is not None:
+		if self._fs_monitor is not None:
 			self._fs_monitor.cancel()
 
 		# if there is already active thread, stop it
@@ -1426,14 +1427,15 @@ class FileList(ItemList):
 			self._item_list.scroll_to_cell(path)
 
 		# create file monitor
-		if gio is not None and self.get_provider().is_local:
-			try:
-				self._fs_monitor = gio.File(self.path).monitor_directory()
+		try:
+			self._fs_monitor = self.get_provider().get_monitor(path)
+
+			if self._fs_monitor is not None:
 				self._fs_monitor.connect('changed', self._directory_changed)
 
-			except gio.Error:
-				# monitoring is probably not supported by the backend
-				self._fs_monitor = None
+		except gio.Error:
+			# monitoring is probably not supported by the provider
+			self._fs_monitor = None
 
 	def select_all(self, pattern=None, exclude_list=None):
 		"""Select all items matching pattern """

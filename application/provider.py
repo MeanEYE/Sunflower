@@ -170,3 +170,7 @@ class Provider:
 	def get_system_size(self, path):
 		"""Return system size information"""
 		pass
+
+	def get_monitor(self, path):
+		"""Return monitor object to be used with specified list"""
+		return None

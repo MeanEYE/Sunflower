@@ -3,6 +3,7 @@ import stat
 import shutil
 import common
 
+from local_monitor import LocalMonitor
 from provider import Provider, FileType, FileInfo, FileInfoExtended, SystemSize
 
 
@@ -204,3 +205,7 @@ class LocalProvider(Provider):
 					)
 
 		return result
+
+	def get_monitor(self, path):
+		"""Get file system monitor for specified path"""
+		return LocalMonitor(self, path)

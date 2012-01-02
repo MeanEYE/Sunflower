@@ -17,13 +17,6 @@ from gui.input_dialog import ApplicationSelectDialog
 from gui.properties_window import PropertiesWindow
 from widgets.thumbnail_view import ThumbnailView
 from threading import Thread, Event
-
-# try to import I/O library
-try:
-	import gio
-except:
-	gio = None
-
 from plugin_base.item_list import ItemList
 
 
@@ -1452,7 +1445,7 @@ class FileList(ItemList):
 			if self._fs_monitor is not None:
 				self._fs_monitor.connect('changed', self._directory_changed)
 
-		except gio.Error:
+		except MonitorError:
 			# monitoring is probably not supported by the provider
 			self._fs_monitor = None
 

@@ -35,7 +35,7 @@ class LocalMonitor(Monitor):
 
 		else:
 			# invalid path, raise exception
-			raise MonitorError('Unable to create monito. Invalid path!')
+			raise MonitorError('Unable to create monitor. Invalid path!')
 
 	def _changed(self, monitor, path, other_path, event_type):
 		"""Handle GIO signal"""

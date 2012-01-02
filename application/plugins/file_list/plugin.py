@@ -883,6 +883,10 @@ class FileList(ItemList):
 		elif event is MonitorSignals.CHANGED:
 			self._update_item_details_by_name(path)
 
+		# attributes changes
+		elif event is MonitorSignals.ATTRIBUTE_CHANGED:
+			self._update_item_attributes_by_name(path)
+
 		self._change_title_text()
 		self._update_status_with_statistis()
 
@@ -1176,6 +1180,21 @@ class FileList(ItemList):
 			self._store.set_value(found_iter, Column.FORMATED_SIZE, formated_file_size)
 			self._store.set_value(found_iter, Column.FORMATED_MODE, formated_file_mode)
 			self._store.set_value(found_iter, Column.FORMATED_TIME, formated_file_date)
+
+	def _update_item_attributes_by_name(self, name):
+		"""Update item attributes column by name"""
+		found_iter = self._find_iter_by_name(name)
+		provider = self.get_provider()
+
+		if found_iter is not None:
+			# get node stats
+			file_stat = provider.get_stat(name, relative_to=self.path)
+
+			file_mode = file_stat.mode
+			formated_file_mode = oct(file_mode)
+
+			self._store.set_value(found_iter, Column.MODE, file_mode)
+			self._store.set_value(found_iter, Column.FORMATED_MODE, formated_file_mode)
 
 	def _change_title_text(self, text=None):
 		"""Change title label text and add free space display"""

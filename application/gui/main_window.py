@@ -138,7 +138,7 @@ class MainWindow(gtk.Window):
 		self._in_fullscreen = False
 
 		# create menu items
-		menu_bar = gtk.MenuBar()
+		self.menu_bar = gtk.MenuBar()
 
 		menu_items = (
 			{
@@ -492,7 +492,7 @@ class MainWindow(gtk.Window):
 
 		# add items to main menu
 		for item in menu_items:
-			menu_bar.append(self.menu_manager.create_menu_item(item))
+			self.menu_bar.append(self.menu_manager.create_menu_item(item))
 
 		# commands menu
 		self.menu_commands = gtk.Menu()
@@ -625,7 +625,7 @@ class MainWindow(gtk.Window):
 
 		# pack gui
 		vbox = gtk.VBox(False, 0)
-		vbox.pack_start(menu_bar, expand=False, fill=False, padding=0)
+		vbox.pack_start(self.menu_bar, expand=False, fill=False, padding=0)
 		vbox.pack_start(self.toolbar_manager.get_toolbar(), expand=False, fill=False, padding=0)
 
 		vbox2 = gtk.VBox(False, 4)

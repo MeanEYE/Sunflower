@@ -49,7 +49,6 @@ class MountManager(gtk.Window):
 		image_remove.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_BUTTON)
 		button_remove = gtk.Button()
 		button_remove.set_image(image_remove)
-
 		
 		# pack user interface
 		container.add(self._list)
@@ -62,6 +61,10 @@ class MountManager(gtk.Window):
 		vbox.pack_start(hbox_controls, False, False, 0)
 		
 		self.add(vbox)
+
+	def _populate_list(self):
+		"""Populate mount/volume list"""
+		pass
 
 	def _hide(self, widget=None, data=None):
 		"""Hide mount manager"""

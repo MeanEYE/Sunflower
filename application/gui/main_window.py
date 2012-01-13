@@ -23,7 +23,6 @@ from plugin_base.rename_extension import RenameExtension
 from plugin_base.find_extension import FindExtension
 from tools.advanced_rename import AdvancedRename
 from tools.find_files import FindFiles
-from tools.mount_manager import MountManager
 
 from ConfigParser import RawConfigParser
 
@@ -83,12 +82,11 @@ class MainWindow(gtk.Window):
 		# create managers early
 		self.icon_manager = IconManager(self)
 		self.menu_manager = MenuManager(self)
-		self.mount_manager = None  # we'll create manager later
+		self.mount_manager = MountsManager(self)
 		self.associations_manager = AssociationManager()
 		self.notification_manager = NotificationManager(self)
 		self.toolbar_manager = ToolbarManager(self)
 		self.accelerator_manager = AcceleratorManager(self)
-		self.mount_manager = MountManager(self)
 
 		# set window title
 		self.set_title(_('Sunflower'))
@@ -531,7 +529,9 @@ class MainWindow(gtk.Window):
 		self._menu_item_mounts.set_label(_('Mounts'))
 		self._menu_item_mounts.set_image(mounts_image)
 		self._menu_item_mounts.show()
-		self.mount_manager = MountsManager(self, self._menu_item_mounts)
+
+		# tell mounts manager to attache menu items
+		self.mount_manager._attach_menus()
 
 		# tools menu
 		menu_item_tools = self.menu_manager.get_item_by_name('tools')

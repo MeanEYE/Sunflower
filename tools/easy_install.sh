@@ -154,7 +154,7 @@ function install_program() {
 
 	# make desktop file
 	echo "   - Creating desktop file"
-	cp -f $location/Sunflwoer.desktop $shared_path/share/applications/
+	cp -f $location/Sunflower.desktop $shared_path/share/applications/
 
 	# copy icons to system directories
 	echo "   - Copying icons"

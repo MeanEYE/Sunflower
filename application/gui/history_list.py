@@ -1,9 +1,11 @@
 import os
 import gtk
 
-COL_NAME		= 0
-COL_PATH		= 1
-COL_TIMESTAMP	= 2
+
+class Column:
+	NAME = 0
+	PATH = 1
+	TIMESTAMP = 2
 
 
 class HistoryList(gtk.Window):
@@ -40,8 +42,8 @@ class HistoryList(gtk.Window):
 		cell_name = gtk.CellRendererText()
 		cell_path = gtk.CellRendererText()
 
-		col_name = gtk.TreeViewColumn(_('Name'), cell_name, text=COL_NAME)
-		col_path = gtk.TreeViewColumn(_('Path'), cell_path, text=COL_PATH)
+		col_name = gtk.TreeViewColumn(_('Name'), cell_name, text=Column.NAME)
+		col_path = gtk.TreeViewColumn(_('Path'), cell_path, text=Column.PATH)
 
 		self._history_list = gtk.TreeView(self._history)
 		self._history_list.connect('key-press-event', self._handle_key_press)
@@ -106,7 +108,7 @@ class HistoryList(gtk.Window):
 
 		# if selection is valid, change to selected path
 		if iter_ is not None:
-			path = list_.get_value(iter_, COL_PATH)
+			path = list_.get_value(iter_, Column.PATH)
 
 			# change path
 			self._parent._handle_history_click(path=path)
@@ -121,7 +123,7 @@ class HistoryList(gtk.Window):
 
 		# if selection is valid, change to selected path
 		if iter_ is not None:
-			path = list_.get_value(iter_, COL_PATH)
+			path = list_.get_value(iter_, Column.PATH)
 
 			# create new tab
 			self._application.create_tab(
@@ -140,7 +142,7 @@ class HistoryList(gtk.Window):
 
 		# if selection is valid, change to selected path
 		if iter_ is not None:
-			path = list_.get_value(iter_, COL_PATH)
+			path = list_.get_value(iter_, Column.PATH)
 
 			# open in oposite list
 			oposite_object = self._application.get_oposite_object(self._application.get_active_object())

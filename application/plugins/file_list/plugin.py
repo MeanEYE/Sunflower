@@ -7,7 +7,6 @@ import fnmatch
 import urllib
 import common
 
-from provider import FileType
 from monitor import MonitorSignals
 from local_provider import LocalProvider
 from operation import DeleteOperation, CopyOperation, MoveOperation
@@ -18,6 +17,7 @@ from gui.properties_window import PropertiesWindow
 from widgets.thumbnail_view import ThumbnailView
 from threading import Thread, Event
 from plugin_base.item_list import ItemList
+from plugin_base.provider import FileType
 
 
 def register_plugin(application):

@@ -4,7 +4,7 @@ import shutil
 import common
 
 from local_monitor import LocalMonitor
-from provider import Provider, FileType, FileInfo, FileInfoExtended, SystemSize
+from plugin_base.provider import Provider, FileType, FileInfo, FileInfoExtended, SystemSize
 
 
 class LocalProvider(Provider):

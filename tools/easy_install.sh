@@ -6,7 +6,7 @@
 # This script downloads and installs the Sunflower file manager in /opt
 # creating shortcuts for easy CLI or GUI starting.
 
-installer_version=1.4
+installer_version=1.5
 download_link="http://rcf-group.com/generator/download/23/0.tgz"
 location="/opt"
 shared_path="/usr"
@@ -154,91 +154,7 @@ function install_program() {
 
 	# make desktop file
 	echo "   - Creating desktop file"
-	echo '[Desktop Entry]
-Type=Application
-Icon=sunflower
-Name=Sunflower
-GenericName=File Manager
-GenericName[be]=Файлавы менеджар
-GenericName[bg]=Файлов мениджър
-GenericName[cs]=Správce souborů
-GenericName[da]=Filhåndtering
-GenericName[de]=Dateimanager
-GenericName[el]=Διαχειριστής αρχείων
-GenericName[en_GB]=File Manager
-GenericName[es]=Gestor de archivos
-GenericName[fa]=مدیر فایل
-GenericName[fi]=Tiedoston hallinta
-GenericName[fr]=Ouvrir dans le gestionnaire de fichiers
-GenericName[gl]=Xestor de ficheiros
-GenericName[he]=מנהל קבצים
-GenericName[hr]=Upravitelj datotekama
-GenericName[hu]=Fájlkezelő
-GenericName[id]=Menejemen Berkas
-GenericName[it]=File Manager
-GenericName[ja]=ファイルマネージャ
-GenericName[lg]=Gulawo Ekiteekateekafayiro
-GenericName[lt]=Failų tvarkyklė
-GenericName[lv]=Failu pārvaldnieks
-GenericName[nl]=Bestandbeheerder
-GenericName[pa]=ਫਾਇਲ ਮੈਨੇਜਰ
-GenericName[pl]=Menedżer plików
-GenericName[pt]=Gestor de ficheiros
-GenericName[pt_BR]=Gerenciador de arquivos
-GenericName[ru]=Файловый менеджер
-GenericName[sl]=Upravljalnik datotek
-GenericName[sr]=Управник датотека
-GenericName[sr@latin]=Upravnik datoteka
-GenericName[sv]=Filhanterare
-GenericName[te]=ఫైల్ నిర్వాహకం
-GenericName[tr]=Dosya Yöneticisi
-GenericName[tt_RU]=Файл-менеджер
-GenericName[uk]=Менеджер файлів
-GenericName[vi]=Bộ quản lý Tập tin
-GenericName[zh_CN]=文件管理器
-GenericName[zh_TW]=檔案管理程式
-Comment=Browse the file system and manage the files
-Comment[be]=Прагляд файлавай сістэмы і кіраванне файламі
-Comment[bg]=Разглеждане на файловата система и управляване на файловете
-Comment[cs]=Procházet systém souborů správcem souborů
-Comment[da]=Gennemse filsystemet og håndter filerne
-Comment[de]=Das Dateisystem durchsuchen und Dateien verwalten
-Comment[el]=Περιήγηση στο σύστημα αρχείων και διαχείριση αρχείων
-Comment[en_GB]=Browse the file system and manage the files
-Comment[es]=Explorar el sistema de archivos y gestionar los archivos
-Comment[fa]=مرور فایل سیستم و مدیریت فایل ها
-Comment[fi]=Selaa tiedostojärjestelmää ja hallitse tiedostoja
-Comment[fr]=Parcourir le système de fichiers et gérer les fichiers
-Comment[gl]=Navegar polo sistema de ficheiros e xestionar os ficheiros
-Comment[he]=עיון במערכת הקבצים וניהול הקבצים
-Comment[hu]=Fájlrendszer tallózása és fájlok kezelése
-Comment[it]=Sfoglia il file system e gestisci i file
-Comment[ja]=ファイルシステムをブラウズし、ファイルの管理を行います
-Comment[lg]=Lambula n'\''okuteekateeka fayiro eziri ku sisitemu yonna
-Comment[lt]=Tvarkykite failus ir aplankus
-Comment[lv]=Pārlūkot failu sistēmu un pārvaldīt failus
-Comment[nl]=Blader door het bestandssysteem en beheer de bestanden
-Comment[pa]=ਫਾਇਲ ਸਿਸਟਮ ਵੇਖੋ ਤੇ ਫਾਇਲਾਂ ਦਾ ਪਰਬੰਧ ਕਰੋ
-Comment[pl]=Umożliwia przeglądanie systemu plików i zarządza jego zawartością
-Comment[pt]=Navegar no sistema e gerir ficheiros
-Comment[pt_BR]=Navegue pelo sistema de arquivos e gerencie arquivos e pastas
-Comment[ru]=Просмотр файловой системы и управление файлами
-Comment[sl]=Brskajte po datotečnem sistemu in upravljajte datoteke
-Comment[sr]=Управљајте системом датотека
-Comment[sr@latin]=Upravljajte sistemom datoteka
-Comment[sv]=Utforska filsystemet och hantera filerna
-Comment[te]=ఫైల్ వ్యవస్థను అన్వేషించు మరియు ఫైళ్ళను నిర్వహించు
-Comment[tr]=Dosya sistemine göz at ve dosyaları yönet
-Comment[tt_RU]=Файл системасын карау һәм файллар белән идарә итү
-Comment[uk]=Показує файлову систему і керує файлами
-Comment[vi]=Xem hệ thống tập tin và quản lý dữ liệu
-Comment[zh_CN]=浏览文件系统和管理文件
-Comment[zh_TW]=瀏覽檔案系統及管理檔案
-Categories=FileManager;Utility;Core;GTK;
-Exec=/usr/local/bin/sunflower %U
-StartupNotify=true
-Terminal=false
-MimeType=inode/directory;' > "$shared_path/share/applications/sunflower.desktop"
+	cp -f $location/Sunflwoer.desktop $shared_path/share/applications/
 
 	# copy icons to system directories
 	echo "   - Copying icons"

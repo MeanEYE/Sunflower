@@ -5,7 +5,7 @@ import locale
 import fnmatch
 import user
 
-from provider import FileType
+from plugin_base.provider import FileType
 from common import get_user_directory, UserDirectory
 
 # constants

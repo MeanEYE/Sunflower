@@ -62,6 +62,8 @@ class MountsManager:
 		
 		self._list = gtk.TreeView(model=self._store)
 		self._list.set_headers_visible(False)
+		self._list.set_show_expanders(True)
+		self._list.set_search_column(Column.NAME)
 		self._list.connect('key-press-event', self._handle_key_press)
 
 		cell_icon = gtk.CellRendererPixbuf()
@@ -106,12 +108,33 @@ class MountsManager:
 		
 		self.window.add(vbox)
 
-		# populate list
-		self._populate_list()
-
 	def _populate_list(self):
 		"""Populate mount/volume list"""
 		self._volumes_iter = self._store.append(None, ('computer', _('Volumes'), None, None, None))
+
+		# get list of volumes
+		for volume in self._volume_monitor.get_volumes():
+			icon_names = volume.get_icon().to_string()
+			icon = self._application.icon_manager.get_mount_icon_name(icon_names)
+			name = volume.get_name()
+			uuid = volume.get_uuid()
+
+			print volume.should_automount()
+
+			self._store.append(
+							self._volumes_iter,
+							(icon, name, uuid, None, None)
+						)
+
+		# get list of mounted volumes
+		for mount in self._volume_monitor.get_mounts():
+			self._add_mount(self._volume_monitor, mount)
+
+		# expand all items
+		self._list.expand_all()
+
+		# update menu item visibility based on mount count
+		self._menu_updated()
 
 	def _hide(self, widget=None, data=None):
 		"""Hide mount manager"""
@@ -265,11 +288,7 @@ class MountsManager:
 		self._menu_item_no_mounts2 = menu_manager.get_item_by_name('mount_list_empty')
 		self._menu_item_no_mounts2.set_property('no-show-all', True)
 
-		# get initial list of mounted volumes
-		for mount in self._volume_monitor.get_mounts():
-			self._add_mount(self._volume_monitor, mount)
-
-		self._menu_updated()
+		self._populate_list()
 
 	def show(self, widget=None, data=None):
 		"""Show mount manager"""

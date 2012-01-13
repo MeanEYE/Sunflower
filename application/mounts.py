@@ -119,8 +119,6 @@ class MountsManager:
 			name = volume.get_name()
 			uuid = volume.get_uuid()
 
-			print volume.should_automount()
-
 			self._store.append(
 							self._volumes_iter,
 							(icon, name, uuid, None, None)

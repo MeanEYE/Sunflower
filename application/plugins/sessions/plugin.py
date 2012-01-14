@@ -202,6 +202,9 @@ def change_session(item, new_session):
 	_close_tabs(main_window.left_notebook, left_pages)
 	_close_tabs(main_window.right_notebook, right_pages)
 	
+	# rename menu
+	_rename_menu()
+	
 def save_current_session():
 	"""Just saves current session"""
 	current_session = main_window.tab_options.get('sessions', 'current')
@@ -228,14 +231,13 @@ def _first_start_specific_actions():
 def _create_menu():
 	"""Creates menu"""
 	menu_sessions = gtk.Menu()
+	_rename_menu()
 	item_manage = gtk.MenuItem(_('Manage sessions'))
 	item_separator = gtk.MenuItem()
 	current_session = main_window.tab_options.get('sessions', 'current')
 		
 	# pack menus and connect signals
 	group = None
-	menu_sessions.append(item_manage)
-	menu_sessions.append(item_separator)	
 	for session in _get_sessions_list(main_window.tab_options):
 		item = gtk.RadioMenuItem(group, _get_session_name(main_window.tab_options, session))
 		menu_sessions.append(item)
@@ -244,10 +246,18 @@ def _create_menu():
 		item.connect('activate', change_session, session)
 		group = item
 	item_sessions.set_submenu(menu_sessions)
+
+	menu_sessions.append(item_separator)	
+	menu_sessions.append(item_manage)
 	item_manage.connect('activate', show_sessions_manager)
 
 	# add to file menu and show it
 	item_sessions.show_all()
+	
+def _rename_menu():
+	current_session = main_window.tab_options.get('sessions', 'current')
+	current_name = main_window.tab_options.get('names', 'session_{0}'.format(current_session))
+	item_sessions.set_label('{0}: {1}'.format(_('Session'), current_name))
 
 def _get_session_name(tab_options, identifier):
 	"""Returns sesions name basing on its identifier"""
@@ -268,7 +278,8 @@ def register_plugin(application):
 	global item_sessions
 	item_sessions = gtk.MenuItem(_('Sessions'))
 	_create_menu()
-	main_window.menu_manager.get_item_by_name('file').get_submenu().insert(item_sessions, 1)
+	main_window.menu_bar.append(item_sessions)
+	item_sessions.set_right_justified(True)
 	
 	# add configuration
 	global config

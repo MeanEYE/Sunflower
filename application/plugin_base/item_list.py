@@ -30,8 +30,6 @@ class ItemList(PluginBase):
 	"""
 
 	def __init__(self, parent, notebook, path=None, sort_column=None, sort_ascending=True):
-		global _icon_theme
-
 		self._provider = None
 		self._menu_timer = None
 

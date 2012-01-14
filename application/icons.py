@@ -52,11 +52,11 @@ class IconManager:
 		"""Set window icon"""
 		if self.has_icon('sunflower'):
 			# in case theme has its own icon, use that one
-			window.set_icon_name('sunflower')
+			window.set_icon(self._icon_theme.load_icon('sunflower', 256, 0))
 
 		else:
 			window.set_icon_from_file(os.path.abspath(os.path.join(
 										'images',
-										'sunflower_64.png'
+										'sunflower.svg'
 									)))
 

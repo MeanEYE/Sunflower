@@ -43,6 +43,7 @@ class SystemTerminal(Terminal):
 									directory=self.path
 								)
 
+			self._title_bar.set_title(_('Terminal'))
 			self._title_bar.set_subtitle(shell_command)
 
 		# change tab label text

@@ -130,6 +130,20 @@ class PreferencesWindow(gtk.Window):
 
 	def _hide(self, widget, data=None):
 		"""Hide dialog"""
+		if self._button_save.get_sensitive():
+			dialog = gtk.MessageDialog(
+			                    self,
+			                    gtk.DIALOG_DESTROY_WITH_PARENT,
+			                    gtk.MESSAGE_QUESTION,
+			                    gtk.BUTTONS_YES_NO,
+			                    _("There are unsaved changes.\nDo you want to save them?")
+			                )
+			result = dialog.run()
+			dialog.destroy()
+
+			if result == gtk.RESPONSE_YES:
+				self._save_options()			
+		
 		self.hide()
 		return True  # avoid destroying components
 

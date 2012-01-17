@@ -1,5 +1,3 @@
-- Ask user to save changes before closing preferences window.
-
 - Change the way editor is selected. Offer user with dropdown list of editors or manual entry.
 
 - On copy/move operation when checking whether the remote directory or file exists we should

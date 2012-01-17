@@ -596,6 +596,7 @@ class MainWindow(gtk.Window):
 
 		buttons = (
 				(_('Refresh'), _('Reload active item list'), self._command_reload),
+				(_('Rename'), _('Rename selected file'), self._command_rename),
 				(_('View'), _('View selected file'), None),
 				(_('Edit'), _('Edit selected file'), self._command_edit),
 				(_('Copy'), _('Copy selected items from active to opposite list'), self._command_copy),
@@ -1093,6 +1094,13 @@ class MainWindow(gtk.Window):
 
 		if hasattr(active_object, 'refresh_file_list'):
 			active_object.refresh_file_list()
+
+	def _command_rename(self, widget=None, data=None):
+		"""Handle command button click"""
+		active_object = self.get_active_object()
+
+		if hasattr(active_object, '_rename_file'):
+			active_object._rename_file()
 
 	def _command_edit(self, widget=None, data=None):
 		"""Handle command button click"""

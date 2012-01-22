@@ -14,6 +14,7 @@ class TitleBar(gtk.HBox):
 		self._control_count = 0
 		self._state = gtk.STATE_NORMAL
 		self._ubuntu_coloring = self._application.options.getboolean('main', 'ubuntu_coloring')
+		self._menu = None
 
 		# configure title bar
 		self.set_border_width(4)
@@ -34,6 +35,7 @@ class TitleBar(gtk.HBox):
 		self._button_menu.set_relief(gtk.RELIEF_NONE)
 		self._button_menu.modify_style(style)
 		self._button_menu.set_focus_on_click(False)
+		self._button_menu.connect('clicked', self.show_menu)
 
 		# create title box
 		vbox = gtk.VBox(False, 1)
@@ -184,6 +186,15 @@ class TitleBar(gtk.HBox):
 		if self._spinner is not None:
 			self._spinner.modify_fg(gtk.STATE_NORMAL, color)
 
+	def __handle_menu_hide(self, widget, data=None):
+		"""Handle hiding title bar menu"""
+		active_object = self._application.get_active_object()
+		oposite_object = self._application.get_oposite_object(active_object)
+
+		# prevent title bar from losing focus
+		active_object._disable_object_block()
+		oposite_object._disable_object_block()
+
 	def add_control(self, widget):
 		"""Add button control"""
 		self._control_count += 1
@@ -213,6 +224,34 @@ class TitleBar(gtk.HBox):
 	def set_icon_from_name(self, icon_name):
 		"""Set icon from specified name"""
 		self._icon.set_from_icon_name(icon_name, gtk.ICON_SIZE_LARGE_TOOLBAR)
+
+	def set_menu(self, menu):
+		"""Set title bar menu"""
+		self._menu = menu
+		self._menu.connect('hide', self.__handle_menu_hide)
+
+	def show_menu(self, widget=None, data=None):
+		"""Show title bar menu"""
+		print 'came'
+		if self._menu is None:
+			return
+
+		# get objects
+		active_object = self._application.get_active_object()
+		oposite_object = self._application.get_oposite_object(active_object)
+
+		# prevent title bar from losing focus
+		active_object._enable_object_block()
+		oposite_object._enable_object_block()
+
+		# show menu below the button
+		button = widget if widget is not None else self._button_menu
+
+		self._menu.popup(
+					None, None,
+					self._application._get_bookmarks_menu_position,
+					1, 0, button
+				)
 
 	def show_spinner(self):
 		"""Show spinner widget"""

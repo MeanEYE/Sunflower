@@ -24,6 +24,17 @@ class TitleBar(gtk.HBox):
 		# top folder icon as default
 		self._icon = gtk.Image()
 
+		# create plugin main menu button
+		style = gtk.RcStyle()
+		style.xthickness = 0
+		style.ythickness = 0
+
+		self._button_menu = gtk.Button()
+		self._button_menu.add(self._icon)
+		self._button_menu.set_relief(gtk.RELIEF_NONE)
+		self._button_menu.modify_style(style)
+		self._button_menu.set_focus_on_click(False)
+
 		# create title box
 		vbox = gtk.VBox(False, 1)
 
@@ -51,7 +62,7 @@ class TitleBar(gtk.HBox):
 		vbox.pack_start(self._title_label, True, True, 0)
 		vbox.pack_start(self._subtitle_label, False, False, 0)
 
-		self.pack_start(self._icon, False, False, 0)
+		self.pack_start(self._button_menu, False, False, 0)
 		self.pack_start(vbox, True, True, 3)
 
 		if self._spinner is not None:

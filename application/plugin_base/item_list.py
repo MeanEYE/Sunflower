@@ -167,6 +167,32 @@ class ItemList(PluginBase):
 		self._open_with_menu = None
 		self._popup_menu = self._create_popup_menu()
 
+		# tab menu 
+		self._tab_menu = gtk.Menu()
+		self._title_bar.set_menu(self._tab_menu)
+
+		# create reload menu item
+		image_refresh = gtk.Image()
+		image_refresh.set_from_icon_name('reload', gtk.ICON_SIZE_MENU)
+
+		menu_item_refresh = gtk.ImageMenuItem()
+		menu_item_refresh.set_label(_('Reload item list'))
+		menu_item_refresh.set_image(image_refresh)
+		menu_item_refresh.connect('activate', self.refresh_file_list)
+		menu_item_refresh.show()
+		self._tab_menu.append(menu_item_refresh)
+
+		# create copy path item
+		image_copy = gtk.Image()
+		image_copy.set_from_stock(gtk.STOCK_COPY, gtk.ICON_SIZE_MENU)
+
+		menu_item_copy_path = gtk.ImageMenuItem()
+		menu_item_copy_path.set_label(_('Copy path to clipboard'))
+		menu_item_copy_path.set_image(image_copy)
+		menu_item_copy_path.connect('activate', self.copy_path_to_clipboard)
+		menu_item_copy_path.show()
+		self._tab_menu.append(menu_item_copy_path)
+
 		# history menu
 		self._history_menu = gtk.Menu()
 		self._history_menu.connect('hide', self._handle_history_hide)
@@ -1249,6 +1275,10 @@ class ItemList(PluginBase):
 	def refresh_file_list(self, widget=None, data=None):
 		"""Reload file list for current directory"""
 		self.change_path(self.path)
+
+	def copy_path_to_clipboard(self, widget=None, data=None):
+		"""Copy current path to clipboard"""
+		self._parent.set_clipboard_text(self.path)
 
 	def update_column_size(self, name):
 		"""Update column sizes"""

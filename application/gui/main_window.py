@@ -755,10 +755,10 @@ class MainWindow(gtk.Window):
 		This method will disable blocking of signals on specified list.
 
 		"""
-		list_ = self.menu_bookmarks.get_data('list')
-		oposite_object = self.get_oposite_object(list_)
+		item_list = self.menu_bookmarks.get_data('list')
+		oposite_object = self.get_oposite_object(item_list)
 
-		list_._disable_object_block()
+		item_list._disable_object_block()
 		oposite_object._disable_object_block()
 
 	def _create_commands_menu(self):
@@ -1489,10 +1489,10 @@ class MainWindow(gtk.Window):
 
 		if button is not None:
 			# disable color changing on tab title bar
-			list_ = self.menu_bookmarks.get_data('list')
-			oposite_object = self.get_oposite_object(list_)
+			item_list = self.menu_bookmarks.get_data('list')
+			oposite_object = self.get_oposite_object(item_list)
 
-			list_._enable_object_block()
+			item_list._enable_object_block()
 			oposite_object._enable_object_block()
 
 			# show bookmarks menu
@@ -2079,12 +2079,12 @@ class MainWindow(gtk.Window):
 		"""Return active object"""
 		return self._active_object
 
-	def get_oposite_object(self, object_):
+	def get_oposite_object(self, active_object):
 		"""Return oposite object"""
 		left_object = self.left_notebook.get_nth_page(self.left_notebook.get_current_page())
 		right_object = self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
 
-		if object_ is left_object:
+		if active_object is left_object:
 			result = right_object
 
 		else:

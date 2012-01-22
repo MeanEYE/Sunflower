@@ -219,6 +219,7 @@ class ItemList(PluginBase):
 		group.add_method('swap_paths', _('Swap right and left paths'), self._swap_paths)
 		group.add_method('move_marker_up', _('Move selection marker up'), self._move_marker_up)
 		group.add_method('move_marker_down', _('Move selection marker down'), self._move_marker_down)
+		group.add_method('show_tab_menu', _('Show tab menu'), self._show_tab_menu)
 
 		# configure accelerators
 		group.set_accelerator('execute_item', keyval('Return'), 0)
@@ -248,6 +249,7 @@ class ItemList(PluginBase):
 		group.set_accelerator('inherit_left_path', keyval('Right'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('inherit_right_path', keyval('Left'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('swap_paths', keyval('U'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('show_tab_menu', keyval('grave'), gtk.gdk.CONTROL_MASK)
 
 		# create bookmark accelerators
 		for number in range(1, 11):
@@ -279,6 +281,11 @@ class ItemList(PluginBase):
 	def _show_history_window(self, widget, data=None):
 		"""Show history browser"""
 		HistoryList(self, self._parent)
+
+	def _show_tab_menu(self, widget, data=None):
+		"""Show title bar menu"""
+		self._title_bar.show_menu()
+		return True
 
 	def _reorder_columns(self, order=None):
 		"""Apply column order and visibility"""

@@ -232,7 +232,6 @@ class TitleBar(gtk.HBox):
 
 	def show_menu(self, widget=None, data=None):
 		"""Show title bar menu"""
-		print 'came'
 		if self._menu is None:
 			return
 

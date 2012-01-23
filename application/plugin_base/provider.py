@@ -51,7 +51,7 @@ class FileType:
 	DEVICE_BLOCK = 5
 
 
-class ProviderSupport:
+class Support:
 	MONITOR = 0
 	TRASH = 1
 	LINK = 2
@@ -144,7 +144,7 @@ class Provider:
 
 	def get_support(self):
 		"""Return supported options by provider"""
-		return (,)
+		return ()
 
 	def set_mode(self, path, mode, relative_to=None):
 		"""Set access mode to specified path"""

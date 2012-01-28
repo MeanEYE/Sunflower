@@ -19,6 +19,7 @@ class MountsManager:
 		self._menu = None
 		self._menu_unmount = None
 		self._menu_item = None
+		self._mounts_iter = None
 		self._volumes_iter = None
 
 		self.window = None
@@ -27,6 +28,8 @@ class MountsManager:
 		self._volume_monitor = VolumeMonitor()
 		self._volume_monitor.connect('mount-added', self._add_mount)
 		self._volume_monitor.connect('mount-removed', self._remove_mount)
+		self._volume_monitor.connect('volume-added', self._add_volume)
+		self._volume_monitor.connect('volume-removed', self._remove_volume)
 
 		# create user interface
 		self.__create_interface()
@@ -38,7 +41,7 @@ class MountsManager:
 		
 		# configure window
 		self.window.set_title(_('Mount manager'))
-		self.window.set_default_size(400, 240)
+		self.window.set_default_size(500, 340)
 		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.window.set_skip_taskbar_hint(True)
 		self.window.set_modal(True)
@@ -75,7 +78,7 @@ class MountsManager:
 		col_name.pack_start(cell_name, True)
 
 		col_name.add_attribute(cell_icon, 'icon-name', Column.ICON)
-		col_name.add_attribute(cell_name, 'text', Column.NAME)
+		col_name.add_attribute(cell_name, 'markup', Column.NAME)
 
 		col_path = gtk.TreeViewColumn(None, cell_path, text=Column.PATH)
 
@@ -85,6 +88,32 @@ class MountsManager:
 		# create controls
 		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
 		button_close.connect('clicked', self._hide)
+
+		button_mount = gtk.Button()
+		button_mount.set_label(_('Mount'))
+		button_mount.set_sensitive(False)
+
+		button_unmount = gtk.Button()
+		button_unmount.set_label(_('Unmount'))
+		button_unmount.set_sensitive(False)
+
+		separator = gtk.VSeparator()
+
+		image_jump = gtk.Image()
+		image_jump.set_from_icon_name('go-jump', gtk.ICON_SIZE_BUTTON)
+		button_jump = gtk.Button()
+		button_jump.set_image(image_jump)
+		button_jump.set_label(_('Go to'))
+		button_jump.set_can_default(True)
+		#button_jump.connect('clicked', self._change_path)
+
+		image_new_tab = gtk.Image()
+		image_new_tab.set_from_icon_name('tab-new', gtk.ICON_SIZE_BUTTON)
+		button_new_tab = gtk.Button()
+		button_new_tab.set_image(image_new_tab)
+		button_new_tab.set_label(_('New tab'))
+		button_new_tab.set_tooltip_text(_('Open selected path in new tab'))
+		#button_new_tab.connect('clicked', self._open_in_new_tab)
 		
 		image_add = gtk.Image()
 		image_add.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_BUTTON)
@@ -101,7 +130,13 @@ class MountsManager:
 
 		hbox_controls.pack_start(button_add, False, False, 0)
 		hbox_controls.pack_start(button_remove, False, False, 0)
+		hbox_controls.pack_start(separator, False, False, 0)
+		hbox_controls.pack_start(button_mount, False, False, 0)
+		hbox_controls.pack_start(button_unmount, False, False, 0)
+
 		hbox_controls.pack_end(button_close, False, False, 0)
+		hbox_controls.pack_end(button_jump, False, False, 0)
+		hbox_controls.pack_end(button_new_tab, False, False, 0)
 		
 		vbox.pack_start(container, True, True, 0)
 		vbox.pack_start(hbox_controls, False, False, 0)
@@ -110,7 +145,8 @@ class MountsManager:
 
 	def _populate_list(self):
 		"""Populate mount/volume list"""
-		self._volumes_iter = self._store.append(None, ('computer', _('Volumes'), None, None, None))
+		self._mounts_iter = self._store.append(None, (None, '<b>{0}</b>'.format(_('Mounts')), None, None, None))
+		self._volumes_iter = self._store.append(None, (None, '<b>{0}</b>'.format(_('Volumes')), None, None, None))
 
 		# get list of volumes
 		for volume in self._volume_monitor.get_volumes():
@@ -133,6 +169,32 @@ class MountsManager:
 
 		# update menu item visibility based on mount count
 		self._menu_updated()
+
+	def _get_volume_iter_by_uuid(self, uuid):
+		"""Get volume list iter by UUID"""
+		result = None
+		index = self._store.get_path(self._volumes_iter)
+		
+		# find iter by uuid
+		for volume_row in self._store[index].iterchildren():
+			if self._store.get_value(volume_row.iter, Column.CONFIGURATION) == uuid:
+				result = volume_row.iter
+				break
+
+		return result
+
+	def _get_mount_iter_by_path(self, path):
+		"""Get mount list iter by path"""
+		result = None
+		index = self._store.get_path(self._mounts_iter)
+		
+		# find iter by uuid
+		for mount_row in self._store[index].iterchildren():
+			if self._store.get_value(mount_row.iter, Column.PATH) == path:
+				result = mount_row.iter
+				break
+
+		return result
 
 	def _hide(self, widget=None, data=None):
 		"""Hide mount manager"""
@@ -158,18 +220,40 @@ class MountsManager:
 		"""Catch volume-mounted signal and update mounts menu"""
 		icon_names = mount.get_icon().to_string()
 		mount_icon = self._application.icon_manager.get_mount_icon_name(icon_names)
+		mount_path = mount.get_root().get_path()
+		volume = mount.get_volume()
+
+		if volume is not None:
+			# we are looking at mounted volume
+			uuid = volume.get_uuid()
+			volume_iter = self._get_volume_iter_by_uuid(uuid)
+
+			if volume_iter is not None:
+				self._store.set_value(volume_iter, Column.PATH, mount_path)
+				self._store.set_value(volume_iter, Column.MOUNTED, True)
+
+		else:
+			# volume doesn't exist, add to mount list
+			data = (
+				mount_icon, 
+				mount.get_name(), 
+				None,  # configuration
+				mount_path,
+				True
+			)
+			self._store.append(self._mounts_iter, data)
 
 		# add bookmark menu item
 		self._add_item(
 				mount.get_name(),
-				mount.get_root().get_path(),
+				mount_path,
 				mount_icon
 			)
 
 		# add unmount menu item
 		self._add_unmount_item(
 				mount.get_name(),
-				mount.get_root().get_path(),
+				mount_path,
 				mount_icon
 			)
 
@@ -178,10 +262,55 @@ class MountsManager:
 
 	def _remove_mount(self, monitor, mount):
 		"""Remove volume menu item from the mounts menu"""
-		self._remove_item(mount.get_root().get_path())
+		volume = mount.get_volume()
+		mount_path = mount.get_root().get_path()
+		
+		if volume is not None:
+			# volume was unmounted
+			uuid = volume.get_uuid()
+			volume_iter = self._get_volume_iter_by_uuid(uuid)
+
+			if volume_iter is not None:
+				self._store.set_value(volume_iter, Column.PATH, None)
+				self._store.set_value(volume_iter, Column.MOUNTED, False)
+
+		else:
+			# remove mount from list
+			mount_iter = self._get_mount_iter_by_path(mount_path)
+
+			if mount_iter is not None:
+				self._store.remove(mount_iter)
+
+		# remove item from menus
+		self._remove_item(mount_path)
 
 		# notify system about menu update
 		self._menu_updated()
+
+	def _add_volume(self, monitor, volume):
+		"""Event called when new volume is connected"""
+		icon_names = volume.get_icon().to_string()
+		icon = self._application.icon_manager.get_mount_icon_name(icon_names)
+		name = volume.get_name()
+		uuid = volume.get_uuid()
+
+		# add new volume to the store
+		self._store.append(
+						self._volumes_iter,
+						(icon, name, uuid, None, None)
+					)
+
+		# expand all items
+		self._list.expand_all()
+
+	def _remove_volume(self, monitor, volume):
+		"""Event called when volume is removed/unmounted"""
+		uuid = volume.get_uuid()
+		volume_iter = self._get_volume_iter_by_uuid(uuid)
+
+		# remove volume from the list
+		if volume_iter is not None:
+			self._store.remove(volume_iter)
 
 	def _menu_updated(self):
 		"""Method called whenever menu is updated"""

@@ -89,13 +89,10 @@ class MountsManager:
 		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
 		button_close.connect('clicked', self._hide)
 
-		button_mount = gtk.Button()
-		button_mount.set_label(_('Mount'))
-		button_mount.set_sensitive(False)
-
 		button_unmount = gtk.Button()
 		button_unmount.set_label(_('Unmount'))
 		button_unmount.set_sensitive(False)
+		button_unmount.connect('clicked', self._unmount_item)
 
 		separator = gtk.VSeparator()
 
@@ -131,7 +128,6 @@ class MountsManager:
 		hbox_controls.pack_start(button_add, False, False, 0)
 		hbox_controls.pack_start(button_remove, False, False, 0)
 		hbox_controls.pack_start(separator, False, False, 0)
-		hbox_controls.pack_start(button_mount, False, False, 0)
 		hbox_controls.pack_start(button_unmount, False, False, 0)
 
 		hbox_controls.pack_end(button_close, False, False, 0)
@@ -195,6 +191,10 @@ class MountsManager:
 				break
 
 		return result
+
+	def _get_extension_for_selected_item(self):
+		"""Get extension for selected item in list, if possible"""
+		pass
 
 	def _hide(self, widget=None, data=None):
 		"""Hide mount manager"""
@@ -357,14 +357,20 @@ class MountsManager:
 			if item.get_data('path') == mount_point: self._menu_unmount.remove(item)
 
 	def _unmount_item(self, widget, data=None):
-		"""Unmount item"""
+		"""Event called by the unmount menu item or unmount button from manager"""
 		path = widget.get_data('path')
 
-		for mount in self._volume_monitor.get_mounts():
-			# check if this is the right mount
-			if mount.get_root().get_path() == path:
-				self._unmount(mount)
-				break
+		if path is not None:
+			# unmount was called by button
+			pass
+
+		else:
+			# unmount was called by menu item
+			for mount in self._volume_monitor.get_mounts():
+				# check if this is the right mount
+				if mount.get_root().get_path() == path:
+					self._unmount(mount)
+					break
 
 	def _unmount(self, mount):
 		"""Perform unmounting"""

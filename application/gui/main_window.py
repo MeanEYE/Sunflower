@@ -2304,6 +2304,10 @@ class MainWindow(gtk.Window):
 
 			if not issubclass(ExtensionClass, FindExtension):
 				print 'Error: Invalid object class!'
+	
+	def register_mount_manager_extension(self, extension):
+		"""Register mount manager extension"""
+		self.mount_manager.register_extension(extension)
 
 	def plugin_class_exists(self, class_name):
 		"""Check if specified class name exists in active plugins"""

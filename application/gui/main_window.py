@@ -75,6 +75,7 @@ class MainWindow(gtk.Window):
 		self.archive_provider_classes = {}
 		self.rename_extension_classes = {}
 		self.find_extension_classes = {}
+		self.mount_manager_extensions = []
 
 		# list of protected plugins
 		self.protected_plugins = ('file_list', 'system_terminal')
@@ -2307,7 +2308,7 @@ class MainWindow(gtk.Window):
 	
 	def register_mount_manager_extension(self, extension):
 		"""Register mount manager extension"""
-		self.mount_manager.register_extension(extension)
+		self.mount_manager_extensions.append(extension)
 
 	def plugin_class_exists(self, class_name):
 		"""Check if specified class name exists in active plugins"""

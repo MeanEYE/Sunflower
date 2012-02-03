@@ -100,10 +100,10 @@ class MountsManager:
 		separator = gtk.VSeparator()
 
 		image_jump = gtk.Image()
-		image_jump.set_from_icon_name('go-jump', gtk.ICON_SIZE_BUTTON)
+		image_jump.set_from_icon_name(gtk.STOCK_OPEN, gtk.ICON_SIZE_BUTTON)
 		button_jump = gtk.Button()
 		button_jump.set_image(image_jump)
-		button_jump.set_label(_('Go to'))
+		button_jump.set_label(_('Open'))
 		button_jump.set_can_default(True)
 		#button_jump.connect('clicked', self._change_path)
 
@@ -420,3 +420,4 @@ class MountsManager:
 	def show(self, widget=None, data=None):
 		"""Show mount manager"""
 		self.window.show_all()
+

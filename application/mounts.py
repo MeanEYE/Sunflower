@@ -1,14 +1,7 @@
 import gtk
 
 from gio import VolumeMonitor
-
-
-class Column:
-	ICON = 0
-	NAME = 1
-	CONFIGURATION = 2
-	PATH = 3
-	MOUNTED = 4
+from gui.mounts_manager_window import MountsManagerWindow, Column
 
 
 class MountsManager:
@@ -22,7 +15,11 @@ class MountsManager:
 		self._mounts_iter = None
 		self._volumes_iter = None
 
-		self.window = None
+		# create store for window list
+		self._store = gtk.TreeStore(str, str, str, str, bool)
+
+		# create user interface
+		self.window = MountsManagerWindow(self)
 
 		# create volume monitor
 		self._volume_monitor = VolumeMonitor()
@@ -30,114 +27,6 @@ class MountsManager:
 		self._volume_monitor.connect('mount-removed', self._remove_mount)
 		self._volume_monitor.connect('volume-added', self._add_volume)
 		self._volume_monitor.connect('volume-removed', self._remove_volume)
-
-		# create user interface
-		self.__create_interface()
-
-	def __create_interface(self):
-		"""Initialize user interface"""
-		# create mount manager window
-		self.window = gtk.Window(type=gtk.WINDOW_TOPLEVEL)
-		
-		# configure window
-		self.window.set_title(_('Mount manager'))
-		self.window.set_default_size(500, 340)
-		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
-		self.window.set_skip_taskbar_hint(True)
-		self.window.set_modal(True)
-		self.window.set_transient_for(self._application)
-		self.window.set_wmclass('Sunflower', 'Sunflower')
-		self.window.set_border_width(7)
-
-		self.window.connect('delete-event', self._hide)
-		
-		# create user interface
-		vbox = gtk.VBox(False, 5)
-		
-		hbox_controls = gtk.HBox(False, 5)
-		
-		# create a tree view
-		container = gtk.ScrolledWindow() 
-		container.set_shadow_type(gtk.SHADOW_IN)
-		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-
-		self._store = gtk.TreeStore(str, str, str, str, bool)
-		
-		self._list = gtk.TreeView(model=self._store)
-		self._list.set_headers_visible(False)
-		self._list.set_show_expanders(True)
-		self._list.set_search_column(Column.NAME)
-		self._list.connect('key-press-event', self._handle_key_press)
-
-		cell_icon = gtk.CellRendererPixbuf()
-		cell_name = gtk.CellRendererText()
-		cell_path = gtk.CellRendererText()
-
-		col_name = gtk.TreeViewColumn(None)
-		col_name.pack_start(cell_icon, False)
-		col_name.pack_start(cell_name, True)
-
-		col_name.add_attribute(cell_icon, 'icon-name', Column.ICON)
-		col_name.add_attribute(cell_name, 'markup', Column.NAME)
-
-		col_path = gtk.TreeViewColumn(None, cell_path, text=Column.PATH)
-
-		self._list.append_column(col_name)
-		self._list.append_column(col_path)
-
-		# create controls
-		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
-		button_close.connect('clicked', self._hide)
-
-		button_unmount = gtk.Button()
-		button_unmount.set_label(_('Unmount'))
-		button_unmount.set_sensitive(False)
-		button_unmount.connect('clicked', self._unmount_item)
-
-		separator = gtk.VSeparator()
-
-		image_jump = gtk.Image()
-		image_jump.set_from_icon_name(gtk.STOCK_OPEN, gtk.ICON_SIZE_BUTTON)
-		button_jump = gtk.Button()
-		button_jump.set_image(image_jump)
-		button_jump.set_label(_('Open'))
-		button_jump.set_can_default(True)
-		#button_jump.connect('clicked', self._change_path)
-
-		image_new_tab = gtk.Image()
-		image_new_tab.set_from_icon_name('tab-new', gtk.ICON_SIZE_BUTTON)
-		button_new_tab = gtk.Button()
-		button_new_tab.set_image(image_new_tab)
-		button_new_tab.set_label(_('New tab'))
-		button_new_tab.set_tooltip_text(_('Open selected path in new tab'))
-		#button_new_tab.connect('clicked', self._open_in_new_tab)
-		
-		image_add = gtk.Image()
-		image_add.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_BUTTON)
-		button_add = gtk.Button()
-		button_add.set_image(image_add)
-		
-		image_remove = gtk.Image()
-		image_remove.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_BUTTON)
-		button_remove = gtk.Button()
-		button_remove.set_image(image_remove)
-		
-		# pack user interface
-		container.add(self._list)
-
-		hbox_controls.pack_start(button_add, False, False, 0)
-		hbox_controls.pack_start(button_remove, False, False, 0)
-		hbox_controls.pack_start(separator, False, False, 0)
-		hbox_controls.pack_start(button_unmount, False, False, 0)
-
-		hbox_controls.pack_end(button_close, False, False, 0)
-		hbox_controls.pack_end(button_jump, False, False, 0)
-		hbox_controls.pack_end(button_new_tab, False, False, 0)
-		
-		vbox.pack_start(container, True, True, 0)
-		vbox.pack_start(hbox_controls, False, False, 0)
-		
-		self.window.add(vbox)
 
 	def _populate_list(self):
 		"""Populate mount/volume list"""
@@ -161,7 +50,7 @@ class MountsManager:
 			self._add_mount(self._volume_monitor, mount)
 
 		# expand all items
-		self._list.expand_all()
+		self.window._list.expand_all()
 
 		# update menu item visibility based on mount count
 		self._menu_updated()
@@ -195,26 +84,6 @@ class MountsManager:
 	def _get_extension_for_selected_item(self):
 		"""Get extension for selected item in list, if possible"""
 		pass
-
-	def _hide(self, widget=None, data=None):
-		"""Hide mount manager"""
-		self.window.hide()
-
-		return True
-
-	def _handle_key_press(self, widget, event, data=None):
-		"""Handle pressing keys in mount manager list"""
-		result = False
-
-		if event.keyval == gtk.keysyms.Return:
-			result = True
-
-		elif event.keyval == gtk.keysyms.Escape:
-			# hide window on escape
-			self._hide()
-			result = True
-
-		return result
 
 	def _add_mount(self, monitor, mount):
 		"""Catch volume-mounted signal and update mounts menu"""
@@ -301,7 +170,7 @@ class MountsManager:
 					)
 
 		# expand all items
-		self._list.expand_all()
+		self.window._list.expand_all()
 
 	def _remove_volume(self, monitor, volume):
 		"""Event called when volume is removed/unmounted"""
@@ -424,6 +293,5 @@ class MountsManager:
 		self._populate_list()
 
 	def show(self, widget=None, data=None):
-		"""Show mount manager"""
+		"""Show mounts manager window"""
 		self.window.show_all()
-

@@ -253,6 +253,25 @@ class Operation(Thread):
 
 		return response
 
+	def _get_read_error_input(self, error):
+		"""Get user response for directory listing error"""
+		with gtk.gdk.lock:
+			dialog = OperationError(self._application)
+	
+			dialog.set_message(_(
+			        'There was a problem with reading specified directory. '
+			        'What would you like to do?'
+			    ))
+			dialog.set_error(str(error))
+	
+			response = dialog.get_response()
+	
+			# abort operation if user requested
+			if response == gtk.RESPONSE_CANCEL:
+				self.cancel()
+
+		return response
+
 	def pause(self):
 		"""Pause current operation"""
 		self._can_continue.clear()
@@ -388,7 +407,20 @@ class CopyOperation(Operation):
 
 	def _scan_directory(self, directory):
 		"""Recursively scan directory and populate list"""
-		for item in self._source.list_dir(directory, relative_to=self._source_path):
+		try:
+			# try to get listing from directory
+			item_list = self._source.list_dir(directory, relative_to=self._source_path)
+
+		except StandardError as error:
+			# problem with reading specified directory, ask user
+			response = self._get_read_error_input(error)
+
+			if response == gtk.RESPONSE_YES:
+				self._scan_directory(directory)
+
+			return
+
+		for item in item_list:
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
@@ -397,6 +429,7 @@ class CopyOperation(Operation):
 
 			full_name = os.path.join(directory, item)
 
+			# item is a directory, scan it
 			if self._source.is_dir(full_name, relative_to=self._source_path):
 				can_procede = True
 				can_create = True

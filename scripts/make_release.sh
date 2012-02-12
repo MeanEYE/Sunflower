@@ -15,7 +15,7 @@ tar_file_home_page="Sunflower.tar"
 echo Preparing release: Sunflower $version_major.$version_minor$version_stage \($version_build\)
 echo -e "\t- Archiving source code"
 cd $working_directory
-hg archive --exclude tools/ --type tgz --prefix Sunflower ~/Desktop/$file_home_page
+hg archive --exclude scripts/ --type tgz --prefix Sunflower ~/Desktop/$file_home_page
 
 # remove unneeded files
 echo -e "\t- Unpacking gzip archive"

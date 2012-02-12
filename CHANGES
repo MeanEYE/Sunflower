@@ -1,6 +1,35 @@
 Version 0.1a-37
   + Reorderable columns
   + Open directory key binding
+  + Add ability to set plugin's description
+  + Main Window: Command Bar: Added 'Rename' button
+  + Preferences Window: Ask user to save changes before closing
+  + Widgets: Title bar: Added tab menu.
+  + Plugin base: Item list: Added method for showing tab menu.
+  + Tools: Added mount manager.
+  + Plugin base: Item list: Added key binding for swapping list paths.
+  + Added desktop file.
+  * Updated Russian translation
+  * Updated German translation.
+  * Fix for issue #95 - Quick search doesn't work with code sets other than English.
+  * Fixed problem with send to menu not being shown.
+  * Session plugin: Fixed bug making file list showing files twice
+  * Operation dialogs: Fix update time after resuming operation.
+  * Images: Vector logo: Organized with layers and fixed missaligned shape.
+  * Images: Updated logo bitmaps with changes from vector version.
+  * Plugins: File list: Update directory statistics when items are loaded from separate thread.
+  * Plugins: File list: Updated plugin to use new monitor and fixed some regression bugs.
+  * Plugins: File list: Created local file system monitor.
+  * Tools: Updated easy install script.
+  * Main window: Made menu bar accessible to plugins.
+  * Sessions plugin: Move menu to menu bar
+  * Icon Manager: Fixed problem with loading themed icons
+  * Plugins: System terminal: Set default tab title for shells that don't update window title.
+  * Operations: Handle exceptions when trying to read directory without permission.
+  * Operations: Handle possible problem with directory permissions when trying to remove directory.
+  * Plugins: File list: On failed path load remember highlighted item.
+  * Associations manager: Fixed problem when executing scripts and binary files.
+  * Renamed tools to scripts.
 
 Version 0.1a-36
   + New sessions plugin

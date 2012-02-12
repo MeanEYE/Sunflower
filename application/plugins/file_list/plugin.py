@@ -1422,10 +1422,12 @@ class FileList(ItemList):
 			dialog.destroy()
 
 			if result == gtk.RESPONSE_YES:
+				# retry loading path again
 				self.change_path(path)
 
 			else:
-				self.change_path(self.history[0])
+				# load previous valid path
+				self.change_path(self.history[0], os.path.basename(path))
 
 			return
 

@@ -785,8 +785,15 @@ class MoveOperation(CopyOperation):
 			if self._source.exists(directory, relative_to=self._source_path):
 				gobject.idle_add(self._dialog.set_current_file, directory)
 
-				# remove directory only if it's empty
-				if len(self._source.list_dir(directory, relative_to=self._source_path)) == 0:
+				# try to get a list of items inside of directory
+				try:
+					item_list = self._source.list_dir(directory, relative_to=self._source_path)
+
+				except:
+					item_list = None
+
+				# remove directory if empty
+				if item_list is not None and len(item_list) == 0:
 					self._remove_path(directory, dir_list)
 
 				# update current count

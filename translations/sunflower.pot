@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-05 17:48+0100\n"
+"POT-Creation-Date: 2012-02-12 16:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -472,7 +472,7 @@ msgstr ""
 msgid "_Unmount"
 msgstr ""
 
-#: application/gui/main_window.py:276 application/mounts.py:285
+#: application/gui/main_window.py:276 application/mounts.py:286
 msgid "Mount list is empty"
 msgstr ""
 
@@ -538,7 +538,7 @@ msgid "Advanced rename"
 msgstr ""
 
 #: application/gui/main_window.py:370
-#: application/gui/mounts_manager_window.py:21
+#: application/gui/mounts_manager_window.py:22
 msgid "Mount manager"
 msgstr ""
 
@@ -1264,7 +1264,7 @@ msgstr ""
 msgid "Volumes"
 msgstr ""
 
-#: application/mounts.py:257
+#: application/mounts.py:258
 msgid "Specified item can not be unmounted."
 msgstr ""
 
@@ -1865,65 +1865,71 @@ msgstr ""
 msgid "There was a problem renaming specified path. What would you like to do?"
 msgstr ""
 
-#: application/operation.py:299
+#: application/operation.py:262
+msgid ""
+"There was a problem with reading specified directory. What would you like to "
+"do?"
+msgstr ""
+
+#: application/operation.py:318
 msgid "Searching for files..."
 msgstr ""
 
-#: application/operation.py:563
+#: application/operation.py:596
 msgid "Creating directories..."
 msgstr ""
 
-#: application/operation.py:580
+#: application/operation.py:613
 msgid "Copying files..."
 msgstr ""
 
-#: application/operation.py:614
+#: application/operation.py:647
 msgid "Copy Operation"
 msgstr ""
 
-#: application/operation.py:616
+#: application/operation.py:649
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/operation.py:706
+#: application/operation.py:739
 msgid "Moving files..."
 msgstr ""
 
-#: application/operation.py:721
+#: application/operation.py:754
 msgid "Deleting source files..."
 msgstr ""
 
-#: application/operation.py:743
+#: application/operation.py:776
 msgid "Deleting source directories..."
 msgstr ""
 
-#: application/operation.py:810
+#: application/operation.py:850
 msgid "Move Operation"
 msgstr ""
 
-#: application/operation.py:812
+#: application/operation.py:852
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/operation.py:891
+#: application/operation.py:931
 msgid "Delete Operation"
 msgstr ""
 
-#: application/operation.py:893
+#: application/operation.py:933
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/operation.py:965
+#: application/operation.py:1005
 msgid "Rename Operation"
 msgstr ""
 
-#: application/operation.py:967
+#: application/operation.py:1007
 msgid "Rename of {0} item from \"{1}\" is completed!"
 msgid_plural "Rename of {0} items from \"{1}\" is completed!"
 msgstr[0] ""

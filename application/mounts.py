@@ -16,7 +16,7 @@ class MountsManager:
 		self._volumes_iter = None
 
 		# create store for window list
-		self._store = gtk.TreeStore(str, str, str, str, bool)
+		self._store = gtk.TreeStore(str, str, str, str, str, bool)
 
 		# create user interface
 		self.window = MountsManagerWindow(self)
@@ -30,8 +30,8 @@ class MountsManager:
 
 	def _populate_list(self):
 		"""Populate mount/volume list"""
-		self._mounts_iter = self._store.append(None, (None, '<b>{0}</b>'.format(_('Mounts')), None, None, None))
-		self._volumes_iter = self._store.append(None, (None, '<b>{0}</b>'.format(_('Volumes')), None, None, None))
+		self._mounts_iter = self._store.append(None, (None, '<b>{0}</b>'.format(_('Mounts')), None, None, None, None))
+		self._volumes_iter = self._store.append(None, (None, '<b>{0}</b>'.format(_('Volumes')), None, None, None, None))
 
 		# get list of volumes
 		for volume in self._volume_monitor.get_volumes():
@@ -42,7 +42,7 @@ class MountsManager:
 
 			self._store.append(
 							self._volumes_iter,
-							(icon, name, uuid, None, None)
+							(icon, name, 'file', uuid, None, None)
 						)
 
 		# get list of mounted volumes
@@ -106,6 +106,7 @@ class MountsManager:
 			data = (
 				mount_icon, 
 				mount.get_name(), 
+				'file',
 				None,  # configuration
 				mount_path,
 				True
@@ -166,7 +167,7 @@ class MountsManager:
 		# add new volume to the store
 		self._store.append(
 						self._volumes_iter,
-						(icon, name, uuid, None, None)
+						(icon, name, 'file', uuid, None, None)
 					)
 
 		# expand all items

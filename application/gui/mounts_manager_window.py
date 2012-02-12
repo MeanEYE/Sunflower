@@ -4,9 +4,10 @@ import gtk
 class Column:
 	ICON = 0
 	NAME = 1
-	CONFIGURATION = 2
-	PATH = 3
-	MOUNTED = 4
+	PROTOCOL = 2
+	CONFIGURATION = 3
+	PATH = 4
+	MOUNTED = 5
 
 
 class MountsManagerWindow(gtk.Window):
@@ -39,7 +40,6 @@ class MountsManagerWindow(gtk.Window):
 		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 
 		self._list = gtk.TreeView(model=self._parent._store)
-		self._list.set_headers_visible(False)
 		self._list.set_show_expanders(True)
 		self._list.set_search_column(Column.NAME)
 		self._list.connect('key-press-event', self._handle_key_press)

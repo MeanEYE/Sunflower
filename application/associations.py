@@ -1,5 +1,6 @@
 import os
 import gio
+import subprocess
 
 from urllib import quote
 from collections import namedtuple
@@ -159,7 +160,10 @@ class AssociationManager:
 
 		if is_executable:
 			# file is executable type and has executable bit set
-			os.system('{0} &'.format(path))
+			subprocess.Popen(
+						(path, '&'),
+						cwd=os.path.dirname(path)
+					)
 
 		else:
 			# file does not have executable bit set, open with default application

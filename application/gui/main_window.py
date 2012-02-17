@@ -96,13 +96,6 @@ class MainWindow(gtk.Window):
 		# set window icon
 		self.icon_manager.set_window_icon(self)
 
-		# set locale for international number formatting
-		try:
-			locale.setlocale(locale.LC_ALL, '')
-
-		except:
-			pass
-
 		# config parsers
 		self.options = None
 		self.tab_options = None

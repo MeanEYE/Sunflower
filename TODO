@@ -1,3 +1,5 @@
+- Handle cases in which PyGTK can't load SVG image in set_window_icon method.
+
 - Change the way editor is selected. Offer user with dropdown list of editors or manual entry.
 
 - On copy/move operation when checking whether the remote directory or file exists we should

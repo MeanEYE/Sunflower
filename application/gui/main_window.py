@@ -97,7 +97,11 @@ class MainWindow(gtk.Window):
 		self.icon_manager.set_window_icon(self)
 
 		# set locale for international number formatting
-		locale.setlocale(locale.LC_ALL, '')
+		try:
+			locale.setlocale(locale.LC_ALL, '')
+
+		except:
+			pass
 
 		# config parsers
 		self.options = None

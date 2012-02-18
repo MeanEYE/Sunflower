@@ -1,3 +1,5 @@
+- Add option to set timestamp on copy/move.
+
 - Handle cases in which PyGTK can't load SVG image in set_window_icon method.
 
 - Change the way editor is selected. Offer user with dropdown list of editors or manual entry.

@@ -14,6 +14,11 @@ class ButtonText:
 	RECYCLE = u'\u267B'
 
 
+class TerminalType:
+	VTE = 0
+	EXTERNAL = 1
+
+
 class Terminal(PluginBase):
 	"""Base class for terminal based plugins
 
@@ -80,10 +85,19 @@ class Terminal(PluginBase):
 		self._title_bar.add_control(self._recycle_button)
 		self._title_bar.add_control(self._menu_button)
 
-		if vte is not None:
+		# create main object
+		terminal_type = self._parent.options.getint('main', 'terminal_type') 
+	
+		if terminal_type == TerminalType.VTE and vte is not None:
 			self._vte_present = True
 			self._terminal = vte.Terminal()
 			self._terminal.connect('window-title-changed', self._update_title)
+
+			# unset drag source
+			self._terminal.drag_source_unset()
+
+		elif terminal_type == TerminalType.EXTERNAL:
+			self._terminal = gtk.Socket()
 			
 		else:
 			# failsafe when VTE module is not present
@@ -112,9 +126,6 @@ class Terminal(PluginBase):
 		# connect events to main object
 		self._connect_main_object(self._terminal)
 		
-		# unset drag source
-		self._terminal.drag_source_unset()
-
 		# create menu
 		self._create_menu()
 

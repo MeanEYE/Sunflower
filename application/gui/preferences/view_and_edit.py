@@ -24,8 +24,10 @@ class ViewEditOptions(SettingsPage):
 		# external options
 		radio_external = gtk.RadioButton(label=_('Use external editor'))
 
+		align_external = gtk.Alignment(xscale=1)
+		align_external.set_padding(0, 10, 15, 15)
 		vbox_external = gtk.VBox(False, 0)
-		vbox_external.set_border_width(10)
+		vbox_external.set_border_width(5)
 
 		label_editor = gtk.Label(_('Command line:'))
 		label_editor.set_alignment(0, 0.5)
@@ -51,8 +53,10 @@ class ViewEditOptions(SettingsPage):
 		vbox_external.pack_start(self._entry_editor, False, False, 0)
 		vbox_external.pack_start(self._checkbox_wait_for_editor, False, False, 0)
 
+		align_external.add(vbox_external)
+
 		vbox_edit.pack_start(radio_external, False, False, 0)
-		vbox_edit.pack_start(vbox_external, False, False, 0)
+		vbox_edit.pack_start(align_external, False, False, 0)
 		vbox_edit.pack_start(radio_internal, False, False, 0)
 		vbox_edit.pack_start(vbox_internal, False, False, 0)
 

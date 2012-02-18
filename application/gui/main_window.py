@@ -2025,7 +2025,7 @@ class MainWindow(gtk.Window):
 				'last_version': 0,
 				'button_relief': 0,
 				'terminal_scrollbars': 'True',
-				'terminal_command': 'uxterm -embed {0}',
+				'terminal_command': 'urxvt -embed {0}',
 				'terminal_type': 0,
 				'case_sensitive_sort': 'True',
 				'plugins': 'file_list,system_terminal,default_toolbar',

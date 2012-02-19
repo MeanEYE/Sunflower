@@ -376,7 +376,7 @@ class OperationDialog(gtk.Window):
 								ngettext('byte', 'bytes', average)
 							)
 
-		speed_text = '{0}/{1}'.format(average_text, _('second'))
+		speed_text = '{0}/s'.format(average_text)
 
 		self._value_eta.set_text(time_text)
 		self._value_speed.set_text(speed_text)

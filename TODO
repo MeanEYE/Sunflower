@@ -41,8 +41,6 @@ check how many parts of path exist and cache that and skip the rest of the files
 
 - Upon receiving focus file list should check validity of its current path
 
-- Terminal tab without scrollbars forces window size
-
 - Set tooltip text for long filenames in file list
 
 - Configurable toolbar look
@@ -68,5 +66,3 @@ check how many parts of path exist and cache that and skip the rest of the files
 - Make file_list module provider agnostic
 
 - Create mount manager
-
-- Terminal options (read font, size, background, cursor type)

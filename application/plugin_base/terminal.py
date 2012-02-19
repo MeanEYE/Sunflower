@@ -5,6 +5,11 @@ try:
 except:
 	vte = None
 
+try:
+	import gconf
+except:
+	gconf = None
+
 from plugin_base.plugin import PluginBase
 from accelerator_group import AcceleratorGroup
 
@@ -19,10 +24,18 @@ class TerminalType:
 	EXTERNAL = 1
 
 
+class CursorShape:
+	BLOCK = 0
+	IBEAM = 1
+	UNDERLINE = 2
+
+
 class Terminal(PluginBase):
 	"""Base class for terminal based plugins
-
-	This class will provide basic VTE GTK+ component wrapped in VBox.
+	
+	This class provides access to VTE GTK+ widget. In cases where VTE is
+	not present on the system you can use gtk.Socket to embed external
+	application.
 
 	You are strongly encouraged to use predefined methods rather than
 	defining your own.
@@ -96,6 +109,24 @@ class Terminal(PluginBase):
 			# unset drag source
 			self._terminal.drag_source_unset()
 
+			# configure terminal widget
+			shape = self._parent.options.getint('main', 'terminal_cursor_shape')
+			shape_type = {
+					CursorShape.BLOCK: vte.CURSOR_SHAPE_BLOCK,
+					CursorShape.IBEAM: vte.CURSOR_SHAPE_IBEAM,
+					CursorShape.UNDERLINE: vte.CURSOR_SHAPE_UNDERLINE
+				}
+			self._terminal.set_cursor_shape(shape_type[shape])
+
+			self._terminal.set_allow_bold(self._parent.options.getboolean('main', 'terminal_allow_bold'))
+			self._terminal.set_mouse_autohide(self._parent.options.getboolean('main', 'terminal_mouse_autohide'))
+
+			if self._parent.options.getboolean('main', 'terminal_use_system_font') and gconf is not None:
+				self.__set_system_font()
+
+			else:
+				self._terminal.set_font_from_string(self._parent.options.get('main', 'terminal_font'))
+
 		elif terminal_type == TerminalType.EXTERNAL:
 			self._terminal = gtk.Socket()
 			
@@ -113,6 +144,7 @@ class Terminal(PluginBase):
 		self._container = gtk.ScrolledWindow()
 		self._container.set_shadow_type(gtk.SHADOW_IN)
 
+		# apply scrollbar visibility
 		show_scrollbars = self._parent.options.getboolean('main', 'terminal_scrollbars')
 		scrollbar_vertical = self._container.get_vscrollbar()
 		scrollbar_horizontal = self._container.get_hscrollbar()
@@ -129,6 +161,21 @@ class Terminal(PluginBase):
 		
 		# create menu
 		self._create_menu()
+
+	def __set_system_font(self, client=None, *args, **kwargs):
+		"""Set system font to terminal"""
+		path = '/desktop/gnome/interface'
+		key = '{0}/monospace_font_name'.format(path)
+
+		if client is None and self._terminal.get_data('client') is None:
+			# client wasn't assigned to widget, get default one and set events
+			client = gconf.client_get_default()
+			client.add_dir(path, gconf.CLIENT_PRELOAD_NONE)
+			client.notify_add(key, self.__set_system_font)
+			self._terminal.set_data('client', client)
+
+		font_name = client.get_string(key)
+		self._terminal.set_font_from_string(font_name)
 
 	def _update_title(self, widget, data=None):
 		"""Update title with terminal window text"""
@@ -315,3 +362,25 @@ class Terminal(PluginBase):
 
 		scrollbar_vertical.set_child_visible(show_scrollbars)
 		scrollbar_horizontal.set_child_visible(show_scrollbars)
+
+		# apply cursor shape
+		shape = self._parent.options.getint('main', 'terminal_cursor_shape')
+		shape_type = {
+				CursorShape.BLOCK: vte.CURSOR_SHAPE_BLOCK,
+				CursorShape.IBEAM: vte.CURSOR_SHAPE_IBEAM,
+				CursorShape.UNDERLINE: vte.CURSOR_SHAPE_UNDERLINE
+			}
+		self._terminal.set_cursor_shape(shape_type[shape])
+
+		# apply allow bold
+		self._terminal.set_allow_bold(self._parent.options.getboolean('main', 'terminal_allow_bold'))
+
+		# apply mouse autohiding
+		self._terminal.set_mouse_autohide(self._parent.options.getboolean('main', 'terminal_mouse_autohide'))
+
+		# apply font
+		if self._parent.options.getboolean('main', 'terminal_use_system_font') and gconf is not None:
+			self.__set_system_font()
+
+		else:
+			self._terminal.set_font_from_string(self._parent.options.get('main', 'terminal_font'))

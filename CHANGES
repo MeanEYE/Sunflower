@@ -1,3 +1,13 @@
+Version 0.1a-38
+  + Updated German translation.
+  + Added script for making packages.
+  + Fixed problems with setting locale to LC_ALL.
+  + View and edit: Minor user interface tweaks.
+  + Added ability to choose terminal type (vte, external).
+  + Fixed problem with terminal tab resizing main window when scrollbars are hidden.
+  + Created additional options for terminal tabs.
+  + Fixed translation bug in operation dialogs.
+
 Version 0.1a-37
   + Reorderable columns
   + Open directory key binding

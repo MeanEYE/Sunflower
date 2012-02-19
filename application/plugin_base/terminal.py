@@ -113,11 +113,12 @@ class Terminal(PluginBase):
 		self._container = gtk.ScrolledWindow()
 		self._container.set_shadow_type(gtk.SHADOW_IN)
 
-		policy = (
-				gtk.POLICY_NEVER,
-				gtk.POLICY_AUTOMATIC
-			)[self._parent.options.getboolean('main', 'terminal_scrollbars')]
-		self._container.set_policy(policy, policy)
+		show_scrollbars = self._parent.options.getboolean('main', 'terminal_scrollbars')
+		scrollbar_vertical = self._container.get_vscrollbar()
+		scrollbar_horizontal = self._container.get_hscrollbar()
+
+		scrollbar_vertical.set_child_visible(show_scrollbars)
+		scrollbar_horizontal.set_child_visible(show_scrollbars)
 
 		# pack terminal
 		self._container.add(self._terminal)
@@ -308,9 +309,9 @@ class Terminal(PluginBase):
 									)[self._parent.options.getint('main', 'button_relief')])
 
 		# apply terminal scroll bar policy
-		policy = (
-				gtk.POLICY_NEVER,
-				gtk.POLICY_AUTOMATIC
-			)[self._parent.options.getboolean('main', 'terminal_scrollbars')]
-		self._container.set_policy(policy, policy)
+		show_scrollbars = self._parent.options.getboolean('main', 'terminal_scrollbars')
+		scrollbar_vertical = self._container.get_vscrollbar()
+		scrollbar_horizontal = self._container.get_hscrollbar()
 
+		scrollbar_vertical.set_child_visible(show_scrollbars)
+		scrollbar_horizontal.set_child_visible(show_scrollbars)

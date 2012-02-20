@@ -2043,7 +2043,7 @@ class MainWindow(gtk.Window):
 				'ubuntu_coloring': 'False',
 				'media_preview': 'False',
 				'active_notebook': 0,
-				'tab_close_button': 'False',
+				'tab_close_button': 'True',
 				'show_status_bar': 0,
 				'human_readable_size': 'True',
 				'expand_tabs': 0,

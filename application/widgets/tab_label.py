@@ -1,22 +1,22 @@
 import gtk
 import pango
 
-class TabLabel(gtk.EventBox):
+class TabLabel:
 	"""Tab label wrapper class"""
 
 	def __init__(self, application, parent):
-		gtk.EventBox.__init__(self)
+		self._container = gtk.EventBox()
 
 		self._application = application
 		self._parent = parent
 		
 		# initialize tab events
-		self.add_events(gtk.gdk.BUTTON_RELEASE_MASK)
-		self.connect('button-release-event', self._button_release_event)
+		self._container.add_events(gtk.gdk.BUTTON_RELEASE_MASK)
+		self._container.connect('button-release-event', self._button_release_event)
 
 		# create interface
 		self._hbox = gtk.HBox(False, 0)
-		self.add(self._hbox)
+		self._container.add(self._hbox)
 		
 		self._label = gtk.Label()
 		self._label.set_max_width_chars(20)
@@ -49,11 +49,11 @@ class TabLabel(gtk.EventBox):
 			self._button.show()
 			self._hbox.set_spacing(3)
 		
-		self.show_all()
+		self._container.show_all()
 
 	def _close_tab(self, widget, data=None):
 		"""Handle clicking on close button"""
-		self._application.close_tab(self._parent._notebook, self._parent)
+		self._parent._close_tab()
 		
 	def _button_release_event(self, widget, event, data = None):
 		"""
@@ -69,6 +69,10 @@ class TabLabel(gtk.EventBox):
 	def set_text(self, text):
 		"""Set label text"""
 		self._label.set_text(text)
+
+	def get_container(self):
+		"""Return container to be added to notebook"""
+		return self._container
 
 	def apply_settings(self):
 		"""Apply global settings to tab label"""

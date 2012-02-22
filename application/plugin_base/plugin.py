@@ -231,7 +231,7 @@ class PluginBase(gtk.VBox):
 		self._parent.create_tab(self._notebook, self.__class__, data)
 		return True
 
-	def _close_tab(self, widget, data=None):
+	def _close_tab(self, widget=None, data=None):
 		"""Ask parent to kill this tab"""
 		self._parent.close_tab(self._notebook, self)
 		return True
@@ -261,6 +261,10 @@ class PluginBase(gtk.VBox):
 		"""Method called before tab is removed"""
 		for group in self._accelerator_groups:
 			group.deactivate()
+
+	def get_tab_label(self):
+		"""Return tab label container"""
+		return self._tab_label.get_container()
 
 	def apply_settings(self):
 		"""Method called after settings were changed"""

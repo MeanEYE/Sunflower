@@ -1667,7 +1667,7 @@ class MainWindow(gtk.Window):
 			new_tab = plugin_class(self, notebook, path)
 
 		# add page to notebook
-		index = notebook.append_page(new_tab, new_tab._tab_label)
+		index = notebook.append_page(new_tab, new_tab.get_tab_label())
 		notebook.set_tab_reorderable(new_tab, True)
 		notebook.set_tab_detachable(new_tab, True)
 

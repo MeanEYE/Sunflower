@@ -13,6 +13,10 @@ class BookmarksOptions(SettingsPage):
 		self._checkbox_show_mount_points = gtk.CheckButton(_('Show mount points in bookmarks menu'))
 		self._checkbox_show_mount_points.connect('toggled', self._parent.enable_save)
 
+		# system bookmarks checkbox
+		self._checkbox_system_bookmarks = gtk.CheckButton(_('Show system bookmarks'))
+		self._checkbox_system_bookmarks.connect('toggled', self._parent.enable_save)
+
 		# bookmarks checkbox
 		self._checkbox_add_home = gtk.CheckButton(_('Add home directory to bookmarks menu'))
 		self._checkbox_add_home.connect('toggled', self._parent.enable_save)
@@ -86,6 +90,7 @@ class BookmarksOptions(SettingsPage):
 		vbox = gtk.VBox(False, 0)
 
 		vbox.pack_start(self._checkbox_show_mount_points, False, False, 0)
+		vbox.pack_start(self._checkbox_system_bookmarks, False, False, 0)
 		vbox.pack_start(self._checkbox_add_home, False, False, 0)
 
 		self.pack_start(vbox, False, False, 0)
@@ -148,6 +153,7 @@ class BookmarksOptions(SettingsPage):
 		# get checkbox states
 		self._checkbox_show_mount_points.set_active(options.getboolean('main', 'show_mounts'))
 		self._checkbox_add_home.set_active(options.getboolean('main', 'add_home'))
+		self._checkbox_system_bookmarks.set_active(options.getboolean('main', 'system_bookmarks'))
 
 		# load and parse bookmars
 		if bookmark_options.has_section('bookmarks'):
@@ -168,6 +174,7 @@ class BookmarksOptions(SettingsPage):
 		# save show mounts checkbox state
 		options.set('main', 'show_mounts', _bool[self._checkbox_show_mount_points.get_active()])
 		options.set('main', 'add_home', _bool[self._checkbox_add_home.get_active()])
+		options.set('main', 'system_bookmarks', _bool[self._checkbox_system_bookmarks.get_active()])
 
 		# save bookmarks
 		bookmark_options.remove_section('bookmarks')

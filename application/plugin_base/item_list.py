@@ -7,7 +7,7 @@ import common
 from plugin import PluginBase
 from operation import CopyOperation, MoveOperation
 from accelerator_group import AcceleratorGroup
-from gui.input_dialog import CopyDialog, MoveDialog
+from gui.input_dialog import CopyDialog, MoveDialog, InputDialog
 from gui.preferences.display import StatusVisible
 from gui.history_list import HistoryList
 
@@ -183,6 +183,10 @@ class ItemList(PluginBase):
 		self._tab_menu.append(menu_item_refresh)
 
 		# create copy path item
+		separator_path = gtk.SeparatorMenuItem()
+		separator_path.show()
+		self._tab_menu.append(separator_path)
+
 		image_copy = gtk.Image()
 		image_copy.set_from_stock(gtk.STOCK_COPY, gtk.ICON_SIZE_MENU)
 
@@ -192,6 +196,13 @@ class ItemList(PluginBase):
 		menu_item_copy_path.connect('activate', self.copy_path_to_clipboard)
 		menu_item_copy_path.show()
 		self._tab_menu.append(menu_item_copy_path)
+
+		# create path entry item
+		menu_path_entry = gtk.MenuItem()
+		menu_path_entry.set_label(_('Enter path...'))
+		menu_path_entry.connect('activate', self.custom_path_entry)
+		menu_path_entry.show()
+		self._tab_menu.append(menu_path_entry)
 
 		# history menu
 		self._history_menu = gtk.Menu()
@@ -246,6 +257,8 @@ class ItemList(PluginBase):
 		group.add_method('move_marker_up', _('Move selection marker up'), self._move_marker_up)
 		group.add_method('move_marker_down', _('Move selection marker down'), self._move_marker_down)
 		group.add_method('show_tab_menu', _('Show tab menu'), self._show_tab_menu)
+		group.add_method('copy_path_to_clipboard', _('Copy path to clipboard'), self.copy_path_to_clipboard)
+		group.add_method('custom_path_entry', _('Ask and navigate to path'), self.custom_path_entry)
 
 		# configure accelerators
 		group.set_accelerator('execute_item', keyval('Return'), 0)
@@ -276,6 +289,8 @@ class ItemList(PluginBase):
 		group.set_accelerator('inherit_right_path', keyval('Left'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('swap_paths', keyval('U'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('show_tab_menu', keyval('grave'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('copy_path_to_clipboard', keyval('l'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
+		group.set_accelerator('custom_path_entry', keyval('l'), gtk.gdk.CONTROL_MASK)
 
 		# create bookmark accelerators
 		for number in range(1, 11):
@@ -1275,10 +1290,40 @@ class ItemList(PluginBase):
 	def refresh_file_list(self, widget=None, data=None):
 		"""Reload file list for current directory"""
 		self.change_path(self.path)
+		return True
 
 	def copy_path_to_clipboard(self, widget=None, data=None):
 		"""Copy current path to clipboard"""
 		self._parent.set_clipboard_text(self.path)
+		return True
+
+	def custom_path_entry(self, widget=None, data=None):
+		"""Ask user to enter path"""
+		path = None
+
+		# try to get path from clipboard
+		if self._parent.is_clipboard_text():
+			# TODO: Test if clipboard is actually a valid URI
+			path = self._parent.get_clipboard_text()
+
+		# use our own path in case nothing is in clipboard
+		if path is None:
+			path = self.path
+
+		# create dialog
+		dialog = InputDialog(self._parent)
+		dialog.set_title(_('Path entry'))
+		dialog.set_label(_('Navigate to:'))
+		dialog.set_text(path)
+
+		# get user response
+		response = dialog.get_response()
+
+		# try to navigate to specified path
+		if response[0] == gtk.RESPONSE_OK:
+			self.change_path(response[1])
+
+		return True
 
 	def update_column_size(self, name):
 		"""Update column sizes"""

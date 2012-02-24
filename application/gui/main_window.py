@@ -696,7 +696,7 @@ class MainWindow(gtk.Window):
 
 			bookmark.set_image(image)
 			bookmark.set_always_show_image(True)
-			bookmark.set_label(label=_('Home directory'))
+			bookmark.set_label(_('Home directory'))
 			bookmark.set_data('path', os.path.expanduser('~/'))
 			bookmark.connect('activate', self._handle_bookmarks_click)
 
@@ -714,11 +714,38 @@ class MainWindow(gtk.Window):
 
 			bookmark.set_image(image)
 			bookmark.set_always_show_image(True)
-			bookmark.set_label(label=data[0])
+			bookmark.set_label(data[0])
 			bookmark.set_data('path', os.path.expanduser(data[1]))
 			bookmark.connect('activate', self._handle_bookmarks_click)
 
 			self.menu_bookmarks.append(bookmark)
+
+		# add system bookmarks if needed
+		if self.options.getboolean('main', 'system_bookmarks')\
+		and os.path.exists(os.path.join(user.home, '.gtk-bookmarks')):
+			with open(os.path.join(user.home, '.gtk-bookmarks'), 'r') as raw_file:
+				lines = raw_file.readlines(False)
+
+			# add separator
+			separator = self.menu_manager.create_menu_item({'type': 'separator'})
+			self.menu_bookmarks.append(separator)
+
+			# add bookmarks
+			for line in lines:
+				line = line.strip()
+				label = os.path.basename(line)
+
+				bookmark = gtk.ImageMenuItem()
+				image = gtk.Image()
+				image.set_from_icon_name('folder', gtk.ICON_SIZE_MENU)
+
+				bookmark.set_image(image)
+				bookmark.set_always_show_image(True)
+				bookmark.set_label(label)
+				bookmark.set_data('path', line)
+				bookmark.connect('activate', self._handle_bookmarks_click)
+
+				self.menu_bookmarks.append(bookmark)
 
 		# add separator
 		separator = self.menu_manager.create_menu_item({'type': 'separator'})
@@ -2012,6 +2039,7 @@ class MainWindow(gtk.Window):
 				'show_command_bar': 'False',
 				'show_command_entry': 'True',
 				'add_home': 'True',
+				'system_bookmarks': 'False',
 				'search_modifier': '010',
 				'time_format': '%H:%M %d-%m-%y',
 				'focus_new_tab': 'True',

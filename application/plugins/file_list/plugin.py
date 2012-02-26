@@ -400,9 +400,6 @@ class FileList(ItemList):
 		response = dialog.get_response()
 		mode = dialog.get_mode()
 
-		# release dialog
-		dialog.destroy()
-
 		# create dialog
 		if response[0] == gtk.RESPONSE_OK:
 			try:
@@ -443,9 +440,6 @@ class FileList(ItemList):
 		mode = dialog.get_mode()
 		edit_after = dialog.get_edit_file()
 		template = dialog.get_template_file()
-
-		# release dialog
-		dialog.destroy()
 
 		# create dialog
 		if response[0] == gtk.RESPONSE_OK:
@@ -572,7 +566,14 @@ class FileList(ItemList):
 
 	def _rename_file(self, widget=None, data=None):
 		"""Rename selected item"""
-		selection = os.path.basename(self._get_selection())
+		selection = self._get_selection()
+
+		# return if there is no selection
+		if selection is None:
+			return
+
+		# get base name from selection
+		selection = os.path.basename(selection)
 
 		dialog = RenameDialog(self._parent, selection)
 		result = dialog.get_response()

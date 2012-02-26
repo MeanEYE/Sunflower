@@ -59,7 +59,7 @@ class Operation(Thread):
 	def _get_merge_input(self, path):
 		"""Get merge confirmation"""
 		with gtk.gdk.lock:
-			dialog = OverwriteDirectoryDialog(self._application, self._dialog)
+			dialog = OverwriteDirectoryDialog(self._application, self._dialog.get_window())
 	
 			title_element = os.path.basename(path)
 			message_element = os.path.basename(os.path.dirname(
@@ -94,7 +94,7 @@ class Operation(Thread):
 	def _get_overwrite_input(self, path):
 		"""Get overwrite confirmation"""
 		with gtk.gdk.lock:
-			dialog = OverwriteFileDialog(self._application, self._dialog)
+			dialog = OverwriteFileDialog(self._application, self._dialog.get_window())
 	
 			title_element = os.path.basename(path)
 			message_element = os.path.basename(os.path.dirname(

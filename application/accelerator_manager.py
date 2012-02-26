@@ -11,6 +11,9 @@ class AcceleratorManager:
 		self._groups = []
 		self._group_names = []
 
+		self._schedule_groups = None
+		self._schedule_owner = None
+
 	def _save_accelerator(self, section, name, accelerator=None, primary=True, can_overwrite=False):
 		"""Save accelerator to config file"""
 		if not primary:
@@ -129,6 +132,30 @@ class AcceleratorManager:
 				accelerator = group.get_accelerator(name, primary)
 				
 		return accelerator
+
+	def schedule_groups_for_deactivation(self, groups, owner):
+		"""Set accelerator groups to be deactivated with second method call"""
+		self._schedule_owner = owner
+		self._schedule_groups = groups
+
+	def deactivate_scheduled_groups(self, owner):
+		"""Deactivate scheduled accelerator groups"""
+		result = False
+
+		if self._schedule_groups is not None\
+		and self._schedule_owner is not owner:
+			# deactivate groups
+			for group in self._schedule_groups:
+				group.deactivate()
+
+			# modify result
+			result = True
+
+		# in case there are no groups to deactivate, return true
+		if self._schedule_groups is None:
+			result = True
+
+		return result
 
 	def load(self, config):
 		"""Load accelerator map"""

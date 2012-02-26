@@ -15,7 +15,7 @@ class OverwriteOption:
 	APPLY_TO_ALL = 2
 
 
-class InputDialog(gtk.Dialog):
+class InputDialog:
 	"""Simple input dialog
 
 	This class can be extended with additional custom controls
@@ -25,18 +25,18 @@ class InputDialog(gtk.Dialog):
 	"""
 
 	def __init__(self, application):
-		gtk.Dialog.__init__(self, parent=application)
+		self._dialog = gtk.Dialog(parent=application)
 
 		self._application = application
 
-		self.set_default_size(340, 10)
-		self.set_resizable(True)
-		self.set_skip_taskbar_hint(True)
-		self.set_modal(True)
-		self.set_transient_for(application)
-		self.set_wmclass('Sunflower', 'Sunflower')
+		self._dialog.set_default_size(340, 10)
+		self._dialog.set_resizable(True)
+		self._dialog.set_skip_taskbar_hint(True)
+		self._dialog.set_modal(True)
+		self._dialog.set_transient_for(application)
+		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
-		self.vbox.set_spacing(0)
+		self._dialog.vbox.set_spacing(0)
 
 		self._container = gtk.VBox(False, 0)
 		self._container.set_border_width(5)
@@ -61,17 +61,21 @@ class InputDialog(gtk.Dialog):
 
 		self._container.pack_start(vbox, False, False, 0)
 
-		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
-		self.action_area.pack_end(button_ok, False, False, 0)
-		self.set_default_response(gtk.RESPONSE_OK)
+		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self._dialog.action_area.pack_end(button_ok, False, False, 0)
+		self._dialog.set_default_response(gtk.RESPONSE_OK)
 
-		self.vbox.pack_start(self._container, True, True, 0)
-		self.show_all()
+		self._dialog.vbox.pack_start(self._container, True, True, 0)
+		self._dialog.show_all()
 
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""
 		if self._entry.get_text() != '':
-			self.response(gtk.RESPONSE_OK)
+			self._dialog.response(gtk.RESPONSE_OK)
+
+	def set_title(self, title_text):
+		"""Set dialog title"""
+		self._dialog.set_title(title_text)
 
 	def set_label(self, label_text):
 		"""Provide an easy way to set label text"""
@@ -88,10 +92,10 @@ class InputDialog(gtk.Dialog):
 		input text.
 
 		"""
-		code = self.run()
+		code = self._dialog.run()
 		result = self._entry.get_text()
 
-		self.hide()
+		self._dialog.destroy()
 
 		return (code, result)
 
@@ -285,7 +289,7 @@ class FileCreateDialog(CreateDialog):
 		self._populate_templates()
 
 		# show all widgets
-		self.show_all()
+		self._dialog.show_all()
 
 	def _populate_templates(self):
 		"""Populate templates list"""
@@ -357,22 +361,22 @@ class DirectoryCreateDialog(CreateDialog):
 		self.set_mode(0755)
 
 
-class CopyDialog(gtk.Dialog):
+class CopyDialog:
 	"""Dialog which will ask user for additional options before copying"""
 
 	def __init__(self, application, provider, path):
-		gtk.Dialog.__init__(self, parent=application)
+		self._dialog = gtk.Dialog(parent=application)
 
 		self._application = application
 		self._provider = provider
 
-		self.set_default_size(340, 10)
-		self.set_resizable(True)
-		self.set_skip_taskbar_hint(True)
-		self.set_modal(True)
-		self.set_transient_for(application)
+		self._dialog.set_default_size(340, 10)
+		self._dialog.set_resizable(True)
+		self._dialog.set_skip_taskbar_hint(True)
+		self._dialog.set_modal(True)
+		self._dialog.set_transient_for(application)
 		
-		self.vbox.set_spacing(0)
+		self._dialog.vbox.set_spacing(0)
 
 		# create additional UI
 		vbox = gtk.VBox(False, 0)
@@ -431,10 +435,10 @@ class CopyDialog(gtk.Dialog):
 		vbox.pack_start(self.entry_destination, False, False, 0)
 		vbox.pack_start(advanced, False, False, 5)
 
-		self.vbox.pack_start(vbox, True, True, 0)
+		self._dialog.vbox.pack_start(vbox, True, True, 0)
 
-		self.set_default_response(gtk.RESPONSE_OK)
-		self.show_all()
+		self._dialog.set_default_response(gtk.RESPONSE_OK)
+		self._dialog.show_all()
 
 	def _get_text_variables(self, count):
 		"""Get text variables for update"""
@@ -457,13 +461,13 @@ class CopyDialog(gtk.Dialog):
 		button_copy = gtk.Button(_('Copy'))
 		button_copy.set_flags(gtk.CAN_DEFAULT)
 
-		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
-		self.add_action_widget(button_copy, gtk.RESPONSE_OK)
+		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self._dialog.add_action_widget(button_copy, gtk.RESPONSE_OK)
 
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""
 		if self.entry_destination.get_text() != '':
-			self.response(gtk.RESPONSE_OK)
+			self._dialog.response(gtk.RESPONSE_OK)
 
 	def _get_item_count(self):
 		"""Count number of items to copy"""
@@ -488,6 +492,10 @@ class CopyDialog(gtk.Dialog):
 		self.set_title(title)
 		self.label_destination.set_markup(label.format(item_count))
 
+	def set_title(self, title_text):
+		"""Set dialog title"""
+		self._dialog.set_title(title_text)
+
 	def get_response(self):
 		"""Return value and self-destruct
 
@@ -495,7 +503,7 @@ class CopyDialog(gtk.Dialog):
 		dictionary with other selected options.
 
 		"""
-		code = self.run()
+		code = self._dialog.run()
 		options = (
 				self.entry_type.get_text(),
 				self.entry_destination.get_text(),
@@ -503,7 +511,7 @@ class CopyDialog(gtk.Dialog):
 				self.checkbox_mode.get_active()
 				)
 
-		self.hide()
+		self._dialog.destroy()
 
 		return (code, options)
 
@@ -532,8 +540,8 @@ class MoveDialog(CopyDialog):
 		button_move = gtk.Button(_('Move'))
 		button_move.set_flags(gtk.CAN_DEFAULT)
 
-		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
-		self.add_action_widget(button_move, gtk.RESPONSE_OK)
+		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self._dialog.add_action_widget(button_move, gtk.RESPONSE_OK)
 
 
 class RenameDialog(InputDialog):
@@ -549,24 +557,24 @@ class RenameDialog(InputDialog):
 		self._entry.select_region(0, len(os.path.splitext(selection)[0]))
 
 
-class OverwriteDialog(gtk.Dialog):
+class OverwriteDialog:
 	"""Dialog used for confirmation of file/directory overwrite"""
 
 	def __init__(self, application, parent):
-		gtk.Dialog.__init__(self, parent=parent)
+		self._dialog = gtk.Dialog(parent=parent)
 
 		self._application = application
 		self._rename_value = ''
 		self._time_format = application.options.get('main', 'time_format')
 
-		self.set_default_size(400, 10)
-		self.set_resizable(True)
-		self.set_skip_taskbar_hint(False)
-		self.set_modal(True)
-		self.set_transient_for(parent)
-		self.set_urgency_hint(True)
+		self._dialog.set_default_size(400, 10)
+		self._dialog.set_resizable(True)
+		self._dialog.set_skip_taskbar_hint(False)
+		self._dialog.set_modal(True)
+		self._dialog.set_transient_for(parent)
+		self._dialog.set_urgency_hint(True)
 
-		self.vbox.set_spacing(0)
+		self._dialog.vbox.set_spacing(0)
 
 		hbox = gtk.HBox(False, 10)
 		hbox.set_border_width(10)
@@ -640,18 +648,18 @@ class OverwriteDialog(gtk.Dialog):
 		hbox.pack_start(vbox_icon, False, False, 0)
 		hbox.pack_start(vbox, True, True, 0)
 
-		self.vbox.pack_start(hbox, True, True, 0)
+		self._dialog.vbox.pack_start(hbox, True, True, 0)
 
 		self._create_buttons()
-		self.show_all()
+		self._dialog.show_all()
 
 	def _create_buttons(self):
 		"""Create basic buttons"""
 		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
 		button_skip = gtk.Button(label=_('Skip'))
 
-		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
-		self.add_action_widget(button_skip, gtk.RESPONSE_NO)
+		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self._dialog.add_action_widget(button_skip, gtk.RESPONSE_NO)
 
 	def _apply_to_all_toggled(self, widget, data=None):
 		"""Event called upon clicking on "apply to all" check box"""
@@ -742,14 +750,14 @@ class OverwriteDialog(gtk.Dialog):
 		dictionary with other selected options.
 
 		"""
-		code = self.run()
+		code = self._dialog.run()
 		options = (
 				self._expander_rename.get_expanded(),
 				self._entry_rename.get_text(),
 				self._checkbox_apply_to_all.get_active()
 				)
 
-		self.hide()
+		self._dialog.destroy()
 
 		return (code, options)
 
@@ -759,7 +767,7 @@ class OverwriteFileDialog(OverwriteDialog):
 	def __init__(self, application, parent):
 		OverwriteDialog.__init__(self, application, parent)
 
-		self.set_title(_('File conflict'))
+		self._dialog.set_title(_('File conflict'))
 
 	def _create_buttons(self):
 		"""Create dialog specific button"""
@@ -767,9 +775,9 @@ class OverwriteFileDialog(OverwriteDialog):
 		button_replace.set_can_default(True)
 
 		OverwriteDialog._create_buttons(self)
-		self.add_action_widget(button_replace, gtk.RESPONSE_YES)
+		self._dialog.add_action_widget(button_replace, gtk.RESPONSE_YES)
 
-		self.set_default_response(gtk.RESPONSE_YES)
+		self._dialog.set_default_response(gtk.RESPONSE_YES)
 
 	def set_title_element(self, element):
 		"""Set title label with appropriate formatting"""
@@ -800,9 +808,9 @@ class OverwriteDirectoryDialog(OverwriteDialog):
 		button_merge.set_can_default(True)
 
 		OverwriteDialog._create_buttons(self)
-		self.add_action_widget(button_merge, gtk.RESPONSE_YES)
+		self._dialog.add_action_widget(button_merge, gtk.RESPONSE_YES)
 
-		self.set_default_response(gtk.RESPONSE_YES)
+		self._dialog.set_default_response(gtk.RESPONSE_YES)
 
 	def set_title_element(self, element):
 		"""Set title label with appropriate formatting"""
@@ -821,23 +829,23 @@ class OverwriteDirectoryDialog(OverwriteDialog):
 		self._label_message.set_text(message.format(element))
 
 
-class AddBookmarkDialog(gtk.Dialog):
+class AddBookmarkDialog:
 	"""This dialog enables user to change data before adding new bookmark"""
 
 	def __init__(self, application, path):
-		gtk.Dialog.__init__(self, parent=application)
+		self._dialog = gtk.Dialog(parent=application)
 
 		self._application = application
 
 		# configure dialog
-		self.set_title(_('Add bookmark'))
-		self.set_default_size(340, 10)
-		self.set_resizable(True)
-		self.set_skip_taskbar_hint(True)
-		self.set_modal(True)
-		self.set_transient_for(application)
+		self._dialog.set_title(_('Add bookmark'))
+		self._dialog.set_default_size(340, 10)
+		self._dialog.set_resizable(True)
+		self._dialog.set_skip_taskbar_hint(True)
+		self._dialog.set_modal(True)
+		self._dialog.set_transient_for(application)
 
-		self.vbox.set_spacing(0)
+		self._dialog.vbox.set_spacing(0)
 
 		# create component container
 		vbox = gtk.VBox(False, 5)
@@ -867,9 +875,9 @@ class AddBookmarkDialog(gtk.Dialog):
 
 		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
 
-		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
-		self.action_area.pack_end(button_ok, False, False, 0)
-		self.set_default_response(gtk.RESPONSE_OK)
+		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self._dialog.action_area.pack_end(button_ok, False, False, 0)
+		self._dialog.set_default_response(gtk.RESPONSE_OK)
 
 		# pack interface
 		vbox_name.pack_start(label_name, False, False, 0)
@@ -881,14 +889,14 @@ class AddBookmarkDialog(gtk.Dialog):
 		vbox.pack_start(vbox_name, False, False, 0)
 		vbox.pack_start(vbox_path, False, False, 0)
 
-		self.vbox.pack_start(vbox, False, False, 0)
+		self._dialog.vbox.pack_start(vbox, False, False, 0)
 
-		self.show_all()
+		self._dialog.show_all()
 
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""
 		if self._entry_name.get_text() != '':
-			self.response(gtk.RESPONSE_OK)
+			self._dialog.response(gtk.RESPONSE_OK)
 
 	def get_response(self):
 		"""Return value and self-destruct
@@ -897,33 +905,33 @@ class AddBookmarkDialog(gtk.Dialog):
 		input text.
 
 		"""
-		code = self.run()
+		code = self._dialog.run()
 
 		name = self._entry_name.get_text()
 		path = self._entry_path.get_text()
 
-		self.hide()
+		self._dialog.destroy()
 
 		return (code, name, path)
 
 
-class OperationError(gtk.Dialog):
+class OperationError:
 	"""Dialog used to ask user about error occured during certain operation."""
 
 	def __init__(self, application):
-		gtk.Dialog.__init__(self, parent=application)
+		self._dialog = gtk.Dialog(parent=application)
 
 		self._application = application
 
 		# configure dialog
-		self.set_title(_('Operation error'))
-		self.set_default_size(340, 10)
-		self.set_resizable(True)
-		self.set_skip_taskbar_hint(True)
-		self.set_modal(True)
-		self.set_transient_for(application)
+		self._dialog.set_title(_('Operation error'))
+		self._dialog.set_default_size(340, 10)
+		self._dialog.set_resizable(True)
+		self._dialog.set_skip_taskbar_hint(True)
+		self._dialog.set_modal(True)
+		self._dialog.set_transient_for(application)
 
-		self.vbox.set_spacing(0)
+		self._dialog.vbox.set_spacing(0)
 
 		# create component container
 		hbox = gtk.HBox(False, 10)
@@ -954,12 +962,12 @@ class OperationError(gtk.Dialog):
 		button_skip = gtk.Button(label=_('Skip'))
 		button_retry = gtk.Button(label=_('Retry'))
 
-		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
-		self.add_action_widget(button_skip, gtk.RESPONSE_NO)
-		self.add_action_widget(button_retry, gtk.RESPONSE_YES)
+		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self._dialog.add_action_widget(button_skip, gtk.RESPONSE_NO)
+		self._dialog.add_action_widget(button_retry, gtk.RESPONSE_YES)
 
 		button_skip.set_can_default(True)
-		self.set_default_response(gtk.RESPONSE_NO)
+		self._dialog.set_default_response(gtk.RESPONSE_NO)
 
 		# pack interface
 		vbox_icon.pack_start(icon, False, False, 0)
@@ -970,10 +978,10 @@ class OperationError(gtk.Dialog):
 		hbox.pack_start(vbox_icon, False, False, 0)
 		hbox.pack_start(vbox, True, True, 0)
 
-		self.vbox.pack_start(hbox, False, False, 0)
+		self._dialog.vbox.pack_start(hbox, False, False, 0)
 
 		# show all components
-		self.show_all()
+		self._dialog.show_all()
 
 	def set_message(self, message):
 		"""Set dialog message"""
@@ -985,29 +993,29 @@ class OperationError(gtk.Dialog):
 
 	def get_response(self):
 		"""Return dialog response and self-destruct"""
-		code = self.run()
-		self.hide()
+		code = self._dialog.run()
+		self._dialog.destroy()
 
 		return code
 
 
-class CreateToolbarWidgetDialog(gtk.Dialog):
+class CreateToolbarWidgetDialog:
 	"""Create widget persisten dialog."""
 
 	def __init__(self, application):
-		gtk.Dialog.__init__(self, parent=application)
+		self._dialog = gtk.Dialog(parent=application)
 
 		self._application = application
 
 		# configure dialog
-		self.set_title(_('Add toolbar widget'))
-		self.set_default_size(340, 10)
-		self.set_resizable(True)
-		self.set_skip_taskbar_hint(True)
-		self.set_modal(True)
-		self.set_transient_for(application)
+		self._dialog.set_title(_('Add toolbar widget'))
+		self._dialog.set_default_size(340, 10)
+		self._dialog.set_resizable(True)
+		self._dialog.set_skip_taskbar_hint(True)
+		self._dialog.set_modal(True)
+		self._dialog.set_transient_for(application)
 
-		self.vbox.set_spacing(0)
+		self._dialog.vbox.set_spacing(0)
 
 		# create component container
 		vbox = gtk.VBox(False, 5)
@@ -1042,10 +1050,10 @@ class CreateToolbarWidgetDialog(gtk.Dialog):
 		button_add.set_can_default(True)
 		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
 
-		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
-		self.add_action_widget(button_add, gtk.RESPONSE_ACCEPT)
+		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self._dialog.add_action_widget(button_add, gtk.RESPONSE_ACCEPT)
 
-		self.set_default_response(gtk.RESPONSE_ACCEPT)
+		self._dialog.set_default_response(gtk.RESPONSE_ACCEPT)
 
 		# pack interface
 		vbox_name.pack_start(label_name, False, False, 0)
@@ -1057,10 +1065,10 @@ class CreateToolbarWidgetDialog(gtk.Dialog):
 		vbox.pack_start(vbox_name, False, False, 0)
 		vbox.pack_start(vbox_type, False, False, 0)
 
-		self.vbox.pack_start(vbox, False, False, 0)
+		self._dialog.vbox.pack_start(vbox, False, False, 0)
 
 		# show all widgets
-		self.show_all()
+		self._dialog.show_all()
 
 	def update_type_list(self, widgets):
 		"""Update type list store"""
@@ -1086,7 +1094,7 @@ class CreateToolbarWidgetDialog(gtk.Dialog):
 		self._entry_name.set_text('')
 
 		# show dialog
-		code = self.run()
+		code = self._dialog.run()
 
 		if code == gtk.RESPONSE_ACCEPT \
 		and len(self._type_list) > 0:
@@ -1094,7 +1102,7 @@ class CreateToolbarWidgetDialog(gtk.Dialog):
 			name = self._entry_name.get_text()
 			widget_type = self._type_list[self._combobox_type.get_active()][0]
 
-		self.hide()
+		self._dialog.destroy()
 
 		return code, name, widget_type
 
@@ -1115,10 +1123,10 @@ class InputRangeDialog(InputDialog):
 
 	def get_response(self):
 		"""Return selection selection_range and self-destruct"""
-		code = self.run()
+		code = self._dialog.run()
 		selection_range = self._entry.get_selection_bounds()
 
-		self.hide()
+		self._dialog.destroy()
 
 		return code, selection_range
 
@@ -1158,7 +1166,7 @@ class ApplicationInputDialog(InputDialog):
 		self._container.set_spacing(5)
 
 		# show components
-		self.show_all()
+		self._dialog.show_all()
 
 	def __select_application(self, widget, data=None):
 		"""Select application using ApplicationSelectDialog"""
@@ -1170,39 +1178,39 @@ class ApplicationInputDialog(InputDialog):
 
 	def get_response(self):
 		"""Get response from dialog"""
-		code = self.run()
+		code = self._dialog.run()
 
 		name = self._entry.get_text()
 		command = self._entry_command.get_text()
 
-		self.hide()
+		self._dialog.destroy()
 
 		return code, name, command
 
 
-class ApplicationSelectDialog(gtk.Dialog):
+class ApplicationSelectDialog:
 	"""Provides user with a list of installed applications and
 	option to enter command"""
 	
 	help_url = 'standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables'
 	
 	def __init__(self, application, path=None):
-		gtk.Dialog.__init__(self, parent=application)
+		self._dialog = gtk.Dialog(parent=application)
 		
 		self._application = application
 		self.path = path
 
 		# configure dialog
-		self.set_title(_('Open With'))
-		self.set_default_size(500, 400)
-		self.set_resizable(True)
-		self.set_skip_taskbar_hint(True)
-		self.set_modal(True)
-		self.set_transient_for(application)
-		self.set_wmclass('Sunflower', 'Sunflower')
+		self._dialog.set_title(_('Open With'))
+		self._dialog.set_default_size(500, 400)
+		self._dialog.set_resizable(True)
+		self._dialog.set_skip_taskbar_hint(True)
+		self._dialog.set_modal(True)
+		self._dialog.set_transient_for(application)
+		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
-		self.vbox.set_spacing(0)
-		self.vbox.set_border_width(0)
+		self._dialog.vbox.set_spacing(0)
+		self._dialog.vbox.set_border_width(0)
 		
 		self._container = gtk.VBox(False, 5)
 		self._container.set_border_width(5)
@@ -1286,15 +1294,15 @@ class ApplicationSelectDialog(gtk.Dialog):
 		
 		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
 		
-		self.action_area.pack_start(button_help, False, False, 0)
-		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
-		self.add_action_widget(button_ok, gtk.RESPONSE_OK)
-		self.set_default_response(gtk.RESPONSE_OK)
+		self._dialog.action_area.pack_start(button_help, False, False, 0)
+		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self._dialog.add_action_widget(button_ok, gtk.RESPONSE_OK)
+		self._dialog.set_default_response(gtk.RESPONSE_OK)
 		
 		# populate content
 		self._load_applications()
 
-		self.show_all()
+		self._dialog.show_all()
 		
 	def __handle_cursor_change(self, widget, data=None):
 		"""Handle setting or changing list cursor"""
@@ -1307,7 +1315,7 @@ class ApplicationSelectDialog(gtk.Dialog):
 			
 	def __handle_row_activated(self, path=None, view_column=None, data=None):
 		"""Handle choosing application by presing 'Enter'"""
-		self.response(gtk.RESPONSE_OK)
+		self._dialog.response(gtk.RESPONSE_OK)
 		
 	def _load_applications(self):
 		"""Populate application list from config files"""
@@ -1325,10 +1333,10 @@ class ApplicationSelectDialog(gtk.Dialog):
 		
 	def get_response(self):
 		"""Get response and destroy dialog"""
-		code = self.run()
+		code = self._dialog.run()
 		is_custom = self._expander_custom.get_expanded()
 		command = self._entry_custom.get_text()
 		
-		self.hide()
+		self._dialog.destroy()
 
 		return code, is_custom, command

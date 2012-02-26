@@ -4,7 +4,7 @@ import locale
 import gobject
 import common
 
-class OperationDialog(gtk.Window):
+class OperationDialog:
 	"""Dialog for operations
 
 	Base class for operations dialog such as
@@ -17,7 +17,7 @@ class OperationDialog(gtk.Window):
 	MAX_SPEED_POINTS = 20  # how many points to aggregate
 
 	def __init__(self, application, thread):
-		gtk.Window.__init__(self, type=gtk.WINDOW_TOPLEVEL)
+		self._window = gtk.Window(type=gtk.WINDOW_TOPLEVEL)
 
 		self._paused = False
 		self._application = application
@@ -44,21 +44,21 @@ class OperationDialog(gtk.Window):
 													)
 
 		# set window properties
-		self.set_title('Operation Dialog')
-		self.set_default_size(500, 10)
-		self.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
-		self.set_resizable(True)
-		self.set_skip_taskbar_hint(False)
-		self.set_transient_for(application)
-		self.set_wmclass('Sunflower', 'Sunflower')
+		self._window.set_title('Operation Dialog')
+		self._window.set_default_size(500, 10)
+		self._window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+		self._window.set_resizable(True)
+		self._window.set_skip_taskbar_hint(False)
+		self._window.set_transient_for(application)
+		self._window.set_wmclass('Sunflower', 'Sunflower')
 
 		# connect signals
-		self.connect('destroy', self._destroy)
-		self.connect('delete-event', self._cancel_click)
-		self.connect('window-state-event', self._window_state)
+		self._window.connect('destroy', self._destroy)
+		self._window.connect('delete-event', self._cancel_click)
+		self._window.connect('window-state-event', self._window_state)
 
 		# set icon
-		self._application.icon_manager.set_window_icon(self)
+		self._application.icon_manager.set_window_icon(self._window)
 
 		# create interface
 		self._vbox = gtk.VBox(False, 5)
@@ -81,7 +81,7 @@ class OperationDialog(gtk.Window):
 		self._operation_item.set_image(self._operation_image)
 
 		# pack interface
-		self.add(self._vbox)
+		self._window.add(self._vbox)
 
 	def _add_source_destination(self):
 		"""Add source and destination labels to the GUI"""
@@ -230,7 +230,7 @@ class OperationDialog(gtk.Window):
 
 	def _confirm_cancel(self, message):
 		"""Create confirmation dialog with specified message and return result"""
-		dialog = gtk.MessageDialog(self,
+		dialog = gtk.MessageDialog(self._window,
 							gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_QUESTION,
 							gtk.BUTTONS_YES_NO, message)
 
@@ -241,13 +241,13 @@ class OperationDialog(gtk.Window):
 
 	def _minimize_click(self, widget, data=None):
 		"""Handle minimize click"""
-		self.iconify()
+		self._window.iconify()
 
 		# support for compositing window managers
 		if self._hide_on_minimize:
 			self._operation_item.show()
 			self._application.operation_menu_changed()
-			self.hide()
+			self._window.hide()
 
 	def _pause_click(self, widget, data=None):
 		"""Lock threading object"""
@@ -277,13 +277,13 @@ class OperationDialog(gtk.Window):
 
 	def _operation_click(self, widget, data=None):
 		"""Handle operation menu item click"""
-		self.deiconify()
+		self._window.deiconify()
 
 		# support for compositing window managers
 		if self._hide_on_minimize:
 			self._operation_item.hide()
 			self._application.operation_menu_changed()
-			self.show()
+			self._window.show()
 
 	def _update_total_count(self):
 		"""Update progress bar and labels for total count"""
@@ -405,6 +405,22 @@ class OperationDialog(gtk.Window):
 		if icon_name is not None:
 			self._operation_image.set_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
 
+	def is_active(self):
+		"""Return true if window is active"""
+		return self._window.is_active()
+
+	def destroy(self):
+		"""Close window"""
+		self._window.destroy()
+
+	def get_window(self):
+		"""Return container window"""
+		return self._window
+
+	def set_title(self, title_text):
+		"""Set window title"""
+		self._window.set_title(title_text)
+
 	def set_status(self, status):
 		"""Set current status"""
 		self._label_status.set_label(status)
@@ -501,7 +517,7 @@ class CopyDialog(OperationDialog):
 		self.set_title(_('Copy Selection'))
 		
 		# show all elements
-		self.show_all()
+		self._window.show_all()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
@@ -522,7 +538,7 @@ class MoveDialog(CopyDialog):
 		self.set_title(_('Move Selection'))
 		
 		# show all elements
-		self.show_all()
+		self._window.show_all()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
@@ -549,7 +565,7 @@ class DeleteDialog(OperationDialog):
 		self.set_current_file('')
 		
 		# show all elements
-		self.show_all()
+		self._window.show_all()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
@@ -576,7 +592,7 @@ class RenameDialog(OperationDialog):
 		self.set_current_file('')
 		
 		# show all elements
-		self.show_all()
+		self._window.show_all()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""

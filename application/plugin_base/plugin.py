@@ -173,17 +173,20 @@ class PluginBase(gtk.VBox):
 		self._title_bar.set_state(gtk.STATE_SELECTED)
 		self._parent._set_active_object(self)
 
-		# activate accelerators
-		for group in self._accelerator_groups:
-			group.activate(self._parent)
+		# deactivate scheduled accelerators
+		deactivated = self._parent.accelerator_manager.deactivate_scheduled_groups(self)
+
+		# activate accelerators only if previous groups were deactivated
+		if deactivated:
+			for group in self._accelerator_groups:
+				group.activate(self._parent)
 
 	def _control_lost_focus(self, widget, data=None):
 		"""List focus out event"""
 		self._title_bar.set_state(gtk.STATE_NORMAL)
 
-		# deactivate accelerators
-		for group in self._accelerator_groups:
-			group.deactivate()
+		# schedule accelerator groups for deactivation
+		self._parent.accelerator_manager.schedule_groups_for_deactivation(self._accelerator_groups, self)
 
 	def _enable_object_block(self, widget=None, data=None):
 		"""Block main object signals"""

@@ -4,13 +4,13 @@ Version 0.1a-39
   + Added menu item to ask user and navigate to specified path.
   + Show system bookmarks in bookmarks menu if specified.
   + Implemented silent mode for copy and move operations.
-  + Modified user interface and enabled saving configuration for copy/move dialog.
+  + Enabled saving configuration for copy/move dialog.
   + Created error list for silent operations.
   * Tab close buttons visible by default.
   * Use lazy accelerator group activation.
   * Handle error in rename method with bad path.
   * Set flag to avoid conflicts with manual repaint in tab title bar.
-  * Disable scheduled accelerator groups on command entry focus. This also fixes issue #143.
+  * Disable scheduled accelerator groups on command entry focus. 
   * Disable drag and drop for terminal based plugins.
   * Handle invalid fonts from gconf when setting terminal font.
   * Changed default selection color.

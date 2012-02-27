@@ -6,6 +6,7 @@ import fnmatch
 from threading import Thread, Event
 from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OperationError
 from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog, RenameDialog
+from gui.error_list import ErrorList
 
 # import constants
 from gui.input_dialog import OverwriteOption
@@ -13,17 +14,30 @@ from gui.input_dialog import OverwriteOption
 # constants
 COPY_BUFFER = 100 * 1024
 
+
 class Option:
 	FILE_TYPE = 0
 	DESTINATION = 1
 	SET_OWNER = 2
 	SET_MODE = 3
+	SET_TIMESTAMP = 4
+	SILENT = 5
+	SILENT_MERGE = 6
+	SILENT_OVERWRITE = 7
+
+
+class OperationType:
+	COPY = 0
+	MOVE = 1
+	DELETE = 2
+	RENAME = 3
+	LINK = 4
 
 
 class Operation(Thread):
 	"""Parent class for all operation threads"""
 
-	def __init__(self, application, source, destination=None):
+	def __init__(self, application, source, destination=None, options=None):
 		Thread.__init__(self, target=self)
 
 		self._can_continue = Event()
@@ -31,6 +45,7 @@ class Operation(Thread):
 		self._application = application
 		self._source = source
 		self._destination = destination
+		self._options = options
 
 		# create operation dialog
 		self._dialog = None
@@ -38,6 +53,7 @@ class Operation(Thread):
 
 		self._dir_list = []
 		self._file_list = []
+		self._error_list = []
 
 		# store initial paths
 		self._source_path = self._source.get_path()
@@ -58,217 +74,284 @@ class Operation(Thread):
 
 	def _get_merge_input(self, path):
 		"""Get merge confirmation"""
-		with gtk.gdk.lock:
-			dialog = OverwriteDirectoryDialog(self._application, self._dialog.get_window())
-	
-			title_element = os.path.basename(path)
-			message_element = os.path.basename(os.path.dirname(
-								os.path.join(self._destination.get_path(), path)))
-	
-			dialog.set_title_element(title_element)
-			dialog.set_message_element(message_element)
-			dialog.set_rename_value(title_element)
-			dialog.set_source(
-							self._source,
-							path,
-							relative_to=self._source_path
-						)
-			dialog.set_original(
-							self._destination,
-							path,
-							relative_to=self._destination_path
-						)
-	
-			result = dialog.get_response()
-			merge = result[0] == gtk.RESPONSE_YES
-
-		if result[1][OverwriteOption.APPLY_TO_ALL]:
+		if self._options[Option.SILENT]:
+			# we are in silent mode, do what user specified
+			merge = self._options[Option.SILENT_MERGE]
 			self._merge_all = merge
 
-		# in case user canceled operation
-		if result[0] == gtk.RESPONSE_CANCEL:
-			self.cancel()
+		else: 
+			# we are not in silent mode, ask user
+			with gtk.gdk.lock:
+				dialog = OverwriteDirectoryDialog(self._application, self._dialog.get_window())
+		
+				title_element = os.path.basename(path)
+				message_element = os.path.basename(os.path.dirname(
+									os.path.join(self._destination.get_path(), path)))
+		
+				dialog.set_title_element(title_element)
+				dialog.set_message_element(message_element)
+				dialog.set_rename_value(title_element)
+				dialog.set_source(
+								self._source,
+								path,
+								relative_to=self._source_path
+							)
+				dialog.set_original(
+								self._destination,
+								path,
+								relative_to=self._destination_path
+							)
+		
+				result = dialog.get_response()
+				merge = result[0] == gtk.RESPONSE_YES
+
+			if result[1][OverwriteOption.APPLY_TO_ALL]:
+				self._merge_all = merge
+
+			# in case user canceled operation
+			if result[0] == gtk.RESPONSE_CANCEL:
+				self.cancel()
 
 		return merge  # return only response for current directory
 
 	def _get_overwrite_input(self, path):
 		"""Get overwrite confirmation"""
-		with gtk.gdk.lock:
-			dialog = OverwriteFileDialog(self._application, self._dialog.get_window())
-	
-			title_element = os.path.basename(path)
-			message_element = os.path.basename(os.path.dirname(
-								os.path.join(self._destination.get_path(), path)))
-	
-			dialog.set_title_element(title_element)
-			dialog.set_message_element(message_element)
-			dialog.set_rename_value(title_element)
-			dialog.set_source(
-							self._source,
-							path,
-							relative_to=self._source_path
-							)
-			dialog.set_original(
-							self._destination,
-							path,
-							relative_to=self._destination_path
-							)
-	
-			result = dialog.get_response()
-			overwrite = result[0] == gtk.RESPONSE_YES
-
-		if result[1][OverwriteOption.APPLY_TO_ALL]:
+		if self._options[Option.SILENT]:
+			# we are in silent mode, do what user specified
+			overwrite = self._options[Option.SILENT_OVERWRITE]
 			self._overwrite_all = overwrite
+			options = (False, '', True)  # no rename, apply to all
 
-		# in case user canceled operation
-		if result[0] == gtk.RESPONSE_CANCEL:
-			self.cancel()
+		else:
+			# we are not in silent mode, ask user what to do
+			with gtk.gdk.lock:
+				dialog = OverwriteFileDialog(self._application, self._dialog.get_window())
+		
+				title_element = os.path.basename(path)
+				message_element = os.path.basename(os.path.dirname(
+									os.path.join(self._destination.get_path(), path)))
+		
+				dialog.set_title_element(title_element)
+				dialog.set_message_element(message_element)
+				dialog.set_rename_value(title_element)
+				dialog.set_source(
+								self._source,
+								path,
+								relative_to=self._source_path
+								)
+				dialog.set_original(
+								self._destination,
+								path,
+								relative_to=self._destination_path
+								)
+		
+				result = dialog.get_response()
+				overwrite = result[0] == gtk.RESPONSE_YES
 
-		return overwrite, result[1]
+			if result[1][OverwriteOption.APPLY_TO_ALL]:
+				self._overwrite_all = overwrite
+
+			# in case user canceled operation
+			if result[0] == gtk.RESPONSE_CANCEL:
+				self.cancel()
+
+			# pass options from input dialog
+			options = result[1]
+
+		return overwrite, options
 
 	def _get_write_error_input(self, error):
 		"""Get user response for write error"""
-		with gtk.gdk.lock:
-			dialog = OperationError(self._application)
-	
-			dialog.set_message(_(
-			        'There is a problem writing data to destination '
-			        'file. What would you like to do?'
-			    ))
-			dialog.set_error(str(error))
-	
-			response = dialog.get_response()
-	
-			# abort operation if user requested
-			if response == gtk.RESPONSE_CANCEL:
-				self.cancel()
+		if self._options[Option.SILENT]:
+			# we are in silent mode, set response and log error
+			self._error_list.append(str(error))
+			response = gtk.RESPONSE_NO
+
+		else:
+			# we are not in silent mode, ask user
+			with gtk.gdk.lock:
+				dialog = OperationError(self._application)
+		
+				dialog.set_message(_(
+						'There is a problem writing data to destination '
+						'file. What would you like to do?'
+					))
+				dialog.set_error(str(error))
+		
+				response = dialog.get_response()
+		
+				# abort operation if user requested
+				if response == gtk.RESPONSE_CANCEL:
+					self.cancel()
 
 		return response
 
 	def _get_create_error_input(self, error, is_directory=False):
 		"""Get user response for create error"""
-		with gtk.gdk.lock:
-			dialog = OperationError(self._application)
-	
-			if not is_directory:
-				# set message for file
-				dialog.set_message(_(
-					'An error occurred while trying to create specified '
-					'file. What would you like to do?'
-				))
-	
-			else:
-				# set message for directory
-				dialog.set_message(_(
-					'An error occurred while trying to create specified '
-					'directory. What would you like to do?'
-				))
-	
-			dialog.set_error(str(error))
-	
-			# get user response
-			response = dialog.get_response()
-	
-			# abort operation if user requested
-			if response == gtk.RESPONSE_CANCEL:
-				self.cancel()
+		if self._options[Option.SILENT]:
+			# we are in silent mode, set response and log error
+			self._error_list.append(str(error))
+			response = gtk.RESPONSE_NO
+
+		else:
+			# we are not in silent mode, ask user
+			with gtk.gdk.lock:
+				dialog = OperationError(self._application)
+		
+				if not is_directory:
+					# set message for file
+					dialog.set_message(_(
+						'An error occurred while trying to create specified '
+						'file. What would you like to do?'
+					))
+		
+				else:
+					# set message for directory
+					dialog.set_message(_(
+						'An error occurred while trying to create specified '
+						'directory. What would you like to do?'
+					))
+		
+				dialog.set_error(str(error))
+		
+				# get user response
+				response = dialog.get_response()
+		
+				# abort operation if user requested
+				if response == gtk.RESPONSE_CANCEL:
+					self.cancel()
 
 		return response
 
 	def _get_mode_set_error_input(self, error):
 		"""Get user response for mode set error"""
-		with gtk.gdk.lock:
-			dialog = OperationError(self._application)
-	
-			dialog.set_message(_(
-		            'Problem with setting mode and/or owner for '
-		            'specified path. What would you like to do?'
-		        ))
-	
-			dialog.set_error(str(error))
-	
-			# get user response
-			response = dialog.get_response()
-	
-			# abort operation if user requested
-			if response == gtk.RESPONSE_CANCEL:
-				self.cancel()
+		if self._options[Option.SILENT]:
+			# we are in silent mode, set response and log error
+			self._error_list.append(str(error))
+			response = gtk.RESPONSE_NO
+
+		else:
+			# we are not in silent mode, ask user
+			with gtk.gdk.lock:
+				dialog = OperationError(self._application)
+		
+				dialog.set_message(_(
+						'Problem with setting mode and/or owner for '
+						'specified path. What would you like to do?'
+					))
+		
+				dialog.set_error(str(error))
+		
+				# get user response
+				response = dialog.get_response()
+		
+				# abort operation if user requested
+				if response == gtk.RESPONSE_CANCEL:
+					self.cancel()
 
 		return response
 
 	def _get_remove_error_input(self, error):
 		"""Get user response for remove error"""
-		with gtk.gdk.lock:
-			dialog = OperationError(self._application)
-	
-			dialog.set_message(_(
-			        'There was a problem removing specified path. '
-			        'What would you like to do?'
-			    ))
-			dialog.set_error(str(error))
-	
-			response = dialog.get_response()
-	
-			# abort operation if user requested
-			if response == gtk.RESPONSE_CANCEL:
-				self.cancel()
+		if self._options[Option.SILENT]:
+			# we are in silent mode, set response and log error
+			self._error_list.append(str(error))
+			response = gtk.RESPONSE_NO
+
+		else:
+			# we are not in silent mode, ask user
+			with gtk.gdk.lock:
+				dialog = OperationError(self._application)
+		
+				dialog.set_message(_(
+						'There was a problem removing specified path. '
+						'What would you like to do?'
+					))
+				dialog.set_error(str(error))
+		
+				response = dialog.get_response()
+		
+				# abort operation if user requested
+				if response == gtk.RESPONSE_CANCEL:
+					self.cancel()
 
 		return response
 
 	def _get_move_error_input(self, error):
 		"""Get user response for move error"""
-		with gtk.gdk.lock:
-			dialog = OperationError(self._application)
-	
-			dialog.set_message(_(
-			        'There was a problem moving specified path. '
-			        'What would you like to do?'
-			    ))
-			dialog.set_error(str(error))
-	
-			response = dialog.get_response()
-	
-			# abort operation if user requested
-			if response == gtk.RESPONSE_CANCEL:
-				self.cancel()
+		if self._options[Option.SILENT]:
+			# we are in silent mode, set response and log error
+			self._error_list.append(str(error))
+			response = gtk.RESPONSE_NO
+
+		else:
+			# we are not in silent mode, ask user
+			with gtk.gdk.lock:
+				dialog = OperationError(self._application)
+		
+				dialog.set_message(_(
+						'There was a problem moving specified path. '
+						'What would you like to do?'
+					))
+				dialog.set_error(str(error))
+		
+				response = dialog.get_response()
+		
+				# abort operation if user requested
+				if response == gtk.RESPONSE_CANCEL:
+					self.cancel()
 
 		return response
 
 	def _get_rename_error_input(self, error):
 		"""Get user response for rename error"""
-		with gtk.gdk.lock:
-			dialog = OperationError(self._application)
-	
-			dialog.set_message(_(
-			        'There was a problem renaming specified path. '
-			        'What would you like to do?'
-			    ))
-			dialog.set_error(str(error))
-	
-			response = dialog.get_response()
-	
-			# abort operation if user requested
-			if response == gtk.RESPONSE_CANCEL:
-				self.cancel()
+		if self._options[Option.SILENT]:
+			# we are in silent mode, set response and log error
+			self._error_list.append(str(error))
+			response = gtk.RESPONSE_NO
+
+		else:
+			# we are not in silent mode, ask user
+			with gtk.gdk.lock:
+				dialog = OperationError(self._application)
+		
+				dialog.set_message(_(
+						'There was a problem renaming specified path. '
+						'What would you like to do?'
+					))
+				dialog.set_error(str(error))
+		
+				response = dialog.get_response()
+		
+				# abort operation if user requested
+				if response == gtk.RESPONSE_CANCEL:
+					self.cancel()
 
 		return response
 
 	def _get_read_error_input(self, error):
 		"""Get user response for directory listing error"""
-		with gtk.gdk.lock:
-			dialog = OperationError(self._application)
-	
-			dialog.set_message(_(
-			        'There was a problem with reading specified directory. '
-			        'What would you like to do?'
-			    ))
-			dialog.set_error(str(error))
-	
-			response = dialog.get_response()
-	
-			# abort operation if user requested
-			if response == gtk.RESPONSE_CANCEL:
-				self.cancel()
+		if self._options[Option.SILENT]:
+			# we are in silent mode, set response and log error
+			self._error_list.append(str(error))
+			response = gtk.RESPONSE_NO
+
+		else:
+			# we are not in silent mode, ask user
+			with gtk.gdk.lock:
+				dialog = OperationError(self._application)
+		
+				dialog.set_message(_(
+						'There was a problem with reading specified directory. '
+						'What would you like to do?'
+					))
+				dialog.set_error(str(error))
+		
+				response = dialog.get_response()
+		
+				# abort operation if user requested
+				if response == gtk.RESPONSE_CANCEL:
+					self.cancel()
 
 		return response
 
@@ -293,9 +376,8 @@ class CopyOperation(Operation):
 	"""Operation thread used for copying files"""
 
 	def __init__(self, application, source, destination, options):
-		Operation.__init__(self, application, source, destination)
+		Operation.__init__(self, application, source, destination, options)
 
-		self._options = options
 		self._merge_all = None
 		self._overwrite_all = None
 		self._dir_list_create = []
@@ -658,6 +740,15 @@ class CopyOperation(Operation):
 				# queue notification
 				notify_manager.notify(title, message)
 
+			# show error list if needed
+			if len(self._error_list) > 0:
+				error_list = ErrorList(self._dialog)
+				error_list.set_operation_name(_('Copy Operation'))
+				error_list.set_source(self._source_path)
+				error_list.set_destination(self._destination_path)
+				error_list.set_errors(self._error_list)
+				error_list.show()
+
 		# destroy dialog
 		self._destroy_ui()
 
@@ -860,6 +951,15 @@ class MoveOperation(CopyOperation):
 	
 				# queue notification
 				notify_manager.notify(title, message)
+
+			# shop error list if needed
+			if len(self._error_list) > 0:
+				error_list = ErrorList(self._dialog)
+				error_list.set_operation_name(_('Move Operation'))
+				error_list.set_source(self._source_path)
+				error_list.set_destination(self._destination_path)
+				error_list.set_errors(self._error_list)
+				error_list.show()
 
 		# destroy dialog
 		self._destroy_ui()

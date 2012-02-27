@@ -21,6 +21,7 @@ class TitleBar(gtk.HBox):
 
 		# connect signals
 		self.connect('expose-event', self.__expose_event)
+		self.set_app_paintable(True)
 
 		# top folder icon as default
 		self._icon = gtk.Image()

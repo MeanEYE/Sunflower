@@ -1,3 +1,21 @@
+Version 0.1a-39
+  + Added Spanish translation.
+  + Now tabs can be closed with middle click.
+  + Added menu item to ask user and navigate to specified path.
+  + Show system bookmarks in bookmarks menu if specified.
+  + Implemented silent mode for copy and move operations.
+  + Modified user interface and enabled saving configuration for copy/move dialog.
+  + Created error list for silent operations.
+  * Tab close buttons visible by default.
+  * Use lazy accelerator group activation.
+  * Handle error in rename method with bad path.
+  * Set flag to avoid conflicts with manual repaint in tab title bar.
+  * Disable scheduled accelerator groups on command entry focus. This also fixes issue #143.
+  * Disable drag and drop for terminal based plugins.
+  * Handle invalid fonts from gconf when setting terminal font.
+  * Changed default selection color.
+  * Item list: Added option to change selection color.
+
 Version 0.1a-38
   + Added script for making packages.
   + Created additional options for terminal tabs.

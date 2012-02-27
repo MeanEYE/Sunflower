@@ -55,6 +55,16 @@ class ItemListOptions(SettingsPage):
 		self._combobox_grid_lines.pack_start(cell_grid_lines)
 		self._combobox_grid_lines.add_attribute(cell_grid_lines, 'text', 0)
 
+		# selection color
+		hbox_selection_color = gtk.HBox(False, 5)
+
+		label_selection_color = gtk.Label(_('Selection color:'))
+		label_selection_color.set_alignment(0, 0.5)
+
+		self._button_selection_color = gtk.ColorButton()
+		self._button_selection_color.set_use_alpha(False)
+		self._button_selection_color.connect('color-set', self._parent.enable_save)
+
 		# quick search
 		label_quick_search = gtk.Label(_('Quick search combination:'))
 		label_quick_search.set_alignment(0, 0.5)
@@ -80,6 +90,9 @@ class ItemListOptions(SettingsPage):
 		self._entry_time_format.connect('changed', self._parent.enable_save)
 
 		# pack interface
+		hbox_selection_color.pack_start(label_selection_color, False, False, 0)
+		hbox_selection_color.pack_start(self._button_selection_color, False, False, 0)
+
 		hbox_quick_search.pack_start(label_quick_search, False, False, 0)
 		hbox_quick_search.pack_start(self._checkbox_control, False, False, 0)
 		hbox_quick_search.pack_start(self._checkbox_alt, False, False, 0)
@@ -96,6 +109,7 @@ class ItemListOptions(SettingsPage):
 		vbox_look_and_feel.pack_start(self._checkbox_media_preview, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_show_hidden, False, False, 0)
 		vbox_look_and_feel.pack_start(hbox_grid_lines, False, False, 5)
+		vbox_look_and_feel.pack_start(hbox_selection_color, False, False, 5)
 
 		vbox_operation.pack_start(self._checkbox_case_sensitive, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_right_click, False, False, 0)
@@ -147,6 +161,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_media_preview.set_active(options.getboolean('main', 'media_preview'))
 		self._combobox_grid_lines.set_active(options.getint('main', 'grid_lines'))
 		self._entry_time_format.set_text(options.get('main', 'time_format'))
+		self._button_selection_color.set_color(gtk.gdk.color_parse(options.get('main', 'selection_color')))
 
 		search_modifier = options.get('main', 'search_modifier')
 		self._checkbox_control.set_active(search_modifier[0] == '1')
@@ -166,6 +181,7 @@ class ItemListOptions(SettingsPage):
 		options.set('main', 'media_preview', _bool[self._checkbox_media_preview.get_active()])
 		options.set('main', 'grid_lines', self._combobox_grid_lines.get_active())
 		options.set('main', 'time_format', self._entry_time_format.get_text())
+		options.set('main', 'selection_color', self._button_selection_color.get_color().to_string())
 
 		search_modifier = "%d%d%d" % (
 								self._checkbox_control.get_active(),

@@ -333,7 +333,7 @@ class Terminal(PluginBase):
 
 	def _get_supported_drag_actions(self):
 		"""Return integer representing supported drag'n'drop actions"""
-		return gtk.gdk.ACTION_COPY
+		return None
 
 	def feed_terminal(self, text):
 		"""Feed terminal process with specified text"""

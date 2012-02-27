@@ -1,5 +1,7 @@
 import gtk
 import pango
+import cairo
+
 
 class TabLabel:
 	"""Tab label wrapper class"""
@@ -13,6 +15,7 @@ class TabLabel:
 		# initialize tab events
 		self._container.add_events(gtk.gdk.BUTTON_RELEASE_MASK)
 		self._container.connect('button-release-event', self._button_release_event)
+		self._container.set_visible_window(False)
 
 		# create interface
 		self._hbox = gtk.HBox(False, 0)
@@ -54,8 +57,8 @@ class TabLabel:
 	def _close_tab(self, widget, data=None):
 		"""Handle clicking on close button"""
 		self._parent._close_tab()
-		
-	def _button_release_event(self, widget, event, data = None):
+
+	def _button_release_event(self, widget, event, data=None):
 		"""
 		Handle clicking on the tab itself, when middle button is pressed
 		the tab is closed.

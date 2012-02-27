@@ -174,6 +174,7 @@ class TitleBar(gtk.HBox):
 			context.close_path()
 			context.fill()
 
+		return False
 
 	def __apply_text_color(self):
 		"""Apply text color for title and subtitle"""

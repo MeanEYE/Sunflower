@@ -393,27 +393,30 @@ class CopyDialog:
 		self.entry_destination.connect('activate', self._confirm_entry)
 
 		# additional options
-		advanced = gtk.Frame('<span size="small">' + _('Advanced options') + '</span>')
-		advanced.set_label_align(1, 0.5)
-		label_advanced = advanced.get_label_widget()
-		label_advanced.set_use_markup(True)
-
-		vbox2 = gtk.VBox(False, 0)
-		vbox2.set_border_width(5)
+		separator = gtk.HSeparator()
 
 		label_type = gtk.Label(_('Only files of this type:'))
 		label_type.set_alignment(0, 0.5)
 
 		self.entry_type = gtk.Entry()
 		self.entry_type.set_text('*')
-		self.entry_type.connect('activate', self._update_label)
+		self.entry_type.connect('changed', self._update_label)
 
+		# create operation options
 		self.checkbox_owner = gtk.CheckButton(_('Set owner on destination'))
 		self.checkbox_mode = gtk.CheckButton(_('Set access mode on destination'))
+		self.checkbox_timestamp = gtk.CheckButton(_('Set date and time on destination'))
 		self.checkbox_silent = gtk.CheckButton(_('Silent mode'))
 
-		self.checkbox_mode.set_active(True)
+		align_silent = gtk.Alignment()
+		align_silent.set_padding(0, 0, 15, 15)
+		vbox_silent = gtk.VBox(False, 0)
+		vbox_silent.set_sensitive(False)
 
+		self.checkbox_merge = gtk.CheckButton(_('Merge directories'))
+		self.checkbox_overwrite = gtk.CheckButton(_('Overwrite files'))
+
+		self.checkbox_silent.connect('toggled', self._toggled_silent_mode, vbox_silent)
 		self.checkbox_silent.set_tooltip_text(_(
 										'Silent mode will enable operation to finish '
 										'without disturbing you. If any errors occur, '
@@ -423,23 +426,56 @@ class CopyDialog:
 		self._create_buttons()
 
 		# pack UI
-		advanced.add(vbox2)
+		vbox_silent.pack_start(self.checkbox_merge, False, False, 0)
+		vbox_silent.pack_start(self.checkbox_overwrite, False, False, 0)
 
-		vbox2.pack_start(label_type, False, False, 0)
-		vbox2.pack_start(self.entry_type, False, False, 0)
-		vbox2.pack_start(self.checkbox_owner, False, False, 0)
-		vbox2.pack_start(self.checkbox_mode, False, False, 0)
-		vbox2.pack_start(self.checkbox_silent, False, False, 0)
+		align_silent.add(vbox_silent)
 
 		vbox.pack_start(self.label_destination, False, False, 0)
 		vbox.pack_start(self.entry_destination, False, False, 0)
-		vbox.pack_start(advanced, False, False, 5)
+		vbox.pack_start(separator, False, False, 5)
+		vbox.pack_start(label_type, False, False, 0)
+		vbox.pack_start(self.entry_type, False, False, 0)
+		vbox.pack_start(self.checkbox_owner, False, False, 0)
+		vbox.pack_start(self.checkbox_mode, False, False, 0)
+		vbox.pack_start(self.checkbox_timestamp, False, False, 0)
+		vbox.pack_start(self.checkbox_silent, False, False, 0)
+		vbox.pack_start(align_silent, False, False, 0)
 
-		self._dialog.vbox.pack_start(vbox, True, True, 0)
+		self._dialog.vbox.pack_start(vbox, False, False, 0)
+
+		self._load_configuration()
 
 		self._dialog.set_default_response(gtk.RESPONSE_OK)
 		self._dialog.show_all()
 
+	def _load_configuration(self):
+		"""Load options from config file"""
+		options = self._application.options
+
+		self.checkbox_owner.set_active(options.getboolean('main', 'operation_set_owner'))
+		self.checkbox_mode.set_active(options.getboolean('main', 'operation_set_mode'))
+		self.checkbox_timestamp.set_active(options.getboolean('main', 'operation_set_timestamp'))
+		self.checkbox_silent.set_active(options.getboolean('main', 'operation_silent'))
+		self.checkbox_merge.set_active(options.getboolean('main', 'operation_merge_in_silent'))
+		self.checkbox_overwrite.set_active(options.getboolean('main', 'operation_overwrite_in_silent'))
+
+	def _save_configuration(self, widget=None, data=None):
+		"""Save default dialog configuration"""
+		options = self._application.options
+		_bool = ('False', 'True')
+
+		options.set('main', 'operation_set_owner', _bool[self.checkbox_owner.get_active()])
+		options.set('main', 'operation_set_mode', _bool[self.checkbox_mode.get_active()])
+		options.set('main', 'operation_set_timestamp', _bool[self.checkbox_timestamp.get_active()])
+		options.set('main', 'operation_silent', _bool[self.checkbox_silent.get_active()])
+		options.set('main', 'operation_merge_in_silent', _bool[self.checkbox_merge.get_active()])
+		options.set('main', 'operation_overwrite_in_silent', _bool[self.checkbox_overwrite.get_active()])
+
+	def _toggled_silent_mode(self, widget, container):
+		"""Set container sensitivity based on widget status"""
+		container.set_sensitive(widget.get_active())
+		
 	def _get_text_variables(self, count):
 		"""Get text variables for update"""
 		title = ngettext(
@@ -461,8 +497,23 @@ class CopyDialog:
 		button_copy = gtk.Button(_('Copy'))
 		button_copy.set_flags(gtk.CAN_DEFAULT)
 
+		image_save = gtk.Image()
+		image_save.set_from_stock(gtk.STOCK_SAVE, gtk.ICON_SIZE_BUTTON)
+		button_save = gtk.Button()
+		button_save.set_image(image_save)
+		button_save.connect('clicked', self._save_configuration)
+		button_save.set_tooltip_text(_('Save default configuration'))
+
+		align_save = gtk.Alignment()
+		align_save.add(button_save)
+
+		self._dialog.action_area.pack_start(align_save, True, True, 0)
+		self._dialog.action_area.set_child_secondary(align_save, True)
+
 		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
 		self._dialog.add_action_widget(button_copy, gtk.RESPONSE_OK)
+
+		self._dialog.action_area.set_homogeneous(False)
 
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""

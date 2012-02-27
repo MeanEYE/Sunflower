@@ -175,7 +175,10 @@ class Terminal(PluginBase):
 			self._terminal.set_data('client', client)
 
 		font_name = client.get_string(key)
-		self._terminal.set_font_from_string(font_name)
+
+		# set font if valid
+		if font_name is not None:
+			self._terminal.set_font_from_string(font_name)
 
 	def _update_title(self, widget, data=None):
 		"""Update title with terminal window text"""

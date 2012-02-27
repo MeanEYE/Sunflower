@@ -14,9 +14,6 @@ check how many parts of path exist and cache that and skip the rest of the files
 - Create option to duplicate selected file with new name. In cases where both left and right path
 are same and only one file is selected offer this option by default.
 
-- On copy/move operation when checking whether the remote directory or file exists we should
-check how many parts of path exist and cache that and skip the rest of the files.
-
 - Ability to extend popup menu
 
 - Ability to extend file list columns
@@ -58,8 +55,6 @@ check how many parts of path exist and cache that and skip the rest of the files
 - Duplicate files finder
 
 - View text files
-
-- Internal editor
 
 - Make file_list module provider agnostic
 

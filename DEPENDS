@@ -1,9 +1,9 @@
 Require:
-  python-gtk2 (>= 2.15.0),
-  python-vte (>= 0.20.0),
-  python-notify (>= 0.1),
+  python-gtk2 (>= 2.15.0)
+  python-notify (>= 0.1)
 
 Optional:
+  python-vte
   python-gnome2
   python-argparse
   mutagen

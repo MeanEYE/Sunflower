@@ -148,6 +148,9 @@ class AcceleratorManager:
 			for group in self._schedule_groups:
 				group.deactivate()
 
+			# clear local list
+			self._schedule_groups = None
+
 			# modify result
 			result = True
 

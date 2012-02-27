@@ -577,6 +577,7 @@ class MainWindow(gtk.Window):
 		self.command_edit.set_completion(self.command_completion)
 		self.command_edit.connect('activate', self.execute_command)
 		self.command_edit.connect('key-press-event', self._command_edit_key_press)
+		self.command_edit.connect('focus-in-event', self._command_edit_focused)
 		self.command_edit.show()
 
 		# load history file
@@ -1250,6 +1251,10 @@ class MainWindow(gtk.Window):
 			result = True
 
 		return result
+
+	def _command_edit_focused(self, widget, event):
+		"""Handle focusing command entry"""
+		self.accelerator_manager.deactivate_scheduled_groups(widget)
 
 	def _save_window_position(self):
 		"""Save window position to config"""

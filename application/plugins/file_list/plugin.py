@@ -906,7 +906,7 @@ class FileList(ItemList):
 			# toggle selection
 			selected = not selected
 
-			value = (None, 'red')[selected]
+			value = (None, self._selection_color)[selected]
 			image = (None, self._pixbuf_selection)[selected]
 			list_.set_value(iter_, Column.COLOR, value)
 			list_.set_value(iter_, Column.SELECTED, image)
@@ -941,7 +941,7 @@ class FileList(ItemList):
 			start_path = (1, )
 
 		# values to be set in columns
-		value = (None, 'red')[new_status]
+		value = (None, self._selection_color)[new_status]
 		image = (None, self._pixbuf_selection)[new_status]
 
 		for index in xrange(start_path[0], end_path[0] + 1):
@@ -1538,7 +1538,7 @@ class FileList(ItemList):
 			# set selection
 			if not row[Column.IS_PARENT_DIR] and fnmatch.fnmatch(row[Column.NAME], pattern):
 				if row[Column.COLOR] is None:
-					row[Column.COLOR] = 'red'
+					row[Column.COLOR] = self._selection_color
 					row[Column.SELECTED] = self._pixbuf_selection
 				else:
 					row[Column.COLOR] = None

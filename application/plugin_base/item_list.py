@@ -1264,6 +1264,9 @@ class ItemList(PluginBase):
 			if i != 0:
 				self.history[0], self.history[i] = self.history[i], self.history[0]
 
+		# hide quick search
+		self._stop_search()
+
 		# update status bar visibility
 		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']

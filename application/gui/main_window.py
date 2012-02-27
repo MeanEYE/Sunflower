@@ -2050,7 +2050,7 @@ class MainWindow(gtk.Window):
 				'focus_new_tab': 'True',
 				'row_hinting': 'False',
 				'grid_lines': 0,
-				'selection_color': 'red',
+				'selection_color': '#ffff5e5e0000',
 				'history_file': '.bash_history',
 				'window': '960x550',
 				'window_state': 0,

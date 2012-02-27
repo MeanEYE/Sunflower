@@ -99,7 +99,7 @@ class AboutWindow(gtk.Window):
 			language = 'German',
 		),
 		Translator(
-			name = "Damián Nohales",
+			name = 'Damián Nohales',
 			email = 'damiannohales@gmail.com',
 			website = None,
 			language = 'Spanish',

@@ -2076,6 +2076,12 @@ class MainWindow(gtk.Window):
 				'human_readable_size': 'True',
 				'expand_tabs': 0,
 				'show_notifications': 'True',
+				'operation_set_owner': 'False',
+				'operation_set_mode': 'True',
+				'operation_set_timestamp': 'True',
+				'operation_silent': 'False',
+				'operation_merge_in_silent': 'True',
+				'operation_overwrite_in_silent': 'True'
 			}
 
 		# set default options

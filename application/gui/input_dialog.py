@@ -559,8 +559,12 @@ class CopyDialog:
 				self.entry_type.get_text(),
 				self.entry_destination.get_text(),
 				self.checkbox_owner.get_active(),
-				self.checkbox_mode.get_active()
-				)
+				self.checkbox_mode.get_active(),
+				self.checkbox_timestamp.get_active(),
+				self.checkbox_silent.get_active(),
+				self.checkbox_merge.get_active(),
+				self.checkbox_overwrite.get_active()
+			)
 
 		self._dialog.destroy()
 

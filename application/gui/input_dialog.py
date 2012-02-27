@@ -1161,6 +1161,10 @@ class CreateToolbarWidgetDialog:
 
 		return code, name, widget_type
 
+	def set_transient_for(self, window):
+		"""Set dialog window transistency"""
+		self._dialog.set_transient_for(window)
+
 
 class InputRangeDialog(InputDialog):
 	"""Dialog used for getting selection range"""

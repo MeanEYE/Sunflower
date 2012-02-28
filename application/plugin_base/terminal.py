@@ -167,18 +167,24 @@ class Terminal(PluginBase):
 		path = '/desktop/gnome/interface'
 		key = '{0}/monospace_font_name'.format(path)
 
-		if client is None and self._terminal.get_data('client') is None:
-			# client wasn't assigned to widget, get default one and set events
-			client = gconf.client_get_default()
-			client.add_dir(path, gconf.CLIENT_PRELOAD_NONE)
-			client.notify_add(key, self.__set_system_font)
-			self._terminal.set_data('client', client)
+		if client is None:
+			if self._terminal.get_data('client') is None:
+				# client wasn't assigned to widget, get default one and set events
+				client = gconf.client_get_default()
+				client.add_dir(path, gconf.CLIENT_PRELOAD_NONE)
+				client.notify_add(key, self.__set_system_font)
+				self._terminal.set_data('client', client)
 
-		font_name = client.get_string(key)
+			else:
+				# get assigned client
+				client = self._terminal.get_data('client')
 
-		# set font if valid
-		if font_name is not None:
-			self._terminal.set_font_from_string(font_name)
+		if client is not None:
+			# try to get font and set it
+			font_name = client.get_string(key)
+
+			if font_name is not None:
+				self._terminal.set_font_from_string(font_name)
 
 	def _update_title(self, widget, data=None):
 		"""Update title with terminal window text"""

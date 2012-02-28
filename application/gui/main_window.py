@@ -1570,9 +1570,6 @@ class MainWindow(gtk.Window):
 			# get response
 			response = dialog.get_response()
 
-			# release dialog
-			dialog.destroy()
-
 			# commit selection
 			if response[0] == gtk.RESPONSE_OK:
 				active_object.select_all(response[1])
@@ -1584,9 +1581,9 @@ class MainWindow(gtk.Window):
 		if hasattr(active_object, '_get_selection') and hasattr(active_object, 'select_all'):
 			selection = active_object._get_selection()
 
-			if selection is not None:
-				extension = os.path.splitext(selection)[1]
-				active_object.select_all('*{0}'.format(extension))
+			if selection is not None\
+			and os.path.splitext(selection)[1] != '':
+				active_object.select_all('*{0}'.format(os.path.splitext(selection)[1]))
 
 	def unselect_with_same_extension(self, widget, data=None):
 		"""Select all items with same extension in active list"""
@@ -1595,9 +1592,9 @@ class MainWindow(gtk.Window):
 		if hasattr(active_object, '_get_selection') and hasattr(active_object, 'select_all'):
 			selection = active_object._get_selection()
 
-			if selection is not None:
-				extension = os.path.splitext(selection)[1]
-				active_object.unselect_all('*{0}'.format(extension))
+			if selection is not None\
+			and os.path.splitext(selection)[1] != '':
+				active_object.unselect_all('*{0}'.format(os.path.splitext(selection)[1]))
 
 	def unselect_with_pattern(self, widget, data=None):
 		"""Ask user for selection pattern and select matching items"""
@@ -1613,9 +1610,6 @@ class MainWindow(gtk.Window):
 
 			# get response
 			response = dialog.get_response()
-
-			# release dialog
-			dialog.destroy()
 
 			# commit selection
 			if response[0] == gtk.RESPONSE_OK:

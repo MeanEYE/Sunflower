@@ -236,7 +236,7 @@ class Operation(Thread):
 				dialog = OperationError(self._application)
 		
 				dialog.set_message(_(
-						'Problem with setting mode and/or owner for '
+						'Problem with setting path parameter for '
 						'specified path. What would you like to do?'
 					))
 		
@@ -487,6 +487,29 @@ class CopyOperation(Operation):
 
 			return
 
+	def _set_timestamp(self, path, access_time, modify_time, change_time):
+		"""Set timestamps for specified path"""
+		if not self._options[Option.SET_TIMESTAMP]: return
+
+		try:
+			# try setting timestamp
+			self._destination.set_timestamp(
+									path, 
+									access_time,
+									modify_time,
+									change_time,
+									relative_to=self._destination_path
+								)
+
+		except StandardError as error:
+			# problem with setting owner, ask user
+			response = self._get_mode_set_error_input(error)
+
+			if response == gtk.RESPONSE_YES:
+				self._set_timestamp(path, access_time, modify_time, change_time)
+
+			return
+
 	def _scan_directory(self, directory):
 		"""Recursively scan directory and populate list"""
 		try:
@@ -600,7 +623,7 @@ class CopyOperation(Operation):
 		try:
 			# get file stats
 			destination_size = 0L
-			file_stat = self._source.get_stat(file_, relative_to=self._source_path)
+			file_stat = self._source.get_stat(file_, relative_to=self._source_path, extended=True)
 
 			# get file handles
 			sh = self._source.get_file_handle(file_, 'rb', relative_to=self._source_path)
@@ -666,11 +689,16 @@ class CopyOperation(Operation):
 				sh.close()
 				dh.close()
 
-				# set mode if required
+				# set file parameters
 				self._set_mode(dest_file, file_stat.mode)
-
-				# set owner if required
 				self._set_owner(dest_file, file_stat.user_id, file_stat.group_id)
+				self._set_timestamp(
+								dest_file, 
+								file_stat.time_access, 
+								file_stat.time_modify,
+								file_stat.time_change
+							)
+
 				break
 
 	def _create_directory_list(self):

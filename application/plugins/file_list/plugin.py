@@ -745,8 +745,7 @@ class FileList(ItemList):
 			self._open_with_menu.append(open_with_other)
 
 		# disable/enable items
-		has_items = len(self._open_with_menu.get_children()) > 0
-		self._open_with_item.set_sensitive(has_items and self.get_provider().is_local)
+		self._open_with_item.set_sensitive(self.get_provider().is_local and not is_dir)
 		self._open_new_tab_item.set_visible(is_dir)
 		self._cut_item.set_sensitive(not is_parent)
 		self._copy_item.set_sensitive(not is_parent)

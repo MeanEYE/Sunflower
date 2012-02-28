@@ -1556,11 +1556,10 @@ class MainWindow(gtk.Window):
 			list_.invert_selection()
 
 	def select_with_pattern(self, widget, data=None):
-		"""Ask user for selection pattern and
-		select matching items"""
-		list_ = self.get_active_object()
+		"""Ask user for selection pattern and select matching items"""
+		active_object = self.get_active_object()
 
-		if hasattr(list_, 'select_all'):
+		if hasattr(active_object, 'select_all'):
 			# create dialog
 			dialog = InputDialog(self)
 
@@ -1576,36 +1575,35 @@ class MainWindow(gtk.Window):
 
 			# commit selection
 			if response[0] == gtk.RESPONSE_OK:
-				list_.select_all(response[1])
+				active_object.select_all(response[1])
 
 	def select_with_same_extension(self, widget, data=None):
 		"""Select all items with same extension in active list"""
-		list_ = self.get_active_object()
+		active_object = self.get_active_object()
 
-		if hasattr(list_, '_get_selection') and hasattr(list_, 'select_all'):
-			selection = list_._get_selection()
+		if hasattr(active_object, '_get_selection') and hasattr(active_object, 'select_all'):
+			selection = active_object._get_selection()
 
 			if selection is not None:
 				extension = os.path.splitext(selection)[1]
-				list_.select_all('*{0}'.format(extension))
+				active_object.select_all('*{0}'.format(extension))
 
 	def unselect_with_same_extension(self, widget, data=None):
 		"""Select all items with same extension in active list"""
-		list_ = self.get_active_object()
+		active_object = self.get_active_object()
 
-		if hasattr(list_, '_get_selection') and hasattr(list_, 'select_all'):
-			selection = list_._get_selection()
+		if hasattr(active_object, '_get_selection') and hasattr(active_object, 'select_all'):
+			selection = active_object._get_selection()
 
 			if selection is not None:
 				extension = os.path.splitext(selection)[1]
-				list_.unselect_all('*{0}'.format(extension))
+				active_object.unselect_all('*{0}'.format(extension))
 
 	def unselect_with_pattern(self, widget, data=None):
-		"""Ask user for selection pattern and
-		select matching items"""
-		list_ = self.get_active_object()
+		"""Ask user for selection pattern and select matching items"""
+		active_object = self.get_active_object()
 
-		if hasattr(list_, 'unselect_all'):
+		if hasattr(active_object, 'unselect_all'):
 			# create dialog
 			dialog = InputDialog(self)
 
@@ -1621,7 +1619,7 @@ class MainWindow(gtk.Window):
 
 			# commit selection
 			if response[0] == gtk.RESPONSE_OK:
-				list_.unselect_all(response[1])
+				active_object.unselect_all(response[1])
 
 	def compare_directories(self, widget=None, data=None):
 		"""Compare directories from left and right notebook"""

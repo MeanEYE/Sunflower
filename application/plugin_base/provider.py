@@ -23,7 +23,7 @@ FileInfoExtended = namedtuple(
 					'group_id',  # group id
 					'time_access',  # time of last access
 					'time_modify',  # time of last modification
-					'time_create',  # time of file creation
+					'time_change',  # time of file creation / on win create time
 					'type',  # file type, constant from FileType class
 					'device',  # device inode resides on
 					'inode'  # inode number
@@ -154,7 +154,8 @@ class Provider:
 		"""Set owner and/or group for specified path"""
 		pass
 
-	def set_time(self, path, access, modify, create, relative_to=None):
+	def set_timestamp(self, path, access=None, modify=None, change=None, relative_to=None):
+		"""Set timestamp for specified path"""
 		pass
 
 	def remove_path(self, path, recursive=True, relative_to=None):

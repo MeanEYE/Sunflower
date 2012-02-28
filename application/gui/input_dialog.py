@@ -855,7 +855,7 @@ class OverwriteDirectoryDialog(OverwriteDialog):
 		OverwriteDialog.__init__(self, application, parent)
 
 		self._entry_rename.set_sensitive(False)
-		self.set_title(_('Directory conflict'))
+		self._dialog.set_title(_('Directory conflict'))
 
 	def _create_buttons(self):
 		"""Create dialog specific button"""

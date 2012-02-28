@@ -125,7 +125,7 @@ class LocalProvider(Provider):
 						group_id = file_stat.st_gid,
 						time_access = file_stat.st_atime,
 						time_modify = file_stat.st_mtime,
-						time_create = file_stat.st_ctime,
+						time_change = file_stat.st_ctime,
 						type = item_type,
 						device = file_stat.st_dev,
 						inode = file_stat.st_ino
@@ -143,6 +143,16 @@ class LocalProvider(Provider):
 		real_path = path if relative_to is None else os.path.join(relative_to, path)
 		os.chown(real_path, owner, group)
 
+	def set_timestamp(self, path, access=None, modify=None, change=None, relative_to=None):
+		"""Set timestamps for specified path
+		
+		On Linux/Unix operating system we can't set metadata change timestamp
+		so we just ignore this part until other platforms are supported.
+		
+		"""
+		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		os.utime(real_path, (access, modify))
+
 	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""
 		if relative_to is None:
@@ -156,7 +166,7 @@ class LocalProvider(Provider):
 			os.rename(
 					os.path.join(self._parent.path, real_source),
 					os.path.join(self._parent.path, real_destination)
-					)
+				)
 
 		except OSError as error:
 			# rename failed, notify user

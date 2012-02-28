@@ -1337,7 +1337,7 @@ class ApplicationSelectDialog:
 		self._container.pack_start(vbox_list, True, True, 0)
 		self._container.pack_start(self._expander_custom, False, False, 0)
 		
-		self.vbox.pack_start(self._container, True, True, 0)
+		self._dialog.vbox.pack_start(self._container, True, True, 0)
 				
 		# create controls
 		button_help = gtk.Button(stock=gtk.STOCK_HELP)

@@ -14,6 +14,10 @@ class IconManager:
 		"""Check if icon with specified name exists in theme"""
 		return self._icon_theme.has_icon(icon_name)
 
+	def get_icon_sizes(self, icon_name):
+		"""Get icon sizes for specified name"""
+		return self._icon_theme.get_icon_sizes(icon_name)
+
 	def get_icon_for_file(self, filename, size=gtk.ICON_SIZE_MENU):
 		"""Load icon for specified file"""
 		result = 'document'

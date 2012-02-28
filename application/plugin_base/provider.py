@@ -154,6 +154,9 @@ class Provider:
 		"""Set owner and/or group for specified path"""
 		pass
 
+	def set_time(self, path, access, modify, create, relative_to=None):
+		pass
+
 	def remove_path(self, path, recursive=True, relative_to=None):
 		"""Remove path"""
 		if self.is_link(path, relative_to):  # handle links

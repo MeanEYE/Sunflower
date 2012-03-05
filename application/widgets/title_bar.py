@@ -139,7 +139,14 @@ class TitleBar:
 
 	def __button_release_event(self, widget, event, data=None):
 		"""Handle button release event"""
-		self._parent._main_object.grab_focus()
+		if event.button == 1:
+			# focus main object on left click
+			self._parent._main_object.grab_focus()
+
+		elif event.button == 2:
+			# duplicate tab on middle click
+			self._parent._duplicate_tab(widget)
+
 		return True
 
 	def __realize_event(self, widget, event=None):

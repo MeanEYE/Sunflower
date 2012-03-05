@@ -1389,8 +1389,7 @@ class FileList(ItemList):
 							break;
 
 						# add item to the list
-						with gtk.gdk.lock:
-							self._add_item(item_name)
+						self._add_item(item_name)
 						
 					# hide spinner animation	
 					with gtk.gdk.lock:

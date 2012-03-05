@@ -3,25 +3,41 @@ import math
 import pango
 
 
-class TitleBar(gtk.HBox):
+class Mode:
+	NORMAL = 0
+	SUPER_USER = 1
+
+
+class TitleBar:
 	"""Title bar wrapper class"""
 
-	def __init__(self, application):
-		gtk.HBox.__init__(self, False, 1)
+	def __init__(self, application, parent):
+		self._container = gtk.EventBox()
 
 		self._application = application
+		self._parent = parent
 		self._radius = 3
 		self._control_count = 0
 		self._state = gtk.STATE_NORMAL
 		self._ubuntu_coloring = self._application.options.getboolean('main', 'ubuntu_coloring')
 		self._menu = None
+		self._style = None
+		self._mode = Mode.NORMAL
+		self._box_spacing = 1
+		self._box_border_width = 4
+
+		# create container box
+		self._hbox = gtk.HBox(homogeneous=False, spacing=self._box_spacing)
 
 		# configure title bar
-		self.set_border_width(4)
+		self._hbox.set_border_width(self._box_border_width)
+		self._container.set_app_paintable(True)
+		self._container.add_events(gtk.gdk.BUTTON_RELEASE_MASK)
 
 		# connect signals
-		self.connect('expose-event', self.__expose_event)
-		self.set_app_paintable(True)
+		self._container.connect('realize', self.__realize_event)
+		self._container.connect('button-release-event', self.__button_release_event)
+		self._hbox.connect('expose-event', self.__expose_event)
 
 		# top folder icon as default
 		self._icon = gtk.Image()
@@ -65,46 +81,54 @@ class TitleBar(gtk.HBox):
 		vbox.pack_start(self._title_label, True, True, 0)
 		vbox.pack_start(self._subtitle_label, False, False, 0)
 
-		self.pack_start(self._button_menu, False, False, 0)
-		self.pack_start(vbox, True, True, 3)
+		self._hbox.pack_start(self._button_menu, False, False, 0)
+		self._hbox.pack_start(vbox, True, True, 3)
 
 		if self._spinner is not None:
-			self.pack_start(self._spinner, False, False, 5)
+			self._hbox.pack_start(self._spinner, False, False, 5)
+
+		self._container.add(self._hbox)
 
 	def __get_colors(self, normal_style=False):
 		"""Get copy of the style for current state"""
+		if self._style is None: return
+
 		if self._state is gtk.STATE_NORMAL or normal_style:
 			# normal state
-			style = self._application.left_notebook.get_style().copy()
-			background = style.bg[gtk.STATE_NORMAL]
-			foreground = style.fg[gtk.STATE_NORMAL]
+			background = self._style.bg[gtk.STATE_NORMAL]
+			foreground = self._style.fg[gtk.STATE_NORMAL]
 
 		else:
-			# selected state
-			if self._ubuntu_coloring:
-				# ubuntu coloring method
-				style = self._application._menu_item_commands.get_style().copy()
-				background = style.bg[gtk.STATE_NORMAL]
-				foreground = style.fg[gtk.STATE_NORMAL]
+			if self._mode is Mode.NORMAL:
+
+				# selected state
+				if self._ubuntu_coloring:
+					# ubuntu coloring method
+					background = self._style.bg[gtk.STATE_NORMAL]
+					foreground = self._style.fg[gtk.STATE_NORMAL]
+
+				else:
+					# normal coloring method
+					background = self._style.bg[gtk.STATE_SELECTED]
+					foreground = self._style.fg[gtk.STATE_SELECTED]
 
 			else:
-				# normal coloring method
-				style = self._application.left_notebook.get_style().copy()
-				background = style.bg[gtk.STATE_SELECTED]
-				foreground = style.fg[gtk.STATE_SELECTED]
+				# for super user mode we use our custom colors
+				background = 'red'
+				foreground = 'yellow'
 
 		return background, foreground
 
 	def __get_controls_width(self):
 		"""Get widget of all controls together"""
 		result = 0
-		spacing = self.get_spacing()
+		spacing = self._box_spacing
 
 		# account for control spacing
 		result += spacing * (self._control_count - 1)
 
 		# get list of controls
-		controls = self.get_children()
+		controls = self._hbox.get_children()
 		total_count = len(controls)
 
 		# get width of each control
@@ -113,14 +137,23 @@ class TitleBar(gtk.HBox):
 
 		return result
 
+	def __button_release_event(self, widget, event, data=None):
+		"""Handle button release event"""
+		self._parent._main_object.grab_focus()
+		return True
+
+	def __realize_event(self, widget, event=None):
+		"""Handle control realize event"""
+		self._style = self._application.left_notebook.get_style().copy()
+
 	def __expose_event(self, widget=None, event=None):
 		"""We use this event to paint backgrounds"""
-		x, y, w, h = self.allocation
+		x, y, w, h = self._hbox.allocation
 		x_offset = x + w
 		y_offset = y + h
 		half_pi = math.pi / 2
 
-		context = self.window.cairo_create()
+		context = self._container.window.cairo_create()
 
 		# clear drawing area first
 		normal_color = self.__get_colors(normal_style=True)[0]
@@ -153,7 +186,7 @@ class TitleBar(gtk.HBox):
 			# draw control space
 			controls_width = self.__get_controls_width()
 			border_mod = 1
-			border = self.get_border_width() - border_mod
+			border = self._box_border_width - border_mod
 
 			# modify rectangle
 			x = x_offset - border - controls_width - (border_mod * 2)
@@ -200,20 +233,15 @@ class TitleBar(gtk.HBox):
 	def add_control(self, widget):
 		"""Add button control"""
 		self._control_count += 1
-		self.pack_end(widget, False, False, 0)
+		self._hbox.pack_end(widget, False, False, 0)
 
 	def set_state(self, state):
 		"""Set GTK control state for title bar"""
 		self._state = state
 
 		# apply new colors
-		self.queue_draw()
+		self._container.queue_draw()
 		self.__apply_text_color()
-
-	def set_style(self, style):
-		"""Set drawing style"""
-		self._style = style
-		self.queue_draw()
 
 	def set_title(self, text):
 		"""Set title text"""
@@ -231,6 +259,10 @@ class TitleBar(gtk.HBox):
 		"""Set title bar menu"""
 		self._menu = menu
 		self._menu.connect('hide', self.__handle_menu_hide)
+	
+	def get_container(self):
+		"""Return title bar container"""
+		return self._container
 
 	def show_menu(self, widget=None, data=None):
 		"""Show title bar menu"""
@@ -271,5 +303,5 @@ class TitleBar(gtk.HBox):
 		self._ubuntu_coloring = self._application.options.getboolean('main', 'ubuntu_coloring')
 
 		# apply new colors
-		self.queue_draw()
+		self._container.queue_draw()
 		self.__apply_text_color()

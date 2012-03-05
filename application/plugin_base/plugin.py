@@ -259,9 +259,17 @@ class PluginBase(gtk.VBox):
 				gtk.keysyms.Down
 			)
 
-		if event.keyval in special_keys:
+		keyval = event.keyval
+		state = event.state
+
+		# pressing Shift + Tab gives ISO_Left_Tab
+		# we need to override this behavior
+		if keyval == gtk.keysyms.ISO_Left_Tab:
+			keyval = gtk.keysyms.Tab
+
+		if keyval in special_keys:
 			for group in self._accelerator_groups:
-				result = group.trigger_accelerator(event.keyval, event.state)
+				result = group.trigger_accelerator(keyval, state)
 
 				if result:
 					break

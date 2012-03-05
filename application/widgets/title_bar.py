@@ -25,6 +25,7 @@ class TitleBar:
 		self._mode = Mode.NORMAL
 		self._box_spacing = 1
 		self._box_border_width = 4
+		self._super_user_colors = None
 
 		# create container box
 		self._hbox = gtk.HBox(homogeneous=False, spacing=self._box_spacing)
@@ -114,8 +115,7 @@ class TitleBar:
 
 			else:
 				# for super user mode we use our custom colors
-				background = 'red'
-				foreground = 'yellow'
+				background, foreground = self._super_user_colors
 
 		return background, foreground
 
@@ -246,6 +246,10 @@ class TitleBar:
 	def set_mode(self, mode):
 		"""Set title bar mode"""
 		self._mode = mode
+		self._super_user_colors = (
+						gtk.gdk.color_parse('red'),
+						gtk.gdk.color_parse('white')
+					)
 
 	def set_title(self, text):
 		"""Set title text"""

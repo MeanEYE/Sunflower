@@ -243,6 +243,10 @@ class TitleBar:
 		self._container.queue_draw()
 		self.__apply_text_color()
 
+	def set_mode(self, mode):
+		"""Set title bar mode"""
+		self._mode = mode
+
 	def set_title(self, text):
 		"""Set title text"""
 		self._title_label.set_markup(text.replace('&', '&amp;'))

@@ -1856,9 +1856,9 @@ class MainWindow(gtk.Window):
 							'tab_{0}'.format(index),
 							'{0}:{1}:{2}:{3}'.format(
 												tab_class,
-												tab_path,
 												tab_sort_column,
-												tab_sort_ascending
+												tab_sort_ascending,
+												tab_path
 											)
 						)
 
@@ -1886,9 +1886,9 @@ class MainWindow(gtk.Window):
 
 				# extract data
 				tab_class = data[0]
-				tab_path = data[1]
-				tab_sort_column = data[2]
-				tab_sort_ascending = data[3]
+				tab_sort_column = data[1]
+				tab_sort_ascending = data[2]
+				tab_path = data[3]
 
 				if self.plugin_class_exists(tab_class):
 					# create new tab with specified data

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#   Sunflower Package Build Script (Version 0.0.1)
+#   Sunflower Package Build Script (Version 0.0.2)
 #   Written by Wojciech Kluczka <wojtekkluczka@gmail.com>
 #
 
@@ -9,6 +9,7 @@ distro="none"
 source="none"
 packager="none"
 release="1"
+short_description="Small and highly customizable twin-panel file manager for Linux with support for plugins."
 
 function install_sunflower() {
 	rm -fR "$1"
@@ -46,8 +47,7 @@ function make_deb() {
 		echo "Maintainer: $packager"                                >> $build_dir/DEBIAN/control
 	fi
 	echo "Installed-Size: 5000"                                     >> $build_dir/DEBIAN/control
-	echo "Description: Small and highly customizable twin-panel"    >> $build_dir/DEBIAN/control
-	echo " file manager for Linux with support for plugins."        >> $build_dir/DEBIAN/control
+	echo "Description: $short_description"                          >> $build_dir/DEBIAN/control
 
 	fakeroot dpkg-deb --build $build_dir
 	mv $build_dir.deb sunflower-$version-$release.all.deb
@@ -58,19 +58,18 @@ function make_deb() {
 function make_pkg() {
 	install_sunflower src
 
-	echo "pkgname=sunflower"                                         >> PKGBUILD
-	echo "pkgver=$version"                                           >> PKGBUILD
-	echo "pkgrel=$release"                                           >> PKGBUILD
-	echo "arch=(any)"                                                >> PKGBUILD
-	echo "url=https://code.google.com/p/sunflower-fm/"               >> PKGBUILD
-	echo "license=(GPLv3)"                                           >> PKGBUILD
-	echo "depends=(pygtk python-notify vte)"                         >> PKGBUILD
-	echo "pkgdesc='Small and highly customizable twin-panel"         >> PKGBUILD
-	echo "         file manager for Linux with support for plugins'" >> PKGBUILD
-	echo ""                                                          >> PKGBUILD
-	echo "function build() {"                                        >> PKGBUILD
-	echo "    cp -a * \$pkgdir"                                      >> PKGBUILD
-	echo "}"                                                         >> PKGBUILD
+	echo "pkgname=sunflower"                           >  PKGBUILD
+	echo "pkgver=$version"                             >> PKGBUILD
+	echo "pkgrel=$release"                             >> PKGBUILD
+	echo "arch=(any)"                                  >> PKGBUILD
+	echo "url=https://code.google.com/p/sunflower-fm/" >> PKGBUILD
+	echo "license=(GPLv3)"                             >> PKGBUILD
+	echo "depends=(pygtk python-notify vte)"           >> PKGBUILD
+	echo "pkgdesc='$short_description'"                >> PKGBUILD
+	echo ""                                            >> PKGBUILD
+	echo "function build() {"                          >> PKGBUILD
+	echo "    cp -a * \$pkgdir"                        >> PKGBUILD
+	echo "}"                                           >> PKGBUILD
 
 	makepkg --noextract --force
 	
@@ -108,8 +107,7 @@ function make_rpm() {
 	echo "Requires: $requires"                                             >> sunflower.spec
 	echo ""                                                                >> sunflower.spec
 	echo "%description"                                                    >> sunflower.spec
-	echo "Small and highly customizable twin-panel file manager"           >> sunflower.spec
-	echo "for Linux with support for plugins."                             >> sunflower.spec
+	echo "$short_description"                                              >> sunflower.spec
 	echo ""                                                                >> sunflower.spec
 	echo ""                                                                >> sunflower.spec
 	echo "%install"                                                        >> sunflower.spec

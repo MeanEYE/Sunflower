@@ -1,8 +1,9 @@
 # coding:utf-8 vi:noet:ts=4
 import gtk
+import getpass
 
 from accelerator_group import AcceleratorGroup
-from widgets.title_bar import TitleBar
+from widgets.title_bar import TitleBar, Mode as TitleBarMode
 from widgets.status_bar import StatusBar
 from widgets.tab_label import TabLabel
 from gui.preferences.display import StatusVisible
@@ -35,7 +36,14 @@ class PluginBase(gtk.VBox):
 		self._tab_label = TabLabel(self._parent, self)
 
 		# title bar
-		self._title_bar = TitleBar(self._parent)
+		self._title_bar = TitleBar(self._parent, self)
+
+		try:
+			if getpass.getuser() == 'root':
+				self._title_bar.set_mode(TitleBarMode.SUPER_USER)
+
+		except:
+			pass
 
 		# status bar
 		self._status_bar = StatusBar()
@@ -45,7 +53,7 @@ class PluginBase(gtk.VBox):
 			self._status_bar.show()
 
 		# pack interface
-		self.pack_start(self._title_bar, False, False, 0)
+		self.pack_start(self._title_bar.get_container(), False, False, 0)
 		self.pack_end(self._status_bar, False, False, 0)
 
 	def _change_title_text(self, text):

@@ -111,7 +111,7 @@ class SessionsOptions(SettingsPage):
 					pass
 				self._tab_options.set('options', 'left_{0}_selected'.format(identifier), '0')
 				self._tab_options.set('options', 'right_{0}_selected'.format(identifier), '0')
-				home_tab = 'FileList:{0}:0:1'.format(os.path.expanduser('~'))
+				home_tab = 'FileList:0:1:{0}'.format(os.path.expanduser('~'))
 				self._tab_options.set('left_{0}'.format(identifier), 'tab_0', home_tab)
 				self._tab_options.set('right_{0}'.format(identifier), 'tab_0', home_tab)
 				

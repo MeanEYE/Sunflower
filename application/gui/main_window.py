@@ -1309,6 +1309,23 @@ class MainWindow(gtk.Window):
 			vbox = gtk.VBox(False, 10)
 			vbox.set_border_width(5)
 
+			# clear tabs
+			if config_version < 40:
+				vbox_version_40 = gtk.VBox(False, 0)
+
+				label_version_40 = gtk.Label('<b>Version 0.1a-40:</b>')
+				label_version_40.set_alignment(0, 0.5)
+				label_version_40.set_use_markup(True)
+
+				checkbox_reset_tabs = gtk.CheckButton('Clear open tabs')
+				checkbox_reset_tabs.set_active(True)
+
+				vbox_version_40.pack_start(label_version_40, False, False, 0)
+				vbox_version_40.pack_start(checkbox_reset_tabs, False, False, 0)
+
+				vbox.pack_start(vbox_version_40, False, False, 0)
+				mod_count += 1
+
 			if config_version < 37:
 				vbox_version_37 = gtk.VBox(False, 0)
 
@@ -1349,33 +1366,11 @@ class MainWindow(gtk.Window):
 				vbox.pack_start(vbox_version_34, False, False, 0)
 				mod_count += 2
 
-			# clear tabs
-			if config_version < 15:
-				vbox_version_15 = gtk.VBox(False, 0)
-
-				label_version_15 = gtk.Label('<b>Version 0.1a-15:</b>')
-				label_version_15.set_alignment(0, 0.5)
-				label_version_15.set_use_markup(True)
-
-				checkbox_reset_tabs = gtk.CheckButton('Clear open tabs')
-				checkbox_reset_tabs.set_active(True)
-
-				vbox_version_15.pack_start(label_version_15, False, False, 0)
-				vbox_version_15.pack_start(checkbox_reset_tabs, False, False, 0)
-
-				vbox.pack_start(vbox_version_15, False, False, 0)
-				mod_count += 1
-
 			# show dialog
 			change_log = ChangeLogDialog(self, vbox, not mod_count == 0)
 			change_log.run()
 
 			## apply selected changes in reverse order
-
-			if config_version < 15:
-				# clear saved tabs
-				if checkbox_reset_tabs.get_active():
-					self.tab_options = RawConfigParser()
 
 			if config_version < 34:
 				# convert tools menu
@@ -1422,6 +1417,11 @@ class MainWindow(gtk.Window):
 				if checkbox_reset_accel_map.get_active() \
 				and os.path.isfile(os.path.join(self.config_path, 'accel_map')):
 					os.remove(os.path.join(self.config_path, 'accel_map'))
+
+			if config_version < 40:
+				# clear saved tabs
+				if checkbox_reset_tabs.get_active():
+					self.tab_options = RawConfigParser()
 
 			# kill dialog
 			change_log.destroy()

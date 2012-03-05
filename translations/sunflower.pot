@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-27 19:54+0100\n"
+"POT-Creation-Date: 2012-03-05 23:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 #: application/gui/preferences/terminal.py:11
 #: application/plugins/system_terminal/plugin.py:59
 #: application/plugins/system_terminal/plugin.py:60
-#: application/plugin_base/terminal.py:278
+#: application/plugin_base/terminal.py:284
 #: application/plugin_base/item_list.py:118
 msgid "Terminal"
 msgstr ""
@@ -761,37 +761,37 @@ msgstr ""
 msgid "open new tab on the right notebook"
 msgstr ""
 
-#: application/gui/main_window.py:1567
+#: application/gui/main_window.py:1566
 msgid "Select items"
 msgstr ""
 
-#: application/gui/main_window.py:1568 application/gui/main_window.py:1613
+#: application/gui/main_window.py:1567 application/gui/main_window.py:1608
 msgid "Selection pattern (eg.: *.jpg):"
 msgstr ""
 
-#: application/gui/main_window.py:1612
+#: application/gui/main_window.py:1607
 msgid "Unselect items"
 msgstr ""
 
-#: application/gui/main_window.py:1992
+#: application/gui/main_window.py:1984
 msgid ""
 "Error saving configuration to files in your home directory. Make sure you "
 "have enough permissions."
 msgstr ""
 
-#: application/gui/main_window.py:2454
+#: application/gui/main_window.py:2446
 msgid ""
 "Active object is not item list. Advanced rename tool needs files and "
 "directories."
 msgstr ""
 
-#: application/gui/main_window.py:2469
+#: application/gui/main_window.py:2461
 msgid ""
 "No rename extensions were found. Please enable basic rename options plugin "
 "and try again."
 msgstr ""
 
-#: application/gui/main_window.py:2494
+#: application/gui/main_window.py:2486
 msgid ""
 "No extensions for finding files were found. Please enable basic find file "
 "options plugin and try again."
@@ -1465,21 +1465,21 @@ msgstr[1] ""
 msgid "Other application..."
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:1204
+#: application/plugins/file_list/plugin.py:1203
 msgid "Free:"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:1205
+#: application/plugins/file_list/plugin.py:1204
 msgid "Total:"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:1248
+#: application/plugins/file_list/plugin.py:1247
 msgid ""
 "Drag and drop functionality can not be used if source and destination are "
 "same!"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:1418
+#: application/plugins/file_list/plugin.py:1416
 msgid ""
 "Error changing working directory. \n"
 "\n"
@@ -1488,7 +1488,7 @@ msgid ""
 "Would you like to retry?"
 msgstr ""
 
-#: application/plugins/file_list/local_provider.py:169
+#: application/plugins/file_list/local_provider.py:179
 msgid ""
 "Unable to rename specified item. Check if you have permission to access "
 "specified path.\n"
@@ -1681,40 +1681,40 @@ msgstr ""
 msgid "Use this extension"
 msgstr ""
 
-#: application/plugin_base/plugin.py:105
+#: application/plugin_base/plugin.py:113
 msgid "Plugin Base"
 msgstr ""
 
-#: application/plugin_base/plugin.py:108
-#: application/plugin_base/terminal.py:284
+#: application/plugin_base/plugin.py:116
+#: application/plugin_base/terminal.py:290
 msgid "Focus oposite object"
 msgstr ""
 
-#: application/plugin_base/plugin.py:109
+#: application/plugin_base/plugin.py:117
 msgid "Next tab"
 msgstr ""
 
-#: application/plugin_base/plugin.py:110
+#: application/plugin_base/plugin.py:118
 msgid "Previous tab"
 msgstr ""
 
-#: application/plugin_base/plugin.py:111
+#: application/plugin_base/plugin.py:119
 msgid "Duplicate tab"
 msgstr ""
 
-#: application/plugin_base/plugin.py:112
+#: application/plugin_base/plugin.py:120
 msgid "Close tab"
 msgstr ""
 
-#: application/plugin_base/plugin.py:113
+#: application/plugin_base/plugin.py:121
 msgid "Focus command entry"
 msgstr ""
 
-#: application/plugin_base/plugin.py:114
+#: application/plugin_base/plugin.py:122
 msgid "Focus left object"
 msgstr ""
 
-#: application/plugin_base/plugin.py:115
+#: application/plugin_base/plugin.py:123
 msgid "Focus right object"
 msgstr ""
 
@@ -1733,21 +1733,21 @@ msgid ""
 "Python VTE module is not installed on this system!"
 msgstr ""
 
-#: application/plugin_base/terminal.py:281
+#: application/plugin_base/terminal.py:287
 #: application/plugin_base/item_list.py:242
 msgid "Create terminal tab"
 msgstr ""
 
-#: application/plugin_base/terminal.py:282
+#: application/plugin_base/terminal.py:288
 #: application/plugin_base/item_list.py:238
 msgid "Copy selection to clipboard"
 msgstr ""
 
-#: application/plugin_base/terminal.py:283
+#: application/plugin_base/terminal.py:289
 msgid "Paste from clipboard"
 msgstr ""
 
-#: application/plugin_base/terminal.py:318
+#: application/plugin_base/terminal.py:324
 msgid ""
 "You are about to feed child process with following data. Are you sure?\n"
 "\n"
@@ -1945,8 +1945,8 @@ msgstr ""
 
 #: application/operation.py:239
 msgid ""
-"Problem with setting mode and/or owner for specified path. What would you "
-"like to do?"
+"Problem with setting path parameter for specified path. What would you like "
+"to do?"
 msgstr ""
 
 #: application/operation.py:267
@@ -1971,61 +1971,61 @@ msgstr ""
 msgid "Searching for files..."
 msgstr ""
 
-#: application/operation.py:678
+#: application/operation.py:706
 msgid "Creating directories..."
 msgstr ""
 
-#: application/operation.py:695
+#: application/operation.py:723
 msgid "Copying files..."
 msgstr ""
 
-#: application/operation.py:729 application/operation.py:746
+#: application/operation.py:757 application/operation.py:774
 msgid "Copy Operation"
 msgstr ""
 
-#: application/operation.py:731
+#: application/operation.py:759
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/operation.py:830
+#: application/operation.py:858
 msgid "Moving files..."
 msgstr ""
 
-#: application/operation.py:845
+#: application/operation.py:873
 msgid "Deleting source files..."
 msgstr ""
 
-#: application/operation.py:867
+#: application/operation.py:895
 msgid "Deleting source directories..."
 msgstr ""
 
-#: application/operation.py:941 application/operation.py:958
+#: application/operation.py:969 application/operation.py:986
 msgid "Move Operation"
 msgstr ""
 
-#: application/operation.py:943
+#: application/operation.py:971
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/operation.py:1031
+#: application/operation.py:1059
 msgid "Delete Operation"
 msgstr ""
 
-#: application/operation.py:1033
+#: application/operation.py:1061
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/operation.py:1105
+#: application/operation.py:1133
 msgid "Rename Operation"
 msgstr ""
 
-#: application/operation.py:1107
+#: application/operation.py:1135
 msgid "Rename of {0} item from \"{1}\" is completed!"
 msgid_plural "Rename of {0} items from \"{1}\" is completed!"
 msgstr[0] ""

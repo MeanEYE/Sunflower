@@ -1,5 +1,3 @@
-- Add option to set timestamp on copy/move.
-
 - Handle cases in which PyGTK can't load SVG image in set_window_icon method.
 
 - Change the way editor is selected. Offer user with dropdown list of editors or manual entry.
@@ -8,8 +6,6 @@
 check how many parts of path exist and cache that and skip the rest of the files.
 
 - Improve file search and multi-rename windows. Filters on the left.
-
-- Fix Shift+Tab combination
 
 - Create option to duplicate selected file with new name. In cases where both left and right path
 are same and only one file is selected offer this option by default.

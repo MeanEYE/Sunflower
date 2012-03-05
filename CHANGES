@@ -1,3 +1,15 @@
+Version 0.1a-40
+  + Set timestamps after copying file.
+  + Set title bar background to red when running with super-user permissions.
+  * Updated and fixed Russian translation.
+  * Fixed bug where application selection dialog failed to open.
+  * Fixed reference problem in merge dialog.
+  * Fixed bug with setting terminal font from gconf.
+  * Change data order for saved tabs.
+  * Fixed accelerators with Shift+Tab combination.
+  * Duplicate tab on middle click on tab title bar.
+  * Fixed racing condition when directory content was loaded from a thread.
+
 Version 0.1a-39
   + Added Spanish translation.
   + Now tabs can be closed with middle click.

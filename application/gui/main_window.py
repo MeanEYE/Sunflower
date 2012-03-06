@@ -1027,13 +1027,13 @@ class MainWindow(gtk.Window):
 			if hasattr(page, 'apply_media_preview_settings'):
 				page.apply_media_preview_settings()
 
-	def _set_active_object(self, object_):
+	def _set_active_object(self, new_object):
 		"""Set active object"""
-		if object_ is not None:
-			self._active_object = object_
+		if new_object is not None:
+			self._active_object = new_object
 
 			# set bookmarks target so accels could work
-			self.menu_bookmarks.set_data('list', object_)
+			self.menu_bookmarks.set_data('list', new_object)
 
 	def _load_history(self):
 		"""Load history file and populate the command list"""
@@ -1060,29 +1060,29 @@ class MainWindow(gtk.Window):
 	def _load_plugins(self):
 		"""Dynamically load plugins"""
 		# get plugin list
-		list_ = self._get_plugin_list()
+		plugin_files = self._get_plugin_list()
 
 		# list of enabled plugins
 		plugins_to_load = self.options.get('main', 'plugins').split(',')
 
 		# filter list for loading
-		list_ = filter(lambda file_: file_ in plugins_to_load, list_)
+		plugin_files = filter(lambda file_name: file_name in plugins_to_load, plugin_files)
 
-		for file_ in list_:
+		for file_name in plugin_files:
 			try:
 				# import module
-				__import__('plugins.{0}.plugin'.format(file_))
-				plugin = sys.modules['plugins.{0}.plugin'.format(file_)]
+				__import__('plugins.{0}.plugin'.format(file_name))
+				plugin = sys.modules['plugins.{0}.plugin'.format(file_name)]
 
 				# call module register_plugin method
 				if hasattr(plugin, 'register_plugin'):
 					plugin.register_plugin(self)
 
 			except Exception as error:
-				print 'Error: Unable to load plugin "{0}": {1}'.format(file_, error)
+				print 'Error: Unable to load plugin "{0}": {1}'.format(file_name, error)
 
 				# in case plugin is protected, complain and exit
-				if file_ in self.protected_plugins:
+				if file_name in self.protected_plugins:
 					print '\nFatal error! Failed to load required plugin, exiting!'
 					sys.exit(3)
 

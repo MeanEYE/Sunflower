@@ -1525,26 +1525,26 @@ class MainWindow(gtk.Window):
 
 	def select_all(self, widget, data=None):
 		"""Select all items in active list"""
-		list_ = self.get_active_object()
+		active_object = self.get_active_object()
 
 		# ensure we don't make exception on terminal tabs
-		if hasattr(list_, 'select_all'):
-			list_.select_all()
+		if hasattr(active_object, 'select_all'):
+			active_object.select_all()
 
 	def unselect_all(self, widget, data=None):
 		"""Unselect all items in active list"""
-		list_ = self.get_active_object()
+		active_object = self.get_active_object()
 
 		# ensure we don't make exception on terminal tabs
-		if hasattr(list_, 'unselect_all'):
-			list_.unselect_all()
+		if hasattr(active_object, 'unselect_all'):
+			active_object.unselect_all()
 
 	def invert_selection(self, widget, data=None):
 		"""Invert selection in active list"""
-		list_ = self.get_active_object()
+		active_object = self.get_active_object()
 
-		if hasattr(list_, 'invert_selection'):
-			list_.invert_selection()
+		if hasattr(active_object, 'invert_selection'):
+			active_object.invert_selection()
 
 	def select_with_pattern(self, widget, data=None):
 		"""Ask user for selection pattern and select matching items"""

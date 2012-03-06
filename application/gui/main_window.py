@@ -694,7 +694,7 @@ class MainWindow(gtk.Window):
 			bookmark.set_image(image)
 			bookmark.set_always_show_image(True)
 			bookmark.set_label(_('Home directory'))
-			bookmark.set_data('path', os.path.expanduser('~/'))
+			bookmark.set_data('path', user.home)
 			bookmark.connect('activate', self._handle_bookmarks_click)
 
 			self.menu_bookmarks.append(bookmark)

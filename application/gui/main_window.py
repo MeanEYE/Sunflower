@@ -470,10 +470,6 @@ class MainWindow(gtk.Window):
 						'data': 'code.google.com/p/sunflower-fm/issues/entry',
 						'path': '<Sunflower>/Help/BugReport',
 					},
-					{
-						'label': _('Check for _updates'),
-						'path': '<Sunflower>/Help/CheckForUpdates',
-					},
 					{'type': 'separator'},
 					{
 						'label': _('_About'),

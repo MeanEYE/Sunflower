@@ -1236,13 +1236,8 @@ class MainWindow(gtk.Window):
 		"""Handle key press in command edit"""
 		result = False
 
-		# get state of modifiers
-		modifier = event.state & gtk.accelerator_get_default_mod_mask()  # filter out unneeded mods
-
-		# retrieve human readable key representation
-		key_name = gtk.gdk.keyval_name(event.keyval)
-
-		if (key_name == 'Up' or key_name == 'Escape') and modifier == 0:
+		if event.keyval in (gtk.keysyms.Up, gtk.keysyms.Escape)\
+		and event.state & gtk.accelerator_get_default_mod_mask() == 0:
 			self.get_active_object()._main_object.grab_focus()
 			result = True
 

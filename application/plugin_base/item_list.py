@@ -260,6 +260,7 @@ class ItemList(PluginBase):
 		group.add_method('show_tab_menu', _('Show tab menu'), self._show_tab_menu)
 		group.add_method('copy_path_to_clipboard', _('Copy path to clipboard'), self.copy_path_to_clipboard)
 		group.add_method('custom_path_entry', _('Ask and navigate to path'), self.custom_path_entry)
+		group.add_method('start_quick_search', _('Start quick search'), self._handle_start_search)
 
 		# configure accelerators
 		group.set_accelerator('execute_item', keyval('Return'), 0)
@@ -292,6 +293,7 @@ class ItemList(PluginBase):
 		group.set_accelerator('show_tab_menu', keyval('grave'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('copy_path_to_clipboard', keyval('l'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('custom_path_entry', keyval('l'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('start_quick_search', keyval('f'), gtk.gdk.CONTROL_MASK)
 
 		# create bookmark accelerators
 		for number in range(1, 11):
@@ -553,6 +555,11 @@ class ItemList(PluginBase):
 
 		return result
 
+	def _handle_start_search(self, widget, event):
+		"""Handle pressing key combination for start search"""
+		self._start_search()
+		return True
+
 	def _handle_history_click(self, widget=None, data=None, path=None):
 		"""Handle clicks on bookmark menu"""
 		if path is None:
@@ -681,12 +688,14 @@ class ItemList(PluginBase):
 		"""Handle cursor change"""
 		pass
 
-	def _start_search(self, key):
+	def _start_search(self, key=None):
 		"""Shows quick search panel and starts searching"""
 		self._search_panel.show()
 		self._search_entry.grab_focus()
-		self._search_entry.set_text(key)
-		self._search_entry.set_position(len(key))
+
+		if key is not None:
+			self._search_entry.set_text(key)
+			self._search_entry.set_position(len(key))
 
 	def _stop_search(self, widget=None, data=None):
 		"""Hide quick search panel and return focus to item list"""
@@ -1041,6 +1050,9 @@ class ItemList(PluginBase):
 
 	def _parent_directory(self, widget=None, data=None):
 		"""Move to parent folder"""
+		if self._search_panel.get_visible():
+			return False  # prevent going to parent directory if quick search is active
+
 		self.change_path(
 						os.path.dirname(self.path),
 						os.path.basename(self.path)

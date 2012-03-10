@@ -1053,7 +1053,7 @@ msgstr "Установить права на целевой каталог"
 
 #: application/gui/input_dialog.py:408
 msgid "Set date and time on destination"
-msgstr "Установить дату и время на целевой каталог"
+msgstr "Установить дату и время для целевого каталога"
 
 #: application/gui/input_dialog.py:409
 msgid "Silent mode"

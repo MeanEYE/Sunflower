@@ -7,6 +7,7 @@ import common
 from plugin import PluginBase
 from operation import CopyOperation, MoveOperation
 from accelerator_group import AcceleratorGroup
+from tools.viewer import Viewer
 from gui.input_dialog import CopyDialog, MoveDialog, InputDialog
 from gui.preferences.display import StatusVisible
 from gui.history_list import HistoryList
@@ -247,6 +248,7 @@ class ItemList(PluginBase):
 		group.add_method('show_left_bookmarks', _('Show bookmarks for left list'), self._show_left_bookmarks)
 		group.add_method('show_right_bookmarks', _('Show bookmarks for right list'), self._show_right_bookmarks)
 		group.add_method('rename_file', _('Rename selected item'), self._rename_file)
+		group.add_method('view_selected', _('View selected item'), self._view_selected)
 		group.add_method('edit_selected', _('Edit selected item'), self._edit_selected)
 		group.add_method('copy_files', _('Copy selected items'), self._copy_files)
 		group.add_method('move_files', _('Move selected items'), self._move_files)
@@ -281,6 +283,7 @@ class ItemList(PluginBase):
 		group.set_accelerator('show_right_bookmarks', keyval('F2'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('rename_file', keyval('F2'), 0)
 		group.set_alt_accelerator('rename_file', keyval('F6'), gtk.gdk.SHIFT_MASK)
+		group.set_accelerator('view_selected', keyval('F3'), 0)
 		group.set_accelerator('edit_selected', keyval('F4'), 0)
 		group.set_accelerator('copy_files', keyval('F5'), 0)
 		group.set_accelerator('move_files', keyval('F6'), 0)
@@ -1204,6 +1207,11 @@ class ItemList(PluginBase):
 		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
+
+	def _view_selected(self, widget, data=None):
+		"""View currently selected item"""
+		viewer = Viewer(self._get_selection(), self.get_provider(), self)
+		return True
 
 	def _edit_selected(self, widget, data=None):
 		"""Abstract method to edit currently selected item"""

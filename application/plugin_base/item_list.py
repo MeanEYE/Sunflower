@@ -1208,7 +1208,7 @@ class ItemList(PluginBase):
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
-	def _view_selected(self, widget, data=None):
+	def _view_selected(self, widget=None, data=None):
 		"""View currently selected item"""
 		selection = self._get_selection()
 
@@ -1217,7 +1217,7 @@ class ItemList(PluginBase):
 
 		return True
 
-	def _edit_selected(self, widget, data=None):
+	def _edit_selected(self, widget=None, data=None):
 		"""Abstract method to edit currently selected item"""
 		pass
 

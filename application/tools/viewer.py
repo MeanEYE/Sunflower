@@ -1,83 +1,92 @@
-#!/usr/bin/env python
-
-# text and image viewer 
-# 2011-12-15
-# Torsten Funck
-
-
-#Python Imports (Standard Library)
-import pygtk
-import sys
-import magic
-pygtk.require('2.0')
-
-#Gtk Imports (External Library)
+import os
 import gtk
+import pango
 
 
 class Viewer:
+	"""Simple file viewer implementation"""
 
-    def close_application(self, widget):
-        gtk.main_quit()
+	def __init__(self, path, provider, parent):
+		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 
-    def __init__(self):
-        # Create and parameterise main window
-        main_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        main_window.set_size_request(1024, 512)
-        main_window.set_resizable(True)  
-        main_window.connect("destroy", self.close_application)
-        main_window.set_title("Viewer")
-        main_window.set_border_width(0)
+		self._path = path
+		self._provider = provider
+		self._parent = parent
+		self._application = self._parent._parent
 
-        # Create and parameterise scrollable window, place into main window
-        scrolled_window = gtk.ScrolledWindow()
-        scrolled_window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        scrolled_window.show()
-        main_window.add(scrolled_window)
+		mime_type = self._application.associations_manager.get_mime_type(path)
 
-        # Load file specified in command line
-        if (len(sys.argv) > 1):
-            file_path = sys.argv[1]
+		# configure window
+		self.window.set_title(_('{0} - Viewer').format(os.path.basename(self._path)))
+		self.window.set_size_request(500, 300)
+		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+		self.window.set_resizable(True)
+		self.window.set_skip_taskbar_hint(False)
+		self.window.set_wmclass('Sunflower', 'Sunflower')
+		self.window.set_border_width(0)
 
-        # Open file_path
-        infile = open(file_path, "r")
+		# connect signals
+		self.window.connect('destroy', self._handle_destroy)
+		self.window.connect('key-press-event', self._handle_key_press)
 
-        if infile:
-            # Check file type
-            magic_string = magic.open(magic.MAGIC_NONE)
-            magic_string.load()
-            file_type = magic_string.file(file_path)
-#            print file_type
+		# create user interface according to mime type
+		vbox = gtk.VBox(homogeneous=False, spacing=0)
+		status_bar = gtk.Statusbar()
+		status_bar.set_has_resize_grip(True)
 
-            if 'text' in file_type:
-                # Create and parameterise text viewer, place into scrollable window
-                text_view = gtk.TextView()
-                text_view.set_left_margin(10)
-                text_view.show()
-                scrolled_window.add(text_view)
+		if 'text/' in mime_type:
+			# text file
+			container = gtk.ScrolledWindow()
+			container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+			container.set_shadow_type(gtk.SHADOW_NONE)
 
-               # Load text from file into the text viewer 
-                string = infile.read()
-                text_buffer = text_view.get_buffer()
-                text_buffer.set_text(string)
+			font = pango.FontDescription('monospace 9')
+			text_view = gtk.TextView()
+			text_view.set_editable(False)
+			text_view.set_cursor_visible(False)
+			text_view.modify_font(font)
+			
+			with open(self._path, 'r') as raw_file:
+				data = raw_file.read()
 
-            elif 'image' in file_type:
-                # Load image from file into the scrollable window 
-                image = gtk.Image()
-                image.set_from_file(file_path)
-                image.show()
-                scrolled_window.add_with_viewport(image)
+			text_view.get_buffer().set_text(data)
 
-            # close file_path
-            infile.close()
+			container.add(text_view)
+			vbox.pack_start(container, True, True, 0)
 
-        # Show everything
-        main_window.show()
+		elif 'image/' in mime_type:
+			# image file
+			container = gtk.ScrolledWindow()
+			container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+			container.set_shadow_type(gtk.SHADOW_NONE)
+			viewport = gtk.Viewport()
 
-def main():
-    gtk.main()
-    return 0       
+			image = gtk.Image()
+			image.set_from_file(self._path)
 
-if __name__ == "__main__":
-    Viewer()
-    main()
+			viewport.add(image)
+			container.add(viewport)
+			vbox.pack_start(container, True, True, 0)
+
+		# pack user interface
+		vbox.pack_end(status_bar, False, False, 0)
+
+		self.window.add(vbox)
+		
+		# show all widgets
+		self.window.show_all()
+
+	def _handle_destroy(self, widget):
+		"""Handle destroying viewer window"""
+		return False
+
+	def _handle_key_press(self, widget, event, data=None):
+		"""Handle pressing keys in history list"""
+		result = False
+
+		if event.keyval == gtk.keysyms.Escape:
+			# close window on escape
+			self.window.destroy()
+			result = True
+
+		return result

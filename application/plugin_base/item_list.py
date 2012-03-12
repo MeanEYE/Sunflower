@@ -1210,7 +1210,11 @@ class ItemList(PluginBase):
 
 	def _view_selected(self, widget, data=None):
 		"""View currently selected item"""
-		viewer = Viewer(self._get_selection(), self.get_provider(), self)
+		selection = self._get_selection()
+
+		if selection is not None:
+			viewer = Viewer(selection, self.get_provider(), self)
+
 		return True
 
 	def _edit_selected(self, widget, data=None):

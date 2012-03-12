@@ -2,6 +2,8 @@ import os
 import gtk
 import pango
 
+from widgets.status_bar import StatusBar
+
 
 class Viewer:
 	"""Simple file viewer implementation"""
@@ -18,7 +20,7 @@ class Viewer:
 
 		# configure window
 		self.window.set_title(_('{0} - Viewer').format(os.path.basename(self._path)))
-		self.window.set_size_request(500, 300)
+		self.window.set_size_request(800, 600)
 		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.window.set_resizable(True)
 		self.window.set_skip_taskbar_hint(False)
@@ -31,8 +33,10 @@ class Viewer:
 
 		# create user interface according to mime type
 		vbox = gtk.VBox(homogeneous=False, spacing=0)
-		status_bar = gtk.Statusbar()
-		status_bar.set_has_resize_grip(True)
+		status_bar = StatusBar()
+		status_bar.set_border_width(2)
+		status_bar.add_group_with_icon('mime_type', 'document-properties', mime_type)
+		status_bar.show()
 
 		if 'text/' in mime_type:
 			# text file

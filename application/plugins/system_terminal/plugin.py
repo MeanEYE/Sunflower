@@ -102,7 +102,7 @@ class SystemTerminal(Terminal):
 			DefaultList = self._parent.plugin_classes['file_list']
 			self._parent.create_tab(self._notebook, DefaultList, self.path)
 
-		Terminal._close_tab(self, widget, data)
+		return Terminal._close_tab(self, widget, data)
 
 	def _handle_tab_close(self):
 		"""Clean up before closing tab"""

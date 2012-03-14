@@ -922,6 +922,8 @@ class FileList(ItemList):
 				self._item_list.set_cursor(path)
 				self._item_list.scroll_to_cell(path)
 
+		return True
+
 	def _select_range(self, start_path, end_path):
 		"""Set items in range to status oposite from frist item in selection"""
 		if len(self._store) == 1:  # exit when list doesn't have items

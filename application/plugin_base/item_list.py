@@ -1239,6 +1239,8 @@ class ItemList(PluginBase):
 		else:
 			self.change_path(oposite_object.path)
 
+		return True
+
 	def _inherit_right_path(self, widget, data=None):
 		"""Inherit path in left list from right"""
 		oposite_object = self._parent.get_oposite_object(self)
@@ -1252,6 +1254,8 @@ class ItemList(PluginBase):
 
 		else:
 			self.change_path(oposite_object.path)
+
+		return True
 
 	def _swap_paths(self, widget, data=None):
 		"""Swap left and right paths"""

@@ -902,15 +902,15 @@ class FileList(ItemList):
 	def _toggle_selection(self, widget, data=None, advance=True):
 		"""Toggle item selection"""
 		selection = self._item_list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
-		is_dir = list_.get_value(iter_, Column.IS_DIR)
-		is_parent = list_.get_value(iter_, Column.IS_PARENT_DIR)
-		size = list_.get_value(iter_, Column.SIZE)
+		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
+		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
+		size = item_list.get_value(selected_iter, Column.SIZE)
 
 		if not is_parent:
 			# get current status of iter
-			selected = list_.get_value(iter_, Column.COLOR) is not None
+			selected = item_list.get_value(selected_iter, Column.COLOR) is not None
 
 			if is_dir:
 				self._dirs['selected'] += [1, -1][selected]
@@ -923,8 +923,8 @@ class FileList(ItemList):
 
 			value = (None, self._selection_color)[selected]
 			image = (None, self._pixbuf_selection)[selected]
-			list_.set_value(iter_, Column.COLOR, value)
-			list_.set_value(iter_, Column.SELECTED, image)
+			item_list.set_value(selected_iter, Column.COLOR, value)
+			item_list.set_value(selected_iter, Column.SELECTED, image)
 
 		# update status bar
 		ItemList._toggle_selection(self, widget, data, advance)
@@ -932,9 +932,9 @@ class FileList(ItemList):
 
 		if advance:
 			# select next item in the list
-			next_iter = list_.iter_next(iter_)
+			next_iter = item_list.iter_next(selected_iter)
 			if next_iter is not None:
-				path = list_.get_path(next_iter)
+				path = item_list.get_path(next_iter)
 				self._item_list.set_cursor(path)
 				self._item_list.scroll_to_cell(path)
 

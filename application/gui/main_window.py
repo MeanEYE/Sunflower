@@ -1635,8 +1635,19 @@ class MainWindow(gtk.Window):
 			right_list = right_object.get_provider().list_dir(right_object.path)
 
 			# mark missing files
-			left_object.select_all(exclude_list=right_list)
-			right_object.select_all(exclude_list=left_list)
+			result_left = left_object.select_all(exclude_list=right_list)
+			result_right = right_object.select_all(exclude_list=left_list)
+
+			if result_left == result_right == 0:
+				dialog = gtk.MessageDialog(
+										self,
+										gtk.DIALOG_DESTROY_WITH_PARENT,
+										gtk.MESSAGE_INFO,
+										gtk.BUTTONS_OK,
+										_("First level of compared directories is identical.") 
+									)
+				dialog.run()
+				dialog.destroy()
 
 	def run(self):
 		"""Start application"""

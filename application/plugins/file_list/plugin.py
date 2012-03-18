@@ -1469,7 +1469,7 @@ class FileList(ItemList):
 			self._fs_monitor = None
 
 	def select_all(self, pattern=None, exclude_list=None):
-		"""Select all items matching pattern """
+		"""Select all items matching pattern"""
 		if pattern is None:
 			pattern = "*"
 
@@ -1479,6 +1479,8 @@ class FileList(ItemList):
 		dirs = 0
 		files = 0
 		size = 0L
+		result = 0
+		color = self._parent.options.get('main', 'selection_color')
 
 		for row in self._store:
 			# set selection
@@ -1486,8 +1488,10 @@ class FileList(ItemList):
 			and fnmatch.fnmatch(row[Column.NAME], pattern) \
 			and row[Column.NAME] not in exclude_list:
 				# select item that matched out criteria
-				row[Column.COLOR] = self._parent.options.get('main', 'selection_color')
+				row[Column.COLOR] = color
 				row[Column.SELECTED] = self._pixbuf_selection
+
+				result += 1
 
 			elif len(exclude_list) > 0:
 				# if out exclude list has items, we need to deselect them
@@ -1510,6 +1514,8 @@ class FileList(ItemList):
 		ItemList.select_all(self, pattern, exclude_list)
 		self._update_status_with_statistis()
 
+		return result
+
 	def unselect_all(self, pattern=None):
 		"""Unselect items matching the pattern"""
 		if pattern is None:
@@ -1518,12 +1524,15 @@ class FileList(ItemList):
 		dirs = 0
 		files = 0
 		size = 0L
+		result = 0
 
 		for row in self._store:
 			# set selection
 			if not row[Column.IS_PARENT_DIR] and fnmatch.fnmatch(row[Column.NAME], pattern):
 				row[Column.COLOR] = None
 				row[Column.SELECTED] = None
+
+				result += 1
 
 			# update dir/file count
 			if row[Column.COLOR] is not None:
@@ -1541,6 +1550,8 @@ class FileList(ItemList):
 		ItemList.select_all(self, pattern)
 		self._update_status_with_statistis();
 
+		return result
+
 	def invert_selection(self, pattern=None):
 		"""Invert selection matching the pattern"""
 		if pattern is None:
@@ -1549,6 +1560,7 @@ class FileList(ItemList):
 		dirs = 0
 		files = 0
 		size = 0L
+		result = 0
 
 		for row in self._store:
 			# set selection
@@ -1568,6 +1580,8 @@ class FileList(ItemList):
 					files += 1
 					size += row[Column.SIZE]
 
+				result += 1
+
 		self._dirs['selected'] = dirs
 		self._files['selected'] = files
 		self._size['selected'] = size
@@ -1575,6 +1589,8 @@ class FileList(ItemList):
 		# update status bar
 		ItemList.select_all(self, pattern)
 		self._update_status_with_statistis();
+
+		return result
 
 	def refresh_file_list(self, widget=None, data=None):
 		"""Reload file list_ for current directory"""

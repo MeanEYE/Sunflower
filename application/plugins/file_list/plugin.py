@@ -351,6 +351,8 @@ class FileList(ItemList):
 			dialog.run()
 			dialog.destroy()
 
+		return True
+
 	def _open_in_new_tab(self, widget=None, data=None):
 		"""Open selected directory in new tab"""
 		selection = self._item_list.get_selection()
@@ -430,6 +432,8 @@ class FileList(ItemList):
 				dialog.run()
 				dialog.destroy()
 
+		return True
+
 	def _create_file(self, widget=None, data=None):
 		"""Prompt user and create empty file"""
 		dialog = FileCreateDialog(self._parent)
@@ -492,6 +496,8 @@ class FileList(ItemList):
 				dialog.run()
 				dialog.destroy()
 
+		return True
+
 	def _delete_files(self, widget=None, data=None):
 		"""Delete selected files"""
 		item_list = self._get_selection_list()
@@ -520,6 +526,8 @@ class FileList(ItemList):
 									self.get_provider()
 								)
 			operation.start()
+	
+		return True
 
 	def _copy_files(self, widget=None, data=None):
 		"""Copy selected files"""
@@ -543,6 +551,8 @@ class FileList(ItemList):
 									)
 			operation.start()
 
+		return True
+
 	def _move_files(self, widget=None, data=None):
 		"""Move selected files"""
 		if self._get_selection_list() is None: return
@@ -563,6 +573,8 @@ class FileList(ItemList):
 									result[1]  # options from dialog
 								)
 			operation.start()
+
+		return True
 
 	def _rename_file(self, widget=None, data=None):
 		"""Rename selected item"""
@@ -617,6 +629,8 @@ class FileList(ItemList):
 									)
 				dialog.run()
 				dialog.destroy()
+
+		return True
 
 	def _send_to(self, widget=None, data=None):
 		"""Nautilus Send To integration"""
@@ -882,6 +896,8 @@ class FileList(ItemList):
 
 		self._change_title_text()
 		self._update_status_with_statistis()
+
+		return True
 
 	def _toggle_selection(self, widget, data=None, advance=True):
 		"""Toggle item selection"""

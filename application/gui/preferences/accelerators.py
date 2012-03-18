@@ -125,6 +125,7 @@ class AcceleratorOptions(SettingsPage):
 		"""Update accelerator list"""
 		manager = self._application.accelerator_manager
 		bookmarks = self._application.bookmark_options
+		options = self._application.options
 		groups = manager.get_groups()
 		groups.sort()
 
@@ -134,9 +135,15 @@ class AcceleratorOptions(SettingsPage):
 		# create rename list
 		replace_list = {}
 
+		addon = 0
+		if options.getboolean('main', 'add_home'):
+			key_name = '{0}.{1}_{2}'.format('item_list', 'bookmark', 1)
+			replace_list[key_name] = _('Home directory')
+			addon = 1
+
 		# add bookmarks to the replace list
 		for number in range(1, 11):
-			key_name = '{0}.{1}_{2}'.format('item_list', 'bookmark', number)
+			key_name = '{0}.{1}_{2}'.format('item_list', 'bookmark', number + addon)
 			bookmark_name = 'b_{0}'.format(number)
 
 			if bookmarks.has_option('bookmarks', bookmark_name):
@@ -146,7 +153,7 @@ class AcceleratorOptions(SettingsPage):
 
 			else:
 				# bookmark doesn't exist, add generic name
-				bookmark_value = 'Bookmark #{0}'.format(number)
+				bookmark_value = 'Bookmark #{0}'.format(number + addon)
 
 			replace_list[key_name] = bookmark_value
 

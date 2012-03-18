@@ -2046,7 +2046,7 @@ class MainWindow(gtk.Window):
 				'show_command_entry': 'True',
 				'add_home': 'True',
 				'system_bookmarks': 'False',
-				'search_modifier': '010',
+				'search_modifier': '000',
 				'time_format': '%H:%M %d-%m-%y',
 				'focus_new_tab': 'True',
 				'row_hinting': 'False',

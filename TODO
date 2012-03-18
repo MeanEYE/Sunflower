@@ -38,10 +38,6 @@ are same and only one file is selected offer this option by default.
 
 - Letter accelerators on labels
 
-- On select/deselect return number of affected items
-
-- When comparing directories using option from Mark menu notify user when directories are identical
-
 - Create GObject signals for main windows
 
 - Migrate from inheriting gtk.Window to creating self.window
@@ -49,8 +45,6 @@ are same and only one file is selected offer this option by default.
 - Directory synchronization
 
 - Duplicate files finder
-
-- View text files
 
 - Make file_list module provider agnostic
 

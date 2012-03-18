@@ -244,6 +244,7 @@ class ItemList(PluginBase):
 		group.add_method('parent_directory', _('Go to parent directory'), self._parent_directory)
 		group.add_method('show_history', _('Show history browser'), self._show_history_window)
 		group.add_method('toggle_selection', _('Toggle selection'), self._toggle_selection)
+		group.add_method('toggle_selection_up', _('Toggle selection and move marker up'), self._toggle_selection_up)
 		group.add_method('delete_files', _('Delete selected items'), self._delete_files)
 		group.add_method('show_left_bookmarks', _('Show bookmarks for left list'), self._show_left_bookmarks)
 		group.add_method('show_right_bookmarks', _('Show bookmarks for right list'), self._show_right_bookmarks)
@@ -277,6 +278,8 @@ class ItemList(PluginBase):
 		group.set_accelerator('parent_directory', keyval('BackSpace'), 0)
 		group.set_accelerator('show_history', keyval('BackSpace'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('toggle_selection', keyval('Insert'), 0)
+		group.set_alt_accelerator('toggle_selection', keyval('Down'), gtk.gdk.SHIFT_MASK)
+		group.set_accelerator('toggle_selection_up', keyval('Up'), gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('delete_files', keyval('Delete'), 0)
 		group.set_alt_accelerator('delete_files', keyval('F8'), 0)
 		group.set_accelerator('show_left_bookmarks', keyval('F1'), gtk.gdk.CONTROL_MASK)
@@ -418,6 +421,12 @@ class ItemList(PluginBase):
 			if next_iter < len(item_list):
 				self._item_list.set_cursor(next_iter)
 
+		return True
+
+	def _toggle_selection_up(self, widget, data=None):
+		"""Toggle selection and move cursor up"""
+		self._toggle_selection(widget, data, advance=False)
+		self._move_marker_up(widget, data)
 		return True
 
 	def _handle_button_press(self, widget, event):

@@ -1,3 +1,24 @@
+Version 0.1a-41
+  + Open directory in new tab by middle-clicking on item in list.
+  + Notify user about unmounting.
+  + Added $ next to command entry to make entry function clearer.
+  + Removed "check for update" menu item.
+  + Added shortcut for starting quick search and fixed backspace behavior.
+  + Added plugin descriptions.
+  + Created simple file viewer.
+  + Show information dialog when compared directories are identical.
+  + Added support for selecting items using Shift + Up/Down arrows.
+  * Sessions: Fix for problem occured after change of way tabs are stored
+  * Updated Russian translation.
+  * Fixed random crashes when inheriting path. (issue #175)
+  * Properly handle toggle selection when assigned to key other than default. (issue #176)
+  * Updated Polish translation
+  * Fix random crashes when closing tab with keyboard accelerator.
+  * Fixed problem with list grabing focus on path change.
+  * Properly form bookmark replacement list to include home directory key bindings editor.
+  * Fixed problem with Ubuntu coloring method.
+  * Changed default search modifier.
+
 Version 0.1a-40
   + Set timestamps after copying file.
   + Set title bar background to red when running with super-user permissions.

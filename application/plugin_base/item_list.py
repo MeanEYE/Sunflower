@@ -391,32 +391,32 @@ class ItemList(PluginBase):
 	def _move_marker_up(self, widget, data=None):
 		"""Move marker up"""
 		selection = self._item_list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
-		if iter_ is not None:
+		if selected_iter is not None:
 			# get current path
-			path = list_.get_path(iter_)[0]
-			previous = path - 1
+			path = item_list.get_path(selected_iter)[0]
+			previous_iter = path - 1
 
 			# if selected item is not first, move selection
-			if previous >= 0:
-				self._item_list.set_cursor(previous)
+			if previous_iter >= 0:
+				self._item_list.set_cursor(previous_iter)
 
 		return True
 
 	def _move_marker_down(self, widget, data=None):
 		"""Move marker down"""
 		selection = self._item_list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
-		if iter_ is not None:
+		if selected_iter is not None:
 			# get current path
-			path = list_.get_path(iter_)[0]
-			next_ = path + 1
+			path = item_list.get_path(selected_iter)[0]
+			next_iter = path + 1
 
 			# if selected item is not last, move selection
-			if next_ < len(list_):
-				self._item_list.set_cursor(next_)
+			if next_iter < len(item_list):
+				self._item_list.set_cursor(next_iter)
 
 		return True
 

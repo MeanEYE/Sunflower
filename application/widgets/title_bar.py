@@ -22,6 +22,7 @@ class TitleBar:
 		self._ubuntu_coloring = self._application.options.getboolean('main', 'ubuntu_coloring')
 		self._menu = None
 		self._style = None
+		self._toolbar_style = None
 		self._mode = Mode.NORMAL
 		self._box_spacing = 1
 		self._box_border_width = 4
@@ -105,8 +106,8 @@ class TitleBar:
 				# selected state
 				if self._ubuntu_coloring:
 					# ubuntu coloring method
-					background = self._style.bg[gtk.STATE_NORMAL]
-					foreground = self._style.fg[gtk.STATE_NORMAL]
+					background = self._toolbar_style.bg[gtk.STATE_NORMAL]
+					foreground = self._toolbar_style.fg[gtk.STATE_NORMAL]
 
 				else:
 					# normal coloring method
@@ -152,6 +153,7 @@ class TitleBar:
 	def __realize_event(self, widget, event=None):
 		"""Handle control realize event"""
 		self._style = self._application.left_notebook.get_style().copy()
+		self._toolbar_style = self._application.menu_bar.get_style().copy()
 
 	def __expose_event(self, widget=None, event=None):
 		"""We use this event to paint backgrounds"""

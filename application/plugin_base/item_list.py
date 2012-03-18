@@ -548,12 +548,12 @@ class ItemList(PluginBase):
 		result = False
 
 		if event.keyval == gtk.keysyms.Return:
-			self._stop_search()
+			self._stop_search(widget)
 			self._execute_selected_item(widget)
 			result = True
 
 		elif event.keyval == gtk.keysyms.Escape:
-			self._stop_search()
+			self._stop_search(widget)
 			result = True
 
 		return result
@@ -703,7 +703,10 @@ class ItemList(PluginBase):
 	def _stop_search(self, widget=None, data=None):
 		"""Hide quick search panel and return focus to item list"""
 		self._search_panel.hide()
-		self._item_list.grab_focus()
+
+		if widget is not None:
+			self._item_list.grab_focus()
+
 		return False
 
 	def _execute_selected_item(self, widget=None, data=None):

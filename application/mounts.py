@@ -230,7 +230,7 @@ class MountsManager:
 		"""Event called by the unmount menu item or unmount button from manager"""
 		path = widget.get_data('path')
 
-		if path is not None:
+		if path is None:
 			# unmount was called by button
 			pass
 
@@ -255,7 +255,7 @@ class MountsManager:
 									gtk.DIALOG_DESTROY_WITH_PARENT,
 									gtk.MESSAGE_WARNING,
 									gtk.BUTTONS_OK,
-									_("Specified item can not be unmounted.")
+									_('Specified item can not be unmounted.')
 								)
 			dialog.run()
 			dialog.destroy()
@@ -265,6 +265,21 @@ class MountsManager:
 		try:
 			# try to finish async unmount
 			mount.unmount_finish(result)
+			mount_path = mount.get_root().get_path()
+
+			# notify user
+			dialog = gtk.MessageDialog(
+								self,
+								gtk.DIALOG_DESTROY_WITH_PARENT,
+								gtk.MESSAGE_INFO,
+								gtk.BUTTONS_OK,
+								_(
+									'Successfully unmounted:'
+									'\n{0}'
+								).format(mount_path)
+							)
+			dialog.run()
+			dialog.destroy()
 
 		except:
 			pass

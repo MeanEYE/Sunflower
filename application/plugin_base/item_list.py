@@ -485,6 +485,11 @@ class ItemList(PluginBase):
 			self._execute_selected_item(widget)
 			result = True
 
+		# handle middle click
+		elif event.button is 2 and event.type is gtk.gdk.BUTTON_RELEASE:
+			self._open_in_new_tab()
+			result = True
+
 		# handle right click
 		elif event.button is 3:
 			if event.type is gtk.gdk.BUTTON_PRESS:

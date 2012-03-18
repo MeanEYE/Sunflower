@@ -559,6 +559,10 @@ class MainWindow(gtk.Window):
 		self.path_label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
 		self.path_label.show()
 
+		label_pound = gtk.Label('$');
+		label_pound.set_alignment(0, 0.5)
+		label_pound.show()
+
 		# create history list
 		self.command_list = gtk.ListStore(str)
 
@@ -579,7 +583,8 @@ class MainWindow(gtk.Window):
 		# load history file
 		self._load_history()
 
-		self.command_entry_bar.pack_start(self.path_label, True, True, 3)
+		self.command_entry_bar.pack_start(self.path_label, True, True, 5)
+		self.command_entry_bar.pack_start(label_pound, False, False, 0)
 		self.command_entry_bar.pack_start(self.command_edit, True, True, 0)
 
 		self.command_entry_bar.set_property(
@@ -1776,6 +1781,10 @@ class MainWindow(gtk.Window):
 	def set_active_tab(self, notebook, tab):
 		"""Set active tab number"""
 		notebook.set_current_page(tab)
+
+	def set_location_label(self, path):
+		"""Set location label"""
+		self.path_label.set_text(path)
 
 	def goto_web(self, widget, data=None):
 		"""Open URL stored in data"""

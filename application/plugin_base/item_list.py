@@ -423,12 +423,6 @@ class ItemList(PluginBase):
 
 		return True
 
-	def _toggle_selection_up(self, widget, data=None):
-		"""Toggle selection and move cursor up"""
-		self._toggle_selection(widget, data, advance=False)
-		self._move_marker_up(widget, data)
-		return True
-
 	def _handle_button_press(self, widget, event):
 		"""Handles mouse events"""
 		result = False
@@ -1214,6 +1208,21 @@ class ItemList(PluginBase):
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
+		return True
+
+	def _toggle_selection_up(self, widget, data=None):
+		"""Toggle selection and move cursor up"""
+		self._toggle_selection(widget, data, advance=False)
+		self._move_marker_up(widget, data)
+	
+		return True
+
+	def _toggle_selection_from_cursor_up(self, widget, data=None):
+		"""Toggle selection from cursor to the end of the list"""
+		return True
+
+	def _toggle_selection_from_cursor_down(self, widget, data=None):
+		"""Toggle selection from cursor to the end of the list"""
 		return True
 
 	def _select_range(self, start_path, end_path):

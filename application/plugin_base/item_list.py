@@ -727,27 +727,27 @@ class ItemList(PluginBase):
 
 	def _create_directory(self, widget=None, data=None):
 		"""Abstract method used to create directory"""
-		pass
+		return True
 
 	def _create_file(self, widget=None, data=None):
 		"""Abstract method used to create file"""
-		pass
+		return True
 
 	def _delete_files(self, widget=None, data=None):
 		"""Abstract method used to delete files"""
-		pass
+		return True
 
 	def _copy_files(self, widget=None, data=None):
 		"""Abstract method used to copy files"""
-		pass
+		return True
 
 	def _move_files(self, widget=None, data=None):
 		"""Abstract method used to move files"""
-		pass
+		return True
 
 	def _rename_file(self, widget=None, data=None):
 		"""Abstract method used to rename selection"""
-		pass
+		return True
 
 	def _send_to(self, widget=None, data=None):
 		"""Abstract method for Send To Nautilus integration"""
@@ -795,7 +795,7 @@ class ItemList(PluginBase):
 
 	def _item_properties(self, widget=None, data=None):
 		"""Abstract method that shows file/directory properties"""
-		pass
+		return True
 
 	def _get_selection(self, relative=False):
 		"""Return item with path under cursor"""

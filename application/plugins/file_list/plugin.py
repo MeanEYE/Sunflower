@@ -267,13 +267,13 @@ class FileList(ItemList):
 		or not self._item_list.has_focus(): return
 
 		selection = self._item_list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
 		# we need selection for this
-		if iter_ is None: return
+		if selected_iter is None: return
 
-		is_dir = list_.get_value(iter_, Column.IS_DIR)
-		is_parent = list_.get_value(iter_, Column.IS_PARENT_DIR)
+		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
+		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
 
 		# create URI from item name and protocol
 		file_name = self._get_selection(relative=False)
@@ -356,10 +356,10 @@ class FileList(ItemList):
 	def _open_in_new_tab(self, widget=None, data=None):
 		"""Open selected directory in new tab"""
 		selection = self._item_list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
-		name = list_.get_value(iter_, Column.NAME)
-		is_dir = list_.get_value(iter_, Column.IS_DIR)
+		name = item_list.get_value(selected_iter, Column.NAME)
+		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
 
 		if is_dir:
 			self._parent.create_tab(
@@ -531,8 +531,8 @@ class FileList(ItemList):
 
 	def _copy_files(self, widget=None, data=None):
 		"""Copy selected files"""
-		list_ = self._get_selection_list()
-		if list_ is None: return
+		item_list = self._get_selection_list()
+		if item_list is None: return
 
 		dialog = CopyDialog(
 						self._parent,
@@ -649,9 +649,9 @@ class FileList(ItemList):
 	def _item_properties(self, widget=None, data=None):
 		"""Show file/directory properties"""
 		selection = self._item_list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
-		is_parent = list_.get_value(iter_, Column.IS_PARENT_DIR)
+		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
 
 		if not is_parent:
 			window = PropertiesWindow(
@@ -668,12 +668,12 @@ class FileList(ItemList):
 		"""Return item with path under cursor"""
 		result = None
 		selection = self._item_list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
-		is_parent = list_.get_value(iter_, Column.IS_PARENT_DIR)
+		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
 
 		if not is_parent:
-			item = list_.get_value(iter_, Column.NAME)
+			item = item_list.get_value(selected_iter, Column.NAME)
 			result = item if relative else os.path.join(self.path, item)
 
 		return result
@@ -772,14 +772,14 @@ class FileList(ItemList):
 	def _get_popup_menu_position(self, menu=None, data=None):
 		"""Positions menu properly for given row"""
 		selection = self._item_list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
 		# grab cell and tree rectangles
-		rect = self._item_list.get_cell_area(list_.get_path(iter_), self._columns[0])
+		rect = self._item_list.get_cell_area(item_list.get_path(selected_iter), self._columns[0])
 		tree_rect = self._item_list.get_visible_rect()
 
 		# grab window coordinates
-		window_x, window_y = self._parent.window.get_position()
+		window_x, window_y = self._parent.window.get_position() 
 
 		# relative to tree
 		x, y = rect.x, rect.y + rect.height
@@ -835,12 +835,12 @@ class FileList(ItemList):
 		# set focus to the list, we don't need it on column
 		self._item_list.grab_focus()
 
-	def _sort_list(self, list_, iter1, iter2, data=None):
+	def _sort_list(self, item_list, iter1, iter2, data=None):
 		"""Compare two items for sorting process"""
 		reverse = (1, -1)[self._sort_ascending]
 
-		value1 = list_.get_value(iter1, self._sort_column)
-		value2 = list_.get_value(iter2, self._sort_column)
+		value1 = item_list.get_value(iter1, self._sort_column)
+		value2 = item_list.get_value(iter2, self._sort_column)
 
 		if not self._sort_sensitive and self._sort_column in (Column.NAME, Column.EXTENSION):
 			value1 = value1.lower()
@@ -849,14 +849,14 @@ class FileList(ItemList):
 				value2 = value2.lower()
 
 		item1 = (
-				reverse * list_.get_value(iter1, Column.IS_PARENT_DIR),
-				reverse * list_.get_value(iter1, Column.IS_DIR),
+				reverse * item_list.get_value(iter1, Column.IS_PARENT_DIR),
+				reverse * item_list.get_value(iter1, Column.IS_DIR),
 				value1
 				)
 
 		item2 = (
-				reverse * list_.get_value(iter2, Column.IS_PARENT_DIR),
-				reverse * list_.get_value(iter2, Column.IS_DIR),
+				reverse * item_list.get_value(iter2, Column.IS_PARENT_DIR),
+				reverse * item_list.get_value(iter2, Column.IS_DIR),
 				value2
 				)
 
@@ -990,12 +990,12 @@ class FileList(ItemList):
 	def _edit_selected(self, widget=None, data=None):
 		"""Abstract method to edit currently selected item"""
 		selection = self._item_list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
-		is_dir = list_.get_value(iter_, Column.IS_DIR)
+		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
 
 		if not is_dir and self.get_provider().is_local:
-			self._edit_filename(list_.get_value(iter_, Column.NAME))
+			self._edit_filename(item_list.get_value(selected_iter, Column.NAME))
 
 		return True
 
@@ -1225,11 +1225,11 @@ class FileList(ItemList):
 
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""
-		list_ = selection_data.data.splitlines(False)
+		item_list = selection_data.data.splitlines(False)
 
 		# prepare data for copying
-		protocol, path = list_[0].split('://', 1)
-		list_ = [urllib.unquote(item.split('://')[1]) for item in list_]
+		protocol, path = item_list[0].split('://', 1)
+		item_list = [urllib.unquote(item.split('://')[1]) for item in item_list]
 
 		if os.path.dirname(path) != self.path:
 			# handle data
@@ -1243,7 +1243,7 @@ class FileList(ItemList):
 				result = self._handle_external_data(
 												operation[drag_context.action],
 												protocol,
-												list_
+												item_list
 											)
 
 			elif drag_context.action is gtk.gdk.ACTION_LINK:
@@ -1593,11 +1593,16 @@ class FileList(ItemList):
 		return result
 
 	def refresh_file_list(self, widget=None, data=None):
-		"""Reload file list_ for current directory"""
+		"""Reload file list for current directory"""
 		selection = self._item_list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
-		f_name = list_.get_value(iter_, Column.NAME) if iter_ is not None else None
+		# get current selection
+		f_name = None
+		if selected_iter is not None:
+			f_name = item_list.get_value(selected_iter, Column.NAME)
+
+		# reload path
 		self.change_path(self.path, f_name)
 
 		return True

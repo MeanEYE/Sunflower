@@ -502,7 +502,7 @@ class CopyDialog:
 		button_save = gtk.Button()
 		button_save.set_image(image_save)
 		button_save.connect('clicked', self._save_configuration)
-		button_save.set_tooltip_text(_('Save default configuration'))
+		button_save.set_tooltip_text(_('Save as default configuration'))
 
 		align_save = gtk.Alignment()
 		align_save.add(button_save)

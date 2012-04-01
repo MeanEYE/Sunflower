@@ -11,6 +11,7 @@ from gui.preferences.plugins import PluginsOptions
 from gui.preferences.accelerators import AcceleratorOptions
 from gui.preferences.associations import AssociationsOptions
 
+
 class Column:
 	NAME = 0
 	WIDGET = 1
@@ -48,7 +49,7 @@ class PreferencesWindow(gtk.Window):
 		label_container.set_size_request(130, -1)
 
 		self._labels = gtk.ListStore(str, int)
-		self._tab_labels = gtk.TreeView(self._labels)
+		self._tab_labels = gtk.TreeView(model=self._labels)
 
 		cell_label = gtk.CellRendererText()
 		col_label = gtk.TreeViewColumn(None, cell_label, text=Column.NAME)

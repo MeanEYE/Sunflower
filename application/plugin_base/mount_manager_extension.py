@@ -1,33 +1,32 @@
+import gtk
+
 
 class MountManagerExtension:
 	"""Base class for mount manager extensions.
 	
-	After initialization you need to call self._register_extension method
-	to implement your class in main object. Mount manager has only one instance 
-	and is created on program startup.
+	Mount manager has only one instance and is created on program startup. 
+	Methods defined in this class are called automatically by the mount manager 
+	so you need to implement them.
 
 	"""
 	
-	def __init__(self, application):
-		self._application = application
-		self._parent = self._application.mount_manager
+	def __init__(self, parent, window):
+		self._parent = parent
+		self._window = window
+		self._application = self._parent._application
 
-		self._protocol_name = None
-		self._title = None
-		self._mountable = False
+		# create user interface
+		self._container = gtk.VBox(False, 5)
+		self._controls = gtk.HBox(False, 5)
 
-	def _register_extension(self):
-		"""Register extension with mount manager"""
-		self._application.register_mount_manager_extension(self)
+		# create buttons
+		self._button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
+		self._button_close.connect('clicked', self._window._hide)
 
-	def is_mountable(self):
-		"""Return value indicating extension support for mountable items"""
-		return self._mountable
+		# pack interface
+		self._controls.pack_end(self._button_close, False, False, 0)
+		self._container.pack_end(self._controls, False, False, 0)
 
-	def get_protocol_name(self):
-		"""Get associated protocol name"""
-		return self._protocol_name
-
-	def get_title(self):
-		"""Get extension title"""
-		return self._title
+	def _get_container(self):
+		"""Return container widget"""
+		return self._container

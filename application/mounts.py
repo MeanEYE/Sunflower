@@ -1,7 +1,7 @@
 import gtk
 
 from gio import VolumeMonitor
-from gui.mounts_manager_window import MountsManagerWindow, Column
+from gui.mounts_manager_window import MountsManagerWindow
 
 
 class MountsManager:
@@ -12,11 +12,6 @@ class MountsManager:
 		self._menu = None
 		self._menu_unmount = None
 		self._menu_item = None
-		self._mounts_iter = None
-		self._volumes_iter = None
-
-		# create store for window list
-		self._store = gtk.TreeStore(str, str, str, str, str, bool)
 
 		# create user interface
 		self.window = MountsManagerWindow(self)
@@ -30,56 +25,16 @@ class MountsManager:
 
 	def _populate_list(self):
 		"""Populate mount/volume list"""
-		self._mounts_iter = self._store.append(None, (None, '<b>{0}</b>'.format(_('Mounts')), None, None, None, None))
-		self._volumes_iter = self._store.append(None, (None, '<b>{0}</b>'.format(_('Volumes')), None, None, None, None))
-
 		# get list of volumes
 		for volume in self._volume_monitor.get_volumes():
-			icon_names = volume.get_icon().to_string()
-			icon = self._application.icon_manager.get_mount_icon_name(icon_names)
-			name = volume.get_name()
-			uuid = volume.get_uuid()
-
-			self._store.append(
-							self._volumes_iter,
-							(icon, name, 'file', uuid, None, None)
-						)
+			self.window._add_volume(volume)
 
 		# get list of mounted volumes
 		for mount in self._volume_monitor.get_mounts():
 			self._add_mount(self._volume_monitor, mount)
 
-		# expand all items
-		self.window._list.expand_all()
-
 		# update menu item visibility based on mount count
 		self._menu_updated()
-
-	def _get_volume_iter_by_uuid(self, uuid):
-		"""Get volume list iter by UUID"""
-		result = None
-		index = self._store.get_path(self._volumes_iter)
-		
-		# find iter by uuid
-		for volume_row in self._store[index].iterchildren():
-			if self._store.get_value(volume_row.iter, Column.CONFIGURATION) == uuid:
-				result = volume_row.iter
-				break
-
-		return result
-
-	def _get_mount_iter_by_path(self, path):
-		"""Get mount list iter by path"""
-		result = None
-		index = self._store.get_path(self._mounts_iter)
-		
-		# find iter by uuid
-		for mount_row in self._store[index].iterchildren():
-			if self._store.get_value(mount_row.iter, Column.PATH) == path:
-				result = mount_row.iter
-				break
-
-		return result
 
 	def _get_extension_for_selected_item(self):
 		"""Get extension for selected item in list, if possible"""
@@ -92,26 +47,13 @@ class MountsManager:
 		mount_path = mount.get_root().get_path()
 		volume = mount.get_volume()
 
+		# if mount has volume, set mounted flag
 		if volume is not None:
-			# we are looking at mounted volume
 			uuid = volume.get_uuid()
-			volume_iter = self._get_volume_iter_by_uuid(uuid)
+			self.window._volume_mounted(uuid)
 
-			if volume_iter is not None:
-				self._store.set_value(volume_iter, Column.PATH, mount_path)
-				self._store.set_value(volume_iter, Column.MOUNTED, True)
-
-		else:
-			# volume doesn't exist, add to mount list
-			data = (
-				mount_icon, 
-				mount.get_name(), 
-				'file',
-				None,  # configuration
-				mount_path,
-				True
-			)
-			self._store.append(self._mounts_iter, data)
+		# add mount to the list
+		self.window.add_mount(mount_icon, mount.get_name(), mount_path)
 
 		# add bookmark menu item
 		self._add_item(
@@ -138,18 +80,10 @@ class MountsManager:
 		if volume is not None:
 			# volume was unmounted
 			uuid = volume.get_uuid()
-			volume_iter = self._get_volume_iter_by_uuid(uuid)
+			self.window._volume_unmounted(uuid)
 
-			if volume_iter is not None:
-				self._store.set_value(volume_iter, Column.PATH, None)
-				self._store.set_value(volume_iter, Column.MOUNTED, False)
-
-		else:
-			# remove mount from list
-			mount_iter = self._get_mount_iter_by_path(mount_path)
-
-			if mount_iter is not None:
-				self._store.remove(mount_iter)
+		# remove mount from list
+		self.window.remove_mount(mount_path)
 
 		# remove item from menus
 		self._remove_item(mount_path)
@@ -159,28 +93,12 @@ class MountsManager:
 
 	def _add_volume(self, monitor, volume):
 		"""Event called when new volume is connected"""
-		icon_names = volume.get_icon().to_string()
-		icon = self._application.icon_manager.get_mount_icon_name(icon_names)
-		name = volume.get_name()
-		uuid = volume.get_uuid()
-
-		# add new volume to the store
-		self._store.append(
-						self._volumes_iter,
-						(icon, name, 'file', uuid, None, None)
-					)
-
-		# expand all items
-		self.window._list.expand_all()
+		self.window._add_volume(volume)
 
 	def _remove_volume(self, monitor, volume):
 		"""Event called when volume is removed/unmounted"""
 		uuid = volume.get_uuid()
-		volume_iter = self._get_volume_iter_by_uuid(uuid)
-
-		# remove volume from the list
-		if volume_iter is not None:
-			self._store.remove(volume_iter)
+		self.window._remove_volume(uuid)
 
 	def _menu_updated(self):
 		"""Method called whenever menu is updated"""

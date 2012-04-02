@@ -184,10 +184,10 @@ class PreferencesWindow(gtk.Window):
 	def _handle_cursor_change(self, widget, data=None):
 		"""Change active tab when cursor is changed"""
 		selection = self._tab_labels.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
-		if iter_ is not None:
-			new_tab = list_.get_value(iter_, Column.WIDGET)
+		if selected_iter is not None:
+			new_tab = item_list.get_value(selected_iter, Column.WIDGET)
 
 			self._tabs.handler_block_by_func(self._handle_page_switch)
 			self._tabs.set_current_page(new_tab)

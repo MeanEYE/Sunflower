@@ -69,11 +69,11 @@ class HistoryList(gtk.Window):
 
 		button_new_tab = gtk.Button()
 		button_new_tab.set_image(image_new_tab)
-		button_new_tab.set_label(_('New tab'))
+		button_new_tab.set_label(_('Open in tab'))
 		button_new_tab.set_tooltip_text(_('Open selected path in new tab'))
 		button_new_tab.connect('clicked', self._open_in_new_tab)
 
-		button_oposite = gtk.Button(label=_('Oposite list'))
+		button_oposite = gtk.Button(label=_('Open in oposite list'))
 		button_oposite.set_tooltip_text(_('Open selected path in oposite list'))
 		button_oposite.connect('clicked', self._open_in_oposite_list)
 
@@ -82,8 +82,8 @@ class HistoryList(gtk.Window):
 
 		hbox_controls.pack_end(button_close, False, False, 0)
 		hbox_controls.pack_end(button_jump, False, False, 0)
-		hbox_controls.pack_start(button_new_tab, False, False, 0)
-		hbox_controls.pack_start(button_oposite, False, False, 0)
+		hbox_controls.pack_end(button_new_tab, False, False, 0)
+		hbox_controls.pack_end(button_oposite, False, False, 0)
 
 		vbox.pack_start(list_container, True, True, 0)
 		vbox.pack_start(hbox_controls, False, False, 0)

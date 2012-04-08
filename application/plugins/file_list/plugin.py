@@ -5,10 +5,12 @@ import locale
 import user
 import fnmatch
 import urllib
+import urlparse
 import common
 
-from monitor import MonitorSignals
+from monitor import MonitorSignals, MonitorError
 from local_provider import LocalProvider
+from smb_provider import SmbProvider
 from operation import DeleteOperation, CopyOperation, MoveOperation
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
@@ -24,6 +26,7 @@ def register_plugin(application):
 	"""Register plugin classes with application"""
 	application.register_class('file_list', _('Local file list'), FileList)
 	application.register_provider(LocalProvider)
+	application.register_provider(SmbProvider)
 
 
 class Column:
@@ -54,6 +57,8 @@ class FileList(ItemList):
 
 	def __init__(self, parent, notebook, path=None, sort_column=None, sort_ascending=True):
 		ItemList.__init__(self, parent, notebook, path, sort_column, sort_ascending)
+
+		self.scheme = 'file'
 
 		# event object controlling path change thread
 		self._thread_active = Event()
@@ -217,9 +222,6 @@ class FileList(ItemList):
 				)[self._parent.options.getint('main', 'grid_lines')]
 		self._item_list.set_grid_lines(grid_lines)
 
-		# change list icon
-		self._title_bar.set_icon_from_name('folder')
-
 		# set sort function
 		if self._sort_column is None:
 			# default sort by name
@@ -276,8 +278,9 @@ class FileList(ItemList):
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
 
 		# create URI from item name and protocol
+		# TODO: Use URLLIB for creating URI instead of formatting a string
 		file_name = self._get_selection(relative=False)
-		protocol = self.get_provider().protocols[0]
+		protocol = self.get_provider().protocol
 		uri = '{0}://{1}'.format(protocol, urllib.quote(file_name)) if not is_parent else None
 
 		# show preview if thumbnail exists
@@ -1216,8 +1219,8 @@ class FileList(ItemList):
 		self._title_bar.set_title(text)
 		self._title_bar.set_subtitle(
 									'{2} {0} - {3} {1}'.format(
-															system_size.size_available,
-															system_size.size_total,
+															common.format_size(system_size.size_available),
+															common.format_size(system_size.size_total),
 															_('Free:'),
 															_('Total:')
 														)
@@ -1320,7 +1323,6 @@ class FileList(ItemList):
 		self._clear_list()
 
 		# cache objects and settings
-		provider = self.get_provider()
 		show_hidden = self._parent.options.getboolean('main', 'show_hidden')
 
 		# assign item for selection
@@ -1330,17 +1332,42 @@ class FileList(ItemList):
 		if self._enable_media_preview:
 			self._thumbnail_view.hide()
 
-		# change path
-		if path is not None and provider.is_dir(path):
-			self.path = os.path.abspath(path)
+		# make sure we don't have trailing directory separator
+		if path[-1] == os.path.sep:
+			path = path[:-1]
+		
+		# get provider for specified URI
+		uri = urlparse.urlparse(path)
+		scheme = uri.scheme if uri.scheme != '' else 'file'
+		provider = None
+		self.path = path
+
+		if scheme == self.scheme:
+			# we are working with same provider
+			provider = self.get_provider()
 
 		else:
+			# different provider, we need to get it
+			Provider = self._parent.get_provider_by_protocol(scheme)
+
+			if Provider is not None:
+				provider = Provider(self)
+
+				self.scheme = scheme
+				self._provider = provider
+
+		if provider is None:
+			provider = LocalProvider(self)
+			self._provider = provider
 			self.path = user.home
+
+		# change list icon
+		self._title_bar.set_icon_from_name(provider.get_protocol_icon())
 
 		# update GTK controls
 		path_name = os.path.basename(self.path)
 		if path_name == "":
-			path_name = os.path.abspath(self.path)
+			path_name = uri.path
 
 		self._change_tab_text(path_name)
 		self._change_title_text(self.path)
@@ -1369,23 +1396,24 @@ class FileList(ItemList):
 			preload_list = item_list[:self._preload_count]
 			item_list = item_list[self._preload_count:]
 
-			# add parent option for parent directory
-			self._store.append((
-							os.path.pardir,
-							os.path.pardir,
-							'',
-							-2,
-							'<DIR>',
-							-1,
-							'',
-							-1,
-							'',
-							True,
-							True,
-							None,
-							'up',
-							None
-						))
+			if uri.path != os.path.sep and uri.path != '':
+				# add parent option for parent directory
+				self._store.append((
+								os.path.pardir,
+								os.path.pardir,
+								'',
+								-2,
+								'<DIR>',
+								-1,
+								'',
+								-1,
+								'',
+								True,
+								True,
+								None,
+								'up',
+								None
+							))
 			
 			# preload items
 			for item_name in preload_list:
@@ -1619,7 +1647,10 @@ class FileList(ItemList):
 	def get_provider(self):
 		"""Get list provider object"""
 		if self._provider is None:
-			self._provider = LocalProvider(self)
+			Provider = self._parent.get_provider_by_protocol(self.scheme)
+
+			if Provider is not None:
+				self._provider = Provider(self)
 
 		return self._provider
 

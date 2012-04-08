@@ -103,11 +103,11 @@ class HistoryList(gtk.Window):
 	def _change_path(self, widget=None, data=None):
 		"""Change to selected path"""
 		selection = self._history_list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
 		# if selection is valid, change to selected path
-		if iter_ is not None:
-			path = list_.get_value(iter_, Column.PATH)
+		if selected_iter is not None:
+			path = item_list.get_value(selected_iter, Column.PATH)
 
 			# change path
 			self._parent._handle_history_click(path=path)
@@ -118,11 +118,11 @@ class HistoryList(gtk.Window):
 	def _open_in_new_tab(self, widget=None, data=None):
 		"""Open selected item in new tab"""
 		selection = self._history_list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
 		# if selection is valid, change to selected path
-		if iter_ is not None:
-			path = list_.get_value(iter_, Column.PATH)
+		if selected_iter is not None:
+			path = item_list.get_value(selected_iter, Column.PATH)
 
 			# create new tab
 			self._application.create_tab(

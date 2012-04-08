@@ -61,7 +61,7 @@ class Provider:
 	"""Abstract provider class used to manipulate items"""
 
 	is_local = True  # if provider handles local files
-	protocols = ()  # list of supported protocols
+	protocol = None # name of supported protocol
 	archives = ()  # list of supported archive types
 
 	def __init__(self, parent, path=None, selection=None):
@@ -188,3 +188,11 @@ class Provider:
 	def get_monitor(self, path):
 		"""Return monitor object to be used with specified list"""
 		return None
+
+	def supports(self, scheme):
+		"""Return true if scheme is supported by the provider"""
+		return scheme == self.protocol
+
+	def get_protocol_icon(self):
+		"""Returns protocol icon name used in tab title bar"""
+		return 'folder'

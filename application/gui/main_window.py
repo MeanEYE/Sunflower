@@ -8,6 +8,7 @@ import user
 import gettext
 import common
 import shlex
+import urlparse
 
 from menus import MenuManager
 from mounts import MountsManager
@@ -869,28 +870,12 @@ class MainWindow(gtk.Window):
 		"""Handle clicks on bookmark menu"""
 		item_list = self.menu_bookmarks.get_data('list')
 
-		if item_list is not None and hasattr(item_list, 'change_path'):
+		if item_list is not None \
+		and hasattr(item_list, 'change_path'):
 			path = widget.get_data('path')
+			item_list.change_path(path)
 
-			if os.path.isdir(path):
-				# path is valid
-				item_list.change_path(path)
-
-			else:
-				# invalid path, notify user
-				dialog = gtk.MessageDialog(
-										self,
-										gtk.DIALOG_DESTROY_WITH_PARENT,
-										gtk.MESSAGE_ERROR,
-										gtk.BUTTONS_OK,
-										_(
-											"Specified path does not exist or is not "
-											"valid. If path is not local check if volume "
-											"is mounted."
-										) + "\n\n{0}".format(path)
-									)
-				dialog.run()
-				dialog.destroy()
+		return True
 
 	def _handle_command_click(self, widget, data=None):
 		"""Handle click on command menu item"""
@@ -2319,8 +2304,7 @@ class MainWindow(gtk.Window):
 		like drag and drop and system bookmark handling.
 
 		"""
-		for protocol in ProviderClass.protocols:
-			self.provider_classes[protocol] = ProviderClass
+		self.provider_classes[ProviderClass.protocol] = ProviderClass
 
 		for archive_type in ProviderClass.archives:
 			self.archive_provider_classes[archive_type] = ProviderClass

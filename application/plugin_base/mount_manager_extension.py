@@ -19,12 +19,10 @@ class MountManagerExtension:
 		self._container = gtk.VBox(False, 5)
 		self._controls = gtk.HBox(False, 5)
 
-		# create buttons
-		self._button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
-		self._button_close.connect('clicked', self._window._hide)
+		separator = gtk.HSeparator();
 
 		# pack interface
-		self._controls.pack_end(self._button_close, False, False, 0)
+		self._container.pack_end(separator, False, False, 0)
 		self._container.pack_end(self._controls, False, False, 0)
 
 	def _get_container(self):

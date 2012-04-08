@@ -10,7 +10,7 @@ from plugin_base.provider import Provider, FileType, FileInfo, FileInfoExtended,
 class LocalProvider(Provider):
 	"""Content provider for local files"""
 	is_local = True
-	protocols = ('file', )
+	protocol = 'file'
 
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
@@ -76,14 +76,30 @@ class LocalProvider(Provider):
 
 		except:
 			# handle invalid files/links
-			result = FileInfo(
-						size = 0,
-						mode = 0,
-						user_id = 0,
-						group_id = 0,
-						time_modify = 0,
-						type = FileType.INVALID,
-					)
+			if extended:
+				result = FileInfo(
+							size = 0,
+							mode = 0,
+							user_id = 0,
+							group_id = 0,
+							time_modify = 0,
+							type = FileType.INVALID,
+						)
+
+			else:
+				result = FileInfoExtended(
+							size = 0,
+							mode = 0,
+							i_mode = 0,
+							user_id = 0,
+							group_id = 0,
+							time_access = 0,
+							time_modify = 0,
+							time_change = 0,
+							type = FileType.INVALID,
+							device = 0,
+							inode = 0
+						)
 
 			return result
 
@@ -194,8 +210,8 @@ class LocalProvider(Provider):
 		try:
 			stat = os.statvfs(path)
 
-			space_free = common.format_size(stat.f_bsize * stat.f_bavail)
-			space_total = common.format_size(stat.f_bsize * stat.f_blocks)
+			space_free = stat.f_bsize * stat.f_bavail
+			space_total = stat.f_bsize * stat.f_blocks
 
 			result = SystemSize(
 						block_size = stat.f_bsize,

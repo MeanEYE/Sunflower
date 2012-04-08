@@ -44,28 +44,28 @@ class MountsManager:
 		"""Catch volume-mounted signal and update mounts menu"""
 		icon_names = mount.get_icon().to_string()
 		mount_icon = self._application.icon_manager.get_mount_icon_name(icon_names)
-		mount_path = mount.get_root().get_path()
+		mount_uri = mount.get_root().get_uri()
 		volume = mount.get_volume()
 
 		# if mount has volume, set mounted flag
 		if volume is not None:
 			uuid = volume.get_uuid()
-			self.window._volume_mounted(uuid, mount_path)
+			self.window._volume_mounted(volume)
 
 		# add mount to the list
-		self.window.add_mount(mount_icon, mount.get_name(), mount_path)
+		self.window.add_mount(mount_icon, mount.get_name(), mount_uri)
 
 		# add bookmark menu item
 		self._add_item(
 				mount.get_name(),
-				mount_path,
+				mount_uri,
 				mount_icon
 			)
 
 		# add unmount menu item
 		self._add_unmount_item(
 				mount.get_name(),
-				mount_path,
+				mount_uri,
 				mount_icon
 			)
 
@@ -75,18 +75,17 @@ class MountsManager:
 	def _remove_mount(self, monitor, mount):
 		"""Remove volume menu item from the mounts menu"""
 		volume = mount.get_volume()
-		mount_path = mount.get_root().get_path()
-		
+		mount_uri = mount.get_root().get_uri()
+
+		# update volume list if possible
 		if volume is not None:
-			# volume was unmounted
-			uuid = volume.get_uuid()
-			self.window._volume_unmounted(uuid)
+			self.window._volume_unmounted(volume)
 
 		# remove mount from list
-		self.window.remove_mount(mount_path)
+		self.window.remove_mount(mount_uri)
 
 		# remove item from menus
-		self._remove_item(mount_path)
+		self._remove_item(mount_uri)
 
 		# notify system about menu update
 		self._menu_updated()
@@ -97,8 +96,7 @@ class MountsManager:
 
 	def _remove_volume(self, monitor, volume):
 		"""Event called when volume is removed/unmounted"""
-		uuid = volume.get_uuid()
-		self.window._remove_volume(uuid)
+		self.window._remove_volume(volume)
 
 	def _menu_updated(self):
 		"""Method called whenever menu is updated"""
@@ -106,7 +104,7 @@ class MountsManager:
 		self._menu_item_no_mounts.set_visible(not has_mounts)
 		self._menu_item_no_mounts2.set_visible(not has_mounts)
 
-	def _add_item(self, text, path, icon):
+	def _add_item(self, text, uri, icon):
 		"""Add new menu item to the list"""
 		image = gtk.Image()
 		image.set_from_icon_name(icon, gtk.ICON_SIZE_MENU)
@@ -115,13 +113,13 @@ class MountsManager:
 		menu_item.set_label(text)
 		menu_item.set_image(image)
 		menu_item.set_always_show_image(True)
-		menu_item.set_data('path', path)
+		menu_item.set_data('path', uri)
 		menu_item.connect('activate', self._application._handle_bookmarks_click)
 		menu_item.show()
 
 		self._menu.append(menu_item)
 
-	def _add_unmount_item(self, text, path, icon):
+	def _add_unmount_item(self, text, uri, icon):
 		"""Add new menu item used for unmounting"""
 		image = gtk.Image()
 		image.set_from_icon_name(icon, gtk.ICON_SIZE_MENU)
@@ -130,7 +128,7 @@ class MountsManager:
 		menu_item.set_label(text)
 		menu_item.set_image(image)
 		menu_item.set_always_show_image(True)
-		menu_item.set_data('path', path)
+		menu_item.set_data('uri', uri)
 		menu_item.connect('activate', self._unmount_item)
 		menu_item.show()
 
@@ -139,16 +137,16 @@ class MountsManager:
 	def _remove_item(self, mount_point):
 		"""Remove item based on device name"""
 		for item in self._menu.get_children():
-			if item.get_data('path') == mount_point: self._menu.remove(item)
+			if item.get_data('uri') == mount_point: self._menu.remove(item)
 
 		for item in self._menu_unmount.get_children():
-			if item.get_data('path') == mount_point: self._menu_unmount.remove(item)
+			if item.get_data('uri') == mount_point: self._menu_unmount.remove(item)
 
 	def _unmount_item(self, widget, data=None):
 		"""Event called by the unmount menu item or unmount button from manager"""
-		path = widget.get_data('path')
+		uri = widget.get_data('uri')
 
-		if path is None:
+		if uri is None:
 			# unmount was called by button
 			pass
 
@@ -156,7 +154,7 @@ class MountsManager:
 			# unmount was called by menu item
 			for mount in self._volume_monitor.get_mounts():
 				# check if this is the right mount
-				if mount.get_root().get_path() == path:
+				if mount.get_root().get_uri() == uri:
 					self._unmount(mount)
 					break
 
@@ -180,27 +178,9 @@ class MountsManager:
 
 	def _unmount_finish(self, mount, result):
 		"""Callback for unmount events"""
-		try:
-			# try to finish async unmount
-			mount.unmount_finish(result)
-			mount_path = mount.get_root().get_path()
-
-			# notify user
-			dialog = gtk.MessageDialog(
-								self,
-								gtk.DIALOG_DESTROY_WITH_PARENT,
-								gtk.MESSAGE_INFO,
-								gtk.BUTTONS_OK,
-								_(
-									'Successfully unmounted:'
-									'\n{0}'
-								).format(mount_path)
-							)
-			dialog.run()
-			dialog.destroy()
-
-		except:
-			pass
+		# try to finish async unmount
+		mount.unmount_finish(result)
+		mount_uri = mount.get_root().get_uri()
 
 	def _attach_menus(self):
 		"""Attach mounts to menus"""

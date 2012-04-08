@@ -42,7 +42,7 @@ class ItemList(PluginBase):
 		# list statistics
 		self._dirs = {'count': 0, 'selected': 0}
 		self._files = {'count': 0, 'selected': 0}
-		self._size = {'total': 0L, 'selected': 0}
+		self._size = {'total': 0L, 'selected': 0L}
 
 		# local human readable cache
 		self._human_readable = self._parent.options.getboolean('main', 'human_readable_size')

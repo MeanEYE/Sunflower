@@ -1,4 +1,5 @@
 import gtk
+import gio
 
 from plugin_base.mount_manager_extension import MountManagerExtension
 
@@ -15,6 +16,7 @@ class VolumesColumn:
 	UUID = 2
 	URI = 3
 	MOUNTED = 4
+	OBJECT = 5
 
 
 class PagesColumn:
@@ -52,6 +54,7 @@ class MountsManagerWindow(gtk.Window):
 		self._pages_store = gtk.ListStore(str, str, int, int)
 		
 		# create user interface
+		vbox = gtk.VBox(False, 5);
 		hbox = gtk.HBox(False, 5)
 		hbox_controls = gtk.HBox(False, 5)
 
@@ -88,14 +91,23 @@ class MountsManagerWindow(gtk.Window):
 		# create notebook pages
 		self._mounts = MountsExtension(self._parent, self)
 		self._volumes = VolumesExtension(self._parent, self)
+	
+		# create buttons
+		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
+		button_close.connect('clicked', self._hide)
 		
 		# pack user interface
 		label_container.add(self._tab_labels)
 
+		hbox_controls.pack_end(button_close, False, False, 0)
+
 		hbox.pack_start(label_container, False, False, 0)
 		hbox.pack_start(self._tabs, True, True, 0)
+
+		vbox.pack_start(hbox, True, True, 0)
+		vbox.pack_start(hbox_controls, False, False, 0)
 		
-		self.add(hbox)
+		self.add(vbox)
 
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys in mount manager list"""
@@ -145,17 +157,17 @@ class MountsManagerWindow(gtk.Window):
 		"""Add volume entry"""
 		self._volumes.add_volume(volume)
 
-	def _remove_volume(self, uuid):
+	def _remove_volume(self, volume):
 		"""Remove volume entry"""
-		self._volumes.remove_volume(uuid)
+		self._volumes.remove_volume(volume)
 
-	def _volume_mounted(self, uuid, path):
+	def _volume_mounted(self, volume):
 		"""Mark volume as mounted"""
-		self._volumes.volume_mounted(uuid, path)
+		self._volumes.volume_mounted(volume)
 
-	def _volume_unmounted(self, uuid):
+	def _volume_unmounted(self, volume):
 		"""Mark volume as unmounted"""
-		self._volumes.volume_unmounted(uuid)
+		self._volumes.volume_unmounted(volume)
 
 	def add_page(self, icon_name, title, container, extension):
 		"""Create new page in mounts manager with specified parameters.
@@ -204,7 +216,7 @@ class MountsExtension(MountManagerExtension):
 
 		cell_icon = gtk.CellRendererPixbuf()
 		cell_name = gtk.CellRendererText()
-		cell_path = gtk.CellRendererText()
+		cell_uri = gtk.CellRendererText()
 
 		col_name = gtk.TreeViewColumn(_('Name'))
 		col_name.pack_start(cell_icon, False)
@@ -214,10 +226,10 @@ class MountsExtension(MountManagerExtension):
 		col_name.add_attribute(cell_icon, 'icon-name', MountsColumn.ICON)
 		col_name.add_attribute(cell_name, 'markup', MountsColumn.NAME)
 
-		col_path = gtk.TreeViewColumn(_('Path'), cell_path, text=MountsColumn.URI)
+		col_uri = gtk.TreeViewColumn(_('URI'), cell_uri, text=MountsColumn.URI)
 
 		self._list.append_column(col_name)
-		self._list.append_column(col_path)
+		self._list.append_column(col_uri)
 
 		# create controls
 		image_jump = gtk.Image()
@@ -226,15 +238,15 @@ class MountsExtension(MountManagerExtension):
 		button_jump.set_image(image_jump)
 		button_jump.set_label(_('Open'))
 		button_jump.set_can_default(True)
-		#button_jump.connect('clicked', self._change_path)
+		button_jump.connect('clicked', self._open_selected, False)
 
 		image_new_tab = gtk.Image()
 		image_new_tab.set_from_icon_name('tab-new', gtk.ICON_SIZE_BUTTON)
 		button_new_tab = gtk.Button()
 		button_new_tab.set_image(image_new_tab)
 		button_new_tab.set_label(_('Open in tab'))
-		button_new_tab.set_tooltip_text(_('Open selected path in new tab'))
-		#button_new_tab.connect('clicked', self._open_in_new_tab)
+		button_new_tab.set_tooltip_text(_('Open selected URI in new tab'))
+		button_new_tab.connect('clicked', self._open_selected, True)
 
 		button_unmount = gtk.Button()
 		button_unmount.set_label(_('Unmount'))
@@ -252,16 +264,37 @@ class MountsExtension(MountManagerExtension):
 		self._window.add_page('harddrive', _('Mounts'), self._container, self)
 
 	def _get_iter_by_uri(self, uri):
-		"""Get mount list iter by path"""
+		"""Get mount list iter by URI"""
 		result = None
 		
 		# find iter by uuid
 		for mount_row in self._store:
-			if self._store.get_value(mount_row.iter, MountsColumn.URI) == path:
+			if self._store.get_value(mount_row.iter, MountsColumn.URI) == uri:
 				result = mount_row.iter
 				break
 
 		return result
+
+	def _open_selected(self, widget, in_new_tab=False):
+		"""Open selected mount"""
+		selection = self._list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		if selected_iter is not None:
+			uri = item_list.get_value(selected_iter, MountsColumn.URI)
+			active_object = self._application.get_active_object()
+			
+			if not in_new_tab and hasattr(active_object, 'change_path'):
+				active_object.change_path(uri)
+
+			else:
+				# create new tab
+				self._application.create_tab(
+								active_object._notebook,
+								active_object.__class__,
+								uri
+							)
+		return True
 
 	def add_mount(self, icon, name, uri):
 		"""Add mount to the list"""
@@ -281,7 +314,8 @@ class VolumesExtension(MountManagerExtension):
 	
 	def __init__(self, parent, window):
 		MountManagerExtension.__init__(self, parent, window)
-		self._store = gtk.ListStore(str, str, str, str, bool)
+		self._store = gtk.ListStore(str, str, str, str, bool, object)
+		self._volumes = {}
 
 		# create interface
 		container = gtk.ScrolledWindow() 
@@ -304,13 +338,36 @@ class VolumesExtension(MountManagerExtension):
 		col_name.add_attribute(cell_icon, 'icon-name', VolumesColumn.ICON)
 		col_name.add_attribute(cell_name, 'markup', VolumesColumn.NAME)
 
-		col_mounted = gtk.TreeViewColumn(_('Mounted'), cell_mounted, text=VolumesColumn.MOUNTED)
+		col_mounted = gtk.TreeViewColumn(_('Mounted'), cell_mounted, active=VolumesColumn.MOUNTED)
 
 		self._list.append_column(col_name)
 		self._list.append_column(col_mounted)
 
+		# create buttons
+		button_mount = gtk.Button()
+		button_mount.set_label(_('Mount'))
+		button_mount.connect('clicked', self._mount_volume)
+
+		button_unmount = gtk.Button()
+		button_unmount.set_label(_('Unmount'))
+		button_unmount.connect('clicked', self._unmount_volume)
+
+		# use spinner if possible to denote busy operation
+		if hasattr(gtk, 'Spinner'):
+			self._spinner = gtk.Spinner()
+			self._spinner.set_size_request(20, 20)
+			self._spinner.set_property('no-show-all', True)
+
+		else:
+			self._spinner = None
+
 		# pack interface
 		container.add(self._list)
+
+		self._controls.pack_start(self._spinner, False, False, 0)
+		self._controls.pack_end(button_unmount, False, False, 0)
+		self._controls.pack_end(button_mount, False, False, 0)
+
 		self._container.pack_start(container, True, True, 0)
 
 		# add page to mount manager
@@ -328,6 +385,92 @@ class VolumesExtension(MountManagerExtension):
 
 		return result
 
+	def _get_iter_by_object(self, volume):
+		"""Get volume list iter by UUID"""
+		result = None
+		
+		# find iter by uuid
+		for volume_row in self._store:
+			if self._store.get_value(volume_row.iter, VolumesColumn.OBJECT) is volume:
+				result = volume_row.iter
+				break
+
+		return result
+
+	def _show_spinner(self):
+		"""Show spinner"""
+		if self._spinner is not None:
+			self._spinner.show()
+			self._spinner.start()
+
+	def _hide_spinner(self):
+		"""Hide spinner"""
+		if self._spinner is not None:
+			self._spinner.stop()
+			self._spinner.hide()
+
+	def _mount_finish(self, volume, result, data=None):
+		"""Callback function for volume mount"""
+		try:
+			volume.mount_finish(result)
+		except:
+			pass
+
+		# update volume list
+		mount = volume.get_mount()
+
+		if mount is not None:
+			self.volume_mounted(volume)
+
+		else:
+			self.volume_unmounted(volume)
+
+		# hide spinner
+		self._hide_spinner()
+
+	def _unmount_finish(self, mount, result, data=None):
+		"""Callback function for unmounting"""
+		try:
+			mount.unmount_finish(result)
+		except:
+			pass
+
+		# update volume status
+		volume = mount.get_volume()
+		uuid = volume.get_uuid()
+
+		self.volume_unmounted(uuid)
+
+		# hide spinner
+		self._hide_spinner()
+
+	def _mount_volume(self, widget, data=None):
+		"""Mount selected volume"""
+		selection = self._list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		if selected_iter is not None:
+			# show busy spinner if possible
+			self._show_spinner()
+
+			# perform auto-mount of volume
+			volume = item_list.get_value(selected_iter, VolumesColumn.OBJECT)
+			volume.mount(None, self._mount_finish, gio.MOUNT_MOUNT_NONE, None, None)
+
+	def _unmount_volume(self, widget, data=None):
+		"""Unmount selected volume"""
+		selection = self._list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		if selected_iter is not None:
+			# show spinner
+			self._show_spinner()
+
+			# unmount
+			volume = item_list.get_value(selected_iter, VolumesColumn.OBJECT)
+			mount = volume.get_mount()
+			mount.unmount(self._unmount_finish, gio.MOUNT_UNMOUNT_NONE, None, None)
+
 	def add_volume(self, volume):
 		"""Add volume to the list"""
 		icon_names = volume.get_icon().to_string()
@@ -335,37 +478,47 @@ class VolumesExtension(MountManagerExtension):
 		name = volume.get_name()
 		uuid = volume.get_uuid()
 		mounted = False
-		mount_path = None
+		mount_uri = None
 
 		# get mount if possible
 		mount = volume.get_mount()
 		if mount is not None:
 			mounted = True
-			mount_path = mount.get_root().get_path()
+			mount_uri = mount.get_root().get_uri()
 
 		# add new entry to store
-		self._store.append((icon, name, uuid, mount_path, mounted))
+		self._store.append((icon, name, uuid, mount_uri, mounted, volume))
 
-	def remove_volume(self, uuid):
+		# check if we should mount this volume automatically
+		if mount is None and volume.should_automount() and volume.can_mount():
+			# show busy spinner if possible
+			self._show_spinner()
+
+			# perform auto-mount of volume
+			volume.mount(None, self._mount_finish, gio.MOUNT_MOUNT_NONE, None, None)
+
+	def remove_volume(self, volume):
 		"""Remove volume from the list"""
-		volume_iter = self._get_iter_by_uuid(uuid)
+		volume_iter = self._get_iter_by_object(volume)
 
 		# remove if volume exists
 		if volume_iter is not None:
 			self._store.remove(volume_iter)
 
-	def volume_mounted(self, uuid, path):
+	def volume_mounted(self, volume):
 		"""Mark volume with specified UUID as mounted"""
-		volume_iter = self._get_iter_by_uuid(uuid)
+		volume_iter = self._get_iter_by_object(volume)
+		mount = volume.get_mount()
+		uri = mount.get_root().get_uri()
 
 		# set data if volume exists
 		if volume_iter is not None:
-			self._store.set_value(volume_iter, VolumesColumn.URI, path)
+			self._store.set_value(volume_iter, VolumesColumn.URI, uri)
 			self._store.set_value(volume_iter, VolumesColumn.MOUNTED, True)
 
-	def volume_unmounted(self, uuid):
-		"""Mark volume with specified UUID as unmounted"""
-		volume_iter = self._get_iter_by_uuid(uuid)
+	def volume_unmounted(self, volume):
+		"""Mark volume with as unmounted"""
+		volume_iter = self._get_iter_by_object(volume)
 
 		# set data if volume exists
 		if volume_iter is not None:

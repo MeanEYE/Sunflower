@@ -10,7 +10,7 @@ import common
 
 from monitor import MonitorSignals, MonitorError
 from local_provider import LocalProvider
-from smb_provider import SmbProvider
+from gio_provider import SmbProvider
 from operation import DeleteOperation, CopyOperation, MoveOperation
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog

@@ -184,25 +184,7 @@ class GioProvider(Provider):
 	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""
 		real_path = self._real_path(source, relative_to)
-
-		try:
-			gio.File(real_path).set_display_name(destination)
-
-		except:
-			# rename failed, notify user
-			dialog = gtk.MessageDialog(
-									self._parent,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_ERROR,
-									gtk.BUTTONS_OK,
-									_(
-										'Unable to rename specified item. '
-										'Check if you have permission to access '
-										'specified path.\n\n{0}'
-									).format(error)
-								)
-			dialog.run()
-			dialog.destroy()
+		gio.File(real_path).set_display_name(destination)
 
 	def list_dir(self, path, relative_to=None):
 		"""Get directory list"""

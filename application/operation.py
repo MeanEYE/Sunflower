@@ -7,6 +7,7 @@ from threading import Thread, Event
 from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OperationError
 from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog, RenameDialog
 from gui.error_list import ErrorList
+from plugin_base.provider import Mode as FileMode
 
 # import constants
 from gui.input_dialog import OverwriteOption
@@ -626,8 +627,8 @@ class CopyOperation(Operation):
 			file_stat = self._source.get_stat(file_, relative_to=self._source_path, extended=True)
 
 			# get file handles
-			sh = self._source.get_file_handle(file_, 'rb', relative_to=self._source_path)
-			dh = self._destination.get_file_handle(dest_file, 'wb', relative_to=self._destination_path)
+			sh = self._source.get_file_handle(file_, FileMode.READ, relative_to=self._source_path)
+			dh = self._destination.get_file_handle(dest_file, FileMode.WRITE, relative_to=self._destination_path)
 
 			# reserve file size
 			if self._reserve_size:

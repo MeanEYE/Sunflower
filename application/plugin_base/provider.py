@@ -201,7 +201,7 @@ class Provider:
 		"""Return supported options by provider"""
 		return ()
 
-	def get_protocol(self, scheme):
+	def get_protocol(self):
 		"""Return true if scheme is supported by the provider"""
 		return self.protocol
 

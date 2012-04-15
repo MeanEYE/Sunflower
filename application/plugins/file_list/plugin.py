@@ -1278,7 +1278,7 @@ class FileList(ItemList):
 
 	def _drag_data_get(self, widget, drag_context, selection_data, info, time):
 		"""Handle data request from destination widget"""
-		protocol = self.get_provider().protocols[0]
+		protocol = self.get_provider().get_protocol()
 
 		selection = []
 		for file_ in self._get_selection_list():

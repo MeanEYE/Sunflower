@@ -42,14 +42,36 @@ class GioProvider(Provider):
 		"""Unlink given path"""
 		pass
 
-	def remove_directory(self, path, recursive, relative_to=None):
+	def remove_directory(self, path, relative_to=None):
 		"""Remove directory and optionally its contents"""
 		real_path = self._real_path(path, relative_to)
-		if recursive:
-			# TODO: Implement
-			pass
-		else:
-			gio.File(real_path).delete()
+		file_list = []
+		to_scan = []
+
+		# add current path to the list
+		file_list.append(real_path)
+		to_scan.append(real_path)
+
+		# traverse through directories
+		while len(to_scan) > 0:
+			current_path = to_scan.pop(0)
+			info_list = gio.File(current_path).enumerate_children('standard::name,standard::type')
+
+			for info in info_list:
+				name = info.get_name()
+				item_path = os.path.join(current_path, name)
+
+				# add item to the removal list
+				file_list.append(item_path)
+
+				# if item is directory, we need to scan it
+				if info.get_file_type() == gio.FILE_TYPE_DIRECTORY:
+					to_scan.append(item_path)
+
+		# remove all items in reverse order
+		file_list.reverse()
+		for path in file_list:
+			gio.File(path).delete()
 
 	def remove_file(self, path, relative_to=None):
 		"""Remove file"""
@@ -66,7 +88,10 @@ class GioProvider(Provider):
 		"""Create directory with specified mode set"""
 		real_path = self._real_path(path, relative_to)
 		gio.File(real_path).make_directory_with_parents()
-		self.set_mode(real_path, mode)
+		try:
+			self.set_mode(real_path, mode)
+		except:
+			pass
 
 	def get_file_handle(self, path, mode, relative_to=None):
 		"""Open path in specified mode and return its handle"""
@@ -158,14 +183,26 @@ class GioProvider(Provider):
 	def set_mode(self, path, mode, relative_to=None):
 		"""Set access mode to specified path"""
 		real_path = self._real_path(path, relative_to)
-		gio.File(real_path).set_attribute(gio.FILE_ATTRIBUTE_UNIX_MODE, mode)
+		gio.File(real_path).set_attribute(
+					gio.FILE_ATTRIBUTE_UNIX_MODE, 
+					gio.FILE_ATTRIBUTE_TYPE_UINT32, 
+					mode
+				)
 
 	def set_owner(self, path, owner=-1, group=-1, relative_to=None):
 		"""Set owner and/or group for specified path"""
 		real_path = self._real_path(path, relative_to)
 		temp = gio.File(real_path)
-		temp.set_attribute(gio.FILE_ATTRIBUTE_UNIX_UID, owner)
-		temp.set_attribute(gio.FILE_ATTRIBUTE_UNIX_GID, group)
+		temp.set_attribute(
+					gio.FILE_ATTRIBUTE_UNIX_UID, 
+					gio.FILE_ATTRIBUTE_TYPE_UINT32,
+					owner
+				)
+		temp.set_attribute(
+					gio.FILE_ATTRIBUTE_UNIX_GID,
+					gio.FILE_ATTRIBUTE_TYPE_UINT32,
+					group
+				)
 
 	def set_timestamp(self, path, access=None, modify=None, change=None, relative_to=None):
 		"""Set timestamp for specified path"""
@@ -173,13 +210,25 @@ class GioProvider(Provider):
 		temp = gio.File(real_path)
 
 		if access is not None:
-			temp.set_attribute(gio.FILE_ATTRIBUTE_TIME_ACCESS, access)
+			temp.set_attribute(
+					gio.FILE_ATTRIBUTE_TIME_ACCESS, 
+					gio.FILE_ATTRIBUTE_TYPE_UINT64,
+					long(access)
+				)
 
 		if modify is not None:
-			temp.set_attribute(gio.FILE_ATTRIBUTE_TIME_MODIFIED, modify)
+			temp.set_attribute(
+					gio.FILE_ATTRIBUTE_TIME_MODIFIED,
+					gio.FILE_ATTRIBUTE_TYPE_UINT64,
+					long(modify)
+				)
 
 		if change is not None:
-			temp.set_attribute(gio.FILE_ATTRIBUTE_TIME_CHANGED, change)
+			temp.set_attribute(
+					gio.FILE_ATTRIBUTE_TIME_CHANGED,
+					gio.FILE_ATTRIBUTE_TYPE_UINT64,
+					long(change)
+				)
 
 	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""
@@ -196,6 +245,8 @@ class GioProvider(Provider):
 			information = directory.enumerate_children('standard::name')
 			for file_information in information:
 				result.append(file_information.get_name())
+
+			information.close()
 
 		except gio.Error:
 			pass

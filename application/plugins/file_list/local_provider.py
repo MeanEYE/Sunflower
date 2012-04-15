@@ -38,13 +38,10 @@ class LocalProvider(Provider):
 		real_path = self._real_path(path, relative_to)
 		os.remove(real_path)
 
-	def remove_directory(self, path, recursive, relative_to=None):
+	def remove_directory(self, path, relative_to=None):
 		"""Remove directory and optionally its contents"""
 		real_path = self._real_path(path, relative_to)
-		if recursive:
-			shutil.rmtree(real_path)
-		else:
-			os.rmdir(real_path)
+		shutil.rmtree(real_path)
 
 	def remove_file(self, path, relative_to=None):
 		"""Remove file"""

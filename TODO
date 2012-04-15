@@ -47,7 +47,3 @@ are same and only one file is selected offer this option by default.
 - Directory synchronization
 
 - Duplicate files finder
-
-- Make file_list module provider agnostic
-
-- Create mount manager

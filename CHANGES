@@ -1,3 +1,18 @@
+Version 0.1a-42
+  + New layout for mounts manager.
+  + Added GIO based provider with support for SMB and FTP. 
+  * Updated Hungarian translation.
+  * Updated German translation.
+  * Changed button label in history list to be consistent with mount manager.
+  * Fixed grammar error in tooltip text for "Save" button in copy/move dialog.
+  * Fixed inconsistent behavior and potential bug in local files provider.
+  * File list supports providers and properly handles URI strings.
+  * Temporarily disabled automounting of volumes.
+  * Fixed renaming issue for providers other than local.
+  * When saving thumbnail check if the result is valid.
+  * Viewer now uses provider to read file content.
+  * Remove operation doesn't have any options, check before trying to test for silent mode.
+
 Version 0.1a-41
   + Open directory in new tab by middle-clicking on item in list.
   + Notify user about unmounting.

@@ -1,7 +1,10 @@
 import os
 import gio
 
+from gio_wrapper import File
+from local_monitor import LocalMonitor as GioMonitor
 from plugin_base.provider import Provider, FileType, FileInfo, FileInfoExtended, SystemSize
+from plugin_base.Provider import Support
 
 
 class GioProvider(Provider):
@@ -11,38 +14,37 @@ class GioProvider(Provider):
 
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		info = gio.File(real_path).query_info('standard::type')
 
 		return info.get_file_type() == gio.FILE_TYPE_REGULAR
 
 	def is_dir(self, path, relative_to=None):
 		"""Test if given path is directory"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		info = gio.File(real_path).query_info('standard::type')
 
 		return info.get_file_type() == gio.FILE_TYPE_DIRECTORY
 
 	def is_link(self, path, relative_to=None):
 		"""Test if given path is a link"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		info = gio.File(real_path).query_info('standard::type')
 
 		return info.get_file_type() == gio.FILE_TYPE_SYMBOLIC_LINK
 
 	def exists(self, path, relative_to=None):
 		"""Test if given path exists"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		return gio.File(real_path).query_exists()
 
 	def unlink(self, path, relative_to=None):
 		"""Unlink given path"""
-		# TODO: Implement
 		pass
 
 	def remove_directory(self, path, recursive, relative_to=None):
 		"""Remove directory and optionally its contents"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		if recursive:
 			# TODO: Implement
 			pass
@@ -51,12 +53,29 @@ class GioProvider(Provider):
 
 	def remove_file(self, path, relative_to=None):
 		"""Remove file"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		gio.File(real_path).delete()
+
+	def create_file(self, path, mode=None, relative_to=None):
+		"""Create empty file with specified mode set"""
+		real_path = self._real_path(path, relative_to)
+		gio.File(real_path).create()
+		self.set_mode(real_path, mode)
+
+	def create_directory(self, path, mode=None, relative_to=None):
+		"""Create directory with specified mode set"""
+		real_path = self._real_path(path, relative_to)
+		gio.File(real_path).make_directory_with_parents()
+		self.set_mode(real_path, mode)
+
+	def get_file_handle(self, path, mode, relative_to=None):
+		"""Open path in specified mode and return its handle"""
+		real_path = self._real_path(path, relative_to)
+		return File(real_path, mode)
 
 	def get_stat(self, path, relative_to=None, extended=False):
 		"""Return file statistics"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 
 		try:
 			# try getting file stats
@@ -131,14 +150,63 @@ class GioProvider(Provider):
 						time_change = file_stat.get_attribute_uint64(gio.FILE_ATTRIBUTE_TIME_CHANGED),
 						type = item_type,
 						device = file_stat.get_attribute_uint32(gio.FILE_ATTRIBUTE_UNIX_DEVICE),
-						inode = file_stat.get_attribute_uint32(gio.FILE_ATTRIBUTE_UNIX_INODE)
+						inode = file_stat.get_attribute_uint64(gio.FILE_ATTRIBUTE_UNIX_INODE)
 					)
 
 		return result
 
+	def set_mode(self, path, mode, relative_to=None):
+		"""Set access mode to specified path"""
+		real_path = self._real_path(path, relative_to)
+		gio.File(real_path).set_attribute(gio.FILE_ATTRIBUTE_UNIX_MODE, mode)
+
+	def set_owner(self, path, owner=-1, group=-1, relative_to=None):
+		"""Set owner and/or group for specified path"""
+		real_path = self._real_path(path, relative_to)
+		temp = gio.File(real_path)
+		temp.set_attribute(gio.FILE_ATTRIBUTE_UNIX_UID, owner)
+		temp.set_attribute(gio.FILE_ATTRIBUTE_UNIX_GID, group)
+
+	def set_timestamp(self, path, access=None, modify=None, change=None, relative_to=None):
+		"""Set timestamp for specified path"""
+		real_path = self._real_path(path, relative_to)
+		temp = gio.File(real_path)
+
+		if access is not None:
+			temp.set_attribute(gio.FILE_ATTRIBUTE_TIME_ACCESS, access)
+
+		if modify is not None:
+			temp.set_attribute(gio.FILE_ATTRIBUTE_TIME_MODIFIED, modify)
+
+		if change is not None:
+			temp.set_attribute(gio.FILE_ATTRIBUTE_TIME_CHANGED, change)
+
+	def rename_path(self, source, destination, relative_to=None):
+		"""Rename file/directory within parents path"""
+		real_path = self._real_path(source, relative_to)
+
+		try:
+			gio.File(real_path).set_display_name(destination)
+
+		except:
+			# rename failed, notify user
+			dialog = gtk.MessageDialog(
+									self._parent,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_ERROR,
+									gtk.BUTTONS_OK,
+									_(
+										'Unable to rename specified item. '
+										'Check if you have permission to access '
+										'specified path.\n\n{0}'
+									).format(error)
+								)
+			dialog.run()
+			dialog.destroy()
+
 	def list_dir(self, path, relative_to=None):
 		"""Get directory list"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		directory = gio.File(real_path)
 		result = []
 
@@ -181,7 +249,11 @@ class GioProvider(Provider):
 
 	def get_monitor(self, path):
 		"""Get file system monitor for specified path"""
-		return None
+		return GioMonitor(self, path)
+
+	def get_support(self):
+		"""Return supported options by provider"""
+		return (Support.MONITOR,)
 
 
 class SmbProvider(GioProvider):
@@ -196,6 +268,10 @@ class SmbProvider(GioProvider):
 class FtpProvider(GioProvider):
 	is_local = False
 	protocol = 'ftp'
+
+	def get_protocol_icon(self):
+		"""Return protocol icon name"""
+		return 'network'
 
 
 class NetworkProvider(GioProvider):

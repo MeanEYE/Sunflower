@@ -5,7 +5,7 @@ import common
 
 from local_monitor import LocalMonitor
 from plugin_base.provider import Provider, FileType, FileInfo, FileInfoExtended, SystemSize
-from plugin_base.Provider import Support
+from plugin_base.provider import Support
 
 
 class LocalProvider(Provider):

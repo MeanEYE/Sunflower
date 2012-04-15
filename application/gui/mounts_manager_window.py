@@ -608,12 +608,13 @@ class VolumesExtension(MountManagerExtension):
 		self._store.append((icon, name, uuid, mount_uri, mounted, volume))
 
 		# check if we should mount this volume automatically
-		if mount is None and volume.should_automount() and volume.can_mount():
-			# show busy spinner if possible
-			self._show_spinner()
-
-			# perform auto-mount of volume
-			volume.mount(None, self._mount_finish, gio.MOUNT_MOUNT_NONE, None, None)
+		# TODO: Fix! This shouldn't be done here, rather in MountsManager class
+		#		if mount is None and volume.should_automount() and volume.can_mount():
+		#			# show busy spinner if possible
+		#			self._show_spinner()
+		#
+		#			# perform auto-mount of volume
+		#			volume.mount(None, self._mount_finish, gio.MOUNT_MOUNT_NONE, None, None)
 
 	def remove_volume(self, volume):
 		"""Remove volume from the list"""

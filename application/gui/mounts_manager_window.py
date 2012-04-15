@@ -8,6 +8,7 @@ class MountsColumn:
 	ICON = 0
 	NAME = 1
 	URI = 2
+	OBJECT = 3
 
 
 class VolumesColumn:
@@ -36,6 +37,11 @@ class MountsManagerWindow(gtk.Window):
 		self._application = self._parent._application
 		self._mounts = None
 		self._volumes = None
+
+		# main menu items
+		self._menu = None
+		self._menu_unmount = None
+		self._menu_item = None
 		
 		# configure window
 		self.set_title(_('Mount manager'))
@@ -109,6 +115,81 @@ class MountsManagerWindow(gtk.Window):
 		
 		self.add(vbox)
 
+	def _attach_menus(self):
+		"""Attach menu items to main window"""
+		menu_manager = self._application.menu_manager
+
+		# get mounts menu item
+		self._menu_item = self._application._menu_item_mounts
+
+		# create mounts menu
+		self._menu = gtk.Menu()
+		self._menu_item.set_submenu(self._menu)
+
+		self._menu_unmount = menu_manager.get_item_by_name('unmount_menu').get_submenu()
+
+		# create item for usage when there are no mounts
+		self._menu_item_no_mounts = gtk.MenuItem(label=_('Mount list is empty'))
+		self._menu_item_no_mounts.set_sensitive(False)
+		self._menu_item_no_mounts.set_property('no-show-all', True)
+		self._menu.append(self._menu_item_no_mounts)
+
+		self._menu_item_no_mounts2 = menu_manager.get_item_by_name('mount_list_empty')
+		self._menu_item_no_mounts2.set_property('no-show-all', True)
+
+		# tell parent we are ready for mount list population
+		self._parent._populate_list()
+
+	def _add_item(self, text, uri, icon):
+		"""Add new menu item to the list"""
+		image = gtk.Image()
+		image.set_from_icon_name(icon, gtk.ICON_SIZE_MENU)
+
+		menu_item = gtk.ImageMenuItem()
+		menu_item.set_label(text)
+		menu_item.set_image(image)
+		menu_item.set_always_show_image(True)
+		menu_item.set_data('uri', uri)
+		menu_item.connect('activate', self._application._handle_bookmarks_click)
+		menu_item.show()
+
+		self._menu.append(menu_item)
+
+	def _add_unmount_item(self, text, uri, icon):
+		"""Add new menu item used for unmounting"""
+		image = gtk.Image()
+		image.set_from_icon_name(icon, gtk.ICON_SIZE_MENU)
+
+		menu_item = gtk.ImageMenuItem()
+		menu_item.set_label(text)
+		menu_item.set_image(image)
+		menu_item.set_always_show_image(True)
+		menu_item.set_data('uri', uri)
+		menu_item.connect('activate', self._parent._unmount_item)
+		menu_item.show()
+
+		self._menu_unmount.append(menu_item)
+
+		# update menu
+		self._menu_updated()
+
+	def _remove_item(self, mount_point):
+		"""Remove item based on device name"""
+		for item in self._menu.get_children():
+			if item.get_data('uri') == mount_point: self._menu.remove(item)
+
+		for item in self._menu_unmount.get_children():
+			if item.get_data('uri') == mount_point: self._menu_unmount.remove(item)
+
+		# update menu
+		self._menu_updated()
+
+	def _menu_updated(self):
+		"""Method called whenever menu is updated"""
+		has_mounts = len(self._menu.get_children()) > 1
+		self._menu_item_no_mounts.set_visible(not has_mounts)
+		self._menu_item_no_mounts2.set_visible(not has_mounts)
+
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys in mount manager list"""
 		result = False
@@ -169,6 +250,14 @@ class MountsManagerWindow(gtk.Window):
 		"""Mark volume as unmounted"""
 		self._volumes.volume_unmounted(volume)
 
+	def _notify_mount_add(self, icon, name, uri):
+		"""Notification from mount manager about mounted volume"""
+		self._mounts.add_mount(icon, name, uri, self._mounts)
+
+	def _notify_mount_remove(self, uri):
+		"""Notification from mount manager about unmounted volume"""
+		self._mounts.remove_mount(uri)
+
 	def add_page(self, icon_name, title, container, extension):
 		"""Create new page in mounts manager with specified parameters.
 		
@@ -187,9 +276,9 @@ class MountsManagerWindow(gtk.Window):
 		# append new page
 		self._tabs.append_page(container)
 
-	def add_mount(self, icon, name, uri):
+	def add_mount(self, icon, name, uri, extension):
 		"""Add mount entry"""
-		self._mounts.add_mount(icon, name, uri)
+		self._mounts.add_mount(icon, name, uri, extension)
 
 	def remove_mount(self, uri):
 		"""Remove mount entry"""
@@ -203,7 +292,8 @@ class MountsExtension(MountManagerExtension):
 		MountManagerExtension.__init__(self, parent, window)
 
 		# create store for mounts
-		self._store = gtk.ListStore(str, str, str)
+		self._store = gtk.ListStore(str, str, str, object)
+		self._mounts = {}
 
 		# create interface
 		container = gtk.ScrolledWindow() 
@@ -250,6 +340,16 @@ class MountsExtension(MountManagerExtension):
 
 		button_unmount = gtk.Button()
 		button_unmount.set_label(_('Unmount'))
+		button_unmount.connect('clicked', self._unmount_selected)
+
+		# use spinner if possible to denote busy operation
+		if hasattr(gtk, 'Spinner'):
+			self._spinner = gtk.Spinner()
+			self._spinner.set_size_request(20, 20)
+			self._spinner.set_property('no-show-all', True)
+
+		else:
+			self._spinner = None
 
 		# pack interface
 		container.add(self._list)
@@ -296,9 +396,19 @@ class MountsExtension(MountManagerExtension):
 							)
 		return True
 
-	def add_mount(self, icon, name, uri):
+	def _unmount_selected(self, widget, data=None):
+		"""Unmount selected item"""
+		selection = self._list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		if selected_iter is not None:
+			uri = item_list.get_value(selected_iter, MountsColumn.URI)
+			extension = item_list.get_value(selected_iter, MountsColumn.OBJECT)
+			extension.unmount(uri)
+
+	def add_mount(self, icon, name, uri, extension):
 		"""Add mount to the list"""
-		self._store.append((icon, name, uri))
+		self._store.append((icon, name, uri, extension))
 
 	def remove_mount(self, uri):
 		"""Remove mount from the list"""
@@ -307,6 +417,14 @@ class MountsExtension(MountManagerExtension):
 		# remove mount if exists
 		if mount_iter is not None:
 			self._store.remove(mount_iter)
+
+		# remove mount objects if exists
+		if self._mounts.has_key(uri):
+			self._mounts.pop(uri)
+
+	def unmount(self, uri):
+		"""Unmount item with specified URI"""
+		self._parent._unmount_by_uri(uri)
 
 
 class VolumesExtension(MountManagerExtension):

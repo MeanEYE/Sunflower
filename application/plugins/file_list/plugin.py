@@ -10,7 +10,7 @@ import common
 
 from monitor import MonitorSignals, MonitorError
 from local_provider import LocalProvider
-from gio_provider import SmbProvider
+from gio_provider import SmbProvider, FtpProvider
 from operation import DeleteOperation, CopyOperation, MoveOperation
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
@@ -27,6 +27,7 @@ def register_plugin(application):
 	application.register_class('file_list', _('Local file list'), FileList)
 	application.register_provider(LocalProvider)
 	application.register_provider(SmbProvider)
+	application.register_provider(FtpProvider)
 
 
 class Column:

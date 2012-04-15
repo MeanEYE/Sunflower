@@ -179,27 +179,10 @@ class LocalProvider(Provider):
 			real_source = os.path.join(relative_to, source)
 			real_destination = os.path.join(relative_to, destination)
 
-		try:
-			os.rename(
-					os.path.join(self._parent.path, real_source),
-					os.path.join(self._parent.path, real_destination)
-				)
-
-		except OSError as error:
-			# rename failed, notify user
-			dialog = gtk.MessageDialog(
-									self._parent,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_ERROR,
-									gtk.BUTTONS_OK,
-									_(
-										'Unable to rename specified item. '
-										'Check if you have permission to access '
-										'specified path.\n\n{0}'
-									).format(error)
-								)
-			dialog.run()
-			dialog.destroy()
+		os.rename(
+				os.path.join(self._parent.path, real_source),
+				os.path.join(self._parent.path, real_destination)
+			)
 
 	def list_dir(self, path, relative_to=None):
 		"""Get directory list"""

@@ -254,7 +254,7 @@ class Operation(Thread):
 
 	def _get_remove_error_input(self, error):
 		"""Get user response for remove error"""
-		if self._options[Option.SILENT]:
+		if self._options is not None and self._options[Option.SILENT]:
 			# we are in silent mode, set response and log error
 			self._error_list.append(str(error))
 			response = gtk.RESPONSE_NO

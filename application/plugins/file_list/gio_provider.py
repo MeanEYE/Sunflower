@@ -68,6 +68,8 @@ class GioProvider(Provider):
 				if info.get_file_type() == gio.FILE_TYPE_DIRECTORY:
 					to_scan.append(item_path)
 
+			info_list.close()
+
 		# remove all items in reverse order
 		file_list.reverse()
 		for path in file_list:

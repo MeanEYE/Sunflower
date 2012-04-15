@@ -5,6 +5,7 @@ import common
 
 from local_monitor import LocalMonitor
 from plugin_base.provider import Provider, FileType, FileInfo, FileInfoExtended, SystemSize
+from plugin_base.Provider import Support
 
 
 class LocalProvider(Provider):
@@ -14,32 +15,32 @@ class LocalProvider(Provider):
 
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		return os.path.isfile(real_path)
 
 	def is_dir(self, path, relative_to=None):
 		"""Test if given path is directory"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		return os.path.isdir(real_path)
 
 	def is_link(self, path, relative_to=None):
 		"""Test if given path is a link"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		return os.path.islink(real_path)
 
 	def exists(self, path, relative_to=None):
 		"""Test if given path exists"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		return os.path.exists(real_path)
 
 	def unlink(self, path, relative_to=None):
 		"""Unlink given path"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		os.remove(real_path)
 
 	def remove_directory(self, path, recursive, relative_to=None):
 		"""Remove directory and optionally its contents"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		if recursive:
 			shutil.rmtree(real_path)
 		else:
@@ -47,28 +48,28 @@ class LocalProvider(Provider):
 
 	def remove_file(self, path, relative_to=None):
 		"""Remove file"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		os.remove(real_path)
 
 	def create_file(self, path, mode=0644, relative_to=None):
 		"""Create empty file with specified mode set"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		open(real_path, 'w').close()
 		self.set_mode(real_path, mode)
 
 	def create_directory(self, path, mode=0755, relative_to=None):
 		"""Create directory with specified mode set"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		os.makedirs(real_path, mode)
 
 	def get_file_handle(self, path, mode, relative_to=None):
 		"""Open path in specified mode and return its handle"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		return open(real_path, mode)
 
 	def get_stat(self, path, relative_to=None, extended=False):
 		"""Return file statistics"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 
 		try:
 			# try getting file stats
@@ -151,12 +152,12 @@ class LocalProvider(Provider):
 
 	def set_mode(self, path, mode, relative_to=None):
 		"""Set access mode to specified path"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		os.chmod(real_path, mode)
 
 	def set_owner(self, path, owner=-1, group=-1, relative_to=None):
 		"""Set owner and/or group for specified path"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		os.chown(real_path, owner, group)
 
 	def set_timestamp(self, path, access=None, modify=None, change=None, relative_to=None):
@@ -166,7 +167,7 @@ class LocalProvider(Provider):
 		so we just ignore this part until other platforms are supported.
 		
 		"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		os.utime(real_path, (access, modify))
 
 	def rename_path(self, source, destination, relative_to=None):
@@ -202,7 +203,7 @@ class LocalProvider(Provider):
 
 	def list_dir(self, path, relative_to=None):
 		"""Get directory list"""
-		real_path = path if relative_to is None else os.path.join(relative_to, path)
+		real_path = self._real_path(path, relative_to)
 		return os.listdir(real_path)
 
 	def get_system_size(self, path):
@@ -235,3 +236,7 @@ class LocalProvider(Provider):
 	def get_monitor(self, path):
 		"""Get file system monitor for specified path"""
 		return LocalMonitor(self, path)
+
+	def get_support(self):
+		"""Return supported options by provider"""
+		return (Support.MONITOR, Support.TRASH, Support.LINK)

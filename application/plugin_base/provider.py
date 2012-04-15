@@ -195,7 +195,7 @@ class Provider:
 
 	def get_protocol(self, scheme):
 		"""Return true if scheme is supported by the provider"""
-		return scheme == self.protocol
+		return self.protocol
 
 	def get_protocol_icon(self):
 		"""Returns protocol icon name used in tab title bar"""

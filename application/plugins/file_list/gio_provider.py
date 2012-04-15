@@ -183,8 +183,8 @@ class GioProvider(Provider):
 
 	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""
-		real_path = self._real_path(source, relative_to)
-		gio.File(real_path).set_display_name(destination)
+		real_source = self._real_path(source, relative_to)
+		gio.File(real_source).set_display_name(destination)
 
 	def list_dir(self, path, relative_to=None):
 		"""Get directory list"""

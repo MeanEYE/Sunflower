@@ -525,7 +525,7 @@ class MainWindow(gtk.Window):
 		self._menu_item_mounts.set_image(mounts_image)
 		self._menu_item_mounts.show()
 
-		# tell mounts manager to attache menu items
+		# tell mounts manager to attach menu items
 		self.mount_manager._attach_menus()
 
 		# tools menu
@@ -700,7 +700,7 @@ class MainWindow(gtk.Window):
 			bookmark.set_image(image)
 			bookmark.set_always_show_image(True)
 			bookmark.set_label(_('Home directory'))
-			bookmark.set_data('path', user.home)
+			bookmark.set_data('uri', user.home)
 			bookmark.connect('activate', self._handle_bookmarks_click)
 
 			self.menu_bookmarks.append(bookmark)
@@ -718,7 +718,7 @@ class MainWindow(gtk.Window):
 			bookmark.set_image(image)
 			bookmark.set_always_show_image(True)
 			bookmark.set_label(data[0])
-			bookmark.set_data('path', os.path.expanduser(data[1]))
+			bookmark.set_data('uri', os.path.expanduser(data[1]))
 			bookmark.connect('activate', self._handle_bookmarks_click)
 
 			self.menu_bookmarks.append(bookmark)
@@ -745,7 +745,7 @@ class MainWindow(gtk.Window):
 				bookmark.set_image(image)
 				bookmark.set_always_show_image(True)
 				bookmark.set_label(label)
-				bookmark.set_data('path', line)
+				bookmark.set_data('uri', line)
 				bookmark.connect('activate', self._handle_bookmarks_click)
 
 				self.menu_bookmarks.append(bookmark)
@@ -872,7 +872,7 @@ class MainWindow(gtk.Window):
 
 		if item_list is not None \
 		and hasattr(item_list, 'change_path'):
-			path = widget.get_data('path')
+			path = widget.get_data('uri')
 			item_list.change_path(path)
 
 		return True

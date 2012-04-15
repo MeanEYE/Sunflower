@@ -166,13 +166,13 @@ class Provider:
 		"""Set timestamp for specified path"""
 		pass
 
-	def remove_path(self, path, recursive=True, relative_to=None):
+	def remove_path(self, path, relative_to=None):
 		"""Remove path"""
 		if self.is_link(path, relative_to):  # handle links
 			self.unlink(path, relative_to)
 
 		elif self.is_dir(path, relative_to):  # handle directories
-			self.remove_directory(path, recursive, relative_to)
+			self.remove_directory(path, relative_to)
 
 		else:  # handle files
 			self.remove_file(path, relative_to)

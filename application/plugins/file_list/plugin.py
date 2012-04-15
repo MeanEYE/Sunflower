@@ -598,7 +598,7 @@ class FileList(ItemList):
 			if not self.get_provider().exists(result[1], relative_to=self.path):
 				try:
 					# rename selected item
-					self.get_provider().rename_path(selection, result[1])
+					self.get_provider().rename_path(selection, result[1], relative_to=self.path)
 
 					# mark item for selection after rename
 					self._item_to_focus = result[1]

@@ -150,7 +150,7 @@ class AdvancedRename:
 		for item in parent_list:
 			name = os.path.basename(item)
 
-			if not self._provider.is_dir(item, relative_to=self._path):
+			if self._provider.is_file(item):
 				icon = self._application.icon_manager.get_icon_for_file(item)
 
 			else:

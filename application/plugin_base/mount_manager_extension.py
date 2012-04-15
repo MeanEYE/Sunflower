@@ -28,3 +28,7 @@ class MountManagerExtension:
 	def _get_container(self):
 		"""Return container widget"""
 		return self._container
+
+	def unmount(self, uri):
+		"""Method called by the mount manager for unmounting the selected URI"""
+		pass

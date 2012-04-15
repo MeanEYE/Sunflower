@@ -1334,7 +1334,7 @@ class FileList(ItemList):
 			self._thumbnail_view.hide()
 
 		# make sure we don't have trailing directory separator
-		if path[-1] == os.path.sep:
+		if len(path) > 1 and path[-1] == os.path.sep:
 			path = path[:-1]
 		
 		# get provider for specified URI

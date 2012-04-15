@@ -74,6 +74,10 @@ class Provider:
 		if selection is not None:
 			self._selection = [item for item in selection if self.exists(item, path)]
 
+	def _real_path(self, path, relative_to=None):
+		"""Commonly used function to get real path"""
+		return path if relative_to is None else os.path.join(relative_to, path)
+
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
 		pass
@@ -142,10 +146,6 @@ class Provider:
 
 		return result
 
-	def get_support(self):
-		"""Return supported options by provider"""
-		return ()
-
 	def set_mode(self, path, mode, relative_to=None):
 		"""Set access mode to specified path"""
 		pass
@@ -189,7 +189,11 @@ class Provider:
 		"""Return monitor object to be used with specified list"""
 		return None
 
-	def supports(self, scheme):
+	def get_support(self):
+		"""Return supported options by provider"""
+		return ()
+
+	def get_protocol(self, scheme):
 		"""Return true if scheme is supported by the provider"""
 		return scheme == self.protocol
 

@@ -59,6 +59,12 @@ class Support:
 	LINK = 2
 
 
+class Mode:
+	READ = 0
+	WRITE = 1
+	APPEND = 2
+
+
 class Provider:
 	"""Abstract provider class used to manipulate items"""
 

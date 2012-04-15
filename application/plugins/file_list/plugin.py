@@ -19,7 +19,7 @@ from gui.properties_window import PropertiesWindow
 from widgets.thumbnail_view import ThumbnailView
 from threading import Thread, Event
 from plugin_base.item_list import ItemList
-from plugin_base.provider import FileType
+from plugin_base.provider import FileType, Mode as FileMode
 
 
 def register_plugin(application):
@@ -476,7 +476,7 @@ class FileList(ItemList):
 					with open(template, 'rb') as raw_file:
 						data = raw_file.read()
 
-					new_file = provider.get_file_handle(response[1], 'wb', relative_to=self.path)
+					new_file = provider.get_file_handle(response[1], FileMode.WRITE, relative_to=self.path)
 					new_file.truncate()
 					new_file.write(data)
 					new_file.close()

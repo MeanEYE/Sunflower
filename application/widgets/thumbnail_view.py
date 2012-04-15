@@ -68,7 +68,9 @@ class ThumbnailView(gtk.Window):
 		# create thumbnail
 		elif self.can_have_thumbnail(uri):
 			result = self._factory.generate_thumbnail(uri, mime_type)
-			self._factory.save_thumbnail(result, uri, 0)
+
+			if result is not None:
+				self._factory.save_thumbnail(result, uri, 0)
 
 		return result
 

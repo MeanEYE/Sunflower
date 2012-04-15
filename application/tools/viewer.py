@@ -3,6 +3,7 @@ import gtk
 import pango
 
 from widgets.status_bar import StatusBar
+from plugin_base.provider import Mode as FileMode
 
 
 class Viewer:
@@ -50,8 +51,9 @@ class Viewer:
 			text_view.set_cursor_visible(False)
 			text_view.modify_font(font)
 			
-			with open(self._path, 'r') as raw_file:
-				data = raw_file.read()
+			raw_file = self._provider.get_file_handle(self._path, FileMode.READ)
+			data = raw_file.read()
+			raw_file.close()
 
 			text_view.get_buffer().set_text(data)
 

@@ -651,6 +651,9 @@ class MainWindow(gtk.Window):
 		# load plugins
 		self._load_plugins()
 
+		# create mount manager extensions
+		self.mount_manager.create_extensions()
+
 		# create toolbar widgets
 		self.toolbar_manager.create_widgets()
 

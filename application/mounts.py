@@ -144,3 +144,7 @@ class MountsManager:
 	def show(self, widget=None, data=None):
 		"""Show mounts manager window"""
 		self.window.show_all()
+
+	def create_extensions(self):
+		"""Create mounts manager extensions"""
+		self.window.create_extensions()

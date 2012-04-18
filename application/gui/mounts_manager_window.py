@@ -94,10 +94,6 @@ class MountsManagerWindow(gtk.Window):
 		self._tab_labels.set_headers_visible(False)
 		self._tab_labels.connect('cursor-changed', self._handle_cursor_change)
 		
-		# create notebook pages
-		self._mounts = MountsExtension(self._parent, self)
-		self._volumes = VolumesExtension(self._parent, self)
-	
 		# create buttons
 		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
 		button_close.connect('clicked', self._hide)
@@ -114,6 +110,21 @@ class MountsManagerWindow(gtk.Window):
 		vbox.pack_start(hbox_controls, False, False, 0)
 		
 		self.add(vbox)
+
+	def create_extensions(self):
+		"""Create all registered extensions"""
+		class_list = [MountsExtension, VolumesExtension]
+		class_list.extend(self._application.mount_manager_extensions)
+
+		for ExtensionClass in class_list:
+			extension = ExtensionClass(self._parent, self)
+
+			# get extension information
+			icon, name = extension.get_information()
+			container = extension.get_container()
+
+			# add page
+			self.add_page(icon, name, container, extension)
 
 	def _attach_menus(self):
 		"""Attach menu items to main window"""
@@ -258,7 +269,7 @@ class MountsManagerWindow(gtk.Window):
 		"""Notification from mount manager about unmounted volume"""
 		self._mounts.remove_mount(uri)
 
-	def add_page(self, icon_name, title, container, extension):
+	def add_page(self, icon_name, name, container, extension):
 		"""Create new page in mounts manager with specified parameters.
 		
 		This method provides easy way to extend mounts manager by adding container
@@ -268,7 +279,7 @@ class MountsManagerWindow(gtk.Window):
 		"""
 		# add tab to store
 		tab_number = self._tabs.get_n_pages()
-		self._pages_store.append((icon_name, title, 0, tab_number))
+		self._pages_store.append((icon_name, name, 0, tab_number))
 
 		# assign extension to container
 		container.set_data('extension', extension)
@@ -360,9 +371,6 @@ class MountsExtension(MountManagerExtension):
 		
 		self._container.pack_start(container, True, True, 0)
 
-		# add page to mount manager window
-		self._window.add_page('harddrive', _('Mounts'), self._container, self)
-
 	def _get_iter_by_uri(self, uri):
 		"""Get mount list iter by URI"""
 		result = None
@@ -405,6 +413,10 @@ class MountsExtension(MountManagerExtension):
 			uri = item_list.get_value(selected_iter, MountsColumn.URI)
 			extension = item_list.get_value(selected_iter, MountsColumn.OBJECT)
 			extension.unmount(uri)
+
+	def get_information(self):
+		"""Get extension information"""
+		return 'harddrive', _('Mounts')
 
 	def add_mount(self, icon, name, uri, extension):
 		"""Add mount to the list"""
@@ -487,9 +499,6 @@ class VolumesExtension(MountManagerExtension):
 		self._controls.pack_end(button_mount, False, False, 0)
 
 		self._container.pack_start(container, True, True, 0)
-
-		# add page to mount manager
-		self._window.add_page('computer', _('Volumes'), self._container, self)
 
 	def _get_iter_by_uuid(self, uuid):
 		"""Get volume list iter by UUID"""
@@ -588,6 +597,10 @@ class VolumesExtension(MountManagerExtension):
 			volume = item_list.get_value(selected_iter, VolumesColumn.OBJECT)
 			mount = volume.get_mount()
 			mount.unmount(self._unmount_finish, gio.MOUNT_UNMOUNT_NONE, None, None)
+
+	def get_information(self):
+		"""Get extension information"""
+		return 'computer', _('Volumes')
 
 	def add_volume(self, volume):
 		"""Add volume to the list"""

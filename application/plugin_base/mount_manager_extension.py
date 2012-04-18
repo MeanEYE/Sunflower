@@ -25,9 +25,16 @@ class MountManagerExtension:
 		self._container.pack_end(separator, False, False, 0)
 		self._container.pack_end(self._controls, False, False, 0)
 
-	def _get_container(self):
+	def get_container(self):
 		"""Return container widget"""
 		return self._container
+
+	def get_information(self):
+		"""Returns information about extension"""
+		icon = None
+		name = None
+
+		return icon, name
 
 	def unmount(self, uri):
 		"""Method called by the mount manager for unmounting the selected URI"""

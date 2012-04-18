@@ -10,7 +10,8 @@ import common
 
 from monitor import MonitorSignals, MonitorError
 from local_provider import LocalProvider
-from gio_provider import SmbProvider, FtpProvider
+from gio_provider import SambaProvider, FtpProvider
+from gio_extension import SambaExtension
 from operation import DeleteOperation, CopyOperation, MoveOperation
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
@@ -25,9 +26,14 @@ from plugin_base.provider import FileType, Mode as FileMode
 def register_plugin(application):
 	"""Register plugin classes with application"""
 	application.register_class('file_list', _('Local file list'), FileList)
+
+	# register providers
 	application.register_provider(LocalProvider)
-	application.register_provider(SmbProvider)
+	application.register_provider(SambaProvider)
 	application.register_provider(FtpProvider)
+
+	# register mount manager extension
+	application.register_mount_manager_extension(SambaExtension)
 
 
 class Column:

@@ -291,7 +291,7 @@ class GioProvider(Provider):
 		return (Support.MONITOR,)
 
 
-class SmbProvider(GioProvider):
+class SambaProvider(GioProvider):
 	is_local = False
 	protocol = 'smb'
 

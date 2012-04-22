@@ -43,7 +43,6 @@ class MountsManager:
 
 		# if mount has volume, set mounted flag
 		if volume is not None:
-			uuid = volume.get_uuid()
 			self.window._volume_mounted(volume)
 
 		# add mount to the list

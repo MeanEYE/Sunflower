@@ -126,6 +126,16 @@ class MountsManagerWindow(gtk.Window):
 			# add page
 			self.add_page(icon, name, container, extension)
 
+			# store local extensions for later use
+			if isinstance(extension, MountsExtension):
+				self._mounts = extension
+
+			if isinstance(extension, VolumesExtension):
+				self._volumes = extension
+
+		# tell parent we are ready for mount list population
+		self._parent._populate_list()
+
 	def _attach_menus(self):
 		"""Attach menu items to main window"""
 		menu_manager = self._application.menu_manager
@@ -147,9 +157,6 @@ class MountsManagerWindow(gtk.Window):
 
 		self._menu_item_no_mounts2 = menu_manager.get_item_by_name('mount_list_empty')
 		self._menu_item_no_mounts2.set_property('no-show-all', True)
-
-		# tell parent we are ready for mount list population
-		self._parent._populate_list()
 
 	def _add_item(self, text, uri, icon):
 		"""Add new menu item to the list"""

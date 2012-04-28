@@ -501,7 +501,8 @@ class VolumesExtension(MountManagerExtension):
 		# pack interface
 		container.add(self._list)
 
-		self._controls.pack_start(self._spinner, False, False, 0)
+		if self._spinner is not None:
+			self._controls.pack_start(self._spinner, False, False, 0)
 		self._controls.pack_end(button_unmount, False, False, 0)
 		self._controls.pack_end(button_mount, False, False, 0)
 

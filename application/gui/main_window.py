@@ -738,8 +738,12 @@ class MainWindow(gtk.Window):
 
 			# add bookmarks
 			for line in lines:
-				line = line.strip()
-				label = os.path.basename(line)
+				try:
+					uri, name = line.strip().split(' ', 1)
+
+				except:
+					uri = line.strip()
+					name = os.path.basename(uri)
 
 				bookmark = gtk.ImageMenuItem()
 				image = gtk.Image()
@@ -747,8 +751,8 @@ class MainWindow(gtk.Window):
 
 				bookmark.set_image(image)
 				bookmark.set_always_show_image(True)
-				bookmark.set_label(label)
-				bookmark.set_data('uri', line)
+				bookmark.set_label(name)
+				bookmark.set_data('uri', uri)
 				bookmark.connect('activate', self._handle_bookmarks_click)
 
 				self.menu_bookmarks.append(bookmark)

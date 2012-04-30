@@ -1345,9 +1345,9 @@ class FileList(ItemList):
 		
 		# get provider for specified URI
 		uri = urlparse.urlparse(path)
-		scheme = uri.scheme if uri.scheme != '' else 'file'
 		provider = None
-		self.path = path
+		scheme = uri.scheme if uri.scheme != '' else 'file'
+		self.path = path if scheme != 'file' else uri.path
 
 		if scheme == self.scheme:
 			# we are working with same provider

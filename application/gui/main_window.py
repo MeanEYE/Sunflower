@@ -8,6 +8,7 @@ import user
 import gettext
 import common
 import shlex
+import urllib
 import urlparse
 import subprocess
 
@@ -754,7 +755,7 @@ class MainWindow(gtk.Window):
 				bookmark.set_image(image)
 				bookmark.set_always_show_image(True)
 				bookmark.set_label(name)
-				bookmark.set_data('uri', uri)
+				bookmark.set_data('uri', urllib.unquote(uri))
 				bookmark.connect('activate', self._handle_bookmarks_click)
 
 				self.menu_bookmarks.append(bookmark)

@@ -22,7 +22,8 @@ class SambaCreate:
 		self._container = gtk.VBox(False, 5)
 		self._container.set_border_width(5)
 
-		hbox_icon = gtk.HBox(False, 10)
+		hbox_icon = gtk.HBox(False, 0)
+		vbox_icon = gtk.VBox(False, 0)
 		icon = gtk.Image()
 		icon.set_from_icon_name('samba', gtk.ICON_SIZE_DIALOG)
 
@@ -57,7 +58,9 @@ class SambaCreate:
 		vbox_directory = gtk.VBox(False, 0)
 
 		label_share = gtk.Label(_('Share:'))
+		label_share.set_alignment(0, 0.5)
 		label_directory = gtk.Label(_('Directory:'))
+		label_directory.set_alignment(0, 0.5)
 		self._entry_share = gtk.Entry()
 		self._entry_directory = gtk.Entry()
 
@@ -93,10 +96,11 @@ class SambaCreate:
 		self._container.pack_start(vbox_share, False, False, 0)
 		self._container.pack_start(vbox_directory, False, False, 0)
 
-		self._dialog.action_area.pack_end(button_save, False, False, 0)
 		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self._dialog.action_area.pack_end(button_save, False, False, 0)
 
-		hbox_icon.pack_start(icon, False, False, 0)
+		vbox_icon.pack_start(icon, False, False, 0)
+		hbox_icon.pack_start(vbox_icon, True, True, 0)
 		hbox_icon.pack_start(self._container, True, True, 0)
 
 		self._dialog.vbox.pack_start(hbox_icon, True, True, 0)

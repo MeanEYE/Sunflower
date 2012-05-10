@@ -8,7 +8,9 @@ import user
 import gettext
 import common
 import shlex
+import urllib
 import urlparse
+import subprocess
 
 from menus import MenuManager
 from mounts import MountsManager
@@ -22,6 +24,7 @@ from accelerator_manager import AcceleratorManager
 from plugin_base.item_list import ItemList
 from plugin_base.rename_extension import RenameExtension
 from plugin_base.find_extension import FindExtension
+from plugin_base.terminal import TerminalType
 from tools.advanced_rename import AdvancedRename
 from tools.find_files import FindFiles
 
@@ -738,8 +741,12 @@ class MainWindow(gtk.Window):
 
 			# add bookmarks
 			for line in lines:
-				line = line.strip()
-				label = os.path.basename(line)
+				try:
+					uri, name = line.strip().split(' ', 1)
+
+				except:
+					uri = line.strip()
+					name = os.path.basename(uri)
 
 				bookmark = gtk.ImageMenuItem()
 				image = gtk.Image()
@@ -747,8 +754,8 @@ class MainWindow(gtk.Window):
 
 				bookmark.set_image(image)
 				bookmark.set_always_show_image(True)
-				bookmark.set_label(label)
-				bookmark.set_data('uri', line)
+				bookmark.set_label(name)
+				bookmark.set_data('uri', urllib.unquote(uri))
 				bookmark.connect('activate', self._handle_bookmarks_click)
 
 				self.menu_bookmarks.append(bookmark)
@@ -1708,14 +1715,38 @@ class MainWindow(gtk.Window):
 
 		return new_tab
 
-	def create_terminal_tab(self, notebook, path=None):
+	def create_terminal_tab(self, notebook, path=None, external=False):
 		"""Create terminal tab on selected notebook"""
 		result = None
+		terminal_command = self.options.get('main', 'terminal_command')
+		terminal_type = self.options.getint('main', 'terminal_type')
+		open_in_tab = not ((terminal_type == TerminalType.EXTERNAL and '{0}' not in terminal_command) or external)
 
-		if self.plugin_classes.has_key('system_terminal'):
-			# only create tab if specified plugin is activated
+		if open_in_tab:
+			# create new terminal tab
 			SystemTerminal = self.plugin_classes['system_terminal']
 			result = self.create_tab(notebook, SystemTerminal, path)
+
+		else:
+			# open external terminal application
+			try:
+				terminal_command = terminal_command.format(0).split(' ')
+				subprocess.Popen(terminal_command, cwd=path)
+
+			except:
+				dialog = gtk.MessageDialog(
+										self,
+										gtk.DIALOG_DESTROY_WITH_PARENT,
+										gtk.MESSAGE_ERROR,
+										gtk.BUTTONS_OK,
+										_(
+											'There was a problem starting external '
+											'terminal application. Check if command '
+											'is valid!'
+										)
+									)
+				dialog.run()
+				dialog.destroy()
 
 		return result
 
@@ -1815,14 +1846,20 @@ class MainWindow(gtk.Window):
 
 				else:
 					# command is console based, create terminal tab and fork it
-					tab = self.create_terminal_tab(active_object._notebook)
+					terminal_type = self.options.getint('main', 'terminal_type')
 
-					tab._close_on_child_exit = False
-					tab._terminal.fork_command(
-									command=command[0],
-									argv=command,
-									directory=active_object.path
-								)
+					if terminal_type == TerminalType.EXTERNAL:
+						os.system('{0} &'.format(raw_command))
+
+					else:
+						tab = self.create_terminal_tab(active_object._notebook)
+
+						tab._close_on_child_exit = False
+						tab._terminal.fork_command(
+										command=command[0],
+										argv=command,
+										directory=active_object.path
+									)
 
 				handled = True
 

@@ -64,6 +64,28 @@ class SambaCreate:
 		self._entry_share = gtk.Entry()
 		self._entry_directory = gtk.Entry()
 
+		# access information
+		hseparator2 = gtk.HSeparator()
+
+		vbox_domain = gtk.VBox(False, 0)
+		vbox_username = gtk.VBox(False, 0)
+		vbox_password = gtk.VBox(False, 0)
+		
+		label_domain = gtk.Label(_('Domain:'))
+		label_username = gtk.Label(_('Username:'))
+		label_password = gtk.Label(_('Password:'))
+
+		label_domain.set_alignment(0, 0.5)
+		label_username.set_alignment(0, 0.5)
+		label_password.set_alignment(0, 0.5)
+
+		self._entry_domain = gtk.Entry()
+		self._entry_username = gtk.Entry()
+		self._entry_password = gtk.Entry()
+
+		self._entry_password.set_property('caps-lock-warning', True)
+		self._entry_password.set_visibility(False)
+
 		# create controls
 		button_save = gtk.Button(stock=gtk.STOCK_SAVE)
 		button_save.connect('clicked', self._confirm_entry)
@@ -72,6 +94,15 @@ class SambaCreate:
 		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
 
 		# pack user interface
+		vbox_domain.pack_start(label_domain, False, False, 0)
+		vbox_domain.pack_start(self._entry_domain, False, False, 0)
+
+		vbox_username.pack_start(label_username, False, False, 0)
+		vbox_username.pack_start(self._entry_username, False, False, 0)
+
+		vbox_password.pack_start(label_password, False, False, 0)
+		vbox_password.pack_start(self._entry_password, False, False, 0)
+
 		vbox_share.pack_start(label_share, False, False, 0)
 		vbox_share.pack_start(self._entry_share, False, False, 0)
 
@@ -91,10 +122,14 @@ class SambaCreate:
 		vbox_name.pack_start(self._entry_name, False, False, 0)
 
 		self._container.pack_start(vbox_name, False, False, 0)
-		self._container.pack_start(hseparator, False, False, 0)
+		self._container.pack_start(hseparator, False, False, 2)
 		self._container.pack_start(hbox_server, False, False, 0)
 		self._container.pack_start(vbox_share, False, False, 0)
 		self._container.pack_start(vbox_directory, False, False, 0)
+		self._container.pack_start(hseparator2, False, False, 2)
+		self._container.pack_start(vbox_domain, False, False, 0)
+		self._container.pack_start(vbox_username, False, False, 0)
+		self._container.pack_start(vbox_password, False, False, 0)
 
 		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
 		self._dialog.action_area.pack_end(button_save, False, False, 0)

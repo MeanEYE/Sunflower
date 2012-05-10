@@ -5,6 +5,11 @@ from dialogs import SambaCreate
 from plugin_base.mount_manager_extension import MountManagerExtension
 
 
+class Column:
+	NAME = 0
+	URI = 1
+
+
 class SambaExtension(MountManagerExtension):
 	"""Mount manager extension that provides editing and mounting
 	of Samba shares through GIO backend.
@@ -15,6 +20,25 @@ class SambaExtension(MountManagerExtension):
 		MountManagerExtension.__init__(self, parent, window)
 
 		# create user interface
+		list_container = gtk.ScrolledWindow()
+		list_container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+		list_container.set_shadow_type(gtk.SHADOW_IN)
+
+		self._store = gtk.ListStore(str, str)
+		self._list = gtk.TreeView(model=self._store)
+
+		cell_name = gtk.CellRendererText()
+		cell_uri = gtk.CellRendererText()
+
+		col_name = gtk.TreeViewColumn(_('Name'), cell_name, text=Column.NAME)
+		col_uri = gtk.TreeViewColumn(_('URI'), cell_uri, text=Column.URI)
+
+		col_name.set_expand(True)
+
+		self._list.append_column(col_name)
+		self._list.append_column(col_uri)
+
+		# create controls
 		image_add = gtk.Image()
 		image_add.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_BUTTON)
 
@@ -43,6 +67,10 @@ class SambaExtension(MountManagerExtension):
 		button_unmount.connect('clicked', self._unmount_selected)
 
 		# pack user interface
+		list_container.add(self._list)
+		
+		self._container.pack_start(list_container, True, True, 0)
+
 		self._controls.pack_start(button_add, False, False, 0)
 		self._controls.pack_start(button_edit, False, False, 0)
 		self._controls.pack_start(button_delete, False, False, 0)

@@ -1,4 +1,5 @@
 import os
+import gio
 import stat
 import shutil
 import common
@@ -47,6 +48,14 @@ class LocalProvider(Provider):
 		"""Remove file"""
 		real_path = self._real_path(path, relative_to)
 		os.remove(real_path)
+
+	def trash_path(self, path, relative_to=None):
+		"""Move path to the trash"""
+		real_path = self._real_path(path, relative_to)
+		tmp = gio.File(real_path)
+
+		if not tmp.trash():
+			raise TrashError(_('Error trashing specified path}', real_path))
 
 	def create_file(self, path, mode=0644, relative_to=None):
 		"""Create empty file with specified mode set"""

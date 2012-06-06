@@ -1473,7 +1473,7 @@ class MainWindow(gtk.Window):
 
 		self.arguments = parser.parse_args()
 
-	def activate_bookmark(self, widget=None, index=1):
+	def activate_bookmark(self, widget=None, index=0):
 		"""Activate bookmark by index"""
 		result = False
 		active_object = self.get_active_object()
@@ -1481,9 +1481,8 @@ class MainWindow(gtk.Window):
 		# get path list
 		items = []
 
-		# add home if needed
-		if self.options.getboolean('main', 'add_home'):
-			items.append(user.home)
+		# add home 
+		items.append(user.home)
 
 		# read all bookmarks
 		bookmark_count = len(self.bookmark_options.options('bookmarks'))
@@ -1492,9 +1491,10 @@ class MainWindow(gtk.Window):
 			items.append(path)
 
 		# check if bookmark index and active object are valid
-		if index-1 < len(items) \
+		if index < len(items) \
+		and index >= 0 \
 		and hasattr(active_object, 'change_path'):
-			active_object.change_path(items[index-1])
+			active_object.change_path(items[index])
 			result = True
 
 		return result

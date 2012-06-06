@@ -1332,9 +1332,6 @@ class FileList(ItemList):
 		# cache objects and settings
 		show_hidden = self._parent.options.getboolean('main', 'show_hidden')
 
-		# assign item for selection
-		self._item_to_focus = selected
-
 		# hide thumbnail
 		if self._enable_media_preview:
 			self._thumbnail_view.hide()
@@ -1398,6 +1395,12 @@ class FileList(ItemList):
 			# sort list to prevent messing up list while
 			# adding items from a separate thread
 			item_list.sort()
+
+			# assign item for selection
+			if not selected in item_list:
+				selected = None
+
+			self._item_to_focus = selected
 
 			# split items among lists
 			preload_list = item_list[:self._preload_count]

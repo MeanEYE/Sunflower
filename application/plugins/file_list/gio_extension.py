@@ -1,14 +1,22 @@
 import gtk
 import gio
 
-from dialogs import SambaCreate
+from dialogs import SambaCreate, SambaResult
 from plugin_base.mount_manager_extension import MountManagerExtension
+
+try:
+	import gnomekeyring as keyring
+
+except:
+	keyring = None
 
 
 class Column:
 	NAME = 0
 	URI = 1
-
+	DOMAIN = 2
+	REQUIRES_LOGIN = 3
+	
 
 class SambaExtension(MountManagerExtension):
 	"""Mount manager extension that provides editing and mounting
@@ -24,7 +32,7 @@ class SambaExtension(MountManagerExtension):
 		list_container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
 		list_container.set_shadow_type(gtk.SHADOW_IN)
 
-		self._store = gtk.ListStore(str, str)
+		self._store = gtk.ListStore(str, str, str, bool) 
 		self._list = gtk.TreeView(model=self._store)
 
 		cell_name = gtk.CellRendererText()
@@ -77,13 +85,35 @@ class SambaExtension(MountManagerExtension):
 		self._controls.pack_end(button_unmount, False, False, 0)
 		self._controls.pack_end(button_mount, False, False, 0)
 
+	def __form_uri(self, params):
+		"""Form URI based on result from SambaCreate dialog"""
+		scheme = 'smb'
+		server = params[SambaResult.SERVER]
+		path = params[SambaResult.SHARE]
+
+		# include username
+		if params[SambaResult.USERNAME] != '':
+			server = '{0}@{1}'.format(params[SambaResult.USERNAME], server)
+
+		# include directory
+		if params[SambaResult.DIRECTORY] != '':
+			path = '{0}/{1}'.format(path, params[SambaResult.DIRECTORY])
+
+		return '{0}://{1}/{2}/'.format(scheme, server, path)
+
 	def _add_mount(self, widget, data=None):
 		"""Present dialog to user for creating a new mount"""
 		dialog = SambaCreate(self._window)
+		dialog.set_keyring_available(keyring is not None)
 		response = dialog.get_response()
 
 		if response[0] == gtk.RESPONSE_OK:
-			pass
+			name = response[1][SambaResult.NAME]
+			uri = self.__form_uri(response[1])
+			domain = response[1][SambaResult.DOMAIN]
+			requires_login = response[1][SambaResult.PASSWORD] != ''
+
+			self._store.append((name, uri, domain, requires_login))
 
 	def _edit_mount(self, widget, data=None):
 		"""Present dialog to user for editing existing mount"""

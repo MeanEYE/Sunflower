@@ -1,6 +1,16 @@
 import gtk
 
 
+class SambaResult:
+	NAME = 0
+	SERVER = 1
+	SHARE = 2
+	DIRECTORY = 3
+	DOMAIN = 4
+	USERNAME = 5
+	PASSWORD = 6
+
+
 class SambaCreate:
 
 	def __init__(self, parent):
@@ -37,17 +47,6 @@ class SambaCreate:
 		hseparator = gtk.HSeparator()
 
 		vbox_server = gtk.VBox(False, 0)
-		vbox_port = gtk.VBox(False, 0)
-		hbox_server = gtk.HBox(False, 5)
-
-		label_server = gtk.Label(_('Server:'))
-		label_server.set_alignment(0, 0.5)
-		label_port = gtk.Label(_('Port:'))
-		label_port.set_alignment(0, 0.5)
-
-		self._entry_server = gtk.Entry()
-		self._entry_port = gtk.SpinButton()
-		self._entry_port.set_size_request(70, -1)
 
 		label_server = gtk.Label(_('Server:'))
 		label_server.set_alignment(0, 0.5)
@@ -112,18 +111,12 @@ class SambaCreate:
 		vbox_server.pack_start(label_server, False, False, 0)
 		vbox_server.pack_start(self._entry_server, False, False, 0)
 
-		vbox_port.pack_start(label_port, False, False, 0)
-		vbox_port.pack_start(self._entry_port, False, False, 0)
-
-		hbox_server.pack_start(vbox_server, True, True, 0)
-		hbox_server.pack_start(vbox_port, False, False, 0)
-
 		vbox_name.pack_start(label_name, False, False, 0)
 		vbox_name.pack_start(self._entry_name, False, False, 0)
 
 		self._container.pack_start(vbox_name, False, False, 0)
 		self._container.pack_start(hseparator, False, False, 2)
-		self._container.pack_start(hbox_server, False, False, 0)
+		self._container.pack_start(vbox_server, False, False, 0)
 		self._container.pack_start(vbox_share, False, False, 0)
 		self._container.pack_start(vbox_directory, False, False, 0)
 		self._container.pack_start(hseparator2, False, False, 2)
@@ -149,6 +142,13 @@ class SambaCreate:
 		"""Set dialog title"""
 		self._dialog.set_title(title_text)
 
+	def set_keyring_available(self, available):
+		"""Change sensitivity of some fields based on our ability
+		to store passwords safely.
+
+		"""
+		self._entry_password.set_sensitive(available)
+
 	def get_response(self):
 		"""Return value and self-destruct
 
@@ -157,7 +157,16 @@ class SambaCreate:
 
 		"""
 		code = self._dialog.run()
-		result = None
+
+		result = (
+				self._entry_name.get_text(),
+				self._entry_server.get_text(),
+				self._entry_share.get_text(),
+				self._entry_directory.get_text(),
+				self._entry_domain.get_text(),
+				self._entry_username.get_text(),
+				self._entry_password.get_text()
+			)
 
 		self._dialog.destroy()
 

@@ -65,6 +65,9 @@ class Mode:
 	APPEND = 2
 
 
+class TrashError(Exception): pass
+
+
 class Provider:
 	"""Abstract provider class used to manipulate items"""
 

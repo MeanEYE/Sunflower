@@ -7,7 +7,7 @@ from threading import Thread, Event
 from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OperationError
 from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog, RenameDialog
 from gui.error_list import ErrorList
-from plugin_base.provider import Mode as FileMode
+from plugin_base.provider import Mode as FileMode, TrashError, Support as ProviderSupport
 
 # import constants
 from gui.input_dialog import OverwriteOption
@@ -267,6 +267,32 @@ class Operation(Thread):
 				dialog.set_message(_(
 						'There was a problem removing specified path. '
 						'What would you like to do?'
+					))
+				dialog.set_error(str(error))
+		
+				response = dialog.get_response()
+		
+				# abort operation if user requested
+				if response == gtk.RESPONSE_CANCEL:
+					self.cancel()
+
+		return response
+
+	def _get_trash_error_input(self, error):
+		"""Get user response for remove error"""
+		if self._options is not None and self._options[Option.SILENT]:
+			# we are in silent mode, set response and log error
+			self._error_list.append(str(error))
+			response = gtk.RESPONSE_NO
+
+		else:
+			# we are not in silent mode, ask user
+			with gtk.gdk.lock:
+				dialog = OperationError(self._application)
+		
+				dialog.set_message(_(
+						'There was a problem trashing specified path. '
+						'Would you like to try removing it instead?'
 					))
 				dialog.set_error(str(error))
 		
@@ -1022,6 +1048,24 @@ class DeleteOperation(Operation):
 				# user didn't want to retry, remove path from list
 				self._file_list.pop(self._file_list.index(path))
 
+	def _trash_path(self, path):
+		"""Move path to the trash"""
+		try:
+			# try trashing specified path
+			self._source.trash_path(path, relative_to=self._source_path)
+
+		except TrashError as error:
+			# problem removing path, ask user what to do
+			response = self._get_trash_error_input(error)
+
+			# handle user response
+			if response == gtk.RESPONSE_YES:
+				self._remove_path(path)  # retry removing path
+
+			else:
+				# user didn't want to retry, remove path from list
+				self._file_list.pop(self._file_list.index(path))
+
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
 		# get selected items
@@ -1033,13 +1077,22 @@ class DeleteOperation(Operation):
 			if self._source_path == parent.path:
 				parent.unselect_all()
 
+		# select removal method
+		trash_files = self._application.options.getboolean('main', 'trash_files') 
+		trash_available = ProviderSupport.TRASH in self._source.get_support()
+
+		remove_method = (
+				self._remove_path, 
+				self._trash_path
+			)[trash_files and trash_available]
+
 		# remove them
 		for index, item in enumerate(self._file_list, 1):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
 			gobject.idle_add(self._dialog.set_current_file, item)
-			self._remove_path(item)
+			remove_method(item)
 
 			# update current count
 			if len(self._file_list) > 0:

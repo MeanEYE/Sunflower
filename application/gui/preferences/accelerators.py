@@ -135,15 +135,12 @@ class AcceleratorOptions(SettingsPage):
 		# create rename list
 		replace_list = {}
 
-		addon = 0
-		if options.getboolean('main', 'add_home'):
-			key_name = '{0}.{1}_{2}'.format('item_list', 'bookmark', 1)
-			replace_list[key_name] = _('Home directory')
-			addon = 1
+		key_name = '{0}.bookmark_home'.format('item_list')
+		replace_list[key_name] = _('Home directory')
 
 		# add bookmarks to the replace list
 		for number in range(1, 11):
-			key_name = '{0}.{1}_{2}'.format('item_list', 'bookmark', number + addon)
+			key_name = '{0}.{1}_{2}'.format('item_list', 'bookmark', number)
 			bookmark_name = 'b_{0}'.format(number)
 
 			if bookmarks.has_option('bookmarks', bookmark_name):
@@ -153,7 +150,7 @@ class AcceleratorOptions(SettingsPage):
 
 			else:
 				# bookmark doesn't exist, add generic name
-				bookmark_value = 'Bookmark #{0}'.format(number + addon)
+				bookmark_value = 'Bookmark #{0}'.format(number)
 
 			replace_list[key_name] = bookmark_value
 

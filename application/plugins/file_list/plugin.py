@@ -8,7 +8,7 @@ import urllib
 import urlparse
 import common
 
-from monitor import MonitorSignals, MonitorError
+from plugin_base.monitor import MonitorSignals, MonitorError
 from local_provider import LocalProvider
 from gio_provider import SambaProvider, FtpProvider
 from gio_extension import SambaExtension

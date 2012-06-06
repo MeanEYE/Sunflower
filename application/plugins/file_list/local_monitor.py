@@ -1,7 +1,7 @@
 import os
 import gio
 
-from monitor import Monitor, MonitorSignals, MonitorError
+from plugin_base.monitor import Monitor, MonitorSignals, MonitorError
 
 
 class LocalMonitor(Monitor):

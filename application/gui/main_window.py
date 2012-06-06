@@ -2103,6 +2103,7 @@ class MainWindow(gtk.Window):
 				'case_sensitive_sort': 'True',
 				'plugins': 'file_list,system_terminal,default_toolbar',
 				'reserve_size': 'False',
+				'trash_files': 'True',
 				'tab_button_icons': 'True',
 				'always_show_tabs': 'True',
 				'right_click_select': 'False',

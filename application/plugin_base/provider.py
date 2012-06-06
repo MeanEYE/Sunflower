@@ -177,6 +177,10 @@ class Provider:
 		else:  # handle files
 			self.remove_file(path, relative_to)
 
+	def trash_path(self, path, relative_to=None):
+		"""Instead of deleting, move path to the trash"""
+		pass
+
 	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""
 		pass

@@ -30,7 +30,7 @@ class FindFiles:
 
 		if hasattr(self._parent, 'get_provider'):
 			self._provider = self._parent.get_provider()
-		
+
 		# configure window
 		self.window = gtk.Window(type=gtk.WINDOW_TOPLEVEL)
 
@@ -41,7 +41,7 @@ class FindFiles:
 		self.window.set_border_width(7)
 		self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
 		self.window.set_wmclass('Sunflower', 'Sunflower')
-		
+
 		# create interface
 		vbox = gtk.VBox(False, 7)
 
@@ -79,28 +79,28 @@ class FindFiles:
 		cell_icon = gtk.CellRendererPixbuf()
 		cell_name = gtk.CellRendererText()
 		cell_directory = gtk.CellRendererText()
-		
+
 		col_name = gtk.TreeViewColumn(_('Name'))
 		col_name.set_expand(True)
-		
+
 		col_directory = gtk.TreeViewColumn(_('Location'))
 		col_directory.set_expand(True)
-		
+
 		# pack renderer
 		col_name.pack_start(cell_icon, False)
 		col_name.pack_start(cell_name, True)
 		col_directory.pack_start(cell_directory, True)
-		
+
 		# connect renderer attributes
 		col_name.add_attribute(cell_icon, 'icon-name', Column.ICON)
 		col_name.add_attribute(cell_name, 'text', Column.NAME)
 		col_directory.add_attribute(cell_directory, 'text', Column.DIRECTORY)
-		
+
 		self._names.append_column(col_name)
 		self._names.append_column(col_directory)
 
-		self._names.connect('button-press-event', self.__handle_button_press)
-		
+		self._names.connect('row-activated', self.__handle_row_activated)
+
 		container = gtk.ScrolledWindow()
 		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 		container.set_shadow_type(gtk.SHADOW_IN)
@@ -124,7 +124,7 @@ class FindFiles:
 
 		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
 		button_cancel.connect('clicked', self._close_window)
-		
+
 		# pack interface
 		self._table_basic.attach(label_path, 0, 1, 0, 1, xoptions=gtk.SHRINK|gtk.FILL)
 		self._table_basic.attach(self._entry_path, 1, 2, 0, 1, xoptions=gtk.EXPAND|gtk.FILL)
@@ -136,8 +136,8 @@ class FindFiles:
 		hbox_controls.pack_end(self._button_find, False, False, 0)
 		hbox_controls.pack_end(button_cancel, False, False, 0)
 
-		vbox.pack_start(self._table_basic, False, False, 0) 
-		vbox.pack_start(self._extension_list, False, False, 0) 
+		vbox.pack_start(self._table_basic, False, False, 0)
+		vbox.pack_start(self._extension_list, False, False, 0)
 		vbox.pack_end(hbox_controls, False, False, 0)
 		vbox.pack_end(self._status, False, False, 0)
 		vbox.pack_end(container, True, True, 0)
@@ -150,60 +150,53 @@ class FindFiles:
 		# show all widgets
 		self.window.show_all()
 
-	def __handle_button_press(self, widget, event):
-		"""Handle clicking on list"""
-		result = False
+	def __handle_row_activated(self, treeview, path, view_column, data=None):
+		"""Handle actions on list"""
+		# get list selection
+		selection = treeview.get_selection()
+		list_, iter_ = selection.get_selected()
 
-		if event.button == 1 and event.type is gtk.gdk._2BUTTON_PRESS:
-			result = True
+		# we need selection for this
+		if iter_ is None: return
 
-			# get list selection
-			selection = self._names.get_selection()
-			list_, iter_ = selection.get_selected()
+		name = list_.get_value(iter_, Column.NAME)
+		path = list_.get_value(iter_, Column.DIRECTORY)
 
-			# we need selection for this
-			if iter_ is None: return
+		# get active object
+		active_object = self._application.get_active_object()
 
-			name = list_.get_value(iter_, Column.NAME)
-			path = list_.get_value(iter_, Column.DIRECTORY)
+		if hasattr(active_object, 'change_path'):
+			# change path
+			active_object.change_path(path, name)
 
-			# get active object
-			active_object = self._application.get_active_object()
+			# close window
+			self._close_window()
 
-			if hasattr(active_object, 'change_path'):
-				# change path
-				active_object.change_path(path, name)
-
-				# close window
-				self._close_window()
-
-			else:
-				# notify user about active object
-				dialog = gtk.MessageDialog(
-									self.window,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_INFO,
-									gtk.BUTTONS_OK,
-									_(
-										'Active object doesn\'t support changing '
-										'path. Set focus on a different object, '
-										'preferably file list, and try again.'
-									)
+		else:
+			# notify user about active object
+			dialog = gtk.MessageDialog(
+								self.window,
+								gtk.DIALOG_DESTROY_WITH_PARENT,
+								gtk.MESSAGE_INFO,
+								gtk.BUTTONS_OK,
+								_(
+									'Active object doesn\'t support changing '
+									'path. Set focus on a different object, '
+									'preferably file list, and try again.'
 								)
-				dialog.run()
-				dialog.destroy()
-
-		return result
+							)
+			dialog.run()
+			dialog.destroy()
 
 	def __create_extensions(self):
 		"""Create rename extensions"""
 		for ExtensionClass in self._application.find_extension_classes.values():
 			extension = ExtensionClass(self)
 			title = extension.get_title()
-		
-			# add tab	
+
+			# add tab
 			self._extension_list.append_page(extension.get_container(), gtk.Label(title))
-			
+
 			# store extension for later use
 			self._extensions.append(extension)
 
@@ -281,7 +274,7 @@ class FindFiles:
 				extension = child.get_data('extension')
 
 				if not extension.is_path_ok(item):
-					break 
+					break
 
 				path_score += 1
 
@@ -300,7 +293,7 @@ class FindFiles:
 		"""Close window"""
 		self._abort.set()  # notify search thread we are terminating
 		self.window.destroy()
-		
+
 	def _choose_directory(self, widget=None, data=None):
 		"""Show 'FileChooser' dialog"""
 		dialog = gtk.FileChooserDialog(
@@ -308,9 +301,9 @@ class FindFiles:
 							parent=self._application,
 							action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
 							buttons=(
-								gtk.STOCK_CANCEL, 
-								gtk.RESPONSE_REJECT, 
-								gtk.STOCK_OK, 
+								gtk.STOCK_CANCEL,
+								gtk.RESPONSE_REJECT,
+								gtk.STOCK_OK,
 								gtk.RESPONSE_ACCEPT
 							)
 						)
@@ -329,7 +322,7 @@ class FindFiles:
 	def find_files(self, widget=None, data=None):
 		"""Start searching for files"""
 		if not self._running:
-			# thread is not running, start it	
+			# thread is not running, start it
 			path = self._entry_path.get_text()
 
 			# make sure we have a valid provider
@@ -357,7 +350,7 @@ class FindFiles:
 
 			# get list of active extensions
 			active_children = filter(
-									lambda child: child.get_data('extension').is_active(), 
+									lambda child: child.get_data('extension').is_active(),
 									self._extension_list.get_children()
 								)
 

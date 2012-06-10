@@ -14,10 +14,12 @@ class UserDirectory:
 	PICTURES = 'XDG_PICTURES_DIR'
 	VIDEOS = 'XDG_VIDEOS_DIR'
 
+
 # file mode formats
-class ModeFormat:
+class AccessModeFormat:
 	OCTAL = 0
 	TEXTUAL = 1
+
 
 def format_size(size):
 	"""Convert size to more human readable format"""
@@ -28,18 +30,21 @@ def format_size(size):
 
 def format_mode(mode, format):
 	"""Convert mode to more human readable format"""
-	if format == ModeFormat.TEXTUAL:
-		result = ''
-		mask = 256
-		for i in 'rwxrwxrwx':
-			if mode & mask:
-				result += i
-			else:
-				result += '-'
-			mask >>= 1
-		return result
+	result = ''
 
-	return oct(mode)
+	if format == AccessModeFormat.TEXTUAL:
+		# create textual representation
+		mask = 256
+
+		for i in 'rwxrwxrwx':
+			result += i if mode & mask else '-'
+			mask >>= 1
+
+	elif format == AccessModeFormat.OCTAL:
+		# create octal
+		result = oct(mode)
+
+	return result
 
 def get_user_directory(directory):
 	"""Get full path to current users predefined directory"""

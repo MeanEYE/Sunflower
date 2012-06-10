@@ -1,5 +1,6 @@
 import gtk
 
+import common
 from widgets.settings_page import SettingsPage
 
 
@@ -38,6 +39,22 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_trash_files.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_headers.connect('toggled', self._parent.enable_save)
 		self._checkbox_media_preview.connect('toggled', self._parent.enable_save)
+
+		# file access mode format
+		hbox_mode_format = gtk.HBox(False, 5)
+		label_mode_format = gtk.Label(_('File access mode format:'))
+		label_mode_format.set_alignment(0, 0.5)
+
+		list_mode_format = gtk.ListStore(str, int)
+		list_mode_format.append((_('Octal'), common.ModeFormat.OCTAL))
+		list_mode_format.append((_('Textual'), common.ModeFormat.TEXTUAL))
+
+		cell_mode_format = gtk.CellRendererText()
+
+		self._combobox_mode_format = gtk.ComboBox(list_mode_format)
+		self._combobox_mode_format.connect('changed', self._parent.enable_save)
+		self._combobox_mode_format.pack_start(cell_mode_format)
+		self._combobox_mode_format.add_attribute(cell_mode_format, 'text', 0)
 
 		# grid lines
 		hbox_grid_lines = gtk.HBox(False, 5)
@@ -100,6 +117,9 @@ class ItemListOptions(SettingsPage):
 		hbox_quick_search.pack_start(self._checkbox_alt, False, False, 0)
 		hbox_quick_search.pack_start(self._checkbox_shift, False, False, 0)
 
+		hbox_mode_format.pack_start(label_mode_format, False, False, 0)
+		hbox_mode_format.pack_start(self._combobox_mode_format, False, False, 0)
+
 		hbox_grid_lines.pack_start(label_grid_lines, False, False, 0)
 		hbox_grid_lines.pack_start(self._combobox_grid_lines, False, False, 0)
 
@@ -110,6 +130,7 @@ class ItemListOptions(SettingsPage):
 		vbox_look_and_feel.pack_start(self._checkbox_show_headers, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_media_preview, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_show_hidden, False, False, 0)
+		vbox_look_and_feel.pack_start(hbox_mode_format, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_grid_lines, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_selection_color, False, False, 5)
 
@@ -163,6 +184,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_trash_files.set_active(options.getboolean('main', 'trash_files'))
 		self._checkbox_show_headers.set_active(options.getboolean('main', 'headers_visible'))
 		self._checkbox_media_preview.set_active(options.getboolean('main', 'media_preview'))
+		self._combobox_mode_format.set_active(options.getint('main', 'mode_format'))
 		self._combobox_grid_lines.set_active(options.getint('main', 'grid_lines'))
 		self._entry_time_format.set_text(options.get('main', 'time_format'))
 		self._button_selection_color.set_color(gtk.gdk.color_parse(options.get('main', 'selection_color')))
@@ -184,6 +206,7 @@ class ItemListOptions(SettingsPage):
 		options.set('main', 'trash_files', _bool[self._checkbox_trash_files.get_active()])
 		options.set('main', 'headers_visible', _bool[self._checkbox_show_headers.get_active()])
 		options.set('main', 'media_preview', _bool[self._checkbox_media_preview.get_active()])
+		options.set('main', 'mode_format', self._combobox_mode_format.get_active())
 		options.set('main', 'grid_lines', self._combobox_grid_lines.get_active())
 		options.set('main', 'time_format', self._entry_time_format.get_text())
 		options.set('main', 'selection_color', self._button_selection_color.get_color().to_string())

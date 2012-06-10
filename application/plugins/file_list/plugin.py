@@ -248,7 +248,7 @@ class FileList(ItemList):
 		# variable that is used to set focus on newly created files and dirs
 		self._item_to_focus = None
 
-		# cache configuration localy
+		# cache configuration locally
 		self._time_format = self._parent.options.get('main', 'time_format')
 		self._mode_format = self._parent.options.getint('main', 'mode_format')
 

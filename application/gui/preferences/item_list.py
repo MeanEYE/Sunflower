@@ -1,6 +1,6 @@
 import gtk
 
-import common
+from common import AccessModeFormat
 from widgets.settings_page import SettingsPage
 
 
@@ -42,12 +42,12 @@ class ItemListOptions(SettingsPage):
 
 		# file access mode format
 		hbox_mode_format = gtk.HBox(False, 5)
-		label_mode_format = gtk.Label(_('File access mode format:'))
+		label_mode_format = gtk.Label(_('Access mode format:'))
 		label_mode_format.set_alignment(0, 0.5)
 
 		list_mode_format = gtk.ListStore(str, int)
-		list_mode_format.append((_('Octal'), common.ModeFormat.OCTAL))
-		list_mode_format.append((_('Textual'), common.ModeFormat.TEXTUAL))
+		list_mode_format.append((_('Octal'), AccessModeFormat.OCTAL))
+		list_mode_format.append((_('Textual'), AccessModeFormat.TEXTUAL))
 
 		cell_mode_format = gtk.CellRendererText()
 

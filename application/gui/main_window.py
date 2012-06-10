@@ -59,7 +59,7 @@ class MainWindow(gtk.Window):
 		}
 
 	NAUTILUS_SEND_TO_INSTALLED = common.executable_exists('nautilus-sendto')
-		
+
 	def __init__(self):
 		# create main window and other widgets
 		gtk.Window.__init__(self, type=gtk.WINDOW_TOPLEVEL)
@@ -1481,7 +1481,7 @@ class MainWindow(gtk.Window):
 		# get path list
 		items = []
 
-		# add home 
+		# add home
 		items.append(user.home)
 
 		# read all bookmarks
@@ -1644,7 +1644,7 @@ class MainWindow(gtk.Window):
 										gtk.DIALOG_DESTROY_WITH_PARENT,
 										gtk.MESSAGE_INFO,
 										gtk.BUTTONS_OK,
-										_("First level of compared directories is identical.") 
+										_("First level of compared directories is identical.")
 									)
 				dialog.run()
 				dialog.destroy()
@@ -2115,6 +2115,7 @@ class MainWindow(gtk.Window):
 				'tab_close_button': 'True',
 				'show_status_bar': 0,
 				'human_readable_size': 'True',
+				'mode_format': 0,
 				'expand_tabs': 0,
 				'show_notifications': 'True',
 				'operation_set_owner': 'False',
@@ -2383,7 +2384,7 @@ class MainWindow(gtk.Window):
 
 			if not issubclass(ExtensionClass, FindExtension):
 				print 'Error: Invalid object class!'
-	
+
 	def register_mount_manager_extension(self, ExtensionClass):
 		"""Register mount manager extension"""
 		self.mount_manager_extensions.append(ExtensionClass)

@@ -15,7 +15,7 @@ from gio_extension import SambaExtension
 from operation import DeleteOperation, CopyOperation, MoveOperation
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
-from gui.input_dialog import ApplicationSelectDialog 
+from gui.input_dialog import ApplicationSelectDialog
 from gui.properties_window import PropertiesWindow
 from widgets.thumbnail_view import ThumbnailView
 from threading import Thread, Event
@@ -334,7 +334,7 @@ class FileList(ItemList):
 			self._parent.associations_manager.execute_file(selected_file)
 
 		return True  # to prevent command or quick search in single key bindings
-	
+
 	def _execute_with_application(self, widget=None, data=None):
 		"""Execute/Open selected item with application user selects from the list"""
 		selection = self._get_selection_list()
@@ -345,7 +345,7 @@ class FileList(ItemList):
 
 			if response[0] == gtk.RESPONSE_OK:
 				self._parent.associations_manager.open_file(
-														selection, 
+														selection,
 														exec_command=response[2]
 													)
 
@@ -356,7 +356,7 @@ class FileList(ItemList):
 									gtk.DIALOG_DESTROY_WITH_PARENT,
 									gtk.MESSAGE_WARNING,
 									gtk.BUTTONS_OK,
-									_('Invalid selection!') 
+									_('Invalid selection!')
 								)
 			dialog.run()
 			dialog.destroy()
@@ -536,7 +536,7 @@ class FileList(ItemList):
 									self.get_provider()
 								)
 			operation.start()
-	
+
 		return True
 
 	def _copy_files(self, widget=None, data=None):
@@ -789,7 +789,7 @@ class FileList(ItemList):
 		tree_rect = self._item_list.get_visible_rect()
 
 		# grab window coordinates
-		window_x, window_y = self._parent.window.get_position() 
+		window_x, window_y = self._parent.window.get_position()
 
 		# relative to tree
 		x, y = rect.x, rect.y + rect.height
@@ -886,7 +886,7 @@ class FileList(ItemList):
 			if self._find_iter_by_name(path) is None:
 				if path[0] == '.' and not show_hidden:
 					return
-					
+
 				self._add_item(path)
 
 			else:
@@ -1067,7 +1067,7 @@ class FileList(ItemList):
 			# don't allow extension splitting on directories
 			file_info = (filename, '') if is_dir else os.path.splitext(filename)
 
-			formated_file_mode = oct(file_mode)
+			formated_file_mode = common.format_mode(file_mode, self._parent.options.getint('main', 'mode_format'))
 			formated_file_date = time.strftime(time_format, time.localtime(file_date))
 
 			if not is_dir:
@@ -1186,12 +1186,12 @@ class FileList(ItemList):
 
 				else:
 					formated_file_size = locale.format('%d', file_size, True)
-					
+
 			else:
 				# item is a directory
 				formated_file_size = '<DIR>'
 
-			formated_file_mode = oct(file_mode)
+			formated_file_mode = common.format_mode(file_mode, self._parent.options.getint('main', 'mode_format'))
 			formated_file_date = time.strftime(time_format, time.localtime(file_date))
 
 			# update list store
@@ -1212,7 +1212,7 @@ class FileList(ItemList):
 			file_stat = provider.get_stat(name, relative_to=self.path)
 
 			file_mode = file_stat.mode
-			formated_file_mode = oct(file_mode)
+			formated_file_mode = common.format_mode(file_mode, self._parent.options.getint('main', 'mode_format'))
 
 			self._store.set_value(found_iter, Column.MODE, file_mode)
 			self._store.set_value(found_iter, Column.FORMATED_MODE, formated_file_mode)
@@ -1339,7 +1339,7 @@ class FileList(ItemList):
 		# make sure we don't have trailing directory separator
 		if len(path) > 1 and path[-1] == os.path.sep:
 			path = path[:-1]
-		
+
 		# get provider for specified URI
 		uri = urlparse.urlparse(path)
 		provider = None
@@ -1424,7 +1424,7 @@ class FileList(ItemList):
 								'up',
 								None
 							))
-			
+
 			# preload items
 			for item_name in preload_list:
 				self._add_item(item_name)
@@ -1434,11 +1434,11 @@ class FileList(ItemList):
 				def thread_method():
 					# set event to active
 					self._thread_active.set()
-					
+
 					# show spinner animation
 					with gtk.gdk.lock:
 						self._title_bar.show_spinner()
-					
+
 					for item_name in item_list:
 						# check if we are allowed to continue
 						if not self._thread_active.is_set():
@@ -1446,8 +1446,8 @@ class FileList(ItemList):
 
 						# add item to the list
 						self._add_item(item_name)
-						
-					# hide spinner animation	
+
+					# hide spinner animation
 					with gtk.gdk.lock:
 						self._title_bar.hide_spinner()
 
@@ -1456,7 +1456,7 @@ class FileList(ItemList):
 
 				self._change_path_thread = Thread(target=thread_method)
 				self._change_path_thread.start()
-				
+
 			# if no errors occurred during path change,
 			# call parent method which handles history
 			ItemList.change_path(self, self.path)

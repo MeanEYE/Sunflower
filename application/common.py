@@ -14,6 +14,10 @@ class UserDirectory:
 	PICTURES = 'XDG_PICTURES_DIR'
 	VIDEOS = 'XDG_VIDEOS_DIR'
 
+# file mode formats
+class ModeFormat:
+	OCTAL = 0
+	TEXTUAL = 1
 
 def format_size(size):
 	"""Convert size to more human readable format"""
@@ -21,6 +25,21 @@ def format_size(size):
 		if size < 1024.0:
 			return "%3.1f %s" % (size, x)
 		size /= 1024.0
+
+def format_mode(mode, format):
+	"""Convert mode to more human readable format"""
+	if format == ModeFormat.TEXTUAL:
+		result = ''
+		mask = 256
+		for i in 'rwxrwxrwx':
+			if mode & mask:
+				result += i
+			else:
+				result += '-'
+			mask >>= 1
+		return result
+
+	return oct(mode)
 
 def get_user_directory(directory):
 	"""Get full path to current users predefined directory"""
@@ -42,13 +61,13 @@ def get_user_directory(directory):
 				break
 
 	return result
-	
+
 def is_x_app(command):
 	"""Checks if command uses grafical user interfaces."""
 	try:
 		output = subprocess.Popen(
-							[command], 
-							env={'LD_TRACE_LOADED_OBJECTS':'1'}, 
+							[command],
+							env={'LD_TRACE_LOADED_OBJECTS':'1'},
 							stdout=subprocess.PIPE
 						).communicate()
 
@@ -67,5 +86,5 @@ def executable_exists(command):
 		if os.path.exists(os.path.join(path, command)):
 			result = True
 			break
-		
+
 	return result

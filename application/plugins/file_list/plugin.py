@@ -248,6 +248,10 @@ class FileList(ItemList):
 		# variable that is used to set focus on newly created files and dirs
 		self._item_to_focus = None
 
+		# cache configuration locally
+		self._time_format = self._parent.options.get('main', 'time_format')
+		self._mode_format = self._parent.options.getint('main', 'mode_format')
+
 		# change to initial path
 		try:
 			self.change_path(path)
@@ -1060,13 +1064,11 @@ class FileList(ItemList):
 
 		# add item to the list
 		try:
-			time_format = self._parent.options.get('main', 'time_format')
-
 			# don't allow extension splitting on directories
 			file_info = (filename, '') if is_dir else os.path.splitext(filename)
 
-			formated_file_mode = common.format_mode(file_mode, self._parent.options.getint('main', 'mode_format'))
-			formated_file_date = time.strftime(time_format, time.localtime(file_date))
+			formated_file_mode = common.format_mode(file_mode, self._mode_format)
+			formated_file_date = time.strftime(self._time_format, time.localtime(file_date))
 
 			if not is_dir:
 				# item is a file
@@ -1174,9 +1176,6 @@ class FileList(ItemList):
 			file_mode = file_stat.mode
 			file_date = file_stat.time_modify
 
-			# time_format values
-			time_format = self._parent.options.get('main', 'time_format')
-
 			if not is_dir:
 				# format file size
 				if self._human_readable:
@@ -1189,8 +1188,8 @@ class FileList(ItemList):
 				# item is a directory
 				formated_file_size = '<DIR>'
 
-			formated_file_mode = common.format_mode(file_mode, self._parent.options.getint('main', 'mode_format'))
-			formated_file_date = time.strftime(time_format, time.localtime(file_date))
+			formated_file_mode = common.format_mode(file_mode, self._mode_format)
+			formated_file_date = time.strftime(self._time_format, time.localtime(file_date))
 
 			# update list store
 			self._store.set_value(found_iter, Column.SIZE, file_size)
@@ -1681,6 +1680,10 @@ class FileList(ItemList):
 					gtk.TREE_VIEW_GRID_LINES_BOTH,
 				)[self._parent.options.getint('main', 'grid_lines')]
 		self._item_list.set_grid_lines(grid_lines)
+
+		# cache settings
+		self._time_format = self._parent.options.get('main', 'time_format')
+		self._mode_format = self._parent.options.getint('main', 'mode_format')
 
 		# reload file list in order to apply time formatting, hidden files and other
 		self.refresh_file_list()

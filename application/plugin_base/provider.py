@@ -133,6 +133,10 @@ class Provider:
 		"""Return file statistics"""
 		pass
 
+	def get_directory_size(self, path, relative_to=None):
+		"""Return directory size"""
+		pass
+
 	def get_selection(self, relative=False):
 		"""Get list of selected items"""
 		if self._selection is None:

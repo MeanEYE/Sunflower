@@ -160,6 +160,7 @@ class ItemList(PluginBase):
 		self._search_entry.connect('key-press-event', self._handle_search_key_press)
 		self._search_entry.connect('focus-out-event', self._stop_search)
 		self._item_list.set_search_entry(self._search_entry)
+		self._item_list.set_search_equal_func(_quick_search_equal_func)
 
 		self._search_panel.pack_start(label, False, False, 3)
 		self._search_panel.pack_start(self._search_entry, True, True, 0)
@@ -1451,3 +1452,8 @@ class ItemList(PluginBase):
 
 		elif show_status_bar == StatusVisible.NEVER:
 			self._hide_status_bar()
+
+
+def _quick_search_equal_func(model, column, key, iter_, data=None):
+	return key not in model.get_value(iter_, column)
+

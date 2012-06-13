@@ -4,12 +4,6 @@ import gio
 from dialogs import SambaCreate, SambaResult
 from plugin_base.mount_manager_extension import MountManagerExtension
 
-try:
-	import gnomekeyring as keyring
-
-except:
-	keyring = None
-
 
 class Column:
 	NAME = 0
@@ -103,8 +97,10 @@ class SambaExtension(MountManagerExtension):
 
 	def _add_mount(self, widget, data=None):
 		"""Present dialog to user for creating a new mount"""
+		keyring_manager = self._parent._application.keyring_manager
+
 		dialog = SambaCreate(self._window)
-		dialog.set_keyring_available(keyring is not None)
+		dialog.set_keyring_available(keyring_manager.is_available())
 		response = dialog.get_response()
 
 		if response[0] == gtk.RESPONSE_OK:

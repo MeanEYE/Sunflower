@@ -21,7 +21,7 @@ class KeyringManager:
 
 	"""
 
-	KEYRING_NAME = 'sunflower'
+	KEYRING_NAME = 'Sunflower'
 	TIMEOUT = 10
 
 	def __init__(self, application):
@@ -38,7 +38,7 @@ class KeyringManager:
 
 	def is_available(self):
 		"""Return true if we are able to use Gnome keyring"""
-		return keyring is not None
+		return keyring is not None and keyring.is_available()
 
 	def get_entries(self):
 		"""Return list of tuples containing entry names and description"""
@@ -48,6 +48,6 @@ class KeyringManager:
 		"""Return password for specified entry"""
 		pass
 
-	def store_password(self, entry, description, password, p_type=None):
+	def store_password(self, entry, description, password, entry_type=EntryType.GENERIC):
 		"""Create new entry in keyring with specified data"""
 		pass

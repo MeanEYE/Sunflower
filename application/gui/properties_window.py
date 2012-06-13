@@ -332,8 +332,9 @@ class PropertiesWindow(gtk.Window):
 			                        gtk.DIALOG_DESTROY_WITH_PARENT,
 			                        gtk.MESSAGE_ERROR,
 			                        gtk.BUTTONS_OK,
-			                        _('Error changing owner or group') +
-			                       "\n\n{0}".format(error)
+			                        _(
+										'Error changing owner or group'
+									) + '\n\n{0}'.format(error)
 			                   )
 			dialog.run()
 			dialog.destroy()
@@ -521,15 +522,15 @@ class PropertiesWindow(gtk.Window):
 		table_access.attach(self._permission_octal_entry, 1, 2, 3, 4)
 		table_access.set_row_spacing(2, 10)
 
-		# create 'Owner and group' frame
+		# create ownership frame
 		frame_ownership = gtk.Frame()
-		frame_ownership.set_label(_('Owner and group'))
+		frame_ownership.set_label(_('Ownership'))
 
 		table_ownership = gtk.Table(2, 2, False)
 		table_ownership.set_border_width(5)
 
 		# create widgets
-		label = gtk.Label(_('Owner:'))
+		label = gtk.Label(_('User:'))
 		label.set_alignment(0, 0.5)
 		table_ownership.attach(label, 0, 1, 0, 1)
 

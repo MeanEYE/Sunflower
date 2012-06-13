@@ -4,6 +4,9 @@ import gio
 import pango
 import locale
 import time
+import pwd
+import grp 
+
 import common
 
 
@@ -235,6 +238,9 @@ class PropertiesWindow(gtk.Window):
 		# update permissions list
 		self._permission_update_mode(initial_update=True)
 
+		# update ownership
+		self._ownership_update()
+
 		# update "open with" list
 		self._load_associated_applications()
 
@@ -274,6 +280,64 @@ class PropertiesWindow(gtk.Window):
 		# set file mode
 		if not initial_update:
 			self._provider.set_mode(self._path, self._mode)
+
+	def _ownership_update(self):
+		"""Update owner and group"""
+		stat = self._provider.get_stat(self._path)
+		
+		self._combobox_owner.handler_block_by_func(self._ownership_changed)
+		self._combobox_group.handler_block_by_func(self._ownership_changed)
+
+		# remove old entries
+		self._list_owner.clear()
+		self._list_group.clear()
+
+		# for local file system fill comboboxes with available user and group names
+		if self._provider.is_local:
+			for i, user in enumerate(pwd.getpwall()):
+				self._list_owner.append((user.pw_name, user.pw_uid))
+				if user.pw_uid == stat.user_id:
+					self._combobox_owner.set_active(i)
+			
+			for i, group in enumerate(grp.getgrall()):
+				self._list_group.append((group.gr_name, group.gr_gid))
+				if group.gr_gid == stat.group_id:
+					self._combobox_group.set_active(i)
+
+		# for remote file systems simply set owner and group
+		else:
+			self._list_owner.append((stat.owner_name, stat.group_id))
+			self._list_group.append((stat.group_name, stat.group_id))
+			self._combobox_owner.set_active(0)
+			self._combobox_group.set_active(0)
+
+		self._combobox_owner.handler_unblock_by_func(self._ownership_changed)
+		self._combobox_group.handler_unblock_by_func(self._ownership_changed)
+
+	def _ownership_changed(self, widget, data=None):
+		"""Handle changing owner or group"""
+		# get new owner and group
+		owner_iter = self._combobox_owner.get_active_iter()
+		group_iter = self._combobox_group.get_active_iter()
+		owner_id = self._list_owner.get_value(owner_iter, 1)
+		group_id = self._list_group.get_value(group_iter, 1)
+
+		# save new owner and group
+		try:
+			self._provider.set_owner(self._path, owner_id, group_id)
+
+		except OSError as error:
+			dialog = gtk.MessageDialog(
+			                        self,
+			                        gtk.DIALOG_DESTROY_WITH_PARENT,
+			                        gtk.MESSAGE_ERROR,
+			                        gtk.BUTTONS_OK,
+			                        _('Error changing owner or group') +
+			                       "\n\n{0}".format(error)
+			                   )
+			dialog.run()
+			dialog.destroy()
+			self._ownership_update()
 
 	def _change_default_application(self, renderer, path, data=None):
 		"""Handle changing default application"""
@@ -387,79 +451,125 @@ class PropertiesWindow(gtk.Window):
 		tab = gtk.VBox(False, 5)
 		tab.set_border_width(10)
 
+		# create 'Access' frame
 		frame_access = gtk.Frame()
 		frame_access.set_label(_('Access'))
 
-		table = gtk.Table(4, 4, False)
-		table.set_border_width(5)
+		table_access = gtk.Table(4, 4, False)
+		table_access.set_border_width(5)
 
 		# create widgets
 		label = gtk.Label(_('User:'))
 		label.set_alignment(0, 0.5)
-		table.attach(label, 0, 1, 0, 1)
+		table_access.attach(label, 0, 1, 0, 1)
 
 		label = gtk.Label(_('Group:'))
 		label.set_alignment(0, 0.5)
-		table.attach(label, 0, 1, 1, 2)
+		table_access.attach(label, 0, 1, 1, 2)
 
 		label = gtk.Label(_('Others:'))
 		label.set_alignment(0, 0.5)
-		table.attach(label, 0, 1, 2, 3)
+		table_access.attach(label, 0, 1, 2, 3)
 
 		# owner checkboxes
 		self._permission_owner_read = gtk.CheckButton(_('Read'))
 		self._permission_owner_read.connect('toggled', self._permission_update_octal, (1 << 2) * 100)
-		table.attach(self._permission_owner_read, 1, 2, 0, 1)
+		table_access.attach(self._permission_owner_read, 1, 2, 0, 1)
 
 		self._permission_owner_write = gtk.CheckButton(_('Write'))
 		self._permission_owner_write.connect('toggled', self._permission_update_octal, (1 << 1) * 100)
-		table.attach(self._permission_owner_write, 2, 3, 0, 1)
+		table_access.attach(self._permission_owner_write, 2, 3, 0, 1)
 
 		self._permission_owner_execute = gtk.CheckButton(_('Execute'))
 		self._permission_owner_execute.connect('toggled', self._permission_update_octal, (1 << 0) * 100)
-		table.attach(self._permission_owner_execute, 3, 4, 0, 1)
+		table_access.attach(self._permission_owner_execute, 3, 4, 0, 1)
 
 		# group checkboxes
 		self._permission_group_read = gtk.CheckButton(_('Read'))
 		self._permission_group_read.connect('toggled', self._permission_update_octal, (1 << 2) * 10)
-		table.attach(self._permission_group_read, 1, 2, 1, 2)
+		table_access.attach(self._permission_group_read, 1, 2, 1, 2)
 
 		self._permission_group_write = gtk.CheckButton(_('Write'))
 		self._permission_group_write.connect('toggled', self._permission_update_octal, (1 << 1) * 10)
-		table.attach(self._permission_group_write, 2, 3, 1, 2)
+		table_access.attach(self._permission_group_write, 2, 3, 1, 2)
 
 		self._permission_group_execute = gtk.CheckButton(_('Execute'))
 		self._permission_group_execute.connect('toggled', self._permission_update_octal, (1 << 0) * 10)
-		table.attach(self._permission_group_execute, 3, 4, 1, 2)
+		table_access.attach(self._permission_group_execute, 3, 4, 1, 2)
 
 		# others checkboxes
 		self._permission_others_read = gtk.CheckButton(_('Read'))
 		self._permission_others_read.connect('toggled', self._permission_update_octal, (1 << 2))
-		table.attach(self._permission_others_read, 1, 2, 2, 3)
+		table_access.attach(self._permission_others_read, 1, 2, 2, 3)
 
 		self._permission_others_write = gtk.CheckButton(_('Write'))
 		self._permission_others_write.connect('toggled', self._permission_update_octal, (1 << 1))
-		table.attach(self._permission_others_write, 2, 3, 2, 3)
+		table_access.attach(self._permission_others_write, 2, 3, 2, 3)
 
 		self._permission_others_execute = gtk.CheckButton(_('Execute'))
 		self._permission_others_execute.connect('toggled', self._permission_update_octal, (1 << 0))
-		table.attach(self._permission_others_execute, 3, 4, 2, 3)
+		table_access.attach(self._permission_others_execute, 3, 4, 2, 3)
 
 		# octal representation
 		label = gtk.Label(_('Octal:'))
 		label.set_alignment(0, 0.5)
-		table.attach(label, 0, 1, 3, 4)
+		table_access.attach(label, 0, 1, 3, 4)
 
 		self._permission_octal_entry = gtk.Entry(4)
 		self._permission_octal_entry.set_width_chars(5)
 		self._permission_octal_entry.connect('activate', self._permission_entry_activate)
-		table.attach(self._permission_octal_entry, 1, 2, 3, 4)
-		table.set_row_spacing(2, 10)
+		table_access.attach(self._permission_octal_entry, 1, 2, 3, 4)
+		table_access.set_row_spacing(2, 10)
+
+		# create 'Owner and group' frame
+		frame_ownership = gtk.Frame()
+		frame_ownership.set_label(_('Owner and group'))
+
+		table_ownership = gtk.Table(2, 2, False)
+		table_ownership.set_border_width(5)
+
+		# create widgets
+		label = gtk.Label(_('Owner:'))
+		label.set_alignment(0, 0.5)
+		table_ownership.attach(label, 0, 1, 0, 1)
+
+		label = gtk.Label(_('Group:'))
+		label.set_alignment(0, 0.5)
+		table_ownership.attach(label, 0, 1, 1, 2)
+
+		# create owner combobox
+		self._list_owner = gtk.ListStore(str, int)
+		cell_owner = gtk.CellRendererText()
+
+		self._combobox_owner = gtk.ComboBox(self._list_owner)
+		self._combobox_owner.connect('changed', self._ownership_changed)
+		self._combobox_owner.pack_start(cell_owner)
+		self._combobox_owner.add_attribute(cell_owner, 'text', 0)
+
+		table_ownership.attach(self._combobox_owner, 1, 2, 0, 1)
+
+		# create group combobox
+		self._list_group = gtk.ListStore(str, int)
+		cell_group = gtk.CellRendererText()
+
+		self._combobox_group = gtk.ComboBox(self._list_group)
+		self._combobox_group.connect('changed', self._ownership_changed)
+		self._combobox_group.pack_start(cell_group)
+		self._combobox_group.add_attribute(cell_group, 'text', 0)
+
+		table_ownership.attach(self._combobox_group, 1, 2, 1, 2)
+
+		# make comboboxes insensitive if filesystem is remote
+		if not self._provider.is_local:
+			self._combobox_owner.set_sensitive(False)
+			self._combobox_group.set_sensitive(False)
 
 		# pack interface
-		frame_access.add(table)
+		frame_access.add(table_access)
+		frame_ownership.add(table_ownership)
 
 		tab.pack_start(frame_access, False, False, 0)
+		tab.pack_start(frame_ownership, False, False, 0)
 
 		return tab
 

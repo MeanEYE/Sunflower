@@ -246,6 +246,71 @@ class CreateDialog(InputDialog):
 		self._update_checkboxes()
 
 
+class PasswordDialog(InputDialog):
+	"""Dialog used for safe entry of passwords. Contains two fields."""
+
+	def __init__(self, application):
+		InputDialog.__init__(self, application)
+
+		# create user interface
+		vbox = gtk.VBox(False, 0)
+
+		self._label_description = gtk.Label()
+		self._label_description.set_alignment(0, 0)
+		self._label_description.set_line_wrap(True)
+		self._label_description.connect('size-allocate', self._adjust_label)
+
+		self._label.set_text(_('Password:'))
+
+		label_confirm = gtk.Label(_('Confirm:'))
+		label_confirm.set_alignment(0, 0.5)
+		self._entry_confirm = gtk.Entry()
+
+		self._entry.set_property('caps-lock-warning', True)
+		self._entry_confirm.set_property('caps-lock-warning', True)
+		self._entry.set_visibility(False)
+		self._entry_confirm.set_visibility(False)
+
+		# configure interface
+		self._container.set_spacing(5)
+
+		# pack user interface
+		vbox.pack_start(label_confirm, False, False, 0)
+		vbox.pack_start(self._entry_confirm, False, False, 0)
+
+		self._container.pack_start(vbox, False, False, 0)
+		self._container.pack_start(self._label_description, False, False, 0)
+
+		self._container.reorder_child(self._label_description, 0)
+
+		# show all elements
+		vbox.show_all()
+		self._label_description.show()
+
+	def _adjust_label(self, widget, data=None):
+		"""Adjust label size"""
+		widget.set_size_request(data.width-1, -1)
+
+	def set_label(self, text):
+		"""Set label text"""
+		self._label_description.set_text(text)
+
+	def get_response(self):
+		"""Return value and self-destruct
+
+		This method returns tuple with response code password
+		and confirmation string.
+
+		"""
+		code = self._dialog.run()
+		password = self._entry.get_text()
+		confirmation = self._entry_confirm.get_text()
+
+		self._dialog.destroy()
+
+		return (code, password, confirmation)
+
+
 class FileCreateDialog(CreateDialog):
 
 	def __init__(self, application):

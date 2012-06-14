@@ -110,6 +110,7 @@ class SambaExtension(MountManagerExtension):
 			requires_login = response[1][SambaResult.PASSWORD] != ''
 
 			self._store.append((name, uri, domain, requires_login))
+			keyring_manager.store_password(name, uri, response[1][SambaResult.PASSWORD])
 
 	def _edit_mount(self, widget, data=None):
 		"""Present dialog to user for editing existing mount"""

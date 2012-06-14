@@ -1,6 +1,8 @@
 import gtk
 import threading
 
+from gui.input_dialog import PasswordDialog
+
 try:
 	import gnomekeyring as keyring
 
@@ -13,6 +15,12 @@ class EntryType:
 	GENERIC = 1
 	NETWORK = 2
 	NOTE = 3
+
+
+class KeyringCreateError(Exception): pass
+class PasswordStoreError(Exception): pass
+class InvalidKeyringError(Exception): pass
+class InvalidEntryError(Exception): pass
 
 
 class KeyringManager:
@@ -42,12 +50,33 @@ class KeyringManager:
 
 	def get_entries(self):
 		"""Return list of tuples containing entry names and description"""
-		pass
+		assert self.is_available()
 
 	def get_password(self, entry):
 		"""Return password for specified entry"""
-		pass
+		assert self.is_available()
 
 	def store_password(self, entry, description, password, entry_type=EntryType.GENERIC):
 		"""Create new entry in keyring with specified data"""
-		pass
+		assert self.is_available()
+
+		# create a new keyring if it doesn't exist
+		if not self.KEYRING_NAME in keyring.list_keyring_names_sync():
+			dialog = PasswordDialog(self._application)
+			dialog.set_title(_('New keyring'))
+			dialog.set_label(_(
+						'We need to create a new keyring to safely '
+						'store your passwords. Choose the password you '
+						'want to use for it.'
+					))
+
+			response = dialog.get_response()
+
+			if response[0] == gtk.RESPONSE_OK \
+			and response[1] == response[2]:
+				# create new keyring
+				pass
+
+			else:
+				# wrong password
+				raise KeyringCreateError('No keyring to store password to.')

@@ -20,6 +20,7 @@ from indicator import Indicator
 from notifications import NotificationManager
 from toolbar import ToolbarManager
 from accelerator_manager import AcceleratorManager
+from keyring import KeyringManager
 
 from plugin_base.item_list import ItemList
 from plugin_base.rename_extension import RenameExtension
@@ -92,6 +93,7 @@ class MainWindow(gtk.Window):
 		self.notification_manager = NotificationManager(self)
 		self.toolbar_manager = ToolbarManager(self)
 		self.accelerator_manager = AcceleratorManager(self)
+		self.keyring_manager = KeyringManager(self)
 
 		# set window title
 		self.set_title(_('Sunflower'))

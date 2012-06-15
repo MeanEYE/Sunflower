@@ -54,6 +54,7 @@ class FindFiles:
 		label_path.set_alignment(0, 0.5)
 
 		self._entry_path = gtk.Entry()
+		self._entry_path.connect('activate', self.find_files)
 
 		if hasattr(self._parent, 'path'):
 			# get path from the parent

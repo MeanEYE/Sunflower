@@ -44,6 +44,7 @@ class DefaultFindFiles(FindExtension):
 		self._entry_pattern = gtk.Entry()
 		self._entry_pattern.set_text('*')
 		self._entry_pattern.connect('changed', self.__handle_pattern_change)
+		self._entry_pattern.connect('activate', self._parent.find_files)
 
 		self._checkbox_case_sensitive = gtk.CheckButton(_('Case sensitive'))
 		self._checkbox_case_sensitive.connect('toggled', self.__handle_case_sensitive_toggle)

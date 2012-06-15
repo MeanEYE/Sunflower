@@ -36,16 +36,18 @@ class SizeFindFiles(FindExtension):
 		self._entry_min = gtk.SpinButton(adjustment=self._adjustment_min, digits=2)
 		self._entry_max.connect('value-changed', self._max_value_changed)
 		self._entry_min.connect('value-changed', self._min_value_changed)
+		self._entry_max.connect('activate', self._parent.find_files)
+		self._entry_min.connect('activate', lambda entry: self._entry_max.grab_focus())
 
 		# pack interface
 		table.attach(label, 0, 3, 0, 1, xoptions=gtk.FILL)
 
 		table.attach(label_min, 0, 1, 1, 2, xoptions=gtk.FILL)
-		table.attach(self._entry_min,  1, 2, 1, 2, xoptions=gtk.FILL)
+		table.attach(self._entry_min, 1, 2, 1, 2, xoptions=gtk.FILL)
 		table.attach(label_min_unit, 2, 3, 1, 2, xoptions=gtk.FILL)
 
 		table.attach(label_max, 0, 1, 2, 3, xoptions=gtk.FILL)
-		table.attach(self._entry_max,  1, 2, 2, 3, xoptions=gtk.FILL)
+		table.attach(self._entry_max, 1, 2, 2, 3, xoptions=gtk.FILL)
 		table.attach(label_max_unit, 2, 3, 2, 3, xoptions=gtk.FILL)
 
 		self.vbox.pack_start(table, False, False, 0)

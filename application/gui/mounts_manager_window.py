@@ -241,11 +241,29 @@ class MountsManagerWindow(gtk.Window):
 			self._tabs.set_current_page(new_tab)
 			self._tabs.handler_unblock_by_func(self._handle_page_switch)
 
+			# tell extension to take focus
+			new_object = self._tabs.get_nth_page(new_tab)
+			extension = new_object.get_data('extension')
+
+			if extension is not None and hasattr(extension, 'focus_object'):
+				extension.focus_object()
+
+		return True
+
 	def _handle_page_switch(self, widget, page, page_num, data=None):
 		"""Handle changing page without user interaction"""
 		self._tab_labels.handler_block_by_func(self._handle_cursor_change)
 		self._tab_labels.set_cursor((page_num,))
 		self._tab_labels.handler_unblock_by_func(self._handle_cursor_change)
+
+		# tell extension to take focus
+		new_object = self._tabs.get_nth_page(page_num)
+		extension = new_object.get_data('extension')
+
+		if extension is not None and hasattr(extension, 'focus_object'):
+			extension.focus_object()
+
+		return True
 
 	def _hide(self, widget=None, data=None):
 		"""Hide mount manager"""
@@ -425,6 +443,10 @@ class MountsExtension(MountManagerExtension):
 		"""Get extension information"""
 		return 'harddrive', _('Mounts')
 
+	def focus_object(self):
+		"""Focus main list on managers request"""
+		self._list.grab_focus()
+
 	def add_mount(self, icon, name, uri, extension):
 		"""Add mount to the list"""
 		self._store.append((icon, name, uri, extension))
@@ -563,7 +585,7 @@ class VolumesExtension(MountManagerExtension):
 		# hide spinner
 		self._hide_spinner()
 
-	def _unmount_finish(self, mount, result, data=None):
+	def _unmount_finish(self, mount, result, volume=None):
 		"""Callback function for unmounting"""
 		try:
 			mount.unmount_finish(result)
@@ -571,10 +593,7 @@ class VolumesExtension(MountManagerExtension):
 			pass
 
 		# update volume status
-		volume = mount.get_volume()
-		uuid = volume.get_uuid()
-
-		self.volume_unmounted(uuid)
+		self.volume_unmounted(volume)
 
 		# hide spinner
 		self._hide_spinner()
@@ -584,7 +603,8 @@ class VolumesExtension(MountManagerExtension):
 		selection = self._list.get_selection()
 		item_list, selected_iter = selection.get_selected()
 
-		if selected_iter is not None:
+		if selected_iter is not None \
+		and not item_list.get_value(selected_iter, VolumesColumn.MOUNTED):
 			# show busy spinner if possible
 			self._show_spinner()
 
@@ -597,18 +617,23 @@ class VolumesExtension(MountManagerExtension):
 		selection = self._list.get_selection()
 		item_list, selected_iter = selection.get_selected()
 
-		if selected_iter is not None:
+		if selected_iter is not None \
+		and item_list.get_value(selected_iter, VolumesColumn.MOUNTED):
 			# show spinner
 			self._show_spinner()
 
 			# unmount
 			volume = item_list.get_value(selected_iter, VolumesColumn.OBJECT)
 			mount = volume.get_mount()
-			mount.unmount(self._unmount_finish, gio.MOUNT_UNMOUNT_NONE, None, None)
+			mount.unmount(self._unmount_finish, gio.MOUNT_UNMOUNT_NONE, None, volume)
 
 	def get_information(self):
 		"""Get extension information"""
 		return 'computer', _('Volumes')
+
+	def focus_object(self):
+		"""Focus main list on managers request"""
+		self._list.grab_focus()
 
 	def add_volume(self, volume):
 		"""Add volume to the list"""

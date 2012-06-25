@@ -2,6 +2,7 @@ import gtk
 import gio
 
 from dialogs import SambaCreate, SambaResult
+from keyring import KeyringCreateError
 from plugin_base.mount_manager_extension import MountManagerExtension
 
 
@@ -109,8 +110,25 @@ class SambaExtension(MountManagerExtension):
 			domain = response[1][SambaResult.DOMAIN]
 			requires_login = response[1][SambaResult.PASSWORD] != ''
 
-			self._store.append((name, uri, domain, requires_login))
-			keyring_manager.store_password(name, uri, response[1][SambaResult.PASSWORD])
+			if requires_login:
+				if keyring_manager.is_available():
+					try:
+						keyring_manager.store_password(name, uri, response[1][SambaResult.PASSWORD])
+
+					except KeyringCreateError:
+						# show error message
+						print "Keyring create error, we need it to store this option"
+
+					else:
+						# make sure we store this
+						self._store.append((name, uri, domain, requires_login))
+
+				else:
+					# show error message
+					print "Keyring is not available but it's needed!"
+
+			else:
+				self._store.append((name, uri, domain, requires_login))
 
 	def _edit_mount(self, widget, data=None):
 		"""Present dialog to user for editing existing mount"""

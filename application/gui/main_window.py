@@ -30,6 +30,7 @@ from tools.advanced_rename import AdvancedRename
 from tools.find_files import FindFiles
 
 from ConfigParser import RawConfigParser
+from config import Config
 
 try:
 	# try to import argument parser

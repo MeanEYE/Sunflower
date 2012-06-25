@@ -39,3 +39,7 @@ class MountManagerExtension:
 	def unmount(self, uri):
 		"""Method called by the mount manager for unmounting the selected URI"""
 		pass
+
+	def focus_object(self):
+		"""Method called by the mount manager for focusing main object"""
+		pass

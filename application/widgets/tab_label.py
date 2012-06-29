@@ -48,7 +48,7 @@ class TabLabel:
 		self._hbox.pack_start(self._button, False, False, 0)
 
 		# show controls
-		if self._application.options.getboolean('main', 'tab_close_button'):
+		if self._application.options.get('tab_close_button'):
 			self._button.show()
 			self._hbox.set_spacing(3)
 		
@@ -79,7 +79,7 @@ class TabLabel:
 
 	def apply_settings(self):
 		"""Apply global settings to tab label"""
-		if self._application.options.getboolean('main', 'tab_close_button'):
+		if self._application.options.get('tab_close_button'):
 			self._button.show()
 			self._hbox.set_spacing(3)
 

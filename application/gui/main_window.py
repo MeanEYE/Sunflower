@@ -28,8 +28,6 @@ from plugin_base.find_extension import FindExtension
 from plugin_base.terminal import TerminalType
 from tools.advanced_rename import AdvancedRename
 from tools.find_files import FindFiles
-
-from ConfigParser import RawConfigParser
 from config import Config
 
 try:
@@ -125,8 +123,9 @@ class MainWindow(gtk.Window):
 		self._version_specific_actions()
 
 		# connect delete event to main window
-		if self.options.getboolean('main', 'hide_on_close'):
+		if self.window_options.section('main').get('hide_on_close'):
 			self.connect('delete-event', self._delete_event)
+
 		else:
 			self.connect('delete-event', self._destroy)
 
@@ -401,7 +400,7 @@ class MainWindow(gtk.Window):
 					{
 						'label': _('Fast m_edia preview'),
 						'type': 'checkbox',
-						'active': self.options.getboolean('main', 'media_preview'),
+						'active': self.options.get('media_preview'),
 						'callback': self._toggle_media_preview,
 						'name': 'fast_media_preview',
 						'path': '<Sunflower>/View/FastMediaPreview',
@@ -412,7 +411,7 @@ class MainWindow(gtk.Window):
 					{
 						'label': _('Show _hidden files'),
 						'type': 'checkbox',
-						'active': self.options.getboolean('main', 'show_hidden'),
+						'active': self.options.section('item_list').get('show_hidden'),
 						'callback': self._toggle_show_hidden_files,
 						'name': 'show_hidden_files',
 						'path': '<Sunflower>/View/ShowHidden',
@@ -420,7 +419,7 @@ class MainWindow(gtk.Window):
 					{
 						'label': _('Show _toolbar'),
 						'type': 'checkbox',
-						'active': self.options.getboolean('main', 'show_toolbar'),
+						'active': self.options.get('show_toolbar'),
 						'callback': self._toggle_show_toolbar,
 						'name': 'show_toolbar',
 						'path': '<Sunflower>/View/ShowToolbar',
@@ -428,7 +427,7 @@ class MainWindow(gtk.Window):
 					{
 						'label': _('Show _command bar'),
 						'type': 'checkbox',
-						'active': self.options.getboolean('main', 'show_command_bar'),
+						'active': self.options.get('show_command_bar'),
 						'callback': self._toggle_show_command_bar,
 						'name': 'show_command_bar',
 						'path': '<Sunflower>/View/ShowCommandBar',
@@ -436,7 +435,7 @@ class MainWindow(gtk.Window):
 					{
 						'label': _('Show co_mmand entry'),
 						'type': 'checkbox',
-						'active': self.options.getboolean('main', 'show_command_entry'),
+						'active': self.options.get('show_command_entry'),
 						'callback': self._toggle_show_command_entry,
 						'name': 'show_command_entry',
 						'path': '<Sunflower>/View/ShowCommandEntry',
@@ -512,10 +511,7 @@ class MainWindow(gtk.Window):
 		self.toolbar_manager.load_config(self.toolbar_options)
 
 		toolbar = self.toolbar_manager.get_toolbar()
-		toolbar.set_property(
-						'no-show-all',
-						not self.options.getboolean('main', 'show_toolbar')
-					)
+		toolbar.set_property('no-show-all', not self.options.get('show_toolbar'))
 
 		# bookmarks menu
 		self.menu_bookmarks = gtk.Menu()
@@ -594,10 +590,8 @@ class MainWindow(gtk.Window):
 		self.command_entry_bar.pack_start(label_pound, False, False, 0)
 		self.command_entry_bar.pack_start(self.command_edit, True, True, 0)
 
-		self.command_entry_bar.set_property(
-						'no-show-all',
-						not self.options.getboolean('main', 'show_command_entry')
-					)
+		self.command_entry_bar.set_property('no-show-all', not self.options.get('show_command_entry'))
+
 		# command buttons bar
 		self.command_bar = gtk.HBox(True, 0)
 
@@ -626,10 +620,7 @@ class MainWindow(gtk.Window):
 
 			self.command_bar.pack_start(button, True, True, 0)
 
-		self.command_bar.set_property(
-						'no-show-all',
-						not self.options.getboolean('main', 'show_command_bar')
-					)
+		self.command_bar.set_property('no-show-all', not self.options.get('show_command_bar'))
 
 		# pack gui
 		vbox = gtk.VBox(False, 0)
@@ -695,13 +686,13 @@ class MainWindow(gtk.Window):
 			self.menu_bookmarks.remove(item)
 
 		# create mounts if specified
-		if self.options.getboolean('main', 'show_mounts'):
+		if self.bookmark_options.get('show_mounts'):
 			separator = self.menu_manager.create_menu_item({'type': 'separator'})
 			self.menu_bookmarks.append(self._menu_item_mounts)
 			self.menu_bookmarks.append(separator)
 
 		# add home if specified
-		if self.options.getboolean('main', 'add_home'):
+		if self.bookmark_options.get('add_home'):
 			bookmark = gtk.ImageMenuItem()
 			image = gtk.Image()
 			image.set_from_icon_name('user-home', gtk.ICON_SIZE_MENU)
@@ -715,25 +706,23 @@ class MainWindow(gtk.Window):
 			self.menu_bookmarks.append(bookmark)
 
 		# create bookmark menu items
-		raw_bookmarks = self.bookmark_options.options('bookmarks')
+		bookmark_list = self.bookmark_options.get('bookmarks')
 
-		for index in range(1, len(raw_bookmarks) + 1):
-			data = self.bookmark_options.get('bookmarks', 'b_{0}'.format(index)).split(';', 1)
-
+		for bookmark_data in bookmark_list:
 			bookmark = gtk.ImageMenuItem()
 			image = gtk.Image()
 			image.set_from_icon_name('folder', gtk.ICON_SIZE_MENU)
 
 			bookmark.set_image(image)
 			bookmark.set_always_show_image(True)
-			bookmark.set_label(data[0])
-			bookmark.set_data('uri', os.path.expanduser(data[1]))
+			bookmark.set_label(bookmark_data['name'])
+			bookmark.set_data('uri', os.path.expanduser(bookmark_data['uri']))
 			bookmark.connect('activate', self._handle_bookmarks_click)
 
 			self.menu_bookmarks.append(bookmark)
 
 		# add system bookmarks if needed
-		if self.options.getboolean('main', 'system_bookmarks')\
+		if self.bookmark_options.get('system_bookmarks') \
 		and os.path.exists(os.path.join(user.home, '.gtk-bookmarks')):
 			with open(os.path.join(user.home, '.gtk-bookmarks'), 'r') as raw_file:
 				lines = raw_file.readlines(False)
@@ -807,25 +796,16 @@ class MainWindow(gtk.Window):
 		for item in self.menu_commands.get_children():  # remove existing items
 			self.menu_commands.remove(item)
 
-		# get total tool items count
-		if self.command_options.has_section('commands'):
-			tool_count = (len(self.command_options.options('commands')) / 2) + 1
-
-		else:
-			tool_count = 0
-
 		# create each item from the list
-		for index in range(1, tool_count):
-			# get data from config
-			tool_title = self.command_options.get('commands', 'title_{0}'.format(index))
-			tool_command = self.command_options.get('commands', 'command_{0}'.format(index))
+		command_list = self.command_options.get('commands')
 
+		for command_data in command_list:
 			# create menu item
 			if tool_title != '-':
 				# normal menu item
-				tool = gtk.MenuItem(label=tool_title)
+				tool = gtk.MenuItem(label=command_data['title'])
 				tool.connect('activate', self._handle_command_click)
-				tool.set_data('command', tool_command)
+				tool.set_data('command', command_data['command'])
 
 			else:
 				# separator
@@ -835,7 +815,7 @@ class MainWindow(gtk.Window):
 			self.menu_commands.append(tool)
 
 		# create separator
-		if tool_count > 1:
+		if len(command_list) > 1:
 			separator = gtk.SeparatorMenuItem()
 			self.menu_commands.append(separator)
 
@@ -871,12 +851,11 @@ class MainWindow(gtk.Window):
 		response = dialog.get_response()
 
 		if response[0] == gtk.RESPONSE_OK:
-			bookmarks = self.bookmark_options.options('bookmarks')
+			self.bookmark_options.get('bookmarks').append({
+					'name': response[1],
+					'uri': response[2]
+				})
 
-			name = 'b_{0}'.format(len(bookmarks) + 1)
-			value = '{0};{1}'.format(response[1], response[2])
-
-			self.bookmark_options.set('bookmarks', name, value)
 			self._create_bookmarks_menu()
 
 	def _handle_bookmarks_click(self, widget, data=None):
@@ -955,7 +934,7 @@ class MainWindow(gtk.Window):
 		if hasattr(child, 'update_notebook'):
 			child.update_notebook(notebook)
 
-		if self.options.getint('main', 'expand_tabs') == TabExpand.ALL:
+		if self.options.get('expand_tabs') == TabExpand.ALL:
 			notebook.child_set_property(child, 'tab-expand', True)
 
 	def _page_switched(self, notebook, page, page_num, data=None):
@@ -963,7 +942,7 @@ class MainWindow(gtk.Window):
 		current_page = notebook.get_nth_page(notebook.get_current_page())
 		new_page = notebook.get_nth_page(page_num)
 
-		if self.options.getint('main', 'expand_tabs') == TabExpand.ACTIVE:
+		if self.options.get('expand_tabs') == TabExpand.ACTIVE:
 			notebook.child_set_property(current_page, 'tab-expand', False)
 			notebook.child_set_property(new_page, 'tab-expand', True)
 
@@ -974,8 +953,7 @@ class MainWindow(gtk.Window):
 
 	def _toggle_show_hidden_files(self, widget, data=None):
 		"""Transfer option event to all the lists"""
-		show_hidden = widget.get_active()
-		self.options.set('main', 'show_hidden', ('False', 'True')[show_hidden])
+		self.options.section('item_list').set('show_hidden', widget.get_active())
 
 		# update left notebook
 		for index in range(0, self.left_notebook.get_n_pages()):
@@ -995,26 +973,26 @@ class MainWindow(gtk.Window):
 		"""Show/hide command bar"""
 		show_command_bar = widget.get_active()
 
-		self.options.set('main', 'show_command_bar', ('False', 'True')[show_command_bar])
+		self.options.set('show_command_bar', show_command_bar)
 		self.command_bar.set_visible(show_command_bar)
 
 	def _toggle_show_command_entry(self, widget, data=None):
 		"""Show/hide command entry"""
 		show_command_entry = widget.get_active()
 
-		self.options.set('main', 'show_command_entry', ('False', 'True')[show_command_entry])
+		self.options.set('show_command_entry', show_command_entry)
 		self.command_entry_bar.set_visible(show_command_entry)
 
 	def _toggle_show_toolbar(self, widget, data=None):
 		"""Show/hide toolbar"""
 		show_toolbar = widget.get_active()
 
-		self.options.set('main', 'show_toolbar', ('False', 'True')[show_toolbar])
+		self.options.set('show_toolbar', show_toolbar)
 		self.toolbar_manager.get_toolbar().set_visible(show_toolbar)
 
 	def _toggle_media_preview(self, widget, data=None):
 		"""Enable/disable fast image preview"""
-		self.options.set('main', 'media_preview', ('False', 'True')[widget.get_active()])
+		self.options.set('media_preview', widget.get_active())
 
 		# update left notebook
 		for index in range(0, self.left_notebook.get_n_pages()):
@@ -1044,8 +1022,19 @@ class MainWindow(gtk.Window):
 
 		try:
 			# try to load our history file
-			for line in file(os.path.join(user.home, self.options.get('main', 'history_file'))):
-				self.command_list.append((line.strip(),))
+			history_file = os.path.join(user.home, self.options.get('history_file'))
+
+			# load history file
+			with open(history_file, 'r') as raw_file:
+				temp_list = raw_file.read().split('\n')
+
+			# filter out duplicates
+			temp_list = list(set(temp_list))
+
+			# add commands to list
+			for command in temp_list:
+				self.command_list.append((command,))
+
 		except:
 			pass
 
@@ -1062,11 +1051,8 @@ class MainWindow(gtk.Window):
 
 	def _load_plugins(self):
 		"""Dynamically load plugins"""
-		# get plugin list
 		plugin_files = self._get_plugin_list()
-
-		# list of enabled plugins
-		plugins_to_load = self.options.get('main', 'plugins').split(',')
+		plugins_to_load = self.options.get('plugins')
 
 		# filter list for loading
 		plugin_files = filter(lambda file_name: file_name in plugins_to_load, plugin_files)
@@ -1270,27 +1256,26 @@ class MainWindow(gtk.Window):
 			# window is maximized
 			window_state = 1
 
-		self.options.set('main', 'window_state', window_state)
+		self.window_options.section('main').set('state', window_state)
 
 		# save window size and position
 		geometry = '{0}x{1}+{2}+{3}'.format(*self._geometry)
-
-		self.options.set('main', 'window', geometry)
+		self.window_options.section('main').set('geometry', geometry)
 
 	def _save_active_notebook(self):
 		"""Save active notebook to config"""
 		active_object = self.get_active_object()
 		is_left = active_object._notebook is self.left_notebook
 
-		self.options.set('main', 'active_notebook', (1, 0)[is_left])
+		self.options.set('active_notebook', (1, 0)[is_left])
 
 	def _restore_window_position(self):
 		"""Restore window position from config string"""
-		self.parse_geometry(self.options.get('main', 'window'))
+		self.parse_geometry(self.window_options.section('main').get('geometry'))
 		self._geometry = self.get_size() + self.get_position()
 
 		# restore window state
-		window_state = self.options.getint('main', 'window_state')
+		window_state = self.window_options.section('main').get('state')
 
 		if window_state == 1:
 			self.maximize()
@@ -1301,11 +1286,11 @@ class MainWindow(gtk.Window):
 	def _version_specific_actions(self):
 		"""This method will provide user with some feedback and
 		backwards compatibility. Also it will show latest change log"""
-		config_version = self.options.getint('main', 'last_version')
+		config_version = self.options.get('last_version')
 		current_version = self.version['build']
 
 		# check if we need to show change log and optionally modify system
-		if config_version is None or current_version > config_version and config_version > 0:
+		if current_version > config_version and config_version > 0:
 			mod_count = 0
 			vbox = gtk.VBox(False, 10)
 			vbox.set_border_width(5)
@@ -1345,74 +1330,11 @@ class MainWindow(gtk.Window):
 				vbox.pack_start(vbox_version_37, False, False, 0)
 				mod_count += 1
 
-			if config_version < 34:
-				vbox_version_34 = gtk.VBox(False, 0)
-
-				label_version_34 = gtk.Label('<b>Version 0.1a-34:</b>')
-				label_version_34.set_alignment(0, 0.5)
-				label_version_34.set_use_markup(True)
-
-				# convert tools menu
-				checkbox_convert_tools_menu = gtk.CheckButton('Convert saved tools menu')
-				checkbox_convert_tools_menu.set_active(True)
-
-				# convert saved column sizes
-				checkbox_convert_column_sizes = gtk.CheckButton('Convert column sizes to new format')
-				checkbox_convert_column_sizes.set_active(True)
-
-				vbox_version_34.pack_start(label_version_34, False, False, 0)
-				vbox_version_34.pack_start(checkbox_convert_tools_menu, False, False, 0)
-				vbox_version_34.pack_start(checkbox_convert_column_sizes, False, False, 0)
-
-				vbox.pack_start(vbox_version_34, False, False, 0)
-				mod_count += 2
-
 			# show dialog
 			change_log = ChangeLogDialog(self, vbox, not mod_count == 0)
 			change_log.run()
 
 			## apply selected changes in reverse order
-
-			if config_version < 34:
-				# convert tools menu
-				if checkbox_convert_tools_menu.get_active():
-					# open old configuration file
-					old_menu = RawConfigParser()
-					old_menu.read(os.path.join(self.config_path, 'tools'))
-
-					if not self.command_options.has_section('tools'):
-						return
-
-					# create section in new configuration file if it doesn't exist
-					if not self.command_options.has_section('commands'):
-						self.command_options.add_section('commands')
-
-					# transfer items
-					for key in old_menu.options('tools'):
-						value = old_menu.get('tools', key)
-						self.command_options.set('commands', key, value)
-
-					# remove old configuration file
-					os.unlink(os.path.join(self.config_path, 'tools'))
-
-				# convert column sizes
-				if checkbox_convert_column_sizes.get_active():
-					columns = {
-							0: 'name',
-							1: 'extension',
-							2: 'size',
-							3: 'mode',
-							4: 'date'
-						}
-
-					for index, name in columns.items():
-						# save size to a new option
-						size = self.options.getint('FileList', 'size_{0}'.format(index))
-						self.options.set('FileList', 'size_{0}'.format(name), size)
-
-						# remove old option
-						self.options.remove_option('FileList', 'size_{0}'.format(index))
-
 			if config_version < 37:
 				# reset accelerator map
 				if checkbox_reset_accel_map.get_active() \
@@ -1429,7 +1351,7 @@ class MainWindow(gtk.Window):
 
 		# set config version to current
 		if config_version is None or current_version > config_version:
-			self.options.set('main', 'last_version', current_version)
+			self.options.set('last_version', current_version)
 
 	def _parse_arguments(self):
 		"""Parse command-line arguments passed to the application"""
@@ -1481,24 +1403,16 @@ class MainWindow(gtk.Window):
 		result = False
 		active_object = self.get_active_object()
 
-		# get path list
-		items = []
-
-		# add home
-		items.append(user.home)
-
 		# read all bookmarks
-		bookmark_count = len(self.bookmark_options.options('bookmarks'))
-		for number in range(1, bookmark_count+1):
-			path = self.bookmark_options.get('bookmarks', 'b_{0}'.format(number)).split(';', 1)[1]
-			items.append(path)
+		bookmark_list = self.bookmark_options.get('bookmarks')
 
-		# check if bookmark index and active object are valid
-		if index < len(items) \
-		and index >= 0 \
-		and hasattr(active_object, 'change_path'):
-			active_object.change_path(items[index])
-			result = True
+		# check if index is valid and change path
+		if index < len(bookmark_list):
+			bookmark = bookmark_list[index]
+
+			if hasattr(active_object, 'change_path'):
+				active_object.change_path(bookmark['uri'])
+				result = True
 
 		return result
 
@@ -1666,11 +1580,11 @@ class MainWindow(gtk.Window):
 
 		else:
 			# load tabs in the left notebook
-			if not self.load_tabs(self.left_notebook, 'left_notebook'):
+			if not self.load_tabs(self.left_notebook, 'left'):
 				self.create_tab(self.left_notebook, DefaultList)
 
 			# load tabs in the right notebook
-			if not self.load_tabs(self.right_notebook, 'right_notebook'):
+			if not self.load_tabs(self.right_notebook, 'right'):
 				self.create_tab(self.right_notebook, DefaultList)
 
 		# create additional tabs
@@ -1684,7 +1598,7 @@ class MainWindow(gtk.Window):
 					self.create_tab(self.right_notebook, DefaultList, path)
 
 		# focus active notebook
-		active_notebook_index = self.options.getint('main', 'active_notebook')
+		active_notebook_index = self.options.get('active_notebook')
 		notebook = (self.left_notebook, self.right_notebook)[active_notebook_index]
 
 		notebook.grab_focus()
@@ -1708,11 +1622,11 @@ class MainWindow(gtk.Window):
 		notebook.set_tab_detachable(new_tab, True)
 
 		# show tabs if needed
-		if not self.options.getboolean('main', 'always_show_tabs'):
+		if not self.options.get('always_show_tabs'):
 			notebook.set_show_tabs(notebook.get_n_pages() > 1)
 
 		# focus tab if needed
-		if self.options.getboolean('main', 'focus_new_tab'):
+		if self.options.get('focus_new_tab'):
 			notebook.set_current_page(index)
 			new_tab._main_object.grab_focus()
 
@@ -1721,8 +1635,8 @@ class MainWindow(gtk.Window):
 	def create_terminal_tab(self, notebook, path=None, external=False):
 		"""Create terminal tab on selected notebook"""
 		result = None
-		terminal_command = self.options.get('main', 'terminal_command')
-		terminal_type = self.options.getint('main', 'terminal_type')
+		terminal_command = self.options.section('terminal').get('command')
+		terminal_type = self.options.section('terminal').get('type')
 		open_in_tab = not ((terminal_type == TerminalType.EXTERNAL and '{0}' not in terminal_command) or external)
 
 		if open_in_tab:
@@ -1764,7 +1678,7 @@ class MainWindow(gtk.Window):
 			notebook.remove_page(notebook.page_num(child))
 
 			# hide tabs if needed
-			if not self.options.getboolean('main', 'always_show_tabs'):
+			if not self.options.get('always_show_tabs'):
 				notebook.set_show_tabs(notebook.get_n_pages() > 1)
 
 			# block signal when destroying plugin with columns
@@ -1849,7 +1763,7 @@ class MainWindow(gtk.Window):
 
 				else:
 					# command is console based, create terminal tab and fork it
-					terminal_type = self.options.getint('main', 'terminal_type')
+					terminal_type = self.options.section('terminal').get('type')
 
 					if terminal_type == TerminalType.EXTERNAL:
 						os.system('{0} &'.format(raw_command))
@@ -1874,48 +1788,29 @@ class MainWindow(gtk.Window):
 
 	def save_tabs(self, notebook, section):
 		"""Save opened tabs"""
-		self.tab_options.remove_section(section)
-		self.tab_options.add_section(section)
+		tab_list = []
 
 		for index in range(0, notebook.get_n_pages()):
 			page = notebook.get_nth_page(index)
+			tab = {}
 
 			# give plugin a chance to clean up
 			if hasattr(page, '_handle_tab_close'):
 				page._handle_tab_close()
 
-			tab_class = page.__class__.__name__
-			tab_path = page.path
+			tab['class'] = page.__class__.__name__
+			tab['uri'] = page.path
 
+			# file lists have sort column
 			if hasattr(page, '_sort_column'):
-				# file lists have sort column
-				tab_sort_column = page._sort_column
-				tab_sort_ascending = (0, 1)[page._sort_ascending]
+				tab['sort_column'] = page._sort_column
+				tab['sort_ascending'] = page._sort_ascending
 
-			else:
-				# other plugins might not have sort column
-				tab_sort_column = ''
-				tab_sort_ascending = ''
+			# add tab to list
+			tab_list.append(tab)		
 
-			self.tab_options.set(
-							section,
-							'tab_{0}'.format(index),
-							'{0}:{1}:{2}:{3}'.format(
-												tab_class,
-												tab_sort_column,
-												tab_sort_ascending,
-												tab_path
-											)
-						)
-
-		if not self.tab_options.has_section('options'):
-			self.tab_options.add_section('options')
-
-		self.tab_options.set(
-					'options',
-					'{0}_selected'.format(section),
-					notebook.get_current_page()
-				)
+		self.tab_options.section(section).set('tabs', tab_list)
+		self.tab_options.section(section).set('active_tab', notebook.get_current_page())
 
 	def load_tabs(self, notebook, section):
 		"""Load saved tabs"""
@@ -1923,43 +1818,30 @@ class MainWindow(gtk.Window):
 		count = 0
 
 		if self.tab_options.has_section(section):
-			# if section exists, load it
-			tab_list = self.tab_options.options(section)
-			tab_list.sort()
+			tab_list = self.tab_options.section(section).get('tabs')
 
 			for tab in tab_list:
-				data = self.tab_options.get(section, tab).split(':', 3)
-
-				# extract data
-				tab_class = data[0]
-				tab_sort_column = data[1]
-				tab_sort_ascending = data[2]
-				tab_path = data[3]
-
 				if self.plugin_class_exists(tab_class):
 					# create new tab with specified data
 					self.create_tab(
 								notebook,
-								globals()[tab_class],
-								tab_path,
-								tab_sort_column,
-								tab_sort_ascending
+								globals()[tab['class']],
+								tab['uri'],
+								tab['sort_column'],
+								tab['sort_ascending']
 							)
 
 					count += 1
 
 				else:
 					# print error to console
-					print 'Error: Unknown plugin class "{0}". Tab skipped!'.format(tab_class)
+					print 'Warning: Unknown plugin class "{0}". Tab skipped!'.format(tab_class)
 
 			result = count > 0
 
 			# set active tab
 			if result:
-				active_tab = self.tab_options.getint(
-											'options',
-											'{0}_selected'.format(section)
-										)
+				active_tab = self.tab_options.section(section).get('active_tab')
 				self.set_active_tab(notebook, active_tab)
 
 		return result
@@ -2007,13 +1889,15 @@ class MainWindow(gtk.Window):
 			if not os.path.isdir(self.config_path):
 				os.makedirs(self.config_path)
 
-			self.options.write(open(os.path.join(self.config_path, 'config'), 'w'))
-			self.tab_options.write(open(os.path.join(self.config_path, 'tabs'), 'w'))
-			self.bookmark_options.write(open(os.path.join(self.config_path, 'bookmarks'), 'w'))
-			self.toolbar_options.write(open(os.path.join(self.config_path, 'toolbar'), 'w'))
-			self.command_options.write(open(os.path.join(self.config_path, 'commands'), 'w'))
-			self.accel_options.write(open(os.path.join(self.config_path, 'accelerators'), 'w'))
-			self.association_options.write(open(os.path.join(self.config_path, 'associations'), 'w'))
+			self.options.save()
+			self.window_options.save()
+			self.plugin_options.save()
+			self.tab_options.save()
+			self.bookmark_options.save()
+			self.toolbar_options.save()
+			self.command_options.save()
+			self.accel_options.save()
+			self.association_options.save()
 
 			# save accelerators
 			self.accelerator_manager.save()
@@ -2037,102 +1921,105 @@ class MainWindow(gtk.Window):
 
 	def load_config(self):
 		"""Load configuration from file located in users home directory"""
-		self.options = RawConfigParser()
-		self.tab_options = RawConfigParser()
-		self.bookmark_options = RawConfigParser()
-		self.toolbar_options = RawConfigParser()
-		self.command_options = RawConfigParser()
-		self.accel_options = RawConfigParser()
-		self.association_options = RawConfigParser()
-
-		# load configuration from right folder on systems that support it
 		if os.path.isdir(os.path.join(user.home, '.config')):
 			self.config_path = os.path.join(user.home, '.config', 'sunflower')
 		else:
 			self.config_path = os.path.join(user.home, '.sunflower')
 
-		self.options.read(os.path.join(self.config_path, 'config'))
-		self.tab_options.read(os.path.join(self.config_path, 'tabs'))
-		self.bookmark_options.read(os.path.join(self.config_path, 'bookmarks'))
-		self.toolbar_options.read(os.path.join(self.config_path, 'toolbar'))
-		self.command_options.read(os.path.join(self.config_path, 'commands'))
-		self.accel_options.read(os.path.join(self.config_path, 'accelerators'))
-		self.association_options.read(os.path.join(self.config_path, 'associations'))
+		self.options = Config('config', self)
+		self.window_options = Config('windows', self)
+		self.plugin_options = Config('plugins', self)
+		self.tab_options = Config('tabs', self)
+		self.bookmark_options = Config('bookmarks', self)
+		self.toolbar_options = Config('toolbar', self)
+		self.command_options = Config('commands', self)
+		self.accel_options = Config('accelerators', self)
+		self.association_options = Config('associations', self)
 
 		# load accelerators
 		self.accelerator_manager.load(self.accel_options)
 
-		# set default values
-		if not self.options.has_section('main'):
-			self.options.add_section('main')
+		# create default main window options
+		self.window_options.create_section('main').update({
+					'geometry': '960x550',
+					'state': 0,
+					'hide_on_close': False
+				})
 
-		if not self.bookmark_options.has_section('bookmarks'):
-			self.bookmark_options.add_section('bookmarks')
+		# create default terminal options
+		self.options.create_section('terminal').update({
+					'show_scrollbars': True,
+					'command': 'urxvt -embed {0}',
+					'type': 0,
+					'cursor_shape': 0,
+					'use_system_font': True,
+					'font': 'Monospace 12',
+					'allow_bold': True,
+					'mouse_autohide': False
+				})
 
-		if not self.command_options.has_section('tools'):
-			self.command_options.add_section('tools')
+		# create item list section
+		self.options.create_section('item_list').update({
+					'show_hidden': False,
+					'search_modifier': '000',
+					'time_format': '%H:%M %d-%m-%y',
+					'row_hinting': False,
+					'grid_lines': 0,
+					'selection_color': '#ffff5e5e0000',
+					'case_sensitive_sort': True,
+					'trash_files': True,
+					'right_click_select': False,
+					'headers_visible': True,
+					'mode_format': 0
+				})
 
-		# define default options
-		default_options = {
-				'default_editor': 'gedit "{0}"',
-				'wait_for_editor': 'False',
-				'show_hidden': 'False',
-				'show_mounts': 'True',
-				'show_toolbar': 'False',
-				'show_command_bar': 'False',
-				'show_command_entry': 'True',
-				'add_home': 'True',
-				'system_bookmarks': 'False',
-				'search_modifier': '000',
-				'time_format': '%H:%M %d-%m-%y',
-				'focus_new_tab': 'True',
-				'row_hinting': 'False',
-				'grid_lines': 0,
-				'selection_color': '#ffff5e5e0000',
-				'history_file': '.bash_history',
-				'window': '960x550',
-				'window_state': 0,
-				'hide_on_close': 'False',
-				'last_version': 0,
-				'button_relief': 0,
-				'terminal_scrollbars': 'True',
-				'terminal_command': 'urxvt -embed {0}',
-				'terminal_type': 0,
-				'terminal_cursor_shape': 0,
-				'terminal_use_system_font': 'True',
-				'terminal_font': 'Monospace 12',
-				'terminal_allow_bold': 'True',
-				'terminal_mouse_autohide': 'False',
-				'case_sensitive_sort': 'True',
-				'plugins': 'file_list,system_terminal,default_toolbar',
-				'reserve_size': 'False',
-				'trash_files': 'True',
-				'tab_button_icons': 'True',
-				'always_show_tabs': 'True',
-				'right_click_select': 'False',
-				'headers_visible': 'True',
-				'hide_operation_on_minimize': 'False',
-				'ubuntu_coloring': 'False',
-				'media_preview': 'False',
-				'active_notebook': 0,
-				'tab_close_button': 'True',
-				'show_status_bar': 0,
-				'human_readable_size': 'True',
-				'mode_format': 0,
-				'expand_tabs': 0,
-				'show_notifications': 'True',
-				'operation_set_owner': 'False',
-				'operation_set_mode': 'True',
-				'operation_set_timestamp': 'True',
-				'operation_silent': 'False',
-				'operation_merge_in_silent': 'True',
-				'operation_overwrite_in_silent': 'True'
-			}
+		# create default operation options
+		self.options.create_section('operations').update({
+					'set_owner': False,
+					'set_mode': True,
+					'set_timestamp': True,
+					'silent': False,
+					'merge_in_silent': True,
+					'overwrite_in_silent': True,
+					'hide_on_minimize': False
+				})
 
-		# set default options
-		for option, value in default_options.items():
-			if not self.options.has_option('main', option):
-				self.options.set('main', option, value)
+		# create default editor options
+		self.options.create_section('editor').update({
+					'type': 0,
+					'default_editor': 'gedit "{0}"',
+					'wait_for_editor': False
+				})
+
+		# create default options for bookmarks
+		self.bookmark_options.update({
+					'add_home': True,
+					'show_mounts': True,
+					'system_bookmarks': False,
+					'bookmarks': []
+				})
+
+		# set default application options
+		self.options.update({
+					'plugins': ['file_list', 'system_terminal', 'default_toolbar'],
+					'show_toolbar': False,
+					'show_command_bar': False,
+					'show_command_entry': True,
+					'history_file': '.bash_history',
+					'last_version': 0,
+					'button_relief': 0,
+					'focus_new_tab': True,
+					'tab_button_icons': True,
+					'always_show_tabs': True,
+					'expand_tabs': 0,
+					'show_notifications': True,
+					'ubuntu_coloring': False,
+					'tab_close_button': True,
+					'show_status_bar': 0,
+					'human_readable_size': True,
+					'media_preview': False,
+					'active_notebook': 0
+				})
 
 	def focus_oposite_object(self, widget, data=None):
 		"""Sets focus on oposite item list"""
@@ -2244,23 +2131,23 @@ class MainWindow(gtk.Window):
 		"""Apply settings to all the pluggins and main window"""
 		# show or hide command bar depending on settings
 		show_command_bar = self.menu_manager.get_item_by_name('show_command_bar')
-		show_command_bar.set_active(self.options.getboolean('main', 'show_command_bar'))
+		show_command_bar.set_active(self.options.get('show_command_bar'))
 
 		# show or hide command bar depending on settings
 		show_command_entry = self.menu_manager.get_item_by_name('show_command_entry')
-		show_command_entry.set_active(self.options.getboolean('main', 'show_command_entry'))
+		show_command_entry.set_active(self.options.get('show_command_entry'))
 
 		# show or hide toolbar depending on settings
 		show_toolbar = self.menu_manager.get_item_by_name('show_toolbar')
-		show_toolbar.set_active(self.options.getboolean('main', 'show_toolbar'))
+		show_toolbar.set_active(self.options.get('show_toolbar'))
 
 		# show or hide hidden files
 		show_hidden = self.menu_manager.get_item_by_name('show_hidden_files')
-		show_hidden.set_active(self.options.getboolean('main', 'show_hidden'))
+		show_hidden.set_active(self.options.get('show_hidden'))
 
 		# apply media preview settings
 		media_preview = self.menu_manager.get_item_by_name('fast_media_preview')
-		media_preview.set_active(self.options.getboolean('main', 'media_preview'))
+		media_preview.set_active(self.options.get('media_preview'))
 
 		# recreate bookmarks menu
 		self._create_bookmarks_menu()
@@ -2273,16 +2160,16 @@ class MainWindow(gtk.Window):
 
 		# show tabs if needed
 		self.left_notebook.set_show_tabs(
-								self.options.getboolean('main', 'always_show_tabs') or
+								self.options.get('always_show_tabs') or
 								self.left_notebook.get_n_pages() > 1
 							)
 		self.right_notebook.set_show_tabs(
-								self.options.getboolean('main', 'always_show_tabs') or
+								self.options.get('always_show_tabs') or
 								self.right_notebook.get_n_pages() > 1
 							)
 
 		# apply settings for all tabs
-		expand_tabs = self.options.getint('main', 'expand_tabs')
+		expand_tabs = self.options.get('expand_tabs')
 
 		for index in range(0, self.left_notebook.get_n_pages()):
 			page = self.left_notebook.get_nth_page(index)
@@ -2421,6 +2308,7 @@ class MainWindow(gtk.Window):
 
 		operation - 'copy' or 'cut' string representing operation
 		uri_list - list of URIs
+
 		"""
 		targets = [
 				('x-special/gnome-copied-files', 0, 0),

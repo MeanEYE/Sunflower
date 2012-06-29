@@ -19,7 +19,7 @@ class TitleBar:
 		self._radius = 3
 		self._control_count = 0
 		self._state = gtk.STATE_NORMAL
-		self._ubuntu_coloring = self._application.options.getboolean('main', 'ubuntu_coloring')
+		self._ubuntu_coloring = self._application.options.get('ubuntu_coloring')
 		self._menu = None
 		self._style = None
 		self._toolbar_style = None
@@ -317,7 +317,7 @@ class TitleBar:
 
 	def apply_settings(self):
 		"""Method called when system applies new settings"""
-		self._ubuntu_coloring = self._application.options.getboolean('main', 'ubuntu_coloring')
+		self._ubuntu_coloring = self._application.options.get('ubuntu_coloring')
 
 		# apply new colors
 		self._container.queue_draw()

@@ -23,6 +23,15 @@ class Container:
 		"""Get configuration value"""
 		return self._values[name] if name in self._values else None
 
+	def has(self, name):
+		"""Check if options with specified name exists"""
+		return name in self._values
+
+	def update(self, options):
+		"""Update missing options"""
+		difference = dict(filter(lambda item: item[0] not in self._values, options.items()))
+		self._values.update(difference)
+
 
 class Config(Container):
 	"""This class provides easy way to create and edit configuration files
@@ -84,7 +93,7 @@ class Config(Container):
 			data = self._decoder.decode(open(file_name).read())
 
 		except ValueError:
-			# we error occurs, we'll just ignore it
+			# if error occurs, we'll just ignore it
 			# empty config is not that scary
 			pass
 	
@@ -105,10 +114,10 @@ class Config(Container):
 
 	def create_section(self, name):
 		"""Create and return new section object"""
-		section = Container()
-		self._sections[name] = section
+		if not name in self._sections:
+			self._sections[name] = Container()
 
-		return section
+		return self._sections[name]
 
 	def get_sections(self):
 		"""Get list of all sections available"""
@@ -122,5 +131,3 @@ class Config(Container):
 	def has_section(self, name):
 		"""Check for existance of section"""
 		return name in self._sections
-
-

@@ -27,6 +27,11 @@ class Container:
 		"""Check if options with specified name exists"""
 		return name in self._values
 
+	def remove(self, name):
+		"""Remove option from container"""
+		assert name in self._values
+		del self._values[name]
+
 	def update(self, options):
 		"""Update missing options"""
 		difference = dict(filter(lambda item: item[0] not in self._values, options.items()))
@@ -118,6 +123,11 @@ class Config(Container):
 			self._sections[name] = Container()
 
 		return self._sections[name]
+
+	def remove_section(self, name):
+		"""Remove section from config"""
+		assert name in self._sections
+		del self._sections[name]
 
 	def get_sections(self):
 		"""Get list of all sections available"""

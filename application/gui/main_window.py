@@ -54,7 +54,7 @@ class MainWindow(gtk.Window):
 	version = {
 			'major': 0,
 			'minor': 1,
-			'build': 42,
+			'build': 43,
 			'stage': 'a'
 		}
 
@@ -1294,39 +1294,20 @@ class MainWindow(gtk.Window):
 			vbox = gtk.VBox(False, 10)
 			vbox.set_border_width(5)
 
-			# clear tabs
-			if config_version < 40:
-				vbox_version_40 = gtk.VBox(False, 0)
+			if config_version < 43:
+				vbox_version_43 = gtk.VBox(False, 0)
 
-				label_version_40 = gtk.Label('<b>Version 0.1a-40:</b>')
-				label_version_40.set_alignment(0, 0.5)
-				label_version_40.set_use_markup(True)
+				label_version_43 = gtk.Label('<b>Version 0.1a-43:</b>')
+				label_version_43.set_alignment(0, 0.5)
+				label_version_43.set_use_markup(True)
 
-				checkbox_reset_tabs = gtk.CheckButton('Clear open tabs')
+				checkbox_reset_tabs = gtk.CheckButton('Remove old configuration files')
 				checkbox_reset_tabs.set_active(True)
 
-				vbox_version_40.pack_start(label_version_40, False, False, 0)
-				vbox_version_40.pack_start(checkbox_reset_tabs, False, False, 0)
+				vbox_version_43.pack_start(label_version_43, False, False, 0)
+				vbox_version_43.pack_start(checkbox_reset_tabs, False, False, 0)
 
-				vbox.pack_start(vbox_version_40, False, False, 0)
-				mod_count += 1
-
-			if config_version < 37:
-				vbox_version_37 = gtk.VBox(False, 0)
-
-				label_version_37 = gtk.Label('<b>Version 0.1a-37:</b>')
-				label_version_37.set_alignment(0, 0.5)
-				label_version_37.set_use_markup(True)
-
-				# reset accelerator map
-				checkbox_reset_accel_map = gtk.CheckButton('Reset accelerator map')
-				checkbox_reset_accel_map.set_active(True)
-
-				# pack controls
-				vbox_version_37.pack_start(label_version_37, False, False, 0)
-				vbox_version_37.pack_start(checkbox_reset_accel_map, False, False, 0)
-
-				vbox.pack_start(vbox_version_37, False, False, 0)
+				vbox.pack_start(vbox_version_43, False, False, 0)
 				mod_count += 1
 
 			# show dialog
@@ -1334,16 +1315,20 @@ class MainWindow(gtk.Window):
 			change_log.run()
 
 			## apply selected changes in reverse order
-			if config_version < 37:
-				# reset accelerator map
-				if checkbox_reset_accel_map.get_active() \
-				and os.path.isfile(os.path.join(self.config_path, 'accel_map')):
-					os.remove(os.path.join(self.config_path, 'accel_map'))
+			if config_version < 43:
+				file_list = (
+						'associations',
+						'tabs',
+						'bookmarks',
+						'toolbar',
+						'commands',
+						'accel_map',
+						'config',
+						'accelerators'
+					)
 
-			if config_version < 40:
-				# clear saved tabs
-				if checkbox_reset_tabs.get_active():
-					self.tab_options = RawConfigParser()
+				existing_files = filter(lambda file_name: os.path.exists(os.path.join(self.config_path, file_name)), file_list)
+				map(lambda file_name: os.unlink(os.path.join(self.config_path, file_name)), existing_files)
 
 			# kill dialog
 			change_log.destroy()

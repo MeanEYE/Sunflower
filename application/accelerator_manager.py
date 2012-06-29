@@ -16,6 +16,8 @@ class AcceleratorManager:
 
 	def _save_accelerator(self, section, name, accelerator=None, primary=True, can_overwrite=False):
 		"""Save accelerator to config file"""
+		section = self._config.section(section)
+
 		if not primary:
 			name = '{0}_2'.format(name)
 
@@ -24,9 +26,8 @@ class AcceleratorManager:
 			label = gtk.accelerator_name(*accelerator)
 
 		# don't allow overwriting user's configuration unless strictly specified
-		if not self._config.has_option(section, name) \
-		or (self._config.has_option(section, name) and can_overwrite):
-			self._config.set(section, name, label)
+		if not section.has(name) or (section.has(name) and can_overwrite):
+			section.set(name, label)
 
 	def _load_accelerator(self, section, name, primary=True):
 		"""Load accelerator from config file"""
@@ -37,8 +38,8 @@ class AcceleratorManager:
 
 		# try to load only if config has accelerator specified
 		if self._config.has_section(section) \
-		and self._config.has_option(section, name):
-			result = gtk.accelerator_parse(self._config.get(section, name))
+		and self._config.section(section).has(name):
+			result = gtk.accelerator_parse(self._config.section(section).get(name))
 
 		return result
 
@@ -56,7 +57,7 @@ class AcceleratorManager:
 	def register_group(self, group):
 		"""Register group with manager"""
 		if not self._config.has_section(group._name):
-			self._config.add_section(group._name)
+			self._config.create_section(group._name)
 
 		# add group name to the list
 		if group._name not in self._group_names:

@@ -3,6 +3,11 @@ import gtk
 from widgets.settings_page import SettingsPage
 
 
+class Column:
+	TITLE = 0
+	COMMAND = 1
+
+
 class CommandsOptions(SettingsPage):
 	"""Commands options extension class"""
 
@@ -32,11 +37,11 @@ class CommandsOptions(SettingsPage):
 		cell_command.connect('edited', self._edited_command, 1)
 
 		# create and pack columns
-		col_title = gtk.TreeViewColumn(_('Title'), cell_title, text=0)
+		col_title = gtk.TreeViewColumn(_('Title'), cell_title, text=Column.TITLE)
 		col_title.set_min_width(200)
 		col_title.set_resizable(True)
 
-		col_command = gtk.TreeViewColumn(_('Command'), cell_command, text=1)
+		col_command = gtk.TreeViewColumn(_('Command'), cell_command, text=Column.COMMAND)
 		col_command.set_resizable(True)
 		col_command.set_expand(True)
 
@@ -92,8 +97,8 @@ class CommandsOptions(SettingsPage):
 
 	def _edited_command(self, cell, path, text, column):
 		"""Record edited text"""
-		iter_ = self._commands.get_iter(path)
-		self._commands.set_value(iter_, column, text)
+		selected_iter = self._commands.get_iter(path)
+		self._commands.set_value(selected_iter, column, text)
 
 		# enable save button
 		self._parent.enable_save()
@@ -101,11 +106,11 @@ class CommandsOptions(SettingsPage):
 	def _delete_command(self, widget, data=None):
 		"""Remove selected field from store"""
 		selection = self._list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
-		if iter_ is not None:
+		if selected_iter is not None:
 			# remove item from the list
-			list_.remove(iter_)
+			item_list.remove(selected_iter)
 
 			# enable save button in case item was removed
 			self._parent.enable_save()
@@ -113,44 +118,41 @@ class CommandsOptions(SettingsPage):
 	def _move_command(self, widget, direction):
 		"""Move selected command"""
 		selection = self._list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
-		if iter_ is not None:
+		if selected_iter is not None:
 			# get iter index
-			index = list_.get_path(iter_)[0]
+			index = item_list.get_path(selected_iter)[0]
 
 			# swap iters depending on specified direction
 			if (direction == -1 and index > 0) \
-			or (direction == 1 and index < len(list_) - 1):
-				list_.swap(iter_, list_[index + direction].iter)
+			or (direction == 1 and index < len(item_list) - 1):
+				item_list.swap(selected_iter, item_list[index + direction].iter)
 
 			# it items were swapped, enable save button
 			self._parent.enable_save()
 
 	def _load_options(self):
 		"""Load options from file"""
-		command_options = self._application.command_options
+		options = self._application.command_options
 
-		# load and parse tools
-		if command_options.has_section('commands'):
-			item_list = command_options.options('commands')
-			self._commands.clear()
+		# load and parse commands
+		self._commands.clear()
 
-			for index in range(1, (len(item_list) / 2) + 1):
-				tool_title = command_options.get('commands', 'title_{0}'.format(index))
-				tool_command = command_options.get('commands', 'command_{0}'.format(index))
-
-				# add item to the store
-				self._commands.append((tool_title, tool_command))
+		command_list = options.get('commands')
+		for command in command_list:
+			self._commands.append((command['title']))
 
 	def _save_options(self):
 		"""Save commands to file"""
-		command_options = self._application.command_options
+		options = self._application.command_options
+		commands = []
 
 		# save commands
-		command_options.remove_section('commands')
-		command_options.add_section('commands')
+		for data in self._commands:
+			commands.append({
+					'title': data[Column.TITLE],
+					'command': data[Column.COMMAND]
+				})
 
-		for index, tool in enumerate(self._commands, 1):
-			command_options.set('commands', 'title_{0}'.format(index), tool[0])
-			command_options.set('commands', 'command_{0}'.format(index), tool[1])
+		options.set('commands', commands)

@@ -3,6 +3,11 @@ import gtk
 from widgets.settings_page import SettingsPage
 
 
+class Column:
+	NAME = 0
+	URI = 1
+
+
 class BookmarksOptions(SettingsPage):
 	"""Bookmark options extension class"""
 
@@ -42,11 +47,11 @@ class BookmarksOptions(SettingsPage):
 		cell_command.set_property('mode', gtk.CELL_RENDERER_MODE_EDITABLE)
 		cell_command.connect('edited', self._edited_bookmark, 1)
 
-		col_title = gtk.TreeViewColumn(_('Title'), cell_title, text=0)
+		col_title = gtk.TreeViewColumn(_('Title'), cell_title, text=Column.NAME)
 		col_title.set_min_width(200)
 		col_title.set_resizable(True)
 
-		col_command = gtk.TreeViewColumn(_('Location'), cell_command, text=1)
+		col_command = gtk.TreeViewColumn(_('Location'), cell_command, text=Column.URI)
 		col_command.set_resizable(True)
 		col_command.set_expand(True)
 
@@ -147,42 +152,36 @@ class BookmarksOptions(SettingsPage):
 
 	def _load_options(self):
 		"""Load options from file"""
-		options = self._application.options
-		bookmark_options = self._application.bookmark_options
+		options = self._application.bookmark_options
 
 		# get checkbox states
-		self._checkbox_show_mount_points.set_active(options.getboolean('main', 'show_mounts'))
-		self._checkbox_add_home.set_active(options.getboolean('main', 'add_home'))
-		self._checkbox_system_bookmarks.set_active(options.getboolean('main', 'system_bookmarks'))
+		self._checkbox_show_mount_points.set_active(options.get('show_mounts'))
+		self._checkbox_add_home.set_active(options.get('add_home'))
+		self._checkbox_system_bookmarks.set_active(options.get('system_bookmarks'))
 
 		# load and parse bookmars
-		if bookmark_options.has_section('bookmarks'):
-			item_list = bookmark_options.options('bookmarks')
+		self._bookmarks.clear()
 
-			self._bookmarks.clear()
-
-			for index in range(1, len(item_list) + 1):
-				bookmark = bookmark_options.get('bookmarks', 'b_{0}'.format(index)).split(';', 1)
-				self._bookmarks.append((bookmark[0], bookmark[1]))
+		bookmarks = options.get('bookmarks')
+		for bookmark in bookmarks:
+			self._bookmarks.append((bookmark['name'], bookmark['uri']))
 
 	def _save_options(self):
 		"""Save bookmarks to file"""
-		options = self._application.options
-		bookmark_options = self._application.bookmark_options
-		_bool = ('False', 'True')
+		options = self._application.bookmark_options
 
-		# save show mounts checkbox state
-		options.set('main', 'show_mounts', _bool[self._checkbox_show_mount_points.get_active()])
-		options.set('main', 'add_home', _bool[self._checkbox_add_home.get_active()])
-		options.set('main', 'system_bookmarks', _bool[self._checkbox_system_bookmarks.get_active()])
+		# save checkbox state
+		options.set('show_mounts', self._checkbox_show_mount_points.get_active())
+		options.set('add_home', self._checkbox_add_home.get_active())
+		options.set('system_bookmarks', self._checkbox_system_bookmarks.get_active())
 
 		# save bookmarks
-		bookmark_options.remove_section('bookmarks')
-		bookmark_options.add_section('bookmarks')
+		bookmarks = []
 
-		for i, bookmark in enumerate(self._bookmarks, 1):
-			bookmark_options.set(
-								'bookmarks',
-								'b_{0}'.format(i),
-								'{0};{1}'.format(bookmark[0], bookmark[1])
-								)
+		for data in self._bookmarks:
+			bookmarks.append({
+					'name': data[Column.NAME],
+					'uri': data[Column.URI]
+				})
+
+		options.set('bookmarks', bookmarks)

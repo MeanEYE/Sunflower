@@ -410,7 +410,7 @@ class CopyOperation(Operation):
 		self._dir_list_create = []
 
 		# cache settings
-		self._reserve_size = self._application.options.getboolean('main', 'reserve_size')
+		self._reserve_size = self._application.options.section('operations').get('reserve_size')
 
 	def _create_dialog(self):
 		"""Create progress dialog"""
@@ -1078,7 +1078,7 @@ class DeleteOperation(Operation):
 				parent.unselect_all()
 
 		# select removal method
-		trash_files = self._application.options.getboolean('main', 'trash_files') 
+		trash_files = self._application.options.section('operations').get('trash_files') 
 		trash_available = ProviderSupport.TRASH in self._source.get_support()
 
 		remove_method = (

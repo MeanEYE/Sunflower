@@ -68,15 +68,14 @@ class ViewEditOptions(SettingsPage):
 
 	def _load_options(self):
 		"""Load options"""
-		options = self._application.options
+		options = self._application.options.section('editor')
 
-		self._entry_editor.set_text(options.get('main', 'default_editor'))
-		self._checkbox_wait_for_editor.set_active(options.getboolean('main', 'wait_for_editor'))
+		self._entry_editor.set_text(options.get('default_editor'))
+		self._checkbox_wait_for_editor.set_active(options.get('wait_for_editor'))
 
 	def _save_options(self):
 		"""Save options"""
-		options = self._application.options
-		bool = ('False', 'True')
+		options = self._application.options.section('editor')
 
-		options.set('main', 'default_editor', self._entry_editor.get_text())
-		options.set('main', 'wait_for_editor', bool[self._checkbox_wait_for_editor.get_active()])
+		options.set('default_editor', self._entry_editor.get_text())
+		options.set('wait_for_editor', self._checkbox_wait_for_editor.get_active())

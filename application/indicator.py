@@ -14,7 +14,7 @@ class Indicator(object):
 		self._menu = gtk.Menu()
 		self._create_menu_items()
 
-		if self._parent.options.getboolean('main', 'hide_on_close'):
+		if self._parent.window_options.section('main').get('hide_on_close'):
 			self._indicator = gtk.StatusIcon()
 
 			self._indicator.set_from_file(os.path.join(self._icon_path, self._icon))

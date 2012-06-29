@@ -1,6 +1,7 @@
 import os
 import pynotify
 
+
 class NotificationManager:
 	"""Notification manager provides OS specific notification
 	methods to plugins and operations.
@@ -27,7 +28,7 @@ class NotificationManager:
 
 	def notify(self, title, text, icon=None):
 		"""Make system notification"""
-		if not self._application.options.getboolean('main', 'show_notifications'):
+		if not self._application.options.get('show_notifications'):
 			return  # if notifications are disabled
 
 		if icon is None:  # make sure we show notification with icon

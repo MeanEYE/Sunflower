@@ -18,14 +18,14 @@ class ToolbarManager:
 
 	def _widget_exists(self, name):
 		"""Check if widget with specified name exists"""
-		return self._config.has_section(self.get_section_name(name))
+		return self._config.has_section(name)
 
 	def _add_widget(self, name, widget_type):
 		"""Add widget to list"""
-		number = len(self._config.options('widgets')) / 2
+		section = self._config.create_section(name)
+		section.set('type', widget_type)
 
-		self._config.set('widgets', 'name_{0}'.format(number), name)
-		self._config.set('widgets', 'type_{0}'.format(number), widget_type)
+		return section
 
 	def get_toolbar(self):
 		"""Return toolbar widget"""
@@ -60,28 +60,18 @@ class ToolbarManager:
 
 		return result
 
-	def get_section_name(self, name):
-		"""Create section name"""
-		return 'widget_{0}'.format(name.lower().replace(' ', '_'))
-
-	def load_config(self, config_parser):
+	def load_config(self, config):
 		"""Set config parser for toolbar"""
-		self._config = config_parser
-
-		if not self._config.has_section('widgets'):
-			self._config.add_section('widgets')
+		self._config = config
 
 	def create_widgets(self):
 		"""Create widgets for toolbar"""
-		count = len(self._config.options('widgets')) / 2
-
 		# remove existing widgets
 		self._toolbar.foreach(lambda item: self._toolbar.remove(item))
 
 		# create new widgets
-		for number in range(0, count):
-			name = self._config.get('widgets', 'name_{0}'.format(number))
-			widget_type = self._config.get('widgets', 'type_{0}'.format(number))
+		for name in self._config.get_sections():
+			widget_type = self._config.section(name).get('type')
 
 			# skip creating widget if there's no factory for specified type
 			if not self._factory_cache.has_key(widget_type): continue
@@ -90,12 +80,7 @@ class ToolbarManager:
 			factory = self._factory_cache[widget_type]
 
 			# get config
-			section_name = self.get_section_name(name)
-			config = {}
-
-			for option in self._config.options(section_name):
-				config[option] = self._config.get(section_name, option)
-
+			config = self._config.section(name)._get_data()
 			widget = factory.get_widget(name, widget_type, config)
 
 			if widget is not None:
@@ -174,14 +159,9 @@ class ToolbarManager:
 
 				# save config
 				if config is not None:
-					self._add_widget(name, widget_type)
-
-					# create config section
-					section_name = self.get_section_name(name)
-					self._config.add_section(section_name)
-
+					section = self._add_widget(name, widget_type)
 					for key, value in config.items():
-						self._config.set(section_name, key, value)
+						section.set(key, value)
 
 					result = True
 
@@ -211,22 +191,12 @@ class ToolbarManager:
 		factory = self._factory_cache[widget_type]
 
 		# load config
-		config = {}
-		section_name = self.get_section_name(name)
-
-		for option in self._config.options(section_name):
-			config[option] = self._config.get(section_name, option)
-
-		# get user input
+		section = self._config.section(name)
+		config = section._get_data()
 		config = factory.configure_widget(name, widget_type, config)
 
 		if config is not None:
-			# clear configuration section
-			self._config.remove_section(section_name)
-			self._config.add_section(section_name)
-
-			# record new values
 			for key, value in config.items():
-				self._config.set(section_name, key, value)
+				section.set(key, value)
 
 		return config is not None

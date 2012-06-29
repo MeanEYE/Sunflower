@@ -660,8 +660,8 @@ class MainWindow(gtk.Window):
 	def _destroy(self, widget, data=None):
 		"""Application destructor"""
 		# save tabs
-		self.save_tabs(self.left_notebook, 'left_notebook')
-		self.save_tabs(self.right_notebook, 'right_notebook')
+		self.save_tabs(self.left_notebook, 'left')
+		self.save_tabs(self.right_notebook, 'right')
 
 		# save window properties
 		self._save_window_position()
@@ -796,7 +796,6 @@ class MainWindow(gtk.Window):
 		for item in self.menu_commands.get_children():  # remove existing items
 			self.menu_commands.remove(item)
 
-		# create each item from the list
 		command_list = self.command_options.get('commands')
 
 		for command_data in command_list:
@@ -1400,19 +1399,25 @@ class MainWindow(gtk.Window):
 
 	def activate_bookmark(self, widget=None, index=0):
 		"""Activate bookmark by index"""
+		path = None
 		result = False
 		active_object = self.get_active_object()
 
 		# read all bookmarks
 		bookmark_list = self.bookmark_options.get('bookmarks')
 
-		# check if index is valid and change path
-		if index < len(bookmark_list):
-			bookmark = bookmark_list[index]
+		# check if index is valid 
+		if index == 0:
+			path = user.home
 
-			if hasattr(active_object, 'change_path'):
-				active_object.change_path(bookmark['uri'])
-				result = True
+		elif index-1 < len(bookmark_list):
+			bookmark = bookmark_list[index-1]
+			path = bookmark['uri']
+
+		# change path
+		if path is not None and hasattr(active_object, 'change_path'):
+			active_object.change_path(path)
+			result = True
 
 		return result
 
@@ -1809,8 +1814,11 @@ class MainWindow(gtk.Window):
 			# add tab to list
 			tab_list.append(tab)		
 
-		self.tab_options.section(section).set('tabs', tab_list)
-		self.tab_options.section(section).set('active_tab', notebook.get_current_page())
+		# store tabs to configuration
+		section = self.tab_options.create_section(section)
+
+		section.set('tabs', tab_list)
+		section.set('active_tab', notebook.get_current_page())
 
 	def load_tabs(self, notebook, section):
 		"""Load saved tabs"""
@@ -1821,14 +1829,14 @@ class MainWindow(gtk.Window):
 			tab_list = self.tab_options.section(section).get('tabs')
 
 			for tab in tab_list:
-				if self.plugin_class_exists(tab_class):
+				if self.plugin_class_exists(tab['class']):
 					# create new tab with specified data
 					self.create_tab(
 								notebook,
 								globals()[tab['class']],
 								tab['uri'],
-								tab['sort_column'],
-								tab['sort_ascending']
+								tab['sort_column'] if 'sort_column' in tab else None,
+								tab['sort_ascending'] if 'sort_ascending' in tab else None
 							)
 
 					count += 1
@@ -1967,7 +1975,6 @@ class MainWindow(gtk.Window):
 					'grid_lines': 0,
 					'selection_color': '#ffff5e5e0000',
 					'case_sensitive_sort': True,
-					'trash_files': True,
 					'right_click_select': False,
 					'headers_visible': True,
 					'mode_format': 0
@@ -1981,7 +1988,9 @@ class MainWindow(gtk.Window):
 					'silent': False,
 					'merge_in_silent': True,
 					'overwrite_in_silent': True,
-					'hide_on_minimize': False
+					'hide_on_minimize': False,
+					'trash_files': True,
+					'reserve_size': False
 				})
 
 		# create default editor options
@@ -2019,6 +2028,11 @@ class MainWindow(gtk.Window):
 					'human_readable_size': True,
 					'media_preview': False,
 					'active_notebook': 0
+				})
+
+		# set default commands
+		self.command_options.update({
+					'commands': []
 				})
 
 	def focus_oposite_object(self, widget, data=None):
@@ -2143,7 +2157,7 @@ class MainWindow(gtk.Window):
 
 		# show or hide hidden files
 		show_hidden = self.menu_manager.get_item_by_name('show_hidden_files')
-		show_hidden.set_active(self.options.get('show_hidden'))
+		show_hidden.set_active(self.options.section('item_list').get('show_hidden'))
 
 		# apply media preview settings
 		media_preview = self.menu_manager.get_item_by_name('fast_media_preview')

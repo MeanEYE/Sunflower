@@ -3,6 +3,14 @@ import gtk
 from widgets.settings_page import SettingsPage
 
 
+class Column:
+	NAME = 0
+	DESCRIPTION = 1
+	TYPE = 2
+	ICON = 3
+
+
+
 class ToolbarOptions(SettingsPage):
 	"""Toolbar options extension class"""
 
@@ -32,11 +40,11 @@ class ToolbarOptions(SettingsPage):
 		# pack and configure renderes
 		col_name.pack_start(cell_icon, False)
 		col_name.pack_start(cell_name, True)
-		col_name.add_attribute(cell_icon, 'icon-name', 3)
-		col_name.add_attribute(cell_name, 'text', 0)
+		col_name.add_attribute(cell_icon, 'icon-name', Column.ICON)
+		col_name.add_attribute(cell_name, 'text', Column.NAME)
 
 		# create type column
-		col_type = gtk.TreeViewColumn(_('Type'), cell_type, markup=1)
+		col_type = gtk.TreeViewColumn(_('Type'), cell_type, markup=Column.DESCRIPTION)
 		col_type.set_resizable(True)
 		col_type.set_expand(True)
 
@@ -145,16 +153,14 @@ class ToolbarOptions(SettingsPage):
 
 	def _load_options(self):
 		"""Load options from file"""
-		toolbar_options = self._application.toolbar_options
-		count = len(toolbar_options.options('widgets')) / 2
+		options = self._application.toolbar_options
 
 		# clear list store
 		self._store.clear()
 
-		for number in range(0, count):
-			name = toolbar_options.get('widgets', 'name_{0}'.format(number))
-			widget_type = toolbar_options.get('widgets', 'type_{0}'.format(number))
-
+		for name in options.get_sections():
+			section = options.section(name)
+			widget_type = section.get('type')
 			data = self._toolbar_manager.get_widget_data(widget_type)
 
 			if data is not None:
@@ -169,28 +175,18 @@ class ToolbarOptions(SettingsPage):
 
 	def _save_options(self):
 		"""Save settings to config file"""
-		toolbar_options = self._application.toolbar_options
+		options = self._application.toolbar_options
 		count = len(self._store)
 
 		# get section list, we'll use this
 		# list to remove orphan configurations
-		section_list = toolbar_options.sections()
+		section_list = options.get_sections()
 
-		# clear section
-		toolbar_options.remove_section('widgets')
-		toolbar_options.add_section('widgets')
-		section_list.pop(section_list.index('widgets'))
+		# get list from configuration window
+		new_list = []
+		for data in self._store:
+			new_list.append(data[Column.NAME])
 
-		# write widgets in specified order
-		for number in range(0, count):
-			data = self._store[number]
-			toolbar_options.set('widgets', 'name_{0}'.format(number), data[0])
-			toolbar_options.set('widgets', 'type_{0}'.format(number), data[2])
-
-			# remove section from temporary list
-			section_name = self._toolbar_manager.get_section_name(data[0])
-			section_list.pop(section_list.index(section_name))
-
-		# remove orphan configurations
-		for section in section_list:
-			toolbar_options.remove_section(section)
+		# get only sections for removal
+		sections_to_remove = filter(lambda name: name not in new_list, section_list)
+		map(lambda name: options.remove_section(name), sections_to_remove)

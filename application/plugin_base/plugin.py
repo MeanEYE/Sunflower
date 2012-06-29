@@ -49,7 +49,7 @@ class PluginBase(gtk.VBox):
 		self._status_bar = StatusBar()
 
 		# show status bar if needed
-		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.ALWAYS:
+		if self._parent.options.get('show_status_bar') == StatusVisible.ALWAYS:
 			self._status_bar.show()
 
 		# pack interface

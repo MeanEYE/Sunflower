@@ -124,7 +124,7 @@ class AcceleratorOptions(SettingsPage):
 	def _populate_list(self):
 		"""Update accelerator list"""
 		manager = self._application.accelerator_manager
-		bookmarks = self._application.bookmark_options
+		bookmarks = self._application.bookmark_options.get('bookmarks')
 		options = self._application.options
 		groups = manager.get_groups()
 		groups.sort()
@@ -141,12 +141,10 @@ class AcceleratorOptions(SettingsPage):
 		# add bookmarks to the replace list
 		for number in range(1, 11):
 			key_name = '{0}.{1}_{2}'.format('item_list', 'bookmark', number)
-			bookmark_name = 'b_{0}'.format(number)
 
-			if bookmarks.has_option('bookmarks', bookmark_name):
+			if number < len(bookmarks):
 				# bookmark exists
-				data = bookmarks.get('bookmarks', bookmark_name).split(';', 1)
-				bookmark_value = data[0]
+				bookmark_value = bookmarks[number-1]['name']
 
 			else:
 				# bookmark doesn't exist, add generic name

@@ -29,6 +29,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_case_sensitive = gtk.CheckButton(_('Case sensitive item sorting'))
 		self._checkbox_right_click = gtk.CheckButton(_('Right click selects items'))
 		self._checkbox_trash_files = gtk.CheckButton(_('Delete items to trash can'))
+		self._checkbox_reserve_size = gtk.CheckButton(_('Reserve free space on copy/move'))
 		self._checkbox_show_headers = gtk.CheckButton(_('Show list headers'))
 		self._checkbox_media_preview = gtk.CheckButton(_('Fast media preview'))
 
@@ -37,6 +38,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_case_sensitive.connect('toggled', self._parent.enable_save)
 		self._checkbox_right_click.connect('toggled', self._parent.enable_save)
 		self._checkbox_trash_files.connect('toggled', self._parent.enable_save)
+		self._checkbox_reserve_size.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_headers.connect('toggled', self._parent.enable_save)
 		self._checkbox_media_preview.connect('toggled', self._parent.enable_save)
 
@@ -137,6 +139,7 @@ class ItemListOptions(SettingsPage):
 		vbox_operation.pack_start(self._checkbox_case_sensitive, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_right_click, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_trash_files, False, False, 0)
+		vbox_operation.pack_start(self._checkbox_reserve_size, False, False, 0)
 		vbox_operation.pack_start(hbox_quick_search, False, False, 5)
 		vbox_operation.pack_start(vbox_time_format, False, False, 5)
 
@@ -148,7 +151,7 @@ class ItemListOptions(SettingsPage):
 	def _vim_bindings_toggled(self, widget, data=None):
 		"""Handle toggling VIM bindings on or off"""
 		if widget.get_active() \
-		and self._application.options.get('main', 'search_modifier') == '000':
+		and self._application.options.section('item_list').get('search_modifier') == '000':
 			# user can't have this quick search combination with VIM bindings
 			dialog = gtk.MessageDialog(
 									self._application,
@@ -176,20 +179,22 @@ class ItemListOptions(SettingsPage):
 	def _load_options(self):
 		"""Load item list options"""
 		options = self._application.options
+		section = options.section('item_list')
 
-		self._checkbox_row_hinting.set_active(options.getboolean('main', 'row_hinting'))
-		self._checkbox_show_hidden.set_active(options.getboolean('main', 'show_hidden'))
-		self._checkbox_case_sensitive.set_active(options.getboolean('main', 'case_sensitive_sort'))
-		self._checkbox_right_click.set_active(options.getboolean('main', 'right_click_select'))
-		self._checkbox_trash_files.set_active(options.getboolean('main', 'trash_files'))
-		self._checkbox_show_headers.set_active(options.getboolean('main', 'headers_visible'))
-		self._checkbox_media_preview.set_active(options.getboolean('main', 'media_preview'))
-		self._combobox_mode_format.set_active(options.getint('main', 'mode_format'))
-		self._combobox_grid_lines.set_active(options.getint('main', 'grid_lines'))
-		self._entry_time_format.set_text(options.get('main', 'time_format'))
-		self._button_selection_color.set_color(gtk.gdk.color_parse(options.get('main', 'selection_color')))
+		self._checkbox_row_hinting.set_active(section.get('row_hinting'))
+		self._checkbox_show_hidden.set_active(section.get('show_hidden'))
+		self._checkbox_case_sensitive.set_active(section.get('case_sensitive_sort'))
+		self._checkbox_right_click.set_active(section.get('right_click_select'))
+		self._checkbox_trash_files.set_active(options.section('operations').get('trash_files'))
+		self._checkbox_reserve_size.set_active(options.section('operations').get('reserve_size'))
+		self._checkbox_show_headers.set_active(section.get('headers_visible'))
+		self._checkbox_media_preview.set_active(options.get('media_preview'))
+		self._combobox_mode_format.set_active(section.get('mode_format'))
+		self._combobox_grid_lines.set_active(section.get('grid_lines'))
+		self._entry_time_format.set_text(section.get('time_format'))
+		self._button_selection_color.set_color(gtk.gdk.color_parse(section.get('selection_color')))
 
-		search_modifier = options.get('main', 'search_modifier')
+		search_modifier = section.get('search_modifier')
 		self._checkbox_control.set_active(search_modifier[0] == '1')
 		self._checkbox_alt.set_active(search_modifier[1] == '1')
 		self._checkbox_shift.set_active(search_modifier[2] == '1')
@@ -197,23 +202,24 @@ class ItemListOptions(SettingsPage):
 	def _save_options(self):
 		"""Save item list options"""
 		options = self._application.options
-		_bool = ('False', 'True')
+		section = options.section('item_list')
 
-		options.set('main', 'row_hinting', _bool[self._checkbox_row_hinting.get_active()])
-		options.set('main', 'show_hidden', _bool[self._checkbox_show_hidden.get_active()])
-		options.set('main', 'case_sensitive_sort', _bool[self._checkbox_case_sensitive.get_active()])
-		options.set('main', 'right_click_select', _bool[self._checkbox_right_click.get_active()])
-		options.set('main', 'trash_files', _bool[self._checkbox_trash_files.get_active()])
-		options.set('main', 'headers_visible', _bool[self._checkbox_show_headers.get_active()])
-		options.set('main', 'media_preview', _bool[self._checkbox_media_preview.get_active()])
-		options.set('main', 'mode_format', self._combobox_mode_format.get_active())
-		options.set('main', 'grid_lines', self._combobox_grid_lines.get_active())
-		options.set('main', 'time_format', self._entry_time_format.get_text())
-		options.set('main', 'selection_color', self._button_selection_color.get_color().to_string())
+		section.set('row_hinting', self._checkbox_row_hinting.get_active())
+		section.set('show_hidden', self._checkbox_show_hidden.get_active())
+		section.set('case_sensitive_sort', self._checkbox_case_sensitive.get_active())
+		section.set('right_click_select', self._checkbox_right_click.get_active())
+		section.set('trash_files', self._checkbox_trash_files.get_active())
+		section.set('reserve_size', self._checkbox_reserve_size.get_active())
+		section.set('headers_visible', self._checkbox_show_headers.get_active())
+		options.set('media_preview', self._checkbox_media_preview.get_active())
+		section.set('mode_format', self._combobox_mode_format.get_active())
+		section.set('grid_lines', self._combobox_grid_lines.get_active())
+		section.set('time_format', self._entry_time_format.get_text())
+		section.set('selection_color', self._button_selection_color.get_color().to_string())
 
 		search_modifier = "%d%d%d" % (
 								self._checkbox_control.get_active(),
 								self._checkbox_alt.get_active(),
 								self._checkbox_shift.get_active()
 							)
-		options.set('main', 'search_modifier', search_modifier)
+		section.set('search_modifier', search_modifier)

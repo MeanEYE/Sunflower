@@ -186,8 +186,8 @@ class PropertiesWindow(gtk.Window):
 		"""Update widgets to represent item state"""
 		mime_type = self._application.associations_manager.get_mime_type(self._path)
 		description = self._application.associations_manager.get_mime_description(mime_type)
-		time_format = self._application.options.get('main', 'time_format')
-		human_readable = self._application.options.getboolean('main', 'human_readable_size')
+		time_format = self._application.options.section('item_list').get('time_format')
+		human_readable = self._application.options.get('human_readable_size')
 		item_stat = self._provider.get_stat(self._path, extended=True)
 
 		# get item size

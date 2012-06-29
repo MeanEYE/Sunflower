@@ -217,7 +217,7 @@ class FileList(ItemList):
 		self._item_list.set_search_column(Column.NAME)
 
 		# set row hinting
-		row_hinting = self._parent.options.getboolean('main', 'row_hinting')
+		row_hinting = self._parent.options.section('item_list').get('row_hinting')
 		self._item_list.set_rules_hint(row_hinting)
 
 		# set grid lines
@@ -226,7 +226,7 @@ class FileList(ItemList):
 					gtk.TREE_VIEW_GRID_LINES_HORIZONTAL,
 					gtk.TREE_VIEW_GRID_LINES_VERTICAL,
 					gtk.TREE_VIEW_GRID_LINES_BOTH,
-				)[self._parent.options.getint('main', 'grid_lines')]
+				)[self._parent.options.section('item_list').get('grid_lines')]
 		self._item_list.set_grid_lines(grid_lines)
 
 		# set sort function
@@ -243,14 +243,14 @@ class FileList(ItemList):
 
 		# thumbnail view
 		self._thumbnail_view = ThumbnailView(self)
-		self._enable_media_preview = self._parent.options.getboolean('main', 'media_preview')
+		self._enable_media_preview = self._parent.options.get('media_preview')
 
 		# variable that is used to set focus on newly created files and dirs
 		self._item_to_focus = None
 
 		# cache configuration locally
-		self._time_format = self._parent.options.get('main', 'time_format')
-		self._mode_format = self._parent.options.getint('main', 'mode_format')
+		self._time_format = self._parent.options.section('item_list').get('time_format')
+		self._mode_format = self._parent.options.section('item_list').get('mode_format')
 
 		# change to initial path
 		try:
@@ -880,7 +880,7 @@ class FileList(ItemList):
 
 	def _directory_changed(self, monitor, event, path, other_path):
 		"""Callback method fired when contents of directory has been changed"""
-		show_hidden = self._parent.options.getboolean('main', 'show_hidden')
+		show_hidden = self._parent.options.section('item_list').get('show_hidden')
 
 		# node created
 		if event is MonitorSignals.CREATED:
@@ -1013,12 +1013,13 @@ class FileList(ItemList):
 
 	def _edit_filename(self, filename):
 		"""Open editor with specified filename and current path"""
-		default_editor = self._parent.options.get('main', 'default_editor')
+		section = self._parent.options.section('editor')
+		default_editor = section.get('default_editor')
 		filename = os.path.join(self.path, filename)
 		command = default_editor.format(filename)
 
 		# if we shouldn't wait for editor, add & at the end of command
-		if not self._parent.options.getboolean('main', 'wait_for_editor'):
+		if not section.get('wait_for_editor'):
 			command = '{0} &'.format(command)
 
 		os.system(command)
@@ -1209,7 +1210,7 @@ class FileList(ItemList):
 			file_stat = provider.get_stat(name, relative_to=self.path)
 
 			file_mode = file_stat.mode
-			formated_file_mode = common.format_mode(file_mode, self._parent.options.getint('main', 'mode_format'))
+			formated_file_mode = common.format_mode(file_mode, self._mode_format)
 
 			self._store.set_value(found_iter, Column.MODE, file_mode)
 			self._store.set_value(found_iter, Column.FORMATED_MODE, formated_file_mode)
@@ -1327,7 +1328,7 @@ class FileList(ItemList):
 		self._clear_list()
 
 		# cache objects and settings
-		show_hidden = self._parent.options.getboolean('main', 'show_hidden')
+		show_hidden = self._parent.options.section('item_list').get('show_hidden')
 
 		# hide thumbnail
 		if self._enable_media_preview:
@@ -1518,7 +1519,7 @@ class FileList(ItemList):
 		files = 0
 		size = 0L
 		result = 0
-		color = self._parent.options.get('main', 'selection_color')
+		color = self._selection_color
 
 		for row in self._store:
 			# set selection
@@ -1648,11 +1649,10 @@ class FileList(ItemList):
 	def update_column_size(self, name):
 		"""Update column size with global value"""
 		column = filter(lambda item: item.get_data('name') == name, self._columns)[0]
-		width = self._parent.options.getint(
-										self.__class__.__name__,
-										'size_{0}'.format(name)
-									)
-		column.set_fixed_width(width)
+		width = self._parent.plugin_options.section(self.__class__.__name__).get('size_{0}'.format(name))
+
+		if width is not None:
+			column.set_fixed_width(width)
 
 	def get_provider(self):
 		"""Get list provider object"""
@@ -1667,9 +1667,10 @@ class FileList(ItemList):
 	def apply_settings(self):
 		"""Apply file list settings"""
 		ItemList.apply_settings(self)  # let parent apply its own settings
+		section = self._parent.options.section('item_list')
 
 		# apply row hinting
-		row_hinting = self._parent.options.getboolean('main', 'row_hinting')
+		row_hinting = section.get('row_hinting')
 		self._item_list.set_rules_hint(row_hinting)
 
 		# apply grid lines
@@ -1678,19 +1679,19 @@ class FileList(ItemList):
 					gtk.TREE_VIEW_GRID_LINES_HORIZONTAL,
 					gtk.TREE_VIEW_GRID_LINES_VERTICAL,
 					gtk.TREE_VIEW_GRID_LINES_BOTH,
-				)[self._parent.options.getint('main', 'grid_lines')]
+				)[section.get('grid_lines')]
 		self._item_list.set_grid_lines(grid_lines)
 
 		# cache settings
-		self._time_format = self._parent.options.get('main', 'time_format')
-		self._mode_format = self._parent.options.getint('main', 'mode_format')
+		self._time_format = section.get('time_format')
+		self._mode_format = section.get('mode_format')
 
 		# reload file list in order to apply time formatting, hidden files and other
 		self.refresh_file_list()
 
 	def apply_media_preview_settings(self):
 		"""Apply settings related to image_preview"""
-		self._enable_media_preview = self._parent.options.getboolean('main', 'media_preview')
+		self._enable_media_preview = self._parent.options.get('media_preview')
 
 		if self._enable_media_preview:
 			# force showing thumbnail

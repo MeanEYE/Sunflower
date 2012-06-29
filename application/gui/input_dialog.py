@@ -516,26 +516,25 @@ class CopyDialog:
 
 	def _load_configuration(self):
 		"""Load options from config file"""
-		options = self._application.options
+		options = self._application.options.section('operations')
 
-		self.checkbox_owner.set_active(options.getboolean('main', 'operation_set_owner'))
-		self.checkbox_mode.set_active(options.getboolean('main', 'operation_set_mode'))
-		self.checkbox_timestamp.set_active(options.getboolean('main', 'operation_set_timestamp'))
-		self.checkbox_silent.set_active(options.getboolean('main', 'operation_silent'))
-		self.checkbox_merge.set_active(options.getboolean('main', 'operation_merge_in_silent'))
-		self.checkbox_overwrite.set_active(options.getboolean('main', 'operation_overwrite_in_silent'))
+		self.checkbox_owner.set_active(options.get('set_owner'))
+		self.checkbox_mode.set_active(options.get('set_mode'))
+		self.checkbox_timestamp.set_active(options.get('set_timestamp'))
+		self.checkbox_silent.set_active(options.get('silent'))
+		self.checkbox_merge.set_active(options.get('merge_in_silent'))
+		self.checkbox_overwrite.set_active(options.get('overwrite_in_silent'))
 
 	def _save_configuration(self, widget=None, data=None):
 		"""Save default dialog configuration"""
-		options = self._application.options
-		_bool = ('False', 'True')
+		options = self._application.options.section('operations')
 
-		options.set('main', 'operation_set_owner', _bool[self.checkbox_owner.get_active()])
-		options.set('main', 'operation_set_mode', _bool[self.checkbox_mode.get_active()])
-		options.set('main', 'operation_set_timestamp', _bool[self.checkbox_timestamp.get_active()])
-		options.set('main', 'operation_silent', _bool[self.checkbox_silent.get_active()])
-		options.set('main', 'operation_merge_in_silent', _bool[self.checkbox_merge.get_active()])
-		options.set('main', 'operation_overwrite_in_silent', _bool[self.checkbox_overwrite.get_active()])
+		options.set('set_owner', self.checkbox_owner.get_active())
+		options.set('set_mode', self.checkbox_mode.get_active())
+		options.set('set_timestamp', self.checkbox_timestamp.get_active())
+		options.set('silent', self.checkbox_silent.get_active())
+		options.set('merge_in_silent', self.checkbox_merge.get_active())
+		options.set('overwrite_in_silent', self.checkbox_overwrite.get_active())
 
 	def _toggled_silent_mode(self, widget, container):
 		"""Set container sensitivity based on widget status"""
@@ -685,7 +684,7 @@ class OverwriteDialog:
 
 		self._application = application
 		self._rename_value = ''
-		self._time_format = application.options.get('main', 'time_format')
+		self._time_format = application.options.section('item_list').get('time_format')
 
 		self._dialog.set_default_size(400, 10)
 		self._dialog.set_resizable(True)

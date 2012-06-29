@@ -45,8 +45,8 @@ class ItemList(PluginBase):
 		self._size = {'total': 0L, 'selected': 0L}
 
 		# local human readable cache
-		self._human_readable = self._parent.options.getboolean('main', 'human_readable_size')
-		self._selection_color = self._parent.options.get('main', 'selection_color')
+		self._human_readable = self._parent.options.get('human_readable_size')
+		self._selection_color = self._parent.options.section('item_list').get('selection_color')
 
 		# we use this variable to prevent dead loop during column resize
 		self._is_updating = False
@@ -55,13 +55,13 @@ class ItemList(PluginBase):
 		self._sort_column = sort_column
 		self._sort_ascending = sort_ascending
 		self._sort_column_widget = None
-		self._sort_sensitive = self._parent.options.getboolean('main', 'case_sensitive_sort')
+		self._sort_sensitive = self._parent.options.section('item_list').get('case_sensitive_sort')
 		self._columns = None
 
 		# bookmarks button
 		self._bookmarks_button = gtk.Button()
 
-		if self._parent.options.getboolean('main', 'tab_button_icons'):
+		if self._parent.options.get('tab_button_icons'):
 			image_bookmarks = gtk.Image()
 			image_bookmarks.set_from_icon_name('go-jump', gtk.ICON_SIZE_MENU)
 			self._bookmarks_button.set_image(image_bookmarks)
@@ -74,7 +74,7 @@ class ItemList(PluginBase):
 		self._bookmarks_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
-									)[self._parent.options.getint('main', 'button_relief')])
+									)[self._parent.options.get('button_relief')])
 
 		self._bookmarks_button.connect('clicked', self._bookmarks_button_clicked)
 
@@ -83,7 +83,7 @@ class ItemList(PluginBase):
 		# history button
 		self._history_button = gtk.Button()
 
-		if self._parent.options.getboolean('main', 'tab_button_icons'):
+		if self._parent.options.get('tab_button_icons'):
 			# set icon
 			image_history = gtk.Image()
 			image_history.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
@@ -97,7 +97,7 @@ class ItemList(PluginBase):
 		self._history_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
-									)[self._parent.options.getint('main', 'button_relief')])
+									)[self._parent.options.get('button_relief')])
 
 		self._history_button.connect('clicked', self._history_button_clicked)
 
@@ -106,7 +106,7 @@ class ItemList(PluginBase):
 		# terminal button
 		self._terminal_button = gtk.Button()
 
-		if self._parent.options.getboolean('main', 'tab_button_icons'):
+		if self._parent.options.get('tab_button_icons'):
 			# set icon
 			image_terminal = gtk.Image()
 			image_terminal.set_from_icon_name('terminal', gtk.ICON_SIZE_MENU)
@@ -120,7 +120,7 @@ class ItemList(PluginBase):
 		self._terminal_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
-		                        )[self._parent.options.getint('main', 'button_relief')])
+		                        )[self._parent.options.get('button_relief')])
 
 		self._terminal_button.connect('clicked', self._create_terminal)
 
@@ -139,7 +139,7 @@ class ItemList(PluginBase):
 		self._item_list = gtk.TreeView()
 		self._item_list.set_fixed_height_mode(True)
 
-		headers_visible = self._parent.options.getboolean('main', 'headers_visible')
+		headers_visible = self._parent.options.section('item_list').get('headers_visible')
 		self._item_list.set_headers_visible(headers_visible)
 
 		self._item_list.connect('button-press-event', self._handle_button_press)
@@ -383,19 +383,18 @@ class ItemList(PluginBase):
 
 	def _create_default_column_sizes(self):
 		"""Create default column sizes section in main configuration file"""
-		options = self._parent.options
-		section = self.__class__.__name__
+		options = self._parent.plugin_options
+		section_name = self.__class__.__name__
 
-		if not options.has_section(section):
-			# section doesn't exist, create one
-			options.add_section(section)
+		section = options.create_section(section_name)
 
-			# store default column sizes
-			for index, column in enumerate(self._columns):
-				name = column.get_data('name')
-				size = self._columns_size[index]
+		# store default column sizes
+		for index, column in enumerate(self._columns):
+			name = 'size_{0}'.format(column.get_data('name'))
+			size = self._columns_size[index]
 
-				options.set(section, 'size_{0}'.format(name), size)
+			if not section.has(name):
+				section.set(name, size)
 
 	def _move_marker_up(self, widget, data=None):
 		"""Move marker up"""
@@ -432,7 +431,7 @@ class ItemList(PluginBase):
 	def _handle_button_press(self, widget, event):
 		"""Handles mouse events"""
 		result = False
-		right_click_select = self._parent.options.getboolean('main', 'right_click_select')
+		right_click_select = self._parent.options.section('item_list').get('right_click_select')
 
 		# handle single click
 		if event.button is 1 \
@@ -538,7 +537,7 @@ class ItemList(PluginBase):
 							bool(event.state & gtk.gdk.SHIFT_MASK)
 						)
 
-				if state == self._parent.options.get('main', 'search_modifier'):
+				if state == self._parent.options.section('item_list').get('search_modifier'):
 					# start quick search if modifier combination is right
 					self._start_search(unichr(key_value))
 					result = True
@@ -1082,8 +1081,7 @@ class ItemList(PluginBase):
 
 	def _focus_command_line(self, key):
 		"""Focus command-line control"""
-		if self._parent.options.getboolean('main', 'show_command_entry'):
-			# focus command entry only if it's visible
+		if self._parent.options.get('show_command_entry'):
 			self._parent.command_edit.grab_focus()
 			self._parent.command_edit.set_text(key)
 			self._parent.command_edit.set_position(len(key))
@@ -1137,15 +1135,15 @@ class ItemList(PluginBase):
 		option_name = 'size_{0}'.format(column_name)
 
 		# get stored column width
-		if self._parent.options.has_option(section_name, option_name):
-			existing_width = self._parent.options.getint(section_name, option_name)
+		if self._parent.plugin_options.section(section_name).has(option_name):
+			existing_width = self._parent.plugin_options.section(section_name).get(option_name)
 
 		else:
 			existing_width = -1
 
 		# if current width is not the same as stored one, save
 		if not column_width == existing_width:
-			self._parent.options.set(section_name, option_name,	column_width)
+			self._parent.plugin_options.section(section_name).set(option_name, column_width)
 			self._parent.delegate_to_objects(self, 'update_column_size', column_name)
 
 	def _column_changed(self, widget, data=None):
@@ -1157,21 +1155,17 @@ class ItemList(PluginBase):
 		self._parent.delegate_to_objects(self, '_reorder_columns', column_names)
 
 		# save column order
-		self._parent.options.set(
-							self.__class__.__name__,
-							'columns',
-							','.join(column_names)
-						)
+		self._parent.plugin_options.section(self.__class__.__name__).set('columns', column_names)
 
 	def _resize_columns(self, columns):
 		"""Resize columns according to global options"""
 		for column in columns:
-			# set column size
-			width = self._parent.options.getint(
-											self.__class__.__name__,
-											'size_{0}'.format(column.get_data('name'))
-										)
-			column.set_fixed_width(width)
+			section_name = self.__class__.__name__
+			option_name = 'size_{0}'.format(column.get_data('name'))
+			width = self._parent.plugin_options.section(section_name).get(option_name)
+
+			if width is not None:
+				column.set_fixed_width(width)
 
 	def _sort_list(self, ascending=True):
 		"""Abstract method for manual list sorting"""
@@ -1215,7 +1209,7 @@ class ItemList(PluginBase):
 
 	def _toggle_selection(self, widget, data=None, advance=True):
 		"""Abstract method for toggling item selection"""
-		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.WHEN_NEEDED:
+		if self._parent.options.get('show_status_bar') == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
@@ -1238,7 +1232,7 @@ class ItemList(PluginBase):
 
 	def _select_range(self, start_path, end_path):
 		"""Set items in range to status oposite from frist item in selection"""
-		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.WHEN_NEEDED:
+		if self._parent.options.get('show_status_bar') == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
@@ -1331,25 +1325,25 @@ class ItemList(PluginBase):
 		self._stop_search()
 
 		# update status bar visibility
-		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.WHEN_NEEDED:
+		if self._parent.options.get('show_status_bar') == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
 	def select_all(self, pattern=None, exclude_list=None):
 		"""Select all items matching pattern"""
-		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.WHEN_NEEDED:
+		if self._parent.options.get('show_status_bar') == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
 	def unselect_all(self, pattern=None):
 		"""Unselect items matching the pattern"""
-		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.WHEN_NEEDED:
+		if self._parent.options.get('show_status_bar') == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
 	def invert_selection(self, pattern=None):
 		"""Invert selection on matching items"""
-		if self._parent.options.getint('main', 'show_status_bar') == StatusVisible.WHEN_NEEDED:
+		if self._parent.options.get('show_status_bar') == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
 
@@ -1416,34 +1410,34 @@ class ItemList(PluginBase):
 		self._update_status_with_statistis()
 
 		# change headers visibility
-		headers_visible = self._parent.options.getboolean('main', 'headers_visible')
+		headers_visible = self._parent.options.section('item_list').get('headers_visible')
 		self._item_list.set_headers_visible(headers_visible)
 
 		# change change sorting sensitivity
-		self._sort_sensitive = self._parent.options.getboolean('main', 'case_sensitive_sort')
+		self._sort_sensitive = self._parent.options.section('item_list').get('case_sensitive_sort')
 
 		# change button relief
 		self._bookmarks_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
-									)[self._parent.options.getint('main', 'button_relief')])
+									)[self._parent.options.get('button_relief')])
 		self._history_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
-									)[self._parent.options.getint('main', 'button_relief')])
+									)[self._parent.options.get('button_relief')])
 		self._terminal_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
-									)[self._parent.options.getint('main', 'button_relief')])
+									)[self._parent.options.get('button_relief')])
 
 		# apply size formatting
-		self._human_readable = self._parent.options.getboolean('main', 'human_readable_size')
+		self._human_readable = self._parent.options.get('human_readable_size')
 
 		# apply selection color
-		self._selection_color = self._parent.options.get('main', 'selection_color')
+		self._selection_color = self._parent.options.section('item_list').get('selection_color')
 
 		# change status bar visibility
-		show_status_bar = self._parent.options.getint('main', 'show_status_bar')
+		show_status_bar = self._parent.options.get('show_status_bar')
 
 		if show_status_bar == StatusVisible.ALWAYS:
 			self._show_status_bar()

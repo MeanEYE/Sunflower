@@ -139,44 +139,43 @@ class DisplayOptions(SettingsPage):
 	def _load_options(self):
 		"""Load display options"""
 		options = self._application.options
+		window_options = self._application.window_options
 
-		self._checkbox_hide_on_close.set_active(options.getboolean('main', 'hide_on_close'))
-		self._checkbox_focus_new_tab.set_active(options.getboolean('main', 'focus_new_tab'))
-		self._checkbox_show_toolbar.set_active(options.getboolean('main', 'show_toolbar'))
-		self._checkbox_show_command_bar.set_active(options.getboolean('main', 'show_command_bar'))
-		self._checkbox_show_command_entry.set_active(options.getboolean('main', 'show_command_entry'))
-		self._checkbox_button_relief.set_active(bool(options.getint('main', 'button_relief')))
-		self._checkbox_button_icons.set_active(options.getboolean('main', 'tab_button_icons'))
-		self._checkbox_tab_close_button.set_active(options.getboolean('main', 'tab_close_button'))
-		self._checkbox_always_show_tabs.set_active(options.getboolean('main', 'always_show_tabs'))
-		self._checkbox_ubuntu_coloring.set_active(options.getboolean('main', 'ubuntu_coloring'))
-		self._checkbox_hide_window_on_minimize.set_active(options.getboolean('main', 'hide_operation_on_minimize'))
-		self._checkbox_human_readable_size.set_active(options.getboolean('main', 'human_readable_size'))
-		self._checkbox_show_notifications.set_active(options.getboolean('main', 'show_notifications'))
-		self._combobox_status_bar.set_active(options.getint('main', 'show_status_bar'))
-		self._combobox_expand_tabs.set_active(options.getint('main', 'expand_tabs'))
+		self._checkbox_hide_on_close.set_active(window_options.section('main').get('hide_on_close'))
+		self._checkbox_focus_new_tab.set_active(options.get('focus_new_tab'))
+		self._checkbox_show_toolbar.set_active(options.get('show_toolbar'))
+		self._checkbox_show_command_bar.set_active(options.get('show_command_bar'))
+		self._checkbox_show_command_entry.set_active(options.get('show_command_entry'))
+		self._checkbox_button_relief.set_active(options.get('button_relief'))
+		self._checkbox_button_icons.set_active(options.get('tab_button_icons'))
+		self._checkbox_tab_close_button.set_active(options.get('tab_close_button'))
+		self._checkbox_always_show_tabs.set_active(options.get('always_show_tabs'))
+		self._checkbox_ubuntu_coloring.set_active(options.get('ubuntu_coloring'))
+		self._checkbox_hide_window_on_minimize.set_active(options.section('operations').get('hide_on_minimize'))
+		self._checkbox_human_readable_size.set_active(options.get('human_readable_size'))
+		self._checkbox_show_notifications.set_active(options.get('show_notifications'))
+		self._combobox_status_bar.set_active(options.get('show_status_bar'))
+		self._combobox_expand_tabs.set_active(options.get('expand_tabs'))
 
 	def _save_options(self):
 		"""Save display options"""
 		options = self._application.options
-
-		# for configuration parser to get boolean, you need to set string :/. makes sense?
-		_bool = ('False', 'True')
+		window_options = self._application.window_options
 
 		# save options
-		options.set('main', 'hide_on_close', _bool[self._checkbox_hide_on_close.get_active()])
-		options.set('main', 'focus_new_tab', _bool[self._checkbox_focus_new_tab.get_active()])
-		options.set('main', 'show_toolbar', _bool[self._checkbox_show_toolbar.get_active()])
-		options.set('main', 'show_command_bar', _bool[self._checkbox_show_command_bar.get_active()])
-		options.set('main', 'show_command_entry', _bool[self._checkbox_show_command_entry.get_active()])
-		options.set('main', 'button_relief', int(self._checkbox_button_relief.get_active()))
-		options.set('main', 'tab_button_icons', _bool[self._checkbox_button_icons.get_active()])
-		options.set('main', 'tab_close_button', _bool[self._checkbox_tab_close_button.get_active()])
-		options.set('main', 'always_show_tabs', _bool[self._checkbox_always_show_tabs.get_active()])
-		options.set('main', 'ubuntu_coloring', _bool[self._checkbox_ubuntu_coloring.get_active()])
-		options.set('main', 'hide_operation_on_minimize', _bool[self._checkbox_hide_window_on_minimize.get_active()])
-		options.set('main', 'human_readable_size', _bool[self._checkbox_human_readable_size.get_active()])
-		options.set('main', 'show_notifications', _bool[self._checkbox_show_notifications.get_active()])
-		options.set('main', 'show_status_bar', self._combobox_status_bar.get_active())
-		options.set('main', 'expand_tabs', self._combobox_expand_tabs.get_active())
+		window_options.section('main').set('hide_on_close', self._checkbox_hide_on_close.get_active())
+		options.set('focus_new_tab', self._checkbox_focus_new_tab.get_active())
+		options.set('show_toolbar', self._checkbox_show_toolbar.get_active())
+		options.set('show_command_bar', self._checkbox_show_command_bar.get_active())
+		options.set('show_command_entry', self._checkbox_show_command_entry.get_active())
+		options.set('button_relief', self._checkbox_button_relief.get_active())
+		options.set('tab_button_icons', self._checkbox_button_icons.get_active())
+		options.set('tab_close_button', self._checkbox_tab_close_button.get_active())
+		options.set('always_show_tabs', self._checkbox_always_show_tabs.get_active())
+		options.set('ubuntu_coloring', self._checkbox_ubuntu_coloring.get_active())
+		options.section('operations').set('hide_on_minimize', self._checkbox_hide_window_on_minimize.get_active())
+		options.set('human_readable_size', self._checkbox_human_readable_size.get_active())
+		options.set('show_notifications', self._checkbox_show_notifications.get_active())
+		options.set('show_status_bar', self._combobox_status_bar.get_active())
+		options.set('expand_tabs', self._combobox_expand_tabs.get_active())
 

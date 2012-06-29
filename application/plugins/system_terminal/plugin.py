@@ -25,17 +25,13 @@ class SystemTerminal(Terminal):
 
 		self._close_on_child_exit = True
 		shell_command = os.environ['SHELL']
-		terminal_type = self._parent.options.getint('main', 'terminal_type')
-	
+		terminal_type = self._parent.options.section('terminal').get('type')
+
 		if terminal_type == TerminalType.VTE:
 			# we need TERM environment variable set
 			if not os.environ.has_key('TERM'):
 				os.environ['TERM'] = 'xterm'
 				os.environ['COLORTERM'] = 'gnome-terminal'
-
-			# force shell to update terminal title
-			if not os.environ.has_key('PROMPT_COMMAND'):
-				os.environ['PROMPT_COMMAND'] = 'echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
 
 			if self._vte_present:
 				# fork default shell
@@ -66,7 +62,7 @@ class SystemTerminal(Terminal):
 		"""Connect process when socket is realized"""
 		socket_id = self._terminal.get_id()
 
-		terminal_command = self._parent.options.get('main', 'terminal_command')
+		terminal_command = self._parent.options.section('terminal').get('command')
 		terminal_command = terminal_command.format(socket_id).split(' ')
 		
 		process = subprocess.Popen(terminal_command, cwd=self.path)

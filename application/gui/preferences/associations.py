@@ -160,7 +160,7 @@ class AssociationsOptions(SettingsPage):
 		self._associations.clear()
 
 		# get all mime types from config file
-		mime_types = config.sections()
+		mime_types = config._get_data().keys()
 
 		for mime_type in mime_types:
 			# add mime type to the list
@@ -168,13 +168,12 @@ class AssociationsOptions(SettingsPage):
 			parent = self._associations.append(None, (description, mime_type))
 
 			# get all applications
-			applications = config.options(mime_type)
+			applications = config.get(mime_type)
 			count = len(applications) / 2
 
 			for index in xrange(1, count + 1):
-				name = config.get(mime_type, 'name_{0}'.format(index))
-				command = config.get(mime_type, 'command_{0}'.format(index))
-				self._associations.append(parent, (name, command))
+				application = applications[index-1]
+				self._associations.append(parent, (application['name'], application['command']))
 
 	def _save_options(self):
 		"""Method called when save button is clicked"""
@@ -184,19 +183,17 @@ class AssociationsOptions(SettingsPage):
 		for row in self._associations:
 			mime_type = self._associations.get_value(row.iter, Column.COMMAND)
 			children = row.iterchildren()
-
-			# create a new section
-			if config.has_section(mime_type):
-				config.remove_section(mime_type)
-
-			config.add_section(mime_type)
+			applications = []
 			
 			# store accelerators for current group
-			index = 0
-			for child in children:
-				index += 1
-				name = self._associations.get_value(child.iter, Column.NAME)
-				command = self._associations.get_value(child.iter, Column.COMMAND)
+			for index, child in enumerate(children, 0):
 
-				config.set(mime_type, 'name_{0}'.format(index), name)
-				config.set(mime_type, 'command_{0}'.format(index), command)
+				application = {
+						'name': self._associations.get_value(child.iter, Column.NAME),
+						'command': self._associations.get_value(child.iter, Column.COMMAND)
+					}
+
+				applications.append(application)
+
+			# add applications to config
+			config.set(mime_type, applications)

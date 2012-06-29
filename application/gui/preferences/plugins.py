@@ -198,7 +198,7 @@ class PluginsOptions(SettingsPage):
 		# get list of plugins
 		plugin_path = os.path.abspath(os.path.join('application', 'plugins'))
 		plugin_list = self._application._get_plugin_list()
-		plugins_to_load = options.get('main', 'plugins').split(',')
+		plugins_to_load = options.get('plugins')
 
 		# extract current locale
 		language = locale.getdefaultlocale()[0]
@@ -277,4 +277,4 @@ class PluginsOptions(SettingsPage):
 		plugin_list = [row[Column.LOCATION] for row in plugin_list]
 
 		# save plugin list
-		options.set('main', 'plugins', ','.join(plugin_list))
+		options.set('plugins', plugin_list)

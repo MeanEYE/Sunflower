@@ -123,21 +123,21 @@ class TerminalOptions(SettingsPage):
 
 	def _load_options(self):
 		"""Load terminal tab options"""
-		options = self._application.options
+		options = self._application.options.section('terminal')
 
-		self._checkbox_scrollbars_visible.set_active(options.getboolean('main', 'terminal_scrollbars'))
-		self._entry_command.set_text(options.get('main', 'terminal_command'))
-		self._checkbox_system_font.set_active(options.getboolean('main', 'terminal_use_system_font'))
-		self._combobox_cursor_shape.set_active(options.getint('main', 'terminal_cursor_shape'))
-		self._checkbox_allow_bold.set_active(options.getboolean('main', 'terminal_allow_bold'))
-		self._checkbox_autohide_mouse.set_active(options.getboolean('main', 'terminal_mouse_autohide'))
-		self._button_font.set_font_name(options.get('main', 'terminal_font'))
+		self._checkbox_scrollbars_visible.set_active(options.get('show_scrollbars'))
+		self._entry_command.set_text(options.get('command'))
+		self._checkbox_system_font.set_active(options.get('use_system_font'))
+		self._combobox_cursor_shape.set_active(options.get('cursor_shape'))
+		self._checkbox_allow_bold.set_active(options.get('allow_bold'))
+		self._checkbox_autohide_mouse.set_active(options.get('mouse_autohide'))
+		self._button_font.set_font_name(options.get('font'))
 
 		# set sensitivity of font selection according to checkbox
 		self._align_font.set_sensitive(not self._checkbox_system_font.get_active())
 
 		# apply terminal type
-		terminal_type = options.getint('main', 'terminal_type')
+		terminal_type = options.get('type')
 		if terminal_type == TerminalType.VTE:
 			self._radio_vte.set_active(True)
 
@@ -146,17 +146,16 @@ class TerminalOptions(SettingsPage):
 
 	def _save_options(self):
 		"""Save terminal tab options"""
-		options = self._application.options
-		_bool = ('False', 'True')
+		options = self._application.options.section('terminal')
 
-		options.set('main', 'terminal_scrollbars', _bool[self._checkbox_scrollbars_visible.get_active()])
-		options.set('main', 'terminal_command', self._entry_command.get_text())
-		options.set('main', 'terminal_use_system_font', _bool[self._checkbox_system_font.get_active()])
-		options.set('main', 'terminal_cursor_shape', self._combobox_cursor_shape.get_active())
-		options.set('main', 'terminal_allow_bold', _bool[self._checkbox_allow_bold.get_active()])
-		options.set('main', 'terminal_mouse_autohide', _bool[self._checkbox_autohide_mouse.get_active()])
-		options.set('main', 'terminal_font', self._button_font.get_font_name())
+		options.set('show_scrollbars', self._checkbox_scrollbars_visible.get_active())
+		options.set('command', self._entry_command.get_text())
+		options.set('use_system_font', self._checkbox_system_font.get_active())
+		options.set('cursor_shape', self._combobox_cursor_shape.get_active())
+		options.set('allow_bold', self._checkbox_allow_bold.get_active())
+		options.set('mouse_autohide', self._checkbox_autohide_mouse.get_active())
+		options.set('font', self._button_font.get_font_name())
 
 		# save terminal type
 		terminal_type = TerminalType.VTE if self._radio_vte.get_active() else TerminalType.EXTERNAL
-		options.set('main', 'terminal_type', terminal_type)
+		options.set('type', terminal_type)

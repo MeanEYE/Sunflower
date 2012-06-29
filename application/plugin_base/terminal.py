@@ -47,6 +47,10 @@ class Terminal(PluginBase):
 	def __init__(self, parent, notebook, path=None):
 		PluginBase.__init__(self, parent, notebook, path)
 
+		# make options available in local namespace
+		options = self._parent.options
+		section = options.section('terminal')
+
 		self._menu = None
 
 		# change list icon
@@ -55,7 +59,7 @@ class Terminal(PluginBase):
 		# recycle button
 		self._recycle_button = gtk.Button()
 
-		if self._parent.options.getboolean('main', 'tab_button_icons'):
+		if options.get('tab_button_icons'):
 			# set icon
 			image_recycle = gtk.Image()
 			image_recycle.set_from_icon_name('reload', gtk.ICON_SIZE_MENU)
@@ -69,14 +73,14 @@ class Terminal(PluginBase):
 		self._recycle_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
-									)[self._parent.options.getint('main', 'button_relief')])
+									)[options.get('button_relief')])
 
 		self._recycle_button.connect('clicked', self._recycle_terminal)
 
 		# terminal menu button
 		self._menu_button = gtk.Button()
 
-		if self._parent.options.getboolean('main', 'tab_button_icons'):
+		if options.get('tab_button_icons'):
 			# set icon
 			image_menu = gtk.Image()
 			image_menu.set_from_icon_name(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
@@ -90,7 +94,7 @@ class Terminal(PluginBase):
 		self._menu_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
-									)[self._parent.options.getint('main', 'button_relief')])
+									)[options.get('button_relief')])
 
 		self._menu_button.connect('clicked', self._show_terminal_menu)
 
@@ -99,7 +103,7 @@ class Terminal(PluginBase):
 		self._title_bar.add_control(self._menu_button)
 
 		# create main object
-		terminal_type = self._parent.options.getint('main', 'terminal_type') 
+		terminal_type = section.get('type') 
 	
 		if terminal_type == TerminalType.VTE and vte is not None:
 			self._vte_present = True
@@ -110,7 +114,7 @@ class Terminal(PluginBase):
 			self._terminal.drag_source_unset()
 
 			# configure terminal widget
-			shape = self._parent.options.getint('main', 'terminal_cursor_shape')
+			shape = section.get('cursor_shape')
 			shape_type = {
 					CursorShape.BLOCK: vte.CURSOR_SHAPE_BLOCK,
 					CursorShape.IBEAM: vte.CURSOR_SHAPE_IBEAM,
@@ -118,21 +122,21 @@ class Terminal(PluginBase):
 				}
 			self._terminal.set_cursor_shape(shape_type[shape])
 
-			self._terminal.set_allow_bold(self._parent.options.getboolean('main', 'terminal_allow_bold'))
-			self._terminal.set_mouse_autohide(self._parent.options.getboolean('main', 'terminal_mouse_autohide'))
+			self._terminal.set_allow_bold(section.get('allow_bold'))
+			self._terminal.set_mouse_autohide(section.get('mouse_autohide'))
 
-			if self._parent.options.getboolean('main', 'terminal_use_system_font') and gconf is not None:
+			if section.get('use_system_font') and gconf is not None:
 				self.__set_system_font()
 
 			else:
-				self._terminal.set_font_from_string(self._parent.options.get('main', 'terminal_font'))
+				self._terminal.set_font_from_string(section.get('font'))
 
 		elif terminal_type == TerminalType.EXTERNAL:
 			self._terminal = gtk.Socket()
 			
 		else:
 			# failsafe when VTE module is not present
-			# NOTE: Cursor need to be visible for 'close tab' accelerator.
+			# NOTE: Cursor needs to be visible for 'close tab' accelerator.
 			self._terminal = gtk.TextView()
 			text = _('\n\nPython VTE module is not installed on this system!')
 			self._terminal.get_buffer().set_text(text)
@@ -145,7 +149,7 @@ class Terminal(PluginBase):
 		self._container.set_shadow_type(gtk.SHADOW_IN)
 
 		# apply scrollbar visibility
-		show_scrollbars = self._parent.options.getboolean('main', 'terminal_scrollbars')
+		show_scrollbars = section.get('show_scrollbars')
 		scrollbar_vertical = self._container.get_vscrollbar()
 		scrollbar_horizontal = self._container.get_hscrollbar()
 
@@ -352,20 +356,22 @@ class Terminal(PluginBase):
 		"""Apply terminal settings"""
 		# let parent class do its work
 		PluginBase.apply_settings(self)
+		options = self._parent.options
+		section = options.section('terminal')
 
 		# button relief
 		self._recycle_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
-									)[self._parent.options.getint('main', 'button_relief')])
+									)[options.get('button_relief')])
 
 		self._menu_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
-									)[self._parent.options.getint('main', 'button_relief')])
+									)[options.get('button_relief')])
 
 		# apply terminal scroll bar policy
-		show_scrollbars = self._parent.options.getboolean('main', 'terminal_scrollbars')
+		show_scrollbars = section.get('show_scrollbars')
 		scrollbar_vertical = self._container.get_vscrollbar()
 		scrollbar_horizontal = self._container.get_hscrollbar()
 
@@ -373,7 +379,7 @@ class Terminal(PluginBase):
 		scrollbar_horizontal.set_child_visible(show_scrollbars)
 
 		# apply cursor shape
-		shape = self._parent.options.getint('main', 'terminal_cursor_shape')
+		shape = section.get('cursor_shape')
 		shape_type = {
 				CursorShape.BLOCK: vte.CURSOR_SHAPE_BLOCK,
 				CursorShape.IBEAM: vte.CURSOR_SHAPE_IBEAM,
@@ -382,14 +388,14 @@ class Terminal(PluginBase):
 		self._terminal.set_cursor_shape(shape_type[shape])
 
 		# apply allow bold
-		self._terminal.set_allow_bold(self._parent.options.getboolean('main', 'terminal_allow_bold'))
+		self._terminal.set_allow_bold(section.get('allow_bold'))
 
 		# apply mouse autohiding
-		self._terminal.set_mouse_autohide(self._parent.options.getboolean('main', 'terminal_mouse_autohide'))
+		self._terminal.set_mouse_autohide(section.get('mouse_autohide'))
 
 		# apply font
-		if self._parent.options.getboolean('main', 'terminal_use_system_font') and gconf is not None:
+		if section.get('use_system_font') and gconf is not None:
 			self.__set_system_font()
 
 		else:
-			self._terminal.set_font_from_string(self._parent.options.get('main', 'terminal_font'))
+			self._terminal.set_font_from_string(section.get('font'))

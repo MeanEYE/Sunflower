@@ -57,6 +57,7 @@ class Support:
 	MONITOR = 0
 	TRASH = 1
 	LINK = 2
+	RESERVE_SIZE = 3
 
 
 class Mode:

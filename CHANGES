@@ -1,3 +1,25 @@
+Version 0.1a-43
+  + Treat files with names ending with "~" as hidden.
+  + Support for external terminal applications.
+  + Option to reserve file size when copying or moving files
+  + JSON based configuration backend
+  + Created keyring manager.
+  + Allow displaying permissions as symbolic in addition to octal.
+  + Added ability to move files to trash can instead of deleting them.
+  + Added ability to change owner/group.
+  * Updated Russian translation.
+  * Set focus properly when specified item is not present on change path.
+  * Quick search matches any substring of filename.
+  * Prevent exception when Spinner class is not available.
+  * Improved loading times by caching some options.
+  * Handle bookmark 0 as home directory (default shortcut Alt+`).
+  * Handle Enter (and Space) hotkeys to find files tool.
+  * Fixed problem with unmounting volumes.
+  * Fixed problem with loading root directory.
+  * Fixed loading GTK bookmarks with custom names.
+  * Fixed handling of local URIs containing scheme string.
+  * Fixed copying and moving files through clipboard.
+
 Version 0.1a-42
   + New layout for mounts manager.
   + Added GIO based provider with support for SMB and FTP. 
@@ -36,7 +58,7 @@ Version 0.1a-41
 
 Version 0.1a-40
   + Set timestamps after copying file.
-  + Set title bar background to red when running with super-user permissions.
+  + Set title bar background to red when running with super-user permissionsv
   * Updated and fixed Russian translation.
   * Fixed bug where application selection dialog failed to open.
   * Fixed reference problem in merge dialog.

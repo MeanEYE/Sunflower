@@ -103,12 +103,14 @@ class MainWindow(gtk.Window):
 
 		# config parsers
 		self.options = None
+		self.window_options = None
 		self.tab_options = None
 		self.bookmark_options = None
 		self.toolbar_options = None
 		self.command_options = None
 		self.accel_options = None
 		self.association_options = None
+		self.mount_options = None
 
 		# location of all configuration files
 		self.config_path = None
@@ -1891,6 +1893,7 @@ class MainWindow(gtk.Window):
 			self.command_options.save()
 			self.accel_options.save()
 			self.association_options.save()
+			self.mount_options.save()
 
 			# save accelerators
 			self.accelerator_manager.save()
@@ -1928,6 +1931,7 @@ class MainWindow(gtk.Window):
 		self.command_options = Config('commands', self)
 		self.accel_options = Config('accelerators', self)
 		self.association_options = Config('associations', self)
+		self.mount_options = Config('mounts', self)
 
 		# load accelerators
 		self.accelerator_manager.load(self.accel_options)

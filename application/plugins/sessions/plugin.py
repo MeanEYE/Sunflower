@@ -3,7 +3,10 @@ import os
 
 from widgets.settings_page import SettingsPage
 
+DEFAULT_NAME = _('Default')
+
 main_window = None
+options = None
 item_sessions = None
 config = None
 
@@ -19,7 +22,7 @@ class SessionsOptions(SettingsPage):
 		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 		container.set_shadow_type(gtk.SHADOW_IN)
 
-		self._session_store = gtk.ListStore(str, str)
+		self._session_store = gtk.ListStore(str, str, int)
 
 		self._treeview = gtk.TreeView()
 		self._treeview.set_model(self._session_store)
@@ -74,50 +77,59 @@ class SessionsOptions(SettingsPage):
 	def _load_options(self):
 		"""Load options and update interface"""
 		self._session_store.clear()
-		sessions = _get_sessions_list(self._tab_options)
-		for session in sessions:
-			self._session_store.append((_get_session_name(self._tab_options, session), session))
+		sessions = options.section('sessions').get('list')
+		for i in range(0, len(sessions)):
+			name = sessions[i].get('name')
+			self._session_store.append((name, name, i))
 
 	def _save_options(self):
 		"""Method called when save button is clicked"""
-		# prepere data in convince format
-		identifiers = list()
-		names = list()		
-		for session in self._session_store:
-			names.append(session[0])
-			identifiers.append(session[1])
-		actual_sessions = _get_sessions_list(self._tab_options)
-
-		# save names
-		for name, identifier in zip(names, identifiers):
-			self._tab_options.set('names', 'session_{0}'.format(identifier), name)
-
-		# delete old sesions
-		for identifier in actual_sessions:
-			if identifier not in identifiers:
-				self._tab_options.remove_section('left_{0}'.format(identifier))
-				self._tab_options.remove_section('right_{0}'.format(identifier))
-				self._tab_options.remove_option('options', 'left_{0}_selected'.format(identifier))
-				self._tab_options.remove_option('options', 'right_{0}_selected'.format(identifier))
-				self._tab_options.remove_option('names', 'session_{0}'.format(identifier))
-				
-		# add new sessions
-		for identifier in identifiers:
-			if identifier not in actual_sessions:
-				try:
-					self._tab_options.add_section('left_{0}'.format(identifier))
-					self._tab_options.add_section('right_{0}'.format(identifier))
-				except:
-					pass
-				self._tab_options.set('options', 'left_{0}_selected'.format(identifier), '0')
-				self._tab_options.set('options', 'right_{0}_selected'.format(identifier), '0')
-				home_tab = 'FileList:0:1:{0}'.format(os.path.expanduser('~'))
-				self._tab_options.set('left_{0}'.format(identifier), 'tab_0', home_tab)
-				self._tab_options.set('right_{0}'.format(identifier), 'tab_0', home_tab)
-				
-		# save new order
-		self._tab_options.set('sessions', 'session_order', ':'.join(identifiers))
+		# default panel
+		home_panel = {
+		        "active_tab": 0, 
+		        "tabs": [{
+		                'class': 'FileList',
+		                'sort_ascending': True,
+		                'sort_column': 0,
+		                'uri': os.path.expanduser('~')
+		            }]
+		    }
 		
+		# prepare data in convince way
+		old_sessions = {s.get('name'): s for s in options.section('sessions').get('list')}
+
+		# add new sessions
+		new_sessions = []
+		for store in self._session_store:
+			try:
+				# copy old session
+				left = old_sessions[store[1]]['left']
+				right = old_sessions[store[1]]['right']
+			except:
+				# create new session
+				left, right = home_panel, home_panel
+
+			# add session
+			new_sessions.append({
+		            'name': store[0],
+					'left': left,
+					'right': right,
+			    })
+
+		# update current sessions id
+		old_current = options.section('sessions').get('current')
+		new_current = 0
+		try:
+			while options.section('')[new_current][2] != old_current:
+				new_current += 1
+		except:
+			new_current = 0
+		options.section('sessions').set('current', new_current)
+
+		# save
+		options.section('sessions').set('list', new_sessions)
+		options.save()
+
 		# recreate menu
 		item_sessions.remove_submenu()
 		_create_menu()
@@ -138,15 +150,19 @@ class SessionsOptions(SettingsPage):
 	
 	def _handle_add_session(self, widget, data=None):
 		"""Add new session to the store"""
-		# generate unique identifier
-		identifier = 0
-		for session in self._session_store:
-			if int(session[1]) > identifier:
-				identifier = int(session[1])
-		identifier += 1
+		# generate unique name
+		names = [s[0] for s in self._session_store]
+		new_name = new_session = _('New session')
+		if new_name in names:
+			num = 0
+			while True:
+				num += 1
+				new_name = '%s %i' % (new_session, num)
+				if new_name not in names:
+					break
 			
 		# add session
-		self._session_store.append((_('New session') + str(identifier), identifier))
+		self._session_store.append((new_name, new_name, len(self._session_store)+1))
 
 		# enable save button
 		self._parent.enable_save()
@@ -156,7 +172,7 @@ class SessionsOptions(SettingsPage):
 		selection = self._treeview.get_selection()
 		list_, iter_ = selection.get_selected()
 
-		if iter_ is not None:
+		if (len(list_) > 1) and (iter_ is not None):
 			# remove item from the store
 			list_.remove(iter_)
 
@@ -181,52 +197,13 @@ class SessionsOptions(SettingsPage):
 			self._parent.enable_save()
 
 
-def show_sessions_manager(widget, data=None):
-	"""Shows preferences window"""
-	main_window.preferences_window._show(None, 'sessions')
-	
-def change_session(item, new_session):
-	"""Changes session"""
-	left_pages = main_window.left_notebook.get_n_pages()
-	right_pages = main_window.right_notebook.get_n_pages()
-	
-	# save current session
-	save_current_session()
-	
-	# load new session
-	main_window.load_tabs(main_window.left_notebook, 'left_{0}'.format(new_session))
-	main_window.load_tabs(main_window.right_notebook, 'right_{0}'.format(new_session))
-	main_window.tab_options.set('sessions', 'current', new_session)
-
-	# close old tabs
-	_close_tabs(main_window.left_notebook, left_pages)
-	_close_tabs(main_window.right_notebook, right_pages)
-	
-	# rename menu
-	_rename_menu()
-	
-def save_current_session():
-	"""Just saves current session"""
-	current_session = main_window.tab_options.get('sessions', 'current')
-	main_window.save_tabs(main_window.left_notebook, 'left_{0}'.format(current_session))
-	main_window.save_tabs(main_window.right_notebook, 'right_{0}'.format(current_session))
-
-def _close_tabs(notebook, num):
-	"""Closes first 'num' pages in 'notebook'"""
-	page = notebook.get_current_page()
-	for i in range(num):
-		main_window.close_tab(notebook, notebook.get_nth_page(0))
-	main_window.set_active_tab(notebook, page)
-
 def _first_start_specific_actions():
 	"""Adds required options to configuration if they are not present"""
-	if not main_window.tab_options.has_section('names'):
-		main_window.tab_options.add_section('names')
-		main_window.tab_options.set('names', 'session_0', 'Default')
-	if not main_window.tab_options.has_section('sessions'):
-		main_window.tab_options.add_section('sessions')
-		main_window.tab_options.set('sessions', 'session_order', '0')
-		main_window.tab_options.set('sessions', 'current', '0')
+	if not options.has_section('sessions'):
+		options.set('sessions', {
+			'list': [{'name': DEFAULT_NAME}],
+			'current': 0
+		})
 
 def _create_menu():
 	"""Creates menu"""
@@ -234,16 +211,18 @@ def _create_menu():
 	_rename_menu()
 	item_manage = gtk.MenuItem(_('Manage sessions'))
 	item_separator = gtk.MenuItem()
-	current_session = main_window.tab_options.get('sessions', 'current')
-		
+	current_session = options.section('sessions').get('current')
+
 	# pack menus and connect signals
 	group = None
-	for session in _get_sessions_list(main_window.tab_options):
-		item = gtk.RadioMenuItem(group, _get_session_name(main_window.tab_options, session))
+	current_session = options.section('sessions').get('current')
+	session = options.section('sessions').get('list')
+	for i in range(0, len(session)):
+		item = gtk.RadioMenuItem(group, session[i].get('name'))
 		menu_sessions.append(item)
-		if session == current_session:
+		if i == current_session:
 			item.set_active(True)
-		item.connect('activate', change_session, session)
+		item.connect('activate', change_session, i)
 		group = item
 	item_sessions.set_submenu(menu_sessions)
 
@@ -255,25 +234,67 @@ def _create_menu():
 	item_sessions.show_all()
 	
 def _rename_menu():
-	current_session = main_window.tab_options.get('sessions', 'current')
-	current_name = main_window.tab_options.get('names', 'session_{0}'.format(current_session))
-	item_sessions.set_label('{0}: {1}'.format(_('Session'), current_name))
+	"""Creates menu"""
+	current_session = options.section('sessions').get('current')
+	current_name = options.section('sessions').get('list')[current_session]['name']
+	item_sessions.set_label('%s: %s' % (_('Session'), current_name))
 
-def _get_session_name(tab_options, identifier):
-	"""Returns sesions name basing on its identifier"""
-	return tab_options.get('names', 'session_{0}'.format(identifier))
+def _close_tabs(notebook, num):
+	"""Closes first 'num' pages in 'notebook'"""
+	page = notebook.get_current_page()
+	for i in range(num):
+		main_window.close_tab(notebook, notebook.get_nth_page(0))
+	main_window.set_active_tab(notebook, page)
 
-def _get_sessions_list(tab_options):
-	"""Returns ordered list of sessions"""
-	return tab_options.get('sessions', 'session_order').split(':')
+def show_sessions_manager(widget, data=None):
+	"""Shows preferences window"""
+	main_window.preferences_window._show(None, 'sessions')
+
+def save_current_session():
+	main_window.save_tabs(main_window.left_notebook, 'left')
+	main_window.save_tabs(main_window.right_notebook, 'right')
+
+def change_session(item, new_session):
+	"""Changes session"""
+	left_pages = main_window.left_notebook.get_n_pages()
+	right_pages = main_window.right_notebook.get_n_pages()
+	sessions = options.section('sessions')
+	current = sessions.get('current')
+	
+	# save current session
+	save_current_session()
+
+	# swap config
+	sessions.get('list')[current]['left'] = options.section('left')._get_data()
+	sessions.get('list')[current]['right'] = options.section('right')._get_data()
+	options.section('left').set('active_tab', sessions.get('list')[new_session]['left']['active_tab'])
+	options.section('left').set('tabs', sessions.get('list')[new_session]['left']['tabs'])
+	options.section('right').set('active_tab', sessions.get('list')[new_session]['right']['active_tab'])
+	options.section('right').set('tabs', sessions.get('list')[new_session]['right']['tabs'])
+	options.save()
+
+	# load new session
+	main_window.load_tabs(main_window.left_notebook, 'left')
+	main_window.load_tabs(main_window.right_notebook, 'right')
+	sessions.set('current', new_session)
+
+	# close old tabs
+	_close_tabs(main_window.left_notebook, left_pages)
+	_close_tabs(main_window.right_notebook, right_pages)
+
+	# rename menu
+	_rename_menu()
 
 def register_plugin(application):
 	"""Method that Sunflower calls once plugin is loaded"""
 	global main_window
 	main_window = application
-	_first_start_specific_actions()
-	save_current_session()
+	global options
+	options = main_window.tab_options
 	
+	_first_start_specific_actions()
+	#save_current_session()
+
 	# create menu
 	global item_sessions
 	item_sessions = gtk.MenuItem(_('Sessions'))

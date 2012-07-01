@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-30 09:31+0200\n"
+"POT-Creation-Date: 2012-07-01 20:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,7 +84,7 @@ msgid ""
 msgstr ""
 
 #: application/gui/preferences/commands.py:15
-#: application/gui/main_window.py:446
+#: application/gui/main_window.py:448
 msgid "Commands"
 msgstr ""
 
@@ -101,14 +101,14 @@ msgstr ""
 #: application/gui/preferences/commands.py:67
 #: application/gui/preferences/bookmarks.py:77
 #: application/gui/preferences/toolbar.py:74
-#: application/plugins/sessions/plugin.py:54
+#: application/plugins/sessions/plugin.py:57
 msgid "Move Up"
 msgstr ""
 
 #: application/gui/preferences/commands.py:75
 #: application/gui/preferences/bookmarks.py:85
 #: application/gui/preferences/toolbar.py:82
-#: application/plugins/sessions/plugin.py:62
+#: application/plugins/sessions/plugin.py:65
 msgid "Move Down"
 msgstr ""
 
@@ -229,7 +229,7 @@ msgid ""
 msgstr ""
 
 #: application/gui/preferences/accelerators.py:139
-#: application/gui/main_window.py:702
+#: application/gui/main_window.py:704
 #: application/plugins/default_toolbar/home_directory_button.py:17
 #: application/plugins/default_toolbar/home_directory_button.py:18
 msgid "Home directory"
@@ -240,12 +240,12 @@ msgid "View & Edit"
 msgstr ""
 
 #: application/gui/preferences/view_and_edit.py:13
-#: application/gui/main_window.py:380 application/gui/main_window.py:601
+#: application/gui/main_window.py:382 application/gui/main_window.py:603
 msgid "View"
 msgstr ""
 
 #: application/gui/preferences/view_and_edit.py:19
-#: application/gui/main_window.py:218 application/gui/main_window.py:602
+#: application/gui/main_window.py:220 application/gui/main_window.py:604
 msgid "Edit"
 msgstr ""
 
@@ -271,7 +271,7 @@ msgstr ""
 #: application/gui/mounts_manager_window.py:492
 #: application/plugins/file_list/plugin.py:124
 #: application/plugins/file_list/gio_extension.py:36
-#: application/plugins/sessions/plugin.py:33
+#: application/plugins/sessions/plugin.py:36
 #: application/plugins/rename_extensions/default.py:73
 #: application/tools/find_files.py:84
 msgid "Name"
@@ -358,7 +358,7 @@ msgid "Expanded tabs:"
 msgstr ""
 
 #: application/gui/preferences/display.py:85
-#: application/gui/preferences/item_list.py:67
+#: application/gui/preferences/item_list.py:77
 msgid "None"
 msgstr ""
 
@@ -382,443 +382,461 @@ msgstr ""
 msgid "Show notifications"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:11
+#: application/gui/preferences/item_list.py:18
 #: application/plugin_base/item_list.py:233
 msgid "Item List"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:16
+#: application/gui/preferences/item_list.py:23
 msgid "Look & feel"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:17
+#: application/gui/preferences/item_list.py:24
 msgid "Operation"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:27
+#: application/gui/preferences/item_list.py:25
+msgid "Columns"
+msgstr ""
+
+#: application/gui/preferences/item_list.py:37
 msgid "Row hinting"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:28
+#: application/gui/preferences/item_list.py:38
 msgid "Show hidden files"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:29
+#: application/gui/preferences/item_list.py:39
 msgid "Case sensitive item sorting"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:30
+#: application/gui/preferences/item_list.py:40
 msgid "Right click selects items"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:31
+#: application/gui/preferences/item_list.py:41
 msgid "Delete items to trash can"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:32
+#: application/gui/preferences/item_list.py:42
 msgid "Reserve free space on copy/move"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:33
+#: application/gui/preferences/item_list.py:43
 msgid "Show list headers"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:34
+#: application/gui/preferences/item_list.py:44
 msgid "Fast media preview"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:47
+#: application/gui/preferences/item_list.py:57
 msgid "Access mode format:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:51
+#: application/gui/preferences/item_list.py:61
 msgid "Octal"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:52
+#: application/gui/preferences/item_list.py:62
 msgid "Textual"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:63
+#: application/gui/preferences/item_list.py:73
 msgid "Show grid lines:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:68
+#: application/gui/preferences/item_list.py:78
 msgid "Horizontal"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:69
+#: application/gui/preferences/item_list.py:79
 msgid "Vertical"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:70
+#: application/gui/preferences/item_list.py:80
 msgid "Both"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:82
+#: application/gui/preferences/item_list.py:92
 msgid "Selection color:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:90
+#: application/gui/preferences/item_list.py:100
 msgid "Quick search combination:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:93
+#: application/gui/preferences/item_list.py:103
 msgid "Control"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:94
+#: application/gui/preferences/item_list.py:104
 msgid "Alt"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:95
+#: application/gui/preferences/item_list.py:105
 msgid "Shift"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:104
+#: application/gui/preferences/item_list.py:114
 msgid "Date format:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:108
+#: application/gui/preferences/item_list.py:118
 msgid "Time is formed using the format located at:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:162
+#: application/gui/preferences/item_list.py:140
+msgid "Column"
+msgstr ""
+
+#: application/gui/preferences/item_list.py:144
+#: application/plugins/file_list/plugin.py:126
+#: application/plugins/find_file_extensions/size.py:65
+msgid "Size"
+msgstr ""
+
+#: application/gui/preferences/item_list.py:147
+msgid "Visible"
+msgstr ""
+
+#: application/gui/preferences/item_list.py:208
 msgid ""
 "Quick search settings are in conflict with VIM navigation style. To resolve "
 "this issue your quick search settings were restored to default."
 msgstr ""
 
-#: application/gui/main_window.py:98 application/gui/main_window.py:1357
+#: application/gui/main_window.py:98 application/gui/main_window.py:1359
 #: application/gui/changelog_dialog.py:51 application/gui/about_window.py:152
 msgid "Sunflower"
 msgstr ""
 
-#: application/gui/main_window.py:147
+#: application/gui/main_window.py:149
 msgid "File"
 msgstr ""
 
-#: application/gui/main_window.py:151
+#: application/gui/main_window.py:153
 msgid "New tab"
 msgstr ""
 
-#: application/gui/main_window.py:163
+#: application/gui/main_window.py:165
 msgid "Create file"
 msgstr ""
 
-#: application/gui/main_window.py:171 application/gui/input_dialog.py:424
+#: application/gui/main_window.py:173 application/gui/input_dialog.py:424
 msgid "Create directory"
 msgstr ""
 
-#: application/gui/main_window.py:182 application/plugin_base/item_list.py:870
+#: application/gui/main_window.py:184 application/plugin_base/item_list.py:870
 msgid "_Open"
 msgstr ""
 
-#: application/gui/main_window.py:189 application/plugin_base/item_list.py:879
+#: application/gui/main_window.py:191 application/plugin_base/item_list.py:879
 msgid "Open in new ta_b"
 msgstr ""
 
-#: application/gui/main_window.py:199 application/plugin_base/item_list.py:985
+#: application/gui/main_window.py:201 application/plugin_base/item_list.py:985
 msgid "_Properties"
 msgstr ""
 
-#: application/gui/main_window.py:209 application/indicator.py:46
+#: application/gui/main_window.py:211 application/indicator.py:46
 msgid "_Quit"
 msgstr ""
 
-#: application/gui/main_window.py:221 application/plugin_base/item_list.py:909
+#: application/gui/main_window.py:223 application/plugin_base/item_list.py:909
 msgid "Cu_t"
 msgstr ""
 
-#: application/gui/main_window.py:228 application/plugin_base/item_list.py:918
+#: application/gui/main_window.py:230 application/plugin_base/item_list.py:918
 msgid "_Copy"
 msgstr ""
 
-#: application/gui/main_window.py:235 application/plugin_base/item_list.py:927
+#: application/gui/main_window.py:237 application/plugin_base/item_list.py:927
 msgid "_Paste"
 msgstr ""
 
-#: application/gui/main_window.py:245 application/plugin_base/item_list.py:941
+#: application/gui/main_window.py:247 application/plugin_base/item_list.py:941
 msgid "_Delete"
 msgstr ""
 
-#: application/gui/main_window.py:255 application/plugin_base/item_list.py:955
+#: application/gui/main_window.py:257 application/plugin_base/item_list.py:955
 msgid "Send to..."
 msgstr ""
 
-#: application/gui/main_window.py:263 application/plugin_base/item_list.py:966
+#: application/gui/main_window.py:265 application/plugin_base/item_list.py:966
 msgid "Ma_ke link"
 msgstr ""
 
-#: application/gui/main_window.py:267 application/plugin_base/item_list.py:972
+#: application/gui/main_window.py:269 application/plugin_base/item_list.py:972
 msgid "_Rename..."
 msgstr ""
 
-#: application/gui/main_window.py:275
+#: application/gui/main_window.py:277
 msgid "_Unmount"
 msgstr ""
 
-#: application/gui/main_window.py:279
+#: application/gui/main_window.py:281
 #: application/gui/mounts_manager_window.py:153
 msgid "Mount list is empty"
 msgstr ""
 
-#: application/gui/main_window.py:288
+#: application/gui/main_window.py:290
 msgid "_Preferences"
 msgstr ""
 
-#: application/gui/main_window.py:297
+#: application/gui/main_window.py:299
 msgid "Mark"
 msgstr ""
 
-#: application/gui/main_window.py:300
+#: application/gui/main_window.py:302
 msgid "_Select all"
 msgstr ""
 
-#: application/gui/main_window.py:307
+#: application/gui/main_window.py:309
 msgid "_Unselect all"
 msgstr ""
 
-#: application/gui/main_window.py:312
+#: application/gui/main_window.py:314
 msgid "Invert select_ion"
 msgstr ""
 
-#: application/gui/main_window.py:318
+#: application/gui/main_window.py:320
 msgid "S_elect with pattern"
 msgstr ""
 
-#: application/gui/main_window.py:323
+#: application/gui/main_window.py:325
 msgid "Unselect with pa_ttern"
 msgstr ""
 
-#: application/gui/main_window.py:329
+#: application/gui/main_window.py:331
 msgid "Select with same e_xtension"
 msgstr ""
 
-#: application/gui/main_window.py:334
+#: application/gui/main_window.py:336
 msgid "Unselect with same exte_nsion"
 msgstr ""
 
-#: application/gui/main_window.py:340
+#: application/gui/main_window.py:342
 msgid "Compare _directories"
 msgstr ""
 
-#: application/gui/main_window.py:347
+#: application/gui/main_window.py:349
 msgid "Tools"
 msgstr ""
 
-#: application/gui/main_window.py:351 application/tools/find_files.py:37
+#: application/gui/main_window.py:353 application/tools/find_files.py:37
 #: application/tools/find_files.py:301
 msgid "Find files"
 msgstr ""
 
-#: application/gui/main_window.py:358
+#: application/gui/main_window.py:360
 msgid "Find duplicate files"
 msgstr ""
 
-#: application/gui/main_window.py:362
+#: application/gui/main_window.py:364
 msgid "Synchronize directories"
 msgstr ""
 
-#: application/gui/main_window.py:367 application/tools/advanced_rename.py:27
+#: application/gui/main_window.py:369 application/tools/advanced_rename.py:27
 msgid "Advanced rename"
 msgstr ""
 
-#: application/gui/main_window.py:373
+#: application/gui/main_window.py:375
 #: application/gui/mounts_manager_window.py:47
 msgid "Mount manager"
 msgstr ""
 
-#: application/gui/main_window.py:383
+#: application/gui/main_window.py:385
 msgid "Ful_lscreen"
 msgstr ""
 
-#: application/gui/main_window.py:391
+#: application/gui/main_window.py:393
 msgid "Rel_oad item list"
 msgstr ""
 
-#: application/gui/main_window.py:401
+#: application/gui/main_window.py:403
 msgid "Fast m_edia preview"
 msgstr ""
 
-#: application/gui/main_window.py:412
+#: application/gui/main_window.py:414
 msgid "Show _hidden files"
 msgstr ""
 
-#: application/gui/main_window.py:420
+#: application/gui/main_window.py:422
 msgid "Show _toolbar"
 msgstr ""
 
-#: application/gui/main_window.py:428
+#: application/gui/main_window.py:430
 msgid "Show _command bar"
 msgstr ""
 
-#: application/gui/main_window.py:436
+#: application/gui/main_window.py:438
 msgid "Show co_mmand entry"
 msgstr ""
 
-#: application/gui/main_window.py:450
+#: application/gui/main_window.py:452
 msgid "Operations"
 msgstr ""
 
-#: application/gui/main_window.py:454
+#: application/gui/main_window.py:456
 msgid "There are no minimized operations"
 msgstr ""
 
-#: application/gui/main_window.py:460
+#: application/gui/main_window.py:462
 msgid "Help"
 msgstr ""
 
-#: application/gui/main_window.py:463
+#: application/gui/main_window.py:465
 msgid "_Home page"
 msgstr ""
 
-#: application/gui/main_window.py:472
+#: application/gui/main_window.py:474
 msgid "File a _bug report"
 msgstr ""
 
-#: application/gui/main_window.py:481
+#: application/gui/main_window.py:483
 msgid "_About"
 msgstr ""
 
-#: application/gui/main_window.py:526
+#: application/gui/main_window.py:528
 #: application/gui/mounts_manager_window.py:444
 msgid "Mounts"
 msgstr ""
 
-#: application/gui/main_window.py:599
+#: application/gui/main_window.py:601
 msgid "Refresh"
 msgstr ""
 
-#: application/gui/main_window.py:599
+#: application/gui/main_window.py:601
 msgid "Reload active item list"
 msgstr ""
 
-#: application/gui/main_window.py:600 application/tools/advanced_rename.py:91
+#: application/gui/main_window.py:602 application/tools/advanced_rename.py:91
 msgid "Rename"
 msgstr ""
 
-#: application/gui/main_window.py:600
+#: application/gui/main_window.py:602
 msgid "Rename selected file"
 msgstr ""
 
-#: application/gui/main_window.py:601
+#: application/gui/main_window.py:603
 msgid "View selected file"
 msgstr ""
 
-#: application/gui/main_window.py:602
+#: application/gui/main_window.py:604
 msgid "Edit selected file"
 msgstr ""
 
-#: application/gui/main_window.py:603 application/gui/input_dialog.py:561
+#: application/gui/main_window.py:605 application/gui/input_dialog.py:561
 msgid "Copy"
 msgstr ""
 
-#: application/gui/main_window.py:603
+#: application/gui/main_window.py:605
 msgid "Copy selected items from active to opposite list"
 msgstr ""
 
-#: application/gui/main_window.py:604 application/gui/input_dialog.py:659
+#: application/gui/main_window.py:606 application/gui/input_dialog.py:659
 msgid "Move"
 msgstr ""
 
-#: application/gui/main_window.py:604
+#: application/gui/main_window.py:606
 msgid "Move selected items from active to opposite list"
 msgstr ""
 
-#: application/gui/main_window.py:605
+#: application/gui/main_window.py:607
 msgid "Create"
 msgstr ""
 
-#: application/gui/main_window.py:605
+#: application/gui/main_window.py:607
 msgid "Create new directory"
 msgstr ""
 
-#: application/gui/main_window.py:606
+#: application/gui/main_window.py:608
 msgid "Delete"
 msgstr ""
 
-#: application/gui/main_window.py:606 application/plugin_base/item_list.py:251
+#: application/gui/main_window.py:608 application/plugin_base/item_list.py:251
 msgid "Delete selected items"
 msgstr ""
 
-#: application/gui/main_window.py:761
+#: application/gui/main_window.py:763
 msgid "Options"
 msgstr ""
 
-#: application/gui/main_window.py:764
+#: application/gui/main_window.py:766
 msgid "_Add bookmark"
 msgstr ""
 
-#: application/gui/main_window.py:770
+#: application/gui/main_window.py:772
 msgid "_Edit bookmarks"
 msgstr ""
 
-#: application/gui/main_window.py:823
+#: application/gui/main_window.py:825
 msgid "_Edit commands"
 msgstr ""
 
-#: application/gui/main_window.py:1345
+#: application/gui/main_window.py:1347
 msgid "Sunflower file manager"
 msgstr ""
 
-#: application/gui/main_window.py:1360
+#: application/gui/main_window.py:1362
 msgid "print version and exit"
 msgstr ""
 
-#: application/gui/main_window.py:1365
+#: application/gui/main_window.py:1367
 msgid "skip loading saved tabs"
 msgstr ""
 
-#: application/gui/main_window.py:1371
+#: application/gui/main_window.py:1373
 msgid "open new tab on the left notebook"
 msgstr ""
 
-#: application/gui/main_window.py:1378
+#: application/gui/main_window.py:1380
 msgid "open new tab on the right notebook"
 msgstr ""
 
-#: application/gui/main_window.py:1471
+#: application/gui/main_window.py:1473
 msgid "Select items"
 msgstr ""
 
-#: application/gui/main_window.py:1472 application/gui/main_window.py:1513
+#: application/gui/main_window.py:1474 application/gui/main_window.py:1515
 msgid "Selection pattern (eg.: *.jpg):"
 msgstr ""
 
-#: application/gui/main_window.py:1512
+#: application/gui/main_window.py:1514
 msgid "Unselect items"
 msgstr ""
 
-#: application/gui/main_window.py:1554
+#: application/gui/main_window.py:1556
 msgid "First level of compared directories is identical."
 msgstr ""
 
-#: application/gui/main_window.py:1650
+#: application/gui/main_window.py:1652
 msgid ""
 "There was a problem starting external terminal application. Check if command "
 "is valid!"
 msgstr ""
 
-#: application/gui/main_window.py:1907
+#: application/gui/main_window.py:1910
 msgid ""
 "Error saving configuration to files in your home directory. Make sure you "
 "have enough permissions."
 msgstr ""
 
-#: application/gui/main_window.py:2380
+#: application/gui/main_window.py:2384
 msgid ""
 "Active object is not item list. Advanced rename tool needs files and "
 "directories."
 msgstr ""
 
-#: application/gui/main_window.py:2395
+#: application/gui/main_window.py:2399
 msgid ""
 "No rename extensions were found. Please enable basic rename options plugin "
 "and try again."
 msgstr ""
 
-#: application/gui/main_window.py:2420
+#: application/gui/main_window.py:2424
 msgid ""
 "No extensions for finding files were found. Please enable basic find file "
 "options plugin and try again."
@@ -1492,11 +1510,6 @@ msgstr ""
 msgid "Ext"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:126
-#: application/plugins/find_file_extensions/size.py:65
-msgid "Size"
-msgstr ""
-
 #: application/plugins/file_list/plugin.py:127
 msgid "Mode"
 msgstr ""
@@ -1594,20 +1607,24 @@ msgstr ""
 msgid "Error trashing specified path}"
 msgstr ""
 
-#: application/plugins/sessions/plugin.py:14
-#: application/plugins/sessions/plugin.py:279
+#: application/plugins/sessions/plugin.py:6
+msgid "Default"
+msgstr ""
+
+#: application/plugins/sessions/plugin.py:17
+#: application/plugins/sessions/plugin.py:317
 msgid "Sessions"
 msgstr ""
 
-#: application/plugins/sessions/plugin.py:149
+#: application/plugins/sessions/plugin.py:158
 msgid "New session"
 msgstr ""
 
-#: application/plugins/sessions/plugin.py:235
+#: application/plugins/sessions/plugin.py:216
 msgid "Manage sessions"
 msgstr ""
 
-#: application/plugins/sessions/plugin.py:260
+#: application/plugins/sessions/plugin.py:245
 msgid "Session"
 msgstr ""
 

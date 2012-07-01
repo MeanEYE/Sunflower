@@ -1966,7 +1966,7 @@ class MainWindow(gtk.Window):
 					'case_sensitive_sort': True,
 					'right_click_select': False,
 					'headers_visible': True,
-					'mode_format': 0
+					'mode_format': 1
 				})
 
 		# create default operation options

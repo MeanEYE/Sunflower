@@ -111,16 +111,16 @@ class SessionsOptions(SettingsPage):
 
 			# add session
 			new_sessions.append({
-		            'name': store[0],
-					'left': left,
-					'right': right,
+			        'name': store[0],
+			        'left': left,
+			        'right': right,
 			    })
 
 		# update current sessions id
 		old_current = options.section('sessions').get('current')
 		new_current = 0
 		try:
-			while options.section('')[new_current][2] != old_current:
+			while self._session_store[new_current][2] != old_current:
 				new_current += 1
 		except:
 			new_current = 0
@@ -200,10 +200,10 @@ class SessionsOptions(SettingsPage):
 def _first_start_specific_actions():
 	"""Adds required options to configuration if they are not present"""
 	if not options.has_section('sessions'):
-		options.set('sessions', {
-			'list': [{'name': DEFAULT_NAME}],
-			'current': 0
-		})
+		options.add_section('sessions', {
+		        'list': [{'name': DEFAULT_NAME}],
+		        'current': 0
+		    })
 
 def _create_menu():
 	"""Creates menu"""

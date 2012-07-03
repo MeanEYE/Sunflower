@@ -28,6 +28,7 @@ from plugin_base.find_extension import FindExtension
 from plugin_base.terminal import TerminalType
 from tools.advanced_rename import AdvancedRename
 from tools.find_files import FindFiles
+from tools.version_check import VersionCheck
 from config import Config
 
 try:
@@ -468,6 +469,10 @@ class MainWindow(gtk.Window):
 						'callback': self.goto_web,
 						'data': 'rcf-group.com',
 						'path': '<Sunflower>/Help/HomePage',
+					},
+					{
+						'label': _('Check for new version'),
+						'callback': self.check_for_new_version,
 					},
 					{'type': 'separator'},
 					{
@@ -2430,3 +2435,8 @@ class MainWindow(gtk.Window):
 
 			# show preferences window
 			self.preferences_window._show(None, tab_name='plugins')
+
+	def check_for_new_version(self, widget=None, data=None):
+		"""Check for new versions"""
+		version = VersionCheck(self)
+		version.check()

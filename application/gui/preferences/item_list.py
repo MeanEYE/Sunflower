@@ -266,7 +266,7 @@ class ItemListOptions(SettingsPage):
 		section.set('show_hidden', self._checkbox_show_hidden.get_active())
 		section.set('case_sensitive_sort', self._checkbox_case_sensitive.get_active())
 		section.set('right_click_select', self._checkbox_right_click.get_active())
-		section.set('trash_files', self._checkbox_trash_files.get_active())
+		options.section('operations').set('trash_files', self._checkbox_trash_files.get_active())
 		section.set('reserve_size', self._checkbox_reserve_size.get_active())
 		section.set('headers_visible', self._checkbox_show_headers.get_active())
 		options.set('media_preview', self._checkbox_media_preview.get_active())

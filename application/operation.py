@@ -4,7 +4,7 @@ import gobject
 import fnmatch
 
 from threading import Thread, Event
-from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OperationError
+from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OperationError, QuestionOperationError
 from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog, RenameDialog
 from gui.error_list import ErrorList
 from plugin_base.provider import Mode as FileMode, TrashError, Support as ProviderSupport
@@ -288,7 +288,7 @@ class Operation(Thread):
 		else:
 			# we are not in silent mode, ask user
 			with gtk.gdk.lock:
-				dialog = OperationError(self._application)
+				dialog = QuestionOperationError(self._application)
 		
 				dialog.set_message(_(
 						'There was a problem trashing specified path. '

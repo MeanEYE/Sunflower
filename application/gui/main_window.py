@@ -754,7 +754,7 @@ class MainWindow(gtk.Window):
 				bookmark.set_image(image)
 				bookmark.set_always_show_image(True)
 				bookmark.set_label(name)
-				bookmark.set_data('uri', urllib.unquote(uri))
+				bookmark.set_data('uri', uri)
 				bookmark.connect('activate', self._handle_bookmarks_click)
 
 				self.menu_bookmarks.append(bookmark)
@@ -871,6 +871,10 @@ class MainWindow(gtk.Window):
 		if item_list is not None \
 		and hasattr(item_list, 'change_path'):
 			path = widget.get_data('uri')
+
+			if path is not None:
+				path = urllib.unquote(path)
+
 			item_list.change_path(path)
 
 		return True

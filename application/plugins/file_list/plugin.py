@@ -1339,10 +1339,12 @@ class FileList(ItemList):
 			path = path[:-1]
 
 		# get provider for specified URI
-		uri = urlparse.urlparse(path)
 		provider = None
-		scheme = uri.scheme if uri.scheme != '' else 'file'
-		self.path = path if scheme != 'file' else uri.path
+		scheme = 'file'
+		self.path = path 
+
+		if '://' in path:
+			scheme, self.path = path.split('://')
 
 		if scheme == self.scheme:
 			# we are working with same provider
@@ -1350,10 +1352,10 @@ class FileList(ItemList):
 
 		else:
 			# different provider, we need to get it
-			Provider = self._parent.get_provider_by_protocol(scheme)
+			ProviderClass = self._parent.get_provider_by_protocol(scheme)
 
-			if Provider is not None:
-				provider = Provider(self)
+			if ProviderClass is not None:
+				provider = ProviderClass(self)
 
 				self.scheme = scheme
 				self._provider = provider
@@ -1363,17 +1365,17 @@ class FileList(ItemList):
 			self._provider = provider
 			self.path = user.home
 
-		# change list icon
-		self._title_bar.set_icon_from_name(provider.get_protocol_icon())
-
 		# update GTK controls
 		path_name = os.path.basename(self.path)
 		if path_name == "":
-			path_name = uri.path
+			path_name = self.path
 
 		self._change_tab_text(path_name)
 		self._change_title_text(self.path)
 		self._parent.path_label.set_text(self.path)
+
+		# change list icon
+		self._title_bar.set_icon_from_name(provider.get_protocol_icon())
 
 		# reset directory statistics
 		self._dirs['count'] = 0
@@ -1407,7 +1409,7 @@ class FileList(ItemList):
 			preload_list = item_list[:self._preload_count]
 			item_list = item_list[self._preload_count:]
 
-			if uri.path != os.path.sep and uri.path != '':
+			if self.path != os.path.sep:
 				# add parent option for parent directory
 				self._store.append((
 								os.path.pardir,

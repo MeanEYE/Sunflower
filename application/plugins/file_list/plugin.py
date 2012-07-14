@@ -252,6 +252,16 @@ class FileList(ItemList):
 		self._time_format = self._parent.options.section('item_list').get('time_format')
 		self._mode_format = self._parent.options.section('item_list').get('mode_format')
 
+		section_name = self.__class__.__name__
+		plugin_options = self._parent.plugin_options
+
+		if plugin_options.has_section(section_name) \
+		and plugin_options.section(section_name).has('columns'):
+			self._show_full_name = 'extension' not in plugin_options.section(section_name).get('columns')
+
+		else:
+			self._show_full_name = False;
+
 		# change to initial path
 		try:
 			self.change_path(path)
@@ -1066,13 +1076,15 @@ class FileList(ItemList):
 		# add item to the list
 		try:
 			# don't allow extension splitting on directories
-			file_info = (filename, '') if is_dir else os.path.splitext(filename)
-
 			formated_file_mode = common.format_mode(file_mode, self._mode_format)
 			formated_file_date = time.strftime(self._time_format, time.localtime(file_date))
 
 			if not is_dir:
 				# item is a file
+				file_info = os.path.splitext(filename)
+				if self._show_full_name:
+					file_info = (filename, file_info[1])
+
 				if self._human_readable:
 					formated_file_size = common.format_size(file_size)
 
@@ -1082,6 +1094,7 @@ class FileList(ItemList):
 
 			else:
 				# item is a directory
+				file_info = (filename, '')
 				formated_file_size = '<DIR>'
 
 			props = (
@@ -1670,6 +1683,8 @@ class FileList(ItemList):
 		"""Apply file list settings"""
 		ItemList.apply_settings(self)  # let parent apply its own settings
 		section = self._parent.options.section('item_list')
+		section_name = self.__class__.__name__
+		plugin_options = self._parent.plugin_options
 
 		# apply row hinting
 		row_hinting = section.get('row_hinting')
@@ -1687,6 +1702,13 @@ class FileList(ItemList):
 		# cache settings
 		self._time_format = section.get('time_format')
 		self._mode_format = section.get('mode_format')
+
+		if plugin_options.has_section(section_name) \
+		and plugin_options.section(section_name).has('columns'):
+			self._show_full_name = 'extension' not in plugin_options.section(section_name).get('columns')
+
+		else:
+			self._show_full_name = False;
 
 		# reload file list in order to apply time formatting, hidden files and other
 		self.refresh_file_list()

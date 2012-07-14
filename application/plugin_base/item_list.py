@@ -346,13 +346,12 @@ class ItemList(PluginBase):
 	def _reorder_columns(self, order=None):
 		"""Apply column order and visibility"""
 		options = self._parent.plugin_options
-		section_name = self.__class__.__name__
 
 		# order was not specified, try to restore from config
 		if order is None \
-		and options.has_section(section_name) \
-		and options.section(section_name).has('columns'):
-			order = options.section(section_name).get('columns')
+		and options.has_section(self._name) \
+		and options.section(self._name).has('columns'):
+			order = options.section(self._name).get('columns')
 
 		columns = self._item_list.get_columns()
 		names = [column.get_data('name') for column in columns]
@@ -384,9 +383,7 @@ class ItemList(PluginBase):
 	def _create_default_column_sizes(self):
 		"""Create default column sizes section in main configuration file"""
 		options = self._parent.plugin_options
-		section_name = self.__class__.__name__
-
-		section = options.create_section(section_name)
+		section = options.create_section(self._name)
 
 		# store default column sizes
 		for index, column in enumerate(self._columns):
@@ -1131,19 +1128,18 @@ class ItemList(PluginBase):
 		"""Resize all columns accordingly"""
 		column_width = widget.get_width()
 		column_name = widget.get_data('name')
-		section_name = self.__class__.__name__
 		option_name = 'size_{0}'.format(column_name)
 
 		# get stored column width
-		if self._parent.plugin_options.section(section_name).has(option_name):
-			existing_width = self._parent.plugin_options.section(section_name).get(option_name)
+		if self._parent.plugin_options.section(self._name).has(option_name):
+			existing_width = self._parent.plugin_options.section(self._name).get(option_name)
 
 		else:
 			existing_width = -1
 
 		# if current width is not the same as stored one, save
 		if not column_width == existing_width:
-			self._parent.plugin_options.section(section_name).set(option_name, column_width)
+			self._parent.plugin_options.section(self._name).set(option_name, column_width)
 			self._parent.delegate_to_objects(self, 'update_column_size', column_name)
 
 	def _column_changed(self, widget, data=None):
@@ -1155,14 +1151,13 @@ class ItemList(PluginBase):
 		self._parent.delegate_to_objects(self, '_reorder_columns', column_names)
 
 		# save column order
-		self._parent.plugin_options.section(self.__class__.__name__).set('columns', column_names)
+		self._parent.plugin_options.section(self._name).set('columns', column_names)
 
 	def _resize_columns(self, columns):
 		"""Resize columns according to global options"""
 		for column in columns:
-			section_name = self.__class__.__name__
 			option_name = 'size_{0}'.format(column.get_data('name'))
-			width = self._parent.plugin_options.section(section_name).get(option_name)
+			width = self._parent.plugin_options.section(self._name).get(option_name)
 
 			if width is not None:
 				column.set_fixed_width(width)

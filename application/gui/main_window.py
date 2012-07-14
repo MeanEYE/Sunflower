@@ -1799,7 +1799,7 @@ class MainWindow(gtk.Window):
 			if hasattr(page, '_handle_tab_close'):
 				page._handle_tab_close()
 
-			tab['class'] = page.__class__.__name__
+			tab['class'] = page._name
 			tab['uri'] = page.path
 
 			# file lists have sort column

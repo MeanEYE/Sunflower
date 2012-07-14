@@ -190,7 +190,7 @@ class ItemListOptions(SettingsPage):
 
 		notebook.append_page(vbox_look_and_feel, label_look_and_feel)
 		notebook.append_page(vbox_operation, label_operation)
-		#notebook.append_page(vbox_columns, label_columns)
+		notebook.append_page(vbox_columns, label_columns)
 
 		self.pack_start(notebook, True, True, 0)
 
@@ -246,16 +246,6 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_control.set_active(search_modifier[0] == '1')
 		self._checkbox_alt.set_active(search_modifier[1] == '1')
 		self._checkbox_shift.set_active(search_modifier[2] == '1')
-
-		# load columns
-		#if plugin_options.has_section('FileList'):
-		#	columns = plugin_options.section('columns')
-
-		#	for column_name in columns:
-		#		option_name = 'size_{0}'.format(column_name)
-		#		size = columns.get(option_name) if columns.has(option_name) else None
-
-		#		self._columns_store.append((column_name, 0, size, True))
 
 	def _save_options(self):
 		"""Save item list options"""

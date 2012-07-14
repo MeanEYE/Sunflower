@@ -252,12 +252,10 @@ class FileList(ItemList):
 		self._time_format = self._parent.options.section('item_list').get('time_format')
 		self._mode_format = self._parent.options.section('item_list').get('mode_format')
 
-		section_name = self.__class__.__name__
 		plugin_options = self._parent.plugin_options
-
-		if plugin_options.has_section(section_name) \
-		and plugin_options.section(section_name).has('columns'):
-			self._show_full_name = 'extension' not in plugin_options.section(section_name).get('columns')
+		if plugin_options.has_section(self._name) \
+		and plugin_options.section(self._name).has('columns'):
+			self._show_full_name = 'extension' not in plugin_options.section(self._name).get('columns')
 
 		else:
 			self._show_full_name = False;
@@ -1664,7 +1662,7 @@ class FileList(ItemList):
 	def update_column_size(self, name):
 		"""Update column size with global value"""
 		column = filter(lambda item: item.get_data('name') == name, self._columns)[0]
-		width = self._parent.plugin_options.section(self.__class__.__name__).get('size_{0}'.format(name))
+		width = self._parent.plugin_options.section(self._name).get('size_{0}'.format(name))
 
 		if width is not None:
 			column.set_fixed_width(width)
@@ -1683,7 +1681,6 @@ class FileList(ItemList):
 		"""Apply file list settings"""
 		ItemList.apply_settings(self)  # let parent apply its own settings
 		section = self._parent.options.section('item_list')
-		section_name = self.__class__.__name__
 		plugin_options = self._parent.plugin_options
 
 		# apply row hinting
@@ -1703,9 +1700,9 @@ class FileList(ItemList):
 		self._time_format = section.get('time_format')
 		self._mode_format = section.get('mode_format')
 
-		if plugin_options.has_section(section_name) \
-		and plugin_options.section(section_name).has('columns'):
-			self._show_full_name = 'extension' not in plugin_options.section(section_name).get('columns')
+		if plugin_options.has_section(self._name) \
+		and plugin_options.section(self._name).has('columns'):
+			self._show_full_name = 'extension' not in plugin_options.section(self._name).get('columns')
 
 		else:
 			self._show_full_name = False;

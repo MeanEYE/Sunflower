@@ -345,19 +345,14 @@ class ItemList(PluginBase):
 
 	def _reorder_columns(self, order=None):
 		"""Apply column order and visibility"""
-		options = self._parent.options
-		section = self.__class__.__name__
+		options = self._parent.plugin_options
+		section_name = self.__class__.__name__
 
-		# make sure we have column order
-		if order is None:
-			if options.has_section(section) \
-			and options.has_option(section, 'columns'):
-				# load column order from config
-				order = options.get(section, 'columns').split(',')
-
-			else:
-				# we don't have column order, just exit
-				return
+		# order was not specified, try to restore from config
+		if order is None \
+		and options.has_section(section_name) \
+		and options.section(section_name).has('columns'):
+			order = options.section(section_name).get('columns')
 
 		columns = self._item_list.get_columns()
 		names = [column.get_data('name') for column in columns]
@@ -380,6 +375,11 @@ class ItemList(PluginBase):
 
 			# update base index
 			base_index = index
+
+		# set column visibility
+		for column in columns:
+			visible = column.get_data('name') in order
+			column.set_visible(visible)
 
 	def _create_default_column_sizes(self):
 		"""Create default column sizes section in main configuration file"""

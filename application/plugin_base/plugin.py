@@ -24,6 +24,7 @@ class PluginBase(gtk.VBox):
 
 		self._parent = parent  # parent is stored locally for later use
 		self._notebook = notebook
+		self._name = self.__class__.__name__
 
 		# accelerator groups
 		self._accelerator_groups = []

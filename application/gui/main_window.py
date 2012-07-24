@@ -2292,9 +2292,9 @@ class MainWindow(gtk.Window):
 		"""Register mount manager extension"""
 		self.mount_manager_extensions.append(ExtensionClass)
 
-	def register_column_editor_extension(self, ExtensionClass):
+	def register_column_editor_extension(self, extension):
 		"""Register column editor extension"""
-		self.column_editor_extensions.append(ExtensionClass)
+		self.column_editor_extensions.append(extension)
 
 	def plugin_class_exists(self, class_name):
 		"""Check if specified class name exists in active plugins"""

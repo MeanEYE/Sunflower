@@ -353,6 +353,10 @@ class ItemList(PluginBase):
 		and options.section(self._name).has('columns'):
 			order = options.section(self._name).get('columns')
 
+		# if we still didn't manage to get order, return
+		if order is None:
+			return
+
 		columns = self._item_list.get_columns()
 		names = [column.get_data('name') for column in columns]
 

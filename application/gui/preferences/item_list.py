@@ -222,6 +222,10 @@ class ItemListOptions(SettingsPage):
 		# enable save button
 		self._parent.enable_save(show_restart=True)
 
+	def _populate_column_editor_extensions(self):
+		"""Populate list with column editor extensions"""
+		pass
+
 	def _load_options(self):
 		"""Load item list options"""
 		options = self._application.options
@@ -247,11 +251,15 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_alt.set_active(search_modifier[1] == '1')
 		self._checkbox_shift.set_active(search_modifier[2] == '1')
 
+		# load column settings
+		map(lambda extension: extension._load_options(), self._application.column_editor_extensions)
+
 	def _save_options(self):
 		"""Save item list options"""
 		options = self._application.options
 		section = options.section('item_list')
 
+		# save settings
 		section.set('row_hinting', self._checkbox_row_hinting.get_active())
 		section.set('show_hidden', self._checkbox_show_hidden.get_active())
 		section.set('case_sensitive_sort', self._checkbox_case_sensitive.get_active())
@@ -271,3 +279,6 @@ class ItemListOptions(SettingsPage):
 								self._checkbox_shift.get_active()
 							)
 		section.set('search_modifier', search_modifier)
+
+		# save column settings
+		map(lambda extension: extension._save_options(), self._application.column_editor_extensions)

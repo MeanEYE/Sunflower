@@ -1496,7 +1496,14 @@ class FileList(ItemList):
 
 			else:
 				# load previous valid path
-				self.change_path(self.history[0], os.path.basename(path))
+				new_path = self.history[0]
+
+				# navigating to a new path by clicking 
+				# on bookmark messes up the history, avoid that
+				if new_path == path:
+					new_path = self.history[-1]
+
+				self.change_path(new_path, os.path.basename(path))
 
 			return
 

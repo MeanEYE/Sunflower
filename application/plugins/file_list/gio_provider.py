@@ -250,8 +250,8 @@ class GioProvider(Provider):
 
 			information.close()
 
-		except gio.Error:
-			pass
+		except gio.Error as error:
+			raise OSError(str(error))
 
 		return result
 

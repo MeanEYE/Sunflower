@@ -140,8 +140,12 @@ class CommandsOptions(SettingsPage):
 		self._commands.clear()
 
 		command_list = options.get('commands')
+
 		for command in command_list:
-			self._commands.append((command['title']))
+			self._commands.append((
+						command['title'],
+						command['command']	
+					))
 
 	def _save_options(self):
 		"""Save commands to file"""

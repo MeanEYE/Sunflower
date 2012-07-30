@@ -808,7 +808,7 @@ class MainWindow(gtk.Window):
 
 		for command_data in command_list:
 			# create menu item
-			if tool_title != '-':
+			if command_data['title'] != '-':
 				# normal menu item
 				tool = gtk.MenuItem(label=command_data['title'])
 				tool.connect('activate', self._handle_command_click)

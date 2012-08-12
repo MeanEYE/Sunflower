@@ -18,6 +18,7 @@ class Column:
 
 
 class PreferencesWindow(gtk.Window):
+	"""Container class for options editors"""
 
 	def __init__(self, parent):
 		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)

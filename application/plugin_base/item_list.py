@@ -363,6 +363,9 @@ class ItemList(PluginBase):
 		# make sure order contains only valid names
 		order = filter(lambda name: name in names, order[:])
 
+		# block signal handler from messing up the config
+		self._item_list.handler_block_by_func(self._column_changed)
+
 		# show columns in specified order
 		base_index = names.index(order[0])
 		for column_name in order[1:]:
@@ -383,6 +386,9 @@ class ItemList(PluginBase):
 		for column in columns:
 			visible = column.get_data('name') in order
 			column.set_visible(visible)
+
+		# unblock signal handler
+		self._item_list.handler_unblock_by_func(self._column_changed)
 
 	def _create_default_column_sizes(self):
 		"""Create default column sizes section in main configuration file"""

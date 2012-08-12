@@ -16,7 +16,7 @@ class ColumnEditorExtension:
 
 	def get_name(self):
 		"""Get plugin's name"""
-		return self._parent_name
+		pass
 
 	def get_columns(self, only_visible=False):
 		"""Get column names"""

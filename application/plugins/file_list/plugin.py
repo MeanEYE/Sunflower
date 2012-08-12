@@ -12,6 +12,7 @@ from plugin_base.monitor import MonitorSignals, MonitorError
 from local_provider import LocalProvider
 from gio_provider import SambaProvider, FtpProvider
 from gio_extension import SambaExtension
+from column_editor import FileList_ColumnEditor
 from operation import DeleteOperation, CopyOperation, MoveOperation
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
@@ -61,6 +62,7 @@ class FileList(ItemList):
 	and make your own content provider.
 
 	"""
+	column_editor = None
 
 	def __init__(self, parent, notebook, path=None, sort_column=None, sort_ascending=True):
 		ItemList.__init__(self, parent, notebook, path, sort_column, sort_ascending)
@@ -88,7 +90,7 @@ class FileList(ItemList):
 								bool,	# Column.IS_DIR
 								bool,	# Column.IS_PARENT_DIR
 								str,	# Column.COLOR
-								str, 	# Column.ICON
+								str,	# Column.ICON
 								gtk.gdk.Pixbuf  # Column.SELECTED
 							)
 
@@ -175,6 +177,11 @@ class FileList(ItemList):
 
 		# register columns
 		self._columns = (col_name, col_extension, col_size, col_mode, col_date)
+
+		# create column editor if needed
+		if self.column_editor is None:
+			self.__class__.column_editor = FileList_ColumnEditor(self, parent.plugin_options)
+			parent.register_column_editor_extension(self.column_editor)
 
 		# set default column sizes for file list
 		self._columns_size = (200, 50, 70, 50, 90)
@@ -1402,9 +1409,9 @@ class FileList(ItemList):
 
 			# remove hidden files if we don't need them
 			item_list = filter(
-			               lambda item_name: show_hidden or (item_name[0] != '.' and item_name[-1] != '~'),
-			               item_list
-			             )
+							lambda item_name: show_hidden or (item_name[0] != '.' and item_name[-1] != '~'),
+							item_list
+						)
 
 			# sort list to prevent messing up list while
 			# adding items from a separate thread
@@ -1682,6 +1689,10 @@ class FileList(ItemList):
 		ItemList.apply_settings(self)  # let parent apply its own settings
 		section = self._parent.options.section('item_list')
 		plugin_options = self._parent.plugin_options
+
+		# apply column visibility and sizes
+		self._reorder_columns()
+		self._resize_columns(self._columns)
 
 		# apply row hinting
 		row_hinting = section.get('row_hinting')

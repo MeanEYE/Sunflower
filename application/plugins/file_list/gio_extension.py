@@ -80,6 +80,9 @@ class SambaExtension(MountManagerExtension):
 		self._controls.pack_end(button_unmount, False, False, 0)
 		self._controls.pack_end(button_mount, False, False, 0)
 
+		# load entries from config file
+		self.__populate_list()
+
 	def __form_uri(self, params):
 		"""Form URI based on result from SambaCreate dialog"""
 		scheme = 'smb'
@@ -96,10 +99,53 @@ class SambaExtension(MountManagerExtension):
 
 		return '{0}://{1}/{2}/'.format(scheme, server, path)
 
+	def __store_mount(self, name, uri, domain, requires_login):
+		"""Store mount entry to configuration file and list store"""
+		mount_options = self._application.mount_options
+
+		# make sure we store this
+		self._store.append((name, uri, domain, requires_login))
+
+		# store configuration to options file
+		if mount_options.has('smb'):
+			entries = mount_options.get('smb')
+
+		else:
+			entries = []
+
+		entries.append({
+				'name': name,
+				'uri': uri,
+				'domain': domain,
+				'requires_login': requires_login
+			})
+
+		# add new list if needed
+		if not mount_options.has('smb'):
+			mount_options.set('smb', entries)
+
+	def __populate_list(self):
+		"""Populate list with entries from config"""
+		entries = self._application.mount_options.get('smb')
+
+		# no entries found, nothing to do here
+		if entries is None:
+			return
+
+		# add entries to the list store
+		for entry in entries:
+			self._store.append((
+					entry['name'],
+					entry['uri'],
+					entry['domain'],
+					entry['requires_login']
+				))
+
 	def _add_mount(self, widget, data=None):
 		"""Present dialog to user for creating a new mount"""
 		keyring_manager = self._parent._application.keyring_manager
 
+		# create dialog and get response from user
 		dialog = SambaCreate(self._window)
 		dialog.set_keyring_available(keyring_manager.is_available())
 		response = dialog.get_response()
@@ -113,6 +159,7 @@ class SambaExtension(MountManagerExtension):
 			if requires_login:
 				if keyring_manager.is_available():
 					try:
+						# first, try to store password with keyring
 						keyring_manager.store_password(name, uri, response[1][SambaResult.PASSWORD])
 
 					except KeyringCreateError:
@@ -120,15 +167,16 @@ class SambaExtension(MountManagerExtension):
 						print "Keyring create error, we need it to store this option"
 
 					else:
-						# make sure we store this
-						self._store.append((name, uri, domain, requires_login))
+						# store entry
+						self.__store_mount(name, uri, domain, requires_login)
 
 				else:
 					# show error message
 					print "Keyring is not available but it's needed!"
 
 			else:
-				self._store.append((name, uri, domain, requires_login))
+				# no login required, just store
+				self.__store_mount(name, uri, domain, requires_login)
 
 	def _edit_mount(self, widget, data=None):
 		"""Present dialog to user for editing existing mount"""

@@ -6,9 +6,13 @@ from widgets.settings_page import SettingsPage
 
 class Column:
 	NAME = 0
-	TYPE = 1
-	SIZE = 3
+	SIZE = 1
 	VISIBLE = 2
+
+
+class ExtensionColumn:
+	NAME = 0
+	CLASS_NAME = 1
 
 
 class ItemListOptions(SettingsPage):
@@ -121,11 +125,22 @@ class ItemListOptions(SettingsPage):
 		self._entry_time_format.connect('changed', self._parent.enable_save)
 
 		# create columns editor
-		container = gtk.ScrolledWindow()
-		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-		container.set_shadow_type(gtk.SHADOW_IN)
+		hbox_columns = gtk.HBox(False, 5)
 
-		self._columns_store = gtk.ListStore(str, int, int, bool)
+		container_columns = gtk.ScrolledWindow()
+		container_columns.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+		container_columns.set_shadow_type(gtk.SHADOW_IN)
+
+		container_plugin = gtk.ScrolledWindow()
+		container_plugin.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+		container_plugin.set_shadow_type(gtk.SHADOW_IN)
+
+		# create variable to store active extension to
+		self._extensions = {}
+		self._active_extension = None
+
+		# create column list
+		self._columns_store = gtk.ListStore(str, int, bool)
 		self._columns_list = gtk.TreeView()
 
 		self._columns_list.set_model(self._columns_store)
@@ -137,9 +152,16 @@ class ItemListOptions(SettingsPage):
 		cell_size = gtk.CellRendererText()
 		cell_visible = gtk.CellRendererToggle()
 
+		cell_size.set_property('editable', True)
+		cell_size.set_property('mode', gtk.CELL_RENDERER_MODE_EDITABLE)
+		cell_size.connect('edited', self._edited_column_size)
+
+		cell_visible.connect('toggled', self._toggle_column_visible)
+
 		col_name = gtk.TreeViewColumn(_('Column'), cell_name, text=Column.NAME)
-		col_name.set_min_width(300)
+		col_name.set_min_width(150)
 		col_name.set_resizable(True)
+		col_name.set_expand(True)
 
 		col_size = gtk.TreeViewColumn(_('Size'), cell_size, text=Column.SIZE)
 		col_size.set_min_width(50)
@@ -151,8 +173,27 @@ class ItemListOptions(SettingsPage):
 		self._columns_list.append_column(col_size)
 		self._columns_list.append_column(col_visible)
 
+		# create plugin list
+		self._extension_store = gtk.ListStore(str, str)
+		self._extension_list = gtk.TreeView()
+
+		self._extension_list.set_model(self._extension_store)
+		self._extension_list.set_size_request(130, -1)
+		self._extension_list.set_headers_visible(False)
+
+		self._extension_list.connect('cursor-changed', self._handle_cursor_change)
+
+		cell_name = gtk.CellRendererText()
+		col_name = gtk.TreeViewColumn(None, cell_name, text=ExtensionColumn.NAME)
+
+		self._extension_list.append_column(col_name)
+
 		# pack interface
-		container.add(self._columns_list)
+		container_columns.add(self._columns_list)
+		container_plugin.add(self._extension_list)
+
+		hbox_columns.pack_start(container_plugin, False, False, 0)
+		hbox_columns.pack_start(container_columns, True, True, 0)
 
 		hbox_selection_color.pack_start(label_selection_color, False, False, 0)
 		hbox_selection_color.pack_start(self._button_selection_color, False, False, 0)
@@ -186,7 +227,7 @@ class ItemListOptions(SettingsPage):
 		vbox_operation.pack_start(hbox_quick_search, False, False, 5)
 		vbox_operation.pack_start(vbox_time_format, False, False, 5)
 
-		vbox_columns.pack_start(container, True, True, 0)
+		vbox_columns.pack_start(hbox_columns, True, True, 0)
 
 		notebook.append_page(vbox_look_and_feel, label_look_and_feel)
 		notebook.append_page(vbox_operation, label_operation)
@@ -224,7 +265,83 @@ class ItemListOptions(SettingsPage):
 
 	def _populate_column_editor_extensions(self):
 		"""Populate list with column editor extensions"""
-		pass
+		extension_list = self._application.column_editor_extensions
+
+		# clear existing lists
+		self._extension_store.clear()
+		self._columns_store.clear()
+
+		self._active_extension = None
+
+		# add all the extensions
+		for extension in extension_list:
+			name, class_name = extension.get_name()
+
+			self._extensions[class_name] = extension
+			self._extension_store.append((name, class_name))
+
+	def _handle_cursor_change(self, widget, data=None):
+		"""Handle selecting column editor extension"""
+		selection = self._extension_list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		if selected_iter is not None:
+			# get selected extension
+			class_name = item_list.get_value(selected_iter, ExtensionColumn.CLASS_NAME)
+			extension = self._extensions[class_name]
+
+			# set selection as active extension
+			self._active_extension = extension
+
+			# clear existing list
+			self._columns_store.clear()
+
+			# populate columns list
+			for column in extension.get_columns():
+				size = extension.get_size(column)
+				is_visible = extension.get_visible(column)
+
+				self._columns_store.append((column, size, is_visible))
+
+	def _edited_column_size(self, cell, path, text, data=None):
+		"""Handle editing column size"""
+		selected_iter = self._columns_store.get_iter(path)
+
+		if selected_iter is not None:
+			old_size = self._columns_store.get_value(selected_iter, Column.SIZE)
+			column_name = self._columns_store.get_value(selected_iter, Column.NAME)
+
+			try:
+				# make sure entered value is integer
+				new_size = int(text)
+			
+			except ValueError:
+				# if entered value is not integer, exception
+				# will be raised and we just skip updating storage
+				pass
+
+			else:
+				if new_size != old_size:
+					self._columns_store.set_value(selected_iter, Column.SIZE, new_size)
+					self._active_extension.set_size(column_name, new_size)
+					self._parent.enable_save()
+
+		return True
+
+	def _toggle_column_visible(self, cell, path):
+		"""Handle toggling column visibility"""
+		selected_iter = self._columns_store.get_iter(path)
+
+		if selected_iter is not None:
+			is_visible = not self._columns_store.get_value(selected_iter, Column.VISIBLE)
+			column_name = self._columns_store.get_value(selected_iter, Column.NAME)
+
+			self._columns_store.set_value(selected_iter, Column.VISIBLE, is_visible)
+			self._active_extension.set_visible(column_name, is_visible)
+
+			self._parent.enable_save()
+
+		return True
 
 	def _load_options(self):
 		"""Load item list options"""
@@ -252,7 +369,10 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_shift.set_active(search_modifier[2] == '1')
 
 		# load column settings
-		map(lambda extension: extension._load_options(), self._application.column_editor_extensions)
+		map(lambda extension: extension._load_settings(), self._application.column_editor_extensions)
+
+		# populate editor
+		self._populate_column_editor_extensions()
 
 	def _save_options(self):
 		"""Save item list options"""
@@ -281,4 +401,4 @@ class ItemListOptions(SettingsPage):
 		section.set('search_modifier', search_modifier)
 
 		# save column settings
-		map(lambda extension: extension._save_options(), self._application.column_editor_extensions)
+		map(lambda extension: extension._save_settings(), self._application.column_editor_extensions)

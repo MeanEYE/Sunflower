@@ -115,8 +115,8 @@ class BookmarksOptions(SettingsPage):
 
 	def _edited_bookmark(self, cell, path, text, column):
 		"""Record edited text"""
-		iter_ = self._bookmarks.get_iter(path)
-		self._bookmarks.set_value(iter_, column, text)
+		selected_iter = self._bookmarks.get_iter(path)
+		self._bookmarks.set_value(selected_iter, column, text)
 
 		# enable save button
 		self._parent.enable_save()
@@ -124,11 +124,11 @@ class BookmarksOptions(SettingsPage):
 	def _delete_bookmark(self, widget, data=None):
 		"""Remove selected field from store"""
 		selection = self._list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
-		if iter_ is not None:
+		if selected_iter is not None:
 			# remove item from the store
-			list_.remove(iter_)
+			item_list.remove(selected_iter)
 
 			# enable save button if item was removed
 			self._parent.enable_save()
@@ -136,16 +136,16 @@ class BookmarksOptions(SettingsPage):
 	def _move_bookmark(self, widget, direction):
 		"""Move selected bookmark up or down"""
 		selection = self._list.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
-		if iter_ is not None:
+		if selected_iter is not None:
 			# get iter index
-			index = list_.get_path(iter_)[0]
+			index = item_list.get_path(selected_iter)[0]
 
 			# depending on direction, swap iters
 			if (direction == -1 and index > 0) \
-			or (direction == 1 and index < len(list_) - 1):
-				list_.swap(iter_, list_[index + direction].iter)
+			or (direction == 1 and index < len(item_list) - 1):
+				item_list.swap(selected_iter, item_list[index + direction].iter)
 
 			# enable save button if iters were swapped
 			self._parent.enable_save()

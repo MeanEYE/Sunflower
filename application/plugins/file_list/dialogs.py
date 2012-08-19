@@ -12,6 +12,7 @@ class SambaResult:
 
 
 class SambaCreate:
+	"""Dialog used for editing and creating Samba connections"""
 
 	def __init__(self, parent):
 		self._dialog = gtk.Dialog(parent=parent)
@@ -148,6 +149,30 @@ class SambaCreate:
 
 		"""
 		self._entry_password.set_sensitive(available)
+	
+	def set_name(self, name):
+		"""Set username for editing"""
+		self._entry_name.set_text(name)
+
+	def set_server(self, uri):
+		"""Set server URI for editing"""
+		self._entry_server.set_text(uri)
+
+	def set_share(self, share):
+		"""Set name of share for editing"""
+		self._entry_share.set_text(share)
+
+	def set_directory(self, directory):
+		"""Set name of directory for editing"""
+		self._entry_directory.set_text(directory)
+
+	def set_domain(self, domain):
+		"""Set name of domain for editing"""
+		self._entry_domain.set_text(domain)
+
+	def set_username(self, username):
+		"""Set username for editing"""
+		self._entry_username.set_text(username)
 
 	def get_response(self):
 		"""Return value and self-destruct

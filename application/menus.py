@@ -215,10 +215,16 @@ class MenuManager:
 			new_item.set_accel_path(item['path'])
 
 		# set initial item visibility
-		item_visible = item['visible'] if item.has_key('visible') else True
-		new_item.set_visible(item_visible)
-		
-		if not item_visible:
-			new_item.set_property('no-show-all', True)
+		visible = item['visible'] if item.has_key('visible') else True
+
+		try:
+			# try using newer method
+			new_item.set_visible(visible)
+
+		except AttributeError:
+			# use legacy way of setting item visibility
+			if visible: new_item.show()
+
+		new_item.set_property('no-show-all', not visible)
 		
 		return new_item

@@ -3,6 +3,10 @@ import gio
 
 from plugin_base.mount_manager_extension import MountManagerExtension
 
+# redefine some GIO constants for legacy support
+GIO_MOUNT_MOUNT_NONE = gio.MOUNT_MOUNT_NONE if hasattr(gio, 'MOUNT_MOUNT_NONE') else 0
+GIO_MOUNT_UNMOUNT_NONE = gio.MOUNT_UNMOUNT_NONE if hasattr(gio, 'MOUNT_UNMOUNT_NONE') else 0
+
 
 class MountsColumn:
 	ICON = 0
@@ -205,8 +209,13 @@ class MountsManagerWindow(gtk.Window):
 	def _menu_updated(self):
 		"""Method called whenever menu is updated"""
 		has_mounts = len(self._menu.get_children()) > 1
-		self._menu_item_no_mounts.set_visible(not has_mounts)
-		self._menu_item_no_mounts2.set_visible(not has_mounts)
+		try: 
+			self._menu_item_no_mounts.set_visible(not has_mounts)
+			self._menu_item_no_mounts2.set_visible(not has_mounts)
+
+		except AttributeError:
+			self._menu_item_no_mounts.set_property('visible', not has_mounts)
+			self._menu_item_no_mounts2.set_property('visible', not has_mounts)
 
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys in mount manager list"""
@@ -363,8 +372,11 @@ class MountsExtension(MountManagerExtension):
 		button_jump = gtk.Button()
 		button_jump.set_image(image_jump)
 		button_jump.set_label(_('Open'))
-		button_jump.set_can_default(True)
 		button_jump.connect('clicked', self._open_selected, False)
+		try:
+			button_jump.set_can_default(True)
+		except AttributeError:
+			button_jump.set_property('can-default', True)
 
 		image_new_tab = gtk.Image()
 		image_new_tab.set_from_icon_name('tab-new', gtk.ICON_SIZE_BUTTON)
@@ -610,7 +622,7 @@ class VolumesExtension(MountManagerExtension):
 
 			# perform auto-mount of volume
 			volume = item_list.get_value(selected_iter, VolumesColumn.OBJECT)
-			volume.mount(None, self._mount_finish, gio.MOUNT_MOUNT_NONE, None, None)
+			volume.mount(None, self._mount_finish, GIO_MOUNT_MOUNT_NONE, None, None)
 
 	def _unmount_volume(self, widget, data=None):
 		"""Unmount selected volume"""
@@ -625,7 +637,7 @@ class VolumesExtension(MountManagerExtension):
 			# unmount
 			volume = item_list.get_value(selected_iter, VolumesColumn.OBJECT)
 			mount = volume.get_mount()
-			mount.unmount(self._unmount_finish, gio.MOUNT_UNMOUNT_NONE, None, volume)
+			mount.unmount(self._unmount_finish, GIO_MOUNT_UNMOUNT_NONE, None, volume)
 
 	def get_information(self):
 		"""Get extension information"""
@@ -658,7 +670,7 @@ class VolumesExtension(MountManagerExtension):
 			self._show_spinner()
 		
 			# perform auto-mount of volume
-			volume.mount(None, self._mount_finish, gio.MOUNT_MOUNT_NONE, None, None)
+			volume.mount(None, self._mount_finish, GIO_MOUNT_MOUNT_NONE, None, None)
 
 	def remove_volume(self, volume):
 		"""Remove volume from the list"""

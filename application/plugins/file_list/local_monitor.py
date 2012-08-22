@@ -16,8 +16,12 @@ class LocalMonitor(Monitor):
 			gio.FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED: MonitorSignals.ATTRIBUTE_CHANGED,
 			gio.FILE_MONITOR_EVENT_PRE_UNMOUNT: MonitorSignals.PRE_UNMOUNT,
 			gio.FILE_MONITOR_EVENT_UNMOUNTED: MonitorSignals.UNMOUNTED,
-			gio.FILE_MONITOR_EVENT_MOVED: MonitorSignals.MOVED,
 		}
+
+	# old versions of GIO don't support this signal
+	if cmp(gio.pygio_version, (2, 20, 0)) == 1:
+		_signal_table[gio.FILE_MONITOR_EVENT_MOVED] = MonitorSignals.MOVED
+
 
 	def __init__(self, provider, path):
 		Monitor.__init__(self, provider, path)

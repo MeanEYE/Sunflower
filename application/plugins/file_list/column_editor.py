@@ -35,6 +35,10 @@ class FileList_ColumnEditor(ColumnEditorExtension):
 		# get list of visible columns
 		self._visible = section.get('columns')
 
+		# make sure we have list of visible columns
+		if self._visible is None:
+			self._visible = self._columns
+
 		# get sizes
 		for column_name in self._columns:
 			size = section.get('size_{0}'.format(column_name))

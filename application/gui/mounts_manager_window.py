@@ -1,7 +1,7 @@
 import gtk
 import gio
 
-from plugin_base.mount_manager_extension import MountManagerExtension
+from plugin_base.mount_manager_extension import MountManagerExtension, ExtensionFeatures
 
 # redefine some GIO constants for legacy support
 GIO_MOUNT_MOUNT_NONE = gio.MOUNT_MOUNT_NONE if hasattr(gio, 'MOUNT_MOUNT_NONE') else 0
@@ -13,6 +13,7 @@ class MountsColumn:
 	NAME = 1
 	URI = 2
 	OBJECT = 3
+	SYSTEM_WIDE = 4
 
 
 class VolumesColumn:
@@ -49,7 +50,7 @@ class MountsManagerWindow(gtk.Window):
 		
 		# configure window
 		self.set_title(_('Mount manager'))
-		self.set_default_size(600, 400)
+		self.set_default_size(700, 400)
 		self.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)
@@ -332,12 +333,14 @@ class MountsManagerWindow(gtk.Window):
 
 class MountsExtension(MountManagerExtension):
 	"""Extension that provides list of all mounted resources"""
+
+	features = set([ExtensionFeatures.SYSTEM_WIDE,])
 	
 	def __init__(self, parent, window):
 		MountManagerExtension.__init__(self, parent, window)
 
 		# create store for mounts
-		self._store = gtk.ListStore(str, str, str, object)
+		self._store = gtk.ListStore(str, str, str, object, bool)
 		self._mounts = {}
 
 		# create interface
@@ -352,6 +355,7 @@ class MountsExtension(MountManagerExtension):
 		cell_icon = gtk.CellRendererPixbuf()
 		cell_name = gtk.CellRendererText()
 		cell_uri = gtk.CellRendererText()
+		cell_system = gtk.CellRendererToggle()
 
 		col_name = gtk.TreeViewColumn(_('Name'))
 		col_name.pack_start(cell_icon, False)
@@ -363,8 +367,11 @@ class MountsExtension(MountManagerExtension):
 
 		col_uri = gtk.TreeViewColumn(_('URI'), cell_uri, text=MountsColumn.URI)
 
+		col_system = gtk.TreeViewColumn(_('Systemwide'), cell_system, active=MountsColumn.SYSTEM_WIDE)
+
 		self._list.append_column(col_name)
 		self._list.append_column(col_uri)
+		self._list.append_column(col_system)
 
 		# create controls
 		image_jump = gtk.Image()
@@ -449,6 +456,8 @@ class MountsExtension(MountManagerExtension):
 		if selected_iter is not None:
 			uri = item_list.get_value(selected_iter, MountsColumn.URI)
 			extension = item_list.get_value(selected_iter, MountsColumn.OBJECT)
+
+			print extension
 			extension.unmount(uri)
 
 	def get_information(self):
@@ -461,7 +470,13 @@ class MountsExtension(MountManagerExtension):
 
 	def add_mount(self, icon, name, uri, extension):
 		"""Add mount to the list"""
-		self._store.append((icon, name, uri, extension))
+		system_wide = True
+
+		# check extension features
+		if extension is not None:
+			system_wide = ExtensionFeatures.SYSTEM_WIDE in extension.get_features()
+
+		self._store.append((icon, name, uri, extension, system_wide))
 
 	def remove_mount(self, uri):
 		"""Remove mount from the list"""

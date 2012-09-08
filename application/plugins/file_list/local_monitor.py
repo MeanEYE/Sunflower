@@ -28,11 +28,15 @@ class LocalMonitor(Monitor):
 
 		if os.path.exists(self._path):
 			# create file/directory monitor
-			if os.path.isdir(self._path):
-				self._monitor = gio.File(path).monitor_directory()
+			try: 
+				if os.path.isdir(self._path):
+					self._monitor = gio.File(path).monitor_directory()
 
-			else:
-				self._monitor = gio.File(path).monitor_file()
+				else:
+					self._monitor = gio.File(path).monitor_file()
+
+			except gio.Error:
+				raise MonitorError('Error creating monitor')
 
 			# connect signal
 			self._monitor.connect('changed', self._changed)

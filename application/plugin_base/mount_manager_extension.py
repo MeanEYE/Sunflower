@@ -1,6 +1,10 @@
 import gtk
 
 
+class ExtensionFeatures:
+	SYSTEM_WIDE = 0
+
+
 class MountManagerExtension:
 	"""Base class for mount manager extensions.
 	
@@ -9,6 +13,9 @@ class MountManagerExtension:
 	so you need to implement them.
 
 	"""
+
+	# features extension supports
+	features = ()
 	
 	def __init__(self, parent, window):
 		self._parent = parent
@@ -43,3 +50,8 @@ class MountManagerExtension:
 	def focus_object(self):
 		"""Method called by the mount manager for focusing main object"""
 		pass
+
+	@classmethod
+	def get_features(cls):
+		"""Returns set of features supported by extension"""
+		return cls.features

@@ -11,9 +11,10 @@ GIO_MOUNT_UNMOUNT_NONE = gio.MOUNT_UNMOUNT_NONE if hasattr(gio, 'MOUNT_UNMOUNT_N
 class MountsColumn:
 	ICON = 0
 	NAME = 1
-	URI = 2
-	OBJECT = 3
-	SYSTEM_WIDE = 4
+	MARKUP_NAME = 2
+	URI = 3
+	OBJECT = 4
+	SYSTEM_WIDE = 5
 
 
 class VolumesColumn:
@@ -42,6 +43,7 @@ class MountsManagerWindow(gtk.Window):
 		self._application = self._parent._application
 		self._mounts = None
 		self._volumes = None
+		self._extensions = []
 
 		# main menu items
 		self._menu = None
@@ -130,6 +132,7 @@ class MountsManagerWindow(gtk.Window):
 
 			# add page
 			self.add_page(icon, name, container, extension)
+			self._extensions.append(extension)
 
 			# store local extensions for later use
 			if isinstance(extension, MountsExtension):
@@ -188,7 +191,7 @@ class MountsManagerWindow(gtk.Window):
 		menu_item.set_image(image)
 		menu_item.set_always_show_image(True)
 		menu_item.set_data('uri', uri)
-		menu_item.connect('activate', self._parent._unmount_item)
+		menu_item.connect('activate', self._parent._unmount_item_menu_callback)
 		menu_item.show()
 
 		self._menu_unmount.append(menu_item)
@@ -340,7 +343,7 @@ class MountsExtension(MountManagerExtension):
 		MountManagerExtension.__init__(self, parent, window)
 
 		# create store for mounts
-		self._store = gtk.ListStore(str, str, str, object, bool)
+		self._store = gtk.ListStore(str, str, str, str, object, bool)
 		self._mounts = {}
 
 		# create interface
@@ -354,7 +357,6 @@ class MountsExtension(MountManagerExtension):
 
 		cell_icon = gtk.CellRendererPixbuf()
 		cell_name = gtk.CellRendererText()
-		cell_uri = gtk.CellRendererText()
 		cell_system = gtk.CellRendererToggle()
 
 		col_name = gtk.TreeViewColumn(_('Name'))
@@ -363,14 +365,11 @@ class MountsExtension(MountManagerExtension):
 		col_name.set_expand(True)
 
 		col_name.add_attribute(cell_icon, 'icon-name', MountsColumn.ICON)
-		col_name.add_attribute(cell_name, 'markup', MountsColumn.NAME)
-
-		col_uri = gtk.TreeViewColumn(_('URI'), cell_uri, text=MountsColumn.URI)
+		col_name.add_attribute(cell_name, 'markup', MountsColumn.MARKUP_NAME)
 
 		col_system = gtk.TreeViewColumn(_('Systemwide'), cell_system, active=MountsColumn.SYSTEM_WIDE)
 
 		self._list.append_column(col_name)
-		self._list.append_column(col_uri)
 		self._list.append_column(col_system)
 
 		# create controls
@@ -452,13 +451,18 @@ class MountsExtension(MountManagerExtension):
 		"""Unmount selected item"""
 		selection = self._list.get_selection()
 		item_list, selected_iter = selection.get_selected()
-
+		
 		if selected_iter is not None:
 			uri = item_list.get_value(selected_iter, MountsColumn.URI)
-			extension = item_list.get_value(selected_iter, MountsColumn.OBJECT)
 
-			print extension
-			extension.unmount(uri)
+			# let all extensions know we are performing unmount
+			for extension in self._window._extensions:
+				if extension.can_handle(uri):
+					extension.unmount(uri)
+
+	def can_handle(self, uri):
+		"""Returns boolean denoting if specified URI can be handled by this extension"""
+		return True
 
 	def get_information(self):
 		"""Get extension information"""
@@ -476,7 +480,14 @@ class MountsExtension(MountManagerExtension):
 		if extension is not None:
 			system_wide = ExtensionFeatures.SYSTEM_WIDE in extension.get_features()
 
-		self._store.append((icon, name, uri, extension, system_wide))
+		# create markup name
+		if uri is not None:
+			markup_name = '{0}\n<small>{1}</small>'.format(name, uri)
+
+		else:
+			markup_name = name
+
+		self._store.append((icon, name, markup_name, uri, extension, system_wide))
 
 	def remove_mount(self, uri):
 		"""Remove mount from the list"""
@@ -522,7 +533,7 @@ class VolumesExtension(MountManagerExtension):
 		col_name.set_expand(True)
 
 		col_name.add_attribute(cell_icon, 'icon-name', VolumesColumn.ICON)
-		col_name.add_attribute(cell_name, 'markup', VolumesColumn.NAME)
+		col_name.add_attribute(cell_name, 'text', VolumesColumn.NAME)
 
 		col_mounted = gtk.TreeViewColumn(_('Mounted'), cell_mounted, active=VolumesColumn.MOUNTED)
 

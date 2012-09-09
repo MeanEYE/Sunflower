@@ -526,6 +526,7 @@ class VolumesExtension(MountManagerExtension):
 		cell_icon = gtk.CellRendererPixbuf()
 		cell_name = gtk.CellRendererText()
 		cell_mounted = gtk.CellRendererToggle()
+		cell_mounted.connect('toggled', self._mount_toggled)
 
 		col_name = gtk.TreeViewColumn(_('Name'))
 		col_name.pack_start(cell_icon, False)
@@ -603,6 +604,23 @@ class VolumesExtension(MountManagerExtension):
 		if self._spinner is not None:
 			self._spinner.stop()
 			self._spinner.hide()
+
+	def _mount_toggled(self, cell, path):
+		"""Handle changing mounted state of a volume"""
+		volume = self._store[path][VolumesColumn.OBJECT]
+		is_mounted = self._store[path][VolumesColumn.MOUNTED]
+
+		# show spinner animation
+		self._show_spinner()
+
+		if is_mounted:
+			# unmount volume
+			mount = volume.get_mount()
+			mount.unmount(self._unmount_finish, GIO_MOUNT_UNMOUNT_NONE, None, volume)
+
+		else:
+			# mount volume
+			volume.mount(None, self._mount_finish, GIO_MOUNT_MOUNT_NONE, None, None)
 
 	def _mount_finish(self, volume, result, data=None):
 		"""Callback function for volume mount"""

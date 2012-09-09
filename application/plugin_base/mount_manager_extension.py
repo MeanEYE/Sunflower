@@ -32,6 +32,10 @@ class MountManagerExtension:
 		self._container.pack_end(separator, False, False, 0)
 		self._container.pack_end(self._controls, False, False, 0)
 
+	def can_handle(self, uri):
+		"""Returns boolean denoting if specified URI can be handled by this extension"""
+		return False
+
 	def get_container(self):
 		"""Return container widget"""
 		return self._container

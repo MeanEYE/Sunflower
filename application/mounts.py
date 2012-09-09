@@ -92,21 +92,12 @@ class MountsManager:
 		"""Event called when volume is removed/unmounted"""
 		self.window._remove_volume(volume)
 
-	def _unmount_item(self, widget, data=None):
+	def _unmount_item_menu_callback(self, widget, data=None):
 		"""Event called by the unmount menu item or unmount button from manager"""
 		uri = widget.get_data('uri')
 
-		if uri is None:
-			# unmount was called by button
-			pass
-
-		else:
-			# unmount was called by menu item
-			for mount in self._volume_monitor.get_mounts():
-				# check if this is the right mount
-				if mount.get_root().get_uri() == uri:
-					self._unmount(mount)
-					break
+		if uri is not None:
+			self._unmount(self._mounts[uri])
 
 	def _unmount_by_uri(self, uri):
 		"""Perform unmount by URI"""
@@ -116,6 +107,12 @@ class MountsManager:
 	def _unmount(self, mount):
 		"""Perform unmounting"""
 		if mount.can_unmount():
+			# notify volume manager extension if mount is part of volume
+			volume = mount.get_volume()
+
+			if volume is not None:
+				self.window._volume_unmounted(volume)
+
 			# we can safely unmount
 			mount.unmount(self._unmount_finish)
 
@@ -133,7 +130,6 @@ class MountsManager:
 
 	def _unmount_finish(self, mount, result):
 		"""Callback for unmount events"""
-		# try to finish async unmount
 		mount.unmount_finish(result)
 
 	def _attach_menus(self):

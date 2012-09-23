@@ -1,3 +1,5 @@
+- Properly set options on copy dialog to reflect supported features from destination provider.
+
 - On apply preferences or show/hide dotfiles path label is updated to the right panel, even if left one is focused.
 
 - On create directory/file when adding item manually we don't test for show hidden

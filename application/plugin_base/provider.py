@@ -58,6 +58,9 @@ class Support:
 	TRASH = 1
 	LINK = 2
 	RESERVE_SIZE = 3
+	SET_OWNER = 4
+	SET_ACCESS = 5
+	SET_TIMESTAMP = 6
 
 
 class Mode:

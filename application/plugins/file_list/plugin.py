@@ -1358,11 +1358,18 @@ class FileList(ItemList):
 
 		# get provider for specified URI
 		provider = None
-		scheme = 'file'
 		self.path = path 
 
-		if '://' in path:
-			scheme, self.path = path.split('://')
+		if '://' not in path:
+			scheme = 'file'
+
+		else:
+			data = path.split('://')
+			scheme = data[0]
+			
+			# for local storage, use path without scheme
+			if scheme == 'file':
+				self.path = data[1]
 
 		if scheme == self.scheme:
 			# we are working with same provider
@@ -1378,6 +1385,7 @@ class FileList(ItemList):
 				self.scheme = scheme
 				self._provider = provider
 
+		# in case we can't handle specified URI show home directory
 		if provider is None:
 			provider = LocalProvider(self)
 			self._provider = provider
@@ -1490,12 +1498,15 @@ class FileList(ItemList):
 									gtk.MESSAGE_ERROR,
 									gtk.BUTTONS_YES_NO,
 									_(
-										"Error changing working directory. "
-										"\n\n{0}\n\nWould you like to retry?"
-									).format(error)
+										"Error changing working directory to:"
+										"\n{1}\n\n{0}\n\nWould you like to retry?"
+									).format(error, path)
 								)
 			result = dialog.run()
 			dialog.destroy()
+
+			# remove invalid paths from history so we don't end up in a dead loop
+			self.history = filter(lambda history_path: path != history_path, self.history)
 
 			if result == gtk.RESPONSE_YES:
 				# retry loading path again

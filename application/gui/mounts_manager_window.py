@@ -408,9 +408,9 @@ class MountsExtension(MountManagerExtension):
 		# pack interface
 		container.add(self._list)
 
-		self._controls.pack_end(button_jump, False, False, 0)
-		self._controls.pack_end(button_new_tab, False, False, 0)
-		self._controls.pack_start(button_unmount, False, False, 0)
+		self._controls.pack_start(button_jump, False, False, 0)
+		self._controls.pack_start(button_new_tab, False, False, 0)
+		self._controls.pack_end(button_unmount, False, False, 0)
 		
 		self._container.pack_start(container, True, True, 0)
 

@@ -229,4 +229,12 @@ class LocalProvider(Provider):
 
 	def get_support(self):
 		"""Return supported options by provider"""
-		return (Support.MONITOR, Support.TRASH, Support.LINK)
+		return (
+			Support.MONITOR,
+			Support.TRASH,
+			Support.LINK,
+			Support.RESERVE_SIZE,
+			Support.SET_OWNER,
+			Support.SET_ACCESS,
+			Support.SET_TIMESTAMP
+		)

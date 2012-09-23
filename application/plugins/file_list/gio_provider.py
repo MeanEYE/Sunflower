@@ -288,7 +288,9 @@ class GioProvider(Provider):
 
 	def get_support(self):
 		"""Return supported options by provider"""
-		return (Support.MONITOR,)
+		return (
+			Support.SET_TIMESTAMP,
+		)
 
 
 class SambaProvider(GioProvider):

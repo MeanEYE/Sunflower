@@ -1,3 +1,21 @@
+Version 0.1a-44
+  + Ukrainian translation.
+  + Added small tool to check for latest version in help menu.
+  + Created column editor.
+  + Show full file name when extension column is disabled.
+  + Samba extension for mount manager. Editing and removing still doesn't work.
+  + Volumes extension for mount manager.
+  + "Copy/move to other" context menu options.
+  + Ability to disable red color when starting program with superuser priviledges.
+  * Fixed mount manager to properly handle different extensions.
+  * Properly handle all exceptions in delete operation.
+  * Ask user what to do when trashing files is not possible.
+  * Fixed problems with mounts which had URL encoded spaces in their names.
+  * Fixed dead loops when history contains invalid paths.
+  * Fixed problem with creating commands menu.
+  * Automount volumes when inserted.
+  * Small changes to make program more compatible with outdated PyGTK implementations.
+
 Version 0.1a-43
   + Treat files with names ending with "~" as hidden.
   + Support for external terminal applications.

@@ -20,6 +20,7 @@ class TitleBar:
 		self._control_count = 0
 		self._state = gtk.STATE_NORMAL
 		self._ubuntu_coloring = self._application.options.get('ubuntu_coloring')
+		self._superuser_notification = self._application.options.get('superuser_notification')
 		self._menu = None
 		self._style = None
 		self._toolbar_style = None
@@ -101,7 +102,8 @@ class TitleBar:
 			foreground = self._style.fg[gtk.STATE_NORMAL]
 
 		else:
-			if self._mode is Mode.NORMAL:
+			if self._mode is Mode.NORMAL \
+			or self._mode is Mode.SUPER_USER and not self._superuser_notification:
 
 				# selected state
 				if self._ubuntu_coloring:

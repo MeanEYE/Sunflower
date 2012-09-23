@@ -943,6 +943,23 @@ class ItemList(PluginBase):
 		item = menu_manager.create_menu_item({'type': 'separator'})
 		result.append(item)
 
+		# create move and copy to other pane items
+		item = menu_manager.create_menu_item({
+								'label': _('Copy to other...'),
+								'callback': self._copy_files
+							})
+		result.append(item)
+
+		item = menu_manager.create_menu_item({
+								'label': _('Move to other...'),
+								'callback': self._move_files
+							})
+		result.append(item)
+
+		# separator
+		item = menu_manager.create_menu_item({'type': 'separator'})
+		result.append(item)
+
 		# delete
 		item = menu_manager.create_menu_item({
 								'label': _('_Delete'),

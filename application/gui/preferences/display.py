@@ -49,6 +49,7 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_tab_close_button = gtk.CheckButton(_('Show close button'))
 		self._checkbox_always_show_tabs = gtk.CheckButton(_('Show tab(s) even if there is only one'))
 		self._checkbox_ubuntu_coloring = gtk.CheckButton(_('Use Ubuntu coloring method for tab title bars'))
+		self._checkbox_superuser_notification = gtk.CheckButton(_('Change title bar color when started as super user'))
 
 		self._checkbox_focus_new_tab.connect('toggled', self._parent.enable_save)
 		self._checkbox_button_relief.connect('toggled', self._parent.enable_save)
@@ -56,6 +57,7 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_tab_close_button.connect('toggled', self._parent.enable_save)
 		self._checkbox_always_show_tabs.connect('toggled', self._parent.enable_save)
 		self._checkbox_ubuntu_coloring.connect('toggled', self._parent.enable_save)
+		self._checkbox_superuser_notification.connect('toggled', self._parent.enable_save)
 
 		# status bar
 		table = gtk.Table(2, 2, False)
@@ -124,6 +126,7 @@ class DisplayOptions(SettingsPage):
 		vbox_tabs.pack_start(self._checkbox_tab_close_button, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_always_show_tabs, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_ubuntu_coloring, False, False, 0)
+		vbox_tabs.pack_start(self._checkbox_superuser_notification, False, False, 0)
 		vbox_tabs.pack_start(table, False, False, 5)
 
 		vbox_other.pack_start(self._checkbox_hide_window_on_minimize, False, False, 0)
@@ -151,6 +154,7 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_tab_close_button.set_active(options.get('tab_close_button'))
 		self._checkbox_always_show_tabs.set_active(options.get('always_show_tabs'))
 		self._checkbox_ubuntu_coloring.set_active(options.get('ubuntu_coloring'))
+		self._checkbox_superuser_notification.set_active(options.get('superuser_notification'))
 		self._checkbox_hide_window_on_minimize.set_active(options.section('operations').get('hide_on_minimize'))
 		self._checkbox_human_readable_size.set_active(options.get('human_readable_size'))
 		self._checkbox_show_notifications.set_active(options.get('show_notifications'))
@@ -173,6 +177,7 @@ class DisplayOptions(SettingsPage):
 		options.set('tab_close_button', self._checkbox_tab_close_button.get_active())
 		options.set('always_show_tabs', self._checkbox_always_show_tabs.get_active())
 		options.set('ubuntu_coloring', self._checkbox_ubuntu_coloring.get_active())
+		options.set('superuser_notification', self._checkbox_superuser_notification.get_active())
 		options.section('operations').set('hide_on_minimize', self._checkbox_hide_window_on_minimize.get_active())
 		options.set('human_readable_size', self._checkbox_human_readable_size.get_active())
 		options.set('show_notifications', self._checkbox_show_notifications.get_active())

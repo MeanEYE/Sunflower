@@ -318,8 +318,9 @@ class BookmarksMenu:
 		self.__populate_list()
 
 		# show window
-		self._window.show()
+		self._window.move(0, 0)
 		self._window.move(pos_x, pos_y)
+		self._window.show()
 
 	def close(self, widget=None, data=None):
 		"""Handle window closing"""

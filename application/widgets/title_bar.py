@@ -235,11 +235,22 @@ class TitleBar:
 	def __handle_menu_hide(self, widget, data=None):
 		"""Handle hiding title bar menu"""
 		active_object = self._application.get_active_object()
-		oposite_object = self._application.get_oposite_object(active_object)
+		opposite_object = self._application.get_opposite_object(active_object)
 
 		# prevent title bar from losing focus
 		active_object._disable_object_block()
-		oposite_object._disable_object_block()
+		opposite_object._disable_object_block()
+
+	def __get_menu_position(self, menu, button):
+		"""Get bookmarks position"""
+		window_x, window_y = self._application.window.get_position()
+		button_x, button_y = button.translate_coordinates(self._application, 0, 0)
+		button_h = button.get_allocation().height
+
+		pos_x = window_x + button_x
+		pos_y = window_y + button_y + button_h
+
+		return (pos_x, pos_y, True)
 
 	def add_control(self, widget):
 		"""Add button control"""
@@ -290,18 +301,18 @@ class TitleBar:
 
 		# get objects
 		active_object = self._application.get_active_object()
-		oposite_object = self._application.get_oposite_object(active_object)
+		opposite_object = self._application.get_opposite_object(active_object)
 
 		# prevent title bar from losing focus
 		active_object._enable_object_block()
-		oposite_object._enable_object_block()
+		opposite_object._enable_object_block()
 
 		# show menu below the button
 		button = widget if widget is not None else self._button_menu
 
 		self._menu.popup(
 					None, None,
-					self._application._get_bookmarks_menu_position,
+					self.__get_menu_position,
 					1, 0, button
 				)
 

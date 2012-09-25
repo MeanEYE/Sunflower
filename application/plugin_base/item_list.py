@@ -588,7 +588,7 @@ class ItemList(PluginBase):
 		if path is None:
 			path = widget.get_data('path')
 
-		if os.path.isdir(path):
+		if self.get_provider().is_dir(path):
 			# path is valid
 			self.change_path(path)
 
@@ -611,8 +611,8 @@ class ItemList(PluginBase):
 	def _handle_history_hide(self, widget, data=None):
 		"""Handle history menu hide event"""
 		self._disable_object_block()
-		oposite_object = self._parent.get_oposite_object(self)
-		oposite_object._disable_object_block()
+		opposite_object = self._parent.get_opposite_object(self)
+		opposite_object._disable_object_block()
 
 	def _handle_external_data(self, operation, protocol, list_):
 		"""Handle data coming from a different application"""
@@ -1128,8 +1128,8 @@ class ItemList(PluginBase):
 
 		# show the menu on calculated location
 		self._enable_object_block()
-		oposite_object = self._parent.get_oposite_object(self)
-		oposite_object._enable_object_block()
+		opposite_object = self._parent.get_opposite_object(self)
+		opposite_object._enable_object_block()
 
 		self._history_menu.popup(
 								None, None,
@@ -1253,7 +1253,7 @@ class ItemList(PluginBase):
 		return True
 
 	def _select_range(self, start_path, end_path):
-		"""Set items in range to status oposite from frist item in selection"""
+		"""Set items in range to status opposite from frist item in selection"""
 		if self._parent.options.get('show_status_bar') == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()
@@ -1277,46 +1277,46 @@ class ItemList(PluginBase):
 
 	def _inherit_left_path(self, widget, data=None):
 		"""Inherit path in right list from left"""
-		oposite_object = self._parent.get_oposite_object(self)
+		opposite_object = self._parent.get_opposite_object(self)
 
 		if self._notebook is self._parent.left_notebook:
-			if hasattr(oposite_object, 'change_path'):
-				oposite_object.change_path(self.path)
+			if hasattr(opposite_object, 'change_path'):
+				opposite_object.change_path(self.path)
 
-			elif hasattr(oposite_object, 'feed_terminal'):
-				oposite_object.feed_terminal(self.path)
+			elif hasattr(opposite_object, 'feed_terminal'):
+				opposite_object.feed_terminal(self.path)
 
 		else:
-			self.change_path(oposite_object.path)
+			self.change_path(opposite_object.path)
 
 		return True
 
 	def _inherit_right_path(self, widget, data=None):
 		"""Inherit path in left list from right"""
-		oposite_object = self._parent.get_oposite_object(self)
+		opposite_object = self._parent.get_opposite_object(self)
 
 		if self._notebook is self._parent.right_notebook:
-			if hasattr(oposite_object, 'change_path'):
-				oposite_object.change_path(self.path)
+			if hasattr(opposite_object, 'change_path'):
+				opposite_object.change_path(self.path)
 
-			elif hasattr(oposite_object, 'feed_terminal'):
-				oposite_object.feed_terminal(self.path)
+			elif hasattr(opposite_object, 'feed_terminal'):
+				opposite_object.feed_terminal(self.path)
 
 		else:
-			self.change_path(oposite_object.path)
+			self.change_path(opposite_object.path)
 
 		return True
 
 	def _swap_paths(self, widget, data=None):
 		"""Swap left and right paths"""
-		oposite_object = self._parent.get_oposite_object(self)
+		opposite_object = self._parent.get_opposite_object(self)
 
-		if (hasattr(oposite_object, 'change_path')):
-			# get path from oposite object
-			new_path = oposite_object.path
+		if (hasattr(opposite_object, 'change_path')):
+			# get path from opposite object
+			new_path = opposite_object.path
 
 			# change paths
-			oposite_object.change_path(self.path)
+			opposite_object.change_path(self.path)
 			self.change_path(new_path)
 
 		return True

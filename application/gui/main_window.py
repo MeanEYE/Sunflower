@@ -26,6 +26,7 @@ from plugin_base.item_list import ItemList
 from plugin_base.rename_extension import RenameExtension
 from plugin_base.find_extension import FindExtension
 from plugin_base.terminal import TerminalType
+from widgets.bookmarks_menu import BookmarksMenu
 from tools.advanced_rename import AdvancedRename
 from tools.find_files import FindFiles
 from tools.version_check import VersionCheck
@@ -522,9 +523,7 @@ class MainWindow(gtk.Window):
 		toolbar.set_property('no-show-all', not self.options.get('show_toolbar'))
 
 		# bookmarks menu
-		self.menu_bookmarks = gtk.Menu()
-		self.menu_bookmarks.connect('hide', self._handle_bookmarks_hide)
-		self.menu_bookmarks.set_accel_group(self.menu_manager.get_accel_group())
+		self.bookmarks = BookmarksMenu(self)
 
 		# mounts menu
 		mounts_image = gtk.Image()
@@ -690,54 +689,23 @@ class MainWindow(gtk.Window):
 
 	def _create_bookmarks_menu(self):
 		"""Create bookmarks menu as defined in options"""
-		for item in self.menu_bookmarks.get_children():  # remove existing items
-			self.menu_bookmarks.remove(item)
-
-		# create mounts if specified
-		if self.bookmark_options.get('show_mounts'):
-			separator = self.menu_manager.create_menu_item({'type': 'separator'})
-			self.menu_bookmarks.append(self._menu_item_mounts)
-			self.menu_bookmarks.append(separator)
+		self.bookmarks.clear_bookmarks()
 
 		# add home if specified
 		if self.bookmark_options.get('add_home'):
-			bookmark = gtk.ImageMenuItem()
-			image = gtk.Image()
-			image.set_from_icon_name('user-home', gtk.ICON_SIZE_MENU)
-
-			bookmark.set_image(image)
-			bookmark.set_always_show_image(True)
-			bookmark.set_label(_('Home directory'))
-			bookmark.set_data('uri', user.home)
-			bookmark.connect('activate', self._handle_bookmarks_click)
-
-			self.menu_bookmarks.append(bookmark)
+			self.bookmarks.add_bookmark(_('Home directory'), 'user-home', user.home)
 
 		# create bookmark menu items
 		bookmark_list = self.bookmark_options.get('bookmarks')
 
 		for bookmark_data in bookmark_list:
-			bookmark = gtk.ImageMenuItem()
-			image = gtk.Image()
-			image.set_from_icon_name('folder', gtk.ICON_SIZE_MENU)
-
-			bookmark.set_image(image)
-			bookmark.set_always_show_image(True)
-			bookmark.set_label(bookmark_data['name'])
-			bookmark.set_data('uri', os.path.expanduser(bookmark_data['uri']))
-			bookmark.connect('activate', self._handle_bookmarks_click)
-
-			self.menu_bookmarks.append(bookmark)
+			self.bookmarks.add_bookmark(bookmark_data['name'], 'folder', bookmark_data['uri'])
 
 		# add system bookmarks if needed
 		if self.bookmark_options.get('system_bookmarks') \
 		and os.path.exists(os.path.join(user.home, '.gtk-bookmarks')):
 			with open(os.path.join(user.home, '.gtk-bookmarks'), 'r') as raw_file:
 				lines = raw_file.readlines(False)
-
-			# add separator
-			separator = self.menu_manager.create_menu_item({'type': 'separator'})
-			self.menu_bookmarks.append(separator)
 
 			# add bookmarks
 			for line in lines:
@@ -748,56 +716,22 @@ class MainWindow(gtk.Window):
 					uri = line.strip()
 					name = os.path.basename(uri)
 
-				bookmark = gtk.ImageMenuItem()
-				image = gtk.Image()
-				image.set_from_icon_name('folder', gtk.ICON_SIZE_MENU)
-
-				bookmark.set_image(image)
-				bookmark.set_always_show_image(True)
-				bookmark.set_label(name)
-				bookmark.set_data('uri', uri)
-				bookmark.connect('activate', self._handle_bookmarks_click)
-
-				self.menu_bookmarks.append(bookmark)
-
-		# add separator
-		separator = self.menu_manager.create_menu_item({'type': 'separator'})
-		self.menu_bookmarks.append(separator)
+				# add entry
+				self.bookmarks.add_bookmark(name, 'folder', uri, system=True)
 
 		# create additional options
-		menu_item = self.menu_manager.create_menu_item({
-										'label': _('Options'),
-										'submenu': (
-												{
-													'label': _('_Add bookmark'),
-													'type': 'image',
-													'image': 'bookmark-new',
-													'callback': self._add_bookmark,
-												},
-												{
-													'label': _('_Edit bookmarks'),
-													'type': 'image',
-													'stock': gtk.STOCK_PREFERENCES,
-													'callback': self.preferences_window._show,
-													'data': 'bookmarks'
-												},
-											)
-									})
-
-		self.menu_bookmarks.append(menu_item)
-		self.menu_bookmarks.show_all()
-
-	def _handle_bookmarks_hide(self, widget=None, data=None):
-		"""Handle hiding of bookmarks menu
-
-		This method will disable blocking of signals on specified list.
-
-		"""
-		item_list = self.menu_bookmarks.get_data('list')
-		oposite_object = self.get_oposite_object(item_list)
-
-		item_list._disable_object_block()
-		oposite_object._disable_object_block()
+		if self.bookmarks.get_menu_item_count() == 0:
+			self.bookmarks.add_menu_item(
+						_('Add bookmark'),
+						'bookmark-new',
+						self._add_bookmark
+					)
+			self.bookmarks.add_menu_item(
+						_('Edit bookmarks'),
+						'bookmarks',
+						self.preferences_window._show,
+						'bookmarks'
+					)
 
 	def _create_commands_menu(self):
 		"""Create commands main menu"""
@@ -835,22 +769,11 @@ class MainWindow(gtk.Window):
 		self._menu_item_commands.set_sensitive(True)
 		self.menu_commands.show_all()
 
-	def _get_bookmarks_menu_position(self, menu, button):
-		"""Get bookmarks position"""
-		window_x, window_y = self.window.get_position()
-		button_x, button_y = button.translate_coordinates(self, 0, 0)
-		button_h = button.get_allocation().height
-
-		pos_x = window_x + button_x
-		pos_y = window_y + button_y + button_h
-
-		return (pos_x, pos_y, True)
-
 	def _add_bookmark(self, widget, item_list=None):
 		"""Show dialog for adding a new bookmark"""
 		if item_list is None:
 			# no list was specified
-			item_list = self.menu_bookmarks.get_data('list')
+			item_list = self.get_active_object()
 
 		path = item_list.path
 		dialog = AddBookmarkDialog(self, path)
@@ -864,21 +787,6 @@ class MainWindow(gtk.Window):
 				})
 
 			self._create_bookmarks_menu()
-
-	def _handle_bookmarks_click(self, widget, data=None):
-		"""Handle clicks on bookmark menu"""
-		item_list = self.menu_bookmarks.get_data('list')
-
-		if item_list is not None \
-		and hasattr(item_list, 'change_path'):
-			path = widget.get_data('uri')
-
-			if path is not None:
-				path = urllib.unquote(path)
-
-			item_list.change_path(path)
-
-		return True
 
 	def _handle_command_click(self, widget, data=None):
 		"""Handle click on command menu item"""
@@ -1023,9 +931,6 @@ class MainWindow(gtk.Window):
 		"""Set active object"""
 		if new_object is not None:
 			self._active_object = new_object
-
-			# set bookmarks target so accels could work
-			self.menu_bookmarks.set_data('list', new_object)
 
 	def _load_history(self):
 		"""Load history file and populate the command list"""
@@ -1424,30 +1329,18 @@ class MainWindow(gtk.Window):
 
 		if notebook is not None:
 			# show request was triggered by global shortcut
-			page = notebook.get_nth_page(notebook.get_current_page())
-			if hasattr(page, '_bookmarks_button'):
-				button = page._bookmarks_button
-
-			self.menu_bookmarks.set_data('list', page)
+			active_object = notebook.get_nth_page(notebook.get_current_page())
+			if hasattr(active_object, '_bookmarks_button'):
+				button = active_object._bookmarks_button
 
 		else:
 			# button called for menu
 			button = widget
+			active_object = self.get_active_object()
 
 		if button is not None:
-			# disable color changing on tab title bar
-			item_list = self.menu_bookmarks.get_data('list')
-			oposite_object = self.get_oposite_object(item_list)
-
-			item_list._enable_object_block()
-			oposite_object._enable_object_block()
-
-			# show bookmarks menu
-			self.menu_bookmarks.popup(
-									None, None,
-									self._get_bookmarks_menu_position,
-									1, 0, button
-								)
+			self.bookmarks.set_object(active_object)
+			self.bookmarks.show(self, button)
 
 	def select_all(self, widget, data=None):
 		"""Select all items in active list"""
@@ -2035,10 +1928,10 @@ class MainWindow(gtk.Window):
 					'commands': []
 				})
 
-	def focus_oposite_object(self, widget, data=None):
-		"""Sets focus on oposite item list"""
-		oposite_object = self.get_oposite_object(self.get_active_object())
-		oposite_object._main_object.grab_focus()
+	def focus_opposite_object(self, widget, data=None):
+		"""Sets focus on opposite item list"""
+		opposite_object = self.get_opposite_object(self.get_active_object())
+		opposite_object._main_object.grab_focus()
 
 		return True
 
@@ -2064,8 +1957,8 @@ class MainWindow(gtk.Window):
 		"""Return active object"""
 		return self._active_object
 
-	def get_oposite_object(self, active_object):
-		"""Return oposite object"""
+	def get_opposite_object(self, active_object):
+		"""Return opposite object"""
 		left_object = self.left_notebook.get_nth_page(self.left_notebook.get_current_page())
 		right_object = self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
 
@@ -2165,6 +2058,10 @@ class MainWindow(gtk.Window):
 
 		# recreate bookmarks menu
 		self._create_bookmarks_menu()
+
+		# apply bookmark settings
+		self.bookmarks.apply_settings()
+
 
 		# recreate tools menu
 		self._create_commands_menu()

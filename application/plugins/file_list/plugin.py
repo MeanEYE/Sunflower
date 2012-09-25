@@ -305,7 +305,6 @@ class FileList(ItemList):
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
 
 		# create URI from item name and protocol
-		# TODO: Use URLLIB for creating URI instead of formatting a string
 		file_name = self._get_selection(relative=False)
 		protocol = self.get_provider().protocol
 		uri = '{0}://{1}'.format(protocol, urllib.quote(file_name)) if not is_parent else None

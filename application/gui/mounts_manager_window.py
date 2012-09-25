@@ -46,9 +46,7 @@ class MountsManagerWindow(gtk.Window):
 		self._extensions = []
 
 		# main menu items
-		self._menu = None
 		self._menu_unmount = None
-		self._menu_item = None
 		
 		# configure window
 		self.set_title(_('Mount manager'))
@@ -148,38 +146,16 @@ class MountsManagerWindow(gtk.Window):
 		"""Attach menu items to main window"""
 		menu_manager = self._application.menu_manager
 
-		# get mounts menu item
-		self._menu_item = self._application._menu_item_mounts
-
-		# create mounts menu
-		self._menu = gtk.Menu()
-		self._menu_item.set_submenu(self._menu)
-
+		# get unmount menu item from main menu
 		self._menu_unmount = menu_manager.get_item_by_name('unmount_menu').get_submenu()
 
 		# create item for usage when there are no mounts
-		self._menu_item_no_mounts = gtk.MenuItem(label=_('Mount list is empty'))
-		self._menu_item_no_mounts.set_sensitive(False)
+		self._menu_item_no_mounts = menu_manager.get_item_by_name('mount_list_empty')
 		self._menu_item_no_mounts.set_property('no-show-all', True)
-		self._menu.append(self._menu_item_no_mounts)
-
-		self._menu_item_no_mounts2 = menu_manager.get_item_by_name('mount_list_empty')
-		self._menu_item_no_mounts2.set_property('no-show-all', True)
 
 	def _add_item(self, text, uri, icon):
 		"""Add new menu item to the list"""
-		image = gtk.Image()
-		image.set_from_icon_name(icon, gtk.ICON_SIZE_MENU)
-
-		menu_item = gtk.ImageMenuItem()
-		menu_item.set_label(text)
-		menu_item.set_image(image)
-		menu_item.set_always_show_image(True)
-		menu_item.set_data('uri', uri)
-		menu_item.connect('activate', self._application._handle_bookmarks_click)
-		menu_item.show()
-
-		self._menu.append(menu_item)
+		self._application.bookmarks.add_mount(text, icon, uri)
 
 	def _add_unmount_item(self, text, uri, icon):
 		"""Add new menu item used for unmounting"""
@@ -201,8 +177,7 @@ class MountsManagerWindow(gtk.Window):
 
 	def _remove_item(self, mount_point):
 		"""Remove item based on device name"""
-		for item in self._menu.get_children():
-			if item.get_data('uri') == mount_point: self._menu.remove(item)
+		self._application.bookmarks.remove_mount(mount_point)
 
 		for item in self._menu_unmount.get_children():
 			if item.get_data('uri') == mount_point: self._menu_unmount.remove(item)
@@ -212,14 +187,13 @@ class MountsManagerWindow(gtk.Window):
 
 	def _menu_updated(self):
 		"""Method called whenever menu is updated"""
-		has_mounts = len(self._menu.get_children()) > 1
+		has_mounts = self._application.bookmarks.get_mount_count() > 0
+
 		try: 
 			self._menu_item_no_mounts.set_visible(not has_mounts)
-			self._menu_item_no_mounts2.set_visible(not has_mounts)
 
 		except AttributeError:
 			self._menu_item_no_mounts.set_property('visible', not has_mounts)
-			self._menu_item_no_mounts2.set_property('visible', not has_mounts)
 
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys in mount manager list"""

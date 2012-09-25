@@ -10,7 +10,7 @@ import common
 
 from plugin_base.monitor import MonitorSignals, MonitorError
 from local_provider import LocalProvider
-from gio_provider import SambaProvider, FtpProvider
+from gio_provider import SambaProvider, FtpProvider, TrashProvider
 from gio_extension import SambaExtension
 from column_editor import FileList_ColumnEditor
 from operation import DeleteOperation, CopyOperation, MoveOperation
@@ -32,6 +32,7 @@ def register_plugin(application):
 	application.register_provider(LocalProvider)
 	application.register_provider(SambaProvider)
 	application.register_provider(FtpProvider)
+	application.register_provider(TrashProvider)
 
 	# register mount manager extension
 	application.register_mount_manager_extension(SambaExtension)
@@ -968,7 +969,7 @@ class FileList(ItemList):
 		return True
 
 	def _select_range(self, start_path, end_path):
-		"""Set items in range to status oposite from frist item in selection"""
+		"""Set items in range to status opposite from frist item in selection"""
 		if len(self._store) == 1:  # exit when list doesn't have items
 			return
 
@@ -1507,6 +1508,10 @@ class FileList(ItemList):
 
 			# remove invalid paths from history so we don't end up in a dead loop
 			self.history = filter(lambda history_path: path != history_path, self.history)
+
+			# make sure we have something in history list
+			if len(self.history) == 0:
+				self.history.append(user.home)
 
 			if result == gtk.RESPONSE_YES:
 				# retry loading path again

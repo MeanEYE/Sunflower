@@ -234,8 +234,8 @@ class Terminal(PluginBase):
 	def _handle_menu_hide(self, widget, data=None):
 		"""Handle hide event for terminal menu"""
 		self._disable_object_block()
-		oposite_object = self._parent.get_oposite_object(self)
-		oposite_object._disable_object_block()
+		opposite_object = self._parent.get_opposite_object(self)
+		opposite_object._disable_object_block()
 
 	def _duplicate_tab(self, widget, data=None):
 		"""Creates new tab with same path"""
@@ -262,8 +262,8 @@ class Terminal(PluginBase):
 
 		# show the menu on calculated location
 		self._enable_object_block()
-		oposite_object = self._parent.get_oposite_object(self)
-		oposite_object._enable_object_block()
+		opposite_object = self._parent.get_opposite_object(self)
+		opposite_object._enable_object_block()
 
 		self._menu.popup(
 						None, None,
@@ -281,7 +281,7 @@ class Terminal(PluginBase):
 
 		# modify plugin accelerator group so we can have terminal auto-complete with tab
 		plugin_group = self._accelerator_groups[0]
-		plugin_group.disable_accelerator('focus_oposite_object')
+		plugin_group.disable_accelerator('focus_opposite_object')
 
 		# configure accelerator group
 		group.set_name('terminal')
@@ -291,13 +291,13 @@ class Terminal(PluginBase):
 		group.add_method('create_terminal', _('Create terminal tab'), self._create_terminal)
 		group.add_method('copy_to_clipboard', _('Copy selection to clipboard'), self._copy_selection)
 		group.add_method('paste_from_clipboard', _('Paste from clipboard'), self._paste_selection)
-		group.add_method('focus_oposite_object', _('Focus oposite object'), self._parent.focus_oposite_object)
+		group.add_method('focus_opposite_object', _('Focus opposite object'), self._parent.focus_opposite_object)
 
 		# configure accelerators
 		group.set_accelerator('create_terminal', keyval('z'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('copy_to_clipboard', keyval('c'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('paste_from_clipboard', keyval('v'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
-		group.set_accelerator('focus_oposite_object', keyval('Tab'), gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK)
+		group.set_accelerator('focus_opposite_object', keyval('Tab'), gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK)
 
 		# add accelerator group to the list
 		self._accelerator_groups.append(group)

@@ -114,7 +114,7 @@ class PluginBase(gtk.VBox):
 		group.set_title(_('Plugin Base'))
 
 		# add all methods to group
-		group.add_method('focus_oposite_object', _('Focus oposite object'), self._parent.focus_oposite_object)
+		group.add_method('focus_opposite_object', _('Focus opposite object'), self._parent.focus_opposite_object)
 		group.add_method('next_tab', _('Next tab'), self._notebook_next_tab)
 		group.add_method('previous_tab', _('Previous tab'), self._notebook_previous_tab)
 		group.add_method('duplicate_tab', _('Duplicate tab'), self._duplicate_tab)
@@ -124,7 +124,7 @@ class PluginBase(gtk.VBox):
 		group.add_method('focus_right_object', _('Focus right object'), self._focus_right_object)
 
 		# configure accelerators
-		group.set_accelerator('focus_oposite_object', keyval('Tab'), 0)
+		group.set_accelerator('focus_opposite_object', keyval('Tab'), 0)
 		group.set_accelerator('next_tab', keyval('Tab'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('previous_tab', keyval('Tab'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('duplicate_tab', keyval('t'), gtk.gdk.CONTROL_MASK)

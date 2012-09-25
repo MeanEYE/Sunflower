@@ -1,3 +1,5 @@
+- Handle root of URI locations.
+
 - Properly set options on copy dialog to reflect supported features from destination provider.
 
 - On apply preferences or show/hide dotfiles path label is updated to the right panel, even if left one is focused.

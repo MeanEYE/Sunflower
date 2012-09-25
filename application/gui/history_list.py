@@ -62,7 +62,7 @@ class HistoryList(gtk.Window):
 		button_jump.set_image(image_jump)
 		button_jump.set_label(_('Open'))
 		button_jump.set_can_default(True)
-		button_jump.connect('clicked', self._change_path)
+		button_jump.connect('clicked', self._change_path, False)
 
 		image_new_tab = gtk.Image()
 		image_new_tab.set_from_icon_name('tab-new', gtk.ICON_SIZE_BUTTON)
@@ -71,11 +71,11 @@ class HistoryList(gtk.Window):
 		button_new_tab.set_image(image_new_tab)
 		button_new_tab.set_label(_('Open in tab'))
 		button_new_tab.set_tooltip_text(_('Open selected path in new tab'))
-		button_new_tab.connect('clicked', self._open_in_new_tab)
+		button_new_tab.connect('clicked', self._change_path, True)
 
-		button_oposite = gtk.Button(label=_('Open in oposite list'))
-		button_oposite.set_tooltip_text(_('Open selected path in oposite list'))
-		button_oposite.connect('clicked', self._open_in_oposite_list)
+		button_opposite = gtk.Button(label=_('Open in opposite list'))
+		button_opposite.set_tooltip_text(_('Open selected path in opposite list'))
+		button_opposite.connect('clicked', self._open_in_opposite_list)
 
 		# pack UI
 		list_container.add(self._history_list)
@@ -83,7 +83,7 @@ class HistoryList(gtk.Window):
 		hbox_controls.pack_end(button_close, False, False, 0)
 		hbox_controls.pack_end(button_jump, False, False, 0)
 		hbox_controls.pack_end(button_new_tab, False, False, 0)
-		hbox_controls.pack_end(button_oposite, False, False, 0)
+		hbox_controls.pack_end(button_opposite, False, False, 0)
 
 		vbox.pack_start(list_container, True, True, 0)
 		vbox.pack_start(hbox_controls, False, False, 0)
@@ -100,7 +100,7 @@ class HistoryList(gtk.Window):
 		"""Handle clicking on close button"""
 		self.destroy()
 
-	def _change_path(self, widget=None, data=None):
+	def _change_path(self, widget=None, new_tab=False):
 		"""Change to selected path"""
 		selection = self._history_list.get_selection()
 		item_list, selected_iter = selection.get_selected()
@@ -109,14 +109,23 @@ class HistoryList(gtk.Window):
 		if selected_iter is not None:
 			path = item_list.get_value(selected_iter, Column.PATH)
 
-			# change path
-			self._parent._handle_history_click(path=path)
+			if not new_tab:
+				# change path
+				self._parent._handle_history_click(path=path)
+
+			else:
+				# create a new tab
+				self._application.create_tab(
+								self._parent._notebook,
+								self._parent.__class__,
+								path
+							)
 
 			# close dialog
 			self._close()
 
-	def _open_in_new_tab(self, widget=None, data=None):
-		"""Open selected item in new tab"""
+	def _open_in_opposite_list(self, widget=None, data=None):
+		"""Open selected item in opposite list"""
 		selection = self._history_list.get_selection()
 		item_list, selected_iter = selection.get_selected()
 
@@ -124,33 +133,13 @@ class HistoryList(gtk.Window):
 		if selected_iter is not None:
 			path = item_list.get_value(selected_iter, Column.PATH)
 
-			# create new tab
-			self._application.create_tab(
-							self._parent._notebook,
-							self._parent.__class__,
-							path
-						)
+			# open in opposite list
+			opposite_object = self._application.get_opposite_object(self._application.get_active_object())
+			if hasattr(opposite_object, 'change_path'):
+				opposite_object.change_path(path)
 
 			# close dialog
 			self._close()
-
-	def _open_in_oposite_list(self, widget=None, data=None):
-		"""Open selected item in oposite list"""
-		selection = self._history_list.get_selection()
-		list_, iter_ = selection.get_selected()
-
-		# if selection is valid, change to selected path
-		if iter_ is not None:
-			path = list_.get_value(iter_, Column.PATH)
-
-			# open in oposite list
-			oposite_object = self._application.get_oposite_object(self._application.get_active_object())
-			if hasattr(oposite_object, 'change_path'):
-				oposite_object.change_path(path)
-
-			# close dialog
-			self._close()
-
 
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys in history list"""
@@ -159,11 +148,11 @@ class HistoryList(gtk.Window):
 		if event.keyval == gtk.keysyms.Return:
 			if event.state & gtk.gdk.CONTROL_MASK:
 				# open path in new tab
-				self._open_in_new_tab()
+				self._change_path(new_tab=True)
 
 			else:
 				# open path in existing tab
-				self._change_path()
+				self._change_path(new_tab=False)
 
 			result = True
 

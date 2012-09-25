@@ -319,3 +319,10 @@ class NetworkProvider(GioProvider):
 		"""Return protocol icon name"""
 		return 'network-workgroup'
 
+class TrashProvider(GioProvider):
+	is_local = True
+	protocol = 'trash'
+
+	def get_protocol_icon(self):
+		"""Return protocol icon name"""
+		return 'trash'

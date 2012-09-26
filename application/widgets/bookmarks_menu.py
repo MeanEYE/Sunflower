@@ -112,6 +112,7 @@ class BookmarksMenu:
 		# connect list signals
 		self._list.connect('focus-out-event', self.__handle_focus_lost)
 		self._list.connect('key-press-event', self.__handle_key_press)
+		self._list.connect('button-release-event', self.__handle_button_press)
 
 		# pack user interface
 		container.add(self._list)
@@ -176,6 +177,12 @@ class BookmarksMenu:
 			result = True
 		
 		return result
+
+	def __handle_button_press(self, widget, event):
+		"""Handle mouse button press"""
+		new_tab = event.state & gtk.gdk.SHIFT_MASK
+		self.__open_selected(new_tab)
+		self.close()
 
 	def __handle_focus_lost(self, widget, data=None):
 		"""Handle loosing focus from the list"""

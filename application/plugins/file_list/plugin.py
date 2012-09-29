@@ -10,7 +10,7 @@ import common
 
 from plugin_base.monitor import MonitorSignals, MonitorError
 from local_provider import LocalProvider
-from gio_provider import SambaProvider, FtpProvider, TrashProvider
+from gio_provider import SambaProvider, FtpProvider, NetworkProvider, TrashProvider
 from gio_extension import SambaExtension
 from column_editor import FileList_ColumnEditor
 from operation import DeleteOperation, CopyOperation, MoveOperation
@@ -32,6 +32,7 @@ def register_plugin(application):
 	application.register_provider(LocalProvider)
 	application.register_provider(SambaProvider)
 	application.register_provider(FtpProvider)
+	application.register_provider(NetworkProvider)
 	application.register_provider(TrashProvider)
 
 	# register mount manager extension
@@ -1257,46 +1258,27 @@ class FileList(ItemList):
 		protocol, path = item_list[0].split('://', 1)
 		item_list = [urllib.unquote(item.split('://')[1]) for item in item_list]
 
-		if os.path.dirname(path) != self.path:
-			# handle data
-			if drag_context.action in (gtk.gdk.ACTION_COPY, gtk.gdk.ACTION_MOVE):
-				# handle copy and move operations
-				operation = {
-							gtk.gdk.ACTION_COPY: 'copy',
-							gtk.gdk.ACTION_MOVE: 'move'
-						}
+		# handle data
+		if drag_context.action in (gtk.gdk.ACTION_COPY, gtk.gdk.ACTION_MOVE):
+			# handle copy and move operations
+			operation = {
+						gtk.gdk.ACTION_COPY: 'copy',
+						gtk.gdk.ACTION_MOVE: 'move'
+					}
 
-				result = self._handle_external_data(
-												operation[drag_context.action],
-												protocol,
-												item_list
-											)
+			result = self._handle_external_data(
+											operation[drag_context.action],
+											protocol,
+											item_list
+										)
 
-			elif drag_context.action is gtk.gdk.ACTION_LINK:
-				# handle linking
-				# TODO: Finish linking code!
-				result = False
+		elif drag_context.action is gtk.gdk.ACTION_LINK:
+			# handle linking
+			# TODO: Finish linking code!
+			result = False
 
-			# notify source application about operation outcome
-			drag_context.finish(result, False, timestamp)
-
-		else:
-			# notify user that he's trying to drag and drop items in same directory
-			dialog = gtk.MessageDialog(
-									self._parent,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_WARNING,
-									gtk.BUTTONS_OK,
-									_(
-										'Drag and drop functionality can not '
-										'be used if source and destination are same!'
-									)
-								)
-			dialog.run()
-			dialog.destroy()
-
-			# problem with paths, let source application know that
-			drag_context.finish(False, False, timestamp)
+		# notify source application about operation outcome
+		drag_context.finish(result, False, timestamp)
 
 	def _drag_data_get(self, widget, drag_context, selection_data, info, time):
 		"""Handle data request from destination widget"""
@@ -1352,10 +1334,6 @@ class FileList(ItemList):
 		if self._enable_media_preview:
 			self._thumbnail_view.hide()
 
-		# make sure we don't have trailing directory separator
-		if len(path) > 1 and path[-1] == os.path.sep:
-			path = path[:-1]
-
 		# get provider for specified URI
 		provider = None
 		self.path = path 
@@ -1364,7 +1342,7 @@ class FileList(ItemList):
 			scheme = 'file'
 
 		else:
-			data = path.split('://')
+			data = path.split('://', 1)
 			scheme = data[0]
 			
 			# for local storage, use path without scheme
@@ -1435,7 +1413,8 @@ class FileList(ItemList):
 			preload_list = item_list[:self._preload_count]
 			item_list = item_list[self._preload_count:]
 
-			if self.path != os.path.sep:
+			if self.path != os.path.sep \
+			and self.path != '{0}://'.format(self.scheme):
 				# add parent option for parent directory
 				self._store.append((
 								os.path.pardir,
@@ -1526,7 +1505,8 @@ class FileList(ItemList):
 		self._update_status_with_statistis()
 
 		# if no item was specified, select first one
-		if selected is None:
+		if selected is None \
+		and len(self._store) > 0:
 			path = self._store.get_path(self._store.get_iter_first())
 			self._item_list.set_cursor(path)
 			self._item_list.scroll_to_cell(path)

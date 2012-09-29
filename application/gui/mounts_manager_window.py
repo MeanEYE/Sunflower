@@ -333,6 +333,12 @@ class MountsExtension(MountManagerExtension):
 		cell_name = gtk.CellRendererText()
 		cell_system = gtk.CellRendererToggle()
 
+		# try to set icon size
+		try:
+			cell_icon.props.stock_size = gtk.ICON_SIZE_LARGE_TOOLBAR
+		except:
+			pass
+
 		col_name = gtk.TreeViewColumn(_('Name'))
 		col_name.pack_start(cell_icon, False)
 		col_name.pack_start(cell_name, True)

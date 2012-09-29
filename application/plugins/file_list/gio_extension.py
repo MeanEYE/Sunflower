@@ -113,9 +113,6 @@ class SambaExtension(MountManagerExtension):
 
 	def __store_mount(self, params, uri):
 		"""Store mount entry to configuration file and list store"""
-		mount_options = self._application.mount_options
-
-		# make sure we store this
 		store_params = (
 				params[SambaResult.NAME],
 				params[SambaResult.SERVER],
@@ -128,27 +125,6 @@ class SambaExtension(MountManagerExtension):
 			)
 		self._store.append(store_params)
 
-		# store configuration to options file
-		if mount_options.has('smb'):
-			entries = mount_options.get('smb')
-
-		else:
-			entries = []
-
-		entries.append({
-				'name': params[SambaResult.NAME],
-				'server': params[SambaResult.SERVER],
-				'share': params[SambaResult.SHARE],
-				'directory': params[SambaResult.DIRECTORY],
-				'domain': params[SambaResult.DOMAIN],
-				'username': params[SambaResult.USERNAME],
-				'requires_login': params[SambaResult.PASSWORD] != ''
-			})
-
-		# add new list if needed
-		if not mount_options.has('smb'):
-			mount_options.set('smb', entries)
-
 	def __populate_list(self):
 		"""Populate list with entries from config"""
 		entries = self._application.mount_options.get('smb')
@@ -156,6 +132,9 @@ class SambaExtension(MountManagerExtension):
 		# no entries found, nothing to do here
 		if entries is None:
 			return
+
+		# clear store
+		self._store.clear()
 
 		# add entries to the list store
 		for entry in entries:
@@ -169,6 +148,31 @@ class SambaExtension(MountManagerExtension):
 					entry['requires_login'],
 					self.__form_uri(entry['server'], entry['share'], entry['directory'])
 				))
+
+	def __save_list(self):
+		"""Save mounts from store to config file"""
+		mount_options = self._application.mount_options
+
+		# store configuration to options file
+		if mount_options.has('smb'):
+			entries = mount_options.get('smb')
+			del entries[:]
+
+		else:
+			entries = []
+			mount_options.set('smb', entries)
+
+		# add items from the store
+		for row in self._store:
+			entries.append({
+					'name': row[Column.NAME],
+					'server': row[Column.SERVER],
+					'share': row[Column.SHARE],
+					'directory': row[Column.DIRECTORY],
+					'domain': row[Column.DOMAIN],
+					'username': row[Column.USERNAME],
+					'requires_login': row[Column.REQUIRES_LOGIN] 
+				})
 
 	def __mount(self, uri, domain, username, password=None):
 		"""Perform actual mounting operation with specified data"""
@@ -284,6 +288,9 @@ class SambaExtension(MountManagerExtension):
 				# no login required, just store
 				self.__store_mount(response[1], uri)
 
+			# save mounts to config file
+			self.__save_list()
+
 	def _edit_mount(self, widget, data=None):
 		"""Present dialog to user for editing existing mount"""
 		keyring_manager = self._parent._application.keyring_manager
@@ -293,6 +300,7 @@ class SambaExtension(MountManagerExtension):
 		if selected_iter is not None:
 			dialog = SambaCreate(self._window)
 
+			# set dialog parameters
 			dialog.set_keyring_available(keyring_manager.is_available())
 			dialog.set_name(item_list.get_value(selected_iter, Column.NAME))
 			dialog.set_server(item_list.get_value(selected_iter, Column.SERVER))
@@ -301,7 +309,29 @@ class SambaExtension(MountManagerExtension):
 			dialog.set_domain(item_list.get_value(selected_iter, Column.DOMAIN))
 			dialog.set_username(item_list.get_value(selected_iter, Column.USERNAME))
 
-			result = dialog.get_response()
+			# show editing dialog
+			response = dialog.get_response()
+
+			if response[0] == gtk.RESPONSE_OK:
+				# modify list store
+				item_list.set_value(selected_iter, Column.NAME, response[1][SambaResult.NAME])
+				item_list.set_value(selected_iter, Column.SERVER, response[1][SambaResult.SERVER])
+				item_list.set_value(selected_iter, Column.SHARE, response[1][SambaResult.SHARE])
+				item_list.set_value(selected_iter, Column.DIRECTORY, response[1][SambaResult.DIRECTORY])
+				item_list.set_value(selected_iter, Column.DOMAIN, response[1][SambaResult.DOMAIN])
+				item_list.set_value(selected_iter, Column.USERNAME, response[1][SambaResult.USERNAME])
+
+				# form uri
+				uri = self.__form_uri(
+							response[1][SambaResult.SERVER],
+							response[1][SambaResult.SHARE],
+							response[1][SambaResult.DIRECTORY]
+						)
+
+				item_list.set_value(selected_iter, Column.URI, uri)
+
+				# save changes
+				self.__save_list()
 
 	def _delete_mount(self, widget, data=None):
 		"""Remove dialog if user confirms"""
@@ -327,7 +357,10 @@ class SambaExtension(MountManagerExtension):
 
 			# remove selected mount
 			if result == gtk.RESPONSE_YES:
-				pass
+				item_list.remove(selected_iter)
+				
+				# save changes
+				self.__save_list()
 
 	def _mount_selected(self, widget, data=None):
 		"""Mount selected item"""

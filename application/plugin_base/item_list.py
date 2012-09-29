@@ -614,7 +614,7 @@ class ItemList(PluginBase):
 		opposite_object = self._parent.get_opposite_object(self)
 		opposite_object._disable_object_block()
 
-	def _handle_external_data(self, operation, protocol, list_):
+	def _handle_external_data(self, operation, protocol, item_list):
 		"""Handle data coming from a different application"""
 		result = False
 
@@ -657,8 +657,13 @@ class ItemList(PluginBase):
 			return result
 
 		# handle data
-		path = os.path.dirname(list_[0])
-		selection = [os.path.basename(item) for item in list_]
+		if protocol == 'file':
+			path = os.path.dirname(item_list[0])
+
+		else:
+			path = '{0}://{1}'.format(protocol, os.path.dirname(item_list[0]))
+
+		selection = [os.path.basename(item) for item in item_list]
 
 		# create provider
 		provider = Provider(self, path, selection)

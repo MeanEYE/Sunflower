@@ -427,10 +427,12 @@ class FileList(ItemList):
 	def _create_directory(self, widget=None, data=None):
 		"""Prompt user and create directory"""
 		dialog = DirectoryCreateDialog(self._parent)
+		show_hidden = self._parent.options.section('item_list').get('show_hidden')
 
 		# get response
 		response = dialog.get_response()
 		mode = dialog.get_mode()
+		is_hidden = response[1][0] == '.'
 
 		# create dialog
 		if response[0] == gtk.RESPONSE_OK:
@@ -444,7 +446,9 @@ class FileList(ItemList):
 				# add directory manually to the list in case
 				# where directory monitoring is not supported
 				if self._fs_monitor is None:
-					self._add_item(response[1])
+					if is_hidden and show_hidden \
+					or not is_hidden:
+						self._add_item(response[1])
 
 			except OSError as error:
 				# error creating, report to user
@@ -467,12 +471,14 @@ class FileList(ItemList):
 		"""Prompt user and create empty file"""
 		dialog = FileCreateDialog(self._parent)
 		provider = self.get_provider()
+		show_hidden = self._parent.options.section('item_list').get('show_hidden')
 
 		# get response
 		response = dialog.get_response()
 		mode = dialog.get_mode()
 		edit_after = dialog.get_edit_file()
 		template = dialog.get_template_file()
+		is_hidden = response[1][0] == '.'
 
 		# create dialog
 		if response[0] == gtk.RESPONSE_OK:
@@ -493,7 +499,9 @@ class FileList(ItemList):
 				# add file manually to the list in case
 				# where directory monitoring is not supported
 				if self._fs_monitor is None:
-					self._add_item(response[1])
+					if is_hidden and show_hidden \
+					or not is_hidden:
+						self._add_item(response[1])
 
 				# create file from template
 				if template is not None:

@@ -67,6 +67,7 @@ class MainWindow(gtk.Window):
 		gtk.Window.__init__(self, type=gtk.WINDOW_TOPLEVEL)
 
 		self._geometry = None
+		self._active_object = None
 
 		# load translations
 		self._load_translation()

@@ -1376,7 +1376,9 @@ class FileList(ItemList):
 
 		self._change_tab_text(path_name)
 		self._change_title_text(self.path)
-		self._parent.path_label.set_text(self.path)
+
+		if self._parent.get_active_object() == self:
+			self._parent.set_location_label(self.path)
 
 		# change list icon
 		self._title_bar.set_icon_from_name(provider.get_protocol_icon())

@@ -325,4 +325,4 @@ class TrashProvider(GioProvider):
 
 	def get_protocol_icon(self):
 		"""Return protocol icon name"""
-		return 'trash'
+		return 'user-trash'

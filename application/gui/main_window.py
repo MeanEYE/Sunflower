@@ -606,7 +606,7 @@ class MainWindow(gtk.Window):
 		buttons = (
 				(_('Refresh'), _('Reload active item list'), self._command_reload),
 				(_('Rename'), _('Rename selected file'), self._command_rename),
-				(_('View'), _('View selected file'), self._command_view),
+				(_('Preview'), _('Preview selected file'), self._command_view),
 				(_('Edit'), _('Edit selected file'), self._command_edit),
 				(_('Copy'), _('Copy selected items from active to opposite list'), self._command_copy),
 				(_('Move'), _('Move selected items from active to opposite list'), self._command_move),

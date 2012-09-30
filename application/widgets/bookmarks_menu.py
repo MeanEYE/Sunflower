@@ -62,7 +62,6 @@ class BookmarksMenu:
 		self._menus = []
 
 		# create window
-		# self._window = gtk.Window(gtk.WINDOW_POPUP)
 		self._window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 
 		# configure window
@@ -72,11 +71,12 @@ class BookmarksMenu:
 		self._window.set_skip_taskbar_hint(True)
 		self._window.set_skip_pager_hint(True)
 		self._window.set_transient_for(application)
-		self._window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_COMBO)
+		self._window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_POPUP_MENU)
 		self._window.set_wmclass('Sunflower', 'Sunflower')
 		self._window.set_border_width(0)
 		self._window.set_keep_above(True)
 		self._window.set_decorated(False)
+		self._window.set_has_frame(False)
 
 		# connect signals
 		self._window.connect('delete-event', self.__destroy_event)
@@ -328,7 +328,7 @@ class BookmarksMenu:
 		self._window.move(0, 0)
 		self._window.move(pos_x, pos_y)
 		self._window.show()
-
+		
 	def close(self, widget=None, data=None):
 		"""Handle window closing"""
 		self._window.hide()

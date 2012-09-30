@@ -1,3 +1,20 @@
+Version 0.1a-45
+  + Created replacement widget for bookmarks.
+  + Added provider for "trash" URI.
+  + Added ability to change and remove mounts in Samba extension.
+  + Handle mouse clicks in bookmarks menu.
+  * Made changelog dialog it resizable.
+  * Updated Polish translation
+  * Updated Russian translation.
+  * Updated Ukrainian translation.
+  * Changed command button text to avoid translation problems.
+  * Make drag and drop work with URI paths.
+  * Use set_location_path method instead of accessing controls directly.
+  * Ensure history is never empty when navigating back on bad path.
+  * In cases where directory monitor doesn't exist properly add created file/directory according to show_hidden setting.
+  * Only set location label if current tab is active object.
+  * Removed annoying message when drag and dropping in same directory. Also fixed warning when trying to select first item on empty store.
+
 Version 0.1a-44
   + Ukrainian translation.
   + Added small tool to check for latest version in help menu.

@@ -308,7 +308,7 @@ class FileList(ItemList):
 		# create URI from item name and protocol
 		file_name = self._get_selection(relative=False)
 		protocol = self.get_provider().protocol
-		uri = '{0}://{1}'.format(protocol, urllib.quote(file_name)) if not is_parent else None
+		uri = '{0}://{1}'.format(protocol, file_name) if not is_parent else None
 
 		# show preview if thumbnail exists
 		if not is_dir and not is_parent \
@@ -348,7 +348,7 @@ class FileList(ItemList):
 				name = item_list.get_value(selected_iter, Column.NAME)
 				self.change_path(os.path.join(self.path, name))
 
-		elif self.get_provider().is_local:
+		else:
 			# selected item is just a file, execute it
 			selected_file = self._get_selection()
 			self._parent.associations_manager.execute_file(selected_file)
@@ -584,7 +584,7 @@ class FileList(ItemList):
 									self.get_provider(),
 									self._get_other_provider(),
 									result[1]  # options from dialog
-									)
+								)
 			operation.start()
 
 		return True
@@ -795,7 +795,7 @@ class FileList(ItemList):
 			self._open_with_menu.append(open_with_other)
 
 		# disable/enable items
-		self._open_with_item.set_sensitive(self.get_provider().is_local and not is_dir)
+		self._open_with_item.set_sensitive(not is_dir)
 		self._open_new_tab_item.set_visible(is_dir)
 		self._cut_item.set_sensitive(not is_parent)
 		self._copy_item.set_sensitive(not is_parent)

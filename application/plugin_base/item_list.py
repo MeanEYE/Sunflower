@@ -657,13 +657,12 @@ class ItemList(PluginBase):
 			return result
 
 		# handle data
-		if protocol == 'file':
-			path = os.path.dirname(item_list[0])
+		path = os.path.dirname(item_list[0])
+		selection = [urllib.unquote(os.path.basename(item)) for item in item_list]
 
-		else:
-			path = '{0}://{1}'.format(protocol, os.path.dirname(item_list[0]))
-
-		selection = [os.path.basename(item) for item in item_list]
+		# local provider is unable to handle URIs
+		if protocol == 'file' and '://' in path:
+			path = path.split('://', 1)[1]
 
 		# create provider
 		provider = Provider(self, path, selection)

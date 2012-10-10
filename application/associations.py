@@ -120,7 +120,7 @@ class AssociationManager:
 		if selection is not None:
 			# prepare lists
 			normal_list = ["'{0}'".format(item) for item in selection]
-			uri_list = ['file://{0}'.format(quote(item.encode('utf-8'))) for item in selection]
+			uri_list = ["'{0}'".format(item) for item in selection]
 			dir_list = ["'{0}'".format(os.path.dirname(item) for item in selection)]
 			names_list = ["'{0}'".format(os.path.basename(item) for item in selection)]
 
@@ -129,7 +129,7 @@ class AssociationManager:
 				exec_string = exec_string.replace('%f', "'{0}'".format(selection[0]))
 
 			if '%u' in command:
-				exec_string = exec_string.replace('%u', 'file://{0}'.format(quote(selection[0].encode('utf-8'))))
+				exec_string = exec_string.replace('%u', "'{0}'".format(selection[0]))
 
 			if '%d' in command:
 				exec_string = exec_string.replace('%d', "'{0}'".format(os.path.dirname(selection[0])))

@@ -4,7 +4,6 @@ import time
 import locale
 import user
 import fnmatch
-import urllib
 import urlparse
 import common
 
@@ -1264,7 +1263,6 @@ class FileList(ItemList):
 
 		# prepare data for copying
 		protocol, path = item_list[0].split('://', 1)
-		item_list = [urllib.unquote(item.split('://')[1]) for item in item_list]
 
 		# handle data
 		if drag_context.action in (gtk.gdk.ACTION_COPY, gtk.gdk.ACTION_MOVE):
@@ -1293,8 +1291,8 @@ class FileList(ItemList):
 		protocol = self.get_provider().get_protocol()
 
 		selection = []
-		for file_ in self._get_selection_list():
-			selection.append('{0}://{1}'.format(protocol, urllib.quote(file_)))
+		for file_name in self._get_selection_list():
+			selection.append('{0}://{1}'.format(protocol, file_name))
 
 		selection_data.set(selection_data.target, 8, '\n'.join(selection))
 		return True

@@ -46,6 +46,7 @@ from gui.preferences_window import PreferencesWindow
 from gui.preferences.display import TabExpand
 from gui.changelog_dialog import ChangeLogDialog
 from gui.input_dialog import InputDialog, AddBookmarkDialog
+from gui.keyring_manager_window import KeyringManagerWindow
 
 
 class MainWindow(gtk.Window):
@@ -379,6 +380,11 @@ class MainWindow(gtk.Window):
 						'label': _('Mount manager'),
 						'path': '<Sunflower>/Tools/MountManager',
 						'callback': self.mount_manager.show,
+					},
+					{
+						'label': _('Keyring manager'),
+						'path': '<Sunflower>/Tools/KeyringManager',
+						'callback': self.show_keyring_manager,
 					}
 				)
 			},
@@ -2346,6 +2352,27 @@ class MainWindow(gtk.Window):
 
 			# show preferences window
 			self.preferences_window._show(None, tab_name='plugins')
+
+	def show_keyring_manager(self, widget=None, data=None):
+		"""Show keyring manager if available"""
+		if self.keyring_manager.is_available():
+			# create and show keyring manager
+			KeyringManagerWindow(self)
+
+		else:
+			# keyring is not available, let user know
+			dialog = gtk.MessageDialog(
+								self,
+								gtk.DIALOG_DESTROY_WITH_PARENT,
+								gtk.MESSAGE_INFO,
+								gtk.BUTTONS_OK,
+								_(
+									'Keyring is not available. Make sure you have '
+									'Python Gnome keyring module installed.'
+								)
+							)
+			dialog.run()
+			dialog.destroy()
 
 	def check_for_new_version(self, widget=None, data=None):
 		"""Check for new versions"""

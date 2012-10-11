@@ -838,6 +838,9 @@ class MainWindow(gtk.Window):
 		if self.window.get_state() == 0:
 			self._geometry = self.get_size() + self.get_position()
 
+		# hide bookmarks menu
+		self.bookmarks.close()
+
 	def _handle_window_state_event(self, widget, event):
 		"""Handle window state change"""
 		in_fullscreen = event.new_window_state is gtk.gdk.WINDOW_STATE_FULLSCREEN

@@ -49,6 +49,7 @@ class BookmarksMenu:
 	def __init__(self, application):
 		self._application = application
 		self._object = None
+		self._visible = False
 
 		# options
 		self._show_mounts = self._application.bookmark_options.get('show_mounts')
@@ -308,6 +309,9 @@ class BookmarksMenu:
 		"""Show bookmarks menu"""
 		assert self._object is not None
 
+		if self._visible:
+			return
+
 		# calculate window position
 		window_x, window_y = window.window.get_position()
 		button_x, button_y = invoker.translate_coordinates(window, 0, 0)
@@ -327,11 +331,15 @@ class BookmarksMenu:
 		# show window
 		self._window.move(0, 0)
 		self._window.move(pos_x, pos_y)
+
+		self._visible = True
 		self._window.show()
 		
 	def close(self, widget=None, data=None):
 		"""Handle window closing"""
-		self._window.hide()
+		if self._visible:
+			self._window.hide()
+			self._visible = False
 
 	def apply_settings(self):
 		"""Apply new configuration"""

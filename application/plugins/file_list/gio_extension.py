@@ -366,6 +366,7 @@ class SambaExtension(MountManagerExtension):
 		"""Mount selected item"""
 		selection = self._list.get_selection()
 		item_list, selected_iter = selection.get_selected()
+		keyring_manager = self._parent._application.keyring_manager
 
 		if selected_iter is not None:
 			server = item_list.get_value(selected_iter, Column.SERVER)
@@ -380,7 +381,8 @@ class SambaExtension(MountManagerExtension):
 
 			# get password if domain requires login
 			if item_list.get_value(selected_iter, Column.REQUIRES_LOGIN):
-				pass
+				entry_name = item_list.get_value(selected_iter, Column.NAME)
+				password = keyring_manager.get_password(entry_name)
 
 			# mount specified URI
 			self.__mount(uri, domain, username, password)

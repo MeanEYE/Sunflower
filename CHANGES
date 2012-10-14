@@ -1,7 +1,7 @@
 Version 0.1a-46
   + Added keyring window manager window. (not functional yet)
   * Updated Ukrainian translation.
-  * Associations manager: Removed hardcoded scheme from open_file method.
+  * Removed hard coded schemes resulting in ability to open files on remote mounts.
   * Better handling of files on remote mounts. Open with menu is available.
   * Properly handle drag and drop from both local and remote providers.
   * Hide bookmarks menu when main window is moving.

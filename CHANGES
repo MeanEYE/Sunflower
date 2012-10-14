@@ -1,3 +1,14 @@
+Version 0.1a-46
+  + Added keyring window manager window. (not functional yet)
+  * Updated Ukrainian translation.
+  * Associations manager: Removed hardcoded scheme from open_file method.
+  * Better handling of files on remote mounts. Open with menu is available.
+  * Properly handle drag and drop from both local and remote providers.
+  * Hide bookmarks menu when main window is moving.
+  * Use keyring manager for storing and getting passwords.
+  * Ask for password on protected Samba mounts.
+  * Lock keyring on application close.
+
 Version 0.1a-45
   + Created replacement widget for bookmarks.
   + Added provider for "trash" URI.

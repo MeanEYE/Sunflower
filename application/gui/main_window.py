@@ -11,6 +11,7 @@ import shlex
 import urllib
 import urlparse
 import subprocess
+import glib
 
 from menus import MenuManager
 from mounts import MountsManager
@@ -67,6 +68,10 @@ class MainWindow(gtk.Window):
 		# create main window and other widgets
 		gtk.Window.__init__(self, type=gtk.WINDOW_TOPLEVEL)
 
+		# set application name
+		glib.set_application_name('Sunflower')
+
+		# local variables
 		self._geometry = None
 		self._active_object = None
 
@@ -680,6 +685,9 @@ class MainWindow(gtk.Window):
 		# save window properties
 		self._save_window_position()
 		self._save_active_notebook()
+
+		# lock keyring
+		self.keyring_manager.lock_keyring()
 
 		# save config changes
 		self.save_config()

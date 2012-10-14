@@ -58,7 +58,7 @@ class MainWindow(gtk.Window):
 	version = {
 			'major': 0,
 			'minor': 1,
-			'build': 45,
+			'build': 46,
 			'stage': 'a'
 		}
 

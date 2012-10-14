@@ -85,6 +85,11 @@ class InputDialog:
 		"""Set main entry text"""
 		self._entry.set_text(entry_text)
 
+	def set_password(self):
+		"""Set field as password input"""
+		self._entry.set_property('caps-lock-warning', True)
+		self._entry.set_visibility(False)
+
 	def get_response(self):
 		"""Return value and self-destruct
 

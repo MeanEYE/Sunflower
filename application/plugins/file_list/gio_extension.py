@@ -2,8 +2,9 @@ import gtk
 import gio
 
 from dialogs import SambaCreate, SambaResult
-from keyring import KeyringCreateError
+from keyring import KeyringCreateError, EntryType
 from plugin_base.mount_manager_extension import MountManagerExtension, ExtensionFeatures
+from gui.input_dialog import InputDialog
 
 
 class Column:
@@ -178,15 +179,33 @@ class SambaExtension(MountManagerExtension):
 		"""Perform actual mounting operation with specified data"""
 		self._show_spinner()
 
+		def ask_password(operation, message, default_user, default_domain, flags): 
+			# configure mount operationeration
+			operation.set_domain(domain if domain != '' else default_domain)
+			operation.set_username(username if username != '' else default_user)
+
+			if password is not None:
+				# set password to stored one
+				operation.set_password(password)
+				operation.reply(gio.MOUNT_OPERATION_HANDLED)
+
+			else:
+				# we don't have stored password, ask user to provide one
+				with gtk.gdk.lock:
+					dialog = InputDialog(self._application)
+					dialog.set_title(_('Mount operation'))
+					dialog.set_label(message)
+					dialog.set_password()
+
+					response = dialog.get_response()
+
+					if response[0] == gtk.RESPONSE_OK:
+						operation.set_password(response[1])
+						operation.reply(gio.MOUNT_OPERATION_HANDLED)
+
 		# create new mount operation object
 		operation = gio.MountOperation()
-
-		# configure mount operation
-		operation.set_domain(domain)
-		operation.set_username(username)
-		
-		if password is not None:
-			operation.set_password(password)
+		operation.connect('ask-password', ask_password)
 
 		# perform mount
 		path = gio.File(uri)
@@ -197,12 +216,14 @@ class SambaExtension(MountManagerExtension):
 		self._show_spinner()
 
 		# get mount for specified URI
-		mount = gio.File(uri).find_enclosing_mount()
-
-		if mount is not None:
+		try:
+			mount = gio.File(uri).find_enclosing_mount()
 			mount.unmount(self.__unmount_callback)
 
-		else:
+		except:
+			pass
+
+		finally:
 			self._hide_spinner()
 
 	def __mount_callback(self, path, result):
@@ -218,8 +239,8 @@ class SambaExtension(MountManagerExtension):
 										gtk.MESSAGE_ERROR,
 										gtk.BUTTONS_OK,
 										_(
-											"Unable to mount:\n{0}"
-										).format(path.get_uri())
+											"Unable to mount:\n{0}\n\n{1}"
+										).format(path.get_uri(), str(error))
 									)
 				dialog.run()
 				dialog.destroy()
@@ -269,8 +290,18 @@ class SambaExtension(MountManagerExtension):
 			if requires_login:
 				if keyring_manager.is_available():
 					try:
+						# prepare atributes
+						attributes = {
+								'server': uri,
+								'user': response[1][SambaResult.USERNAME]
+							}
 						# first, try to store password with keyring
-						keyring_manager.store_password(name, uri, response[1][SambaResult.PASSWORD])
+						keyring_manager.store_password(
+									name, 
+									response[1][SambaResult.PASSWORD],
+									attributes,
+									entry_type=EntryType.NETWORK
+								)
 
 					except KeyringCreateError:
 						# show error message
@@ -299,10 +330,11 @@ class SambaExtension(MountManagerExtension):
 
 		if selected_iter is not None:
 			dialog = SambaCreate(self._window)
+			old_name = item_list.get_value(selected_iter, Column.NAME)
 
 			# set dialog parameters
 			dialog.set_keyring_available(keyring_manager.is_available())
-			dialog.set_name(item_list.get_value(selected_iter, Column.NAME))
+			dialog.set_name(old_name)
 			dialog.set_server(item_list.get_value(selected_iter, Column.SERVER))
 			dialog.set_share(item_list.get_value(selected_iter, Column.SHARE))
 			dialog.set_directory(item_list.get_value(selected_iter, Column.DIRECTORY))
@@ -313,13 +345,19 @@ class SambaExtension(MountManagerExtension):
 			response = dialog.get_response()
 
 			if response[0] == gtk.RESPONSE_OK:
+				new_name = response[1][SambaResult.NAME]
+
 				# modify list store
-				item_list.set_value(selected_iter, Column.NAME, response[1][SambaResult.NAME])
+				item_list.set_value(selected_iter, Column.NAME, new_name)
 				item_list.set_value(selected_iter, Column.SERVER, response[1][SambaResult.SERVER])
 				item_list.set_value(selected_iter, Column.SHARE, response[1][SambaResult.SHARE])
 				item_list.set_value(selected_iter, Column.DIRECTORY, response[1][SambaResult.DIRECTORY])
 				item_list.set_value(selected_iter, Column.DOMAIN, response[1][SambaResult.DOMAIN])
 				item_list.set_value(selected_iter, Column.USERNAME, response[1][SambaResult.USERNAME])
+
+				# rename entry if needed
+				if new_name != old_name:
+					keyring_manager.rename_entry(old_name, new_name)
 
 				# form uri
 				uri = self.__form_uri(
@@ -337,9 +375,11 @@ class SambaExtension(MountManagerExtension):
 		"""Remove dialog if user confirms"""
 		selection = self._list.get_selection()
 		item_list, selected_iter = selection.get_selected()
+		keyring_manager = self._parent._application.keyring_manager
 
 		if selected_iter is not None:
 			entry_name = item_list.get_value(selected_iter, Column.NAME)
+			requires_login = item_list.get_value(selected_iter, Column.REQUIRES_LOGIN)
 
 			# ask user to confirm removal
 			dialog = gtk.MessageDialog(
@@ -361,6 +401,10 @@ class SambaExtension(MountManagerExtension):
 				
 				# save changes
 				self.__save_list()
+
+				# remove password from keyring manager
+				if requires_login:
+					keyring_manager.remove_entry(entry_name)
 
 	def _mount_selected(self, widget, data=None):
 		"""Mount selected item"""

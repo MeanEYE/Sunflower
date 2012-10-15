@@ -2,11 +2,10 @@ import os
 import gio
 import stat
 import shutil
-import common
 
 from local_monitor import LocalMonitor
 from plugin_base.provider import Provider, FileType, FileInfo, FileInfoExtended, SystemSize
-from plugin_base.provider import Support
+from plugin_base.provider import Support, TrashError
 
 
 class LocalProvider(Provider):

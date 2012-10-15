@@ -1054,7 +1054,7 @@ class DeleteOperation(Operation):
 			# try trashing specified path
 			self._source.trash_path(path, relative_to=self._source_path)
 
-		except Exception as error:
+		except TrashError as error:
 			# problem removing path, ask user what to do
 			response = self._get_trash_error_input(error)
 

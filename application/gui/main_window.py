@@ -3,13 +3,10 @@ import sys
 import gtk
 import pango
 import webbrowser
-import locale
 import user
 import gettext
 import common
 import shlex
-import urllib
-import urlparse
 import subprocess
 import glib
 

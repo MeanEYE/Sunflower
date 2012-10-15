@@ -4,7 +4,6 @@ import time
 import locale
 import user
 import fnmatch
-import urlparse
 import common
 
 from plugin_base.monitor import MonitorSignals, MonitorError

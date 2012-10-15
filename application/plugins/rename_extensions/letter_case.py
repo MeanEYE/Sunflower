@@ -3,7 +3,6 @@ import gtk
 import string
 
 from plugin_base.rename_extension import RenameExtension
-from gui.input_dialog import InputRangeDialog
 
 
 class LetterCaseRename(RenameExtension):

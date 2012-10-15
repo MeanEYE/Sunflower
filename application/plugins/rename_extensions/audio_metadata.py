@@ -10,7 +10,6 @@ except ImportError:
 	USE_MUTAGEN = False
 
 from plugin_base.rename_extension import RenameExtension
-from gui.input_dialog import InputRangeDialog
 
 
 class AudioMetadataRename(RenameExtension):

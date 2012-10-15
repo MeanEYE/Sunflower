@@ -1,4 +1,3 @@
-import gtk
 import user
 
 from bookmark_button import Button as BookmarkButton

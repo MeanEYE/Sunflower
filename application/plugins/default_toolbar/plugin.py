@@ -1,6 +1,4 @@
-import os
 import gtk
-import user
 
 from plugin_base.toolbar_factory import ToolbarFactory
 

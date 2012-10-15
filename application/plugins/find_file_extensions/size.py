@@ -1,6 +1,4 @@
-import os
 import gtk
-import fnmatch
 
 from plugin_base.find_extension import FindExtension
 

@@ -2,7 +2,6 @@ import os
 import gio
 import subprocess
 
-from urllib import quote
 from collections import namedtuple
 
 

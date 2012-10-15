@@ -176,7 +176,6 @@ class ToolbarOptions(SettingsPage):
 	def _save_options(self):
 		"""Save settings to config file"""
 		options = self._application.toolbar_options
-		count = len(self._store)
 
 		# get section list, we'll use this
 		# list to remove orphan configurations

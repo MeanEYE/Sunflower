@@ -1,6 +1,5 @@
 import gtk
 import pango
-import cairo
 
 
 class TabLabel:

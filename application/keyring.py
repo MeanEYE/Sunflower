@@ -154,7 +154,7 @@ class KeyringManager:
 	def rename_entry(self, entry, new_name):
 		"""Rename entry"""
 		if not self.keyring_exists():
-			raise invalidkeyringerror('keyring does not exist!')
+			raise InvalidKeyringError('keyring does not exist!')
 
 		result = False
 
@@ -176,7 +176,7 @@ class KeyringManager:
 	def remove_entry(self, entry):
 		"""Remove entry from keyring"""
 		if not self.keyring_exists():
-			raise invalidkeyringerror('keyring does not exist!')
+			raise InvalidKeyringError('keyring does not exist!')
 
 		result = False
 
@@ -196,7 +196,7 @@ class KeyringManager:
 	def get_entries(self):
 		"""Return list of tuples containing entry names and description"""
 		if not self.keyring_exists():
-			raise invalidkeyringerror('keyring does not exist!')
+			raise InvalidKeyringError('keyring does not exist!')
 
 		result = []
 

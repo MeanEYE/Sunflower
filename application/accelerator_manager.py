@@ -11,8 +11,8 @@ class AcceleratorManager:
 		self._groups = []
 		self._group_names = []
 
-		self._schedule_groups = None
-		self._schedule_owner = None
+		self._scheduled_groups = None
+		self._scheduled_owner = None
 
 	def _save_accelerator(self, section, name, accelerator=None, primary=True, can_overwrite=False):
 		"""Save accelerator to config file"""
@@ -136,27 +136,27 @@ class AcceleratorManager:
 
 	def schedule_groups_for_deactivation(self, groups, owner):
 		"""Set accelerator groups to be deactivated with second method call"""
-		self._schedule_owner = owner
-		self._schedule_groups = groups
+		self._scheduled_owner = owner
+		self._scheduled_groups = groups
 
 	def deactivate_scheduled_groups(self, owner):
 		"""Deactivate scheduled accelerator groups"""
 		result = False
 
-		if self._schedule_groups is not None\
-		and self._schedule_owner is not owner:
+		if self._scheduled_groups is not None\
+		and self._scheduled_owner is not owner:
 			# deactivate groups
-			for group in self._schedule_groups:
+			for group in self._scheduled_groups:
 				group.deactivate()
 
 			# clear local list
-			self._schedule_groups = None
+			self._scheduled_groups = None
 
 			# modify result
 			result = True
 
 		# in case there are no groups to deactivate, return true
-		if self._schedule_groups is None:
+		if self._scheduled_groups is None:
 			result = True
 
 		return result

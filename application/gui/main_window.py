@@ -1037,13 +1037,6 @@ class MainWindow(gtk.Window):
 		if hasattr(active_object, 'refresh_file_list'):
 			active_object.refresh_file_list()
 
-	def _command_rename(self, widget=None, data=None):
-		"""Handle command button click"""
-		active_object = self.get_active_object()
-
-		if hasattr(active_object, '_rename_file'):
-			active_object._rename_file()
-
 	def _command_view(self, widget=None, data=None):
 		"""Handle command button click"""
 		active_object = self.get_active_object()
@@ -1748,7 +1741,7 @@ class MainWindow(gtk.Window):
 
 				else:
 					# print error to console
-					print 'Warning: Unknown plugin class "{0}". Tab skipped!'.format(tab_class)
+					print 'Warning: Unknown plugin class "{0}". Tab skipped!'.format(tab['class'])
 
 			result = count > 0
 

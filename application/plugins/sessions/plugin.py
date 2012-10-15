@@ -173,12 +173,11 @@ class SessionsOptions(SettingsPage):
 	def _handle_delete_session(self, widget, data=None):
 		"""Remove selected field from store"""
 		selection = self._treeview.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
-		current = options.section('sessions').get('current')
-		if (len(list_) > 1) and (iter_ is not None):
+		if (len(item_list) > 1) and (selected_iter is not None):
 			# remove item from the store
-			list_.remove(iter_)
+			item_list.remove(selected_iter)
 
 			# enable save button if item was removed
 			self._parent.enable_save()
@@ -186,16 +185,16 @@ class SessionsOptions(SettingsPage):
 	def _handle_move_session(self, widget, direction):
 		"""Move selected bookmark up or down"""
 		selection = self._treeview.get_selection()
-		list_, iter_ = selection.get_selected()
+		item_list, selected_iter = selection.get_selected()
 
-		if iter_ is not None:
+		if selected_iter is not None:
 			# get iter index
-			index = list_.get_path(iter_)[0]
+			index = item_list.get_path(selected_iter)[0]
 
 			# depending on direction, swap iters
 			if (direction == -1 and index > 0) \
-			or (direction == 1 and index < len(list_) - 1):
-				list_.swap(iter_, list_[index + direction].iter)
+			or (direction == 1 and index < len(item_list) - 1):
+				item_list.swap(selected_iter, item_list[index + direction].iter)
 
 			# enable save button if iters were swapped
 			self._parent.enable_save()

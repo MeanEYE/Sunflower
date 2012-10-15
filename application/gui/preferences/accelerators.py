@@ -125,7 +125,6 @@ class AcceleratorOptions(SettingsPage):
 		"""Update accelerator list"""
 		manager = self._application.accelerator_manager
 		bookmarks = self._application.bookmark_options.get('bookmarks')
-		options = self._application.options
 		groups = manager.get_groups()
 		groups.sort()
 

@@ -268,10 +268,6 @@ class AboutWindow(gtk.Window):
 			'<b>{0}</b>'.format(_('Translating:')),
 			self._create_language_groups(self.translators))
 
-		# separators
-		separator1 = gtk.HSeparator()
-		separator2 = gtk.HSeparator()
-
 		# pack interface
 		vbox.pack_start(program_info, False, False, 0)
 		vbox.pack_start(contributors, False, False, 0)

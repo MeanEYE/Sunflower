@@ -346,7 +346,6 @@ class ItemListOptions(SettingsPage):
 	def _load_options(self):
 		"""Load item list options"""
 		options = self._application.options
-		plugin_options = self._application.plugin_options
 		section = options.section('item_list')
 
 		# load options

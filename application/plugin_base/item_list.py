@@ -1267,7 +1267,7 @@ class ItemList(PluginBase):
 		selection = self._get_selection()
 
 		if selection is not None:
-			viewer = Viewer(selection, self.get_provider(), self)
+			Viewer(selection, self.get_provider(), self)
 
 		return True
 

@@ -227,9 +227,13 @@ class OperationDialog:
 
 	def _confirm_cancel(self, message):
 		"""Create confirmation dialog with specified message and return result"""
-		dialog = gtk.MessageDialog(self._window,
-							gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_QUESTION,
-							gtk.BUTTONS_YES_NO, message)
+		dialog = gtk.MessageDialog(
+						self._window,
+						gtk.DIALOG_DESTROY_WITH_PARENT, 
+						gtk.MESSAGE_QUESTION,
+						gtk.BUTTONS_YES_NO, 
+						message
+					)
 
 		result = dialog.run()
 		dialog.destroy()

@@ -130,6 +130,7 @@ class KeyringManager:
 		"""Lock keyring"""
 		if self.keyring_exists():
 			self.__lock_keyring()
+			self.__update_info()
 
 	def keyring_exists(self):
 		"""Check if keyring exists"""
@@ -154,7 +155,7 @@ class KeyringManager:
 	def rename_entry(self, entry, new_name):
 		"""Rename entry"""
 		if not self.keyring_exists():
-			raise InvalidKeyringError('keyring does not exist!')
+			raise InvalidKeyringError('Keyring does not exist!')
 
 		result = False
 
@@ -173,10 +174,31 @@ class KeyringManager:
 
 		return result
 
+	def change_secret(self, entry_id, secret):
+		"""Change secret for selected entry"""
+		if not self.keyring_exists():
+			raise InvalidKeyringError('Keyring does not exist!')
+
+		result = False
+
+		# if keyring is locked, try to unlock it
+		if self.is_locked() and not self.__unlock_keyring():
+			return result
+
+		# get entry information
+		info = keyring.item_get_info_sync(self.KEYRING_NAME, entry_id)
+
+		if info is not None:
+			info.set_secret(secret)
+			keyring.item_set_info_sync(self.KEYRING_NAME, entry_id, info)
+			result = True
+
+		return result
+
 	def remove_entry(self, entry):
 		"""Remove entry from keyring"""
 		if not self.keyring_exists():
-			raise InvalidKeyringError('keyring does not exist!')
+			raise InvalidKeyringError('Keyring does not exist!')
 
 		result = False
 
@@ -196,7 +218,7 @@ class KeyringManager:
 	def get_entries(self):
 		"""Return list of tuples containing entry names and description"""
 		if not self.keyring_exists():
-			raise InvalidKeyringError('keyring does not exist!')
+			raise InvalidKeyringError('Keyring does not exist!')
 
 		result = []
 
@@ -207,7 +229,7 @@ class KeyringManager:
 		# populate result list
 		for item_id in keyring.list_item_ids_sync(self.KEYRING_NAME):
 			info = keyring.item_get_info_sync(self.KEYRING_NAME, item_id)
-			result.append((item_id, info.get_display_name()))
+			result.append((item_id, info.get_display_name(), info.get_mtime()))
 
 		return result
 

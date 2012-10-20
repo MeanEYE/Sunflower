@@ -7,7 +7,7 @@ from plugin_base.mount_manager_extension import MountManagerExtension, Extension
 from gui.input_dialog import InputDialog
 
 
-class Column:
+class SambaColumn:
 	NAME = 0
 	SERVER = 1
 	SHARE = 2
@@ -39,8 +39,8 @@ class SambaExtension(MountManagerExtension):
 		cell_name = gtk.CellRendererText()
 		cell_uri = gtk.CellRendererText()
 
-		col_name = gtk.TreeViewColumn(_('Name'), cell_name, text=Column.NAME)
-		col_uri = gtk.TreeViewColumn(_('URI'), cell_uri, text=Column.URI)
+		col_name = gtk.TreeViewSambaColumn(_('Name'), cell_name, text=SambaColumn.NAME)
+		col_uri = gtk.TreeViewSambaColumn(_('URI'), cell_uri, text=SambaColumn.URI)
 
 		col_name.set_expand(True)
 
@@ -166,13 +166,13 @@ class SambaExtension(MountManagerExtension):
 		# add items from the store
 		for row in self._store:
 			entries.append({
-					'name': row[Column.NAME],
-					'server': row[Column.SERVER],
-					'share': row[Column.SHARE],
-					'directory': row[Column.DIRECTORY],
-					'domain': row[Column.DOMAIN],
-					'username': row[Column.USERNAME],
-					'requires_login': row[Column.REQUIRES_LOGIN] 
+					'name': row[SambaColumn.NAME],
+					'server': row[SambaColumn.SERVER],
+					'share': row[SambaColumn.SHARE],
+					'directory': row[SambaColumn.DIRECTORY],
+					'domain': row[SambaColumn.DOMAIN],
+					'username': row[SambaColumn.USERNAME],
+					'requires_login': row[SambaColumn.REQUIRES_LOGIN] 
 				})
 
 	def __mount(self, uri, domain, username, password=None):
@@ -330,16 +330,16 @@ class SambaExtension(MountManagerExtension):
 
 		if selected_iter is not None:
 			dialog = SambaCreate(self._window)
-			old_name = item_list.get_value(selected_iter, Column.NAME)
+			old_name = item_list.get_value(selected_iter, SambaColumn.NAME)
 
 			# set dialog parameters
 			dialog.set_keyring_available(keyring_manager.is_available())
 			dialog.set_name(old_name)
-			dialog.set_server(item_list.get_value(selected_iter, Column.SERVER))
-			dialog.set_share(item_list.get_value(selected_iter, Column.SHARE))
-			dialog.set_directory(item_list.get_value(selected_iter, Column.DIRECTORY))
-			dialog.set_domain(item_list.get_value(selected_iter, Column.DOMAIN))
-			dialog.set_username(item_list.get_value(selected_iter, Column.USERNAME))
+			dialog.set_server(item_list.get_value(selected_iter, SambaColumn.SERVER))
+			dialog.set_share(item_list.get_value(selected_iter, SambaColumn.SHARE))
+			dialog.set_directory(item_list.get_value(selected_iter, SambaColumn.DIRECTORY))
+			dialog.set_domain(item_list.get_value(selected_iter, SambaColumn.DOMAIN))
+			dialog.set_username(item_list.get_value(selected_iter, SambaColumn.USERNAME))
 
 			# show editing dialog
 			response = dialog.get_response()
@@ -348,12 +348,12 @@ class SambaExtension(MountManagerExtension):
 				new_name = response[1][SambaResult.NAME]
 
 				# modify list store
-				item_list.set_value(selected_iter, Column.NAME, new_name)
-				item_list.set_value(selected_iter, Column.SERVER, response[1][SambaResult.SERVER])
-				item_list.set_value(selected_iter, Column.SHARE, response[1][SambaResult.SHARE])
-				item_list.set_value(selected_iter, Column.DIRECTORY, response[1][SambaResult.DIRECTORY])
-				item_list.set_value(selected_iter, Column.DOMAIN, response[1][SambaResult.DOMAIN])
-				item_list.set_value(selected_iter, Column.USERNAME, response[1][SambaResult.USERNAME])
+				item_list.set_value(selected_iter, SambaColumn.NAME, new_name)
+				item_list.set_value(selected_iter, SambaColumn.SERVER, response[1][SambaResult.SERVER])
+				item_list.set_value(selected_iter, SambaColumn.SHARE, response[1][SambaResult.SHARE])
+				item_list.set_value(selected_iter, SambaColumn.DIRECTORY, response[1][SambaResult.DIRECTORY])
+				item_list.set_value(selected_iter, SambaColumn.DOMAIN, response[1][SambaResult.DOMAIN])
+				item_list.set_value(selected_iter, SambaColumn.USERNAME, response[1][SambaResult.USERNAME])
 
 				# rename entry if needed
 				if new_name != old_name:
@@ -366,7 +366,7 @@ class SambaExtension(MountManagerExtension):
 							response[1][SambaResult.DIRECTORY]
 						)
 
-				item_list.set_value(selected_iter, Column.URI, uri)
+				item_list.set_value(selected_iter, SambaColumn.URI, uri)
 
 				# save changes
 				self.__save_list()
@@ -378,8 +378,8 @@ class SambaExtension(MountManagerExtension):
 		keyring_manager = self._parent._application.keyring_manager
 
 		if selected_iter is not None:
-			entry_name = item_list.get_value(selected_iter, Column.NAME)
-			requires_login = item_list.get_value(selected_iter, Column.REQUIRES_LOGIN)
+			entry_name = item_list.get_value(selected_iter, SambaColumn.NAME)
+			requires_login = item_list.get_value(selected_iter, SambaColumn.REQUIRES_LOGIN)
 
 			# ask user to confirm removal
 			dialog = gtk.MessageDialog(
@@ -413,19 +413,19 @@ class SambaExtension(MountManagerExtension):
 		keyring_manager = self._parent._application.keyring_manager
 
 		if selected_iter is not None:
-			server = item_list.get_value(selected_iter, Column.SERVER)
-			share = item_list.get_value(selected_iter, Column.SHARE)
-			directory = item_list.get_value(selected_iter, Column.DIRECTORY)
-			domain = item_list.get_value(selected_iter, Column.DOMAIN)
-			username = item_list.get_value(selected_iter, Column.USERNAME)
+			server = item_list.get_value(selected_iter, SambaColumn.SERVER)
+			share = item_list.get_value(selected_iter, SambaColumn.SHARE)
+			directory = item_list.get_value(selected_iter, SambaColumn.DIRECTORY)
+			domain = item_list.get_value(selected_iter, SambaColumn.DOMAIN)
+			username = item_list.get_value(selected_iter, SambaColumn.USERNAME)
 			password = None
 
 			# form URI for mounting
 			uri = self.__form_uri(server, share, directory)
 
 			# get password if domain requires login
-			if item_list.get_value(selected_iter, Column.REQUIRES_LOGIN):
-				entry_name = item_list.get_value(selected_iter, Column.NAME)
+			if item_list.get_value(selected_iter, SambaColumn.REQUIRES_LOGIN):
+				entry_name = item_list.get_value(selected_iter, SambaColumn.NAME)
 				password = keyring_manager.get_password(entry_name)
 
 			# mount specified URI
@@ -437,9 +437,9 @@ class SambaExtension(MountManagerExtension):
 		item_list, selected_iter = selection.get_selected()
 
 		if selected_iter is not None:
-			server = item_list.get_value(selected_iter, Column.SERVER)
-			share = item_list.get_value(selected_iter, Column.SHARE)
-			directory = item_list.get_value(selected_iter, Column.DIRECTORY)
+			server = item_list.get_value(selected_iter, SambaColumn.SERVER)
+			share = item_list.get_value(selected_iter, SambaColumn.SHARE)
+			directory = item_list.get_value(selected_iter, SambaColumn.DIRECTORY)
 
 			# form URI for mounting
 			uri = self.__form_uri(server, share, directory)
@@ -459,3 +459,5 @@ class SambaExtension(MountManagerExtension):
 	def get_information(self):
 		"""Get extension information"""
 		return 'samba', 'Samba'
+
+

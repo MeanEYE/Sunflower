@@ -9,7 +9,7 @@ import common
 from plugin_base.monitor import MonitorSignals, MonitorError
 from local_provider import LocalProvider
 from gio_provider import SambaProvider, FtpProvider, NetworkProvider, TrashProvider
-from gio_extension import SambaExtension
+from gio_extension import SambaExtension, FTPExtension
 from column_editor import FileList_ColumnEditor
 from operation import DeleteOperation, CopyOperation, MoveOperation
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
@@ -35,6 +35,7 @@ def register_plugin(application):
 
 	# register mount manager extension
 	application.register_mount_manager_extension(SambaExtension)
+	application.register_mount_manager_extension(FTPExtension)
 
 
 class Column:

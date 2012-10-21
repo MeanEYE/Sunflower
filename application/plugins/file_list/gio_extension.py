@@ -25,17 +25,118 @@ class FTPColumn:
 	USERNAME = 3
 	REQUIRES_LOGIN = 4
 	URI = 7
+
+
+
+class GioExtension(MountManagerExtension):
+	"""Base class for all GIO based extensions"""
+	features = set([ExtensionFeatures.SYSTEM_WIDE,])
+	
+	def __init__(self, parent, window):
+		MountManagerExtension.__init__(self, parent, window)
+
+	def __mount(self, uri, domain, username, password=None):
+		"""Perform actual mounting operation with specified data"""
+		self._show_spinner()
+
+		def ask_password(operation, message, default_user, default_domain, flags): 
+			# configure mount operationeration
+			operation.set_domain(domain if domain != '' else default_domain)
+			operation.set_username(username if username != '' else default_user)
+
+			if password is not None:
+				# set password to stored one
+				operation.set_password(password)
+				operation.reply(gio.MOUNT_OPERATION_HANDLED)
+
+			else:
+				# we don't have stored password, ask user to provide one
+				with gtk.gdk.lock:
+					dialog = InputDialog(self._application)
+					dialog.set_title(_('Mount operation'))
+					dialog.set_label(message)
+					dialog.set_password()
+
+					response = dialog.get_response()
+
+					if response[0] == gtk.RESPONSE_OK:
+						operation.set_password(response[1])
+						operation.reply(gio.MOUNT_OPERATION_HANDLED)
+
+		# create new mount operation object
+		operation = gio.MountOperation()
+		operation.connect('ask-password', ask_password)
+
+		# perform mount
+		path = gio.File(uri)
+		path.mount_enclosing_volume(operation, self.__mount_callback)
+
+	def __unmount(self, uri):
+		"""Perform unmount on specified URI"""
+		self._show_spinner()
+
+		# get mount for specified URI
+		try:
+			mount = gio.File(uri).find_enclosing_mount()
+			mount.unmount(self.__unmount_callback)
+
+		except:
+			pass
+
+		finally:
+			self._hide_spinner()
+
+	def __mount_callback(self, path, result):
+		"""Finish mounting"""
+		try:
+			path.mount_enclosing_volume_finish(result)
+
+		except gio.Error as error:
+			with gtk.gdk.lock:
+				dialog = gtk.MessageDialog(
+										self._parent.window,
+										gtk.DIALOG_DESTROY_WITH_PARENT,
+										gtk.MESSAGE_ERROR,
+										gtk.BUTTONS_OK,
+										_(
+											"Unable to mount:\n{0}\n\n{1}"
+										).format(path.get_uri(), str(error))
+									)
+				dialog.run()
+				dialog.destroy()
+
+		finally:
+			self._hide_spinner()
+
+	def __unmount_callback(self, mount, result):
+		"""Finish unmounting"""
+		try:
+			mount.unmount_finish(result)
+		
+		finally:
+			self._hide_spinner()
+
+	def _show_spinner(self):
+		"""Show spinner"""
+		if self._spinner is not None:
+			self._spinner.show()
+			self._spinner.start()
+
+	def _hide_spinner(self):
+		"""Hide spinner"""
+		if self._spinner is not None:
+			self._spinner.stop()
+			self._spinner.hide()
 	
 
-class SambaExtension(MountManagerExtension):
+class SambaExtension(GioExtension):
 	"""Mount manager extension that provides editing and mounting
 	of Samba shares through GIO backend.
 
 	"""
-	features = set([ExtensionFeatures.SYSTEM_WIDE,])
 
 	def __init__(self, parent, window):
-		MountManagerExtension.__init__(self, parent, window)
+		GioExtension.__init__(self, parent, window)
 
 		# create user interface
 		list_container = gtk.ScrolledWindow()
@@ -183,100 +284,6 @@ class SambaExtension(MountManagerExtension):
 					'username': row[SambaColumn.USERNAME],
 					'requires_login': row[SambaColumn.REQUIRES_LOGIN] 
 				})
-
-	def __mount(self, uri, domain, username, password=None):
-		"""Perform actual mounting operation with specified data"""
-		self._show_spinner()
-
-		def ask_password(operation, message, default_user, default_domain, flags): 
-			# configure mount operationeration
-			operation.set_domain(domain if domain != '' else default_domain)
-			operation.set_username(username if username != '' else default_user)
-
-			if password is not None:
-				# set password to stored one
-				operation.set_password(password)
-				operation.reply(gio.MOUNT_OPERATION_HANDLED)
-
-			else:
-				# we don't have stored password, ask user to provide one
-				with gtk.gdk.lock:
-					dialog = InputDialog(self._application)
-					dialog.set_title(_('Mount operation'))
-					dialog.set_label(message)
-					dialog.set_password()
-
-					response = dialog.get_response()
-
-					if response[0] == gtk.RESPONSE_OK:
-						operation.set_password(response[1])
-						operation.reply(gio.MOUNT_OPERATION_HANDLED)
-
-		# create new mount operation object
-		operation = gio.MountOperation()
-		operation.connect('ask-password', ask_password)
-
-		# perform mount
-		path = gio.File(uri)
-		path.mount_enclosing_volume(operation, self.__mount_callback)
-
-	def __unmount(self, uri):
-		"""Perform unmount on specified URI"""
-		self._show_spinner()
-
-		# get mount for specified URI
-		try:
-			mount = gio.File(uri).find_enclosing_mount()
-			mount.unmount(self.__unmount_callback)
-
-		except:
-			pass
-
-		finally:
-			self._hide_spinner()
-
-	def __mount_callback(self, path, result):
-		"""Finish mounting"""
-		try:
-			path.mount_enclosing_volume_finish(result)
-
-		except gio.Error as error:
-			with gtk.gdk.lock:
-				dialog = gtk.MessageDialog(
-										self._parent.window,
-										gtk.DIALOG_DESTROY_WITH_PARENT,
-										gtk.MESSAGE_ERROR,
-										gtk.BUTTONS_OK,
-										_(
-											"Unable to mount:\n{0}\n\n{1}"
-										).format(path.get_uri(), str(error))
-									)
-				dialog.run()
-				dialog.destroy()
-
-		finally:
-			self._hide_spinner()
-
-	def __unmount_callback(self, mount, result):
-		"""Finish unmounting"""
-		try:
-			mount.unmount_finish(result)
-		
-		finally:
-			self._hide_spinner()
-
-	def _show_spinner(self):
-		"""Show spinner"""
-		if self._spinner is not None:
-			self._spinner.show()
-			self._spinner.start()
-
-	def _hide_spinner(self):
-		"""Hide spinner"""
-		if self._spinner is not None:
-			self._spinner.stop()
-			self._spinner.hide()
-
 
 	def _add_mount(self, widget, data=None):
 		"""Present dialog to user for creating a new mount"""
@@ -470,15 +477,14 @@ class SambaExtension(MountManagerExtension):
 		return 'samba', 'Samba'
 
 
-class FTPExtension(MountManagerExtension):
+class FTPExtension(GioExtension):
 	"""Mount manager extension that provides editing and mounting
 	of FTP (and SFTP) shares through GIO backend.
 
 	"""
-	features = set([ExtensionFeatures.SYSTEM_WIDE,])
 
 	def __init__(self, parent, window):
-		MountManagerExtension.__init__(self, parent, window)
+		GioExtension.__init__(self, parent, window)
 
 		# create user interface
 		list_container = gtk.ScrolledWindow()
@@ -567,22 +573,6 @@ class FTPExtension(MountManagerExtension):
 
 	def __save_list(self):
 		"""Save list to config file"""
-		pass
-
-	def __mount(self, uri, domain, username, password=None):
-		"""Mount selected mount"""
-		pass
-
-	def __unmount(self, uri):
-		"""Unmount selected mount"""
-		pass
-
-	def __mount_callback(self, path, result):
-		"""Finish mounting"""
-		pass
-
-	def __unmount_callback(self, mount, result):
-		"""Finish unmounting"""
 		pass
 
 	def _add_mount(self, widget, data=None):

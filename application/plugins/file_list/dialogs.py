@@ -289,9 +289,6 @@ class FtpInputDialog:
 		vbox_password.pack_start(label_password, False, False, 0)
 		vbox_password.pack_start(self._entry_password, False, False, 0)
 
-		vbox_share.pack_start(label_share, False, False, 0)
-		vbox_share.pack_start(self._entry_share, False, False, 0)
-
 		vbox_directory.pack_start(label_directory, False, False, 0)
 		vbox_directory.pack_start(self._entry_directory, False, False, 0)
 

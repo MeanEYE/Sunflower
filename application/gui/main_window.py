@@ -18,7 +18,7 @@ from indicator import Indicator
 from notifications import NotificationManager
 from toolbar import ToolbarManager
 from accelerator_manager import AcceleratorManager
-from keyring import KeyringManager
+from keyring import KeyringManager, InvalidKeyringError
 
 from plugin_base.item_list import ItemList
 from plugin_base.rename_extension import RenameExtension
@@ -2355,7 +2355,20 @@ class MainWindow(gtk.Window):
 		"""Show keyring manager if available"""
 		if self.keyring_manager.is_available():
 			# create and show keyring manager
-			KeyringManagerWindow(self)
+			try:
+				KeyringManagerWindow(self)
+
+			except InvalidKeyringError as error:
+				# keyring is not available, let user know
+				dialog = gtk.MessageDialog(
+									self,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_INFO,
+									gtk.BUTTONS_OK,
+									_('Keyring is empty!')
+								)
+				dialog.run()
+				dialog.destroy()
 
 		else:
 			# keyring is not available, let user know

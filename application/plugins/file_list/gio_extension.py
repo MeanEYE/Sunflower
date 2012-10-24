@@ -1,7 +1,7 @@
 import gtk
 import gio
 
-from dialogs import SambaCreate, SambaResult
+from dialogs import SambaInputDialog, SambaResult, FtpInputDialog, FtpResult
 from keyring import KeyringCreateError, EntryType
 from plugin_base.mount_manager_extension import MountManagerExtension, ExtensionFeatures
 from gui.input_dialog import InputDialog
@@ -18,31 +18,31 @@ class SambaColumn:
 	URI = 7
 
 
-class FTPColumn:
+class FtpColumn:
 	NAME = 0
 	SERVER = 1
 	DIRECTORY = 2
 	USERNAME = 3
 	REQUIRES_LOGIN = 4
-	URI = 7
-
+	URI = 5
 
 
 class GioExtension(MountManagerExtension):
 	"""Base class for all GIO based extensions"""
 	features = set([ExtensionFeatures.SYSTEM_WIDE,])
+	scheme = None
 	
 	def __init__(self, parent, window):
 		MountManagerExtension.__init__(self, parent, window)
 
-	def __mount(self, uri, domain, username, password=None):
+	def _mount(self, uri, domain, username, password=None):
 		"""Perform actual mounting operation with specified data"""
 		self._show_spinner()
 
 		def ask_password(operation, message, default_user, default_domain, flags): 
-			# configure mount operationeration
-			operation.set_domain(domain if domain != '' else default_domain)
-			operation.set_username(username if username != '' else default_user)
+			# configure mount operation
+			operation.set_domain(domain if domain is not None and domain != '' else default_domain)
+			operation.set_username(username if username is not None and username != '' else default_user)
 
 			if password is not None:
 				# set password to stored one
@@ -71,7 +71,7 @@ class GioExtension(MountManagerExtension):
 		path = gio.File(uri)
 		path.mount_enclosing_volume(operation, self.__mount_callback)
 
-	def __unmount(self, uri):
+	def _unmount(self, uri):
 		"""Perform unmount on specified URI"""
 		self._show_spinner()
 
@@ -134,6 +134,7 @@ class SambaExtension(GioExtension):
 	of Samba shares through GIO backend.
 
 	"""
+	scheme = 'smb'
 
 	def __init__(self, parent, window):
 		GioExtension.__init__(self, parent, window)
@@ -212,8 +213,8 @@ class SambaExtension(GioExtension):
 		self.__populate_list()
 
 	def __form_uri(self, server, share, directory):
-		"""Form URI based on result from SambaCreate dialog"""
-		scheme = 'smb'
+		"""Form URI based on result from SambaInputDialog dialog"""
+		scheme = self.scheme
 		path = share
 
 		# include directory
@@ -238,7 +239,7 @@ class SambaExtension(GioExtension):
 
 	def __populate_list(self):
 		"""Populate list with entries from config"""
-		entries = self._application.mount_options.get('smb')
+		entries = self._application.mount_options.get(self.scheme)
 
 		# no entries found, nothing to do here
 		if entries is None:
@@ -265,13 +266,13 @@ class SambaExtension(GioExtension):
 		mount_options = self._application.mount_options
 
 		# store configuration to options file
-		if mount_options.has('smb'):
-			entries = mount_options.get('smb')
+		if mount_options.has(self.scheme):
+			entries = mount_options.get(self.scheme)
 			del entries[:]
 
 		else:
 			entries = []
-			mount_options.set('smb', entries)
+			mount_options.set(self.scheme, entries)
 
 		# add items from the store
 		for row in self._store:
@@ -290,7 +291,7 @@ class SambaExtension(GioExtension):
 		keyring_manager = self._parent._application.keyring_manager
 
 		# create dialog and get response from user
-		dialog = SambaCreate(self._window)
+		dialog = SambaInputDialog(self._window)
 		dialog.set_keyring_available(keyring_manager.is_available())
 		response = dialog.get_response()
 
@@ -306,7 +307,7 @@ class SambaExtension(GioExtension):
 			if requires_login:
 				if keyring_manager.is_available():
 					try:
-						# prepare atributes
+						# prepare attributes
 						attributes = {
 								'server': uri,
 								'user': response[1][SambaResult.USERNAME]
@@ -345,7 +346,7 @@ class SambaExtension(GioExtension):
 		item_list, selected_iter = selection.get_selected()
 
 		if selected_iter is not None:
-			dialog = SambaCreate(self._window)
+			dialog = SambaInputDialog(self._window)
 			old_name = item_list.get_value(selected_iter, SambaColumn.NAME)
 
 			# set dialog parameters
@@ -375,7 +376,7 @@ class SambaExtension(GioExtension):
 				if new_name != old_name:
 					keyring_manager.rename_entry(old_name, new_name)
 
-				# form uri
+				# form URI
 				uri = self.__form_uri(
 							response[1][SambaResult.SERVER],
 							response[1][SambaResult.SHARE],
@@ -445,7 +446,7 @@ class SambaExtension(GioExtension):
 				password = keyring_manager.get_password(entry_name)
 
 			# mount specified URI
-			self.__mount(uri, domain, username, password)
+			self._mount(uri, domain, username, password)
 
 	def _unmount_selected(self, widget, data=None):
 		"""Unmount selected item"""
@@ -461,7 +462,7 @@ class SambaExtension(GioExtension):
 			uri = self.__form_uri(server, share, directory)
 
 			# mount specified URI
-			self.__unmount(uri)
+			self._unmount(uri)
 
 	def unmount(self, uri):
 		"""Handle unmounting specified URI"""
@@ -470,18 +471,19 @@ class SambaExtension(GioExtension):
 	def can_handle(self, uri):
 		"""Returns boolean denoting if specified URI can be handled by this extension"""
 		protocol, path = uri.split('://', 1)
-		return protocol == 'smb'
+		return protocol == self.scheme
 
 	def get_information(self):
 		"""Get extension information"""
 		return 'samba', 'Samba'
 
 
-class FTPExtension(GioExtension):
+class FtpExtension(GioExtension):
 	"""Mount manager extension that provides editing and mounting
 	of FTP (and SFTP) shares through GIO backend.
 
 	"""
+	scheme = 'ftp'
 
 	def __init__(self, parent, window):
 		GioExtension.__init__(self, parent, window)
@@ -497,8 +499,8 @@ class FTPExtension(GioExtension):
 		cell_name = gtk.CellRendererText()
 		cell_uri = gtk.CellRendererText()
 
-		col_name = gtk.TreeViewColumn(_('Name'), cell_name, text=SambaColumn.NAME)
-		col_uri = gtk.TreeViewColumn(_('URI'), cell_uri, text=SambaColumn.URI)
+		col_name = gtk.TreeViewColumn(_('Name'), cell_name, text=FtpColumn.NAME)
+		col_uri = gtk.TreeViewColumn(_('URI'), cell_uri, text=FtpColumn.URI)
 
 		col_name.set_expand(True)
 
@@ -561,39 +563,247 @@ class FTPExtension(GioExtension):
 
 	def __populate_list(self):
 		"""Populate list with stored mounts"""
-		pass
+		entries = self._application.mount_options.get(self.scheme)
+
+		# no entries found, nothing to do here
+		if entries is None:
+			return
+
+		# clear store
+		self._store.clear()
+
+		# add entries to the list store
+		for entry in entries:
+			self._store.append((
+					entry['name'],
+					entry['server'],
+					entry['directory'],
+					entry['username'],
+					entry['requires_login'],
+					self.__form_uri(entry['server'], entry['username'], entry['directory'])
+				))
 
 	def __form_uri(self, server, username, directory):
 		"""Form URI string from specified parameters"""
-		pass
+		# include username
+		if username is not None and username != '':
+			server = '{0}@{1}'.format(username, server)
+
+		# include directory
+		if directory is not None and directory != '':
+			result = '{0}://{1}/{2}'.format(self.scheme, server, directory)
+
+		else:
+			result = '{0}://{1}/'.format(self.scheme, server)
+
+		return result
 
 	def __store_mount(self, params, uri):
 		"""Store mount to the list"""
-		pass
+		store_params = (
+				params[FtpResult.NAME],
+				params[FtpResult.SERVER],
+				params[FtpResult.DIRECTORY],
+				params[FtpResult.USERNAME],
+				params[FtpResult.PASSWORD] != '',
+				uri
+			)
+		self._store.append(store_params)
 
 	def __save_list(self):
-		"""Save list to config file"""
-		pass
+		"""Save mounts from store to config file"""
+		mount_options = self._application.mount_options
+
+		# store configuration to options file
+		if mount_options.has(self.scheme):
+			entries = mount_options.get(self.scheme)
+			del entries[:]
+
+		else:
+			entries = []
+			mount_options.set(self.scheme, entries)
+
+		# add items from the store
+		for row in self._store:
+			entries.append({
+					'name': row[FtpColumn.NAME],
+					'server': row[FtpColumn.SERVER],
+					'directory': row[FtpColumn.DIRECTORY],
+					'username': row[FtpColumn.USERNAME],
+					'requires_login': row[FtpColumn.REQUIRES_LOGIN] 
+				})
 
 	def _add_mount(self, widget, data=None):
-		"""Show dialog for adding new FTP mount"""
-		pass
+		"""Present dialog to user for creating a new mount"""
+		keyring_manager = self._parent._application.keyring_manager
+
+		# create dialog and get response from user
+		dialog = FtpInputDialog(self._window)
+		dialog.set_keyring_available(keyring_manager.is_available())
+		response = dialog.get_response()
+
+		if response[0] == gtk.RESPONSE_OK:
+			name = response[1][FtpResult.NAME]
+			uri = self.__form_uri(
+						response[1][FtpResult.SERVER],
+						response[1][FtpResult.USERNAME],
+						response[1][FtpResult.DIRECTORY]
+					)
+			requires_login = response[1][FtpResult.PASSWORD] != ''
+
+			if requires_login:
+				if keyring_manager.is_available():
+					try:
+						# prepare attributes
+						attributes = {
+								'server': uri,
+								'user': response[1][FtpResult.USERNAME]
+							}
+						# first, try to store password with keyring
+						keyring_manager.store_password(
+									name, 
+									response[1][FtpResult.PASSWORD],
+									attributes,
+									entry_type=EntryType.NETWORK
+								)
+
+					except KeyringCreateError:
+						# show error message
+						print "Keyring create error, we need it to store this option"
+
+					else:
+						# store entry
+						self.__store_mount(response[1], uri)
+
+				else:
+					# show error message
+					print "Keyring is not available but it's needed!"
+
+			else:
+				# no login required, just store
+				self.__store_mount(response[1], uri)
+
+			# save mounts to config file
+			self.__save_list()
 
 	def _delete_mount(self, widget, data=None):
-		"""Remove selected mount"""
-		pass
+		"""Remove dialog if user confirms"""
+		selection = self._list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+		keyring_manager = self._parent._application.keyring_manager
+
+		if selected_iter is not None:
+			entry_name = item_list.get_value(selected_iter, FtpColumn.NAME)
+			requires_login = item_list.get_value(selected_iter, FtpColumn.REQUIRES_LOGIN)
+
+			# ask user to confirm removal
+			dialog = gtk.MessageDialog(
+									self._parent.window,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_QUESTION,
+									gtk.BUTTONS_YES_NO,
+									_(
+										"You are about to remove '{0}'.\n"
+										"Are you sure about this?"
+									).format(entry_name)
+								)
+			result = dialog.run()
+			dialog.destroy()
+
+			# remove selected mount
+			if result == gtk.RESPONSE_YES:
+				item_list.remove(selected_iter)
+				
+				# save changes
+				self.__save_list()
+
+				# remove password from keyring manager
+				if requires_login:
+					keyring_manager.remove_entry(entry_name)
 
 	def _edit_mount(self, widget, data=None):
-		"""Edit selected mount"""
-		pass
+		"""Present dialog to user for editing existing mount"""
+		keyring_manager = self._parent._application.keyring_manager
+		selection = self._list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		if selected_iter is not None:
+			dialog = FtpInputDialog(self._window)
+			old_name = item_list.get_value(selected_iter, FtpColumn.NAME)
+
+			# set dialog parameters
+			dialog.set_keyring_available(keyring_manager.is_available())
+			dialog.set_name(old_name)
+			dialog.set_server(item_list.get_value(selected_iter, FtpColumn.SERVER))
+			dialog.set_directory(item_list.get_value(selected_iter, FtpColumn.DIRECTORY))
+			dialog.set_username(item_list.get_value(selected_iter, FtpColumn.USERNAME))
+
+			# show editing dialog
+			response = dialog.get_response()
+
+			if response[0] == gtk.RESPONSE_OK:
+				new_name = response[1][FtpResult.NAME]
+
+				# modify list store
+				item_list.set_value(selected_iter, FtpColumn.NAME, new_name)
+				item_list.set_value(selected_iter, FtpColumn.SERVER, response[1][FtpResult.SERVER])
+				item_list.set_value(selected_iter, FtpColumn.DIRECTORY, response[1][FtpResult.DIRECTORY])
+				item_list.set_value(selected_iter, FtpColumn.USERNAME, response[1][FtpResult.USERNAME])
+
+				# rename entry if needed
+				if new_name != old_name:
+					keyring_manager.rename_entry(old_name, new_name)
+
+				# form URI
+				uri = self.__form_uri(
+							response[1][FtpResult.SERVER],
+							response[1][FtpResult.USERNAME],
+							response[1][FtpResult.DIRECTORY]
+						)
+
+				item_list.set_value(selected_iter, FtpColumn.URI, uri)
+
+				# save changes
+				self.__save_list()
 
 	def _mount_selected(self, widget, data=None):
-		"""Mount selected"""
-		pass
+		"""Mount selected item"""
+		selection = self._list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+		keyring_manager = self._parent._application.keyring_manager
+
+		if selected_iter is not None:
+			server = item_list.get_value(selected_iter, FtpColumn.SERVER)
+			directory = item_list.get_value(selected_iter, FtpColumn.DIRECTORY)
+			username = item_list.get_value(selected_iter, FtpColumn.USERNAME)
+			password = None
+
+			# form URI for mounting
+			uri = self.__form_uri(server, username, directory)
+
+			# get password if domain requires login
+			if item_list.get_value(selected_iter, FtpColumn.REQUIRES_LOGIN):
+				entry_name = item_list.get_value(selected_iter, FtpColumn.NAME)
+				password = keyring_manager.get_password(entry_name)
+
+			# mount specified URI
+			self._mount(uri, None, username, password)
 
 	def _unmount_selected(self, widget, data=None):
-		"""Unmount selected"""
-		pass
+		"""Unmount selected item"""
+		selection = self._list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		if selected_iter is not None:
+			server = item_list.get_value(selected_iter, FtpColumn.SERVER)
+			username = item_list.get_value(selected_iter, FtpColumn.USERNAME)
+			directory = item_list.get_value(selected_iter, FtpColumn.DIRECTORY)
+
+			# form URI for mounting
+			uri = self.__form_uri(server, username, directory)
+
+			# mount specified URI
+			self._unmount(uri)
 
 	def get_information(self):
 		"""Get extension information"""

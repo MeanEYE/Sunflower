@@ -410,7 +410,9 @@ class CopyOperation(Operation):
 		self._dir_list_create = []
 
 		# cache settings
-		self._reserve_size = self._application.options.section('operations').get('reserve_size')
+		should_reserve = self._application.options.section('operations').get('reserve_size')
+		supported_by_provider = ProviderSupport.RESERVE_SIZE in self._destination.get_support()
+		self._reserve_size = should_reserve and supported_by_provider
 
 	def _create_dialog(self):
 		"""Create progress dialog"""

@@ -311,6 +311,15 @@ class FtpProvider(GioProvider):
 		return 'network'
 
 
+class SftpProvider(GioProvider):
+	is_local = False
+	protocol = 'sftp'
+
+	def get_protocol_icon(self):
+		"""Return protocol icon name"""
+		return 'network'
+
+
 class NetworkProvider(GioProvider):
 	is_local = False
 	protocol = 'network'
@@ -318,6 +327,7 @@ class NetworkProvider(GioProvider):
 	def get_protocol_icon(self):
 		"""Return protocol icon name"""
 		return 'network-workgroup'
+
 
 class TrashProvider(GioProvider):
 	is_local = True

@@ -8,7 +8,7 @@ import common
 
 from plugin_base.monitor import MonitorSignals, MonitorError
 from local_provider import LocalProvider
-from gio_provider import SambaProvider, FtpProvider, NetworkProvider, TrashProvider
+from gio_provider import SambaProvider, FtpProvider, SftpProvider, NetworkProvider, TrashProvider
 from gio_extension import SambaExtension, FtpExtension
 from column_editor import FileList_ColumnEditor
 from operation import DeleteOperation, CopyOperation, MoveOperation
@@ -30,6 +30,7 @@ def register_plugin(application):
 	application.register_provider(LocalProvider)
 	application.register_provider(SambaProvider)
 	application.register_provider(FtpProvider)
+	application.register_provider(SftpProvider)
 	application.register_provider(NetworkProvider)
 	application.register_provider(TrashProvider)
 

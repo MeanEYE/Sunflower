@@ -14,7 +14,6 @@ class EntryType:
 	NO_TYPE = 0
 	GENERIC = 1
 	NETWORK = 2
-	NOTE = 3
 
 
 class KeyringCreateError(Exception): pass
@@ -35,7 +34,6 @@ class KeyringManager:
 			EntryType.NO_TYPE: keyring.ITEM_NO_TYPE,
 			EntryType.GENERIC: keyring.ITEM_GENERIC_SECRET,
 			EntryType.NETWORK: keyring.ITEM_NETWORK_PASSWORD,
-			EntryType.NOTE: keyring.ITEM_NOTE
 		}
 
 	def __init__(self, application):

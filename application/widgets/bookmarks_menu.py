@@ -1,4 +1,5 @@
 import gtk
+import urllib
 
 from collections import namedtuple
 
@@ -219,6 +220,13 @@ class BookmarksMenu:
 		path = item_list.get_value(selected_iter, Column.URI)
 		item_type = item_list.get_value(selected_iter, Column.TYPE)
 
+		# unquote path before giving it to handler
+		if '://' in path:
+			data = path.split('://', 1)
+			data[1] = urllib.unquote(data[1])
+			path = '://'.join(data)
+
+		# handle bookmark item propery depending on its type
 		if item_type == Type.MOUNT \
 		or item_type == Type.BOOKMARK:
 			if new_tab:

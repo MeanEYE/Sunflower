@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-15 00:07+0200\n"
+"POT-Creation-Date: 2012-10-29 20:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,13 +84,13 @@ msgid ""
 msgstr ""
 
 #: application/gui/preferences/commands.py:15
-#: application/gui/main_window.py:463
+#: application/gui/main_window.py:460
 msgid "Commands"
 msgstr ""
 
 #: application/gui/preferences/commands.py:40
 #: application/gui/preferences/bookmarks.py:50
-#: application/plugins/rename_extensions/audio_metadata.py:25
+#: application/plugins/rename_extensions/audio_metadata.py:24
 msgid "Title"
 msgstr ""
 
@@ -186,7 +186,7 @@ msgid "No plugin selected"
 msgstr ""
 
 #: application/gui/preferences/bookmarks.py:15
-#: application/widgets/bookmarks_menu.py:69
+#: application/widgets/bookmarks_menu.py:70
 #: application/plugins/default_toolbar/bookmarks_button.py:16
 #: application/plugins/default_toolbar/bookmarks_button.py:17
 #: application/plugin_base/item_list.py:73
@@ -229,10 +229,10 @@ msgid ""
 "assign mode."
 msgstr ""
 
-#: application/gui/preferences/accelerators.py:139
-#: application/gui/main_window.py:711
+#: application/gui/preferences/accelerators.py:138
+#: application/gui/main_window.py:708
+#: application/plugins/default_toolbar/home_directory_button.py:16
 #: application/plugins/default_toolbar/home_directory_button.py:17
-#: application/plugins/default_toolbar/home_directory_button.py:18
 msgid "Home directory"
 msgstr ""
 
@@ -241,12 +241,12 @@ msgid "View & Edit"
 msgstr ""
 
 #: application/gui/preferences/view_and_edit.py:13
-#: application/gui/main_window.py:397
+#: application/gui/main_window.py:394
 msgid "View"
 msgstr ""
 
 #: application/gui/preferences/view_and_edit.py:19
-#: application/gui/main_window.py:230 application/gui/main_window.py:621
+#: application/gui/main_window.py:227 application/gui/main_window.py:618
 msgid "Edit"
 msgstr ""
 
@@ -270,8 +270,10 @@ msgstr ""
 #: application/gui/history_list.py:45
 #: application/gui/mounts_manager_window.py:342
 #: application/gui/mounts_manager_window.py:511
-#: application/plugins/file_list/plugin.py:127
-#: application/plugins/file_list/gio_extension.py:42
+#: application/gui/keyring_manager_window.py:52
+#: application/plugins/file_list/plugin.py:128
+#: application/plugins/file_list/gio_extension.py:153
+#: application/plugins/file_list/gio_extension.py:502
 #: application/plugins/sessions/plugin.py:36
 #: application/plugins/rename_extensions/default.py:73
 #: application/tools/find_files.py:84
@@ -498,8 +500,8 @@ msgid "Column"
 msgstr ""
 
 #: application/gui/preferences/item_list.py:166
-#: application/plugins/file_list/plugin.py:129
-#: application/plugins/find_file_extensions/size.py:65
+#: application/plugins/file_list/plugin.py:130
+#: application/plugins/find_file_extensions/size.py:63
 msgid "Size"
 msgstr ""
 
@@ -513,352 +515,356 @@ msgid ""
 "this issue your quick search settings were restored to default."
 msgstr ""
 
-#: application/gui/main_window.py:108 application/gui/main_window.py:1292
+#: application/gui/main_window.py:105 application/gui/main_window.py:1282
 #: application/gui/changelog_dialog.py:51 application/gui/about_window.py:164
 msgid "Sunflower"
 msgstr ""
 
-#: application/gui/main_window.py:159
+#: application/gui/main_window.py:156
 msgid "File"
 msgstr ""
 
-#: application/gui/main_window.py:163
+#: application/gui/main_window.py:160
 msgid "New tab"
 msgstr ""
 
-#: application/gui/main_window.py:175
+#: application/gui/main_window.py:172
 msgid "Create file"
 msgstr ""
 
-#: application/gui/main_window.py:183 application/gui/input_dialog.py:429
+#: application/gui/main_window.py:180 application/gui/input_dialog.py:429
 msgid "Create directory"
 msgstr ""
 
-#: application/gui/main_window.py:194 application/plugin_base/item_list.py:881
+#: application/gui/main_window.py:191 application/plugin_base/item_list.py:881
 msgid "_Open"
 msgstr ""
 
-#: application/gui/main_window.py:201 application/plugin_base/item_list.py:890
+#: application/gui/main_window.py:198 application/plugin_base/item_list.py:890
 msgid "Open in new ta_b"
 msgstr ""
 
-#: application/gui/main_window.py:211
+#: application/gui/main_window.py:208
 #: application/plugin_base/item_list.py:1013
 msgid "_Properties"
 msgstr ""
 
-#: application/gui/main_window.py:221 application/indicator.py:46
+#: application/gui/main_window.py:218 application/indicator.py:46
 msgid "_Quit"
 msgstr ""
 
-#: application/gui/main_window.py:233 application/plugin_base/item_list.py:920
+#: application/gui/main_window.py:230 application/plugin_base/item_list.py:920
 msgid "Cu_t"
 msgstr ""
 
-#: application/gui/main_window.py:240 application/plugin_base/item_list.py:929
+#: application/gui/main_window.py:237 application/plugin_base/item_list.py:929
 msgid "_Copy"
 msgstr ""
 
-#: application/gui/main_window.py:247 application/plugin_base/item_list.py:938
+#: application/gui/main_window.py:244 application/plugin_base/item_list.py:938
 msgid "_Paste"
 msgstr ""
 
-#: application/gui/main_window.py:257 application/plugin_base/item_list.py:969
+#: application/gui/main_window.py:254 application/plugin_base/item_list.py:969
 msgid "_Delete"
 msgstr ""
 
-#: application/gui/main_window.py:267 application/plugin_base/item_list.py:983
+#: application/gui/main_window.py:264 application/plugin_base/item_list.py:983
 msgid "Send to..."
 msgstr ""
 
-#: application/gui/main_window.py:275 application/plugin_base/item_list.py:994
+#: application/gui/main_window.py:272 application/plugin_base/item_list.py:994
 msgid "Ma_ke link"
 msgstr ""
 
-#: application/gui/main_window.py:279
+#: application/gui/main_window.py:276
 #: application/plugin_base/item_list.py:1000
 msgid "_Rename..."
 msgstr ""
 
-#: application/gui/main_window.py:287
+#: application/gui/main_window.py:284
 msgid "_Unmount"
 msgstr ""
 
-#: application/gui/main_window.py:291
+#: application/gui/main_window.py:288
 msgid "Mount list is empty"
 msgstr ""
 
-#: application/gui/main_window.py:300
+#: application/gui/main_window.py:297
 msgid "_Preferences"
 msgstr ""
 
-#: application/gui/main_window.py:309
+#: application/gui/main_window.py:306
 msgid "Mark"
 msgstr ""
 
-#: application/gui/main_window.py:312
+#: application/gui/main_window.py:309
 msgid "_Select all"
 msgstr ""
 
-#: application/gui/main_window.py:319
+#: application/gui/main_window.py:316
 msgid "_Unselect all"
 msgstr ""
 
-#: application/gui/main_window.py:324
+#: application/gui/main_window.py:321
 msgid "Invert select_ion"
 msgstr ""
 
-#: application/gui/main_window.py:330
+#: application/gui/main_window.py:327
 msgid "S_elect with pattern"
 msgstr ""
 
-#: application/gui/main_window.py:335
+#: application/gui/main_window.py:332
 msgid "Unselect with pa_ttern"
 msgstr ""
 
-#: application/gui/main_window.py:341
+#: application/gui/main_window.py:338
 msgid "Select with same e_xtension"
 msgstr ""
 
-#: application/gui/main_window.py:346
+#: application/gui/main_window.py:343
 msgid "Unselect with same exte_nsion"
 msgstr ""
 
-#: application/gui/main_window.py:352
+#: application/gui/main_window.py:349
 msgid "Compare _directories"
 msgstr ""
 
-#: application/gui/main_window.py:359
+#: application/gui/main_window.py:356
 msgid "Tools"
 msgstr ""
 
-#: application/gui/main_window.py:363 application/tools/find_files.py:37
+#: application/gui/main_window.py:360 application/tools/find_files.py:37
 #: application/tools/find_files.py:301
 msgid "Find files"
 msgstr ""
 
-#: application/gui/main_window.py:370
+#: application/gui/main_window.py:367
 msgid "Find duplicate files"
 msgstr ""
 
-#: application/gui/main_window.py:374
+#: application/gui/main_window.py:371
 msgid "Synchronize directories"
 msgstr ""
 
-#: application/gui/main_window.py:379 application/tools/advanced_rename.py:27
+#: application/gui/main_window.py:376 application/tools/advanced_rename.py:27
 msgid "Advanced rename"
 msgstr ""
 
-#: application/gui/main_window.py:385
+#: application/gui/main_window.py:382
 #: application/gui/mounts_manager_window.py:52
 msgid "Mount manager"
 msgstr ""
 
-#: application/gui/main_window.py:390
-#: application/gui/keyring_manager_window.py:24
+#: application/gui/main_window.py:387
+#: application/gui/keyring_manager_window.py:27
 msgid "Keyring manager"
 msgstr ""
 
-#: application/gui/main_window.py:400
+#: application/gui/main_window.py:397
 msgid "Ful_lscreen"
 msgstr ""
 
-#: application/gui/main_window.py:408
+#: application/gui/main_window.py:405
 msgid "Rel_oad item list"
 msgstr ""
 
-#: application/gui/main_window.py:418
+#: application/gui/main_window.py:415
 msgid "Fast m_edia preview"
 msgstr ""
 
-#: application/gui/main_window.py:429
+#: application/gui/main_window.py:426
 msgid "Show _hidden files"
 msgstr ""
 
-#: application/gui/main_window.py:437
+#: application/gui/main_window.py:434
 msgid "Show _toolbar"
 msgstr ""
 
-#: application/gui/main_window.py:445
+#: application/gui/main_window.py:442
 msgid "Show _command bar"
 msgstr ""
 
-#: application/gui/main_window.py:453
+#: application/gui/main_window.py:450
 msgid "Show co_mmand entry"
 msgstr ""
 
-#: application/gui/main_window.py:467
+#: application/gui/main_window.py:464
 msgid "Operations"
 msgstr ""
 
-#: application/gui/main_window.py:471
+#: application/gui/main_window.py:468
 msgid "There are no minimized operations"
 msgstr ""
 
-#: application/gui/main_window.py:477
+#: application/gui/main_window.py:474
 msgid "Help"
 msgstr ""
 
-#: application/gui/main_window.py:480
+#: application/gui/main_window.py:477
 msgid "_Home page"
 msgstr ""
 
-#: application/gui/main_window.py:488
+#: application/gui/main_window.py:485
 msgid "Check for new version"
 msgstr ""
 
-#: application/gui/main_window.py:493
+#: application/gui/main_window.py:490
 msgid "File a _bug report"
 msgstr ""
 
-#: application/gui/main_window.py:502
+#: application/gui/main_window.py:499
 msgid "_About"
 msgstr ""
 
-#: application/gui/main_window.py:545
+#: application/gui/main_window.py:542
 #: application/gui/mounts_manager_window.py:449
 msgid "Mounts"
 msgstr ""
 
-#: application/gui/main_window.py:618
+#: application/gui/main_window.py:615
 msgid "Refresh"
 msgstr ""
 
-#: application/gui/main_window.py:618
+#: application/gui/main_window.py:615
 msgid "Reload active item list"
 msgstr ""
 
-#: application/gui/main_window.py:619 application/tools/advanced_rename.py:91
+#: application/gui/main_window.py:616 application/tools/advanced_rename.py:91
 msgid "Rename"
 msgstr ""
 
-#: application/gui/main_window.py:619
+#: application/gui/main_window.py:616
 msgid "Rename selected file"
 msgstr ""
 
-#: application/gui/main_window.py:620
+#: application/gui/main_window.py:617
 msgid "Preview"
 msgstr ""
 
-#: application/gui/main_window.py:620
+#: application/gui/main_window.py:617
 msgid "Preview selected file"
 msgstr ""
 
-#: application/gui/main_window.py:621
+#: application/gui/main_window.py:618
 msgid "Edit selected file"
 msgstr ""
 
-#: application/gui/main_window.py:622 application/gui/input_dialog.py:566
+#: application/gui/main_window.py:619 application/gui/input_dialog.py:566
 msgid "Copy"
 msgstr ""
 
-#: application/gui/main_window.py:622
+#: application/gui/main_window.py:619
 msgid "Copy selected items from active to opposite list"
 msgstr ""
 
-#: application/gui/main_window.py:623 application/gui/input_dialog.py:664
+#: application/gui/main_window.py:620 application/gui/input_dialog.py:664
 msgid "Move"
 msgstr ""
 
-#: application/gui/main_window.py:623
+#: application/gui/main_window.py:620
 msgid "Move selected items from active to opposite list"
 msgstr ""
 
-#: application/gui/main_window.py:624
+#: application/gui/main_window.py:621
 msgid "Create"
 msgstr ""
 
-#: application/gui/main_window.py:624
+#: application/gui/main_window.py:621
 msgid "Create new directory"
 msgstr ""
 
-#: application/gui/main_window.py:625
+#: application/gui/main_window.py:622
 msgid "Delete"
 msgstr ""
 
-#: application/gui/main_window.py:625 application/plugin_base/item_list.py:251
+#: application/gui/main_window.py:622 application/plugin_base/item_list.py:251
 msgid "Delete selected items"
 msgstr ""
 
-#: application/gui/main_window.py:740 application/gui/input_dialog.py:965
+#: application/gui/main_window.py:737 application/gui/input_dialog.py:965
 msgid "Add bookmark"
 msgstr ""
 
-#: application/gui/main_window.py:745 application/plugin_base/item_list.py:240
+#: application/gui/main_window.py:742 application/plugin_base/item_list.py:240
 msgid "Edit bookmarks"
 msgstr ""
 
-#: application/gui/main_window.py:780
+#: application/gui/main_window.py:777
 msgid "_Edit commands"
 msgstr ""
 
-#: application/gui/main_window.py:1280
+#: application/gui/main_window.py:1270
 msgid "Sunflower file manager"
 msgstr ""
 
-#: application/gui/main_window.py:1295
+#: application/gui/main_window.py:1285
 msgid "print version and exit"
 msgstr ""
 
-#: application/gui/main_window.py:1300
+#: application/gui/main_window.py:1290
 msgid "skip loading saved tabs"
 msgstr ""
 
-#: application/gui/main_window.py:1306
+#: application/gui/main_window.py:1296
 msgid "open new tab on the left notebook"
 msgstr ""
 
-#: application/gui/main_window.py:1313
+#: application/gui/main_window.py:1303
 msgid "open new tab on the right notebook"
 msgstr ""
 
-#: application/gui/main_window.py:1394
+#: application/gui/main_window.py:1384
 msgid "Select items"
 msgstr ""
 
-#: application/gui/main_window.py:1395 application/gui/main_window.py:1436
+#: application/gui/main_window.py:1385 application/gui/main_window.py:1426
 msgid "Selection pattern (eg.: *.jpg):"
 msgstr ""
 
-#: application/gui/main_window.py:1435
+#: application/gui/main_window.py:1425
 msgid "Unselect items"
 msgstr ""
 
-#: application/gui/main_window.py:1477
+#: application/gui/main_window.py:1467
 msgid "First level of compared directories is identical."
 msgstr ""
 
-#: application/gui/main_window.py:1573
+#: application/gui/main_window.py:1563
 msgid ""
 "There was a problem starting external terminal application. Check if command "
 "is valid!"
 msgstr ""
 
-#: application/gui/main_window.py:1831
+#: application/gui/main_window.py:1821
 msgid ""
 "Error saving configuration to files in your home directory. Make sure you "
 "have enough permissions."
 msgstr ""
 
-#: application/gui/main_window.py:2314
+#: application/gui/main_window.py:2304
 msgid ""
 "Active object is not item list. Advanced rename tool needs files and "
 "directories."
 msgstr ""
 
-#: application/gui/main_window.py:2329
+#: application/gui/main_window.py:2319
 msgid ""
 "No rename extensions were found. Please enable basic rename options plugin "
 "and try again."
 msgstr ""
 
-#: application/gui/main_window.py:2354
+#: application/gui/main_window.py:2344
 msgid ""
 "No extensions for finding files were found. Please enable basic find file "
 "options plugin and try again."
 msgstr ""
 
-#: application/gui/main_window.py:2378
+#: application/gui/main_window.py:2368
+msgid "Keyring is empty!"
+msgstr ""
+
+#: application/gui/main_window.py:2381
 msgid ""
 "Keyring is not available. Make sure you have Python Gnome keyring module "
 "installed."
@@ -928,19 +934,19 @@ msgid "Open With"
 msgstr ""
 
 #: application/gui/properties_window.py:120
-#: application/plugins/file_list/plugin.py:660
+#: application/plugins/file_list/plugin.py:661
 msgid ""
 "File or directory with specified name already exists in current directory. "
 "Item could not be renamed."
 msgstr ""
 
 #: application/gui/properties_window.py:155
-#: application/plugins/file_list/plugin.py:645
+#: application/plugins/file_list/plugin.py:646
 msgid "Error renaming specified item. Make sure you have enough permissions."
 msgstr ""
 
 #: application/gui/properties_window.py:203
-#: application/gui/operation_dialog.py:373
+#: application/gui/operation_dialog.py:377
 msgid "byte"
 msgid_plural "bytes"
 msgstr[0] ""
@@ -953,7 +959,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: application/gui/properties_window.py:228
-#: application/gui/operation_dialog.py:365
+#: application/gui/operation_dialog.py:369
 msgid "unknown"
 msgstr ""
 
@@ -964,7 +970,8 @@ msgstr ""
 #: application/gui/properties_window.py:377
 #: application/gui/input_dialog.py:979 application/gui/input_dialog.py:1164
 #: application/plugins/default_toolbar/bookmark_button.py:73
-#: application/plugins/file_list/dialogs.py:43
+#: application/plugins/file_list/dialogs.py:51
+#: application/plugins/file_list/dialogs.py:238
 msgid "Name:"
 msgstr ""
 
@@ -1074,7 +1081,7 @@ msgstr ""
 msgid "Change log was not found!"
 msgstr ""
 
-#: application/gui/changelog_dialog.py:109 application/gui/about_window.py:413
+#: application/gui/changelog_dialog.py:109 application/gui/about_window.py:409
 msgid "Change log"
 msgstr ""
 
@@ -1083,7 +1090,8 @@ msgid "Advanced options"
 msgstr ""
 
 #: application/gui/input_dialog.py:268
-#: application/plugins/file_list/dialogs.py:76
+#: application/plugins/file_list/dialogs.py:84
+#: application/plugins/file_list/dialogs.py:267
 msgid "Password:"
 msgstr ""
 
@@ -1105,7 +1113,7 @@ msgstr ""
 
 #: application/gui/input_dialog.py:332
 #: application/plugins/rename_extensions/default.py:52
-#: application/plugins/rename_extensions/audio_metadata.py:32
+#: application/plugins/rename_extensions/audio_metadata.py:31
 msgid "Template:"
 msgstr ""
 
@@ -1335,57 +1343,57 @@ msgid "Minimize"
 msgstr ""
 
 #: application/gui/operation_dialog.py:213
-#: application/gui/operation_dialog.py:265
+#: application/gui/operation_dialog.py:269
 msgid "Pause"
 msgstr ""
 
-#: application/gui/operation_dialog.py:258
+#: application/gui/operation_dialog.py:262
 msgid "Resume"
 msgstr ""
 
-#: application/gui/operation_dialog.py:270
+#: application/gui/operation_dialog.py:274
 msgid "Are you sure about canceling current operation?"
 msgstr ""
 
-#: application/gui/operation_dialog.py:346
+#: application/gui/operation_dialog.py:350
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/gui/operation_dialog.py:352
+#: application/gui/operation_dialog.py:356
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/gui/operation_dialog.py:359
+#: application/gui/operation_dialog.py:363
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/gui/operation_dialog.py:514
+#: application/gui/operation_dialog.py:518
 msgid "Copy Selection"
 msgstr ""
 
-#: application/gui/operation_dialog.py:535
+#: application/gui/operation_dialog.py:539
 msgid "Move Selection"
 msgstr ""
 
-#: application/gui/operation_dialog.py:560
+#: application/gui/operation_dialog.py:564
 msgid "Delete Selection"
 msgstr ""
 
-#: application/gui/operation_dialog.py:561
+#: application/gui/operation_dialog.py:565
 msgid "Removing items..."
 msgstr ""
 
-#: application/gui/operation_dialog.py:587
+#: application/gui/operation_dialog.py:591
 msgid "Rename Items"
 msgstr ""
 
-#: application/gui/operation_dialog.py:588
+#: application/gui/operation_dialog.py:592
 msgid "Renaming items..."
 msgstr ""
 
@@ -1399,7 +1407,8 @@ msgstr ""
 
 #: application/gui/mounts_manager_window.py:376
 #: application/gui/mounts_manager_window.py:530
-#: application/plugins/file_list/gio_extension.py:75
+#: application/plugins/file_list/gio_extension.py:186
+#: application/plugins/file_list/gio_extension.py:535
 msgid "Unmount"
 msgstr ""
 
@@ -1408,12 +1417,53 @@ msgid "Mounted"
 msgstr ""
 
 #: application/gui/mounts_manager_window.py:526
-#: application/plugins/file_list/gio_extension.py:72
+#: application/plugins/file_list/gio_extension.py:183
+#: application/plugins/file_list/gio_extension.py:532
 msgid "Mount"
 msgstr ""
 
 #: application/gui/mounts_manager_window.py:668
 msgid "Volumes"
+msgstr ""
+
+#: application/gui/keyring_manager_window.py:51
+msgid "ID"
+msgstr ""
+
+#: application/gui/keyring_manager_window.py:54
+msgid "Modified"
+msgstr ""
+
+#: application/gui/keyring_manager_window.py:127
+msgid "Please select an entry to delete!"
+msgstr ""
+
+#: application/gui/keyring_manager_window.py:143
+msgid ""
+"You are about to remove the following entry from your keyring. If you do "
+"this you will have to provide password manually when needed. Are you sure?\n"
+"\n"
+"{0}"
+msgstr ""
+
+#: application/gui/keyring_manager_window.py:170
+msgid "Please select an entry to change!"
+msgstr ""
+
+#: application/gui/keyring_manager_window.py:177
+msgid "Change password"
+msgstr ""
+
+#: application/gui/keyring_manager_window.py:178
+msgid "Enter new password for selected keyring entry."
+msgstr ""
+
+#: application/gui/keyring_manager_window.py:193
+msgid "Password was changed!"
+msgstr ""
+
+#: application/gui/keyring_manager_window.py:208
+msgid "Passwords do not match! Please try again."
 msgstr ""
 
 #: application/gui/about_window.py:132
@@ -1442,7 +1492,7 @@ msgstr ""
 msgid "Translating:"
 msgstr ""
 
-#: application/gui/about_window.py:378
+#: application/gui/about_window.py:374
 msgid "License"
 msgstr ""
 
@@ -1458,19 +1508,19 @@ msgstr ""
 msgid "Specified item can not be unmounted."
 msgstr ""
 
-#: application/keyring.py:83
+#: application/keyring.py:85
 msgid "Unlock keyring"
 msgstr ""
 
-#: application/keyring.py:84
+#: application/keyring.py:86
 msgid "Please enter your keyring password:"
 msgstr ""
 
-#: application/keyring.py:263
+#: application/keyring.py:287
 msgid "New keyring"
 msgstr ""
 
-#: application/keyring.py:265
+#: application/keyring.py:289
 msgid ""
 "We need to create a new keyring to safely store your passwords. Choose the "
 "password you want to use for it."
@@ -1511,71 +1561,71 @@ msgstr ""
 msgid "Show label"
 msgstr ""
 
-#: application/plugins/default_toolbar/plugin.py:28
+#: application/plugins/default_toolbar/plugin.py:26
 msgid "Parent directory button"
 msgstr ""
 
-#: application/plugins/default_toolbar/plugin.py:34
+#: application/plugins/default_toolbar/plugin.py:32
 msgid "Home directory button"
 msgstr ""
 
-#: application/plugins/default_toolbar/plugin.py:40
+#: application/plugins/default_toolbar/plugin.py:38
 msgid "Bookmark button"
 msgstr ""
 
-#: application/plugins/default_toolbar/plugin.py:46
+#: application/plugins/default_toolbar/plugin.py:44
 msgid "Bookmarks menu"
 msgstr ""
 
-#: application/plugins/default_toolbar/plugin.py:52
+#: application/plugins/default_toolbar/plugin.py:50
 msgid "Separator"
 msgstr ""
 
-#: application/plugins/default_toolbar/plugin.py:107
+#: application/plugins/default_toolbar/plugin.py:105
 msgid "This widget has no configuration dialog."
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:28
+#: application/plugins/file_list/plugin.py:27
 msgid "Local file list"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:128
+#: application/plugins/file_list/plugin.py:129
 msgid "Ext"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:130
+#: application/plugins/file_list/plugin.py:131
 msgid "Mode"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:131
-#: application/plugins/rename_extensions/audio_metadata.py:27
+#: application/plugins/file_list/plugin.py:132
+#: application/plugins/rename_extensions/audio_metadata.py:26
 msgid "Date"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:378
+#: application/plugins/file_list/plugin.py:379
 msgid "Invalid selection!"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:460
+#: application/plugins/file_list/plugin.py:461
 msgid ""
 "There was an error creating directory. Make sure you have enough "
 "permissions. "
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:487
+#: application/plugins/file_list/plugin.py:488
 msgid "File already exists: {0}"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:490
+#: application/plugins/file_list/plugin.py:491
 msgid "Directory with same name exists: {0}"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:527
+#: application/plugins/file_list/plugin.py:528
 msgid ""
 "There was an error creating file. Make sure you have enough permissions."
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:547
+#: application/plugins/file_list/plugin.py:548
 msgid ""
 "You are about to remove {0} item.\n"
 "Are you sure about this?"
@@ -1585,19 +1635,19 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/plugins/file_list/plugin.py:790
+#: application/plugins/file_list/plugin.py:791
 msgid "Other application..."
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:1255
+#: application/plugins/file_list/plugin.py:1256
 msgid "Free:"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:1256
+#: application/plugins/file_list/plugin.py:1257
 msgid "Total:"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:1488
+#: application/plugins/file_list/plugin.py:1489
 msgid ""
 "Error changing working directory to:\n"
 "{1}\n"
@@ -1607,15 +1657,11 @@ msgid ""
 "Would you like to retry?"
 msgstr ""
 
-#: application/plugins/file_list/gio_extension.py:43
-msgid "URI"
-msgstr ""
-
-#: application/plugins/file_list/gio_extension.py:196
+#: application/plugins/file_list/gio_extension.py:56
 msgid "Mount operation"
 msgstr ""
 
-#: application/plugins/file_list/gio_extension.py:242
+#: application/plugins/file_list/gio_extension.py:102
 msgid ""
 "Unable to mount:\n"
 "{0}\n"
@@ -1623,37 +1669,50 @@ msgid ""
 "{1}"
 msgstr ""
 
-#: application/plugins/file_list/gio_extension.py:391
+#: application/plugins/file_list/gio_extension.py:154
+#: application/plugins/file_list/gio_extension.py:503
+msgid "URI"
+msgstr ""
+
+#: application/plugins/file_list/gio_extension.py:408
+#: application/plugins/file_list/gio_extension.py:706
 msgid ""
 "You are about to remove '{0}'.\n"
 "Are you sure about this?"
 msgstr ""
 
-#: application/plugins/file_list/dialogs.py:21
+#: application/plugins/file_list/dialogs.py:29
 msgid "Create Samba mount"
 msgstr ""
 
-#: application/plugins/file_list/dialogs.py:52
+#: application/plugins/file_list/dialogs.py:60
+#: application/plugins/file_list/dialogs.py:247
 msgid "Server:"
 msgstr ""
 
-#: application/plugins/file_list/dialogs.py:60
+#: application/plugins/file_list/dialogs.py:68
 msgid "Share:"
 msgstr ""
 
-#: application/plugins/file_list/dialogs.py:62
+#: application/plugins/file_list/dialogs.py:70
+#: application/plugins/file_list/dialogs.py:254
 msgid "Directory:"
 msgstr ""
 
-#: application/plugins/file_list/dialogs.py:74
+#: application/plugins/file_list/dialogs.py:82
 msgid "Domain:"
 msgstr ""
 
-#: application/plugins/file_list/dialogs.py:75
+#: application/plugins/file_list/dialogs.py:83
+#: application/plugins/file_list/dialogs.py:266
 msgid "Username:"
 msgstr ""
 
-#: application/plugins/file_list/local_provider.py:58
+#: application/plugins/file_list/dialogs.py:216
+msgid "Create FTP mount"
+msgstr ""
+
+#: application/plugins/file_list/local_provider.py:57
 msgid "Error trashing specified path}"
 msgstr ""
 
@@ -1662,7 +1721,7 @@ msgid "Default"
 msgstr ""
 
 #: application/plugins/sessions/plugin.py:17
-#: application/plugins/sessions/plugin.py:317
+#: application/plugins/sessions/plugin.py:316
 msgid "Sessions"
 msgstr ""
 
@@ -1670,46 +1729,46 @@ msgstr ""
 msgid "New session"
 msgstr ""
 
-#: application/plugins/sessions/plugin.py:216
+#: application/plugins/sessions/plugin.py:215
 msgid "Manage sessions"
 msgstr ""
 
-#: application/plugins/sessions/plugin.py:245
+#: application/plugins/sessions/plugin.py:244
 msgid "Session"
 msgstr ""
 
-#: application/plugins/rename_extensions/letter_case.py:16
-#: application/plugins/rename_extensions/letter_case.py:24
+#: application/plugins/rename_extensions/letter_case.py:15
+#: application/plugins/rename_extensions/letter_case.py:23
 msgid "Do nothing"
 msgstr ""
 
-#: application/plugins/rename_extensions/letter_case.py:17
+#: application/plugins/rename_extensions/letter_case.py:16
 msgid "Capitalize"
+msgstr ""
+
+#: application/plugins/rename_extensions/letter_case.py:17
+#: application/plugins/rename_extensions/letter_case.py:24
+msgid "Upper case"
 msgstr ""
 
 #: application/plugins/rename_extensions/letter_case.py:18
 #: application/plugins/rename_extensions/letter_case.py:25
-msgid "Upper case"
-msgstr ""
-
-#: application/plugins/rename_extensions/letter_case.py:19
-#: application/plugins/rename_extensions/letter_case.py:26
 msgid "Lower case"
 msgstr ""
 
-#: application/plugins/rename_extensions/letter_case.py:20
+#: application/plugins/rename_extensions/letter_case.py:19
 msgid "Swap case"
 msgstr ""
 
-#: application/plugins/rename_extensions/letter_case.py:30
+#: application/plugins/rename_extensions/letter_case.py:29
 msgid "Item name:"
 msgstr ""
 
-#: application/plugins/rename_extensions/letter_case.py:33
+#: application/plugins/rename_extensions/letter_case.py:32
 msgid "Extension:"
 msgstr ""
 
-#: application/plugins/rename_extensions/letter_case.py:88
+#: application/plugins/rename_extensions/letter_case.py:87
 msgid "Letter Case"
 msgstr ""
 
@@ -1757,61 +1816,61 @@ msgstr ""
 msgid "Item list is empty. Unable to get item for range selection!"
 msgstr ""
 
-#: application/plugins/rename_extensions/audio_metadata.py:23
+#: application/plugins/rename_extensions/audio_metadata.py:22
 msgid "Album"
 msgstr ""
 
-#: application/plugins/rename_extensions/audio_metadata.py:24
+#: application/plugins/rename_extensions/audio_metadata.py:23
 msgid "Artist"
 msgstr ""
 
-#: application/plugins/rename_extensions/audio_metadata.py:26
+#: application/plugins/rename_extensions/audio_metadata.py:25
 msgid "Genre"
 msgstr ""
 
-#: application/plugins/rename_extensions/audio_metadata.py:28
+#: application/plugins/rename_extensions/audio_metadata.py:27
 msgid "Track number"
 msgstr ""
 
-#: application/plugins/rename_extensions/audio_metadata.py:40
+#: application/plugins/rename_extensions/audio_metadata.py:39
 msgid "Replace:"
 msgstr ""
 
-#: application/plugins/rename_extensions/audio_metadata.py:48
+#: application/plugins/rename_extensions/audio_metadata.py:47
 msgid "With:"
 msgstr ""
 
-#: application/plugins/rename_extensions/audio_metadata.py:61
+#: application/plugins/rename_extensions/audio_metadata.py:60
 msgid "Template syntax"
 msgstr ""
 
-#: application/plugins/rename_extensions/audio_metadata.py:72
+#: application/plugins/rename_extensions/audio_metadata.py:71
 msgid "Character replacement"
 msgstr ""
 
-#: application/plugins/rename_extensions/audio_metadata.py:79
+#: application/plugins/rename_extensions/audio_metadata.py:78
 msgid ""
 "In order to use this extension you need <b>mutagen</b> module installed!"
 msgstr ""
 
-#: application/plugins/rename_extensions/audio_metadata.py:111
+#: application/plugins/rename_extensions/audio_metadata.py:110
 msgid "Audio Metadata"
 msgstr ""
 
-#: application/plugins/find_file_extensions/size.py:23
+#: application/plugins/find_file_extensions/size.py:21
 msgid "Match file size"
 msgstr ""
 
-#: application/plugins/find_file_extensions/size.py:27
+#: application/plugins/find_file_extensions/size.py:25
 msgid "Minimum:"
 msgstr ""
 
-#: application/plugins/find_file_extensions/size.py:29
-#: application/plugins/find_file_extensions/size.py:33
+#: application/plugins/find_file_extensions/size.py:27
+#: application/plugins/find_file_extensions/size.py:31
 msgid "MB"
 msgstr ""
 
-#: application/plugins/find_file_extensions/size.py:31
+#: application/plugins/find_file_extensions/size.py:29
 msgid "Maximum:"
 msgstr ""
 
@@ -1825,7 +1884,7 @@ msgid ""
 msgstr ""
 
 #: application/plugins/find_file_extensions/default.py:41
-#: application/plugins/find_file_extensions/contents.py:23
+#: application/plugins/find_file_extensions/contents.py:21
 msgid "Search for:"
 msgstr ""
 
@@ -1833,7 +1892,7 @@ msgstr ""
 msgid "Case sensitive"
 msgstr ""
 
-#: application/plugins/find_file_extensions/contents.py:39
+#: application/plugins/find_file_extensions/contents.py:37
 msgid "Content"
 msgstr ""
 
@@ -2155,65 +2214,65 @@ msgid ""
 "do?"
 msgstr ""
 
-#: application/operation.py:427
+#: application/operation.py:429
 msgid "Searching for files..."
 msgstr ""
 
-#: application/operation.py:733
+#: application/operation.py:735
 msgid "Creating directories..."
 msgstr ""
 
-#: application/operation.py:750
+#: application/operation.py:752
 msgid "Copying files..."
 msgstr ""
 
-#: application/operation.py:784 application/operation.py:801
+#: application/operation.py:786 application/operation.py:803
 msgid "Copy Operation"
 msgstr ""
 
-#: application/operation.py:786
+#: application/operation.py:788
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/operation.py:885
+#: application/operation.py:887
 msgid "Moving files..."
 msgstr ""
 
-#: application/operation.py:900
+#: application/operation.py:902
 msgid "Deleting source files..."
 msgstr ""
 
-#: application/operation.py:922
+#: application/operation.py:924
 msgid "Deleting source directories..."
 msgstr ""
 
-#: application/operation.py:996 application/operation.py:1013
+#: application/operation.py:998 application/operation.py:1015
 msgid "Move Operation"
 msgstr ""
 
-#: application/operation.py:998
+#: application/operation.py:1000
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/operation.py:1113
+#: application/operation.py:1115
 msgid "Delete Operation"
 msgstr ""
 
-#: application/operation.py:1115
+#: application/operation.py:1117
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/operation.py:1187
+#: application/operation.py:1189
 msgid "Rename Operation"
 msgstr ""
 
-#: application/operation.py:1189
+#: application/operation.py:1191
 msgid "Rename of {0} item from \"{1}\" is completed!"
 msgid_plural "Rename of {0} items from \"{1}\" is completed!"
 msgstr[0] ""

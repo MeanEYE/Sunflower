@@ -1,3 +1,14 @@
+Version 0.1a-47
+  + First functional version of keyring manager window.
+  + Added FTP mount manager extension.
+  + Reserve file size only in cases when option is checked and providers supports it.
+  + Added SFTP provider based on GIO.
+  * Fixed invalid exceptions in keyring manager.
+  * Changed operations code to catch right exceptions.
+  * Lots of code refactoring and removed unused imports.
+  * Properly save option used to reserve file size on copy/move.
+  * Unquote URL encoded paths before changing path when navigating from bookmarks.
+
 Version 0.1a-46
   + Added keyring window manager window. (not functional yet)
   * Updated Ukrainian translation.

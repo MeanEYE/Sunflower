@@ -116,6 +116,12 @@ class AboutWindow(gtk.Window):
 			website = None,
 			language = 'Ukrainian',
 		),
+		Translator(
+			name = 'Táncos Tamás',
+			email = 'h868315@gmail.com',
+			website = None,
+			language = 'Hungarian' 
+		)
 	]
 
 	# contributor table's current row

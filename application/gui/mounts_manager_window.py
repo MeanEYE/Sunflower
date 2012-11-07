@@ -257,9 +257,9 @@ class MountsManagerWindow(gtk.Window):
 		self.hide()
 		return True
 
-	def _add_volume(self, volume):
+	def _add_volume(self, volume, startup=False):
 		"""Add volume entry"""
-		self._volumes.add_volume(volume)
+		self._volumes.add_volume(volume, startup)
 
 	def _remove_volume(self, volume):
 		"""Remove volume entry"""
@@ -671,7 +671,7 @@ class VolumesExtension(MountManagerExtension):
 		"""Focus main list on managers request"""
 		self._list.grab_focus()
 
-	def add_volume(self, volume):
+	def add_volume(self, volume, startup=False):
 		"""Add volume to the list"""
 		icon_names = volume.get_icon().to_string()
 		icon = self._application.icon_manager.get_mount_icon_name(icon_names)
@@ -689,7 +689,22 @@ class VolumesExtension(MountManagerExtension):
 		# add new entry to store
 		self._store.append((icon, name, uuid, mount_uri, mounted, volume))
 
-		if mount is None and volume.should_automount() and volume.can_mount():
+		# get automount options
+		options = self._parent._application.options
+		section = options.section('operations')
+
+		if startup:
+			option = section.get('automount_start')
+			should_mount = option and volume.can_mount()
+
+		else:
+			option = section.get('automount_insert')
+			should_mount = option and volume.can_mount()
+
+		# auto mount if needed
+		if mount is None \
+		and should_mount:
+			print "Mounting...", mount
 			# show busy spinner if possible
 			self._show_spinner()
 		

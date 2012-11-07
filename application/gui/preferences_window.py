@@ -1,6 +1,7 @@
 import gtk
 
 from gui.preferences.display import DisplayOptions
+from gui.preferences.operation import OperationOptions
 from gui.preferences.item_list import ItemListOptions
 from gui.preferences.terminal import TerminalOptions
 from gui.preferences.view_and_edit import ViewEditOptions
@@ -66,6 +67,7 @@ class PreferencesWindow(gtk.Window):
 		self._tabs.connect('switch-page', self._handle_page_switch)
 
 		DisplayOptions(self, parent)
+		OperationOptions(self, parent)
 		ItemListOptions(self, parent)
 		TerminalOptions(self, parent)
 		ViewEditOptions(self, parent)

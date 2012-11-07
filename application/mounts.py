@@ -25,7 +25,7 @@ class MountsManager:
 		"""Populate mount/volume list"""
 		# get list of volumes
 		for volume in self._volume_monitor.get_volumes():
-			self.window._add_volume(volume)
+			self.window._add_volume(volume, startup=True)
 
 		# get list of mounted volumes
 		for mount in self._volume_monitor.get_mounts():

@@ -1890,7 +1890,9 @@ class MainWindow(gtk.Window):
 					'overwrite_in_silent': True,
 					'hide_on_minimize': False,
 					'trash_files': True,
-					'reserve_size': False
+					'reserve_size': False,
+					'automount_start': False,
+					'automount_insert': False
 				})
 
 		# create default editor options

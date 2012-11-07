@@ -42,8 +42,6 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_show_hidden = gtk.CheckButton(_('Show hidden files'))
 		self._checkbox_case_sensitive = gtk.CheckButton(_('Case sensitive item sorting'))
 		self._checkbox_right_click = gtk.CheckButton(_('Right click selects items'))
-		self._checkbox_trash_files = gtk.CheckButton(_('Delete items to trash can'))
-		self._checkbox_reserve_size = gtk.CheckButton(_('Reserve free space on copy/move'))
 		self._checkbox_show_headers = gtk.CheckButton(_('Show list headers'))
 		self._checkbox_media_preview = gtk.CheckButton(_('Fast media preview'))
 
@@ -51,8 +49,6 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
 		self._checkbox_case_sensitive.connect('toggled', self._parent.enable_save)
 		self._checkbox_right_click.connect('toggled', self._parent.enable_save)
-		self._checkbox_trash_files.connect('toggled', self._parent.enable_save)
-		self._checkbox_reserve_size.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_headers.connect('toggled', self._parent.enable_save)
 		self._checkbox_media_preview.connect('toggled', self._parent.enable_save)
 
@@ -222,8 +218,6 @@ class ItemListOptions(SettingsPage):
 
 		vbox_operation.pack_start(self._checkbox_case_sensitive, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_right_click, False, False, 0)
-		vbox_operation.pack_start(self._checkbox_trash_files, False, False, 0)
-		vbox_operation.pack_start(self._checkbox_reserve_size, False, False, 0)
 		vbox_operation.pack_start(hbox_quick_search, False, False, 5)
 		vbox_operation.pack_start(vbox_time_format, False, False, 5)
 
@@ -353,8 +347,6 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_show_hidden.set_active(section.get('show_hidden'))
 		self._checkbox_case_sensitive.set_active(section.get('case_sensitive_sort'))
 		self._checkbox_right_click.set_active(section.get('right_click_select'))
-		self._checkbox_trash_files.set_active(options.section('operations').get('trash_files'))
-		self._checkbox_reserve_size.set_active(options.section('operations').get('reserve_size'))
 		self._checkbox_show_headers.set_active(section.get('headers_visible'))
 		self._checkbox_media_preview.set_active(options.get('media_preview'))
 		self._combobox_mode_format.set_active(section.get('mode_format'))
@@ -383,8 +375,6 @@ class ItemListOptions(SettingsPage):
 		section.set('show_hidden', self._checkbox_show_hidden.get_active())
 		section.set('case_sensitive_sort', self._checkbox_case_sensitive.get_active())
 		section.set('right_click_select', self._checkbox_right_click.get_active())
-		options.section('operations').set('trash_files', self._checkbox_trash_files.get_active())
-		options.section('operations').set('reserve_size', self._checkbox_reserve_size.get_active())
 		section.set('headers_visible', self._checkbox_show_headers.get_active())
 		options.set('media_preview', self._checkbox_media_preview.get_active())
 		section.set('mode_format', self._combobox_mode_format.get_active())

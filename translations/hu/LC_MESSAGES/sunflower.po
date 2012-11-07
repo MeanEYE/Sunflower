@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-27 19:54+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Tamás Táncos <h868315@gmail.com>\n"
+"Last-Translator: Táncos Tamás <h868315@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -58,7 +58,7 @@ msgstr "Félkövér betűk engedélyezése"
 
 #: application/gui/preferences/terminal.py:62
 msgid "Automatically hide mouse when typing"
-msgstr "Egér elrejtése amikor gépel"
+msgstr "Egér elrejtése gépelés közben"
 
 #: application/gui/preferences/terminal.py:70
 msgid "External terminal"
@@ -74,8 +74,9 @@ msgid ""
 "<small><i>Note: {0} will be replaced with socket/window id.\n"
 "Xterm has problems with embeding so it might not work.</i></small>"
 msgstr ""
-"<small><i>Note: {0} will be replaced with socket/window id.\n"
-"Xterm has problems with embeding so it might not work.</i></small>"
+"<small><i>Megjegyzés: {0} le lesz cserélve socket/window id-vel.\n"
+"Az xtermnek problémái vannak a beágyazással, ezért nem biztos, hogy működik."
+"</i></small>"
 
 #: application/gui/preferences/commands.py:10
 #: application/gui/main_window.py:440
@@ -113,15 +114,15 @@ msgstr "Társítások"
 #: application/gui/preferences/associations.py:45
 #: application/gui/preferences/associations.py:81
 msgid "Add mime type"
-msgstr "Fájl kiterjesztés típusa"
+msgstr "Mime típus hozzáadása"
 
 #: application/gui/preferences/associations.py:48
 msgid "Add application to mime type"
-msgstr "Alkalmazás hozzáadása a fájlkiterjesztéshez"
+msgstr "Alkalmazás hozzáadása a mime típushoz"
 
 #: application/gui/preferences/associations.py:82
 msgid "Enter MIME type (eg. image/png):"
-msgstr "Kiterjesztés tipusa (eg. image/png):"
+msgstr "MIME tipus (pl.: image/png):"
 
 #: application/gui/preferences/associations.py:133
 msgid ""
@@ -130,11 +131,11 @@ msgid ""
 "parent."
 msgstr ""
 "Ki kell választanod az alkalmazás mime típusát. Kiválaszthatsz egy másik "
-"alkalmazást is, amely esetben az egyik a szülőjéhez lesz hozzáadva. "
+"alkalmazást is, amely esetben az új az egyik a szülőjéhez lesz hozzáadva. "
 
 #: application/gui/preferences/plugins.py:34
 msgid "Plugins"
-msgstr "Kiegészítők"
+msgstr "Bővítmények"
 
 #: application/gui/preferences/plugins.py:66
 #: application/gui/preferences/display.py:86
@@ -172,8 +173,8 @@ msgid ""
 "{0} is required for normal program operation and therefore can not be "
 "deactivated!"
 msgstr ""
-"Meghatározott plugin (\"{0} \"), szükséges a program normális működéséhez, "
-"ezért nem lehet leállítani!"
+"A (\"{0} \") bővítmény szükséges a program helyes működéséhez, ezért nem "
+"deaktiválható!"
 
 #: application/gui/preferences/plugins.py:214
 msgid "This plugin has no description"
@@ -192,15 +193,15 @@ msgstr "Könyvjelzők"
 
 #: application/gui/preferences/bookmarks.py:13
 msgid "Show mount points in bookmarks menu"
-msgstr "Mutasd a csatolási pontot a könyvjelzők menüben"
+msgstr "A csatolási pontok megjelenítése a könyvjelzők menüben"
 
 #: application/gui/preferences/bookmarks.py:17
 msgid "Show system bookmarks"
-msgstr "Rendszer  könyvjelzők megjelenítése"
+msgstr "Rendszer könyvjelzők megjelenítése"
 
 #: application/gui/preferences/bookmarks.py:21
 msgid "Add home directory to bookmarks menu"
-msgstr "Add a Home mappát a könyvjelzök menühöz"
+msgstr "A Home könyvtár megjelenítése a könyvjelzők menüben"
 
 #: application/gui/preferences/bookmarks.py:49
 #: application/tools/find_files.py:86
@@ -246,15 +247,15 @@ msgstr "Szerkesztés"
 
 #: application/gui/preferences/view_and_edit.py:25
 msgid "Use external editor"
-msgstr "Belső szerkesztő"
+msgstr "Külső szövegszerkesztő"
 
 #: application/gui/preferences/view_and_edit.py:38
 msgid "Wait for editor process to end"
-msgstr "Várja meg, amíg szerkesztő folyamat véget ér"
+msgstr "Várd meg, amíg a szövegszerkesztési folyamat véget ér"
 
 #: application/gui/preferences/view_and_edit.py:44
 msgid "Use internal editor"
-msgstr "Külső szerkesztő"
+msgstr "Belső szövegszerkesztő"
 
 #: application/gui/preferences/toolbar.py:10
 msgid "Toolbar"
@@ -275,7 +276,7 @@ msgstr "Tipus"
 
 #: application/gui/preferences/toolbar.py:166
 msgid "missing plugin"
-msgstr "Elveszett kiegészítő"
+msgstr "Hiányzó bővítmény"
 
 #: application/gui/preferences/display.py:22
 msgid "Display"
@@ -283,11 +284,11 @@ msgstr "Képernyő"
 
 #: application/gui/preferences/display.py:27
 msgid "Main window"
-msgstr "Saját ablak"
+msgstr "Fő ablak"
 
 #: application/gui/preferences/display.py:31
 msgid "Hide main window on close"
-msgstr "Saját ablak elrejtése bezáráskor"
+msgstr "Fő ablak elrejtése bezáráskor"
 
 #: application/gui/preferences/display.py:32
 msgid "Show toolbar"
@@ -307,7 +308,7 @@ msgstr "Lapok"
 
 #: application/gui/preferences/display.py:46
 msgid "Focus new tab after opening"
-msgstr "Új lap megnyitáskor legfelül"
+msgstr "Megnyitás után az új lapra kerüljön a fókusz"
 
 #: application/gui/preferences/display.py:47
 msgid "Show normal button relief"
@@ -315,7 +316,7 @@ msgstr "Lapos ikonok"
 
 #: application/gui/preferences/display.py:48
 msgid "Show icons instead of text in tab buttons"
-msgstr "Ikon szöveg helyett"
+msgstr "Lapoknál az ikon megjelenítése a szöveg helyett"
 
 #: application/gui/preferences/display.py:49
 msgid "Show close button"
@@ -323,15 +324,15 @@ msgstr "Bezárás gomb megjelenítése"
 
 #: application/gui/preferences/display.py:50
 msgid "Show tab(s) even if there is only one"
-msgstr "Fül(ek) Megjelenítése akkor is, ha csak egy van"
+msgstr "Lap(ok) megjelenítése akkor is, ha csak egy van"
 
 #: application/gui/preferences/display.py:51
 msgid "Use Ubuntu coloring method for tab title bars"
-msgstr "Használja Ubuntu színeit a lapok címsávjában"
+msgstr "Használja az Ubuntu színezését a lapok címsávjában"
 
 #: application/gui/preferences/display.py:65
 msgid "Show status bar:"
-msgstr "Kiegészítő sáv megjelenítése"
+msgstr "Státusz sáv megjelenítése"
 
 #: application/gui/preferences/display.py:69
 msgid "Always"
@@ -339,7 +340,7 @@ msgstr "Mindig"
 
 #: application/gui/preferences/display.py:70
 msgid "When needed"
-msgstr "Ha nincs"
+msgstr "Amikor szükséges"
 
 #: application/gui/preferences/display.py:71
 msgid "Never"
@@ -368,7 +369,7 @@ msgstr "Műveleti ablak elrejtése kicsinyítéskor"
 
 #: application/gui/preferences/display.py:102
 msgid "Show sizes in human readable format"
-msgstr "Mutasd  a méreteket ember által olvasható formátumban"
+msgstr "A méretek kiírása ember által olvasható formátumban"
 
 #: application/gui/preferences/display.py:103
 msgid "Show notifications"
@@ -397,7 +398,7 @@ msgstr "Rejtett fájlok megjelenítése"
 
 #: application/gui/preferences/item_list.py:28
 msgid "Case sensitive item sorting"
-msgstr "Elemek nagybetűérzékeny elrendezése"
+msgstr "Elemek betűméret érzékeny elrendezése"
 
 #: application/gui/preferences/item_list.py:29
 msgid "Right click selects items"
@@ -405,7 +406,7 @@ msgstr "Jobb gombos kiválasztás"
 
 #: application/gui/preferences/item_list.py:30
 msgid "Show list headers"
-msgstr "Lista megjelenítése a fejlécekben"
+msgstr "Fejléc megjelenítése"
 
 #: application/gui/preferences/item_list.py:31
 msgid "Fast media preview"
@@ -429,7 +430,7 @@ msgstr "Minden"
 
 #: application/gui/preferences/item_list.py:61
 msgid "Selection color:"
-msgstr "szín választás:"
+msgstr "Kijelölés színe:"
 
 #: application/gui/preferences/item_list.py:69
 msgid "Quick search combination:"
@@ -449,20 +450,20 @@ msgstr "Shift"
 
 #: application/gui/preferences/item_list.py:83
 msgid "Date format:"
-msgstr "Dátum formázás:"
+msgstr "Dátum formátum:"
 
 #: application/gui/preferences/item_list.py:87
 msgid "Time is formed using the format located at:"
-msgstr "Az idő alakult formanyomtatvány alkalmazásával található:"
+msgstr "Az idő a következő formátumban lesz megjelenítve:"
 
 #: application/gui/preferences/item_list.py:135
 msgid ""
 "Quick search settings are in conflict with VIM navigation style. To resolve "
 "this issue your quick search settings were restored to default."
 msgstr ""
-"Gyors keresés beállítások ellentétesek VIM navigációs stílusban. A probléma "
-"megoldásához a gyors keresési beállításokat is vissza kell állítani az "
-"alapértelmezettre."
+"Gyorskeresés beállítások konfliktusban vannak a VIM navigációs stílusával. A "
+"probléma megoldásához a gyorskeresési beállításokat is vissza kell állítani "
+"az alapértelmezettre."
 
 #: application/gui/main_window.py:93 application/gui/main_window.py:1450
 #: application/gui/changelog_dialog.py:51 application/gui/about_window.py:152
@@ -488,19 +489,19 @@ msgstr "Könyvtár létrehozása"
 
 #: application/gui/main_window.py:176 application/plugin_base/item_list.py:842
 msgid "_Open"
-msgstr "Megnyitás"
+msgstr "_Megnyitás"
 
 #: application/gui/main_window.py:183 application/plugin_base/item_list.py:851
 msgid "Open in new ta_b"
-msgstr "Megnitás új lapon"
+msgstr "Megynitás új lapon"
 
 #: application/gui/main_window.py:193 application/plugin_base/item_list.py:957
 msgid "_Properties"
-msgstr "Tulajdonságok"
+msgstr "_Tulajdonságok"
 
 #: application/gui/main_window.py:203 application/indicator.py:46
 msgid "_Quit"
-msgstr "Kilépés"
+msgstr "_Kilépés"
 
 #: application/gui/main_window.py:215 application/plugin_base/item_list.py:881
 msgid "Cu_t"
@@ -508,15 +509,15 @@ msgstr "Kivágás"
 
 #: application/gui/main_window.py:222 application/plugin_base/item_list.py:890
 msgid "_Copy"
-msgstr "Másolás"
+msgstr "_Másolás"
 
 #: application/gui/main_window.py:229 application/plugin_base/item_list.py:899
 msgid "_Paste"
-msgstr "Beillesztés"
+msgstr "_Beillesztés"
 
 #: application/gui/main_window.py:239 application/plugin_base/item_list.py:913
 msgid "_Delete"
-msgstr "Törlés"
+msgstr "_Törlés"
 
 #: application/gui/main_window.py:249 application/plugin_base/item_list.py:927
 msgid "Send to..."
@@ -528,7 +529,7 @@ msgstr "Link hozzáadása"
 
 #: application/gui/main_window.py:261 application/plugin_base/item_list.py:944
 msgid "_Rename..."
-msgstr "Átnevezés"
+msgstr "_Átnevezés"
 
 #: application/gui/main_window.py:269
 msgid "_Unmount"
@@ -548,15 +549,15 @@ msgstr "Kijelölés"
 
 #: application/gui/main_window.py:294
 msgid "_Select all"
-msgstr "Mindet kijelöli"
+msgstr "_Mindent kijelöl"
 
 #: application/gui/main_window.py:301
 msgid "_Unselect all"
-msgstr "Mindet törli"
+msgstr "_Minden kijelölés eltávolítása"
 
 #: application/gui/main_window.py:306
 msgid "Invert select_ion"
-msgstr "Ellentétes kijelölés"
+msgstr "Kijelölés megfordítása"
 
 #: application/gui/main_window.py:312
 msgid "S_elect with pattern"
@@ -564,15 +565,15 @@ msgstr "Kiválasztás mintával"
 
 #: application/gui/main_window.py:317
 msgid "Unselect with pa_ttern"
-msgstr "Nincs kijelölve a minta"
+msgstr "Kijelölés megszüntetése mintával"
 
 #: application/gui/main_window.py:323
 msgid "Select with same e_xtension"
-msgstr "Azonos kiterjesztés választása"
+msgstr "Azonos kiterjesztésűek kijelölése"
 
 #: application/gui/main_window.py:328
 msgid "Unselect with same exte_nsion"
-msgstr "Kijelölés megegyező kiterjesztéssel"
+msgstr "Kijelölés megszüntetése"
 
 #: application/gui/main_window.py:334
 msgid "Compare _directories"

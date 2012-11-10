@@ -72,6 +72,9 @@ class SambaInputDialog:
 		self._entry_share = gtk.Entry()
 		self._entry_directory = gtk.Entry()
 
+		self._entry_share.connect('activate', self._confirm_entry)
+		self._entry_directory.connect('activate', self._confirm_entry)
+
 		# access information
 		hseparator2 = gtk.HSeparator()
 
@@ -93,6 +96,10 @@ class SambaInputDialog:
 
 		self._entry_password.set_property('caps-lock-warning', True)
 		self._entry_password.set_visibility(False)
+
+		self._entry_domain.connect('activate', self._confirm_entry)
+		self._entry_username.connect('activate', self._confirm_entry)
+		self._entry_password.connect('activate', self._confirm_entry)
 
 		# create controls
 		button_save = gtk.Button(stock=gtk.STOCK_SAVE)
@@ -145,7 +152,27 @@ class SambaInputDialog:
 
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""
-		self._dialog.response(gtk.RESPONSE_OK)
+		if self._entry_name.get_text() == '' \
+		or self._entry_server.get_text() == '' \
+		or self._entry_share.get_text() == '':
+			# missing required fields
+			dialog = gtk.MessageDialog(
+									self._dialog,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_INFO,
+									gtk.BUTTONS_OK,
+									_(
+										'One or more required fields is empty. '
+										'Please make sure you have entered name, '
+										'server and share.'
+									) 
+								)
+			dialog.run()
+			dialog.destroy()
+
+		else:
+			# return response
+			self._dialog.response(gtk.RESPONSE_OK)
 
 	def set_title(self, title_text):
 		"""Set dialog title"""
@@ -256,6 +283,9 @@ class FtpInputDialog:
 		self._entry_share = gtk.Entry()
 		self._entry_directory = gtk.Entry()
 
+		self._entry_share.connect('activate', self._confirm_entry)
+		self._entry_directory.connect('activate', self._confirm_entry)
+
 		# access information
 		hseparator2 = gtk.HSeparator()
 
@@ -274,6 +304,9 @@ class FtpInputDialog:
 
 		self._entry_password.set_property('caps-lock-warning', True)
 		self._entry_password.set_visibility(False)
+
+		self._entry_username.connect('activate', self._confirm_entry)
+		self._entry_password.connect('activate', self._confirm_entry)
 
 		# create controls
 		button_save = gtk.Button(stock=gtk.STOCK_SAVE)
@@ -318,7 +351,25 @@ class FtpInputDialog:
 
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""
-		self._dialog.response(gtk.RESPONSE_OK)
+		if self._entry_name.get_text() == '' \
+		or self._entry_server.get_text() == '':
+			# missing required fields
+			dialog = gtk.MessageDialog(
+									self._dialog,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_INFO,
+									gtk.BUTTONS_OK,
+									_(
+										'One or more required fields is empty. '
+										'Please make sure you have entered name and server.'
+									) 
+								)
+			dialog.run()
+			dialog.destroy()
+
+		else:
+			# return response
+			self._dialog.response(gtk.RESPONSE_OK)
 
 	def set_title(self, title_text):
 		"""Set dialog title"""

@@ -1,3 +1,5 @@
+- Handle exceptions when removing, copying and moving files.
+
 - Handle cases in which PyGTK can't load SVG image in set_window_icon method.
 
 - Change the way editor is selected. Offer user with dropdown list of editors or manual entry.

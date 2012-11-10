@@ -1385,11 +1385,7 @@ class ItemList(PluginBase):
 
 	def custom_path_entry(self, widget=None, data=None):
 		"""Ask user to enter path"""
-		path = data
-
-		# use our own path in case nothing is in clipboard
-		if path is None:
-			path = self.path
+		path = self.path
 
 		# create dialog
 		dialog = InputDialog(self._parent)
@@ -1402,7 +1398,7 @@ class ItemList(PluginBase):
 
 		# try to navigate to specified path
 		if response[0] == gtk.RESPONSE_OK:
-			self.change_path(response[1])
+			self.change_path(os.path.expanduser(response[1]))
 
 		return True
 

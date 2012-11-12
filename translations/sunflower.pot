@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-29 20:49+0100\n"
+"POT-Creation-Date: 2012-11-12 19:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -154,7 +154,7 @@ msgid "Author"
 msgstr ""
 
 #: application/gui/preferences/plugins.py:75
-#: application/gui/changelog_dialog.py:52 application/gui/about_window.py:165
+#: application/gui/changelog_dialog.py:52 application/gui/about_window.py:171
 msgid "Version"
 msgstr ""
 
@@ -288,6 +288,37 @@ msgstr ""
 msgid "missing plugin"
 msgstr ""
 
+#: application/gui/preferences/operation.py:10
+#: application/gui/preferences/item_list.py:28
+msgid "Operation"
+msgstr ""
+
+#: application/gui/preferences/operation.py:13
+msgid "General"
+msgstr ""
+
+#: application/gui/preferences/operation.py:17
+#: application/gui/main_window.py:542
+#: application/gui/mounts_manager_window.py:449
+msgid "Mounts"
+msgstr ""
+
+#: application/gui/preferences/operation.py:22
+msgid "Delete items to trash can"
+msgstr ""
+
+#: application/gui/preferences/operation.py:23
+msgid "Reserve free space on copy/move"
+msgstr ""
+
+#: application/gui/preferences/operation.py:24
+msgid "Automount drives on start up"
+msgstr ""
+
+#: application/gui/preferences/operation.py:25
+msgid "Automount removable drives when inserted"
+msgstr ""
+
 #: application/gui/preferences/display.py:22
 msgid "Display"
 msgstr ""
@@ -365,7 +396,7 @@ msgid "Expanded tabs:"
 msgstr ""
 
 #: application/gui/preferences/display.py:87
-#: application/gui/preferences/item_list.py:81
+#: application/gui/preferences/item_list.py:77
 msgid "None"
 msgstr ""
 
@@ -399,10 +430,6 @@ msgstr ""
 msgid "Look & feel"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:28
-msgid "Operation"
-msgstr ""
-
 #: application/gui/preferences/item_list.py:29
 msgid "Columns"
 msgstr ""
@@ -424,99 +451,91 @@ msgid "Right click selects items"
 msgstr ""
 
 #: application/gui/preferences/item_list.py:45
-msgid "Delete items to trash can"
-msgstr ""
-
-#: application/gui/preferences/item_list.py:46
-msgid "Reserve free space on copy/move"
-msgstr ""
-
-#: application/gui/preferences/item_list.py:47
 msgid "Show list headers"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:48
+#: application/gui/preferences/item_list.py:46
 msgid "Fast media preview"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:61
+#: application/gui/preferences/item_list.py:57
 msgid "Access mode format:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:65
+#: application/gui/preferences/item_list.py:61
 msgid "Octal"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:66
+#: application/gui/preferences/item_list.py:62
 msgid "Textual"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:77
+#: application/gui/preferences/item_list.py:73
 msgid "Show grid lines:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:82
+#: application/gui/preferences/item_list.py:78
 msgid "Horizontal"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:83
+#: application/gui/preferences/item_list.py:79
 msgid "Vertical"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:84
+#: application/gui/preferences/item_list.py:80
 msgid "Both"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:96
+#: application/gui/preferences/item_list.py:92
 msgid "Selection color:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:104
+#: application/gui/preferences/item_list.py:100
 msgid "Quick search combination:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:107
+#: application/gui/preferences/item_list.py:103
 msgid "Control"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:108
+#: application/gui/preferences/item_list.py:104
 msgid "Alt"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:109
+#: application/gui/preferences/item_list.py:105
 msgid "Shift"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:118
+#: application/gui/preferences/item_list.py:114
 msgid "Date format:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:122
+#: application/gui/preferences/item_list.py:118
 msgid "Time is formed using the format located at:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:161
+#: application/gui/preferences/item_list.py:157
 msgid "Column"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:166
+#: application/gui/preferences/item_list.py:162
 #: application/plugins/file_list/plugin.py:130
 #: application/plugins/find_file_extensions/size.py:63
 msgid "Size"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:169
+#: application/gui/preferences/item_list.py:165
 msgid "Visible"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:249
+#: application/gui/preferences/item_list.py:243
 msgid ""
 "Quick search settings are in conflict with VIM navigation style. To resolve "
 "this issue your quick search settings were restored to default."
 msgstr ""
 
 #: application/gui/main_window.py:105 application/gui/main_window.py:1282
-#: application/gui/changelog_dialog.py:51 application/gui/about_window.py:164
+#: application/gui/changelog_dialog.py:51 application/gui/about_window.py:170
 msgid "Sunflower"
 msgstr ""
 
@@ -717,11 +736,6 @@ msgstr ""
 msgid "_About"
 msgstr ""
 
-#: application/gui/main_window.py:542
-#: application/gui/mounts_manager_window.py:449
-msgid "Mounts"
-msgstr ""
-
 #: application/gui/main_window.py:615
 msgid "Refresh"
 msgstr ""
@@ -842,43 +856,43 @@ msgid ""
 "have enough permissions."
 msgstr ""
 
-#: application/gui/main_window.py:2304
+#: application/gui/main_window.py:2306
 msgid ""
 "Active object is not item list. Advanced rename tool needs files and "
 "directories."
 msgstr ""
 
-#: application/gui/main_window.py:2319
+#: application/gui/main_window.py:2321
 msgid ""
 "No rename extensions were found. Please enable basic rename options plugin "
 "and try again."
 msgstr ""
 
-#: application/gui/main_window.py:2344
+#: application/gui/main_window.py:2346
 msgid ""
 "No extensions for finding files were found. Please enable basic find file "
 "options plugin and try again."
 msgstr ""
 
-#: application/gui/main_window.py:2368
+#: application/gui/main_window.py:2370
 msgid "Keyring is empty!"
 msgstr ""
 
-#: application/gui/main_window.py:2381
+#: application/gui/main_window.py:2383
 msgid ""
 "Keyring is not available. Make sure you have Python Gnome keyring module "
 "installed."
 msgstr ""
 
-#: application/gui/preferences_window.py:31
+#: application/gui/preferences_window.py:32
 msgid "Preferences"
 msgstr ""
 
-#: application/gui/preferences_window.py:102
+#: application/gui/preferences_window.py:104
 msgid "Program restart required!"
 msgstr ""
 
-#: application/gui/preferences_window.py:141
+#: application/gui/preferences_window.py:143
 msgid ""
 "There are unsaved changes.\n"
 "Do you want to save them?"
@@ -971,7 +985,7 @@ msgstr ""
 #: application/gui/input_dialog.py:979 application/gui/input_dialog.py:1164
 #: application/plugins/default_toolbar/bookmark_button.py:73
 #: application/plugins/file_list/dialogs.py:51
-#: application/plugins/file_list/dialogs.py:238
+#: application/plugins/file_list/dialogs.py:265
 msgid "Name:"
 msgstr ""
 
@@ -1081,7 +1095,7 @@ msgstr ""
 msgid "Change log was not found!"
 msgstr ""
 
-#: application/gui/changelog_dialog.py:109 application/gui/about_window.py:409
+#: application/gui/changelog_dialog.py:109 application/gui/about_window.py:415
 msgid "Change log"
 msgstr ""
 
@@ -1090,8 +1104,8 @@ msgid "Advanced options"
 msgstr ""
 
 #: application/gui/input_dialog.py:268
-#: application/plugins/file_list/dialogs.py:84
-#: application/plugins/file_list/dialogs.py:267
+#: application/plugins/file_list/dialogs.py:87
+#: application/plugins/file_list/dialogs.py:297
 msgid "Password:"
 msgstr ""
 
@@ -1466,33 +1480,33 @@ msgstr ""
 msgid "Passwords do not match! Please try again."
 msgstr ""
 
-#: application/gui/about_window.py:132
+#: application/gui/about_window.py:138
 msgid "About program"
 msgstr ""
 
-#: application/gui/about_window.py:240
+#: application/gui/about_window.py:246
 msgid "Copyright"
 msgstr ""
 
-#: application/gui/about_window.py:248
+#: application/gui/about_window.py:254
 msgid ""
 "This software is being developed under GNU General Public License.\n"
 "Bug reports, suggestions or questions are more than welcome."
 msgstr ""
 
-#: application/gui/about_window.py:258
+#: application/gui/about_window.py:264
 msgid "Programming:"
 msgstr ""
 
-#: application/gui/about_window.py:263
+#: application/gui/about_window.py:269
 msgid "Artists:"
 msgstr ""
 
-#: application/gui/about_window.py:268
+#: application/gui/about_window.py:274
 msgid "Translating:"
 msgstr ""
 
-#: application/gui/about_window.py:374
+#: application/gui/about_window.py:380
 msgid "License"
 msgstr ""
 
@@ -1647,7 +1661,7 @@ msgstr ""
 msgid "Total:"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:1489
+#: application/plugins/file_list/plugin.py:1490
 msgid ""
 "Error changing working directory to:\n"
 "{1}\n"
@@ -1686,7 +1700,7 @@ msgid "Create Samba mount"
 msgstr ""
 
 #: application/plugins/file_list/dialogs.py:60
-#: application/plugins/file_list/dialogs.py:247
+#: application/plugins/file_list/dialogs.py:274
 msgid "Server:"
 msgstr ""
 
@@ -1695,21 +1709,33 @@ msgid "Share:"
 msgstr ""
 
 #: application/plugins/file_list/dialogs.py:70
-#: application/plugins/file_list/dialogs.py:254
+#: application/plugins/file_list/dialogs.py:281
 msgid "Directory:"
 msgstr ""
 
-#: application/plugins/file_list/dialogs.py:82
+#: application/plugins/file_list/dialogs.py:85
 msgid "Domain:"
 msgstr ""
 
-#: application/plugins/file_list/dialogs.py:83
-#: application/plugins/file_list/dialogs.py:266
+#: application/plugins/file_list/dialogs.py:86
+#: application/plugins/file_list/dialogs.py:296
 msgid "Username:"
 msgstr ""
 
-#: application/plugins/file_list/dialogs.py:216
+#: application/plugins/file_list/dialogs.py:165
+msgid ""
+"One or more required fields is empty. Please make sure you have entered "
+"name, server and share."
+msgstr ""
+
+#: application/plugins/file_list/dialogs.py:243
 msgid "Create FTP mount"
+msgstr ""
+
+#: application/plugins/file_list/dialogs.py:363
+msgid ""
+"One or more required fields is empty. Please make sure you have entered name "
+"and server."
 msgstr ""
 
 #: application/plugins/file_list/local_provider.py:57
@@ -2150,11 +2176,11 @@ msgstr ""
 msgid "History is empty"
 msgstr ""
 
-#: application/plugin_base/item_list.py:1401
+#: application/plugin_base/item_list.py:1392
 msgid "Path entry"
 msgstr ""
 
-#: application/plugin_base/item_list.py:1402
+#: application/plugin_base/item_list.py:1393
 msgid "Navigate to:"
 msgstr ""
 

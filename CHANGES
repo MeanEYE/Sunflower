@@ -1,3 +1,12 @@
+Version 0.1a-48
+  * Updated Hungarian translation.
+  * Fixed racing condition when loading items for a specific directory.
+  * Added program in FileTools group to make it visible by default in KDE.
+  * Set current path as default value when manually entering path.
+  * Options to control auto-mounting volumes on startup or connect.
+  * Expand manually entered path so that ~ is a valid directory.
+  * Fixed behavior of FTP and Samba input dialogs.
+
 Version 0.1a-47
   + First functional version of keyring manager window.
   + Added FTP mount manager extension.

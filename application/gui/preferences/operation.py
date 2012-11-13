@@ -33,7 +33,7 @@ class OperationOptions(SettingsPage):
 		self._checkbox_reserve_size.connect('toggled', self._parent.enable_save)
 		self._checkbox_automount_on_start.connect('toggled', self._parent.enable_save)
 		self._checkbox_automount_on_insert.connect('toggled', self._parent.enable_save)
-		self._checkbox_confirm_delete.connect('toggled', self._parent.enable_save)
+		self._checkbox_confirm_delete.connect('toggled', self._confirm_delete_toggle)
 
 		# pack user interface
 		vbox_general.pack_start(self._checkbox_trash_files, False, False, 0)
@@ -51,6 +51,39 @@ class OperationOptions(SettingsPage):
 		self.pack_start(frame_general, False, False, 0)
 		self.pack_start(frame_mounts, False, False, 0)
 		self.pack_start(frame_confirmations, False, False, 0)
+
+	def _confirm_delete_toggle(self, widget, data=None):
+		"""Make sure user really wants to disable confirmation dialog"""
+		if not widget.get_active() and not self._checkbox_trash_files.get_active():
+			dialog = gtk.MessageDialog(
+									self._parent,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_QUESTION,
+									gtk.BUTTONS_YES_NO,
+									_(
+										'With trashing disabled you will not be able to '
+										'restore accidentally deleted items. Are you sure '
+										'you want to disable confirmation dialog when '
+										'deleting items?'
+									)
+								)
+			result = dialog.run()
+			dialog.destroy()
+
+			if result == gtk.RESPONSE_NO:
+				# user changed his mind, restore original value
+				widget.handler_block_by_func(self._confirm_delete_toggle)
+				widget.set_active(True)
+				widget.handler_unblock_by_func(self._confirm_delete_toggle)
+
+			else:
+				# user really wants to disable this option
+				self._parent.enable_save(widget, data)
+
+		else:
+			# normal operation, just notify parent
+			self._parent.enable_save(widget, data)
+
 
 	def _load_options(self):
 		"""Load item list options"""

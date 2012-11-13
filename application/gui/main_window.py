@@ -1895,6 +1895,11 @@ class MainWindow(gtk.Window):
 					'automount_insert': False
 				})
 
+		# create default confirmation options
+		self.options.create_section('confirmations').update({
+					'delete_items': True
+				})
+
 		# create default editor options
 		self.options.create_section('editor').update({
 					'type': 0,

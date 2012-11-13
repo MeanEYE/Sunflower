@@ -539,24 +539,35 @@ class FileList(ItemList):
 		item_list = self._get_selection_list()
 		if item_list is None: return
 
-		dialog = gtk.MessageDialog(
-								self._parent,
-								gtk.DIALOG_DESTROY_WITH_PARENT,
-								gtk.MESSAGE_QUESTION,
-								gtk.BUTTONS_YES_NO,
-								ngettext(
-									"You are about to remove {0} item.\n"
-									"Are you sure about this?",
-									"You are about to remove {0} items.\n"
-									"Are you sure about this?",
-									len(item_list)
-								).format(len(item_list))
-							)
-		result = dialog.run()
-		dialog.destroy()
+		# check if user has disabled dialog
+		show_dialog = self._parent.options.section('confirmations').get('delete_items')
 
-		if result == gtk.RESPONSE_YES:
-			# if user is sure about removal create operation
+		if show_dialog:
+			# user has confirmation dialog enabled
+			dialog = gtk.MessageDialog(
+									self._parent,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_QUESTION,
+									gtk.BUTTONS_YES_NO,
+									ngettext(
+										"You are about to remove {0} item.\n"
+										"Are you sure about this?",
+										"You are about to remove {0} items.\n"
+										"Are you sure about this?",
+										len(item_list)
+									).format(len(item_list))
+								)
+			result = dialog.run()
+			dialog.destroy()
+
+			can_continue = result == gtk.RESPONSE_YES
+
+		else:
+			# user has confirmation dialog disabled
+			can_continue = True
+
+		# if user is sure about removal create operation
+		if can_continue:
 			operation = DeleteOperation(
 									self._parent,
 									self.get_provider()

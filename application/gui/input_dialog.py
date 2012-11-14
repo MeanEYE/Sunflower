@@ -445,6 +445,7 @@ class CopyDialog:
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
+		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 		
 		self._dialog.vbox.set_spacing(0)
 
@@ -697,6 +698,7 @@ class OverwriteDialog:
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(parent)
 		self._dialog.set_urgency_hint(True)
+		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		self._dialog.vbox.set_spacing(0)
 
@@ -968,6 +970,7 @@ class AddBookmarkDialog:
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
+		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		self._dialog.vbox.set_spacing(0)
 
@@ -1054,6 +1057,7 @@ class OperationError:
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
+		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		self._dialog.vbox.set_spacing(0)
 
@@ -1151,6 +1155,7 @@ class CreateToolbarWidgetDialog:
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
+		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		self._dialog.vbox.set_spacing(0)
 

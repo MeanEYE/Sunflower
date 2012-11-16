@@ -1468,7 +1468,8 @@ class ApplicationSelectDialog:
 		application_list = self._application.associations_manager.get_all()
 
 		for application in application_list:
-			if '%' in application.command_line:
+			if application.command_line is not None \
+			and '%' in application.command_line:
 				self._store.append((
 							application.icon, 
 							application.name, 

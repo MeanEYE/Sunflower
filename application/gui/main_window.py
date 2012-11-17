@@ -1648,11 +1648,18 @@ class MainWindow(gtk.Window):
 
 		if command[0] == 'cd' and hasattr(active_object, 'change_path'):
 			# handle CD command
-			if len(command) < 2:
-				command.append(os.path.expanduser('~'))
+			path = command[1] if len(command) >= 2 else user.home
 
-			if os.path.isdir(os.path.join(active_object.path, command[1])):
-				active_object.change_path(os.path.join(active_object.path, command[1]))
+			# apply path modifications
+			if path[0] == '~':
+				path = os.path.expanduser(path)
+
+			elif path[0] != os.sep:
+				path = os.path.join(active_object.path, path)
+
+			# if resulting path is a directory, change 
+			if active_object.get_provider().is_dir(path):
+				active_object.change_path(path)
 				active_object._main_object.grab_focus()
 
 			handled = True

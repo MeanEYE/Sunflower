@@ -29,9 +29,8 @@ tar --delete --wildcards --file=$HOME/Desktop/$tar_file_home_page Sunflower/imag
 echo -e "\t- Repacking gzip archive"
 gzip --best ~/Desktop/$tar_file_home_page
 
-# create a duplicate
-echo -e "\t- Duplicating file"
-mv ~/Desktop/$tar_file_home_page.gz ~/Desktop/$file_home_page
-cp ~/Desktop/$file_home_page ~/Desktop/$file_google_code
+# move file
+echo -e "\t- Moving file"
+mv ~/Desktop/$tar_file_home_page.gz ~/Desktop/$file_google_code
 
 echo "Done!"

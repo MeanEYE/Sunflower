@@ -173,17 +173,22 @@ class AssociationManager:
 		"""Execute specified item properly."""
 		mime_type = self.get_mime_type(path)
 		terminal_type = self._application.options.section('terminal').get('type')
+		should_execute = False
 
-		# if provider is specified and we have no clue 
-		# about type, try to detect file type based on data
-		if gio.content_type_is_unknown(mime_type) and provider is not None:
-			file_handle = provider.get_file_handle(path, Mode.READ)
-			data = file_handle.read(512)
-			file_handle.close()
+		if provider is not None and provider.is_local:
+			# only allow local files which have execute
+			# bit set to be executed locally
+			should_execute = os.access(path, os.X_OK)
 
-			mime_type = self.get_mime_type(data=data)
+			# if we still don't know content type, try to guess
+			if gio.content_type_is_unknown(mime_type):
+				file_handle = provider.get_file_handle(path, Mode.READ)
+				data = file_handle.read(512)
+				file_handle.close()
 
-		if gio.content_type_can_be_executable(mime_type):
+				mime_type = self.get_mime_type(data=data)
+
+		if gio.content_type_can_be_executable(mime_type) and should_execute:
 			# file type is executable
 			if is_x_app(path):
 				subprocess.Popen(

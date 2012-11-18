@@ -39,6 +39,22 @@ class AssociationManager:
 			
 		return result
 
+	def is_mime_type_subset(self, mime_type, super_type):
+		"""Check whether specified mime_type is a subset of super_type"""
+		return gio.content_type_is_a(mime_type, super_type)
+
+	def is_mime_type_unknown(self, mime_type):
+		"""Check if specified mime_type is unknown"""
+		return gio.content_type_is_unknown(mime_type)
+
+	def get_sample_data(self, path, provider):
+		"""Get sample data needed for content detection"""
+		file_handle = provider.get_file_handle(path, Mode.READ)
+		data = file_handle.read(128)
+		file_handle.close()
+
+		return data
+
 	def get_mime_type(self, path=None, data=None):
 		"""Get mime type for specified path"""
 		result = None
@@ -181,11 +197,8 @@ class AssociationManager:
 			should_execute = os.access(path, os.X_OK)
 
 			# if we still don't know content type, try to guess
-			if gio.content_type_is_unknown(mime_type):
-				file_handle = provider.get_file_handle(path, Mode.READ)
-				data = file_handle.read(512)
-				file_handle.close()
-
+			if self.is_mime_type_unknown(mime_type):
+				data = self.get_sample_data(path, provider)
 				mime_type = self.get_mime_type(data=data)
 
 		if gio.content_type_can_be_executable(mime_type) and should_execute:

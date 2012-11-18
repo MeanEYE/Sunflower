@@ -1,10 +1,10 @@
 import os
 import gtk
 import gio
-import mimetypes
+
 
 class IconManager:
-	_icon_theme = None
+	"""Icon manager class provides easy and abstract way of dealing with icons"""
 
 	def __init__(self, parent):
 		self._parent = parent
@@ -21,8 +21,11 @@ class IconManager:
 	def get_icon_for_file(self, filename, size=gtk.ICON_SIZE_MENU):
 		"""Load icon for specified file"""
 		result = 'document'
-		mime_type = mimetypes.guess_type(filename, False)[0]
+		mime_type = self._parent.associations_manager.get_mime_type(filename)
 		themed_icon = None
+
+		if gio.content_type_is_unknown(mime_type):
+			pass
 
 		# get icon names
 		if mime_type is not None:
@@ -43,12 +46,12 @@ class IconManager:
 		result = 'drive-harddisk'
 
 		# create a list of icons and filter non-existing
-		list_ = icons.split(' ')
-		list_ = filter(self.has_icon, list_)
+		icon_list = icons.split(' ')
+		icon_list = filter(self.has_icon, icon_list)
 
 		# if list has items, grab first
-		if len(list_) > 0:
-			result = list_[0]
+		if len(icon_list) > 0:
+			result = icon_list[0]
 
 		return result
 

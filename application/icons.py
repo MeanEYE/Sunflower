@@ -24,8 +24,6 @@ class IconManager:
 		mime_type = self._parent.associations_manager.get_mime_type(filename)
 		themed_icon = None
 
-		if gio.content_type_is_unknown(mime_type):
-			pass
 
 		# get icon names
 		if mime_type is not None:

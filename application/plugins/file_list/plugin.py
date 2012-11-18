@@ -1522,6 +1522,10 @@ class FileList(ItemList):
 
 			return
 
+		else:
+			# with or without exception we need to handle few things
+			self._title_bar.hide_spinner()
+
 		# update status bar
 		self._update_status_with_statistis()
 

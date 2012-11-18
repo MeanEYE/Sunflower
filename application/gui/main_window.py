@@ -1696,6 +1696,8 @@ class MainWindow(gtk.Window):
 		if not handled:
 			print 'Unhandled command: {0}'.format(command[0])
 
+		return True
+
 	def save_tabs(self, notebook, section):
 		"""Save opened tabs"""
 		tab_list = []

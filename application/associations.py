@@ -1,8 +1,12 @@
 import os
 import gio
+import gtk
 import subprocess
 
+from plugin_base.terminal import TerminalType
+from gui.input_dialog import ApplicationSelectDialog
 from collections import namedtuple
+from common import is_x_app
 
 
 ApplicationInfo = namedtuple(
@@ -19,6 +23,9 @@ ApplicationInfo = namedtuple(
 
 class AssociationManager:
 	"""Class that provides 'Open With' menu"""
+
+	def __init__(self, application):
+		self._application = application
 	
 	def __get_icon(self, icon_object):
 		"""Get icon string from GIO icon object"""
@@ -109,7 +116,7 @@ class AssociationManager:
 		
 		else:
 			# raise exception, we need at least one argument
-			raise AttributeError('We need either config_file or command to be specified!')
+			raise AttributeError('Error opening file. We need command or application to be specified.')
 		
 		# we modify exec_string and use 
 		# command for testing to avoid problem
@@ -153,18 +160,43 @@ class AssociationManager:
 			os.system('{0} &'.format(exec_string))
 
 	def execute_file(self, path):
-		"""Execute specified item"""
+		"""Execute specified item properly."""
 		mime_type = self.get_mime_type(path)
-		is_executable = gio.content_type_can_be_executable(mime_type)
+		type_is_executable = gio.content_type_can_be_executable(mime_type)
+		terminal_type = self._application.options.section('terminal').get('type')
 
-		if is_executable:
-			# file is executable type and has executable bit set
-			subprocess.Popen(
-						(path, '&'),
-						cwd=os.path.dirname(path)
-					)
+		if type_is_executable:
+			# file type is executable
+			if is_x_app(path):
+				subprocess.Popen(
+							(path, '&'),
+							cwd=os.path.dirname(path)
+						)
+
+			else:
+				# command is console based, create terminal tab and fork it
+				if terminal_type != TerminalType.EXTERNAL:
+					active_object = self._application.get_active_object()
+					tab = self._application.create_terminal_tab(active_object._notebook)
+
+					tab._close_on_child_exit = True
+					tab._terminal.fork_command(
+									command=path,
+									directory=os.path.dirname(path)
+								)
 
 		else:
-			# file does not have executable bit set, open with default application
-			default_program = self.get_default_application_for_type(mime_type)
-			self.open_file((path,), default_program)
+			# file type is not executable, try to open with default associated application
+			default_application = self.get_default_application_for_type(mime_type)
+
+			if default_application is not None:
+				self.open_file((path,), default_application)
+
+			else:
+				# no default application selected, show application selection dialog
+				dialog = ApplicationSelectDialog(self._application, path)
+				result = dialog.get_response()
+
+				if result[0] == gtk.RESPONSE_OK:
+					self.open_file(selection=(path,), exec_command=result[2])
+

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-12 19:23+0100\n"
+"POT-Creation-Date: 2012-11-18 19:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -303,20 +303,35 @@ msgstr ""
 msgid "Mounts"
 msgstr ""
 
-#: application/gui/preferences/operation.py:22
+#: application/gui/preferences/operation.py:21
+msgid "Confirmation"
+msgstr ""
+
+#: application/gui/preferences/operation.py:26
 msgid "Delete items to trash can"
 msgstr ""
 
-#: application/gui/preferences/operation.py:23
+#: application/gui/preferences/operation.py:27
 msgid "Reserve free space on copy/move"
 msgstr ""
 
-#: application/gui/preferences/operation.py:24
+#: application/gui/preferences/operation.py:28
 msgid "Automount drives on start up"
 msgstr ""
 
-#: application/gui/preferences/operation.py:25
+#: application/gui/preferences/operation.py:29
 msgid "Automount removable drives when inserted"
+msgstr ""
+
+#: application/gui/preferences/operation.py:30
+msgid "Show confirmation dialog before deleting items"
+msgstr ""
+
+#: application/gui/preferences/operation.py:64
+msgid ""
+"With trashing disabled you will not be able to restore accidentally deleted "
+"items. Are you sure you want to disable confirmation dialog when deleting "
+"items?"
 msgstr ""
 
 #: application/gui/preferences/display.py:22
@@ -764,7 +779,7 @@ msgstr ""
 msgid "Edit selected file"
 msgstr ""
 
-#: application/gui/main_window.py:619 application/gui/input_dialog.py:566
+#: application/gui/main_window.py:619 application/gui/input_dialog.py:567
 msgid "Copy"
 msgstr ""
 
@@ -772,7 +787,7 @@ msgstr ""
 msgid "Copy selected items from active to opposite list"
 msgstr ""
 
-#: application/gui/main_window.py:620 application/gui/input_dialog.py:664
+#: application/gui/main_window.py:620 application/gui/input_dialog.py:665
 msgid "Move"
 msgstr ""
 
@@ -796,7 +811,7 @@ msgstr ""
 msgid "Delete selected items"
 msgstr ""
 
-#: application/gui/main_window.py:737 application/gui/input_dialog.py:965
+#: application/gui/main_window.py:737 application/gui/input_dialog.py:967
 msgid "Add bookmark"
 msgstr ""
 
@@ -850,35 +865,35 @@ msgid ""
 "is valid!"
 msgstr ""
 
-#: application/gui/main_window.py:1821
+#: application/gui/main_window.py:1830
 msgid ""
 "Error saving configuration to files in your home directory. Make sure you "
 "have enough permissions."
 msgstr ""
 
-#: application/gui/main_window.py:2306
+#: application/gui/main_window.py:2320
 msgid ""
 "Active object is not item list. Advanced rename tool needs files and "
 "directories."
 msgstr ""
 
-#: application/gui/main_window.py:2321
+#: application/gui/main_window.py:2335
 msgid ""
 "No rename extensions were found. Please enable basic rename options plugin "
 "and try again."
 msgstr ""
 
-#: application/gui/main_window.py:2346
+#: application/gui/main_window.py:2360
 msgid ""
 "No extensions for finding files were found. Please enable basic find file "
 "options plugin and try again."
 msgstr ""
 
-#: application/gui/main_window.py:2370
+#: application/gui/main_window.py:2384
 msgid "Keyring is empty!"
 msgstr ""
 
-#: application/gui/main_window.py:2383
+#: application/gui/main_window.py:2397
 msgid ""
 "Keyring is not available. Make sure you have Python Gnome keyring module "
 "installed."
@@ -928,150 +943,150 @@ msgstr ""
 msgid "Open selected path in opposite list"
 msgstr ""
 
-#: application/gui/properties_window.py:31
+#: application/gui/properties_window.py:45
 msgid "{0} Properties"
 msgstr ""
 
-#: application/gui/properties_window.py:58
+#: application/gui/properties_window.py:72
 #: application/plugins/rename_extensions/default.py:268
 #: application/plugins/find_file_extensions/default.py:82
 msgid "Basic"
 msgstr ""
 
-#: application/gui/properties_window.py:62
+#: application/gui/properties_window.py:76
 msgid "Permissions"
 msgstr ""
 
-#: application/gui/properties_window.py:66
-#: application/gui/input_dialog.py:1345
+#: application/gui/properties_window.py:80
+#: application/gui/input_dialog.py:1349
 msgid "Open With"
 msgstr ""
 
-#: application/gui/properties_window.py:120
-#: application/plugins/file_list/plugin.py:661
+#: application/gui/properties_window.py:134
+#: application/plugins/file_list/plugin.py:672
 msgid ""
 "File or directory with specified name already exists in current directory. "
 "Item could not be renamed."
 msgstr ""
 
-#: application/gui/properties_window.py:155
-#: application/plugins/file_list/plugin.py:646
+#: application/gui/properties_window.py:169
+#: application/plugins/file_list/plugin.py:657
 msgid "Error renaming specified item. Make sure you have enough permissions."
 msgstr ""
 
-#: application/gui/properties_window.py:203
+#: application/gui/properties_window.py:218
 #: application/gui/operation_dialog.py:377
 msgid "byte"
 msgid_plural "bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/gui/properties_window.py:211
+#: application/gui/properties_window.py:226
 msgid "item"
 msgid_plural "items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/gui/properties_window.py:228
+#: application/gui/properties_window.py:243
 #: application/gui/operation_dialog.py:369
 msgid "unknown"
 msgstr ""
 
-#: application/gui/properties_window.py:337
+#: application/gui/properties_window.py:352
 msgid "Error changing owner or group"
 msgstr ""
 
-#: application/gui/properties_window.py:377
-#: application/gui/input_dialog.py:979 application/gui/input_dialog.py:1164
+#: application/gui/properties_window.py:392
+#: application/gui/input_dialog.py:982 application/gui/input_dialog.py:1169
 #: application/plugins/default_toolbar/bookmark_button.py:73
 #: application/plugins/file_list/dialogs.py:51
 #: application/plugins/file_list/dialogs.py:265
 msgid "Name:"
 msgstr ""
 
-#: application/gui/properties_window.py:378
-#: application/gui/input_dialog.py:1171
+#: application/gui/properties_window.py:393
+#: application/gui/input_dialog.py:1176
 msgid "Type:"
 msgstr ""
 
-#: application/gui/properties_window.py:379
-#: application/gui/input_dialog.py:843 application/gui/input_dialog.py:860
+#: application/gui/properties_window.py:394
+#: application/gui/input_dialog.py:845 application/gui/input_dialog.py:862
 msgid "Size:"
 msgstr ""
 
-#: application/gui/properties_window.py:380
-#: application/gui/input_dialog.py:987
+#: application/gui/properties_window.py:395
+#: application/gui/input_dialog.py:990
 msgid "Location:"
 msgstr ""
 
-#: application/gui/properties_window.py:381
+#: application/gui/properties_window.py:396
 msgid "Volume:"
 msgstr ""
 
-#: application/gui/properties_window.py:382
+#: application/gui/properties_window.py:397
 msgid "Accessed:"
 msgstr ""
 
-#: application/gui/properties_window.py:383
-#: application/gui/input_dialog.py:844 application/gui/input_dialog.py:861
+#: application/gui/properties_window.py:398
+#: application/gui/input_dialog.py:846 application/gui/input_dialog.py:863
 msgid "Modified:"
 msgstr ""
 
-#: application/gui/properties_window.py:458
+#: application/gui/properties_window.py:473
 msgid "Access"
 msgstr ""
 
-#: application/gui/properties_window.py:464
-#: application/gui/properties_window.py:534
+#: application/gui/properties_window.py:479
+#: application/gui/properties_window.py:549
 #: application/gui/input_dialog.py:131
 msgid "User:"
 msgstr ""
 
-#: application/gui/properties_window.py:468
-#: application/gui/properties_window.py:538
+#: application/gui/properties_window.py:483
+#: application/gui/properties_window.py:553
 #: application/gui/input_dialog.py:135
 msgid "Group:"
 msgstr ""
 
-#: application/gui/properties_window.py:472
+#: application/gui/properties_window.py:487
 #: application/gui/input_dialog.py:139
 msgid "Others:"
 msgstr ""
 
-#: application/gui/properties_window.py:477
-#: application/gui/properties_window.py:490
-#: application/gui/properties_window.py:503
+#: application/gui/properties_window.py:492
+#: application/gui/properties_window.py:505
+#: application/gui/properties_window.py:518
 #: application/gui/input_dialog.py:144 application/gui/input_dialog.py:157
 #: application/gui/input_dialog.py:170
 msgid "Read"
 msgstr ""
 
-#: application/gui/properties_window.py:481
-#: application/gui/properties_window.py:494
-#: application/gui/properties_window.py:507
+#: application/gui/properties_window.py:496
+#: application/gui/properties_window.py:509
+#: application/gui/properties_window.py:522
 #: application/gui/input_dialog.py:148 application/gui/input_dialog.py:161
 #: application/gui/input_dialog.py:174
 msgid "Write"
 msgstr ""
 
-#: application/gui/properties_window.py:485
-#: application/gui/properties_window.py:498
-#: application/gui/properties_window.py:511
+#: application/gui/properties_window.py:500
+#: application/gui/properties_window.py:513
+#: application/gui/properties_window.py:526
 #: application/gui/input_dialog.py:152 application/gui/input_dialog.py:165
 #: application/gui/input_dialog.py:178
 msgid "Execute"
 msgstr ""
 
-#: application/gui/properties_window.py:516
+#: application/gui/properties_window.py:531
 #: application/gui/input_dialog.py:183
 msgid "Octal:"
 msgstr ""
 
-#: application/gui/properties_window.py:528
+#: application/gui/properties_window.py:543
 msgid "Ownership"
 msgstr ""
 
-#: application/gui/properties_window.py:589
+#: application/gui/properties_window.py:603
 msgid ""
 "Select an application to open <i>{0}</i> and other files of type \"{1}\""
 msgstr ""
@@ -1139,192 +1154,192 @@ msgstr ""
 msgid "Enter new directory name:"
 msgstr ""
 
-#: application/gui/input_dialog.py:468
+#: application/gui/input_dialog.py:469
 msgid "Only files of this type:"
 msgstr ""
 
-#: application/gui/input_dialog.py:476
+#: application/gui/input_dialog.py:477
 msgid "Set owner on destination"
 msgstr ""
 
-#: application/gui/input_dialog.py:477
+#: application/gui/input_dialog.py:478
 msgid "Set access mode on destination"
 msgstr ""
 
-#: application/gui/input_dialog.py:478
+#: application/gui/input_dialog.py:479
 msgid "Set date and time on destination"
 msgstr ""
 
-#: application/gui/input_dialog.py:479
+#: application/gui/input_dialog.py:480
 msgid "Silent mode"
 msgstr ""
 
-#: application/gui/input_dialog.py:486
+#: application/gui/input_dialog.py:487
 msgid "Merge directories"
 msgstr ""
 
-#: application/gui/input_dialog.py:487
+#: application/gui/input_dialog.py:488
 msgid "Overwrite files"
 msgstr ""
 
-#: application/gui/input_dialog.py:491
+#: application/gui/input_dialog.py:492
 msgid ""
 "Silent mode will enable operation to finish without disturbing you. If any "
 "errors occur, they will be presented to you after completion."
 msgstr ""
 
-#: application/gui/input_dialog.py:551
+#: application/gui/input_dialog.py:552
 msgid "Copy item"
 msgid_plural "Copy items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/gui/input_dialog.py:556
+#: application/gui/input_dialog.py:557
 msgid "Copy <b>{0}</b> item to:"
 msgid_plural "Copy <b>{0}</b> items to:"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/gui/input_dialog.py:565 application/gui/input_dialog.py:663
-#: application/gui/input_dialog.py:1085
+#: application/gui/input_dialog.py:566 application/gui/input_dialog.py:664
+#: application/gui/input_dialog.py:1089
 #: application/gui/operation_dialog.py:206
 msgid "Cancel"
 msgstr ""
 
-#: application/gui/input_dialog.py:574
+#: application/gui/input_dialog.py:575
 msgid "Save as default configuration"
 msgstr ""
 
-#: application/gui/input_dialog.py:649
+#: application/gui/input_dialog.py:650
 msgid "Move item"
 msgid_plural "Move items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/gui/input_dialog.py:654
+#: application/gui/input_dialog.py:655
 msgid "Move <b>{0}</b> item to:"
 msgid_plural "Move <b>{0}</b> items to:"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/gui/input_dialog.py:677
+#: application/gui/input_dialog.py:678
 msgid "Rename file/directory"
 msgstr ""
 
-#: application/gui/input_dialog.py:678
+#: application/gui/input_dialog.py:679
 msgid "Enter a new name for this item:"
 msgstr ""
 
-#: application/gui/input_dialog.py:739
+#: application/gui/input_dialog.py:741
 msgid "Select a new name for the destination"
 msgstr ""
 
-#: application/gui/input_dialog.py:744
+#: application/gui/input_dialog.py:746
 msgid "Reset"
 msgstr ""
 
-#: application/gui/input_dialog.py:748
+#: application/gui/input_dialog.py:750
 msgid "Apply this action to all files"
 msgstr ""
 
-#: application/gui/input_dialog.py:783 application/gui/input_dialog.py:1086
+#: application/gui/input_dialog.py:785 application/gui/input_dialog.py:1090
 msgid "Skip"
 msgstr ""
 
-#: application/gui/input_dialog.py:842
+#: application/gui/input_dialog.py:844
 msgid "Original"
 msgstr ""
 
-#: application/gui/input_dialog.py:859
+#: application/gui/input_dialog.py:861
 msgid "Replace with"
 msgstr ""
 
-#: application/gui/input_dialog.py:894
+#: application/gui/input_dialog.py:896
 msgid "File conflict"
 msgstr ""
 
-#: application/gui/input_dialog.py:898
+#: application/gui/input_dialog.py:900
 msgid "Replace"
 msgstr ""
 
-#: application/gui/input_dialog.py:908
+#: application/gui/input_dialog.py:910
 msgid "Replace file \"{0}\"?"
 msgstr ""
 
-#: application/gui/input_dialog.py:914
+#: application/gui/input_dialog.py:916
 msgid ""
 "Another file with the same name already exists in \"{0}\". Replacing it will "
 "overwrite its content."
 msgstr ""
 
-#: application/gui/input_dialog.py:927
+#: application/gui/input_dialog.py:929
 msgid "Directory conflict"
 msgstr ""
 
-#: application/gui/input_dialog.py:931
+#: application/gui/input_dialog.py:933
 msgid "Merge"
 msgstr ""
 
-#: application/gui/input_dialog.py:941
+#: application/gui/input_dialog.py:943
 msgid "Merge directory \"{0}\"?"
 msgstr ""
 
-#: application/gui/input_dialog.py:947
+#: application/gui/input_dialog.py:949
 msgid ""
 "Directory with the same name already exists in \"{0}\". Merging will ask for "
 "confirmation before replacing any files in the directory that conflict with "
 "the files being copied."
 msgstr ""
 
-#: application/gui/input_dialog.py:1051
+#: application/gui/input_dialog.py:1054
 msgid "Operation error"
 msgstr ""
 
-#: application/gui/input_dialog.py:1087
+#: application/gui/input_dialog.py:1091
 msgid "Retry"
 msgstr ""
 
-#: application/gui/input_dialog.py:1135
+#: application/gui/input_dialog.py:1139
 msgid "No"
 msgstr ""
 
-#: application/gui/input_dialog.py:1136
+#: application/gui/input_dialog.py:1140
 msgid "Yes"
 msgstr ""
 
-#: application/gui/input_dialog.py:1148
+#: application/gui/input_dialog.py:1152
 msgid "Add toolbar widget"
 msgstr ""
 
-#: application/gui/input_dialog.py:1258
+#: application/gui/input_dialog.py:1263
 msgid "Select range"
 msgstr ""
 
-#: application/gui/input_dialog.py:1259
+#: application/gui/input_dialog.py:1264
 msgid "Select part of the text:"
 msgstr ""
 
-#: application/gui/input_dialog.py:1283
+#: application/gui/input_dialog.py:1288
 msgid "Add application"
 msgstr ""
 
-#: application/gui/input_dialog.py:1284
+#: application/gui/input_dialog.py:1289
 msgid "Application name:"
 msgstr ""
 
-#: application/gui/input_dialog.py:1294
+#: application/gui/input_dialog.py:1299
 msgid "Select"
 msgstr ""
 
-#: application/gui/input_dialog.py:1366
+#: application/gui/input_dialog.py:1370
 msgid "Select application:"
 msgstr ""
 
-#: application/gui/input_dialog.py:1369
+#: application/gui/input_dialog.py:1373
 msgid "Open <i>{0}</i> with:"
 msgstr ""
 
-#: application/gui/input_dialog.py:1405
+#: application/gui/input_dialog.py:1409
 msgid "Use a custom command"
 msgstr ""
 
@@ -1639,7 +1654,7 @@ msgid ""
 "There was an error creating file. Make sure you have enough permissions."
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:548
+#: application/plugins/file_list/plugin.py:553
 msgid ""
 "You are about to remove {0} item.\n"
 "Are you sure about this?"
@@ -1649,19 +1664,19 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/plugins/file_list/plugin.py:791
+#: application/plugins/file_list/plugin.py:802
 msgid "Other application..."
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:1256
+#: application/plugins/file_list/plugin.py:1267
 msgid "Free:"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:1257
+#: application/plugins/file_list/plugin.py:1268
 msgid "Total:"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:1490
+#: application/plugins/file_list/plugin.py:1501
 msgid ""
 "Error changing working directory to:\n"
 "{1}\n"
@@ -2304,8 +2319,16 @@ msgid_plural "Rename of {0} items from \"{1}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/tools/viewer.py:23
+#: application/tools/viewer.py:28
 msgid "{0} - Viewer"
+msgstr ""
+
+#: application/tools/viewer.py:71
+msgid "Text"
+msgstr ""
+
+#: application/tools/viewer.py:86
+msgid "Image"
 msgstr ""
 
 #: application/tools/find_files.py:53

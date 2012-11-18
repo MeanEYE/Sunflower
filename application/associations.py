@@ -3,11 +3,11 @@ import gio
 import gtk
 import subprocess
 
+from common import is_x_app
+from collections import namedtuple
+from plugin_base.provider import Mode
 from plugin_base.terminal import TerminalType
 from gui.input_dialog import ApplicationSelectDialog
-from collections import namedtuple
-from common import is_x_app
-
 
 ApplicationInfo = namedtuple(
 				'ApplicationInfo',
@@ -39,9 +39,19 @@ class AssociationManager:
 			
 		return result
 
-	def get_mime_type(self, path):
+	def get_mime_type(self, path=None, data=None):
 		"""Get mime type for specified path"""
-		return gio.content_type_guess(path)
+		result = None
+
+		if path is not None:
+			# detect content type based on file name
+			result = gio.content_type_guess(filename=path)
+
+		elif data is not None:
+			# detect content type based on data
+			result = gio.content_type_guess(data=data)
+
+		return result
 	
 	def get_mime_description(self, mime_type):
 		"""Get description from mime type"""
@@ -159,13 +169,21 @@ class AssociationManager:
 			# open selected file(s)
 			os.system('{0} &'.format(exec_string))
 
-	def execute_file(self, path):
+	def execute_file(self, path, provider=None):
 		"""Execute specified item properly."""
 		mime_type = self.get_mime_type(path)
-		type_is_executable = gio.content_type_can_be_executable(mime_type)
 		terminal_type = self._application.options.section('terminal').get('type')
 
-		if type_is_executable:
+		# if provider is specified and we have no clue 
+		# about type, try to detect file type based on data
+		if gio.content_type_is_unknown(mime_type) and provider is not None:
+			file_handle = provider.get_file_handle(path, Mode.READ)
+			data = file_handle.read(512)
+			file_handle.close()
+
+			mime_type = self.get_mime_type(data=data)
+
+		if gio.content_type_can_be_executable(mime_type):
 			# file type is executable
 			if is_x_app(path):
 				subprocess.Popen(
@@ -179,7 +197,7 @@ class AssociationManager:
 					active_object = self._application.get_active_object()
 					tab = self._application.create_terminal_tab(active_object._notebook)
 
-					tab._close_on_child_exit = True
+					tab._close_on_child_exit = False
 					tab._terminal.fork_command(
 									command=path,
 									directory=os.path.dirname(path)

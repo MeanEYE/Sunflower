@@ -221,7 +221,7 @@ class BookmarksMenu:
 		item_type = item_list.get_value(selected_iter, Column.TYPE)
 
 		# unquote path before giving it to handler
-		if '://' in path:
+		if path is not None and '://' in path:
 			data = path.split('://', 1)
 			data[1] = urllib.unquote(data[1])
 			path = '://'.join(data)

@@ -1,3 +1,16 @@
+Version 0.1a-49
+  + Added option to allow disabling confirmation when deleting items.
+  * Added missing definitions of WM_CLASS so dialogs are positioned properly on systems with multiple displays.
+  * Fix unhandled exception when application has no command line specified.
+  * Properly handle 'cd' command.
+  * Properly detect and execute files.
+  * Added support for detecting content type based on data.
+  * Fixed issue with bookmark menu items.
+  * Make sure we hide spinner even if exception occurs.
+  * Use associations manager in icons manager to detect file type instead of guessing by file name.
+  * Fixed content type detection in item propertied window using new methods available in associations manager.
+  * Redesigned viewer tool.
+
 Version 0.1a-48
   + Added program in FileTools group to make it visible by default in KDE.
   + Options to control auto-mounting volumes on startup or connect.

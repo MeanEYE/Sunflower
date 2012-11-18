@@ -72,7 +72,7 @@ def is_x_app(command):
 	try:
 		output = subprocess.Popen(
 							[command],
-							env={'LD_TRACE_LOADED_OBJECTS':'1'},
+							env={'LD_TRACE_LOADED_OBJECTS': '1'},
 							stdout=subprocess.PIPE
 						).communicate()
 

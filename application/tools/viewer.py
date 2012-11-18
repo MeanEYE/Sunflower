@@ -17,7 +17,12 @@ class Viewer:
 		self._parent = parent
 		self._application = self._parent._parent
 
-		mime_type = self._application.associations_manager.get_mime_type(path)
+		associations_manager = self._application.associations_manager
+		mime_type = associations_manager.get_mime_type(path)
+
+		if associations_manager.is_mime_type_unknown(mime_type):
+			data = associations_manager.get_sample_data(path, provider)
+			mime_type = associations_manager.get_mime_type(data=data)
 
 		# configure window
 		self.window.set_title(_('{0} - Viewer').format(os.path.basename(self._path)))
@@ -39,16 +44,20 @@ class Viewer:
 		status_bar.add_group_with_icon('mime_type', 'document-properties', mime_type)
 		status_bar.show()
 
-		if 'text/' in mime_type:
-			# text file
+		self._notebook = gtk.Notebook()
+		self._notebook.set_border_width(5)
+
+		# create text page if needed
+		if associations_manager.is_mime_type_subset(mime_type, 'text/plain'):
 			container = gtk.ScrolledWindow()
 			container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-			container.set_shadow_type(gtk.SHADOW_NONE)
+			container.set_shadow_type(gtk.SHADOW_IN)
+			container.set_border_width(5)
 
 			font = pango.FontDescription('monospace 9')
 			text_view = gtk.TextView()
 			text_view.set_editable(False)
-			text_view.set_cursor_visible(False)
+			text_view.set_cursor_visible(True)
 			text_view.modify_font(font)
 			
 			raw_file = self._provider.get_file_handle(self._path, FileMode.READ)
@@ -57,14 +66,16 @@ class Viewer:
 
 			text_view.get_buffer().set_text(data)
 
+			# add container to notebook
 			container.add(text_view)
-			vbox.pack_start(container, True, True, 0)
+			self._append_page(_('Text'), container)
 
-		elif 'image/' in mime_type:
-			# image file
+		# create image page if needed
+		if mime_type.startswith('image/'):
 			container = gtk.ScrolledWindow()
 			container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
 			container.set_shadow_type(gtk.SHADOW_NONE)
+			container.set_border_width(5)
 			viewport = gtk.Viewport()
 
 			image = gtk.Image()
@@ -72,15 +83,25 @@ class Viewer:
 
 			viewport.add(image)
 			container.add(viewport)
-			vbox.pack_start(container, True, True, 0)
+			self._insert_page(_('Image'), container)
 
 		# pack user interface
-		vbox.pack_end(status_bar, False, False, 0)
+		vbox.pack_start(self._notebook, True, True, 0)
+		vbox.pack_start(status_bar, False, False, 0)
 
 		self.window.add(vbox)
 		
 		# show all widgets
 		self.window.show_all()
+
+	def _append_page(self, title, container):
+		"""Append new page to viewer"""
+		self._notebook.append_page(container, gtk.Label(title))
+		container.grab_focus()
+
+	def _insert_page(self, title, container, position=0):
+		"""Insert page at desired position in viewer notebook"""
+		self._notebook.insert_page(container, gtk.Label(title), position)
 
 	def _handle_destroy(self, widget):
 		"""Handle destroying viewer window"""
@@ -93,6 +114,15 @@ class Viewer:
 		if event.keyval == gtk.keysyms.Escape:
 			# close window on escape
 			self.window.destroy()
+			result = True
+
+		elif event.keyval in range(gtk.keysyms._1, gtk.keysyms._9 + 1):
+			# switch to specified page
+			index = event.keyval - gtk.keysyms._1
+
+			if index <= self._notebook.get_n_pages() - 1:
+				self._notebook.set_current_page(index)
+
 			result = True
 
 		return result

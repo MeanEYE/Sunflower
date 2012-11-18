@@ -95,7 +95,7 @@ class MainWindow(gtk.Window):
 		self.icon_manager = IconManager(self)
 		self.menu_manager = MenuManager(self)
 		self.mount_manager = MountsManager(self)
-		self.associations_manager = AssociationManager()
+		self.associations_manager = AssociationManager(self)
 		self.notification_manager = NotificationManager(self)
 		self.toolbar_manager = ToolbarManager(self)
 		self.accelerator_manager = AcceleratorManager(self)

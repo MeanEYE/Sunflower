@@ -1335,8 +1335,7 @@ class ApplicationInputDialog(InputDialog):
 
 
 class ApplicationSelectDialog:
-	"""Provides user with a list of installed applications and
-	option to enter command"""
+	"""Provides user with a list of installed applications and option to enter command"""
 	
 	help_url = 'standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables'
 	

@@ -10,6 +10,12 @@ import grp
 import common
 
 
+class Column:
+	SELECTED = 0
+	ICON_NAME = 1
+	APPLICATION_NAME = 2
+	APPLICATION_ID = 3
+
 class PropertiesWindow(gtk.Window):
 	"""Properties window for files and directories"""
 
@@ -23,6 +29,14 @@ class PropertiesWindow(gtk.Window):
 		self._is_file = self._provider.is_file(self._path)
 		self._permission_updating = False
 		self._mode = None
+
+		# get content type
+		self._mime_type = application.associations_manager.get_mime_type(self._path)
+
+		# content type is unknown, try to detect using content
+		if application.associations_manager.is_mime_type_unknown(self._mime_type):
+			data = application.associations_manager.get_sample_data(path, provider)
+			self._mime_type = application.associations_manager.get_mime_type(data=data)
 
 		# file monitor, we'd like to update info if file changes
 		self._create_monitor()
@@ -167,9 +181,8 @@ class PropertiesWindow(gtk.Window):
 	def _load_associated_applications(self):
 		"""Get associated applications with file/directory"""
 		associations_manager = self._application.associations_manager
-		mime_type = associations_manager.get_mime_type(self._path)
-		application_list = associations_manager.get_application_list_for_type(mime_type)
-		default_application = associations_manager.get_default_application_for_type(mime_type)
+		application_list = associations_manager.get_application_list_for_type(self._mime_type)
+		default_application = associations_manager.get_default_application_for_type(self._mime_type)
 
 		# clear existing list
 		self._store.clear()
@@ -185,8 +198,10 @@ class PropertiesWindow(gtk.Window):
 
 	def _update_data(self):
 		"""Update widgets to represent item state"""
-		mime_type = self._application.associations_manager.get_mime_type(self._path)
-		description = self._application.associations_manager.get_mime_description(mime_type)
+		associations_manager = self._application.associations_manager
+
+		# get the rest of the infromation
+		description = associations_manager.get_mime_description(self._mime_type)
 		time_format = self._application.options.section('item_list').get('time_format')
 		human_readable = self._application.options.get('human_readable_size')
 		item_stat = self._provider.get_stat(self._path, extended=True)
@@ -229,7 +244,7 @@ class PropertiesWindow(gtk.Window):
 
 		# update widgets
 		self._entry_name.set_text(os.path.basename(self._path))
-		self._label_type.set_text('{0}\n{1}'.format(description, mime_type))
+		self._label_type.set_text('{0}\n{1}'.format(description, self._mime_type))
 		self._label_size.set_text(item_size)
 		self._label_location.set_text(os.path.dirname(os.path.abspath(self._path)))
 		self._label_volume.set_text(volume_name)
@@ -347,7 +362,7 @@ class PropertiesWindow(gtk.Window):
 
 		# get data
 		mime_type = self._application.associations_manager.get_mime_type(self._path)
-		application = active_item[3]
+		application = active_item[Column.APPLICATION_ID]
 
 		# set default application
 		command = 'xdg-mime default {0} {1}'.format(application, mime_type)
@@ -355,7 +370,7 @@ class PropertiesWindow(gtk.Window):
 
 		# select active item
 		for item in self._store:
-			item[0] = item.path == active_item.path
+			item[Column.SELECTED] = item.path == active_item.path
 
 	def _create_basic_tab(self):
 		"""Create tab containing basic information"""
@@ -581,8 +596,7 @@ class PropertiesWindow(gtk.Window):
 		tab.set_border_width(10)
 
 		# get item description
-		mime_type = self._application.associations_manager.get_mime_type(self._path)
-		description = self._application.associations_manager.get_mime_description(mime_type)
+		description = self._application.associations_manager.get_mime_description(self._mime_type)
 
 		# create label
 		text = _(
@@ -623,9 +637,9 @@ class PropertiesWindow(gtk.Window):
 		column_name.pack_start(cell_name, True)
 
 		# configure renderer
-		column_radio.add_attribute(cell_radio, 'active', 0)
-		column_name.add_attribute(cell_icon, 'icon-name', 1)
-		column_name.add_attribute(cell_name, 'text', 2)
+		column_radio.add_attribute(cell_radio, 'active', Column.SELECTED)
+		column_name.add_attribute(cell_icon, 'icon-name', Column.ICON_NAME)
+		column_name.add_attribute(cell_name, 'text', Column.APPLICATION_NAME)
 
 		# add column_name to the list
 		self._list.append_column(column_radio)

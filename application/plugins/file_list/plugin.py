@@ -351,7 +351,7 @@ class FileList(ItemList):
 		else:
 			# selected item is just a file, execute it
 			selected_file = self._get_selection()
-			self._parent.associations_manager.execute_file(selected_file)
+			self._parent.associations_manager.execute_file(selected_file, provider=self.get_provider())
 
 		return True  # to prevent command or quick search in single key bindings
 

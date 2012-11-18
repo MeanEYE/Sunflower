@@ -760,6 +760,7 @@ class FileList(ItemList):
 		"""Populate pop-up menu items"""
 		selection = self._item_list.get_selection()
 		item_list, selected_iter = selection.get_selected()
+		associations_manager = self._parent.associations_manager
 
 		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
@@ -771,9 +772,15 @@ class FileList(ItemList):
 		ItemList._prepare_popup_menu(self)
 
 		if not is_dir:
-			# get associated programs
+			# detect mime type
+			mime_type = associations_manager.get_mime_type(filename)
+			if associations_manager.is_mime_type_unknown(mime_type):
+				data = associations_manager.get_sample_data(filename, self.get_provider())
+				mime_type = associations_manager.get_mime_type(data=data)
+
+			# get associated applications
 			selection = self._get_selection_list()
-			mime_type = self._parent.associations_manager.get_mime_type(filename)
+
 			program_list = self._parent.menu_manager.get_items_for_type(mime_type, selection)
 			custom_list = self._parent.menu_manager.get_custom_items_for_type(mime_type, selection)
 

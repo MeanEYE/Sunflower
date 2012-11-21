@@ -12,12 +12,13 @@ class Viewer:
 	"""Simple file viewer implementation"""
 
 	def __init__(self, path, provider, parent):
-		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+		self._window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 
 		self._path = path
 		self._provider = provider
 		self._parent = parent
 		self._application = self._parent._parent
+		self._page_count = 0
 
 		associations_manager = self._application.associations_manager
 		mime_type = associations_manager.get_mime_type(path)
@@ -27,17 +28,17 @@ class Viewer:
 			mime_type = associations_manager.get_mime_type(data=data)
 
 		# configure window
-		self.window.set_title(_('{0} - Viewer').format(os.path.basename(self._path)))
-		self.window.set_size_request(800, 600)
-		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
-		self.window.set_resizable(True)
-		self.window.set_skip_taskbar_hint(False)
-		self.window.set_wmclass('Sunflower', 'Sunflower')
-		self.window.set_border_width(0)
+		self._window.set_title(_('{0} - Viewer').format(os.path.basename(self._path)))
+		self._window.set_size_request(800, 600)
+		self._window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+		self._window.set_resizable(True)
+		self._window.set_skip_taskbar_hint(False)
+		self._window.set_wmclass('Sunflower', 'Sunflower')
+		self._window.set_border_width(0)
 
 		# connect signals
-		self.window.connect('destroy', self._handle_destroy)
-		self.window.connect('key-press-event', self._handle_key_press)
+		self._window.connect('destroy', self._handle_destroy)
+		self._window.connect('key-press-event', self._handle_key_press)
 
 		# create user interface according to mime type
 		vbox = gtk.VBox(homogeneous=False, spacing=0)
@@ -98,13 +99,29 @@ class Viewer:
 		vbox.pack_start(self._notebook, True, True, 0)
 		vbox.pack_start(status_bar, False, False, 0)
 
-		self.window.add(vbox)
+		self._window.add(vbox)
 		
-		# show all widgets
-		self.window.show_all()
+		# show all widgets if there are pages present
+		if self._page_count > 0:
+			self._window.show_all()
+
+		else:
+			# show information and close window
+			dialog = gtk.MessageDialog(
+									self._application,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_INFO,
+									gtk.BUTTONS_OK,
+									_('Viewer is unable to display this file type.')
+								)
+			dialog.run()
+			dialog.destroy()
+
+			self._window.destroy()
 
 	def _append_page(self, title, container):
 		"""Append new page to viewer"""
+		self._page_count += 1
 		self._notebook.append_page(container, gtk.Label(title))
 		container.grab_focus()
 
@@ -141,7 +158,7 @@ class Viewer:
 
 		if event.keyval == gtk.keysyms.Escape:
 			# close window on escape
-			self.window.destroy()
+			self._window.destroy()
 			result = True
 
 		elif event.keyval in range(gtk.keysyms._1, gtk.keysyms._9 + 1):

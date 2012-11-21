@@ -48,7 +48,7 @@ class Viewer:
 		status_bar.show()
 
 		self._notebook = gtk.Notebook()
-		self._notebook.set_border_width(5)
+		self._notebook.set_border_width(2)
 
 		# create page for executables
 		if mime_type in ('application/x-executable', 'application/x-sharedlib') \

@@ -1,5 +1,3 @@
-- Add option to disable confirmation when removing files.
-
 - Handle exceptions when removing, copying and moving files.
 
 - Handle cases in which PyGTK can't load SVG image in set_window_icon method.

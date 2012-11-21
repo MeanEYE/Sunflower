@@ -1,7 +1,9 @@
 import os
 import gtk
 import pango
+import subprocess
 
+from common import executable_exists
 from widgets.status_bar import StatusBar
 from plugin_base.provider import Mode as FileMode
 
@@ -47,28 +49,35 @@ class Viewer:
 		self._notebook = gtk.Notebook()
 		self._notebook.set_border_width(5)
 
+		# create page for executables
+		if mime_type in ('application/x-executable', 'application/x-sharedlib') \
+		and executable_exists('nm'):
+			# get output from command
+			data = ''
+			try:
+				output = subprocess.Popen(
+									['nm', '-al', path],
+									stdout=subprocess.PIPE
+								).communicate()
+
+				data = output[0]
+
+			except OSError as error:
+				# report error to user
+				raise error
+
+			# create new page
+			self._create_text_page(_('Executable'), data)
+
 		# create text page if needed
 		if associations_manager.is_mime_type_subset(mime_type, 'text/plain'):
-			container = gtk.ScrolledWindow()
-			container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-			container.set_shadow_type(gtk.SHADOW_IN)
-			container.set_border_width(5)
-
-			font = pango.FontDescription('monospace 9')
-			text_view = gtk.TextView()
-			text_view.set_editable(False)
-			text_view.set_cursor_visible(True)
-			text_view.modify_font(font)
-			
+			# get data from the file
 			raw_file = self._provider.get_file_handle(self._path, FileMode.READ)
 			data = raw_file.read()
 			raw_file.close()
 
-			text_view.get_buffer().set_text(data)
-
-			# add container to notebook
-			container.add(text_view)
-			self._append_page(_('Text'), container)
+			# create new page
+			self._create_text_page(_('Text'), data)
 
 		# create image page if needed
 		if mime_type.startswith('image/'):
@@ -102,6 +111,25 @@ class Viewer:
 	def _insert_page(self, title, container, position=0):
 		"""Insert page at desired position in viewer notebook"""
 		self._notebook.insert_page(container, gtk.Label(title), position)
+
+	def _create_text_page(self, title, content, position=0):
+		"""Create text page with specified data"""
+		container = gtk.ScrolledWindow()
+		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+		container.set_shadow_type(gtk.SHADOW_IN)
+		container.set_border_width(5)
+
+		font = pango.FontDescription('monospace 9')
+		text_view = gtk.TextView()
+		text_view.set_editable(False)
+		text_view.set_cursor_visible(True)
+		text_view.modify_font(font)
+		
+		text_view.get_buffer().set_text(content)
+
+		# add container to notebook
+		container.add(text_view)
+		self._append_page(title, container)
 
 	def _handle_destroy(self, widget):
 		"""Handle destroying viewer window"""

@@ -16,8 +16,6 @@ are same and only one file is selected offer this option by default.
 
 - Ability to extend file list columns
 
-- Directory monitoring doesn't catch on mount event
-
 - Tab menu: Lock, close, close others
 
 - Monitor history file and reload when needed

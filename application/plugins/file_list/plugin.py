@@ -536,8 +536,11 @@ class FileList(ItemList):
 
 	def _delete_files(self, widget=None, data=None):
 		"""Delete selected files"""
-		item_list = self._get_selection_list()
-		if item_list is None: return
+		selection = self._get_selection_list(relative=False)
+
+		# return if there is no selection
+		if selection is None:
+			return
 
 		# check if user has disabled dialog
 		show_dialog = self._parent.options.section('confirmations').get('delete_items')
@@ -554,8 +557,8 @@ class FileList(ItemList):
 										"Are you sure about this?",
 										"You are about to remove {0} items.\n"
 										"Are you sure about this?",
-										len(item_list)
-									).format(len(item_list))
+										len(selection)
+									).format(len(selection))
 								)
 			result = dialog.run()
 			dialog.destroy()
@@ -572,20 +575,24 @@ class FileList(ItemList):
 									self._parent,
 									self.get_provider()
 								)
+			operation.set_selection(selection)
 			operation.start()
 
 		return True
 
 	def _copy_files(self, widget=None, data=None):
 		"""Copy selected files"""
-		item_list = self._get_selection_list()
-		if item_list is None: return
+		selection = self._get_selection_list(relative=True)
+
+		# return if there is no selection
+		if selection is None:
+			return
 
 		dialog = CopyDialog(
 						self._parent,
 						self.get_provider(),
 						self._get_other_provider().get_path()
-						)
+					)
 		result = dialog.get_response()
 
 		if result[0] == gtk.RESPONSE_OK:
@@ -596,19 +603,24 @@ class FileList(ItemList):
 									self._get_other_provider(),
 									result[1]  # options from dialog
 								)
+			operation.set_selection(selection)
 			operation.start()
 
 		return True
 
 	def _move_files(self, widget=None, data=None):
 		"""Move selected files"""
-		if self._get_selection_list() is None: return
+		selection = self._get_selection_list(relative=True)
+
+		# return if there is no selection
+		if selection is None:
+			return
 
 		dialog = MoveDialog(
 						self._parent,
 						self.get_provider(),
 						self._get_other_provider().get_path()
-						)
+					)
 		result = dialog.get_response()
 
 		if result[0] == gtk.RESPONSE_OK:
@@ -619,6 +631,7 @@ class FileList(ItemList):
 									self._get_other_provider(),
 									result[1]  # options from dialog
 								)
+			operation.set_selection(selection)
 			operation.start()
 
 		return True

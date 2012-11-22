@@ -705,6 +705,7 @@ class ItemList(PluginBase):
 							)
 
 			# start the operation
+			operation.set_selection(selection)
 			operation.start()
 
 			result = True

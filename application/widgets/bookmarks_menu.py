@@ -151,6 +151,11 @@ class BookmarksMenu:
 			for menu_item in self._menus:
 				self._store.append((Type.MENU_ITEM, menu_item.name, menu_item.icon, None, menu_item.callback, menu_item.data))
 
+		# select first item in list
+		path = self._store.get_path(self._store.get_iter_first())
+		self._list.set_cursor(path)
+		self._list.scroll_to_cell(path)
+
 	def __is_row_separator(self, model, iter, data=None):
 		"""Check if specified row should be treated as separator"""
 		result = False

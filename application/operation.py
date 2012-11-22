@@ -55,6 +55,7 @@ class Operation(Thread):
 		self._dir_list = []
 		self._file_list = []
 		self._error_list = []
+		self._selection_list = []
 
 		# store initial paths
 		self._source_path = self._source.get_path()
@@ -382,6 +383,10 @@ class Operation(Thread):
 
 		return response
 
+	def set_selection(self, item_list):
+		"""Set list of selected items"""
+		self._selection_list.extend(item_list)
+
 	def pause(self):
 		"""Pause current operation"""
 		self._can_continue.clear()
@@ -428,12 +433,8 @@ class CopyOperation(Operation):
 		"""Find all files for copying"""
 		gobject.idle_add(self._update_status, _('Searching for files...'))
 		
-		# safely get selection list from parent
-		with gtk.gdk.lock:
-			item_list = self._source.get_selection(relative=True)
-
 		# traverse through the rest of the items
-		for item in item_list:
+		for item in self._selection_list:
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
@@ -467,11 +468,6 @@ class CopyOperation(Operation):
 				gobject.idle_add(self._dialog.increment_total_size, item_stat.size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
 				self._file_list.append(item)
-
-		# clear selection on source directory
-		parent = self._source.get_parent()
-		if self._source_path == parent.path:
-			parent.unselect_all()
 
 	def _set_mode(self, path, mode):
 		"""Set mode for specified path"""
@@ -774,6 +770,12 @@ class CopyOperation(Operation):
 		# get list of items to copy
 		self._get_lists()
 
+		# clear selection on source directory
+		with gtk.gdk.lock:
+			parent = self._source.get_parent()
+			if self._source_path == parent.path:
+				parent.unselect_all()
+
 		# perform operation
 		self._create_directory_list()
 		self._copy_file_list()
@@ -976,6 +978,12 @@ class MoveOperation(CopyOperation):
 
 		self._get_lists()
 
+		# clear selection on source directory
+		with gtk.gdk.lock:
+			parent = self._source.get_parent()
+			if self._source_path == parent.path:
+				parent.unselect_all()
+
 		# create directories
 		self._create_directory_list()
 
@@ -1070,10 +1078,9 @@ class DeleteOperation(Operation):
 
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
-		# get selected items
-		with gtk.gdk.lock:
-			self._file_list = self._source.get_selection(relative=True)
+		self._file_list = self._selection_list[:]  # use predefined selection list
 
+		with gtk.gdk.lock:
 			# clear selection on source directory
 			parent = self._source.get_parent()
 			if self._source_path == parent.path:
@@ -1162,7 +1169,6 @@ class RenameOperation(Operation):
 
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
-		# remove them
 		for index, item in enumerate(self._file_list, 1):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock

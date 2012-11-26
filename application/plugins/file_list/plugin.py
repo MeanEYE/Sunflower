@@ -588,9 +588,19 @@ class FileList(ItemList):
 		if selection is None:
 			return
 
+		# get providers
+		opposite_object = self._parent.get_opposite_object(self)
+		source_provider = self.get_provider()
+		destination_provider = None
+
+		if hasattr(opposite_object, 'get_provider'):
+			destination_provider = opposite_object.get_provider()
+		
+		# ask confirmation from user
 		dialog = CopyDialog(
 						self._parent,
-						self.get_provider(),
+						source_provider,
+						destination_provider,
 						self._get_other_provider().get_path()
 					)
 		result = dialog.get_response()
@@ -616,9 +626,19 @@ class FileList(ItemList):
 		if selection is None:
 			return
 
+		# get providers
+		opposite_object = self._parent.get_opposite_object(self)
+		source_provider = self.get_provider()
+		destination_provider = None
+
+		if hasattr(opposite_object, 'get_provider'):
+			destination_provider = opposite_object.get_provider()
+
+		# ask confirmation from user
 		dialog = MoveDialog(
 						self._parent,
-						self.get_provider(),
+						source_provider,
+						destination_provider,
 						self._get_other_provider().get_path()
 					)
 		result = dialog.get_response()

@@ -44,8 +44,8 @@ class Terminal(PluginBase):
 
 	_vte_present = False
 
-	def __init__(self, parent, notebook, path=None):
-		PluginBase.__init__(self, parent, notebook, path)
+	def __init__(self, parent, notebook, options):
+		PluginBase.__init__(self, parent, notebook, options)
 
 		# make options available in local namespace
 		options = self._parent.options
@@ -55,27 +55,6 @@ class Terminal(PluginBase):
 
 		# change list icon
 		self._title_bar.set_icon_from_name('terminal')
-
-		# recycle button
-		self._recycle_button = gtk.Button()
-
-		if options.get('tab_button_icons'):
-			# set icon
-			image_recycle = gtk.Image()
-			image_recycle.set_from_icon_name('reload', gtk.ICON_SIZE_MENU)
-			self._recycle_button.set_image(image_recycle)
-		else:
-			# set text
-			self._recycle_button = gtk.Button(ButtonText.RECYCLE)
-
-		self._recycle_button.set_focus_on_click(False)
-		self._recycle_button.set_tooltip_text(_('Recycle terminal'))
-		self._recycle_button.set_relief((
-									gtk.RELIEF_NONE,
-									gtk.RELIEF_NORMAL
-									)[options.get('button_relief')])
-
-		self._recycle_button.connect('clicked', self._recycle_terminal)
 
 		# terminal menu button
 		self._menu_button = gtk.Button()
@@ -94,12 +73,11 @@ class Terminal(PluginBase):
 		self._menu_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
-									)[options.get('button_relief')])
+								)[options.get('button_relief')])
 
 		self._menu_button.connect('clicked', self._show_terminal_menu)
 
 		# pack buttons
-		self._title_bar.add_control(self._recycle_button)
 		self._title_bar.add_control(self._menu_button)
 
 		# create main object
@@ -199,13 +177,9 @@ class Terminal(PluginBase):
 		"""Update status bar text with terminal data"""
 		self.update_status(self._terminal.get_status_line())
 
-	def _recycle_terminal(self, widget, data=None):
-		"""Recycle terminal"""
-		pass
-
 	def _create_terminal(self, widget, data=None):
 		"""Create terminal tab in parent notebook"""
-		self._parent.create_terminal_tab(self._notebook, self.path)
+		self._parent.create_terminal_tab(self._notebook, self._options)
 		return True
 
 	def _create_menu(self):
@@ -239,7 +213,7 @@ class Terminal(PluginBase):
 
 	def _duplicate_tab(self, widget, data=None):
 		"""Creates new tab with same path"""
-		PluginBase._duplicate_tab(self, None, self.path)
+		PluginBase._duplicate_tab(self, None, self._options)
 		return True
 
 	def _get_menu_position(self, menu, button):

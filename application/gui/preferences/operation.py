@@ -23,7 +23,7 @@ class OperationOptions(SettingsPage):
 		vbox_confirmations.set_border_width(5)
 
 		# create components
-		self._checkbox_trash_files = gtk.CheckButton(_('Delete items to trash can'))
+		self._checkbox_trash_files = gtk.CheckButton(_('Delete items to trashcan'))
 		self._checkbox_reserve_size = gtk.CheckButton(_('Reserve free space on copy/move'))
 		self._checkbox_automount_on_start = gtk.CheckButton(_('Automount drives on start up'))
 		self._checkbox_automount_on_insert = gtk.CheckButton(_('Automount removable drives when inserted'))

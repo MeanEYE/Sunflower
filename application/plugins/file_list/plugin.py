@@ -536,7 +536,7 @@ class FileList(ItemList):
 
 	def _delete_files(self, widget=None, data=None):
 		"""Delete selected files"""
-		selection = self._get_selection_list(relative=False)
+		selection = self._get_selection_list(relative=True)
 
 		# return if there is no selection
 		if selection is None:

@@ -64,12 +64,16 @@ class ViewEditOptions(SettingsPage):
 		self._entry_editor = gtk.Entry()
 		self._entry_editor.connect('changed', self._parent.enable_save)
 
+		self._checkbox_terminal_command = gtk.CheckButton(_('Execute command in terminal tab'))
+		self._checkbox_terminal_command.connect('toggled', self._parent.enable_save)
+
 		# pack ui
 		vbox_application.pack_start(self._combobox_application, False, False, 0)
 		align_application.add(vbox_application)
 
 		vbox_external.pack_start(label_editor, False, False, 0)
 		vbox_external.pack_start(self._entry_editor, False, False, 0)
+		vbox_external.pack_start(self._checkbox_terminal_command, False, False, 0)
 		align_external.add(vbox_external)
 
 		vbox_edit.pack_start(self._radio_application, False, False, 0)
@@ -122,6 +126,7 @@ class ViewEditOptions(SettingsPage):
 
 		# configure user interface
 		self._entry_editor.set_text(options.get('external_command'))
+		self._checkbox_terminal_command.set_active(options.get('terminal_command'))
 
 	def _save_options(self):
 		"""Save options"""
@@ -149,3 +154,4 @@ class ViewEditOptions(SettingsPage):
 		options.set('default_editor', command)
 		options.set('application', application_name)
 		options.set('external_command', external_command)
+		options.set('terminal_command', self._checkbox_terminal_command.get_active())

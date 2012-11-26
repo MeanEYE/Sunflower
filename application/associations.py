@@ -1,6 +1,7 @@
 import os
 import gio
 import gtk
+import shlex
 import subprocess
 
 from common import is_x_app
@@ -38,6 +39,48 @@ class AssociationManager:
 			result = icon_object.get_file().get_path()
 			
 		return result
+
+	def __format_command_string(self, selection, command):
+		"""Format command string"""
+		# we modify exec_string and use 
+		# command for testing to avoid problem
+		# with Unicode characters in URI
+		exec_string = command
+
+		if selection is not None:
+			# prepare lists
+			normal_list = ["'{0}'".format(item) for item in selection]
+			uri_list = ["'{0}'".format(item) for item in selection]
+			dir_list = ["'{0}'".format(os.path.dirname(item) for item in selection)]
+			names_list = ["'{0}'".format(os.path.basename(item) for item in selection)]
+
+			# prepare single item selection
+			if '%f' in command:
+				exec_string = exec_string.replace('%f', "'{0}'".format(selection[0]))
+
+			if '%u' in command:
+				exec_string = exec_string.replace('%u', "'{0}'".format(selection[0]))
+
+			if '%d' in command:
+				exec_string = exec_string.replace('%d', "'{0}'".format(os.path.dirname(selection[0])))
+
+			if '%n' in command:
+				exec_string = exec_string.replace('%n', "'{0}'".format(os.path.basename(selection[0])))
+
+			# prepare multiple selection
+			if '%F' in command:
+				exec_string = exec_string.replace('%F', ' '.join(normal_list))
+
+			if '%U' in command:
+				exec_string = exec_string.replace('%U', ' '.join(uri_list))
+
+			if '%D' in command:
+				exec_string = exec_string.replace('%D', ' '.join(dir_list))
+
+			if '%N' in command:
+				exec_string = exec_string.replace('%N', ' '.join(names_list))
+
+		return exec_string
 
 	def is_mime_type_subset(self, mime_type, super_type):
 		"""Check whether specified mime_type is a subset of super_type"""
@@ -144,53 +187,41 @@ class AssociationManager:
 			# raise exception, we need at least one argument
 			raise AttributeError('Error opening file. We need command or application to be specified.')
 		
-		# we modify exec_string and use 
-		# command for testing to avoid problem
-		# with Unicode characters in URI
-		exec_string = command
+		exec_string = self.__format_command_string(selection, command)
 
-		if selection is not None:
-			# prepare lists
-			normal_list = ["'{0}'".format(item) for item in selection]
-			uri_list = ["'{0}'".format(item) for item in selection]
-			dir_list = ["'{0}'".format(os.path.dirname(item) for item in selection)]
-			names_list = ["'{0}'".format(os.path.basename(item) for item in selection)]
+		# open selected file(s)
+		split_command = shlex.split(exec_string)
+		test_command = split_command[0] if len(split_command) > 1 else exec_string
 
-			# prepare single item selection
-			if '%f' in command:
-				exec_string = exec_string.replace('%f', "'{0}'".format(selection[0]))
-
-			if '%u' in command:
-				exec_string = exec_string.replace('%u', "'{0}'".format(selection[0]))
-
-			if '%d' in command:
-				exec_string = exec_string.replace('%d', "'{0}'".format(os.path.dirname(selection[0])))
-
-			if '%n' in command:
-				exec_string = exec_string.replace('%n', "'{0}'".format(os.path.basename(selection[0])))
-
-			# prepare multiple selection
-			if '%F' in command:
-				exec_string = exec_string.replace('%F', ' '.join(normal_list))
-
-			if '%U' in command:
-				exec_string = exec_string.replace('%U', ' '.join(uri_list))
-
-			if '%D' in command:
-				exec_string = exec_string.replace('%D', ' '.join(dir_list))
-
-			if '%N' in command:
-				exec_string = exec_string.replace('%N', ' '.join(names_list))
-
-			# open selected file(s)
+		if is_x_app(test_command):
 			os.system('{0} &'.format(exec_string))
+
+		else:
+			self._application.execute_command_in_terminal_tab(
+									command=exec_string,
+									close_with_child=True
+								)
 
 	def edit_file(self, selection):
 		"""Edit selected filename"""
 		section = self._application.options.section('editor')
 		command = section.get('default_editor')
 
-		self.open_file(selection, exec_command=command)
+		exec_string = self.__format_command_string(selection, command)
+
+		# open selected file(s)
+		split_command = shlex.split(exec_string)
+		test_command = split_command[0] if len(split_command) > 1 else exec_string
+
+		if section.get('terminal_command') \
+		or not is_x_app(test_command):
+			self._application.execute_command_in_terminal_tab(
+									command=exec_string,
+									close_with_child=True
+								)
+
+		else:
+			os.system('{0} &'.format(exec_string))
 
 	def execute_file(self, path, provider=None):
 		"""Execute specified item properly."""

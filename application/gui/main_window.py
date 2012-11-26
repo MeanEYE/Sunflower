@@ -1679,14 +1679,12 @@ class MainWindow(gtk.Window):
 						os.system('{0} &'.format(raw_command))
 
 					else:
-						tab = self.create_terminal_tab(active_object._notebook)
-
-						tab._close_on_child_exit = False
-						tab._terminal.fork_command(
-										command=command[0],
-										argv=command,
-										directory=active_object.path
-									)
+						self.execute_command_in_terminal_tab(
+								command=command[0],
+								argv=command[1:],
+								directory=active_object.path,
+								close_with_child=False
+							)
 
 				handled = True
 
@@ -1697,6 +1695,19 @@ class MainWindow(gtk.Window):
 			print 'Unhandled command: {0}'.format(command[0])
 
 		return True
+
+	def execute_command_in_terminal_tab(self, command, argv=None, directory=None, close_with_child=True):
+		"""Execute specified command in new terminal tab"""
+		active_object = self.get_active_object()
+		tab = self.create_terminal_tab(active_object._notebook)
+
+		print command
+		tab._close_on_child_exit = close_with_child
+		tab._terminal.fork_command(
+						command=command,
+						argv=argv,
+						directory=directory if directory is not None else active_object.path
+					)
 
 	def save_tabs(self, notebook, section):
 		"""Save opened tabs"""
@@ -1917,7 +1928,7 @@ class MainWindow(gtk.Window):
 					'default_editor': default_application.command_line,
 					'external_command': default_application.command_line,
 					'application': default_application.name,
-					'wait_for_editor': False
+					'terminal_command': False
 				})
 
 		# create default options for bookmarks

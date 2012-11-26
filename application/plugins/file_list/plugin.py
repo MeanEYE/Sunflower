@@ -515,7 +515,7 @@ class FileList(ItemList):
 
 				# if specified, edit file after creating it
 				if edit_after:
-					self._edit_filename(response[1])
+					self._parent.association_manager.edit_file((response[1], ))
 
 			except OSError as error:
 				# error creating, report to user
@@ -744,21 +744,22 @@ class FileList(ItemList):
 
 		return True
 
-	def _get_selection(self, relative=False):
+	def _get_selection(self, relative=False, files_only=False):
 		"""Return item with path under cursor"""
 		result = None
 		selection = self._item_list.get_selection()
 		item_list, selected_iter = selection.get_selected()
 
+		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
 
-		if not is_parent:
+		if not is_parent and ((not files_only) or (files_only and not is_dir)):
 			item = item_list.get_value(selected_iter, Column.NAME)
 			result = item if relative else os.path.join(self.path, item)
 
 		return result
 
-	def _get_selection_list(self, under_cursor=False, relative=False):
+	def _get_selection_list(self, under_cursor=False, relative=False, files_only=False):
 		"""Return list of selected items
 
 		This list is used by many other methods inside this program,
@@ -768,7 +769,7 @@ class FileList(ItemList):
 		result = []
 
 		if under_cursor:
-			selection = self._get_selection()
+			selection = self._get_selection(relative=relative, files_only=files_only)
 			if selection is None:
 				result = None
 			else:
@@ -776,16 +777,17 @@ class FileList(ItemList):
 
 		else:
 			for row in self._store:
-				if row[Column.COLOR] is not None:
+				if row[Column.COLOR] is not None \
+				and ((not files_only) or (files_only and not row[Column.IS_DIR])):
 					value = row[Column.NAME] if relative else os.path.join(self.path, row[Column.NAME])
 					result.append(value)
 
-		if len(result) is 0:
-			selection = self._get_selection(relative=relative)
-			if selection is None:
-				result = None
-			else:
-				result.append(selection)
+			if len(result) == 0:
+				selection = self._get_selection(relative=relative, files_only=files_only)
+				if selection is None:
+					result = None
+				else:
+					result.append(selection)
 
 		return result
 
@@ -1076,28 +1078,12 @@ class FileList(ItemList):
 
 	def _edit_selected(self, widget=None, data=None):
 		"""Abstract method to edit currently selected item"""
-		selection = self._item_list.get_selection()
-		item_list, selected_iter = selection.get_selected()
+		selection_list = self._get_selection_list(relative=False, files_only=True)
 
-		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
-
-		if not is_dir and self.get_provider().is_local:
-			self._edit_filename(item_list.get_value(selected_iter, Column.NAME))
+		if len(selection_list) > 0:
+			self._parent.associations_manager.edit_file(selection_list)
 
 		return True
-
-	def _edit_filename(self, filename):
-		"""Open editor with specified filename and current path"""
-		section = self._parent.options.section('editor')
-		default_editor = section.get('default_editor')
-		filename = os.path.join(self.path, filename)
-		command = default_editor.format(filename)
-
-		# if we shouldn't wait for editor, add & at the end of command
-		if not section.get('wait_for_editor'):
-			command = '{0} &'.format(command)
-
-		os.system(command)
 
 	def _find_iter_by_name(self, name):
 		""" Find and return item by name"""

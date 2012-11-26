@@ -5,7 +5,7 @@ import locale
 import fnmatch
 import user
 
-from plugin_base.provider import FileType
+from plugin_base.provider import FileType, Support as ProviderSupport
 from common import get_user_directory, UserDirectory
 
 # constants
@@ -434,11 +434,12 @@ class DirectoryCreateDialog(CreateDialog):
 class CopyDialog:
 	"""Dialog which will ask user for additional options before copying"""
 
-	def __init__(self, application, provider, path):
+	def __init__(self, application, source_provider, destination_provider, path):
 		self._dialog = gtk.Dialog(parent=application)
 
 		self._application = application
-		self._provider = provider
+		self._source_provider = source_provider
+		self._destination_provider = destination_provider
 
 		self._dialog.set_default_size(340, 10)
 		self._dialog.set_resizable(True)
@@ -524,9 +525,44 @@ class CopyDialog:
 		"""Load options from config file"""
 		options = self._application.options.section('operations')
 
-		self.checkbox_owner.set_active(options.get('set_owner'))
-		self.checkbox_mode.set_active(options.get('set_mode'))
-		self.checkbox_timestamp.set_active(options.get('set_timestamp'))
+		# get options supported by providers
+		source_support = self._source_provider.get_support()
+		source_set_owner = ProviderSupport.SET_OWNER in source_support
+		source_set_mode = ProviderSupport.SET_ACCESS in source_support
+		source_set_timestamp = ProviderSupport.SET_TIMESTAMP in source_support
+
+		if self._destination_provider is not None:
+			destination_support = self._destination_provider.get_support()
+			destination_set_owner = ProviderSupport.SET_OWNER in destination_support
+			destination_set_mode = ProviderSupport.SET_ACCESS in destination_support
+			destination_set_timestamp = ProviderSupport.SET_TIMESTAMP in destination_support
+
+		else:
+			destination_set_owner = False
+			destination_set_mode = False
+			destination_set_timestamp = False
+
+		provider_set_owner = source_set_owner and destination_set_owner
+		provider_set_mode = source_set_mode and destination_set_mode
+		provider_set_timestamp = source_set_timestamp and destination_set_timestamp
+
+		# disable checkboxes that are not supported by provider
+		if not provider_set_owner:
+			self.checkbox_owner.set_sensitive(False)
+			self.checkbox_owner.set_tooltip_text(_('Not supported by file system provider'))
+
+		if not provider_set_mode:
+			self.checkbox_mode.set_sensitive(False)
+			self.checkbox_mode.set_tooltip_text(_('Not supported by file system provider'))
+
+		if not provider_set_timestamp:
+			self.checkbox_timestamp.set_sensitive(False)
+			self.checkbox_timestamp.set_tooltip_text(_('Not supported by file system provider'))
+
+		# set checkbox states
+		self.checkbox_owner.set_active(options.get('set_owner') and provider_set_owner)
+		self.checkbox_mode.set_active(options.get('set_mode') and provider_set_mode)
+		self.checkbox_timestamp.set_active(options.get('set_timestamp') and provider_set_timestamp)
 		self.checkbox_silent.set_active(options.get('silent'))
 		self.checkbox_merge.set_active(options.get('merge_in_silent'))
 		self.checkbox_overwrite.set_active(options.get('overwrite_in_silent'))
@@ -535,12 +571,55 @@ class CopyDialog:
 		"""Save default dialog configuration"""
 		options = self._application.options.section('operations')
 
-		options.set('set_owner', self.checkbox_owner.get_active())
-		options.set('set_mode', self.checkbox_mode.get_active())
-		options.set('set_timestamp', self.checkbox_timestamp.get_active())
+		# get options supported by providers
+		source_support = self._source_provider.get_support()
+		source_set_owner = ProviderSupport.SET_OWNER in source_support
+		source_set_mode = ProviderSupport.SET_ACCESS in source_support
+		source_set_timestamp = ProviderSupport.SET_TIMESTAMP in source_support
+
+		if self._destination_provider is not None:
+			destination_support = self._destination_provider.get_support()
+			destination_set_owner = ProviderSupport.SET_OWNER in destination_support
+			destination_set_mode = ProviderSupport.SET_ACCESS in destination_support
+			destination_set_timestamp = ProviderSupport.SET_TIMESTAMP in destination_support
+
+		else:
+			destination_set_owner = False
+			destination_set_mode = False
+			destination_set_timestamp = False
+
+		provider_set_owner = source_set_owner and destination_set_owner
+		provider_set_mode = source_set_mode and destination_set_mode
+		provider_set_timestamp = source_set_timestamp and destination_set_timestamp
+
+		# only save options supported by provider
+		if provider_set_owner:
+			options.set('set_owner', self.checkbox_owner.get_active())
+
+		if provider_set_mode:
+			options.set('set_mode', self.checkbox_mode.get_active())
+
+		if provider_set_timestamp:
+			options.set('set_timestamp', self.checkbox_timestamp.get_active())
+
 		options.set('silent', self.checkbox_silent.get_active())
 		options.set('merge_in_silent', self.checkbox_merge.get_active())
 		options.set('overwrite_in_silent', self.checkbox_overwrite.get_active())
+
+		# show message letting user know
+		if not (provider_set_owner and provider_set_mode and provider_set_timestamp):
+			dialog = gtk.MessageDialog(
+									self._dialog,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_INFO,
+									gtk.BUTTONS_OK,
+									_(
+										'Only options supported by file '
+										'system providers were saved.'
+									)
+								)
+			dialog.run()
+			dialog.destroy()
 
 	def _toggled_silent_mode(self, widget, container):
 		"""Set container sensitivity based on widget status"""
@@ -592,11 +671,11 @@ class CopyDialog:
 
 	def _get_item_count(self):
 		"""Count number of items to copy"""
-		list_ = self._provider.get_selection()
-		result = len(list_)
+		selected_items = self._source_provider.get_selection()
+		result = len(selected_items)
 
 		if hasattr(self, 'entry_type'):
-			matches = fnmatch.filter(list_, self.entry_type.get_text())
+			matches = fnmatch.filter(selected_items, self.entry_type.get_text())
 			result = len(matches)
 
 		return result

@@ -185,6 +185,13 @@ class AssociationManager:
 			# open selected file(s)
 			os.system('{0} &'.format(exec_string))
 
+	def edit_file(self, selection):
+		"""Edit selected filename"""
+		section = self._application.options.section('editor')
+		command = section.get('default_editor')
+
+		self.open_file(selection, exec_command=command)
+
 	def execute_file(self, path, provider=None):
 		"""Execute specified item properly."""
 		mime_type = self.get_mime_type(path)

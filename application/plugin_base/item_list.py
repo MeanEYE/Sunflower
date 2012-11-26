@@ -1276,10 +1276,6 @@ class ItemList(PluginBase):
 		"""Abstract method to edit currently selected item"""
 		pass
 
-	def _edit_filename(self, filename):
-		"""Open editor with specified filename and current path"""
-		pass
-
 	def _inherit_left_path(self, widget, data=None):
 		"""Inherit path in right list from left"""
 		opposite_object = self._parent.get_opposite_object(self)

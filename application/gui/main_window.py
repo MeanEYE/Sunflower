@@ -1910,9 +1910,13 @@ class MainWindow(gtk.Window):
 				})
 
 		# create default editor options
+		default_application = self.associations_manager.get_default_application_for_type('text/plain')
+
 		self.options.create_section('editor').update({
 					'type': 0,
-					'default_editor': 'gedit "{0}"',
+					'default_editor': default_application.command_line,
+					'external_command': default_application.command_line,
+					'application': default_application.name,
 					'wait_for_editor': False
 				})
 

@@ -17,12 +17,11 @@ class PluginBase(gtk.VBox):
 
 	"""
 
-	def __init__(self, parent, notebook, path=None):
+	def __init__(self, parent, notebook, options):
 		gtk.VBox.__init__(self, False, 3)
 
-		self.path = path
-
-		self._parent = parent  # parent is stored locally for later use
+		self._parent = parent
+		self._options = options
 		self._notebook = notebook
 		self._name = self.__class__.__name__
 

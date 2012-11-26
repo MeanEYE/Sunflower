@@ -30,7 +30,7 @@ class ItemList(PluginBase):
 
 	"""
 
-	def __init__(self, parent, notebook, path=None, sort_column=None, sort_ascending=True):
+	def __init__(self, parent, notebook, options):
 		self._provider = None
 		self._menu_timer = None
 
@@ -52,8 +52,8 @@ class ItemList(PluginBase):
 		self._is_updating = False
 
 		# sort options
-		self._sort_column = sort_column
-		self._sort_ascending = sort_ascending
+		self._sort_column = self._options.get('sort_column')
+		self._sort_ascending = self._options.get('sort_ascending')
 		self._sort_column_widget = None
 		self._sort_sensitive = self._parent.options.section('item_list').get('case_sensitive_sort')
 		self._columns = None

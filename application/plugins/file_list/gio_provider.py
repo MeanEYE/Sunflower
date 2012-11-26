@@ -290,6 +290,8 @@ class GioProvider(Provider):
 		"""Return supported options by provider"""
 		return (
 			Support.SET_TIMESTAMP,
+			Support.SET_ACCESS,
+			Support.SET_OWNER
 		)
 
 

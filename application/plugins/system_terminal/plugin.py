@@ -13,18 +13,17 @@ def register_plugin(application):
 class SystemTerminal(Terminal):
 	"""System terminal plugin"""
 
-	def __init__(self, parent, notebook, path=None):
-		Terminal.__init__(self, parent, notebook, path)
+	def __init__(self, parent, notebook, options):
+		Terminal.__init__(self, parent, notebook, options)
 
 		# variable to store process id
 		self._pid = None
 
 		# make sure we open in a good path
-		if self.path is None:
-			self.path = user.home
+		self.path = self._options.get('path', user.path)
+		self._close_on_child_exit = self._options.get('close_with_child', True)
+		shell_command = self._options.get('shell_command', os.environ['SHELL'])
 
-		self._close_on_child_exit = True
-		shell_command = os.environ['SHELL']
 		terminal_type = self._parent.options.section('terminal').get('type')
 
 		if terminal_type == TerminalType.VTE:
@@ -80,17 +79,6 @@ class SystemTerminal(Terminal):
 				self.path = os.readlink('/proc/{0}/cwd'.format(self._pid))
 		except:
 			pass
-
-	def _recycle_terminal(self, widget, data=None):
-		"""Recycle terminal"""
-		self._close_on_child_exit = True
-
-		shell_command = os.environ['SHELL']
-		self._terminal.reset(True, True)
-		self._terminal.fork_command(
-								command=shell_command,
-								directory=self.path
-							)
 
 	def _close_tab(self, widget=None, data=None):
 		"""Provide additional functionality"""

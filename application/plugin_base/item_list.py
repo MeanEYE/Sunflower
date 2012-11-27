@@ -7,6 +7,7 @@ import common
 from plugin import PluginBase
 from operation import CopyOperation, MoveOperation
 from accelerator_group import AcceleratorGroup
+from parameters import Parameters
 from tools.viewer import Viewer
 from gui.input_dialog import CopyDialog, MoveDialog, InputDialog
 from gui.preferences.display import StatusVisible
@@ -31,13 +32,14 @@ class ItemList(PluginBase):
 	"""
 
 	def __init__(self, parent, notebook, options):
+		# call parent constructor
+		PluginBase.__init__(self, parent, notebook, options)
+
+		# store local stuff
 		self._provider = None
 		self._menu_timer = None
 
 		self.history = []
-
-		# call parent constructor
-		PluginBase.__init__(self, parent, notebook, path)
 
 		# list statistics
 		self._dirs = {'count': 0, 'selected': 0}
@@ -560,6 +562,10 @@ class ItemList(PluginBase):
 		"""Clean up before tab close"""
 		PluginBase._handle_tab_close(self)
 		self._main_object.handler_block_by_func(self._column_changed)
+
+		self._options.set('path', self.path)
+		self._options.set('sort_column', self._sort_column)
+		self._options.set('sort_ascending', self._sort_ascending)
 
 		return True
 
@@ -1149,7 +1155,10 @@ class ItemList(PluginBase):
 
 	def _create_terminal(self, widget, data=None):
 		"""Create terminal tab in parent notebook"""
-		self._parent.create_terminal_tab(self._notebook, self.path)
+		options = Parameters()
+		options.set('path', self.path)
+
+		self._parent.create_terminal_tab(self._notebook, options)
 		return True
 
 	def _set_sort_function(self, widget, data=None):

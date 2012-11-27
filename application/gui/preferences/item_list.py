@@ -117,7 +117,7 @@ class ItemListOptions(SettingsPage):
 		self._entry_time_format.set_tooltip_markup(
 								'<b>' + _('Time is formed using the format located at:') + '</b>\n'
 								'http://docs.python.org/library/time.html#time.strftime'
-								)
+							)
 		self._entry_time_format.connect('changed', self._parent.enable_save)
 
 		# create columns editor
@@ -273,6 +273,12 @@ class ItemListOptions(SettingsPage):
 
 			self._extensions[class_name] = extension
 			self._extension_store.append((name, class_name))
+
+		# select first extension
+		if len(self._extension_store) > 0:
+			path = self._extension_store.get_path(self._extension_store.get_iter_first())
+			self._extension_list.set_cursor(path)
+			self._extension_list.scroll_to_cell(path)
 
 	def _handle_cursor_change(self, widget, data=None):
 		"""Handle selecting column editor extension"""

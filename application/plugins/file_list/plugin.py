@@ -66,10 +66,14 @@ class FileList(ItemList):
 	"""
 	column_editor = None
 
-	def __init__(self, parent, notebook, path=None, sort_column=None, sort_ascending=True):
-		ItemList.__init__(self, parent, notebook, path, sort_column, sort_ascending)
+	def __init__(self, parent, notebook, options):
+		ItemList.__init__(self, parent, notebook, options)
 
 		self.scheme = 'file'
+
+		self.path = self._options.get('path', user.home)
+		self._sort_column = self._options.get('sort_column', 0)
+		self._sort_ascending = self._options.get('sort_ascending', True)
 
 		# event object controlling path change thread
 		self._thread_active = Event()
@@ -271,7 +275,7 @@ class FileList(ItemList):
 
 		# change to initial path
 		try:
-			self.change_path(path)
+			self.change_path(self.path)
 
 		except:
 			# fail-safe jump to user home directory
@@ -392,10 +396,13 @@ class FileList(ItemList):
 		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
 
 		if is_dir:
+			options = Parameters()
+			options.set('path', os.path.join(self.path, name))
+
 			self._parent.create_tab(
 							self._notebook,
 							self.__class__,
-							os.path.join(self.path, name)
+							options
 						)
 
 		return True

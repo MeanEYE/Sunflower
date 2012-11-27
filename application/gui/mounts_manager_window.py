@@ -1,6 +1,7 @@
 import gtk
 import gio
 
+from parameters import Parameters
 from plugin_base.mount_manager_extension import MountManagerExtension, ExtensionFeatures
 
 # redefine some GIO constants for legacy support
@@ -420,10 +421,13 @@ class MountsExtension(MountManagerExtension):
 
 			else:
 				# create new tab
+				options = Parameters()
+				options.set('path', uri)
+
 				self._application.create_tab(
 								active_object._notebook,
 								active_object.__class__,
-								uri
+								options
 							)
 		return True
 
@@ -704,7 +708,6 @@ class VolumesExtension(MountManagerExtension):
 		# auto mount if needed
 		if mount is None \
 		and should_mount:
-			print "Mounting...", mount
 			# show busy spinner if possible
 			self._show_spinner()
 		

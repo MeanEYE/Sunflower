@@ -1,6 +1,8 @@
 import os
 import gtk
 
+from parameters import Parameters
+
 
 class Column:
 	NAME = 0
@@ -115,10 +117,13 @@ class HistoryList(gtk.Window):
 
 			else:
 				# create a new tab
+				options = Parameters()
+				options.set('path', path)
+
 				self._application.create_tab(
 								self._parent._notebook,
 								self._parent.__class__,
-								path
+								options
 							)
 
 			# close dialog

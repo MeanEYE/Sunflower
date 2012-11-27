@@ -239,7 +239,7 @@ class PluginBase(gtk.VBox):
 
 	def _duplicate_tab(self, widget, data=None):
 		"""Creates new tab with same path"""
-		self._parent.create_tab(self._notebook, self.__class__, data)
+		self._parent.create_tab(self._notebook, self.__class__, self._options.copy())
 		return True
 
 	def _close_tab(self, widget=None, data=None):

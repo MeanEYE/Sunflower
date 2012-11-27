@@ -2,6 +2,7 @@ import os
 import user
 import subprocess
 
+from parameters import Parameters
 from plugin_base.terminal import Terminal, TerminalType
 
 
@@ -20,7 +21,7 @@ class SystemTerminal(Terminal):
 		self._pid = None
 
 		# make sure we open in a good path
-		self.path = self._options.get('path', user.path)
+		self.path = self._options.get('path', user.home)
 		self._close_on_child_exit = self._options.get('close_with_child', True)
 		shell_command = self._options.get('shell_command', os.environ['SHELL'])
 
@@ -29,17 +30,14 @@ class SystemTerminal(Terminal):
 		if terminal_type == TerminalType.VTE:
 			# we need TERM environment variable set
 			if not os.environ.has_key('TERM'):
-				os.environ['TERM'] = 'xterm'
+				os.environ['TERM'] = 'xterm-color'
 				os.environ['COLORTERM'] = 'gnome-terminal'
 
 			if self._vte_present:
 				# fork default shell
 				self._terminal.connect('child-exited', self.__child_exited)
 				self._terminal.connect('status-line-changed', self._update_terminal_status)
-				self._pid = self._terminal.fork_command(
-										command=shell_command,
-										directory=self.path
-									)
+				self._terminal.connect('realize', self.__terminal_realized)
 
 		elif terminal_type == TerminalType.EXTERNAL:
 			# connect signals
@@ -67,6 +65,16 @@ class SystemTerminal(Terminal):
 		process = subprocess.Popen(terminal_command, cwd=self.path)
 		self._pid = process.pid
 
+	def __terminal_realized(self, widget, data=None):
+		"""Event called once terminal emulator is realized"""
+		shell_command = self._options.get('shell_command', os.environ['SHELL'])
+		arguments = self._options.get('arguments', [shell_command])
+		self._pid = self._terminal.fork_command(
+								command=shell_command,
+								argv=arguments,
+								directory=self.path
+							)
+
 	def __child_exited(self, widget, data=None):
 		"""Handle child process termination"""
 		if self._close_on_child_exit:
@@ -77,6 +85,7 @@ class SystemTerminal(Terminal):
 		try: 
 			if self._pid is not None and os.path.isdir('/proc/{0}'.format(self._pid)):
 				self.path = os.readlink('/proc/{0}/cwd'.format(self._pid))
+				self._options.set('path', self.path)
 		except:
 			pass
 
@@ -84,7 +93,10 @@ class SystemTerminal(Terminal):
 		"""Provide additional functionality"""
 		if self._notebook.get_n_pages() == 1:
 			DefaultList = self._parent.plugin_classes['file_list']
-			self._parent.create_tab(self._notebook, DefaultList, self.path)
+			options = Parameters()
+			options.set('path', self.path)
+
+			self._parent.create_tab(self._notebook, DefaultList, options)
 
 		return Terminal._close_tab(self, widget, data)
 

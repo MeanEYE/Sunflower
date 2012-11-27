@@ -19,6 +19,7 @@ from notifications import NotificationManager
 from toolbar import ToolbarManager
 from accelerator_manager import AcceleratorManager
 from keyring import KeyringManager, InvalidKeyringError
+from parameters import Parameters
 
 from plugin_base.item_list import ItemList
 from plugin_base.rename_extension import RenameExtension
@@ -1494,11 +1495,15 @@ class MainWindow(gtk.Window):
 		if self.arguments is not None:
 			if self.arguments.left_tabs is not None:
 				for path in self.arguments.left_tabs:
-					self.create_tab(self.left_notebook, DefaultList, path)
+					options = Parameters()
+					options.set('path', path)
+					self.create_tab(self.left_notebook, DefaultList, options)
 
 			if self.arguments.right_tabs is not None:
 				for path in self.arguments.right_tabs:
-					self.create_tab(self.right_notebook, DefaultList, path)
+					options = Parameters()
+					options.set('path', path)
+					self.create_tab(self.right_notebook, DefaultList, options)
 
 		# focus active notebook
 		active_notebook_index = self.options.get('active_notebook')
@@ -1509,15 +1514,13 @@ class MainWindow(gtk.Window):
 		# enter main loop
 		gtk.main()
 
-	def create_tab(self, notebook, plugin_class=None, path=None, sort_column=None, sort_ascending=None):
+	def create_tab(self, notebook, plugin_class=None, options=None):
 		"""Safe create tab"""
-		if sort_column is not None and sort_column != '':
-			# create plugin object with sort parameters
-			new_tab = plugin_class(self, notebook, path, int(sort_column), bool(int(sort_ascending)))
+		if options is None:
+			options = Parameters()
 
-		else:
-			# create plugin object without sorting information
-			new_tab = plugin_class(self, notebook, path)
+		# create plugin object 
+		new_tab = plugin_class(self, notebook, options)
 
 		# add page to notebook
 		index = notebook.append_page(new_tab, new_tab.get_tab_label())
@@ -1535,17 +1538,21 @@ class MainWindow(gtk.Window):
 
 		return new_tab
 
-	def create_terminal_tab(self, notebook, path=None, external=False):
+	def create_terminal_tab(self, notebook, options=None):
 		"""Create terminal tab on selected notebook"""
 		result = None
+
+		if options is None:
+			options = Parameters()
+
 		terminal_command = self.options.section('terminal').get('command')
 		terminal_type = self.options.section('terminal').get('type')
-		open_in_tab = not ((terminal_type == TerminalType.EXTERNAL and '{0}' not in terminal_command) or external)
+		open_in_tab = not (terminal_type == TerminalType.EXTERNAL and '{0}' not in terminal_command)
 
 		if open_in_tab:
 			# create new terminal tab
 			SystemTerminal = self.plugin_classes['system_terminal']
-			result = self.create_tab(notebook, SystemTerminal, path)
+			result = self.create_tab(notebook, SystemTerminal, options)
 
 		else:
 			# open external terminal application
@@ -1679,12 +1686,13 @@ class MainWindow(gtk.Window):
 						os.system('{0} &'.format(raw_command))
 
 					else:
-						self.execute_command_in_terminal_tab(
-								command=command[0],
-								argv=command[1:],
-								directory=active_object.path,
-								close_with_child=False
-							)
+						options = Parameters()
+						options.set('close_with_child', False)
+						options.set('shell_command', command[0])
+						options.set('arguments', command)
+						options.set('path', active_object.path)
+
+						self.create_terminal_tab(active_object._notebook, options)
 
 				handled = True
 
@@ -1696,38 +1704,20 @@ class MainWindow(gtk.Window):
 
 		return True
 
-	def execute_command_in_terminal_tab(self, command, argv=None, directory=None, close_with_child=True):
-		"""Execute specified command in new terminal tab"""
-		active_object = self.get_active_object()
-		tab = self.create_terminal_tab(active_object._notebook)
-
-		print command
-		tab._close_on_child_exit = close_with_child
-		tab._terminal.fork_command(
-						command=command,
-						argv=argv,
-						directory=directory if directory is not None else active_object.path
-					)
-
 	def save_tabs(self, notebook, section):
 		"""Save opened tabs"""
 		tab_list = []
 
 		for index in range(0, notebook.get_n_pages()):
 			page = notebook.get_nth_page(index)
-			tab = {}
 
 			# give plugin a chance to clean up
 			if hasattr(page, '_handle_tab_close'):
 				page._handle_tab_close()
 
+			# get options from tab
+			tab = page._options.get_params()
 			tab['class'] = page._name
-			tab['uri'] = page.path
-
-			# file lists have sort column
-			if hasattr(page, '_sort_column'):
-				tab['sort_column'] = page._sort_column
-				tab['sort_ascending'] = page._sort_ascending
 
 			# add tab to list
 			tab_list.append(tab)		
@@ -1749,14 +1739,14 @@ class MainWindow(gtk.Window):
 			for tab in tab_list:
 				if self.plugin_class_exists(tab['class']):
 					# create new tab with specified data
-					self.create_tab(
-								notebook,
-								globals()[tab['class']],
-								tab['uri'],
-								tab['sort_column'] if 'sort_column' in tab else None,
-								tab['sort_ascending'] if 'sort_ascending' in tab else None
-							)
+					tab_class = tab['class']
 
+					# prepare stored options
+					options = tab.copy()
+					del options['class']
+
+					# create new tab
+					self.create_tab(notebook, globals()[tab_class], Parameters(options))
 					count += 1
 
 				else:

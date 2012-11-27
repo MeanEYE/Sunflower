@@ -10,6 +10,7 @@ try:
 except:
 	gconf = None
 
+from parameters import Parameters
 from plugin_base.plugin import PluginBase
 from accelerator_group import AcceleratorGroup
 
@@ -179,7 +180,7 @@ class Terminal(PluginBase):
 
 	def _create_terminal(self, widget, data=None):
 		"""Create terminal tab in parent notebook"""
-		self._parent.create_terminal_tab(self._notebook, self._options)
+		self._parent.create_terminal_tab(self._notebook, self._options.copy())
 		return True
 
 	def _create_menu(self):

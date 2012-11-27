@@ -236,10 +236,13 @@ class BookmarksMenu:
 		or item_type == Type.BOOKMARK:
 			if new_tab:
 				# create new tab
+				options = Parameters()
+				options.set('path', path)
+
 				self._application.create_tab(
 								self._object._notebook,
 								self._object.__class__,
-								path
+								options
 							)
 
 			elif hasattr(self._object, 'change_path'):

@@ -1,3 +1,17 @@
+Version 0.1a-50
+  + Automatically detect default editor on first start.
+  + Added support for viewing binary executable files using `nm` command.
+  + Added support for opening and editing files in terminal tab.
+  + Added option to select editor from list of installed applications.
+  * Show message when viewer is unable to display selected file.
+  * Set cursor on first menu item in bookmarks menu.
+  * Select first extension in column editor.
+  * Properly detect file type when preparing popup menu.
+  * Lazy command forking to avoid problems with programs wich measure size of terminal window.
+  * Get list of selected items before starting operation to avoid potential problems.
+  * Fixed problem with removing files on remote file systems.
+  * Check for supported options in providers and only allow supported in copy/move dialog.
+
 Version 0.1a-49
   + Added option to allow disabling confirmation when deleting items.
   * Added missing definitions of WM_CLASS so dialogs are positioned properly on systems with multiple displays.

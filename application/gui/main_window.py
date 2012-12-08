@@ -88,6 +88,7 @@ class MainWindow(gtk.Window):
 		self.find_extension_classes = {}
 		self.mount_manager_extensions = []
 		self.column_editor_extensions = []
+		self.popup_menu_methods = []
 
 		# list of protected plugins
 		self.protected_plugins = ('file_list', 'system_terminal')
@@ -2222,6 +2223,21 @@ class MainWindow(gtk.Window):
 	def register_column_editor_extension(self, extension):
 		"""Register column editor extension"""
 		self.column_editor_extensions.append(extension)
+
+	def register_popup_menu_action(self, mime_types, method, label, icon=None):
+		"""Register handler method for popup menu which will be
+		displayed if file type matches any string in mime_types.
+		
+		mime_types - tuple containing mime type strings
+		method - method to be called when option is activated
+		label - string which will be used for menu item
+		icon - string representing path or icon name for menu item
+
+		def callback(mime_type, path, provider):
+			pass
+		"""
+		data = (mime_types, method, label, icon)
+		self.popup_menu_methods.append(data)
 
 	def plugin_class_exists(self, class_name):
 		"""Check if specified class name exists in active plugins"""

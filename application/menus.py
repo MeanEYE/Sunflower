@@ -69,11 +69,24 @@ class MenuManager:
 
 	def _open_with_callback(self, widget, data):
 		"""Callback event for menu items from 'open with' menu"""
-		self._application.associations_manager.open_file(data['selection'], application_info=data['application'])
+		self._application.associations_manager.open_file(
+									data['selection'], 
+									application_info=data['application']
+								)
 	
 	def _open_with_custom_callback(self, widget, data):
 		"""Callback event for menu items from custom 'open with' menu"""
-		self._application.associations_manager.open_file(data['selection'], exec_command=data['command'])
+		self._application.associations_manager.open_file(
+									data['selection'], 
+									exec_command=data['command']
+								)
+
+	def _additional_options_callback(self, widget, data):
+		"""Callback event for additional options menu items"""
+		method = data['method']
+		
+		if method is not None:
+			method(data['mime_type'], data['selection'], data['provider'])
 
 	def get_accel_group(self):
 		"""Return accelerator group"""
@@ -105,16 +118,54 @@ class MenuManager:
 				image.set_from_icon_name(application.icon, gtk.ICON_SIZE_MENU)
 				item.set_image(image)
 
+			# data for handler
 			data = {
 				'selection': selection,
 				'application': application
-				}
+			}
 
 			# connect signals
 			item.connect('activate', self._open_with_callback, data)
 			item.show()
 
 			result.append(item)
+
+		return result
+
+	def get_additional_options_for_type(self, mime_type, selection, provider):
+		"""Get list of menu items for methods assigned to specified file type"""
+		result = []
+
+		for method_data in self._application.popup_menu_methods:
+			mime_types, method, label, icon = method_data
+			is_subset = self._application.associations_manager.is_mime_type_subset
+			matched_types = filter(lambda iter_mime_type: is_subset(mime_type, iter_mime_type), mime_types)
+
+			# if mime types match, create menu item
+			if len(matched_types) > 0:
+				item = gtk.ImageMenuItem()
+				item.set_label(label)
+				item.set_always_show_image(True)
+
+				# create image to hold icon for menu item
+				if icon is not None:
+					image = gtk.Image()
+					image.set_from_icon_name(icon, gtk.ICON_SIZE_MENU)
+					item.set_image(image)
+
+				# data for handler
+				data = {
+					'method': method,
+					'mime_type': mime_type,
+					'selection': selection,
+					'provider': provider
+				}
+
+				# connect signals 
+				item.connect('activate', self._additional_options_callback, data)
+				item.show()
+
+				result.append(item)
 
 		return result
 
@@ -142,7 +193,7 @@ class MenuManager:
 				data = {
 					'selection': selection,
 					'command': command
-					}
+				}
 
 				# connect an event
 				menu_item.connect('activate', self._open_with_custom_callback, data)

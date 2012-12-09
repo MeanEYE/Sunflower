@@ -1426,6 +1426,9 @@ class FileList(ItemList):
 			self._provider = provider
 			self.path = user.home
 
+		# update options container
+		self._options.set('path', self.path)
+
 		# update GTK controls
 		path_name = os.path.basename(self.path)
 		if path_name == "":

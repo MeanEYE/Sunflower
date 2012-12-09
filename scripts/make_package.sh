@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#   Sunflower Package Build Script (Version 0.0.2)
+#   Sunflower Package Build Script (Version 0.0.3)
 #   Written by Wojciech Kluczka <wojtekkluczka@gmail.com>
 #
 
@@ -28,6 +28,9 @@ function install_sunflower() {
 	cp -f "$1$sunflower_path/images/sunflower.png" "$1/usr/share/pixmaps/sunflower.png"
 	cp -f "$1$sunflower_path/images/sunflower.svg" "$1/usr/share/pixmaps/sunflower.svg"
 
+	case $distro in mageia|mandriva|pclinuxos)
+		desktop-file-edit --add-category="X-MandrivaLinux-System-FileTools" $1$sunflower_path/Sunflower.desktop ;;
+	esac
 	cp -f "$1$sunflower_path/Sunflower.desktop" "$1/usr/share/applications/sunflower.desktop"
 }
 
@@ -64,7 +67,7 @@ function make_pkg() {
 	echo "arch=(any)"                                  >> PKGBUILD
 	echo "url=https://code.google.com/p/sunflower-fm/" >> PKGBUILD
 	echo "license=(GPLv3)"                             >> PKGBUILD
-	echo "depends=(pygtk python-notify vte)"           >> PKGBUILD
+	echo "depends=(pygtk python2-notify vte)"          >> PKGBUILD
 	echo "pkgdesc='$short_description'"                >> PKGBUILD
 	echo ""                                            >> PKGBUILD
 	echo "function build() {"                          >> PKGBUILD

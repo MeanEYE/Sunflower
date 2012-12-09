@@ -918,6 +918,16 @@ class ItemList(PluginBase):
 		self._open_with_menu = gtk.Menu()
 		item.set_submenu(self._open_with_menu)
 
+		# additional options menu
+		item = menu_manager.create_menu_item({
+								'label': _('Additional options'),
+							})
+		result.append(item)
+
+		self._additional_options_item = item
+		self._additional_options_menu = gtk.Menu()
+		item.set_submenu(self._additional_options_menu)
+
 		# separator
 		item = menu_manager.create_menu_item({'type': 'separator'})
 		result.append(item)
@@ -1032,6 +1042,10 @@ class ItemList(PluginBase):
 		# remove existing items
 		for item in self._open_with_menu.get_children():
 			self._open_with_menu.remove(item)
+
+		# remove items from additional options menu
+		for item in self._additional_options_menu.get_children():
+			self._additional_options_menu.remove(item)
 
 	def _prepare_history_menu(self):
 		"""Prepare history menu contents"""

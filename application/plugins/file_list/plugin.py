@@ -803,28 +803,33 @@ class FileList(ItemList):
 		selection = self._item_list.get_selection()
 		item_list, selected_iter = selection.get_selected()
 		associations_manager = self._parent.associations_manager
+		menu_manager = self._parent.menu_manager
 
 		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
 
 		# get selected item
 		filename = self._get_selection()
+		mime_type = associations_manager.get_mime_type(filename)
+		selection = self._get_selection_list()
 
 		# call parent method which removes existing menu items
 		ItemList._prepare_popup_menu(self)
 
+		# update additional options menu
+		additional_options = menu_manager.get_additional_options_for_type(mime_type, selection, self.get_provider())
+		for menu_item in additional_options:
+			self._additional_options_menu.append(menu_item)
+
 		if not is_dir:
 			# detect mime type
-			mime_type = associations_manager.get_mime_type(filename)
 			if associations_manager.is_mime_type_unknown(mime_type):
 				data = associations_manager.get_sample_data(filename, self.get_provider())
 				mime_type = associations_manager.get_mime_type(data=data)
 
 			# get associated applications
-			selection = self._get_selection_list()
-
-			program_list = self._parent.menu_manager.get_items_for_type(mime_type, selection)
-			custom_list = self._parent.menu_manager.get_custom_items_for_type(mime_type, selection)
+			program_list = menu_manager.get_items_for_type(mime_type, selection)
+			custom_list = menu_manager.get_custom_items_for_type(mime_type, selection)
 
 			# create open with menu
 			for menu_item in program_list:
@@ -857,6 +862,7 @@ class FileList(ItemList):
 		# disable/enable items
 		self._open_with_item.set_sensitive(not is_dir)
 		self._open_new_tab_item.set_visible(is_dir)
+		self._additional_options_item.set_sensitive(len(additional_options) > 0)
 		self._cut_item.set_sensitive(not is_parent)
 		self._copy_item.set_sensitive(not is_parent)
 		self._paste_item.set_sensitive(self._parent.is_clipboard_item_list())

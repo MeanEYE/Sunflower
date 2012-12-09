@@ -2233,7 +2233,7 @@ class MainWindow(gtk.Window):
 		label - string which will be used for menu item
 		icon - string representing path or icon name for menu item
 
-		def callback(mime_type, path, provider):
+		def callback(mime_type, selection_list, provider):
 			pass
 		"""
 		data = (mime_types, method, label, icon)

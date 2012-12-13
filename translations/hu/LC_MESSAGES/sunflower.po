@@ -2,21 +2,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sunflower-fm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-27 19:54+0100\n"
+"POT-Creation-Date: 2012-11-12 19:23+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Táncos Tamás <h868315@gmail.com>\n"
 "Language-Team: \n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: application/gui/preferences/terminal.py:11
-#: application/plugins/system_terminal/plugin.py:59
-#: application/plugins/system_terminal/plugin.py:60
-#: application/plugin_base/terminal.py:278
-#: application/plugin_base/item_list.py:118
+#: application/plugins/system_terminal/plugin.py:55
+#: application/plugins/system_terminal/plugin.py:56
+#: application/plugin_base/terminal.py:288
+#: application/plugin_base/item_list.py:119
 msgid "Terminal"
 msgstr "Terminál"
 
@@ -71,39 +71,43 @@ msgstr "Parancssor:"
 
 #: application/gui/preferences/terminal.py:79
 msgid ""
-"<small><i>Note: {0} will be replaced with socket/window id.\n"
-"Xterm has problems with embeding so it might not work.</i></small>"
+"<small><i>Note:\n"
+"\tXterm has problems with embeding so it might not work.\n"
+"\tOmitting {0} will open new terminal application instead of tab.\n"
+"\t{0} will be replaced with socket/window id.</i></small>"
 msgstr ""
-"<small><i>Megjegyzés: {0} le lesz cserélve socket/window id-vel.\n"
-"Az xtermnek problémái vannak a beágyazással, ezért nem biztos, hogy működik."
-"</i></small>"
+"<small><i>Megjegyzés:\n"
+"\tAz Xterm-nek gondjai vannak a beágyazással, ezért lehet, hogy nem fog "
+"működni.\n"
+"\t{0} elhagyása meg fog nyitni egy új terminál alkalmazást tab helyett.\n"
+"\t{0} ki lesz cserélve socket/window id-re.</i></small>"
 
-#: application/gui/preferences/commands.py:10
-#: application/gui/main_window.py:440
+#: application/gui/preferences/commands.py:15
+#: application/gui/main_window.py:460
 msgid "Commands"
 msgstr "Parancsok"
 
-#: application/gui/preferences/commands.py:35
-#: application/gui/preferences/bookmarks.py:45
-#: application/plugins/rename_extensions/audio_metadata.py:25
+#: application/gui/preferences/commands.py:40
+#: application/gui/preferences/bookmarks.py:50
+#: application/plugins/rename_extensions/audio_metadata.py:24
 msgid "Title"
 msgstr "Cím"
 
-#: application/gui/preferences/commands.py:39
+#: application/gui/preferences/commands.py:44
 msgid "Command"
 msgstr "Parancs"
 
-#: application/gui/preferences/commands.py:62
-#: application/gui/preferences/bookmarks.py:72
-#: application/gui/preferences/toolbar.py:66
-#: application/plugins/sessions/plugin.py:54
+#: application/gui/preferences/commands.py:67
+#: application/gui/preferences/bookmarks.py:77
+#: application/gui/preferences/toolbar.py:74
+#: application/plugins/sessions/plugin.py:57
 msgid "Move Up"
 msgstr "Mozgatás fel"
 
-#: application/gui/preferences/commands.py:70
-#: application/gui/preferences/bookmarks.py:80
-#: application/gui/preferences/toolbar.py:74
-#: application/plugins/sessions/plugin.py:62
+#: application/gui/preferences/commands.py:75
+#: application/gui/preferences/bookmarks.py:85
+#: application/gui/preferences/toolbar.py:82
+#: application/plugins/sessions/plugin.py:65
 msgid "Move Down"
 msgstr "Mozgatás le"
 
@@ -138,7 +142,7 @@ msgid "Plugins"
 msgstr "Bővítmények"
 
 #: application/gui/preferences/plugins.py:66
-#: application/gui/preferences/display.py:86
+#: application/gui/preferences/display.py:88
 msgid "Active"
 msgstr "Aktív"
 
@@ -151,7 +155,7 @@ msgid "Author"
 msgstr "Szerző"
 
 #: application/gui/preferences/plugins.py:75
-#: application/gui/changelog_dialog.py:52 application/gui/about_window.py:153
+#: application/gui/changelog_dialog.py:52 application/gui/about_window.py:171
 msgid "Version"
 msgstr "Verzió"
 
@@ -184,27 +188,28 @@ msgstr "A bövítményhez nincs leírás"
 msgid "No plugin selected"
 msgstr "Nincs kiválasztva bővítmény"
 
-#: application/gui/preferences/bookmarks.py:10
+#: application/gui/preferences/bookmarks.py:15
+#: application/widgets/bookmarks_menu.py:70
 #: application/plugins/default_toolbar/bookmarks_button.py:16
 #: application/plugins/default_toolbar/bookmarks_button.py:17
-#: application/plugin_base/item_list.py:72
+#: application/plugin_base/item_list.py:73
 msgid "Bookmarks"
 msgstr "Könyvjelzők"
 
-#: application/gui/preferences/bookmarks.py:13
+#: application/gui/preferences/bookmarks.py:18
 msgid "Show mount points in bookmarks menu"
 msgstr "A csatolási pontok megjelenítése a könyvjelzők menüben"
 
-#: application/gui/preferences/bookmarks.py:17
+#: application/gui/preferences/bookmarks.py:22
 msgid "Show system bookmarks"
 msgstr "Rendszer könyvjelzők megjelenítése"
 
-#: application/gui/preferences/bookmarks.py:21
+#: application/gui/preferences/bookmarks.py:26
 msgid "Add home directory to bookmarks menu"
 msgstr "A Home könyvtár megjelenítése a könyvjelzők menüben"
 
-#: application/gui/preferences/bookmarks.py:49
-#: application/tools/find_files.py:86
+#: application/gui/preferences/bookmarks.py:54
+#: application/tools/find_files.py:87
 msgid "Location"
 msgstr "Útvonal"
 
@@ -231,17 +236,24 @@ msgstr ""
 "tartozó objektumok az aktuális sessionben legalább egyszer létre lettek "
 "hozva. A gyorsítók letiltásához nyomd meg a <i> Backspace </i> gombot."
 
+#: application/gui/preferences/accelerators.py:138
+#: application/gui/main_window.py:708
+#: application/plugins/default_toolbar/home_directory_button.py:16
+#: application/plugins/default_toolbar/home_directory_button.py:17
+msgid "Home directory"
+msgstr "Saját mappa "
+
 #: application/gui/preferences/view_and_edit.py:10
 msgid "View & Edit"
 msgstr "Nézet és szerkesztés"
 
 #: application/gui/preferences/view_and_edit.py:13
-#: application/gui/main_window.py:374 application/gui/main_window.py:599
+#: application/gui/main_window.py:394
 msgid "View"
 msgstr "Nézet"
 
 #: application/gui/preferences/view_and_edit.py:19
-#: application/gui/main_window.py:212 application/gui/main_window.py:600
+#: application/gui/main_window.py:227 application/gui/main_window.py:618
 msgid "Edit"
 msgstr "Szerkesztés"
 
@@ -257,26 +269,62 @@ msgstr "Várd meg, amíg a szövegszerkesztési folyamat véget ér"
 msgid "Use internal editor"
 msgstr "Belső szövegszerkesztő"
 
-#: application/gui/preferences/toolbar.py:10
+#: application/gui/preferences/toolbar.py:18
 msgid "Toolbar"
 msgstr "Eszköztár"
 
-#: application/gui/preferences/toolbar.py:28
+#: application/gui/preferences/toolbar.py:36
 #: application/gui/history_list.py:45
-#: application/plugins/file_list/plugin.py:112
-#: application/plugins/sessions/plugin.py:33
+#: application/gui/mounts_manager_window.py:342
+#: application/gui/mounts_manager_window.py:511
+#: application/gui/keyring_manager_window.py:52
+#: application/plugins/file_list/plugin.py:128
+#: application/plugins/file_list/gio_extension.py:153
+#: application/plugins/file_list/gio_extension.py:502
+#: application/plugins/sessions/plugin.py:36
 #: application/plugins/rename_extensions/default.py:73
-#: application/tools/find_files.py:83
+#: application/tools/find_files.py:84
 msgid "Name"
 msgstr "Név"
 
-#: application/gui/preferences/toolbar.py:39
+#: application/gui/preferences/toolbar.py:47
 msgid "Type"
 msgstr "Tipus"
 
-#: application/gui/preferences/toolbar.py:166
+#: application/gui/preferences/toolbar.py:172
 msgid "missing plugin"
 msgstr "Hiányzó bővítmény"
+
+#: application/gui/preferences/operation.py:10
+#: application/gui/preferences/item_list.py:28
+msgid "Operation"
+msgstr "Müvelet"
+
+#: application/gui/preferences/operation.py:13
+msgid "General"
+msgstr "Általános"
+
+#: application/gui/preferences/operation.py:17
+#: application/gui/main_window.py:542
+#: application/gui/mounts_manager_window.py:449
+msgid "Mounts"
+msgstr "Csatolások"
+
+#: application/gui/preferences/operation.py:22
+msgid "Delete items to trash can"
+msgstr "Elemek kukába helyezése"
+
+#: application/gui/preferences/operation.py:23
+msgid "Reserve free space on copy/move"
+msgstr "Szabad terület megőrzése másolás/áthelyezés-kor"
+
+#: application/gui/preferences/operation.py:24
+msgid "Automount drives on start up"
+msgstr "Meghajtók felcsatolása indításkor"
+
+#: application/gui/preferences/operation.py:25
+msgid "Automount removable drives when inserted"
+msgstr "Cserélhető meghajtók felcsatolása indításkor"
 
 #: application/gui/preferences/display.py:22
 msgid "Display"
@@ -330,133 +378,164 @@ msgstr "Lap(ok) megjelenítése akkor is, ha csak egy van"
 msgid "Use Ubuntu coloring method for tab title bars"
 msgstr "Használja az Ubuntu színezését a lapok címsávjában"
 
-#: application/gui/preferences/display.py:65
+#: application/gui/preferences/display.py:52
+msgid "Change title bar color when started as super user"
+msgstr "A cím terület színének megváltoztatása rootként"
+
+#: application/gui/preferences/display.py:67
 msgid "Show status bar:"
 msgstr "Státusz sáv megjelenítése"
 
-#: application/gui/preferences/display.py:69
+#: application/gui/preferences/display.py:71
 msgid "Always"
 msgstr "Mindig"
 
-#: application/gui/preferences/display.py:70
+#: application/gui/preferences/display.py:72
 msgid "When needed"
 msgstr "Amikor szükséges"
 
-#: application/gui/preferences/display.py:71
+#: application/gui/preferences/display.py:73
 msgid "Never"
 msgstr "Soha"
 
-#: application/gui/preferences/display.py:81
+#: application/gui/preferences/display.py:83
 msgid "Expanded tabs:"
 msgstr "Kiterjesztett lapok:"
 
-#: application/gui/preferences/display.py:85
-#: application/gui/preferences/item_list.py:46
+#: application/gui/preferences/display.py:87
+#: application/gui/preferences/item_list.py:77
 msgid "None"
 msgstr "Nincs"
 
-#: application/gui/preferences/display.py:87
+#: application/gui/preferences/display.py:89
 msgid "All"
 msgstr "Minden"
 
-#: application/gui/preferences/display.py:97
+#: application/gui/preferences/display.py:99
 msgid "Other"
 msgstr "Más"
 
-#: application/gui/preferences/display.py:101
+#: application/gui/preferences/display.py:103
 msgid "Hide operation window on minimize"
 msgstr "Műveleti ablak elrejtése kicsinyítéskor"
 
-#: application/gui/preferences/display.py:102
+#: application/gui/preferences/display.py:104
 msgid "Show sizes in human readable format"
 msgstr "A méretek kiírása ember által olvasható formátumban"
 
-#: application/gui/preferences/display.py:103
+#: application/gui/preferences/display.py:105
 msgid "Show notifications"
 msgstr "Értesítések megjelenítése"
 
-#: application/gui/preferences/item_list.py:10
-#: application/plugin_base/item_list.py:229
+#: application/gui/preferences/item_list.py:22
+#: application/plugins/file_list/column_editor.py:51
+#: application/plugin_base/item_list.py:233
 msgid "Item List"
 msgstr "Elem lista"
 
-#: application/gui/preferences/item_list.py:15
+#: application/gui/preferences/item_list.py:27
 msgid "Look & feel"
 msgstr "Felület"
 
-#: application/gui/preferences/item_list.py:16
-msgid "Operation"
-msgstr "Müvelet"
+#: application/gui/preferences/item_list.py:29
+msgid "Columns"
+msgstr "Oszlopok"
 
-#: application/gui/preferences/item_list.py:26
+#: application/gui/preferences/item_list.py:41
 msgid "Row hinting"
 msgstr "Sor kiegészítése"
 
-#: application/gui/preferences/item_list.py:27
+#: application/gui/preferences/item_list.py:42
 msgid "Show hidden files"
 msgstr "Rejtett fájlok megjelenítése"
 
-#: application/gui/preferences/item_list.py:28
+#: application/gui/preferences/item_list.py:43
 msgid "Case sensitive item sorting"
 msgstr "Elemek betűméret érzékeny elrendezése"
 
-#: application/gui/preferences/item_list.py:29
+#: application/gui/preferences/item_list.py:44
 msgid "Right click selects items"
 msgstr "Jobb gombos kiválasztás"
 
-#: application/gui/preferences/item_list.py:30
+#: application/gui/preferences/item_list.py:45
 msgid "Show list headers"
 msgstr "Fejléc megjelenítése"
 
-#: application/gui/preferences/item_list.py:31
+#: application/gui/preferences/item_list.py:46
 msgid "Fast media preview"
 msgstr "Gyors média előnézet"
 
-#: application/gui/preferences/item_list.py:42
+#: application/gui/preferences/item_list.py:57
+msgid "Access mode format:"
+msgstr "Hozzáférési mód formája:"
+
+#: application/gui/preferences/item_list.py:61
+msgid "Octal"
+msgstr "Oktális"
+
+#: application/gui/preferences/item_list.py:62
+msgid "Textual"
+msgstr "Szöveges"
+
+#: application/gui/preferences/item_list.py:73
 msgid "Show grid lines:"
 msgstr "Rácsvonalak megjelenítése:"
 
-#: application/gui/preferences/item_list.py:47
+#: application/gui/preferences/item_list.py:78
 msgid "Horizontal"
 msgstr "Vízszintes"
 
-#: application/gui/preferences/item_list.py:48
+#: application/gui/preferences/item_list.py:79
 msgid "Vertical"
 msgstr "Függőleges"
 
-#: application/gui/preferences/item_list.py:49
+#: application/gui/preferences/item_list.py:80
 msgid "Both"
 msgstr "Minden"
 
-#: application/gui/preferences/item_list.py:61
+#: application/gui/preferences/item_list.py:92
 msgid "Selection color:"
 msgstr "Kijelölés színe:"
 
-#: application/gui/preferences/item_list.py:69
+#: application/gui/preferences/item_list.py:100
 msgid "Quick search combination:"
 msgstr "Gyors keresési kombinációk:"
 
-#: application/gui/preferences/item_list.py:72
+#: application/gui/preferences/item_list.py:103
 msgid "Control"
 msgstr "Control"
 
-#: application/gui/preferences/item_list.py:73
+#: application/gui/preferences/item_list.py:104
 msgid "Alt"
 msgstr "Alt"
 
-#: application/gui/preferences/item_list.py:74
+#: application/gui/preferences/item_list.py:105
 msgid "Shift"
 msgstr "Shift"
 
-#: application/gui/preferences/item_list.py:83
+#: application/gui/preferences/item_list.py:114
 msgid "Date format:"
 msgstr "Dátum formátum:"
 
-#: application/gui/preferences/item_list.py:87
+#: application/gui/preferences/item_list.py:118
 msgid "Time is formed using the format located at:"
 msgstr "Az idő a következő formátumban lesz megjelenítve:"
 
-#: application/gui/preferences/item_list.py:135
+#: application/gui/preferences/item_list.py:157
+msgid "Column"
+msgstr "Oszlop"
+
+#: application/gui/preferences/item_list.py:162
+#: application/plugins/file_list/plugin.py:130
+#: application/plugins/find_file_extensions/size.py:63
+msgid "Size"
+msgstr "Méret"
+
+#: application/gui/preferences/item_list.py:165
+msgid "Visible"
+msgstr "Látható"
+
+#: application/gui/preferences/item_list.py:243
 msgid ""
 "Quick search settings are in conflict with VIM navigation style. To resolve "
 "this issue your quick search settings were restored to default."
@@ -465,325 +544,325 @@ msgstr ""
 "probléma megoldásához a gyorskeresési beállításokat is vissza kell állítani "
 "az alapértelmezettre."
 
-#: application/gui/main_window.py:93 application/gui/main_window.py:1450
-#: application/gui/changelog_dialog.py:51 application/gui/about_window.py:152
+#: application/gui/main_window.py:105 application/gui/main_window.py:1282
+#: application/gui/changelog_dialog.py:51 application/gui/about_window.py:170
 msgid "Sunflower"
 msgstr "Sunflower"
 
-#: application/gui/main_window.py:141
+#: application/gui/main_window.py:156
 msgid "File"
 msgstr "Fájl"
 
-#: application/gui/main_window.py:145 application/gui/history_list.py:73
-#: application/gui/mounts_manager_window.py:86
+#: application/gui/main_window.py:160
 msgid "New tab"
 msgstr "Új lap"
 
-#: application/gui/main_window.py:157
+#: application/gui/main_window.py:172
 msgid "Create file"
 msgstr "Fájl létrehozása"
 
-#: application/gui/main_window.py:165 application/gui/input_dialog.py:359
+#: application/gui/main_window.py:180 application/gui/input_dialog.py:429
 msgid "Create directory"
 msgstr "Könyvtár létrehozása"
 
-#: application/gui/main_window.py:176 application/plugin_base/item_list.py:842
+#: application/gui/main_window.py:191 application/plugin_base/item_list.py:881
 msgid "_Open"
 msgstr "_Megnyitás"
 
-#: application/gui/main_window.py:183 application/plugin_base/item_list.py:851
+#: application/gui/main_window.py:198 application/plugin_base/item_list.py:890
 msgid "Open in new ta_b"
 msgstr "Megnyitás új _lapon"
 
-#: application/gui/main_window.py:193 application/plugin_base/item_list.py:957
+#: application/gui/main_window.py:208
+#: application/plugin_base/item_list.py:1013
 msgid "_Properties"
 msgstr "_Tulajdonságok"
 
-#: application/gui/main_window.py:203 application/indicator.py:46
+#: application/gui/main_window.py:218 application/indicator.py:46
 msgid "_Quit"
 msgstr "_Kilépés"
 
-#: application/gui/main_window.py:215 application/plugin_base/item_list.py:881
+#: application/gui/main_window.py:230 application/plugin_base/item_list.py:920
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: application/gui/main_window.py:222 application/plugin_base/item_list.py:890
+#: application/gui/main_window.py:237 application/plugin_base/item_list.py:929
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: application/gui/main_window.py:229 application/plugin_base/item_list.py:899
+#: application/gui/main_window.py:244 application/plugin_base/item_list.py:938
 msgid "_Paste"
 msgstr "_Beillesztés"
 
-#: application/gui/main_window.py:239 application/plugin_base/item_list.py:913
+#: application/gui/main_window.py:254 application/plugin_base/item_list.py:969
 msgid "_Delete"
 msgstr "_Törlés"
 
-#: application/gui/main_window.py:249 application/plugin_base/item_list.py:927
+#: application/gui/main_window.py:264 application/plugin_base/item_list.py:983
 msgid "Send to..."
 msgstr "Küldés..."
 
-#: application/gui/main_window.py:257 application/plugin_base/item_list.py:938
+#: application/gui/main_window.py:272 application/plugin_base/item_list.py:994
 msgid "Ma_ke link"
 msgstr "Li_nk hozzáadása"
 
-#: application/gui/main_window.py:261 application/plugin_base/item_list.py:944
+#: application/gui/main_window.py:276
+#: application/plugin_base/item_list.py:1000
 msgid "_Rename..."
 msgstr "Átne_vezés"
 
-#: application/gui/main_window.py:269
+#: application/gui/main_window.py:284
 msgid "_Unmount"
 msgstr "Le_csatolás"
 
-#: application/gui/main_window.py:273 application/mounts.py:286
+#: application/gui/main_window.py:288
 msgid "Mount list is empty"
 msgstr "Nincs felcsatolt elem"
 
-#: application/gui/main_window.py:282
+#: application/gui/main_window.py:297
 msgid "_Preferences"
 msgstr "Beállí_tások"
 
-#: application/gui/main_window.py:291
+#: application/gui/main_window.py:306
 msgid "Mark"
 msgstr "Kijelölés"
 
-#: application/gui/main_window.py:294
+#: application/gui/main_window.py:309
 msgid "_Select all"
 msgstr "_Mindent kijelöl"
 
-#: application/gui/main_window.py:301
+#: application/gui/main_window.py:316
 msgid "_Unselect all"
 msgstr "Minden kijelölés _eltávolítása"
 
-#: application/gui/main_window.py:306
+#: application/gui/main_window.py:321
 msgid "Invert select_ion"
 msgstr "Kijelölés meg_fordítása"
 
-#: application/gui/main_window.py:312
+#: application/gui/main_window.py:327
 msgid "S_elect with pattern"
 msgstr "Kijelölés _mintával"
 
-#: application/gui/main_window.py:317
+#: application/gui/main_window.py:332
 msgid "Unselect with pa_ttern"
 msgstr "Kijelölés meg_szüntetése mintával"
 
-#: application/gui/main_window.py:323
+#: application/gui/main_window.py:338
 msgid "Select with same e_xtension"
 msgstr "Azonos _kiterjesztésűek kijelölése"
 
-#: application/gui/main_window.py:328
+#: application/gui/main_window.py:343
 msgid "Unselect with same exte_nsion"
 msgstr "Kijelölés me_gszüntetése"
 
-#: application/gui/main_window.py:334
+#: application/gui/main_window.py:349
 msgid "Compare _directories"
 msgstr "Könyvtárak _összehasonlítása"
 
-#: application/gui/main_window.py:341
+#: application/gui/main_window.py:356
 msgid "Tools"
 msgstr "Eszközök"
 
-#: application/gui/main_window.py:345 application/tools/find_files.py:37
-#: application/tools/find_files.py:307
+#: application/gui/main_window.py:360 application/tools/find_files.py:37
+#: application/tools/find_files.py:301
 msgid "Find files"
 msgstr "Fájlok keresése"
 
-#: application/gui/main_window.py:352
+#: application/gui/main_window.py:367
 msgid "Find duplicate files"
 msgstr "Duplikált fájlok keresése"
 
-#: application/gui/main_window.py:356
+#: application/gui/main_window.py:371
 msgid "Synchronize directories"
 msgstr "Könyvtárak szinkronizálása"
 
-#: application/gui/main_window.py:361 application/tools/advanced_rename.py:27
+#: application/gui/main_window.py:376 application/tools/advanced_rename.py:27
 msgid "Advanced rename"
 msgstr "Fejlett átnevezés"
 
-#: application/gui/main_window.py:367
-#: application/gui/mounts_manager_window.py:22
+#: application/gui/main_window.py:382
+#: application/gui/mounts_manager_window.py:52
 msgid "Mount manager"
 msgstr "Csatolás kezelő"
 
-#: application/gui/main_window.py:377
+#: application/gui/main_window.py:387
+#: application/gui/keyring_manager_window.py:27
+msgid "Keyring manager"
+msgstr "Kulcstartó kezelő"
+
+#: application/gui/main_window.py:397
 msgid "Ful_lscreen"
 msgstr "_Tejes méret"
 
-#: application/gui/main_window.py:385
+#: application/gui/main_window.py:405
 msgid "Rel_oad item list"
 msgstr "Cikk lista újra_töltése"
 
-#: application/gui/main_window.py:395
+#: application/gui/main_window.py:415
 msgid "Fast m_edia preview"
 msgstr "Gyors _média előnézet"
 
-#: application/gui/main_window.py:406
+#: application/gui/main_window.py:426
 msgid "Show _hidden files"
 msgstr "_Rejtett fájlok"
 
-#: application/gui/main_window.py:414
+#: application/gui/main_window.py:434
 msgid "Show _toolbar"
 msgstr "_Eszköztár"
 
-#: application/gui/main_window.py:422
+#: application/gui/main_window.py:442
 msgid "Show _command bar"
 msgstr "_Gombsor mutatása"
 
-#: application/gui/main_window.py:430
+#: application/gui/main_window.py:450
 msgid "Show co_mmand entry"
 msgstr "_Parancssor mutatása"
 
-#: application/gui/main_window.py:444
+#: application/gui/main_window.py:464
 msgid "Operations"
 msgstr "Műveletek"
 
-#: application/gui/main_window.py:448
+#: application/gui/main_window.py:468
 msgid "There are no minimized operations"
 msgstr "Nincs kicsinyített műveletek"
 
-#: application/gui/main_window.py:454
+#: application/gui/main_window.py:474
 msgid "Help"
 msgstr "Súgó"
 
-#: application/gui/main_window.py:457
+#: application/gui/main_window.py:477
 msgid "_Home page"
 msgstr "Honlap"
 
-#: application/gui/main_window.py:466
+#: application/gui/main_window.py:485
+msgid "Check for new version"
+msgstr "Frissítések keresése"
+
+#: application/gui/main_window.py:490
 msgid "File a _bug report"
 msgstr "_Hibajelentés"
 
-#: application/gui/main_window.py:474
-msgid "Check for _updates"
-msgstr "_Frissítések keresése"
-
-#: application/gui/main_window.py:479
+#: application/gui/main_window.py:499
 msgid "_About"
 msgstr "_Rólunk"
 
-#: application/gui/main_window.py:527 application/mounts.py:33
-msgid "Mounts"
-msgstr "Csatolások"
-
-#: application/gui/main_window.py:597
+#: application/gui/main_window.py:615
 msgid "Refresh"
 msgstr "Frissítés"
 
-#: application/gui/main_window.py:597
+#: application/gui/main_window.py:615
 msgid "Reload active item list"
 msgstr "Aktiv elemek listájának újratöltése"
 
-#: application/gui/main_window.py:598 application/tools/advanced_rename.py:91
+#: application/gui/main_window.py:616 application/tools/advanced_rename.py:91
 msgid "Rename"
 msgstr "Átnevezés"
 
-#: application/gui/main_window.py:598
+#: application/gui/main_window.py:616
 msgid "Rename selected file"
 msgstr "Kiválasztott fájlok átnevezése"
 
-#: application/gui/main_window.py:599
-msgid "View selected file"
-msgstr "Kiválasztot fájl nézet"
+#: application/gui/main_window.py:617
+msgid "Preview"
+msgstr "Előnézet"
 
-#: application/gui/main_window.py:600
+#: application/gui/main_window.py:617
+msgid "Preview selected file"
+msgstr "Előnézet"
+
+#: application/gui/main_window.py:618
 msgid "Edit selected file"
 msgstr "Kiválasztott fájl szerkesztése"
 
-#: application/gui/main_window.py:601 application/gui/input_dialog.py:497
+#: application/gui/main_window.py:619 application/gui/input_dialog.py:566
 msgid "Copy"
 msgstr "Másolás"
 
-#: application/gui/main_window.py:601
+#: application/gui/main_window.py:619
 msgid "Copy selected items from active to opposite list"
 msgstr "Kijelölt elemek másolása aktív lapról az ellenkező oldalra"
 
-#: application/gui/main_window.py:602 application/gui/input_dialog.py:595
+#: application/gui/main_window.py:620 application/gui/input_dialog.py:664
 msgid "Move"
 msgstr "Áthelyezés"
 
-#: application/gui/main_window.py:602
+#: application/gui/main_window.py:620
 msgid "Move selected items from active to opposite list"
 msgstr "A kijelölt elemek mozgatása aktív lapról az ellenkező oldalra"
 
-#: application/gui/main_window.py:603
+#: application/gui/main_window.py:621
 msgid "Create"
 msgstr "Létrehozás"
 
-#: application/gui/main_window.py:603
+#: application/gui/main_window.py:621
 msgid "Create new directory"
 msgstr "Új könyvtár létrehozása"
 
-#: application/gui/main_window.py:604
+#: application/gui/main_window.py:622
 msgid "Delete"
 msgstr "Törlés"
 
-#: application/gui/main_window.py:604 application/plugin_base/item_list.py:246
+#: application/gui/main_window.py:622 application/plugin_base/item_list.py:251
 msgid "Delete selected items"
 msgstr "Kiválasztott elemek törlése"
 
-#: application/gui/main_window.py:700
-#: application/plugins/default_toolbar/home_directory_button.py:17
-#: application/plugins/default_toolbar/home_directory_button.py:18
-msgid "Home directory"
-msgstr "Saját mappa "
+#: application/gui/main_window.py:737 application/gui/input_dialog.py:965
+msgid "Add bookmark"
+msgstr "Könyvjelzökhőz ad"
 
-#: application/gui/main_window.py:757
-msgid "Options"
-msgstr "Beállítások"
+#: application/gui/main_window.py:742 application/plugin_base/item_list.py:240
+msgid "Edit bookmarks"
+msgstr "Könyvjelzők szerkesztése"
 
-#: application/gui/main_window.py:760
-msgid "_Add bookmark"
-msgstr "Könyvjelzőkhöz _ad"
-
-#: application/gui/main_window.py:766
-msgid "_Edit bookmarks"
-msgstr "Könyvjelzők sz_erkesztése"
-
-#: application/gui/main_window.py:829
+#: application/gui/main_window.py:777
 msgid "_Edit commands"
 msgstr "_Parancs szerkesztő"
 
-#: application/gui/main_window.py:886
-msgid ""
-"Specified path does not exist or is not valid. If path is not local check if "
-"volume is mounted."
-msgstr ""
-"A megadott elérési út nem létezik, vagy nem érvényes. Ha az útvonal nem "
-"helyi, ellenőrizni kell, hogy a kötet csatolva van-e."
-
-#: application/gui/main_window.py:1438
+#: application/gui/main_window.py:1270
 msgid "Sunflower file manager"
 msgstr "Sunflower fájlkezelő"
 
-#: application/gui/main_window.py:1453
+#: application/gui/main_window.py:1285
 msgid "print version and exit"
 msgstr "Verzió kiíratása és kilépés"
 
-#: application/gui/main_window.py:1458
+#: application/gui/main_window.py:1290
 msgid "skip loading saved tabs"
 msgstr "ugorja át a mentett lapok betöltését"
 
-#: application/gui/main_window.py:1464
+#: application/gui/main_window.py:1296
 msgid "open new tab on the left notebook"
 msgstr "Új lap nyitás a bal oldalon"
 
-#: application/gui/main_window.py:1471
+#: application/gui/main_window.py:1303
 msgid "open new tab on the right notebook"
 msgstr "Új lap nyitás a jobb oldalon"
 
-#: application/gui/main_window.py:1567
+#: application/gui/main_window.py:1384
 msgid "Select items"
 msgstr "Kijelölt elemek"
 
-#: application/gui/main_window.py:1568 application/gui/main_window.py:1613
+#: application/gui/main_window.py:1385 application/gui/main_window.py:1426
 msgid "Selection pattern (eg.: *.jpg):"
 msgstr "Kijelölés minta (pl.: *.jpg):"
 
-#: application/gui/main_window.py:1612
+#: application/gui/main_window.py:1425
 msgid "Unselect items"
 msgstr "Kijelölés megszüntetése"
 
-#: application/gui/main_window.py:1992
+#: application/gui/main_window.py:1467
+msgid "First level of compared directories is identical."
+msgstr "Az összehasonlított könyvtárak első szintje megegyezik."
+
+#: application/gui/main_window.py:1563
+msgid ""
+"There was a problem starting external terminal application. Check if command "
+"is valid!"
+msgstr ""
+"Probléma történt a külső terminál indításakor. Ellenőrizze, hogy a megadott "
+"parancs érvényes-e!"
+
+#: application/gui/main_window.py:1821
 msgid ""
 "Error saving configuration to files in your home directory. Make sure you "
 "have enough permissions."
@@ -791,7 +870,7 @@ msgstr ""
 "Hiba a konfigurációs fájl mentésekor. Győződj meg róla, hogy megfelelőek a "
 "jogosultságok."
 
-#: application/gui/main_window.py:2454
+#: application/gui/main_window.py:2306
 msgid ""
 "Active object is not item list. Advanced rename tool needs files and "
 "directories."
@@ -799,7 +878,7 @@ msgstr ""
 "Aktív objektum nincs az elemek között. A fejlett átnevező eszköznek szüksége "
 "van fájlokra és könyvtárakra."
 
-#: application/gui/main_window.py:2469
+#: application/gui/main_window.py:2321
 msgid ""
 "No rename extensions were found. Please enable basic rename options plugin "
 "and try again."
@@ -807,7 +886,7 @@ msgstr ""
 "Nem található az átnevező bővítmény. Engedélyezd \"rename_extensions \" "
 "plugint és próbáld újra."
 
-#: application/gui/main_window.py:2494
+#: application/gui/main_window.py:2346
 msgid ""
 "No extensions for finding files were found. Please enable basic find file "
 "options plugin and try again."
@@ -815,15 +894,27 @@ msgstr ""
 "Nincs bővítménye a fájlok kereséséhez. Kérlek engedélyezd a  "
 "\"find_file_extensions \" plugint és próbáld újra."
 
-#: application/gui/preferences_window.py:29
+#: application/gui/main_window.py:2370
+msgid "Keyring is empty!"
+msgstr "A kulcstartó üres!"
+
+#: application/gui/main_window.py:2383
+msgid ""
+"Keyring is not available. Make sure you have Python Gnome keyring module "
+"installed."
+msgstr ""
+"Kulcstartó nem elérhető Győződj meg róla, hogy a Python Gnome keyring modul "
+"telepítve van-e!"
+
+#: application/gui/preferences_window.py:32
 msgid "Preferences"
 msgstr "Beállítások"
 
-#: application/gui/preferences_window.py:100
+#: application/gui/preferences_window.py:104
 msgid "Program restart required!"
 msgstr "A program újraindítása szükséges!"
 
-#: application/gui/preferences_window.py:139
+#: application/gui/preferences_window.py:143
 msgid ""
 "There are unsaved changes.\n"
 "Do you want to save them?"
@@ -831,7 +922,7 @@ msgstr ""
 "A változások nincsenek elmentve.\n"
 "Szeretné elmenteni?"
 
-#: application/gui/history_list.py:23 application/plugin_base/item_list.py:95
+#: application/gui/history_list.py:23 application/plugin_base/item_list.py:96
 msgid "History"
 msgstr "Előzmények"
 
@@ -839,44 +930,49 @@ msgstr "Előzmények"
 msgid "Path"
 msgstr "Útvonal"
 
-#: application/gui/history_list.py:64
-msgid "Go to"
-msgstr "Menj a"
+#: application/gui/history_list.py:63
+#: application/gui/mounts_manager_window.py:360
+msgid "Open"
+msgstr "Megnyit"
 
-#: application/gui/history_list.py:74
-#: application/gui/mounts_manager_window.py:87
+#: application/gui/history_list.py:72
+#: application/gui/mounts_manager_window.py:371
+msgid "Open in tab"
+msgstr "Megnyitás új lapon"
+
+#: application/gui/history_list.py:73
 msgid "Open selected path in new tab"
 msgstr "Kiválasztott útvonal megnyitása új lapon"
 
+#: application/gui/history_list.py:76
+msgid "Open in opposite list"
+msgstr "Megnyitás az ellenkező listán"
+
 #: application/gui/history_list.py:77
-msgid "Oposite list"
-msgstr "Ellenkező lista"
+msgid "Open selected path in opposite list"
+msgstr "A kijelölt útvonal megnyitása az ellenkező listán"
 
-#: application/gui/history_list.py:78
-msgid "Open selected path in oposite list"
-msgstr "A kijelölt útvonal megnyitása az ellenkező lapon"
-
-#: application/gui/properties_window.py:28
+#: application/gui/properties_window.py:31
 msgid "{0} Properties"
 msgstr "{0} Tulajdonságok"
 
-#: application/gui/properties_window.py:54
+#: application/gui/properties_window.py:58
 #: application/plugins/rename_extensions/default.py:268
-#: application/plugins/find_file_extensions/default.py:81
+#: application/plugins/find_file_extensions/default.py:82
 msgid "Basic"
 msgstr "Alap"
 
-#: application/gui/properties_window.py:58
+#: application/gui/properties_window.py:62
 msgid "Permissions"
 msgstr "Jogosultságok"
 
-#: application/gui/properties_window.py:62
-#: application/gui/input_dialog.py:1263
+#: application/gui/properties_window.py:66
+#: application/gui/input_dialog.py:1345
 msgid "Open With"
 msgstr "Megnyitás ezzel"
 
-#: application/gui/properties_window.py:116
-#: application/plugins/file_list/plugin.py:613
+#: application/gui/properties_window.py:120
+#: application/plugins/file_list/plugin.py:661
 msgid ""
 "File or directory with specified name already exists in current directory. "
 "Item could not be renamed."
@@ -884,112 +980,124 @@ msgstr ""
 "A fájl vagy könyvtár már létezik ebben a könyvtárban. Az elemet nem lehet "
 "átnevezni."
 
-#: application/gui/properties_window.py:151
-#: application/plugins/file_list/plugin.py:598
+#: application/gui/properties_window.py:155
+#: application/plugins/file_list/plugin.py:646
 msgid "Error renaming specified item. Make sure you have enough permissions."
 msgstr "Átnevezési hiba. Nincs megfelelő jogosultságod."
 
-#: application/gui/properties_window.py:199
-#: application/gui/operation_dialog.py:376
+#: application/gui/properties_window.py:203
+#: application/gui/operation_dialog.py:377
 msgid "byte"
 msgid_plural "bytes"
 msgstr[0] "bájt"
 msgstr[1] "bájtok"
 
-#: application/gui/properties_window.py:207
+#: application/gui/properties_window.py:211
 msgid "item"
 msgid_plural "items"
 msgstr[0] "elem"
 msgstr[1] "elemek"
 
-#: application/gui/properties_window.py:224
-#: application/gui/operation_dialog.py:368
+#: application/gui/properties_window.py:228
+#: application/gui/operation_dialog.py:369
 msgid "unknown"
 msgstr "ismeretlen"
 
-#: application/gui/properties_window.py:311
-#: application/gui/input_dialog.py:910 application/gui/input_dialog.py:1082
+#: application/gui/properties_window.py:337
+msgid "Error changing owner or group"
+msgstr "Hiba a tulajdonos vagy csoport megváltoztatásakor"
+
+#: application/gui/properties_window.py:377
+#: application/gui/input_dialog.py:979 application/gui/input_dialog.py:1164
 #: application/plugins/default_toolbar/bookmark_button.py:73
+#: application/plugins/file_list/dialogs.py:51
+#: application/plugins/file_list/dialogs.py:265
 msgid "Name:"
 msgstr "Név:"
 
-#: application/gui/properties_window.py:312
-#: application/gui/input_dialog.py:1089
+#: application/gui/properties_window.py:378
+#: application/gui/input_dialog.py:1171
 msgid "Type:"
 msgstr "Tipus:"
 
-#: application/gui/properties_window.py:313
-#: application/gui/input_dialog.py:774 application/gui/input_dialog.py:791
+#: application/gui/properties_window.py:379
+#: application/gui/input_dialog.py:843 application/gui/input_dialog.py:860
 msgid "Size:"
 msgstr "Méret:"
 
-#: application/gui/properties_window.py:314
-#: application/gui/input_dialog.py:918
+#: application/gui/properties_window.py:380
+#: application/gui/input_dialog.py:987
 msgid "Location:"
 msgstr "Hely:"
 
-#: application/gui/properties_window.py:315
+#: application/gui/properties_window.py:381
 msgid "Volume:"
 msgstr "Hangerő:"
 
-#: application/gui/properties_window.py:316
+#: application/gui/properties_window.py:382
 msgid "Accessed:"
 msgstr "Hozzáférve:"
 
-#: application/gui/properties_window.py:317
-#: application/gui/input_dialog.py:775 application/gui/input_dialog.py:792
+#: application/gui/properties_window.py:383
+#: application/gui/input_dialog.py:844 application/gui/input_dialog.py:861
 msgid "Modified:"
 msgstr "Modosítva:"
 
-#: application/gui/properties_window.py:391
+#: application/gui/properties_window.py:458
 msgid "Access"
 msgstr "Hozzáférés"
 
-#: application/gui/properties_window.py:397
-#: application/gui/input_dialog.py:126
+#: application/gui/properties_window.py:464
+#: application/gui/properties_window.py:534
+#: application/gui/input_dialog.py:131
 msgid "User:"
 msgstr "Felhasználó:"
 
-#: application/gui/properties_window.py:401
-#: application/gui/input_dialog.py:130
+#: application/gui/properties_window.py:468
+#: application/gui/properties_window.py:538
+#: application/gui/input_dialog.py:135
 msgid "Group:"
 msgstr "Csoport:"
 
-#: application/gui/properties_window.py:405
-#: application/gui/input_dialog.py:134
+#: application/gui/properties_window.py:472
+#: application/gui/input_dialog.py:139
 msgid "Others:"
 msgstr "Mások:"
 
-#: application/gui/properties_window.py:410
-#: application/gui/properties_window.py:423
-#: application/gui/properties_window.py:436
-#: application/gui/input_dialog.py:139 application/gui/input_dialog.py:152
-#: application/gui/input_dialog.py:165
+#: application/gui/properties_window.py:477
+#: application/gui/properties_window.py:490
+#: application/gui/properties_window.py:503
+#: application/gui/input_dialog.py:144 application/gui/input_dialog.py:157
+#: application/gui/input_dialog.py:170
 msgid "Read"
 msgstr "Olvasás"
 
-#: application/gui/properties_window.py:414
-#: application/gui/properties_window.py:427
-#: application/gui/properties_window.py:440
-#: application/gui/input_dialog.py:143 application/gui/input_dialog.py:156
-#: application/gui/input_dialog.py:169
+#: application/gui/properties_window.py:481
+#: application/gui/properties_window.py:494
+#: application/gui/properties_window.py:507
+#: application/gui/input_dialog.py:148 application/gui/input_dialog.py:161
+#: application/gui/input_dialog.py:174
 msgid "Write"
 msgstr "Írás"
 
-#: application/gui/properties_window.py:418
-#: application/gui/properties_window.py:431
-#: application/gui/properties_window.py:444
-#: application/gui/input_dialog.py:147 application/gui/input_dialog.py:160
-#: application/gui/input_dialog.py:173
+#: application/gui/properties_window.py:485
+#: application/gui/properties_window.py:498
+#: application/gui/properties_window.py:511
+#: application/gui/input_dialog.py:152 application/gui/input_dialog.py:165
+#: application/gui/input_dialog.py:178
 msgid "Execute"
 msgstr "Végrehajtás"
 
-#: application/gui/properties_window.py:449
-#: application/gui/input_dialog.py:178
+#: application/gui/properties_window.py:516
+#: application/gui/input_dialog.py:183
 msgid "Octal:"
 msgstr "Attribútum:"
 
-#: application/gui/properties_window.py:477
+#: application/gui/properties_window.py:528
+msgid "Ownership"
+msgstr "Tulajdonos"
+
+#: application/gui/properties_window.py:589
 msgid ""
 "Select an application to open <i>{0}</i> and other files of type \"{1}\""
 msgstr "Válaszon programot <i>{0}</i> a fájl megnyitásához \"{1}\""
@@ -1016,69 +1124,79 @@ msgstr "Módosítások"
 msgid "Change log was not found!"
 msgstr "A változás napló nem található"
 
-#: application/gui/changelog_dialog.py:109 application/gui/about_window.py:401
+#: application/gui/changelog_dialog.py:109 application/gui/about_window.py:415
 msgid "Change log"
 msgstr "Változás napló"
 
-#: application/gui/input_dialog.py:116
+#: application/gui/input_dialog.py:121
 msgid "Advanced options"
 msgstr "Speciális beállítások"
 
-#: application/gui/input_dialog.py:254
+#: application/gui/input_dialog.py:268
+#: application/plugins/file_list/dialogs.py:87
+#: application/plugins/file_list/dialogs.py:297
+msgid "Password:"
+msgstr "Jelszó:"
+
+#: application/gui/input_dialog.py:270
+msgid "Confirm:"
+msgstr "Megerősítés:"
+
+#: application/gui/input_dialog.py:324
 msgid "Create empty file"
 msgstr "Üres fájl készítése"
 
-#: application/gui/input_dialog.py:255
+#: application/gui/input_dialog.py:325
 msgid "Enter new file name:"
 msgstr "Új fájlnév bevitele:"
 
-#: application/gui/input_dialog.py:258
+#: application/gui/input_dialog.py:328
 msgid "Open file in editor"
 msgstr "Fájl szerkesztése"
 
-#: application/gui/input_dialog.py:262
+#: application/gui/input_dialog.py:332
 #: application/plugins/rename_extensions/default.py:52
-#: application/plugins/rename_extensions/audio_metadata.py:32
+#: application/plugins/rename_extensions/audio_metadata.py:31
 msgid "Template:"
 msgstr "Sablonok:"
 
-#: application/gui/input_dialog.py:307
+#: application/gui/input_dialog.py:377
 msgid "Empty File"
 msgstr "Üres fájl"
 
-#: application/gui/input_dialog.py:360
+#: application/gui/input_dialog.py:430
 msgid "Enter new directory name:"
 msgstr "Új könyvtárnév beírása:"
 
-#: application/gui/input_dialog.py:398
+#: application/gui/input_dialog.py:468
 msgid "Only files of this type:"
 msgstr "Csak ilyen típusú fájlok:"
 
-#: application/gui/input_dialog.py:406
+#: application/gui/input_dialog.py:476
 msgid "Set owner on destination"
 msgstr "Tulajdonos beállítása"
 
-#: application/gui/input_dialog.py:407
+#: application/gui/input_dialog.py:477
 msgid "Set access mode on destination"
 msgstr "Hoozáférés beállítása"
 
-#: application/gui/input_dialog.py:408
+#: application/gui/input_dialog.py:478
 msgid "Set date and time on destination"
 msgstr "Dátum és idő beállítása az állomáson"
 
-#: application/gui/input_dialog.py:409
+#: application/gui/input_dialog.py:479
 msgid "Silent mode"
 msgstr "Csendes mód"
 
-#: application/gui/input_dialog.py:416
+#: application/gui/input_dialog.py:486
 msgid "Merge directories"
 msgstr "Mappák összefésülése"
 
-#: application/gui/input_dialog.py:417
+#: application/gui/input_dialog.py:487
 msgid "Overwrite files"
 msgstr "Fájlok felülírása"
 
-#: application/gui/input_dialog.py:421
+#: application/gui/input_dialog.py:491
 msgid ""
 "Silent mode will enable operation to finish without disturbing you. If any "
 "errors occur, they will be presented to you after completion."
@@ -1086,85 +1204,85 @@ msgstr ""
 "A néma üzemmód lehetővé teszi, hogy a művelet véget érjen zavarás nélkül. Ha "
 "hiba történik, az ki lesz íratva a befejezés után."
 
-#: application/gui/input_dialog.py:482
+#: application/gui/input_dialog.py:551
 msgid "Copy item"
 msgid_plural "Copy items"
 msgstr[0] "Elem másolása"
 msgstr[1] "Elemek másolása"
 
-#: application/gui/input_dialog.py:487
+#: application/gui/input_dialog.py:556
 msgid "Copy <b>{0}</b> item to:"
 msgid_plural "Copy <b>{0}</b> items to:"
 msgstr[0] "<b>{0}</b> elem másolása:"
 msgstr[1] "<b>{0}</b> elem másolása:"
 
-#: application/gui/input_dialog.py:496 application/gui/input_dialog.py:594
-#: application/gui/input_dialog.py:1016
-#: application/gui/operation_dialog.py:209
+#: application/gui/input_dialog.py:565 application/gui/input_dialog.py:663
+#: application/gui/input_dialog.py:1085
+#: application/gui/operation_dialog.py:206
 msgid "Cancel"
 msgstr "Mégsem"
 
-#: application/gui/input_dialog.py:505
-msgid "Save default configuration"
-msgstr "Alapértelmezett beállítások mentése"
+#: application/gui/input_dialog.py:574
+msgid "Save as default configuration"
+msgstr "Beállítások mentése alapértelmezettként"
 
-#: application/gui/input_dialog.py:580
+#: application/gui/input_dialog.py:649
 msgid "Move item"
 msgid_plural "Move items"
 msgstr[0] "Elem mozgatása"
 msgstr[1] "Elemek mozgatása"
 
-#: application/gui/input_dialog.py:585
+#: application/gui/input_dialog.py:654
 msgid "Move <b>{0}</b> item to:"
 msgid_plural "Move <b>{0}</b> items to:"
 msgstr[0] "<b>{0}</b> elem mozgatása ide:"
 msgstr[1] "<b>{0}</b> elem mozgatása ide:"
 
-#: application/gui/input_dialog.py:608
+#: application/gui/input_dialog.py:677
 msgid "Rename file/directory"
 msgstr "Fájl/könyvtár átnevezése"
 
-#: application/gui/input_dialog.py:609
+#: application/gui/input_dialog.py:678
 msgid "Enter a new name for this item:"
 msgstr "Új név ehhez az elemhez:"
 
-#: application/gui/input_dialog.py:670
+#: application/gui/input_dialog.py:739
 msgid "Select a new name for the destination"
 msgstr "Válasszon új nevet a beállításhoz"
 
-#: application/gui/input_dialog.py:675
+#: application/gui/input_dialog.py:744
 msgid "Reset"
 msgstr "Törlés"
 
-#: application/gui/input_dialog.py:679
+#: application/gui/input_dialog.py:748
 msgid "Apply this action to all files"
 msgstr "Utasítás végrehajtása a kiválasztott fájlokon"
 
-#: application/gui/input_dialog.py:714 application/gui/input_dialog.py:1017
+#: application/gui/input_dialog.py:783 application/gui/input_dialog.py:1086
 msgid "Skip"
 msgstr "Átugrik"
 
-#: application/gui/input_dialog.py:773
+#: application/gui/input_dialog.py:842
 msgid "Original"
 msgstr "Eredeti"
 
-#: application/gui/input_dialog.py:790
+#: application/gui/input_dialog.py:859
 msgid "Replace with"
 msgstr "Felülír ezzel"
 
-#: application/gui/input_dialog.py:825
+#: application/gui/input_dialog.py:894
 msgid "File conflict"
 msgstr "Fájl ütközés"
 
-#: application/gui/input_dialog.py:829
+#: application/gui/input_dialog.py:898
 msgid "Replace"
 msgstr "Felülír"
 
-#: application/gui/input_dialog.py:839
+#: application/gui/input_dialog.py:908
 msgid "Replace file \"{0}\"?"
 msgstr "Felülírja a fájlt \"{0}\"?"
 
-#: application/gui/input_dialog.py:845
+#: application/gui/input_dialog.py:914
 msgid ""
 "Another file with the same name already exists in \"{0}\". Replacing it will "
 "overwrite its content."
@@ -1172,19 +1290,19 @@ msgstr ""
 "Egy másik fájl már megtalálható ezzel a névvel \"{0}\". Az átnevezéssel "
 "felülírja a melévő fájlt."
 
-#: application/gui/input_dialog.py:858
+#: application/gui/input_dialog.py:927
 msgid "Directory conflict"
 msgstr "Könyvtár ütközés"
 
-#: application/gui/input_dialog.py:862
+#: application/gui/input_dialog.py:931
 msgid "Merge"
 msgstr "Összefésül"
 
-#: application/gui/input_dialog.py:872
+#: application/gui/input_dialog.py:941
 msgid "Merge directory \"{0}\"?"
 msgstr "Összefésülje a könyvtárat \"{0}\"?"
 
-#: application/gui/input_dialog.py:878
+#: application/gui/input_dialog.py:947
 msgid ""
 "Directory with the same name already exists in \"{0}\". Merging will ask for "
 "confirmation before replacing any files in the directory that conflict with "
@@ -1194,154 +1312,225 @@ msgstr ""
 "fog kérni mielőtt felülírna bármilyen fájlt a könyvtárban ahol ütközés van a "
 "fájlok másolásakor."
 
-#: application/gui/input_dialog.py:896
-msgid "Add bookmark"
-msgstr "Könyvjelzökhőz ad"
-
-#: application/gui/input_dialog.py:982
+#: application/gui/input_dialog.py:1051
 msgid "Operation error"
 msgstr "Müvelet hiba"
 
-#: application/gui/input_dialog.py:1018
+#: application/gui/input_dialog.py:1087
 msgid "Retry"
 msgstr "Újra"
 
-#: application/gui/input_dialog.py:1066
+#: application/gui/input_dialog.py:1135
+#, fuzzy
+msgid "No"
+msgstr "Nincs"
+
+#: application/gui/input_dialog.py:1136
+msgid "Yes"
+msgstr "Igen"
+
+#: application/gui/input_dialog.py:1148
 msgid "Add toolbar widget"
 msgstr "Menü widdget hozzáadása"
 
-#: application/gui/input_dialog.py:1176
+#: application/gui/input_dialog.py:1258
 msgid "Select range"
 msgstr "Tartomány kiválasztása"
 
-#: application/gui/input_dialog.py:1177
+#: application/gui/input_dialog.py:1259
 msgid "Select part of the text:"
 msgstr "Kiválasztott rész a szövegből:"
 
-#: application/gui/input_dialog.py:1201
+#: application/gui/input_dialog.py:1283
 msgid "Add application"
 msgstr "Alkalmazás hozzáadása"
 
-#: application/gui/input_dialog.py:1202
+#: application/gui/input_dialog.py:1284
 msgid "Application name:"
 msgstr "Alkalmazás neve:"
 
-#: application/gui/input_dialog.py:1212
+#: application/gui/input_dialog.py:1294
 msgid "Select"
 msgstr "Kiválaszt"
 
-#: application/gui/input_dialog.py:1284
+#: application/gui/input_dialog.py:1366
 msgid "Select application:"
 msgstr "Alkalmazás kiválasztása:"
 
-#: application/gui/input_dialog.py:1287
+#: application/gui/input_dialog.py:1369
 msgid "Open <i>{0}</i> with:"
 msgstr "Megnyitása <i>{0}</i>  ezzel:"
 
-#: application/gui/input_dialog.py:1323
+#: application/gui/input_dialog.py:1405
 msgid "Use a custom command"
 msgstr "Egyéni parancs használata"
 
-#: application/gui/operation_dialog.py:94 application/gui/error_list.py:44
+#: application/gui/operation_dialog.py:91 application/gui/error_list.py:44
 msgid "Source:"
 msgstr "Forrás:"
 
-#: application/gui/operation_dialog.py:95 application/gui/error_list.py:50
+#: application/gui/operation_dialog.py:92 application/gui/error_list.py:50
 msgid "Destination:"
 msgstr "Művelet:"
 
-#: application/gui/operation_dialog.py:152
+#: application/gui/operation_dialog.py:149
 msgid "ETA:"
 msgstr "ETA:"
 
-#: application/gui/operation_dialog.py:153
+#: application/gui/operation_dialog.py:150
 msgid "Speed:"
 msgstr "Sebesség:"
 
-#: application/gui/operation_dialog.py:154
+#: application/gui/operation_dialog.py:151
 msgid "Total size:"
 msgstr "Teljes méret:"
 
-#: application/gui/operation_dialog.py:155
+#: application/gui/operation_dialog.py:152
 msgid "Total count:"
 msgstr "Teljes számláló:"
 
-#: application/gui/operation_dialog.py:208
+#: application/gui/operation_dialog.py:205
 msgid "Minimize"
 msgstr "Kicsinyítés"
 
-#: application/gui/operation_dialog.py:216
-#: application/gui/operation_dialog.py:268
+#: application/gui/operation_dialog.py:213
+#: application/gui/operation_dialog.py:269
 msgid "Pause"
 msgstr "Szünet"
 
-#: application/gui/operation_dialog.py:261
+#: application/gui/operation_dialog.py:262
 msgid "Resume"
 msgstr "Vissza"
 
-#: application/gui/operation_dialog.py:273
+#: application/gui/operation_dialog.py:274
 msgid "Are you sure about canceling current operation?"
 msgstr "Biztosan befejezi az aktuális műveletet?"
 
-#: application/gui/operation_dialog.py:349
+#: application/gui/operation_dialog.py:350
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] "másodperc"
 msgstr[1] "másodpercek"
 
-#: application/gui/operation_dialog.py:355
+#: application/gui/operation_dialog.py:356
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "perc"
 msgstr[1] "percek"
 
-#: application/gui/operation_dialog.py:362
+#: application/gui/operation_dialog.py:363
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "óra"
 msgstr[1] "órák"
 
-#: application/gui/operation_dialog.py:517
+#: application/gui/operation_dialog.py:518
 msgid "Copy Selection"
 msgstr "Kijelölés másolása"
 
-#: application/gui/operation_dialog.py:538
+#: application/gui/operation_dialog.py:539
 msgid "Move Selection"
 msgstr "Kijelölés mozgatása"
 
-#: application/gui/operation_dialog.py:563
+#: application/gui/operation_dialog.py:564
 msgid "Delete Selection"
 msgstr "Kijelölés törlése"
 
-#: application/gui/operation_dialog.py:564
+#: application/gui/operation_dialog.py:565
 msgid "Removing items..."
 msgstr "Elemek törlése..."
 
-#: application/gui/operation_dialog.py:590
+#: application/gui/operation_dialog.py:591
 msgid "Rename Items"
 msgstr "Elemek átnevezése"
 
-#: application/gui/operation_dialog.py:591
+#: application/gui/operation_dialog.py:592
 msgid "Renaming items..."
 msgstr "Elemek átnevezése"
 
-#: application/gui/mounts_manager_window.py:68
+#: application/gui/mounts_manager_window.py:350
+msgid "Systemwide"
+msgstr "Rendszerszintű"
+
+#: application/gui/mounts_manager_window.py:372
+msgid "Open selected URI in new tab"
+msgstr "Kiválasztott URI megnyitása új lapon"
+
+#: application/gui/mounts_manager_window.py:376
+#: application/gui/mounts_manager_window.py:530
+#: application/plugins/file_list/gio_extension.py:186
+#: application/plugins/file_list/gio_extension.py:535
 msgid "Unmount"
 msgstr "Leválaszt"
 
-#: application/gui/mounts_manager_window.py:78
-msgid "Open"
-msgstr "Megnyit"
+#: application/gui/mounts_manager_window.py:519
+msgid "Mounted"
+msgstr "Csatolt"
 
-#: application/gui/about_window.py:120
+#: application/gui/mounts_manager_window.py:526
+#: application/plugins/file_list/gio_extension.py:183
+#: application/plugins/file_list/gio_extension.py:532
+msgid "Mount"
+msgstr "Csatolás"
+
+#: application/gui/mounts_manager_window.py:668
+msgid "Volumes"
+msgstr "Hangerő"
+
+#: application/gui/keyring_manager_window.py:51
+msgid "ID"
+msgstr "ID"
+
+#: application/gui/keyring_manager_window.py:54
+msgid "Modified"
+msgstr "Módosítva:"
+
+#: application/gui/keyring_manager_window.py:127
+msgid "Please select an entry to delete!"
+msgstr "Válassz ki egy elemet a törléshez!"
+
+#: application/gui/keyring_manager_window.py:143
+msgid ""
+"You are about to remove the following entry from your keyring. If you do "
+"this you will have to provide password manually when needed. Are you sure?\n"
+"\n"
+"{0}"
+msgstr ""
+"El fogod távolítani a következő bejegyzést a kulcstartódból. Ha ezt "
+"megteszed, a jelszavad mindig manuálisan kell megadnod ezután. Biztosan ezt "
+"akarod?\n"
+"\n"
+"{0}"
+
+#: application/gui/keyring_manager_window.py:170
+msgid "Please select an entry to change!"
+msgstr "Válassz ki egy elemet, amit szeretnél megváltoztatni!"
+
+#: application/gui/keyring_manager_window.py:177
+msgid "Change password"
+msgstr "Jelszó megváltoztatása"
+
+#: application/gui/keyring_manager_window.py:178
+msgid "Enter new password for selected keyring entry."
+msgstr "Add meg az új jelszót a kijelölt kulcstartó bejegyzéshez."
+
+#: application/gui/keyring_manager_window.py:193
+msgid "Password was changed!"
+msgstr "Jelszó megváltoztatva!"
+
+#: application/gui/keyring_manager_window.py:208
+msgid "Passwords do not match! Please try again."
+msgstr "A jelszavak nem egyenzek meg. Próbáld meg újra!"
+
+#: application/gui/about_window.py:138
 msgid "About program"
 msgstr "A programról"
 
-#: application/gui/about_window.py:228
+#: application/gui/about_window.py:246
 msgid "Copyright"
 msgstr "Copyright"
 
-#: application/gui/about_window.py:236
+#: application/gui/about_window.py:254
 msgid ""
 "This software is being developed under GNU General Public License.\n"
 "Bug reports, suggestions or questions are more than welcome."
@@ -1349,19 +1538,19 @@ msgstr ""
 "A szoftver fejlesztése alatt GNU General Public License. \n"
 "Bug jelentések, javaslatok, vagy kérdések több mint szívesen."
 
-#: application/gui/about_window.py:246
+#: application/gui/about_window.py:264
 msgid "Programming:"
 msgstr "Programozás:"
 
-#: application/gui/about_window.py:251
+#: application/gui/about_window.py:269
 msgid "Artists:"
 msgstr "Szerző:"
 
-#: application/gui/about_window.py:256
+#: application/gui/about_window.py:274
 msgid "Translating:"
 msgstr "Fordítás:"
 
-#: application/gui/about_window.py:366
+#: application/gui/about_window.py:380
 msgid "License"
 msgstr "Licensz"
 
@@ -1373,29 +1562,45 @@ msgstr "Hibás lista"
 msgid "For:"
 msgstr "a:"
 
-#: application/mounts.py:34
-msgid "Volumes"
-msgstr "Hangerő"
-
-#: application/mounts.py:258
+#: application/mounts.py:126
 msgid "Specified item can not be unmounted."
 msgstr "Az eszközt nem lehet lecsatolni."
 
-#: application/toolbar.py:146
+#: application/keyring.py:85
+msgid "Unlock keyring"
+msgstr "Kulcstartó feloldása"
+
+#: application/keyring.py:86
+msgid "Please enter your keyring password:"
+msgstr "Add meg a kulcstartó jelszavadat:"
+
+#: application/keyring.py:287
+msgid "New keyring"
+msgstr "Új kulcstartó"
+
+#: application/keyring.py:289
+msgid ""
+"We need to create a new keyring to safely store your passwords. Choose the "
+"password you want to use for it."
+msgstr ""
+"Egy új kulcstartót kell készítened ahhoz, hogy biztonságosan tárolni tudd a "
+"jelszavaidat. Válassz ki egy jelszót a kulcstartónak."
+
+#: application/toolbar.py:131
 msgid ""
 "Error adding widget. You need to enter unique name and select widget type."
 msgstr ""
 "Widget hozzáadás sikertelen. Kérem adjon meg egy egyedi nevet és válasszon "
 "típust."
 
-#: application/toolbar.py:161
+#: application/toolbar.py:146
 msgid ""
 "Widget with specified name already exists. You need to enter unique name and "
 "select widget type."
 msgstr ""
 "Már szerepel ezzel a névvel widget. Adj másik nevet a kiválasztott widgetnek."
 
-#: application/toolbar.py:200
+#: application/toolbar.py:180
 msgid ""
 "Plugin used to create selected toolbar widget is not active or not present. "
 "In order to edit this entry you need to activate plugin used to create it."
@@ -1406,7 +1611,7 @@ msgstr ""
 
 #: application/plugins/default_toolbar/parent_directory_button.py:14
 #: application/plugins/default_toolbar/parent_directory_button.py:15
-#: application/plugin_base/item_list.py:243
+#: application/plugin_base/item_list.py:247
 msgid "Go to parent directory"
 msgstr "Menj aszülő könyvtárba"
 
@@ -1422,57 +1627,52 @@ msgstr "Útvonal:"
 msgid "Show label"
 msgstr "Cimke mutatása"
 
-#: application/plugins/default_toolbar/plugin.py:28
+#: application/plugins/default_toolbar/plugin.py:26
 msgid "Parent directory button"
 msgstr "Aktuális könyvtár gomb"
 
-#: application/plugins/default_toolbar/plugin.py:34
+#: application/plugins/default_toolbar/plugin.py:32
 msgid "Home directory button"
 msgstr "Saját mappa gomb"
 
-#: application/plugins/default_toolbar/plugin.py:40
+#: application/plugins/default_toolbar/plugin.py:38
 msgid "Bookmark button"
 msgstr "Előzmények gomb"
 
-#: application/plugins/default_toolbar/plugin.py:46
+#: application/plugins/default_toolbar/plugin.py:44
 msgid "Bookmarks menu"
 msgstr "Előzmények menü"
 
-#: application/plugins/default_toolbar/plugin.py:52
+#: application/plugins/default_toolbar/plugin.py:50
 msgid "Separator"
 msgstr "Elválasztó"
 
-#: application/plugins/default_toolbar/plugin.py:107
+#: application/plugins/default_toolbar/plugin.py:105
 msgid "This widget has no configuration dialog."
 msgstr "A widgetnek nincs konfigurációs ablaka."
 
-#: application/plugins/file_list/plugin.py:25
+#: application/plugins/file_list/plugin.py:27
 msgid "Local file list"
 msgstr "Helyi fájl lista"
 
-#: application/plugins/file_list/plugin.py:113
+#: application/plugins/file_list/plugin.py:129
 msgid "Ext"
 msgstr "Kiterjesztés"
 
-#: application/plugins/file_list/plugin.py:114
-#: application/plugins/find_file_extensions/size.py:63
-msgid "Size"
-msgstr "Méret"
-
-#: application/plugins/file_list/plugin.py:115
+#: application/plugins/file_list/plugin.py:131
 msgid "Mode"
 msgstr "Mód"
 
-#: application/plugins/file_list/plugin.py:116
-#: application/plugins/rename_extensions/audio_metadata.py:27
+#: application/plugins/file_list/plugin.py:132
+#: application/plugins/rename_extensions/audio_metadata.py:26
 msgid "Date"
 msgstr "Dátum"
 
-#: application/plugins/file_list/plugin.py:349
+#: application/plugins/file_list/plugin.py:379
 msgid "Invalid selection!"
 msgstr "Hibás kijelőlés!"
 
-#: application/plugins/file_list/plugin.py:426
+#: application/plugins/file_list/plugin.py:461
 msgid ""
 "There was an error creating directory. Make sure you have enough "
 "permissions. "
@@ -1480,21 +1680,21 @@ msgstr ""
 "Hiba történt a könyvtár létrehozásakor. Gyöződjön meg róla, van-e "
 "jogosultsága."
 
-#: application/plugins/file_list/plugin.py:449
+#: application/plugins/file_list/plugin.py:488
 msgid "File already exists: {0}"
 msgstr "A fájl már létezik: {0}"
 
-#: application/plugins/file_list/plugin.py:452
+#: application/plugins/file_list/plugin.py:491
 msgid "Directory with same name exists: {0}"
 msgstr "Már van ilyen  névvel könyvtár: {0}"
 
-#: application/plugins/file_list/plugin.py:488
+#: application/plugins/file_list/plugin.py:528
 msgid ""
 "There was an error creating file. Make sure you have enough permissions."
 msgstr ""
 "Hiba történt a file létrehozásakor. Gyöződjön meg róla, van-e jogosultsága."
 
-#: application/plugins/file_list/plugin.py:506
+#: application/plugins/file_list/plugin.py:548
 msgid ""
 "You are about to remove {0} item.\n"
 "Are you sure about this?"
@@ -1508,97 +1708,165 @@ msgstr[1] ""
 "{0} fájlok törlésére készül.\n"
 "Biztos bene?"
 
-#: application/plugins/file_list/plugin.py:741
+#: application/plugins/file_list/plugin.py:791
 msgid "Other application..."
 msgstr "Más alkalmazás…"
 
-#: application/plugins/file_list/plugin.py:1204
+#: application/plugins/file_list/plugin.py:1256
 msgid "Free:"
 msgstr "Szabad:"
 
-#: application/plugins/file_list/plugin.py:1205
+#: application/plugins/file_list/plugin.py:1257
 msgid "Total:"
 msgstr "Teljes:"
 
-#: application/plugins/file_list/plugin.py:1248
+#: application/plugins/file_list/plugin.py:1490
 msgid ""
-"Drag and drop functionality can not be used if source and destination are "
-"same!"
-msgstr "\"Drag and drop\" nem használható, ha a forrás és a cél ugyanaz!"
-
-#: application/plugins/file_list/plugin.py:1418
-msgid ""
-"Error changing working directory. \n"
+"Error changing working directory to:\n"
+"{1}\n"
 "\n"
 "{0}\n"
 "\n"
 "Would you like to retry?"
 msgstr ""
-"Hiba a könyvtár váltáskor \n"
+"Hiba a könyvtárba való belépéskor \n"
 "\n"
 "{0}\n"
 "\n"
 "Szeretné újra megpróbálni?"
 
-#: application/plugins/file_list/local_provider.py:169
-msgid ""
-"Unable to rename specified item. Check if you have permission to access "
-"specified path.\n"
-"\n"
-"{0}"
-msgstr ""
-"Nem lehet átnevezni a kiválasztott elemet. Ellenőrizd, hogy a hozzáférési "
-"jogod  a megadott útvonalhoz."
+#: application/plugins/file_list/gio_extension.py:56
+msgid "Mount operation"
+msgstr "Csatolás művelet"
 
-#: application/plugins/sessions/plugin.py:14
-#: application/plugins/sessions/plugin.py:279
+#: application/plugins/file_list/gio_extension.py:102
+msgid ""
+"Unable to mount:\n"
+"{0}\n"
+"\n"
+"{1}"
+msgstr ""
+"Nem sikerült felmountolni:\n"
+"{0}\n"
+"\n"
+"{1}"
+
+#: application/plugins/file_list/gio_extension.py:154
+#: application/plugins/file_list/gio_extension.py:503
+msgid "URI"
+msgstr "URI"
+
+#: application/plugins/file_list/gio_extension.py:408
+#: application/plugins/file_list/gio_extension.py:706
+msgid ""
+"You are about to remove '{0}'.\n"
+"Are you sure about this?"
+msgstr ""
+"{0} fájl törlésére készülsz.\n"
+"Biztos vagy bene?"
+
+#: application/plugins/file_list/dialogs.py:29
+msgid "Create Samba mount"
+msgstr "Samba megosztás létrehozása"
+
+#: application/plugins/file_list/dialogs.py:60
+#: application/plugins/file_list/dialogs.py:274
+msgid "Server:"
+msgstr "Szerver:"
+
+#: application/plugins/file_list/dialogs.py:68
+msgid "Share:"
+msgstr "Megosztás:"
+
+#: application/plugins/file_list/dialogs.py:70
+#: application/plugins/file_list/dialogs.py:281
+msgid "Directory:"
+msgstr "Könyvtár:"
+
+#: application/plugins/file_list/dialogs.py:85
+msgid "Domain:"
+msgstr "Domain:"
+
+#: application/plugins/file_list/dialogs.py:86
+#: application/plugins/file_list/dialogs.py:296
+msgid "Username:"
+msgstr "Felhasználó név:"
+
+#: application/plugins/file_list/dialogs.py:165
+msgid ""
+"One or more required fields is empty. Please make sure you have entered "
+"name, server and share."
+msgstr ""
+"Egy vagy több szükséges mező üres. Győződj meg róla, hogy helyesen adtad-e "
+"meg a nevet, szerver nevét és a megosztást. "
+
+#: application/plugins/file_list/dialogs.py:243
+msgid "Create FTP mount"
+msgstr "FTP csatolás létrehozása"
+
+#: application/plugins/file_list/dialogs.py:363
+msgid ""
+"One or more required fields is empty. Please make sure you have entered name "
+"and server."
+msgstr "Egy vagy több szükséges mező üres. Győződj meg róla, hogy "
+
+#: application/plugins/file_list/local_provider.py:57
+msgid "Error trashing specified path}"
+msgstr "Hiba a megadott útvonal fordításakor"
+
+#: application/plugins/sessions/plugin.py:6
+msgid "Default"
+msgstr "Alapértelmezett"
+
+#: application/plugins/sessions/plugin.py:17
+#: application/plugins/sessions/plugin.py:316
 msgid "Sessions"
 msgstr "Munkamenetek"
 
-#: application/plugins/sessions/plugin.py:149
+#: application/plugins/sessions/plugin.py:158
 msgid "New session"
 msgstr "Új munkamenet"
 
-#: application/plugins/sessions/plugin.py:235
+#: application/plugins/sessions/plugin.py:215
 msgid "Manage sessions"
 msgstr "Mukamenetek kezelése"
 
-#: application/plugins/sessions/plugin.py:260
+#: application/plugins/sessions/plugin.py:244
 msgid "Session"
 msgstr "Munkamenet"
 
-#: application/plugins/rename_extensions/letter_case.py:16
-#: application/plugins/rename_extensions/letter_case.py:24
+#: application/plugins/rename_extensions/letter_case.py:15
+#: application/plugins/rename_extensions/letter_case.py:23
 msgid "Do nothing"
 msgstr "Minden marad a régiben"
 
-#: application/plugins/rename_extensions/letter_case.py:17
+#: application/plugins/rename_extensions/letter_case.py:16
 msgid "Capitalize"
 msgstr "Hasznosítani"
 
-#: application/plugins/rename_extensions/letter_case.py:18
-#: application/plugins/rename_extensions/letter_case.py:25
+#: application/plugins/rename_extensions/letter_case.py:17
+#: application/plugins/rename_extensions/letter_case.py:24
 msgid "Upper case"
 msgstr "Nagybetűk"
 
-#: application/plugins/rename_extensions/letter_case.py:19
-#: application/plugins/rename_extensions/letter_case.py:26
+#: application/plugins/rename_extensions/letter_case.py:18
+#: application/plugins/rename_extensions/letter_case.py:25
 msgid "Lower case"
 msgstr "Kisbetűk"
 
-#: application/plugins/rename_extensions/letter_case.py:20
+#: application/plugins/rename_extensions/letter_case.py:19
 msgid "Swap case"
 msgstr "Csere esetén"
 
-#: application/plugins/rename_extensions/letter_case.py:30
+#: application/plugins/rename_extensions/letter_case.py:29
 msgid "Item name:"
 msgstr "Elem név:"
 
-#: application/plugins/rename_extensions/letter_case.py:33
+#: application/plugins/rename_extensions/letter_case.py:32
 msgid "Extension:"
 msgstr "Kiegészítés:"
 
-#: application/plugins/rename_extensions/letter_case.py:88
+#: application/plugins/rename_extensions/letter_case.py:87
 msgid "Letter Case"
 msgstr "Levél esetén"
 
@@ -1653,63 +1921,63 @@ msgstr "Számok:"
 msgid "Item list is empty. Unable to get item for range selection!"
 msgstr "A lista üres.  Nem található elem ebben a tartományban!"
 
-#: application/plugins/rename_extensions/audio_metadata.py:23
+#: application/plugins/rename_extensions/audio_metadata.py:22
 msgid "Album"
 msgstr "Album"
 
-#: application/plugins/rename_extensions/audio_metadata.py:24
+#: application/plugins/rename_extensions/audio_metadata.py:23
 msgid "Artist"
 msgstr "Szerző"
 
-#: application/plugins/rename_extensions/audio_metadata.py:26
+#: application/plugins/rename_extensions/audio_metadata.py:25
 msgid "Genre"
 msgstr "Név"
 
-#: application/plugins/rename_extensions/audio_metadata.py:28
+#: application/plugins/rename_extensions/audio_metadata.py:27
 msgid "Track number"
 msgstr "Szám cim"
 
-#: application/plugins/rename_extensions/audio_metadata.py:40
+#: application/plugins/rename_extensions/audio_metadata.py:39
 msgid "Replace:"
 msgstr "Felülír:"
 
-#: application/plugins/rename_extensions/audio_metadata.py:48
+#: application/plugins/rename_extensions/audio_metadata.py:47
 msgid "With:"
 msgstr "Vele:"
 
-#: application/plugins/rename_extensions/audio_metadata.py:61
+#: application/plugins/rename_extensions/audio_metadata.py:60
 msgid "Template syntax"
 msgstr "Sablon szintaxis"
 
-#: application/plugins/rename_extensions/audio_metadata.py:72
+#: application/plugins/rename_extensions/audio_metadata.py:71
 msgid "Character replacement"
 msgstr "Karakter csere"
 
-#: application/plugins/rename_extensions/audio_metadata.py:79
+#: application/plugins/rename_extensions/audio_metadata.py:78
 msgid ""
 "In order to use this extension you need <b>mutagen</b> module installed!"
 msgstr ""
 "Ahhoz, hogy ezt a kiterjesztést használni tudd, telepítened kell a "
 "<b>mutagen</b> modult!"
 
-#: application/plugins/rename_extensions/audio_metadata.py:111
+#: application/plugins/rename_extensions/audio_metadata.py:110
 msgid "Audio Metadata"
 msgstr "Audio metaadatok"
 
-#: application/plugins/find_file_extensions/size.py:23
+#: application/plugins/find_file_extensions/size.py:21
 msgid "Match file size"
 msgstr "Azonos fájl méret"
 
-#: application/plugins/find_file_extensions/size.py:27
+#: application/plugins/find_file_extensions/size.py:25
 msgid "Minimum:"
 msgstr "Minimum:"
 
-#: application/plugins/find_file_extensions/size.py:29
-#: application/plugins/find_file_extensions/size.py:33
+#: application/plugins/find_file_extensions/size.py:27
+#: application/plugins/find_file_extensions/size.py:31
 msgid "MB"
 msgstr "MB"
 
-#: application/plugins/find_file_extensions/size.py:31
+#: application/plugins/find_file_extensions/size.py:29
 msgid "Maximum:"
 msgstr "Maximum:"
 
@@ -1728,15 +1996,15 @@ msgstr ""
 "[!seq]\tBármelyik karakter, amelyik <u>nincs</u> <i>seq</i>-ben"
 
 #: application/plugins/find_file_extensions/default.py:41
-#: application/plugins/find_file_extensions/contents.py:23
+#: application/plugins/find_file_extensions/contents.py:21
 msgid "Search for:"
 msgstr "Keresés:"
 
-#: application/plugins/find_file_extensions/default.py:48
+#: application/plugins/find_file_extensions/default.py:49
 msgid "Case sensitive"
 msgstr "Kis és nagybetűk"
 
-#: application/plugins/find_file_extensions/contents.py:39
+#: application/plugins/find_file_extensions/contents.py:37
 msgid "Content"
 msgstr "Tartalom"
 
@@ -1749,53 +2017,52 @@ msgstr "Rendszer terminál"
 msgid "Use this extension"
 msgstr "Kiterjesztés használata"
 
-#: application/plugin_base/plugin.py:105
+#: application/plugin_base/plugin.py:114
 msgid "Plugin Base"
 msgstr "Kiegészítők"
 
-#: application/plugin_base/plugin.py:108
-#: application/plugin_base/terminal.py:284
-msgid "Focus oposite object"
-msgstr "Focus másik objektum"
+#: application/plugin_base/plugin.py:117
+#: application/plugin_base/terminal.py:294
+msgid "Focus opposite object"
+msgstr "Fókuszálás az ellenkező objektumra"
 
-#: application/plugin_base/plugin.py:109
+#: application/plugin_base/plugin.py:118
 msgid "Next tab"
 msgstr "Következő lap"
 
-#: application/plugin_base/plugin.py:110
+#: application/plugin_base/plugin.py:119
 msgid "Previous tab"
 msgstr "Elöző lap"
 
-#: application/plugin_base/plugin.py:111
+#: application/plugin_base/plugin.py:120
 msgid "Duplicate tab"
 msgstr "Kétszerezett lap"
 
-#: application/plugin_base/plugin.py:112
+#: application/plugin_base/plugin.py:121
 msgid "Close tab"
 msgstr "Lap bezárása"
 
-#: application/plugin_base/plugin.py:113
-#, fuzzy
+#: application/plugin_base/plugin.py:122
 msgid "Focus command entry"
-msgstr "Többszörös név"
+msgstr "Parancs"
 
-#: application/plugin_base/plugin.py:114
+#: application/plugin_base/plugin.py:123
 msgid "Focus left object"
 msgstr "Focus left object"
 
-#: application/plugin_base/plugin.py:115
+#: application/plugin_base/plugin.py:124
 msgid "Focus right object"
 msgstr "Focus right object"
 
-#: application/plugin_base/terminal.py:68
+#: application/plugin_base/terminal.py:72
 msgid "Recycle terminal"
 msgstr "Terminál törlése"
 
-#: application/plugin_base/terminal.py:89
+#: application/plugin_base/terminal.py:93
 msgid "Terminal menu"
 msgstr "Terminál menü"
 
-#: application/plugin_base/terminal.py:137
+#: application/plugin_base/terminal.py:141
 msgid ""
 "\n"
 "\n"
@@ -1805,153 +2072,162 @@ msgstr ""
 "\n"
 "A Python VTE modul nincs telepítve a rendszeren!"
 
-#: application/plugin_base/terminal.py:281
-#: application/plugin_base/item_list.py:242
+#: application/plugin_base/terminal.py:291
+#: application/plugin_base/item_list.py:246
 msgid "Create terminal tab"
 msgstr "Új terminál lap"
 
-#: application/plugin_base/terminal.py:282
-#: application/plugin_base/item_list.py:238
+#: application/plugin_base/terminal.py:292
+#: application/plugin_base/item_list.py:242
 msgid "Copy selection to clipboard"
 msgstr "Kijelölés másolása vágólapra"
 
-#: application/plugin_base/terminal.py:283
+#: application/plugin_base/terminal.py:293
 msgid "Paste from clipboard"
 msgstr "Beillesztés vágólapról"
 
-#: application/plugin_base/terminal.py:318
+#: application/plugin_base/terminal.py:328
 msgid ""
 "You are about to feed child process with following data. Are you sure?\n"
 "\n"
 "{0}"
 msgstr "Arra készül, hogy felülírja a következő adatokat. Biztos benne?"
 
-#: application/plugin_base/item_list.py:156
+#: application/plugin_base/item_list.py:157
 msgid "Search:"
 msgstr "Keresés:"
 
-#: application/plugin_base/item_list.py:180
+#: application/plugin_base/item_list.py:184
 msgid "Reload item list"
 msgstr "Tételes lista frissítése:"
 
-#: application/plugin_base/item_list.py:195
-#: application/plugin_base/item_list.py:261
+#: application/plugin_base/item_list.py:199
+#: application/plugin_base/item_list.py:267
 msgid "Copy path to clipboard"
 msgstr "Hely másolása a vágólapra"
 
-#: application/plugin_base/item_list.py:203
+#: application/plugin_base/item_list.py:207
 msgid "Enter path..."
 msgstr "Hely megnyitása"
 
-#: application/plugin_base/item_list.py:232
+#: application/plugin_base/item_list.py:236
 msgid "Execute selected item"
 msgstr "Kiválasztott elem futtatása"
 
-#: application/plugin_base/item_list.py:233
+#: application/plugin_base/item_list.py:237
 msgid "Select application and execute item"
 msgstr "Válassz alkalmazást és futtasd a fájlt"
 
-#: application/plugin_base/item_list.py:234
+#: application/plugin_base/item_list.py:238
 msgid "Show selected item properties"
 msgstr "Mutasd a kiválasztott elem tulajdonságait"
 
-#: application/plugin_base/item_list.py:235
+#: application/plugin_base/item_list.py:239
 msgid "Bookmark current directory"
 msgstr "Könyvjelző az aktuális mappához"
 
-#: application/plugin_base/item_list.py:236
-msgid "Edit bookmarks"
-msgstr "Könyvjelzők szerkesztése"
-
-#: application/plugin_base/item_list.py:237
+#: application/plugin_base/item_list.py:241
 msgid "Cut selection to clipboard"
 msgstr "Vágás kijelölés vágólapra"
 
-#: application/plugin_base/item_list.py:239
+#: application/plugin_base/item_list.py:243
 msgid "Paste items from clipboard"
 msgstr "Elemek beillesztése a vágólapról"
 
-#: application/plugin_base/item_list.py:240
+#: application/plugin_base/item_list.py:244
 msgid "Open selected directory in new tab"
 msgstr "Kiválasztott könyvtár megnyitása új lapon"
 
-#: application/plugin_base/item_list.py:241
+#: application/plugin_base/item_list.py:245
 msgid "Open selected directory"
 msgstr "Kijelölt mappa megnyitása"
 
-#: application/plugin_base/item_list.py:244
+#: application/plugin_base/item_list.py:248
 msgid "Show history browser"
 msgstr "Előzmények megjelenítése"
 
-#: application/plugin_base/item_list.py:245
+#: application/plugin_base/item_list.py:249
 msgid "Toggle selection"
 msgstr "Ellentétes kiválasztás"
 
-#: application/plugin_base/item_list.py:247
+#: application/plugin_base/item_list.py:250
+msgid "Toggle selection and move marker up"
+msgstr "Kijelölés megfordítása és a jelölő felfelé mozgatása"
+
+#: application/plugin_base/item_list.py:252
 msgid "Show bookmarks for left list"
 msgstr "Mutasd  a könyvjelzők bal oldalon"
 
-#: application/plugin_base/item_list.py:248
+#: application/plugin_base/item_list.py:253
 msgid "Show bookmarks for right list"
 msgstr "Mutasd  a könyvjelzők jobb oldalon"
 
-#: application/plugin_base/item_list.py:249
+#: application/plugin_base/item_list.py:254
 msgid "Rename selected item"
 msgstr "Kiválasztott elemek átnevezése"
 
-#: application/plugin_base/item_list.py:250
+#: application/plugin_base/item_list.py:255
+msgid "View selected item"
+msgstr "Kiválasztott fájl előnézet"
+
+#: application/plugin_base/item_list.py:256
 msgid "Edit selected item"
 msgstr "Kiválasztott elem szerkesztése"
 
-#: application/plugin_base/item_list.py:251
+#: application/plugin_base/item_list.py:257
 msgid "Copy selected items"
 msgstr "Kiválasztott elemek másolása"
 
-#: application/plugin_base/item_list.py:252
+#: application/plugin_base/item_list.py:258
 msgid "Move selected items"
 msgstr "Kiválasztott elemek mozgatása"
 
-#: application/plugin_base/item_list.py:253
+#: application/plugin_base/item_list.py:259
 msgid "Show context menu"
 msgstr "Gombsor megjelenítése"
 
-#: application/plugin_base/item_list.py:254
+#: application/plugin_base/item_list.py:260
 msgid "Show \"open with\" menu"
 msgstr "\"Megnyitás ezzel\" menü megjelenítése"
 
-#: application/plugin_base/item_list.py:255
+#: application/plugin_base/item_list.py:261
 msgid "Assign path from left list"
 msgstr "Útvonal hozzáadása a  bal panelhez"
 
-#: application/plugin_base/item_list.py:256
+#: application/plugin_base/item_list.py:262
 msgid "Assign path from right list"
 msgstr "Útvonal hozzáadása a  jobb panelhez"
 
-#: application/plugin_base/item_list.py:257
+#: application/plugin_base/item_list.py:263
 msgid "Swap right and left paths"
 msgstr "Jobb és bal oldal felcserélése"
 
-#: application/plugin_base/item_list.py:258
+#: application/plugin_base/item_list.py:264
 msgid "Move selection marker up"
 msgstr "Kijelölés mozgatása fel"
 
-#: application/plugin_base/item_list.py:259
+#: application/plugin_base/item_list.py:265
 msgid "Move selection marker down"
 msgstr "Kijelölés mozgatása le"
 
-#: application/plugin_base/item_list.py:260
+#: application/plugin_base/item_list.py:266
 msgid "Show tab menu"
 msgstr "Fülek megjelenítése"
 
-#: application/plugin_base/item_list.py:262
+#: application/plugin_base/item_list.py:268
 msgid "Ask and navigate to path"
 msgstr "Kérdezze ésmutassa a helyet"
 
-#: application/plugin_base/item_list.py:300
+#: application/plugin_base/item_list.py:269
+msgid "Start quick search"
+msgstr "Gyors keresés elindítása"
+
+#: application/plugin_base/item_list.py:308
+#: application/plugin_base/item_list.py:314
 msgid "Go to '{0}'"
 msgstr "Menj a '{0}'"
 
-#: application/plugin_base/item_list.py:573
+#: application/plugin_base/item_list.py:603
 msgid ""
 "Directory does not exist anymore or is not valid. If path is not local check "
 "if specified volume is mounted."
@@ -1959,7 +2235,7 @@ msgstr ""
 "Könyvtár nem létezik, vagy nem érvényes. Ha az útvonal nem helyi ellenőrizni "
 "kell, hogy csatlakoztatva van."
 
-#: application/plugin_base/item_list.py:618
+#: application/plugin_base/item_list.py:648
 msgid ""
 "Specified protocol ({0}) is not supported by this application. Please check "
 "for available plugins or create a feature request."
@@ -1967,7 +2243,7 @@ msgstr ""
 "A megadott protokolt ({0}) nem támogatja ez az alkalmazás. Kérlek ellenőrizd "
 "az elérhető bővítményeket vagy hozz létre egy \"feature requestet\"."
 
-#: application/plugin_base/item_list.py:645
+#: application/plugin_base/item_list.py:679
 msgid ""
 "Application is unable to handle specified data. Check if source items still "
 "exist."
@@ -1975,23 +2251,31 @@ msgstr ""
 "Az alkalmazás nem tudja kezelni a megadott adatot. Ellenőrizd hogy a forrás "
 "létezik-e."
 
-#: application/plugin_base/item_list.py:865
+#: application/plugin_base/item_list.py:904
 msgid "Open _with"
 msgstr "Megnyitás mással"
 
-#: application/plugin_base/item_list.py:1001
+#: application/plugin_base/item_list.py:952
+msgid "Copy to other..."
+msgstr "Másolás máshova"
+
+#: application/plugin_base/item_list.py:958
+msgid "Move to other..."
+msgstr "Mozgatás máshova"
+
+#: application/plugin_base/item_list.py:1057
 msgid "View complete history..."
 msgstr "Mutass minden előzményt"
 
-#: application/plugin_base/item_list.py:1007
+#: application/plugin_base/item_list.py:1063
 msgid "History is empty"
 msgstr "Előzmények üres"
 
-#: application/plugin_base/item_list.py:1319
+#: application/plugin_base/item_list.py:1392
 msgid "Path entry"
 msgstr "Üres hely "
 
-#: application/plugin_base/item_list.py:1320
+#: application/plugin_base/item_list.py:1393
 msgid "Navigate to:"
 msgstr "Átirányítás:"
 
@@ -2003,132 +2287,143 @@ msgstr "Mutasd a saját ablakot"
 msgid "_Hide main window"
 msgstr "Saját ablak elrejtése"
 
-#: application/operation.py:176
+#: application/operation.py:177
 msgid ""
 "There is a problem writing data to destination file. What would you like to "
 "do?"
 msgstr "Hiba történt a file írásakor. Mit szeretnél csinálni?"
 
-#: application/operation.py:204
+#: application/operation.py:205
 msgid ""
 "An error occurred while trying to create specified file. What would you like "
 "to do?"
 msgstr "Hiba történt a fájl létrehozásakor. Mit szeretnél csinálni?"
 
-#: application/operation.py:211
+#: application/operation.py:212
 msgid ""
 "An error occurred while trying to create specified directory. What would you "
 "like to do?"
 msgstr "Hiba történt a könyvtár létrehozásakor. Mit szeretnél csinálni?"
 
-#: application/operation.py:239
+#: application/operation.py:240
 msgid ""
-"Problem with setting mode and/or owner for specified path. What would you "
-"like to do?"
+"Problem with setting path parameter for specified path. What would you like "
+"to do?"
 msgstr ""
-"Hiba történt a mód és/vagy tulajdonos beállításánál. Mit szeretnél csinálni?"
+"Hibás az elérési út paraméter beállítása egy bizonyos úton. Mit szeretnél "
+"csinálni?"
 
-#: application/operation.py:267
+#: application/operation.py:268
 msgid "There was a problem removing specified path. What would you like to do?"
 msgstr ""
 "Hiba történt a megadott útvonal eltávolításával. Mit szeretnél csinálni?"
 
-#: application/operation.py:293
+#: application/operation.py:294
+msgid ""
+"There was a problem trashing specified path. Would you like to try removing "
+"it instead?"
+msgstr "A kijelölt útvonalat nem lehet a kukába tenni. Megbróbálod törölni?"
+
+#: application/operation.py:320
 msgid "There was a problem moving specified path. What would you like to do?"
 msgstr ""
 "Hiba történt a megadott útvonal áthelyezésekor. Mit szeretnél csinálni?"
 
-#: application/operation.py:319
+#: application/operation.py:346
 msgid "There was a problem renaming specified path. What would you like to do?"
 msgstr "Hiba történt az útvonal átnevezésénél. Mit szeretnél csinálni?"
 
-#: application/operation.py:345
+#: application/operation.py:372
 msgid ""
 "There was a problem with reading specified directory. What would you like to "
 "do?"
 msgstr "Hiba történt a megadott könyvtár olvasásakor. Mit szeretne csinálni?"
 
-#: application/operation.py:400
+#: application/operation.py:429
 msgid "Searching for files..."
 msgstr "Keresés a fájlokban..."
 
-#: application/operation.py:678
+#: application/operation.py:735
 msgid "Creating directories..."
 msgstr "Könyvtárak készítése..."
 
-#: application/operation.py:695
+#: application/operation.py:752
 msgid "Copying files..."
 msgstr "Fájlok másolása..."
 
-#: application/operation.py:729 application/operation.py:746
+#: application/operation.py:786 application/operation.py:803
 msgid "Copy Operation"
 msgstr "Művelet másolása"
 
-#: application/operation.py:731
+#: application/operation.py:788
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] "{0} másolása \"{1}\"-ról \"{2}\"-re befejeződött!"
 msgstr[1] "{0} másolása \"{1}\"-ról \"{2}\"-re befejeződött!"
 
-#: application/operation.py:830
+#: application/operation.py:887
 msgid "Moving files..."
 msgstr "Fájlok mozgatása..."
 
-#: application/operation.py:845
+#: application/operation.py:902
 msgid "Deleting source files..."
 msgstr "Forrás fájlok törlése..."
 
-#: application/operation.py:867
+#: application/operation.py:924
 msgid "Deleting source directories..."
 msgstr "Forrás könyvtárak törlése..."
 
-#: application/operation.py:941 application/operation.py:958
+#: application/operation.py:998 application/operation.py:1015
 msgid "Move Operation"
 msgstr "Művelet mozgatása"
 
-#: application/operation.py:943
+#: application/operation.py:1000
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] "{0} elem áthelyezése \"{1}\"-ról \"{2}\"-re befejeződött!"
 msgstr[1] "{0} elemek áthelyezése \"{1}\"-ról \"{2}\"-re befejeződött!"
 
-#: application/operation.py:1031
+#: application/operation.py:1115
 msgid "Delete Operation"
 msgstr "Művelet türlése"
 
-#: application/operation.py:1033
+#: application/operation.py:1117
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
 msgstr[0] "{0} elem eltávolítása \"{1}\"-ról befejeződött!"
 msgstr[1] "{0} elemek eltávolítása \"{1}\"-ról befejeződött!"
 
-#: application/operation.py:1105
+#: application/operation.py:1189
 msgid "Rename Operation"
 msgstr "Művelet átnevezése"
 
-#: application/operation.py:1107
+#: application/operation.py:1191
 msgid "Rename of {0} item from \"{1}\" is completed!"
 msgid_plural "Rename of {0} items from \"{1}\" is completed!"
 msgstr[0] "{0} átnevezése \"{1}\"-re sikerült."
 msgstr[1] "{0} átnevezése \"{1}\"-re sikerült."
 
+#: application/tools/viewer.py:23
+msgid "{0} - Viewer"
+msgstr "{0} - Nézegető"
+
 #: application/tools/find_files.py:53
 msgid "Search in:"
 msgstr "Keresés itt:"
 
-#: application/tools/find_files.py:66
+#: application/tools/find_files.py:67
 msgid "Browse"
 msgstr "Keresés"
 
-#: application/tools/find_files.py:69
+#: application/tools/find_files.py:70
 msgid "Search recursively"
 msgstr "Keresés rekurzívan"
 
-#: application/tools/find_files.py:121 application/tools/find_files.py:240
+#: application/tools/find_files.py:122 application/tools/find_files.py:234
 msgid "Start"
 msgstr "Indítás"
 
-#: application/tools/find_files.py:188
+#: application/tools/find_files.py:184
 msgid ""
 "Active object doesn't support changing path. Set focus on a different "
 "object, preferably file list, and try again."
@@ -2136,11 +2431,11 @@ msgstr ""
 "Az aktív objektum nem támogatja a változó útvonalat. Állítsd középpontba egy "
 "másik tárgyat, lehetőleg fájl listából, és próbáld újra."
 
-#: application/tools/find_files.py:228
+#: application/tools/find_files.py:222
 msgid "Stop"
 msgstr "Megállítás"
 
-#: application/tools/find_files.py:348
+#: application/tools/find_files.py:342
 msgid ""
 "Specified path is not valid or doesn't exist anymore. Please check your "
 "selection and try again."
@@ -2148,12 +2443,28 @@ msgstr ""
 "A megadott útvonal nem érvényes, vagy nem létezik. Kérlek, ellenőrizd, és "
 "próbáld újra."
 
-#: application/tools/find_files.py:371
+#: application/tools/find_files.py:365
 msgid ""
 "You need to enable at least one extension in order to find files and "
 "directories!"
 msgstr ""
 "Egy kiterjesztést aktíválni kell, hogy megtaláld a fájlokat és könyvtárakat!"
+
+#: application/tools/version_check.py:22
+msgid "Version check"
+msgstr "Verzió ellenőrzés"
+
+#: application/tools/version_check.py:40
+msgid "Current:"
+msgstr "Jelenlegi:"
+
+#: application/tools/version_check.py:43
+msgid "Latest:"
+msgstr "Legfrissebb:"
+
+#: application/tools/version_check.py:94
+msgid "Checking..."
+msgstr "Ellenőrzés"
 
 #: application/tools/advanced_rename.py:50
 msgid "Old name"
@@ -2181,6 +2492,50 @@ msgstr[1] ""
 "Át fogod nevezni {0} elemeket. \n"
 "Biztosan ezt akarod?"
 
+#~ msgid ""
+#~ "<small><i>Note: {0} will be replaced with socket/window id.\n"
+#~ "Xterm has problems with embeding so it might not work.</i></small>"
+#~ msgstr ""
+#~ "<small><i>Megjegyzés: {0} le lesz cserélve socket/window id-vel.\n"
+#~ "Az xtermnek problémái vannak a beágyazással, ezért nem biztos, hogy "
+#~ "működik.</i></small>"
+
+#~ msgid "Options"
+#~ msgstr "Beállítások"
+
+#~ msgid "_Add bookmark"
+#~ msgstr "Könyvjelzőkhöz _ad"
+
+#~ msgid "_Edit bookmarks"
+#~ msgstr "Könyvjelzők sz_erkesztése"
+
+#~ msgid ""
+#~ "Specified path does not exist or is not valid. If path is not local check "
+#~ "if volume is mounted."
+#~ msgstr ""
+#~ "A megadott elérési út nem létezik, vagy nem érvényes. Ha az útvonal nem "
+#~ "helyi, ellenőrizni kell, hogy a kötet csatolva van-e."
+
+#~ msgid "Go to"
+#~ msgstr "Menj a"
+
+#~ msgid "Oposite list"
+#~ msgstr "Ellenkező lista"
+
+#~ msgid ""
+#~ "Drag and drop functionality can not be used if source and destination are "
+#~ "same!"
+#~ msgstr "\"Drag and drop\" nem használható, ha a forrás és a cél ugyanaz!"
+
+#~ msgid ""
+#~ "Unable to rename specified item. Check if you have permission to access "
+#~ "specified path.\n"
+#~ "\n"
+#~ "{0}"
+#~ msgstr ""
+#~ "Nem lehet átnevezni a kiválasztott elemet. Ellenőrizd, hogy a hozzáférési "
+#~ "jogod  a megadott útvonalhoz."
+
 #~ msgid "Plugin file"
 #~ msgstr "Kiegészítő fájl"
 
@@ -2196,9 +2551,6 @@ msgstr[1] ""
 #~ msgstr ""
 #~ "Új mappa készítése (F7)\n"
 #~ "Új fájl készítése (CTRL+F7)"
-
-#~ msgid "Directories:"
-#~ msgstr "Könyvtárak:"
 
 #~ msgid "Files:"
 #~ msgstr "Fájlok:"

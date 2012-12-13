@@ -127,6 +127,7 @@ class Viewer:
 
 	def _insert_page(self, title, container, position=0):
 		"""Insert page at desired position in viewer notebook"""
+		self._page_count += 1
 		self._notebook.insert_page(container, gtk.Label(title), position)
 
 	def _create_text_page(self, title, content, position=0):

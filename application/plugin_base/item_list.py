@@ -671,10 +671,11 @@ class ItemList(PluginBase):
 			path = path.split('://', 1)[1]
 
 		# create provider
-		provider = Provider(self, path, selection)
+		source_provider = Provider(self, path, selection)
+		destination_provider = self.get_provider()
 
 		# check if we actually have data to handle
-		if len(provider.get_selection()) == 0:
+		if len(source_provider.get_selection()) == 0:
 			# no provider was found for specified protocol
 			dialog = gtk.MessageDialog(
 									self._parent,
@@ -695,7 +696,8 @@ class ItemList(PluginBase):
 		# show operation dialog
 		dialog = Dialog(
 					self._parent,
-					provider,
+					source_provider,
+					destination_provider,
 					self.path
 				)
 		dialog_result = dialog.get_response()
@@ -705,8 +707,8 @@ class ItemList(PluginBase):
 			# user confirmed copying
 			operation = Operation(
 								self._parent,
-								provider,
-								self.get_provider(),
+								source_provider,
+								destination_provider,
 								dialog_result[1]  # options from dialog
 							)
 

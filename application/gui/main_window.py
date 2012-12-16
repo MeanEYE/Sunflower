@@ -2221,9 +2221,9 @@ class MainWindow(gtk.Window):
 		"""Register mount manager extension"""
 		self.mount_manager_extensions.append(ExtensionClass)
 
-	def register_column_extension(self, ExtensionClass):
+	def register_column_extension(self, ListClass, ExtensionClass):
 		"""Register column extension class"""
-		pass
+		self.column_extension_classes.append((ListClass, ExtensionClass))
 
 	def register_column_editor_extension(self, extension):
 		"""Register column editor extension"""
@@ -2261,6 +2261,16 @@ class MainWindow(gtk.Window):
 
 		if protocol in self.provider_classes.keys():
 			result = self.provider_classes[protocol]
+
+		return result
+
+	def get_column_extension_classes(self, BaseClass):
+		"""Get column extension classes for specified list class"""
+		result = []
+
+		for ListClass, ExtensionClass in self.column_extension_classes:
+			if issubclass(ListClass, BaseClass):
+				result.append(ListClass)
 
 		return result
 

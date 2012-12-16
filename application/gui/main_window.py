@@ -988,6 +988,10 @@ class MainWindow(gtk.Window):
 		plugin_files = self._get_plugin_list()
 		plugins_to_load = self.options.get('plugins')
 
+		# only load protected plugins if command line parameter is specified
+		if self.arguments is not None and self.arguments.dont_load_plugins:
+			plugins_to_load = self.protected_plugins
+
 		# filter list for loading
 		plugin_files = filter(lambda file_name: file_name in plugins_to_load, plugin_files)
 
@@ -1286,6 +1290,12 @@ class MainWindow(gtk.Window):
 								self.version
 							),
 						help=_('print version and exit')
+					)
+		parser.add_argument(
+						'-p', '--no-plugins',
+						action='store_true',
+						help=_('skip loading additional plugins'),
+						dest='dont_load_plugins'
 					)
 		parser.add_argument(
 						'-t', '--no-load-tabs',

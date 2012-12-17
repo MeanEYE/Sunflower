@@ -135,17 +135,13 @@ class MenuManager:
 	def get_additional_options_for_type(self, mime_type, selection, provider):
 		"""Get list of menu items for methods assigned to specified file type"""
 		result = []
+		is_subset = self._application.associations_manager.is_mime_type_subset
 
 		for mime_types, menu_item in self._application.popup_menu_actions:
-			is_subset = self._application.associations_manager.is_mime_type_subset
 			matched_types = filter(lambda iter_mime_type: is_subset(mime_type, iter_mime_type), mime_types)
 
 			# if mime types match, create menu item
 			if len(matched_types) > 0:
-				menu_item.set_data('selection', selection)
-				menu_item.set_data('provider', provider)
-				menu_item.set_data('mime_type', mime_type)
-
 				result.append(menu_item)
 
 		return result

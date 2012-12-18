@@ -218,6 +218,14 @@ class FileList(ItemList):
 			# add to the list
 			self._item_list.append_column(column)
 
+		# create extension columns
+		class_list = self._parent.get_column_extension_classes(self.__class__)
+
+		for ExtensionClass in class_list:
+			column = ExtensionsClass(self, self._store).get_column()
+			if column is not None:
+				self._item_list.append_column(column)
+
 		# set column order
 		self._reorder_columns()
 

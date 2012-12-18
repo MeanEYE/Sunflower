@@ -12,8 +12,10 @@ from plugin_base.provider import Mode as FileMode, TrashError, Support as Provid
 # import constants
 from gui.input_dialog import OverwriteOption
 
-# constants
-COPY_BUFFER = 100 * 1024
+
+class BufferSize:
+	LOCAL = 4096 * 1024
+	REMOTE = 100 * 1024
 
 
 class Option:
@@ -654,6 +656,10 @@ class CopyOperation(Operation):
 			sh = self._source.get_file_handle(file_, FileMode.READ, relative_to=self._source_path)
 			dh = self._destination.get_file_handle(dest_file, FileMode.WRITE, relative_to=self._destination_path)
 
+			# set buffer size
+			local_operation = self._source.is_local and self._destination.is_local
+			buffer_size = BufferSize.LOCAL if local_operation else BufferSize.REMOTE
+
 			# reserve file size
 			if self._reserve_size:
 				# try to reserve file size in advance, 
@@ -695,13 +701,13 @@ class CopyOperation(Operation):
 			if self._abort.is_set(): break
 			self._can_continue.wait()  # pause lock
 
-			buffer_ = sh.read(COPY_BUFFER)
+			data = sh.read(buffer_size)
 
-			if (buffer_):
-				dh.write(buffer_)
+			if (data):
+				dh.write(data)
 
-				destination_size += len(buffer_)
-				gobject.idle_add(self._dialog.increment_current_size, len(buffer_))
+				destination_size += len(data)
+				gobject.idle_add(self._dialog.increment_current_size, len(data))
 				if file_stat.size > 0:  # ensure we don't end up with error on 0 size files
 					gobject.idle_add(
 									self._dialog.set_current_file_fraction,

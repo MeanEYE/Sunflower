@@ -1924,12 +1924,18 @@ class MainWindow(gtk.Window):
 
 		# create default editor options
 		default_application = self.associations_manager.get_default_application_for_type('text/plain')
+		editor_command = None
+		editor_name = None
+
+		if default_application is not None:
+			editor_command = default_application.command_line
+			editor_name = default_application.name
 
 		self.options.create_section('editor').update({
 					'type': 0,
-					'default_editor': default_application.command_line,
-					'external_command': default_application.command_line,
-					'application': default_application.name,
+					'default_editor': editor_command,
+					'external_command': editor_command,
+					'application': editor_name,
 					'terminal_command': False
 				})
 

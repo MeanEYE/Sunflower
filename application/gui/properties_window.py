@@ -16,6 +16,7 @@ class Column:
 	APPLICATION_NAME = 2
 	APPLICATION_ID = 3
 
+
 class PropertiesWindow(gtk.Window):
 	"""Properties window for files and directories"""
 
@@ -31,12 +32,16 @@ class PropertiesWindow(gtk.Window):
 		self._mode = None
 
 		# get content type
-		self._mime_type = application.associations_manager.get_mime_type(self._path)
+		if self._provider.is_dir(self._path):
+			self._mime_type = 'inode/directory'
 
-		# content type is unknown, try to detect using content
-		if application.associations_manager.is_mime_type_unknown(self._mime_type):
-			data = application.associations_manager.get_sample_data(path, provider)
-			self._mime_type = application.associations_manager.get_mime_type(data=data)
+		else:
+			self._mime_type = application.associations_manager.get_mime_type(self._path)
+
+			# content type is unknown, try to detect using content
+			if application.associations_manager.is_mime_type_unknown(self._mime_type):
+				data = application.associations_manager.get_sample_data(path, provider)
+				self._mime_type = application.associations_manager.get_mime_type(data=data)
 
 		# file monitor, we'd like to update info if file changes
 		self._create_monitor()

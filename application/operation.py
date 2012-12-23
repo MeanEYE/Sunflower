@@ -8,6 +8,7 @@ from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, Oper
 from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog, RenameDialog
 from gui.error_list import ErrorList
 from plugin_base.provider import Mode as FileMode, TrashError, Support as ProviderSupport
+from common import format_size
 
 # import constants
 from gui.input_dialog import OverwriteOption
@@ -75,6 +76,43 @@ class Operation(Thread):
 		if self._dialog is not None:
 			with gtk.gdk.lock:
 				self._dialog.destroy()
+
+	def _get_free_space_input(self, needed, available):
+		"""Get user input when there is not enough space"""
+		space_needed = format_size(needed)
+		space_available = format_size(available)
+
+		if self._options[Option.SILENT]:
+			# silent option is enabled, we skip operation by default
+			self._error_list.append(_(
+							'Aborted. Not enough free space on target file system.\n'
+							'Needed: {0}\n'
+							'Available: {1}'
+						).format(space_needed, space_available))
+			should_continue = False
+
+		else:
+			# ask user what to do
+			with gtk.gdk.lock:
+				dialog = gtk.MessageDialog(
+										self._dialog.get_window(),
+										gtk.DIALOG_DESTROY_WITH_PARENT,
+										gtk.MESSAGE_WARNING,
+										gtk.BUTTONS_YES_NO,
+										_(
+											'Target file system does not have enough '
+											'free space for this operation to continue.\n\n'
+											'Needed: {0}\n'
+											'Available: {1}\n\n'
+											'Do you wish to continue?'
+										).format(space_needed, space_available)
+									)
+				result = dialog.run()
+				dialog.destroy()
+
+				should_continue = result == gtk.RESPONSE_YES
+
+		return should_continue
 
 	def _get_merge_input(self, path):
 		"""Get merge confirmation"""
@@ -416,6 +454,9 @@ class CopyOperation(Operation):
 		self._overwrite_all = None
 		self._dir_list_create = []
 
+		self._total_count = 0;
+		self._total_size = 0;
+
 		# cache settings
 		should_reserve = self._application.options.section('operations').get('reserve_size')
 		supported_by_provider = ProviderSupport.RESERVE_SIZE in self._destination.get_support()
@@ -467,8 +508,13 @@ class CopyOperation(Operation):
 			elif fnmatch.fnmatch(item, self._options[Option.FILE_TYPE]):
 				# item is a file, get stats and update lists
 				item_stat = self._source.get_stat(item, relative_to=self._source_path)
+
 				gobject.idle_add(self._dialog.increment_total_size, item_stat.size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
+
+				self._total_count += 1;
+				self._total_size += item_stat.size
+
 				self._file_list.append(item)
 
 	def _set_mode(self, path, mode):
@@ -581,9 +627,15 @@ class CopyOperation(Operation):
 					self._scan_directory(full_name)
 
 			elif fnmatch.fnmatch(item, self._options[Option.FILE_TYPE]):
+				# item is a file, update global statistics
 				item_stat = self._source.get_stat(full_name, relative_to=self._source_path)
+
 				gobject.idle_add(self._dialog.increment_total_size, item_stat.size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
+
+				self._total_count += 1;
+				self._total_size += item_stat.size
+
 				self._file_list.append(full_name)
 
 	def _create_directory(self, directory):
@@ -704,7 +756,22 @@ class CopyOperation(Operation):
 			data = sh.read(buffer_size)
 
 			if (data):
-				dh.write(data)
+				try:
+					# try writing data to destination
+					dh.write(data)
+
+				except IOError as error:
+					# handle error
+					response = self._get_write_error_input(error)
+
+					if response == gtk.RESPONSE_YES:
+						gobject.idle_add(self._dialog.increment_current_size, -dh.tell())
+						if hasattr(sh, 'close'): sh.close()
+						if hasattr(dh, 'close'): sh.close()
+
+						self._copy_file(dest_file)
+
+					return
 
 				destination_size += len(data)
 				gobject.idle_add(self._dialog.increment_current_size, len(data))
@@ -775,6 +842,16 @@ class CopyOperation(Operation):
 
 		# get list of items to copy
 		self._get_lists()
+
+		# check for available free space
+		system_info = self._destination.get_system_size(self._destination_path)
+
+		if self._total_size > system_info.size_available:
+			should_continue = self._get_free_space_input(self._total_size, system_info.size_available)
+
+			# exit if user chooses to
+			if not should_continue:
+				self.cancel()
 
 		# clear selection on source directory
 		with gtk.gdk.lock:
@@ -983,6 +1060,16 @@ class MoveOperation(CopyOperation):
 			self._dialog.set_destination(self._destination_path)
 
 		self._get_lists()
+
+		# check for available free space
+		system_info = self._destination.get_system_size(self._destination_path)
+
+		if self._total_size > system_info.size_available and not self._check_devices():
+			should_continue = self._get_free_space_input(self._total_size, system_info.size_available)
+
+			# exit if user chooses to
+			if not should_continue:
+				self.cancel()
 
 		# clear selection on source directory
 		with gtk.gdk.lock:

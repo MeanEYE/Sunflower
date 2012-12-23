@@ -129,9 +129,9 @@ class ItemList(PluginBase):
 		self._title_bar.add_control(self._terminal_button)
 		
 		# configure status bar
-		self._status_bar.add_group_with_icon('dirs', 'folder', '0/0')
-		self._status_bar.add_group_with_icon('files', 'document', '0/0')
-		self._status_bar.add_group_with_icon('size', 'add', '0/0')
+		self._status_bar.add_group_with_icon('dirs', 'folder', '0/0', tooltip=_('Directories (selected/total)'))
+		self._status_bar.add_group_with_icon('files', 'document', '0/0', tooltip=_('Files (selected/total)'))
+		self._status_bar.add_group_with_icon('size', 'add', '0/0', tooltip=_('Size (selected/total)'))
 
 		# file list
 		container = gtk.ScrolledWindow()

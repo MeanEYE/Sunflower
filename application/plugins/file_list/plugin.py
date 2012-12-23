@@ -819,8 +819,19 @@ class FileList(ItemList):
 
 		# get selected item
 		filename = self._get_selection()
-		mime_type = associations_manager.get_mime_type(filename)
 		selection = self._get_selection_list()
+
+		# detect mime type
+		if is_dir:
+			mime_type = 'inode/directory'
+
+		else:
+			mime_type = associations_manager.get_mime_type(filename)
+
+			# try to detect by content
+			if associations_manager.is_mime_type_unknown(mime_type):
+				data = associations_manager.get_sample_data(filename, self.get_provider())
+				mime_type = associations_manager.get_mime_type(data=data)
 
 		# call parent method which removes existing menu items
 		ItemList._prepare_popup_menu(self)
@@ -830,46 +841,40 @@ class FileList(ItemList):
 		for menu_item in additional_options:
 			self._additional_options_menu.append(menu_item)
 
-		if not is_dir:
-			# detect mime type
-			if associations_manager.is_mime_type_unknown(mime_type):
-				data = associations_manager.get_sample_data(filename, self.get_provider())
-				mime_type = associations_manager.get_mime_type(data=data)
+		# get associated applications
+		program_list = menu_manager.get_items_for_type(mime_type, selection)
+		custom_list = menu_manager.get_custom_items_for_type(mime_type, selection)
 
-			# get associated applications
-			program_list = menu_manager.get_items_for_type(mime_type, selection)
-			custom_list = menu_manager.get_custom_items_for_type(mime_type, selection)
+		# create open with menu
+		for menu_item in program_list:
+			self._open_with_menu.append(menu_item)
 
-			# create open with menu
-			for menu_item in program_list:
+		# add separator if there are other menu items
+		if len(program_list) > 0:
+			separator = gtk.SeparatorMenuItem()
+			separator.show()
+			self._open_with_menu.append(separator)
+
+		# add custom menu items if needed
+		if len(custom_list) > 0:
+			for menu_item in custom_list:
 				self._open_with_menu.append(menu_item)
 
-			# add separator if there are other menu items
+			# add separator if needed
 			if len(program_list) > 0:
 				separator = gtk.SeparatorMenuItem()
 				separator.show()
 				self._open_with_menu.append(separator)
 
-			# add custom menu items if needed
-			if len(custom_list) > 0:
-				for menu_item in custom_list:
-					self._open_with_menu.append(menu_item)
+		# create an option for opening selection with custom command
+		open_with_other = gtk.MenuItem(_('Other application...'))
+		open_with_other.connect('activate', self._execute_with_application)
+		open_with_other.show()
 
-				# add separator if needed
-				if len(program_list) > 0:
-					separator = gtk.SeparatorMenuItem()
-					separator.show()
-					self._open_with_menu.append(separator)
-
-			# create an option for opening selection with custom command
-			open_with_other = gtk.MenuItem(_('Other application...'))
-			open_with_other.connect('activate', self._execute_with_application)
-			open_with_other.show()
-
-			self._open_with_menu.append(open_with_other)
+		self._open_with_menu.append(open_with_other)
 
 		# disable/enable items
-		self._open_with_item.set_sensitive(not is_dir)
+		self._open_with_item.set_sensitive(not is_parent)
 		self._open_new_tab_item.set_visible(is_dir)
 		self._additional_options_item.set_sensitive(len(additional_options) > 0)
 		self._cut_item.set_sensitive(not is_parent)

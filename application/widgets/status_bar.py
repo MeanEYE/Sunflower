@@ -32,7 +32,7 @@ class StatusBar(gtk.HBox):
 			# set specified group label
 			self._labels[group].set_markup(text)
 
-	def add_group_with_icon(self, name, icon_name, value=''):
+	def add_group_with_icon(self, name, icon_name, value='', tooltip=None):
 		"""Add status bar group with icon"""
 		icon = gtk.Image()
 		icon.set_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
@@ -42,6 +42,11 @@ class StatusBar(gtk.HBox):
 		label.set_use_markup(True)
 		label.set_alignment(0, 0.5)
 		label.show()
+
+		# configure tooltip
+		if tooltip is not None:
+			label.set_tooltip_text(tooltip)
+			icon.set_tooltip_text(tooltip)
 
 		# pack group
 		hbox = gtk.HBox(False, 3)

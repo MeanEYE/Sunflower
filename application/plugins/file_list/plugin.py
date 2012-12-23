@@ -20,6 +20,7 @@ from widgets.thumbnail_view import ThumbnailView
 from threading import Thread, Event
 from plugin_base.item_list import ItemList
 from plugin_base.provider import FileType, Mode as FileMode
+from parameters import Parameters
 
 
 def register_plugin(application):

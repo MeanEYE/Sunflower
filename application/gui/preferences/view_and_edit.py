@@ -125,7 +125,10 @@ class ViewEditOptions(SettingsPage):
 			self._radio_external.set_active(True)
 
 		# configure user interface
-		self._entry_editor.set_text(options.get('external_command'))
+		editor_command = options.get('external_command')
+		if editor_command is not None:
+			self._entry_editor.set_text(editor_command)
+
 		self._checkbox_terminal_command.set_active(options.get('terminal_command'))
 
 	def _save_options(self):

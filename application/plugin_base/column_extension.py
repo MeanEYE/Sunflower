@@ -16,7 +16,13 @@ class ColumnExtension:
 		self._column = None
 
 	def _create_column(self):
-		"""Create column"""
+		"""Create column
+
+		For each column you create, you need to call set_data('name', column_name).
+		This information will be used to store sorting and column order in
+		configuration files.
+
+		"""
 		pass
 
 	def get_column(self):

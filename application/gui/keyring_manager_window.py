@@ -146,6 +146,7 @@ class KeyringManagerWindow:
 									'manually when needed. Are you sure?\n\n{0}'
 								).format(entry_name)
 							)
+		dialog.set_default_response(gtk.RESPONSE_YES)
 		response = dialog.run()
 		dialog.destroy()
 

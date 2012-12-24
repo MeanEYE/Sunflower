@@ -234,7 +234,7 @@ class OperationDialog:
 						gtk.BUTTONS_YES_NO, 
 						message
 					)
-
+		dialog.set_default_response(gtk.RESPONSE_YES)
 		result = dialog.run()
 		dialog.destroy()
 

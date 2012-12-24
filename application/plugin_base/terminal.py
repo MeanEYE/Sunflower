@@ -304,6 +304,7 @@ class Terminal(PluginBase):
 									'following data. Are you sure?\n\n{0}'
 								).format(text)
 							)
+		dialog.set_default_response(gtk.RESPONSE_YES)
 		result = dialog.run()
 		dialog.destroy()
 		

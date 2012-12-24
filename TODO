@@ -1,10 +1,6 @@
 - Make file list plugin use options container to store path instead of using local parameter.
 
-- Handle exceptions when removing, copying and moving files.
-
 - Handle cases in which PyGTK can't load SVG image in set_window_icon method.
-
-- Change the way editor is selected. Offer user with dropdown list of editors or manual entry.
 
 - On copy/move operation when checking whether the remote directory or file exists we should
 check how many parts of path exist and cache that and skip the rest of the files.
@@ -13,8 +9,6 @@ check how many parts of path exist and cache that and skip the rest of the files
 
 - Create option to duplicate selected file with new name. In cases where both left and right path
 are same and only one file is selected offer this option by default.
-
-- Ability to extend file list columns
 
 - Tab menu: Lock, close, close others
 

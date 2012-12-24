@@ -202,6 +202,7 @@ class AdvancedRename:
 									len(self._list)
 								).format(len(self._list))
 							)
+		dialog.set_default_response(gtk.RESPONSE_YES)
 		result = dialog.run()
 		dialog.destroy()
 

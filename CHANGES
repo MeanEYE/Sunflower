@@ -1,3 +1,22 @@
+Version 0.1a-51
+  + Created tooltips for status bar groups.
+  + Added ability to extent popup menu with plugins.
+  + Added ability to create extension columns with plugins (not tested).
+  + Added command line option to skip loading plugins.
+  * Allow "open with" menu to be shown with directories.
+  * Check for available space before starting copy/move operation.
+  * Fixed bad behavior when duplicating tab.
+  * Fixed bug which prevented preferences window from opening in case there is no default editor application present.
+  * Fixed bug which prevent "open in new tab" from working.
+  * Fixed double mount entries.
+  * Fixed issues with session plugin.
+  * Fixed problem with directory detection in item properties window.
+  * Fixed regression bug which prevented drag and drop as well as copy/paste actions.
+  * Fixed viewing images.
+  * Minor code optimizations in menu manager.
+  * Optimized buffer size. Separate buffer for remote operations.
+  * Updated Hungarian translation.
+
 Version 0.1a-50
   + Automatically detect default editor on first start.
   + Added support for viewing binary executable files using `nm` command.

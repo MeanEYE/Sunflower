@@ -142,6 +142,7 @@ class PreferencesWindow(gtk.Window):
 			                    gtk.BUTTONS_YES_NO,
 			                    _("There are unsaved changes.\nDo you want to save them?")
 			                )
+			dialog.set_default_response(gtk.RESPONSE_YES)
 			result = dialog.run()
 			dialog.destroy()
 

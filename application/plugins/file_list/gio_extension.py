@@ -409,6 +409,7 @@ class SambaExtension(GioExtension):
 										"Are you sure about this?"
 									).format(entry_name)
 								)
+			dialog.set_default_response(gtk.RESPONSE_YES)
 			result = dialog.run()
 			dialog.destroy()
 
@@ -707,6 +708,7 @@ class FtpExtension(GioExtension):
 										"Are you sure about this?"
 									).format(entry_name)
 								)
+			dialog.set_default_response(gtk.RESPONSE_YES)
 			result = dialog.run()
 			dialog.destroy()
 

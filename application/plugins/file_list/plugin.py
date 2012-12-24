@@ -576,6 +576,7 @@ class FileList(ItemList):
 										len(selection)
 									).format(len(selection))
 								)
+			dialog.set_default_response(gtk.RESPONSE_YES)
 			result = dialog.run()
 			dialog.destroy()
 
@@ -1558,6 +1559,7 @@ class FileList(ItemList):
 										"\n{1}\n\n{0}\n\nWould you like to retry?"
 									).format(error, path)
 								)
+			dialog.set_default_response(gtk.RESPONSE_YES)
 			result = dialog.run()
 			dialog.destroy()
 

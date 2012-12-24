@@ -67,6 +67,7 @@ class OperationOptions(SettingsPage):
 										'deleting items?'
 									)
 								)
+			dialog.set_default_response(gtk.RESPONSE_YES)
 			result = dialog.run()
 			dialog.destroy()
 

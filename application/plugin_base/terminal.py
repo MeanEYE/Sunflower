@@ -133,7 +133,7 @@ class Terminal(PluginBase):
 		scrollbar_horizontal = self._container.get_hscrollbar()
 
 		scrollbar_vertical.set_child_visible(show_scrollbars)
-		scrollbar_horizontal.set_child_visible(show_scrollbars)
+		scrollbar_horizontal.set_child_visible(False)
 
 		# pack terminal
 		self._container.add(self._terminal)
@@ -348,10 +348,7 @@ class Terminal(PluginBase):
 		# apply terminal scroll bar policy
 		show_scrollbars = section.get('show_scrollbars')
 		scrollbar_vertical = self._container.get_vscrollbar()
-		scrollbar_horizontal = self._container.get_hscrollbar()
-
 		scrollbar_vertical.set_child_visible(show_scrollbars)
-		scrollbar_horizontal.set_child_visible(show_scrollbars)
 
 		# apply cursor shape
 		shape = section.get('cursor_shape')

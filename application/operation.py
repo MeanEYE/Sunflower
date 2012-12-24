@@ -107,6 +107,7 @@ class Operation(Thread):
 											'Do you wish to continue?'
 										).format(space_needed, space_available)
 									)
+				dialog.set_default_response(gtk.RESPONSE_YES)
 				result = dialog.run()
 				dialog.destroy()
 

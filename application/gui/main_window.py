@@ -575,6 +575,7 @@ class MainWindow(gtk.Window):
 
 		# command line prompt
 		self.command_entry_bar = gtk.HBox(False, 0)
+		self.status_bar = gtk.HBox(False, 0)
 
 		self.path_label = gtk.Label()
 		self.path_label.set_alignment(1, 0.5)
@@ -605,6 +606,11 @@ class MainWindow(gtk.Window):
 		# load history file
 		self._load_history()
 
+		# pack command entry bar
+		if self.keyring_manager.is_available():
+			self.status_bar.pack_start(self.keyring_manager._status_icon, False, False, 0)
+
+		self.command_entry_bar.pack_start(self.status_bar, False, False, 5)
 		self.command_entry_bar.pack_start(self.path_label, True, True, 5)
 		self.command_entry_bar.pack_start(label_pound, False, False, 0)
 		self.command_entry_bar.pack_start(self.command_edit, True, True, 0)
@@ -2452,3 +2458,7 @@ class MainWindow(gtk.Window):
 		"""Check for new versions"""
 		version = VersionCheck(self)
 		version.check()
+
+	def add_control_to_status_bar(self, control):
+		"""Add new control to status bar"""
+		self.status_bar.pack_start(control, False, False, 0)

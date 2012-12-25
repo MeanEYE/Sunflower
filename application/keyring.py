@@ -30,7 +30,7 @@ class KeyringManager:
 	"""
 
 	KEYRING_NAME = 'sunflower'
-	TIMEOUT = 10
+	TIMEOUT = 2
 
 	if keyring is not None:
 		KEYRING_TYPE = {

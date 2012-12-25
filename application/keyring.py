@@ -56,7 +56,7 @@ class KeyringManager:
 	def __update_icon(self):
 		"""Update icon based on keyring status"""
 		is_locked = self.is_locked()
-		icon_name = ('changes-allow', 'changes-prevent')[is_locked]
+		icon_name = ('changes-allow-symbolic', 'changes-prevent-symbolic')[is_locked]
 		icon_tooltip = (
 					_('Keyring is unlocked'),
 					_('Keyring is locked')

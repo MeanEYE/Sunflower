@@ -45,20 +45,40 @@ class KeyringManager:
 		self._info = None
 		self._timeout = None
 
+		# create status icon
+		self._status_icon = gtk.Image()
+		self._status_icon.show()
+
 		# initialize keyring
 		if self.is_available():
 			self.__initialize_keyring()
+
+	def __update_icon(self):
+		"""Update icon based on keyring status"""
+		is_locked = self.is_locked()
+		icon_name = ('changes-allow', 'changes-prevent')[is_locked]
+		icon_tooltip = (
+					_('Keyring is unlocked'),
+					_('Keyring is locked')
+				)[is_locked]
+
+		self._status_icon.set_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
+		self._status_icon.set_tooltip_text(icon_tooltip)
 
 	def __initialize_keyring(self):
 		"""Initialize keyring"""
 		if not self.keyring_exists():
 			return
 
+		# update keyring information
 		self.__update_info()
 
 	def __update_info(self):
 		"""Update keyring status information"""
 		self._info = keyring.get_info_sync(self.KEYRING_NAME)
+
+		# update icon
+		self.__update_icon()
 
 	def __reset_timeout(self):
 		"""Reset autolock timeout"""
@@ -75,6 +95,7 @@ class KeyringManager:
 			gobject.source_remove(self._timeout)
 			self._timeout = None
 
+		# lock keyring
 		keyring.lock_sync(self.KEYRING_NAME)
 
 	def __unlock_keyring(self):

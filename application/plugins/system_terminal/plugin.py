@@ -46,7 +46,6 @@ class SystemTerminal(Terminal):
 
 			# disable controls
 			self._menu_button.set_sensitive(False)
-			self._recycle_button.set_sensitive(False)
 
 		# change titles
 		self._change_tab_text(_('Terminal'))

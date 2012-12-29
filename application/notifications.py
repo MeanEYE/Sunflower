@@ -1,5 +1,9 @@
 import os
-import pynotify
+
+try:
+	import pynotify
+except:
+	pynotify = None
 
 
 class NotificationManager:
@@ -11,7 +15,8 @@ class NotificationManager:
 		self._application = application
 
 		# initialize OS notification system
-		pynotify.init('sunflower')
+		if pynotify is not None:
+			pynotify.init('sunflower')
 
 		# decide which icon to use
 		if self._application.icon_manager.has_icon('sunflower'):
@@ -28,7 +33,8 @@ class NotificationManager:
 
 	def notify(self, title, text, icon=None):
 		"""Make system notification"""
-		if not self._application.options.get('show_notifications'):
+		if not self._application.options.get('show_notifications') \
+		or pynotify is None:
 			return  # if notifications are disabled
 
 		if icon is None:  # make sure we show notification with icon

@@ -1164,12 +1164,7 @@ class FileList(ItemList):
 				if self._show_full_name:
 					file_info = (filename, file_info[1])
 
-				if self._human_readable:
-					formated_file_size = common.format_size(file_size)
-
-				else:
-					formated_file_size = locale.format('%d', file_size, True)
-
+				formated_file_size = common.format_size(file_size, self._size_format, False)
 
 			else:
 				# item is a directory
@@ -1271,11 +1266,7 @@ class FileList(ItemList):
 
 			if not is_dir:
 				# format file size
-				if self._human_readable:
-					formated_file_size = common.format_size(file_size)
-
-				else:
-					formated_file_size = locale.format('%d', file_size, True)
+				formated_file_size = common.format_size(file_size, self._size_format, False)
 
 			else:
 				# item is a directory
@@ -1312,16 +1303,11 @@ class FileList(ItemList):
 		if text is None: text = self.path
 
 		system_size = self.get_provider().get_system_size(self.path)
+		size_available = common.format_size(system_size.size_available, self._size_format)
+		size_total = common.format_size(system_size.size_total, self._size_format)
 
 		self._title_bar.set_title(text)
-		self._title_bar.set_subtitle(
-									'{2} {0} - {3} {1}'.format(
-															common.format_size(system_size.size_available),
-															common.format_size(system_size.size_total),
-															_('Free:'),
-															_('Total:')
-														)
-								)
+		self._title_bar.set_subtitle('{2} {0} - {3} {1}'.format(size_available, size_total, _('Free:'), _('Total:')))
 
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""

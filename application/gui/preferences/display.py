@@ -101,11 +101,9 @@ class DisplayOptions(SettingsPage):
 		vbox_other.set_border_width(5)
 
 		self._checkbox_hide_window_on_minimize = gtk.CheckButton(_('Hide operation window on minimize'))
-		self._checkbox_human_readable_size = gtk.CheckButton(_('Show sizes in human readable format'))
 		self._checkbox_show_notifications = gtk.CheckButton(_('Show notifications'))
 
 		self._checkbox_hide_window_on_minimize.connect('toggled', self._parent.enable_save)
-		self._checkbox_human_readable_size.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_notifications.connect('toggled', self._parent.enable_save)
 
 		# pack ui
@@ -130,7 +128,6 @@ class DisplayOptions(SettingsPage):
 		vbox_tabs.pack_start(table, False, False, 5)
 
 		vbox_other.pack_start(self._checkbox_hide_window_on_minimize, False, False, 0)
-		vbox_other.pack_start(self._checkbox_human_readable_size, False, False, 0)
 		vbox_other.pack_start(self._checkbox_show_notifications, False, False, 0)
 
 		notebook.append_page(vbox_main_window, label_main_window)
@@ -156,7 +153,6 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_ubuntu_coloring.set_active(options.get('ubuntu_coloring'))
 		self._checkbox_superuser_notification.set_active(options.get('superuser_notification'))
 		self._checkbox_hide_window_on_minimize.set_active(options.section('operations').get('hide_on_minimize'))
-		self._checkbox_human_readable_size.set_active(options.get('human_readable_size'))
 		self._checkbox_show_notifications.set_active(options.get('show_notifications'))
 		self._combobox_status_bar.set_active(options.get('show_status_bar'))
 		self._combobox_expand_tabs.set_active(options.get('expand_tabs'))
@@ -179,7 +175,6 @@ class DisplayOptions(SettingsPage):
 		options.set('ubuntu_coloring', self._checkbox_ubuntu_coloring.get_active())
 		options.set('superuser_notification', self._checkbox_superuser_notification.get_active())
 		options.section('operations').set('hide_on_minimize', self._checkbox_hide_window_on_minimize.get_active())
-		options.set('human_readable_size', self._checkbox_human_readable_size.get_active())
 		options.set('show_notifications', self._checkbox_show_notifications.get_active())
 		options.set('show_status_bar', self._combobox_status_bar.get_active())
 		options.set('expand_tabs', self._combobox_expand_tabs.get_active())

@@ -79,8 +79,9 @@ class Operation(Thread):
 
 	def _get_free_space_input(self, needed, available):
 		"""Get user input when there is not enough space"""
-		space_needed = format_size(needed)
-		space_available = format_size(available)
+		size_format = self._application.options.get('size_format')
+		space_needed = format_size(needed, size_format)
+		space_available = format_size(available, size_format)
 
 		if self._options[Option.SILENT]:
 			# silent option is enabled, we skip operation by default

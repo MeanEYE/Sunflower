@@ -208,20 +208,13 @@ class PropertiesWindow(gtk.Window):
 		# get the rest of the infromation
 		description = associations_manager.get_mime_description(self._mime_type)
 		time_format = self._application.options.section('item_list').get('time_format')
-		human_readable = self._application.options.get('human_readable_size')
+		size_format = self._application.options.get('size_format')
 		item_stat = self._provider.get_stat(self._path, extended=True)
 
 		# get item size
 		if self._is_file:
 			# file size
-			if human_readable:
-				item_size = common.format_size(item_stat.size)
-
-			else:
-				item_size = '{0} {1}'.format(
-									locale.format('%d', item_stat.size, True),
-									ngettext('byte', 'bytes', item_stat.size)
-								)
+			item_size = common.format_size(item_stat.size, size_format)
 
 		else:
 			# directory size

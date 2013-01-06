@@ -47,7 +47,7 @@ class ItemList(PluginBase):
 		self._size = {'total': 0L, 'selected': 0L}
 
 		# local human readable cache
-		self._human_readable = self._parent.options.get('human_readable_size')
+		self._size_format = self._parent.options.get('size_format')
 		self._selection_color = self._parent.options.section('item_list').get('selection_color')
 
 		# we use this variable to prevent dead loop during column resize
@@ -1230,13 +1230,8 @@ class ItemList(PluginBase):
 	def _update_status_with_statistis(self):
 		"""Set status bar text according to dir/file stats"""
 		# format size
-		if self._human_readable:
-			total_text = common.format_size(self._size['total'])
-			selected_text = common.format_size(self._size['selected'])
-
-		else:
-			total_text = locale.format('%d', self._size['total'], True)
-			selected_text = locale.format('%d', self._size['selected'], True)
+		total_text = common.format_size(self._size['total'], self._size_format)
+		selected_text = common.format_size(self._size['selected'], self._size_format)
 
 		self._status_bar.set_text(
 							'{0}/{1}'.format(
@@ -1470,7 +1465,7 @@ class ItemList(PluginBase):
 									)[self._parent.options.get('button_relief')])
 
 		# apply size formatting
-		self._human_readable = self._parent.options.get('human_readable_size')
+		self._size_format = self._parent.options.get('size_format')
 
 		# apply selection color
 		self._selection_color = self._parent.options.section('item_list').get('selection_color')

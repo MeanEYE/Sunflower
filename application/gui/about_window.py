@@ -203,13 +203,9 @@ class AboutWindow(gtk.Window):
 		btn_close.connect('clicked', self._hide)
 		hbox2.pack_end(btn_close, False, False, 0)
 
-		btn_web1 = gtk.Button('RCF Group')
-		btn_web1.connect('clicked', parent.goto_web, 'rcf-group.com')
+		btn_web1 = gtk.Button('Google Code')
+		btn_web1.connect('clicked', parent.goto_web, 'code.google.com/p/sunflower-fm')
 		hbox2.pack_start(btn_web1, False, False, 0)
-
-		btn_web2 = gtk.Button('Google Code')
-		btn_web2.connect('clicked', parent.goto_web, 'code.google.com/p/sunflower-fm')
-		hbox2.pack_start(btn_web2, False, False, 0)
 
 		# pack ui
 		vbox.pack_start(frame, False, False, padding=0)

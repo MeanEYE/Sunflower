@@ -1,6 +1,5 @@
 import gtk
 import pango
-import locale
 import gobject
 import common
 

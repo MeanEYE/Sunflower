@@ -1971,9 +1971,9 @@ class MainWindow(gtk.Window):
 					'superuser_notification': True,
 					'tab_close_button': True,
 					'show_status_bar': 0,
-					'human_readable_size': True,
 					'media_preview': False,
-					'active_notebook': 0
+					'active_notebook': 0,
+					'size_format': common.SizeFormat.SI
 				})
 
 		# set default commands

@@ -2427,7 +2427,7 @@ class MainWindow(gtk.Window):
 			try:
 				KeyringManagerWindow(self)
 
-			except InvalidKeyringError as error:
+			except InvalidKeyringError:
 				# keyring is not available, let user know
 				dialog = gtk.MessageDialog(
 									self,

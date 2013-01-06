@@ -1,7 +1,7 @@
-import os
 import gtk
 
 from widgets.settings_page import SettingsPage
+
 
 DEFAULT_NAME = _('Default')
 

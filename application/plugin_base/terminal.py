@@ -10,7 +10,6 @@ try:
 except:
 	gconf = None
 
-from parameters import Parameters
 from plugin_base.plugin import PluginBase
 from accelerator_group import AcceleratorGroup
 

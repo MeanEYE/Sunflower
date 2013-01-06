@@ -1,5 +1,6 @@
 import gtk
 
+from common import SizeFormat
 from widgets.settings_page import SettingsPage
 
 
@@ -95,7 +96,7 @@ class DisplayOptions(SettingsPage):
 		self._combobox_expand_tabs.pack_start(cell_expand_tab)
 		self._combobox_expand_tabs.add_attribute(cell_expand_tab, 'text', 0)
 
-		# operation options
+		# other options
 		label_other = gtk.Label(_('Other'))
 		vbox_other = gtk.VBox(False, 0)
 		vbox_other.set_border_width(5)
@@ -106,7 +107,27 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_hide_window_on_minimize.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_notifications.connect('toggled', self._parent.enable_save)
 
+		# size format
+		hbox_size_format = gtk.HBox(False, 5)
+		label_size_format = gtk.Label(_('Size format:'))
+		label_size_format.set_alignment(0, 0.5)
+
+		list_size_format = gtk.ListStore(str, int)
+		list_size_format.append((_('Localized'), SizeFormat.LOCAL))
+		list_size_format.append((_('SI <small>(1 kB = 1000 B)</small>'), SizeFormat.SI))
+		list_size_format.append((_('IEC <small>(1 KiB = 1024 B)</small>'), SizeFormat.IEC))
+
+		cell_size_format = gtk.CellRendererText()
+
+		self._combobox_size_format = gtk.ComboBox(list_size_format)
+		self._combobox_size_format.connect('changed', self._parent.enable_save)
+		self._combobox_size_format.pack_start(cell_size_format)
+		self._combobox_size_format.add_attribute(cell_size_format, 'markup', 0)
+
 		# pack ui
+		hbox_size_format.pack_start(label_size_format, False, False, 0)
+		hbox_size_format.pack_start(self._combobox_size_format, False, False, 0)
+
 		table.attach(label_status_bar, 0, 1, 0, 1, xoptions=gtk.FILL)
 		table.attach(self._combobox_status_bar, 1, 2, 0, 1, xoptions=gtk.FILL)
 
@@ -129,6 +150,7 @@ class DisplayOptions(SettingsPage):
 
 		vbox_other.pack_start(self._checkbox_hide_window_on_minimize, False, False, 0)
 		vbox_other.pack_start(self._checkbox_show_notifications, False, False, 0)
+		vbox_other.pack_start(hbox_size_format, False, False, 0)
 
 		notebook.append_page(vbox_main_window, label_main_window)
 		notebook.append_page(vbox_tabs, label_tabs)
@@ -156,6 +178,7 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_show_notifications.set_active(options.get('show_notifications'))
 		self._combobox_status_bar.set_active(options.get('show_status_bar'))
 		self._combobox_expand_tabs.set_active(options.get('expand_tabs'))
+		self._combobox_size_format.set_active(options.get('size_format'))
 
 	def _save_options(self):
 		"""Save display options"""
@@ -178,4 +201,5 @@ class DisplayOptions(SettingsPage):
 		options.set('show_notifications', self._checkbox_show_notifications.get_active())
 		options.set('show_status_bar', self._combobox_status_bar.get_active())
 		options.set('expand_tabs', self._combobox_expand_tabs.get_active())
+		options.set('size_format', self._combobox_size_format.get_active())
 

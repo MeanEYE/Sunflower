@@ -289,7 +289,6 @@ class FtpInputDialog:
 		# access information
 		hseparator2 = gtk.HSeparator()
 
-		vbox_domain = gtk.VBox(False, 0)
 		vbox_username = gtk.VBox(False, 0)
 		vbox_password = gtk.VBox(False, 0)
 		

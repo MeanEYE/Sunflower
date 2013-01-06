@@ -1,6 +1,7 @@
 import gtk
 import urllib
 
+from parameters import Parameters
 from collections import namedtuple
 
 

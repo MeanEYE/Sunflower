@@ -1,6 +1,3 @@
-import gtk
-
-
 class ColumnExtension:
 	"""Class used for extending item lists. 
 	

@@ -229,7 +229,7 @@ class AssociationManager:
 			options.set('arguments', split_command)
 			options.set('path', os.path.dirname(selection[0]))
 
-			tab = self._application.create_terminal_tab(active_object._notebook, options)
+			self._application.create_terminal_tab(active_object._notebook, options)
 
 		else:
 			os.system('{0} &'.format(exec_string))
@@ -268,7 +268,7 @@ class AssociationManager:
 					options.set('shell_command', path)
 					options.set('path', os.path.dirname(path))
 
-					tab = self._application.create_terminal_tab(active_object._notebook, options)
+					self._application.create_terminal_tab(active_object._notebook, options)
 
 		else:
 			# file type is not executable, try to open with default associated application

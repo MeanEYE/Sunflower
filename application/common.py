@@ -1,6 +1,7 @@
 import os
 import user
 import subprocess
+import locale
 
 
 # user directories
@@ -21,12 +22,43 @@ class AccessModeFormat:
 	TEXTUAL = 1
 
 
-def format_size(size):
+# file size formats
+class SizeFormat:
+	LOCAL = 0
+	SI = 1
+	IEC = 2
+
+	multiplier = {
+			SI: 1000.0,
+			IEC: 1024.0
+		}
+	unit_names = {
+			SI: ['B','kB','MB','GB','TB'],
+			IEC: ['B','KiB','MiB','GiB','TiB']
+		}
+
+
+def format_size(size, format_type, include_unit=True):
 	"""Convert size to more human readable format"""
-	for x in ['B','kB','MB','GB','TB']:
-		if size < 1024.0:
-			return "%3.1f %s" % (size, x)
-		size /= 1024.0
+	result = size
+
+	# format as localized decimal number
+	if format_type == SizeFormat.LOCAL:
+		result = ('{0}', '{0} B')[include_unit].format(locale.format('%d', size, True))
+
+	# format based on specified standard
+	else:
+		names = SizeFormat.unit_names[format_type]
+		multiplier = SizeFormat.multiplier[format_type]
+
+		for name in names:
+			if size < multiplier:
+				result = '{0:3.1f} {1}'.format(size, name)
+				break
+
+			size /= multiplier
+
+	return result
 
 def format_mode(mode, format):
 	"""Convert mode to more human readable format"""

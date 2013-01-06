@@ -1,6 +1,5 @@
 import os
 import gtk
-import locale
 import urllib
 import common
 

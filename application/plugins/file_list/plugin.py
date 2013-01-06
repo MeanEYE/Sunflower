@@ -1,7 +1,6 @@
 import os
 import gtk
 import time
-import locale
 import user
 import fnmatch
 import common
@@ -223,7 +222,7 @@ class FileList(ItemList):
 		class_list = self._parent.get_column_extension_classes(self.__class__)
 
 		for ExtensionClass in class_list:
-			column = ExtensionsClass(self, self._store).get_column()
+			column = ExtensionClass(self, self._store).get_column()
 			if column is not None:
 				self._item_list.append_column(column)
 

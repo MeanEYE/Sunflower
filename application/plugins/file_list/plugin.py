@@ -549,7 +549,7 @@ class FileList(ItemList):
 
 		return True
 
-	def _delete_files(self, widget=None, data=None):
+	def _delete_files(self, widget=None, force_delete=None):
 		"""Delete selected files"""
 		selection = self._get_selection_list(relative=True)
 
@@ -559,21 +559,35 @@ class FileList(ItemList):
 
 		# check if user has disabled dialog
 		show_dialog = self._parent.options.section('confirmations').get('delete_items')
+		trash_items = self._parent.options.section('operations').get('trash_files')
 
 		if show_dialog:
+			# get context sensitive message
+			if force_delete or not trash_items:
+				message = ngettext(
+						 	"You are about to delete {0} item.\n"
+						 	"Are you sure about this?",
+						 	"You are about to delete {0} items.\n"
+						 	"Are you sure about this?",
+						 	len(selection)
+						 ) 
+
+			else:
+				message = ngettext(
+						 	"You are about to move {0} item to trash.\n"
+						 	"Are you sure about this?",
+						 	"You are about to move {0} items to trash.\n"
+						 	"Are you sure about this?",
+						 	len(selection)
+						 ) 
+
 			# user has confirmation dialog enabled
 			dialog = gtk.MessageDialog(
 									self._parent,
 									gtk.DIALOG_DESTROY_WITH_PARENT,
 									gtk.MESSAGE_QUESTION,
 									gtk.BUTTONS_YES_NO,
-									ngettext(
-										"You are about to remove {0} item.\n"
-										"Are you sure about this?",
-										"You are about to remove {0} items.\n"
-										"Are you sure about this?",
-										len(selection)
-									).format(len(selection))
+									message.format(len(selection))
 								)
 			dialog.set_default_response(gtk.RESPONSE_YES)
 			result = dialog.run()
@@ -591,6 +605,9 @@ class FileList(ItemList):
 									self._parent,
 									self.get_provider()
 								)
+			if force_delete:
+				operation.set_force_delete(True)
+
 			operation.set_selection(selection)
 			operation.start()
 

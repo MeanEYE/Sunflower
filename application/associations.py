@@ -174,6 +174,18 @@ class AssociationManager:
 					
 		return application
 
+	def set_default_application_for_type(self, mime_type, application_id):
+		"""Set default application for specified type"""
+		result = False
+
+		for app_info in gio.app_info_get_all():
+			if application_id == app_info.get_id():
+				app_info.set_as_default_for_type(mime_type)
+				result = True
+				break
+
+		return result
+
 	def open_file(self, selection, application_info=None, exec_command=None):
 		"""Open filename using config file or specified execute command"""
 		if application_info is not None:

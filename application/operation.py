@@ -1130,6 +1130,9 @@ class DeleteOperation(Operation):
 
 	def __init__(self, application, provider):
 		Operation.__init__(self, application, provider)
+
+		# allow users to force deleting items
+		self._force_delete = False
 		
 	def _create_dialog(self):
 		"""Create operation dialog"""
@@ -1171,6 +1174,10 @@ class DeleteOperation(Operation):
 				# user didn't want to retry, remove path from list
 				self._file_list.pop(self._file_list.index(path))
 
+	def set_force_delete(self, force):
+		"""Set forced deletion instead of trashing files"""
+		self._force_delete = force
+
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
 		self._file_list = self._selection_list[:]  # use predefined selection list
@@ -1185,10 +1192,14 @@ class DeleteOperation(Operation):
 		trash_files = self._application.options.section('operations').get('trash_files') 
 		trash_available = ProviderSupport.TRASH in self._source.get_support()
 
-		remove_method = (
-				self._remove_path, 
-				self._trash_path
-			)[trash_files and trash_available]
+		if self._force_delete:
+			remove_method = self._remove_path
+
+		else:
+			remove_method = (
+					self._remove_path, 
+					self._trash_path
+				)[trash_files and trash_available]
 
 		# remove them
 		for index, item in enumerate(self._file_list, 1):

@@ -246,6 +246,7 @@ class ItemList(PluginBase):
 		group.add_method('open_directory', _('Open selected directory'), self._open_directory)
 		group.add_method('create_terminal', _('Create terminal tab'), self._create_terminal)
 		group.add_method('parent_directory', _('Go to parent directory'), self._parent_directory)
+		group.add_method('root_directory', _('Go to root directory'), self._root_directory)
 		group.add_method('show_history', _('Show history browser'), self._show_history_window)
 		group.add_method('toggle_selection', _('Toggle selection'), self._toggle_selection)
 		group.add_method('toggle_selection_up', _('Toggle selection and move marker up'), self._toggle_selection_up)
@@ -280,6 +281,7 @@ class ItemList(PluginBase):
 		group.set_accelerator('open_in_new_tab', keyval('t'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('create_terminal', keyval('z'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('parent_directory', keyval('BackSpace'), 0)
+		group.set_accelerator('root_directory', keyval('backslash'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('show_history', keyval('BackSpace'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('toggle_selection', keyval('Insert'), 0)
 		group.set_alt_accelerator('toggle_selection', keyval('Down'), gtk.gdk.SHIFT_MASK)
@@ -1128,6 +1130,15 @@ class ItemList(PluginBase):
 					)
 
 		return True  # to prevent command or quick search in single key bindings
+
+	def _root_directory(self, widget=None, data=None):
+		"""Navigate to root directory"""
+		self.change_path(
+						os.path.sep,
+						os.path.basename(self.path)
+					)
+
+		return True
 
 	def _focus_command_line(self, key):
 		"""Focus command-line control"""

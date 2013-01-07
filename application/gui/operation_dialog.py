@@ -3,6 +3,7 @@ import pango
 import gobject
 import common
 
+
 class OperationDialog:
 	"""Dialog for operations
 
@@ -27,6 +28,7 @@ class OperationDialog:
 		self._has_current_file = False
 		self._has_details = False
 		self._size_format_type = self._application.options.get('size_format')
+		self._hide_on_minimize = application.options.section('operations').get('hide_on_minimize')
 
 		self._total_size = 0L
 		self._total_count = 0L
@@ -36,8 +38,6 @@ class OperationDialog:
 		# aggregate speeds to provide accurate time prediction
 		self._speeds = []
 		self._total_checkpoint = 0
-
-		self._hide_on_minimize = application.options.section('operations').get('hide_on_minimize')
 
 		# set window properties
 		self._window.set_title('Operation Dialog')

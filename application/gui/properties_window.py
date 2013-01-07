@@ -357,18 +357,16 @@ class PropertiesWindow(gtk.Window):
 	def _change_default_application(self, renderer, path, data=None):
 		"""Handle changing default application"""
 		active_item = self._store[path]
+		application_id = active_item[Column.APPLICATION_ID]
+		associations_manager = self._application.associations_manager
 
-		# get data
-		mime_type = self._application.associations_manager.get_mime_type(self._path)
-		application = active_item[Column.APPLICATION_ID]
-
-		# set default application
-		command = 'xdg-mime default {0} {1}'.format(application, mime_type)
-		os.system(command)
+		# set default application for mime type
+		application_set = associations_manager.set_default_application_for_type(self._mime_type, application_id)
 
 		# select active item
-		for item in self._store:
-			item[Column.SELECTED] = item.path == active_item.path
+		if application_set:
+			for item in self._store:
+				item[Column.SELECTED] = item.path == active_item.path
 
 	def _create_basic_tab(self):
 		"""Create tab containing basic information"""

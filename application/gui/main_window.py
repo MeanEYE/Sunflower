@@ -749,7 +749,7 @@ class MainWindow(gtk.Window):
 					)
 			self.bookmarks.add_menu_item(
 						_('Edit bookmarks'),
-						'bookmarks',
+						None,
 						self.preferences_window._show,
 						'bookmarks'
 					)
@@ -857,9 +857,6 @@ class MainWindow(gtk.Window):
 		"""Handle window resizing"""
 		if self.window.get_state() == 0:
 			self._geometry = self.get_size() + self.get_position()
-
-		# hide bookmarks menu
-		self.bookmarks.close()
 
 	def _handle_window_state_event(self, widget, event):
 		"""Handle window state change"""

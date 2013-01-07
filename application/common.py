@@ -112,7 +112,10 @@ def is_x_app(command):
 		# report error to user
 		raise error
 
-	return 'libX11.so' in output[0]
+	libraries = ('libX11.so', 'libvlc.so')
+	matching = filter(lambda library: library in output[0], libraries)
+
+	return len(matching) > 0
 
 def executable_exists(command):
 	"""Check if specified command exists in search path"""

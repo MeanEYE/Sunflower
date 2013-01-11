@@ -55,7 +55,7 @@ class ToolbarManager:
 		"""Get data for specified widget type"""
 		result = None
 
-		if self._widget_types.has_key(widget_type):
+		if widget_type in self._widget_types:
 			result = self._widget_types[widget_type]
 
 		return result
@@ -74,7 +74,7 @@ class ToolbarManager:
 			widget_type = self._config.section(name).get('type')
 
 			# skip creating widget if there's no factory for specified type
-			if not self._factory_cache.has_key(widget_type): continue
+			if not widget_type in self._factory_cache: continue
 
 			# get factory from cache
 			factory = self._factory_cache[widget_type]
@@ -169,7 +169,7 @@ class ToolbarManager:
 
 	def show_configure_widget_dialog(self, name, widget_type, window=None):
 		"""Show blocking configuration dialog for specified widget"""
-		if not self._factory_cache.has_key(widget_type):
+		if not widget_type in self._factory_cache:
 			# there is no factory for specified type, show error and return
 			dialog = gtk.MessageDialog(
 		                            self._application,

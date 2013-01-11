@@ -129,7 +129,7 @@ class PreferencesWindow(gtk.Window):
 		self._load_options()
 		self.show_all()
 
-		if tab_name is not None and self._tab_names.has_key(tab_name):
+		if tab_name is not None and tab_name in self._tab_names:
 			self._tabs.set_current_page(self._tab_names[tab_name])
 
 	def _hide(self, widget, data=None):

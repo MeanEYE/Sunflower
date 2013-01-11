@@ -2209,13 +2209,13 @@ class MainWindow(gtk.Window):
 	def register_rename_extension(self, name, ExtensionClass):
 		"""Register class to be used in advanced rename tool"""
 		if issubclass(ExtensionClass, RenameExtension) \
-		and not self.rename_extension_classes.has_key(name):
+		and not name in self.rename_extension_classes:
 			# register class
 			self.rename_extension_classes[name] = ExtensionClass
 
 		else:
 			# report error to console
-			if self.rename_extension_classes.has_key(name):
+			if name in self.rename_extension_classes:
 				print 'Error: Extension with name "{0}" is already registered!'
 
 			if not issubclass(ExtensionClass, RenameExtension):
@@ -2224,13 +2224,13 @@ class MainWindow(gtk.Window):
 	def register_find_extension(self, name, ExtensionClass):
 		"""Register class to be used in find files tool"""
 		if issubclass(ExtensionClass, FindExtension) \
-		and not self.find_extension_classes.has_key(name):
+		and not name in self.find_extension_classes:
 			# register extension
 			self.find_extension_classes[name] = ExtensionClass
 
 		else:
 			# report error to console
-			if self.find_extension_classes.has_key(name):
+			if name in self.find_extension_classes:
 				print 'Error: Extension with name "{0}" is already registered!'
 
 			if not issubclass(ExtensionClass, FindExtension):

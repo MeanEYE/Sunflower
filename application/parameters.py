@@ -6,7 +6,7 @@ class Parameters:
 
 	def get(self, name, default=None):
 		"""Get parameter"""
-		return self._parameters[name] if self._parameters.has_key(name) else default
+		return self._parameters[name] if name in self._parameters else default
 
 	def set(self, name, value):
 		"""Set parameter"""

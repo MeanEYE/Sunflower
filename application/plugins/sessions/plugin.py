@@ -94,10 +94,10 @@ class SessionsOptions(SettingsPage):
 			left_section = session.get('left')
 			right_section = session.get('right')
 
-			if left_section is not None and left_section.has_key('tabs'):
+			if left_section is not None and 'tabs' in left_section:
 				tab_count += len(session.get('left').get('tabs'))
 
-			if right_section is not None and right_section.has_key('tabs'):
+			if right_section is not None and 'tabs' in right_section:
 				tab_count += len(session.get('right').get('tabs'))
 
 			self._store.append((session.get('name'), tab_count, index))

@@ -167,7 +167,7 @@ class AcceleratorOptions(SettingsPage):
 
 				# check if specified method name has a rename value
 				key_name = '{0}.{1}'.format(group_name, method_name)
-				if replace_list.has_key(key_name):
+				if key_name in replace_list:
 					title = title.format(replace_list[key_name])
 
 				# get accelerators

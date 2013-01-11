@@ -18,11 +18,11 @@ class Button(gtk.ToolButton):
 		self._set_icon()
 
 		# show label if specified
-		if self._config.has_key('show_label'):
+		if 'show_label' in self._config:
 			important = self._config['show_label'] in ('True', True)
 			self.set_is_important(important)
 
-		if self._config.has_key('path'):
+		if 'path' in self._config:
 			self._path = os.path.expanduser(self._config['path'])
 
 		# connect signals

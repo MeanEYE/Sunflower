@@ -113,7 +113,7 @@ class DefaultToolbar(ToolbarFactory):
 		"""Return newly created widget based on type and configuration."""
 		result = None
 
-		if self._widgets.has_key(widget_type) \
+		if widget_type in self._widgets \
 		and self._widgets[widget_type]['class'] is not None:
 			# create widget
 			WidgetClass = self._widgets[widget_type]['class']

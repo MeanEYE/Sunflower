@@ -482,7 +482,7 @@ class MountsExtension(MountManagerExtension):
 			self._store.remove(mount_iter)
 
 		# remove mount objects if exists
-		if self._mounts.has_key(uri):
+		if uri in self._mounts:
 			self._mounts.pop(uri)
 
 	def unmount(self, uri):

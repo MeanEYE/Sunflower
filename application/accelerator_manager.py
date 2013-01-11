@@ -69,14 +69,14 @@ class AcceleratorManager:
 		# add all the methods to config file
 		for name in group._methods:
 			# save primary accelerator
-			if group._primary.has_key(name):
+			if name in group._primary:
 				self._save_accelerator(group._name, name, group._primary[name])
 
 			else:
 				self._save_accelerator(group._name, name)
 
 			# save secondary accelerator
-			if group._secondary.has_key(name):
+			if name in group._secondary:
 				self._save_accelerator(group._name, name, group._secondary[name], primary=False)
 
 	def get_groups(self):

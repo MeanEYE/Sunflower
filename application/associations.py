@@ -50,23 +50,23 @@ class AssociationManager:
 
 		if selection is not None:
 			# prepare lists
-			normal_list = ["'{0}'".format(item) for item in selection]
-			uri_list = ["'{0}'".format(item) for item in selection]
-			dir_list = ["'{0}'".format(os.path.dirname(item) for item in selection)]
-			names_list = ["'{0}'".format(os.path.basename(item) for item in selection)]
+			normal_list = ['"{0}"'.format(item) for item in selection]
+			uri_list = ['"{0}"'.format(item) for item in selection]
+			dir_list = ['"{0}"'.format(os.path.dirname(item) for item in selection)]
+			names_list = ['"{0}"'.format(os.path.basename(item) for item in selection)]
 
 			# prepare single item selection
 			if '%f' in command:
-				exec_string = exec_string.replace('%f', "'{0}'".format(selection[0]))
+				exec_string = exec_string.replace('%f', '"{0}"'.format(selection[0]))
 
 			if '%u' in command:
-				exec_string = exec_string.replace('%u', "'{0}'".format(selection[0]))
+				exec_string = exec_string.replace('%u', '"{0}"'.format(selection[0]))
 
 			if '%d' in command:
-				exec_string = exec_string.replace('%d', "'{0}'".format(os.path.dirname(selection[0])))
+				exec_string = exec_string.replace('%d', '"{0}"'.format(os.path.dirname(selection[0])))
 
 			if '%n' in command:
-				exec_string = exec_string.replace('%n', "'{0}'".format(os.path.basename(selection[0])))
+				exec_string = exec_string.replace('%n', '"{0}"'.format(os.path.basename(selection[0])))
 
 			# prepare multiple selection
 			if '%F' in command:
@@ -200,10 +200,11 @@ class AssociationManager:
 			# raise exception, we need at least one argument
 			raise AttributeError('Error opening file. We need command or application to be specified.')
 		
+		selection = map(lambda item: item.replace('\'', '\\\'').replace('"', '\\"'), selection)
 		exec_string = self.__format_command_string(selection, command)
 
 		# open selected file(s)
-		split_command = shlex.split(exec_string)
+		split_command = shlex.split(exec_string, posix=False)
 		test_command = split_command[0] if len(split_command) > 1 else exec_string
 
 		if is_x_app(test_command):

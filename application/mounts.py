@@ -78,7 +78,7 @@ class MountsManager:
 		self.window._remove_item(mount_uri)
 
 		# remove mount object from cache list
-		if self._mounts.has_key(mount_uri):
+		if mount_uri in self._mounts:
 			self._mounts.pop(mount_uri)
 
 	def _add_volume(self, monitor, volume):
@@ -98,7 +98,7 @@ class MountsManager:
 
 	def _unmount_by_uri(self, uri):
 		"""Perform unmount by URI"""
-		if self._mounts.has_key(uri):
+		if uri in self._mounts:
 			self._unmount(self._mounts[uri])
 		
 	def _unmount(self, mount):

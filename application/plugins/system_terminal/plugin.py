@@ -29,7 +29,7 @@ class SystemTerminal(Terminal):
 
 		if terminal_type == TerminalType.VTE:
 			# we need TERM environment variable set
-			if not os.environ.has_key('TERM'):
+			if not 'TERM' in os.environ:
 				os.environ['TERM'] = 'xterm-color'
 				os.environ['COLORTERM'] = 'gnome-terminal'
 

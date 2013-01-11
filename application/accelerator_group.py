@@ -43,7 +43,7 @@ class AcceleratorGroup:
 
 	def _create_accelerators(self, primary=True):
 		"""Create accelerators from specified list"""
-		list_ = (self._secondary, self._primary)[primary]
+		accelerator_list = (self._secondary, self._primary)[primary]
 
 		# connect all methods in list
 		for method_name in self._methods.keys():
@@ -54,8 +54,8 @@ class AcceleratorGroup:
 			accelerator = self._manager.get_accelerator(self._name, method_name, primary)
 
 			# if we don't have saved key combination, use default
-			if accelerator is None and list_.has_key(method_name):
-				accelerator = list_[method_name]
+			if accelerator is None and method_name in accelerator_list:
+				accelerator = accelerator_list[method_name]
 
 			# finally connect accelerator to specified method
 			if accelerator is not None:
@@ -138,17 +138,17 @@ class AcceleratorGroup:
 		result = None
 		group = (self._secondary, self._primary)[primary]
 
-		if group.has_key(name):
+		if name in group:
 			result = group[name]
 
 		return result
 
 	def reset_accelerator(self, name):
 		"""Resets accelerator shortcuts"""
-		if self._primary.has_key(name):
+		if name in self._primary:
 			del self._primary[name]
 
-		if self._secondary.has_key(name):
+		if name in self._secondary:
 			del self._secondary[name]
 
 		# remove any cache
@@ -168,7 +168,7 @@ class AcceleratorGroup:
 		label = gtk.accelerator_get_label(keyval, modifier)
 
 		# trigger accelerator only if we have method connected
-		if self._method_names.has_key(label):
+		if label in self._method_names:
 			result = self._handle_activate(self._accel_group, self._window, keyval, modifier)
 
 		return result

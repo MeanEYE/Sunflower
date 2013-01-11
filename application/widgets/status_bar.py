@@ -28,7 +28,7 @@ class StatusBar(gtk.HBox):
 			# set default label
 			self._label.set_markup(text)
 
-		elif self._labels.has_key(group):
+		elif group in self._labels:
 			# set specified group label
 			self._labels[group].set_markup(text)
 

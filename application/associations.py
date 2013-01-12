@@ -200,7 +200,7 @@ class AssociationManager:
 			# raise exception, we need at least one argument
 			raise AttributeError('Error opening file. We need command or application to be specified.')
 		
-		selection = map(lambda item: item.replace('\'', '\\\'').replace('"', '\\"'), selection)
+		selection = map(lambda item: item.replace('"', '\\"'), selection)
 		exec_string = self.__format_command_string(selection, command)
 
 		# open selected file(s)

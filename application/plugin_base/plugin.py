@@ -299,3 +299,12 @@ class PluginBase(gtk.VBox):
 		if notebook is not None:
 			self._notebook = notebook
 
+	def focus_main_object(self):
+		"""Give focus to main object"""
+		result = False
+
+		if self._main_object is not None and hasattr(self._main_object, 'grab_focus'):
+			self._main_object.grab_focus()
+			result = True
+
+		return result

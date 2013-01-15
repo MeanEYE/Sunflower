@@ -77,7 +77,6 @@ class TerminalOptions(SettingsPage):
 
 		label_note = gtk.Label(_(
 					'<small><i>Note:'
-					'\n\tXterm has problems with embeding so it might not work.'
 					'\n\tOmitting {0} will open new terminal application instead of tab.'
 					'\n\t{0} will be replaced with socket/window id.'
 					'</i></small>'

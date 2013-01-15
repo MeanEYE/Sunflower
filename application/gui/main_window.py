@@ -56,7 +56,7 @@ class MainWindow(gtk.Window):
 	version = {
 			'major': 0,
 			'minor': 1,
-			'build': 51,
+			'build': 52,
 			'stage': 'a'
 		}
 
@@ -889,7 +889,7 @@ class MainWindow(gtk.Window):
 	def _transfer_focus(self, notebook, data=None):
 		"""Transfer focus from notebook to child widget in active tab"""
 		selected_page = notebook.get_nth_page(notebook.get_current_page())
-		selected_page._main_object.grab_focus()
+		selected_page.focus_main_object()
 
 	def _toggle_show_hidden_files(self, widget, data=None):
 		"""Transfer option event to all the lists"""
@@ -1168,7 +1168,7 @@ class MainWindow(gtk.Window):
 
 		if event.keyval in (gtk.keysyms.Up, gtk.keysyms.Escape)\
 		and event.state & gtk.accelerator_get_default_mod_mask() == 0:
-			self.get_active_object()._main_object.grab_focus()
+			self.get_active_object().focus_main_object()
 			result = True
 
 		return result
@@ -1549,7 +1549,7 @@ class MainWindow(gtk.Window):
 		# focus tab if needed
 		if self.options.get('focus_new_tab'):
 			notebook.set_current_page(index)
-			new_tab._main_object.grab_focus()
+			new_tab.focus_main_object()
 
 		return new_tab
 
@@ -1624,7 +1624,7 @@ class MainWindow(gtk.Window):
 			notebook.next_page()
 
 		page = notebook.get_nth_page(notebook.get_current_page())
-		page._main_object.grab_focus()
+		page.focus_main_object()
 
 	def previous_tab(self, notebook):
 		"""Select previous tab on given notebook"""
@@ -1637,7 +1637,7 @@ class MainWindow(gtk.Window):
 			notebook.prev_page()
 
 		page = notebook.get_nth_page(notebook.get_current_page())
-		page._main_object.grab_focus()
+		page.focus_main_object()
 
 	def set_active_tab(self, notebook, tab):
 		"""Set active tab number"""
@@ -1682,7 +1682,7 @@ class MainWindow(gtk.Window):
 			# if resulting path is a directory, change 
 			if active_object.get_provider().is_dir(path):
 				active_object.change_path(path)
-				active_object._main_object.grab_focus()
+				active_object.focus_main_object()
 
 			handled = True
 
@@ -1982,7 +1982,7 @@ class MainWindow(gtk.Window):
 	def focus_opposite_object(self, widget, data=None):
 		"""Sets focus on opposite item list"""
 		opposite_object = self.get_opposite_object(self.get_active_object())
-		opposite_object._main_object.grab_focus()
+		opposite_object.focus_main_object()
 
 		return True
 
@@ -1995,14 +1995,14 @@ class MainWindow(gtk.Window):
 		left_object = self.left_notebook.get_nth_page(self.left_notebook.get_current_page())
 
 		if left_object is not None:
-			left_object._main_object.grab_focus()
+			left_object.focus_main_object()
 
 	def focus_right_object(self, widget=None, data=None):
 		"""Focus object in the right notebook"""
 		right_object = self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
 
 		if right_object is not None:
-			right_object._main_object.grab_focus()
+			right_object.focus_main_object()
 
 	def get_active_object(self):
 		"""Return active object"""

@@ -1,3 +1,20 @@
+Version 0.1a-52
+  + Enable navigation with a single mouse click.
+  + Keyboard accelerator to navigate to root.
+  + Ability to force deleting files instead of trashing.
+  + Creates main window status bar.
+  + Properly set default application for specified file type.
+  + Support for SI and IEC size formats.
+  + Added VLC as a graphical application.
+  * Redone bookmarks menu to use gtk.Menu instead of custom widget.
+  * Make positive operation default in popup dialogs.
+  * Fixed issue when embeding external terminal application.
+  * Made horizontal scrollbar always invisible in terminal tabs.
+  * Optimized code and removed unused entries.
+  * Made pynotify package optional.
+  * Changed autolock timeout for keyring manager from 10 minutes to 2.
+  * Properly escape file names before forming exec_string.
+
 Version 0.1a-51
   + Created tooltips for status bar groups.
   + Added ability to extent popup menu with plugins.

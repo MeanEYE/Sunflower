@@ -16,7 +16,6 @@ from accelerator_group import AcceleratorGroup
 
 class ButtonText:
 	MENU = u'\u2699'
-	RECYCLE = u'\u267B'
 
 
 class TerminalType:
@@ -81,9 +80,9 @@ class Terminal(PluginBase):
 		self._title_bar.add_control(self._menu_button)
 
 		# create main object
-		terminal_type = section.get('type') 
+		self._terminal_type = section.get('type') 
 	
-		if terminal_type == TerminalType.VTE and vte is not None:
+		if self._terminal_type == TerminalType.VTE and vte is not None:
 			self._vte_present = True
 			self._terminal = vte.Terminal()
 			self._terminal.connect('window-title-changed', self._update_title)
@@ -109,7 +108,7 @@ class Terminal(PluginBase):
 			else:
 				self._terminal.set_font_from_string(section.get('font'))
 
-		elif terminal_type == TerminalType.EXTERNAL:
+		elif self._terminal_type == TerminalType.EXTERNAL:
 			self._terminal = gtk.Socket()
 			
 		else:
@@ -123,16 +122,21 @@ class Terminal(PluginBase):
 			self._terminal.set_wrap_mode(gtk.WRAP_WORD)
 
 		# terminal container
-		self._container = gtk.ScrolledWindow()
-		self._container.set_shadow_type(gtk.SHADOW_IN)
+		if self._terminal_type == TerminalType.VTE:
+			self._container = gtk.ScrolledWindow()
+			self._container.set_shadow_type(gtk.SHADOW_IN)
 
-		# apply scrollbar visibility
-		show_scrollbars = section.get('show_scrollbars')
-		scrollbar_vertical = self._container.get_vscrollbar()
-		scrollbar_horizontal = self._container.get_hscrollbar()
+			# apply scrollbar visibility
+			show_scrollbars = section.get('show_scrollbars')
+			scrollbar_vertical = self._container.get_vscrollbar()
+			scrollbar_horizontal = self._container.get_hscrollbar()
 
-		scrollbar_vertical.set_child_visible(show_scrollbars)
-		scrollbar_horizontal.set_child_visible(False)
+			scrollbar_vertical.set_child_visible(show_scrollbars)
+			scrollbar_horizontal.set_child_visible(False)
+
+		elif self._terminal_type == TerminalType.EXTERNAL:
+			self._container = gtk.Viewport()
+			self._container.set_shadow_type(gtk.SHADOW_IN)
 
 		# pack terminal
 		self._container.add(self._terminal)
@@ -335,11 +339,6 @@ class Terminal(PluginBase):
 		section = options.section('terminal')
 
 		# button relief
-		self._recycle_button.set_relief((
-									gtk.RELIEF_NONE,
-									gtk.RELIEF_NORMAL
-									)[options.get('button_relief')])
-
 		self._menu_button.set_relief((
 									gtk.RELIEF_NONE,
 									gtk.RELIEF_NORMAL
@@ -371,3 +370,16 @@ class Terminal(PluginBase):
 
 		else:
 			self._terminal.set_font_from_string(section.get('font'))
+
+	def focus_main_object(self):
+		"""Give focus to main object"""
+		result = False
+
+		if self._terminal_type == TerminalType.VTE:
+			result = Plugin.focus_main_object(self)
+
+		elif self._terminal_type == TerminalType.EXTERNAL:
+			self._main_object.child_focus(gtk.DIR_TAB_FORWARD)
+			result = True
+
+		return result

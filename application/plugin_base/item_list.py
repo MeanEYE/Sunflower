@@ -443,12 +443,15 @@ class ItemList(PluginBase):
 	def _handle_button_press(self, widget, event):
 		"""Handles mouse events"""
 		result = False
+
 		right_click_select = self._parent.options.section('item_list').get('right_click_select')
+		single_click_navigation = self._parent.options.section('item_list').get('single_click_navigation')
+
+		shift_active = event.state & gtk.gdk.SHIFT_MASK
+		control_active = event.state & gtk.gdk.CONTROL_MASK
 
 		# handle single click
-		if event.button is 1 \
-		and event.state & gtk.gdk.CONTROL_MASK \
-		and event.type in (gtk.gdk.BUTTON_PRESS, gtk.gdk.BUTTON_RELEASE):
+		if event.button is 1 and control_active and event.type in (gtk.gdk.BUTTON_PRESS, gtk.gdk.BUTTON_RELEASE):
 			# we handle left mouse press and release in order to prevent
 			# default widget behavior which leads to unpredictable results
 
@@ -468,9 +471,7 @@ class ItemList(PluginBase):
 			result = True
 
 		# handle range select
-		elif event.button is 1 \
-		and event.state & gtk.gdk.SHIFT_MASK \
-		and event.type is gtk.gdk.BUTTON_PRESS:
+		elif event.button is 1 and shift_active and event.type is gtk.gdk.BUTTON_PRESS:
 			start_path = None
 			end_path = None
 
@@ -497,10 +498,15 @@ class ItemList(PluginBase):
 
 			result = True
 
-		# handle double click
-		elif event.button is 1 and event.type is gtk.gdk._2BUTTON_PRESS:
-			self._execute_selected_item(widget)
-			result = True
+		# handle navigation with double or single click
+		elif event.button is 1 and not (shift_active or control_active) \
+		and ((event.type is gtk.gdk._2BUTTON_PRESS and not single_click_navigation) \
+		or (event.type is gtk.gdk.BUTTON_RELEASE and single_click_navigation)):
+
+			# make sure that clicking on empty space doesn't trigger any action
+			if self._item_list.get_path_at_pos(int(event.x), int(event.y)) is not None:
+				self._execute_selected_item(widget)
+				result = True
 
 		# handle middle click
 		elif event.button is 2 and event.type is gtk.gdk.BUTTON_RELEASE:

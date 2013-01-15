@@ -520,7 +520,7 @@ class ItemList(PluginBase):
 				self._popup_timestamp = event.get_time()
 
 				# prevent CTRL+RightClick from generating exceptions
-				if event.state & gtk.gdk.CONTROL_MASK:
+				if control_active:
 					result = True
 
 			elif event.type is gtk.gdk.BUTTON_RELEASE:

@@ -376,7 +376,7 @@ class Terminal(PluginBase):
 		result = False
 
 		if self._terminal_type == TerminalType.VTE:
-			result = Plugin.focus_main_object(self)
+			result = PluginBase.focus_main_object(self)
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
 			self._main_object.child_focus(gtk.DIR_TAB_FORWARD)

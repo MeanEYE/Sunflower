@@ -17,6 +17,7 @@ from associations import AssociationManager
 from indicator import Indicator
 from notifications import NotificationManager
 from toolbar import ToolbarManager
+from accelerator_group import AcceleratorGroup
 from accelerator_manager import AcceleratorManager
 from keyring import KeyringManager, InvalidKeyringError
 from parameters import Parameters
@@ -72,6 +73,7 @@ class MainWindow(gtk.Window):
 		# local variables
 		self._geometry = None
 		self._active_object = None
+		self._accel_group = None
 
 		# load translations
 		self._load_translation()
@@ -173,6 +175,7 @@ class MainWindow(gtk.Window):
 					},
 					{
 						'label': _('Create file'),
+						'name': 'create_file',
 						'type': 'image',
 						'stock': gtk.STOCK_NEW,
 						'callback': self._command_create,
@@ -181,6 +184,7 @@ class MainWindow(gtk.Window):
 					},
 					{
 						'label': _('Create directory'),
+						'name': 'create_directory',
 						'type': 'image',
 						'image': 'folder-new',
 						'callback': self._command_create,
@@ -298,6 +302,7 @@ class MainWindow(gtk.Window):
 					},
 					{
 						'label': _('_Preferences'),
+						'name': 'show_preferences',
 						'type': 'image',
 						'stock': gtk.STOCK_PREFERENCES,
 						'callback': self.preferences_window._show,
@@ -350,6 +355,7 @@ class MainWindow(gtk.Window):
 					{'type': 'separator'},
 					{
 						'label': _('Compare _directories'),
+						'name': 'compare_directories',
 						'callback': self.compare_directories,
 						'path': '<Sunflower>/Mark/Compare',
 					}
@@ -361,6 +367,7 @@ class MainWindow(gtk.Window):
 				'submenu': (
 					{
 						'label': _('Find files'),
+						'name': 'find_files',
 						'type': 'image',
 						'image': 'system-search',
 						'path': '<Sunflower>/Tools/FindFiles',
@@ -368,26 +375,31 @@ class MainWindow(gtk.Window):
 					},
 					{
 						'label': _('Find duplicate files'),
+						'name': 'find_duplicate_files',
 						'path': '<Sunflower>/Tools/FindDuplicateFiles'
 					},
 					{
 						'label': _('Synchronize directories'),
+						'name': 'synchronize_directories',
 						'path': '<Sunflower>/Tools/SynchronizeDirectories'
 					},
 					{'type': 'separator'},
 					{
 						'label': _('Advanced rename'),
+						'name': 'advanced_rename',
 						'path': '<Sunflower>/Tools/AdvancedRename',
 						'callback': self.show_advanced_rename,
 					},
 					{'type': 'separator'},
 					{
 						'label': _('Mount manager'),
+						'name': 'mount_manager',
 						'path': '<Sunflower>/Tools/MountManager',
 						'callback': self.mount_manager.show,
 					},
 					{
 						'label': _('Keyring manager'),
+						'name': 'keyring_manager',
 						'path': '<Sunflower>/Tools/KeyringManager',
 						'callback': self.show_keyring_manager,
 					}
@@ -481,12 +493,14 @@ class MainWindow(gtk.Window):
 						'type': 'image',
 						'stock': gtk.STOCK_HOME,
 						'callback': self.goto_web,
-						'data': 'rcf-group.com',
+						'data': 'code.google.com/p/sunflower-fm',
 						'path': '<Sunflower>/Help/HomePage',
 					},
 					{
 						'label': _('Check for new version'),
+						'name': 'check_for_new_version',
 						'callback': self.check_for_new_version,
+						'path': '<Sunflower>/Help/CheckVersion',
 					},
 					{'type': 'separator'},
 					{
@@ -509,6 +523,9 @@ class MainWindow(gtk.Window):
 			},
 		)
 
+		# create main menu accelerators group
+		self.configure_accelerators(menu_items)
+
 		# add items to main menu
 		for item in menu_items:
 			self.menu_bar.append(self.menu_manager.create_menu_item(item))
@@ -524,9 +541,6 @@ class MainWindow(gtk.Window):
 		self._menu_item_no_operations = self.menu_manager.get_item_by_name('no_operations')
 
 		self.menu_operations = self._menu_item_operations.get_submenu()
-
-		# load accelerator map
-		self.load_accel_map(os.path.join(self.config_path, 'accel_map'))
 
 		# create toolbar
 		self.toolbar_manager.load_config(self.toolbar_options)
@@ -678,6 +692,9 @@ class MainWindow(gtk.Window):
 
 		# create toolbar widgets
 		self.toolbar_manager.create_widgets()
+
+		# activate accelerators
+		self._accel_group.activate(self)
 
 		# show widgets
 		self.show_all()
@@ -1777,42 +1794,72 @@ class MainWindow(gtk.Window):
 
 		return result
 
-	def save_accel_map(self, path):
-		"""Save menu accelerator map"""
-		gtk.accel_map_save(path)
+	def configure_accelerators(self, menu):
+		"""Configure main accelerators group"""
+		group = AcceleratorGroup(self)
+		keyval = gtk.gdk.keyval_from_name
+		required_fields = set(('label', 'callback', 'path', 'name'))
 
-	def load_accel_map(self, path):
-		"""Load menu accelerator map"""
-		if os.path.isfile(path):
-			# load accelerator map
-			gtk.accel_map_load(path)
+		# configure accelerator group
+		group.set_name('main_menu')
+		group.set_title(_('Main Menu'))
 
-		else:
-			# no existing configuration, set default
-			accel_map = (
-					('<Sunflower>/File/CreateFile', 'F7', gtk.gdk.CONTROL_MASK),
-					('<Sunflower>/File/CreateDirectory', 'F7', 0),
-					('<Sunflower>/File/Quit', 'Q', gtk.gdk.CONTROL_MASK),
-					('<Sunflower>/Edit/Preferences', 'P', gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK),
-					('<Sunflower>/Mark/SelectAll', 'A', gtk.gdk.CONTROL_MASK),
-					('<Sunflower>/Mark/SelectPattern', 'KP_Add', 0),
-					('<Sunflower>/Mark/UnselectPattern', 'KP_Subtract', 0),
-					('<Sunflower>/Mark/InvertSelection', 'KP_Multiply', 0),
-					('<Sunflower>/Mark/SelectWithSameExtension', 'KP_Add', gtk.gdk.MOD1_MASK),
-					('<Sunflower>/Mark/UnselectWithSameExtension', 'KP_Subtract', gtk.gdk.MOD1_MASK),
-					('<Sunflower>/Mark/Compare', 'F12', 0),
-					('<Sunflower>/Tools/FindFiles', 'F7', gtk.gdk.MOD1_MASK),
-					('<Sunflower>/Tools/SynchronizeDirectories', 'F8', gtk.gdk.MOD1_MASK),
-					('<Sunflower>/Tools/AdvancedRename', 'M', gtk.gdk.CONTROL_MASK),
-					('<Sunflower>/Tools/MountManager', 'O', gtk.gdk.CONTROL_MASK),
-					('<Sunflower>/View/Fullscreen', 'F11', 0),
-					('<Sunflower>/View/Reload', 'R', gtk.gdk.CONTROL_MASK),
-					('<Sunflower>/View/FastMediaPreview', 'F3', gtk.gdk.MOD1_MASK),
-					('<Sunflower>/View/ShowHidden', 'H', gtk.gdk.CONTROL_MASK),
-				)
+		# default accelerator map
+		default_accel_map = {
+				'<Sunflower>/File/CreateFile': (keyval('F7'), gtk.gdk.CONTROL_MASK),
+				'<Sunflower>/File/CreateDirectory': (keyval('F7'), 0),
+				'<Sunflower>/File/Quit': (keyval('Q'), gtk.gdk.CONTROL_MASK),
+				'<Sunflower>/Edit/Preferences': (keyval('P'), gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK),
+				'<Sunflower>/Mark/SelectAll': (keyval('A'), gtk.gdk.CONTROL_MASK),
+				'<Sunflower>/Mark/SelectPattern': (keyval('KP_Add'), 0),
+				'<Sunflower>/Mark/UnselectPattern': (keyval('KP_Subtract'), 0),
+				'<Sunflower>/Mark/InvertSelection': (keyval('KP_Multiply'), 0),
+				'<Sunflower>/Mark/SelectWithSameExtension': (keyval('KP_Add'), gtk.gdk.MOD1_MASK),
+				'<Sunflower>/Mark/UnselectWithSameExtension': (keyval('KP_Subtract'), gtk.gdk.MOD1_MASK),
+				'<Sunflower>/Mark/Compare': (keyval('F12'), 0),
+				'<Sunflower>/Tools/FindFiles': (keyval('F7'), gtk.gdk.MOD1_MASK),
+				'<Sunflower>/Tools/SynchronizeDirectories': (keyval('F8'), gtk.gdk.MOD1_MASK),
+				'<Sunflower>/Tools/AdvancedRename': (keyval('M'), gtk.gdk.CONTROL_MASK),
+				'<Sunflower>/Tools/MountManager': (keyval('O'), gtk.gdk.CONTROL_MASK),
+				'<Sunflower>/View/Fullscreen': (keyval('F11'), 0),
+				'<Sunflower>/View/Reload': (keyval('R'), gtk.gdk.CONTROL_MASK),
+				'<Sunflower>/View/FastMediaPreview': (keyval('F3'), gtk.gdk.MOD1_MASK),
+				'<Sunflower>/View/ShowHidden': (keyval('H'), gtk.gdk.CONTROL_MASK),
+			}
 
-			for path, key, mask in accel_map:
-				gtk.accel_map_change_entry(path, gtk.gdk.keyval_from_name(key), mask, True)
+		# filter out menu groups without submenu
+		menu = filter(lambda menu_group: 'submenu' in menu_group, menu)
+
+		# generate group based on main menu structure
+		for menu_group in menu:
+			group_name = menu_group['label'].replace('_', '')
+
+			for menu_item in menu_group['submenu']:
+				fields = set(menu_item.keys())
+
+				if required_fields.issubset(fields):
+					path = menu_item['path']
+					label = '{0} {1} {2}'.format(
+							group_name,
+							u'\u2192',
+							menu_item['label'].replace('_', '')
+						)
+					callback = menu_item['callback']
+					method_name = menu_item['name']
+					data = menu_item['data'] if 'data' in menu_item else None
+
+					# add method
+					group.add_method(method_name, label, callback, data)
+
+					# add default accelerator
+					if path in default_accel_map:
+						group.set_accelerator(method_name, *default_accel_map[path])
+
+					# set method path
+					group.set_path(method_name, path)
+		
+		# expose object
+		self._accel_group = group
 
 	def save_config(self):
 		"""Save configuration to file"""
@@ -1833,7 +1880,6 @@ class MainWindow(gtk.Window):
 
 			# save accelerators
 			self.accelerator_manager.save()
-			self.save_accel_map(os.path.join(self.config_path, 'accel_map'))
 
 		except IOError as error:
 			# notify user about failure
@@ -1843,10 +1889,10 @@ class MainWindow(gtk.Window):
 									gtk.MESSAGE_ERROR,
 									gtk.BUTTONS_OK,
 									_(
-										"Error saving configuration to files "
-										"in your home directory. Make sure you have "
-										"enough permissions."
-									) +	"\n\n{0}".format(error)
+										'Error saving configuration to files '
+										'in your home directory. Make sure you have '
+										'enough permissions.'
+									) +	'\n\n{0}'.format(error)
 								)
 			dialog.run()
 			dialog.destroy()

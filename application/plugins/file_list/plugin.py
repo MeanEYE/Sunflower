@@ -447,7 +447,6 @@ class FileList(ItemList):
 		# get response
 		response = dialog.get_response()
 		mode = dialog.get_mode()
-		is_hidden = response[1][0] == '.'
 
 		# create dialog
 		if response[0] == gtk.RESPONSE_OK:
@@ -460,6 +459,8 @@ class FileList(ItemList):
 
 				# add directory manually to the list in case
 				# where directory monitoring is not supported
+				is_hidden = response[1][0] == '.'
+
 				if self._fs_monitor is None:
 					if is_hidden and show_hidden \
 					or not is_hidden:
@@ -493,7 +494,6 @@ class FileList(ItemList):
 		mode = dialog.get_mode()
 		edit_after = dialog.get_edit_file()
 		template = dialog.get_template_file()
-		is_hidden = response[1][0] == '.'
 
 		# create dialog
 		if response[0] == gtk.RESPONSE_OK:
@@ -513,6 +513,8 @@ class FileList(ItemList):
 
 				# add file manually to the list in case
 				# where directory monitoring is not supported
+				is_hidden = response[1][0] == '.'
+
 				if self._fs_monitor is None:
 					if is_hidden and show_hidden \
 					or not is_hidden:

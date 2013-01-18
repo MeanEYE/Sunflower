@@ -24,6 +24,7 @@ class AcceleratorOptions(SettingsPage):
 		container.set_shadow_type(gtk.SHADOW_IN)
 
 		self._accels = gtk.TreeStore(str, str, int, int, int, int)
+		self._accels.set_sort_column_id(Column.TITLE, gtk.SORT_ASCENDING)
 
 		self._list = gtk.TreeView()
 		self._list.set_model(self._accels)
@@ -52,6 +53,8 @@ class AcceleratorOptions(SettingsPage):
 		col_name = gtk.TreeViewColumn(_('Description'), cell_name, markup=Column.TITLE)
 		col_name.set_min_width(200)
 		col_name.set_resizable(True)
+		col_name.set_sort_column_id(Column.TITLE)
+		col_name.set_sort_order(gtk.SORT_ASCENDING)
 
 		col_primary = gtk.TreeViewColumn(
 									_('Primary'),

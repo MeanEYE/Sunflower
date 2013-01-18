@@ -52,8 +52,6 @@ class AcceleratorGroup:
 			callback = self._methods[method_name]['callback']
 			self._accel_group.connect_by_path(path, callback)
 
-			print path, callback
-
 	def _create_accelerators(self, primary=True):
 		"""Create accelerators from specified list"""
 		accelerator_list = (self._secondary, self._primary)[primary]

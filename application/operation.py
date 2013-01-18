@@ -859,7 +859,7 @@ class CopyOperation(Operation):
 		with gtk.gdk.lock:
 			parent = self._source.get_parent()
 			if self._source_path == parent.path:
-				parent.unselect_all()
+				parent.deselect_all()
 
 		# perform operation
 		self._create_directory_list()
@@ -1077,7 +1077,7 @@ class MoveOperation(CopyOperation):
 		with gtk.gdk.lock:
 			parent = self._source.get_parent()
 			if self._source_path == parent.path:
-				parent.unselect_all()
+				parent.deselect_all()
 
 		# create directories
 		self._create_directory_list()
@@ -1186,7 +1186,7 @@ class DeleteOperation(Operation):
 			# clear selection on source directory
 			parent = self._source.get_parent()
 			if self._source_path == parent.path:
-				parent.unselect_all()
+				parent.deselect_all()
 
 		# select removal method
 		trash_files = self._application.options.section('operations').get('trash_files') 

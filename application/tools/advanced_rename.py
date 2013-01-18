@@ -141,7 +141,7 @@ class AdvancedRename:
 
 		# clear selection on source directory
 		if self._path == self._parent.path:
-			self._parent.unselect_all()
+			self._parent.deselect_all()
 
 		# clear items
 		self._list.clear()

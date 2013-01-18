@@ -13,9 +13,6 @@ class MenuManager:
 	def __init__(self, application):
 		self._application = application
 
-		self._accel_group = gtk.AccelGroup()
-		self._application.add_accel_group(self._accel_group)
-
 	def _item_normal(self, item):
 		"""Create normal menu item"""
 		return gtk.MenuItem(label = item['label'], use_underline = True)
@@ -83,10 +80,6 @@ class MenuManager:
 		
 		if method is not None:
 			method(data['mime_type'], data['selection'], data['provider'])
-
-	def get_accel_group(self):
-		"""Return accelerator group"""
-		return self._accel_group
 
 	def get_item_by_name(self, name):
 		"""Get menu by specified name"""
@@ -175,7 +168,7 @@ class MenuManager:
 
 		return result
 
-	def create_menu_item(self, item):
+	def create_menu_item(self, item, accel_group=None):
 		"""Create new menu item from definition"""
 
 		# ensure we don't get confused with item type
@@ -193,10 +186,18 @@ class MenuManager:
 		# if item has children then make submenu
 		if item_type is not 'separator' and 'submenu' in item:
 			submenu = gtk.Menu()
-			submenu.set_accel_group(self._accel_group)
+
+			if accel_group is None:
+				# no accelerator group was specified, use main window
+				self._application._accel_group.add_menu(submenu)
+
+			else:
+				# connect submenu to specified accelerator group
+				submenu.set_accel_group(accel_group)
 
 			for sub_item in item['submenu']:
-				submenu.append(self.create_menu_item(sub_item))
+				submenu.append(self.create_menu_item(sub_item, accel_group))
+
 			new_item.set_submenu(submenu)
 
 		# connect signals

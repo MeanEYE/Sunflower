@@ -1648,8 +1648,8 @@ class FileList(ItemList):
 
 		return result
 
-	def unselect_all(self, pattern=None):
-		"""Unselect items matching the pattern"""
+	def deselect_all(self, pattern=None):
+		"""Deselect items matching the pattern"""
 		if pattern is None:
 			pattern = "*"
 

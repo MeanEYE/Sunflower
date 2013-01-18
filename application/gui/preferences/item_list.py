@@ -98,6 +98,25 @@ class ItemListOptions(SettingsPage):
 		self._button_selection_color.set_use_alpha(False)
 		self._button_selection_color.connect('color-set', self._parent.enable_save)
 
+		# selection indicator
+		hbox_indicator = gtk.HBox(False, 5)
+
+		label_indicator = gtk.Label(_('Selection indicator:'))
+		label_indicator.set_alignment(0, 0.5)
+
+		list_indicator = gtk.ListStore(str)
+		list_indicator.append((u'\u25b6',))
+		list_indicator.append((u'\u25e2',))
+		list_indicator.append((u'\u25c8',))
+		list_indicator.append((u'\u263b',))
+		list_indicator.append((u'\u2771',))
+		list_indicator.append((u'\u2738',))
+		list_indicator.append((u'\u2731',))
+
+		self._combobox_indicator = gtk.ComboBoxEntry(list_indicator, 0)
+		self._combobox_indicator.connect('changed', self._parent.enable_save)
+		self._combobox_indicator.set_size_request(100, -1)
+
 		# quick search
 		label_quick_search = gtk.Label(_('Quick search combination:'))
 		label_quick_search.set_alignment(0, 0.5)
@@ -193,6 +212,9 @@ class ItemListOptions(SettingsPage):
 		hbox_columns.pack_start(container_plugin, False, False, 0)
 		hbox_columns.pack_start(container_columns, True, True, 0)
 
+		hbox_indicator.pack_start(label_indicator, False, False, 0)
+		hbox_indicator.pack_start(self._combobox_indicator, False, False, 0)
+
 		hbox_selection_color.pack_start(label_selection_color, False, False, 0)
 		hbox_selection_color.pack_start(self._button_selection_color, False, False, 0)
 
@@ -217,6 +239,7 @@ class ItemListOptions(SettingsPage):
 		vbox_look_and_feel.pack_start(hbox_mode_format, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_grid_lines, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_selection_color, False, False, 5)
+		vbox_look_and_feel.pack_start(hbox_indicator, False, False, 5)
 
 		vbox_operation.pack_start(self._checkbox_case_sensitive, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_single_click, False, False, 0)
@@ -361,6 +384,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_media_preview.set_active(options.get('media_preview'))
 		self._combobox_mode_format.set_active(section.get('mode_format'))
 		self._combobox_grid_lines.set_active(section.get('grid_lines'))
+		self._combobox_indicator.child.set_text(section.get('selection_indicator'))
 		self._entry_time_format.set_text(section.get('time_format'))
 		self._button_selection_color.set_color(gtk.gdk.color_parse(section.get('selection_color')))
 
@@ -392,6 +416,7 @@ class ItemListOptions(SettingsPage):
 		section.set('grid_lines', self._combobox_grid_lines.get_active())
 		section.set('time_format', self._entry_time_format.get_text())
 		section.set('selection_color', self._button_selection_color.get_color().to_string())
+		section.set('selection_indicator', self._combobox_indicator.get_active_text())
 
 		search_modifier = "%d%d%d" % (
 								self._checkbox_control.get_active(),

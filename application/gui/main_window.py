@@ -44,7 +44,6 @@ except:
 from gui.about_window import AboutWindow
 from gui.preferences_window import PreferencesWindow
 from gui.preferences.display import TabExpand
-from gui.changelog_dialog import ChangeLogDialog
 from gui.input_dialog import InputDialog, AddBookmarkDialog
 from gui.keyring_manager_window import KeyringManagerWindow
 
@@ -132,9 +131,6 @@ class MainWindow(gtk.Window):
 
 		# load config
 		self.load_config()
-
-		# call version specific actions
-		self._version_specific_actions()
 
 		# connect delete event to main window
 		if self.window_options.section('main').get('hide_on_close'):
@@ -321,9 +317,9 @@ class MainWindow(gtk.Window):
 						'path': '<Sunflower>/Mark/SelectAll',
 					},
 					{
-						'label': _('_Unselect all'),
-						'callback': self.unselect_all,
-						'path': '<Sunflower>/Mark/UnselectAll',
+						'label': _('_Deselect all'),
+						'callback': self.deselect_all,
+						'path': '<Sunflower>/Mark/DeselectAll',
 					},
 					{
 						'label': _('Invert select_ion'),
@@ -333,24 +329,28 @@ class MainWindow(gtk.Window):
 					{'type': 'separator'},
 					{
 						'label': _('S_elect with pattern'),
+						'name': 'select_with_pattern',
 						'callback': self.select_with_pattern,
 						'path': '<Sunflower>/Mark/SelectPattern',
 					},
 					{
-						'label': _('Unselect with pa_ttern'),
-						'callback': self.unselect_with_pattern,
-						'path': '<Sunflower>/Mark/UnselectPattern',
+						'label': _('Deselect with pa_ttern'),
+						'name': 'deselect_with_pattern',
+						'callback': self.deselect_with_pattern,
+						'path': '<Sunflower>/Mark/DeselectPattern',
 					},
 					{'type': 'separator'},
 					{
 						'label': _('Select with same e_xtension'),
+						'name': 'select_with_same_extension',
 						'callback': self.select_with_same_extension,
 						'path': '<Sunflower>/Mark/SelectWithSameExtension',
 					},
 					{
-						'label': _('Unselect with same exte_nsion'),
-						'callback': self.unselect_with_same_extension,
-						'path': '<Sunflower>/Mark/UnselectWithSameExtension',
+						'label': _('Deselect with same exte_nsion'),
+						'name': 'deselect_with_same_extension',
+						'callback': self.deselect_with_same_extension,
+						'path': '<Sunflower>/Mark/DeselectWithSameExtension',
 					},
 					{'type': 'separator'},
 					{
@@ -1234,61 +1234,6 @@ class MainWindow(gtk.Window):
 		elif window_state == 2:
 			self.fullscreen()
 
-	def _version_specific_actions(self):
-		"""This method will provide user with some feedback and
-		backwards compatibility. Also it will show latest change log"""
-		config_version = self.options.get('last_version')
-		current_version = self.version['build']
-
-		# check if we need to show change log and optionally modify system
-		if current_version > config_version and config_version > 0:
-			mod_count = 0
-			vbox = gtk.VBox(False, 10)
-			vbox.set_border_width(5)
-
-			if config_version < 43:
-				vbox_version_43 = gtk.VBox(False, 0)
-
-				label_version_43 = gtk.Label('<b>Version 0.1a-43:</b>')
-				label_version_43.set_alignment(0, 0.5)
-				label_version_43.set_use_markup(True)
-
-				checkbox_reset_tabs = gtk.CheckButton('Remove old configuration files')
-				checkbox_reset_tabs.set_active(True)
-
-				vbox_version_43.pack_start(label_version_43, False, False, 0)
-				vbox_version_43.pack_start(checkbox_reset_tabs, False, False, 0)
-
-				vbox.pack_start(vbox_version_43, False, False, 0)
-				mod_count += 1
-
-			# show dialog
-			change_log = ChangeLogDialog(self, vbox, not mod_count == 0)
-			change_log.run()
-
-			## apply selected changes in reverse order
-			if config_version < 43:
-				file_list = (
-						'associations',
-						'tabs',
-						'bookmarks',
-						'toolbar',
-						'commands',
-						'accel_map',
-						'config',
-						'accelerators'
-					)
-
-				existing_files = filter(lambda file_name: os.path.exists(os.path.join(self.config_path, file_name)), file_list)
-				map(lambda file_name: os.unlink(os.path.join(self.config_path, file_name)), existing_files)
-
-			# kill dialog
-			change_log.destroy()
-
-		# set config version to current
-		if config_version is None or current_version > config_version:
-			self.options.set('last_version', current_version)
-
 	def _parse_arguments(self):
 		"""Parse command-line arguments passed to the application"""
 		if not USE_ARGPARSE: return
@@ -1385,29 +1330,42 @@ class MainWindow(gtk.Window):
 
 	def select_all(self, widget, data=None):
 		"""Select all items in active list"""
+		result = False
 		active_object = self.get_active_object()
 
 		# ensure we don't make exception on terminal tabs
 		if hasattr(active_object, 'select_all'):
 			active_object.select_all()
+			result = True
 
-	def unselect_all(self, widget, data=None):
-		"""Unselect all items in active list"""
+		return result
+
+	def deselect_all(self, widget, data=None):
+		"""Deselect all items in active list"""
+		result = False
 		active_object = self.get_active_object()
 
 		# ensure we don't make exception on terminal tabs
-		if hasattr(active_object, 'unselect_all'):
-			active_object.unselect_all()
+		if hasattr(active_object, 'deselect_all'):
+			active_object.deselect_all()
+			result = True
+
+		return result
 
 	def invert_selection(self, widget, data=None):
 		"""Invert selection in active list"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, 'invert_selection'):
 			active_object.invert_selection()
+			result = True
+
+		return result
 
 	def select_with_pattern(self, widget, data=None):
 		"""Ask user for selection pattern and select matching items"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, 'select_all'):
@@ -1425,8 +1383,13 @@ class MainWindow(gtk.Window):
 			if response[0] == gtk.RESPONSE_OK:
 				active_object.select_all(response[1])
 
+			result = True
+
+		return result
+
 	def select_with_same_extension(self, widget, data=None):
 		"""Select all items with same extension in active list"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_get_selection') and hasattr(active_object, 'select_all'):
@@ -1436,8 +1399,13 @@ class MainWindow(gtk.Window):
 			and os.path.splitext(selection)[1] != '':
 				active_object.select_all('*{0}'.format(os.path.splitext(selection)[1]))
 
-	def unselect_with_same_extension(self, widget, data=None):
+			result = True
+
+		return result
+
+	def deselect_with_same_extension(self, widget, data=None):
 		"""Select all items with same extension in active list"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_get_selection') and hasattr(active_object, 'select_all'):
@@ -1445,17 +1413,22 @@ class MainWindow(gtk.Window):
 
 			if selection is not None\
 			and os.path.splitext(selection)[1] != '':
-				active_object.unselect_all('*{0}'.format(os.path.splitext(selection)[1]))
+				active_object.deselect_all('*{0}'.format(os.path.splitext(selection)[1]))
 
-	def unselect_with_pattern(self, widget, data=None):
+			result = True
+
+		return result
+
+	def deselect_with_pattern(self, widget, data=None):
 		"""Ask user for selection pattern and select matching items"""
+		result = False
 		active_object = self.get_active_object()
 
-		if hasattr(active_object, 'unselect_all'):
+		if hasattr(active_object, 'deselect_all'):
 			# create dialog
 			dialog = InputDialog(self)
 
-			dialog.set_title(_('Unselect items'))
+			dialog.set_title(_('Deselect items'))
 			dialog.set_label(_('Selection pattern (eg.: *.jpg):'))
 			dialog.set_text('*')
 
@@ -1464,10 +1437,15 @@ class MainWindow(gtk.Window):
 
 			# commit selection
 			if response[0] == gtk.RESPONSE_OK:
-				active_object.unselect_all(response[1])
+				active_object.deselect_all(response[1])
+
+			result = True
+
+		return result
 
 	def compare_directories(self, widget=None, data=None):
 		"""Compare directories from left and right notebook"""
+		result = False
 		left_object = None
 		right_object = None
 
@@ -1501,6 +1479,10 @@ class MainWindow(gtk.Window):
 									)
 				dialog.run()
 				dialog.destroy()
+
+			result = True
+
+		return result
 
 	def run(self):
 		"""Start application"""
@@ -1805,17 +1787,15 @@ class MainWindow(gtk.Window):
 		group.set_title(_('Main Menu'))
 
 		# default accelerator map
-		default_accel_map = {
+		default_accelerator = {
 				'<Sunflower>/File/CreateFile': (keyval('F7'), gtk.gdk.CONTROL_MASK),
 				'<Sunflower>/File/CreateDirectory': (keyval('F7'), 0),
 				'<Sunflower>/File/Quit': (keyval('Q'), gtk.gdk.CONTROL_MASK),
 				'<Sunflower>/Edit/Preferences': (keyval('P'), gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK),
-				'<Sunflower>/Mark/SelectAll': (keyval('A'), gtk.gdk.CONTROL_MASK),
 				'<Sunflower>/Mark/SelectPattern': (keyval('KP_Add'), 0),
-				'<Sunflower>/Mark/UnselectPattern': (keyval('KP_Subtract'), 0),
-				'<Sunflower>/Mark/InvertSelection': (keyval('KP_Multiply'), 0),
+				'<Sunflower>/Mark/DeselectPattern': (keyval('KP_Subtract'), 0),
 				'<Sunflower>/Mark/SelectWithSameExtension': (keyval('KP_Add'), gtk.gdk.MOD1_MASK),
-				'<Sunflower>/Mark/UnselectWithSameExtension': (keyval('KP_Subtract'), gtk.gdk.MOD1_MASK),
+				'<Sunflower>/Mark/DeselectWithSameExtension': (keyval('KP_Subtract'), gtk.gdk.MOD1_MASK),
 				'<Sunflower>/Mark/Compare': (keyval('F12'), 0),
 				'<Sunflower>/Tools/FindFiles': (keyval('F7'), gtk.gdk.MOD1_MASK),
 				'<Sunflower>/Tools/SynchronizeDirectories': (keyval('F8'), gtk.gdk.MOD1_MASK),
@@ -1825,6 +1805,13 @@ class MainWindow(gtk.Window):
 				'<Sunflower>/View/Reload': (keyval('R'), gtk.gdk.CONTROL_MASK),
 				'<Sunflower>/View/FastMediaPreview': (keyval('F3'), gtk.gdk.MOD1_MASK),
 				'<Sunflower>/View/ShowHidden': (keyval('H'), gtk.gdk.CONTROL_MASK),
+			}
+
+		alternative_accelerator = {
+				'<Sunflower>/Mark/SelectPattern': (keyval('equal'), 0),
+				'<Sunflower>/Mark/DeselectPattern': (keyval('minus'), 0),
+				'<Sunflower>/Mark/SelectWithSameExtension': (keyval('equal'), gtk.gdk.MOD1_MASK),
+				'<Sunflower>/Mark/DeselectWithSameExtension': (keyval('minus'), gtk.gdk.MOD1_MASK),
 			}
 
 		# filter out menu groups without submenu
@@ -1852,8 +1839,12 @@ class MainWindow(gtk.Window):
 					group.add_method(method_name, label, callback, data)
 
 					# add default accelerator
-					if path in default_accel_map:
-						group.set_accelerator(method_name, *default_accel_map[path])
+					if path in default_accelerator:
+						group.set_accelerator(method_name, *default_accelerator[path])
+
+					# add alternative accelerator
+					if path in alternative_accelerator:
+						group.set_alt_accelerator(method_name, *alternative_accelerator[path])
 
 					# set method path
 					group.set_path(method_name, path)

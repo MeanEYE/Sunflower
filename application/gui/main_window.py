@@ -1945,6 +1945,7 @@ class MainWindow(gtk.Window):
 					'row_hinting': False,
 					'grid_lines': 0,
 					'selection_color': '#ffff5e5e0000',
+					'selection_indicator': u'\u2731',
 					'case_sensitive_sort': True,
 					'right_click_select': False,
 					'single_click_navigation': False,

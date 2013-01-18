@@ -13,11 +13,13 @@ class AcceleratorGroup:
 		self._name = None
 		self._title = None
 		self._window = None
+		self._menus = []
 
 		# accelerator containers
 		self._methods = {}
 		self._primary = {}
 		self._secondary = {}
+		self._paths = {}
 		self._disabled = []
 
 		# method name cache
@@ -38,8 +40,19 @@ class AcceleratorGroup:
 		self._create_accelerators()
 		self._create_accelerators(primary=False)
 
+		# connect paths
+		self._connect_paths()
+
 		# register group with manager
 		self._register_group()
+
+	def _connect_paths(self):
+		"""Connect accelerator paths with callbacks"""
+		for method_name, path in self._paths.items():
+			callback = self._methods[method_name]['callback']
+			self._accel_group.connect_by_path(path, callback)
+
+			print path, callback
 
 	def _create_accelerators(self, primary=True):
 		"""Create accelerators from specified list"""
@@ -97,12 +110,23 @@ class AcceleratorGroup:
 	
 			# add accelerator group to specified window
 			self._window.add_accel_group(self._accel_group)
+
+			# activate menus
+			for menu in self._menus:
+				menu.set_accel_group(self._accel_group)
+
 			self._active = True
 
 	def deactivate(self):
 		"""Deactivate accelerator group"""
 		if self._active:
+			# remove accelerator group from window
 			self._window.remove_accel_group(self._accel_group)
+
+			# deactivate menus
+			for menu in self._menus:
+				menu.set_accel_group(None)
+
 			self._active = False
 
 	def invalidate(self):
@@ -125,6 +149,10 @@ class AcceleratorGroup:
 						'data': data
 					}
 
+	def add_menu(self, menu):
+		"""Add menu to be connected with accelerator group on activate"""
+		self._menus.append(menu)
+
 	def set_accelerator(self, name, keyval, modifier):
 		"""Set primary accelerator for specified method name"""
 		self._primary[name] = (keyval, modifier)
@@ -132,6 +160,10 @@ class AcceleratorGroup:
 	def set_alt_accelerator(self, name, keyval, modifier):
 		"""Set secondary accelerator for specified method name"""
 		self._secondary[name] = (keyval, modifier)
+
+	def set_path(self, name, path):
+		"""Set activation path for specified method name"""
+		self._paths[name] = path
 
 	def get_accelerator(self, name, primary=True):
 		"""Get accelerator for specified method"""

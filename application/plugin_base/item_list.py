@@ -48,6 +48,7 @@ class ItemList(PluginBase):
 		# local human readable cache
 		self._size_format = self._parent.options.get('size_format')
 		self._selection_color = self._parent.options.section('item_list').get('selection_color')
+		self._selection_indicator = self._parent.options.section('item_list').get('selection_indicator')
 
 		# we use this variable to prevent dead loop during column resize
 		self._is_updating = False
@@ -1485,8 +1486,9 @@ class ItemList(PluginBase):
 		# apply size formatting
 		self._size_format = self._parent.options.get('size_format')
 
-		# apply selection color
+		# apply selection
 		self._selection_color = self._parent.options.section('item_list').get('selection_color')
+		self._selection_indicator = self._parent.options.section('item_list').get('selection_indicator')
 
 		# change status bar visibility
 		show_status_bar = self._parent.options.get('show_status_bar')

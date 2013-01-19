@@ -910,7 +910,18 @@ class MainWindow(gtk.Window):
 
 	def _toggle_show_hidden_files(self, widget, data=None):
 		"""Transfer option event to all the lists"""
-		self.options.section('item_list').set('show_hidden', widget.get_active())
+		section = self.options.section('item_list')
+		menu_item = self.menu_manager.get_item_by_name('show_hidden_files')
+
+		# NOTE: Calling set_active emits signal causing deadloop,
+		# to work around this issue we check if calling widget is menu item.
+		if widget is menu_item:
+			show_hidden = menu_item.get_active()
+			section.set('show_hidden', show_hidden)
+
+		else:
+			menu_item.set_active(not section.get('show_hidden'))
+			return True
 
 		# update left notebook
 		for index in range(0, self.left_notebook.get_n_pages()):
@@ -925,31 +936,67 @@ class MainWindow(gtk.Window):
 
 			if hasattr(page, 'refresh_file_list'):
 				page.refresh_file_list(widget, data)
+
+		return True
 
 	def _toggle_show_command_bar(self, widget, data=None):
 		"""Show/hide command bar"""
-		show_command_bar = widget.get_active()
+		menu_item = self.menu_manager.get_item_by_name('show_command_bar')
 
-		self.options.set('show_command_bar', show_command_bar)
-		self.command_bar.set_visible(show_command_bar)
+		# NOTE: Calling set_active emits signal causing deadloop,
+		# to work around this issue we check if calling widget is menu item.
+		if widget is menu_item:
+			show_command_bar = menu_item.get_active()
+			self.options.set('show_command_bar', show_command_bar)
+			self.command_bar.set_visible(show_command_bar)
+
+		else:
+			menu_item.set_active(not self.options.get('show_command_bar'))
+		
+		return True
 
 	def _toggle_show_command_entry(self, widget, data=None):
 		"""Show/hide command entry"""
-		show_command_entry = widget.get_active()
+		menu_item = self.menu_manager.get_item_by_name('show_command_entry')
 
-		self.options.set('show_command_entry', show_command_entry)
-		self.command_entry_bar.set_visible(show_command_entry)
+		# NOTE: Calling set_active emits signal causing deadloop,
+		# to work around this issue we check if calling widget is menu item.
+		if widget is menu_item:
+			show_command_entry = menu_item.get_active()
+			self.options.set('show_command_entry', show_command_entry)
+			self.command_entry_bar.set_visible(show_command_entry)
+
+		else:
+			menu_item.set_active(not self.options.get('show_command_entry'))
+
+		return True
 
 	def _toggle_show_toolbar(self, widget, data=None):
 		"""Show/hide toolbar"""
-		show_toolbar = widget.get_active()
+		menu_item = self.menu_manager.get_item_by_name('show_toolbar')
 
-		self.options.set('show_toolbar', show_toolbar)
-		self.toolbar_manager.get_toolbar().set_visible(show_toolbar)
+		# NOTE: Calling set_active emits signal causing deadloop,
+		# to work around this issue we check if calling widget is menu item.
+		if widget is menu_item:
+			show_toolbar = menu_item.get_active()
+			self.options.set('show_toolbar', show_toolbar)
+			self.toolbar_manager.get_toolbar().set_visible(show_toolbar)
+
+		else:
+			menu_item.set_active(not self.options.get('show_toolbar'))
+
+		return True
 
 	def _toggle_media_preview(self, widget, data=None):
 		"""Enable/disable fast image preview"""
-		self.options.set('media_preview', widget.get_active())
+		menu_item = self.menu_manager.get_item_by_name('fast_media_preview')
+
+		if widget is menu_item:
+			self.options.set('media_preview', menu_item.get_active())
+
+		else:
+			menu_item.set_active(not self.options.get('media_preview'))
+			return True
 
 		# update left notebook
 		for index in range(0, self.left_notebook.get_n_pages()):
@@ -964,6 +1011,8 @@ class MainWindow(gtk.Window):
 
 			if hasattr(page, 'apply_media_preview_settings'):
 				page.apply_media_preview_settings()
+
+		return True
 
 	def _set_active_object(self, new_object):
 		"""Set active object"""
@@ -1059,125 +1108,188 @@ class MainWindow(gtk.Window):
 
 	def _command_reload(self, widget=None, data=None):
 		"""Handle command button click"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, 'refresh_file_list'):
 			active_object.refresh_file_list()
+			result = True
+
+		return result
 
 	def _command_view(self, widget=None, data=None):
 		"""Handle command button click"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_view_selected'):
 			active_object._view_selected()
+			result = True
+
+		return result
 
 	def _command_edit(self, widget=None, data=None):
 		"""Handle command button click"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_edit_selected'):
 			active_object._edit_selected()
+			result = True
+
+		return result
 
 	def _command_copy(self, widget=None, data=None):
 		"""Handle command button click"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_copy_files'):
 			active_object._copy_files()
+			result = True
+
+		return result
 
 	def _command_move(self, widget=None, data=None):
 		"""Handle command button click"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_move_files'):
 			active_object._move_files()
+			result = True
+
+		return result
 
 	def _command_create(self, widget=None, data=None):
 		"""Handle command button click"""
+		result = False
 		active_object = self.get_active_object()
 
 		if data is None or (data is not None and data == 'directory'):
 			# create directory
 			if hasattr(active_object, '_create_directory'):
 				active_object._create_directory()
+				result = True
 
 		else:
 			# create file
 			if hasattr(active_object, '_create_file'):
 				active_object._create_file()
+				result = True
+
+		return result
 
 	def _command_delete(self, widget=None, data=None):
 		"""Handle command button click"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_delete_files'):
 			active_object._delete_files()
+			result = True
+
+		return result
 
 	def _command_open(self, widget=None, data=None):
 		"""Execute selected item in active list"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_execute_selected_item'):
 			active_object._execute_selected_item()
+			result = True
+
+		return result
 
 	def _command_open_in_new_tab(self, widget=None, data=None):
 		"""Open selected directory from active list in new tab"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_open_in_new_tab'):
 			active_object._open_in_new_tab()
+			result = True
+		
+		return result
 
 	def _command_cut_to_clipboard(self, widget=None, data=None):
 		"""Copy selected items from active list to clipboard"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_cut_files_to_clipboard'):
 			active_object._cut_files_to_clipboard()
+			result = True
+
+		return result
 
 	def _command_copy_to_clipboard(self, widget=None, data=None):
 		"""Copy selected items from active list to clipboard"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_copy_files_to_clipboard'):
 			# ItemList object
 			active_object._copy_files_to_clipboard()
+			result = True
 
 		elif hasattr(active_object, '_copy_selection'):
 			# Terminal object
 			active_object._copy_selection()
+			result = True
+
+		return result
 
 	def _command_paste_from_clipboard(self, widget=None, data=None):
 		"""Copy selected items from active list to clipboard"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_paste_files_from_clipboard'):
 			# ItemList object
 			active_object._paste_files_from_clipboard()
+			result = True
 
 		elif hasattr(active_object, '_paste_selection'):
 			# Terminal object
 			active_object._paste_selection()
+			result = True
+
+		return result
 
 	def _command_properties(self, widget=None, data=None):
 		"""Show properties for selected item in active list"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_item_properties'):
 			active_object._item_properties()
+			result = True
+
+		return result
 
 	def _command_send_to(self, widget=None, data=None):
 		"""Show 'send to' dialog for selected items in active list"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_send_to'):
 			active_object._send_to()
+			result = True
+
+		return result
 
 	def _command_rename(self, widget=None, data=None):
 		"""Rename selected item in active list"""
+		result = False
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_rename_file'):
 			active_object._rename_file()
+			result = True
+
+		return result
 
 	def _command_edit_key_press(self, widget, event):
 		"""Handle key press in command edit"""
@@ -1327,6 +1439,8 @@ class MainWindow(gtk.Window):
 		if button is not None:
 			self.bookmarks.set_object(active_object)
 			self.bookmarks.show(self, button)
+
+		return True
 
 	def select_all(self, widget, data=None):
 		"""Select all items in active list"""
@@ -2389,6 +2503,8 @@ class MainWindow(gtk.Window):
 		window = AboutWindow(self)
 		window._show()
 
+		return True
+
 	def show_advanced_rename(self, widget, data=None):
 		"""Show advanced rename tool for active list"""
 		if len(self.rename_extension_classes) > 0 \
@@ -2432,6 +2548,8 @@ class MainWindow(gtk.Window):
 			# show preferences window
 			self.preferences_window._show(None, tab_name='plugins')
 
+		return True
+
 	def show_find_files(self, widget=None, data=None):
 		"""Show find files tool"""
 		if len(self.find_extension_classes) > 0:
@@ -2455,6 +2573,8 @@ class MainWindow(gtk.Window):
 
 			# show preferences window
 			self.preferences_window._show(None, tab_name='plugins')
+
+		return True
 
 	def show_keyring_manager(self, widget=None, data=None):
 		"""Show keyring manager if available"""
@@ -2490,10 +2610,14 @@ class MainWindow(gtk.Window):
 			dialog.run()
 			dialog.destroy()
 
+		return True
+
 	def check_for_new_version(self, widget=None, data=None):
 		"""Check for new versions"""
 		version = VersionCheck(self)
 		version.check()
+
+		return True
 
 	def add_control_to_status_bar(self, control):
 		"""Add new control to status bar"""

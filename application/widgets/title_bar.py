@@ -21,6 +21,7 @@ class TitleBar:
 		self._state = gtk.STATE_NORMAL
 		self._ubuntu_coloring = self._application.options.get('ubuntu_coloring')
 		self._superuser_notification = self._application.options.get('superuser_notification')
+		self._button_relief = self._application.options.get('button_relief')
 		self._menu = None
 		self._style = None
 		self._toolbar_style = None
@@ -52,9 +53,11 @@ class TitleBar:
 
 		self._button_menu = gtk.Button()
 		self._button_menu.add(self._icon)
-		self._button_menu.set_relief(gtk.RELIEF_NONE)
+		if not self._button_relief:
+			self._button_menu.set_relief(gtk.RELIEF_NONE)
 		self._button_menu.modify_style(style)
 		self._button_menu.set_focus_on_click(False)
+		self._button_menu.set_tooltip_text(_('Context menu'))
 		self._button_menu.connect('clicked', self.show_menu)
 
 		# create title box
@@ -85,7 +88,7 @@ class TitleBar:
 		vbox.pack_start(self._subtitle_label, False, False, 0)
 
 		self._hbox.pack_start(self._button_menu, False, False, 0)
-		self._hbox.pack_start(vbox, True, True, 3)
+		self._hbox.pack_start(vbox, True, True, 4)
 
 		if self._spinner is not None:
 			self._hbox.pack_start(self._spinner, False, False, 5)
@@ -94,7 +97,8 @@ class TitleBar:
 
 	def __get_colors(self, normal_style=False):
 		"""Get copy of the style for current state"""
-		if self._style is None: return
+		if self._style is None:
+			return
 
 		if self._state is gtk.STATE_NORMAL or normal_style:
 			# normal state
@@ -140,6 +144,11 @@ class TitleBar:
 
 		return result
 
+	def __get_menu_width(self):
+		"""Get width of menu button"""
+		result  = self._button_menu.allocation.width
+		return result
+
 	def __button_release_event(self, widget, event, data=None):
 		"""Handle button release event"""
 		if event.button == 1:
@@ -157,80 +166,94 @@ class TitleBar:
 		self._style = self._application.left_notebook.get_style().copy()
 		self._toolbar_style = self._application.menu_bar.get_style().copy()
 
+	def __draw_rectangle(self, context, rectangle, radius):
+		"""Draw rectangle with rounded borders"""
+		half_pi = math.pi / 2
+
+		context.arc(rectangle[0] + radius, rectangle[1] + radius, radius, 2 * half_pi, 3 * half_pi)
+		context.arc(rectangle[2] - radius, rectangle[1] + radius, radius, 3 * half_pi, 4 * half_pi)
+		context.arc(rectangle[2] - radius, rectangle[3] - radius, radius, 0 * half_pi, 1 * half_pi)
+		context.arc(rectangle[0] + radius, rectangle[3] - radius, radius, 1 * half_pi, 2 * half_pi)
+		context.close_path()
+		context.fill()
+
 	def __expose_event(self, widget=None, event=None):
 		"""We use this event to paint backgrounds"""
 		x, y, w, h = self._hbox.allocation
 		x_offset = x + w
 		y_offset = y + h
-		half_pi = math.pi / 2
+		border_offset = 1
 
+		# calculate parameters
+		hbox_rectangle = (x, y, x_offset, y_offset)
+		controls_rectangle = (
+						x_offset - self.__get_controls_width() - self._box_border_width - border_offset,
+						y + self._box_border_width - border_offset,
+						x_offset - self._box_border_width + border_offset,
+						y_offset - self._box_border_width + border_offset
+					)
+		menu_rectangle = (
+						x + self._box_border_width - border_offset, 
+						y + self._box_border_width - border_offset,
+						x + self._box_border_width + self.__get_menu_width() + border_offset,
+						y_offset - self._box_border_width + border_offset
+					)
+
+		# create drawing context
 		context = self._container.window.cairo_create()
 
-		# clear drawing area first
+		# get colors
 		normal_color = self.__get_colors(normal_style=True)[0]
-		context.set_source_rgb(
-							normal_color.red_float,
-							normal_color.green_float,
-							normal_color.blue_float
-						)
-		context.rectangle(x, y, w, h)
+		active_color = self.__get_colors()[0]
+
+		# clear drawing area first
+		context.set_source_rgb(normal_color.red_float, normal_color.green_float, normal_color.blue_float)
+		context.rectangle(*hbox_rectangle)
 		context.fill()
 
 		# draw focus if needed
 		if self._state is not gtk.STATE_NORMAL:
-			color = self.__get_colors()[0]
-			context.set_source_rgb(
-								color.red_float,
-								color.green_float,
-								color.blue_float
-							)
+			# draw background
+			context.set_source_rgb(active_color.red_float, active_color.green_float, active_color.blue_float)
+			self.__draw_rectangle(context, hbox_rectangle, self._radius + 1)
 
-			# draw rounded rectangle
-			radius = self._radius + 1
-			context.arc(x + radius, y + radius, radius, 2 * half_pi, 3 * half_pi)
-			context.arc(x_offset - radius, y + radius, radius, 3 * half_pi, 4 * half_pi)
-			context.arc(x_offset - radius, y_offset - radius, radius, 0 * half_pi, 1 * half_pi)
-			context.arc(x + radius, y_offset - radius, radius, 1 * half_pi, 2 * half_pi)
-			context.close_path()
-			context.fill()
+			# draw control space only if button relief is disabled
+			if not self._button_relief:
+				context.set_source_rgba(normal_color.red_float, normal_color.green_float, normal_color.blue_float, 0.4)
+				self.__draw_rectangle(context, controls_rectangle, self._radius)
 
-			# draw control space
-			controls_width = self.__get_controls_width()
-			border_mod = 1
-			border = self._box_border_width - border_mod
-
-			# modify rectangle
-			x = x_offset - border - controls_width - (border_mod * 2)
-			y += border
-			x_offset -= border
-			y_offset -= border
-
-			context.set_source_rgba(
-								normal_color.red_float,
-								normal_color.green_float,
-								normal_color.blue_float,
-								0.5
-							)
-			context.arc(x + self._radius, y + self._radius, self._radius, 2 * half_pi, 3 * half_pi)
-			context.arc(x_offset - self._radius, y + self._radius, self._radius, 3 * half_pi, 4 * half_pi)
-			context.arc(x_offset - self._radius, y_offset - self._radius, self._radius, 0 * half_pi, 1 * half_pi)
-			context.arc(x + self._radius, y_offset - self._radius, self._radius, 1 * half_pi, 2 * half_pi)
-			context.close_path()
-			context.fill()
+				# draw menu space
+				self.__draw_rectangle(context, menu_rectangle, self._radius)
 
 		return False
 
-	def __apply_text_color(self):
+	def __apply_color(self):
 		"""Apply text color for title and subtitle"""
-		color = self.__get_colors()[1]
+		colors = self.__get_colors()
 
 		# apply text color to labels
-		self._title_label.modify_fg(gtk.STATE_NORMAL, color)
-		self._subtitle_label.modify_fg(gtk.STATE_NORMAL, color)
+		self._title_label.modify_fg(gtk.STATE_NORMAL, colors[1])
+		self._subtitle_label.modify_fg(gtk.STATE_NORMAL, colors[1])
+
+		# apply color to controls
+		self._button_menu.modify_fg(gtk.STATE_NORMAL, colors[1])
+		self._button_menu.modify_bg(gtk.STATE_NORMAL, colors[0])
+		self._button_menu.modify_fg(gtk.STATE_PRELIGHT, colors[1])
+		self._button_menu.modify_bg(gtk.STATE_PRELIGHT, colors[0])
+		self._button_menu.modify_fg(gtk.STATE_ACTIVE, colors[1])
+		self._button_menu.modify_bg(gtk.STATE_ACTIVE, colors[0])
+
+		for control in self._hbox.get_children():
+			control.modify_fg(gtk.STATE_NORMAL, colors[1])
+			control.modify_bg(gtk.STATE_NORMAL, colors[0])
+			control.modify_fg(gtk.STATE_PRELIGHT, colors[1])
+			control.modify_bg(gtk.STATE_PRELIGHT, colors[0])
+			control.modify_fg(gtk.STATE_ACTIVE, colors[1])
+			control.modify_bg(gtk.STATE_ACTIVE, colors[0])
 
 		# apply spinner color
 		if self._spinner is not None:
-			self._spinner.modify_fg(gtk.STATE_NORMAL, color)
+			self._spinner.modify_fg(gtk.STATE_NORMAL, colors[1])
 
 	def __handle_menu_hide(self, widget, data=None):
 		"""Handle hiding title bar menu"""
@@ -257,13 +280,16 @@ class TitleBar:
 		self._control_count += 1
 		self._hbox.pack_end(widget, False, False, 0)
 
+		if issubclass(widget.__class__, gtk.Button):
+			widget.set_relief((gtk.RELIEF_NONE, gtk.RELIEF_NORMAL)[self._button_relief])
+
 	def set_state(self, state):
 		"""Set GTK control state for title bar"""
 		self._state = state
 
 		# apply new colors
 		self._container.queue_draw()
-		self.__apply_text_color()
+		self.__apply_color()
 
 	def set_mode(self, mode):
 		"""Set title bar mode"""
@@ -331,7 +357,20 @@ class TitleBar:
 	def apply_settings(self):
 		"""Method called when system applies new settings"""
 		self._ubuntu_coloring = self._application.options.get('ubuntu_coloring')
+		self._superuser_notification = self._application.options.get('superuser_notification')
+		self._button_relief = self._application.options.get('button_relief')
+
+		# get new color styles
+		self._style = self._application.left_notebook.get_style().copy()
+		self._toolbar_style = self._application.menu_bar.get_style().copy()
+
+		# apply button relief
+		relief = (gtk.RELIEF_NONE, gtk.RELIEF_NORMAL)[self._button_relief]
+
+		for control in self._hbox.get_children():
+			if issubclass(control.__class__, gtk.Button):
+				control.set_relief(relief)
 
 		# apply new colors
 		self._container.queue_draw()
-		self.__apply_text_color()
+		self.__apply_color()

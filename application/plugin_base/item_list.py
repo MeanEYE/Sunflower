@@ -73,11 +73,6 @@ class ItemList(PluginBase):
 
 		self._bookmarks_button.set_focus_on_click(False)
 		self._bookmarks_button.set_tooltip_text(_('Bookmarks'))
-		self._bookmarks_button.set_relief((
-									gtk.RELIEF_NONE,
-									gtk.RELIEF_NORMAL
-									)[self._parent.options.get('button_relief')])
-
 		self._bookmarks_button.connect('clicked', self._bookmarks_button_clicked)
 
 		self._title_bar.add_control(self._bookmarks_button)
@@ -96,11 +91,6 @@ class ItemList(PluginBase):
 
 		self._history_button.set_focus_on_click(False)
 		self._history_button.set_tooltip_text(_('History'))
-		self._history_button.set_relief((
-									gtk.RELIEF_NONE,
-									gtk.RELIEF_NORMAL
-									)[self._parent.options.get('button_relief')])
-
 		self._history_button.connect('clicked', self._history_button_clicked)
 
 		self._title_bar.add_control(self._history_button)
@@ -119,11 +109,6 @@ class ItemList(PluginBase):
 
 		self._terminal_button.set_focus_on_click(False)
 		self._terminal_button.set_tooltip_text(_('Terminal'))
-		self._terminal_button.set_relief((
-									gtk.RELIEF_NONE,
-									gtk.RELIEF_NORMAL
-		                        )[self._parent.options.get('button_relief')])
-
 		self._terminal_button.connect('clicked', self._create_terminal)
 
 		self._title_bar.add_control(self._terminal_button)
@@ -1475,20 +1460,6 @@ class ItemList(PluginBase):
 
 		# change change sorting sensitivity
 		self._sort_sensitive = self._parent.options.section('item_list').get('case_sensitive_sort')
-
-		# change button relief
-		self._bookmarks_button.set_relief((
-									gtk.RELIEF_NONE,
-									gtk.RELIEF_NORMAL
-									)[self._parent.options.get('button_relief')])
-		self._history_button.set_relief((
-									gtk.RELIEF_NONE,
-									gtk.RELIEF_NORMAL
-									)[self._parent.options.get('button_relief')])
-		self._terminal_button.set_relief((
-									gtk.RELIEF_NONE,
-									gtk.RELIEF_NORMAL
-									)[self._parent.options.get('button_relief')])
 
 		# apply size formatting
 		self._size_format = self._parent.options.get('size_format')

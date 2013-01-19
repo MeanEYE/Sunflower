@@ -615,6 +615,7 @@ class MainWindow(gtk.Window):
 		self.command_edit.connect('activate', self.execute_command)
 		self.command_edit.connect('key-press-event', self._command_edit_key_press)
 		self.command_edit.connect('focus-in-event', self._command_edit_focused)
+		self.command_edit.connect('focus-out-event', self._command_edit_lost_focus)
 		self.command_edit.show()
 
 		# load history file
@@ -1305,6 +1306,11 @@ class MainWindow(gtk.Window):
 	def _command_edit_focused(self, widget, event):
 		"""Handle focusing command entry"""
 		self.accelerator_manager.deactivate_scheduled_groups(widget)
+		self._accel_group.deactivate()
+
+	def _command_edit_lost_focus(self, widget, event):
+		"""Handle command entry loosing focus"""
+		self._accel_group.activate(self)
 
 	def _save_window_position(self):
 		"""Save window position to config"""

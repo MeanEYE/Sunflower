@@ -1026,6 +1026,21 @@ class FileList(ItemList):
 
 		return True
 
+	def _select_all(self, widget, data=None):
+		"""Proxy method for selecting all items"""
+		self.select_all()
+		return True
+
+	def _deselect_all(self, widget, data=None):
+		"""Proxy method for deselecting all items"""
+		self.deselect_all()
+		return True
+
+	def _invert_selection(self, widget, data=None):
+		"""Proxy method for selecting all items"""
+		self.invert_selection()
+		return True
+
 	def _toggle_selection(self, widget, data=None, advance=True):
 		"""Toggle item selection"""
 		selection = self._item_list.get_selection()

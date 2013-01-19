@@ -69,11 +69,6 @@ class Terminal(PluginBase):
 
 		self._menu_button.set_focus_on_click(False)
 		self._menu_button.set_tooltip_text(_('Terminal menu'))
-		self._menu_button.set_relief((
-									gtk.RELIEF_NONE,
-									gtk.RELIEF_NORMAL
-								)[options.get('button_relief')])
-
 		self._menu_button.connect('clicked', self._show_terminal_menu)
 
 		# pack buttons
@@ -337,12 +332,6 @@ class Terminal(PluginBase):
 		PluginBase.apply_settings(self)
 		options = self._parent.options
 		section = options.section('terminal')
-
-		# button relief
-		self._menu_button.set_relief((
-									gtk.RELIEF_NONE,
-									gtk.RELIEF_NORMAL
-									)[options.get('button_relief')])
 
 		# apply terminal scroll bar policy
 		show_scrollbars = section.get('show_scrollbars')

@@ -758,7 +758,7 @@ class RenameDialog(InputDialog):
 		self.set_label(_('Enter a new name for this item:'))
 		self.set_text(selection)
 
-		self._entry.select_region(0, len(os.path.splitext(selection)[0]))
+		self._entry.select_region(0, len(os.path.splitext(selection.decode('utf8'))[0]))
 
 
 class OverwriteDialog:

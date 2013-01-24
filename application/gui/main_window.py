@@ -569,6 +569,7 @@ class MainWindow(gtk.Window):
 
 		# create notebooks
 		paned = gtk.HPaned()
+
 		self.left_notebook = gtk.Notebook()
 		self.left_notebook.set_scrollable(True)
 		self.left_notebook.connect('focus-in-event', self._transfer_focus)

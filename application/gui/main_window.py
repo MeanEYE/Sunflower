@@ -568,8 +568,7 @@ class MainWindow(gtk.Window):
 		self.menu_tools = menu_item_tools.get_submenu()
 
 		# create notebooks
-		hbox = gtk.HBox(True, 4)
-
+		paned = gtk.HPaned()
 		self.left_notebook = gtk.Notebook()
 		self.left_notebook.set_scrollable(True)
 		self.left_notebook.connect('focus-in-event', self._transfer_focus)
@@ -584,9 +583,8 @@ class MainWindow(gtk.Window):
 		self.right_notebook.connect('switch-page', self._page_switched)
 		self.right_notebook.set_group_id(0)
 
-		hbox.pack_start(self.left_notebook, True, True, 0)
-		hbox.pack_start(self.right_notebook, True, True, 0)
-
+		paned.pack1(self.left_notebook, resize=False, shrink=False)
+		paned.pack2(self.right_notebook, resize=False, shrink=False)
 		# command line prompt
 		self.command_entry_bar = gtk.HBox(False, 0)
 		self.status_bar = gtk.HBox(False, 0)
@@ -669,7 +667,7 @@ class MainWindow(gtk.Window):
 
 		vbox2 = gtk.VBox(False, 4)
 		vbox2.set_border_width(3)
-		vbox2.pack_start(hbox, expand=True, fill=True, padding=0)
+		vbox2.pack_start(paned, expand=True, fill=True, padding=0)
 		vbox2.pack_start(self.command_entry_bar, expand=False, fill=False, padding=0)
 		vbox2.pack_start(self.command_bar, expand=False, fill=False, padding=0)
 

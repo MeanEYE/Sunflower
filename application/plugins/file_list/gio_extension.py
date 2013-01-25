@@ -1,7 +1,7 @@
 import gtk
 import gio
 
-from dialogs import SambaInputDialog, SambaResult, FtpInputDialog, FtpResult
+from dialogs import SambaInputDialog, SambaResult, FtpInputDialog, FtpResult, DavInputDialog, DavResult
 from keyring import KeyringCreateError, EntryType
 from plugin_base.mount_manager_extension import MountManagerExtension, ExtensionFeatures
 from gui.input_dialog import InputDialog
@@ -820,3 +820,347 @@ class FtpExtension(GioExtension):
 	def get_information(self):
 		"""Get extension information"""
 		return 'folder-remote-ftp', 'FTP'
+
+
+class DavExtension(GioExtension):
+	"""Mount manager extension that provides editing and mounting
+	of WEBDAV shares through GIO backend.
+	"""
+	scheme = 'dav'
+
+	def __init__(self, parent, window):
+		GioExtension.__init__(self, parent, window)
+
+		# create user interface
+		list_container = gtk.ScrolledWindow()
+		list_container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+		list_container.set_shadow_type(gtk.SHADOW_IN)
+
+		self._store = gtk.ListStore(str, str, int, str, str, bool, str)
+		self._list = gtk.TreeView(model=self._store)
+
+		cell_name = gtk.CellRendererText()
+		cell_uri = gtk.CellRendererText()
+
+		col_name = gtk.TreeViewColumn(_('Name'), cell_name, text=DavColumn.NAME)
+		col_uri = gtk.TreeViewColumn(_('URI'), cell_uri, text=DavColumn.URI)
+
+		col_name.set_expand(True)
+
+		self._list.append_column(col_name)
+		self._list.append_column(col_uri)
+
+		# create controls
+		image_add = gtk.Image()
+		image_add.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_BUTTON)
+
+		button_add = gtk.Button()
+		button_add.set_image(image_add)
+		button_add.connect('clicked', self._add_mount)
+
+		image_edit = gtk.Image()
+		image_edit.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_BUTTON)
+
+		button_edit = gtk.Button()
+		button_edit.set_image(image_edit)
+		button_edit.connect('clicked', self._edit_mount)
+
+		image_delete = gtk.Image()
+		image_delete.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_BUTTON)
+
+		button_delete = gtk.Button()
+		button_delete.set_image(image_delete)
+		button_delete.connect('clicked', self._delete_mount)
+
+		button_mount = gtk.Button(_('Mount'))
+		button_mount.connect('clicked', self._mount_selected)
+
+		button_unmount = gtk.Button(_('Unmount'))
+		button_unmount.connect('clicked', self._unmount_selected)
+
+		# use spinner if possible to denote busy operation
+		if hasattr(gtk, 'Spinner'):
+			self._spinner = gtk.Spinner()
+			self._spinner.set_size_request(20, 20)
+			self._spinner.set_property('no-show-all', True)
+
+		else:
+			self._spinner = None
+
+		# pack user interface
+		list_container.add(self._list)
+
+		self._container.pack_start(list_container, True, True, 0)
+
+		self._controls.pack_start(button_add, False, False, 0)
+		self._controls.pack_start(button_edit, False, False, 0)
+		self._controls.pack_start(button_delete, False, False, 0)
+
+		if self._spinner is not None:
+			self._controls.pack_start(self._spinner, False, False, 0)
+		self._controls.pack_end(button_unmount, False, False, 0)
+		self._controls.pack_end(button_mount, False, False, 0)
+
+		# load entries from config file
+		self.__populate_list()
+
+	def __populate_list(self):
+		"""Populate list with stored mounts"""
+		entries = self._application.mount_options.get(self.scheme)
+
+		# no entries found, nothing to do here
+		if entries is None:
+			return
+
+		# clear store
+		self._store.clear()
+
+		# add entries to the list store
+		for entry in entries:
+			self._store.append((
+			entry['name'],
+			entry['server'],
+			entry['server_type'],
+			entry['directory'],
+			entry['username'],
+			entry['requires_login'],
+			self.__form_uri(entry['server'], entry['server_type'], entry['username'], entry['directory'])
+			))
+
+	def __form_uri(self, server, server_type, username, directory):
+		"""Form URI string from specified parameters"""
+
+		if server_type == 1:
+			self.scheme = 'davs'
+
+		# include username
+		if username is not None and username != '':
+			server = '{0}@{1}'.format(username, server)
+
+		# include directory
+		if directory is not None and directory != '':
+			result = '{0}://{1}/{2}'.format(self.scheme, server, directory)
+
+		else:
+			result = '{0}://{1}/'.format(self.scheme, server)
+
+		return result
+
+	def __store_mount(self, params, uri):
+		"""Store mount to the list"""
+		store_params = (
+		params[DavResult.NAME],
+		params[DavResult.SERVER],
+		params[DavResult.SERVER_TYPE],
+		params[DavResult.DIRECTORY],
+		params[DavResult.USERNAME],
+		params[DavResult.PASSWORD] != '',
+		uri
+		)
+		self._store.append(store_params)
+
+	def __save_list(self):
+		"""Save mounts from store to config file"""
+		mount_options = self._application.mount_options
+
+		# store configuration to options file
+		if mount_options.has(self.scheme):
+			entries = mount_options.get(self.scheme)
+			del entries[:]
+
+		else:
+			entries = []
+			mount_options.set(self.scheme, entries)
+
+		# add items from the store
+		for row in self._store:
+			entries.append({
+			'name': row[DavColumn.NAME],
+			'server': row[DavColumn.SERVER],
+			'server_type': row[DavColumn.SERVER_TYPE],
+			'directory': row[DavColumn.DIRECTORY],
+			'username': row[DavColumn.USERNAME],
+			'requires_login': row[DavColumn.REQUIRES_LOGIN]
+			})
+
+	def _add_mount(self, widget, data=None):
+		"""Present dialog to user for creating a new mount"""
+		keyring_manager = self._parent._application.keyring_manager
+
+		# create dialog and get response from user
+		dialog = DavInputDialog(self._window)
+		dialog.set_keyring_available(keyring_manager.is_available())
+		response = dialog.get_response()
+
+		if response[0] == gtk.RESPONSE_OK:
+			name = response[1][DavResult.NAME]
+			uri = self.__form_uri(
+				response[1][DavResult.SERVER],
+				response[1][DavResult.SERVER_TYPE],
+				response[1][DavResult.USERNAME],
+				response[1][DavResult.DIRECTORY]
+			)
+			requires_login = response[1][DavResult.PASSWORD] != ''
+
+			if requires_login:
+				if keyring_manager.is_available():
+					try:
+						# prepare attributes
+						attributes = {
+						'server': uri,
+						'user': response[1][DavResult.USERNAME]
+						}
+						# first, try to store password with keyring
+						keyring_manager.store_password(
+							name,
+							response[1][DavResult.PASSWORD],
+							attributes,
+							entry_type=EntryType.NETWORK
+						)
+
+					except KeyringCreateError:
+						# show error message
+						print "Keyring create error, we need it to store this option"
+
+					else:
+						# store entry
+						self.__store_mount(response[1], uri)
+
+				else:
+					# show error message
+					print "Keyring is not available but it's needed!"
+
+			else:
+				# no login required, just store
+				self.__store_mount(response[1], uri)
+
+			# save mounts to config file
+			self.__save_list()
+
+	def _delete_mount(self, widget, data=None):
+		"""Remove dialog if user confirms"""
+		selection = self._list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+		keyring_manager = self._parent._application.keyring_manager
+
+		if selected_iter is not None:
+			entry_name = item_list.get_value(selected_iter, DavColumn.NAME)
+			requires_login = item_list.get_value(selected_iter, DavColumn.REQUIRES_LOGIN)
+
+			# ask user to confirm removal
+			dialog = gtk.MessageDialog(
+				self._parent.window,
+				gtk.DIALOG_DESTROY_WITH_PARENT,
+				gtk.MESSAGE_QUESTION,
+				gtk.BUTTONS_YES_NO,
+				_(
+					"You are about to remove '{0}'.\n"
+					"Are you sure about this?"
+				).format(entry_name)
+			)
+			dialog.set_default_response(gtk.RESPONSE_YES)
+			result = dialog.run()
+			dialog.destroy()
+
+			# remove selected mount
+			if result == gtk.RESPONSE_YES:
+				item_list.remove(selected_iter)
+
+				# save changes
+				self.__save_list()
+
+				# remove password from keyring manager
+				if requires_login:
+					keyring_manager.remove_entry(entry_name)
+
+	def _edit_mount(self, widget, data=None):
+		"""Present dialog to user for editing existing mount"""
+		keyring_manager = self._parent._application.keyring_manager
+		selection = self._list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		if selected_iter is not None:
+			dialog = DavInputDialog(self._window)
+			old_name = item_list.get_value(selected_iter, DavColumn.NAME)
+
+			# set dialog parameters
+			dialog.set_keyring_available(keyring_manager.is_available())
+			dialog.set_name(old_name)
+			dialog.set_server(item_list.get_value(selected_iter, DavColumn.SERVER))
+			dialog.set_directory(item_list.get_value(selected_iter, DavColumn.DIRECTORY))
+			dialog.set_username(item_list.get_value(selected_iter, DavColumn.USERNAME))
+
+			# show editing dialog
+			response = dialog.get_response()
+
+			if response[0] == gtk.RESPONSE_OK:
+				new_name = response[1][DavResult.NAME]
+
+				# modify list store
+				item_list.set_value(selected_iter, DavColumn.NAME, new_name)
+				item_list.set_value(selected_iter, DavColumn.SERVER, response[1][DavResult.SERVER])
+				item_list.set_value(selected_iter, DavColumn.SERVER_TYPE, response[1][DavResult.SERVER_TYPE])
+				item_list.set_value(selected_iter, DavColumn.DIRECTORY, response[1][DavResult.DIRECTORY])
+				item_list.set_value(selected_iter, DavColumn.USERNAME, response[1][DavResult.USERNAME])
+
+				# rename entry if needed
+				if new_name != old_name:
+					keyring_manager.rename_entry(old_name, new_name)
+
+				# form URI
+				uri = self.__form_uri(
+					response[1][DavResult.SERVER],
+					response[1][DavResult.SERVER_TYPE],
+					response[1][DavResult.USERNAME],
+					response[1][DavResult.DIRECTORY]
+				)
+
+				item_list.set_value(selected_iter, DavColumn.URI, uri)
+
+				# save changes
+				self.__save_list()
+
+	def _mount_selected(self, widget, data=None):
+		"""Mount selected item"""
+		selection = self._list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+		keyring_manager = self._parent._application.keyring_manager
+
+		if selected_iter is not None:
+			server = item_list.get_value(selected_iter, DavColumn.SERVER)
+			server_type = item_list.get_value(selected_iter, DavColumn.SERVER_TYPE)
+			directory = item_list.get_value(selected_iter, DavColumn.DIRECTORY)
+			username = item_list.get_value(selected_iter, DavColumn.USERNAME)
+			password = None
+
+			# form URI for mounting
+			uri = self.__form_uri(server, server_type, username, directory)
+
+			# get password if domain requires login
+			if item_list.get_value(selected_iter, DavColumn.REQUIRES_LOGIN):
+				entry_name = item_list.get_value(selected_iter, DavColumn.NAME)
+				password = keyring_manager.get_password(entry_name)
+
+			# mount specified URI
+			self._mount(uri, None, username, password)
+
+	def _unmount_selected(self, widget, data=None):
+		"""Unmount selected item"""
+		selection = self._list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		if selected_iter is not None:
+			server = item_list.get_value(selected_iter, DavColumn.SERVER)
+			server_type = item_list.get_value(selected_iter, DavColumn.SERVER_TYPE)
+			username = item_list.get_value(selected_iter, DavColumn.USERNAME)
+			directory = item_list.get_value(selected_iter, DavColumn.DIRECTORY)
+
+			# form URI for mounting
+			uri = self.__form_uri(server, server_type, username, directory)
+
+			# mount specified URI
+			self._unmount(uri)
+
+	def get_information(self):
+		"""Get extension information"""
+		return 'folder-remote-dav', 'WebDav'

@@ -1765,10 +1765,15 @@ class MainWindow(gtk.Window):
 		"""Set location label"""
 		self.path_label.set_text(path)
 
-	def goto_web(self, widget, data=None):
+	def goto_web(self, widget, uri):
 		"""Open URL stored in data"""
-		if data is not None:
-			webbrowser.open_new_tab("http://%s" % data)
+		if '://' in uri:
+			webbrowser.open_new_tab(uri)
+
+		else:
+			webbrowser.open_new_tab('http://%s' % uri)
+
+		return True
 
 	def execute_command(self, widget, data=None):
 		"""Executes system command"""
@@ -2506,7 +2511,7 @@ class MainWindow(gtk.Window):
 	def show_about_window(self, widget=None, data=None):
 		"""Show about window"""
 		window = AboutWindow(self)
-		window._show()
+		window.show()
 
 		return True
 

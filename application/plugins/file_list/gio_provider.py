@@ -338,3 +338,20 @@ class TrashProvider(GioProvider):
 	def get_protocol_icon(self):
 		"""Return protocol icon name"""
 		return 'user-trash'
+
+
+class DavProvider(GioProvider):
+	is_local = False
+	protocol = 'dav'
+
+	def get_protocol_icon(self):
+		"""Return protocol icon name"""
+		return 'network'
+
+class DavsProvider(GioProvider):
+	is_local = False
+	protocol = 'davs'
+
+	def get_protocol_icon(self):
+		"""Return protocol icon name"""
+		return 'network'

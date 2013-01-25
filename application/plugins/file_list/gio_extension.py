@@ -929,13 +929,7 @@ class DavExtension(GioExtension):
 
 	def __form_uri(self, server, server_type, username, directory):
 		"""Form URI string from specified parameters"""
-
-		if server_type == 0:
-			type = 'dav'
-		else:
-			type = 'davs'
-
-
+		protocol = 'dav' if server_type == 0 else 'davs'
 
 		# include username
 		if username is not None and username != '':
@@ -943,24 +937,24 @@ class DavExtension(GioExtension):
 
 		# include directory
 		if directory is not None and directory != '':
-			result = '{0}://{1}/{2}'.format(type, server, directory)
+			result = '{0}://{1}/{2}'.format(protocol, server, directory)
 
 		else:
-			result = '{0}://{1}/'.format(type, server)
+			result = '{0}://{1}/'.format(protocol, server)
 
 		return result
 
 	def __store_mount(self, params, uri):
 		"""Store mount to the list"""
 		store_params = (
-		params[DavResult.NAME],
-		params[DavResult.SERVER],
-		params[DavResult.SERVER_TYPE],
-		params[DavResult.DIRECTORY],
-		params[DavResult.USERNAME],
-		params[DavResult.PASSWORD] != '',
-		uri
-		)
+				params[DavResult.NAME],
+				params[DavResult.SERVER],
+				params[DavResult.SERVER_TYPE],
+				params[DavResult.DIRECTORY],
+				params[DavResult.USERNAME],
+				params[DavResult.PASSWORD] != '',
+				uri
+			)
 		self._store.append(store_params)
 
 	def __save_list(self):

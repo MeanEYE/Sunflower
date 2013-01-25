@@ -619,12 +619,12 @@ class DavInputDialog:
 		code = self._dialog.run()
 
 		result = (
-		self._entry_name.get_text(),
-		self._entry_server.get_text(),
-		self._entry_server_type.get_active(),
-		self._entry_directory.get_text(),
-		self._entry_username.get_text(),
-		self._entry_password.get_text()
+			self._entry_name.get_text(),
+			self._entry_server.get_text(),
+			self._entry_server_type.get_active(),
+			self._entry_directory.get_text(),
+			self._entry_username.get_text(),
+			self._entry_password.get_text()
 		)
 
 		self._dialog.destroy()

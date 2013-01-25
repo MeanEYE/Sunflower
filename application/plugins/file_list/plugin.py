@@ -7,7 +7,8 @@ import common
 
 from plugin_base.monitor import MonitorSignals, MonitorError
 from local_provider import LocalProvider
-from gio_provider import SambaProvider, FtpProvider, SftpProvider, NetworkProvider, TrashProvider, DavProvider, DavsProvider
+from gio_provider import SambaProvider, FtpProvider, SftpProvider
+from gio_provider import NetworkProvider, TrashProvider, DavProvider, DavsProvider
 from gio_extension import SambaExtension, FtpExtension, DavExtension
 from column_editor import FileList_ColumnEditor
 from operation import DeleteOperation, CopyOperation, MoveOperation

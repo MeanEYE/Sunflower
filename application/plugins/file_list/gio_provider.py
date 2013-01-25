@@ -348,6 +348,7 @@ class DavProvider(GioProvider):
 		"""Return protocol icon name"""
 		return 'network'
 
+
 class DavsProvider(GioProvider):
 	is_local = False
 	protocol = 'davs'

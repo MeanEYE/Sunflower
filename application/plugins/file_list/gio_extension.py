@@ -973,12 +973,12 @@ class DavExtension(GioExtension):
 		# add items from the store
 		for row in self._store:
 			entries.append({
-			'name': row[DavColumn.NAME],
-			'server': row[DavColumn.SERVER],
-			'server_type': row[DavColumn.SERVER_TYPE],
-			'directory': row[DavColumn.DIRECTORY],
-			'username': row[DavColumn.USERNAME],
-			'requires_login': row[DavColumn.REQUIRES_LOGIN]
+				'name': row[DavColumn.NAME],
+				'server': row[DavColumn.SERVER],
+				'server_type': row[DavColumn.SERVER_TYPE],
+				'directory': row[DavColumn.DIRECTORY],
+				'username': row[DavColumn.USERNAME],
+				'requires_login': row[DavColumn.REQUIRES_LOGIN]
 			})
 
 	def _add_mount(self, widget, data=None):
@@ -1161,4 +1161,4 @@ class DavExtension(GioExtension):
 
 	def get_information(self):
 		"""Get extension information"""
-		return 'folder-remote-dav', 'WebDav'
+		return 'gnome-fs-dav', 'WebDav'

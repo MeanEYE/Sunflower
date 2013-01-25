@@ -27,6 +27,16 @@ class FtpColumn:
 	URI = 5
 
 
+class DavColumn:
+	NAME = 0
+	SERVER = 1
+	SERVER_TYPE = 2
+	DIRECTORY = 3
+	USERNAME = 4
+	REQUIRES_LOGIN = 5
+	URI = 6
+
+
 class GioExtension(MountManagerExtension):
 	"""Base class for all GIO based extensions"""
 	features = set([ExtensionFeatures.SYSTEM_WIDE,])

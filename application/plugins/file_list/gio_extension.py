@@ -826,7 +826,7 @@ class DavExtension(GioExtension):
 	"""Mount manager extension that provides editing and mounting
 	of WEBDAV shares through GIO backend.
 	"""
-	scheme = 'dav'
+	scheme = 'webdav'
 
 	def __init__(self, parent, window):
 		GioExtension.__init__(self, parent, window)
@@ -930,8 +930,12 @@ class DavExtension(GioExtension):
 	def __form_uri(self, server, server_type, username, directory):
 		"""Form URI string from specified parameters"""
 
-		if server_type == 1:
-			self.scheme = 'davs'
+		if server_type == 0:
+			type = 'dav'
+		else:
+			type = 'davs'
+
+
 
 		# include username
 		if username is not None and username != '':
@@ -939,10 +943,10 @@ class DavExtension(GioExtension):
 
 		# include directory
 		if directory is not None and directory != '':
-			result = '{0}://{1}/{2}'.format(self.scheme, server, directory)
+			result = '{0}://{1}/{2}'.format(type, server, directory)
 
 		else:
-			result = '{0}://{1}/'.format(self.scheme, server)
+			result = '{0}://{1}/'.format(type, server)
 
 		return result
 

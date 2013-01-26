@@ -2159,6 +2159,15 @@ class MainWindow(gtk.Window):
 					'commands': []
 				})
 
+	def restore_handle_position(self, widget=None, data=None):
+		"""Restore handle position"""
+		self._paned.set_position(-1)
+
+	def move_handle(self, widget, direction):
+		"""Move handle to left if direction is False or right if True """
+		self._paned.set_position(self._paned.get_position()+5)if direction else\
+		self._paned.set_position(self._paned.get_position()-5)
+
 	def focus_opposite_object(self, widget, data=None):
 		"""Sets focus on opposite item list"""
 		opposite_object = self.get_opposite_object(self.get_active_object())

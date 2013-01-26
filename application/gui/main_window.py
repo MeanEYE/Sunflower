@@ -1990,6 +1990,16 @@ class MainWindow(gtk.Window):
 
 					# set method path
 					group.set_path(method_name, path)
+
+		# add other methods
+		group.add_method('restore_handle_position', _('Restore handle position'), self.restore_handle_position)
+		group.add_method('move_handle_left', _('Move handle to the left'), self.move_handle, -1)
+		group.add_method('move_handle_right', _('Move handle to the right'), self.move_handle, 1)
+
+		# set default accelerators
+		group.set_accelerator('restore_handle_position', keyval('Home'), gtk.gdk.MOD1_MASK)
+		group.set_accelerator('move_handle_left', keyval('Page_Up'), gtk.gdk.MOD1_MASK)
+		group.set_accelerator('move_handle_right', keyval('Page_Down'), gtk.gdk.MOD1_MASK)
 		
 		# expose object
 		self._accel_group = group
@@ -2162,11 +2172,14 @@ class MainWindow(gtk.Window):
 	def restore_handle_position(self, widget=None, data=None):
 		"""Restore handle position"""
 		self._paned.set_position(-1)
+		return True
 
-	def move_handle(self, widget, direction):
-		"""Move handle to left if direction is False or right if True """
-		self._paned.set_position(self._paned.get_position()+5)if direction else\
-		self._paned.set_position(self._paned.get_position()-5)
+	def move_handle(self, widget=None, direction):
+		"""Move handle to specified direction """
+		new_position = self._paned.get_position() + (direction * 5)
+		self._paned.set_position(new_position)
+
+		return True
 
 	def focus_opposite_object(self, widget, data=None):
 		"""Sets focus on opposite item list"""

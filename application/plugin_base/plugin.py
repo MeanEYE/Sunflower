@@ -121,6 +121,9 @@ class PluginBase(gtk.VBox):
 		group.add_method('focus_command_entry', _('Focus command entry'), self._focus_command_entry)
 		group.add_method('focus_left_object', _('Focus left object'), self._focus_left_object)
 		group.add_method('focus_right_object', _('Focus right object'), self._focus_right_object)
+		group.add_method('restore_handle_position', _('Restore handle position'), self._restore_handle_position)
+		group.add_method('move_handle_left', _('Move handle to left'), self._move_handle_left)
+		group.add_method('move_handle_right', _('Move handle to right'), self._move_handle_right)
 
 		# configure accelerators
 		group.set_accelerator('focus_opposite_object', keyval('Tab'), 0)
@@ -131,6 +134,9 @@ class PluginBase(gtk.VBox):
 		group.set_accelerator('focus_command_entry', keyval('Down'), gtk.gdk.MOD1_MASK)
 		group.set_accelerator('focus_left_object', keyval('Left'), gtk.gdk.MOD1_MASK)
 		group.set_accelerator('focus_right_object', keyval('Right'), gtk.gdk.MOD1_MASK)
+		group.set_accelerator('restore_handle_position', keyval('Home'), gtk.gdk.MOD1_MASK)
+		group.set_accelerator('move_handle_left', keyval('Left'), gtk.gdk.MOD1_MASK)
+		group.set_accelerator('move_handle_right', keyval('Right'), gtk.gdk.MOD1_MASK)
 
 		# add accelerator group to the list
 		self._accelerator_groups.append(group)
@@ -308,3 +314,15 @@ class PluginBase(gtk.VBox):
 			result = True
 
 		return result
+
+	def _restore_handle_position(self, widget=None, data=None):
+		"""Restore handle position"""
+		self._parent.restore_handle_position()
+
+	def _move_handle_left(self, widget=None, data=None):
+		"""Move handle to left"""
+		self._parent.move_handle(widget, False)
+
+	def _move_handle_right(self, widget=None, data=None):
+		"""Move handle to right"""
+		self._parent.move_handle(widget, True)

@@ -135,8 +135,8 @@ class PluginBase(gtk.VBox):
 		group.set_accelerator('focus_left_object', keyval('Left'), gtk.gdk.MOD1_MASK)
 		group.set_accelerator('focus_right_object', keyval('Right'), gtk.gdk.MOD1_MASK)
 		group.set_accelerator('restore_handle_position', keyval('Home'), gtk.gdk.MOD1_MASK)
-		group.set_accelerator('move_handle_left', keyval('Left'), gtk.gdk.MOD1_MASK)
-		group.set_accelerator('move_handle_right', keyval('Right'), gtk.gdk.MOD1_MASK)
+		group.set_accelerator('move_handle_left', keyval('Page_Up'), gtk.gdk.MOD1_MASK)
+		group.set_accelerator('move_handle_right', keyval('Page_Down'), gtk.gdk.MOD1_MASK)
 
 		# add accelerator group to the list
 		self._accelerator_groups.append(group)

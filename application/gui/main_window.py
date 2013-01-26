@@ -568,7 +568,7 @@ class MainWindow(gtk.Window):
 		self.menu_tools = menu_item_tools.get_submenu()
 
 		# create notebooks
-		paned = gtk.HPaned()
+		self._paned = gtk.HPaned()
 
 		rc_string = (
 				'style "paned-style" {GtkPaned::handle-size = 4}'
@@ -590,8 +590,8 @@ class MainWindow(gtk.Window):
 		self.right_notebook.connect('switch-page', self._page_switched)
 		self.right_notebook.set_group_id(0)
 
-		paned.pack1(self.left_notebook, resize=False, shrink=False)
-		paned.pack2(self.right_notebook, resize=False, shrink=False)
+		self._paned.pack1(self.left_notebook, resize=False, shrink=False)
+		self._paned.pack2(self.right_notebook, resize=False, shrink=False)
 		# command line prompt
 		self.command_entry_bar = gtk.HBox(False, 0)
 		self.status_bar = gtk.HBox(False, 0)
@@ -674,7 +674,7 @@ class MainWindow(gtk.Window):
 
 		vbox2 = gtk.VBox(False, 4)
 		vbox2.set_border_width(3)
-		vbox2.pack_start(paned, expand=True, fill=True, padding=0)
+		vbox2.pack_start(self._paned, expand=True, fill=True, padding=0)
 		vbox2.pack_start(self.command_entry_bar, expand=False, fill=False, padding=0)
 		vbox2.pack_start(self.command_bar, expand=False, fill=False, padding=0)
 
@@ -1319,6 +1319,8 @@ class MainWindow(gtk.Window):
 
 	def _save_window_position(self):
 		"""Save window position to config"""
+		section = self.window_options.section('main')
+
 		state = self.window.get_state()
 		window_state = 0
 
@@ -1334,7 +1336,10 @@ class MainWindow(gtk.Window):
 
 		# save window size and position
 		geometry = '{0}x{1}+{2}+{3}'.format(*self._geometry)
-		self.window_options.section('main').set('geometry', geometry)
+		section.set('geometry', geometry)
+
+		# save handle position
+		section.set('handle_position', self._paned.get_position())
 
 	def _save_active_notebook(self):
 		"""Save active notebook to config"""
@@ -1345,7 +1350,10 @@ class MainWindow(gtk.Window):
 
 	def _restore_window_position(self):
 		"""Restore window position from config string"""
-		self.parse_geometry(self.window_options.section('main').get('geometry'))
+		section = self.window_options.section('main')
+
+		# restore window geometry
+		self.parse_geometry(section.get('geometry'))
 		self._geometry = self.get_size() + self.get_position()
 
 		# restore window state
@@ -1356,6 +1364,10 @@ class MainWindow(gtk.Window):
 
 		elif window_state == 2:
 			self.fullscreen()
+
+		# restore handle position
+		if section.has('handle_position'):
+			self._paned.set_position(section.get('handle_position'))
 
 	def _parse_arguments(self):
 		"""Parse command-line arguments passed to the application"""

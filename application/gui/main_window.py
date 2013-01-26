@@ -2171,10 +2171,16 @@ class MainWindow(gtk.Window):
 
 	def restore_handle_position(self, widget=None, data=None):
 		"""Restore handle position"""
-		self._paned.set_position(-1)
+		left_width = self.left_notebook.allocation[2]
+		right_width = self.right_notebook.allocation[2]
+
+		# calculate middle position
+		new_position = (left_width + right_width) / 2
+		self._paned.set_position(new_position)
+
 		return True
 
-	def move_handle(self, widget=None, direction):
+	def move_handle(self, widget=None, direction=1):
 		"""Move handle to specified direction """
 		new_position = self._paned.get_position() + (direction * 5)
 		self._paned.set_position(new_position)

@@ -570,6 +570,12 @@ class MainWindow(gtk.Window):
 		# create notebooks
 		paned = gtk.HPaned()
 
+		rc_string = (
+		'style "paned-style" {GtkPaned::handle-size = 3}'
+		'class "GtkPaned" style "paned-style"'
+		)
+		gtk.rc_parse_string(rc_string)
+
 		self.left_notebook = gtk.Notebook()
 		self.left_notebook.set_scrollable(True)
 		self.left_notebook.connect('focus-in-event', self._transfer_focus)

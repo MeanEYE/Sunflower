@@ -571,9 +571,9 @@ class MainWindow(gtk.Window):
 		paned = gtk.HPaned()
 
 		rc_string = (
-		'style "paned-style" {GtkPaned::handle-size = 3}'
-		'class "GtkPaned" style "paned-style"'
-		)
+				'style "paned-style" {GtkPaned::handle-size = 3}'
+				'class "GtkPaned" style "paned-style"'
+			)
 		gtk.rc_parse_string(rc_string)
 
 		self.left_notebook = gtk.Notebook()

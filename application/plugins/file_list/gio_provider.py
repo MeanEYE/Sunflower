@@ -289,6 +289,7 @@ class GioProvider(Provider):
 	def get_support(self):
 		"""Return supported options by provider"""
 		return (
+			Support.MONITOR,
 			Support.SET_TIMESTAMP,
 			Support.SET_ACCESS,
 			Support.SET_OWNER
@@ -302,6 +303,10 @@ class SambaProvider(GioProvider):
 	def get_protocol_icon(self):
 		"""Return protocol icon name"""
 		return 'samba'
+
+	def get_support(self):
+		"""Return supported options by provider"""
+		return ()
 
 
 class FtpProvider(GioProvider):
@@ -330,6 +335,10 @@ class NetworkProvider(GioProvider):
 		"""Return protocol icon name"""
 		return 'network-workgroup'
 
+	def get_support(self):
+		"""Return supported options by provider"""
+		return ()
+
 
 class TrashProvider(GioProvider):
 	is_local = True
@@ -338,6 +347,10 @@ class TrashProvider(GioProvider):
 	def get_protocol_icon(self):
 		"""Return protocol icon name"""
 		return 'user-trash'
+
+	def get_support(self):
+		"""Return supported options by provider"""
+		return ()
 
 
 class DavProvider(GioProvider):
@@ -348,6 +361,13 @@ class DavProvider(GioProvider):
 		"""Return protocol icon name"""
 		return 'network'
 
+	def get_support(self):
+		"""Return supported options by provider"""
+		return (
+			Support.SET_ACCESS,
+			Support.SET_TIMESTAMP,
+		)
+
 
 class DavsProvider(GioProvider):
 	is_local = False
@@ -356,3 +376,10 @@ class DavsProvider(GioProvider):
 	def get_protocol_icon(self):
 		"""Return protocol icon name"""
 		return 'network'
+
+	def get_support(self):
+		"""Return supported options by provider"""
+		return (
+			Support.SET_ACCESS,
+			Support.SET_TIMESTAMP,
+		)

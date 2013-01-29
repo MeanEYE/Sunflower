@@ -6,8 +6,9 @@ import locale
 import time
 import pwd
 import grp 
-
 import common
+
+from plugin_base.provider import Support
 
 
 class Column:
@@ -320,8 +321,8 @@ class PropertiesWindow(gtk.Window):
 
 		# for remote file systems simply set owner and group
 		else:
-			self._list_owner.append((stat.owner_name, stat.group_id))
-			self._list_group.append((stat.group_name, stat.group_id))
+			self._list_owner.append((stat.user_id, stat.user_id))
+			self._list_group.append((stat.group_id, stat.group_id))
 			self._combobox_owner.set_active(0)
 			self._combobox_group.set_active(0)
 
@@ -572,10 +573,24 @@ class PropertiesWindow(gtk.Window):
 
 		table_ownership.attach(self._combobox_group, 1, 2, 1, 2)
 
-		# make comboboxes insensitive if filesystem is remote
-		if not self._provider.is_local:
+		# make controls insensitive if provider doesn't support them
+		supported_features = self._provider.get_support()
+
+		if Support.SET_OWNER not in supported_features:
 			self._combobox_owner.set_sensitive(False)
 			self._combobox_group.set_sensitive(False)
+
+		if Support.SET_ACCESS not in supported_features:
+			self._permission_owner_read.set_sensitive(False)
+			self._permission_owner_write.set_sensitive(False)
+			self._permission_owner_execute.set_sensitive(False)
+			self._permission_group_read.set_sensitive(False)
+			self._permission_group_write.set_sensitive(False)
+			self._permission_group_execute.set_sensitive(False)
+			self._permission_others_read.set_sensitive(False)
+			self._permission_others_write.set_sensitive(False)
+			self._permission_others_execute.set_sensitive(False)
+			self._permission_octal_entry.set_sensitive(False)
 
 		# pack interface
 		frame_access.add(table_access)

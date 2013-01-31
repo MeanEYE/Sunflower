@@ -1329,14 +1329,31 @@ class FileList(ItemList):
 
 	def _change_title_text(self, text=None):
 		"""Change title label text and add free space display"""
-		if text is None: text = self.path
+		if text is None:
+			text = self.path
 
+		# get system information
 		system_size = self.get_provider().get_system_size(self.path)
+
+		# format numbers
 		size_available = common.format_size(system_size.size_available, self._size_format)
 		size_total = common.format_size(system_size.size_total, self._size_format)
 
+		# calculate percent available
+		if system_size.size_total > 0:
+			percent_available = 100.0 * system_size.size_available / system_size.size_total
+
+		else:
+			percent_available = 0
+
 		self._title_bar.set_title(text)
-		self._title_bar.set_subtitle('{2} {0} - {3} {1}'.format(size_available, size_total, _('Free:'), _('Total:')))
+		self._title_bar.set_subtitle('{3} {0} - {4} {1} - {2:.2f}%'.format(
+							size_available, 
+							size_total, 
+							percent_available,
+							_('Free:'), 
+							_('Total:')
+						))
 
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""

@@ -983,13 +983,13 @@ class FileList(ItemList):
 				reverse * item_list.get_value(iter1, Column.IS_PARENT_DIR),
 				reverse * item_list.get_value(iter1, Column.IS_DIR),
 				value1
-				)
+			)
 
 		item2 = (
 				reverse * item_list.get_value(iter2, Column.IS_PARENT_DIR),
 				reverse * item_list.get_value(iter2, Column.IS_DIR),
 				value2
-				)
+			)
 
 		return cmp(item1, item2)
 
@@ -1346,6 +1346,7 @@ class FileList(ItemList):
 		else:
 			percent_available = 0
 
+		# set title and subtitle
 		self._title_bar.set_title(text)
 		self._title_bar.set_subtitle('{3} {0} - {4} {1} - {2:.2f}%'.format(
 							size_available, 

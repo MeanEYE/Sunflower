@@ -268,7 +268,8 @@ class FileList(ItemList):
 		self._item_list.set_grid_lines(grid_lines)
 
 		# set sort function
-		if self._sort_column is None:
+		if self._sort_column is None \
+		or self._sort_column not in column_sort_data:
 			# default sort by name
 			self._sort_column = Column.NAME
 			self._sort_ascending = True

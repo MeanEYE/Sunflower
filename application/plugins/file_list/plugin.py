@@ -220,12 +220,23 @@ class FileList(ItemList):
 		class_list = self._parent.get_column_extension_classes(self.__class__)
 
 		for ExtensionClass in class_list:
-			column = ExtensionClass(self, self._store).get_column()
+			extension = ExtensionClass(self, self._store)
+			column = extension.get_column()
 
 			if column is not None:
-				column.connect('notify::width', self._column_resized)
-				column.set_reorderable(True)
+				sort_data = extension.get_sort_column()
 
+				# configure column
+				column.set_reorderable(True)
+				column.set_resizable(True)
+				column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+
+				# connect signals
+				column.connect('notify::width', self._column_resized)
+				column.connect('clicked', self._set_sort_function, sort_data)
+
+				# add new column to lists for proper handling
+				column_sort_data[sort_data] = column
 				self._columns.append(column)
 				self._item_list.append_column(column)
 
@@ -961,7 +972,7 @@ class FileList(ItemList):
 	def _apply_sort_function(self):
 		"""Apply sort settings"""
 		# set sort indicator only on one column
-		for column in self._item_list.get_columns():
+		for column in self._columns:
 			selected = column is self._sort_column_widget
 			column.set_sort_indicator(selected)
 

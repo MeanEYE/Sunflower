@@ -58,7 +58,7 @@ class ItemList(PluginBase):
 		self._sort_ascending = self._options.get('sort_ascending')
 		self._sort_column_widget = None
 		self._sort_sensitive = self._parent.options.section('item_list').get('case_sensitive_sort')
-		self._columns = None
+		self._columns = []
 
 		# bookmarks button
 		self._bookmarks_button = gtk.Button()

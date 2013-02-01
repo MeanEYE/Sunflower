@@ -348,10 +348,7 @@ class ItemList(PluginBase):
 		options = self._parent.plugin_options
 
 		# order was not specified, try to restore from config
-		if order is None \
-		and options.has_section(self._name) \
-		and options.section(self._name).has('columns'):
-			order = options.section(self._name).get('columns')
+		order = order or options.section(self._name).get('columns')
 
 		# if we still didn't manage to get order, return
 		if order is None:
@@ -1214,7 +1211,7 @@ class ItemList(PluginBase):
 
 	def _column_changed(self, widget, data=None):
 		"""Handle adding, removing and reordering columns"""
-		columns = self._item_list.get_columns()
+		columns = filter(lambda column: column.get_visible(), self._item_list.get_columns())
 		column_names = map(lambda column: column.get_data('name'), columns)
 
 		# apply column change to other objects

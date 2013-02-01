@@ -58,6 +58,8 @@ class Column:
 	COLOR = 11
 	ICON = 12
 	SELECTED = 13
+	USER_ID = 14
+	GROUP_ID = 15
 
 
 class FileList(ItemList):
@@ -101,7 +103,9 @@ class FileList(ItemList):
 								bool,	# Column.IS_PARENT_DIR
 								str,	# Column.COLOR
 								str,	# Column.ICON
-								bool	# Column.SELECTED
+								bool,	# Column.SELECTED
+								int,	# Column.USER_ID
+								int,	# Column.GROUP_ID
 							)
 
 		# set item list model
@@ -179,7 +183,7 @@ class FileList(ItemList):
 		col_date.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
 
 		# register columns
-		self._columns = (col_name, col_extension, col_size, col_mode, col_date)
+		self._columns = [col_name, col_extension, col_size, col_mode, col_date]
 
 		# create column editor if needed
 		if self.column_editor is None:
@@ -189,9 +193,6 @@ class FileList(ItemList):
 		# set default column sizes for file list
 		self._columns_size = (200, 50, 70, 50, 90)
 		self._create_default_column_sizes()
-
-		# resize columns to saved values
-		self._resize_columns(self._columns)
 
 		# create a list of columns
 		column_sort_data = {
@@ -220,8 +221,16 @@ class FileList(ItemList):
 
 		for ExtensionClass in class_list:
 			column = ExtensionClass(self, self._store).get_column()
+
 			if column is not None:
+				column.connect('notify::width', self._column_resized)
+				column.set_reorderable(True)
+
+				self._columns.append(column)
 				self._item_list.append_column(column)
+
+		# resize columns to saved values
+		self._resize_columns(self._columns)
 
 		# set column order
 		self._reorder_columns()
@@ -1214,7 +1223,9 @@ class FileList(ItemList):
 					False,
 					None,
 					icon,
-					None
+					None,
+					file_stat.user_id,
+					file_stat.group_id
 				)
 
 			result = self._store.append(props)
@@ -1466,7 +1477,9 @@ class FileList(ItemList):
 							True,
 							None,
 							'up',
-							None
+							None,
+							0,
+							0
 						))
 
 		# preload items

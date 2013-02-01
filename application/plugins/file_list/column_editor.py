@@ -11,7 +11,11 @@ class FileList_ColumnEditor(ColumnEditorExtension):
 		self._visible = []
 		self._sizes = {}
 
-		for column in parent._columns:
+	def __update_column_list(self):
+		"""Update list of available columns"""
+		self._columns = []
+
+		for column in self._parent._columns:
 			self._columns.append(column.get_data('name'))
 
 	def _save_settings(self):
@@ -28,6 +32,9 @@ class FileList_ColumnEditor(ColumnEditorExtension):
 	def _load_settings(self):
 		"""Load values from config"""
 		section = self._config.section(self._parent_name)
+
+		# update columns
+		self.__update_column_list()
 
 		if section is None:
 			return

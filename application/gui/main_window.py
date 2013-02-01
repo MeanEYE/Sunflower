@@ -2492,8 +2492,8 @@ class MainWindow(gtk.Window):
 		result = []
 
 		for ListClass, ExtensionClass in self.column_extension_classes:
-			if issubclass(ListClass, BaseClass):
-				result.append(ListClass)
+			if issubclass(BaseClass, ListClass):
+				result.append(ExtensionClass)
 
 		return result
 

@@ -24,4 +24,8 @@ class ColumnExtension:
 
 	def get_column(self):
 		"""Get column object to be added to the list"""
-		pass
+		return self._column
+
+	def get_sort_column(self):
+		"""Get column sort number"""
+		return None

@@ -5,22 +5,22 @@ import user
 import fnmatch
 import common
 
-from plugin_base.monitor import MonitorSignals, MonitorError
-from local_provider import LocalProvider
-from gio_provider import SambaProvider, FtpProvider, SftpProvider
-from gio_provider import NetworkProvider, TrashProvider, DavProvider, DavsProvider
-from gio_extension import SambaExtension, FtpExtension, DavExtension
 from column_editor import FileList_ColumnEditor
-from operation import DeleteOperation, CopyOperation, MoveOperation
-from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
-from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
+from gio_extension import SambaExtension, FtpExtension, DavExtension
+from gio_provider import NetworkProvider, TrashProvider, DavProvider, DavsProvider
+from gio_provider import SambaProvider, FtpProvider, SftpProvider
 from gui.input_dialog import ApplicationSelectDialog
+from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
+from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
 from gui.properties_window import PropertiesWindow
-from widgets.thumbnail_view import ThumbnailView
-from threading import Thread, Event
-from plugin_base.item_list import ItemList
-from plugin_base.provider import FileType, Mode as FileMode
+from local_provider import LocalProvider
+from operation import DeleteOperation, CopyOperation, MoveOperation
 from parameters import Parameters
+from plugin_base.item_list import ItemList
+from plugin_base.monitor import MonitorSignals, MonitorError
+from plugin_base.provider import FileType, Mode as FileMode
+from threading import Thread, Event
+from widgets.thumbnail_view import ThumbnailView
 
 
 def register_plugin(application):

@@ -1,3 +1,32 @@
+Version 0.1a-53
+  + Configurable accelerators for main menu.
+  + Allow changing aspect ratio of notebooks.
+  + Added free space in percent to tab subtitle.
+  + Added Owner and Group columns plugin.
+  + Added Dav and Davs provider.
+  + Added Arseniy to AUTHORS file.
+  * Updated Ukrainian translation.
+  * Updated Hungarian translation.
+  * Sort key bindings list alphabetically.
+  * Redone drawing code for title bar.
+  * Properly return get_support for some providers.
+  * Prefer GTK3 bookmarks file if present.
+  * In item properties window make controls insensitive if provider doesn't support features.
+  * Fixed sorting issues with custom columns.
+  * Fixed issues with embeding external application.
+  * Fixed issue with unicode file names in rename dialog.
+  * Fixed issue with localized text sticking out of controls in item properties window.
+  * Fixed issue with invisible columns reappearing after reorder.
+  * Fixed issue with focusing terminal tab when type is VTE.
+  * Fixed exception when canceling create file/directory dialog.
+  * Fixed class matching for get_column_extensions method.
+  * Disable main window accelerator group when command entry gets focus.
+  * Changed about dialog to gtk.AboutDialog.
+  * Better handling of column list to properly detect column extensions.
+  * Applied full license to COPYING.
+  - Removed warning message about xterm. Everything works now.
+  - Removed change log dialog.
+
 Version 0.1a-52
   + Enable navigation with a single mouse click.
   + Keyboard accelerator to navigate to root.

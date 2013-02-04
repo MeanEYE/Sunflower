@@ -746,9 +746,15 @@ class MainWindow(gtk.Window):
 			self.bookmarks.add_bookmark(bookmark_data['name'], 'folder', bookmark_data['uri'])
 
 		# add system bookmarks if needed
-		if self.bookmark_options.get('system_bookmarks') \
-		and os.path.exists(os.path.join(user.home, '.gtk-bookmarks')):
-			with open(os.path.join(user.home, '.gtk-bookmarks'), 'r') as raw_file:
+		bookmarks_files = (
+					os.path.join(user.home, '.config', 'gtk-3.0', 'bookmarks'),
+					os.path.join(user.home, '.gtk-bookmarks')
+				)
+
+		available_files = filter(lambda path: os.path.exists(path), bookmarks_files)
+
+		if self.bookmark_options.get('system_bookmarks') and len(available_files) > 0:
+			with open(available_files[0], 'r') as raw_file:
 				lines = raw_file.readlines(False)
 
 			# add bookmarks

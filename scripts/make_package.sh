@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#   Sunflower Package Build Script (Version 0.0.3)
+#   Sunflower Package Build Script (Version 0.0.5)
 #   Written by Wojciech Kluczka <wojtekkluczka@gmail.com>
 #
 
@@ -44,7 +44,8 @@ function make_deb() {
 	echo "Section: misc"                                            >> $build_dir/DEBIAN/control
 	echo "Priority: optional"                                       >> $build_dir/DEBIAN/control
 	echo "Architecture: all"                                        >> $build_dir/DEBIAN/control
-	echo "Depends: python, python-gtk2, python-vte, python-notify"  >> $build_dir/DEBIAN/control
+	echo "Depends: python, python-gtk2"                             >> $build_dir/DEBIAN/control
+	echo "Recommends: python-notify, python-vte"                    >> $build_dir/DEBIAN/control
 	echo "Suggests: python-gnome2, python-argparse, python-mutagen" >> $build_dir/DEBIAN/control
 	if test "$packager" != "none"; then
 		echo "Maintainer: $packager"                                >> $build_dir/DEBIAN/control
@@ -61,18 +62,21 @@ function make_deb() {
 function make_pkg() {
 	install_sunflower src
 
-	echo "pkgname=sunflower"                           >  PKGBUILD
-	echo "pkgver=$version"                             >> PKGBUILD
-	echo "pkgrel=$release"                             >> PKGBUILD
-	echo "arch=(any)"                                  >> PKGBUILD
-	echo "url=https://code.google.com/p/sunflower-fm/" >> PKGBUILD
-	echo "license=(GPLv3)"                             >> PKGBUILD
-	echo "depends=(pygtk python2-notify vte)"          >> PKGBUILD
-	echo "pkgdesc='$short_description'"                >> PKGBUILD
-	echo ""                                            >> PKGBUILD
-	echo "function build() {"                          >> PKGBUILD
-	echo "    cp -a * \$pkgdir"                        >> PKGBUILD
-	echo "}"                                           >> PKGBUILD
+	echo "pkgname=sunflower"                                   >  PKGBUILD
+	echo "pkgver=$version"                                     >> PKGBUILD
+	echo "pkgrel=$release"                                     >> PKGBUILD
+	echo "arch=(any)"                                          >> PKGBUILD
+	echo "url=https://code.google.com/p/sunflower-fm/"         >> PKGBUILD
+	echo "license=(GPLv3)"                                     >> PKGBUILD
+	echo "depends=(pygtk)"                                     >> PKGBUILD
+	echo "optdepends=('python2-notify: notifications',"        >> PKGBUILD
+	echo " 'python2-gnomekeyring: access to saved passwords'," >> PKGBUILD
+	echo " 'vte: support for built-in terminal')"              >> PKGBUILD
+	echo "pkgdesc='$short_description'"                        >> PKGBUILD
+	echo ""                                                    >> PKGBUILD
+	echo "function build() {"                                  >> PKGBUILD
+	echo "    cp -a * \$pkgdir"                                >> PKGBUILD
+	echo "}"                                                   >> PKGBUILD
 
 	makepkg --noextract --force
 	
@@ -81,11 +85,11 @@ function make_pkg() {
 
 function make_rpm() {	
 	case $distro in
-		fedora) requires="python pygtk2 vte notify-python";;
-		mageia) requires="python pygtk2 python-vte python-notify";;
-		mandriva) requires="python pygtk2 python-notify";;
-		opensuse) requires="python python-gtk python-vte python-notify";;
-		pclinuxos) requires="python pygtk2.0 python-vte python-notify";;
+		fedora) requires="python pygtk2";;
+		mageia) requires="python pygtk2";;
+		mandriva) requires="python pygtk2";;
+		opensuse) requires="python python-gtk";;
+		pclinuxos) requires="python pygtk2.0";;
 		*) echo "Unsupported distro"; exit 6;;
 	esac
 

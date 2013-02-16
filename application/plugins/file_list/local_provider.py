@@ -53,8 +53,11 @@ class LocalProvider(Provider):
 		real_path = self._real_path(path, relative_to)
 		tmp = gio.File(real_path)
 
-		if not tmp.trash():
-			raise TrashError(_('Error trashing specified path}', real_path))
+		try:
+			tmp.trash()
+
+		except Exception as error:
+			raise TrashError(error)
 
 	def create_file(self, path, mode=0644, relative_to=None):
 		"""Create empty file with specified mode set"""

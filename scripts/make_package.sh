@@ -45,8 +45,8 @@ function make_deb() {
 	echo "Priority: optional"                                       >> $build_dir/DEBIAN/control
 	echo "Architecture: all"                                        >> $build_dir/DEBIAN/control
 	echo "Depends: python, python-gtk2"                             >> $build_dir/DEBIAN/control
-	echo "Recommends: python-notify, python-vte"                    >> $build_dir/DEBIAN/control
-	echo "Suggests: python-gnome2, python-argparse, python-mutagen" >> $build_dir/DEBIAN/control
+	echo "Recommends: python-notify"                                >> $build_dir/DEBIAN/control
+	echo "Suggests: python-gnome2, python-argparse, python-mutagen, python-vte" >> $build_dir/DEBIAN/control
 	if test "$packager" != "none"; then
 		echo "Maintainer: $packager"                                >> $build_dir/DEBIAN/control
 	fi

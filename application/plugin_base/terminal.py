@@ -255,6 +255,7 @@ class Terminal(PluginBase):
 		# modify plugin accelerator group so we can have terminal auto-complete with tab
 		plugin_group = self._accelerator_groups[0]
 		plugin_group.disable_accelerator('focus_opposite_object')
+		plugin_group.disable_accelerator('close_tab')
 
 		# configure accelerator group
 		group.set_name('terminal')
@@ -265,12 +266,14 @@ class Terminal(PluginBase):
 		group.add_method('copy_to_clipboard', _('Copy selection to clipboard'), self._copy_selection)
 		group.add_method('paste_from_clipboard', _('Paste from clipboard'), self._paste_selection)
 		group.add_method('focus_opposite_object', _('Focus opposite object'), self._parent.focus_opposite_object)
+		group.add_method('close_tab', _('Close tab'), self._close_tab)
 
 		# configure accelerators
 		group.set_accelerator('create_terminal', keyval('z'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('copy_to_clipboard', keyval('c'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('paste_from_clipboard', keyval('v'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('focus_opposite_object', keyval('Tab'), gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK)
+		group.set_accelerator('close_tab', keyval('w'), gtk.gdk.CONTROL_MASK)
 
 		# add accelerator group to the list
 		self._accelerator_groups.append(group)

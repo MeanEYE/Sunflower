@@ -1423,6 +1423,20 @@ class MainWindow(gtk.Window):
 						metavar='PATH',
 						dest='right_tabs'
 					)
+		parser.add_argument(
+						'-L', '--left-terminal',
+						action='append',
+						help=_('open terminal tab on the left notebook'),
+						metavar='PATH',
+						dest='left_terminals'
+					)
+		parser.add_argument(
+						'-R', '--right-terminal',
+						action='append',
+						help=_('open terminal tab on the right notebook'),
+						metavar='PATH',
+						dest='right_terminals'
+					)
 
 		self.arguments = parser.parse_args()
 
@@ -1630,6 +1644,7 @@ class MainWindow(gtk.Window):
 	def run(self):
 		"""Start application"""
 		DefaultList = self.plugin_classes['file_list']
+		DefaultTerminal = self.plugin_classes['system_terminal']
 
 		if self.arguments is not None and self.arguments.dont_load_tabs:
 			# if specified tab list is empty, create default
@@ -1661,6 +1676,18 @@ class MainWindow(gtk.Window):
 					options = Parameters()
 					options.set('path', path)
 					self.create_tab(self.right_notebook, DefaultList, options)
+
+			if self.arguments.left_terminals is not None:
+				for path in self.arguments.left_terminals:
+					options = Parameters()
+					options.set('path', path)
+					self.create_tab(self.left_notebook, DefaultTerminal, options)
+
+			if self.arguments.right_terminals is not None:
+				for path in self.arguments.right_terminals:
+					options = Parameters()
+					options.set('path', path)
+					self.create_tab(self.right_notebook, DefaultTerminal, options)
 
 		# focus active notebook
 		active_notebook_index = self.options.get('active_notebook')

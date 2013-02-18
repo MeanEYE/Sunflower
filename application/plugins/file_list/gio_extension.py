@@ -1,7 +1,9 @@
 import gtk
 import gio
 
-from dialogs import SambaInputDialog, SambaResult, FtpInputDialog, FtpResult, DavInputDialog, DavResult
+from dialogs import SambaInputDialog, SambaResult
+from dialogs import FtpInputDialog, FtpResult, SftpInputDialog
+from dialogs import DavInputDialog, DavResult
 from keyring import KeyringCreateError, EntryType
 from plugin_base.mount_manager_extension import MountManagerExtension, ExtensionFeatures
 from gui.input_dialog import InputDialog
@@ -491,7 +493,7 @@ class SambaExtension(GioExtension):
 
 class FtpExtension(GioExtension):
 	"""Mount manager extension that provides editing and mounting
-	of FTP (and SFTP) shares through GIO backend.
+	of FTP shares through GIO backend.
 
 	"""
 	scheme = 'ftp'
@@ -644,12 +646,16 @@ class FtpExtension(GioExtension):
 					'requires_login': row[FtpColumn.REQUIRES_LOGIN] 
 				})
 
+	def _create_dialog(self, parent):
+		"""Create input dialog for mount"""
+		return FtpInputDialog(parent)
+
 	def _add_mount(self, widget, data=None):
 		"""Present dialog to user for creating a new mount"""
 		keyring_manager = self._parent._application.keyring_manager
 
 		# create dialog and get response from user
-		dialog = FtpInputDialog(self._window)
+		dialog = self._create_dialog(self._window)
 		dialog.set_keyring_available(keyring_manager.is_available())
 		response = dialog.get_response()
 
@@ -740,7 +746,7 @@ class FtpExtension(GioExtension):
 		item_list, selected_iter = selection.get_selected()
 
 		if selected_iter is not None:
-			dialog = FtpInputDialog(self._window)
+			dialog = self._create_dialog(self._window)
 			old_name = item_list.get_value(selected_iter, FtpColumn.NAME)
 
 			# set dialog parameters
@@ -820,6 +826,22 @@ class FtpExtension(GioExtension):
 	def get_information(self):
 		"""Get extension information"""
 		return 'folder-remote-ftp', 'FTP'
+
+
+class SftpExtension(FtpExtension):
+	"""Mount manager extension that provides editing and mounting
+	of SFTP shares through GIO backend.
+
+	"""
+	scheme = 'sftp'
+
+	def _create_dialog(self, parent):
+		"""Create input dialog for mount"""
+		return SftpInputDialog(parent)
+
+	def get_information(self):
+		"""Get extension information"""
+		return 'folder-remote-ftp', 'SFTP'
 
 
 class DavExtension(GioExtension):

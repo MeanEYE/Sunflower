@@ -428,6 +428,14 @@ class FtpInputDialog:
 		return (code, result)
 
 
+class SftpInputDialog(FtpInputDialog):
+	"""Dialog used for editing and creating SFTP connections"""
+
+	def __init__(self, parent):
+		FtpInputDialog.__init__(self, parent)
+		self.set_title(_('Create SFTP mount'))
+
+
 class DavInputDialog:
 	"""Dialog used for editing and creating FTP connections"""
 

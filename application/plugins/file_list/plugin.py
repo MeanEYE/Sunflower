@@ -6,7 +6,7 @@ import fnmatch
 import common
 
 from column_editor import FileList_ColumnEditor
-from gio_extension import SambaExtension, FtpExtension, DavExtension
+from gio_extension import SambaExtension, FtpExtension, DavExtension, SftpExtension
 from gio_provider import NetworkProvider, TrashProvider, DavProvider, DavsProvider
 from gio_provider import SambaProvider, FtpProvider, SftpProvider
 from gui.input_dialog import ApplicationSelectDialog
@@ -40,6 +40,7 @@ def register_plugin(application):
 	# register mount manager extension
 	application.register_mount_manager_extension(SambaExtension)
 	application.register_mount_manager_extension(FtpExtension)
+	application.register_mount_manager_extension(SftpExtension)
 	application.register_mount_manager_extension(DavExtension)
 
 

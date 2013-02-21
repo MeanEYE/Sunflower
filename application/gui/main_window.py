@@ -91,6 +91,7 @@ class MainWindow(gtk.Window):
 		self.column_extension_classes = []
 		self.column_editor_extensions = []
 		self.popup_menu_actions = []
+		self.viewer_extensions_classes = []
 
 		# list of protected plugins
 		self.protected_plugins = ('file_list', 'system_terminal')
@@ -2500,6 +2501,11 @@ class MainWindow(gtk.Window):
 		data = (mime_types, menu_item)
 		self.popup_menu_actions.append(data)
 
+	def register_viewer_extension(self, mime_types, ExtensionClass):
+		"""Register viewer extension class for specified list of mime types"""
+		data = (mime_types, ExtensionClass)
+		self.viewer_extensions_classes.append(data)
+
 	def plugin_class_exists(self, class_name):
 		"""Check if specified class name exists in active plugins"""
 		result = False
@@ -2526,6 +2532,20 @@ class MainWindow(gtk.Window):
 
 		for ListClass, ExtensionClass in self.column_extension_classes:
 			if issubclass(BaseClass, ListClass):
+				result.append(ExtensionClass)
+
+		return result
+
+	def get_viewer_extension_classes(self, mime_type):
+		"""Get list of extension classes for specified mime type"""
+		result = []
+		is_subset = self.associations_manager.is_mime_type_subset
+		
+		# get all classes that match any of the mime types defined
+		for mime_types, ExtensionClass in self.viewer_extensions_classes:
+			matched_types = filter(lambda iter_mime_type: is_subset(mime_type, iter_mime_type), mime_types)
+			
+			if len(matched_types) > 0:
 				result.append(ExtensionClass)
 
 		return result

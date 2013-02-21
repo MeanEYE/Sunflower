@@ -14,21 +14,21 @@ class Viewer:
 	def __init__(self, path, provider, parent):
 		self._window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 
-		self._path = path
+		self.path = path
 		self._provider = provider
 		self._parent = parent
 		self._application = self._parent._parent
 		self._page_count = 0
 
 		associations_manager = self._application.associations_manager
-		mime_type = associations_manager.get_mime_type(path)
+		self._mime_type = associations_manager.get_mime_type(path)
 
-		if associations_manager.is_mime_type_unknown(mime_type):
+		if associations_manager.is_mime_type_unknown(self._mime_type):
 			data = associations_manager.get_sample_data(path, provider)
-			mime_type = associations_manager.get_mime_type(data=data)
+			self._mime_type = associations_manager.get_mime_type(data=data)
 
 		# configure window
-		self._window.set_title(_('{0} - Viewer').format(os.path.basename(self._path)))
+		self._window.set_title(_('{0} - Viewer').format(os.path.basename(self.path)))
 		self._window.set_size_request(800, 600)
 		self._window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self._window.set_resizable(True)
@@ -42,16 +42,16 @@ class Viewer:
 
 		# create user interface according to mime type
 		vbox = gtk.VBox(homogeneous=False, spacing=0)
-		status_bar = StatusBar()
-		status_bar.set_border_width(2)
-		status_bar.add_group_with_icon('mime_type', 'document-properties', mime_type)
-		status_bar.show()
+		self.status_bar = StatusBar()
+		self.status_bar.set_border_width(2)
+		self.status_bar.add_group_with_icon('mime_type', 'document-properties', self._mime_type)
+		self.status_bar.show()
 
 		self._notebook = gtk.Notebook()
 		self._notebook.set_border_width(2)
 
 		# create page for executables
-		if mime_type in ('application/x-executable', 'application/x-sharedlib') \
+		if self._mime_type in ('application/x-executable', 'application/x-sharedlib') \
 		and executable_exists('nm'):
 			# get output from command
 			data = ''
@@ -71,9 +71,9 @@ class Viewer:
 			self._create_text_page(_('Executable'), data)
 
 		# create text page if needed
-		if associations_manager.is_mime_type_subset(mime_type, 'text/plain'):
+		if associations_manager.is_mime_type_subset(self._mime_type, 'text/plain'):
 			# get data from the file
-			raw_file = self._provider.get_file_handle(self._path, FileMode.READ)
+			raw_file = self._provider.get_file_handle(self.path, FileMode.READ)
 			data = raw_file.read()
 			raw_file.close()
 
@@ -81,7 +81,7 @@ class Viewer:
 			self._create_text_page(_('Text'), data)
 
 		# create image page if needed
-		if mime_type.startswith('image/'):
+		if self._mime_type.startswith('image/'):
 			container = gtk.ScrolledWindow()
 			container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
 			container.set_shadow_type(gtk.SHADOW_NONE)
@@ -89,15 +89,18 @@ class Viewer:
 			viewport = gtk.Viewport()
 
 			image = gtk.Image()
-			image.set_from_file(self._path)
+			image.set_from_file(self.path)
 
 			viewport.add(image)
 			container.add(viewport)
 			self._insert_page(_('Image'), container)
 
+		# create extensions
+		self._create_extensions()
+
 		# pack user interface
 		vbox.pack_start(self._notebook, True, True, 0)
-		vbox.pack_start(status_bar, False, False, 0)
+		vbox.pack_start(self.status_bar, False, False, 0)
 
 		self._window.add(vbox)
 		
@@ -118,6 +121,19 @@ class Viewer:
 			dialog.destroy()
 
 			self._window.destroy()
+
+	def _create_extensions(self):
+		"""Create extension widgets"""
+		class_list = self._application.get_viewer_extension_classes(self._mime_type)
+
+		# we don't have any registered extensions for this mime type
+		if len(class_list) == 0:
+			return
+
+		# create all extensions and populate notebook
+		for ExtensionClass in class_list:
+			extension = ExtensionClass(self)
+			self._append_page(extension.get_title(), extension.get_container())
 
 	def _append_page(self, title, container):
 		"""Append new page to viewer"""

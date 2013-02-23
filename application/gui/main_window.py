@@ -1056,12 +1056,18 @@ class MainWindow(gtk.Window):
 
 	def _get_plugin_list(self):
 		"""Get list of plugins"""
-		# get plugin list
-		path = os.path.abspath(os.path.join('application', 'plugins'))
+		user_path = os.path.join(self.config_path, 'plugins')
+		system_path = os.path.abspath(os.path.join('application', 'plugins'))
 
-		# get matching directories
-		plugin_list = filter(lambda item: os.path.isdir(os.path.join(path, item)), os.listdir(path))
-		plugin_list = filter(lambda item: os.path.exists(os.path.join(path, item, 'plugin.py')), plugin_list)
+		# get list of system wide plugins
+		plugin_list = filter(lambda item: os.path.isdir(os.path.join(system_path, item)), os.listdir(system_path))
+		plugin_list = filter(lambda item: os.path.exists(os.path.join(system_path, item, 'plugin.py')), plugin_list)
+
+		# get user specific plugins
+		if os.path.isdir(user_path):
+			user_list = filter(lambda item: os.path.isdir(os.path.join(user_path, item)), os.listdir(user_path))
+			user_list = filter(lambda item: os.path.exists(os.path.join(user_path, item, 'plugin.py')), user_list)
+			plugin_list.extend(user_list)
 
 		return plugin_list
 
@@ -2041,8 +2047,15 @@ class MainWindow(gtk.Window):
 	def save_config(self):
 		"""Save configuration to file"""
 		try:
+			# make sure config directory
 			if not os.path.isdir(self.config_path):
 				os.makedirs(self.config_path)
+
+			# make sure plugins directory is present
+			plugins_path = os.path.join(self.config_path, 'plugins')
+			if not os.path.isdir(plugins_path):
+				os.makedirs(plugins_path)
+				open(os.path.join(plugins_path, '__init__.py'), 'w').close()
 
 			self.options.save()
 			self.window_options.save()

@@ -280,14 +280,16 @@ class Terminal(PluginBase):
 
 	def _copy_selection(self, widget=None, data=None):
 		"""Copy selection from terminal"""
-		if self._terminal.get_has_selection():
+		if self._terminal_type == TerminalType.VTE and self._terminal.get_has_selection():
 			self._terminal.copy_clipboard()
 
 		return True
 
 	def _paste_selection(self, widget=None, data=None):
 		"""Paste selection from terminal"""
-		self._terminal.paste_clipboard()
+		if self._terminal_type == TerminalType.VTE:
+			self._terminal.paste_clipboard()
+
 		return True
 
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):

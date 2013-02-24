@@ -13,14 +13,15 @@ except:
 	sys.exit(1)
 
 # add search path
-path_application = os.path.abspath(os.path.dirname(sys.argv[0]))
-# sys.path.insert(1, path_application)
+application_path = os.path.abspath(os.path.dirname(sys.argv[0]))
+if application_path not in sys.path:
+	sys.path.insert(1, application_path)
 
 # initialize threads
 gtk.gdk.threads_init()
 
 # change working directory
-os.chdir(os.path.dirname(path_application))
+os.chdir(os.path.dirname(application_path))
 
 # construct main application object
 from gui.main_window import MainWindow

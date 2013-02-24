@@ -280,17 +280,23 @@ class Terminal(PluginBase):
 
 	def _copy_selection(self, widget=None, data=None):
 		"""Copy selection from terminal"""
+		result = False
+
 		if self._terminal_type == TerminalType.VTE and self._terminal.get_has_selection():
 			self._terminal.copy_clipboard()
+			result = True
 
-		return True
+		return result
 
 	def _paste_selection(self, widget=None, data=None):
 		"""Paste selection from terminal"""
+		result = False
+
 		if self._terminal_type == TerminalType.VTE:
 			self._terminal.paste_clipboard()
+			result = True
 
-		return True
+		return result
 
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""
@@ -338,32 +344,33 @@ class Terminal(PluginBase):
 		options = self._parent.options
 		section = options.section('terminal')
 
-		# apply terminal scroll bar policy
-		show_scrollbars = section.get('show_scrollbars')
-		scrollbar_vertical = self._container.get_vscrollbar()
-		scrollbar_vertical.set_child_visible(show_scrollbars)
+		if self._terminal_type == TerminalType.VTE:
+			# apply terminal scroll bar policy
+			show_scrollbars = section.get('show_scrollbars')
+			scrollbar_vertical = self._container.get_vscrollbar()
+			scrollbar_vertical.set_child_visible(show_scrollbars)
 
-		# apply cursor shape
-		shape = section.get('cursor_shape')
-		shape_type = {
-				CursorShape.BLOCK: vte.CURSOR_SHAPE_BLOCK,
-				CursorShape.IBEAM: vte.CURSOR_SHAPE_IBEAM,
-				CursorShape.UNDERLINE: vte.CURSOR_SHAPE_UNDERLINE
-			}
-		self._terminal.set_cursor_shape(shape_type[shape])
+			# apply cursor shape
+			shape = section.get('cursor_shape')
+			shape_type = {
+					CursorShape.BLOCK: vte.CURSOR_SHAPE_BLOCK,
+					CursorShape.IBEAM: vte.CURSOR_SHAPE_IBEAM,
+					CursorShape.UNDERLINE: vte.CURSOR_SHAPE_UNDERLINE
+				}
+			self._terminal.set_cursor_shape(shape_type[shape])
 
-		# apply allow bold
-		self._terminal.set_allow_bold(section.get('allow_bold'))
+			# apply allow bold
+			self._terminal.set_allow_bold(section.get('allow_bold'))
 
-		# apply mouse autohiding
-		self._terminal.set_mouse_autohide(section.get('mouse_autohide'))
+			# apply mouse autohiding
+			self._terminal.set_mouse_autohide(section.get('mouse_autohide'))
 
-		# apply font
-		if section.get('use_system_font') and gconf is not None:
-			self.__set_system_font()
+			# apply font
+			if section.get('use_system_font') and gconf is not None:
+				self.__set_system_font()
 
-		else:
-			self._terminal.set_font_from_string(section.get('font'))
+			else:
+				self._terminal.set_font_from_string(section.get('font'))
 
 	def focus_main_object(self):
 		"""Give focus to main object"""

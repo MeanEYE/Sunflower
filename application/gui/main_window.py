@@ -1059,8 +1059,8 @@ class MainWindow(gtk.Window):
 
 	def _get_plugin_list(self):
 		"""Get list of plugins"""
-		user_path = os.path.join(self.config_path, 'user_plugins')
-		system_path = os.path.abspath(os.path.join('application', 'plugins'))
+		user_path = self.user_plugin_path
+		system_path = self.system_plugin_path
 
 		# get list of system wide plugins
 		plugin_list = filter(lambda item: os.path.isdir(os.path.join(system_path, item)), os.listdir(system_path))

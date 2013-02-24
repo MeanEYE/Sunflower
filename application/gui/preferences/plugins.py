@@ -196,8 +196,6 @@ class PluginsOptions(SettingsPage):
 		self._plugins.clear()
 
 		# get list of plugins
-		system_plugin_path = os.path.abspath(os.path.join('application', 'plugins'))
-		user_plugin_path = os.path.join(self._application.config_path, 'plugins')
 		plugin_list = self._application._get_plugin_list()
 		plugins_to_load = options.get('plugins')
 
@@ -214,8 +212,8 @@ class PluginsOptions(SettingsPage):
 			plugin_contact = None
 			plugin_description = _('This plugin has no description')
 
-			system_plugin_config = os.path.join(system_plugin_path, plugin, 'plugin.conf')
-			user_plugin_config = os.path.join(user_plugin_path, plugin, 'plugin.conf')
+			system_plugin_config = os.path.join(self._application.system_plugin_path, plugin, 'plugin.conf')
+			user_plugin_config = os.path.join(self._application.user_plugin_path, plugin, 'plugin.conf')
 
 			# prefer user plugin over system version
 			plugin_config = user_plugin_config if os.path.exists(user_plugin_config) else system_plugin_config

@@ -1,4 +1,5 @@
 import os
+import imp
 import sys
 import gtk
 import pango
@@ -124,8 +125,10 @@ class MainWindow(gtk.Window):
 		self.association_options = None
 		self.mount_options = None
 
-		# location of all configuration files
+		# config and plugin paths
 		self.config_path = None
+		self.system_plugin_path = None
+		self.user_plugin_path = None
 
 		# create a clipboard manager
 		self.clipboard = gtk.Clipboard()
@@ -1056,7 +1059,7 @@ class MainWindow(gtk.Window):
 
 	def _get_plugin_list(self):
 		"""Get list of plugins"""
-		user_path = os.path.join(self.config_path, 'plugins')
+		user_path = os.path.join(self.config_path, 'user_plugins')
 		system_path = os.path.abspath(os.path.join('application', 'plugins'))
 
 		# get list of system wide plugins
@@ -1076,6 +1079,10 @@ class MainWindow(gtk.Window):
 		plugin_files = self._get_plugin_list()
 		plugins_to_load = self.options.get('plugins')
 
+		# make sure user plugin path is in module search path
+		if self.config_path not in sys.path:
+			sys.path.append(self.config_path)
+
 		# only load protected plugins if command line parameter is specified
 		if self.arguments is not None and self.arguments.dont_load_plugins:
 			plugins_to_load = self.protected_plugins
@@ -1085,9 +1092,15 @@ class MainWindow(gtk.Window):
 
 		for file_name in plugin_files:
 			try:
+				# determine whether we need to load user plugin or system plugin
+				user_plugin_exists = os.path.exists(os.path.join(self.user_plugin_path, file_name)) 
+				load_user_plugin = user_plugin_exists and file_name not in self.protected_plugins
+
+				plugin_base_module = 'user_plugins' if load_user_plugin else 'plugins'
+
 				# import module
-				__import__('plugins.{0}.plugin'.format(file_name))
-				plugin = sys.modules['plugins.{0}.plugin'.format(file_name)]
+				__import__('{0}.{1}.plugin'.format(plugin_base_module, file_name))
+				plugin = sys.modules['{0}.{1}.plugin'.format(plugin_base_module, file_name)]
 
 				# call module register_plugin method
 				if hasattr(plugin, 'register_plugin'):
@@ -2052,10 +2065,9 @@ class MainWindow(gtk.Window):
 				os.makedirs(self.config_path)
 
 			# make sure plugins directory is present
-			plugins_path = os.path.join(self.config_path, 'plugins')
-			if not os.path.isdir(plugins_path):
-				os.makedirs(plugins_path)
-				open(os.path.join(plugins_path, '__init__.py'), 'w').close()
+			if not os.path.isdir(self.user_plugin_path):
+				os.makedirs(self.user_plugin_path)
+				open(os.path.join(self.user_plugin_path, '__init__.py'), 'w').close()
 
 			self.options.save()
 			self.window_options.save()
@@ -2094,6 +2106,11 @@ class MainWindow(gtk.Window):
 		else:
 			self.config_path = os.path.join(user.home, '.sunflower')
 
+		# generate plugins paths
+		self.user_plugin_path = os.path.join(self.config_path, 'user_plugins')
+		self.system_plugin_path = os.path.abspath(os.path.join('application', 'plugins'))
+
+		# create config parsers
 		self.options = Config('config', self)
 		self.window_options = Config('windows', self)
 		self.plugin_options = Config('plugins', self)

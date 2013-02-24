@@ -14,7 +14,7 @@ except:
 
 # add search path
 path_application = os.path.abspath(os.path.dirname(sys.argv[0]))
-sys.path.insert(1, path_application)
+# sys.path.insert(1, path_application)
 
 # initialize threads
 gtk.gdk.threads_init()

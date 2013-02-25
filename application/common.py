@@ -3,6 +3,8 @@ import user
 import subprocess
 import locale
 
+from xdg.BaseDirectory import xdg_config_home
+
 
 # user directories
 class UserDirectory:
@@ -81,7 +83,7 @@ def format_mode(mode, format):
 def get_user_directory(directory):
 	"""Get full path to current users predefined directory"""
 	result = None
-	config_file = os.path.join(user.home, '.config', 'user-dirs.dirs')
+	config_file = os.path.join(xdg_config_home, 'user-dirs.dirs')
 
 	if os.path.isfile(config_file):
 		# read configuration file

@@ -32,6 +32,7 @@ from tools.advanced_rename import AdvancedRename
 from tools.find_files import FindFiles
 from tools.version_check import VersionCheck
 from config import Config
+from xdg.BaseDirectory import xdg_config_home
 
 try:
 	# try to import argument parser
@@ -751,7 +752,7 @@ class MainWindow(gtk.Window):
 
 		# add system bookmarks if needed
 		bookmarks_files = (
-					os.path.join(user.home, '.config', 'gtk-3.0', 'bookmarks'),
+					os.path.join(xdg_config_home, 'gtk-3.0', 'bookmarks'),
 					os.path.join(user.home, '.gtk-bookmarks')
 				)
 
@@ -2101,8 +2102,8 @@ class MainWindow(gtk.Window):
 
 	def load_config(self):
 		"""Load configuration from file located in users home directory"""
-		if os.path.isdir(os.path.join(user.home, '.config')):
-			self.config_path = os.path.join(user.home, '.config', 'sunflower')
+		if os.path.isdir(xdg_config_home):
+			self.config_path = os.path.join(xdg_config_home, 'sunflower')
 		else:
 			self.config_path = os.path.join(user.home, '.sunflower')
 

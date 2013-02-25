@@ -82,12 +82,12 @@ def get_user_directory(directory):
 	"""Get full path to current users predefined directory"""
 	result = None
 
-	if 'XDG_CONFIG_HOME' in os.environ:
-		config_home = os.environ['XDG_CONFIG_HOME']
+	if 'XDG_xdg_config_home' in os.environ:
+		xdg_config_home = os.environ['XDG_xdg_config_home']
 	else:
-		config_home = os.path.join(user.home, '.config')
+		xdg_config_home = os.path.join(user.home, '.config')
 
-	config_file = os.path.join(config_home, 'user-dirs.dirs')
+	config_file = os.path.join(xdg_config_home, 'user-dirs.dirs')
 
 	if os.path.isfile(config_file):
 		# read configuration file

@@ -135,6 +135,17 @@ class AssociationManager:
 			
 		return result
 
+	def get_gio_application_by_id(self, id):
+		"""Get GIO AppInfo object for specified Id"""
+		result = None
+
+		for app_info in gio.app_info_get_all():
+			if app_info.get_id() == id:
+				result = app_info
+				break
+
+		return result
+
 	def get_application_list_for_type(self, mime_type):
 		"""Get list of associated programs for specified type"""
 		result = []
@@ -189,37 +200,36 @@ class AssociationManager:
 	def open_file(self, selection, application_info=None, exec_command=None):
 		"""Open filename using config file or specified execute command"""
 		if application_info is not None:
-			# get command from config file
-			command = application_info.command_line
+			# launch application using GIO API
+			application = self.get_gio_application_by_id(application_info.id)
+
+			if application is not None:
+				application.launch_uris(selection)
 			
 		elif exec_command is not None:
 			# use specified command
 			command = exec_command
 		
-		else:
-			# raise exception, we need at least one argument
-			raise AttributeError('Error opening file. We need command or application to be specified.')
-		
-		selection = map(lambda item: item.replace('"', '\\"'), selection)
-		exec_string = self.__format_command_string(selection, command)
+			selection = map(lambda item: item.replace('"', '\\"'), selection)
+			exec_string = self.__format_command_string(selection, command)
 
-		# open selected file(s)
-		split_command = shlex.split(exec_string, posix=False)
-		test_command = split_command[0] if len(split_command) > 1 else exec_string
+			# open selected file(s)
+			split_command = shlex.split(exec_string, posix=False)
+			test_command = split_command[0] if len(split_command) > 1 else exec_string
 
-		if is_x_app(test_command):
-			os.system('{0} &'.format(exec_string))
+			if is_x_app(test_command):
+				os.system('{0} &'.format(exec_string))
 
-		else:
-			active_object = self._application.get_active_object()
+			else:
+				active_object = self._application.get_active_object()
 
-			options = Parameters()
-			options.set('close_with_child', True)
-			options.set('shell_command', split_command[0])
-			options.set('arguments', split_command)
-			options.set('path', os.path.dirname(selection[0]))
+				options = Parameters()
+				options.set('close_with_child', True)
+				options.set('shell_command', split_command[0])
+				options.set('arguments', split_command)
+				options.set('path', os.path.dirname(selection[0]))
 
-			self._application.create_terminal_tab(active_object._notebook, options)
+				self._application.create_terminal_tab(active_object._notebook, options)
 
 	def edit_file(self, selection):
 		"""Edit selected filename"""

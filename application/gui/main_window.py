@@ -32,7 +32,6 @@ from tools.advanced_rename import AdvancedRename
 from tools.find_files import FindFiles
 from tools.version_check import VersionCheck
 from config import Config
-from xdg.BaseDirectory import xdg_config_home
 
 try:
 	# try to import argument parser
@@ -130,6 +129,11 @@ class MainWindow(gtk.Window):
 		self.config_path = None
 		self.system_plugin_path = None
 		self.user_plugin_path = None
+
+		if 'XDG_CONFIG_HOME' in os.environ:
+			self.config_path = os.environ['XDG_CONFIG_HOME']
+		else:
+			self.config_path = os.path.join(user.home, '.config')
 
 		# create a clipboard manager
 		self.clipboard = gtk.Clipboard()
@@ -752,7 +756,7 @@ class MainWindow(gtk.Window):
 
 		# add system bookmarks if needed
 		bookmarks_files = (
-					os.path.join(xdg_config_home, 'gtk-3.0', 'bookmarks'),
+					os.path.join(self.config_home, 'gtk-3.0', 'bookmarks'),
 					os.path.join(user.home, '.gtk-bookmarks')
 				)
 
@@ -2102,8 +2106,8 @@ class MainWindow(gtk.Window):
 
 	def load_config(self):
 		"""Load configuration from file located in users home directory"""
-		if os.path.isdir(xdg_config_home):
-			self.config_path = os.path.join(xdg_config_home, 'sunflower')
+		if os.path.isdir(self.config_home):
+			self.config_path = os.path.join(self.config_home, 'sunflower')
 		else:
 			self.config_path = os.path.join(user.home, '.sunflower')
 

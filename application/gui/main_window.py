@@ -131,9 +131,9 @@ class MainWindow(gtk.Window):
 		self.user_plugin_path = None
 
 		if 'XDG_CONFIG_HOME' in os.environ:
-			self.config_path = os.environ['XDG_CONFIG_HOME']
+			self.config_home = os.environ['XDG_CONFIG_HOME']
 		else:
-			self.config_path = os.path.join(user.home, '.config')
+			self.config_home = os.path.join(user.home, '.config')
 
 		# create a clipboard manager
 		self.clipboard = gtk.Clipboard()

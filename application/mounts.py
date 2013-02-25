@@ -141,3 +141,11 @@ class MountsManager:
 	def create_extensions(self):
 		"""Create mounts manager extensions"""
 		self.window.create_extensions()
+
+	def is_mounted(self, path):
+		"""Check if specified path is mounted"""
+		pass
+
+	def mount_path(self, path):
+		"""Mount specified path if extensions know how"""
+		pass

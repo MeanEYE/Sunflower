@@ -83,9 +83,9 @@ def get_user_directory(directory):
 	result = None
 
 	if 'XDG_CONFIG_HOME' in os.environ:
-		config_path = os.environ['XDG_CONFIG_HOME']
+		config_home = os.environ['XDG_CONFIG_HOME']
 	else:
-		config_path = os.path.join(user.home, '.config')
+		config_home = os.path.join(user.home, '.config')
 
 	config_file = os.path.join(config_home, 'user-dirs.dirs')
 

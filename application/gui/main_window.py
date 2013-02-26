@@ -10,6 +10,7 @@ import common
 import shlex
 import subprocess
 import glib
+import urllib
 
 from menus import MenuManager
 from mounts import MountsManager
@@ -773,7 +774,8 @@ class MainWindow(gtk.Window):
 
 				except:
 					uri = line.strip()
-					name = os.path.basename(uri)
+					name = urllib.unquote(uri.split('://')[1]) if '://' in uri else uri
+					name = os.path.basename(name)
 
 				# add entry
 				self.bookmarks.add_bookmark(name, 'folder', uri, system=True)

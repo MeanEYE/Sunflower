@@ -205,7 +205,6 @@ class AssociationManager:
 			application = self.get_gio_application_by_id(application_info.id)
 
 			if application is not None:
-				selection = [str(uri) for uri in selection]
 				application.launch_uris(selection)
 			
 		elif exec_command is not None:

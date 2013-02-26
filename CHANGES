@@ -1,3 +1,17 @@
+Version 0.1a-54
+  + Support loading modules from user's home directory.
+  + Created SFTP mount manager extension.
+  + Added command line options to allow opening terminal tabs.
+  + Added ability to specify separate accelerator for closing terminal tab.
+  + Added ability to extend viewer tool.
+  + Added GVim viewer extension plugin.
+  * Use system environment variable for detecting config home instead of adding dependency.
+  * Use GIO API to launch files associated with known applications.
+  * Properly re-raise exceptions when trashing files.
+  * Only call copy/paste methods on VTE terminals.
+  * Fixed issues with file/directory names with bad encoding.
+  * Apply terminal settings only if terminal type is VTE.
+
 Version 0.1a-53
   + Configurable accelerators for main menu.
   + Allow changing aspect ratio of notebooks.

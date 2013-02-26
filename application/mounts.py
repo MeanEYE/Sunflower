@@ -23,6 +23,10 @@ class MountsManager:
 
 	def _populate_list(self):
 		"""Populate mount/volume list"""
+		# get list of volumes
+		for volume in self._volume_monitor.get_volumes():
+			self.window._add_volume(volume, startup=True)
+
 		# get list of mounted volumes
 		for mount in self._volume_monitor.get_mounts():
 			if mount.get_volume() is None:

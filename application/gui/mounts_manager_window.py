@@ -44,6 +44,7 @@ class MountsManagerWindow(gtk.Window):
 		self._application = self._parent._application
 		self._mounts = None
 		self._volumes = None
+		self._volume_list = []
 		self._extensions = []
 
 		# main menu items
@@ -260,10 +261,13 @@ class MountsManagerWindow(gtk.Window):
 
 	def _add_volume(self, volume, startup=False):
 		"""Add volume entry"""
-		self._volumes.add_volume(volume, startup)
+		if volume not in self._volume_list:
+			self._volume_list.append(volume)
+			self._volumes.add_volume(volume, startup)
 
 	def _remove_volume(self, volume):
 		"""Remove volume entry"""
+		del self._volume_list[self._volume_list.index(volume)]
 		self._volumes.remove_volume(volume)
 
 	def _volume_mounted(self, volume):

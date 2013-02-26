@@ -1537,6 +1537,11 @@ class FileList(ItemList):
 		# clear list
 		self._clear_list()
 
+		# make sure path is actually string and not unicode object
+		# we still handle unicode strings properly, just avoid issues
+		# with file names that have names in bad encoding
+		path = str(path)
+
 		# hide thumbnail
 		if self._enable_media_preview:
 			self._thumbnail_view.hide()

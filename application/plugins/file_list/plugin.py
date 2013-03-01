@@ -1438,7 +1438,7 @@ class FileList(ItemList):
 		"""Return integer representing supported drag'n'drop actions"""
 		return gtk.gdk.ACTION_COPY | gtk.gdk.ACTION_MOVE  # | gtk.gdk.ACTION_LINK # add later
 
-	def _load_directory(self, path, parent=None):
+	def _load_directory(self, path, parent=None, clear_store=False):
 		"""Load directory content into store"""
 		# if there is already active thread, stop it
 		if self._thread_active.is_set():
@@ -1456,6 +1456,10 @@ class FileList(ItemList):
 			if len(cell_area) >= 4 and cell_area[3] > 0:
 				self._preload_count = (tree_size / cell_area[3]) + 1
 				self._preload_size = tree_size
+
+		# clear list
+		if clear_store:
+			self._clear_list()
 
 		# cache objects and settings
 		show_hidden = self._parent.options.section('item_list').get('show_hidden')
@@ -1542,9 +1546,6 @@ class FileList(ItemList):
 		if self._fs_monitor is not None:
 			self._fs_monitor.cancel()
 
-		# clear list
-		self._clear_list()
-
 		# make sure path is actually string and not unicode object
 		# we still handle unicode strings properly, just avoid issues
 		# with file names that have names in bad encoding
@@ -1617,7 +1618,7 @@ class FileList(ItemList):
 		try:
 			# populate list
 			self._item_to_focus = selected
-			self._load_directory(self.path)
+			self._load_directory(self.path, clear_store=True)
 
 			# if no errors occurred during path change,
 			# call parent method which handles history

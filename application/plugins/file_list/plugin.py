@@ -357,6 +357,14 @@ class FileList(ItemList):
 			# hide preview if item thumbnail is not available
 			self._thumbnail_view.hide()
 
+	def _handle_tab_close(self):
+		"""Handle tab closing"""
+		ItemList._handle_tab_close(self)
+
+		# cancel current directory monitor
+		if self._fs_monitor is not None:
+			self._fs_monitor.cancel()
+
 	def _execute_selected_item(self, widget=None, data=None):
 		"""Execute/Open selected item"""
 		selection = self._item_list.get_selection()

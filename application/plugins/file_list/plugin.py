@@ -84,6 +84,7 @@ class FileList(ItemList):
 
 		# event object controlling path change thread
 		self._thread_active = Event()
+		self._main_thread_lock = Event()
 
 		# preload variables
 		self._preload_count = 0
@@ -1442,7 +1443,11 @@ class FileList(ItemList):
 		"""Load directory content into store"""
 		# if there is already active thread, stop it
 		if self._thread_active.is_set():
+			self._main_thread_lock.set()
 			self._thread_active.clear()
+
+			while self._main_thread_lock.is_set():
+				gtk.main_iteration(block=False)
 
 		# get number of items to preload
 		if len(self._store) > 0 and self._item_list.allocation.height != self._preload_size:
@@ -1536,6 +1541,9 @@ class FileList(ItemList):
 
 					# update status bar
 					self._update_status_with_statistis()
+
+				self._thread_active.clear()
+				self._main_thread_lock.clear()
 
 			self._change_path_thread = Thread(target=thread_method)
 			self._change_path_thread.start()

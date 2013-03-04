@@ -9,7 +9,7 @@ version_major = $(shell cat $(working_directory)/application/gui/main_window.py 
 version_minor = $(shell cat $(working_directory)/application/gui/main_window.py | grep \'minor\': | cut -f 2 -d : | tr -d [:space:][,])
 version_build = $(shell cat $(working_directory)/application/gui/main_window.py | grep \'build\': | cut -f 2 -d : | tr -d [:space:][,])
 version_stage = $(shell cat $(working_directory)/application/gui/main_window.py | grep \'stage\': | cut -f 2 -d : | tr -d [:space:][\'][,])
-version = $(version_major).$(version_minor)$(version_stage).$(version_build)
+version = $(version_major).$(version_minor)$(version_stage)-$(version_build)
 
 # Variables
 release ?= 1

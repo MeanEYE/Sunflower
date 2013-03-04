@@ -1491,7 +1491,8 @@ class FileList(ItemList):
 		item_list = item_list[self._preload_count:]
 
 		if self.path != os.path.sep \
-		and self.path != '{0}://'.format(self.scheme):
+		and self.path != '{0}://'.format(self.scheme) \
+		and parent is None:
 			# add parent option for parent directory
 			self._store.append((
 							os.path.pardir,

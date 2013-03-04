@@ -1,0 +1,26 @@
+pkgname=sunflower                                                                                                                       
+pkgver=@version@
+pkgrel=@release@
+arch=(any)
+url=https://code.google.com/p/sunflower-fm/
+license=(GPLv3)
+depends=(pygtk)
+optdepends=('python2-notify: notifications',
+            'python2-gnomekeyring: access to saved passwords',
+            'vte: support for built-in terminal')
+pkgdesc="@short_description@"
+options=(!strip !zipman)
+source=(./${pkgname}-${pkgver}.tgz ./sunflower)
+
+package() {
+	install -Dm755 sunflower "${pkgdir}/usr/bin/sunflower"
+
+	install -d "${pkgdir}/usr/share/sunflower"
+	cd Sunflower
+	cp -r * "${pkgdir}/usr/share/sunflower"
+
+	install -Dm644 images/sunflower.png "${pkgdir}/usr/share/pixmaps/sunflower.png"
+	install -Dm644 images/sunflower.svg "${pkgdir}/usr/share/pixmaps/sunflower.svg"
+	install -Dm644 Sunflower.desktop "${pkgdir}/usr/share/applications/sunflower.desktop"
+}
+

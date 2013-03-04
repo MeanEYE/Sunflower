@@ -1,0 +1,12 @@
+Package: sunflower
+Version: @version@
+Section: misc
+Priority: optional
+Architecture: all
+Depends: python, python-gtk2
+Recommends: python-notify
+Suggests: python-gnome2, python-argparse, python-mutagen, python-vte
+Maintainer: @packager@
+Installed-Size: 5000
+Description: @short_description@
+

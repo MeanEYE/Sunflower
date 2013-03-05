@@ -10,7 +10,7 @@ optdepends=('python2-notify: notifications',
             'vte: support for built-in terminal')
 pkgdesc="@short_description@"
 options=(!strip !zipman)
-source=(./${pkgname}-${pkgver}.tgz ./sunflower)
+source=(./${pkgname}-${pkgver//a./a-}.tgz ./sunflower)
 
 package() {
 	install -Dm755 sunflower "${pkgdir}/usr/bin/sunflower"

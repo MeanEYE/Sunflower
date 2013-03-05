@@ -9,15 +9,15 @@ version_major := $(shell cat $(working_directory)/application/gui/main_window.py
 version_minor := $(shell cat $(working_directory)/application/gui/main_window.py | grep \'minor\': | cut -f 2 -d : | tr -d [:space:][,])
 version_build := $(shell cat $(working_directory)/application/gui/main_window.py | grep \'build\': | cut -f 2 -d : | tr -d [:space:][,])
 version_stage := $(shell cat $(working_directory)/application/gui/main_window.py | grep \'stage\': | cut -f 2 -d : | tr -d [:space:][\'][,])
-version = $(version_major).$(version_minor)$(version_stage)-$(version_build)
+version = $(version_major).$(version_minor)$(version_stage).$(version_build)
 
 # Variables
 release ?= 1
-packager ?= "Unpecified Packager"
+packager ?= ""
 short_description = "Small and highly customizable twin-panel file manager for Linux with support for plugins."
 
 # Paths
-file_name = sunflower-$(version)
+file_name = sunflower-$(version_major).$(version_minor)$(version_stage)-$(version_build)
 file_path = $(build_directory)/$(file_name)
 deb_file_path = $(build_directory)/sunflower-$(version)-$(release).all.deb
 pkg_file_path = $(build_directory)/sunflower-$(version)-$(release)-any.pkg.tar.xz
@@ -34,11 +34,15 @@ Usage:
 	dist-rpm           - create a .rpm package for Fedora, Mageia, Mandriva
 	dist-rpm-opensuse  - create a .rpm package for OpenSUSE
 	dist-rpm-pclinuxos - create a .rpm package for PCLinuxOS
-	dist-all           - create all package
+	dist-all           - create all packages
 	language-template  - update language template
 	clean              - remove all build files
 	version            - print Sunflower version
 	help               - print this help
+
+Options for dist-*:
+	release=1   - release number
+	packager="" - packagers name (e.i. "John Smith <mail@example.com>")
 endef
 export HELP
 
@@ -62,7 +66,7 @@ define create_spec
 	@cp $(working_directory)/dist/sunflower.spec $(build_directory)
 	@sed -i s/@version@/$(version)/ $(build_directory)/sunflower.spec
 	@sed -i s/@release@/$(release)/ $(build_directory)/sunflower.spec
-	@sed -i s/@packager@/$(packager)/ $(build_directory)/sunflower.spec
+	@sed -i s/@packager@/"$(packager)"/ $(build_directory)/sunflower.spec
 	@sed -i s/@short_description@/$(short_description)/ $(build_directory)/sunflower.spec
 endef
 
@@ -79,9 +83,10 @@ endef
 # configuration options
 default: version help
 
-$(file_path).tar:
+$(file_path).tgz:
 	$(info Preparing release...)
 	@mkdir -p $(build_directory)
+	@rm -f $(file_path).tar
 
 	# archive files
 	@hg archive --exclude dist/ --exclude Makefile --type tgz --prefix Sunflower $(file_path).tgz
@@ -91,9 +96,12 @@ $(file_path).tar:
 	@tar --delete --wildcards --file=$(file_path).tar Sunflower/.hg*
 	@tar --delete --wildcards --file=$(file_path).tar Sunflower/images/*.xcf
 
-$(file_path).tgz: $(file_path).tar
 	# repacking gzip archive
 	@gzip --best -c $(file_path).tar > $(file_path).tgz
+	@rm -f $(file_path).tar
+
+$(file_path).tar: $(file_path).tgz
+	@gunzip -c $(file_path).tgz > $(file_path).tar
 
 $(deb_file_path): $(file_path).tar
 	$(info Building package for Debian, Mint, Ubuntu...)
@@ -103,7 +111,7 @@ $(deb_file_path): $(file_path).tar
 	@mkdir -p $(install_directory)/DEBIAN
 	@cp $(working_directory)/dist/control $(install_directory)/DEBIAN
 	@sed -i s/@version@/$(version)/ $(install_directory)/DEBIAN/control
-	@sed -i s/@packager@/$(packager)/ $(install_directory)/DEBIAN/control
+	@sed -i s/@packager@/"$(packager)"/ $(install_directory)/DEBIAN/control
 	@sed -i s/@short_description@/$(short_description)/ $(install_directory)/DEBIAN/control
 
 	# building package
@@ -159,6 +167,7 @@ $(rpm_pclinuxos_file_path): $(file_path).tar
 	$(dist_install)
 	$(create_spec)
 	@sed -i s/@requires@/pygtk2.0/ $(build_directory)/sunflower.spec
+	@desktop-file-edit --add-category="X-MandrivaLinux-System-FileTools" "$(install_directory)/usr/share/applications/sunflower.desktop"
 	$(create_rpm)
 
 dist: $(file_path).tgz

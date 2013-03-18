@@ -61,6 +61,7 @@ class Support:
 	SET_OWNER = 4
 	SET_ACCESS = 5
 	SET_TIMESTAMP = 6
+	SYSTEM_SIZE = 7
 
 
 class Mode:

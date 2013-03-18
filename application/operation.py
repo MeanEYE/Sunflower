@@ -757,7 +757,7 @@ class CopyOperation(Operation):
 
 			data = sh.read(buffer_size)
 
-			if (data):
+			if data:
 				try:
 					# try writing data to destination
 					dh.write(data)
@@ -848,7 +848,8 @@ class CopyOperation(Operation):
 		# check for available free space
 		system_info = self._destination.get_system_size(self._destination_path)
 
-		if self._total_size > system_info.size_available:
+		if ProviderSupport.SYSTEM_SIZE in self._destination.get_support() \
+		and self._total_size > system_info.size_available:
 			should_continue = self._get_free_space_input(self._total_size, system_info.size_available)
 
 			# exit if user chooses to

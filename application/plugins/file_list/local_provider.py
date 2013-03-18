@@ -238,5 +238,6 @@ class LocalProvider(Provider):
 			Support.RESERVE_SIZE,
 			Support.SET_OWNER,
 			Support.SET_ACCESS,
-			Support.SET_TIMESTAMP
+			Support.SET_TIMESTAMP,
+			Support.SYSTEM_SIZE
 		)

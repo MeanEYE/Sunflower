@@ -292,7 +292,8 @@ class GioProvider(Provider):
 			Support.MONITOR,
 			Support.SET_TIMESTAMP,
 			Support.SET_ACCESS,
-			Support.SET_OWNER
+			Support.SET_OWNER,
+			Support.SYSTEM_SIZE
 		)
 
 
@@ -306,7 +307,9 @@ class SambaProvider(GioProvider):
 
 	def get_support(self):
 		"""Return supported options by provider"""
-		return ()
+		return (
+			Support.SYSTEM_SIZE,
+		)
 
 
 class FtpProvider(GioProvider):
@@ -317,6 +320,10 @@ class FtpProvider(GioProvider):
 		"""Return protocol icon name"""
 		return 'network'
 
+	def get_support(self):
+		"""Return supported options by provider"""
+		return ()
+
 
 class SftpProvider(GioProvider):
 	is_local = False
@@ -325,6 +332,10 @@ class SftpProvider(GioProvider):
 	def get_protocol_icon(self):
 		"""Return protocol icon name"""
 		return 'network'
+
+	def get_support(self):
+		"""Return supported options by provider"""
+		return ()
 
 
 class NetworkProvider(GioProvider):
@@ -350,7 +361,9 @@ class TrashProvider(GioProvider):
 
 	def get_support(self):
 		"""Return supported options by provider"""
-		return ()
+		return (
+			Support.SYSTEM_SIZE
+		)
 
 
 class DavProvider(GioProvider):
@@ -366,6 +379,7 @@ class DavProvider(GioProvider):
 		return (
 			Support.SET_ACCESS,
 			Support.SET_TIMESTAMP,
+			Support.SYSTEM_SIZE
 		)
 
 
@@ -382,4 +396,5 @@ class DavsProvider(GioProvider):
 		return (
 			Support.SET_ACCESS,
 			Support.SET_TIMESTAMP,
+			Support.SYSTEM_SIZE
 		)

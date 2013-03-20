@@ -190,13 +190,32 @@ class CreateDialog(InputDialog):
 		table.attach(self._permission_octal_entry, 1, 2, 3, 4)
 		table.set_row_spacing(2, 10)
 
+		# create button for saving default configuration
+		image_save = gtk.Image()
+		image_save.set_from_stock(gtk.STOCK_SAVE, gtk.ICON_SIZE_BUTTON)
+
+		button_save = gtk.Button()
+		button_save.set_image(image_save)
+		button_save.connect('clicked', self._save_configuration)
+		button_save.set_tooltip_text(_('Save as default configuration'))
+
+		align_save = gtk.Alignment()
+		align_save.add(button_save)
+
 		# pack interface
+		self._dialog.action_area.pack_start(align_save, True, True, 0)
+		self._dialog.action_area.set_child_secondary(align_save, True)
+
 		self._advanced.pack_start(table, False, False, 0)
 		expander.add(self._advanced)
 		self._container.pack_start(expander, False, False, 0)
 
-		self.update_mode()
 		expander.show_all()
+		align_save.show_all()
+
+	def _save_configuration(self, widget=None, data=None):
+		"""Save default configuration for create dialog"""
+		pass
 
 	def _entry_activate(self, widget, data=None):
 		"""Handle octal mode change"""
@@ -358,8 +377,21 @@ class FileCreateDialog(CreateDialog):
 		# populate template list
 		self._populate_templates()
 
+		# set options to previously stored values
+		section = self._application.options.section('create_dialog')
+
+		self.set_mode(section.get('file_mode'))
+		self._checkbox_edit_after.set_active(section.get('edit_file'))
+
 		# show all widgets
 		self._dialog.show_all()
+
+	def _save_configuration(self, widget=None, data=None):
+		"""Save default configuration for create dialog"""
+		section = self._application.options.section('create_dialog')
+
+		section.set('file_mode', self._mode)
+		section.set('edit_file', self._checkbox_edit_after.get_active())
 
 	def _populate_templates(self):
 		"""Populate templates list"""
@@ -428,7 +460,12 @@ class DirectoryCreateDialog(CreateDialog):
 
 		self.set_title(_('Create directory'))
 		self.set_label(_('Enter new directory name:'))
-		self.set_mode(0755)
+		self.set_mode(self._application.options.section('create_dialog').get('directory_mode'))
+
+	def _save_configuration(self, widget=None, data=None):
+		"""Save default configuration for create dialog"""
+		section = self._application.options.section('create_dialog')
+		section.set('directory_mode', self._mode)
 
 
 class CopyDialog:

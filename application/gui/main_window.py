@@ -2182,6 +2182,13 @@ class MainWindow(gtk.Window):
 					'automount_insert': False
 				})
 
+		# create default create file/directory dialog options
+		self.options.create_section('create_dialog').update({
+					'file_mode': 0644,
+					'directory_mode': 0755,
+					'edit_file': False
+				})
+
 		# create default confirmation options
 		self.options.create_section('confirmations').update({
 					'delete_items': True

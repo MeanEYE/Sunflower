@@ -242,6 +242,7 @@ class ItemList(PluginBase):
 		group.add_method('toggle_selection_up', _('Toggle selection and move marker up'), self._toggle_selection_up)
 		group.add_method('delete_files', _('Trash or delete selected items'), self._delete_files, False)
 		group.add_method('force_delete_files', _('Force deleting selected items'), self._delete_files, True)
+		group.add_method('show_bookmarks', _('Show bookmarks for current list'), self._show_bookmarks)
 		group.add_method('show_left_bookmarks', _('Show bookmarks for left list'), self._show_left_bookmarks)
 		group.add_method('show_right_bookmarks', _('Show bookmarks for right list'), self._show_right_bookmarks)
 		group.add_method('rename_file', _('Rename selected item'), self._rename_file)
@@ -326,17 +327,25 @@ class ItemList(PluginBase):
 		# add accelerator group to the list
 		self._accelerator_groups.append(group)
 
+	def _show_bookmarks(self, widget=None, data=None):
+		"""Show bookmarks for current panel"""
+		self._parent.show_bookmarks_menu(None, self._notebook)
+		return True
+
 	def _show_left_bookmarks(self, widget, data=None):
 		"""Show left bookmarks menu"""
 		self._parent.show_bookmarks_menu(None, self._parent.left_notebook)
+		return True
 
 	def _show_right_bookmarks(self, widget, data=None):
 		"""Show right bookmarks menu"""
 		self._parent.show_bookmarks_menu(None, self._parent.right_notebook)
+		return True
 
 	def _show_history_window(self, widget, data=None):
 		"""Show history browser"""
 		HistoryList(self, self._parent)
+		return True
 
 	def _show_tab_menu(self, widget, data=None):
 		"""Show title bar menu"""

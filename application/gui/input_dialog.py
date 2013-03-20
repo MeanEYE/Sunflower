@@ -248,12 +248,12 @@ class CreateDialog(InputDialog):
 	def _expander_event(self, widget, data=None):
 		"""Return dialog size back to normal"""
 		if widget.get_expanded():
-			self.set_size_request(1, 1)
-			self.resize(*self._dialog_size)
+			self._dialog.set_size_request(1, 1)
+			self._dialog.resize(*self._dialog_size)
 
 		else:
-			self._dialog_size = self.get_size()
-			self.set_size_request(-1, -1)
+			self._dialog_size = self._dialog.get_size()
+			self._dialog.set_size_request(-1, -1)
 
 	def get_mode(self):
 		"""Returns default directory/file creation mode"""

@@ -205,7 +205,10 @@ class AssociationManager:
 			application = self.get_gio_application_by_id(application_info.id)
 
 			if application is not None:
-				application.launch_uris(selection)
+				if application.supports_uris():
+					application.launch_uris(selection)
+				else:
+					application.launch([gio.File(path=path) for path in selection])
 			
 		elif exec_command is not None:
 			# use specified command

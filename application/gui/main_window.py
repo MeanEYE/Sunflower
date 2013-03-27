@@ -1660,51 +1660,57 @@ class MainWindow(gtk.Window):
 
 	def run(self):
 		"""Start application"""
+		left_list = []
+		right_list = []
+
 		DefaultList = self.plugin_classes['file_list']
 		DefaultTerminal = self.plugin_classes['system_terminal']
 
-		if self.arguments is not None and self.arguments.dont_load_tabs:
-			# if specified tab list is empty, create default
-			if self.arguments.left_tabs is None:
-				self.create_tab(self.left_notebook, DefaultList)
+		section = self.options.section('item_list')
+		config_prevents_load = section.get('force_directories')
+		arguments_prevents_load = self.arguments is not None and self.arguments.dont_load_tabs
 
-			if self.arguments.right_tabs is None:
-				self.create_tab(self.right_notebook, DefaultList)
+		# load saved tabs if needed
+		if not (config_prevents_load or arguments_prevents_load):
+			self.load_tabs(self.left_notebook, 'left')
+			self.load_tabs(self.right_notebook, 'right')
 
-		else:
-			# load tabs in the left notebook
-			if not self.load_tabs(self.left_notebook, 'left'):
-				self.create_tab(self.left_notebook, DefaultList)
-
-			# load tabs in the right notebook
-			if not self.load_tabs(self.right_notebook, 'right'):
-				self.create_tab(self.right_notebook, DefaultList)
-
-		# create additional tabs
+		# populate lists with command line arguments
 		if self.arguments is not None:
 			if self.arguments.left_tabs is not None:
-				for path in self.arguments.left_tabs:
-					options = Parameters()
-					options.set('path', path)
-					self.create_tab(self.left_notebook, DefaultList, options)
+				left_list.extend(map(lambda path: (DefaultList, path), self.arguments.left_tabs))
 
 			if self.arguments.right_tabs is not None:
-				for path in self.arguments.right_tabs:
-					options = Parameters()
-					options.set('path', path)
-					self.create_tab(self.right_notebook, DefaultList, options)
+				right_list.extend(map(lambda path: (DefaultList, path), self.arguments.right_tabs))
 
 			if self.arguments.left_terminals is not None:
-				for path in self.arguments.left_terminals:
-					options = Parameters()
-					options.set('path', path)
-					self.create_tab(self.left_notebook, DefaultTerminal, options)
+				left_list.extend(map(lambda path: (DefaultTerminal, path), self.arguments.left_terminals))
 
 			if self.arguments.right_terminals is not None:
-				for path in self.arguments.right_terminals:
-					options = Parameters()
-					options.set('path', path)
-					self.create_tab(self.right_notebook, DefaultTerminal, options)
+				right_list.extend(map(lambda path: (DefaultTerminal, path), self.arguments.right_terminals))
+
+		# populate list with specified config directories
+		if config_prevents_load:
+			left_list.extend(map(lambda path: (DefaultList, path), section.get('left_directories')))
+			right_list.extend(map(lambda path: (DefaultList, path), section.get('right_directories')))
+
+		# finally create additional tabs
+		for Class, path in left_list:
+			options = Parameters()
+			options.set('path', path)
+			self.create_tab(self.left_notebook, Class, options)
+
+		for Class, path in right_list:
+			options = Parameters()
+			options.set('path', path)
+			self.create_tab(self.right_notebook, Class, options)
+
+		# make sure we have at least one tab loaded on each notebook
+		if self.left_notebook.get_n_pages() == 0:
+			self.create_tab(self.left_notebook, DefaultList)
+
+		if self.right_notebook.get_n_pages() == 0:
+			self.create_tab(self.right_notebook, DefaultList)
 
 		# focus active notebook
 		active_notebook_index = self.options.get('active_notebook')

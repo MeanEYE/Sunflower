@@ -2154,7 +2154,10 @@ class MainWindow(gtk.Window):
 					'right_click_select': False,
 					'single_click_navigation': False,
 					'headers_visible': True,
-					'mode_format': 1
+					'mode_format': 1,
+					'left_directories': [],
+					'right_directories': [],
+					'force_directories': False
 				})
 
 		# create default operation options

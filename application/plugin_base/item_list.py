@@ -1273,6 +1273,14 @@ class ItemList(PluginBase):
 							),
 							'size')
 
+	def _select_all(self, widget, data=None):
+		"""Abstract proxy method for selecting all items"""
+		pass
+
+	def _deselect_all(self, widget, data=None):
+		"""Abstract proxy method for deselecting all items"""
+		pass
+
 	def _toggle_selection(self, widget, data=None, advance=True):
 		"""Abstract method for toggling item selection"""
 		if self._parent.options.get('show_status_bar') == StatusVisible.WHEN_NEEDED:

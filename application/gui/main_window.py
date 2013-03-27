@@ -854,8 +854,8 @@ class MainWindow(gtk.Window):
 		command = widget.get_data('command')
 
 		# grab active objects
-		left_object = self.left_notebook.get_nth_page(self.left_notebook.get_current_page())
-		right_object = self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
+		left_object = self.get_left_object()
+		right_object = self.get_right_object()
 
 		if hasattr(left_object, '_get_selection'):
 			# get selected item from the left list
@@ -1630,21 +1630,11 @@ class MainWindow(gtk.Window):
 	def compare_directories(self, widget=None, data=None):
 		"""Compare directories from left and right notebook"""
 		result = False
-		left_object = None
-		right_object = None
-
-		# get left object
-		if self.left_notebook.get_n_pages() > 0:
-			left_object = self.left_notebook.get_nth_page(self.left_notebook.get_current_page())
-
-		# get right object
-		if self.right_notebook.get_n_pages() > 0:
-			right_object = self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
+		left_object = self.get_left_object()
+		right_object = self.get_right_object()
 
 		# if both objects have selection methods and exist
-		if None not in (left_object, right_object) \
-		and hasattr(left_object, 'select_all') \
-		and hasattr(right_object, 'select_all'):
+		if hasattr(left_object, 'select_all') and hasattr(right_object, 'select_all'):
 			# get file lists
 			left_list = left_object.get_provider().list_dir(left_object.path)
 			right_list = right_object.get_provider().list_dir(right_object.path)
@@ -2278,17 +2268,13 @@ class MainWindow(gtk.Window):
 
 	def focus_left_object(self, widget=None, data=None):
 		"""Focus object in the left notebook"""
-		left_object = self.left_notebook.get_nth_page(self.left_notebook.get_current_page())
-
-		if left_object is not None:
-			left_object.focus_main_object()
+		left_object = self.get_left_object()
+		left_object.focus_main_object()
 
 	def focus_right_object(self, widget=None, data=None):
 		"""Focus object in the right notebook"""
-		right_object = self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
-
-		if right_object is not None:
-			right_object.focus_main_object()
+		right_object = self.get_right_object()
+		right_object.focus_main_object()
 
 	def get_active_object(self):
 		"""Return active object"""
@@ -2296,16 +2282,20 @@ class MainWindow(gtk.Window):
 
 	def get_opposite_object(self, active_object):
 		"""Return opposite object"""
-		left_object = self.left_notebook.get_nth_page(self.left_notebook.get_current_page())
-		right_object = self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
+		left_object = self.get_left_object()
+		right_object = self.get_right_object()
 
-		if active_object is left_object:
-			result = right_object
-
-		else:
-			result = left_object
+		result = right_object if active_object is left_object else left_object
 
 		return result
+
+	def get_left_object(self):
+		"""Return active tab from left notebook"""
+		return self.left_notebook.get_nth_page(self.left_notebook.get_current_page())
+
+	def get_right_object(self):
+		"""Return active tab from right notebook"""
+		return self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
 
 	def delegate_to_objects(self, caller, method_name, *args):
 		"""Call specified method_name on all active objects of same class as caller

@@ -1063,7 +1063,7 @@ class FileList(ItemList):
 
 	def _select_all(self, widget, data=None):
 		"""Proxy method for selecting all items"""
-		if self._dirs['selected'] < self._dirs['count'] and self._files['selected'] < self._files['count']:
+		if self._dirs['selected'] < self._dirs['count'] or self._files['selected'] < self._files['count']:
 			self.select_all()
 
 		else:

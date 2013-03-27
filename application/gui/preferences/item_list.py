@@ -1,6 +1,7 @@
 import gtk
 
 from common import AccessModeFormat
+from gui.input_dialog import InputDialog
 from widgets.settings_page import SettingsPage
 
 
@@ -15,6 +16,18 @@ class ExtensionColumn:
 	CLASS_NAME = 1
 
 
+class DirectoryColumn:
+	PATH = 0
+	LEFT_LIST = 1
+	RIGHT_LIST = 2
+
+
+class Source:
+	LEFT = 0
+	RIGHT = 1
+	CUSTOM = 2
+
+
 class ItemListOptions(SettingsPage):
 	"""Options related to item lists"""
 
@@ -26,15 +39,19 @@ class ItemListOptions(SettingsPage):
 		# create frames
 		label_look_and_feel = gtk.Label(_('Look & feel'))
 		label_operation = gtk.Label(_('Operation'))
+		label_directories = gtk.Label(_('Directories'))
 		label_columns = gtk.Label(_('Columns'))
 
 		# vertical boxes
 		vbox_look_and_feel = gtk.VBox(False, 0)
 		vbox_operation = gtk.VBox(False, 0)
+		vbox_directory = gtk.VBox(False, 0)
 		vbox_columns = gtk.VBox(False, 0)
 
 		vbox_look_and_feel.set_border_width(5)
 		vbox_operation.set_border_width(5)
+		vbox_directory.set_border_width(5)
+		vbox_directory.set_spacing(5)
 		vbox_columns.set_border_width(5)
 
 		# file list options
@@ -141,6 +158,78 @@ class ItemListOptions(SettingsPage):
 							)
 		self._entry_time_format.connect('changed', self._parent.enable_save)
 
+		# create list of directories
+		container_directory = gtk.ScrolledWindow()
+		container_directory.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+		container_directory.set_shadow_type(gtk.SHADOW_IN)
+
+		self._checkbox_load_directories = gtk.CheckButton(_('Load specified tabs instead of saved'))
+		self._checkbox_load_directories.connect('toggled', self._parent.enable_save)
+
+		self._directory_store = gtk.ListStore(str, bool, bool)
+		self._directory_list = gtk.TreeView(model=self._directory_store)
+
+		cell_directory = gtk.CellRendererText()
+		cell_left_list = gtk.CellRendererToggle()
+		cell_right_list = gtk.CellRendererToggle()
+
+		cell_left_list.connect('toggled', self._toggle_path, Source.LEFT)
+		cell_right_list.connect('toggled', self._toggle_path, Source.RIGHT)
+
+		col_directory = gtk.TreeViewColumn(_('Directory'), cell_directory, text=DirectoryColumn.PATH)
+		col_directory.set_min_width(200)
+		col_directory.set_resizable(True)
+		col_directory.set_expand(True)
+
+		col_left_list = gtk.TreeViewColumn(_('Left list'), cell_left_list, active=DirectoryColumn.LEFT_LIST)
+		col_right_list = gtk.TreeViewColumn(_('Right list'), cell_right_list, active=DirectoryColumn.RIGHT_LIST)
+
+		self._directory_list.append_column(col_directory)
+		self._directory_list.append_column(col_left_list)
+		self._directory_list.append_column(col_right_list)
+
+		hbox_directory = gtk.HBox(False, 5)
+
+		button_add_directory = gtk.Button(stock=gtk.STOCK_ADD)
+		button_add_directory.connect('clicked', self.__button_add_clicked)
+
+		button_delete_directory = gtk.Button(stock=gtk.STOCK_DELETE)
+		button_delete_directory.connect('clicked', self._delete_path)
+
+		image_up = gtk.Image()
+		image_up.set_from_stock(gtk.STOCK_GO_UP, gtk.ICON_SIZE_BUTTON)
+
+		button_directory_move_up = gtk.Button(label=None)
+		button_directory_move_up.add(image_up)
+		button_directory_move_up.set_tooltip_text(_('Move Up'))
+		button_directory_move_up.connect('clicked', self._move_path, -1)
+
+		image_down = gtk.Image()
+		image_down.set_from_stock(gtk.STOCK_GO_DOWN, gtk.ICON_SIZE_BUTTON)
+
+		button_directory_move_down = gtk.Button(label=None)
+		button_directory_move_down.add(image_down)
+		button_directory_move_down.set_tooltip_text(_('Move Down'))
+		button_directory_move_down.connect('clicked', self._move_path, 1)
+
+		self._menu_add_directory = gtk.Menu()
+
+		menu_item_custom = gtk.MenuItem(_('Custom directory'))
+		menu_item_separator = gtk.SeparatorMenuItem()
+		menu_item_left_directory = gtk.MenuItem(_('Left directory'))
+		menu_item_right_directory = gtk.MenuItem(_('Right directory'))
+
+		menu_item_custom.connect('activate', self._add_path, Source.CUSTOM)
+		menu_item_left_directory.connect('activate', self._add_path, Source.LEFT)
+		menu_item_right_directory.connect('activate', self._add_path, Source.RIGHT)
+
+		self._menu_add_directory.append(menu_item_custom)
+		self._menu_add_directory.append(menu_item_separator)
+		self._menu_add_directory.append(menu_item_left_directory)
+		self._menu_add_directory.append(menu_item_right_directory)
+
+		self._menu_add_directory.show_all()
+
 		# create columns editor
 		hbox_columns = gtk.HBox(False, 5)
 
@@ -206,8 +295,14 @@ class ItemListOptions(SettingsPage):
 		self._extension_list.append_column(col_name)
 
 		# pack interface
+		container_directory.add(self._directory_list)
 		container_columns.add(self._columns_list)
 		container_plugin.add(self._extension_list)
+
+		hbox_directory.pack_start(button_add_directory, False, False, 0)
+		hbox_directory.pack_start(button_delete_directory, False, False, 0)
+		hbox_directory.pack_end(button_directory_move_down, False, False, 0)
+		hbox_directory.pack_end(button_directory_move_up, False, False, 0)
 
 		hbox_columns.pack_start(container_plugin, False, False, 0)
 		hbox_columns.pack_start(container_columns, True, True, 0)
@@ -247,13 +342,115 @@ class ItemListOptions(SettingsPage):
 		vbox_operation.pack_start(hbox_quick_search, False, False, 5)
 		vbox_operation.pack_start(vbox_time_format, False, False, 5)
 
+		vbox_directory.pack_start(self._checkbox_load_directories, False, False, 0)
+		vbox_directory.pack_start(container_directory, True, True, 0)
+		vbox_directory.pack_start(hbox_directory, False, False, 0)
+
 		vbox_columns.pack_start(hbox_columns, True, True, 0)
 
 		notebook.append_page(vbox_look_and_feel, label_look_and_feel)
 		notebook.append_page(vbox_operation, label_operation)
+		notebook.append_page(vbox_directory, label_directories)
 		notebook.append_page(vbox_columns, label_columns)
 
 		self.pack_start(notebook, True, True, 0)
+
+	def __button_add_clicked(self, widget, data=None):
+		"""Handle clicking on add button"""
+		self._menu_add_directory.popup(
+						None, None,
+						self.__get_menu_position,
+						1, 0, widget
+					)
+
+	def __get_menu_position(self, menu, button):
+		"""Get history menu position"""
+		# get coordinates
+		window_x, window_y = self._parent.window.get_position()
+		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
+		button_h = button.get_allocation().height
+
+		# calculate absolute menu position
+		pos_x = window_x + button_x
+		pos_y = window_y + button_y + button_h
+
+		return (pos_x, pos_y, True)
+
+	def _add_path(self, widget, source):
+		"""Add path to the list from specified source"""
+		if source == Source.CUSTOM:
+			# show dialog for custom path entry
+			dialog = InputDialog(self._application)
+			dialog.set_title(_('Add custom directory'))
+			dialog.set_label(_('Full path:'))
+			
+			response = dialog.get_response()
+
+			if response[0] == gtk.RESPONSE_OK:
+				self._directory_store.append((response[1], False, False))
+
+		else:
+			# add path from notebook
+			list_object = {
+					Source.LEFT: self._application.get_left_object(),
+					Source.RIGHT: self._application.get_right_object()
+				}[source]
+
+			path = list_object._options.get('path')
+
+			if path is not None:
+				self._directory_store.append((path, False, False))
+
+		# enable save button
+		self._parent.enable_save()
+
+		return True
+
+	def _delete_path(self, widget, data=None):
+		"""Remove path from the list"""
+		selection = self._directory_list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		if selected_iter is not None:
+			# remove item from the store
+			item_list.remove(selected_iter)
+
+			# enable save button if item was removed
+			self._parent.enable_save()
+
+	def _move_path(self, widget, direction):
+		"""Move selected path up or down"""
+		selection = self._directory_list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		if selected_iter is not None:
+			# get iter index
+			index = item_list.get_path(selected_iter)[0]
+
+			# depending on direction, swap iters
+			if (direction == -1 and index > 0) \
+			or (direction == 1 and index < len(item_list) - 1):
+				item_list.swap(selected_iter, item_list[index + direction].iter)
+
+			# enable save button if iters were swapped
+			self._parent.enable_save()
+
+	def _toggle_path(self, cell, path, target_list):
+		"""Handle toggling path entry for specific list"""
+		if target_list == Source.LEFT:
+			# toggle for left list
+			state = self._directory_store[path][DirectoryColumn.LEFT_LIST]
+			self._directory_store[path][DirectoryColumn.LEFT_LIST] = not state
+
+		else:
+			# toggle for right list
+			state = self._directory_store[path][DirectoryColumn.RIGHT_LIST]
+			self._directory_store[path][DirectoryColumn.RIGHT_LIST] = not state
+
+		# enable save button
+		self._parent.enable_save()
+	
+		return True
 
 	def _vim_bindings_toggled(self, widget, data=None):
 		"""Handle toggling VIM bindings on or off"""
@@ -387,6 +584,7 @@ class ItemListOptions(SettingsPage):
 		self._combobox_indicator.child.set_text(section.get('selection_indicator'))
 		self._entry_time_format.set_text(section.get('time_format'))
 		self._button_selection_color.set_color(gtk.gdk.color_parse(section.get('selection_color')))
+		self._checkbox_load_directories.set_active(section.get('force_directories'))
 
 		search_modifier = section.get('search_modifier')
 		self._checkbox_control.set_active(search_modifier[0] == '1')
@@ -398,6 +596,15 @@ class ItemListOptions(SettingsPage):
 
 		# populate editor
 		self._populate_column_editor_extensions()
+
+		# load directories
+		self._directory_store.clear()
+
+		left_list = section.get('left_directories')
+		right_list = section.get('right_directories')
+
+		for path in set(left_list + right_list):
+			self._directory_store.append((path, path in left_list, path in right_list))
 
 	def _save_options(self):
 		"""Save item list options"""
@@ -417,6 +624,7 @@ class ItemListOptions(SettingsPage):
 		section.set('time_format', self._entry_time_format.get_text())
 		section.set('selection_color', self._button_selection_color.get_color().to_string())
 		section.set('selection_indicator', self._combobox_indicator.get_active_text())
+		section.set('force_directories', self._checkbox_load_directories.get_active())
 
 		search_modifier = "%d%d%d" % (
 								self._checkbox_control.get_active(),
@@ -427,3 +635,21 @@ class ItemListOptions(SettingsPage):
 
 		# save column settings
 		map(lambda extension: extension._save_settings(), self._application.column_editor_extensions)
+
+		# save directories
+		left_list = []
+		right_list = []
+
+		for row in self._directory_store:
+			path = row[DirectoryColumn.PATH]
+			add_to_left = row[DirectoryColumn.LEFT_LIST]
+			add_to_right = row[DirectoryColumn.RIGHT_LIST]
+
+			if add_to_left:
+				left_list.append(path)
+
+			if add_to_right:
+				right_list.append(path)
+
+		section.set('left_directories', left_list)
+		section.set('right_directories', right_list)

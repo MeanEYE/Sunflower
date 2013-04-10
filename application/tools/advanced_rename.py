@@ -178,7 +178,7 @@ class AdvancedRename:
 
 		for row in self._list:
 			old_name = row[Column.OLD_NAME]
-			new_name = old_name
+			new_name = old_name.decode('utf8')
 
 			# run new name through extensions
 			for child in active_children:

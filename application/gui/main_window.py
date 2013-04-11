@@ -73,6 +73,7 @@ class MainWindow(gtk.Window):
 
 		# local variables
 		self._geometry = None
+		self._handle_position = None
 		self._active_object = None
 		self._accel_group = None
 
@@ -897,6 +898,7 @@ class MainWindow(gtk.Window):
 		"""Handle window resizing"""
 		if self.window.get_state() == 0:
 			self._geometry = self.get_size() + self.get_position()
+			self._handle_position = self._paned.get_position()
 
 	def _handle_window_state_event(self, widget, event):
 		"""Handle window state change"""
@@ -1372,7 +1374,7 @@ class MainWindow(gtk.Window):
 		section.set('geometry', geometry)
 
 		# save handle position
-		section.set('handle_position', self._paned.get_position())
+		section.set('handle_position', self._handle_position)
 
 	def _save_active_notebook(self):
 		"""Save active notebook to config"""

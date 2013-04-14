@@ -1,3 +1,22 @@
+Version 0.1a-55
+  + Added a way for file system provider to tell program if it supports getting file system metrics.
+  + Created keyboard accelerator for opening bookmarks menu for current list.
+  + Store default values for create file/directory dialog.
+  + Added default options for forcing directories tab on start up.
+  * Updated Russian translation
+  * Fixed issue with unicode characters in advanced rename tool.
+  * Properly calculate number of preload items in file list.
+  * Fixed racing condition between threads used to load content of directory.
+  * Deselect all items when pressing Ctrl+A and all items are already selected.
+  * Properly cancel directory monitor when closing tab.
+  * Fixed showing free space warning if destination provider doesn't support checking for free space.
+  * Fix cases where volume-added signal is not automatically emitted on start up.
+  * Unquote URI names in system bookmarks.
+  * Store handle position when configure-event is fired instead when saving window.
+  * Simplified tab loading code. Added support for forcing specified list of directories.
+  * Fixed bug which prevented setting previous size when expander is closed.
+  * Handle applications that do not support URIs.
+
 Version 0.1a-54
   + Support loading modules from user's home directory.
   + Created SFTP mount manager extension.

@@ -1,3 +1,5 @@
+- When creating file allow selecting template from currently listed directory.
+
 - Allow opening commands in terminal tab when terminal type is EXTERNAL
 
 - Make file list plugin use options container to store path instead of using local parameter.

@@ -351,10 +351,12 @@ class FileCreateDialog(CreateDialog):
 		label_templates = gtk.Label(_('Template:'))
 		label_templates.set_alignment(0, 0.5)
 
+		self._templates = gtk.ListStore(str, str, str)
+
 		cell_icon = gtk.CellRendererPixbuf()
 		cell_name = gtk.CellRendererText()
 
-		self._templates = gtk.ListStore(str, str, str)
+		# create template combobox
 		self._template_list = gtk.ComboBox(self._templates)
 		self._template_list.set_row_separator_func(self._row_is_separator)
 		self._template_list.connect('changed', self._template_changed)

@@ -75,10 +75,17 @@ class TerminalOptions(SettingsPage):
 		self._entry_command = gtk.Entry()
 		self._entry_command.connect('changed', self._parent.enable_save)
 
+		vbox_command2 = gtk.VBox(False, 0)
+		label_command2 = gtk.Label(_('Command line for executing specific program:'))
+		label_command2.set_alignment(0, 0.5)
+		self._entry_command2 = gtk.Entry()
+		self._entry_command2.connect('changed', self._parent.enable_save)
+
 		label_note = gtk.Label(_(
 					'<small><i>Note:'
 					'\n\tOmitting {0} will open new terminal application instead of tab.'
 					'\n\t{0} will be replaced with socket/window id.'
+					'\n\t{1} will be replaced with specified command and its parameters.'
 					'</i></small>'
 				));
 		label_note.set_alignment(0, 0)
@@ -96,7 +103,8 @@ class TerminalOptions(SettingsPage):
 
 		vbox_command.pack_start(label_command, False, False, 0)
 		vbox_command.pack_start(self._entry_command, False, False, 0)
-		vbox_command.pack_start(label_note, False, False, 0)
+		vbox_command2.pack_start(label_command2, False, False, 0)
+		vbox_command2.pack_start(self._entry_command2, False, False, 0)
 
 		self._vbox_vte.pack_start(self._checkbox_scrollbars_visible, False, False, 0)
 		self._vbox_vte.pack_start(self._checkbox_system_font, False, False, 0)
@@ -106,6 +114,8 @@ class TerminalOptions(SettingsPage):
 		self._vbox_vte.pack_start(self._checkbox_autohide_mouse, False, False, 0)
 
 		self._vbox_external.pack_start(vbox_command, False, False, 0)
+		self._vbox_external.pack_start(vbox_command2, False, False, 0)
+		self._vbox_external.pack_start(label_note, False, False, 0)
 
 		align_vte.add(self._vbox_vte)
 		align_external.add(self._vbox_external)
@@ -126,6 +136,7 @@ class TerminalOptions(SettingsPage):
 
 		self._checkbox_scrollbars_visible.set_active(options.get('show_scrollbars'))
 		self._entry_command.set_text(options.get('command'))
+		self._entry_command2.set_text(options.get('command2'))
 		self._checkbox_system_font.set_active(options.get('use_system_font'))
 		self._combobox_cursor_shape.set_active(options.get('cursor_shape'))
 		self._checkbox_allow_bold.set_active(options.get('allow_bold'))
@@ -149,6 +160,7 @@ class TerminalOptions(SettingsPage):
 
 		options.set('show_scrollbars', self._checkbox_scrollbars_visible.get_active())
 		options.set('command', self._entry_command.get_text())
+		options.set('command2', self._entry_command2.get_text())
 		options.set('use_system_font', self._checkbox_system_font.get_active())
 		options.set('cursor_shape', self._combobox_cursor_shape.get_active())
 		options.set('allow_bold', self._checkbox_allow_bold.get_active())

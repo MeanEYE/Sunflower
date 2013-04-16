@@ -73,7 +73,6 @@ class MainWindow(gtk.Window):
 
 		# local variables
 		self._geometry = None
-		self._handle_position = None
 		self._active_object = None
 		self._accel_group = None
 
@@ -601,8 +600,8 @@ class MainWindow(gtk.Window):
 		self.right_notebook.connect('switch-page', self._page_switched)
 		self.right_notebook.set_group_id(0)
 
-		self._paned.pack1(self.left_notebook, resize=False, shrink=False)
-		self._paned.pack2(self.right_notebook, resize=False, shrink=False)
+		self._paned.pack1(self.left_notebook, resize=True, shrink=False)
+		self._paned.pack2(self.right_notebook, resize=True, shrink=False)
 		# command line prompt
 		self.command_entry_bar = gtk.HBox(False, 0)
 		self.status_bar = gtk.HBox(False, 0)
@@ -898,7 +897,6 @@ class MainWindow(gtk.Window):
 		"""Handle window resizing"""
 		if self.window.get_state() == 0:
 			self._geometry = self.get_size() + self.get_position()
-			self._handle_position = self._paned.get_position()
 
 	def _handle_window_state_event(self, widget, event):
 		"""Handle window state change"""
@@ -1374,7 +1372,7 @@ class MainWindow(gtk.Window):
 		section.set('geometry', geometry)
 
 		# save handle position
-		section.set('handle_position', self._handle_position)
+		section.set('handle_position', self._paned.get_position())
 
 	def _save_active_notebook(self):
 		"""Save active notebook to config"""
@@ -1401,7 +1399,7 @@ class MainWindow(gtk.Window):
 			self.fullscreen()
 
 		# restore handle position
-		if section.has('handle_position'):
+		if section.has('handle_position') and section.get('handle_position'):
 			self._paned.set_position(section.get('handle_position'))
 
 	def _parse_arguments(self):

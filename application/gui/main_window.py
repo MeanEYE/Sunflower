@@ -1892,19 +1892,13 @@ class MainWindow(gtk.Window):
 
 				else:
 					# command is console based, create terminal tab and fork it
-					terminal_type = self.options.section('terminal').get('type')
+					options = Parameters()
+					options.set('close_with_child', False)
+					options.set('shell_command', command[0])
+					options.set('arguments', command)
+					options.set('path', active_object.path)
 
-					if terminal_type == TerminalType.EXTERNAL:
-						os.system('{0} &'.format(raw_command))
-
-					else:
-						options = Parameters()
-						options.set('close_with_child', False)
-						options.set('shell_command', command[0])
-						options.set('arguments', command)
-						options.set('path', active_object.path)
-
-						self.create_terminal_tab(active_object._notebook, options)
+					self.create_terminal_tab(active_object._notebook, options)
 
 				handled = True
 
@@ -2138,7 +2132,8 @@ class MainWindow(gtk.Window):
 		# create default terminal options
 		self.options.create_section('terminal').update({
 					'show_scrollbars': True,
-					'command': 'urxvt -embed {0}',
+					'command': 'xterm -into {0}',
+					'command2': 'xterm -into {0} -e "{1}"',
 					'type': 0,
 					'cursor_shape': 0,
 					'use_system_font': True,

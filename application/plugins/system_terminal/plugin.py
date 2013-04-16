@@ -1,5 +1,6 @@
 import os
 import user
+import shlex
 import subprocess
 
 from parameters import Parameters
@@ -23,11 +24,11 @@ class SystemTerminal(Terminal):
 		# make sure we open in a good path
 		self.path = self._options.get('path', user.home)
 		self._close_on_child_exit = self._options.get('close_with_child', True)
+		self._terminal_type = self._parent.options.section('terminal').get('type')
+
 		shell_command = self._options.get('shell_command', os.environ['SHELL'])
 
-		terminal_type = self._parent.options.section('terminal').get('type')
-
-		if terminal_type == TerminalType.VTE:
+		if self._terminal_type == TerminalType.VTE:
 			# we need TERM environment variable set
 			if not 'TERM' in os.environ:
 				os.environ['TERM'] = 'xterm-color'
@@ -39,7 +40,7 @@ class SystemTerminal(Terminal):
 				self._terminal.connect('status-line-changed', self._update_terminal_status)
 				self._terminal.connect('realize', self.__terminal_realized)
 
-		elif terminal_type == TerminalType.EXTERNAL:
+		elif self._terminal_type == TerminalType.EXTERNAL:
 			# connect signals
 			self._terminal.connect('realize', self.__socket_realized)
 			self._terminal.connect('plug-removed', self.__child_exited)
@@ -57,10 +58,21 @@ class SystemTerminal(Terminal):
 	def __socket_realized(self, widget, data=None):
 		"""Connect process when socket is realized"""
 		socket_id = self._terminal.get_id()
+		shell_command = self._options.get('shell_command', None)
+		command_version = 'command' if shell_command is None else 'command2'
+		arguments = self._options.get('arguments', [])
 
-		terminal_command = self._parent.options.section('terminal').get('command')
-		terminal_command = terminal_command.format(socket_id).split(' ')
+		# append additional parameter if we need to wait for command to finish
+		if not self._options.get('close_with_child'):
+			arguments.extend(('&&', 'read'))
+
+		arguments_string = ' '.join(arguments)
+
+		# parse command
+		terminal_command = self._parent.options.section('terminal').get(command_version)
+		terminal_command = shlex.split(terminal_command.format(socket_id, arguments_string))
 		
+		# execute process
 		process = subprocess.Popen(terminal_command, cwd=self.path)
 		self._pid = process.pid
 
@@ -76,7 +88,7 @@ class SystemTerminal(Terminal):
 
 	def __child_exited(self, widget, data=None):
 		"""Handle child process termination"""
-		if self._close_on_child_exit:
+		if self._close_on_child_exit or self._terminal_type == TerminalType.EXTERNAL:
 			self._close_tab()
 
 	def __update_path_from_pid(self):

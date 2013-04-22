@@ -1399,8 +1399,11 @@ class MainWindow(gtk.Window):
 			self.fullscreen()
 
 		# restore handle position
-		if section.has('handle_position') and section.get('handle_position'):
-			self._paned.set_position(section.get('handle_position'))
+		if section.has('handle_position'):
+			position = section.get('handle_position')
+
+			if isinstance(position, int):
+				self._paned.set_position(section.get('handle_position'))
 
 	def _parse_arguments(self):
 		"""Parse command-line arguments passed to the application"""

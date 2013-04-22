@@ -30,7 +30,7 @@ class KeyringManager:
 	"""
 
 	KEYRING_NAME = 'sunflower'
-	TIMEOUT = 2
+	TIMEOUT = 1
 
 	if keyring is not None:
 		KEYRING_TYPE = {
@@ -98,6 +98,9 @@ class KeyringManager:
 		# lock keyring
 		keyring.lock_sync(self.KEYRING_NAME)
 
+		# update information about keyring
+		self.__update_info()
+
 	def __unlock_keyring(self):
 		"""Unlock keyring and schedule automatic lock"""
 		result = False
@@ -153,7 +156,6 @@ class KeyringManager:
 		"""Lock keyring"""
 		if self.keyring_exists():
 			self.__lock_keyring()
-			self.__update_info()
 
 	def keyring_exists(self):
 		"""Check if keyring exists"""

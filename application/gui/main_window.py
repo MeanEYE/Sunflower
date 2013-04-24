@@ -1372,7 +1372,8 @@ class MainWindow(gtk.Window):
 		section.set('geometry', geometry)
 
 		# save handle position
-		section.set('handle_position', self._paned.get_position())
+		if window_state == 0:
+			section.set('handle_position', self._paned.get_position())
 
 	def _save_active_notebook(self):
 		"""Save active notebook to config"""
@@ -1384,6 +1385,10 @@ class MainWindow(gtk.Window):
 	def _restore_window_position(self):
 		"""Restore window position from config string"""
 		section = self.window_options.section('main')
+
+		# block event handlers
+		self.handler_block_by_func(self._handle_configure_event)
+		self.handler_block_by_func(self._handle_window_state_event)
 
 		# restore window geometry
 		self.parse_geometry(section.get('geometry'))
@@ -1404,6 +1409,10 @@ class MainWindow(gtk.Window):
 
 			if isinstance(position, int):
 				self._paned.set_position(section.get('handle_position'))
+
+		# restore event handlers
+		self.handler_unblock_by_func(self._handle_configure_event)
+		self.handler_unblock_by_func(self._handle_window_state_event)
 
 	def _parse_arguments(self):
 		"""Parse command-line arguments passed to the application"""

@@ -2170,7 +2170,8 @@ class MainWindow(gtk.Window):
 					'mode_format': 1,
 					'left_directories': [],
 					'right_directories': [],
-					'force_directories': False
+					'force_directories': False,
+					'show_expanders': False
 				})
 
 		# create default operation options

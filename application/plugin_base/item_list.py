@@ -261,6 +261,8 @@ class ItemList(PluginBase):
 		group.add_method('copy_path_to_clipboard', _('Copy path to clipboard'), self.copy_path_to_clipboard)
 		group.add_method('custom_path_entry', _('Ask and navigate to path'), self.custom_path_entry)
 		group.add_method('start_quick_search', _('Start quick search'), self._handle_start_search)
+		group.add_method('expand_directory', _('Expand directory'), self._expand_directory)
+		group.add_method('collapse_directory', _('Collapse directory'), self._collapse_directory)
 
 		# configure accelerators
 		group.set_accelerator('execute_item', keyval('Return'), 0)
@@ -304,6 +306,8 @@ class ItemList(PluginBase):
 		group.set_accelerator('copy_path_to_clipboard', keyval('l'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('custom_path_entry', keyval('l'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('start_quick_search', keyval('f'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('expand_directory', keyval('Right'), 0)
+		group.set_accelerator('collapse_directory', keyval('Left'), 0)
 
 		# create bookmark accelerators
 		group.add_method('bookmark_home', _("Go to '{0}'"), self._parent.activate_bookmark, 0)
@@ -766,6 +770,14 @@ class ItemList(PluginBase):
 
 	def _open_directory(self, widget=None, data=None):
 		"""Open selected directory"""
+		return True
+
+	def _expand_directory(self, widget=None, data=None):
+		"""Expand currently selected directory"""
+		return True
+
+	def _collapse_directory(self, widget=None, data=None):
+		"""Collapse currently selected directory"""
 		return True
 
 	def _create_directory(self, widget=None, data=None):

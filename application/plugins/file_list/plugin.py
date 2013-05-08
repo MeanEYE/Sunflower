@@ -91,7 +91,7 @@ class FileList(ItemList):
 		self._preload_size = 0
 
 		# storage system for list items
-		self._store = gtk.ListStore(
+		self._store = gtk.TreeStore(
 								str,	# Column.NAME
 								str,	# Column.FORMATED_NAME
 								str,	# Column.EXTENSION
@@ -259,6 +259,9 @@ class FileList(ItemList):
 		# set row hinting
 		row_hinting = self._parent.options.section('item_list').get('row_hinting')
 		self._item_list.set_rules_hint(row_hinting)
+
+		# set visibility of tree expanders
+		self._item_list.set_show_expanders(self._parent.options.section('item_list').get('show_expanders'))
 
 		# set grid lines
 		grid_lines = (
@@ -449,7 +452,8 @@ class FileList(ItemList):
 		item_list, selected_iter = selection.get_selected()
 
 		# we need selection for this
-		if selected_iter is None: return
+		if selected_iter is None:
+			return True
 
 		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
@@ -464,6 +468,66 @@ class FileList(ItemList):
 				# just change path
 				name = item_list.get_value(selected_iter, Column.NAME)
 				self.change_path(os.path.join(self.path, name))
+
+		return True
+
+	def _expand_directory(self, widget=None, data=None):
+		"""Expand currently selected directory"""
+		selection = self._item_list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		# we need selection for this
+		if selected_iter is None:
+			return True
+
+		# get needed data for operation
+		name = item_list.get_value(selected_iter, Column.NAME)
+		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
+		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
+
+		# don't allow expanding parent directory
+		if is_parent:
+			return True
+
+		# start loader thread and expand directory
+		if is_dir:
+			self._load_directory(os.path.join(self.path, name), selected_iter)
+			self._item_list.expand_row(item_list.get_path(selected_iter), False)
+
+		return True
+
+	def _collapse_directory(self, widget=None, data=None):
+		"""Collapse currently selected directory"""
+		selection = self._item_list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		# we need selection for this
+		if selected_iter is None:
+			return True
+
+		# get parent iter
+		if item_list.iter_has_child(selected_iter):
+			parent = selected_iter
+
+		else:
+			parent = item_list.iter_parent(selected_iter)
+
+		# collapse directory and remove its children
+		if parent is not None:
+			# remove children
+			child = item_list.iter_children(parent)
+			while child:
+				old_child = child
+				child = item_list.iter_next(old_child)
+				item_list.remove(old_child)
+
+			# collapse row
+			self._item_list.collapse_row(item_list.get_path(parent))
+
+			# select parent row
+			path = item_list.get_path(parent)
+			self._item_list.set_cursor(path)
+			self._item_list.scroll_to_cell(path)
 
 		return True
 
@@ -656,6 +720,8 @@ class FileList(ItemList):
 		source_provider = self.get_provider()
 		destination_provider = None
 
+		print self._get_selection_list()
+
 		if hasattr(opposite_object, 'get_provider'):
 			destination_provider = opposite_object.get_provider()
 		
@@ -822,7 +888,7 @@ class FileList(ItemList):
 
 		return result
 
-	def _get_selection_list(self, under_cursor=False, relative=False, files_only=False):
+	def _get_selection_list(self, under_cursor=False, relative=False, files_only=False, starting_iter=None):
 		"""Return list of selected items
 
 		This list is used by many other methods inside this program,
@@ -839,10 +905,30 @@ class FileList(ItemList):
 				result.append(self._get_selection())
 
 		else:
-			for row in self._store:
-				if row[Column.SELECTED] and ((not files_only) or (files_only and not row[Column.IS_DIR])):
-					value = row[Column.NAME] if relative else os.path.join(self.path, row[Column.NAME])
-					result.append(value)
+			list_iter = starting_iter or self._store.get_iter_first()
+
+			while list_iter:
+				is_dir = self._store.get_value(list_iter, Column.IS_DIR)
+				is_selected = self._store.get_value(list_iter, Column.SELECTED)
+				name = self._store.get_value(list_iter, Column.NAME)
+
+				# only add to the result list if item matches selection
+				if is_selected and ((not files_only) or (files_only and not is_dir)):
+					result.append(name if not relative else os.path.join(self.path, name))
+
+				# if iter has children check them too
+				if self._store.iter_has_child(list_iter):
+					sublist = self._get_selection_list(
+									under_cursor,
+									relative,
+									files_only,
+									self._store.iter_children(list_iter)
+								)
+
+					if sublist is not None:
+						result.extend(sublist)
+
+				list_iter = self._store.iter_next(list_iter)
 
 			if len(result) == 0:
 				selection = self._get_selection(relative=relative, files_only=files_only)
@@ -1189,12 +1275,13 @@ class FileList(ItemList):
 
 		return result
 
-	def _add_item(self, filename):
+	def _add_item(self, filename, parent=None, parent_path=None):
 		"""Add item to the list"""
 		result = None
 		provider = self.get_provider()
+		full_path = os.path.join(self.path, parent_path) if parent_path else self.path
 
-		file_stat = provider.get_stat(filename, relative_to=self.path)
+		file_stat = provider.get_stat(filename, relative_to=full_path)
 
 		file_size = file_stat.size
 		file_mode = file_stat.mode
@@ -1203,19 +1290,25 @@ class FileList(ItemList):
 
 		# directory
 		if file_stat.type is FileType.DIRECTORY:
-			self._dirs['count'] += 1
 			icon = 'folder'
+
+			if parent is None:
+				self._dirs['count'] += 1
 
 		# regular file
 		elif file_stat.type is FileType.REGULAR:
-			self._files['count'] += 1
-			self._size['total'] += file_size
 			icon = self._parent.icon_manager.get_icon_for_file(filename)
+
+			if parent is None:
+				self._files['count'] += 1
+				self._size['total'] += file_size
 
 		# invalid links or files
 		elif file_stat.type is FileType.INVALID:
-			self._files['count'] += 1
 			icon = 'image-missing'
+
+			if parent is None:
+				self._files['count'] += 1
 
 		# add item to the list
 		try:
@@ -1237,7 +1330,7 @@ class FileList(ItemList):
 				formated_file_size = '<DIR>'
 
 			props = (
-					filename,
+					os.path.join(parent_path, filename) if parent_path else filename,
 					file_info[0],
 					file_info[1][1:],
 					file_size,
@@ -1255,7 +1348,7 @@ class FileList(ItemList):
 					file_stat.group_id
 				)
 
-			result = self._store.append(props)
+			result = self._store.append(parent, props)
 
 			# focus specified item
 			if self._item_to_focus == filename:
@@ -1471,11 +1564,14 @@ class FileList(ItemList):
 		if clear_store:
 			self._clear_list()
 
+		# default value for parent path
+		parent_path = None
+
 		# cache objects and settings
 		show_hidden = self._parent.options.section('item_list').get('show_hidden')
 
 		# get list of items to add
-		item_list = self._provider.list_dir(self.path)
+		item_list = self._provider.list_dir(path)
 
 		# remove hidden files if we don't need them
 		item_list = filter(
@@ -1495,11 +1591,11 @@ class FileList(ItemList):
 		preload_list = item_list[:self._preload_count]
 		item_list = item_list[self._preload_count:]
 
-		if self.path != os.path.sep \
-		and self.path != '{0}://'.format(self.scheme) \
+		if path != os.path.sep \
+		and path != '{0}://'.format(self.scheme) \
 		and parent is None:
 			# add parent option for parent directory
-			self._store.append((
+			self._store.append(parent, (
 							os.path.pardir,
 							os.path.pardir,
 							'',
@@ -1517,10 +1613,13 @@ class FileList(ItemList):
 							0,
 							0
 						))
+		else:
+			# prepare full parent path
+			parent_path = self._store.get_value(parent, Column.NAME)
 
 		# preload items
 		for item_name in preload_list:
-			self._add_item(item_name)
+			self._add_item(item_name, parent, parent_path)
 
 		# let the rest of items load in a separate thread
 		if len(item_list) > 0:
@@ -1539,7 +1638,7 @@ class FileList(ItemList):
 
 					# add item to the list
 					with gtk.gdk.lock:
-						self._add_item(item_name)
+						self._add_item(item_name, parent, parent_path)
 
 				# hide spinner animation
 				with gtk.gdk.lock:
@@ -1865,6 +1964,9 @@ class FileList(ItemList):
 		# apply row hinting
 		row_hinting = section.get('row_hinting')
 		self._item_list.set_rules_hint(row_hinting)
+
+		# apply expander visibility
+		self._item_list.set_show_expanders(section.get('show_expanders'))
 
 		# apply grid lines
 		grid_lines = (

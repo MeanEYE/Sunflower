@@ -519,6 +519,26 @@ class CopyOperation(Operation):
 
 				self._file_list.append(item)
 
+				# if item is part of expanded directory check if we need to add that directory
+				if os.path.sep in item:
+					can_procede = True
+					can_create = True
+					directory = os.path.dirname(item)
+
+					# check if directory exists on destination
+					if self._destination.exists(directory, relative_to=self._destination_path):
+						can_create = False
+
+						if self._merge_all is not None:
+							can_procede = self._merge_all
+						else:
+							can_procede = self._get_merge_input(directory)
+
+					# if user didn't skip directory, scan and update lists
+					if can_procede and directory not in self._dir_list_create:
+						self._dir_list.append(directory)
+						if can_create: self._dir_list_create.append(directory)
+
 	def _set_mode(self, path, mode):
 		"""Set mode for specified path"""
 		if not self._options[Option.SET_MODE]: return
@@ -647,11 +667,20 @@ class CopyOperation(Operation):
 
 		try:
 			# try to create a directory
-			self._destination.create_directory(
-			                                directory,
-			                                mode,
-			                                relative_to=self._destination_path
-			                            )
+			if self._destination.exists(directory, relative_to=self._destination_path):
+				if not self._destination.is_dir(directory, relative_to=self._destination_path):
+					raise StandardError(_(
+							'Unable to create directory because file with the same name '
+							'already exists in target directory.'
+						))
+
+			else:
+				# inode with specified name doesn't exist, create directory
+				self._destination.create_directory(
+												directory,
+												mode,
+												relative_to=self._destination_path
+											)
 
 		except StandardError as error:
 			# there was a problem creating directory
@@ -805,12 +834,12 @@ class CopyOperation(Operation):
 		"""Create all directories in list"""
 		gobject.idle_add(self._update_status, _('Creating directories...'))
 
-		for number, dir_ in enumerate(self._dir_list_create, 0):
+		for number, directory in enumerate(self._dir_list_create, 0):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
-			gobject.idle_add(self._dialog.set_current_file, dir_)
-			self._create_directory(dir_)  # create directory
+			gobject.idle_add(self._dialog.set_current_file, directory)
+			self._create_directory(directory)  # create directory
 
 			gobject.idle_add(
 						self._dialog.set_current_file_fraction,

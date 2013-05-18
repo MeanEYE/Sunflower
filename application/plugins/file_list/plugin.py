@@ -1600,30 +1600,31 @@ class FileList(ItemList):
 		item_list = item_list[self._preload_count:]
 
 		if path != os.path.sep \
-		and path != '{0}://'.format(self.scheme) \
-		and parent is None:
-			# add parent option for parent directory
-			self._store.append(parent, (
-							os.path.pardir,
-							os.path.pardir,
-							'',
-							-2,
-							'<DIR>',
-							-1,
-							'',
-							-1,
-							'',
-							True,
-							True,
-							None,
-							'up',
-							None,
-							0,
-							0
-						))
-		else:
-			# prepare full parent path
-			parent_path = self._store.get_value(parent, Column.NAME)
+		and path != '{0}://'.format(self.scheme):
+			if parent is None:
+				# add parent option for parent directory
+				self._store.append(parent, (
+								os.path.pardir,
+								os.path.pardir,
+								'',
+								-2,
+								'<DIR>',
+								-1,
+								'',
+								-1,
+								'',
+								True,
+								True,
+								None,
+								'up',
+								None,
+								0,
+								0
+							))
+
+			else:
+				# prepare full parent path
+				parent_path = self._store.get_value(parent, Column.NAME)
 
 		# preload items
 		for item_name in preload_list:

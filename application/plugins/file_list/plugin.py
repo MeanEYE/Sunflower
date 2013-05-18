@@ -1196,9 +1196,19 @@ class FileList(ItemList):
 			# select next item in the list
 			next_iter = item_list.iter_next(selected_iter)
 			if next_iter is not None:
+				# iter is not last in the list
 				path = item_list.get_path(next_iter)
 				self._item_list.set_cursor(path)
 				self._item_list.scroll_to_cell(path)
+
+			elif item_list.iter_parent(selected_iter) is not None:
+				# if iter is part of expanded directory advance through parent
+				next_iter = item_list.iter_next(item_list.iter_parent(selected_iter))
+
+				if next_iter is not None:
+					path = item_list.get_path(next_iter)
+					self._item_list.set_cursor(path)
+					self._item_list.scroll_to_cell(path)
 
 		return True
 

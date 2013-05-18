@@ -720,8 +720,6 @@ class FileList(ItemList):
 		source_provider = self.get_provider()
 		destination_provider = None
 
-		print self._get_selection_list()
-
 		if hasattr(opposite_object, 'get_provider'):
 			destination_provider = opposite_object.get_provider()
 		
@@ -914,7 +912,7 @@ class FileList(ItemList):
 
 				# only add to the result list if item matches selection
 				if is_selected and ((not files_only) or (files_only and not is_dir)):
-					result.append(name if not relative else os.path.join(self.path, name))
+					result.append(name if relative else os.path.join(self.path, name))
 
 				# if iter has children check them too
 				if self._store.iter_has_child(list_iter):

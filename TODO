@@ -1,5 +1,3 @@
-- When saved location is root, list doesn't gain focus properly on start.
-
 - When creating file allow selecting template from currently listed directory.
 
 - Make file list plugin use options container to store path instead of using local parameter.

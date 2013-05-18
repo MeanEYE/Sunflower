@@ -1359,7 +1359,7 @@ class FileList(ItemList):
 			result = self._store.append(parent, props)
 
 			# focus specified item
-			if self._item_to_focus == filename:
+			if self._item_to_focus == filename or self._item_to_focus is None:
 				path = self._store.get_path(result)
 
 				# set cursor position and scroll ti make it visible
@@ -1367,7 +1367,7 @@ class FileList(ItemList):
 				self._item_list.scroll_to_cell(path)
 
 				# reset local variable
-				self._item_to_focus = None
+				self._item_to_focus = filename
 
 		except Exception as error:
 			print 'Error: {0} - {1}'.format(filename, str(error))

@@ -110,6 +110,10 @@ class Provider:
 		"""Test if given path exists"""
 		pass
 
+	def link(self, existing_path, destination_path, relative_to=None, symbolic=True):
+		"""Create hard or symbolic link from existing path"""
+		pass
+
 	def unlink(self, path, relative_to=None):
 		"""Unlink given path"""
 		pass

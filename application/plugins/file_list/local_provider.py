@@ -33,6 +33,18 @@ class LocalProvider(Provider):
 		real_path = self._real_path(path, relative_to)
 		return os.path.exists(real_path)
 
+	def link(self, existing_path, destination_path, relative_to=None, symbolic=True):
+		"""Create hard or symbolic link from existing path"""
+		real_path = self._real_path(path, relative_to)
+
+		if symbolic:
+			# create a symbolic link on destination path from existing path
+			os.symlink(existing_path, real_path)
+
+		else:
+			# create a hard link on destination path from existing path
+			self.link(existing_path, real_path)
+
 	def unlink(self, path, relative_to=None):
 		"""Unlink given path"""
 		real_path = self._real_path(path, relative_to)

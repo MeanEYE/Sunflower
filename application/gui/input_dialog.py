@@ -105,6 +105,93 @@ class InputDialog:
 		return (code, result)
 
 
+class LinkDialog(InputDialog):
+	"""Input dialog for creating symbolic or hard links"""
+
+	def __init__(self, application):
+		InputDialog.__init__(self, application)
+
+		self.set_title(_('Create link'))
+		self.set_label(_('Enter new link name:'))
+
+		self._container.set_spacing(5)
+
+		# create user interface
+		vbox_original_path = gtk.VBox(False, 0)
+		hbox_original_path = gtk.HBox(False, 5)
+
+		label_original_path = gtk.Label(_('Original path:'))
+		label_original_path.set_alignment(0, 0.5)
+		self._entry_original_path = gtk.Entry()
+
+		# create checkbox
+		self._checkbox_hard_link = gtk.CheckButton(_('Create hard link'))
+
+		# create browse button
+		button_browse = gtk.Button(_('Browse'))
+		button_browse.connect('clicked', self._browse_original_path)
+
+		# pack interface
+		hbox_original_path.pack_start(self._entry_original_path, True, True, 0)
+		hbox_original_path.pack_start(button_browse, False, False, 0)
+
+		vbox_original_path.pack_start(label_original_path, False, False, 0)
+		vbox_original_path.pack_start(hbox_original_path, False, False, 0)
+
+		self._container.pack_start(vbox_original_path, False, False, 0)
+		self._container.pack_start(self._checkbox_hard_link, False, False, 0)
+
+		# show all widgets
+		self._container.show_all()
+
+	def _browse_original_path(self, widget, data=None):
+		"""Show file selection dialog"""
+		dialog = gtk.FileChooserDialog(
+							title=_('Select original path'),
+							parent=self._application,
+							action=gtk.FILE_CHOOSER_ACTION_OPEN,
+							buttons=(
+								gtk.STOCK_CANCEL,
+								gtk.RESPONSE_REJECT,
+								gtk.STOCK_OK,
+								gtk.RESPONSE_ACCEPT
+							)
+						)
+		response = dialog.run()
+
+		if response == gtk.RESPONSE_ACCEPT:
+			self._entry_original_path.set_text(dialog.get_filename())
+
+			# if link name is empty, add original path name
+			if self._entry.get_text() == '':
+				self._entry.set_text(os.path.basename(dialog.get_filename()))
+
+		dialog.destroy()
+
+	def set_original_path(self, path):
+		"""Set original path where link point to"""
+		self._entry_original_path.set_text(path)
+
+	def set_hard_link(self, hard_link=True):
+		"""Set hard link option state"""
+		self._checkbox_hard_link.set_active(hard_link)
+
+	def set_hard_link_supported(self, supported):
+		"""Set checkbox state for hard link"""
+		self._checkbox_hard_link.set_sensitive(supported)
+
+	def get_response(self):
+		"""Return value and self-destruct"""
+		code = self._dialog.run()
+		original_path = self._entry_original_path.get_text();
+		link_name = self._entry.get_text()
+		hard_link = self._checkbox_hard_link.get_active()
+
+		self._dialog.destroy()
+
+		return (code, original_path, link_name, hard_link)
+
+
 class CreateDialog(InputDialog):
 	"""Generic create file/directory dialog"""
 

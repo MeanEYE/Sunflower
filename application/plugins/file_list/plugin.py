@@ -11,14 +11,14 @@ from gio_provider import NetworkProvider, TrashProvider, DavProvider, DavsProvid
 from gio_provider import SambaProvider, FtpProvider, SftpProvider
 from gui.input_dialog import ApplicationSelectDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
-from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog
+from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog, LinkDialog
 from gui.properties_window import PropertiesWindow
 from local_provider import LocalProvider
 from operation import DeleteOperation, CopyOperation, MoveOperation
 from parameters import Parameters
 from plugin_base.item_list import ItemList
 from plugin_base.monitor import MonitorSignals, MonitorError
-from plugin_base.provider import FileType, Mode as FileMode
+from plugin_base.provider import FileType, Mode as FileMode, Support as ProviderSupport
 from threading import Thread, Event
 from widgets.thumbnail_view import ThumbnailView
 
@@ -642,6 +642,58 @@ class FileList(ItemList):
 				dialog.destroy()
 
 		return True
+
+	def _create_link(self, widget=None, hard_link=None):
+		"""Create symbolic or hard link"""
+		dialog = LinkDialog(self._parent)
+		provider = self.get_provider()
+		supported_options = provider.get_support()
+
+		if ProviderSupport.SYMBOLIC_LINK in supported_options \
+		or ProviderSupport.HARD_LINK in supported_options:
+			# configure dialog
+			dialog.set_hard_link_supported(ProviderSupport.HARD_LINK in supported_options)
+
+			result = dialog.get_response()
+
+			if result[0] == gtk.RESPONSE_OK:
+				original_path = result[1]
+				link_name = result[2]
+				hard_link = result[3]
+
+				try:
+					provider.link(
+							original_path,
+							link_name,
+							relative_to=self.path,
+							symbolic=not hard_link
+						)
+
+				except Exception as error:
+					# there was a problem creating link, let the user know
+					dialog = gtk.MessageDialog(
+											self._parent,
+											gtk.DIALOG_DESTROY_WITH_PARENT,
+											gtk.MESSAGE_ERROR,
+											gtk.BUTTONS_OK,
+											_(
+												"Error creating new link."
+											) +	"\n\n{0}".format(error)
+										)
+					dialog.run()
+					dialog.destroy()
+
+		else:
+			# current file system doesn't support linking
+			dialog = gtk.MessageDialog(
+									self._parent,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_INFO,
+									gtk.BUTTONS_OK,
+									_('Current file system does not support linking.')
+								)
+			dialog.run()
+			dialog.destroy()
 
 	def _delete_files(self, widget=None, force_delete=None):
 		"""Delete selected files"""

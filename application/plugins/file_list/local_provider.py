@@ -35,7 +35,7 @@ class LocalProvider(Provider):
 
 	def link(self, existing_path, destination_path, relative_to=None, symbolic=True):
 		"""Create hard or symbolic link from existing path"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self._real_path(destination_path, relative_to)
 
 		if symbolic:
 			# create a symbolic link on destination path from existing path
@@ -246,7 +246,8 @@ class LocalProvider(Provider):
 		return (
 			Support.MONITOR,
 			Support.TRASH,
-			Support.LINK,
+			Support.SYMBOLIC_LINK,
+			Support.HARD_LINK,
 			Support.RESERVE_SIZE,
 			Support.SET_OWNER,
 			Support.SET_ACCESS,

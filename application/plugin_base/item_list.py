@@ -263,6 +263,7 @@ class ItemList(PluginBase):
 		group.add_method('start_quick_search', _('Start quick search'), self._handle_start_search)
 		group.add_method('expand_directory', _('Expand directory'), self._expand_directory)
 		group.add_method('collapse_directory', _('Collapse directory'), self._collapse_directory)
+		group.add_method('create_link', _('Create symbolic or hard link'), self._create_link)
 
 		# configure accelerators
 		group.set_accelerator('execute_item', keyval('Return'), 0)
@@ -308,6 +309,7 @@ class ItemList(PluginBase):
 		group.set_accelerator('start_quick_search', keyval('f'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('expand_directory', keyval('Right'), 0)
 		group.set_accelerator('collapse_directory', keyval('Left'), 0)
+		group.set_accelerator('create_link', keyval('F7'), gtk.gdk.SHIFT_MASK)
 
 		# create bookmark accelerators
 		group.add_method('bookmark_home', _("Go to '{0}'"), self._parent.activate_bookmark, 0)
@@ -781,31 +783,35 @@ class ItemList(PluginBase):
 		return True
 
 	def _create_directory(self, widget=None, data=None):
-		"""Abstract method used to create directory"""
+		"""Create directory"""
 		return True
 
 	def _create_file(self, widget=None, data=None):
-		"""Abstract method used to create file"""
+		"""Create file"""
 		return True
 
-	def _delete_files(self, widget=None, data=None):
-		"""Abstract method used to delete files"""
+	def _create_link(self, widget=None, hard_link=None):
+		"""Create symbolic or hard link"""
+		return True
+
+	def _delete_files(self, widget=None, force_delete=None):
+		"""Delete files"""
 		return True
 
 	def _copy_files(self, widget=None, data=None):
-		"""Abstract method used to copy files"""
+		"""Start a copy files operation"""
 		return True
 
 	def _move_files(self, widget=None, data=None):
-		"""Abstract method used to move files"""
+		"""Start a move files operation"""
 		return True
 
 	def _rename_file(self, widget=None, data=None):
-		"""Abstract method used to rename selection"""
+		"""Rename highlighed item"""
 		return True
 
 	def _send_to(self, widget=None, data=None):
-		"""Abstract method for Send To Nautilus integration"""
+		"""Send To Nautilus integration"""
 		pass
 
 	def _cut_files_to_clipboard(self, widget=None, data=None):

@@ -645,13 +645,13 @@ class FileList(ItemList):
 
 	def _create_link(self, widget=None, hard_link=None):
 		"""Create symbolic or hard link"""
-		dialog = LinkDialog(self._parent)
 		provider = self.get_provider()
 		supported_options = provider.get_support()
 
 		if ProviderSupport.SYMBOLIC_LINK in supported_options \
 		or ProviderSupport.HARD_LINK in supported_options:
 			# configure dialog
+			dialog = LinkDialog(self._parent)
 			dialog.set_hard_link_supported(ProviderSupport.HARD_LINK in supported_options)
 
 			result = dialog.get_response()

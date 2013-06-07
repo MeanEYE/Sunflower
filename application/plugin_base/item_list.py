@@ -1039,9 +1039,9 @@ class ItemList(PluginBase):
 		# link/rename
 		item = menu_manager.create_menu_item({
 								'label': _('Ma_ke link'),
+								'callback': self._create_link
 							})
 		result.append(item)
-		item.set_sensitive(False)
 
 		item = menu_manager.create_menu_item({
 								'label': _('_Rename...'),

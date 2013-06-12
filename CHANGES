@@ -1,3 +1,14 @@
+Version 0.1a-56
+  + Support for expandable directories. Based on code by Arseniy Krasnov.
+  + Ability to create symbolic and hard links.
+  + Split provider Support.LINK into two options HARD_LINK and SYMBOLIC_LINK.
+  * Updated Czech translation.
+  * Fixed issue where listing root directory would result in list not getting proper focus.
+  * Fixed issue in get_selection_list method.
+  * Test main window handle position before applying it.
+  * Block event handlers when restoring window state and position.
+  * Fixed bug with keyring auto-lock.
+
 Version 0.1a-55
   + Added a way for file system provider to tell program if it supports getting file system metrics.
   + Created keyboard accelerator for opening bookmarks menu for current list.

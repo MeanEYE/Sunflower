@@ -283,6 +283,7 @@ class MainWindow(gtk.Window):
 					},
 					{
 						'label': _('Ma_ke link'),
+						'callback': self._create_link,
 						'path': '<Sunflower>/Edit/MakeLink',
 					},
 					{
@@ -1315,6 +1316,17 @@ class MainWindow(gtk.Window):
 
 		if hasattr(active_object, '_send_to'):
 			active_object._send_to()
+			result = True
+
+		return result
+
+	def _create_link(self, widget=None, data=None):
+		"""Show dialog for creating symbolic or hard links"""
+		result = False
+		active_object = self.get_active_object()
+
+		if hasattr(active_object, '_create_link'):
+			active_object._create_link()
 			result = True
 
 		return result

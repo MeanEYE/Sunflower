@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 #
-#	Sunflower.py
+#	Sunflower File Manager
+#	http://sunflower-fm.org
 #
 #	Copyright (c) 2011. by Mladen (MeanEYE) Mijatov
-#	RCF Group, http://rcf-group.com
 #
 #	This program is free software; you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by

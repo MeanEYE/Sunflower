@@ -96,16 +96,17 @@ class GioProvider(Provider):
 		"""Create empty file with specified mode set"""
 		real_path = self._real_path(path, relative_to)
 		gio.File(real_path).create()
-		self.set_mode(real_path, mode)
+
+		if Support.SET_ACCESS in self.get_support():
+			self.set_mode(real_path, mode)
 
 	def create_directory(self, path, mode=None, relative_to=None):
 		"""Create directory with specified mode set"""
 		real_path = self._real_path(path, relative_to)
 		gio.File(real_path).make_directory_with_parents()
-		try:
+
+		if Support.SET_ACCESS in self.get_support():
 			self.set_mode(real_path, mode)
-		except:
-			pass
 
 	def get_file_handle(self, path, mode, relative_to=None):
 		"""Open path in specified mode and return its handle"""

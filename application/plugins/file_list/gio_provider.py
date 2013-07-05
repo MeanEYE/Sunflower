@@ -14,17 +14,29 @@ class GioProvider(Provider):
 
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
+		result = False
 		real_path = self._real_path(path, relative_to)
-		info = gio.File(real_path).query_info('standard::type')
 
-		return info.get_file_type() == gio.FILE_TYPE_REGULAR
+		try:
+			info = gio.File(real_path).query_info('standard::type')
+			result = info.get_file_type() == gio.FILE_TYPE_REGULAR
+		except gio.Error as error:
+			pass
+
+		return result
 
 	def is_dir(self, path, relative_to=None):
 		"""Test if given path is directory"""
+		result = False
 		real_path = self._real_path(path, relative_to)
-		info = gio.File(real_path).query_info('standard::type')
 
-		return info.get_file_type() == gio.FILE_TYPE_DIRECTORY
+		try:
+			info = gio.File(real_path).query_info('standard::type')
+			result = info.get_file_type() == gio.FILE_TYPE_DIRECTORY
+		except gio.Error as error:
+			pass
+
+		return result
 
 	def is_link(self, path, relative_to=None):
 		"""Test if given path is a link"""

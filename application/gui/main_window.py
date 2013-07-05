@@ -2613,6 +2613,13 @@ class MainWindow(gtk.Window):
 
 		return result
 
+	def set_command_entry_text(self, text, focus=True):
+		"""Set command entry text and focus if specified"""
+		self.command_edit.set_text(text)
+
+		if focus:
+			self.focus_command_entry()
+
 	def set_clipboard_text(self, text):
 		"""Set text data to clipboard"""
 		self.clipboard.set_text(text)

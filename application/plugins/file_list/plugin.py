@@ -489,6 +489,10 @@ class FileList(ItemList):
 		if is_parent:
 			return True
 
+		# show expanders if they are hidden
+		if not self._item_list.get_show_expanders():
+			self._item_list.set_show_expanders(True)
+
 		# start loader thread and expand directory
 		if is_dir and not item_list.iter_has_child(selected_iter):
 			self._load_directory(os.path.join(self.path, name), selected_iter)

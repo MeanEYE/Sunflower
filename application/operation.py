@@ -50,6 +50,9 @@ class Operation(Thread):
 		self._source = source
 		self._destination = destination
 		self._options = options
+		
+		# daemonize
+		self.daemon = True
 
 		# create operation dialog
 		self._dialog = None

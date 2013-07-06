@@ -490,7 +490,7 @@ class FileList(ItemList):
 			return True
 
 		# start loader thread and expand directory
-		if is_dir:
+		if is_dir and not item_list.iter_has_child(selected_iter):
 			self._load_directory(os.path.join(self.path, name), selected_iter)
 			self._item_list.expand_row(item_list.get_path(selected_iter), False)
 

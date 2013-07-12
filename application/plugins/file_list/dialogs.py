@@ -162,8 +162,7 @@ class SambaInputDialog:
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""
 		if self._entry_name.get_text() == '' \
-		or self._entry_server.get_text() == '' \
-		or self._entry_share.get_text() == '':
+		or self._entry_server.get_text() == '':
 			# missing required fields
 			dialog = gtk.MessageDialog(
 									self._dialog,
@@ -171,7 +170,7 @@ class SambaInputDialog:
 									gtk.MESSAGE_INFO,
 									gtk.BUTTONS_OK,
 									_(
-										'One or more required fields is empty. '
+										'One or more required fields are empty. '
 										'Please make sure you have entered name, '
 										'server and share.'
 									) 

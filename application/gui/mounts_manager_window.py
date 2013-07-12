@@ -96,6 +96,7 @@ class MountsManagerWindow(gtk.Window):
 
 		col_label.add_attribute(cell_icon, 'icon-name', PagesColumn.ICON)
 		col_label.add_attribute(cell_label, 'text', PagesColumn.NAME)
+		col_label.set_cell_data_func(cell_count, self._mount_count_data_function)
 
 		self._tab_labels.append_column(col_label)
 		self._tab_labels.set_headers_visible(False)
@@ -143,6 +144,11 @@ class MountsManagerWindow(gtk.Window):
 
 		# tell parent we are ready for mount list population
 		self._parent._populate_list()
+
+	def _mount_count_data_function(self, column, renderer, model, current_iter, data=None):
+		"""Set content of cell renderer when drawing number of mounts extension has"""
+		count = model.get_value(current_iter, PagesColumn.COUNT)
+		renderer.set_property('text', count if count > 0 else '')
 
 	def _attach_menus(self):
 		"""Attach menu items to main window"""
@@ -312,6 +318,16 @@ class MountsManagerWindow(gtk.Window):
 		"""Remove mount entry"""
 		self._mounts.remove_mount(uri)
 
+	def set_count(self, extension, count):
+		"""Set number of mounts extension has"""
+		icon_name, extension_name = extension.get_information()
+
+		# set count
+		for row in self._pages_store:
+			if self._pages_store.get_value(row.iter, PagesColumn.NAME) == extension_name:
+				self._pages_store.set_value(row.iter, PagesColumn.COUNT, count)
+				break
+
 
 class MountsExtension(MountManagerExtension):
 	"""Extension that provides list of all mounted resources"""
@@ -477,6 +493,9 @@ class MountsExtension(MountManagerExtension):
 
 		self._store.append((icon, name, markup_name, uri, extension, system_wide))
 
+		# notify main window about number change
+		self._window.set_count(self, len(self._store))
+
 	def remove_mount(self, uri):
 		"""Remove mount from the list"""
 		mount_iter = self._get_iter_by_uri(uri)
@@ -488,6 +507,9 @@ class MountsExtension(MountManagerExtension):
 		# remove mount objects if exists
 		if uri in self._mounts:
 			self._mounts.pop(uri)
+
+		# notify main window about number change
+		self._window.set_count(self, len(self._store))
 
 	def unmount(self, uri):
 		"""Unmount item with specified URI"""
@@ -718,6 +740,9 @@ class VolumesExtension(MountManagerExtension):
 			# perform auto-mount of volume
 			volume.mount(None, self._mount_finish, GIO_MOUNT_MOUNT_NONE, None, None)
 
+		# notify main window about number change
+		self._window.set_count(self, len(self._store))
+
 	def remove_volume(self, volume):
 		"""Remove volume from the list"""
 		volume_iter = self._get_iter_by_object(volume)
@@ -725,6 +750,9 @@ class VolumesExtension(MountManagerExtension):
 		# remove if volume exists
 		if volume_iter is not None:
 			self._store.remove(volume_iter)
+
+		# notify main window about number change
+		self._window.set_count(self, len(self._store))
 
 	def volume_mounted(self, volume):
 		"""Mark volume with specified UUID as mounted"""

@@ -227,13 +227,17 @@ class SambaExtension(GioExtension):
 	def __form_uri(self, server, share, directory):
 		"""Form URI based on result from SambaInputDialog dialog"""
 		scheme = self.scheme
-		path = share
+		path = ''
+
+		# include share
+		if share is not None and share != '':
+			path = share
 
 		# include directory
 		if directory is not None and directory != '':
 			path = '{0}/{1}'.format(path, directory)
 
-		return '{0}://{1}/{2}/'.format(scheme, server, path)
+		return '{0}://{1}/{2}'.format(scheme, server, path)
 
 	def __store_mount(self, params, uri):
 		"""Store mount entry to configuration file and list store"""

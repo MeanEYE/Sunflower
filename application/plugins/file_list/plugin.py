@@ -641,7 +641,7 @@ class FileList(ItemList):
 											"There was an error creating file. "
 											"Make sure you have enough permissions."
 										) + "\n\n{0}".format(error)
-										)
+									)
 				dialog.run()
 				dialog.destroy()
 

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Sunflower 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-13 00:10+0300\n"
-"PO-Revision-Date: 2013-06-24 13:01+0100\n"
+"PO-Revision-Date: 2013-08-27 20:18+0100\n"
 "Last-Translator: Kévin Pellet <ilphrin@autistici.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.5.7\n"
 
 #: application/keyring.py:61
 msgid "Keyring is unlocked"
@@ -1012,7 +1012,7 @@ msgid ""
 msgstr ""
 "<b>Note:</b> Vous pouvez seulement éditer un accélérateur provenant d'objets "
 "crées au moins une fois dans cette session. Pour désactiver les accélérateur "
-"appuyez sur <i>Backspace</i> dans le mode d'assignation."
+"appuyez sur <i>Retour arrière</i> dans le mode d'assignation."
 
 #: application/gui/preferences/toolbar.py:18
 msgid "Toolbar"
@@ -1704,8 +1704,9 @@ msgid "Mount manager"
 msgstr "Gestionnaire de montage"
 
 #: application/gui/mounts_manager_window.py:355
+#, fuzzy
 msgid "Systemwide"
-msgstr ""
+msgstr "Système entier"
 
 #: application/gui/mounts_manager_window.py:377
 msgid "Open selected URI in new tab"
@@ -2026,17 +2027,14 @@ msgid "Main Menu"
 msgstr "Menu Principal"
 
 #: application/gui/main_window.py:2057
-#, fuzzy
 msgid "Restore handle position"
-msgstr "Restaurer la position de la poignée"
+msgstr "Restaurer la position initiale de la poignée"
 
 #: application/gui/main_window.py:2058
-#, fuzzy
 msgid "Move handle to the left"
 msgstr "Déplacer la poignée sur la gauche"
 
 #: application/gui/main_window.py:2059
-#, fuzzy
 msgid "Move handle to the right"
 msgstr "Déplacer la poignée sur la droite"
 
@@ -2525,6 +2523,10 @@ msgid ""
 "\n"
 "{0}"
 msgstr ""
+"Vous êtes sur le point d'envoyer des données au processus fils. Êtes-vous "
+"sûr?\n"
+"\n"
+" {0}"
 
 #: application/plugin_base/item_list.py:117
 msgid "Directories (selected/total)"
@@ -2612,14 +2614,12 @@ msgid "Invert selection"
 msgstr "Inverser la sélection"
 
 #: application/plugin_base/item_list.py:241
-#, fuzzy
 msgid "Toggle selection"
-msgstr "Inverser les options"
+msgstr "Inverser la sélection"
 
 #: application/plugin_base/item_list.py:242
-#, fuzzy
 msgid "Toggle selection and move marker up"
-msgstr "Inverser les options et déplacer le marqueur vers le haut"
+msgstr "Inverser la sélection et déplacer le marqueur vers le haut"
 
 #: application/plugin_base/item_list.py:243
 msgid "Trash or delete selected items"

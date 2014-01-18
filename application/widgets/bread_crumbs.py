@@ -1,220 +1,216 @@
-'''
-@author: sevka
-'''
-import gtk
 import os
-import gio
-import gobject
-import copy
+import gtk
 import pango
 
 
 class BreadCrumbs(gtk.HBox):
-	'''
-	Bread crumbs widget
-	'''
-	CRUMBS_TYPE_NORMAL 		= 1
-	CRUMBS_TYPE_SMART 		= 2
-	CRUMBS_TYPE_COMPRESS 	= 3
+	TYPE_NORMAL = 1
+	TYPE_SMART = 2
+	TYPE_COMPRESS = 3
 
-	def __init__(self, parent, callback, options = {'smart_bread_crumbs': True}):
-		'''
-		Bread Crumbs construnctor
-		:param callback: Callback, which called when directory has to be changed
-		'''
+	def __init__(self, parent):
 		gtk.HBox.__init__(self)
 
 		self._parent = parent
-		self._options = options
-		self._callback = callback
+		self._type = BreadCrumbs.TYPE_SMART
 	
-		self._longest_common_path = None
 		self._path = None
-		self._lastWidth = 0
+		self._previous_path = None
 		self._colors = None
+		self._state = gtk.STATE_NORMAL
+		self._smart_color = None
+		self._elements_size = None
+		self._elements_width = None
+		self._allocation = None
+		self._highlight_index = None
 
-		self._pathHBox = gtk.HBox()
-		self.connect('size_allocate', self._path_resized)
-		
-		self.pack_start(self._pathHBox, True, True)
-		self.set_no_show_all(True)
+		# create user interface
+		self._path_object = gtk.DrawingArea()
+
+		self._path_object.add_events(gtk.gdk.POINTER_MOTION_MASK)
+		self._path_object.add_events(gtk.gdk.LEAVE_NOTIFY_MASK)
+		self._path_object.add_events(gtk.gdk.BUTTON_PRESS_MASK)
+
+		self._path_object.connect('expose-event', self.__expose_event)
+		self._path_object.connect('motion-notify-event', self.__motion_event)
+		self._path_object.connect('leave-notify-event', self.__leave_event)
+		self._path_object.connect('button-press-event', self.__button_press_event)
+		self._path_object.connect('realize', self.__realize_event)
+
+		self.connect('size_allocate', self._update_visibility)
+
+		# pack interface
+		self.pack_start(self._path_object, True, True)
+		self.show_all()
 	
-	def __get_smart_crumbs_color(self, c):
-		s = c.saturation
-		v = c.value
-		if s > 0.3:
-			s = s / 2
-			v = v * 1.5
+	def __get_color(self, color):
+		"""Calculate color for the part history part of the path"""
+		value = color.value
+		saturation = color.saturation
+
+		if saturation > 0.3:
+			saturation = saturation / 2.0
+			value = value * 1.5
+
 		else:
-			v = v / 1.5 if v > 0.5 else v * 2.5
-		c2 =  gtk.gdk.color_from_hsv(c.hue, s, v)
-		return c2
+			value = value / 1.5 if value > 0.5 else value * 2.5
+
+		return gtk.gdk.color_from_hsv(color.hue, saturation, value)
+
+	def __realize_event(self, widget, data=None):
+		"""Resize drawing area when object is realized"""
+		layout = widget.create_pango_layout('')
+
+		height = layout.get_size()[1] / pango.SCALE
+		self._path_object.set_size_request(-1, height)
+
+	def __leave_event(self, widget, event):
+		"""Handle mouse leaving the widget"""
+		# remove highlight
+		self._highlight_index = None
+
+		# prepare refresh region
+		region = self._allocation.copy()
+		region.x = 0
+
+		# request redraw
+		self._path_object.queue_draw_area(*region)
+
+		return True
+
+	def __button_press_event(self, widget, event):
+		"""Handle button press"""
+		path = self._path
+		if self._previous_path is not None and self._previous_path.startswith(self._path):
+			path = self._previous_path
+
+		# handle single left mouse click
+		if event.button is 1 and event.type is gtk.gdk.BUTTON_PRESS:
+			width = self._elements_size[self._highlight_index]
+			new_path = path[0:width]
+			file_list = self._parent._parent
+
+			# change path
+			if hasattr(file_list, 'change_path'):
+				file_list.change_path(new_path)
+
+		return True
+
+	def __motion_event(self, widget, event):
+		"""Handle mouse movement over widget"""
+		elements = filter(lambda width: width <= event.x, self._elements_width)
+		index = len(elements)
+
+		# make sure we redraw only on index change
+		if index != self._highlight_index:
+			self._highlight_index = index
+
+			# make sure we don't have index higher than needed
+			if self._highlight_index >= len(self._elements_width):
+				self._highlight_index = len(self._elements_width) - 1
+
+			# prepare refresh region
+			region = self._allocation.copy()
+			region.x = 0
+
+			# request redraw
+			self._path_object.queue_draw_area(*region)
+
+		return True
+
+	def __expose_event(self, widget, event=None):
+		"""Handle drawing bread crumbs"""
+		foreground_context = widget.get_style().fg_gc[self._state]
+		background_context = widget.get_style().bg_gc[self._state]
+		layout = widget.create_pango_layout('')
+
+		text_to_draw = self._path
+		path_length = len(self._path)
+
+		# make sure we have allocation
+		if self._allocation is None:
+			self._allocation = widget.get_allocation()
+
+		# create attributes
+		attributes = pango.AttrList()
+
+		# check if path is part of previous one
+		if self._previous_path is not None and self._previous_path.startswith(self._path):
+			smart_color = (self._smart_color.red, self._smart_color.green, self._smart_color.blue)
+			attributes.insert(pango.AttrForeground(
+											*smart_color,
+											start_index=path_length,
+											end_index=len(self._previous_path)
+										))
+			text_to_draw = self._previous_path
+
+		# calculate width of path elements
+		if self._elements_width is None:
+			path = None
+			self._elements_size = []
+			self._elements_width = []
+			elements = text_to_draw.split(os.path.sep)
+			elements[0] = os.path.sep
+
+			for element in elements:
+				# get path size
+				path = os.path.join(path, element) if path is not None else element
+				layout.set_text(path)
+
+				# add width to the list
+				width = layout.get_size()[0] / pango.SCALE
+				self._elements_size.append(len(path))
+				self._elements_width.append(width)
+
+		# underline hovered path if specified
+		if None not in (self._highlight_index, self._elements_size):
+			width = self._elements_size[self._highlight_index]
+			attributes.insert(pango.AttrUnderline(pango.UNDERLINE_SINGLE, 0, width))
+
+		# prepare text for drawing
+		layout.set_text(text_to_draw)
+		layout.set_attributes(attributes)
+
+		# fill background for drawing area
+		widget.window.draw_rectangle(
+							background_context,
+							True,
+							0,
+							0,
+							self._allocation[2],
+							self._allocation[3]
+						)
+
+		# draw text
+		widget.window.draw_layout(foreground_context, 0, 0, layout)
+
+		return True
+
+	def _update_visibility(self, sender=None, data=None):
+		"""Handle path container resize"""
+		self._allocation = self._path_object.get_allocation()
 		
-	def apply_color(self, colors = None):
-		if colors:
-			self._colors = colors
-		if self._colors:
-			smart_crumbs_color = self.__get_smart_crumbs_color(self._colors[0])
-			for child in self._pathHBox.get_children():
-				if child.type == self.CRUMBS_TYPE_SMART:
-					child.get_children()[0].modify_fg(gtk.STATE_NORMAL, smart_crumbs_color)
-				else:
-					child.get_children()[0].modify_fg(gtk.STATE_NORMAL, self._colors[1])
-				
-				child.modify_bg(gtk.STATE_NORMAL, self._colors[0])
+	def apply_color(self, colors):
+		"""Apply colors to all bread crumbs"""
+		self._colors = colors
+		self._smart_color = self.__get_color(colors[0])
 
-	def _path_clicked(self, sender, b, path):
-		'''
-		Called when path clicked. Then Callback called
-		'''
-		self._callback(path)
-		self.apply_color(self._colors)
-	
-	def _calculateVisibledCrumbsWidth(self):
-		labelWidth = 0
-		for child in self._pathHBox.get_children():
-			if child.get_visible():
-				labelWidth += child.get_allocation().width
-		return labelWidth
+	def set_state(self, state):
+		"""Set widget state"""
+		self._state = state
 
-	def _path_resized(self, sender, allocation):
-		labelWidth = self._calculateVisibledCrumbsWidth()
-		lastWidth = self._lastWidth
-		self._lastWidth = self._pathHBox.get_allocation().width
-		if labelWidth < self._pathHBox.get_allocation().width and (self._shortenNormal or self._shortenSmart) and lastWidth > 0 and self._pathHBox.get_allocation().width > lastWidth:
-			self.refresh()
-			return
-		
-		labelWidth = self._calculateVisibledCrumbsWidth()
-		while labelWidth >= self._pathHBox.get_allocation().width:
+	def refresh(self, path=None):
+		"""Update label on directory change"""
+		if self._previous_path is None or not self._previous_path.startswith(self._path):
+			self._previous_path = self._path
 
-			for child in reversed(self._pathHBox.get_children()):
-				if child.type == self.CRUMBS_TYPE_SMART and child.get_visible():
-					child.hide()
-					self._shortenSmart = True
-					labelWidth = self._calculateVisibledCrumbsWidth()
-					break
-			else:
-				normalCrumbs = []
-				self._shortenNormal = True
-				self._compressEventBox.show()
-				for child in self._pathHBox.get_children():
-					if child.type == self.CRUMBS_TYPE_NORMAL and child.get_visible():
-						normalCrumbs.append(child)
-				i = int(round(len(normalCrumbs) / 2.0))
-				if (i < len(normalCrumbs) - 1):
-					normalCrumbs[i].hide()
-					labelWidth = self._calculateVisibledCrumbsWidth()
-				else:
-					normalCrumbs[0].hide()
-					break
-
-
-	def _mouse_enter(self, sender, b, n):
-		'''
-		Method called when mouse enters path item
-		'''
-		children = self._pathHBox.get_children()
-		last_underline = False
-		for i in range(0, n+2):
-			if children[i].get_children()[0].get_label() == "/...":
-				last_underline = True
-			if i == n+1 and not last_underline:
-				break
-			attr = pango.AttrList()
-			attr.insert(pango.AttrUnderline(pango.UNDERLINE_SINGLE, 0, len(children[i].get_children()[0].get_text())))
-			children[i].get_children()[0].set_attributes(attr)
-			if children[i].type == self.CRUMBS_TYPE_SMART:
-				children[i].get_children()[0].modify_fg(gtk.STATE_NORMAL, self._colors[1])
-			
-	
-	def _mouse_leave(self, sender, b, n):
-		'''
-		Method called when mouse leaves path item
-		'''
-		children = self._pathHBox.get_children()
-		for i in range(0,n+2):
-			attr = pango.AttrList()
-			attr.insert(pango.AttrUnderline(pango.UNDERLINE_NONE, 0, len(children[i].get_children()[0].get_text())))
-			children[i].get_children()[0].set_attributes(attr)
-			if children[i].type == self.CRUMBS_TYPE_SMART:
-				children[i].get_children()[0].modify_fg(gtk.STATE_NORMAL, self.__get_smart_crumbs_color(self._colors[0]))
-
-	def refresh(self, path = None):
-		'''
-		Refresh panel on directory change
-		:param path: new directory
-		'''
-		if path == None:
-			path = self._path
-		self._shortenNormal = False
-		self._shortenSmart = False
-		for child in self._pathHBox.get_children():
-			self._pathHBox.remove(child)
-		pathToCD = '/'
-		if path == '/':
-			items = ['']
-		else:
-			items = path.split('/')
-		
-		if not self._longest_common_path:
-			self._longest_common_path = self._path
-		else:
-			commonPath = os.path.commonprefix([path, self._path])
-			commonPath2 = os.path.commonprefix([path, self._longest_common_path])
-			if commonPath:
-				if len(path) > len(self._longest_common_path) or path != commonPath2:
-					self._longest_common_path = path
-			else:
-				self._longest_common_path = path
-		k = 0
-		for item in items:
-			pathToCD = os.path.join(pathToCD, item)
-			if item != '' or len(items) == 1:
-				item = '/' + item
-			eventBox = gtk.EventBox()
-			label = gtk.Label(item)
-			eventBox.add(label)
-			eventBox.type = self.CRUMBS_TYPE_NORMAL
-			eventBox.connect('button-press-event', self._path_clicked, pathToCD)
-			eventBox.connect('enter-notify-event', self._mouse_enter, k)
-			eventBox.connect('leave-notify-event', self._mouse_leave, k)
-			if round(len(items) / 2.0) == k:
-				self._compressEventBox = gtk.EventBox();
-				self._compressEventBox.type = self.CRUMBS_TYPE_COMPRESS
-				self._compressEventBox.add(gtk.Label("/..."))
-				self._pathHBox.pack_start(self._compressEventBox, False, False)
-				self._compressEventBox.hide()
-			self._pathHBox.pack_start(eventBox, False, False)
-
-			k += 1
-			
-		if self._options['smart_bread_crumbs'] and self._longest_common_path and len(self._longest_common_path) > len(path):
-			items2 = self._longest_common_path.split('/')
-			i = 0
-			for item in items2:
-				i += 1
-				if i > len(items):
-					pathToCD = os.path.join(pathToCD, item)
-					eventBox = gtk.EventBox()
-					if i == (len(items) + 1) and len(items) == 1 and items[0] == '':
-						label = gtk.Label(item)
-					else:
-						label = gtk.Label('/' + item)
-					font = pango.FontDescription()
-#					font.set_weight(pango.WEIGHT_THIN)
-#					font.set_style(pango.STYLE_ITALIC)
-					label.modify_font(font)
-					eventBox.add(label)
-					eventBox.type = self.CRUMBS_TYPE_SMART
-					eventBox.connect('button-press-event', self._path_clicked, pathToCD)
-					eventBox.connect('enter-notify-event', self._mouse_enter, k)
-					eventBox.connect('leave-notify-event', self._mouse_leave, k)
-					self._pathHBox.pack_start(eventBox, False, False)
-					k += 1
+		# split path
 		self._path = path
-		self.show()
-		self._pathHBox.show_all()
-		if not self._shortenNormal:
-			self._compressEventBox.hide()
-		self.apply_color()
+
+		# clear cache
+		self._elements_size = None
+		self._elements_width = None
+		self._highlight_index = None
+
+		# force widget to be redrawn
+		self._path_object.queue_draw()

@@ -149,7 +149,7 @@ msgstr "Модули"
 #: application/gui/preferences/plugins.py:66
 #: application/gui/preferences/display.py:89
 msgid "Active"
-msgstr ""
+msgstr "Активен"
 
 #: application/gui/preferences/plugins.py:68
 msgid "Plugin name"

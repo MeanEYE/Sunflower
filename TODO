@@ -1,3 +1,7 @@
+- Make delete items confirmation dialog contain two icons/text with default one selected according to options.
+
+- When closing program warn users that there are minimized operations
+
 - When creating file allow selecting template from currently listed directory.
 
 - Make file list plugin use options container to store path instead of using local parameter.

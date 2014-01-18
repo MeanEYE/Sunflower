@@ -2,7 +2,8 @@ import gtk
 import math
 import pango
 
-from widgets.bread_crumbs import BreadCrumbs
+from widgets.breadcrumbs import Breadcrumbs
+
 
 class Mode:
 	NORMAL = 0
@@ -64,7 +65,7 @@ class TitleBar:
 		# create title box
 		vbox = gtk.VBox(False, 1)
 		if self._show_bread_crumbs:
-			self._bread_crumbs = BreadCrumbs(self)
+			self._bread_crumbs = Breadcrumbs(self)
 			vbox.pack_start(self._bread_crumbs, True, True, 0)
 
 		else:

@@ -3,7 +3,7 @@ import gtk
 import pango
 
 
-class BreadCrumbs(gtk.HBox):
+class Breadcrumbs(gtk.HBox):
 	TYPE_NORMAL = 1
 	TYPE_SMART = 2
 	TYPE_COMPRESS = 3
@@ -12,7 +12,7 @@ class BreadCrumbs(gtk.HBox):
 		gtk.HBox.__init__(self)
 
 		self._parent = parent
-		self._type = BreadCrumbs.TYPE_SMART
+		self._type = Breadcrumbs.TYPE_SMART
 	
 		self._path = None
 		self._previous_path = None

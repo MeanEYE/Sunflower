@@ -966,6 +966,30 @@ class ItemList(PluginBase):
 		item = menu_manager.create_menu_item({'type': 'separator'})
 		result.append(item)
 
+		# create new file
+		item = menu_manager.create_menu_item({
+								'label': _('Create file'),
+								'type': 'image',
+								'stock': gtk.STOCK_NEW,
+								'callback': self._parent._command_create,
+								'data': 'file'
+							})
+		result.append(item)
+
+		# create new directory
+		item = menu_manager.create_menu_item({
+								'label': _('Create directory'),
+								'type': 'image',
+								'image': 'folder-new',
+								'callback': self._parent._command_create,
+								'data': 'directory',
+							})
+		result.append(item)
+
+		# separator
+		item = menu_manager.create_menu_item({'type': 'separator'})
+		result.append(item)
+
 		# cut/copy/paste
 		item = menu_manager.create_menu_item({
 								'label': _('Cu_t'),

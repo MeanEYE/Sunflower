@@ -2,6 +2,7 @@ import gtk
 import math
 import pango
 
+from widgets.bread_crumbs import BreadCrumbs
 
 class Mode:
 	NORMAL = 0
@@ -13,7 +14,6 @@ class TitleBar:
 
 	def __init__(self, application, parent):
 		self._container = gtk.EventBox()
-
 		self._application = application
 		self._parent = parent
 		self._radius = 3
@@ -22,6 +22,7 @@ class TitleBar:
 		self._ubuntu_coloring = self._application.options.get('ubuntu_coloring')
 		self._superuser_notification = self._application.options.get('superuser_notification')
 		self._button_relief = self._application.options.get('button_relief')
+		self._show_bread_crumbs = True
 		self._menu = None
 		self._style = None
 		self._toolbar_style = None
@@ -62,11 +63,16 @@ class TitleBar:
 
 		# create title box
 		vbox = gtk.VBox(False, 1)
+		if self._show_bread_crumbs:
+			self._bread_crumbs = BreadCrumbs(self)
+			vbox.pack_start(self._bread_crumbs, True, True, 0)
 
-		self._title_label = gtk.Label()
-		self._title_label.set_alignment(0, 0.5)
-		self._title_label.set_use_markup(True)
-		self._title_label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
+		else:
+			self._title_label = gtk.Label()
+			self._title_label.set_alignment(0, 0.5)
+			self._title_label.set_use_markup(True)
+			self._title_label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
+			vbox.pack_start(self._title_label, True, True, 0)
 
 		font = pango.FontDescription('8')
 		self._subtitle_label = gtk.Label()
@@ -84,7 +90,6 @@ class TitleBar:
 			self._spinner = None
 
 		# pack interface
-		vbox.pack_start(self._title_label, True, True, 0)
 		vbox.pack_start(self._subtitle_label, False, False, 0)
 
 		self._hbox.pack_start(self._button_menu, False, False, 0)
@@ -166,6 +171,9 @@ class TitleBar:
 		self._style = self._application.left_notebook.get_style().copy()
 		self._toolbar_style = self._application.menu_bar.get_style().copy()
 
+		# apply colors on realize
+		self.__apply_color()
+
 	def __draw_rectangle(self, context, rectangle, radius):
 		"""Draw rectangle with rounded borders"""
 		half_pi = math.pi / 2
@@ -207,14 +215,14 @@ class TitleBar:
 		active_color = self.__get_colors()[0]
 
 		# clear drawing area first
-		context.set_source_rgb(normal_color.red_float, normal_color.green_float, normal_color.blue_float)
+		context.set_source_color(normal_color)
 		context.rectangle(*hbox_rectangle)
 		context.fill()
 
 		# draw focus if needed
 		if self._state is not gtk.STATE_NORMAL:
 			# draw background
-			context.set_source_rgb(active_color.red_float, active_color.green_float, active_color.blue_float)
+			context.set_source_color(active_color)
 			self.__draw_rectangle(context, hbox_rectangle, self._radius + 1)
 
 			# draw control space only if button relief is disabled
@@ -232,7 +240,12 @@ class TitleBar:
 		colors = self.__get_colors()
 
 		# apply text color to labels
-		self._title_label.modify_fg(gtk.STATE_NORMAL, colors[1])
+		if self._show_bread_crumbs:
+			self._bread_crumbs.apply_color(colors)
+
+		else:
+			self._title_label.modify_fg(gtk.STATE_NORMAL, colors[1])
+
 		self._subtitle_label.modify_fg(gtk.STATE_NORMAL, colors[1])
 
 		# apply color to controls
@@ -291,6 +304,10 @@ class TitleBar:
 		self._container.queue_draw()
 		self.__apply_color()
 
+		# let breadcrumbs know about new state
+		if self._show_bread_crumbs:
+			self._bread_crumbs.set_state(state)
+
 	def set_mode(self, mode):
 		"""Set title bar mode"""
 		self._mode = mode
@@ -301,7 +318,11 @@ class TitleBar:
 
 	def set_title(self, text):
 		"""Set title text"""
-		self._title_label.set_markup(text.replace('&', '&amp;'))
+		if self._show_bread_crumbs:
+			self._bread_crumbs.refresh(text)
+			
+		else:
+			self._title_label.set_markup(text.replace('&', '&amp;'))
 
 	def set_subtitle(self, text):
 		"""Set subtitle text"""

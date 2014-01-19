@@ -1,4 +1,5 @@
 import os
+import re
 import gtk
 import time
 import user
@@ -72,6 +73,7 @@ class FileList(ItemList):
 
 	"""
 	column_editor = None
+	number_split = re.compile('([0-9]+)')
 
 	def __init__(self, parent, notebook, options):
 		ItemList.__init__(self, parent, notebook, options)
@@ -1144,11 +1146,18 @@ class FileList(ItemList):
 		value1 = item_list.get_value(iter1, self._sort_column)
 		value2 = item_list.get_value(iter2, self._sort_column)
 
-		if not self._sort_sensitive and self._sort_column in (Column.NAME, Column.EXTENSION):
-			value1 = value1.lower()
+		if self._sort_column in (Column.NAME, Column.EXTENSION):
+			# make values lowercase for case insensitive comparison
+			if not self._sort_case_sensitive:
+				value1 = value1.lower()
 
-			if value2 is not None:  # make sure we have extension to make lowercase
-				value2 = value2.lower()
+				if value2 is not None:  # make sure we have extension to make lowercase
+					value2 = value2.lower()
+
+			# split values to list containing characters and numbers
+			if self._sort_number_sensitive:
+				value1 = [int(part) if part.isdigit() else part for part in self.number_split.split(value1)]
+				value2 = [int(part) if part.isdigit() else part for part in self.number_split.split(value2)]
 
 		item1 = (
 				reverse * item_list.get_value(iter1, Column.IS_PARENT_DIR),

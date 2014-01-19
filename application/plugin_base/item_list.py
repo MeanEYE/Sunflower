@@ -259,6 +259,7 @@ class ItemList(PluginBase):
 		group.add_method('move_marker_down', _('Move selection marker down'), self._move_marker_down)
 		group.add_method('show_tab_menu', _('Show tab menu'), self._show_tab_menu)
 		group.add_method('copy_path_to_clipboard', _('Copy path to clipboard'), self.copy_path_to_clipboard)
+		group.add_method('copy_selected_path_to_clipboard', _('Copy selected path to clipboard'), self.copy_selected_path_to_clipboard)
 		group.add_method('copy_path_to_command_entry', _('Copy path to command entry'), self.copy_path_to_command_entry)
 		group.add_method('copy_selection_to_command_entry', _('Copy selection to command entry'), self.copy_selection_to_command_entry)
 		group.add_method('custom_path_entry', _('Ask and navigate to path'), self.custom_path_entry)
@@ -307,6 +308,7 @@ class ItemList(PluginBase):
 		group.set_accelerator('swap_paths', keyval('U'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('show_tab_menu', keyval('grave'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('copy_path_to_clipboard', keyval('l'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
+		group.set_accelerator('copy_selected_path_to_clipboard', keyval('c'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('copy_path_to_command_entry', keyval('Return'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('copy_selection_to_command_entry', keyval('Return'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('custom_path_entry', keyval('l'), gtk.gdk.CONTROL_MASK)
@@ -1471,6 +1473,12 @@ class ItemList(PluginBase):
 	def copy_path_to_clipboard(self, widget=None, data=None):
 		"""Copy current path to clipboard"""
 		self._parent.set_clipboard_text(self.path)
+		return True
+
+	def copy_selected_path_to_clipboard(self, widget=None, data=None):
+		"""Copy paths of selected items to clipboard"""
+		selection = self._get_selection_list(relative=False)
+		self._parent.set_clipboard_text('\n'.join(selection))
 		return True
 
 	def copy_path_to_command_entry(self, widget=None, data=None):

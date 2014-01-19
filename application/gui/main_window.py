@@ -758,8 +758,8 @@ class MainWindow(gtk.Window):
 
 		# add system bookmarks if needed
 		bookmarks_files = (
-					os.path.join(self.xdg_config_home, 'gtk-3.0', 'bookmarks'),
-					os.path.join(user.home, '.gtk-bookmarks')
+					os.path.join(user.home, '.gtk-bookmarks'),
+					os.path.join(self.xdg_config_home, 'gtk-3.0', 'bookmarks')
 				)
 
 		available_files = filter(lambda path: os.path.exists(path), bookmarks_files)

@@ -2177,6 +2177,7 @@ class MainWindow(gtk.Window):
 					'selection_color': '#ffff5e5e0000',
 					'selection_indicator': u'\u2731',
 					'case_sensitive_sort': True,
+					'number_sensitive_sort': False,
 					'right_click_select': False,
 					'single_click_navigation': False,
 					'headers_visible': True,

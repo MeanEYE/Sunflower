@@ -765,8 +765,9 @@ class MainWindow(gtk.Window):
 		available_files = filter(lambda path: os.path.exists(path), bookmarks_files)
 
 		if self.bookmark_options.get('system_bookmarks') and len(available_files) > 0:
+			lines = []
 			with open(available_files[0], 'r') as raw_file:
-				lines = raw_file.readlines(False)
+				lines.extend(raw_file.readlines(False))
 
 			# add bookmarks
 			for line in lines:

@@ -57,7 +57,8 @@ class ItemList(PluginBase):
 		self._sort_column = self._options.get('sort_column')
 		self._sort_ascending = self._options.get('sort_ascending')
 		self._sort_column_widget = None
-		self._sort_sensitive = self._parent.options.section('item_list').get('case_sensitive_sort')
+		self._sort_case_sensitive = self._parent.options.section('item_list').get('case_sensitive_sort')
+		self._sort_number_sensitive = self._parent.options.section('item_list').get('number_sensitive_sort')
 		self._columns = []
 
 		# bookmarks button
@@ -1538,7 +1539,8 @@ class ItemList(PluginBase):
 		self._item_list.set_headers_visible(headers_visible)
 
 		# change change sorting sensitivity
-		self._sort_sensitive = self._parent.options.section('item_list').get('case_sensitive_sort')
+		self._sort_case_sensitive = self._parent.options.section('item_list').get('case_sensitive_sort')
+		self._sort_number_sensitive = self._parent.options.section('item_list').get('number_sensitive_sort')
 
 		# apply size formatting
 		self._size_format = self._parent.options.get('size_format')

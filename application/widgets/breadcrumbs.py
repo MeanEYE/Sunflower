@@ -12,7 +12,7 @@ class Breadcrumbs(gtk.HBox):
 		gtk.HBox.__init__(self)
 
 		self._parent = parent
-		self._type = Breadcrumbs.TYPE_SMART
+		self._type = self._parent._breadcrumb_type
 	
 		self._path = None
 		self._previous_path = None
@@ -135,7 +135,9 @@ class Breadcrumbs(gtk.HBox):
 		attributes = pango.AttrList()
 
 		# check if path is part of previous one
-		if self._previous_path is not None and self._previous_path.startswith(self._path):
+		if self._type is Breadcrumbs.TYPE_SMART \
+		and self._previous_path is not None \
+		and self._previous_path.startswith(self._path):
 			smart_color = (self._smart_color.red, self._smart_color.green, self._smart_color.blue)
 			attributes.insert(pango.AttrForeground(
 											*smart_color,
@@ -195,13 +197,18 @@ class Breadcrumbs(gtk.HBox):
 		self._colors = colors
 		self._smart_color = self.__get_color(colors[0])
 
+	def apply_settings(self):
+		"""Method called when system applies new settings"""
+		self._type = self._parent._breadcrumb_type
+
 	def set_state(self, state):
 		"""Set widget state"""
 		self._state = state
 
 	def refresh(self, path=None):
 		"""Update label on directory change"""
-		if self._previous_path is None or not self._previous_path.startswith(self._path):
+		if self._type is Breadcrumbs.TYPE_SMART \
+		and (self._previous_path is None or not self._previous_path.startswith(self._path)):
 			self._previous_path = self._path
 
 		# split path

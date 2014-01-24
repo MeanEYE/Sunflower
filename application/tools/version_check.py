@@ -28,6 +28,7 @@ class VersionCheck:
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
 		self._dialog.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+		self._dialog.connect('key-press-event', self._handle_key_press)
 
 		# create user interface
 		vbox = gtk.VBox(False, 5)
@@ -53,7 +54,7 @@ class VersionCheck:
 
 		# create controls
 		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
-		button_close.connect('clicked', self.__close)
+		button_close.connect('clicked', lambda widget: self._dialog.hide())
 
 		# pack user interface
 		self._dialog.add(vbox)
@@ -84,9 +85,10 @@ class VersionCheck:
 			with gtk.gdk.lock:
 				self._entry_latest.set_text(latest_data[1])
 
-	def __close(self, widget=None, data=None):
-		"""Close version check window"""
-		self._dialog.hide()
+	def _handle_key_press(self, widget, event, data=None):
+		"""Handle pressing keys"""
+		if event.keyval == gtk.keysyms.Escape:
+			self._dialog.hide()
 
 	def check(self):
 		"""Check for new version online"""

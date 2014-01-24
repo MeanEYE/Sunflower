@@ -2185,7 +2185,8 @@ class MainWindow(gtk.Window):
 					'left_directories': [],
 					'right_directories': [],
 					'force_directories': False,
-					'show_expanders': False
+					'show_expanders': False,
+					'breadcrumbs': 2
 				})
 
 		# create default operation options

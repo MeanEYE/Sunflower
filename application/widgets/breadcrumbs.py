@@ -4,9 +4,9 @@ import pango
 
 
 class Breadcrumbs(gtk.HBox):
+	TYPE_NONE = 0
 	TYPE_NORMAL = 1
 	TYPE_SMART = 2
-	TYPE_COMPRESS = 3
 
 	def __init__(self, parent):
 		gtk.HBox.__init__(self)

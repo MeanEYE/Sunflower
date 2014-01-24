@@ -23,7 +23,6 @@ class TitleBar:
 		self._ubuntu_coloring = self._application.options.get('ubuntu_coloring')
 		self._superuser_notification = self._application.options.get('superuser_notification')
 		self._button_relief = self._application.options.get('button_relief')
-		self._show_bread_crumbs = True
 		self._menu = None
 		self._style = None
 		self._toolbar_style = None
@@ -31,6 +30,11 @@ class TitleBar:
 		self._box_spacing = 1
 		self._box_border_width = 4
 		self._super_user_colors = None
+
+		# determine whether we need to show breadcrumbs
+		section = self._application.options.section('item_list')
+		self._breadcrumb_type = section.get('breadcrumbs')
+		self._show_breadcrumbs = self._breadcrumb_type != Breadcrumbs.TYPE_NONE
 
 		# create container box
 		self._hbox = gtk.HBox(homogeneous=False, spacing=self._box_spacing)
@@ -64,9 +68,9 @@ class TitleBar:
 
 		# create title box
 		vbox = gtk.VBox(False, 1)
-		if self._show_bread_crumbs:
-			self._bread_crumbs = Breadcrumbs(self)
-			vbox.pack_start(self._bread_crumbs, True, True, 0)
+		if self._show_breadcrumbs:
+			self._breadcrumbs = Breadcrumbs(self)
+			vbox.pack_start(self._breadcrumbs, True, True, 0)
 
 		else:
 			self._title_label = gtk.Label()
@@ -241,8 +245,8 @@ class TitleBar:
 		colors = self.__get_colors()
 
 		# apply text color to labels
-		if self._show_bread_crumbs:
-			self._bread_crumbs.apply_color(colors)
+		if self._show_breadcrumbs:
+			self._breadcrumbs.apply_color(colors)
 
 		else:
 			self._title_label.modify_fg(gtk.STATE_NORMAL, colors[1])
@@ -297,8 +301,8 @@ class TitleBar:
 		self.__apply_color()
 
 		# let breadcrumbs know about new state
-		if self._show_bread_crumbs:
-			self._bread_crumbs.set_state(state)
+		if self._show_breadcrumbs:
+			self._breadcrumbs.set_state(state)
 
 	def set_mode(self, mode):
 		"""Set title bar mode"""
@@ -310,8 +314,8 @@ class TitleBar:
 
 	def set_title(self, text):
 		"""Set title text"""
-		if self._show_bread_crumbs:
-			self._bread_crumbs.refresh(text)
+		if self._show_breadcrumbs:
+			self._breadcrumbs.refresh(text)
 			
 		else:
 			self._title_label.set_markup(text.replace('&', '&amp;'))
@@ -363,6 +367,13 @@ class TitleBar:
 		self._ubuntu_coloring = self._application.options.get('ubuntu_coloring')
 		self._superuser_notification = self._application.options.get('superuser_notification')
 		self._button_relief = self._application.options.get('button_relief')
+
+		# determine whether we need to show breadcrumbs
+		section = self._application.options.section('item_list')
+		self._breadcrumb_type = section.get('breadcrumbs')
+		
+		if self._breadcrumbs is not None:
+			self._breadcrumbs.apply_settings()
 
 		# get new color styles
 		self._style = self._application.left_notebook.get_style().copy()

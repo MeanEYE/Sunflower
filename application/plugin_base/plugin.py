@@ -178,10 +178,11 @@ class PluginBase(gtk.VBox):
 
 	def _control_got_focus(self, widget, data=None):
 		"""List focus in event"""
-		self._title_bar.set_state(gtk.STATE_SELECTED)
-
 		self._parent._set_active_object(self)
-		self._parent.get_opposite_object(self)._title_bar.set_state(gtk.STATE_NORMAL)
+
+		# update states
+		self.update_state(gtk.STATE_SELECTED)
+		self._parent.get_opposite_object(self).update_state(gtk.STATE_NORMAL)
 
 		# deactivate scheduled accelerators
 		deactivated = self._parent.accelerator_manager.deactivate_scheduled_groups(self)
@@ -290,6 +291,10 @@ class PluginBase(gtk.VBox):
 		"""Update notebook and/or page number"""
 		if notebook is not None:
 			self._notebook = notebook
+
+	def update_state(self, state):
+		"""Update plugin state"""
+		self._title_bar.set_state(state)
 
 	def focus_main_object(self):
 		"""Give focus to main object"""

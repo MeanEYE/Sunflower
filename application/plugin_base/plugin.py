@@ -179,7 +179,9 @@ class PluginBase(gtk.VBox):
 	def _control_got_focus(self, widget, data=None):
 		"""List focus in event"""
 		self._title_bar.set_state(gtk.STATE_SELECTED)
+
 		self._parent._set_active_object(self)
+		self._parent.get_opposite_object(self)._title_bar.set_state(gtk.STATE_NORMAL)
 
 		# deactivate scheduled accelerators
 		deactivated = self._parent.accelerator_manager.deactivate_scheduled_groups(self)
@@ -191,18 +193,8 @@ class PluginBase(gtk.VBox):
 
 	def _control_lost_focus(self, widget, data=None):
 		"""List focus out event"""
-		self._title_bar.set_state(gtk.STATE_NORMAL)
-
 		# schedule accelerator groups for deactivation
 		self._parent.accelerator_manager.schedule_groups_for_deactivation(self._accelerator_groups, self)
-
-	def _enable_object_block(self, widget=None, data=None):
-		"""Block main object signals"""
-		self._main_object.handler_block_by_func(self._control_lost_focus)
-
-	def _disable_object_block(self, widget=None, data=None):
-		"""Block main object signals"""
-		self._main_object.handler_unblock_by_func(self._control_lost_focus)
 
 	def _notebook_next_tab(self, widget, data=None):
 		"""Go to next tab in parent Notebook"""

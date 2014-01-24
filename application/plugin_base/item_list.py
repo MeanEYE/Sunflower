@@ -199,7 +199,6 @@ class ItemList(PluginBase):
 
 		# history menu
 		self._history_menu = gtk.Menu()
-		self._history_menu.connect('hide', self._handle_history_hide)
 
 		# pack gui
 		self.pack_start(container, True, True, 0)
@@ -636,12 +635,6 @@ class ItemList(PluginBase):
 								)
 			dialog.run()
 			dialog.destroy()
-
-	def _handle_history_hide(self, widget, data=None):
-		"""Handle history menu hide event"""
-		self._disable_object_block()
-		opposite_object = self._parent.get_opposite_object(self)
-		opposite_object._disable_object_block()
 
 	def _handle_external_data(self, operation, protocol, item_list):
 		"""Handle data coming from a different application"""
@@ -1222,10 +1215,6 @@ class ItemList(PluginBase):
 		self._prepare_history_menu()
 
 		# show the menu on calculated location
-		self._enable_object_block()
-		opposite_object = self._parent.get_opposite_object(self)
-		opposite_object._enable_object_block()
-
 		self._history_menu.popup(
 								None, None,
 								self._get_history_menu_position,

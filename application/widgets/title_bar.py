@@ -269,15 +269,6 @@ class TitleBar:
 		if self._spinner is not None:
 			self._spinner.modify_fg(gtk.STATE_NORMAL, colors[1])
 
-	def __handle_menu_hide(self, widget, data=None):
-		"""Handle hiding title bar menu"""
-		active_object = self._application.get_active_object()
-		opposite_object = self._application.get_opposite_object(active_object)
-
-		# prevent title bar from losing focus
-		active_object._disable_object_block()
-		opposite_object._disable_object_block()
-
 	def __get_menu_position(self, menu, button):
 		"""Get bookmarks position"""
 		window_x, window_y = self._application.window.get_position()
@@ -336,7 +327,6 @@ class TitleBar:
 	def set_menu(self, menu):
 		"""Set title bar menu"""
 		self._menu = menu
-		self._menu.connect('hide', self.__handle_menu_hide)
 	
 	def get_container(self):
 		"""Return title bar container"""
@@ -346,14 +336,6 @@ class TitleBar:
 		"""Show title bar menu"""
 		if self._menu is None:
 			return
-
-		# get objects
-		active_object = self._application.get_active_object()
-		opposite_object = self._application.get_opposite_object(active_object)
-
-		# prevent title bar from losing focus
-		active_object._enable_object_block()
-		opposite_object._enable_object_block()
 
 		# show menu below the button
 		button = widget if widget is not None else self._button_menu

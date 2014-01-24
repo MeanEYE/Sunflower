@@ -67,7 +67,6 @@ class BookmarksMenu:
 
 		# create interface
 		self._menu = gtk.Menu()
-		self._menu.connect('hide', self.__enable_handlers)
 		self._menu.connect('key-press-event', self.__handle_key_press)
 		self._menu.connect('key-release-event', self.__handle_key_press)
 
@@ -158,15 +157,6 @@ class BookmarksMenu:
 							)
 
 		self._menu.show_all()
-
-	def __enable_handlers(self, widget=None, data=None):
-		"""Enable handlers on active objects"""
-		assert self._object is not None
-
-		# restore handlers
-		opposite_object = self._application.get_opposite_object(self._object)
-		self._object._disable_object_block()
-		opposite_object._disable_object_block()
 
 	def __open_selected(self, widget, path):
 		"""Open selected item in either active, or new tab"""
@@ -273,11 +263,6 @@ class BookmarksMenu:
 
 		pos_x = window_x + button_x + button_alloc.width - invoker.get_allocation()[2]
 		pos_y = window_y + button_y + button_alloc.height
-
-		# block enable handler block
-		opposite_object = self._application.get_opposite_object(self._object)
-		self._object._enable_object_block()
-		opposite_object._enable_object_block()
 
 		# repopulate list
 		self.__populate_list()

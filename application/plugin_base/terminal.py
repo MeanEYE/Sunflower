@@ -197,18 +197,11 @@ class Terminal(PluginBase):
 
 		# show all items
 		self._menu.show_all()
-		self._menu.connect('hide', self._handle_menu_hide)
 
 	def _prepare_menu(self):
 		"""Prepare terminal menu before showing"""
 		self._menu_item_copy.set_sensitive(self._terminal.get_has_selection())
 		self._menu_item_paste.set_sensitive(self._parent.is_clipboard_text())
-
-	def _handle_menu_hide(self, widget, data=None):
-		"""Handle hide event for terminal menu"""
-		self._disable_object_block()
-		opposite_object = self._parent.get_opposite_object(self)
-		opposite_object._disable_object_block()
 
 	def _duplicate_tab(self, widget, data=None):
 		"""Creates new tab with same path"""
@@ -234,9 +227,6 @@ class Terminal(PluginBase):
 		self._prepare_menu()
 
 		# show the menu on calculated location
-		self._enable_object_block()
-		opposite_object = self._parent.get_opposite_object(self)
-		opposite_object._enable_object_block()
 
 		self._menu.popup(
 						None, None,

@@ -167,7 +167,7 @@ class AdvancedRename:
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys"""
 		if event.keyval == gtk.keysyms.Escape:
-			self.window.hide()
+			self.window.destroy()
 
 	def update_list(self):
 		"""Update file list"""

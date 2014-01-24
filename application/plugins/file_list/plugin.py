@@ -351,12 +351,17 @@ class FileList(ItemList):
 		if not is_dir and not is_parent \
 		and self.get_provider().exists(file_name) \
 		and self._thumbnail_view.can_have_thumbnail(uri):
+			# hide preview and load new image
+			self._thumbnail_view.hide()
+			self._thumbnail_view.show_thumbnail(uri)
+
 			# get position of popup menu, we use these coordinates to show thumbnail
 			position = self._get_popup_menu_position()
 			column_width = self._columns[0].get_width()
+			preview_width = self._thumbnail_view.get_size()[0]
 
-			self._thumbnail_view.show_thumbnail(uri)
-			self._thumbnail_view.move(position[0] + column_width, position[1])
+			# show preivew in specified location
+			self._thumbnail_view.move(position[0] + (column_width - preview_width), position[1])
 			self._thumbnail_view.show()
 
 		else:

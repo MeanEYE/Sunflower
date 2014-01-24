@@ -108,9 +108,11 @@ def get_user_directory(directory):
 def is_x_app(command):
 	"""Checks if command uses grafical user interfaces."""
 	try:
+		env = os.environ.copy()
+		env.update({'LD_TRACE_LOADED_OBJECTS': '1'})
 		output = subprocess.Popen(
 							[command],
-							env={'LD_TRACE_LOADED_OBJECTS': '1'},
+							env=env,
 							stdout=subprocess.PIPE
 						).communicate()
 

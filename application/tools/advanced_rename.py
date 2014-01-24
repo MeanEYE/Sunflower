@@ -32,6 +32,8 @@ class AdvancedRename:
 		self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
 		self.window.set_wmclass('Sunflower', 'Sunflower')
 
+		self.window.connect('key-press-event', self._handle_key_press)
+
 		# create interface
 		vbox = gtk.VBox(False, 7)
 
@@ -84,7 +86,7 @@ class AdvancedRename:
 		hbox = gtk.HBox(False, 5)
 
 		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
-		button_cancel.connect('clicked', self._close_window)
+		button_cancel.connect('clicked', lambda widget: self.window.destroy())
 
 		image_rename = gtk.Image()
 		image_rename.set_from_icon_name('edit-find-replace', gtk.ICON_SIZE_BUTTON)
@@ -162,9 +164,10 @@ class AdvancedRename:
 		"""Handle extension reordering"""
 		self.update_list()
 
-	def _close_window(self, widget=None, data=None):
-		"""Close window"""
-		self.window.destroy()
+	def _handle_key_press(self, widget, event, data=None):
+		"""Handle pressing keys"""
+		if event.keyval == gtk.keysyms.Escape:
+			self.window.destroy()
 
 	def update_list(self):
 		"""Update file list"""

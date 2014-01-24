@@ -42,6 +42,8 @@ class FindFiles:
 		self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
 		self.window.set_wmclass('Sunflower', 'Sunflower')
 
+		self.window.connect('key-press-event', self._handle_key_press)
+
 		# create interface
 		vbox = gtk.VBox(False, 7)
 
@@ -315,6 +317,11 @@ class FindFiles:
 			self._entry_path.set_text(dialog.get_filename())
 
 		dialog.destroy()
+
+	def _handle_key_press(self, widget, event, data=None):
+		"""Handle pressing keys"""
+		if event.keyval == gtk.keysyms.Escape:
+			self._close_window()
 
 	def stop_search(self, widget=None, data=None):
 		"""Stop searching for files"""

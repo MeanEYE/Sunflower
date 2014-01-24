@@ -68,6 +68,7 @@ class PropertiesWindow(gtk.Window):
 		self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
 		self.set_wmclass('Sunflower', 'Sunflower')
 
+		self.connect('key-press-event', self._handle_key_press)
 		# create interface
 		vbox = gtk.VBox(False, 5)
 
@@ -662,4 +663,7 @@ class PropertiesWindow(gtk.Window):
 
 		return tab
 
-
+	def _handle_key_press(self, widget, event, data=None):
+		"""Handle pressing keys"""
+		if event.keyval == gtk.keysyms.Escape:
+			self._close_window()

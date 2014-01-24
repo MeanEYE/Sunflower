@@ -38,6 +38,7 @@ class PreferencesWindow(gtk.Window):
 		self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
 		self.set_wmclass('Sunflower', 'Sunflower')
 
+		self.connect('key-press-event', self._handle_key_press)
 		# create GUI
 		vbox = gtk.VBox(False, 7)
 		vbox.set_border_width(7)
@@ -132,7 +133,7 @@ class PreferencesWindow(gtk.Window):
 		if tab_name is not None and tab_name in self._tab_names:
 			self._tabs.set_current_page(self._tab_names[tab_name])
 
-	def _hide(self, widget, data=None):
+	def _hide(self, widget=None, data=None):
 		"""Hide dialog"""
 		if self._button_save.get_sensitive():
 			dialog = gtk.MessageDialog(
@@ -202,6 +203,12 @@ class PreferencesWindow(gtk.Window):
 		self._tab_labels.handler_block_by_func(self._handle_cursor_change)
 		self._tab_labels.set_cursor((page_num,))
 		self._tab_labels.handler_unblock_by_func(self._handle_cursor_change)
+
+	def _handle_key_press(self, widget, event, data=None):
+		"""Handle pressing keys"""
+
+		if event.keyval == gtk.keysyms.Escape:
+			self._hide()
 
 	def enable_save(self, widget=None, show_restart=None):
 		"""Enable save button"""

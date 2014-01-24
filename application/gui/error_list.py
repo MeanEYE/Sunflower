@@ -28,6 +28,8 @@ class ErrorList:
 		self._window.set_wmclass('Sunflower', 'Sunflower')
 		self._window.set_border_width(7)
 
+		self._window.connect('key-press-event', self._handle_key_press)
+
 		# create user interface
 		vbox = gtk.VBox(False, 7)
 
@@ -97,6 +99,11 @@ class ErrorList:
 	def _close(self, widget=None, data=None):
 		"""Close error list window"""
 		self._window.destroy()
+
+	def _handle_key_press(self, widget, event, data=None):
+		"""Handle pressing keys"""
+		if event.keyval == gtk.keysyms.Escape:
+			self._close()
 
 	def set_operation_name(self, operation_name):
 		"""Set operation name"""

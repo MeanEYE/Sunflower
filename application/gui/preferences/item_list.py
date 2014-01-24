@@ -2,6 +2,7 @@ import gtk
 
 from common import AccessModeFormat
 from gui.input_dialog import InputDialog
+from widgets.breadcrumbs import Breadcrumbs
 from widgets.settings_page import SettingsPage
 
 
@@ -74,6 +75,23 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_show_headers.connect('toggled', self._parent.enable_save)
 		self._checkbox_media_preview.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_expanders.connect('toggled', self._parent.enable_save)
+
+		# bread crumbs type
+		hbox_breadcrumbs = gtk.HBox(False, 5);
+		label_breadcrumbs = gtk.Label(_('Breadcrumbs:'))
+		label_breadcrumbs.set_alignment(0, 0.5)
+		
+		list_breadcrumbs = gtk.ListStore(str, int)
+		list_breadcrumbs.append((_('None'), Breadcrumbs.TYPE_NONE))
+		list_breadcrumbs.append((_('Normal'), Breadcrumbs.TYPE_NORMAL))
+		list_breadcrumbs.append((_('Smart'), Breadcrumbs.TYPE_SMART))
+
+		cell_breadcrumbs = gtk.CellRendererText()
+
+		self._combobox_breadcrumbs = gtk.ComboBox(list_breadcrumbs)
+		self._combobox_breadcrumbs.connect('changed', self._parent.enable_save)
+		self._combobox_breadcrumbs.pack_start(cell_breadcrumbs)
+		self._combobox_breadcrumbs.add_attribute(cell_breadcrumbs, 'text', 0)
 
 		# file access mode format
 		hbox_mode_format = gtk.HBox(False, 5)
@@ -322,6 +340,9 @@ class ItemListOptions(SettingsPage):
 		hbox_quick_search.pack_start(self._checkbox_alt, False, False, 0)
 		hbox_quick_search.pack_start(self._checkbox_shift, False, False, 0)
 
+		hbox_breadcrumbs.pack_start(label_breadcrumbs, False, False, 0)
+		hbox_breadcrumbs.pack_start(self._combobox_breadcrumbs, False, False, 0)
+
 		hbox_mode_format.pack_start(label_mode_format, False, False, 0)
 		hbox_mode_format.pack_start(self._combobox_mode_format, False, False, 0)
 
@@ -336,6 +357,7 @@ class ItemListOptions(SettingsPage):
 		vbox_look_and_feel.pack_start(self._checkbox_media_preview, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_show_hidden, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_show_expanders, False, False, 0)
+		vbox_look_and_feel.pack_start(hbox_breadcrumbs, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_mode_format, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_grid_lines, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_selection_color, False, False, 5)
@@ -586,6 +608,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_right_click.set_active(section.get('right_click_select'))
 		self._checkbox_show_headers.set_active(section.get('headers_visible'))
 		self._checkbox_media_preview.set_active(options.get('media_preview'))
+		self._combobox_breadcrumbs.set_active(section.get('breadcrumbs'))
 		self._combobox_mode_format.set_active(section.get('mode_format'))
 		self._combobox_grid_lines.set_active(section.get('grid_lines'))
 		self._combobox_indicator.child.set_text(section.get('selection_indicator'))
@@ -628,6 +651,7 @@ class ItemListOptions(SettingsPage):
 		section.set('right_click_select', self._checkbox_right_click.get_active())
 		section.set('headers_visible', self._checkbox_show_headers.get_active())
 		options.set('media_preview', self._checkbox_media_preview.get_active())
+		section.set('breadcrumbs', self._combobox_breadcrumbs.get_active())
 		section.set('mode_format', self._combobox_mode_format.get_active())
 		section.set('grid_lines', self._combobox_grid_lines.get_active())
 		section.set('time_format', self._entry_time_format.get_text())

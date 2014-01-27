@@ -1,3 +1,26 @@
+Version 0.1a-57
+  + Added ability close various windows by pressing Escape.
+  + Added breadcrumbs.
+  + Added French translation.
+  + Added number sensitive sort.
+  + Added options to create file or directory to context menu.
+  + Added option to copy selected items path to clipboard.
+  + Show number of mouted locations in mount manager.
+  + Show tree expanders when expading directory.
+  * Changed license header to proper GPLv3.
+  * Copy environment dictionary before checking is application is graphcial.
+  * Daemonize threads by default.
+  * Don't allow expanding directories that are already expanded.
+  * Don't remove children when collapsing directory.
+  * Don't require Samba share name to be specified.
+  * Fixed focus issues with media preview and popup menus.
+  * Load both bookmark files to avoid confusion.
+  * Move media preview window to the end of name column.
+  * Properly handle exceptions when is_dir/is_file is called on invalid path using GIO.
+  * Test for supported features before setting access in create_file/create_directory using GIO.
+  * Updated Czech translation.
+  * Updated Russian translation.
+
 Version 0.1a-56
   + Support for expandable directories. Based on code by Arseniy Krasnov.
   + Ability to create symbolic and hard links.

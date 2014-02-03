@@ -1099,16 +1099,24 @@ class OverwriteFileDialog(OverwriteDialog):
 		OverwriteDialog.__init__(self, application, parent)
 
 		self._dialog.set_title(_('File conflict'))
+		self._entry_rename.connect('changed', self._rename_button)
 
 	def _create_buttons(self):
 		"""Create dialog specific button"""
-		button_replace = gtk.Button(label=_('Replace'))
-		button_replace.set_can_default(True)
+		self._button_replace = gtk.Button(label=_('Replace'))
+		self._button_replace.set_can_default(True)
 
 		OverwriteDialog._create_buttons(self)
-		self._dialog.add_action_widget(button_replace, gtk.RESPONSE_YES)
+		self._dialog.add_action_widget(self._button_replace, gtk.RESPONSE_YES)
 
 		self._dialog.set_default_response(gtk.RESPONSE_YES)
+
+	def _rename_button(self, entry):
+		if entry.get_text() == self._rename_value:
+			self._button_replace.set_label(_('Replace'))
+
+		else:
+			self._button_replace.set_label(_('Copy'))
 
 	def set_title_element(self, element):
 		"""Set title label with appropriate formatting"""

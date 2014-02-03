@@ -1789,8 +1789,14 @@ class MainWindow(gtk.Window):
 		else:
 			# open external terminal application
 			try:
+				path = options.get('path')
+
+				# prepare environment
+				environment = os.environ
+				environment['PWD'] = path
+
 				terminal_command = terminal_command.format(0).split(' ')
-				subprocess.Popen(terminal_command, cwd=options.get('path'))
+				subprocess.Popen(terminal_command, cwd=path, env=environment)
 
 			except:
 				dialog = gtk.MessageDialog(

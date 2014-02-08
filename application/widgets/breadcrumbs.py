@@ -121,7 +121,7 @@ class Breadcrumbs(gtk.HBox):
 	def __expose_event(self, widget, event=None):
 		"""Handle drawing bread crumbs"""
 		foreground_context = widget.get_style().fg_gc[self._state]
-		background_context = widget.get_style().bg_gc[self._state]
+		background_context = widget.window.cairo_create()
 		layout = widget.create_pango_layout('')
 
 		text_to_draw = self._path
@@ -173,15 +173,10 @@ class Breadcrumbs(gtk.HBox):
 		layout.set_text(text_to_draw)
 		layout.set_attributes(attributes)
 
-		# fill background for drawing area
-		widget.window.draw_rectangle(
-							background_context,
-							True,
-							0,
-							0,
-							self._allocation[2],
-							self._allocation[3]
-						)
+		# draw background color
+		background_context.set_source_color(self._colors[0])
+		background_context.rectangle(0, 0, self._allocation[2], self._allocation[3])
+		background_context.fill()
 
 		# draw text
 		widget.window.draw_layout(foreground_context, 0, 0, layout)

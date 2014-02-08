@@ -170,12 +170,21 @@ class HistoryList(gtk.Window):
 
 	def _populate_list(self):
 		"""Populate history list"""
-		for path in self._parent.history[1:]:
+		target_iter = None
+		parent_path = self._parent._options.get('path')
+
+		# add all entries to the list
+		for path in self._parent.history:
 			name = os.path.basename(path)
 			if name == '':
 				name = path
 
-			self._history.append((name, path))
+			new_iter = self._history.append((name, path))
 
-		# select first item
-		self._history_list.set_cursor((0,))
+			# assign row to be selected
+			if target_iter is None or path == parent_path:
+				target_iter = new_iter
+
+		# select row
+		path = self._history.get_path(target_iter)
+		self._history_list.set_cursor(path)

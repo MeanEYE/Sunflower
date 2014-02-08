@@ -1779,7 +1779,7 @@ class MainWindow(gtk.Window):
 
 		terminal_command = self.options.section('terminal').get('command')
 		terminal_type = self.options.section('terminal').get('type')
-		open_in_tab = not (terminal_type == TerminalType.EXTERNAL and '{0}' not in terminal_command)
+		open_in_tab = not (terminal_type == TerminalType.EXTERNAL and '{1}' not in terminal_command)
 
 		if open_in_tab:
 			# create new terminal tab
@@ -1789,8 +1789,14 @@ class MainWindow(gtk.Window):
 		else:
 			# open external terminal application
 			try:
-				terminal_command = terminal_command.format(0).split(' ')
-				subprocess.Popen(terminal_command, cwd=options.get('path'))
+				path = options.get('path')
+
+				# prepare environment
+				environment = os.environ
+				environment['PWD'] = path
+
+				terminal_command = shlex.split(terminal_command.format(path))
+				subprocess.Popen(terminal_command, cwd=path, env=environment)
 
 			except:
 				dialog = gtk.MessageDialog(

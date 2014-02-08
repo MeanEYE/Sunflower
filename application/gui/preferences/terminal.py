@@ -65,7 +65,7 @@ class TerminalOptions(SettingsPage):
 		# create external terminal options
 		align_external = gtk.Alignment(xscale=1)
 		align_external.set_padding(0, 0, 15, 15)
-		self._vbox_external = gtk.VBox(False, 5)
+		self._vbox_external = gtk.VBox(False, 10)
 
 		self._radio_external = gtk.RadioButton(group=self._radio_vte, label=_('External terminal'))
 
@@ -75,21 +75,29 @@ class TerminalOptions(SettingsPage):
 		self._entry_command = gtk.Entry()
 		self._entry_command.connect('changed', self._parent.enable_save)
 
+		label_note = gtk.Label(_(
+					'<small><i>Note:'
+					'\n\t{0} will be replaced with current working directory.'
+					'</i></small>'
+				));
+		label_note.set_alignment(0, 0)
+		label_note.set_use_markup(True)
+
 		vbox_command2 = gtk.VBox(False, 0)
 		label_command2 = gtk.Label(_('Command line for executing specific program:'))
 		label_command2.set_alignment(0, 0.5)
 		self._entry_command2 = gtk.Entry()
 		self._entry_command2.connect('changed', self._parent.enable_save)
 
-		label_note = gtk.Label(_(
+		label_note2 = gtk.Label(_(
 					'<small><i>Note:'
 					'\n\tOmitting {0} will open new terminal application instead of tab.'
 					'\n\t{0} will be replaced with socket/window id.'
 					'\n\t{1} will be replaced with specified command and its parameters.'
 					'</i></small>'
 				));
-		label_note.set_alignment(0, 0)
-		label_note.set_use_markup(True)
+		label_note2.set_alignment(0, 0)
+		label_note2.set_use_markup(True)
 
 		# pack interface
 		hbox_font.pack_start(label_font, False, False, 0)
@@ -100,11 +108,12 @@ class TerminalOptions(SettingsPage):
 		hbox_cursor_shape.pack_start(label_cursor_shape, False, False, 0)
 		hbox_cursor_shape.pack_start(self._combobox_cursor_shape, False, False, 0)
 
-
 		vbox_command.pack_start(label_command, False, False, 0)
 		vbox_command.pack_start(self._entry_command, False, False, 0)
+		vbox_command.pack_start(label_note, False, False, 0)
 		vbox_command2.pack_start(label_command2, False, False, 0)
 		vbox_command2.pack_start(self._entry_command2, False, False, 0)
+		vbox_command2.pack_start(label_note2, False, False, 0)
 
 		self._vbox_vte.pack_start(self._checkbox_scrollbars_visible, False, False, 0)
 		self._vbox_vte.pack_start(self._checkbox_system_font, False, False, 0)
@@ -115,7 +124,6 @@ class TerminalOptions(SettingsPage):
 
 		self._vbox_external.pack_start(vbox_command, False, False, 0)
 		self._vbox_external.pack_start(vbox_command2, False, False, 0)
-		self._vbox_external.pack_start(label_note, False, False, 0)
 
 		align_vte.add(self._vbox_vte)
 		align_external.add(self._vbox_external)

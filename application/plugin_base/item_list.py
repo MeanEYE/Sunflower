@@ -568,6 +568,20 @@ class ItemList(PluginBase):
 
 				result = True
 
+		# handle back button on mouse
+		elif event.button is 8:
+			if event.type is gtk.gdk.BUTTON_RELEASE:
+				self.history_manager.back()
+
+			result = True
+
+		# handle forward button on mouse
+		elif event.button is 9:
+			if event.type is gtk.gdk.BUTTON_RELEASE:
+				self.history_manager.forward()
+
+			result = True
+
 		return result
 
 	def _handle_key_press(self, widget, event):

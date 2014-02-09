@@ -1777,7 +1777,9 @@ class MainWindow(gtk.Window):
 		if options is None:
 			options = Parameters()
 
-		terminal_command = self.options.section('terminal').get('command')
+		shell_command = options.get('shell_command', None)
+		command_version = 'command' if shell_command is None else 'command2'
+		terminal_command = self.options.section('terminal').get(command_version)
 		terminal_type = self.options.section('terminal').get('type')
 		open_in_tab = not (terminal_type == TerminalType.EXTERNAL and '{0}' not in terminal_command)
 
@@ -1795,7 +1797,7 @@ class MainWindow(gtk.Window):
 				environment = os.environ
 				environment['PWD'] = path
 
-				terminal_command = shlex.split(terminal_command.format(path))
+				terminal_command = shlex.split(terminal_command.format('', shell_command, path))
 				subprocess.Popen(terminal_command, cwd=path, env=environment)
 
 			except:

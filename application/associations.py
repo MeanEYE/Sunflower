@@ -287,15 +287,14 @@ class AssociationManager:
 
 			else:
 				# command is console based, create terminal tab and fork it
-				if terminal_type != TerminalType.EXTERNAL:
-					active_object = self._application.get_active_object()
+				active_object = self._application.get_active_object()
 
-					options = Parameters()
-					options.set('close_with_child', False)
-					options.set('shell_command', path)
-					options.set('path', os.path.dirname(path))
+				options = Parameters()
+				options.set('close_with_child', False)
+				options.set('shell_command', path)
+				options.set('path', os.path.dirname(path))
 
-					self._application.create_terminal_tab(active_object._notebook, options)
+				self._application.create_terminal_tab(active_object._notebook, options)
 
 		else:
 			# file type is not executable, try to open with default associated application

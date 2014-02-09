@@ -11,6 +11,7 @@ from tools.viewer import Viewer
 from gui.input_dialog import CopyDialog, MoveDialog, InputDialog
 from gui.preferences.display import StatusVisible
 from gui.history_list import HistoryList
+from history import HistoryManager
 
 
 class ButtonText:
@@ -39,6 +40,7 @@ class ItemList(PluginBase):
 		self._menu_timer = None
 
 		self.history = []
+		self.history_manager = HistoryManager(self, self.history)
 
 		# list statistics
 		self._dirs = {'count': 0, 'selected': 0}
@@ -235,6 +237,8 @@ class ItemList(PluginBase):
 		group.add_method('root_directory', _('Go to root directory'), self._root_directory)
 		group.add_method('refresh_list', _('Reload items in current directory'), self.refresh_file_list)
 		group.add_method('show_history', _('Show history browser'), self._show_history_window)
+		group.add_method('back_in_history', _('Go back in history'), self._history_go_back)
+		group.add_method('forward_in_history', _('Go forward in history'), self._history_go_forward)
 		group.add_method('select_all', _('Select all'), self._select_all)
 		group.add_method('deselect_all', _('Deselect all'), self._deselect_all)
 		group.add_method('invert_selection', _('Invert selection'), self._invert_selection)
@@ -282,6 +286,8 @@ class ItemList(PluginBase):
 		group.set_accelerator('root_directory', keyval('backslash'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('refresh_list', keyval('R'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('show_history', keyval('BackSpace'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('back_in_history', keyval('Left'), gtk.gdk.MOD1_MASK)
+		group.set_accelerator('forward_in_history', keyval('Right'), gtk.gdk.MOD1_MASK)
 		group.set_accelerator('select_all', keyval('A'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('deselect_all', keyval('A'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('invert_selection', keyval('asterisk'), gtk.gdk.SHIFT_MASK)
@@ -357,6 +363,18 @@ class ItemList(PluginBase):
 	def _show_history_window(self, widget, data=None):
 		"""Show history browser"""
 		HistoryList(self, self._parent)
+		return True
+
+	def _history_go_back(self, widget=None, data=None):
+		"""Go back in history by one entry"""
+		if self.history_manager is not None:
+			self.history_manager.back()
+		return True
+
+	def _history_go_forward(self, widget=None, data=None):
+		"""Go forward in history by one entry"""
+		if self.history_manager is not None:
+			self.history_manager.forward()
 		return True
 
 	def _show_tab_menu(self, widget, data=None):
@@ -549,6 +567,20 @@ class ItemList(PluginBase):
 					self._toggle_selection(widget, advance=False)
 
 				result = True
+
+		# handle back button on mouse
+		elif event.button is 8:
+			if event.type is gtk.gdk.BUTTON_RELEASE:
+				self.history_manager.back()
+
+			result = True
+
+		# handle forward button on mouse
+		elif event.button is 9:
+			if event.type is gtk.gdk.BUTTON_RELEASE:
+				self.history_manager.forward()
+
+			result = True
 
 		return result
 
@@ -1421,13 +1453,9 @@ class ItemList(PluginBase):
 		"""Public method for safe path change """
 		real_path = os.path.expanduser(path)
 
-		if not real_path in self.history:
-			self.history.insert(0, real_path)
-
-		else:
-			i = self.history.index(real_path)
-			if i != 0:
-				self.history[0], self.history[i] = self.history[i], self.history[0]
+		# record change in history
+		if self.history_manager is not None:
+			self.history_manager.record(real_path)
 
 		# hide quick search
 		self._stop_search()

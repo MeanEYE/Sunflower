@@ -1779,7 +1779,7 @@ class MainWindow(gtk.Window):
 
 		terminal_command = self.options.section('terminal').get('command')
 		terminal_type = self.options.section('terminal').get('type')
-		open_in_tab = not (terminal_type == TerminalType.EXTERNAL and '{1}' not in terminal_command)
+		open_in_tab = not (terminal_type == TerminalType.EXTERNAL and '{0}' not in terminal_command)
 
 		if open_in_tab:
 			# create new terminal tab

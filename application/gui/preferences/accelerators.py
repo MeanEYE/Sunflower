@@ -94,35 +94,82 @@ class AcceleratorOptions(SettingsPage):
 		self.pack_start(label_warning, False, False, 0)
 		self.pack_start(container, True, True, 0)
 
+	def __collisons_warning_dialog(self, key , mods, collisions):
+		actions = ", ".join(accel[1] for accel in collisions)
+		accel_label = gtk.accelerator_get_label(key, mods)
+		dialog = gtk.MessageDialog(None, 0, gtk.MESSAGE_WARNING, gtk.BUTTONS_CLOSE, _('The shortcut %s already assigned to other actions' % accel_label))
+		dialog.format_secondary_text(actions)
+		response = dialog.run()
+		dialog.destroy()
+		return response
+
+	def __accel_collision_dialog(self, accel, title, key, mods, primary):
+		accel_type = _('primary shortcut') if primary else _('secondary shortcut')
+		accel_label = gtk.accelerator_get_label(key, mods)
+		message = _('Accelerator %s already used in %s as %s' % (accel_label, title, accel_type))
+		dialog = gtk.MessageDialog(None, 0, gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, message)
+		dialog.format_secondary_text(_('Do you want to remove it?'))
+		response = dialog.run()
+		dialog.destroy()
+		response = True if response == gtk.RESPONSE_YES else False
+		return response
+
+	def _find_collisions(self, accel_iter, key, mods):
+
+		result = []
+		parent = self._accels.iter_parent(accel_iter)
+		parent_path = self._accels.get_path(parent)
+		for row in self._accels:
+			if row.path == parent_path:
+				children = row.iterchildren()
+				for child in children:
+					if child.iter != accel_iter:
+						title = self._accels.get_value(child.iter, Column.TITLE)
+						primary_key = self._accels.get_value(child.iter, Column.PRIMARY_KEY)
+						secondary_key = self._accels.get_value(child.iter, Column.SECONDARY_KEY)
+						primary_mods = self._accels.get_value(child.iter, Column.PRIMARY_MODS)
+						secondary_mods = self._accels.get_value(child.iter, Column.SECONDARY_MODS)
+						if primary_key == key and primary_mods == mods:
+							result.append([child.iter, title, primary_key, primary_mods, True])
+						if secondary_key == key and secondary_mods == mods:
+							result.append([child.iter, title, secondary_key, secondary_mods, False])
+
+		return result
+
+	def _edit_accel(self, accel, key, mods, primary):
+
+		column_key = Column.PRIMARY_KEY if primary else Column.SECONDARY_KEY
+		column_mods = Column.PRIMARY_MODS if primary else Column.SECONDARY_MODS
+
+		# save changes to local list
+		self._accels.set_value(accel, column_key, key)
+		self._accels.set_value(accel, column_mods, mods)
+
+		# enable save button
+		self._parent.enable_save(show_restart=True)
+
 	def __accel_edited(self, widget, path, key, mods, hwcode, primary):
 		"""Handle editing accelerator"""
 		accel_iter = self._accels.get_iter(path)
 
 		if accel_iter is not None:
-			column_key = Column.PRIMARY_KEY if primary else Column.SECONDARY_KEY
-			column_mods = Column.PRIMARY_MODS if primary else Column.SECONDARY_MODS
-
-			# save changes to local list
-			self._accels.set_value(accel_iter, column_key, key)
-			self._accels.set_value(accel_iter, column_mods, mods)
-
-			# enable save button
-			self._parent.enable_save(show_restart=True)
+			collisions = self._find_collisions(accel_iter, key, mods)
+			if collisions:
+				response = self.__accel_collision_dialog(*collisions[0])
+				if response:
+					self._edit_accel(accel_iter, key, mods, primary)
+					self._edit_accel(collisions[0][0], 0, 0, collisions[0][4])
+				if collisions.__len__() > 1:
+					self.__collisons_warning_dialog(key, mods, collisions[1:])
+			else:
+				self._edit_accel(accel_iter, key, mods, primary)
 
 	def __accel_cleared(self, widget, path, primary):
 		"""Handle clearing accelerator"""
 		accel_iter = self._accels.get_iter(path)
 
 		if accel_iter is not None:
-			column_key = Column.PRIMARY_KEY if primary else Column.SECONDARY_KEY
-			column_mods = Column.PRIMARY_MODS if primary else Column.SECONDARY_MODS
-
-			# save changes to local list
-			self._accels.set_value(accel_iter, column_key, 0)
-			self._accels.set_value(accel_iter, column_mods, 0)
-
-			# enable save button
-			self._parent.enable_save(show_restart=True)
+			self._edit_accel(accel_iter, 0, 0, primary)
 
 	def _populate_list(self):
 		"""Update accelerator list"""

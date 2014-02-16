@@ -135,6 +135,10 @@ class AcceleratorGroup:
 		"""Set accelerator group name"""
 		self._name = name.replace(' ', '_')
 
+	def get_name(self):
+		"""Get group name"""
+		return self._name
+
 	def set_title(self, title):
 		"""Set accelerator group title"""
 		self._title = title
@@ -173,6 +177,15 @@ class AcceleratorGroup:
 
 		return result
 
+	def get_method_title(self, name):
+		"""Get title for specified accelerator"""
+		result = None
+
+		if name in self._methods:
+			result = self._methods[name]['title']
+
+		return result
+
 	def reset_accelerator(self, name):
 		"""Resets accelerator shortcuts"""
 		if name in self._primary:
@@ -200,6 +213,22 @@ class AcceleratorGroup:
 		# trigger accelerator only if we have method connected
 		if label in self._method_names:
 			result = self._handle_activate(self._accel_group, self._window, keyval, modifier)
+
+		return result
+
+	def get_collisions(self, keyval, modifier):
+		"""Get list of colliding accelerators"""
+		result = []
+
+		# check for collisions in primary accelerators
+		for name, data in self._primary.items():
+			if cmp((keyval, modifier), data) == 0:
+				result.append((self, name, True))
+
+		# check for collisions in secondary accelerators
+		for name, data in self._secondary.items():
+			if cmp((keyval, modifier), data) == 0:
+				result.append((self, name, False))
 
 		return result
 

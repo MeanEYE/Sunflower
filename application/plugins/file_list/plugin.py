@@ -991,7 +991,7 @@ class FileList(ItemList):
 
 				list_iter = self._store.iter_next(list_iter)
 
-			if len(result) == 0:
+			if len(result) == 0 and starting_iter is None:
 				selection = self._get_selection(relative=relative, files_only=files_only)
 				if selection is None:
 					result = None

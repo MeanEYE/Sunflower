@@ -1,6 +1,12 @@
 import gtk
 
 
+class GroupType:
+	MAIN_MENU = 0
+	PLUGIN_BASE = 1
+	ALL_GROUPS = 2
+
+
 class AcceleratorManager:
 	"""This manager handles saving and loading of accelerators"""
 
@@ -51,6 +57,28 @@ class AcceleratorManager:
 			if group._name == name:
 				result = group
 				break
+
+		return result
+
+	def _get_group_by_type(self, group_type):
+		"""docstring for _get_group_by_type"""
+		result = self._groups
+
+		if group_type is GroupType.MAIN_MENU:
+			result = [self._get_group_by_name('main_menu')]
+
+		elif group_type is GroupType.PLUGIN_BASE:
+			result = [self._get_group_by_name('plugin_base')]
+
+		return result
+
+	def check_collisions(self, keyval, modifier, group_type):
+		"""Check against collisions in specified groups matched by type"""
+		result = []
+		groups = self._get_group_by_type(group_type)
+
+		for group in self._groups:
+			result.extend(group.get_collisions(keyval, modifier))
 
 		return result
 

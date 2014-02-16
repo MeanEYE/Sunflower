@@ -1,5 +1,6 @@
 import gtk
 
+from accelerator_manager import GroupType
 from widgets.settings_page import SettingsPage
 
 
@@ -94,75 +95,105 @@ class AcceleratorOptions(SettingsPage):
 		self.pack_start(label_warning, False, False, 0)
 		self.pack_start(container, True, True, 0)
 
-	def __collisons_warning_dialog(self, key , mods, collisions):
-		actions = ", ".join(accel[1] for accel in collisions)
-		accel_label = gtk.accelerator_get_label(key, mods)
-		dialog = gtk.MessageDialog(None, 0, gtk.MESSAGE_WARNING, gtk.BUTTONS_CLOSE, _('The shortcut %s already assigned to other actions' % accel_label))
-		dialog.format_secondary_text(actions)
-		response = dialog.run()
-		dialog.destroy()
-		return response
+	def __find_iter_by_group_name(self, group_name):
+		"""Find group iter by its name"""
+		result = None
 
-	def __accel_collision_dialog(self, accel, title, key, mods, primary):
-		accel_type = _('primary shortcut') if primary else _('secondary shortcut')
-		accel_label = gtk.accelerator_get_label(key, mods)
-		message = _('Accelerator %s already used in %s as %s' % (accel_label, title, accel_type))
-		dialog = gtk.MessageDialog(None, 0, gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, message)
-		dialog.format_secondary_text(_('Do you want to remove it?'))
-		response = dialog.run()
-		dialog.destroy()
-		response = True if response == gtk.RESPONSE_YES else False
-		return response
-
-	def _find_collisions(self, accel_iter, key, mods):
-
-		result = []
-		parent = self._accels.iter_parent(accel_iter)
-		parent_path = self._accels.get_path(parent)
 		for row in self._accels:
-			if row.path == parent_path:
-				children = row.iterchildren()
-				for child in children:
-					if child.iter != accel_iter:
-						title = self._accels.get_value(child.iter, Column.TITLE)
-						primary_key = self._accels.get_value(child.iter, Column.PRIMARY_KEY)
-						secondary_key = self._accels.get_value(child.iter, Column.SECONDARY_KEY)
-						primary_mods = self._accels.get_value(child.iter, Column.PRIMARY_MODS)
-						secondary_mods = self._accels.get_value(child.iter, Column.SECONDARY_MODS)
-						if primary_key == key and primary_mods == mods:
-							result.append([child.iter, title, primary_key, primary_mods, True])
-						if secondary_key == key and secondary_mods == mods:
-							result.append([child.iter, title, secondary_key, secondary_mods, False])
+			iter_name = self._accels.get_value(row.iter, Column.NAME)
+
+			if iter_name == group_name:
+				result = row.iter
+				break
 
 		return result
 
-	def _edit_accel(self, accel, key, mods, primary):
+	def __find_iter_by_method_name(self, group_name, method_name):
+		"""Find iter by method name"""
+		result = None
+		group_iter = self.__find_iter_by_group_name(group_name)
 
+		# get group children
+		if group_iter is not None:
+			accelerator_iter = self._accels.iter_children(group_iter)
+
+			while accelerator_iter is not None:
+				iter_name = self._accels.get_value(accelerator_iter, Column.NAME)
+
+				# exit loop if we found the result
+				if iter_name == method_name:
+					result = accelerator_iter
+					break
+
+				accelerator_iter = self._accels.iter_next(accelerator_iter)
+
+		return result
+
+	def __change_accelerator(self, accelerator_iter, keyval, modifier, primary):
+		"""Change accelerator value in the list"""
 		column_key = Column.PRIMARY_KEY if primary else Column.SECONDARY_KEY
 		column_mods = Column.PRIMARY_MODS if primary else Column.SECONDARY_MODS
 
 		# save changes to local list
-		self._accels.set_value(accel, column_key, key)
-		self._accels.set_value(accel, column_mods, mods)
+		self._accels.set_value(accelerator_iter, column_key, keyval)
+		self._accels.set_value(accelerator_iter, column_mods, modifier)
 
 		# enable save button
 		self._parent.enable_save(show_restart=True)
 
-	def __accel_edited(self, widget, path, key, mods, hwcode, primary):
+	def __accel_edited(self, widget, path, keyval, modifier, hwcode, primary):
 		"""Handle editing accelerator"""
-		accel_iter = self._accels.get_iter(path)
+		selected_iter = self._accels.get_iter(path)
+		accelerator_label = gtk.accelerator_get_label(keyval, modifier)
 
-		if accel_iter is not None:
-			collisions = self._find_collisions(accel_iter, key, mods)
-			if collisions:
-				response = self.__accel_collision_dialog(*collisions[0])
-				if response:
-					self._edit_accel(accel_iter, key, mods, primary)
-					self._edit_accel(collisions[0][0], 0, 0, collisions[0][4])
-				if collisions.__len__() > 1:
-					self.__collisons_warning_dialog(key, mods, collisions[1:])
-			else:
-				self._edit_accel(accel_iter, key, mods, primary)
+		# check if new accelerator has collisions
+		accelerator_manager = self._application.accelerator_manager
+		collisions = accelerator_manager.check_collisions(keyval, modifier, GroupType.ALL_GROUPS) 
+
+		if len(collisions) > 0:
+			# ask user what to do with collisions
+			method_list = []
+			for group, method_name, colliding_primary in collisions:
+				method_list.append(group.get_method_title(method_name))
+
+			methods = '\n'.join([method_name for method_name in method_list])
+
+			# show dialog
+			dialog = gtk.MessageDialog(
+									self._parent,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_QUESTION,
+									gtk.BUTTONS_YES_NO,
+									_(
+										'Selected accelerator "{0}" is already being '
+										'used. Would you still like to assign accelerator '
+										'to this function? This will reset listed '
+										'functions.\n\n'
+										'Collisions:\n'
+										'{1}'
+									).format(accelerator_label, methods)
+								)
+			dialog.set_default_response(gtk.RESPONSE_NO)
+			result = dialog.run()
+			dialog.destroy()
+
+			if result == gtk.RESPONSE_YES:
+				# reset other accelerators
+				for group, method_name, colliding_primary in collisions:
+					colliding_iter = self.__find_iter_by_method_name(
+														group.get_name(),
+														method_name
+													)
+
+					if colliding_iter is not None:
+						self.__change_accelerator(colliding_iter, 0, 0, colliding_primary)
+
+				# save new accelerator
+				self.__change_accelerator(selected_iter, keyval, modifier, primary)
+
+		else:
+			# no collisions detected
+			self.__change_accelerator(selected_iter, keyval, modifier, primary)
 
 	def __accel_cleared(self, widget, path, primary):
 		"""Handle clearing accelerator"""

@@ -883,8 +883,10 @@ class RenameDialog(InputDialog):
 		self.set_title(_('Rename file/directory'))
 		self.set_label(_('Enter a new name for this item:'))
 		self.set_text(selection)
+
 		if is_dir:
 			self._entry.select_region(0, len(selection.decode('utf8')))
+
 		else:
 			self._entry.select_region(0, len(os.path.splitext(selection.decode('utf8'))[0]))
 

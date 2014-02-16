@@ -853,11 +853,11 @@ class FileList(ItemList):
 		# return if there is no selection
 		if selection is None:
 			return
-
+		is_dir = self.get_provider().is_dir(selection)
 		# get base name from selection
 		selection = os.path.basename(selection)
 
-		dialog = RenameDialog(self._parent, selection)
+		dialog = RenameDialog(self._parent, selection, is_dir)
 		result = dialog.get_response()
 
 		if result[0] == gtk.RESPONSE_OK:

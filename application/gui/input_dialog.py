@@ -877,14 +877,16 @@ class MoveDialog(CopyDialog):
 class RenameDialog(InputDialog):
 	"""Dialog used for renaming file/directory"""
 
-	def __init__(self, application, selection):
+	def __init__(self, application, selection, is_dir):
 		InputDialog.__init__(self, application)
 
 		self.set_title(_('Rename file/directory'))
 		self.set_label(_('Enter a new name for this item:'))
 		self.set_text(selection)
-
-		self._entry.select_region(0, len(os.path.splitext(selection.decode('utf8'))[0]))
+		if is_dir:
+			self._entry.select_region(0, len(selection.decode('utf8')))
+		else:
+			self._entry.select_region(0, len(os.path.splitext(selection.decode('utf8'))[0]))
 
 
 class OverwriteDialog:

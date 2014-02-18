@@ -65,6 +65,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_show_headers = gtk.CheckButton(_('Show list headers'))
 		self._checkbox_media_preview = gtk.CheckButton(_('Fast media preview'))
 		self._checkbox_show_expanders = gtk.CheckButton(_('Show tree expanders'))
+		self._checkbox_hide_scrollbar = gtk.CheckButton(_('Hide horizontal scrollbar'))
 
 		self._checkbox_row_hinting.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
@@ -75,6 +76,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_show_headers.connect('toggled', self._parent.enable_save)
 		self._checkbox_media_preview.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_expanders.connect('toggled', self._parent.enable_save)
+		self._checkbox_hide_scrollbar.connect('toggled', self._parent.enable_save)
 
 		# bread crumbs type
 		hbox_breadcrumbs = gtk.HBox(False, 5);
@@ -357,6 +359,7 @@ class ItemListOptions(SettingsPage):
 		vbox_look_and_feel.pack_start(self._checkbox_media_preview, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_show_hidden, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_show_expanders, False, False, 0)
+		vbox_look_and_feel.pack_start(self._checkbox_hide_scrollbar, False, False, 0)
 		vbox_look_and_feel.pack_start(hbox_breadcrumbs, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_mode_format, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_grid_lines, False, False, 5)
@@ -616,6 +619,7 @@ class ItemListOptions(SettingsPage):
 		self._button_selection_color.set_color(gtk.gdk.color_parse(section.get('selection_color')))
 		self._checkbox_load_directories.set_active(section.get('force_directories'))
 		self._checkbox_show_expanders.set_active(section.get('show_expanders'))
+		self._checkbox_hide_scrollbar.set_active(section.get('hide_horizontal_scrollbar'))
 
 		search_modifier = section.get('search_modifier')
 		self._checkbox_control.set_active(search_modifier[0] == '1')
@@ -659,6 +663,7 @@ class ItemListOptions(SettingsPage):
 		section.set('selection_indicator', self._combobox_indicator.get_active_text())
 		section.set('force_directories', self._checkbox_load_directories.get_active())
 		section.set('show_expanders', self._checkbox_show_expanders.get_active())
+		section.set('hide_horizontal_scrollbar', self._checkbox_hide_scrollbar.get_active())
 
 		search_modifier = "%d%d%d" % (
 								self._checkbox_control.get_active(),
@@ -687,3 +692,4 @@ class ItemListOptions(SettingsPage):
 
 		section.set('left_directories', left_list)
 		section.set('right_directories', right_list)
+

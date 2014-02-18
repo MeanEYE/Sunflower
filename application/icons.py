@@ -1,6 +1,9 @@
 import os
 import gtk
 import gio
+import user
+
+from common import UserDirectory, get_user_directory
 
 
 class IconManager:
@@ -9,6 +12,37 @@ class IconManager:
 	def __init__(self, parent):
 		self._parent = parent
 		self._icon_theme = gtk.icon_theme_get_default()
+		self._user_directories = None
+
+		# preload information
+		self._load_user_directories()
+
+	def _load_user_directories(self):
+		"""Load special user directories"""
+		directories = []
+		icon_names = {
+				UserDirectory.DESKTOP: 'desktop',
+				UserDirectory.DOWNLOADS: 'folder-downloads',
+				UserDirectory.TEMPLATES: 'folder-templates',
+				UserDirectory.PUBLIC: 'folder-publicshare',
+				UserDirectory.DOCUMENTS: 'folder-documents',
+				UserDirectory.MUSIC: 'folder-music',
+				UserDirectory.PICTURES: 'folder-pictures',
+				UserDirectory.VIDEOS: 'folder-videos'
+			}
+
+		# add all directories
+		for directory in icon_names.keys():
+			full_path = get_user_directory(directory)
+			icon_name = icon_names[directory]
+
+			directories.append((full_path, icon_name))
+
+		# add user home directory
+		directories.append((user.home, 'folder-home'))
+
+		# create a dictionary
+		self._user_directories = dict(directories)
 
 	def has_icon(self, icon_name):
 		"""Check if icon with specified name exists in theme"""
@@ -24,7 +58,6 @@ class IconManager:
 		mime_type = self._parent.associations_manager.get_mime_type(filename)
 		themed_icon = None
 
-
 		# get icon names
 		if mime_type is not None:
 			themed_icon = gio.content_type_get_icon(mime_type)
@@ -36,6 +69,15 @@ class IconManager:
 
 			if len(icon_list) > 0:
 				result = icon_list[0]
+
+		return result
+
+	def get_icon_for_directory(self, path, size=gtk.ICON_SIZE_MENU):
+		"""Get icon for specified directory"""
+		result = 'folder'
+
+		if path in self._user_directories:
+			result = self._user_directories[path]
 
 		return result
 

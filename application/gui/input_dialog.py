@@ -1012,19 +1012,16 @@ class OverwriteDialog:
 
 	def _get_data(self, provider, path, relative_to=None):
 		"""Return information for specified path using provider"""
+		full_path = os.path.join(provider.get_path(), path)
 		item_stat = provider.get_stat(path, relative_to=relative_to)
 
 		if item_stat.type is FileType.DIRECTORY:
 			size = len(provider.list_dir(path, relative_to=relative_to))
-			icon = 'folder'
+			icon = self._application.icon_manager.get_icon_for_directory(full_path)
 
 		else:
 			size = item_stat.size
-			icon = self._application.icon_manager.get_icon_for_file(
-																os.path.join(
-																			provider.get_path(),
-																			path
-																		))
+			icon = self._application.icon_manager.get_icon_for_file(full_path)
 
 		str_size = locale.format('%d', size, True)
 		str_date = time.strftime(self._time_format, time.localtime(item_stat.time_modify))

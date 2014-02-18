@@ -35,7 +35,8 @@ class Button(gtk.ToolButton):
 
 	def _set_icon(self):
 		"""Set button icon"""
-		self.set_icon_name('folder')
+		icon_name = self._application.icon_manager.get_icon_for_directory(self._path)
+		self.set_icon_name(icon_name)
 
 	def _clicked(self, widget, data=None):
 		"""Handle click"""

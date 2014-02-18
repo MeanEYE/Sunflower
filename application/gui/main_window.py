@@ -2194,6 +2194,7 @@ class MainWindow(gtk.Window):
 					'right_directories': [],
 					'force_directories': False,
 					'show_expanders': False,
+					'hide_horizontal_scrollbar': False,
 					'breadcrumbs': 2
 				})
 

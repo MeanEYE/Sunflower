@@ -156,7 +156,7 @@ class AdvancedRename:
 				icon = self._application.icon_manager.get_icon_for_file(item)
 
 			else:
-				icon = 'folder'
+				icon = self._application.icon_manager.get_icon_for_directory(item)
 
 			self._list.append((icon, name, ''))
 

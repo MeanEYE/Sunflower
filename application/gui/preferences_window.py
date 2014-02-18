@@ -28,7 +28,6 @@ class PreferencesWindow(gtk.Window):
 		self._tab_names = {}
 
 		# configure self
-		self.connect('delete_event', self._hide)
 		self.set_title(_('Preferences'))
 		self.set_size_request(640, 500)
 		self.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
@@ -38,7 +37,9 @@ class PreferencesWindow(gtk.Window):
 		self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
 		self.set_wmclass('Sunflower', 'Sunflower')
 
+		self.connect('delete_event', self._hide)
 		self.connect('key-press-event', self._handle_key_press)
+
 		# create GUI
 		vbox = gtk.VBox(False, 7)
 		vbox.set_border_width(7)
@@ -135,22 +136,34 @@ class PreferencesWindow(gtk.Window):
 
 	def _hide(self, widget=None, data=None):
 		"""Hide dialog"""
+		should_close = True
+
 		if self._button_save.get_sensitive():
 			dialog = gtk.MessageDialog(
 			                    self,
 			                    gtk.DIALOG_DESTROY_WITH_PARENT,
 			                    gtk.MESSAGE_QUESTION,
-			                    gtk.BUTTONS_YES_NO,
+								gtk.BUTTONS_NONE,
 			                    _("There are unsaved changes.\nDo you want to save them?")
 			                )
+			dialog.add_buttons(
+						gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+						gtk.STOCK_NO, gtk.RESPONSE_NO,
+						gtk.STOCK_YES, gtk.RESPONSE_YES,
+					)
 			dialog.set_default_response(gtk.RESPONSE_YES)
 			result = dialog.run()
 			dialog.destroy()
 
 			if result == gtk.RESPONSE_YES:
 				self._save_options()			
+
+			elif result == gtk.RESPONSE_CANCEL:
+				should_close = False
 		
-		self.hide()
+		if should_close:
+			self.hide()
+
 		return True  # avoid destroying components
 
 	def _load_options(self, widget=None, data=None):
@@ -206,7 +219,6 @@ class PreferencesWindow(gtk.Window):
 
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys"""
-
 		if event.keyval == gtk.keysyms.Escape:
 			self._hide()
 

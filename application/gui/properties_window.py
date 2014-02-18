@@ -57,7 +57,7 @@ class PropertiesWindow(gtk.Window):
 
 		else:
 			# get folder icon
-			self._icon_name = 'folder'
+			self._icon_name = icon_manager.get_icon_for_directory(path)
 
 		# configure window
 		self.set_title(title)
@@ -114,7 +114,6 @@ class PropertiesWindow(gtk.Window):
 
 	def _item_changes(self, monitor, file, other_file, event, data=None):
 		"""Event triggered when monitored file changes"""
-
 		if event is gio.FILE_MONITOR_EVENT_DELETED:
 			# item was removed, close dialog
 			self.destroy()

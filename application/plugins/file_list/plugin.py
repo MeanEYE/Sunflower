@@ -1368,7 +1368,8 @@ class FileList(ItemList):
 
 		# directory
 		if file_stat.type is FileType.DIRECTORY:
-			icon = 'folder'
+			directory_path = os.path.join(full_path, filename)
+			icon = self._parent.icon_manager.get_icon_for_directory(directory_path)
 
 			if parent is None:
 				self._dirs['count'] += 1

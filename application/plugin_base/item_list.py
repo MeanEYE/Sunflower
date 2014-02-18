@@ -35,6 +35,9 @@ class ItemList(PluginBase):
 		# call parent constructor
 		PluginBase.__init__(self, parent, notebook, options)
 
+		options = self._parent.options
+		section = options.section('item_list')
+
 		# store local stuff
 		self._provider = None
 		self._menu_timer = None
@@ -49,8 +52,8 @@ class ItemList(PluginBase):
 
 		# local human readable cache
 		self._size_format = self._parent.options.get('size_format')
-		self._selection_color = self._parent.options.section('item_list').get('selection_color')
-		self._selection_indicator = self._parent.options.section('item_list').get('selection_indicator')
+		self._selection_color = section.get('selection_color')
+		self._selection_indicator = section.get('selection_indicator')
 
 		# we use this variable to prevent dead loop during column resize
 		self._is_updating = False
@@ -59,14 +62,14 @@ class ItemList(PluginBase):
 		self._sort_column = self._options.get('sort_column')
 		self._sort_ascending = self._options.get('sort_ascending')
 		self._sort_column_widget = None
-		self._sort_case_sensitive = self._parent.options.section('item_list').get('case_sensitive_sort')
-		self._sort_number_sensitive = self._parent.options.section('item_list').get('number_sensitive_sort')
+		self._sort_case_sensitive = section.get('case_sensitive_sort')
+		self._sort_number_sensitive = section.get('number_sensitive_sort')
 		self._columns = []
 
 		# bookmarks button
 		self._bookmarks_button = gtk.Button()
 
-		if self._parent.options.get('tab_button_icons'):
+		if options.get('tab_button_icons'):
 			image_bookmarks = gtk.Image()
 			image_bookmarks.set_from_icon_name('go-jump', gtk.ICON_SIZE_MENU)
 			self._bookmarks_button.set_image(image_bookmarks)
@@ -83,7 +86,7 @@ class ItemList(PluginBase):
 		# history button
 		self._history_button = gtk.Button()
 
-		if self._parent.options.get('tab_button_icons'):
+		if options.get('tab_button_icons'):
 			# set icon
 			image_history = gtk.Image()
 			image_history.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
@@ -101,7 +104,7 @@ class ItemList(PluginBase):
 		# terminal button
 		self._terminal_button = gtk.Button()
 
-		if self._parent.options.get('tab_button_icons'):
+		if options.get('tab_button_icons'):
 			# set icon
 			image_terminal = gtk.Image()
 			image_terminal.set_from_icon_name('terminal', gtk.ICON_SIZE_MENU)
@@ -122,24 +125,30 @@ class ItemList(PluginBase):
 		self._status_bar.add_group_with_icon('size', 'add', '0/0', tooltip=_('Size (selected/total)'))
 
 		# file list
-		container = gtk.ScrolledWindow()
-		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-		container.set_shadow_type(gtk.SHADOW_IN)
+		self._container = gtk.ScrolledWindow()
+		self._container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+		self._container.set_shadow_type(gtk.SHADOW_IN)
 
 		self._item_list = gtk.TreeView()
 		self._item_list.set_fixed_height_mode(True)
 
-		headers_visible = self._parent.options.section('item_list').get('headers_visible')
+		# apply header visibility
+		headers_visible = section.get('headers_visible')
 		self._item_list.set_headers_visible(headers_visible)
 
+		# apply scrollbar visibility
+		hide_scrollbar = section.get('hide_horizontal_scrollbar')
+		scrollbar_horizontal = self._container.get_hscrollbar()
+		scrollbar_horizontal.set_child_visible(not hide_scrollbar)
+
+		# connect events
 		self._item_list.connect('button-press-event', self._handle_button_press)
 		self._item_list.connect('button-release-event', self._handle_button_press)
 		self._item_list.connect('cursor-changed', self._handle_cursor_change)
 		self._item_list.connect('columns-changed', self._column_changed)
-
 		self._connect_main_object(self._item_list)
 
-		container.add(self._item_list)
+		self._container.add(self._item_list)
 
 		# quick search
 		self._search_panel = gtk.HBox(False, 0)
@@ -203,7 +212,7 @@ class ItemList(PluginBase):
 		self._history_menu = gtk.Menu()
 
 		# pack gui
-		self.pack_start(container, True, True, 0)
+		self.pack_start(self._container, True, True, 0)
 		self.pack_start(self._search_panel, False, False, 0)
 
 		self.show_all()
@@ -1545,6 +1554,9 @@ class ItemList(PluginBase):
 
 	def apply_settings(self):
 		"""Apply settings"""
+		options = self._parent.options
+		section = options.section('item_list')
+
 		# let parent class do its work
 		PluginBase.apply_settings(self)
 
@@ -1552,22 +1564,27 @@ class ItemList(PluginBase):
 		self._update_status_with_statistis()
 
 		# change headers visibility
-		headers_visible = self._parent.options.section('item_list').get('headers_visible')
+		headers_visible = section.get('headers_visible')
 		self._item_list.set_headers_visible(headers_visible)
 
+		# apply scrollbar visibility
+		hide_scrollbar = section.get('hide_horizontal_scrollbar')
+		scrollbar_horizontal = self._container.get_hscrollbar()
+		scrollbar_horizontal.set_child_visible(not hide_scrollbar)
+
 		# change change sorting sensitivity
-		self._sort_case_sensitive = self._parent.options.section('item_list').get('case_sensitive_sort')
-		self._sort_number_sensitive = self._parent.options.section('item_list').get('number_sensitive_sort')
+		self._sort_case_sensitive = section.get('case_sensitive_sort')
+		self._sort_number_sensitive = section.get('number_sensitive_sort')
 
 		# apply size formatting
-		self._size_format = self._parent.options.get('size_format')
+		self._size_format = options.get('size_format')
 
 		# apply selection
-		self._selection_color = self._parent.options.section('item_list').get('selection_color')
-		self._selection_indicator = self._parent.options.section('item_list').get('selection_indicator')
+		self._selection_color = section.get('selection_color')
+		self._selection_indicator = section.get('selection_indicator')
 
 		# change status bar visibility
-		show_status_bar = self._parent.options.get('show_status_bar')
+		show_status_bar = options.get('show_status_bar')
 
 		if show_status_bar == StatusVisible.ALWAYS:
 			self._show_status_bar()
@@ -1578,3 +1595,4 @@ class ItemList(PluginBase):
 
 		elif show_status_bar == StatusVisible.NEVER:
 			self._hide_status_bar()
+

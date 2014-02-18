@@ -754,7 +754,8 @@ class MainWindow(gtk.Window):
 		bookmark_list = self.bookmark_options.get('bookmarks')
 
 		for bookmark_data in bookmark_list:
-			self.bookmarks.add_bookmark(bookmark_data['name'], 'folder', bookmark_data['uri'])
+			icon_name = self.icon_manager.get_icon_for_directory(bookmark_data['uri'])
+			self.bookmarks.add_bookmark(bookmark_data['name'], icon_name, bookmark_data['uri'])
 
 		# add system bookmarks if needed
 		bookmarks_files = (
@@ -780,7 +781,8 @@ class MainWindow(gtk.Window):
 					name = os.path.basename(name)
 
 				# add entry
-				self.bookmarks.add_bookmark(name, 'folder', uri, system=True)
+				icon_name = self.icon_manager.get_icon_for_directory(uri)
+				self.bookmarks.add_bookmark(name, icon_name, uri, system=True)
 
 		# create additional options
 		if self.bookmarks.get_menu_item_count() == 0:

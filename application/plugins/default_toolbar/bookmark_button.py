@@ -90,7 +90,7 @@ class ConfigurationDialog(gtk.Dialog):
 		# load default values
 		if config is not None:
 			self._entry_path.set_text(config['path'])
-			self._checkbox_show_label.set_active(config['show_label'] == 'True')
+			self._checkbox_show_label.set_active(config['show_label'] == True)
 
 		# create controls
 		button_save = gtk.Button(stock=gtk.STOCK_SAVE)

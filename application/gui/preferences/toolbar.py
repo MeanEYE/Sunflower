@@ -89,6 +89,48 @@ class ToolbarOptions(SettingsPage):
 		button_box.pack_end(button_move_down, False, False, 0)
 		button_box.pack_end(button_move_up, False, False, 0)
 
+		# toolbar style
+		label_style = gtk.Label(_('Toolbar style:'))
+		list_styles = gtk.ListStore(str, int)
+		list_styles.append((_('Icons'), gtk.TOOLBAR_ICONS))
+		list_styles.append((_('Text'), gtk.TOOLBAR_TEXT))
+		list_styles.append((_('Both'), gtk.TOOLBAR_BOTH))
+		list_styles.append((_('Both horizontal'), gtk.TOOLBAR_BOTH_HORIZ))
+
+		renderer = gtk.CellRendererText()
+
+		self._combobox_styles = gtk.ComboBox(list_styles)
+		self._combobox_styles.pack_start(renderer)
+		self._combobox_styles.add_attribute(renderer, 'text', 0)
+		self._combobox_styles.connect('changed', self._parent.enable_save)
+
+		# toolbar icon size
+		label_icon_size = gtk.Label(_('Icon size:'))
+		list_icon_size = gtk.ListStore(str, int)
+		list_icon_size.append((_('Same as menu item'), gtk.ICON_SIZE_MENU))
+		list_icon_size.append((_('Small toolbar icon'), gtk.ICON_SIZE_SMALL_TOOLBAR))
+		list_icon_size.append((_('Large toolbar icon'), gtk.ICON_SIZE_LARGE_TOOLBAR))
+		list_icon_size.append((_('Same as buttons'), gtk.ICON_SIZE_BUTTON))
+		list_icon_size.append((_('Same as drag icons'), gtk.ICON_SIZE_DND))
+		list_icon_size.append((_('Same as dialog'), gtk.ICON_SIZE_DIALOG))
+
+		renderer = gtk.CellRendererText()
+
+		self._combobox_icon_size = gtk.ComboBox(list_icon_size)
+		self._combobox_icon_size.pack_start(renderer)
+		self._combobox_icon_size.add_attribute(renderer, 'text', 0)
+		self._combobox_icon_size.connect('changed', self._parent.enable_save)
+
+		style_box = gtk.HBox(False, 5)
+		style_box.pack_start(label_style, False, False, 0)
+		style_box.pack_start(self._combobox_styles, False, False, 0)
+
+		size_box = gtk.HBox(False, 5)
+		size_box.pack_start(label_icon_size, False, False, 0)
+		size_box.pack_start(self._combobox_icon_size, False, False, 0)
+
+		self.pack_start(style_box, False, False, 0)
+		self.pack_start(size_box, False, False, 0)
 		self.pack_start(container, True, True, 0)
 		self.pack_start(button_box, False, False, 0)
 
@@ -155,6 +197,9 @@ class ToolbarOptions(SettingsPage):
 		"""Load options from file"""
 		options = self._application.toolbar_options
 
+		self._combobox_styles.set_active(options.get('style'))
+		self._combobox_icon_size.set_active(options.get('icon_size'))
+
 		# clear list store
 		self._store.clear()
 
@@ -177,6 +222,8 @@ class ToolbarOptions(SettingsPage):
 		"""Save settings to config file"""
 		options = self._application.toolbar_options
 
+		options.set('style', self._combobox_styles.get_active())
+		options.set('icon_size', self._combobox_icon_size.get_active())
 		# get section list, we'll use this
 		# list to remove orphan configurations
 		section_list = options.get_sections()

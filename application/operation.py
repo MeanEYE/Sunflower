@@ -8,6 +8,7 @@ from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, Oper
 from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog, RenameDialog
 from gui.error_list import ErrorList
 from plugin_base.provider import Mode as FileMode, TrashError, Support as ProviderSupport
+from plugin_base.monitor import MonitorSignals
 from common import format_size
 
 # import constants
@@ -50,6 +51,8 @@ class Operation(Thread):
 		self._source = source
 		self._destination = destination
 		self._options = options
+		self._source_queue = None
+		self._destination_queue = None
 		
 		# daemonize
 		self.daemon = True
@@ -432,6 +435,14 @@ class Operation(Thread):
 		"""Set list of selected items"""
 		self._selection_list.extend(item_list)
 
+	def set_source_queue(self, queue):
+		"""Set event queue for fallback monitor support"""
+		self._source_queue = queue
+
+	def set_destination_queue(self, queue):
+		"""Set event queue for fallback monitor support"""
+		self._destination_queue = queue
+
 	def pause(self):
 		"""Pause current operation"""
 		self._can_continue.clear()
@@ -554,6 +565,11 @@ class CopyOperation(Operation):
 				                    relative_to=self._destination_path
 				                )
 
+			# push event to the queue
+			if self._destination_queue is not None:
+				event = (MonitorSignals.ATTRIBUTE_CHANGED, path, None)
+				self._destination_queue.put(event, False)
+
 		except StandardError as error:
 			# problem setting mode, ask user
 			response = self._get_mode_set_error_input(error)
@@ -575,6 +591,11 @@ class CopyOperation(Operation):
 				                    group_id,
 				                    relative_to=self._destination_path
 				                )
+
+			# push event to the queue
+			if self._destination_queue is not None:
+				event = (MonitorSignals.ATTRIBUTE_CHANGED, path, None)
+				self._destination_queue.put(event, False)
 
 		except StandardError as error:
 			# problem with setting owner, ask user
@@ -598,6 +619,11 @@ class CopyOperation(Operation):
 									change_time,
 									relative_to=self._destination_path
 								)
+
+			# push event to the queue
+			if self._destination_queue is not None:
+				event = (MonitorSignals.ATTRIBUTE_CHANGED, path, None)
+				self._destination_queue.put(event, False)
 
 		except StandardError as error:
 			# problem with setting owner, ask user
@@ -684,6 +710,10 @@ class CopyOperation(Operation):
 												mode,
 												relative_to=self._destination_path
 											)
+			# push event to the queue
+			if self._destination_queue is not None:
+				event = (MonitorSignals.CREATED, directory, None)
+				self._destination_queue.put(event, False)
 
 		except StandardError as error:
 			# there was a problem creating directory
@@ -762,6 +792,11 @@ class CopyOperation(Operation):
 
 			dh.seek(0)
 
+			# push event to the queue
+			if self._destination_queue is not None:
+				event = (MonitorSignals.CREATED, dest_file, None)
+				self._destination_queue.put(event, False)
+
 		except StandardError as error:
 			# close handles if they exist
 			if hasattr(sh, 'close'): sh.close()
@@ -816,6 +851,11 @@ class CopyOperation(Operation):
 								)
 				else:
 					gobject.idle_add(self._dialog.set_current_file_fraction, 1)
+
+				# push event to the queue
+				if self._destination_queue is not None:
+					event = (MonitorSignals.CHANGED, dest_file, None)
+					self._destination_queue.put(event, False)
 
 			else:
 				sh.close()
@@ -939,6 +979,11 @@ class MoveOperation(CopyOperation):
 			# try removing specified path
 			self._source.remove_path(path, relative_to=self._source_path)
 
+			# push event to the queue
+			if self._source_queue is not None:
+				event = (MonitorSignals.DELETED, path, None)
+				self._source_queue.put(event, False)
+
 		except StandardError as error:
 			# problem removing path, ask user what to do
 			response = self._get_remove_error_input(error)
@@ -986,6 +1031,15 @@ class MoveOperation(CopyOperation):
 								os.path.join(self._destination_path, dest_file),
 								relative_to=self._source_path
 							)
+
+			# push events to the queue
+			if self._source_queue is not None:
+				event = (MonitorSignals.DELETED, file_, None)
+				self._source_queue.put(event, False)
+
+			if self._destination_queue is not None:
+				event = (MonitorSignals.CREATED, dest_file, None)
+				self._destination_queue.put(event, False)
 
 		except StandardError as error:
 			# problem with moving file, ask user what to do
@@ -1177,6 +1231,11 @@ class DeleteOperation(Operation):
 			# try removing specified path
 			self._source.remove_path(path, relative_to=self._source_path)
 
+			# push event to the queue
+			if self._source_queue is not None:
+				event = (MonitorSignals.DELETED, path, None)
+				self._source_queue.put(event, False)
+
 		except StandardError as error:
 			# problem removing path, ask user what to do
 			response = self._get_remove_error_input(error)
@@ -1194,6 +1253,11 @@ class DeleteOperation(Operation):
 		try:
 			# try trashing specified path
 			self._source.trash_path(path, relative_to=self._source_path)
+
+			# push event to the queue
+			if self._source_queue is not None:
+				event = (MonitorSignals.DELETED, path, None)
+				self._source_queue.put(event, False)
 
 		except TrashError as error:
 			# problem removing path, ask user what to do
@@ -1293,6 +1357,14 @@ class RenameOperation(Operation):
 		try:
 			# try renaming specified path
 			self._source.rename_path(old_name, new_name, relative_to=self._source_path)
+
+			# push event to the queue
+			if self._source_queue is not None:
+				delete_event = (MonitorSignals.DELETE, old_name, None)
+				create_event = (MonitorSignals.CREATED, new_name, None)
+
+				self._source_queue.put(delete_event, False)
+				self._source_queue.put(create_event, False)
 
 		except StandardError as error:
 			# problem renaming path, ask user what to do

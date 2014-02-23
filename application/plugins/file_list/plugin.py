@@ -284,9 +284,6 @@ class FileList(ItemList):
 		self._sort_column_widget = column_sort_data[self._sort_column]
 		self._apply_sort_function()
 
-		# directory monitor
-		self._fs_monitor = None
-
 		# thumbnail view
 		self._thumbnail_view = ThumbnailView(self)
 		self._enable_media_preview = self._parent.options.get('media_preview')
@@ -560,14 +557,10 @@ class FileList(ItemList):
 				# try to create directories
 				self.get_provider().create_directory(response[1], mode, relative_to=self.path)
 
-				# add directory manually to the list in case
-				# where directory monitoring is not supported
-				is_hidden = response[1][0] == '.'
-
-				if self._fs_monitor is None:
-					if is_hidden and show_hidden \
-					or not is_hidden:
-						self._add_item(response[1])
+				# push monitor event queue
+				if self._fs_monitor is not None and self._fs_monitor.is_queue_based():
+					event_queue = self._fs_monitor.get_queue()
+					event_queue.put((MonitorSignals.CREATED, response[1], None), False)
 
 			except OSError as error:
 				# error creating, report to user
@@ -614,14 +607,10 @@ class FileList(ItemList):
 				# create file
 				provider.create_file(response[1], mode=mode, relative_to=self.path)
 
-				# add file manually to the list in case
-				# where directory monitoring is not supported
-				is_hidden = response[1][0] == '.'
-
-				if self._fs_monitor is None:
-					if is_hidden and show_hidden \
-					or not is_hidden:
-						self._add_item(response[1])
+				# push monitor event queue
+				if self._fs_monitor is not None and self._fs_monitor.is_queue_based():
+					event_queue = self._fs_monitor.get_queue()
+					event_queue.put((MonitorSignals.CREATED, response[1], None), False)
 
 				# create file from template
 				if template is not None:
@@ -762,8 +751,14 @@ class FileList(ItemList):
 									self._parent,
 									self.get_provider()
 								)
+
+			# set users preference on trashing files
 			if force_delete:
 				operation.set_force_delete(True)
+
+			# set event queue
+			if self._fs_monitor is not None and self._fs_monitor.is_queue_based():
+				operation.set_source_queue(self._fs_monitor.get_queue())
 
 			operation.set_selection(selection)
 			operation.start()
@@ -782,9 +777,11 @@ class FileList(ItemList):
 		opposite_object = self._parent.get_opposite_object(self)
 		source_provider = self.get_provider()
 		destination_provider = None
+		destination_monitor = None
 
 		if hasattr(opposite_object, 'get_provider'):
 			destination_provider = opposite_object.get_provider()
+			destination_monitor = opposite_object.get_monitor()
 		
 		# ask confirmation from user
 		dialog = CopyDialog(
@@ -799,10 +796,15 @@ class FileList(ItemList):
 			# if user confirmed copying
 			operation = CopyOperation(
 									self._parent,
-									self.get_provider(),
-									self._get_other_provider(),
+									source_provider,
+									destination_provider,
 									result[1]  # options from dialog
 								)
+
+			# set event queue
+			if destination_monitor is not None and destination_monitor.is_queue_based():
+				operation.set_destination_queue(destination_monitor.get_queue())
+
 			operation.set_selection(selection)
 			operation.start()
 
@@ -820,9 +822,11 @@ class FileList(ItemList):
 		opposite_object = self._parent.get_opposite_object(self)
 		source_provider = self.get_provider()
 		destination_provider = None
+		destination_monitor = None
 
 		if hasattr(opposite_object, 'get_provider'):
 			destination_provider = opposite_object.get_provider()
+			destination_monitor = opposite_object.get_monitor()
 
 		# ask confirmation from user
 		dialog = MoveDialog(
@@ -837,10 +841,18 @@ class FileList(ItemList):
 			# if user confirmed copying
 			operation = MoveOperation(
 									self._parent,
-									self.get_provider(),
-									self._get_other_provider(),
+									source_provider,
+									destination_provider,
 									result[1]  # options from dialog
 								)
+
+			# set event queues
+			if self._fs_monitor is not None and self._fs_monitor.is_queue_based():
+				operation.set_source_queue(self._fs_monitor.get_queue())
+
+			if destination_monitor is not None and destination_monitor.is_queue_based():
+				operation.set_destination_queue(destination_monitor.get_queue())
+
 			operation.set_selection(selection)
 			operation.start()
 

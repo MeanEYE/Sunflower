@@ -222,6 +222,11 @@ class AdvancedRename:
 									self._path,
 									item_list
 								)
+
+			# set event queue
+			if self._fs_monitor is not None and self._fs_monitor.is_queue_based():
+				operation.set_source_queue(self._fs_monitor.get_queue())
+
 			operation.start()
 
 			# destroy window

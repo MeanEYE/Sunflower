@@ -48,6 +48,11 @@ class AboutWindow:
 			email = 'arseniy@krasnoff.org',
 			website = None,
 		),
+		Contributor(
+			name = 'Sevka Fedoroff',
+			email = 'sevka.fedoroff@gmail.com',
+			website = None
+		)
 	]
 
 	# list of artists

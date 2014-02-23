@@ -1,5 +1,6 @@
 import gobject
 
+from Queue import Queue, Empty as QueueEmptyException
 from threading import Event
 
 
@@ -18,7 +19,7 @@ class MonitorSignals:
 
 
 class Monitor(gobject.GObject):
-	"""File system monitor base class
+	"""File system monitor base class.
 
 	Monitors are used to watch over a specific path on file system
 	specific to provider that created the monitor. They are created and
@@ -65,3 +66,61 @@ class Monitor(gobject.GObject):
 	def cancel(self):
 		"""Cancel monitoring"""
 		pass
+
+
+class ManualMonitor(Monitor):
+	"""Fallback monitor class.
+
+	This monitor is designed to periodically emit signals by reading
+	events from its queue. This class was designed to provide monitor-like
+	functionality to providers which don't support file system notifications,
+	for example remote mounts and archives. Events queue is populated by
+	the operation threads themselves.
+
+	"""
+
+	TIMEOUT = 1000
+
+	def __init__(self, provider, path):
+		Monitor.__init__(self, provider, path)
+
+		self._queue = Queue()
+		self._start_interval()
+
+	def _start_interval(self):
+		"""Start periodical event emission"""
+		gobject.timeout_add(self.TIMEOUT, self._handle_interval)
+
+	def _handle_interval(self):
+		"""Handle notification interval"""
+		events = []
+
+		# get all events from the queue
+		while True:
+			try:
+				# try to get another event
+				events.append(self._queue.get(False))
+
+			except QueueEmptyException:
+				# no more events in the queue
+				break
+
+		# emit events from a set
+		for event in set(events):
+			self._emit(*event)
+
+		# if paused break inteval cycle
+		return not self._paused.isSet()
+
+	def resume(self):
+		"""Resume monitoring"""
+		Monitor.resume(self)
+		self._start_interval()
+
+	def cancel(self):
+		"""Cancel monitoring"""
+		self.pause()
+
+	def get_queue(self):
+		"""Return queue object"""
+		return self._queue

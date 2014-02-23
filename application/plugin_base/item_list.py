@@ -41,6 +41,7 @@ class ItemList(PluginBase):
 		# store local stuff
 		self._provider = None
 		self._menu_timer = None
+		self._fs_monitor = None
 
 		self.history = []
 		self.history_manager = HistoryManager(self, self.history)
@@ -1551,6 +1552,10 @@ class ItemList(PluginBase):
 	def get_povider(self):
 		"""Get list provider"""
 		return self._provider
+
+	def get_monitor(self):
+		"""Get file system monitor"""
+		return self._fs_monitor
 
 	def apply_settings(self):
 		"""Apply settings"""

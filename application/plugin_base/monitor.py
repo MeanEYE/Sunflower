@@ -111,7 +111,7 @@ class ManualMonitor(Monitor):
 
 		# emit events from a set
 		for event in set(events):
-			self._emit(*event)
+			self._emit_signal(*event)
 
 		# if paused break inteval cycle
 		return not self._paused.isSet()

@@ -55,6 +55,10 @@ class Monitor(gobject.GObject):
 		if not self._paused.is_set():
 			self.emit('changed', signal, path, other_path)
 
+	def is_queue_based(self):
+		"""Is monitor queue based"""
+		return False
+
 	def pause(self):
 		"""Pause monitoring"""
 		self._paused.set()
@@ -111,6 +115,10 @@ class ManualMonitor(Monitor):
 
 		# if paused break inteval cycle
 		return not self._paused.isSet()
+
+	def is_queue_based(self):
+		"""Is monitor queue based"""
+		return True
 
 	def resume(self):
 		"""Resume monitoring"""

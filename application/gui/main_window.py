@@ -555,9 +555,11 @@ class MainWindow(gtk.Window):
 
 		# create toolbar
 		self.toolbar_manager.load_config(self.toolbar_options)
+		self.toolbar_manager.apply_settings()
 
 		toolbar = self.toolbar_manager.get_toolbar()
 		toolbar.set_property('no-show-all', not self.options.get('show_toolbar'))
+		
 
 		# bookmarks menu
 		self.bookmarks = BookmarksMenu(self)
@@ -2280,6 +2282,12 @@ class MainWindow(gtk.Window):
 					'commands': []
 				})
 
+		# create default toolbar options
+		self.toolbar_options.update({
+					'style': 3,
+					'icon_size': 1,
+				})
+
 	def restore_handle_position(self, widget=None, data=None):
 		"""Restore handle position"""
 		left_width = self.left_notebook.allocation[2]
@@ -2432,11 +2440,11 @@ class MainWindow(gtk.Window):
 		# apply bookmark settings
 		self.bookmarks.apply_settings()
 
-
 		# recreate tools menu
 		self._create_commands_menu()
 
 		# recreate toolbar widgets
+		self.toolbar_manager.apply_settings()
 		self.toolbar_manager.create_widgets()
 
 		# show tabs if needed

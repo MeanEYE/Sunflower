@@ -200,3 +200,8 @@ class ToolbarManager:
 				section.set(key, value)
 
 		return config is not None
+
+	def apply_settings(self):
+		"""Apply toolbar settings"""
+		self._toolbar.set_style(self._config.get('style'))
+		self._toolbar.set_icon_size(self._config.get('icon_size'))

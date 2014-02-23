@@ -1360,12 +1360,11 @@ class RenameOperation(Operation):
 
 			# push event to the queue
 			if self._source_queue is not None:
-				event = (MonitorSignals.DELETE, old_name, None)
-				self._source_queue.put(event, False)
+				delete_event = (MonitorSignals.DELETE, old_name, None)
+				create_event = (MonitorSignals.CREATED, new_name, None)
 
-			if self._destination_queue is not None:
-				event = (MonitorSignals.CREATED, new_name, None)
-				self._destination_queue.put(event, False)
+				self._source_queue.put(delete_event, False)
+				self._source_queue.put(create_event, False)
 
 		except StandardError as error:
 			# problem renaming path, ask user what to do

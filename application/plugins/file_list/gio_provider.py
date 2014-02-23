@@ -390,8 +390,6 @@ class DavProvider(GioProvider):
 	def get_support(self):
 		"""Return supported options by provider"""
 		return (
-			Support.SET_ACCESS,
-			Support.SET_TIMESTAMP,
 			Support.SYSTEM_SIZE
 		)
 
@@ -407,7 +405,5 @@ class DavsProvider(GioProvider):
 	def get_support(self):
 		"""Return supported options by provider"""
 		return (
-			Support.SET_ACCESS,
-			Support.SET_TIMESTAMP,
 			Support.SYSTEM_SIZE
 		)

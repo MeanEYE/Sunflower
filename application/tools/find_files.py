@@ -125,8 +125,8 @@ class FindFiles:
 		self._button_find.set_image(self._image_find)
 		self._button_find.connect('clicked', self.find_files)
 
-		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
-		button_cancel.connect('clicked', self._close_window)
+		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
+		button_close.connect('clicked', self._close_window)
 
 		# pack interface
 		self._table_basic.attach(label_path, 0, 1, 0, 1, xoptions=gtk.SHRINK|gtk.FILL)
@@ -137,7 +137,7 @@ class FindFiles:
 		container.add(self._names)
 
 		hbox_controls.pack_end(self._button_find, False, False, 0)
-		hbox_controls.pack_end(button_cancel, False, False, 0)
+		hbox_controls.pack_end(button_close, False, False, 0)
 
 		vbox.pack_start(self._table_basic, False, False, 0)
 		vbox.pack_start(self._extension_list, False, False, 0)

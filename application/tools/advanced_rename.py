@@ -17,6 +17,7 @@ class AdvancedRename:
 		# store parameters
 		self._parent = parent
 		self._provider = self._parent.get_provider()
+		self._fs_monitor = self._parent.get_monitor()
 		self._application = application
 		self._extensions = []
 		self._path = self._parent.path
@@ -85,8 +86,8 @@ class AdvancedRename:
 		# create controls
 		hbox = gtk.HBox(False, 5)
 
-		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
-		button_cancel.connect('clicked', lambda widget: self.window.destroy())
+		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
+		button_close.connect('clicked', lambda widget: self.window.destroy())
 
 		image_rename = gtk.Image()
 		image_rename.set_from_icon_name('edit-find-replace', gtk.ICON_SIZE_BUTTON)
@@ -99,7 +100,7 @@ class AdvancedRename:
 		vbox_location.pack_start(entry_location, False, False, 0)
 
 		hbox.pack_end(button_rename, False, False, 0)
-		hbox.pack_end(button_cancel, False, False, 0)
+		hbox.pack_end(button_close, False, False, 0)
 
 		container.add(self._names)
 

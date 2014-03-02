@@ -100,6 +100,9 @@ $(file_path).tgz:
 	@gzip --best -c $(file_path).tar > $(file_path).tgz
 	@rm -f $(file_path).tar
 
+	# making checksum
+	@shasum -a 256 build/* > $(file_path).tgz.sha256
+
 $(file_path).tar: $(file_path).tgz
 	@gunzip -c $(file_path).tgz > $(file_path).tar
 

@@ -30,9 +30,11 @@ class Breadcrumbs(gtk.HBox):
 		self._path_object.add_events(gtk.gdk.POINTER_MOTION_MASK)
 		self._path_object.add_events(gtk.gdk.LEAVE_NOTIFY_MASK)
 		self._path_object.add_events(gtk.gdk.BUTTON_PRESS_MASK)
+		self._path_object.add_events(gtk.gdk.ENTER_NOTIFY_MASK)
 
 		self._path_object.connect('expose-event', self.__expose_event)
 		self._path_object.connect('motion-notify-event', self.__motion_event)
+		self._path_object.connect('enter-notify-event', self.__motion_event)
 		self._path_object.connect('leave-notify-event', self.__leave_event)
 		self._path_object.connect('button-press-event', self.__button_press_event)
 		self._path_object.connect('realize', self.__realize_event)

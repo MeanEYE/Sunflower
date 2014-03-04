@@ -1,3 +1,26 @@
+Version 0.1a-58
+  + Support for different toolbar styles.
+  + Show all entries in history and select currently active path.
+  + Initial support for custom directory icons. XDG directories fully supported.
+  + Fixed issue with custom background colors in breadcrumbs.
+  + Execute file independently from terminal type.
+  + Detect accelerator collisions in preferences.
+  + Created fallback monitor for filesystems that don't support monitoring.
+  + Added support to go back and forth in history.
+  + Added support for using mouse buttons 8, 9 to navigate through history.
+  + Added cancel button on confirmation dialog displayed for closing preferences.
+  + Added ability to pass current working directory to external terminal command.
+  + Add Sevka as contributor.
+  + Ability to hide horizontal scrollbar on item list.
+  * Updated Russian translation.
+  * Set environment variables for external terminals
+  * Rename dialog will now select whole directory name.
+  * Fixed issue with breadcrumbs on some window managers like Awesome.
+  * Fix issue with drag and drop.
+  * Fix WebDav provider support.
+  * Change cancel button to close in tool windows.
+  * Change button label when renaming item.
+
 Version 0.1a-57
   + Added ability close various windows by pressing Escape.
   + Added breadcrumbs.

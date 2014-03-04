@@ -1,4 +1,4 @@
 #!/bin/sh
 
-exec /usr/share/sunflower/Sunflower.py $@
+exec /usr/share/sunflower/Sunflower.py "$@"
 

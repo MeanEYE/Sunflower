@@ -375,7 +375,7 @@ class TrashProvider(GioProvider):
 	def get_support(self):
 		"""Return supported options by provider"""
 		return (
-			Support.SYSTEM_SIZE
+			Support.SYSTEM_SIZE,
 		)
 
 
@@ -390,7 +390,7 @@ class DavProvider(GioProvider):
 	def get_support(self):
 		"""Return supported options by provider"""
 		return (
-			Support.SYSTEM_SIZE
+			Support.SYSTEM_SIZE,
 		)
 
 
@@ -405,5 +405,5 @@ class DavsProvider(GioProvider):
 	def get_support(self):
 		"""Return supported options by provider"""
 		return (
-			Support.SYSTEM_SIZE
+			Support.SYSTEM_SIZE,
 		)

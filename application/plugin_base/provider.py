@@ -216,6 +216,14 @@ class Provider:
 		"""Return parent list"""
 		return self._parent
 
+	def get_root_path(self, path):
+		"""Get root for specified path"""
+		pass
+
+	def get_parent_path(self, path):
+		"""Get parent path for specified"""
+		pass
+
 	def get_system_size(self, path):
 		"""Return system size information"""
 		pass

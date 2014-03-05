@@ -210,6 +210,15 @@ class LocalProvider(Provider):
 		real_path = self._real_path(path, relative_to)
 		return os.listdir(real_path)
 
+	def get_root_path(self, path):
+		"""Get root for specified path"""
+		return os.path.sep if path[0] == os.path.sep else None
+
+	def get_parent_path(self, path):
+		"""Get parent path for specified"""
+		result = os.path.dirname(path)
+		return result if result != path else None
+
 	def get_system_size(self, path):
 		"""Return system size information"""
 		try:

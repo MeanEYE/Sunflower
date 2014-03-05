@@ -4,6 +4,8 @@ import pango
 
 
 class Breadcrumbs(gtk.HBox):
+	"""Widget for displaying paths with clickable segments."""
+
 	TYPE_NONE = 0
 	TYPE_NORMAL = 1
 	TYPE_SMART = 2
@@ -151,10 +153,21 @@ class Breadcrumbs(gtk.HBox):
 		# calculate width of path elements
 		if self._elements_width is None:
 			path = None
+			provider = self._parent._parent.get_provider()
 			self._elements_size = []
 			self._elements_width = []
-			elements = text_to_draw.split(os.path.sep)
-			elements[0] = os.path.sep
+
+			# split root element from others
+			root_element = provider.get_root_path(text_to_draw)
+			other_elements = text_to_draw[len(root_element):]
+
+			# make sure our path doesn't begin with slash
+			if other_elements[0] == os.path.sep:
+				other_elements = other_elements[1:]
+
+			# split elements
+			elements = other_elements.split(os.path.sep)
+			elements.insert(0, root_element)
 
 			for element in elements:
 				# get path size

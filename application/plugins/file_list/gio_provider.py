@@ -268,6 +268,27 @@ class GioProvider(Provider):
 
 		return result
 
+	def get_root_path(self, path):
+		"""Get root for specified path"""
+		result = None
+
+		# try to get mount
+		mount = gio.File(path).find_enclosing_mount()
+
+		# get root directory from mount
+		if mount is not None:
+			result = mount.get_root().get_uri()
+
+		# remove trailing slash
+		if result[-1] == os.path.sep:
+			result = result[:-1]
+
+		return result
+
+	def get_parent_path(self, path):
+		"""Get parent path for specified"""
+		return gio.File(path).get_parent().get_uri()
+
 	def get_system_size(self, path):
 		"""Return system size information"""
 		try:

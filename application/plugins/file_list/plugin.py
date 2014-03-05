@@ -1682,8 +1682,7 @@ class FileList(ItemList):
 		preload_list = item_list[:self._preload_count]
 		item_list = item_list[self._preload_count:]
 
-		if path != os.path.sep \
-		and path != '{0}://'.format(self.scheme):
+		if path != self.get_provider().get_root_path(path):
 			if parent is None:
 				# add parent option for parent directory
 				self._store.append(parent, (

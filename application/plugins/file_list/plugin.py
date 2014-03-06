@@ -621,7 +621,7 @@ class FileList(ItemList):
 
 				# if specified, edit file after creating it
 				if edit_after:
-					self._parent.association_manager.edit_file((response[1], ))
+					self._parent.associations_manager.edit_file((response[1], ))
 
 			except OSError as error:
 				# error creating, report to user

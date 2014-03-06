@@ -14,33 +14,42 @@ class TitleBar:
 	"""Title bar wrapper class"""
 
 	def __init__(self, application, parent):
-		self._container = gtk.EventBox()
 		self._application = application
 		self._parent = parent
+
 		self._radius = 3
 		self._control_count = 0
 		self._state = gtk.STATE_NORMAL
-		self._ubuntu_coloring = self._application.options.get('ubuntu_coloring')
-		self._superuser_notification = self._application.options.get('superuser_notification')
-		self._button_relief = self._application.options.get('button_relief')
+		self._mode = Mode.NORMAL
 		self._menu = None
 		self._style = None
 		self._toolbar_style = None
-		self._mode = Mode.NORMAL
 		self._box_spacing = 1
 		self._box_border_width = 4
 		self._super_user_colors = None
 
+
+		# get options
+		options = self._application.options
+
+		self._ubuntu_coloring = options.get('ubuntu_coloring')
+		self._superuser_notification = options.get('superuser_notification')
+		self._button_relief = options.get('button_relief')
+
 		# determine whether we need to show breadcrumbs
-		section = self._application.options.section('item_list')
+		from plugin_base.item_list import ItemList
+		section = options.section('item_list')
+		is_list = isinstance(parent, ItemList)
 		self._breadcrumb_type = section.get('breadcrumbs')
-		self._show_breadcrumbs = self._breadcrumb_type != Breadcrumbs.TYPE_NONE
+		self._show_breadcrumbs = self._breadcrumb_type != Breadcrumbs.TYPE_NONE and is_list
 
 		# create container box
 		self._hbox = gtk.HBox(homogeneous=False, spacing=self._box_spacing)
 
 		# configure title bar
 		self._hbox.set_border_width(self._box_border_width)
+
+		self._container = gtk.EventBox()
 		self._container.set_app_paintable(True)
 		self._container.add_events(gtk.gdk.BUTTON_RELEASE_MASK)
 

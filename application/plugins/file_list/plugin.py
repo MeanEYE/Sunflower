@@ -88,9 +88,7 @@ class FileList(ItemList):
 		self._thread_active = Event()
 		self._main_thread_lock = Event()
 
-		# preload variables
-		self._preload_count = 0
-		self._preload_size = 0
+		self._item_queue = []
 
 		# storage system for list items
 		self._store = gtk.TreeStore(
@@ -507,7 +505,6 @@ class FileList(ItemList):
 
 		# start loader thread and expand directory
 		self._load_directory(os.path.join(self.path, name), selected_iter)
-		self._item_list.expand_row(item_list.get_path(selected_iter), False)
 
 		return True
 
@@ -1206,6 +1203,7 @@ class FileList(ItemList):
 					return
 
 				self._add_item(path)
+				self._flush_queue()
 
 			else:
 				self._update_item_details_by_name(path)
@@ -1420,7 +1418,7 @@ class FileList(ItemList):
 				file_info = (filename, '')
 				formated_file_size = '<DIR>'
 
-			props = (
+			data = (
 					os.path.join(parent_path, filename) if parent_path else filename,
 					file_info[0],
 					file_info[1][1:],
@@ -1439,23 +1437,37 @@ class FileList(ItemList):
 					file_stat.group_id
 				)
 
-			result = self._store.append(parent, props)
+			self._item_queue.append(data)
 
-			# focus specified item
-			if self._item_to_focus == filename or self._item_to_focus is None:
-				path = self._store.get_path(result)
-
-				# set cursor position and scroll ti make it visible
-				self._item_list.set_cursor(path)
-				self._item_list.scroll_to_cell(path)
-
-				# reset local variable
-				self._item_to_focus = filename
+			if len(self._item_queue) > 50:
+				self._flush_queue(parent)
 
 		except Exception as error:
 			print 'Error: {0} - {1}'.format(filename, str(error))
 
 		return result
+
+	def _flush_queue(self, parent=None):
+		"""Add items in queue to the list"""
+		with gtk.gdk.lock:
+			# add items
+			for data in self._item_queue:
+				result = self._store.append(parent, data)
+
+				# focus specified item
+				if self._item_to_focus == data[0]:
+					path = self._store.get_path(result)
+
+					# set cursor position and scroll ti make it visible
+					self._item_list.set_cursor(path)
+					self._item_list.scroll_to_cell(path)
+
+			# clear item queue
+			self._item_queue[:] = []
+
+			# expand row if needed
+			if parent is not None:
+				self._item_list.expand_row(self._store.get_path(parent), False)
 
 	def _delete_item_by_name(self, name):
 		"""Removes item with 'name' from the list"""
@@ -1638,22 +1650,12 @@ class FileList(ItemList):
 			while self._main_thread_lock.is_set():
 				gtk.main_iteration(block=False)
 
-		# get number of items to preload
-		if len(self._store) > 0 and self._item_list.allocation.height != self._preload_size:
-			cell_area = self._item_list.get_cell_area(
-										self._store.get_path(self._store.get_iter_first()),
-										self._columns[0]
-									)
-			tree_size = self._item_list.allocation.height
-
-			# calculate number of items to preload
-			if len(cell_area) >= 4 and cell_area[3] > 0:
-				self._preload_count = (tree_size / cell_area[3]) + 1
-				self._preload_size = tree_size
-
 		# clear list
 		if clear_store:
 			self._clear_list()
+
+		# clear item queue
+		self._item_queue[:] = []
 
 		# default value for parent path
 		parent_path = None
@@ -1661,30 +1663,9 @@ class FileList(ItemList):
 		# cache objects and settings
 		show_hidden = self._parent.options.section('item_list').get('show_hidden')
 
-		# get list of items to add
-		item_list = self._provider.list_dir(path)
-
-		# remove hidden files if we don't need them
-		item_list = filter(
-						lambda item_name: show_hidden or (item_name[0] != '.' and item_name[-1] != '~'),
-						item_list
-					)
-
-		# sort list to prevent messing up list while
-		# adding items from a separate thread
-		item_list.sort()
-
-		# assign item for selection
-		if not self._item_to_focus in item_list:
-			self._item_to_focus = None
-
-		# split items among lists
-		preload_list = item_list[:self._preload_count]
-		item_list = item_list[self._preload_count:]
-
+		# add parent option for parent directory
 		if path != self.get_provider().get_root_path(path):
 			if parent is None:
-				# add parent option for parent directory
 				self._store.append(parent, (
 								os.path.pardir,
 								os.path.pardir,
@@ -1708,41 +1689,58 @@ class FileList(ItemList):
 				# prepare full parent path
 				parent_path = self._store.get_value(parent, Column.NAME)
 
-		# preload items
-		for item_name in preload_list:
-			self._add_item(item_name, parent, parent_path)
-
 		# let the rest of items load in a separate thread
-		if len(item_list) > 0:
-			def thread_method():
-				# set event to active
-				self._thread_active.set()
+		def thread_method():
+			# set event to active
+			self._thread_active.set()
 
-				# show spinner animation
-				with gtk.gdk.lock:
-					self._title_bar.show_spinner()
+			# show spinner animation
+			with gtk.gdk.lock:
+				self._title_bar.show_spinner()
 
-				for item_name in item_list:
-					# check if we are allowed to continue
-					if not self._thread_active.is_set():
-						break;
+			try:
+				# get list of items to add
+				item_list = self._provider.list_dir(path)
 
-					# add item to the list
-					with gtk.gdk.lock:
-						self._add_item(item_name, parent, parent_path)
-
-				# hide spinner animation
-				with gtk.gdk.lock:
-					self._title_bar.hide_spinner()
-
-					# update status bar
-					self._update_status_with_statistis()
-
+			except:
+				# clear locks and exit
 				self._thread_active.clear()
 				self._main_thread_lock.clear()
+				return
 
-			self._change_path_thread = Thread(target=thread_method)
-			self._change_path_thread.start()
+			# remove hidden files if we don't need them
+			item_list = filter(
+							lambda item_name: show_hidden or (item_name[0] != '.' and item_name[-1] != '~'),
+							item_list
+						)
+
+			# assign item for selection
+			if not self._item_to_focus in item_list:
+				self._item_to_focus = None
+
+			for item_name in item_list:
+				# check if we are allowed to continue
+				if not self._thread_active.is_set():
+					break;
+
+				# add item to the list
+				self._add_item(item_name, parent, parent_path)
+
+			self._flush_queue(parent)
+
+			# hide spinner animation
+			with gtk.gdk.lock:
+				self._title_bar.hide_spinner()
+
+				# update status bar
+				self._update_status_with_statistis()
+
+			self._thread_active.clear()
+			self._main_thread_lock.clear()
+
+		# create new thread
+		self._change_path_thread = Thread(target=thread_method)
+		self._change_path_thread.start()
 
 	def change_path(self, path=None, selected=None):
 		"""Change file list path"""

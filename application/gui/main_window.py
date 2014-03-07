@@ -229,10 +229,11 @@ class MainWindow(gtk.Window):
 					},
 					{
 						'label': _('_Quit'),
+						'name': 'quit_program',
 						'type': 'image',
 						'stock': gtk.STOCK_QUIT,
 						'callback' : self._destroy,
-						'path': '<Sunflower>/File/Quit',
+						'path': '<Sunflower>/File/Quit'
 					},
 				)
 			},
@@ -275,6 +276,7 @@ class MainWindow(gtk.Window):
 					},
 					{
 						'label': _('Send to...'),
+						'name': 'send_to',
 						'type': 'image',
 						'image': 'document-send',
 						'callback': self._command_send_to,
@@ -283,6 +285,7 @@ class MainWindow(gtk.Window):
 					},
 					{
 						'label': _('Ma_ke link'),
+						'name': 'make_link',
 						'callback': self._create_link,
 						'path': '<Sunflower>/Edit/MakeLink',
 					},

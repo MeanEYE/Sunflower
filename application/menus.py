@@ -184,7 +184,7 @@ class MenuManager:
 			}[item_type](item)
 
 		# if item has children then make submenu
-		if item_type is not 'separator' and 'submenu' in item:
+		if item_type != 'separator' and 'submenu' in item:
 			submenu = gtk.Menu()
 
 			if accel_group is None:
@@ -204,11 +204,11 @@ class MenuManager:
 		if 'callback' in item:
 			data = item['data'] if 'data' in item else None
 
-			if item_type is 'checkbox':
+			if item_type == 'checkbox':
 				# connect checkbox event
 				new_item.connect('toggled', item['callback'], data)
 
-			elif item_type is 'radio':
+			elif item_type == 'radio':
 				# connect group changed event
 				new_item.connect('group-changed', item['callback'], data)
 

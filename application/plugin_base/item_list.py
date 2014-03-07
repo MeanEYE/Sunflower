@@ -335,7 +335,7 @@ class ItemList(PluginBase):
 
 		# create bookmark accelerators
 		group.add_method('bookmark_home', _("Go to '{0}'"), self._parent.activate_bookmark, 0)
-		group.set_accelerator('bookmark_home', keyval('`'), gtk.gdk.MOD1_MASK)
+		group.set_accelerator('bookmark_home', keyval('grave'), gtk.gdk.MOD1_MASK)
 
 		for number in range(1, 11):
 			group.add_method(

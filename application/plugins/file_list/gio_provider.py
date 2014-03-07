@@ -318,7 +318,12 @@ class GioProvider(Provider):
 
 	def get_monitor(self, path):
 		"""Get file system monitor for specified path"""
-		return GioMonitor(self, path)
+		try:
+			result = GioMonitor(self, path)
+		except:
+			result = Provider.get_monitor(self, path)
+
+		return result
 
 	def get_support(self):
 		"""Return supported options by provider"""

@@ -27,8 +27,8 @@ class LocalMonitor(Monitor):
 		Monitor.__init__(self, provider, path)
 
 		if os.path.exists(self._path):
-			# create file/directory monitor
 			try: 
+				# create file/directory monitor
 				if os.path.isdir(self._path):
 					self._monitor = gio.File(path).monitor_directory()
 
@@ -38,8 +38,9 @@ class LocalMonitor(Monitor):
 			except gio.Error:
 				raise MonitorError('Error creating monitor')
 
-			# connect signal
-			self._monitor.connect('changed', self._changed)
+			else:
+				# connect signal
+				self._monitor.connect('changed', self._changed)
 
 		else:
 			# invalid path, raise exception

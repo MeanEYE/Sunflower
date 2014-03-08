@@ -162,7 +162,7 @@ class Breadcrumbs(gtk.HBox):
 			other_elements = text_to_draw[len(root_element):]
 
 			# make sure our path doesn't begin with slash
-			if other_elements[0] == os.path.sep:
+			if other_elements.startswith(os.path.sep):
 				other_elements = other_elements[1:]
 
 			# split elements

@@ -1,6 +1,7 @@
 import os
 import gio
 
+from urllib import unquote
 from gio_wrapper import File
 from local_monitor import LocalMonitor as GioMonitor
 from plugin_base.provider import Provider, FileType, FileInfo, FileInfoExtended, SystemSize
@@ -283,11 +284,11 @@ class GioProvider(Provider):
 		if result[-1] == os.path.sep:
 			result = result[:-1]
 
-		return result
+		return unquote(result)
 
 	def get_parent_path(self, path):
 		"""Get parent path for specified"""
-		return gio.File(path).get_parent().get_uri()
+		return unquote(gio.File(path).get_parent().get_uri())
 
 	def get_system_size(self, path):
 		"""Return system size information"""

@@ -1153,6 +1153,10 @@ class FileList(ItemList):
 		# set focus to the list, we don't need it on column
 		self._item_list.grab_focus()
 
+	def _clear_sort_function(self):
+		"""Clear sort settings"""
+		self._store.set_sort_column_id(gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, True)
+
 	def _sort_list(self, item_list, iter1, iter2, data=None):
 		"""Compare two items for sorting process"""
 		reverse = (1, -1)[self._sort_ascending]
@@ -1657,6 +1661,9 @@ class FileList(ItemList):
 		# clear item queue
 		self._item_queue[:] = []
 
+		# disable sorting while we load
+		self._clear_sort_function()
+
 		# default value for parent path
 		parent_path = None
 
@@ -1735,8 +1742,13 @@ class FileList(ItemList):
 				# update status bar
 				self._update_status_with_statistis()
 
+			# release locks
 			self._thread_active.clear()
 			self._main_thread_lock.clear()
+
+			# turn on sorting
+			self._apply_sort_function()
+
 
 		# create new thread
 		self._change_path_thread = Thread(target=thread_method)

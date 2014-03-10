@@ -133,6 +133,7 @@ class MainWindow(gtk.Window):
 
 		if 'XDG_CONFIG_HOME' in os.environ:
 			self.xdg_config_home = os.environ['XDG_CONFIG_HOME']
+
 		else:
 			self.xdg_config_home = os.path.join(user.home, '.config')
 

@@ -57,7 +57,7 @@ class Breadcrumbs(gtk.HBox):
 			value = value * 1.5
 
 		else:
-			value = value / 1.5 if value > 0.5 else value * 2.5
+			value = value / 1.5 if value > 0.5 else value * 1.5
 
 		return gtk.gdk.color_from_hsv(color.hue, saturation, value)
 

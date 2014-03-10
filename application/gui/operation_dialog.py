@@ -75,6 +75,7 @@ class OperationDialog:
 															self._operation_click
 														)
 		self._operation_item.set_image(self._operation_image)
+		self._operation_item.show_all()
 
 		# pack interface
 		self._window.add(self._vbox)
@@ -245,7 +246,6 @@ class OperationDialog:
 
 		# support for compositing window managers
 		if self._hide_on_minimize:
-			self._operation_item.show()
 			self._application.operation_menu_changed()
 			self._window.hide()
 
@@ -281,9 +281,8 @@ class OperationDialog:
 
 		# support for compositing window managers
 		if self._hide_on_minimize:
-			self._operation_item.hide()
 			self._application.operation_menu_changed()
-			self._window.show()
+			self._window.present()
 
 	def _update_total_count(self):
 		"""Update progress bar and labels for total count"""
@@ -377,12 +376,10 @@ class OperationDialog:
 		"""Handle change of window state"""
 		if event.new_window_state == gtk.gdk.WINDOW_STATE_ICONIFIED:
 			# window was iconified, show operations menu item
-			self._operation_item.show()
 			self._application.operation_menu_changed()
 
 		elif event.new_window_state == 0:
 			# normal window state or window was restored
-			self._operation_item.hide()
 			self._application.operation_menu_changed()
 
 	def _set_operation_image(self, icon_name=None):

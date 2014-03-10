@@ -495,7 +495,7 @@ class MainWindow(gtk.Window):
 				'name': 'operations',
 				'submenu': (
 					{
-						'label': _('There are no minimized operations'),
+						'label': _('There are no active operations'),
 						'name': 'no_operations',
 					},
 				)
@@ -2408,8 +2408,7 @@ class MainWindow(gtk.Window):
 
 		# check if there are minimized operations
 		for operation_item in self.menu_operations.get_children():
-			if operation_item is not self._menu_item_no_operations \
-			and operation_item.get_visible():
+			if operation_item is not self._menu_item_no_operations:
 				has_operations = True
 				break
 

@@ -67,7 +67,7 @@ class MountsManagerWindow(gtk.Window):
 		self._pages_store = gtk.ListStore(str, str, int, int)
 		
 		# create user interface
-		vbox = gtk.VBox(False, 5);
+		vbox = gtk.VBox(False, 5)
 		hbox = gtk.HBox(False, 5)
 		hbox_controls = gtk.HBox(False, 5)
 

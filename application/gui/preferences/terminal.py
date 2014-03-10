@@ -88,7 +88,7 @@ class TerminalOptions(SettingsPage):
 					'\n\t{1} will be replaced with specified command and its parameters.'
 					'\n\t{2} will be replaced with current working directory.'
 					'</i></small>'
-				));
+				))
 		label_note.set_alignment(0, 0)
 		label_note.set_use_markup(True)
 

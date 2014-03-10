@@ -183,7 +183,7 @@ class LinkDialog(InputDialog):
 	def get_response(self):
 		"""Return value and self-destruct"""
 		code = self._dialog.run()
-		original_path = self._entry_original_path.get_text();
+		original_path = self._entry_original_path.get_text()
 		link_name = self._entry.get_text()
 		hard_link = self._checkbox_hard_link.get_active()
 

@@ -52,11 +52,11 @@ class SizeFindFiles(FindExtension):
 
 	def _max_value_changed(self, entry):
 		"""Assign value to adjustment handler"""
-		self._adjustment_min.set_upper(entry.get_value());
+		self._adjustment_min.set_upper(entry.get_value())
 
 	def _min_value_changed(self, entry):
 		"""Assign value to adjustment handler"""
-		self._adjustment_max.set_lower(entry.get_value());
+		self._adjustment_max.set_lower(entry.get_value())
 
 	def get_title(self):
 		"""Return i18n title for extension"""

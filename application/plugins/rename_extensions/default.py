@@ -23,7 +23,7 @@ class DefaultRename(RenameExtension):
 		self._counter = 0
 		self._counter_start = 0
 		self._counter_step = 1
-		self._counter_digits = 1;
+		self._counter_digits = 1
 
 		# create user interface
 		hbox = gtk.HBox(True, 15)

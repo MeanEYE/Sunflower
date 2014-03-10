@@ -470,8 +470,8 @@ class CopyOperation(Operation):
 		self._overwrite_all = None
 		self._dir_list_create = []
 
-		self._total_count = 0;
-		self._total_size = 0;
+		self._total_count = 0
+		self._total_size = 0
 
 		# cache settings
 		should_reserve = self._application.options.section('operations').get('reserve_size')
@@ -528,7 +528,7 @@ class CopyOperation(Operation):
 				gobject.idle_add(self._dialog.increment_total_size, item_stat.size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
 
-				self._total_count += 1;
+				self._total_count += 1
 				self._total_size += item_stat.size
 
 				self._file_list.append(item)
@@ -684,7 +684,7 @@ class CopyOperation(Operation):
 				gobject.idle_add(self._dialog.increment_total_size, item_stat.size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
 
-				self._total_count += 1;
+				self._total_count += 1
 				self._total_size += item_stat.size
 
 				self._file_list.append(full_name)

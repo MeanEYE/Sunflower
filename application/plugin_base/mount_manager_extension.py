@@ -26,7 +26,7 @@ class MountManagerExtension:
 		self._container = gtk.VBox(False, 5)
 		self._controls = gtk.HBox(False, 5)
 
-		separator = gtk.HSeparator();
+		separator = gtk.HSeparator()
 
 		# pack interface
 		self._container.pack_end(separator, False, False, 0)

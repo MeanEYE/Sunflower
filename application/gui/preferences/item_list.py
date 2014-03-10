@@ -79,7 +79,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_hide_scrollbar.connect('toggled', self._parent.enable_save)
 
 		# bread crumbs type
-		hbox_breadcrumbs = gtk.HBox(False, 5);
+		hbox_breadcrumbs = gtk.HBox(False, 5)
 		label_breadcrumbs = gtk.Label(_('Breadcrumbs:'))
 		label_breadcrumbs.set_alignment(0, 0.5)
 		

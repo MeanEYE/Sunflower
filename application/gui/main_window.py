@@ -617,7 +617,7 @@ class MainWindow(gtk.Window):
 		self.path_label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
 		self.path_label.show()
 
-		label_pound = gtk.Label('$');
+		label_pound = gtk.Label('$')
 		label_pound.set_alignment(0, 0.5)
 		label_pound.show()
 

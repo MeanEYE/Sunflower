@@ -2319,7 +2319,8 @@ class MainWindow(gtk.Window):
 
 	def focus_command_entry(self, widget=None, data=None):
 		"""Focus main command entry widget"""
-		self.command_edit.grab_focus()
+		if self.options.get('show_command_entry'):
+			self.command_edit.grab_focus()
 
 	def focus_left_object(self, widget=None, data=None):
 		"""Focus object in the left notebook"""

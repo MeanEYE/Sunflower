@@ -1203,7 +1203,7 @@ class FileList(ItemList):
 		if event is MonitorSignals.CREATED:
 			# temporarily fix problem with duplicating items when file was saved with GIO
 			if self._find_iter_by_name(path) is None:
-				if (not show_hidden) and (path[0] == '.' or path[-1] == '~'):
+				if (not show_hidden) and (path[0] == '.' or path[-1] == '~') or os.path.dirname(path):
 					return
 
 				self._add_item(path)

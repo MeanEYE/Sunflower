@@ -326,13 +326,15 @@ class FileList(ItemList):
 	def _handle_cursor_change(self, widget=None, data=None):
 		"""Handle cursor change"""
 		if not self._enable_media_preview \
-		or not self._item_list.has_focus(): return
+		or not self._item_list.has_focus():
+			return
 
 		selection = self._item_list.get_selection()
 		item_list, selected_iter = selection.get_selected()
 
 		# we need selection for this
-		if selected_iter is None: return
+		if selected_iter is None:
+			return
 
 		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
@@ -1161,10 +1163,11 @@ class FileList(ItemList):
 		"""Compare two items for sorting process"""
 		reverse = (1, -1)[self._sort_ascending]
 
-		value1 = item_list.get_value(iter1, self._sort_column)
-		value2 = item_list.get_value(iter2, self._sort_column)
+		sort_column = self._sort_column
+		value1 = item_list.get_value(iter1, sort_column)
+		value2 = item_list.get_value(iter2, sort_column)
 
-		if self._sort_column in (Column.NAME, Column.EXTENSION):
+		if sort_column is Column.NAME or sort_column is Column.EXTENSION:
 			# make values lowercase for case insensitive comparison
 			if not self._sort_case_sensitive:
 				value1 = value1.lower()
@@ -1742,13 +1745,15 @@ class FileList(ItemList):
 				# update status bar
 				self._update_status_with_statistis()
 
+				# turn on sorting
+				self._apply_sort_function()
+
+				# update status bar
+				self._update_status_with_statistis()
+
 			# release locks
 			self._thread_active.clear()
 			self._main_thread_lock.clear()
-
-			# turn on sorting
-			self._apply_sort_function()
-
 
 		# create new thread
 		self._change_path_thread = Thread(target=thread_method)
@@ -1815,7 +1820,7 @@ class FileList(ItemList):
 		self._change_tab_text(path_name)
 		self._change_title_text(self.path)
 
-		if self._parent.get_active_object() == self:
+		if self._parent.get_active_object() is self:
 			self._parent.set_location_label(self.path)
 
 		# change list icon
@@ -1871,13 +1876,6 @@ class FileList(ItemList):
 
 			return
 
-		else:
-			# with or without exception we need to handle few things
-			self._title_bar.hide_spinner()
-
-		# update status bar
-		self._update_status_with_statistis()
-
 		# if no item was specified, select first one
 		if selected is None \
 		and len(self._store) > 0:
@@ -1886,15 +1884,8 @@ class FileList(ItemList):
 			self._item_list.scroll_to_cell(path)
 
 		# create file monitor
-		try:
-			self._fs_monitor = provider.get_monitor(self.path)
-
-			if self._fs_monitor is not None:
-				self._fs_monitor.connect('changed', self._directory_changed)
-
-		except MonitorError:
-			# monitoring is probably not supported by the provider
-			self._fs_monitor = None
+		self._fs_monitor = provider.get_monitor(self.path)
+		self._fs_monitor.connect('changed', self._directory_changed)
 
 	def select_all(self, pattern=None, exclude_list=None):
 		"""Select all items matching pattern"""

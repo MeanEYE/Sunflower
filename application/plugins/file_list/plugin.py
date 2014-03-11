@@ -1152,9 +1152,6 @@ class FileList(ItemList):
 		self._store.set_sort_func(self._sort_column, self._sort_list)
 		self._store.set_sort_column_id(self._sort_column, order)
 
-		# set focus to the list, we don't need it on column
-		self._item_list.grab_focus()
-
 	def _clear_sort_function(self):
 		"""Clear sort settings"""
 		self._store.set_sort_column_id(gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, True)
@@ -1747,9 +1744,6 @@ class FileList(ItemList):
 
 				# turn on sorting
 				self._apply_sort_function()
-
-				# update status bar
-				self._update_status_with_statistis()
 
 			# release locks
 			self._thread_active.clear()

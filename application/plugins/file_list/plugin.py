@@ -1456,11 +1456,11 @@ class FileList(ItemList):
 		with gtk.gdk.lock:
 			# add items
 			for data in self._item_queue:
-				result = self._store.append(parent, data)
+				new_iter = self._store.append(parent, data)
 
 				# focus specified item
 				if self._item_to_focus == data[0]:
-					path = self._store.get_path(result)
+					path = self._store.get_path(new_iter)
 
 					# set cursor position and scroll ti make it visible
 					self._item_list.set_cursor(path)

@@ -17,7 +17,6 @@ class AdvancedRename:
 		# store parameters
 		self._parent = parent
 		self._provider = self._parent.get_provider()
-		self._fs_monitor = self._parent.get_monitor()
 		self._application = application
 		self._extensions = []
 		self._path = self._parent.path
@@ -225,8 +224,9 @@ class AdvancedRename:
 								)
 
 			# set event queue
-			if self._fs_monitor is not None and self._fs_monitor.is_queue_based():
-				operation.set_source_queue(self._fs_monitor.get_queue())
+			event_queue = self._parent.get_monitor_queue()
+			if event_queue is not None:
+				operation.set_source_queue(event_queue)
 
 			operation.start()
 

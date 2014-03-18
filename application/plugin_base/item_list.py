@@ -41,7 +41,7 @@ class ItemList(PluginBase):
 		# store local stuff
 		self._provider = None
 		self._menu_timer = None
-		self._fs_monitor = None
+		self._monitor_list = []
 
 		self.history = []
 		self.history_manager = HistoryManager(self, self.history)
@@ -1464,6 +1464,10 @@ class ItemList(PluginBase):
 		self._parent.preferences_window._show(widget, 'bookmarks')
 		return True
 
+	def _directory_changed(monitor, event, path, other_path, parent=None):
+		"""Handle signal emitted by monitor"""
+		pass
+
 	def change_path(self, path=None, selected=None):
 		"""Public method for safe path change """
 		real_path = os.path.expanduser(path)
@@ -1560,7 +1564,39 @@ class ItemList(PluginBase):
 
 	def get_monitor(self):
 		"""Get file system monitor"""
-		return self._fs_monitor
+		return self._monitor_list[0] if len(self._monitor_list) > 0 else None
+
+	def get_monitor_queue(self):
+		"""Get queue for monitors in list"""
+		result = None
+
+		if len(self._monitor_list) > 0:
+			monitor = self._monitor_list[0]
+
+			if monitor.is_queue_based():
+				result = monitor.get_queue()
+
+		return result
+
+	def monitor_path(self, path, parent=None):
+		"""Create new monitor for specified path"""
+		if len(self._monitor_list) > 0 and self._monitor_list[0].is_queue_based():
+			return
+
+		# create new monitor for specified path
+		provider = self.get_provider()
+		monitor = provider.get_monitor(path)
+		monitor.connect('changed', self._directory_changed, parent)
+
+		# add monitor to the list
+		self._monitor_list.append(monitor)
+
+	def cancel_monitors(self):
+		"""Cancel all monitors"""
+		for monitor in self._monitor_list:
+			monitor.cancel()
+
+		self._monitor_list[:] = []
 
 	def apply_settings(self):
 		"""Apply settings"""

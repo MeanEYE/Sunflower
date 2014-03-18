@@ -370,8 +370,7 @@ class FileList(ItemList):
 		ItemList._handle_tab_close(self)
 
 		# cancel current directory monitor
-		if self._fs_monitor is not None:
-			self._fs_monitor.cancel()
+		self.cancel_monitors()
 
 	def _execute_selected_item(self, widget=None, data=None):
 		"""Execute/Open selected item"""
@@ -557,8 +556,8 @@ class FileList(ItemList):
 				self.get_provider().create_directory(response[1], mode, relative_to=self.path)
 
 				# push monitor event queue
-				if self._fs_monitor is not None and self._fs_monitor.is_queue_based():
-					event_queue = self._fs_monitor.get_queue()
+				event_queue = self.get_monitor_queue()
+				if event_queue is not None:
 					event_queue.put((MonitorSignals.CREATED, response[1], None), False)
 
 			except OSError as error:
@@ -607,8 +606,8 @@ class FileList(ItemList):
 				provider.create_file(response[1], mode=mode, relative_to=self.path)
 
 				# push monitor event queue
-				if self._fs_monitor is not None and self._fs_monitor.is_queue_based():
-					event_queue = self._fs_monitor.get_queue()
+				event_queue = self.get_monitor_queue()
+				if event_queue is not None:
 					event_queue.put((MonitorSignals.CREATED, response[1], None), False)
 
 				# create file from template
@@ -756,8 +755,9 @@ class FileList(ItemList):
 				operation.set_force_delete(True)
 
 			# set event queue
-			if self._fs_monitor is not None and self._fs_monitor.is_queue_based():
-				operation.set_source_queue(self._fs_monitor.get_queue())
+			event_queue = self.get_monitor_queue()
+			if event_queue is not None:
+				operation.set_source_queue(event_queue)
 
 			operation.set_selection(selection)
 			operation.start()
@@ -821,11 +821,9 @@ class FileList(ItemList):
 		opposite_object = self._parent.get_opposite_object(self)
 		source_provider = self.get_provider()
 		destination_provider = None
-		destination_monitor = None
 
 		if hasattr(opposite_object, 'get_provider'):
 			destination_provider = opposite_object.get_provider()
-			destination_monitor = opposite_object.get_monitor()
 
 		# ask confirmation from user
 		dialog = MoveDialog(
@@ -846,11 +844,13 @@ class FileList(ItemList):
 								)
 
 			# set event queues
-			if self._fs_monitor is not None and self._fs_monitor.is_queue_based():
-				operation.set_source_queue(self._fs_monitor.get_queue())
+			source_queue = self.get_monitor_queue()
+			if source_queue is not None:
+				operation.set_source_queue(source_queue)
 
-			if destination_monitor is not None and destination_monitor.is_queue_based():
-				operation.set_destination_queue(destination_monitor.get_queue())
+			destination_queue = opposite_object.get_monitor_queue()
+			if destination_queue is not None:
+				operation.set_destination_queue(destination)
 
 			operation.set_selection(selection)
 			operation.start()
@@ -1195,34 +1195,55 @@ class FileList(ItemList):
 		"""Clear item list"""
 		self._store.clear()
 
-	def _directory_changed(self, monitor, event, path, other_path):
+	def _directory_changed(self, monitor, event, path, other_path, parent=None):
 		"""Callback method fired when contents of directory has been changed"""
 		show_hidden = self._parent.options.section('item_list').get('show_hidden')
+
+		# get parent path
+		relative_path = path
+		parent_path = None
+
+		if parent is not None:
+			# form relative path for easier handling
+			parent_path = self._store.get_value(parent, Column.NAME)
+			relative_path = os.path.join(parent_path, path)
+
+		elif parent is None and os.path.sep in path:
+			# find parent for fallback monitor
+			path_fragments = path.split(os.path.sep)
+			parent_path = os.path.dirname(path)
+			path = path_fragments[-1]
+			path_fragments = path_fragments[:-1]
+
+			while len(path_fragments) > 0:
+				parent = self._find_iter_by_name(path_fragments.pop(0), parent)
 
 		# node created
 		if event is MonitorSignals.CREATED:
 			# temporarily fix problem with duplicating items when file was saved with GIO
-			if self._find_iter_by_name(path) is None:
-				if (not show_hidden) and (path[0] == '.' or path[-1] == '~') or os.path.dirname(path):
+			if self._find_iter_by_name(path, parent) is None:
+				if (not show_hidden) \
+				and (path[0] == '.' or path[-1] == '~'):
 					return
 
-				self._add_item(path)
-				self._flush_queue()
+				# add item
+				self._add_item(path, parent, parent_path)
+				self._flush_queue(parent)
 
 			else:
-				self._update_item_details_by_name(path)
+				self._update_item_details_by_name(relative_path, parent)
 
 		# node deleted
 		elif event is MonitorSignals.DELETED:
-			self._delete_item_by_name(path)
+			self._delete_item_by_name(relative_path, parent)
 
 		# node changed
 		elif event is MonitorSignals.CHANGED:
-			self._update_item_details_by_name(path)
+			self._update_item_details_by_name(relative_path, parent)
 
 		# attributes changes
 		elif event is MonitorSignals.ATTRIBUTE_CHANGED:
-			self._update_item_attributes_by_name(path)
+			self._update_item_attributes_by_name(relative_path, parent)
 
 		self._change_title_text()
 		self._update_status_with_statistis()
@@ -1356,14 +1377,17 @@ class FileList(ItemList):
 		selected = store.get_value(selected_iter, Column.SELECTED)
 		cell.set_property('text', (None, self._selection_indicator)[selected])
 
-	def _find_iter_by_name(self, name):
+	def _find_iter_by_name(self, name, parent):
 		""" Find and return item by name"""
 		result = None
 
-		for row in self._store:
-			if row[Column.NAME] == name:
-				result = row.iter
+		iter = self._store.iter_children(parent)
+		while iter:
+			if self._store.get_value(iter, Column.NAME) == name:
+				result = iter
 				break
+
+			iter = self._store.iter_next(iter)
 
 		return result
 
@@ -1473,7 +1497,7 @@ class FileList(ItemList):
 			if parent is not None:
 				self._item_list.expand_row(self._store.get_path(parent), False)
 
-	def _delete_item_by_name(self, name):
+	def _delete_item_by_name(self, name, parent):
 		"""Removes item with 'name' from the list"""
 		selection = self._item_list.get_selection()
 		item_list, selected_iter = selection.get_selected()
@@ -1483,8 +1507,8 @@ class FileList(ItemList):
 		if selected_iter is not None:
 			selected_name = item_list.get_value(selected_iter, Column.NAME)
 
-		# find iter matching 'name'
-		found_iter = self._find_iter_by_name(name)
+		# find iter matching name
+		found_iter = self._find_iter_by_name(name, parent)
 
 		if found_iter is not None:
 			iter_name = self._store.get_value(found_iter, Column.NAME)
@@ -1517,9 +1541,9 @@ class FileList(ItemList):
 			# remove
 			self._store.remove(found_iter)
 
-	def _update_item_details_by_name(self, name):
+	def _update_item_details_by_name(self, name, parent):
 		"""Update item details (size, time, etc.) on changed event"""
-		found_iter = self._find_iter_by_name(name)
+		found_iter = self._find_iter_by_name(name, parent)
 		provider = self.get_provider()
 
 		if found_iter is not None:
@@ -1550,9 +1574,9 @@ class FileList(ItemList):
 			self._store.set_value(found_iter, Column.FORMATED_MODE, formated_file_mode)
 			self._store.set_value(found_iter, Column.FORMATED_TIME, formated_file_date)
 
-	def _update_item_attributes_by_name(self, name):
+	def _update_item_attributes_by_name(self, name, parent):
 		"""Update item attributes column by name"""
-		found_iter = self._find_iter_by_name(name)
+		found_iter = self._find_iter_by_name(name, parent)
 		provider = self.get_provider()
 
 		if found_iter is not None:
@@ -1749,6 +1773,9 @@ class FileList(ItemList):
 			self._thread_active.clear()
 			self._main_thread_lock.clear()
 
+			# create directory monitor
+			self.monitor_path(path, parent)
+
 		# create new thread
 		self._change_path_thread = Thread(target=thread_method)
 		self._change_path_thread.start()
@@ -1756,8 +1783,7 @@ class FileList(ItemList):
 	def change_path(self, path=None, selected=None):
 		"""Change file list path"""
 		# cancel current directory monitor
-		if self._fs_monitor is not None:
-			self._fs_monitor.cancel()
+		self.cancel_monitors()
 
 		# make sure path is actually string and not unicode object
 		# we still handle unicode strings properly, just avoid issues
@@ -1876,10 +1902,6 @@ class FileList(ItemList):
 			path = self._store.get_path(self._store.get_iter_first())
 			self._item_list.set_cursor(path)
 			self._item_list.scroll_to_cell(path)
-
-		# create file monitor
-		self._fs_monitor = provider.get_monitor(self.path)
-		self._fs_monitor.connect('changed', self._directory_changed)
 
 	def select_all(self, pattern=None, exclude_list=None):
 		"""Select all items matching pattern"""

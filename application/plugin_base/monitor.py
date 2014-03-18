@@ -71,6 +71,10 @@ class Monitor(gobject.GObject):
 		"""Cancel monitoring"""
 		pass
 
+	def get_queue(self):
+		"""Return monitor queue"""
+		return None
+
 
 class ManualMonitor(Monitor):
 	"""Fallback monitor class.

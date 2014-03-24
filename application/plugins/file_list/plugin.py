@@ -218,6 +218,9 @@ class FileList(ItemList):
 			# add to the list
 			self._item_list.append_column(column)
 
+		# set tooltip on name column
+		self._item_list.set_tooltip_column(Column.NAME)
+
 		# create extension columns
 		class_list = self._parent.get_column_extension_classes(self.__class__)
 
@@ -325,8 +328,7 @@ class FileList(ItemList):
 
 	def _handle_cursor_change(self, widget=None, data=None):
 		"""Handle cursor change"""
-		if not self._enable_media_preview \
-		or not self._item_list.has_focus():
+		if not self._enable_media_preview or not self._item_list.has_focus():
 			return
 
 		selection = self._item_list.get_selection()

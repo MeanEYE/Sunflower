@@ -170,11 +170,13 @@ class LinkDialog(InputDialog):
 
 	def set_original_path(self, path):
 		"""Set original path where link point to"""
-		self._entry_original_path.set_text(path)
+		if path is not None:
+			self._entry_original_path.set_text(path)
 
 	def set_hard_link(self, hard_link=True):
 		"""Set hard link option state"""
-		self._checkbox_hard_link.set_active(hard_link)
+		if self._checkbox_hard_link.is_sensitive():
+			self._checkbox_hard_link.set_active(hard_link)
 
 	def set_hard_link_supported(self, supported):
 		"""Set checkbox state for hard link"""

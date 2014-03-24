@@ -641,8 +641,9 @@ class FileList(ItemList):
 
 		return True
 
-	def _create_link(self, widget=None, hard_link=None):
+	def _create_link(self, widget=None, original_path=None, hard_link=None):
 		"""Create symbolic or hard link"""
+		result = False
 		provider = self.get_provider()
 		supported_options = provider.get_support()
 
@@ -652,6 +653,20 @@ class FileList(ItemList):
 			dialog = LinkDialog(self._parent)
 			dialog.set_hard_link_supported(ProviderSupport.HARD_LINK in supported_options)
 
+			# set original path in dialog
+			if original_path is None:
+				opposite_object = self._parent.get_opposite_object(self)
+
+				if hasattr(opposite_object, '_get_selection'):
+					original_path = opposite_object._get_selection(relative=False)
+
+			dialog.set_original_path(original_path)
+
+			# set hard link dialog option for user
+			if hard_link is not None:
+				dialog.set_hard_link(hard_link)
+
+			# ask user to confirm linking
 			result = dialog.get_response()
 
 			if result[0] == gtk.RESPONSE_OK:
@@ -681,6 +696,9 @@ class FileList(ItemList):
 					dialog.run()
 					dialog.destroy()
 
+				finally:
+					result = True
+
 		else:
 			# current file system doesn't support linking
 			dialog = gtk.MessageDialog(
@@ -692,6 +710,8 @@ class FileList(ItemList):
 								)
 			dialog.run()
 			dialog.destroy()
+
+		return result
 
 	def _delete_files(self, widget=None, force_delete=None):
 		"""Delete selected files"""
@@ -1641,8 +1661,7 @@ class FileList(ItemList):
 
 		elif drag_context.action is gtk.gdk.ACTION_LINK:
 			# handle linking
-			# TODO: Finish linking code!
-			result = False
+			result = self._create_link(original_path=path)
 
 		# notify source application about operation outcome
 		drag_context.finish(result, False, timestamp)
@@ -1666,7 +1685,7 @@ class FileList(ItemList):
 
 	def _get_supported_drag_actions(self):
 		"""Return integer representing supported drag'n'drop actions"""
-		return gtk.gdk.ACTION_COPY | gtk.gdk.ACTION_MOVE  # | gtk.gdk.ACTION_LINK # add later
+		return gtk.gdk.ACTION_COPY | gtk.gdk.ACTION_MOVE | gtk.gdk.ACTION_LINK
 
 	def _load_directory(self, path, parent=None, clear_store=False):
 		"""Load directory content into store"""

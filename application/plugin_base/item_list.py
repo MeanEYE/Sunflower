@@ -731,7 +731,6 @@ class ItemList(PluginBase):
 		# create provider
 		source_provider = Provider(self, path, selection)
 		destination_provider = self.get_provider()
-		destination_monitor = self.get_monitor()
 
 		# check if we actually have data to handle
 		if len(source_provider.get_selection()) == 0:
@@ -772,8 +771,9 @@ class ItemList(PluginBase):
 							)
 
 			# set event queue
-			if destination_monitor is not None and destination_monitor.is_queue_based():
-				operation.set_destination_queue(destination_monitor.get_queue())
+			event_queue = self.get_monitor_queue()
+			if event_queue is not None
+				operation.set_destination_queue(event_queue)
 
 			# start the operation
 			operation.set_selection(selection)

@@ -1641,6 +1641,32 @@ class FileList(ItemList):
 							_('Total:')
 						))
 
+	def _drag_motion(self, widget, drag_context, x, y, timestamp):
+		"""Handle dragging data over widget"""
+		path = None
+		action = gtk.gdk.ACTION_DEFAULT
+
+		try:
+			# get directory under mouse cursor
+			path_at_row, position = widget.get_dest_row_at_pos(x, y)
+			under_cursor = self._store.get_iter(path_at_row)
+
+			if self._store.get_value(under_cursor, Column.IS_DIR):
+				path = path_at_row
+				action = drag_context.action
+
+			else:
+				path = self._store.get_path(self._store.iter_parent(under_cursor))
+
+		except TypeError:
+			pass
+
+		if drag_context.get_source_widget() is widget and path is None:
+			drag_context.drag_status(action, timestamp)
+
+		widget.set_drag_dest_row(path, gtk.TREE_VIEW_DROP_INTO_OR_AFTER)
+		return True
+
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""
 		item_list = selection_data.data.splitlines(False)
@@ -1656,10 +1682,24 @@ class FileList(ItemList):
 						gtk.gdk.ACTION_MOVE: 'move'
 					}
 
+			row_path, position = widget.get_dest_row_at_pos(x, y)
+			destination_iter = self._store.get_iter(row_path)
+			selected_name = self._store.get_value(destination_iter, Column.NAME)
+
+			if self._store.get_value(destination_iter, Column.IS_PARENT_DIR):
+				destination = os.path.dirname(os.path.join(self.path, selected_name))
+
+			elif not self._store.get_value(destination_iter, Column.IS_DIR):
+				destination = os.path.join(self.path, selected_name)
+
+			else:
+				destination = path
+
 			result = self._handle_external_data(
 											operation[drag_context.action],
 											protocol,
-											item_list
+											item_list,
+											destination
 										)
 
 		elif drag_context.action is gtk.gdk.ACTION_LINK:

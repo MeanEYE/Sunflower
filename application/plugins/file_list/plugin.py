@@ -1732,7 +1732,7 @@ class FileList(ItemList):
 								True,
 								True,
 								None,
-								'up',
+								'go-up',
 								None,
 								0,
 								0

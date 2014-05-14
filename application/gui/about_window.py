@@ -131,6 +131,24 @@ class AboutWindow:
 			email = 'h868315@gmail.com',
 			website = None,
 			language = 'Hungarian' 
+		),
+		Translator(
+			name = 'Radek Otáhal',
+			email = 'radek.otahal@gmail.com',
+			website = None,
+			language = 'Czech'
+		),
+		Translator(
+			name = 'Kevin Pellet',
+			email = 'ilphrin@autistici.org',
+			website = None,
+			language = 'French'
+		),
+		Translator(
+			name = 'Helene Clozel',
+			email = 'clozel.helene@yahoo.fr',
+			website = None,
+			language = 'French'
 		)
 	]
 

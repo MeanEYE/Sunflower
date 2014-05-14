@@ -48,6 +48,7 @@ class IconManager:
 			full_path = get_user_directory(directory)
 			icon_name = icon_names[directory]
 
+			# make sure icon exists
 			if not self.has_icon(icon_name):
 				icon_name = self._default_directory
 

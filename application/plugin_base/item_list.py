@@ -772,7 +772,7 @@ class ItemList(PluginBase):
 
 			# set event queue
 			event_queue = self.get_monitor_queue()
-			if event_queue is not None
+			if event_queue is not None:
 				operation.set_destination_queue(event_queue)
 
 			# start the operation
@@ -1573,14 +1573,14 @@ class ItemList(PluginBase):
 		if len(self._monitor_list) > 0:
 			monitor = self._monitor_list[0]
 
-			if monitor.is_queue_based():
+			if monitor.is_manual():
 				result = monitor.get_queue()
 
 		return result
 
 	def monitor_path(self, path, parent=None):
 		"""Create new monitor for specified path"""
-		if len(self._monitor_list) > 0 and self._monitor_list[0].is_queue_based():
+		if len(self._monitor_list) > 0 and self._monitor_list[0].is_manual():
 			return
 
 		# create new monitor for specified path

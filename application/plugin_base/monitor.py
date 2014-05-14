@@ -16,6 +16,7 @@ class MonitorSignals:
 	PRE_UNMOUNT = 5  # location will soon be unmounted
 	UNMOUNTED = 6  # location was unmounted
 	MOVED = 7  # file was moved
+	EMBLEM_CHANGED = 8  # list of emblems has changed
 
 
 class Monitor(gobject.GObject):
@@ -25,6 +26,9 @@ class Monitor(gobject.GObject):
 	specific to provider that created the monitor. They are created and
 	destroyed automatically on each path change and mainly used by file
 	lists but could have other usages.
+	
+	This monitor class also provides custom event queue which can be
+	used to manually emit signals.
 
 	"""
 
@@ -32,6 +36,8 @@ class Monitor(gobject.GObject):
 	__gsignals__ = {
 				'changed': (gobject.SIGNAL_RUN_LAST, None, (int, str, str)),
 			}
+
+	TIMEOUT = 1000
 	
 	def __init__(self, provider, path):
 		gobject.GObject.__init__(self)
@@ -43,54 +49,6 @@ class Monitor(gobject.GObject):
 		
 		# clear initial value
 		self._paused.clear()
-
-	def _emit_signal(self, signal, path, other_path):
-		"""Notify connected objects that monitored path was changed.
-
-		Use other_path in cases where it seems logical, like moving files.
-		Otherwise None should be used instead. Paths needs to be relative to
-		path specified in constructor.
-		
-		"""
-		if not self._paused.is_set():
-			self.emit('changed', signal, path, other_path)
-
-	def is_queue_based(self):
-		"""Is monitor queue based"""
-		return False
-
-	def pause(self):
-		"""Pause monitoring"""
-		self._paused.set()
-
-	def resume(self):
-		"""Resume monitoring"""
-		self._paused.clear()
-
-	def cancel(self):
-		"""Cancel monitoring"""
-		pass
-
-	def get_queue(self):
-		"""Return monitor queue"""
-		return None
-
-
-class ManualMonitor(Monitor):
-	"""Fallback monitor class.
-
-	This monitor is designed to periodically emit signals by reading
-	events from its queue. This class was designed to provide monitor-like
-	functionality to providers which don't support file system notifications,
-	for example remote mounts and archives. Events queue is populated by
-	the operation threads themselves.
-
-	"""
-
-	TIMEOUT = 1000
-
-	def __init__(self, provider, path):
-		Monitor.__init__(self, provider, path)
 
 		self._queue = Queue()
 		self._start_interval()
@@ -120,13 +78,28 @@ class ManualMonitor(Monitor):
 		# if paused break inteval cycle
 		return not self._paused.isSet()
 
-	def is_queue_based(self):
-		"""Is monitor queue based"""
+	def _emit_signal(self, signal, path, other_path):
+		"""Notify connected objects that monitored path was changed.
+
+		Use other_path in cases where it seems logical, like moving files.
+		Otherwise None should be used instead. Paths needs to be relative to
+		path specified in constructor.
+		
+		"""
+		if not self._paused.is_set():
+			self.emit('changed', signal, path, other_path)
+
+	def is_manual(self):
+		"""Check if monitor solely relies on queues"""
 		return True
+
+	def pause(self):
+		"""Pause monitoring"""
+		self._paused.set()
 
 	def resume(self):
 		"""Resume monitoring"""
-		Monitor.resume(self)
+		self._paused.clear()
 		self._start_interval()
 
 	def cancel(self):
@@ -134,5 +107,5 @@ class ManualMonitor(Monitor):
 		self.pause()
 
 	def get_queue(self):
-		"""Return queue object"""
+		"""Return monitor queue"""
 		return self._queue

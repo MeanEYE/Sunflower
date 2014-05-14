@@ -1,6 +1,5 @@
 import os
 
-from monitor import ManualMonitor
 from collections import namedtuple
 
 
@@ -230,7 +229,7 @@ class Provider:
 
 	def get_monitor(self, path):
 		"""Return monitor object to be used with specified list"""
-		return ManualMonitor(self, path)
+		return Monitor(self, path)
 
 	def get_support(self):
 		"""Return supported options by provider"""

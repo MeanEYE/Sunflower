@@ -15,6 +15,7 @@ import urllib
 from menus import MenuManager
 from mounts import MountsManager
 from icons import IconManager
+from emblems import EmblemManager
 from associations import AssociationManager
 from indicator import Indicator
 from notifications import NotificationManager
@@ -100,6 +101,7 @@ class MainWindow(gtk.Window):
 
 		# create managers early
 		self.icon_manager = IconManager(self)
+		self.emblem_manager = EmblemManager(self)
 		self.menu_manager = MenuManager(self)
 		self.mount_manager = MountsManager(self)
 		self.associations_manager = AssociationManager(self)

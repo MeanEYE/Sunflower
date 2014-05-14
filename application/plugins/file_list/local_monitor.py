@@ -61,3 +61,7 @@ class LocalMonitor(Monitor):
 		"""Cancel monitoring"""
 		if self._monitor is not None:
 			self._monitor.cancel()
+
+	def is_manual(self):
+		"""Check if monitor solely relies on queues"""
+		return False

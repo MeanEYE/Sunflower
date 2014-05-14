@@ -5,6 +5,7 @@ import time
 import user
 import fnmatch
 import common
+import gobject
 
 from column_editor import FileList_ColumnEditor
 from gio_extension import SambaExtension, FtpExtension, DavExtension, SftpExtension
@@ -22,6 +23,7 @@ from plugin_base.monitor import MonitorSignals, MonitorError
 from plugin_base.provider import FileType, Mode as FileMode, Support as ProviderSupport
 from threading import Thread, Event
 from widgets.thumbnail_view import ThumbnailView
+from widgets.emblems_renderer import CellRendererEmblems
 
 
 def register_plugin(application):
@@ -62,6 +64,7 @@ class Column:
 	SELECTED = 13
 	USER_ID = 14
 	GROUP_ID = 15
+	EMBLEMS = 16
 
 
 class FileList(ItemList):
@@ -108,6 +111,7 @@ class FileList(ItemList):
 								bool,	# Column.SELECTED
 								int,	# Column.USER_ID
 								int,	# Column.GROUP_ID
+								gobject.TYPE_PYOBJECT	# Column.EMBLEMS
 							)
 
 		# set item list model
@@ -121,6 +125,7 @@ class FileList(ItemList):
 		cell_size = gtk.CellRendererText()
 		cell_mode = gtk.CellRendererText()
 		cell_date = gtk.CellRendererText()
+		cell_emblems = CellRendererEmblems()
 
 		cell_selected.set_property('width', 30)  # leave enough room for various characters
 		cell_selected.set_property('xalign', 1)
@@ -147,7 +152,8 @@ class FileList(ItemList):
 		# add cell renderer to columns
 		col_name.pack_start(cell_icon, False)
 		col_name.pack_start(cell_name, True)
-		col_name.pack_start(cell_selected, False)
+		col_name.pack_end(cell_emblems, False)
+		col_name.pack_end(cell_selected, False)
 		col_extension.pack_start(cell_extension, True)
 		col_size.pack_start(cell_size, True)
 		col_mode.pack_start(cell_mode, True)
@@ -160,8 +166,8 @@ class FileList(ItemList):
 		col_mode.add_attribute(cell_mode, 'foreground', Column.COLOR)
 		col_date.add_attribute(cell_date, 'foreground', Column.COLOR)
 
-		# col_name.add_attribute(cell_selected, 'pixbuf', Column.SELECTED)
 		col_name.add_attribute(cell_icon, 'icon-name', Column.ICON)
+		col_name.add_attribute(cell_emblems, 'emblems', Column.EMBLEMS)
 		col_name.add_attribute(cell_name, 'text', Column.FORMATED_NAME)
 		col_extension.add_attribute(cell_extension, 'text', Column.EXTENSION)
 		col_size.add_attribute(cell_size, 'text', Column.FORMATED_SIZE)
@@ -824,7 +830,7 @@ class FileList(ItemList):
 								)
 
 			# set event queue
-			if destination_monitor is not None and destination_monitor.is_queue_based():
+			if destination_monitor is not None and destination_monitor.is_manual():
 				operation.set_destination_queue(destination_monitor.get_queue())
 
 			operation.set_selection(selection)
@@ -1268,6 +1274,10 @@ class FileList(ItemList):
 		elif event is MonitorSignals.ATTRIBUTE_CHANGED:
 			self._update_item_attributes_by_name(relative_path, parent)
 
+		# emblem changes
+		elif event is MonitorSignals.EMBLEM_CHANGED:
+			self._update_emblems_by_name(path, parent, parent_path)
+
 		self._change_title_text()
 		self._update_status_with_statistis()
 
@@ -1485,7 +1495,8 @@ class FileList(ItemList):
 					icon,
 					None,
 					file_stat.user_id,
-					file_stat.group_id
+					file_stat.group_id,
+					None
 				)
 
 			self._item_queue.append(data)
@@ -1775,7 +1786,8 @@ class FileList(ItemList):
 								'go-up',
 								None,
 								0,
-								0
+								0,
+								None
 							))
 
 			else:
@@ -1831,6 +1843,9 @@ class FileList(ItemList):
 				# turn on sorting
 				self._apply_sort_function()
 
+			# load emblems
+			self._load_emblems(parent, parent_path)
+
 			# release locks
 			self._thread_active.clear()
 			self._main_thread_lock.clear()
@@ -1841,6 +1856,58 @@ class FileList(ItemList):
 		# create new thread
 		self._change_path_thread = Thread(target=thread_method)
 		self._change_path_thread.start()
+
+	def _load_emblems(self, parent=None, parent_path=None):
+		"""Load emblems for specified path."""
+		icon_manager = self._parent.icon_manager
+		emblem_manager = self._parent.emblem_manager
+		item_store = self._store  # avoid namespace lookups
+
+		# get path to load emblems for
+		path = self._options.get('path')
+		if parent is not None:
+			path = os.path.join(path, parent_path)
+
+		# get emblems for current path
+		emblems = emblem_manager.get_emblems_for_path(path)
+
+		# avoid wasting time
+		if len(emblems) == 0:
+			return
+
+		# iterate over items in the list
+		list_iter = item_store.iter_children(parent) if parent else item_store.get_iter_first()
+
+		while list_iter:
+			name = item_store.get_value(list_iter, Column.NAME)
+
+			if parent is not None:
+				name = os.path.split(name)[1]
+
+			# set emblems for item
+			if name in emblems:
+				item_store.set_value(list_iter, Column.EMBLEMS, emblems[name])
+
+			# get next item in list
+			list_iter = item_store.iter_next(list_iter)
+
+	def _update_emblems_by_name(self, name, parent=None, parent_path=None):
+		"""Update emblem list for specified iter in list."""
+		found_iter = self._find_iter_by_name(name, parent)
+
+		if not found_iter:
+			return
+
+		# get path to load emblems for
+		path = self._options.get('path')
+		if parent is not None:
+			path = os.path.join(path, parent_path)
+
+		# get emblems for current path
+		emblems = self._parent.emblem_manager.get_emblems(path, name)
+
+		# update list
+		self._store.set_value(found_iter, Column.EMBLEMS, emblems)
 
 	def change_path(self, path=None, selected=None):
 		"""Change file list path"""

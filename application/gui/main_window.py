@@ -15,6 +15,7 @@ import urllib
 from menus import MenuManager
 from mounts import MountsManager
 from icons import IconManager
+from emblems import EmblemManager
 from associations import AssociationManager
 from indicator import Indicator
 from notifications import NotificationManager
@@ -100,6 +101,7 @@ class MainWindow(gtk.Window):
 
 		# create managers early
 		self.icon_manager = IconManager(self)
+		self.emblem_manager = EmblemManager(self)
 		self.menu_manager = MenuManager(self)
 		self.mount_manager = MountsManager(self)
 		self.associations_manager = AssociationManager(self)
@@ -130,12 +132,6 @@ class MainWindow(gtk.Window):
 		self.config_path = None
 		self.system_plugin_path = None
 		self.user_plugin_path = None
-
-		if 'XDG_CONFIG_HOME' in os.environ:
-			self.xdg_config_home = os.environ['XDG_CONFIG_HOME']
-
-		else:
-			self.xdg_config_home = os.path.join(user.home, '.config')
 
 		# create a clipboard manager
 		self.clipboard = gtk.Clipboard()
@@ -766,7 +762,7 @@ class MainWindow(gtk.Window):
 		# add system bookmarks if needed
 		bookmarks_files = (
 					os.path.join(user.home, '.gtk-bookmarks'),
-					os.path.join(self.xdg_config_home, 'gtk-3.0', 'bookmarks')
+					os.path.join(common.get_config_directory(), 'gtk-3.0', 'bookmarks')
 				)
 
 		available_files = filter(lambda path: os.path.exists(path), bookmarks_files)
@@ -2139,8 +2135,10 @@ class MainWindow(gtk.Window):
 
 	def load_config(self):
 		"""Load configuration from file located in users home directory"""
-		if os.path.isdir(self.xdg_config_home):
-			self.config_path = os.path.join(self.xdg_config_home, 'sunflower')
+		config_directory = common.get_config_directory()
+
+		if os.path.isdir(config_directory):
+			self.config_path = os.path.join(config_directory, 'sunflower')
 		else:
 			self.config_path = os.path.join(user.home, '.sunflower')
 

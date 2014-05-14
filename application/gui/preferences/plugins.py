@@ -69,15 +69,15 @@ class PluginsOptions(SettingsPage):
 		col_name.set_resizable(True)
 		col_name.set_expand(True)
 
+		col_version = gtk.TreeViewColumn(_('Version'), cell_version, text=Column.VERSION)
+
 		col_author = gtk.TreeViewColumn(_('Author'), cell_author, text=Column.AUTHOR)
 		col_author.set_resizable(True)
 
-		col_version = gtk.TreeViewColumn(_('Version'), cell_version, text=Column.VERSION)
-
 		self._list.append_column(col_active)
 		self._list.append_column(col_name)
-		self._list.append_column(col_author)
 		self._list.append_column(col_version)
+		self._list.append_column(col_author)
 
 		# create description
 		self._label_description = gtk.Label()
@@ -252,6 +252,9 @@ class PluginsOptions(SettingsPage):
 					elif config.has_option(Section.DESCRIPTION, 'en'):
 						# try to get plugin description for default language
 						plugin_description = config.get(Section.DESCRIPTION, 'en')
+
+				if config.has_section(Section.VERSION) and config.has_option(Section.VERSION, 'number'):
+					plugin_version = config.get(Section.VERSION, 'number')
 
 			# add plugin data to list
 			self._plugins.append((

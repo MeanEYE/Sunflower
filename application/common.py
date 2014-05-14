@@ -78,16 +78,37 @@ def format_mode(mode, format):
 
 	return result
 
+def get_cache_directory():
+	"""Get full path to cache files for curring user."""
+	if 'XDG_CACHE_HOME' in os.environ:
+		result = os.path.abspath(os.environ['XDG_CACHE_HOME'])
+	else:
+		result = os.path.join(user.home, '.cache')
+
+	return result
+
+def get_config_directory():
+	"""Get full path to configuration files for current user."""
+	if 'XDG_CONFIG_HOME' in os.environ:
+		result = os.path.abspath(os.environ['XDG_CONFIG_HOME'])
+	else:
+		result = os.path.join(user.home, '.config')
+
+	return result
+
+def get_data_directory():
+	"""Get full path to user data files."""
+	if 'XDG_DATA_HOME' in os.environ:
+		result = os.path.abspath(os.environ['XDG_DATA_HOME'])
+	else:
+		result = os.path.join(user.home, '.local', 'share')
+
+	return result
+
 def get_user_directory(directory):
 	"""Get full path to current users predefined directory"""
 	result = None
-
-	if 'XDG_xdg_config_home' in os.environ:
-		xdg_config_home = os.environ['XDG_xdg_config_home']
-	else:
-		xdg_config_home = os.path.join(user.home, '.config')
-
-	config_file = os.path.join(xdg_config_home, 'user-dirs.dirs')
+	config_file = os.path.join(get_config_directory(), 'user-dirs.dirs')
 
 	if os.path.isfile(config_file):
 		# read configuration file

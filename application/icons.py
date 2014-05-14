@@ -13,12 +13,24 @@ class IconManager:
 		self._parent = parent
 		self._icon_theme = gtk.icon_theme_get_default()
 		self._user_directories = None
+		self._default_file = None
+		self._default_directory = None
 
 		# preload information
-		self._load_user_directories()
+		self._prepare_icons()
 
-	def _load_user_directories(self):
+	def _prepare_icons(self):
 		"""Load special user directories"""
+		# set default icons for file and directory
+		self._default_file = 'empty'
+		if not self.has_icon(self._default_file):
+			self._default_file = gtk.STOCK_FILE
+
+		self._default_directory = 'folder'
+		if not self.has_icon(self._default_directory):
+			self._default_directory = gtk.STOCK_DIRECTORY
+
+		# special user directories
 		directories = []
 		icon_names = {
 				UserDirectory.DESKTOP: 'desktop',
@@ -36,10 +48,15 @@ class IconManager:
 			full_path = get_user_directory(directory)
 			icon_name = icon_names[directory]
 
+			# make sure icon exists
+			if not self.has_icon(icon_name):
+				icon_name = self._default_directory
+
 			directories.append((full_path, icon_name))
 
 		# add user home directory
-		directories.append((user.home, 'folder-home'))
+		if self.has_icon('folder-home'):
+			directories.append((user.home, 'folder-home'))
 
 		# create a dictionary
 		self._user_directories = dict(directories)
@@ -54,7 +71,7 @@ class IconManager:
 
 	def get_icon_for_file(self, filename, size=gtk.ICON_SIZE_MENU):
 		"""Load icon for specified file"""
-		result = 'document'
+		result = self._default_file
 		mime_type = self._parent.associations_manager.get_mime_type(filename)
 		themed_icon = None
 
@@ -74,7 +91,7 @@ class IconManager:
 
 	def get_icon_for_directory(self, path, size=gtk.ICON_SIZE_MENU):
 		"""Get icon for specified directory"""
-		result = 'folder'
+		result = self._default_directory
 
 		if path in self._user_directories:
 			result = self._user_directories[path]

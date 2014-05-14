@@ -5,6 +5,7 @@ import time
 import user
 import fnmatch
 import common
+import gobject
 
 from column_editor import FileList_ColumnEditor
 from gio_extension import SambaExtension, FtpExtension, DavExtension, SftpExtension
@@ -22,6 +23,7 @@ from plugin_base.monitor import MonitorSignals, MonitorError
 from plugin_base.provider import FileType, Mode as FileMode, Support as ProviderSupport
 from threading import Thread, Event
 from widgets.thumbnail_view import ThumbnailView
+from widgets.emblems_renderer import CellRendererEmblems
 
 
 def register_plugin(application):
@@ -62,6 +64,7 @@ class Column:
 	SELECTED = 13
 	USER_ID = 14
 	GROUP_ID = 15
+	EMBLEMS = 16
 
 
 class FileList(ItemList):
@@ -108,6 +111,7 @@ class FileList(ItemList):
 								bool,	# Column.SELECTED
 								int,	# Column.USER_ID
 								int,	# Column.GROUP_ID
+								gobject.TYPE_PYOBJECT	# Column.EMBLEMS
 							)
 
 		# set item list model
@@ -121,6 +125,7 @@ class FileList(ItemList):
 		cell_size = gtk.CellRendererText()
 		cell_mode = gtk.CellRendererText()
 		cell_date = gtk.CellRendererText()
+		cell_emblems = CellRendererEmblems()
 
 		cell_selected.set_property('width', 30)  # leave enough room for various characters
 		cell_selected.set_property('xalign', 1)
@@ -147,7 +152,8 @@ class FileList(ItemList):
 		# add cell renderer to columns
 		col_name.pack_start(cell_icon, False)
 		col_name.pack_start(cell_name, True)
-		col_name.pack_start(cell_selected, False)
+		col_name.pack_end(cell_emblems, False)
+		col_name.pack_end(cell_selected, False)
 		col_extension.pack_start(cell_extension, True)
 		col_size.pack_start(cell_size, True)
 		col_mode.pack_start(cell_mode, True)
@@ -160,8 +166,8 @@ class FileList(ItemList):
 		col_mode.add_attribute(cell_mode, 'foreground', Column.COLOR)
 		col_date.add_attribute(cell_date, 'foreground', Column.COLOR)
 
-		# col_name.add_attribute(cell_selected, 'pixbuf', Column.SELECTED)
 		col_name.add_attribute(cell_icon, 'icon-name', Column.ICON)
+		col_name.add_attribute(cell_emblems, 'emblems', Column.EMBLEMS)
 		col_name.add_attribute(cell_name, 'text', Column.FORMATED_NAME)
 		col_extension.add_attribute(cell_extension, 'text', Column.EXTENSION)
 		col_size.add_attribute(cell_size, 'text', Column.FORMATED_SIZE)
@@ -217,6 +223,9 @@ class FileList(ItemList):
 
 			# add to the list
 			self._item_list.append_column(column)
+
+		# set tooltip on name column
+		self._item_list.set_tooltip_column(Column.NAME)
 
 		# create extension columns
 		class_list = self._parent.get_column_extension_classes(self.__class__)
@@ -325,8 +334,7 @@ class FileList(ItemList):
 
 	def _handle_cursor_change(self, widget=None, data=None):
 		"""Handle cursor change"""
-		if not self._enable_media_preview \
-		or not self._item_list.has_focus():
+		if not self._enable_media_preview or not self._item_list.has_focus():
 			return
 
 		selection = self._item_list.get_selection()
@@ -622,7 +630,8 @@ class FileList(ItemList):
 
 				# if specified, edit file after creating it
 				if edit_after:
-					self._parent.associations_manager.edit_file((response[1], ))
+					full_path = os.path.join(provider.get_path(), response[1])
+					self._parent.associations_manager.edit_file((full_path, ))
 
 			except OSError as error:
 				# error creating, report to user
@@ -821,7 +830,7 @@ class FileList(ItemList):
 								)
 
 			# set event queue
-			if destination_monitor is not None and destination_monitor.is_queue_based():
+			if destination_monitor is not None and destination_monitor.is_manual():
 				operation.set_destination_queue(destination_monitor.get_queue())
 
 			operation.set_selection(selection)
@@ -1265,6 +1274,10 @@ class FileList(ItemList):
 		elif event is MonitorSignals.ATTRIBUTE_CHANGED:
 			self._update_item_attributes_by_name(relative_path, parent)
 
+		# emblem changes
+		elif event is MonitorSignals.EMBLEM_CHANGED:
+			self._update_emblems_by_name(path, parent, parent_path)
+
 		self._change_title_text()
 		self._update_status_with_statistis()
 
@@ -1482,7 +1495,8 @@ class FileList(ItemList):
 					icon,
 					None,
 					file_stat.user_id,
-					file_stat.group_id
+					file_stat.group_id,
+					None
 				)
 
 			self._item_queue.append(data)
@@ -1638,6 +1652,32 @@ class FileList(ItemList):
 							_('Total:')
 						))
 
+	def _drag_motion(self, widget, drag_context, x, y, timestamp):
+		"""Handle dragging data over widget"""
+		path = None
+		action = gtk.gdk.ACTION_DEFAULT
+
+		try:
+			# get directory under mouse cursor
+			path_at_row, position = widget.get_dest_row_at_pos(x, y)
+			under_cursor = self._store.get_iter(path_at_row)
+
+			if self._store.get_value(under_cursor, Column.IS_DIR):
+				path = path_at_row
+				action = drag_context.action
+
+			else:
+				path = self._store.get_path(self._store.iter_parent(under_cursor))
+
+		except TypeError:
+			pass
+
+		if drag_context.get_source_widget() is widget and path is None:
+			drag_context.drag_status(action, timestamp)
+
+		widget.set_drag_dest_row(path, gtk.TREE_VIEW_DROP_INTO_OR_AFTER)
+		return True
+
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""
 		item_list = selection_data.data.splitlines(False)
@@ -1653,10 +1693,24 @@ class FileList(ItemList):
 						gtk.gdk.ACTION_MOVE: 'move'
 					}
 
+			row_path, position = widget.get_dest_row_at_pos(x, y)
+			destination_iter = self._store.get_iter(row_path)
+			selected_name = self._store.get_value(destination_iter, Column.NAME)
+
+			if self._store.get_value(destination_iter, Column.IS_PARENT_DIR):
+				destination = os.path.dirname(os.path.join(self.path, selected_name))
+
+			elif not self._store.get_value(destination_iter, Column.IS_DIR):
+				destination = os.path.join(self.path, selected_name)
+
+			else:
+				destination = path
+
 			result = self._handle_external_data(
 											operation[drag_context.action],
 											protocol,
-											item_list
+											item_list,
+											destination
 										)
 
 		elif drag_context.action is gtk.gdk.ACTION_LINK:
@@ -1729,10 +1783,11 @@ class FileList(ItemList):
 								True,
 								True,
 								None,
-								'up',
+								'go-up',
 								None,
 								0,
-								0
+								0,
+								None
 							))
 
 			else:
@@ -1788,6 +1843,9 @@ class FileList(ItemList):
 				# turn on sorting
 				self._apply_sort_function()
 
+			# load emblems
+			self._load_emblems(parent, parent_path)
+
 			# release locks
 			self._thread_active.clear()
 			self._main_thread_lock.clear()
@@ -1798,6 +1856,58 @@ class FileList(ItemList):
 		# create new thread
 		self._change_path_thread = Thread(target=thread_method)
 		self._change_path_thread.start()
+
+	def _load_emblems(self, parent=None, parent_path=None):
+		"""Load emblems for specified path."""
+		icon_manager = self._parent.icon_manager
+		emblem_manager = self._parent.emblem_manager
+		item_store = self._store  # avoid namespace lookups
+
+		# get path to load emblems for
+		path = self._options.get('path')
+		if parent is not None:
+			path = os.path.join(path, parent_path)
+
+		# get emblems for current path
+		emblems = emblem_manager.get_emblems_for_path(path)
+
+		# avoid wasting time
+		if len(emblems) == 0:
+			return
+
+		# iterate over items in the list
+		list_iter = item_store.iter_children(parent) if parent else item_store.get_iter_first()
+
+		while list_iter:
+			name = item_store.get_value(list_iter, Column.NAME)
+
+			if parent is not None:
+				name = os.path.split(name)[1]
+
+			# set emblems for item
+			if name in emblems:
+				item_store.set_value(list_iter, Column.EMBLEMS, emblems[name])
+
+			# get next item in list
+			list_iter = item_store.iter_next(list_iter)
+
+	def _update_emblems_by_name(self, name, parent=None, parent_path=None):
+		"""Update emblem list for specified iter in list."""
+		found_iter = self._find_iter_by_name(name, parent)
+
+		if not found_iter:
+			return
+
+		# get path to load emblems for
+		path = self._options.get('path')
+		if parent is not None:
+			path = os.path.join(path, parent_path)
+
+		# get emblems for current path
+		emblems = self._parent.emblem_manager.get_emblems(path, name)
+
+		# update list
+		self._store.set_value(found_iter, Column.EMBLEMS, emblems)
 
 	def change_path(self, path=None, selected=None):
 		"""Change file list path"""

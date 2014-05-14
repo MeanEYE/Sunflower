@@ -8,6 +8,7 @@ import pwd
 import grp 
 import common
 
+from plugin_base.monitor import MonitorSignals
 from plugin_base.provider import Support
 
 
@@ -16,6 +17,12 @@ class Column:
 	ICON_NAME = 1
 	APPLICATION_NAME = 2
 	APPLICATION_ID = 3
+
+
+class EmblemColumn:
+	SELECTED = 0
+	NAME = 1
+	ICON_NAME = 2
 
 
 class PropertiesWindow(gtk.Window):
@@ -85,6 +92,10 @@ class PropertiesWindow(gtk.Window):
 		self._notebook.append_page(
 								self._create_open_with_tab(),
 								gtk.Label(_('Open With'))
+							)
+		self._notebook.append_page(
+								self._create_emblems_tab(),
+								gtk.Label(_('Emblems'))
 							)
 
 		# create buttons
@@ -368,6 +379,41 @@ class PropertiesWindow(gtk.Window):
 		if application_set:
 			for item in self._store:
 				item[Column.SELECTED] = item.path == active_item.path
+
+		return True
+
+	def _toggle_emblem(self, renderer, path, data=None):
+		"""Handle toggling emblem selection"""
+		active_item = self._emblems_store.get_iter(path)
+		is_selected = not self._emblems_store.get_value(active_item, EmblemColumn.SELECTED)
+		emblem = self._emblems_store.get_value(active_item, EmblemColumn.NAME)
+
+		# modify value in list store
+		self._emblems_store.set_value(active_item, EmblemColumn.SELECTED, is_selected)
+
+		# update emblem database
+		update_method = (
+					self._application.emblem_manager.remove_emblem,
+					self._application.emblem_manager.add_emblem
+				)[is_selected]
+
+		path, item_name = os.path.split(self._path)
+		update_method(path, item_name, emblem)
+
+		# notify monitor of our change
+		parent = self._provider.get_parent()
+		parent_path = self._provider.get_path()
+
+		if parent_path == self._provider.get_root_path(parent_path):
+			item_path = self._path[len(parent_path):]
+
+		else:
+			item_path = self._path[len(parent_path) + 1:]
+
+		queue = parent.get_monitor().get_queue()
+		queue.put((MonitorSignals.EMBLEM_CHANGED, item_path, None))
+
+		return True
 
 	def _create_basic_tab(self):
 		"""Create tab containing basic information"""
@@ -659,6 +705,60 @@ class PropertiesWindow(gtk.Window):
 		container.add(self._list)
 		tab.pack_start(label, False, False, 0)
 		tab.pack_start(container, True, True, 0)
+
+		return tab
+
+	def _create_emblems_tab(self):
+		"""Create tab for editing emblems"""
+		tab = gtk.VBox(False, 5)
+		tab.set_border_width(10)
+
+		# create scrollable container
+		container = gtk.ScrolledWindow()
+		container.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+		container.set_shadow_type(gtk.SHADOW_IN)
+
+		# create list
+		self._emblems_store = gtk.ListStore(bool, str, str)
+		self._emblems = gtk.TreeView(model=self._emblems_store)
+
+		cell_selected = gtk.CellRendererToggle()
+		cell_icon = gtk.CellRendererPixbuf()
+		cell_name = gtk.CellRendererText()
+
+		cell_selected.connect('toggled', self._toggle_emblem)
+
+		column_name = gtk.TreeViewColumn()
+		column_name.pack_start(cell_selected, False)
+		column_name.pack_start(cell_icon, False)
+		column_name.pack_start(cell_name, True)
+
+		column_name.add_attribute(cell_selected, 'active', EmblemColumn.SELECTED)
+		column_name.add_attribute(cell_icon, 'icon-name', EmblemColumn.ICON_NAME)
+		column_name.add_attribute(cell_name, 'text', EmblemColumn.NAME)
+
+		self._emblems.set_headers_visible(False)
+		self._emblems.set_search_column(EmblemColumn.NAME)
+		self._emblems.append_column(column_name)
+
+		# set search function
+		compare = lambda model, column, key, iter_: key.lower() not in model.get_value(iter_, column).lower()
+		self._emblems.set_search_equal_func(compare)
+
+		# get list of assigned emblems
+		path, item_name = os.path.split(self._path)
+		assigned_emblems = self._application.emblem_manager.get_emblems(path, item_name) or []
+
+		# populate emblem list
+		emblems = self._application.emblem_manager.get_available_emblems()
+
+		for emblem in emblems:
+			self._emblems_store.append((emblem in assigned_emblems, emblem, emblem))
+
+		# pack user interface
+		container.add(self._emblems)
+
+		tab.pack_start(container)
 
 		return tab
 

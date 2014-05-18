@@ -44,7 +44,6 @@ class Operation(Thread):
 
 	def __init__(self, application, source, destination=None, options=None, destination_path=None):
 		Thread.__init__(self, target=self)
-		print destination_path
 		self._can_continue = Event()
 		self._abort = Event()
 		self._application = application

@@ -1654,28 +1654,24 @@ class FileList(ItemList):
 
 	def _drag_motion(self, widget, drag_context, x, y, timestamp):
 		"""Handle dragging data over widget"""
-		path = None
 		action = gtk.gdk.ACTION_DEFAULT
-
+		path = None
 		try:
-			# get directory under mouse cursor
-			path_at_row, position = widget.get_dest_row_at_pos(x, y)
-			under_cursor = self._store.get_iter(path_at_row)
-
+			path_, position = widget.get_dest_row_at_pos(x, y)
+			under_cursor = self._store.get_iter(path_)
 			if self._store.get_value(under_cursor, Column.IS_DIR):
-				path = path_at_row
+				path = path_
 				action = drag_context.action
-
 			else:
 				path = self._store.get_path(self._store.iter_parent(under_cursor))
-
 		except TypeError:
 			pass
 
-		if drag_context.get_source_widget() is widget and path is None:
+		if drag_context.get_source_widget() == widget and path is None:
 			drag_context.drag_status(action, timestamp)
 
 		widget.set_drag_dest_row(path, gtk.TREE_VIEW_DROP_INTO_OR_AFTER)
+
 		return True
 
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
@@ -1692,19 +1688,18 @@ class FileList(ItemList):
 						gtk.gdk.ACTION_COPY: 'copy',
 						gtk.gdk.ACTION_MOVE: 'move'
 					}
+			try:
+				path, position = widget.get_dest_row_at_pos(x, y)
+				dest_iter = self._store.get_iter(path)
+				destination = self._store.get_value(dest_iter, Column.NAME)
+				destination =  os.path.join(self.path, destination)
+				if self._store.get_value(dest_iter, Column.IS_PARENT_DIR):
+					destination = os.path.dirname(os.path.dirname(destination))
+				elif not self._store.get_value(dest_iter, Column.IS_DIR):
+					destination =  os.path.dirname(os.path.join(self.path, destination))
 
-			row_path, position = widget.get_dest_row_at_pos(x, y)
-			destination_iter = self._store.get_iter(row_path)
-			selected_name = self._store.get_value(destination_iter, Column.NAME)
-
-			if self._store.get_value(destination_iter, Column.IS_PARENT_DIR):
-				destination = os.path.dirname(os.path.join(self.path, selected_name))
-
-			elif not self._store.get_value(destination_iter, Column.IS_DIR):
-				destination = os.path.join(self.path, selected_name)
-
-			else:
-				destination = path
+			except TypeError:
+				destination = self.path
 
 			result = self._handle_external_data(
 											operation[drag_context.action],

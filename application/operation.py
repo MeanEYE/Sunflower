@@ -42,9 +42,9 @@ class OperationType:
 class Operation(Thread):
 	"""Parent class for all operation threads"""
 
-	def __init__(self, application, source, destination=None, options=None):
+	def __init__(self, application, source, destination=None, options=None, destination_path=None):
 		Thread.__init__(self, target=self)
-
+		print destination_path
 		self._can_continue = Event()
 		self._abort = Event()
 		self._application = application
@@ -69,7 +69,7 @@ class Operation(Thread):
 		# store initial paths
 		self._source_path = self._source.get_path()
 		if self._destination is not None:
-			self._destination_path = self._destination.get_path()
+			self._destination_path = self._destination.get_path() if destination_path is None else destination_path
 
 		self._can_continue.set()
 		
@@ -463,8 +463,8 @@ class Operation(Thread):
 class CopyOperation(Operation):
 	"""Operation thread used for copying files"""
 
-	def __init__(self, application, source, destination, options):
-		Operation.__init__(self, application, source, destination, options)
+	def __init__(self, application, source, destination, options , destination_path=None):
+		Operation.__init__(self, application, source, destination, options, destination_path)
 
 		self._merge_all = None
 		self._overwrite_all = None

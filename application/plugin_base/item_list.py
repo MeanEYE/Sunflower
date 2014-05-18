@@ -678,10 +678,9 @@ class ItemList(PluginBase):
 			dialog.run()
 			dialog.destroy()
 
-	def _handle_external_data(self, operation, protocol, item_list):
+	def _handle_external_data(self, operation, protocol, item_list, destination):
 		"""Handle data coming from a different application"""
 		result = False
-
 		dialog_classes = {
 					'copy': CopyDialog,
 					'cut': MoveDialog,
@@ -756,7 +755,7 @@ class ItemList(PluginBase):
 					self._parent,
 					source_provider,
 					destination_provider,
-					self.path
+					destination
 				)
 		dialog_result = dialog.get_response()
 
@@ -767,7 +766,8 @@ class ItemList(PluginBase):
 								self._parent,
 								source_provider,
 								destination_provider,
-								dialog_result[1]  # options from dialog
+								dialog_result[1],
+								destination# options from dialog
 							)
 
 			# set event queue
@@ -897,7 +897,7 @@ class ItemList(PluginBase):
 			list_ = [urllib.unquote(item.split('://')[1]) for item in list_]
 
 			# call handler
-			self._handle_external_data(operation, protocol, list_)
+			self._handle_external_data(operation, protocol, list_, self.path)
 
 		return True
 
@@ -1641,4 +1641,3 @@ class ItemList(PluginBase):
 
 		elif show_status_bar == StatusVisible.NEVER:
 			self._hide_status_bar()
-

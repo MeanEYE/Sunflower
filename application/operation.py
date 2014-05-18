@@ -68,7 +68,7 @@ class Operation(Thread):
 		# store initial paths
 		self._source_path = self._source.get_path()
 		if self._destination is not None:
-			self._destination_path = self._destination.get_path() if destination_path is None else destination_path
+			self._destination_path = destination_path or self._destination.get_path()
 
 		self._can_continue.set()
 		

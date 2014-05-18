@@ -1657,17 +1657,17 @@ class FileList(ItemList):
 		action = gtk.gdk.ACTION_DEFAULT
 		path = None
 		try:
-			path_, position = widget.get_dest_row_at_pos(x, y)
-			under_cursor = self._store.get_iter(path_)
+			path_at_row, position = widget.get_dest_row_at_pos(x, y)
+			under_cursor = self._store.get_iter(path_at_row)
 			if self._store.get_value(under_cursor, Column.IS_DIR):
-				path = path_
+				path = path_at_row
 				action = drag_context.action
 			else:
 				path = self._store.get_path(self._store.iter_parent(under_cursor))
 		except TypeError:
 			pass
 
-		if drag_context.get_source_widget() == widget and path is None:
+		if drag_context.get_source_widget() is widget and path is None:
 			drag_context.drag_status(action, timestamp)
 
 		widget.set_drag_dest_row(path, gtk.TREE_VIEW_DROP_INTO_OR_AFTER)
@@ -1690,12 +1690,12 @@ class FileList(ItemList):
 					}
 			try:
 				path, position = widget.get_dest_row_at_pos(x, y)
-				dest_iter = self._store.get_iter(path)
-				destination = self._store.get_value(dest_iter, Column.NAME)
+				destination_iter = self._store.get_iter(path)
+				destination = self._store.get_value(destination_iter, Column.NAME)
 				destination =  os.path.join(self.path, destination)
-				if self._store.get_value(dest_iter, Column.IS_PARENT_DIR):
+				if self._store.get_value(destination_iter, Column.IS_PARENT_DIR):
 					destination = os.path.dirname(os.path.dirname(destination))
-				elif not self._store.get_value(dest_iter, Column.IS_DIR):
+				elif not self._store.get_value(destination_iter, Column.IS_DIR):
 					destination =  os.path.dirname(os.path.join(self.path, destination))
 
 			except TypeError:

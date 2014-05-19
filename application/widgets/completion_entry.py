@@ -45,6 +45,7 @@ class PathCompletionEntry(gtk.Entry):
 		"""Match function for EntryCompletion"""
 		model = completion.get_model()
 		dir = model.get_value(iter, 0)
+		key = completion.get_entry().get_text()
 		return True if dir and dir.startswith(key) else False
 
 	def _completion_selected(self, completion, model, iter):

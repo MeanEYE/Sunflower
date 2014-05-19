@@ -1,8 +1,10 @@
 import os
+import re
 import gtk
 
 class PathCompletionEntry(gtk.Entry):
 	"""Entry with path completion"""
+	number_split = re.compile('([0-9]+)')
 
 	def __init__(self, application):
 		gtk.Entry.__init__(self)
@@ -10,6 +12,8 @@ class PathCompletionEntry(gtk.Entry):
 		entry_completion = gtk.EntryCompletion()
 		self.set_completion(entry_completion)
 		liststore = gtk.ListStore(str, str)
+		liststore.set_sort_column_id(1, gtk.SORT_ASCENDING)
+		liststore.set_sort_func(1, self._sort_list)
 		entry_completion.set_model(liststore)
 		entry_completion.set_match_func(self._match_completion)
 		cell = gtk.CellRendererText()
@@ -53,3 +57,18 @@ class PathCompletionEntry(gtk.Entry):
 		self.set_text(model[iter][0])
 		self.set_position(-1)
 		return True
+
+	def _sort_list(self, item_list, iter1, iter2, data=None):
+		"""Compare two items for sorting process"""
+
+		value1 = item_list.get_value(iter1, 1)
+		value2 = item_list.get_value(iter2, 1)
+
+		value1 = value1.lower()
+		value1 = [int(part) if part.isdigit() else part for part in self.number_split.split(value1)]
+
+		if value2 is not None:
+			value2 = value2.lower()
+			value2 = [int(part) if part.isdigit() else part for part in self.number_split.split(value2)]
+
+		return cmp(value1, value2)

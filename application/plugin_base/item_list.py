@@ -1528,34 +1528,37 @@ class ItemList(PluginBase):
 		self._parent.set_command_entry_text(selection, True)
 
 	def fill_completion_list(self, entry, entry_completion):
-		completion_list = []
+		model = entry_completion.get_model()
+		model.clear()
 		path = entry.get_text()
+		dirname = os.path.dirname(path)
 
 		if '://' not in path:
 			scheme = 'file'
+
 		else:
 			data = path.split('://', 1)
 			scheme = data[0]
+
 			# for local storage, use path without scheme
 			if scheme == 'file':
 				self.path = data[1]
-		ProviderClass = self._parent.get_provider_by_protocol(scheme)
-		if ProviderClass is not None:
-			provider = ProviderClass(self)
 
-		dirname = os.path.dirname(path)
+		if scheme == self.scheme:
+			# we are working with same provider
+			provider = self.get_provider()
 
-		try :
+		else:
+			# different provider, we need to get it
+			ProviderClass = self._parent.get_provider_by_protocol(scheme)
+
+			if ProviderClass is not None:
+				provider = ProviderClass(self)
+
+		if provider.exists(dirname):
 			for item in provider.list_dir(dirname):
 				if provider.is_dir(item, relative_to=dirname):
-					completion_list.append(item)
-		except:
-			pass
-
-		model = entry_completion.get_model()
-		model.clear()
-		for item in completion_list:
-			model.append([os.path.join(dirname, item), item])
+					model.append([os.path.join(dirname, item), item])
 
 	def match_completion(self, completion, key, iter):
 		model = completion.get_model()

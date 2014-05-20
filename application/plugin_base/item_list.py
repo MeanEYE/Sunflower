@@ -1527,6 +1527,41 @@ class ItemList(PluginBase):
 		selection = self._get_selection(relative=True)
 		self._parent.set_command_entry_text(selection, True)
 
+	def fill_completion_list(self, entry, entry_completion):
+		completion_list = []
+		path = entry.get_text()
+
+		if '://' not in path:
+			scheme = 'file'
+		else:
+			data = path.split('://', 1)
+			scheme = data[0]
+			# for local storage, use path without scheme
+			if scheme == 'file':
+				self.path = data[1]
+		ProviderClass = self._parent.get_provider_by_protocol(scheme)
+		if ProviderClass is not None:
+			provider = ProviderClass(self)
+
+		dirname = os.path.dirname(path)
+
+		try :
+			for item in provider.list_dir(dirname):
+				if provider.is_dir(item, relative_to=dirname):
+					completion_list.append(item)
+		except:
+			pass
+
+		model = entry_completion.get_model()
+		model.clear()
+		for item in completion_list:
+			model.append([os.path.join(dirname, item), item])
+
+	def match_completion(self, completion, key, iter):
+		model = completion.get_model()
+		dir = model.get_value(iter, 0)
+		return True if dir and dir.startswith(key) else False
+
 	def custom_path_entry(self, widget=None, data=None):
 		"""Ask user to enter path"""
 		path = self.path
@@ -1537,6 +1572,16 @@ class ItemList(PluginBase):
 		dialog.set_label(_('Navigate to:'))
 		dialog.set_text(path)
 
+		dialog._entry.set_position(-1)
+		entry_completion = gtk.EntryCompletion()
+		dialog._entry.set_completion(entry_completion)
+		liststore = gtk.ListStore(str, str)
+		entry_completion.set_model(liststore)
+		entry_completion.set_match_func(self.match_completion)
+		cell = gtk.CellRendererText()
+		entry_completion.pack_start(cell)
+		entry_completion.add_attribute(cell, 'text', 1)
+		dialog._entry.connect('changed', self.fill_completion_list, entry_completion)
 		# get user response
 		response = dialog.get_response()
 

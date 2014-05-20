@@ -1562,6 +1562,11 @@ class ItemList(PluginBase):
 		dir = model.get_value(iter, 0)
 		return True if dir and dir.startswith(key) else False
 
+	def completion_selected(self, completion, model, iter):
+		completion.get_entry().set_text(model[iter][0])
+		completion.get_entry().set_position(-1)
+		return True
+
 	def custom_path_entry(self, widget=None, data=None):
 		"""Ask user to enter path"""
 		path = self.path
@@ -1581,6 +1586,7 @@ class ItemList(PluginBase):
 		cell = gtk.CellRendererText()
 		entry_completion.pack_start(cell)
 		entry_completion.add_attribute(cell, 'text', 1)
+		entry_completion.connect('match-selected', self.completion_selected)
 		dialog._entry.connect('changed', self.fill_completion_list, entry_completion)
 		# get user response
 		response = dialog.get_response()

@@ -569,6 +569,7 @@ class CopyDialog:
 		self._source_provider = source_provider
 		self._destination_provider = destination_provider
 
+		self._dialog_size = None
 		self._dialog.set_default_size(340, 10)
 		self._dialog.set_resizable(True)
 		self._dialog.set_skip_taskbar_hint(True)
@@ -578,14 +579,13 @@ class CopyDialog:
 		
 		self._dialog.vbox.set_spacing(0)
 
-		# create additional UI
+		# create additional components
 		vbox = gtk.VBox(False, 0)
 		vbox.set_border_width(5)
 
 		self.label_destination = gtk.Label()
 		self.label_destination.set_alignment(0, 0.5)
 		self.label_destination.set_use_markup(True)
-		self._update_label()
 
 		self.entry_destination = gtk.Entry()
 		self.entry_destination.set_text(path)
@@ -593,7 +593,7 @@ class CopyDialog:
 		self.entry_destination.connect('activate', self._confirm_entry)
 
 		# additional options
-		separator = gtk.HSeparator()
+		separator_file_type = gtk.HSeparator()
 
 		label_type = gtk.Label(_('Only files of this type:'))
 		label_type.set_alignment(0, 0.5)
@@ -601,6 +601,35 @@ class CopyDialog:
 		self.entry_type = gtk.Entry()
 		self.entry_type.set_text('*')
 		self.entry_type.connect('changed', self._update_label)
+
+		# detailed item list
+		separator_details = gtk.HSeparator()
+		list_container = gtk.ScrolledWindow()
+		list_container.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+		list_container.set_shadow_type(gtk.SHADOW_IN)
+
+		expand_details = gtk.Expander()
+		expand_details.set_label(_('Affected item list'))
+		expand_details.connect('activate', self._handle_expand)
+
+		self._affected = gtk.ListStore(str, str)
+		affected_list = gtk.TreeView(model=self._affected)
+		affected_list.set_size_request(-1, 200)
+		affected_list.set_headers_visible(False)
+		affected_list.set_search_column(1)
+		affected_list.set_enable_search(True)
+
+		cell_icon = gtk.CellRendererPixbuf()
+		cell_name = gtk.CellRendererText()
+
+		column_name = gtk.TreeViewColumn()
+		column_name.pack_start(cell_icon, False)
+		column_name.pack_start(cell_name, True)
+		column_name.add_attribute(cell_icon, 'icon-name', 0)
+		column_name.add_attribute(cell_name, 'text', 1)
+		column_name.set_expand(True)
+
+		affected_list.append_column(column_name)
 
 		# create operation options
 		self.checkbox_owner = gtk.CheckButton(_('Set owner on destination'))
@@ -625,7 +654,10 @@ class CopyDialog:
 
 		self._create_buttons()
 
-		# pack UI
+		# pack user interface
+		list_container.add(affected_list)
+		expand_details.add(list_container)
+
 		vbox_silent.pack_start(self.checkbox_merge, False, False, 0)
 		vbox_silent.pack_start(self.checkbox_overwrite, False, False, 0)
 
@@ -633,9 +665,11 @@ class CopyDialog:
 
 		vbox.pack_start(self.label_destination, False, False, 0)
 		vbox.pack_start(self.entry_destination, False, False, 0)
-		vbox.pack_start(separator, False, False, 5)
+		vbox.pack_start(separator_file_type, False, False, 5)
 		vbox.pack_start(label_type, False, False, 0)
 		vbox.pack_start(self.entry_type, False, False, 0)
+		vbox.pack_start(expand_details, False, False, 0)
+		vbox.pack_start(separator_details, False, False, 5)
 		vbox.pack_start(self.checkbox_owner, False, False, 0)
 		vbox.pack_start(self.checkbox_mode, False, False, 0)
 		vbox.pack_start(self.checkbox_timestamp, False, False, 0)
@@ -644,9 +678,13 @@ class CopyDialog:
 
 		self._dialog.vbox.pack_start(vbox, False, False, 0)
 
+		# prepare dialog
+		self._update_label()
 		self._load_configuration()
 
 		self._dialog.set_default_response(gtk.RESPONSE_OK)
+
+		# show all widgets
 		self._dialog.show_all()
 
 	def _load_configuration(self):
@@ -752,6 +790,16 @@ class CopyDialog:
 	def _toggled_silent_mode(self, widget, container):
 		"""Set container sensitivity based on widget status"""
 		container.set_sensitive(widget.get_active())
+
+	def _handle_expand(self, widget, data=None):
+		"""Handle expanding and collapsing affected list."""
+		if widget.get_expanded():
+			self._dialog.set_size_request(1, 1)
+			self._dialog.resize(*self._dialog_size)
+
+		else:
+			self._dialog_size = self._dialog.get_size()
+			self._dialog.set_size_request(-1, -1)
 		
 	def _get_text_variables(self, count):
 		"""Get text variables for update"""
@@ -797,28 +845,32 @@ class CopyDialog:
 		if self.entry_destination.get_text() != '':
 			self._dialog.response(gtk.RESPONSE_OK)
 
-	def _get_item_count(self):
-		"""Count number of items to copy"""
-		selected_items = self._source_provider.get_selection()
-		result = len(selected_items)
-
-		if hasattr(self, 'entry_type'):
-			matches = fnmatch.filter(selected_items, self.entry_type.get_text())
-			result = len(matches)
-
-		return result
-
 	def _update_label(self, widget=None, data=None):
 		"""Update label based on file type and selection"""
-		# get item count
-		item_count = self._get_item_count()
+		icon_manager = self._application.icon_manager
+		source_provider = self._source_provider
 
-		# get label text
+		# get affected items
+		pattern = self.entry_type.get_text()
+		match_function = lambda item: source_provider.is_dir(item) or fnmatch.fnmatch(item, pattern) 
+		affected_items = filter(match_function, source_provider.get_selection())
+		item_count = len(affected_items)
+
+		# change title and label
 		title, label = self._get_text_variables(item_count)
 
-		# apply text
 		self.set_title(title)
 		self.label_destination.set_markup(label.format(item_count))
+
+		# populate list
+		self._affected.clear()
+		for item in affected_items:
+			if source_provider.is_dir(item):
+				icon = icon_manager.get_icon_for_directory(item)
+			else:
+				icon = icon_manager.get_icon_for_file(item)
+
+			self._affected.append((icon, os.path.basename(item)))
 
 	def set_title(self, title_text):
 		"""Set dialog title"""

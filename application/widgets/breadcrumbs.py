@@ -47,19 +47,13 @@ class Breadcrumbs(gtk.HBox):
 		self.pack_start(self._path_object, True, True)
 		self.show_all()
 	
-	def __get_color(self, color):
+	def __get_color(self, background, foreground):
 		"""Calculate color for the part history part of the path"""
-		value = color.value
-		saturation = color.saturation
+		red = (background.red + foreground.red) / 2
+		green = (background.green + foreground.green) / 2
+		blue = (background.blue + foreground.blue) / 2
 
-		if saturation > 0.3:
-			saturation = saturation / 2.0
-			value = value * 1.5
-
-		else:
-			value = value / 1.5 if value > 0.5 else value * 1.5
-
-		return gtk.gdk.color_from_hsv(color.hue, saturation, value)
+		return gtk.gdk.Color(red, green, blue)
 
 	def __realize_event(self, widget, data=None):
 		"""Resize drawing area when object is realized"""
@@ -205,7 +199,7 @@ class Breadcrumbs(gtk.HBox):
 	def apply_color(self, colors):
 		"""Apply colors to all bread crumbs"""
 		self._colors = colors
-		self._smart_color = self.__get_color(colors[0])
+		self._smart_color = self.__get_color(*colors)
 
 	def apply_settings(self):
 		"""Method called when system applies new settings"""

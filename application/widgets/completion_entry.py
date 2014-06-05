@@ -2,6 +2,7 @@ import os
 import gtk
 
 class PathCompletionEntry(gtk.Entry):
+	"""Entry with path completion"""
 
 	def __init__(self, application):
 		gtk.Entry.__init__(self)
@@ -18,6 +19,7 @@ class PathCompletionEntry(gtk.Entry):
 		self.connect('changed', self._fill_completion_list, entry_completion)
 
 	def _fill_completion_list(self, entry, entry_completion):
+		"""Populate a list of file names from entered path"""
 		model = entry_completion.get_model()
 		model.clear()
 		path = entry.get_text()
@@ -40,11 +42,13 @@ class PathCompletionEntry(gtk.Entry):
 						model.append([os.path.join(dirname, item), item])
 
 	def _match_completion(self, completion, key, iter):
+		"""Match function for EntryCompletion"""
 		model = completion.get_model()
 		dir = model.get_value(iter, 0)
 		return True if dir and dir.startswith(key) else False
 
 	def _completion_selected(self, completion, model, iter):
+		"""Paste selected path to entry"""
 		self.set_text(model[iter][0])
 		self.set_position(-1)
 		return True

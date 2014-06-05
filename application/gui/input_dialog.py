@@ -7,6 +7,7 @@ import user
 
 from plugin_base.provider import FileType, Support as ProviderSupport
 from common import get_user_directory, UserDirectory
+from widgets.completion_entry import PathCompletionEntry
 
 # constants
 class OverwriteOption:
@@ -1702,3 +1703,80 @@ class ApplicationSelectDialog:
 		self._dialog.destroy()
 
 		return code, is_custom, command
+
+class PathInputDialog():
+	def __init__(self, application):
+		self._dialog = gtk.Dialog(parent=application)
+
+		self._application = application
+
+		self._dialog.set_default_size(340, 10)
+		self._dialog.set_resizable(True)
+		self._dialog.set_skip_taskbar_hint(True)
+		self._dialog.set_modal(True)
+		self._dialog.set_transient_for(application)
+		self._dialog.set_wmclass('Sunflower', 'Sunflower')
+
+		self._dialog.vbox.set_spacing(0)
+
+		self._container = gtk.VBox(False, 0)
+		self._container.set_border_width(5)
+
+		# create interface
+		vbox = gtk.VBox(False, 0)
+		self._label = gtk.Label('Label')
+		self._label.set_alignment(0, 0.5)
+
+		self._entry = PathCompletionEntry(application)
+		self._entry.connect('activate', self._confirm_entry)
+
+		button_ok = gtk.Button(stock=gtk.STOCK_OK)
+		button_ok.connect('clicked', self._confirm_entry)
+		button_ok.set_can_default(True)
+
+		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
+
+		# pack interface
+		vbox.pack_start(self._label, False, False, 0)
+		vbox.pack_start(self._entry, False, False, 0)
+
+		self._container.pack_start(vbox, False, False, 0)
+
+		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self._dialog.action_area.pack_end(button_ok, False, False, 0)
+		self._dialog.set_default_response(gtk.RESPONSE_OK)
+
+		self._dialog.vbox.pack_start(self._container, True, True, 0)
+		self._dialog.show_all()
+
+	def _confirm_entry(self, widget, data=None):
+		"""Enable user to confirm by pressing Enter"""
+		if self._entry.get_text() != '':
+			self._dialog.response(gtk.RESPONSE_OK)
+
+	def set_title(self, title_text):
+		"""Set dialog title"""
+		self._dialog.set_title(title_text)
+
+	def set_label(self, label_text):
+		"""Provide an easy way to set label text"""
+		self._label.set_text(label_text)
+
+	def set_text(self, entry_text):
+		"""Set main entry text"""
+		self._entry.set_text(entry_text)
+		self._entry.set_position(-1)
+
+	def get_response(self):
+		"""Return value and self-destruct
+
+		This method returns tuple with response code and
+		input text.
+
+		"""
+		code = self._dialog.run()
+		result = self._entry.get_text()
+
+		self._dialog.destroy()
+
+		return (code, result)

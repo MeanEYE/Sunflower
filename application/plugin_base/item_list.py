@@ -8,7 +8,7 @@ from operation import CopyOperation, MoveOperation
 from accelerator_group import AcceleratorGroup
 from parameters import Parameters
 from tools.viewer import Viewer
-from gui.input_dialog import CopyDialog, MoveDialog, InputDialog
+from gui.input_dialog import CopyDialog, MoveDialog, InputDialog, PathInputDialog
 from gui.preferences.display import StatusVisible
 from gui.history_list import HistoryList
 from history import HistoryManager
@@ -1532,7 +1532,7 @@ class ItemList(PluginBase):
 		path = self.path
 
 		# create dialog
-		dialog = InputDialog(self._parent)
+		dialog = PathInputDialog(self._parent)
 		dialog.set_title(_('Path entry'))
 		dialog.set_label(_('Navigate to:'))
 		dialog.set_text(path)

@@ -20,9 +20,6 @@ if application_path not in sys.path:
 # initialize threads
 gtk.gdk.threads_init()
 
-# change working directory
-os.chdir(os.path.dirname(application_path))
-
 # construct main application object
 from gui.main_window import MainWindow
 

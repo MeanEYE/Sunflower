@@ -1705,9 +1705,7 @@ class ApplicationSelectDialog:
 		return code, is_custom, command
 
 class PathInputDialog():
-	"""
-	Input Dialog with path completion entry
-	"""
+	"""Input Dialog with path completion entry"""
 	def __init__(self, application):
 		self._dialog = gtk.Dialog(parent=application)
 

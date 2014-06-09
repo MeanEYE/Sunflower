@@ -144,7 +144,7 @@ class ItemList(PluginBase):
 
 		# connect events
 		self._item_list.connect('button-press-event', self._handle_button_press)
-		self._item_list.connect('button-release-event', self._handle_button_press)
+		self.button_press_handler = self._item_list.connect('button-release-event', self._handle_button_press)
 		self._item_list.connect('cursor-changed', self._handle_cursor_change)
 		self._item_list.connect('columns-changed', self._column_changed)
 		self._connect_main_object(self._item_list)

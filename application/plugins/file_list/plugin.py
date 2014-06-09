@@ -1783,8 +1783,7 @@ class FileList(ItemList):
 
 	def _get_supported_drag_actions(self):
 		"""Return integer representing supported drag'n'drop actions"""
-		return gtk.gdk.ACTION_COPY | gtk.gdk.ACTION_MOVE | gtk.gdk.ACTION_ASK  # | gtk.gdk.ACTION_LINK # add later
-		return gtk.gdk.ACTION_COPY | gtk.gdk.ACTION_MOVE | gtk.gdk.ACTION_LINK
+		return gtk.gdk.ACTION_COPY | gtk.gdk.ACTION_MOVE | gtk.gdk.ACTION_ASK | gtk.gdk.ACTION_LINK
 
 	def _load_directory(self, path, parent=None, clear_store=False):
 		"""Load directory content into store"""

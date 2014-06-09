@@ -1674,15 +1674,6 @@ class FileList(ItemList):
 
 		return True
 
-
-	def _drag_begin(self, widget, drag_context):
-		"""Handle start of drag and drop operation"""
-		self._item_list.handler_block(self.button_press_handler)
-
-	def _drag_end(self, widget, drag_context, data=None):
-		"""Handle the end of drag and drop operation"""
-		self._item_list.handler_unblock(self.button_press_handler)
-
 	def _drag_ask(self):
 		"""Show popup menu and return selected action"""
 		result = []

@@ -144,7 +144,7 @@ class ItemList(PluginBase):
 
 		# connect events
 		self._item_list.connect('button-press-event', self._handle_button_press)
-		self.button_press_handler = self._item_list.connect('button-release-event', self._handle_button_press)
+		self._item_list.connect('button-release-event', self._handle_button_press)
 		self._item_list.connect('cursor-changed', self._handle_cursor_change)
 		self._item_list.connect('columns-changed', self._column_changed)
 		self._connect_main_object(self._item_list)
@@ -567,14 +567,14 @@ class ItemList(PluginBase):
 			elif event.type is gtk.gdk.BUTTON_RELEASE:
 				# button was released, depending on options call specific method
 				time_valid = event.get_time() - self._popup_timestamp > 500
+				if event.x and event.y:
+					if not right_click_select or (right_click_select and time_valid):
+						# show popup menu
+						self._show_popup_menu(widget)
 
-				if not right_click_select or (right_click_select and time_valid):
-					# show popup menu
-					self._show_popup_menu(widget)
-
-				else:
-					# toggle item mark
-					self._toggle_selection(widget, advance=False)
+					else:
+						# toggle item mark
+						self._toggle_selection(widget, advance=False)
 
 				result = True
 

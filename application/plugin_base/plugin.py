@@ -52,6 +52,11 @@ class PluginBase(gtk.VBox):
 		if self._parent.options.get('show_status_bar') == StatusVisible.ALWAYS:
 			self._status_bar.show()
 
+		#lock options
+		self._lock = self._options.get('lock')
+		if self.is_locked():
+			self.lock()
+
 		# pack interface
 		self.pack_start(self._title_bar.get_container(), False, False, 0)
 		self.pack_end(self._status_bar, False, False, 0)
@@ -271,6 +276,7 @@ class PluginBase(gtk.VBox):
 
 	def _handle_tab_close(self):
 		"""Method called before tab is removed"""
+		self._options.set('lock', self._lock)
 		for group in self._accelerator_groups:
 			group.deactivate()
 
@@ -305,3 +311,17 @@ class PluginBase(gtk.VBox):
 			result = True
 
 		return result
+
+	def lock(self):
+		"""Lock tab"""
+		self._lock = True
+		self._tab_label.lock()
+
+	def unlock(self):
+		"""Unlock tab"""
+		self._lock = False
+		self._tab_label.unlock()
+
+	def is_locked(self):
+		"""Return the status of lock"""
+		return self._lock

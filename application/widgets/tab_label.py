@@ -71,8 +71,6 @@ class TabLabel:
 		"""Lock or Unlock tab"""
 		self._parent.unlock() if self._parent.is_locked() else self._parent.lock()
 
-	def _reload(self, widget=None, data=None):
-		self._parent.reload()
 	def _show_menu(self):
 		menu = gtk.Menu()
 		menu_manager = self._application.menu_manager

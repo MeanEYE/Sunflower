@@ -245,6 +245,14 @@ class PluginBase(gtk.VBox):
 		self._parent.close_tab(self._notebook, self)
 		return True
 
+	def _move_tab(self, widget=None, data=None):
+		"""Move tab to opposite panel"""
+		new_notebook = self._parent.left_notebook if self._notebook == self._parent.right_notebook\
+												else self._parent.right_notebook
+		page_num = self._notebook.page_num(self)
+		self._notebook.remove_page(page_num)
+		new_notebook.append_page(self, self.get_tab_label())
+
 	def _handle_key_press(self, widget, event):
 		"""Handles key events in item list"""
 		result = False

@@ -80,6 +80,10 @@ class TabLabel:
 						'callback': self._lock,
 					},
 					{
+						'label': _('Move to opposite panel'),
+						'callback': self._parent._move_tab,
+					},
+					{
 						'type': 'separator'
 					},
 					{

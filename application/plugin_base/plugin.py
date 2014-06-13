@@ -252,6 +252,8 @@ class PluginBase(gtk.VBox):
 		page_num = self._notebook.page_num(self)
 		self._notebook.remove_page(page_num)
 		new_notebook.append_page(self, self.get_tab_label())
+		new_notebook.set_tab_reorderable(self, True)
+		new_notebook.set_tab_detachable(self, True)
 
 	def _handle_key_press(self, widget, event):
 		"""Handles key events in item list"""

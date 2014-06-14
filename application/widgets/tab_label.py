@@ -80,6 +80,10 @@ class TabLabel:
 						'callback': self._lock,
 					},
 					{
+						'label': _('Duplicate tab'),
+						'callback': self._parent._duplicate_tab,
+					},
+					{
 						'label': _('Move to opposite panel'),
 						'callback': self._parent._move_tab,
 					},

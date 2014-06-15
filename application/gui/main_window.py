@@ -923,6 +923,9 @@ class MainWindow(gtk.Window):
 		if self.options.get('expand_tabs') == TabExpand.ALL:
 			notebook.child_set_property(child, 'tab-expand', True)
 
+		notebook.set_tab_reorderable(child, True)
+		notebook.set_tab_detachable(child, True)
+
 	def _page_switched(self, notebook, page, page_num, data=None):
 		"""Handle switching pages"""
 		current_page = notebook.get_nth_page(notebook.get_current_page())
@@ -1760,8 +1763,6 @@ class MainWindow(gtk.Window):
 
 		# add page to notebook
 		index = notebook.append_page(new_tab, new_tab.get_tab_label())
-		notebook.set_tab_reorderable(new_tab, True)
-		notebook.set_tab_detachable(new_tab, True)
 
 		# show tabs if needed
 		if not self.options.get('always_show_tabs'):
@@ -1823,7 +1824,7 @@ class MainWindow(gtk.Window):
 
 	def close_tab(self, notebook, child, can_close_all=False):
 		"""Safely remove tab and its children"""
-		if (not can_close_all and notebook.get_n_pages() > 1) or can_close_all:
+		if (not can_close_all and notebook.get_n_pages() > 1 and not child.is_locked()) or can_close_all:
 			# call tab close handle method
 			if hasattr(child, '_handle_tab_close'):
 				child._handle_tab_close()
@@ -1841,6 +1842,11 @@ class MainWindow(gtk.Window):
 
 			# kill the component
 			child.destroy()
+
+	def close_all_tabs(self, notebook, excluded=None):
+		tabs = notebook.get_children()
+		tabs = filter(lambda tab: not tab.is_locked() and tab is not excluded, tabs)
+		map(lambda tab: self.close_tab(notebook, tab), tabs)
 
 	def next_tab(self, notebook):
 		"""Select next tab on given notebook"""
@@ -2350,6 +2356,10 @@ class MainWindow(gtk.Window):
 	def get_right_object(self):
 		"""Return active tab from right notebook"""
 		return self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
+
+	def get_opposite_notebook(self, notebook):
+		"""Return opposite notebook"""
+		return self.left_notebook if notebook is self.right_notebook else self.right_notebook
 
 	def delegate_to_objects(self, caller, method_name, *args):
 		"""Call specified method_name on all active objects of same class as caller

@@ -2144,7 +2144,7 @@ class MainWindow(gtk.Window):
 
 		# generate plugins paths
 		self.user_plugin_path = os.path.join(self.config_path, 'user_plugins')
-		self.system_plugin_path = os.path.abspath(os.path.join('application', 'plugins'))
+		self.system_plugin_path = os.path.join(os.path.dirname(sys.argv[0]), 'plugins')
 
 		# create config parsers
 		self.options = Config('config', self)

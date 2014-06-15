@@ -1674,15 +1674,55 @@ class FileList(ItemList):
 
 		return True
 
+	def _drag_ask(self):
+		"""Show popup menu and return selected action"""
+		result = []
+		def action_selected(widget, selected_action):
+			result.append(selected_action)
+
+		actions = ({'action': gtk.gdk.ACTION_COPY, 'name': _('Copy here'), 'icon': 'stock_folder-copy'},
+					{'action': gtk.gdk.ACTION_MOVE, 'name': _('Move here'), 'icon': 'stock_folder-move'},
+					{'action': gtk.gdk.ACTION_LINK, 'name': _('Link here'), 'icon': None})
+
+
+		menu = gtk.Menu()
+		for action in actions:
+			menu_item = gtk.ImageMenuItem()
+
+			if action['icon']:
+				image = gtk.image_new_from_icon_name(action['icon'], gtk.ICON_SIZE_MENU)
+				menu_item.set_image(image)
+
+			menu_item.set_label(action['name'])
+			menu_item.connect('activate', action_selected, action['action'])
+			menu.append(menu_item)
+
+		menu.append(gtk.SeparatorMenuItem())
+		menu_item = gtk.ImageMenuItem()
+		menu_item.set_label(_('Cancel'))
+		image = gtk.image_new_from_stock(gtk.STOCK_CANCEL, gtk.ICON_SIZE_MENU)
+		menu_item.set_image(image)
+		menu.append(menu_item)
+
+		menu.show_all()
+		menu.connect('deactivate', gtk.main_quit)
+		menu.popup(None, None, None, 1, 0)
+		gtk.main()
+
+		return result[0] if result else None
+
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""
+		action = drag_context.action
 		item_list = selection_data.data.splitlines(False)
-
+		result = False
 		# prepare data for copying
 		protocol, path = item_list[0].split('://', 1)
-
 		# handle data
-		if drag_context.action in (gtk.gdk.ACTION_COPY, gtk.gdk.ACTION_MOVE):
+		if action is gtk.gdk.ACTION_ASK:
+			action = self._drag_ask()
+
+		if action in (gtk.gdk.ACTION_COPY, gtk.gdk.ACTION_MOVE):
 			# handle copy and move operations
 			operation = {
 						gtk.gdk.ACTION_COPY: 'copy',
@@ -1702,13 +1742,13 @@ class FileList(ItemList):
 				destination = self.path
 
 			result = self._handle_external_data(
-											operation[drag_context.action],
+											operation[action],
 											protocol,
 											item_list,
 											destination
 										)
 
-		elif drag_context.action is gtk.gdk.ACTION_LINK:
+		elif action is gtk.gdk.ACTION_LINK:
 			# handle linking
 			result = self._create_link(original_path=path)
 
@@ -1734,7 +1774,7 @@ class FileList(ItemList):
 
 	def _get_supported_drag_actions(self):
 		"""Return integer representing supported drag'n'drop actions"""
-		return gtk.gdk.ACTION_COPY | gtk.gdk.ACTION_MOVE | gtk.gdk.ACTION_LINK
+		return gtk.gdk.ACTION_COPY | gtk.gdk.ACTION_MOVE | gtk.gdk.ACTION_ASK | gtk.gdk.ACTION_LINK
 
 	def _load_directory(self, path, parent=None, clear_store=False):
 		"""Load directory content into store"""

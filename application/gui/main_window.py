@@ -2357,6 +2357,10 @@ class MainWindow(gtk.Window):
 		"""Return active tab from right notebook"""
 		return self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
 
+	def get_opposite_notebook(self, notebook):
+		"""Return opposite notebook"""
+		return self.left_notebook if notebook is self.right_notebook else self.right_notebook
+
 	def delegate_to_objects(self, caller, method_name, *args):
 		"""Call specified method_name on all active objects of same class as caller
 

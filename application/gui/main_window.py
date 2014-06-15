@@ -923,6 +923,9 @@ class MainWindow(gtk.Window):
 		if self.options.get('expand_tabs') == TabExpand.ALL:
 			notebook.child_set_property(child, 'tab-expand', True)
 
+		notebook.set_tab_reorderable(child, True)
+		notebook.set_tab_detachable(child, True)
+
 	def _page_switched(self, notebook, page, page_num, data=None):
 		"""Handle switching pages"""
 		current_page = notebook.get_nth_page(notebook.get_current_page())
@@ -1760,8 +1763,6 @@ class MainWindow(gtk.Window):
 
 		# add page to notebook
 		index = notebook.append_page(new_tab, new_tab.get_tab_label())
-		notebook.set_tab_reorderable(new_tab, True)
-		notebook.set_tab_detachable(new_tab, True)
 
 		# show tabs if needed
 		if not self.options.get('always_show_tabs'):

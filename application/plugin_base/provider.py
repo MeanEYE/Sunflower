@@ -1,6 +1,7 @@
 import os
 
 from collections import namedtuple
+from monitor import Monitor
 
 
 FileInfo = namedtuple(

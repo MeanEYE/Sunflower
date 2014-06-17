@@ -585,14 +585,14 @@ class ItemList(PluginBase):
 			elif event.type is gtk.gdk.BUTTON_RELEASE:
 				# button was released, depending on options call specific method
 				time_valid = event.get_time() - self._popup_timestamp > 500
+				if event.x and event.y:
+					if not right_click_select or (right_click_select and time_valid):
+						# show popup menu
+						self._show_popup_menu(widget)
 
-				if not right_click_select or (right_click_select and time_valid):
-					# show popup menu
-					self._show_popup_menu(widget)
-
-				else:
-					# toggle item mark
-					self._toggle_selection(widget, advance=False)
+					else:
+						# toggle item mark
+						self._toggle_selection(widget, advance=False)
 
 				result = True
 

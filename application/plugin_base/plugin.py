@@ -52,6 +52,11 @@ class PluginBase(gtk.VBox):
 		if self._parent.options.get('show_status_bar') == StatusVisible.ALWAYS:
 			self._status_bar.show()
 
+		#lock options
+		self._lock = self._options.get('lock')
+		if self.is_locked():
+			self.lock()
+
 		# pack interface
 		self.pack_start(self._title_bar.get_container(), False, False, 0)
 		self.pack_end(self._status_bar, False, False, 0)
@@ -89,7 +94,7 @@ class PluginBase(gtk.VBox):
 									)
 
 			self._main_object.drag_source_set(
-										gtk.gdk.BUTTON1_MASK,
+										gtk.gdk.BUTTON1_MASK | gtk.gdk.BUTTON3_MASK,
 										types,
 										actions
 									)
@@ -240,6 +245,13 @@ class PluginBase(gtk.VBox):
 		self._parent.close_tab(self._notebook, self)
 		return True
 
+	def _move_tab(self, widget=None, data=None):
+		"""Move tab to opposite panel"""
+		notebook = self._parent.get_opposite_notebook(self._notebook)
+		page_num = self._notebook.page_num(self)
+		self._notebook.remove_page(page_num)
+		notebook.append_page(self, self.get_tab_label())
+
 	def _handle_key_press(self, widget, event):
 		"""Handles key events in item list"""
 		result = False
@@ -271,6 +283,7 @@ class PluginBase(gtk.VBox):
 
 	def _handle_tab_close(self):
 		"""Method called before tab is removed"""
+		self._options.set('lock', self._lock)
 		for group in self._accelerator_groups:
 			group.deactivate()
 
@@ -305,3 +318,17 @@ class PluginBase(gtk.VBox):
 			result = True
 
 		return result
+
+	def lock(self):
+		"""Lock tab"""
+		self._lock = True
+		self._tab_label.lock()
+
+	def unlock(self):
+		"""Unlock tab"""
+		self._lock = False
+		self._tab_label.unlock()
+
+	def is_locked(self):
+		"""Return the status of lock"""
+		return self._lock

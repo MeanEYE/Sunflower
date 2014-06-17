@@ -251,7 +251,7 @@ class EmblemManager:
 		cursor = self._get_cursor()
 
 		# get all the items in path
-		cursor.execute('SELECT id, name FROM items WHERE path=?', (path,))
+		cursor.execute('SELECT id, name FROM items WHERE path=?', (unicode(path),))
 		items = cursor.fetchall()
 
 		# exit if there are no items in path

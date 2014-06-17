@@ -1130,7 +1130,8 @@ class MainWindow(gtk.Window):
 	def _load_translation(self):
 		"""Load translation and install global functions"""
 		# get directory for translations
-		directory = os.path.abspath('translations')
+		base_path = os.path.dirname(os.path.dirname(sys.argv[0]))
+		directory = os.path.join(base_path, 'translations')
 
 		# function params
 		params = {

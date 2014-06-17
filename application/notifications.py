@@ -1,4 +1,5 @@
 import os
+import sys
 
 try:
 	import pynotify
@@ -25,7 +26,9 @@ class NotificationManager:
 
 		else:
 			# use local icon
+			base_path = os.path.dirname(os.path.dirname(sys.argv[0]))
 			icon_file = os.path.abspath(os.path.join(
+								base_path,
 								'images',
 								'sunflower_64.png'
 			                ))

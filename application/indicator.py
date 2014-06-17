@@ -1,18 +1,21 @@
 import os
+import sys
 import gtk
 
 
 class Indicator(object):
 	"""This class provides access to application indicators in Gnome envirnoments"""
 
-	_icon = 'sunflower_64.png'
-	_icon_path = os.path.abspath('images')
-	_indicator = None
-
 	def __init__(self, parent):
 		self._parent = parent
 		self._menu = gtk.Menu()
 		self._create_menu_items()
+
+		base_path = os.path.dirname(os.path.dirname(sys.argv[0]))
+
+		self._icon = 'sunflower_64.png'
+		self._icon_path = os.path.abspath(os.path.join(base_path, 'images'))
+		self._indicator = None
 
 		if self._parent.window_options.section('main').get('hide_on_close'):
 			self._indicator = gtk.StatusIcon()

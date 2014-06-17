@@ -3,6 +3,7 @@
 import os
 import gtk
 import pango
+import sys
 
 from collections import namedtuple
 
@@ -159,8 +160,9 @@ class AboutWindow:
 		# store parent locally, we'll need it later
 		version = '{0[major]}.{0[minor]}{0[stage]} ({0[build]})'.format(parent.version)
 
+		base_path = os.path.dirname(os.path.dirname(sys.argv[0]))
 		image = gtk.Image()
-		image.set_from_file(os.path.abspath(os.path.join('images', 'splash.png')))
+		image.set_from_file(os.path.abspath(os.path.join(base_path, 'images', 'splash.png')))
 
 		# configure dialog
 		self._dialog.set_resizable(False)

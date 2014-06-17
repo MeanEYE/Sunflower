@@ -380,6 +380,22 @@ class FileList(ItemList):
 		# cancel current directory monitor
 		self.cancel_monitors()
 
+	def _handle_emblem_toggle(self, widget, emblem=None):
+		"""Handle toggling emblem for selected item."""
+		selection = self._get_selection(relative=True, files_only=False)
+		path = self._options.get('path')
+
+		# make sure we have emblem specified
+		if emblem is None:
+			return
+
+		# toggle emblem
+		self._parent.emblem_manager.toggle_emblem(path, selection, emblem)
+
+		# notify monitor about change
+		queue = self.get_monitor().get_queue()
+		queue.put((MonitorSignals.EMBLEM_CHANGED, os.path.join(path, selection), None))
+
 	def _execute_selected_item(self, widget=None, data=None):
 		"""Execute/Open selected item"""
 		selection = self._item_list.get_selection()
@@ -1117,6 +1133,25 @@ class FileList(ItemList):
 		self._rename_item.set_sensitive(not is_parent)
 		self._delete_item.set_sensitive(not is_parent)
 		self._properties_item.set_sensitive(not is_parent)
+
+	def _prepare_emblem_menu(self):
+		"""Prepare emblem menu."""
+		emblem_list = self._parent.emblem_manager.get_available_emblems()
+
+		for emblem in emblem_list:
+			# create image
+			image = gtk.Image()
+			image.set_from_icon_name(emblem, gtk.ICON_SIZE_MENU)
+
+			# create menu item
+			menu_item = gtk.ImageMenuItem(emblem)
+			menu_item.set_image(image)
+			menu_item.connect('activate', self._handle_emblem_toggle, emblem)
+
+			# add emblem to menu
+			self._emblem_menu.append(menu_item)
+
+		self._emblem_menu.show_all()
 
 	def _get_popup_menu_position(self, menu=None, data=None):
 		"""Positions menu properly for given row"""

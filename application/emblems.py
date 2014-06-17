@@ -136,6 +136,16 @@ class EmblemManager:
 
 		return result
 
+	def toggle_emblem(self, path, item_name, emblem):
+		"""Toggle emblem on specified item."""
+		emblems = self.get_emblems(path, item_name)
+
+		if emblems is not None and emblem in emblems:
+			self.remove_emblem(path, item_name, emblem)
+
+		else:
+			self.add_emblem(path, item_name, emblem)
+
 	def set_emblems(self, path, item_name, emblems):
 		"""Set multiple emblems at the same time."""
 		self.clear_emblems(path, item_name, remove_item=False)

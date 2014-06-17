@@ -212,6 +212,10 @@ class ItemList(PluginBase):
 		# history menu
 		self._history_menu = gtk.Menu()
 
+		# emblem menu
+		self._emblem_menu = gtk.Menu()
+		self._prepare_emblem_menu()
+
 		# pack gui
 		self.pack_start(self._container, True, True, 0)
 		self.pack_start(self._search_panel, False, False, 0)
@@ -281,6 +285,7 @@ class ItemList(PluginBase):
 		group.add_method('expand_directory', _('Expand directory'), self._expand_directory)
 		group.add_method('collapse_directory', _('Collapse directory'), self._collapse_directory)
 		group.add_method('create_link', _('Create symbolic or hard link'), self._create_link)
+		group.add_method('show_emblem_menu', _('Show emblem menu'), self._show_emblem_menu)
 
 		# configure accelerators
 		group.set_accelerator('execute_item', keyval('Return'), 0)
@@ -332,6 +337,7 @@ class ItemList(PluginBase):
 		group.set_accelerator('expand_directory', keyval('Right'), 0)
 		group.set_accelerator('collapse_directory', keyval('Left'), 0)
 		group.set_accelerator('create_link', keyval('F7'), gtk.gdk.SHIFT_MASK)
+		group.set_accelerator('show_emblem_menu', keyval('e'), gtk.gdk.CONTROL_MASK)
 
 		# create bookmark accelerators
 		group.add_method('bookmark_home', _("Go to '{0}'"), self._parent.activate_bookmark, 0)
@@ -390,6 +396,18 @@ class ItemList(PluginBase):
 	def _show_tab_menu(self, widget, data=None):
 		"""Show title bar menu"""
 		self._title_bar.show_menu()
+		return True
+
+	def _show_emblem_menu(self, widget, data=None):
+		"""Show quick emblem selection menu."""
+		if data is not None:
+			# if this method is called by accelerator data is actually keyval
+			self._emblem_menu.popup(None, None, self._get_popup_menu_position, 1, 0)
+
+		else:
+			# if called by mouse, we don't have the need to position the menu manually
+			self._emblem_menu.popup(None, None, None, 1, 0)
+
 		return True
 
 	def _reorder_columns(self, order=None):
@@ -1189,6 +1207,10 @@ class ItemList(PluginBase):
 
 		# show all menu items
 		self._history_menu.show_all()
+
+	def _prepare_emblem_menu(self):
+		"""Prepare emblem menu."""
+		pass
 
 	def _show_open_with_menu(self, widget, data=None):
 		"""Show 'open with' menu"""

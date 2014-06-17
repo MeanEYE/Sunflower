@@ -47,8 +47,8 @@ class CellRendererEmblems(gtk.CellRenderer):
 		# cache constants locally
 		icon_size = self.icon_size
 		spacing = self.spacing
-		emblems = self.emblems
 		icon_theme = gtk.icon_theme_get_default()
+		emblems = filter(lambda emblem: icon_theme.has_icon(emblem), self.emblems)
 		context = window.cairo_create()
 
 		# position of next icon

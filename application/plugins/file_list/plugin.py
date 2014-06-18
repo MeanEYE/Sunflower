@@ -1771,7 +1771,7 @@ class FileList(ItemList):
 				if self._store.get_value(destination_iter, Column.IS_PARENT_DIR):
 					destination = os.path.dirname(os.path.dirname(destination))
 				elif not self._store.get_value(destination_iter, Column.IS_DIR):
-					destination =  os.path.dirname(os.path.join(self.path, destination))
+					destination =  os.path.dirname(destination)
 
 			except TypeError:
 				destination = self.path

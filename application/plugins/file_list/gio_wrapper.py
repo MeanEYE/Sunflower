@@ -12,6 +12,8 @@ class File:
 			self._resource = gio.File(path).read()
 
 		elif mode == Mode.WRITE:
+			if gio.File(path).query_exists():
+				gio.File(path).delete()
 			self._resource = gio.File(path).create()
 
 		elif mode == Mode.APPEND:

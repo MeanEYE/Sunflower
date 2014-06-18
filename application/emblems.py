@@ -51,6 +51,7 @@ class EmblemManager:
 
 		# connect to database
 		result = sql.connect(database_file, check_same_thread=False)
+		result.text_factory = str
 
 		return result
 
@@ -253,7 +254,7 @@ class EmblemManager:
 		cursor = self._get_cursor()
 
 		# get all the items in path
-		cursor.execute('SELECT id, name FROM items WHERE path=?', (unicode(path),))
+		cursor.execute('SELECT id, name FROM items WHERE path=?', (path,))
 		items = cursor.fetchall()
 
 		# exit if there are no items in path

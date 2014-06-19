@@ -14,8 +14,6 @@ check how many parts of path exist and cache that and skip the rest of the files
 - Create option to duplicate selected file with new name. In cases where both left and right path
 are same and only one file is selected offer this option by default.
 
-- Tab menu: Lock, close, close others
-
 - Monitor history file and reload when needed
 
 - Remove duplicates from history file when loading

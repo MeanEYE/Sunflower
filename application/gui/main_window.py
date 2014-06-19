@@ -1825,7 +1825,7 @@ class MainWindow(gtk.Window):
 
 	def close_tab(self, notebook, child, can_close_all=False):
 		"""Safely remove tab and its children"""
-		if (not can_close_all and notebook.get_n_pages() > 1 and not child.is_locked()) or can_close_all:
+		if (not can_close_all and notebook.get_n_pages() > 1 and not child.is_tab_locked()) or can_close_all:
 			# call tab close handle method
 			if hasattr(child, '_handle_tab_close'):
 				child._handle_tab_close()
@@ -1846,7 +1846,7 @@ class MainWindow(gtk.Window):
 
 	def close_all_tabs(self, notebook, excluded=None):
 		tabs = notebook.get_children()
-		tabs = filter(lambda tab: not tab.is_locked() and tab is not excluded, tabs)
+		tabs = filter(lambda tab: not tab.is_tab_locked() and tab is not excluded, tabs)
 		map(lambda tab: self.close_tab(notebook, tab), tabs)
 
 	def next_tab(self, notebook):

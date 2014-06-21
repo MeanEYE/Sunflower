@@ -1,5 +1,4 @@
 import os
-import imp
 import sys
 import gtk
 import pango
@@ -11,6 +10,7 @@ import shlex
 import subprocess
 import glib
 import urllib
+import dbus, dbus.glib
 
 from menus import MenuManager
 from mounts import MountsManager
@@ -24,6 +24,7 @@ from accelerator_group import AcceleratorGroup
 from accelerator_manager import AcceleratorManager
 from keyring import KeyringManager, InvalidKeyringError
 from parameters import Parameters
+from dbus_api import DBus
 
 from plugin_base.item_list import ItemList
 from plugin_base.rename_extension import RenameExtension
@@ -143,6 +144,23 @@ class MainWindow(gtk.Window):
 		if self.window_options.section('main').get('hide_on_close'):
 			self.connect('delete-event', self._delete_event)
 
+			if dbus.SessionBus().request_name('org.sunflower.API') != dbus.bus.REQUEST_NAME_REPLY_PRIMARY_OWNER:
+				create_tab = dbus.SessionBus().get_object('org.sunflower.API', '/org/sunflower/API').get_dbus_method('create_tab')
+				create_terminal = dbus.SessionBus().get_object('org.sunflower.API', '/org/sunflower/API').get_dbus_method('create_terminal')
+				show_window = dbus.SessionBus().get_object('org.sunflower.API', '/org/sunflower/API').get_dbus_method('show_window')
+
+				if self.arguments is not None:
+					if self.arguments.left_tabs is not None:
+						map(create_tab, self.arguments.left_tabs, ['left']*len(self.arguments.left_tabs))
+					if self.arguments.right_tabs is not None:
+						map(create_tab, self.arguments.right_tabs, ['right']*(len(self.arguments.right_tabs)))
+					if self.arguments.left_terminals is not None:
+						map(create_terminal, self.arguments.left_terminals, ['left']*(len(self.arguments.left_terminals)))
+					if self.arguments.right_terminals is not None:
+						map(create_terminal, self.arguments.right_terminals, ['right']*(len(self.arguments.right_terminals)))
+
+				show_window()
+				sys.exit()
 		else:
 			self.connect('delete-event', self._destroy)
 
@@ -715,6 +733,8 @@ class MainWindow(gtk.Window):
 		# activate accelerators
 		self._accel_group.activate(self)
 
+		#init dbus api
+		DBus(self)
 		# show widgets
 		self.show_all()
 

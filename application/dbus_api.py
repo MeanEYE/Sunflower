@@ -1,27 +1,68 @@
 import dbus, dbus.service, dbus.glib
+
 from parameters import Parameters
+
+
+class DBusClient(object):
+	def __new__(cls, *args, **kwargs):
+		if dbus.SessionBus().request_name('org.sunflower.API') != dbus.bus.REQUEST_NAME_REPLY_PRIMARY_OWNER:
+			return object.__new__(cls, args, kwargs)
+		else:
+			return None
+
+	def __init__(self):
+		self._bus_name = 'org.sunflower.API'
+		self._path = '/org/sunflower/API'
+		self._bus = dbus.SessionBus()
+		self._proxy = self._bus.get_object(self._bus_name, self._path)
+
+	def show_window(self):
+		self._proxy.get_dbus_method('show_window')()
+
+	def create_tab(self, path, position=None):
+		create_tab = self._proxy.get_dbus_method('create_tab')
+		create_tab(path, position)
+
+	def create_terminal(self, path, position=None):
+		create_terminal = self._proxy.get_dbus_method('create_terminal')
+		create_terminal(path, position)
+
 
 class DBus(dbus.service.Object):
 	def __init__(self, app):
-		self._app = app
+		self._application = app
 		bus_name = dbus.service.BusName('org.sunflower.API', bus = dbus.SessionBus())
 		dbus.service.Object.__init__(self, bus_name, '/org/sunflower/API')
 
 	@dbus.service.method(dbus_interface='org.sunflower.API')
 	def show_window(self):
-		self._app.set_visible(True)
-		self._app.indicator.adjust_visibility_items(True)
+		self._application.set_visible(True)
+		self._application.indicator.adjust_visibility_items(True)
 
 	@dbus.service.method(dbus_interface='org.sunflower.API', utf8_strings=True)
-	def create_tab(self, path, position):
+	def create_tab(self, path, position=None):
 		options = Parameters()
 		options.set('path', path)
-		notebook = self._app.left_notebook if position == 'left' else self._app.right_notebook
-		self._app.create_tab(notebook, self._app.plugin_classes['file_list'], options)
+
+		if position == 'left':
+			notebook = self._application.left_notebook
+		elif position == 'right':
+			notebook = self._application.right_notebook
+		else:
+			notebook = self._application.get_active_notebook()
+
+		self._application.create_tab(notebook, self._application.plugin_classes['file_list'], options)
 
 	@dbus.service.method(dbus_interface='org.sunflower.API')
-	def create_terminal(self, path, position):
+	def create_terminal(self, path, position=None):
 		options = Parameters()
 		options.set('path', path)
-		notebook = self._app.left_notebook if position == 'left' else self._app.right_notebook
-		self._app.create_tab(notebook, self._app.plugin_classes['system_terminal'], options)
+
+		if position == 'left':
+			notebook = self._application.left_notebook
+		elif position == 'right':
+			notebook = self._application.right_notebook
+		else:
+			notebook = self._application.get_active_notebook()
+
+		self._application.create_tab(notebook, self._application.plugin_classes['system_terminal'], options)

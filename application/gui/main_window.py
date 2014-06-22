@@ -23,7 +23,12 @@ from accelerator_group import AcceleratorGroup
 from accelerator_manager import AcceleratorManager
 from keyring import KeyringManager, InvalidKeyringError
 from parameters import Parameters
-from dbus_api import DBus, DBusClient
+
+try:
+	from dbus_api import DBus, DBusClient
+	USE_DBUS = True
+except:
+	USE_DBUS = False
 
 from plugin_base.item_list import ItemList
 from plugin_base.rename_extension import RenameExtension
@@ -142,21 +147,10 @@ class MainWindow(gtk.Window):
 		# connect delete event to main window
 		if self.window_options.section('main').get('hide_on_close'):
 			self.connect('delete-event', self._delete_event)
-			dbus_client = DBusClient()
-			if dbus_client:
-
-				if self.arguments is not None:
-					if self.arguments.left_tabs is not None:
-						map(dbus_client.create_tab, self.arguments.left_tabs, ['left']*len(self.arguments.left_tabs))
-					if self.arguments.right_tabs is not None:
-						map(dbus_client.create_tab, self.arguments.right_tabs, ['right']*(len(self.arguments.right_tabs)))
-					if self.arguments.left_terminals is not None:
-						map(dbus_client.create_terminal, self.arguments.left_terminals, ['left']*(len(self.arguments.left_terminals)))
-					if self.arguments.right_terminals is not None:
-						map(dbus_client.create_terminal, self.arguments.right_terminals, ['right']*(len(self.arguments.right_terminals)))
-
-				dbus_client.show_window()
-				sys.exit()
+			if USE_DBUS:
+				dbus_client = DBusClient(self)
+				if dbus_client:
+					dbus_client.one_instance()
 		else:
 			self.connect('delete-event', self._destroy)
 
@@ -729,8 +723,8 @@ class MainWindow(gtk.Window):
 		# activate accelerators
 		self._accel_group.activate(self)
 
-		#init dbus api
-		self.dbus_interface = DBus(self)
+		# init dbus api
+		self.dbus_interface = DBus(self) if USE_DBUS else None
 
 		# show widgets
 		self.show_all()

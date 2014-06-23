@@ -10,6 +10,7 @@ import shlex
 import subprocess
 import glib
 import urllib
+import signal
 
 from menus import MenuManager
 from mounts import MountsManager
@@ -147,12 +148,10 @@ class MainWindow(gtk.Window):
 		# connect delete event to main window
 		if self.window_options.section('main').get('hide_on_close'):
 			self.connect('delete-event', self._delete_event)
-			if USE_DBUS:
-				dbus_client = DBusClient(self)
-				if dbus_client:
-					dbus_client.one_instance()
 		else:
 			self.connect('delete-event', self._destroy)
+
+		signal.signal(signal.SIGTERM, self._destroy)
 
 		self.connect('configure-event', self._handle_configure_event)
 		self.connect('window-state-event', self._handle_window_state_event)
@@ -723,13 +722,10 @@ class MainWindow(gtk.Window):
 		# activate accelerators
 		self._accel_group.activate(self)
 
-		# init dbus api
-		self.dbus_interface = DBus(self) if USE_DBUS else None
-
 		# show widgets
 		self.show_all()
 
-	def _destroy(self, widget, data=None):
+	def _destroy(self, widget=None, data=None):
 		"""Application destructor"""
 		# save tabs
 		self.save_tabs(self.left_notebook, 'left')
@@ -744,6 +740,12 @@ class MainWindow(gtk.Window):
 
 		# save config changes
 		self.save_config()
+
+		if not USE_DBUS:
+			try:
+				os.remove('/tmp/sunflower-{}-lockfile'.format(os.geteuid()))
+			except Exception, e:
+				print e
 
 		# exit main loop
 		gtk.main_quit()
@@ -1704,6 +1706,24 @@ class MainWindow(gtk.Window):
 
 	def run(self):
 		"""Start application"""
+
+		if self.window_options.section('main').get('hide_on_close'):
+			if USE_DBUS:
+				dbus_client = DBusClient(self)
+				if dbus_client:
+					dbus_client.one_instance()
+			elif os.path.exists('/tmp/sunflower-{}-lockfile'.format(os.geteuid())):
+				sys.exit()
+
+		if USE_DBUS:
+			self.dbus_interface = DBus(self)
+		else:
+			self.dbus_interface = None
+			try:
+				open('/tmp/sunflower-{}-lockfile'.format(os.geteuid()), 'w').close()
+			except Exception, e:
+				print e
+
 		left_list = []
 		right_list = []
 

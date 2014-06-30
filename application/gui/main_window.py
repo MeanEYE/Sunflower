@@ -1439,6 +1439,11 @@ class MainWindow(gtk.Window):
 		"""Parse command-line arguments passed to the application"""
 		if not USE_ARGPARSE: return
 
+		def make_absolute_path(path):
+			if '://' not in path:
+				path = os.path.abspath(path)
+			return path
+
 		parser = ArgumentParser(
 							description=_('Sunflower file manager'),
 							prog='Sunflower.py'
@@ -1474,28 +1479,32 @@ class MainWindow(gtk.Window):
 						action='append',
 						help=_('open new tab on the left notebook'),
 						metavar='PATH',
-						dest='left_tabs'
+						dest='left_tabs',
+						type=make_absolute_path
 					)
 		parser.add_argument(
 						'-r', '--right-tab',
 						action='append',
 						help=_('open new tab on the right notebook'),
 						metavar='PATH',
-						dest='right_tabs'
+						dest='right_tabs',
+						type=make_absolute_path
 					)
 		parser.add_argument(
 						'-L', '--left-terminal',
 						action='append',
 						help=_('open terminal tab on the left notebook'),
 						metavar='PATH',
-						dest='left_terminals'
+						dest='left_terminals',
+						type=make_absolute_path
 					)
 		parser.add_argument(
 						'-R', '--right-terminal',
 						action='append',
 						help=_('open terminal tab on the right notebook'),
 						metavar='PATH',
-						dest='right_terminals'
+						dest='right_terminals',
+						type=make_absolute_path
 					)
 
 		self.arguments = parser.parse_args()

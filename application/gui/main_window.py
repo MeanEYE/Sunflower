@@ -25,12 +25,6 @@ from accelerator_manager import AcceleratorManager
 from keyring import KeyringManager, InvalidKeyringError
 from parameters import Parameters
 
-try:
-	from dbus_api import DBus, DBusClient
-	USE_DBUS = True
-except:
-	USE_DBUS = False
-
 from plugin_base.item_list import ItemList
 from plugin_base.rename_extension import RenameExtension
 from plugin_base.find_extension import FindExtension
@@ -41,8 +35,16 @@ from tools.find_files import FindFiles
 from tools.version_check import VersionCheck
 from config import Config
 
+# try using DBus support
 try:
-	# try to import argument parser
+	from dbus import DBus, DBusClient
+	USE_DBUS = True
+
+except:
+	USE_DBUS = False
+
+# try to import argument parser
+try:
 	from argparse import ArgumentParser
 	USE_ARGPARSE = True
 

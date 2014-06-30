@@ -1,5 +1,4 @@
 import os
-import imp
 import sys
 import gtk
 import pango
@@ -11,6 +10,7 @@ import shlex
 import subprocess
 import glib
 import urllib
+import signal
 
 from menus import MenuManager
 from mounts import MountsManager
@@ -24,6 +24,12 @@ from accelerator_group import AcceleratorGroup
 from accelerator_manager import AcceleratorManager
 from keyring import KeyringManager, InvalidKeyringError
 from parameters import Parameters
+
+try:
+	from dbus_api import DBus, DBusClient
+	USE_DBUS = True
+except:
+	USE_DBUS = False
 
 from plugin_base.item_list import ItemList
 from plugin_base.rename_extension import RenameExtension
@@ -142,9 +148,10 @@ class MainWindow(gtk.Window):
 		# connect delete event to main window
 		if self.window_options.section('main').get('hide_on_close'):
 			self.connect('delete-event', self._delete_event)
-
 		else:
 			self.connect('delete-event', self._destroy)
+
+		signal.signal(signal.SIGTERM, self._destroy)
 
 		self.connect('configure-event', self._handle_configure_event)
 		self.connect('window-state-event', self._handle_window_state_event)
@@ -718,7 +725,7 @@ class MainWindow(gtk.Window):
 		# show widgets
 		self.show_all()
 
-	def _destroy(self, widget, data=None):
+	def _destroy(self, widget=None, data=None):
 		"""Application destructor"""
 		# save tabs
 		self.save_tabs(self.left_notebook, 'left')
@@ -733,6 +740,12 @@ class MainWindow(gtk.Window):
 
 		# save config changes
 		self.save_config()
+
+		if not USE_DBUS:
+			try:
+				os.remove('/tmp/sunflower-{}-lockfile'.format(os.geteuid()))
+			except Exception, e:
+				print e
 
 		# exit main loop
 		gtk.main_quit()
@@ -1702,6 +1715,24 @@ class MainWindow(gtk.Window):
 
 	def run(self):
 		"""Start application"""
+
+		if self.window_options.section('main').get('hide_on_close'):
+			if USE_DBUS:
+				dbus_client = DBusClient(self)
+				if dbus_client:
+					dbus_client.one_instance()
+			elif os.path.exists('/tmp/sunflower-{}-lockfile'.format(os.geteuid())):
+				sys.exit()
+
+		if USE_DBUS:
+			self.dbus_interface = DBus(self)
+		else:
+			self.dbus_interface = None
+			try:
+				open('/tmp/sunflower-{}-lockfile'.format(os.geteuid()), 'w').close()
+			except Exception, e:
+				print e
+
 		left_list = []
 		right_list = []
 

@@ -37,7 +37,7 @@ from config import Config
 
 # try using DBus support
 try:
-	from dbus import DBus, DBusClient
+	from dbus_interface import DBus, DBusClient
 	USE_DBUS = True
 
 except:
@@ -743,6 +743,7 @@ class MainWindow(gtk.Window):
 		# save config changes
 		self.save_config()
 
+		# remove lockfile
 		if not USE_DBUS:
 			try:
 				os.remove('/tmp/sunflower-{}-lockfile'.format(os.geteuid()))

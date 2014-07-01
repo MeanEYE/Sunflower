@@ -9,8 +9,10 @@ class DBusClient(object):
 		try:
 			if dbus.SessionBus().request_name('org.sunflower.API') != dbus.bus.REQUEST_NAME_REPLY_PRIMARY_OWNER:
 				return object.__new__(cls, args, kwargs)
+
 			else:
 				return None
+
 		except dbus.exceptions.DBusException:
 			return None
 
@@ -45,6 +47,7 @@ class DBusClient(object):
 				map(self.create_terminal, arguments.right_terminals, ['right']*(len(arguments.right_terminals)))
 		self.show_window()
 		sys.exit()
+
 
 class DBus(dbus.service.Object):
 	def __new__(cls, *args, **kwargs):

@@ -10,6 +10,7 @@ class Column:
 	NAME = 0
 	SIZE = 1
 	VISIBLE = 2
+	FONT_SIZE = 3
 
 
 class ExtensionColumn:
@@ -270,7 +271,7 @@ class ItemListOptions(SettingsPage):
 		self._active_extension = None
 
 		# create column list
-		self._columns_store = gtk.ListStore(str, int, bool)
+		self._columns_store = gtk.ListStore(str, int, bool, str)
 		self._columns_list = gtk.TreeView()
 
 		self._columns_list.set_model(self._columns_store)
@@ -281,10 +282,17 @@ class ItemListOptions(SettingsPage):
 		cell_name = gtk.CellRendererText()
 		cell_size = gtk.CellRendererText()
 		cell_visible = gtk.CellRendererToggle()
+		cell_font_size = gtk.CellRendererSpin()
 
 		cell_size.set_property('editable', True)
 		cell_size.set_property('mode', gtk.CELL_RENDERER_MODE_EDITABLE)
 		cell_size.connect('edited', self._edited_column_size)
+
+		cell_font_size.set_property('editable', True)
+		cell_font_size.set_property('mode', gtk.CELL_RENDERER_MODE_EDITABLE)
+		adjustment = gtk.Adjustment(0, 0, 100, 1, 10, 0)
+		cell_font_size.set_property("adjustment", adjustment)
+		cell_font_size.connect('edited', self._edited_column_font_size)
 
 		cell_visible.connect('toggled', self._toggle_column_visible)
 
@@ -299,8 +307,12 @@ class ItemListOptions(SettingsPage):
 		col_visible = gtk.TreeViewColumn(_('Visible'), cell_visible, active=Column.VISIBLE)
 		col_visible.set_min_width(50)
 
+		col_font_size = gtk.TreeViewColumn(_('Font'), cell_font_size, text=Column.FONT_SIZE)
+		col_font_size.set_min_width(50)
+
 		self._columns_list.append_column(col_name)
 		self._columns_list.append_column(col_size)
+		self._columns_list.append_column(col_font_size)
 		self._columns_list.append_column(col_visible)
 
 		# create plugin list
@@ -554,8 +566,9 @@ class ItemListOptions(SettingsPage):
 			for column in extension.get_columns():
 				size = extension.get_size(column)
 				is_visible = extension.get_visible(column)
+				font_size = extension.get_font_size(column)
 
-				self._columns_store.append((column, size, is_visible))
+				self._columns_store.append((column, size, is_visible, font_size))
 
 	def _edited_column_size(self, cell, path, text, data=None):
 		"""Handle editing column size"""
@@ -578,6 +591,31 @@ class ItemListOptions(SettingsPage):
 				if new_size != old_size:
 					self._columns_store.set_value(selected_iter, Column.SIZE, new_size)
 					self._active_extension.set_size(column_name, new_size)
+					self._parent.enable_save()
+
+		return True
+
+	def _edited_column_font_size(self, cell, path, text, data=None):
+		"""Handle editing column size"""
+		selected_iter = self._columns_store.get_iter(path)
+
+		if selected_iter is not None:
+			old_size = self._columns_store.get_value(selected_iter, Column.FONT_SIZE)
+			column_name = self._columns_store.get_value(selected_iter, Column.NAME)
+
+			try:
+				# make sure entered value is integer
+				new_size = None if int(text) == 0 else int(text)
+
+			except ValueError:
+				# if entered value is not integer, exception
+				# will be raised and we just skip updating storage
+				pass
+
+			else:
+				if new_size != old_size:
+					self._columns_store.set_value(selected_iter, Column.FONT_SIZE, new_size)
+					self._active_extension.set_font_size(column_name, new_size)
 					self._parent.enable_save()
 
 		return True

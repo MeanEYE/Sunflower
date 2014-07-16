@@ -30,11 +30,13 @@ class DisplayOptions(SettingsPage):
 		vbox_main_window.set_border_width(5)
 
 		self._checkbox_hide_on_close = gtk.CheckButton(_('Hide main window on close'))
+		self._checkbox_multiple_instances = gtk.CheckButton(_('Allow multiple instances'))
 		self._checkbox_show_toolbar = gtk.CheckButton(_('Show toolbar'))
 		self._checkbox_show_command_bar = gtk.CheckButton(_('Show command bar'))
 		self._checkbox_show_command_entry = gtk.CheckButton(_('Show command entry'))
 
 		self._checkbox_hide_on_close.connect('toggled', self._parent.enable_save, True)
+		self._checkbox_multiple_instances.connect('toggled', self._parent.enable_save, True)
 		self._checkbox_show_toolbar.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_command_bar.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_command_entry.connect('toggled', self._parent.enable_save)
@@ -135,6 +137,7 @@ class DisplayOptions(SettingsPage):
 		table.attach(self._combobox_expand_tabs, 1, 2, 1, 2, xoptions=gtk.FILL)
 
 		vbox_main_window.pack_start(self._checkbox_hide_on_close, False, False, 0)
+		vbox_main_window.pack_start(self._checkbox_multiple_instances, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_toolbar, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_command_bar, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_command_entry, False, False, 0)
@@ -164,6 +167,7 @@ class DisplayOptions(SettingsPage):
 		window_options = self._application.window_options
 
 		self._checkbox_hide_on_close.set_active(window_options.section('main').get('hide_on_close'))
+		self._checkbox_multiple_instances.set_active(options.get('multiple_instances'))
 		self._checkbox_focus_new_tab.set_active(options.get('focus_new_tab'))
 		self._checkbox_show_toolbar.set_active(options.get('show_toolbar'))
 		self._checkbox_show_command_bar.set_active(options.get('show_command_bar'))
@@ -187,6 +191,7 @@ class DisplayOptions(SettingsPage):
 
 		# save options
 		window_options.section('main').set('hide_on_close', self._checkbox_hide_on_close.get_active())
+		options.set('multiple_instances', self._checkbox_multiple_instances.get_active())
 		options.set('focus_new_tab', self._checkbox_focus_new_tab.get_active())
 		options.set('show_toolbar', self._checkbox_show_toolbar.get_active())
 		options.set('show_command_bar', self._checkbox_show_command_bar.get_active())

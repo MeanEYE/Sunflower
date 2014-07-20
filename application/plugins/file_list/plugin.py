@@ -129,11 +129,17 @@ class FileList(ItemList):
 
 		cell_selected.set_property('width', 30)  # leave enough room for various characters
 		cell_selected.set_property('xalign', 1)
-		cell_extension.set_property('size-points', 8)
-		cell_size.set_property('size-points', 8)
 		cell_size.set_property('xalign', 1)
-		cell_mode.set_property('size-points', 8)
-		cell_date.set_property('size-points', 8)
+
+		default_font_size = int(gtk.Settings().get_property('gtk-font-name').split()[-1])
+
+		self._default_fonts = {
+								'name': default_font_size,
+								'extension': 8,
+								'size': 8,
+								'mode': 8,
+								'date': 8
+							}
 
 		# create columns
 		col_name = gtk.TreeViewColumn(_('Name'))
@@ -254,6 +260,8 @@ class FileList(ItemList):
 		# resize columns to saved values
 		self._resize_columns(self._columns)
 
+		self._set_font_size(self._columns)
+
 		# set column order
 		self._reorder_columns()
 
@@ -317,6 +325,27 @@ class FileList(ItemList):
 		except:
 			# fail-safe jump to user home directory
 			self.change_path(user.home)
+
+	def set_default_font_size(self, column_name, size):
+		self._default_fonts.update({column_name: size})
+
+	def _set_font_size(self, columns):
+		"""Set font size from options"""
+		for column in columns:
+			column.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
+			option_name = 'font_size_{0}'.format(column.get_data('name'))
+			size_points = self._parent.plugin_options.section(self._name).get(option_name)
+
+			if size_points is None:
+				size_points = self._default_fonts.get(column.get_data('name'))
+
+			for cell_renderer in column.get_cell_renderers():
+				try:
+					cell_renderer.set_property('size-points', size_points)
+				except TypeError:
+					pass
+			column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+			column.set_resizable(True)
 
 	def _control_got_focus(self, widget, data=None):
 		"""Handle control gaining focus"""
@@ -2271,6 +2300,7 @@ class FileList(ItemList):
 		# apply column visibility and sizes
 		self._reorder_columns()
 		self._resize_columns(self._columns)
+		self._set_font_size(self._columns)
 
 		# apply row hinting
 		row_hinting = section.get('row_hinting')

@@ -291,7 +291,7 @@ class ItemListOptions(SettingsPage):
 		cell_font_size.set_property('editable', True)
 		cell_font_size.set_property('mode', gtk.CELL_RENDERER_MODE_EDITABLE)
 		adjustment = gtk.Adjustment(0, 0, 100, 1, 10, 0)
-		cell_font_size.set_property("adjustment", adjustment)
+		cell_font_size.set_property('adjustment', adjustment)
 		cell_font_size.connect('edited', self._edited_column_font_size)
 
 		cell_visible.connect('toggled', self._toggle_column_visible)

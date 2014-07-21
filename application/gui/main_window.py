@@ -24,6 +24,7 @@ from accelerator_group import AcceleratorGroup
 from accelerator_manager import AcceleratorManager
 from keyring import KeyringManager, InvalidKeyringError
 from parameters import Parameters
+from dbus_common import DBus
 
 from plugin_base.item_list import ItemList
 from plugin_base.rename_extension import RenameExtension
@@ -34,14 +35,6 @@ from tools.advanced_rename import AdvancedRename
 from tools.find_files import FindFiles
 from tools.version_check import VersionCheck
 from config import Config
-
-# try using DBus support
-try:
-	from dbus_interface import DBus, DBusClient
-	USE_DBUS = True
-
-except:
-	USE_DBUS = False
 
 # try to import argument parser
 try:
@@ -140,6 +133,9 @@ class MainWindow(gtk.Window):
 		self.config_path = None
 		self.system_plugin_path = None
 		self.user_plugin_path = None
+
+		# DBus interface object
+		self.dbus_interface = None
 
 		# create a clipboard manager
 		self.clipboard = gtk.Clipboard()
@@ -743,12 +739,15 @@ class MainWindow(gtk.Window):
 		# save config changes
 		self.save_config()
 
-		# remove lockfile
-		if not USE_DBUS:
-			try:
-				os.remove('/tmp/sunflower-{}-lockfile'.format(os.geteuid()))
-			except Exception, e:
-				print e
+		# remove lockfile if needed
+		multiple_instances = self.options.get('multiple_instances')
+		hide_on_close = self.window_options.section('main').get('hide_on_close')
+
+		if (not multiple_instances or hide_on_close) and not DBus.is_available():
+			lock_file = '/tmp/sunflower-{}.lock'.format(os.geteuid())
+
+			if os.path.exists(lock_file):
+				os.remove(lock_file)
 
 		# exit main loop
 		gtk.main_quit()
@@ -1718,24 +1717,28 @@ class MainWindow(gtk.Window):
 
 	def run(self):
 		"""Start application"""
+		# check for mutliple instances
+		lock_file = '/tmp/sunflower-{}.lock'.format(os.geteuid())
+		multiple_instances = self.options.get('multiple_instances')
+		hide_on_close = self.window_options.section('main').get('hide_on_close')
 
-		if self.window_options.section('main').get('hide_on_close'):
-			if USE_DBUS:
-				dbus_client = DBusClient(self)
-				if dbus_client:
-					dbus_client.one_instance()
-			elif os.path.exists('/tmp/sunflower-{}-lockfile'.format(os.geteuid())):
-				sys.exit()
+		if not multiple_instances or hide_on_close:
+			if DBus.is_available():
+				DBus.get_client(self).one_instance()
 
-		if USE_DBUS:
-			self.dbus_interface = DBus(self)
-		else:
-			self.dbus_interface = None
-			try:
-				open('/tmp/sunflower-{}-lockfile'.format(os.geteuid()), 'w').close()
-			except Exception, e:
-				print e
+			else:
+				# check for lockfile
+				if os.path.exists(lock_file):
+					sys.exit()
 
+				else:
+					open(lock_file, 'w').close()
+
+		# create dbus interface
+		if DBus.is_available():
+			self.dbus_interface = DBus.get_service(self)
+
+		# prepare for tab loading
 		left_list = []
 		right_list = []
 
@@ -2326,7 +2329,8 @@ class MainWindow(gtk.Window):
 					'show_status_bar': 0,
 					'media_preview': False,
 					'active_notebook': 0,
-					'size_format': common.SizeFormat.SI
+					'size_format': common.SizeFormat.SI,
+					'multiple_instances': False
 				})
 
 		# set default commands

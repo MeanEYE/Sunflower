@@ -25,6 +25,10 @@ class ColumnEditorExtension:
 		"""Get column size"""
 		pass
 
+	def get_font_size(self, column):
+		"""Get column font size"""
+		pass
+
 	def get_visible(self, column):
 		"""Get column visibility"""
 		pass

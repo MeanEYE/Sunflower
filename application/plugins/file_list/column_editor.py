@@ -10,6 +10,7 @@ class FileList_ColumnEditor(ColumnEditorExtension):
 		self._columns = []
 		self._visible = []
 		self._sizes = {}
+		self._font_sizes = {}
 
 	def __update_column_list(self):
 		"""Update list of available columns"""
@@ -28,6 +29,10 @@ class FileList_ColumnEditor(ColumnEditorExtension):
 		# save column sizes
 		for name, size in self._sizes.items():
 			section.set('size_{0}'.format(name), size)
+
+		# save font sizes
+		for name, size in self._font_sizes.items():
+			section.set('font_size_{0}'.format(name), size)
 
 	def _load_settings(self):
 		"""Load values from config"""
@@ -53,6 +58,13 @@ class FileList_ColumnEditor(ColumnEditorExtension):
 			if size is not None:
 				self._sizes[column_name] = size
 
+		# get font sizes
+		for column_name in self._columns:
+			size = section.get('font_size_{0}'.format(column_name))
+
+			if size is not None:
+				self._font_sizes[column_name] = size
+
 	def get_name(self):
 		"""Return name of extension"""
 		return _('Item List'), self._parent_name
@@ -70,6 +82,10 @@ class FileList_ColumnEditor(ColumnEditorExtension):
 		"""Get column size"""
 		return self._sizes[column] if column in self._sizes else None
 
+	def get_font_size(self, column):
+		"""Get column font size"""
+		return self._font_sizes[column] if column in self._font_sizes else None
+
 	def get_visible(self, column):
 		"""Get column visibility"""
 		return column in self._visible
@@ -78,6 +94,11 @@ class FileList_ColumnEditor(ColumnEditorExtension):
 		"""Set column size"""
 		if column in self._columns:
 			self._sizes[column] = size
+
+	def set_font_size(self, column, size):
+		"""Set column font size"""
+		if column in self._columns:
+			self._font_sizes[column] = size
 
 	def set_visible(self, column, visible):
 		"""Set column visibility"""

@@ -1,10 +1,10 @@
 import sys
-import dbus, dbus.service, dbus.glib
+import dbus
 
 from parameters import Parameters
 
 
-class DBusClient(object):
+class DBus_Client:
 	def __new__(cls, *args, **kwargs):
 		try:
 			if dbus.SessionBus().request_name('org.sunflower.API') != dbus.bus.REQUEST_NAME_REPLY_PRIMARY_OWNER:
@@ -24,6 +24,7 @@ class DBusClient(object):
 		self._proxy = self._bus.get_object(self._bus_name, self._path)
 
 	def show_window(self):
+		"""Send request to show window through DBus."""
 		self._proxy.get_dbus_method('show_window')()
 
 	def create_tab(self, path, position=None):
@@ -49,11 +50,14 @@ class DBusClient(object):
 		sys.exit()
 
 
-class DBus(dbus.service.Object):
+class DBus_Service(dbus.service.Object):
+	"""Service provider object for DBus."""
+
 	def __new__(cls, *args, **kwargs):
 		try:
 			dbus.SessionBus()
 			return object.__new__(cls, args, kwargs)
+
 		except dbus.exceptions.DBusException:
 			return None
 

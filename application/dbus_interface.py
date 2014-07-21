@@ -1,5 +1,5 @@
 import sys
-import dbus
+import dbus, dbus.service, dbus.glib
 
 from parameters import Parameters
 

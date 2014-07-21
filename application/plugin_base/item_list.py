@@ -855,7 +855,7 @@ class ItemList(PluginBase):
 		"""Create file"""
 		return True
 
-	def _create_link(self, widget=None, hard_link=None):
+	def _create_link(self, widget=None, data=None, original_path=None, hard_link=None):
 		"""Create symbolic or hard link"""
 		return True
 

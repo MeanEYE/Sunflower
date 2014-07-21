@@ -666,7 +666,7 @@ class FileList(ItemList):
 
 		return True
 
-	def _create_link(self, widget=None, original_path=None, hard_link=None):
+	def _create_link(self, widget=None, data=None, original_path=None, hard_link=None):
 		"""Create symbolic or hard link"""
 		result = False
 		provider = self.get_provider()

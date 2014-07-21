@@ -4,7 +4,8 @@ import dbus, dbus.service, dbus.glib
 from parameters import Parameters
 
 
-class DBus_Client:
+class DBus_Client(object):
+
 	def __new__(cls, *args, **kwargs):
 		try:
 			if dbus.SessionBus().request_name('org.sunflower.API') != dbus.bus.REQUEST_NAME_REPLY_PRIMARY_OWNER:

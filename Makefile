@@ -1,6 +1,6 @@
 
 # Directories
-working_directory := $(shell hg root)
+working_directory := $(dir $(lastword $(MAKEFILE_LIST)))
 build_directory ?= $(working_directory)/build
 install_directory = $(build_directory)/sunflower
 

@@ -69,7 +69,7 @@ class AcceleratorGroup:
 				accelerator = accelerator_list[method_name]
 
 			# finally connect accelerator to specified method
-			if accelerator is not None:
+			if accelerator is not None and accelerator[0] > 0:
 				keyval = accelerator[0]
 				modifier = accelerator[1]
 	

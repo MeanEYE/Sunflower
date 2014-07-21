@@ -15,14 +15,14 @@ class BaseColumn(ColumnExtension):
 
 	def __init__(self, parent, store):
 		ColumnExtension.__init__(self, parent, store)
-
+		self._parent = parent
 		# create column object
 		self._create_column()
 
 	def _create_column(self):
 		"""Create column"""
 		self._cell_renderer = gtk.CellRendererText()
-		self._cell_renderer.set_property('size-points', 8)
+		self._parent.set_default_font_size(self._get_column_name(), 8)
 
 		self._column = gtk.TreeViewColumn(self._get_column_title())
 		self._column.pack_start(self._cell_renderer, True)

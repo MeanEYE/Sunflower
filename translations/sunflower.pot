@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-21 20:41+0200\n"
+"POT-Creation-Date: 2014-07-21 21:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -107,14 +107,14 @@ msgstr ""
 #: application/gui/preferences/commands.py:67
 #: application/gui/preferences/bookmarks.py:77
 #: application/gui/preferences/toolbar.py:74
-#: application/gui/preferences/item_list.py:228
+#: application/gui/preferences/item_list.py:229
 msgid "Move Up"
 msgstr ""
 
 #: application/gui/preferences/commands.py:75
 #: application/gui/preferences/bookmarks.py:85
 #: application/gui/preferences/toolbar.py:82
-#: application/gui/preferences/item_list.py:236
+#: application/gui/preferences/item_list.py:237
 msgid "Move Down"
 msgstr ""
 
@@ -286,7 +286,7 @@ msgstr ""
 #: application/gui/mounts_manager_window.py:363
 #: application/gui/mounts_manager_window.py:541
 #: application/gui/keyring_manager_window.py:52
-#: application/plugins/file_list/plugin.py:139
+#: application/plugins/file_list/plugin.py:145
 #: application/plugins/file_list/gio_extension.py:165
 #: application/plugins/file_list/gio_extension.py:519
 #: application/plugins/file_list/gio_extension.py:871
@@ -313,7 +313,7 @@ msgid "Text"
 msgstr ""
 
 #: application/gui/preferences/toolbar.py:97
-#: application/gui/preferences/item_list.py:123
+#: application/gui/preferences/item_list.py:124
 msgid "Both"
 msgstr ""
 
@@ -354,7 +354,7 @@ msgid "missing plugin"
 msgstr ""
 
 #: application/gui/preferences/operation.py:10
-#: application/gui/preferences/item_list.py:42
+#: application/gui/preferences/item_list.py:43
 msgid "Operation"
 msgstr ""
 
@@ -481,8 +481,8 @@ msgid "Expanded tabs:"
 msgstr ""
 
 #: application/gui/preferences/display.py:90
-#: application/gui/preferences/item_list.py:87
-#: application/gui/preferences/item_list.py:120
+#: application/gui/preferences/item_list.py:88
+#: application/gui/preferences/item_list.py:121
 msgid "None"
 msgstr ""
 
@@ -518,183 +518,187 @@ msgstr ""
 msgid "IEC <small>(1 KiB = 1024 B)</small>"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:36
-#: application/plugins/file_list/column_editor.py:58
+#: application/gui/preferences/item_list.py:37
+#: application/plugins/file_list/column_editor.py:70
 #: application/plugin_base/item_list.py:236
 msgid "Item List"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:41
+#: application/gui/preferences/item_list.py:42
 msgid "Look & feel"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:43
+#: application/gui/preferences/item_list.py:44
 msgid "Directories"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:44
+#: application/gui/preferences/item_list.py:45
 msgid "Columns"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:59
+#: application/gui/preferences/item_list.py:60
 msgid "Row hinting"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:60
+#: application/gui/preferences/item_list.py:61
 msgid "Show hidden files"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:61
+#: application/gui/preferences/item_list.py:62
 msgid "Case sensitive item sorting"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:62
+#: application/gui/preferences/item_list.py:63
 msgid "Number sensitive item sorting"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:63
+#: application/gui/preferences/item_list.py:64
 msgid "Single click navigation"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:64
+#: application/gui/preferences/item_list.py:65
 msgid "Right click selects items"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:65
+#: application/gui/preferences/item_list.py:66
 msgid "Show list headers"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:66
+#: application/gui/preferences/item_list.py:67
 msgid "Fast media preview"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:67
+#: application/gui/preferences/item_list.py:68
 msgid "Show tree expanders"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:68
+#: application/gui/preferences/item_list.py:69
 msgid "Hide horizontal scrollbar"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:83
+#: application/gui/preferences/item_list.py:84
 msgid "Breadcrumbs:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:88
+#: application/gui/preferences/item_list.py:89
 msgid "Normal"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:89
+#: application/gui/preferences/item_list.py:90
 msgid "Smart"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:100
+#: application/gui/preferences/item_list.py:101
 msgid "Access mode format:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:104
+#: application/gui/preferences/item_list.py:105
 msgid "Octal"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:105
+#: application/gui/preferences/item_list.py:106
 msgid "Textual"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:116
+#: application/gui/preferences/item_list.py:117
 msgid "Show grid lines:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:121
+#: application/gui/preferences/item_list.py:122
 msgid "Horizontal"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:122
+#: application/gui/preferences/item_list.py:123
 msgid "Vertical"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:135
+#: application/gui/preferences/item_list.py:136
 msgid "Selection color:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:145
+#: application/gui/preferences/item_list.py:146
 msgid "Selection indicator:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:162
+#: application/gui/preferences/item_list.py:163
 msgid "Quick search combination:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:165
+#: application/gui/preferences/item_list.py:166
 msgid "Control"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:166
+#: application/gui/preferences/item_list.py:167
 msgid "Alt"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:167
+#: application/gui/preferences/item_list.py:168
 msgid "Shift"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:176
+#: application/gui/preferences/item_list.py:177
 msgid "Date format:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:180
+#: application/gui/preferences/item_list.py:181
 msgid "Time is formed using the format located at:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:190
+#: application/gui/preferences/item_list.py:191
 msgid "Load specified tabs instead of saved"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:203
+#: application/gui/preferences/item_list.py:204
 msgid "Directory"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:208
+#: application/gui/preferences/item_list.py:209
 msgid "Left list"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:209
+#: application/gui/preferences/item_list.py:210
 msgid "Right list"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:241
+#: application/gui/preferences/item_list.py:242
 msgid "Custom directory"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:243
+#: application/gui/preferences/item_list.py:244
 msgid "Left directory"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:244
+#: application/gui/preferences/item_list.py:245
 msgid "Right directory"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:291
+#: application/gui/preferences/item_list.py:299
 msgid "Column"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:296
-#: application/plugins/file_list/plugin.py:141
+#: application/gui/preferences/item_list.py:304
+#: application/plugins/file_list/plugin.py:147
 #: application/plugins/find_file_extensions/size.py:63
 msgid "Size"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:299
+#: application/gui/preferences/item_list.py:307
 msgid "Visible"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:415
+#: application/gui/preferences/item_list.py:310
+msgid "Font"
+msgstr ""
+
+#: application/gui/preferences/item_list.py:427
 msgid "Add custom directory"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:416
+#: application/gui/preferences/item_list.py:428
 msgid "Full path:"
 msgstr ""
 
-#: application/gui/preferences/item_list.py:497
+#: application/gui/preferences/item_list.py:509
 msgid ""
 "Quick search settings are in conflict with VIM navigation style. To resolve "
 "this issue your quick search settings were restored to default."
@@ -1156,14 +1160,14 @@ msgid "Emblems"
 msgstr ""
 
 #: application/gui/properties_window.py:151
-#: application/plugins/file_list/plugin.py:951
+#: application/plugins/file_list/plugin.py:980
 msgid ""
 "File or directory with specified name already exists in current directory. "
 "Item could not be renamed."
 msgstr ""
 
 #: application/gui/properties_window.py:186
-#: application/plugins/file_list/plugin.py:936
+#: application/plugins/file_list/plugin.py:965
 msgid "Error renaming specified item. Make sure you have enough permissions."
 msgstr ""
 
@@ -1411,7 +1415,7 @@ msgstr[1] ""
 #: application/gui/input_dialog.py:822 application/gui/input_dialog.py:924
 #: application/gui/input_dialog.py:1358
 #: application/gui/operation_dialog.py:206
-#: application/plugins/file_list/plugin.py:1737
+#: application/plugins/file_list/plugin.py:1766
 msgid "Cancel"
 msgstr ""
 
@@ -1862,53 +1866,53 @@ msgstr ""
 msgid "Local file list"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:140
+#: application/plugins/file_list/plugin.py:146
 msgid "Ext"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:142
+#: application/plugins/file_list/plugin.py:148
 msgid "Mode"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:143
+#: application/plugins/file_list/plugin.py:149
 #: application/plugins/rename_extensions/audio_metadata.py:26
 msgid "Date"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:449
+#: application/plugins/file_list/plugin.py:478
 msgid "Invalid selection!"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:595
+#: application/plugins/file_list/plugin.py:624
 msgid ""
 "There was an error creating directory. Make sure you have enough "
 "permissions. "
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:621
+#: application/plugins/file_list/plugin.py:650
 #, python-brace-format
 msgid "File already exists: {0}"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:624
+#: application/plugins/file_list/plugin.py:653
 #, python-brace-format
 msgid "Directory with same name exists: {0}"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:660
+#: application/plugins/file_list/plugin.py:689
 msgid ""
 "There was an error creating file. Make sure you have enough permissions."
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:718
+#: application/plugins/file_list/plugin.py:747
 msgid "Error creating new link."
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:734
+#: application/plugins/file_list/plugin.py:763
 msgid "Current file system does not support linking."
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:757
+#: application/plugins/file_list/plugin.py:786
 #, python-brace-format
 msgid ""
 "You are about to delete {0} item.\n"
@@ -1919,7 +1923,7 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/plugins/file_list/plugin.py:766
+#: application/plugins/file_list/plugin.py:795
 #, python-brace-format
 msgid ""
 "You are about to move {0} item to trash.\n"
@@ -1930,35 +1934,35 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: application/plugins/file_list/plugin.py:1119
+#: application/plugins/file_list/plugin.py:1148
 msgid "Other application..."
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:1686
+#: application/plugins/file_list/plugin.py:1715
 msgid "Free:"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:1687
+#: application/plugins/file_list/plugin.py:1716
 msgid "Total:"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:1718
+#: application/plugins/file_list/plugin.py:1747
 msgid "Copy here"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:1719
+#: application/plugins/file_list/plugin.py:1748
 msgid "Move here"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:1720
+#: application/plugins/file_list/plugin.py:1749
 msgid "Link here"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:2059
+#: application/plugins/file_list/plugin.py:2088
 msgid "No such file or directory"
 msgstr ""
 
-#: application/plugins/file_list/plugin.py:2077
+#: application/plugins/file_list/plugin.py:2106
 #, python-brace-format
 msgid ""
 "Error changing working directory to:\n"

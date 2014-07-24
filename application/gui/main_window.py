@@ -1724,7 +1724,12 @@ class MainWindow(gtk.Window):
 
 		if not multiple_instances or hide_on_close:
 			if DBus.is_available():
-				DBus.get_client(self).one_instance()
+				dbus_client = DBus.get_client(self)
+				# Make sure that the client is connected
+				if dbus_client.is_connected():
+					dbus_client.one_instance()
+
+				dbus_client.disconnect()
 
 			else:
 				# check for lockfile

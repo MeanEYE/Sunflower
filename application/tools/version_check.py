@@ -92,7 +92,16 @@ class VersionCheck:
 
 	def check(self):
 		"""Check for new version online"""
-		self._entry_current.set_text(('{0[major]}.{0[minor]}{0[stage]}-{0[build]}').format(self._application.version))
+		version = self._application.version
+
+		# prepare template
+		if version['stage'] != 'f':
+			template = '{0[major]}.{0[minor]}{0[stage]}-{0[build]}'
+		else: 
+			template = '{0[major]}.{0[minor]}-{0[build]}'
+
+		# populate version values
+		self._entry_current.set_text(template.format(version))
 		self._entry_latest.set_text(_('Checking...'))
 
 		# show dialog

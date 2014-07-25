@@ -1983,7 +1983,7 @@ class MainWindow(gtk.Window):
 			try:
 				if common.is_x_app(command[0]):
 					# command is X based, just execute it
-					os.system('{0} &'.format(raw_command))
+					process = subprocess.Popen(shlex.split(raw_command), cwd=active_object.path)
 
 				else:
 					# command is console based, create terminal tab and fork it

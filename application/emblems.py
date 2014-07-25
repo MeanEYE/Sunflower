@@ -23,7 +23,6 @@ class EmblemManager:
 			'emblem-readonly',
 			'emblem-shared',
 			'emblem-symbolic-link',
-			'emblem-synchronized',
 			'emblem-system',
 			'emblem-unreadable'
 		)

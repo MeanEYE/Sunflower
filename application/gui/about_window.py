@@ -180,7 +180,7 @@ class AboutWindow:
 		self._dialog.set_program_name(_('Sunflower'))
 		self._dialog.set_version(version)
 		self._dialog.set_logo(image.get_pixbuf())
-		self._dialog.set_website('code.google.com/p/sunflower-fm')
+		self._dialog.set_website('github.com/MeanEYE/Sunflower')
 		self._dialog.set_comments(_('Twin-panel file manager for Linux.'))
 
 		# set license

@@ -131,10 +131,8 @@ class FileList(ItemList):
 		cell_selected.set_property('xalign', 1)
 		cell_size.set_property('xalign', 1)
 
-		default_font_size = int(gtk.Settings().get_property('gtk-font-name').split()[-1])
-
-		self._default_fonts = {
-								'name': default_font_size,
+		# get default font size
+		self._default_column_font_size = {
 								'extension': 8,
 								'size': 8,
 								'mode': 8,
@@ -327,23 +325,37 @@ class FileList(ItemList):
 			self.change_path(user.home)
 
 	def set_default_font_size(self, column_name, size):
-		self._default_fonts.update({column_name: size})
+		"""Set default column font size."""
+		self._default_column_font_size.update({column_name: size})
 
 	def _set_font_size(self, columns):
-		"""Set font size from options"""
+		"""Apply font size from settings."""
+		options = self._parent.plugin_options.section(self._name)
+
 		for column in columns:
 			column.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
-			option_name = 'font_size_{0}'.format(column.get_data('name'))
-			size_points = self._parent.plugin_options.section(self._name).get(option_name)
 
-			if size_points is None:
-				size_points = self._default_fonts.get(column.get_data('name'))
+			column_name = column.get_data('name')
+			font_size = options.get('font_size_{0}'.format(column_name))
 
+			# make sure we have font size specified
+			if font_size is None:
+				font_size = self._default_column_font_size.get(column_name, None)
+
+			# no font size was specified, skip column
+			if font_size is None:
+				column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+				column.set_resizable(True)
+				continue
+
+			# apply font size to all cell renderers
 			for cell_renderer in column.get_cell_renderers():
 				try:
-					cell_renderer.set_property('size-points', size_points)
+					cell_renderer.set_property('size-points', font_size)
+
 				except TypeError:
 					pass
+
 			column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
 			column.set_resizable(True)
 

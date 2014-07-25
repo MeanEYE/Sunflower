@@ -157,9 +157,13 @@ class AboutWindow:
 		# create main window
 		self._dialog = gtk.AboutDialog()
 
-		# store parent locally, we'll need it later
-		version = '{0[major]}.{0[minor]}{0[stage]} ({0[build]})'.format(parent.version)
+		# prepare version template
+		if parent.version['stage'] != 'f':
+			version = '{0[major]}.{0[minor]}{0[stage]} ({0[build]})'.format(parent.version)
+		else:
+			version = '{0[major]}.{0[minor]} ({0[build]})'.format(parent.version)
 
+		# set about dialog image
 		base_path = os.path.dirname(os.path.dirname(sys.argv[0]))
 		image = gtk.Image()
 		image.set_from_file(os.path.abspath(os.path.join(base_path, 'images', 'splash.png')))

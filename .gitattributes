@@ -3,3 +3,4 @@
 Makefile export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
+.hg* export-ignore

@@ -4,25 +4,28 @@ import dbus, dbus.service, dbus.glib
 from parameters import Parameters
 
 
-class DBus_Client(object):
-
-	def __new__(cls, *args, **kwargs):
-		try:
-			if dbus.SessionBus().request_name('org.sunflower.API') != dbus.bus.REQUEST_NAME_REPLY_PRIMARY_OWNER:
-				return object.__new__(cls, args, kwargs)
-
-			else:
-				return None
-
-		except dbus.exceptions.DBusException:
-			return None
+class DBus_Client():
 
 	def __init__(self, app):
 		self._application = app
 		self._bus_name = 'org.sunflower.API'
 		self._path = '/org/sunflower/API'
 		self._bus = dbus.SessionBus()
-		self._proxy = self._bus.get_object(self._bus_name, self._path)
+		self._proxy = None
+		self.connect()
+
+	def connect(self):
+		try:
+			self._proxy = self._bus.get_object(self._bus_name, self._path)
+		except dbus.exceptions.DBusException:
+			self._proxy = None
+
+	def disconnect(self):
+		if self.is_connected():
+			self._proxy.close()
+
+	def is_connected(self):
+		return True if self._proxy else None
 
 	def show_window(self):
 		"""Send request to show window through DBus."""

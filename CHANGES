@@ -1,3 +1,43 @@
+Version 0.2-59
+  + Support for multiple file system monitors.
+  + Support for drag and drop in same directory.
+  + Support for column font size.
+  + Support for autocomplete in manual location entry.
+  + Support for XDG directory icons.
+  + Show plugin version if present in preferences window.
+  + Show long file names as tooltip.
+  + Right-click drag and drop with options "Copy", "Move", "Link".
+  + Option to choose to allow multiple instances.
+  + Emblem support.
+  + Created DBus support interface.
+  + Added support for locking tabs and tab menus.
+  + Add support for linking using DnD.
+  + Add missing translators to about window.
+  + Add affected items list in copy/move dialog.
+  * Updated Polish translation.
+  * Update Czech translation.
+  * Test for keyval validity before connecting accelerator.
+  * Stopped changing working directory on startup.
+  * Speed up directory loading speeds.
+  * Set working directory when executing command.
+  * Makefile was fixed to use Git for archiving.
+  * Make menu item always visible in operations menu.
+  * Handle quoted URIs properly.
+  * Fixed wrong destination in drag and drop.
+  * Fixed issues with icons when no icon theme is present.
+  * Fixed bug when file is edited after creation with wrong path.
+  * Fix regression with WebDav.
+  * Fix issue with terminal tabs and breadcrumbs.
+  * Fix issue with some accelerators.
+  * Fix issue with parameters containing space when program is started from command line.
+  * Fix issue with URIs in breadcrumbs.
+  * Delete file on remote if file already exist before trying to create.
+  * Create link dialog will no longer place keyboard accelerator in destination.
+  * Create fallback monitor when file system specific is not present.
+  * Changed home page and new issue URLs to GitHub.
+  * Changed formula for calculating color in breadcrumbs.
+  * Allow focus only when command entry is visible.
+
 Version 0.1a-58
   + Support for different toolbar styles.
   + Show all entries in history and select currently active path.

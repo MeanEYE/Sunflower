@@ -59,9 +59,9 @@ class MainWindow(gtk.Window):
 	# continue increasing and will never be reset.
 	version = {
 			'major': 0,
-			'minor': 1,
+			'minor': 2,
 			'build': 59,
-			'stage': 'a'
+			'stage': 'f'
 		}
 
 	NAUTILUS_SEND_TO_INSTALLED = common.executable_exists('nautilus-sendto')

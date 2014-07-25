@@ -86,18 +86,22 @@ class DBus_Service(dbus.service.Object):
 
 	@dbus.service.method(dbus_interface='org.sunflower.API')
 	def show_window(self):
+		"""Expose method for showing main window."""
 		self._application.set_visible(True)
 		self._application.indicator.adjust_visibility_items(True)
 
 	@dbus.service.method(dbus_interface='org.sunflower.API', utf8_strings=True)
 	def create_tab(self, path, position=None):
+		"""Expose method for creating standard tab."""
 		options = Parameters()
 		options.set('path', path)
 
 		if position == 'left':
 			notebook = self._application.left_notebook
+
 		elif position == 'right':
 			notebook = self._application.right_notebook
+
 		else:
 			notebook = self._application.get_active_notebook()
 
@@ -105,13 +109,16 @@ class DBus_Service(dbus.service.Object):
 
 	@dbus.service.method(dbus_interface='org.sunflower.API')
 	def create_terminal(self, path, position=None):
+		"""Expose method for creating terminal tab."""
 		options = Parameters()
 		options.set('path', path)
 
 		if position == 'left':
 			notebook = self._application.left_notebook
+
 		elif position == 'right':
 			notebook = self._application.right_notebook
+
 		else:
 			notebook = self._application.get_active_notebook()
 

@@ -509,7 +509,7 @@ class MainWindow(gtk.Window):
 						'type': 'image',
 						'stock': gtk.STOCK_HOME,
 						'callback': self.goto_web,
-						'data': 'code.google.com/p/sunflower-fm',
+						'data': 'sunflower-fm.org',
 						'path': '<Sunflower>/Help/HomePage',
 					},
 					{
@@ -524,7 +524,7 @@ class MainWindow(gtk.Window):
 						'type': 'image',
 						'image': 'lpi-bug',
 						'callback': self.goto_web,
-						'data': 'code.google.com/p/sunflower-fm/issues/entry',
+						'data': 'github.com/MeanEYE/Sunflower/issues/new',
 						'path': '<Sunflower>/Help/BugReport',
 					},
 					{'type': 'separator'},

@@ -8,7 +8,14 @@ version_major := $(shell cat $(working_directory)/application/gui/main_window.py
 version_minor := $(shell cat $(working_directory)/application/gui/main_window.py | grep \'minor\': | cut -f 2 -d : | tr -d [:space:][,])
 version_build := $(shell cat $(working_directory)/application/gui/main_window.py | grep \'build\': | cut -f 2 -d : | tr -d [:space:][,])
 version_stage := $(shell cat $(working_directory)/application/gui/main_window.py | grep \'stage\': | cut -f 2 -d : | tr -d [:space:][\'][,])
+
+ifeq ($(version_stage),f)
+version = $(version_major).$(version_minor).$(version_build)
+file_name = sunflower-$(version_major).$(version_minor)-$(version_build)
+else
 version = $(version_major).$(version_minor)$(version_stage).$(version_build)
+file_name = sunflower-$(version_major).$(version_minor)$(version_stage)-$(version_build)
+endif
 
 # Variables
 release ?= 1
@@ -16,7 +23,6 @@ packager ?= ""
 short_description = "Small and highly customizable twin-panel file manager for Linux with support for plugins."
 
 # Paths
-file_name = sunflower-$(version_major).$(version_minor)$(version_stage)-$(version_build)
 file_path = $(build_directory)/$(file_name)
 deb_file_path = $(build_directory)/sunflower-$(version)-$(release).all.deb
 pkg_file_path = $(build_directory)/sunflower-$(version)-$(release)-any.pkg.tar.xz

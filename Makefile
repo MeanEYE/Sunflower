@@ -1,4 +1,3 @@
-
 # Directories
 working_directory := $(dir $(lastword $(MAKEFILE_LIST)))
 build_directory ?= $(working_directory)/build
@@ -86,19 +85,11 @@ default: version help
 $(file_path).tgz:
 	$(info Preparing release...)
 	@mkdir -p $(build_directory)
-	@rm -f $(file_path).tar
 
 	# archive files
-	@hg archive --exclude dist/ --exclude Makefile --type tgz --prefix Sunflower $(file_path).tgz
-
-	# remove unneeded files
-	@gunzip $(file_path).tgz
-	@tar --delete --wildcards --file=$(file_path).tar Sunflower/.hg*
-	@tar --delete --wildcards --file=$(file_path).tar Sunflower/images/*.xcf
-
-	# repacking gzip archive
-	@gzip --best -c $(file_path).tar > $(file_path).tgz
-	@rm -f $(file_path).tar
+	@git archive \
+		--format=tar.gz --output=$(file_path).tgz \
+		--prefix=Sunflower/ release
 
 	# making checksum
 	@shasum -a 256 build/* > $(file_path).tgz.sha256

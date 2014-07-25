@@ -1,0 +1,5 @@
+/dist export-ignore
+/images/*.xcf export-ignore
+Makefile export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore

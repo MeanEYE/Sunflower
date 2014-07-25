@@ -1,7 +1,6 @@
-import gtk
 import math
-import pango
 
+from gi.repository import Gtk, Pango
 from widgets.breadcrumbs import Breadcrumbs
 
 
@@ -19,7 +18,7 @@ class TitleBar:
 
 		self._radius = 3
 		self._control_count = 0
-		self._state = gtk.STATE_NORMAL
+		self._state = Gtk.STATE_NORMAL
 		self._mode = Mode.NORMAL
 		self._menu = None
 		self._style = None
@@ -44,14 +43,14 @@ class TitleBar:
 		self._show_breadcrumbs = self._breadcrumb_type != Breadcrumbs.TYPE_NONE and is_list
 
 		# create container box
-		self._hbox = gtk.HBox(homogeneous=False, spacing=self._box_spacing)
+		self._hbox = Gtk.HBox(homogeneous=False, spacing=self._box_spacing)
 
 		# configure title bar
 		self._hbox.set_border_width(self._box_border_width)
 
-		self._container = gtk.EventBox()
+		self._container = Gtk.EventBox()
 		self._container.set_app_paintable(True)
-		self._container.add_events(gtk.gdk.BUTTON_RELEASE_MASK)
+		self._container.add_events(Gdk.BUTTON_RELEASE_MASK)
 
 		# connect signals
 		self._container.connect('realize', self.__realize_event)
@@ -59,44 +58,44 @@ class TitleBar:
 		self._hbox.connect('expose-event', self.__expose_event)
 
 		# top folder icon as default
-		self._icon = gtk.Image()
+		self._icon = Gtk.Image()
 
 		# create plugin main menu button
-		style = gtk.RcStyle()
+		style = Gtk.RcStyle()
 		style.xthickness = 0
 		style.ythickness = 0
 
-		self._button_menu = gtk.Button()
+		self._button_menu = Gtk.Button()
 		self._button_menu.add(self._icon)
 		if not self._button_relief:
-			self._button_menu.set_relief(gtk.RELIEF_NONE)
+			self._button_menu.set_relief(Gtk.RELIEF_NONE)
 		self._button_menu.modify_style(style)
 		self._button_menu.set_focus_on_click(False)
 		self._button_menu.set_tooltip_text(_('Context menu'))
 		self._button_menu.connect('clicked', self.show_menu)
 
 		# create title box
-		vbox = gtk.VBox(False, 1)
+		vbox = Gtk.VBox(False, 1)
 		if self._show_breadcrumbs:
 			self._breadcrumbs = Breadcrumbs(self)
 			vbox.pack_start(self._breadcrumbs, True, True, 0)
 
 		else:
-			self._title_label = gtk.Label()
+			self._title_label = Gtk.Label()
 			self._title_label.set_alignment(0, 0.5)
 			self._title_label.set_use_markup(True)
 			self._title_label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
 			vbox.pack_start(self._title_label, True, True, 0)
 
 		font = pango.FontDescription('8')
-		self._subtitle_label = gtk.Label()
+		self._subtitle_label = Gtk.Label()
 		self._subtitle_label.set_alignment(0, 0.5)
 		self._subtitle_label.set_use_markup(False)
 		self._subtitle_label.modify_font(font)
 
 		# create spinner control if it exists
 		if hasattr(gtk, 'Spinner'):
-			self._spinner = gtk.Spinner()
+			self._spinner = Gtk.Spinner()
 			self._spinner.set_size_request(20, 20)
 			self._spinner.set_property('no-show-all', True)
 
@@ -119,10 +118,10 @@ class TitleBar:
 		if self._style is None:
 			return
 
-		if self._state is gtk.STATE_NORMAL or normal_style:
+		if self._state is Gtk.STATE_NORMAL or normal_style:
 			# normal state
-			background = self._style.bg[gtk.STATE_NORMAL]
-			foreground = self._style.fg[gtk.STATE_NORMAL]
+			background = self._style.bg[Gtk.STATE_NORMAL]
+			foreground = self._style.fg[Gtk.STATE_NORMAL]
 
 		else:
 			if self._mode is Mode.NORMAL \
@@ -131,13 +130,13 @@ class TitleBar:
 				# selected state
 				if self._ubuntu_coloring:
 					# ubuntu coloring method
-					background = self._toolbar_style.bg[gtk.STATE_NORMAL]
-					foreground = self._toolbar_style.fg[gtk.STATE_NORMAL]
+					background = self._toolbar_style.bg[Gtk.STATE_NORMAL]
+					foreground = self._toolbar_style.fg[Gtk.STATE_NORMAL]
 
 				else:
 					# normal coloring method
-					background = self._style.bg[gtk.STATE_SELECTED]
-					foreground = self._style.fg[gtk.STATE_SELECTED]
+					background = self._style.bg[Gtk.STATE_SELECTED]
+					foreground = self._style.fg[Gtk.STATE_SELECTED]
 
 			else:
 				# for super user mode we use our custom colors
@@ -234,7 +233,7 @@ class TitleBar:
 		context.fill()
 
 		# draw focus if needed
-		if self._state is not gtk.STATE_NORMAL:
+		if self._state is not Gtk.STATE_NORMAL:
 			# draw background
 			context.set_source_color(active_color)
 			self.__draw_rectangle(context, hbox_rectangle, self._radius + 1)
@@ -258,29 +257,29 @@ class TitleBar:
 			self._breadcrumbs.apply_color(colors)
 
 		else:
-			self._title_label.modify_fg(gtk.STATE_NORMAL, colors[1])
+			self._title_label.modify_fg(Gtk.STATE_NORMAL, colors[1])
 
-		self._subtitle_label.modify_fg(gtk.STATE_NORMAL, colors[1])
+		self._subtitle_label.modify_fg(Gtk.STATE_NORMAL, colors[1])
 
 		# apply color to controls
-		self._button_menu.modify_fg(gtk.STATE_NORMAL, colors[1])
-		self._button_menu.modify_bg(gtk.STATE_NORMAL, colors[0])
-		self._button_menu.modify_fg(gtk.STATE_PRELIGHT, colors[1])
-		self._button_menu.modify_bg(gtk.STATE_PRELIGHT, colors[0])
-		self._button_menu.modify_fg(gtk.STATE_ACTIVE, colors[1])
-		self._button_menu.modify_bg(gtk.STATE_ACTIVE, colors[0])
+		self._button_menu.modify_fg(Gtk.STATE_NORMAL, colors[1])
+		self._button_menu.modify_bg(Gtk.STATE_NORMAL, colors[0])
+		self._button_menu.modify_fg(Gtk.STATE_PRELIGHT, colors[1])
+		self._button_menu.modify_bg(Gtk.STATE_PRELIGHT, colors[0])
+		self._button_menu.modify_fg(Gtk.STATE_ACTIVE, colors[1])
+		self._button_menu.modify_bg(Gtk.STATE_ACTIVE, colors[0])
 
 		for control in self._hbox.get_children():
-			control.modify_fg(gtk.STATE_NORMAL, colors[1])
-			control.modify_bg(gtk.STATE_NORMAL, colors[0])
-			control.modify_fg(gtk.STATE_PRELIGHT, colors[1])
-			control.modify_bg(gtk.STATE_PRELIGHT, colors[0])
-			control.modify_fg(gtk.STATE_ACTIVE, colors[1])
-			control.modify_bg(gtk.STATE_ACTIVE, colors[0])
+			control.modify_fg(Gtk.STATE_NORMAL, colors[1])
+			control.modify_bg(Gtk.STATE_NORMAL, colors[0])
+			control.modify_fg(Gtk.STATE_PRELIGHT, colors[1])
+			control.modify_bg(Gtk.STATE_PRELIGHT, colors[0])
+			control.modify_fg(Gtk.STATE_ACTIVE, colors[1])
+			control.modify_bg(Gtk.STATE_ACTIVE, colors[0])
 
 		# apply spinner color
 		if self._spinner is not None:
-			self._spinner.modify_fg(gtk.STATE_NORMAL, colors[1])
+			self._spinner.modify_fg(Gtk.STATE_NORMAL, colors[1])
 
 	def __get_menu_position(self, menu, button):
 		"""Get bookmarks position"""
@@ -298,8 +297,8 @@ class TitleBar:
 		self._control_count += 1
 		self._hbox.pack_end(widget, False, False, 0)
 
-		if issubclass(widget.__class__, gtk.Button):
-			widget.set_relief((gtk.RELIEF_NONE, gtk.RELIEF_NORMAL)[self._button_relief])
+		if issubclass(widget.__class__, Gtk.Button):
+			widget.set_relief((Gtk.RELIEF_NONE, Gtk.RELIEF_NORMAL)[self._button_relief])
 
 	def set_state(self, state):
 		"""Set GTK control state for title bar"""
@@ -317,8 +316,8 @@ class TitleBar:
 		"""Set title bar mode"""
 		self._mode = mode
 		self._super_user_colors = (
-						gtk.gdk.color_parse('red'),
-						gtk.gdk.color_parse('white')
+						Gdk.color_parse('red'),
+						Gdk.color_parse('white')
 					)
 
 	def set_title(self, text):
@@ -335,7 +334,7 @@ class TitleBar:
 
 	def set_icon_from_name(self, icon_name):
 		"""Set icon from specified name"""
-		self._icon.set_from_icon_name(icon_name, gtk.ICON_SIZE_LARGE_TOOLBAR)
+		self._icon.set_from_icon_name(icon_name, Gtk.IconSize.LARGE_TOOLBAR)
 
 	def set_menu(self, menu):
 		"""Set title bar menu"""
@@ -389,10 +388,10 @@ class TitleBar:
 		self._toolbar_style = self._application.menu_bar.get_style().copy()
 
 		# apply button relief
-		relief = (gtk.RELIEF_NONE, gtk.RELIEF_NORMAL)[self._button_relief]
+		relief = (Gtk.RELIEF_NONE, Gtk.RELIEF_NORMAL)[self._button_relief]
 
 		for control in self._hbox.get_children():
-			if issubclass(control.__class__, gtk.Button):
+			if issubclass(control.__class__, Gtk.Button):
 				control.set_relief(relief)
 
 		# apply new colors

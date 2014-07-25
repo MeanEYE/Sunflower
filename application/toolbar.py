@@ -1,5 +1,4 @@
-import gtk
-
+from gi.repository import Gtk
 from gui.input_dialog import CreateToolbarWidgetDialog
 
 
@@ -14,7 +13,7 @@ class ToolbarManager:
 		self._factory_cache = {}
 		self._factories = []
 
-		self._toolbar = gtk.Toolbar()
+		self._toolbar = Gtk.Toolbar()
 
 	def _widget_exists(self, name):
 		"""Check if widget with specified name exists"""
@@ -119,14 +118,14 @@ class ToolbarManager:
 		# get user response
 		response, name, widget_type = dialog.get_response()
 
-		if response == gtk.RESPONSE_ACCEPT:
+		if response == Gtk.RESPONSE_ACCEPT:
 			if None in (name, widget_type) or name == '':
 				# user didn't input all the data
-				dialog = gtk.MessageDialog(
+				dialog = Gtk.MessageDialog(
 					                    self._application,
-					                    gtk.DIALOG_DESTROY_WITH_PARENT,
-					                    gtk.MESSAGE_ERROR,
-					                    gtk.BUTTONS_OK,
+					                    Gtk.DIALOG_DESTROY_WITH_PARENT,
+					                    Gtk.MESSAGE_ERROR,
+					                    Gtk.BUTTONS_OK,
 					                    _(
 					                        "Error adding widget. You need to enter unique "
 				                            "name and select widget type."
@@ -137,11 +136,11 @@ class ToolbarManager:
 
 			elif self._widget_exists(name):
 				# item with the same name already exists
-				dialog = gtk.MessageDialog(
+				dialog = Gtk.MessageDialog(
 					                    self._application,
-					                    gtk.DIALOG_DESTROY_WITH_PARENT,
-					                    gtk.MESSAGE_ERROR,
-					                    gtk.BUTTONS_OK,
+					                    Gtk.DIALOG_DESTROY_WITH_PARENT,
+					                    Gtk.MESSAGE_ERROR,
+					                    Gtk.BUTTONS_OK,
 					                    _(
 				                            "Widget with specified name already exists. "
 				                            "You need to enter unique name and select widget type."
@@ -171,11 +170,11 @@ class ToolbarManager:
 		"""Show blocking configuration dialog for specified widget"""
 		if not widget_type in self._factory_cache:
 			# there is no factory for specified type, show error and return
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 		                            self._application,
-		                            gtk.DIALOG_DESTROY_WITH_PARENT,
-		                            gtk.MESSAGE_ERROR,
-		                            gtk.BUTTONS_OK,
+		                            Gtk.DIALOG_DESTROY_WITH_PARENT,
+		                            Gtk.MESSAGE_ERROR,
+		                            Gtk.BUTTONS_OK,
 		                            _(
 		                                "Plugin used to create selected toolbar widget is not active "
 			                            "or not present. In order to edit this entry you need to activate "

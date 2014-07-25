@@ -1,5 +1,4 @@
-import gtk
-
+from gi.repository import Gtk, Gio
 from gio import VolumeMonitor
 from gui.mounts_manager_window import MountsManagerWindow
 
@@ -119,11 +118,11 @@ class MountsManager:
 
 		else:
 			# print error
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_WARNING,
-									gtk.BUTTONS_OK,
+									Gtk.DIALOG_DESTROY_WITH_PARENT,
+									Gtk.MESSAGE_WARNING,
+									Gtk.BUTTONS_OK,
 									_('Specified item can not be unmounted.')
 								)
 			dialog.run()

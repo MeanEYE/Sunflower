@@ -1,8 +1,8 @@
 import os
-import gio
 import stat
 import shutil
 
+from gi.repository import Gio
 from local_monitor import LocalMonitor
 from plugin_base.provider import Provider, FileType, FileInfo, FileInfoExtended, SystemSize
 from plugin_base.provider import Support, TrashError

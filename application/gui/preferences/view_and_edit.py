@@ -1,5 +1,4 @@
-import gtk
-
+from gi.repository import Gtk
 from widgets.settings_page import SettingsPage
 
 
@@ -16,32 +15,32 @@ class ViewEditOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'view_and_edit', _('View & Edit'))
 
 		# viewer options
-		frame_view = gtk.Frame(_('View'))
+		frame_view = Gtk.Frame(_('View'))
 
-		label_not_implemented = gtk.Label('This option is not implemented yet.')
+		label_not_implemented = Gtk.Label('This option is not implemented yet.')
 		label_not_implemented.set_sensitive(False)
 
 		# editor options
-		frame_edit = gtk.Frame(_('Edit'))
+		frame_edit = Gtk.Frame(_('Edit'))
 
-		vbox_edit = gtk.VBox(False, 0)
+		vbox_edit = Gtk.VBox(False, 0)
 		vbox_edit.set_border_width(5)
 
 		# installed application
-		self._radio_application = gtk.RadioButton(label=_('Use installed application'))
+		self._radio_application = Gtk.RadioButton(label=_('Use installed application'))
 		self._radio_application.connect('toggled', self._parent.enable_save)
 
-		align_application = gtk.Alignment(xscale=1)
+		align_application = Gtk.Alignment(xscale=1)
 		align_application.set_padding(0, 10, 15, 15)
-		vbox_application = gtk.VBox(False, 0)
+		vbox_application = Gtk.VBox(False, 0)
 		vbox_application.set_border_width(5)
 
-		self._store = gtk.ListStore(str, str, str)
-		self._combobox_application = gtk.ComboBox(model=self._store)
+		self._store = Gtk.ListStore(str, str, str)
+		self._combobox_application = Gtk.ComboBox(model=self._store)
 		self._combobox_application.connect('changed', self._parent.enable_save)
 
-		cell_icon = gtk.CellRendererPixbuf()
-		cell_name = gtk.CellRendererText()
+		cell_icon = Gtk.CellRendererPixbuf()
+		cell_name = Gtk.CellRendererText()
 
 		self._combobox_application.pack_start(cell_icon, False)
 		self._combobox_application.pack_start(cell_name, True)
@@ -50,21 +49,21 @@ class ViewEditOptions(SettingsPage):
 		self._combobox_application.add_attribute(cell_name, 'text', Column.NAME)
 
 		# external options
-		self._radio_external = gtk.RadioButton(group=self._radio_application, label=_('Use external command'))
+		self._radio_external = Gtk.RadioButton(group=self._radio_application, label=_('Use external command'))
 		self._radio_external.connect('toggled', self._parent.enable_save)
 
-		align_external = gtk.Alignment(xscale=1)
+		align_external = Gtk.Alignment(xscale=1)
 		align_external.set_padding(0, 10, 15, 15)
-		vbox_external = gtk.VBox(False, 0)
+		vbox_external = Gtk.VBox(False, 0)
 		vbox_external.set_border_width(5)
 
-		label_editor = gtk.Label(_('Command line:'))
+		label_editor = Gtk.Label(_('Command line:'))
 		label_editor.set_alignment(0, 0.5)
 		label_editor.set_use_markup(True)
-		self._entry_editor = gtk.Entry()
+		self._entry_editor = Gtk.Entry()
 		self._entry_editor.connect('changed', self._parent.enable_save)
 
-		self._checkbox_terminal_command = gtk.CheckButton(_('Execute command in terminal tab'))
+		self._checkbox_terminal_command = Gtk.CheckButton(_('Execute command in terminal tab'))
 		self._checkbox_terminal_command.connect('toggled', self._parent.enable_save)
 
 		# pack ui

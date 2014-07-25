@@ -1,9 +1,8 @@
 import os
 import sys
-import gtk
-import gio
 import user
 
+from gi.repository import Gtk, Gio
 from common import UserDirectory, get_user_directory
 
 
@@ -12,7 +11,7 @@ class IconManager:
 
 	def __init__(self, parent):
 		self._parent = parent
-		self._icon_theme = gtk.icon_theme_get_default()
+		self._icon_theme = Gtk.icon_theme_get_default()
 		self._user_directories = None
 		self._default_file = None
 		self._default_directory = None
@@ -25,11 +24,11 @@ class IconManager:
 		# set default icons for file and directory
 		self._default_file = 'empty'
 		if not self.has_icon(self._default_file):
-			self._default_file = gtk.STOCK_FILE
+			self._default_file = Gtk.STOCK_FILE
 
 		self._default_directory = 'folder'
 		if not self.has_icon(self._default_directory):
-			self._default_directory = gtk.STOCK_DIRECTORY
+			self._default_directory = Gtk.STOCK_DIRECTORY
 
 		# special user directories
 		directories = []
@@ -70,7 +69,7 @@ class IconManager:
 		"""Get icon sizes for specified name"""
 		return self._icon_theme.get_icon_sizes(icon_name)
 
-	def get_icon_for_file(self, filename, size=gtk.ICON_SIZE_MENU):
+	def get_icon_for_file(self, filename, size=Gtk.IconSize.MENU):
 		"""Load icon for specified file"""
 		result = self._default_file
 		mime_type = self._parent.associations_manager.get_mime_type(filename)
@@ -78,7 +77,7 @@ class IconManager:
 
 		# get icon names
 		if mime_type is not None:
-			themed_icon = gio.content_type_get_icon(mime_type)
+			themed_icon = Gio.content_type_get_icon(mime_type)
 
 		# get only valid icon names
 		if themed_icon is not None:
@@ -90,7 +89,7 @@ class IconManager:
 
 		return result
 
-	def get_icon_for_directory(self, path, size=gtk.ICON_SIZE_MENU):
+	def get_icon_for_directory(self, path, size=Gtk.IconSize.MENU):
 		"""Get icon for specified directory"""
 		result = self._default_directory
 

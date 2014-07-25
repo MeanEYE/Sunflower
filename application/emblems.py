@@ -1,8 +1,8 @@
 import os
-import gtk
 import user
 import sqlite3 as sql
 
+from gi.repository import Gtk
 from common import get_cache_directory
 
 
@@ -237,7 +237,7 @@ class EmblemManager:
 		cursor.execute('SELECT value FROM emblems WHERE item=?', (item_id,))
 
 		# prepare result
-		icom_theme = gtk.icon_theme_get_default()
+		icom_theme = Gtk.icon_theme_get_default()
 		result = tuple(row[0] for row in cursor.fetchall())
 		result = filter(lambda icon: icom_theme.has_icon(icon), result)
 
@@ -263,7 +263,7 @@ class EmblemManager:
 		# get emblems for each item
 		for item_id, item_name in items:
 			cursor.execute('SELECT value FROM emblems WHERE item=?', (item_id,))
-			icom_theme = gtk.icon_theme_get_default()
+			icom_theme = Gtk.icon_theme_get_default()
 			emblems = tuple(row[0] for row in cursor.fetchall())
 			result[item_name] = filter(lambda icon: icom_theme.has_icon(icon), emblems)
 

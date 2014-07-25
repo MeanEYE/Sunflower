@@ -1,6 +1,6 @@
 import os
-import gio
 
+from gi.repository import Gio
 from plugin_base.monitor import Monitor, MonitorSignals, MonitorError
 
 

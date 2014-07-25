@@ -1,5 +1,4 @@
-import gtk
-
+from gi.repository import Gtk
 from widgets.settings_page import SettingsPage
 
 
@@ -15,43 +14,43 @@ class BookmarksOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'bookmarks', _('Bookmarks'))
 
 		# mounts checkbox
-		self._checkbox_show_mount_points = gtk.CheckButton(_('Show mount points in bookmarks menu'))
+		self._checkbox_show_mount_points = Gtk.CheckButton(_('Show mount points in bookmarks menu'))
 		self._checkbox_show_mount_points.connect('toggled', self._parent.enable_save)
 
 		# system bookmarks checkbox
-		self._checkbox_system_bookmarks = gtk.CheckButton(_('Show system bookmarks'))
+		self._checkbox_system_bookmarks = Gtk.CheckButton(_('Show system bookmarks'))
 		self._checkbox_system_bookmarks.connect('toggled', self._parent.enable_save)
 
 		# bookmarks checkbox
-		self._checkbox_add_home = gtk.CheckButton(_('Add home directory to bookmarks menu'))
+		self._checkbox_add_home = Gtk.CheckButton(_('Add home directory to bookmarks menu'))
 		self._checkbox_add_home.connect('toggled', self._parent.enable_save)
 
 		# create list box
-		container = gtk.ScrolledWindow()
-		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-		container.set_shadow_type(gtk.SHADOW_IN)
+		container = Gtk.ScrolledWindow()
+		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
+		container.set_shadow_type(Gtk.SHADOW_IN)
 
-		self._bookmarks = gtk.ListStore(str, str)
+		self._bookmarks = Gtk.ListStore(str, str)
 
-		self._list = gtk.TreeView()
+		self._list = Gtk.TreeView()
 		self._list.set_model(self._bookmarks)
 		self._list.set_rules_hint(True)
 
-		cell_title = gtk.CellRendererText()
+		cell_title = Gtk.CellRendererText()
 		cell_title.set_property('editable', True)
-		cell_title.set_property('mode', gtk.CELL_RENDERER_MODE_EDITABLE)
+		cell_title.set_property('mode', Gtk.CELL_RENDERER_MODE_EDITABLE)
 		cell_title.connect('edited', self._edited_bookmark, 0)
 
-		cell_command = gtk.CellRendererText()
+		cell_command = Gtk.CellRendererText()
 		cell_command.set_property('editable', True)
-		cell_command.set_property('mode', gtk.CELL_RENDERER_MODE_EDITABLE)
+		cell_command.set_property('mode', Gtk.CELL_RENDERER_MODE_EDITABLE)
 		cell_command.connect('edited', self._edited_bookmark, 1)
 
-		col_title = gtk.TreeViewColumn(_('Title'), cell_title, text=Column.NAME)
+		col_title = Gtk.TreeViewColumn(_('Title'), cell_title, text=Column.NAME)
 		col_title.set_min_width(200)
 		col_title.set_resizable(True)
 
-		col_command = gtk.TreeViewColumn(_('Location'), cell_command, text=Column.URI)
+		col_command = Gtk.TreeViewColumn(_('Location'), cell_command, text=Column.URI)
 		col_command.set_resizable(True)
 		col_command.set_expand(True)
 
@@ -61,26 +60,26 @@ class BookmarksOptions(SettingsPage):
 		container.add(self._list)
 
 		# create controls
-		button_box = gtk.HBox(False, 5)
+		button_box = Gtk.HBox(False, 5)
 
-		button_add = gtk.Button(stock=gtk.STOCK_ADD)
+		button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
 		button_add.connect('clicked', self._add_bookmark)
 
-		button_delete = gtk.Button(stock=gtk.STOCK_DELETE)
+		button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
 		button_delete.connect('clicked', self._delete_bookmark)
 
-		image_up = gtk.Image()
-		image_up.set_from_stock(gtk.STOCK_GO_UP, gtk.ICON_SIZE_BUTTON)
+		image_up = Gtk.Image()
+		image_up.set_from_stock(Gtk.STOCK_GO_UP, Gtk.IconSize.BUTTON)
 
-		button_move_up = gtk.Button(label=None)
+		button_move_up = Gtk.Button(label=None)
 		button_move_up.add(image_up)
 		button_move_up.set_tooltip_text(_('Move Up'))
 		button_move_up.connect('clicked', self._move_bookmark, -1)
 
-		image_down = gtk.Image()
-		image_down.set_from_stock(gtk.STOCK_GO_DOWN, gtk.ICON_SIZE_BUTTON)
+		image_down = Gtk.Image()
+		image_down.set_from_stock(Gtk.STOCK_GO_DOWN, Gtk.IconSize.BUTTON)
 
-		button_move_down = gtk.Button(label=None)
+		button_move_down = Gtk.Button(label=None)
 		button_move_down.add(image_down)
 		button_move_down.set_tooltip_text(_('Move Down'))
 		button_move_down.connect('clicked', self._move_bookmark, 1)
@@ -92,7 +91,7 @@ class BookmarksOptions(SettingsPage):
 		button_box.pack_end(button_move_up, False, False, 0)
 
 		# pack checkboxes
-		vbox = gtk.VBox(False, 0)
+		vbox = Gtk.VBox(False, 0)
 
 		vbox.pack_start(self._checkbox_show_mount_points, False, False, 0)
 		vbox.pack_start(self._checkbox_system_bookmarks, False, False, 0)

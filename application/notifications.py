@@ -3,6 +3,7 @@ import sys
 
 try:
 	import pynotify
+
 except:
 	pynotify = None
 

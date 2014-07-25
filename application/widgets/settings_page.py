@@ -1,11 +1,11 @@
-import gtk
+from gi.repository import Gtk
 
 
-class SettingsPage(gtk.VBox):
+class SettingsPage(Gtk.VBox):
 	"""Abstract class used to build pages in preferences window."""
 	
 	def __init__(self, parent, application, name, title):
-		gtk.VBox.__init__(self, False, 0)
+		Gtk.VBox.__init__(self, False, 0)
 
 		self._parent = parent
 		self._application = application

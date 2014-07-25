@@ -1,5 +1,4 @@
-import gtk
-
+from gi.repository import Gtk
 from plugin_base.provider import FileType
 from plugin_base.find_extension import FindExtension
 
@@ -11,18 +10,18 @@ class ContentsFindFiles(FindExtension):
 		FindExtension.__init__(self, parent)
 
 		# create container
-		vbox = gtk.VBox(False, 0)
+		vbox = Gtk.VBox(False, 0)
 
-		viewport = gtk.ScrolledWindow()
-		viewport.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-		viewport.set_shadow_type(gtk.SHADOW_IN)
+		viewport = Gtk.ScrolledWindow()
+		viewport.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_AUTOMATIC)
+		viewport.set_shadow_type(Gtk.SHADOW_IN)
 
 		# create entry widget
-		label_content = gtk.Label(_('Search for:'))
+		label_content = Gtk.Label(_('Search for:'))
 		label_content.set_alignment(0, 0.5)
 
-		self._buffer = gtk.TextBuffer()
-		self._text_view = gtk.TextView(self._buffer)
+		self._buffer = Gtk.TextBuffer()
+		self._text_view = Gtk.TextView(self._buffer)
 
 		# pack interface
 		viewport.add(self._text_view)

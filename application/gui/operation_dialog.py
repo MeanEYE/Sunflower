@@ -1,7 +1,6 @@
-import gtk
-import pango
-import gobject
 import common
+
+from gi.repository import Gtk, GObject, Pango
 
 
 class OperationDialog:
@@ -17,7 +16,7 @@ class OperationDialog:
 	MAX_SPEED_POINTS = 20  # how many points to aggregate
 
 	def __init__(self, application, thread):
-		self._window = gtk.Window(type=gtk.WINDOW_TOPLEVEL)
+		self._window = Gtk.Window(type=Gtk.WINDOW_TOPLEVEL)
 
 		self._paused = False
 		self._application = application
@@ -42,7 +41,7 @@ class OperationDialog:
 		# set window properties
 		self._window.set_title('Operation Dialog')
 		self._window.set_default_size(500, 10)
-		self._window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+		self._window.set_position(Gtk.WIN_POS_CENTER_ON_PARENT)
 		self._window.set_resizable(True)
 		self._window.set_skip_taskbar_hint(False)
 		self._window.set_transient_for(application)
@@ -57,16 +56,16 @@ class OperationDialog:
 		self._application.icon_manager.set_window_icon(self._window)
 
 		# create interface
-		self._vbox = gtk.VBox(False, 5)
+		self._vbox = Gtk.VBox(False, 5)
 
 		# operation items
-		self._operation_label = gtk.Label()
+		self._operation_label = Gtk.Label()
 		self._operation_label.set_alignment(0, 0.5)
-		self._operation_progress = gtk.ProgressBar()
-		self._operation_image = gtk.Image()
+		self._operation_progress = Gtk.ProgressBar()
+		self._operation_image = Gtk.Image()
 		self._set_operation_image()
 
-		vbox_operation = gtk.VBox(False, 0)
+		vbox_operation = Gtk.VBox(False, 0)
 		vbox_operation.pack_start(self._operation_label, False, False, 0)
 		vbox_operation.pack_start(self._operation_progress, False, False, 0)
 
@@ -83,20 +82,20 @@ class OperationDialog:
 	def _add_source_destination(self):
 		"""Add source and destination labels to the GUI"""
 		self._has_source_destination = True
-		table = gtk.Table(2, 2, False)
+		table = Gtk.Table(2, 2, False)
 		table.set_border_width(7)
 		table.set_col_spacing(0, 10)
 		table.set_row_spacing(0, 2)
 
-		self._label_source = gtk.Label(_('Source:'))
-		self._label_destination = gtk.Label(_('Destination:'))
+		self._label_source = Gtk.Label(_('Source:'))
+		self._label_destination = Gtk.Label(_('Destination:'))
 
-		self._value_source = gtk.Label()
-		self._value_destination = gtk.Label()
+		self._value_source = Gtk.Label()
+		self._value_destination = Gtk.Label()
 
 		# pack interface
-		table.attach(self._label_source, 0, 1, 0, 1, gtk.FILL)
-		table.attach(self._label_destination, 0, 1, 1, 2, gtk.FILL)
+		table.attach(self._label_source, 0, 1, 0, 1, Gtk.FILL)
+		table.attach(self._label_destination, 0, 1, 1, 2, Gtk.FILL)
 
 		table.attach(self._value_source, 1, 2, 0, 1)
 		table.attach(self._value_destination, 1, 2, 1, 2)
@@ -115,23 +114,23 @@ class OperationDialog:
 	def _add_current_file(self):
 		"""Add 'current file' progress to the GUI"""
 		self._has_current_file = True
-		table = gtk.Table(2, 2, False)
+		table = Gtk.Table(2, 2, False)
 		table.set_border_width(7)
 		table.set_row_spacing(0, 2)
 		table.set_col_spacing(0, 10)
 
-		self._label_status = gtk.Label('Current status...')
-		self._label_current_file = gtk.Label()
-		self._pb_current_file = gtk.ProgressBar()
+		self._label_status = Gtk.Label('Current status...')
+		self._label_current_file = Gtk.Label()
+		self._pb_current_file = Gtk.ProgressBar()
 		self._pb_current_file.set_pulse_step(0.005)
 
 		# pack interface
-		table.attach(self._label_status, 0, 1, 0, 1, gtk.FILL)
+		table.attach(self._label_status, 0, 1, 0, 1, Gtk.FILL)
 		table.attach(self._label_current_file, 1, 2, 0, 1)
 		table.attach(self._pb_current_file, 0, 2, 1, 2)
 
 		if self._has_source_destination:
-			separator = gtk.HSeparator()
+			separator = Gtk.HSeparator()
 			self._vbox.pack_start(separator, False, False, 0)
 		self._vbox.pack_start(table, False, False, 0)
 
@@ -143,27 +142,27 @@ class OperationDialog:
 	def _add_details(self):
 		"""Add ETA to the dialog"""
 		self._has_details = True
-		table = gtk.Table(2, 6, False)
+		table = Gtk.Table(2, 6, False)
 		table.set_border_width(7)
 
-		self._label_eta = gtk.Label(_('ETA:'))
-		self._label_speed = gtk.Label(_('Speed:'))
-		self._label_total_size = gtk.Label(_('Total size:'))
-		self._label_total_count = gtk.Label(_('Total count:'))
+		self._label_eta = Gtk.Label(_('ETA:'))
+		self._label_speed = Gtk.Label(_('Speed:'))
+		self._label_total_size = Gtk.Label(_('Total size:'))
+		self._label_total_count = Gtk.Label(_('Total count:'))
 
-		self._value_eta = gtk.Label()
-		self._value_speed = gtk.Label()
-		self._value_total_size = gtk.Label()
-		self._value_total_count = gtk.Label()
+		self._value_eta = Gtk.Label()
+		self._value_speed = Gtk.Label()
+		self._value_total_size = Gtk.Label()
+		self._value_total_count = Gtk.Label()
 
-		self._pb_total_size = gtk.ProgressBar()
-		self._pb_total_count = gtk.ProgressBar()
+		self._pb_total_size = Gtk.ProgressBar()
+		self._pb_total_count = Gtk.ProgressBar()
 
 		# pack interface
-		table.attach(self._label_eta, 0, 1, 0, 1, gtk.FILL)
-		table.attach(self._label_speed, 0, 1, 1, 2, gtk.FILL)
-		table.attach(self._label_total_size, 0, 1, 2, 3, gtk.FILL)
-		table.attach(self._label_total_count, 0, 1, 4, 5, gtk.FILL)
+		table.attach(self._label_eta, 0, 1, 0, 1, Gtk.FILL)
+		table.attach(self._label_speed, 0, 1, 1, 2, Gtk.FILL)
+		table.attach(self._label_total_size, 0, 1, 2, 3, Gtk.FILL)
+		table.attach(self._label_total_count, 0, 1, 4, 5, Gtk.FILL)
 
 		table.attach(self._value_eta, 1, 2, 0, 1)
 		table.attach(self._value_speed, 1, 2, 1, 2)
@@ -172,7 +171,7 @@ class OperationDialog:
 		table.attach(self._value_total_count, 1, 2, 4, 5)
 		table.attach(self._pb_total_count, 0, 2, 5, 6)
 
-		separator = gtk.HSeparator()
+		separator = Gtk.HSeparator()
 		self._vbox.pack_start(separator, False, False, 0)
 		self._vbox.pack_start(table, False, False, 0)
 
@@ -199,16 +198,16 @@ class OperationDialog:
 
 	def _add_buttons(self):
 		"""Add button bar"""
-		hbox = gtk.HBox(False, 5)
+		hbox = Gtk.HBox(False, 5)
 		hbox.set_border_width(7)
 
-		self._button_minimize = gtk.Button(_('Minimize'))
-		self._button_cancel = gtk.Button(_('Cancel'))
+		self._button_minimize = Gtk.Button(_('Minimize'))
+		self._button_cancel = Gtk.Button(_('Cancel'))
 
-		image_pause = gtk.Image()
-		image_pause.set_from_stock(gtk.STOCK_MEDIA_PAUSE, gtk.ICON_SIZE_BUTTON)
+		image_pause = Gtk.Image()
+		image_pause.set_from_stock(Gtk.STOCK_MEDIA_PAUSE, Gtk.IconSize.BUTTON)
 
-		self._button_pause = gtk.Button()
+		self._button_pause = Gtk.Button()
 		self._button_pause.add(image_pause)
 		self._button_pause.set_tooltip_text(_('Pause'))
 
@@ -221,24 +220,24 @@ class OperationDialog:
 		hbox.pack_start(self._button_pause, False, False, 0)
 		hbox.pack_end(self._button_cancel, False, False, 0)
 
-		separator = gtk.HSeparator()
+		separator = Gtk.HSeparator()
 		self._vbox.pack_end(hbox, False, False, 0)
 		self._vbox.pack_end(separator, False, False, 0)
 
 	def _confirm_cancel(self, message):
 		"""Create confirmation dialog with specified message and return result"""
-		dialog = gtk.MessageDialog(
+		dialog = Gtk.MessageDialog(
 						self._window,
-						gtk.DIALOG_DESTROY_WITH_PARENT, 
-						gtk.MESSAGE_QUESTION,
-						gtk.BUTTONS_YES_NO, 
+						Gtk.DIALOG_DESTROY_WITH_PARENT, 
+						Gtk.MESSAGE_QUESTION,
+						Gtk.BUTTONS_YES_NO, 
 						message
 					)
-		dialog.set_default_response(gtk.RESPONSE_YES)
+		dialog.set_default_response(Gtk.RESPONSE_YES)
 		result = dialog.run()
 		dialog.destroy()
 
-		return result == gtk.RESPONSE_YES
+		return result == Gtk.RESPONSE_YES
 
 	def _minimize_click(self, widget, data=None):
 		"""Handle minimize click"""
@@ -256,15 +255,15 @@ class OperationDialog:
 
 		if self._paused:
 			# thread is active, pause it
-			self._set_operation_image(gtk.STOCK_MEDIA_PAUSE)
-			image.set_from_stock(gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_BUTTON)
+			self._set_operation_image(Gtk.STOCK_MEDIA_PAUSE)
+			image.set_from_stock(Gtk.STOCK_MEDIA_PLAY, Gtk.IconSize.BUTTON)
 			self._button_pause.set_tooltip_text(_('Resume'))
 			self._thread.pause()
 
 		else:
 			# thread is paused, resume it
 			self._set_operation_image()
-			image.set_from_stock(gtk.STOCK_MEDIA_PAUSE, gtk.ICON_SIZE_BUTTON)
+			image.set_from_stock(Gtk.STOCK_MEDIA_PAUSE, Gtk.IconSize.BUTTON)
 			self._button_pause.set_tooltip_text(_('Pause'))
 			self._thread.resume()
 
@@ -374,7 +373,7 @@ class OperationDialog:
 
 	def _window_state(self, widget, event, data=None):
 		"""Handle change of window state"""
-		if event.new_window_state == gtk.gdk.WINDOW_STATE_ICONIFIED:
+		if event.new_window_state == Gdk.WINDOW_STATE_ICONIFIED:
 			# window was iconified, show operations menu item
 			self._application.operation_menu_changed()
 
@@ -385,7 +384,7 @@ class OperationDialog:
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
 		if icon_name is not None:
-			self._operation_image.set_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
+			self._operation_image.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
 
 	def is_active(self):
 		"""Return true if window is active"""
@@ -507,7 +506,7 @@ class CopyDialog(OperationDialog):
 
 		# set default icon
 		if icon_name is None:
-			self._operation_image.set_from_stock(gtk.STOCK_COPY, gtk.ICON_SIZE_MENU)
+			self._operation_image.set_from_stock(Gtk.STOCK_COPY, Gtk.IconSize.MENU)
 
 
 class MoveDialog(CopyDialog):
@@ -528,7 +527,7 @@ class MoveDialog(CopyDialog):
 
 		# set default icon
 		if icon_name is None:
-			self._operation_image.set_from_stock(gtk.STOCK_CUT, gtk.ICON_SIZE_MENU)
+			self._operation_image.set_from_stock(Gtk.STOCK_CUT, Gtk.IconSize.MENU)
 
 
 class DeleteDialog(OperationDialog):
@@ -555,7 +554,7 @@ class DeleteDialog(OperationDialog):
 
 		# set default icon
 		if icon_name is None:
-			self._operation_image.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_MENU)
+			self._operation_image.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.MENU)
 
 
 class RenameDialog(OperationDialog):
@@ -582,4 +581,4 @@ class RenameDialog(OperationDialog):
 
 		# set default icon
 		if icon_name is None:
-			self._operation_image.set_from_icon_name('edit-find-replace', gtk.ICON_SIZE_MENU)
+			self._operation_image.set_from_icon_name('edit-find-replace', Gtk.IconSize.MENU)

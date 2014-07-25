@@ -1,5 +1,4 @@
-import gtk
-
+from gi.repository import Gtk
 from widgets.settings_page import SettingsPage
 
 
@@ -22,54 +21,54 @@ class SessionsOptions(SettingsPage):
 		self._manager = None
 
 		# create list box
-		container = gtk.ScrolledWindow()
-		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-		container.set_shadow_type(gtk.SHADOW_IN)
+		container = Gtk.ScrolledWindow()
+		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
+		container.set_shadow_type(Gtk.SHADOW_IN)
 
-		self._store = gtk.ListStore(str, int, int)
+		self._store = Gtk.ListStore(str, int, int)
 
-		self._list = gtk.TreeView()
+		self._list = Gtk.TreeView()
 		self._list.set_model(self._store)
 		self._list.set_rules_hint(True)
 
 		# create cell renderers
-		cell_name = gtk.CellRendererText()
+		cell_name = Gtk.CellRendererText()
 		cell_name.set_property('editable', True)
-		cell_name.set_property('mode', gtk.CELL_RENDERER_MODE_EDITABLE)
+		cell_name.set_property('mode', Gtk.CELL_RENDERER_MODE_EDITABLE)
 		cell_name.connect('edited', self._handle_edited_name, 0)
 
-		cell_count = gtk.CellRendererText()
+		cell_count = Gtk.CellRendererText()
 
 		# create columns
-		col_name = gtk.TreeViewColumn(_('Name'), cell_name, text=Column.NAME)
+		col_name = Gtk.TreeViewColumn(_('Name'), cell_name, text=Column.NAME)
 		col_name.set_min_width(200)
 		col_name.set_resizable(True)
 		col_name.set_expand(True)
 
-		col_count = gtk.TreeViewColumn(_('Tabs'), cell_count, text=Column.TAB_COUNT)
+		col_count = Gtk.TreeViewColumn(_('Tabs'), cell_count, text=Column.TAB_COUNT)
 
 		self._list.append_column(col_name)
 		self._list.append_column(col_count)
 
 		# create controls
-		button_box = gtk.HBox(False, 5)
+		button_box = Gtk.HBox(False, 5)
 
-		button_add = gtk.Button(stock=gtk.STOCK_ADD)
+		button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
 		button_add.connect('clicked', self._handle_add_session)
 
-		button_delete = gtk.Button(stock=gtk.STOCK_DELETE)
+		button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
 		button_delete.connect('clicked', self._handle_delete_session)
 
-		image_up = gtk.Image()
-		image_up.set_from_stock(gtk.STOCK_GO_UP, gtk.ICON_SIZE_BUTTON)
-		button_move_up = gtk.Button(label=None)
+		image_up = Gtk.Image()
+		image_up.set_from_stock(Gtk.STOCK_GO_UP, Gtk.IconSize.BUTTON)
+		button_move_up = Gtk.Button(label=None)
 		button_move_up.add(image_up)
 		button_move_up.set_tooltip_text(_('Move up'))
 		button_move_up.connect('clicked', self._handle_move_session, -1)
 
-		image_down = gtk.Image()
-		image_down.set_from_stock(gtk.STOCK_GO_DOWN, gtk.ICON_SIZE_BUTTON)
-		button_move_down = gtk.Button(label=None)
+		image_down = Gtk.Image()
+		image_down.set_from_stock(Gtk.STOCK_GO_DOWN, Gtk.IconSize.BUTTON)
+		button_move_down = Gtk.Button(label=None)
 		button_move_down.add(image_down)
 		button_move_down.set_tooltip_text(_('Move down'))
 		button_move_down.connect('clicked', self._handle_move_session, 1)
@@ -151,11 +150,11 @@ class SessionsOptions(SettingsPage):
 		existing_sessions = filter(lambda session: text == session[Column.NAME], self._store)
 
 		if len(existing_sessions) > 0:
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self._parent,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_ERROR,
-									gtk.BUTTONS_OK,
+									Gtk.DIALOG_DESTROY_WITH_PARENT,
+									Gtk.MESSAGE_ERROR,
+									Gtk.BUTTONS_OK,
 									_('Session with this name already exists.')
 								)
 			dialog.run()
@@ -242,12 +241,12 @@ class SessionManager:
 						})
 
 		# create menus
-		self._session_menu = gtk.Menu()
-		self._session_menu_item = gtk.MenuItem()
+		self._session_menu = Gtk.Menu()
+		self._session_menu_item = Gtk.MenuItem()
 		self._session_menu_item.set_submenu(self._session_menu)
 		self._session_menu_item.set_right_justified(True)
 
-		self._manage_sessions_menu_item = gtk.MenuItem(_('Manage sessions'))
+		self._manage_sessions_menu_item = Gtk.MenuItem(_('Manage sessions'))
 		self._manage_sessions_menu_item.connect(
 								'activate',
 								self._application.preferences_window._show,
@@ -271,7 +270,7 @@ class SessionManager:
 		# iterate over saved sessions and create menu item for each
 		group = None
 		for index, session in enumerate(self._options.section('sessions').get('list')):
-			menu_item = gtk.RadioMenuItem(group, session.get('name'))
+			menu_item = Gtk.RadioMenuItem(group, session.get('name'))
 			menu_item.set_active(index == current_session)
 			menu_item.connect('activate', self._switch_session, index)
 			menu_item.show()
@@ -283,7 +282,7 @@ class SessionManager:
 			group = menu_item
 
 		# add options
-		separator = gtk.SeparatorMenuItem()
+		separator = Gtk.SeparatorMenuItem()
 		separator.show()
 
 		self._session_menu.append(separator)

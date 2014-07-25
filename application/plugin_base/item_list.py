@@ -1,8 +1,8 @@
 import os
-import gtk
 import urllib
 import common
 
+from gi.repository import Gtk
 from plugin import PluginBase
 from operation import CopyOperation, MoveOperation
 from accelerator_group import AcceleratorGroup
@@ -68,11 +68,11 @@ class ItemList(PluginBase):
 		self._columns = []
 
 		# bookmarks button
-		self._bookmarks_button = gtk.Button()
+		self._bookmarks_button = Gtk.Button()
 
 		if options.get('tab_button_icons'):
-			image_bookmarks = gtk.Image()
-			image_bookmarks.set_from_icon_name('go-jump', gtk.ICON_SIZE_MENU)
+			image_bookmarks = Gtk.Image()
+			image_bookmarks.set_from_icon_name('go-jump', Gtk.IconSize.MENU)
 			self._bookmarks_button.set_image(image_bookmarks)
 
 		else:
@@ -85,12 +85,12 @@ class ItemList(PluginBase):
 		self._title_bar.add_control(self._bookmarks_button)
 
 		# history button
-		self._history_button = gtk.Button()
+		self._history_button = Gtk.Button()
 
 		if options.get('tab_button_icons'):
 			# set icon
-			image_history = gtk.Image()
-			image_history.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
+			image_history = Gtk.Image()
+			image_history.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
 			self._history_button.set_image(image_history)
 		else:
 			# set text
@@ -103,12 +103,12 @@ class ItemList(PluginBase):
 		self._title_bar.add_control(self._history_button)
 
 		# terminal button
-		self._terminal_button = gtk.Button()
+		self._terminal_button = Gtk.Button()
 
 		if options.get('tab_button_icons'):
 			# set icon
-			image_terminal = gtk.Image()
-			image_terminal.set_from_icon_name('terminal', gtk.ICON_SIZE_MENU)
+			image_terminal = Gtk.Image()
+			image_terminal.set_from_icon_name('terminal', Gtk.IconSize.MENU)
 			self._terminal_button.set_image(image_terminal)
 		else:
 			# set text
@@ -126,11 +126,11 @@ class ItemList(PluginBase):
 		self._status_bar.add_group_with_icon('size', 'add', '0/0', tooltip=_('Size (selected/total)'))
 
 		# file list
-		self._container = gtk.ScrolledWindow()
-		self._container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-		self._container.set_shadow_type(gtk.SHADOW_IN)
+		self._container = Gtk.ScrolledWindow()
+		self._container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
+		self._container.set_shadow_type(Gtk.SHADOW_IN)
 
-		self._item_list = gtk.TreeView()
+		self._item_list = Gtk.TreeView()
 		self._item_list.set_fixed_height_mode(True)
 
 		# apply header visibility
@@ -152,11 +152,11 @@ class ItemList(PluginBase):
 		self._container.add(self._item_list)
 
 		# quick search
-		self._search_panel = gtk.HBox(False, 0)
+		self._search_panel = Gtk.HBox(False, 0)
 
-		label = gtk.Label(_('Search:'))
+		label = Gtk.Label(_('Search:'))
 
-		self._search_entry = gtk.Entry()
+		self._search_entry = Gtk.Entry()
 		self._search_entry.connect('key-press-event', self._handle_search_key_press)
 		self._search_entry.connect('focus-out-event', self._stop_search)
 		self._item_list.set_search_entry(self._search_entry)
@@ -173,14 +173,14 @@ class ItemList(PluginBase):
 		self._popup_menu = self._create_popup_menu()
 
 		# tab menu 
-		self._tab_menu = gtk.Menu()
+		self._tab_menu = Gtk.Menu()
 		self._title_bar.set_menu(self._tab_menu)
 
 		# create reload menu item
-		image_refresh = gtk.Image()
-		image_refresh.set_from_icon_name('reload', gtk.ICON_SIZE_MENU)
+		image_refresh = Gtk.Image()
+		image_refresh.set_from_icon_name('reload', Gtk.IconSize.MENU)
 
-		menu_item_refresh = gtk.ImageMenuItem()
+		menu_item_refresh = Gtk.ImageMenuItem()
 		menu_item_refresh.set_label(_('Reload item list'))
 		menu_item_refresh.set_image(image_refresh)
 		menu_item_refresh.connect('activate', self.refresh_file_list)
@@ -188,14 +188,14 @@ class ItemList(PluginBase):
 		self._tab_menu.append(menu_item_refresh)
 
 		# create copy path item
-		separator_path = gtk.SeparatorMenuItem()
+		separator_path = Gtk.SeparatorMenuItem()
 		separator_path.show()
 		self._tab_menu.append(separator_path)
 
-		image_copy = gtk.Image()
-		image_copy.set_from_stock(gtk.STOCK_COPY, gtk.ICON_SIZE_MENU)
+		image_copy = Gtk.Image()
+		image_copy.set_from_stock(Gtk.STOCK_COPY, Gtk.IconSize.MENU)
 
-		menu_item_copy_path = gtk.ImageMenuItem()
+		menu_item_copy_path = Gtk.ImageMenuItem()
 		menu_item_copy_path.set_label(_('Copy path to clipboard'))
 		menu_item_copy_path.set_image(image_copy)
 		menu_item_copy_path.connect('activate', self.copy_path_to_clipboard)
@@ -203,17 +203,17 @@ class ItemList(PluginBase):
 		self._tab_menu.append(menu_item_copy_path)
 
 		# create path entry item
-		menu_path_entry = gtk.MenuItem()
+		menu_path_entry = Gtk.MenuItem()
 		menu_path_entry.set_label(_('Enter path...'))
 		menu_path_entry.connect('activate', self.custom_path_entry)
 		menu_path_entry.show()
 		self._tab_menu.append(menu_path_entry)
 
 		# history menu
-		self._history_menu = gtk.Menu()
+		self._history_menu = Gtk.Menu()
 
 		# emblem menu
-		self._emblem_menu = gtk.Menu()
+		self._emblem_menu = Gtk.Menu()
 		self._prepare_emblem_menu()
 
 		# pack gui
@@ -226,7 +226,7 @@ class ItemList(PluginBase):
 	def _configure_accelerators(self):
 		"""Configure accelerator group"""
 		group = AcceleratorGroup(self._parent)
-		keyval = gtk.gdk.keyval_from_name
+		keyval = Gdk.keyval_from_name
 
 		# give parent chance to register its own accelerator group
 		PluginBase._configure_accelerators(self)
@@ -289,59 +289,59 @@ class ItemList(PluginBase):
 
 		# configure accelerators
 		group.set_accelerator('execute_item', keyval('Return'), 0)
-		group.set_accelerator('item_properties', keyval('Return'), gtk.gdk.MOD1_MASK)
-		group.set_accelerator('add_bookmark', keyval('d'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('edit_bookmarks', keyval('b'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('cut_to_clipboard', keyval('x'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('copy_to_clipboard', keyval('c'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('paste_from_clipboard', keyval('v'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('open_in_new_tab', keyval('t'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
-		group.set_accelerator('create_terminal', keyval('z'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('item_properties', keyval('Return'), Gdk.MOD1_MASK)
+		group.set_accelerator('add_bookmark', keyval('d'), Gdk.CONTROL_MASK)
+		group.set_accelerator('edit_bookmarks', keyval('b'), Gdk.CONTROL_MASK)
+		group.set_accelerator('cut_to_clipboard', keyval('x'), Gdk.CONTROL_MASK)
+		group.set_accelerator('copy_to_clipboard', keyval('c'), Gdk.CONTROL_MASK)
+		group.set_accelerator('paste_from_clipboard', keyval('v'), Gdk.CONTROL_MASK)
+		group.set_accelerator('open_in_new_tab', keyval('t'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
+		group.set_accelerator('create_terminal', keyval('z'), Gdk.CONTROL_MASK)
 		group.set_accelerator('parent_directory', keyval('BackSpace'), 0)
-		group.set_accelerator('root_directory', keyval('backslash'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('refresh_list', keyval('R'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('show_history', keyval('BackSpace'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('back_in_history', keyval('Left'), gtk.gdk.MOD1_MASK)
-		group.set_accelerator('forward_in_history', keyval('Right'), gtk.gdk.MOD1_MASK)
-		group.set_accelerator('select_all', keyval('A'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('deselect_all', keyval('A'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
-		group.set_accelerator('invert_selection', keyval('asterisk'), gtk.gdk.SHIFT_MASK)
+		group.set_accelerator('root_directory', keyval('backslash'), Gdk.CONTROL_MASK)
+		group.set_accelerator('refresh_list', keyval('R'), Gdk.CONTROL_MASK)
+		group.set_accelerator('show_history', keyval('BackSpace'), Gdk.CONTROL_MASK)
+		group.set_accelerator('back_in_history', keyval('Left'), Gdk.MOD1_MASK)
+		group.set_accelerator('forward_in_history', keyval('Right'), Gdk.MOD1_MASK)
+		group.set_accelerator('select_all', keyval('A'), Gdk.CONTROL_MASK)
+		group.set_accelerator('deselect_all', keyval('A'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
+		group.set_accelerator('invert_selection', keyval('asterisk'), Gdk.SHIFT_MASK)
 		group.set_alt_accelerator('invert_selection', keyval('KP_Multiply'), 0)
 		group.set_accelerator('toggle_selection', keyval('Insert'), 0)
-		group.set_alt_accelerator('toggle_selection', keyval('Down'), gtk.gdk.SHIFT_MASK)
-		group.set_accelerator('toggle_selection_up', keyval('Up'), gtk.gdk.SHIFT_MASK)
+		group.set_alt_accelerator('toggle_selection', keyval('Down'), Gdk.SHIFT_MASK)
+		group.set_accelerator('toggle_selection_up', keyval('Up'), Gdk.SHIFT_MASK)
 		group.set_accelerator('delete_files', keyval('Delete'), 0)
-		group.set_accelerator('force_delete_files', keyval('Delete'), gtk.gdk.SHIFT_MASK)
+		group.set_accelerator('force_delete_files', keyval('Delete'), Gdk.SHIFT_MASK)
 		group.set_alt_accelerator('delete_files', keyval('F8'), 0)
-		group.set_accelerator('show_left_bookmarks', keyval('F1'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('show_right_bookmarks', keyval('F2'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('show_left_bookmarks', keyval('F1'), Gdk.CONTROL_MASK)
+		group.set_accelerator('show_right_bookmarks', keyval('F2'), Gdk.CONTROL_MASK)
 		group.set_accelerator('rename_file', keyval('F2'), 0)
-		group.set_alt_accelerator('rename_file', keyval('F6'), gtk.gdk.SHIFT_MASK)
+		group.set_alt_accelerator('rename_file', keyval('F6'), Gdk.SHIFT_MASK)
 		group.set_accelerator('view_selected', keyval('F3'), 0)
 		group.set_accelerator('edit_selected', keyval('F4'), 0)
 		group.set_accelerator('copy_files', keyval('F5'), 0)
 		group.set_accelerator('move_files', keyval('F6'), 0)
 		group.set_accelerator('show_popup_menu', keyval('Menu'), 0)
-		group.set_alt_accelerator('show_popup_menu', keyval('F10'), gtk.gdk.SHIFT_MASK)
-		group.set_accelerator('show_open_with_menu', keyval('Menu'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('inherit_left_path', keyval('Right'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('inherit_right_path', keyval('Left'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('swap_paths', keyval('U'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('show_tab_menu', keyval('grave'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('copy_path_to_clipboard', keyval('l'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
-		group.set_accelerator('copy_selected_path_to_clipboard', keyval('c'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
-		group.set_accelerator('copy_path_to_command_entry', keyval('Return'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
-		group.set_accelerator('copy_selection_to_command_entry', keyval('Return'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('custom_path_entry', keyval('l'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('start_quick_search', keyval('f'), gtk.gdk.CONTROL_MASK)
+		group.set_alt_accelerator('show_popup_menu', keyval('F10'), Gdk.SHIFT_MASK)
+		group.set_accelerator('show_open_with_menu', keyval('Menu'), Gdk.CONTROL_MASK)
+		group.set_accelerator('inherit_left_path', keyval('Right'), Gdk.CONTROL_MASK)
+		group.set_accelerator('inherit_right_path', keyval('Left'), Gdk.CONTROL_MASK)
+		group.set_accelerator('swap_paths', keyval('U'), Gdk.CONTROL_MASK)
+		group.set_accelerator('show_tab_menu', keyval('grave'), Gdk.CONTROL_MASK)
+		group.set_accelerator('copy_path_to_clipboard', keyval('l'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
+		group.set_accelerator('copy_selected_path_to_clipboard', keyval('c'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
+		group.set_accelerator('copy_path_to_command_entry', keyval('Return'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
+		group.set_accelerator('copy_selection_to_command_entry', keyval('Return'), Gdk.CONTROL_MASK)
+		group.set_accelerator('custom_path_entry', keyval('l'), Gdk.CONTROL_MASK)
+		group.set_accelerator('start_quick_search', keyval('f'), Gdk.CONTROL_MASK)
 		group.set_accelerator('expand_directory', keyval('Right'), 0)
 		group.set_accelerator('collapse_directory', keyval('Left'), 0)
-		group.set_accelerator('create_link', keyval('F7'), gtk.gdk.SHIFT_MASK)
-		group.set_accelerator('show_emblem_menu', keyval('e'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('create_link', keyval('F7'), Gdk.SHIFT_MASK)
+		group.set_accelerator('show_emblem_menu', keyval('e'), Gdk.CONTROL_MASK)
 
 		# create bookmark accelerators
 		group.add_method('bookmark_home', _("Go to '{0}'"), self._parent.activate_bookmark, 0)
-		group.set_accelerator('bookmark_home', keyval('grave'), gtk.gdk.MOD1_MASK)
+		group.set_accelerator('bookmark_home', keyval('grave'), Gdk.MOD1_MASK)
 
 		for number in range(1, 11):
 			group.add_method(
@@ -355,7 +355,7 @@ class ItemList(PluginBase):
 			group.set_accelerator(
 						'bookmark_{0}'.format(number),
 						keyval(str(key_number)),
-						gtk.gdk.MOD1_MASK
+						Gdk.MOD1_MASK
 					)
 
 		# add accelerator group to the list
@@ -506,15 +506,15 @@ class ItemList(PluginBase):
 		right_click_select = self._parent.options.section('item_list').get('right_click_select')
 		single_click_navigation = self._parent.options.section('item_list').get('single_click_navigation')
 
-		shift_active = event.state & gtk.gdk.SHIFT_MASK
-		control_active = event.state & gtk.gdk.CONTROL_MASK
+		shift_active = event.state & Gdk.SHIFT_MASK
+		control_active = event.state & Gdk.CONTROL_MASK
 
 		# handle single click
-		if event.button is 1 and control_active and event.type in (gtk.gdk.BUTTON_PRESS, gtk.gdk.BUTTON_RELEASE):
+		if event.button is 1 and control_active and event.type in (Gdk.BUTTON_PRESS, Gdk.BUTTON_RELEASE):
 			# we handle left mouse press and release in order to prevent
 			# default widget behavior which leads to unpredictable results
 
-			if event.type is gtk.gdk.BUTTON_PRESS:
+			if event.type is Gdk.BUTTON_PRESS:
 				# focus clicked item on button press
 				item = self._item_list.get_path_at_pos(int(event.x), int(event.y))
 
@@ -530,7 +530,7 @@ class ItemList(PluginBase):
 			result = True
 
 		# handle range select
-		elif event.button is 1 and shift_active and event.type is gtk.gdk.BUTTON_PRESS:
+		elif event.button is 1 and shift_active and event.type is Gdk.BUTTON_PRESS:
 			start_path = None
 			end_path = None
 
@@ -559,8 +559,8 @@ class ItemList(PluginBase):
 
 		# handle navigation with double or single click
 		elif event.button is 1 and not (shift_active or control_active) \
-		and ((event.type is gtk.gdk._2BUTTON_PRESS and not single_click_navigation) \
-		or (event.type is gtk.gdk.BUTTON_RELEASE and single_click_navigation)):
+		and ((event.type is Gdk._2BUTTON_PRESS and not single_click_navigation) \
+		or (event.type is Gdk.BUTTON_RELEASE and single_click_navigation)):
 
 			# make sure that clicking on empty space doesn't trigger any action
 			if self._item_list.get_path_at_pos(int(event.x), int(event.y)) is not None:
@@ -568,13 +568,13 @@ class ItemList(PluginBase):
 				result = True
 
 		# handle middle click
-		elif event.button is 2 and event.type is gtk.gdk.BUTTON_RELEASE:
+		elif event.button is 2 and event.type is Gdk.BUTTON_RELEASE:
 			self._open_in_new_tab()
 			result = True
 
 		# handle right click
 		elif event.button is 3:
-			if event.type is gtk.gdk.BUTTON_PRESS:
+			if event.type is Gdk.BUTTON_PRESS:
 				# record mouse down timestamp
 				self._popup_timestamp = event.get_time()
 
@@ -582,7 +582,7 @@ class ItemList(PluginBase):
 				if control_active:
 					result = True
 
-			elif event.type is gtk.gdk.BUTTON_RELEASE:
+			elif event.type is Gdk.BUTTON_RELEASE:
 				# button was released, depending on options call specific method
 				time_valid = event.get_time() - self._popup_timestamp > 500
 				if event.x and event.y:
@@ -598,14 +598,14 @@ class ItemList(PluginBase):
 
 		# handle back button on mouse
 		elif event.button is 8:
-			if event.type is gtk.gdk.BUTTON_RELEASE:
+			if event.type is Gdk.BUTTON_RELEASE:
 				self.history_manager.back()
 
 			result = True
 
 		# handle forward button on mouse
 		elif event.button is 9:
-			if event.type is gtk.gdk.BUTTON_RELEASE:
+			if event.type is Gdk.BUTTON_RELEASE:
 				self.history_manager.forward()
 
 			result = True
@@ -618,14 +618,14 @@ class ItemList(PluginBase):
 
 		if not result:
 			# retrieve human readable key representation
-			key_value = gtk.gdk.keyval_to_unicode(event.keyval)
+			key_value = Gdk.keyval_to_unicode(event.keyval)
 
 			if not result and key_value > 0:
 				# generate state sting based on modifier state (control, alt, shift)
 				state = "%d%d%d" % (
-							bool(event.state & gtk.gdk.CONTROL_MASK),
-							bool(event.state & gtk.gdk.MOD1_MASK),
-							bool(event.state & gtk.gdk.SHIFT_MASK)
+							bool(event.state & Gdk.CONTROL_MASK),
+							bool(event.state & Gdk.MOD1_MASK),
+							bool(event.state & Gdk.SHIFT_MASK)
 						)
 
 				if state == self._parent.options.section('item_list').get('search_modifier'):
@@ -655,12 +655,12 @@ class ItemList(PluginBase):
 		"""Handle return and escape keys for quick search"""
 		result = False
 
-		if event.keyval == gtk.keysyms.Return:
+		if event.keyval == Gtk.keysyms.Return:
 			self._stop_search(widget)
 			self._execute_selected_item(widget)
 			result = True
 
-		elif event.keyval == gtk.keysyms.Escape:
+		elif event.keyval == Gtk.keysyms.Escape:
 			self._stop_search(widget)
 			result = True
 
@@ -682,11 +682,11 @@ class ItemList(PluginBase):
 
 		else:
 			# invalid path, notify user
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_ERROR,
-									gtk.BUTTONS_OK,
+									Gtk.DIALOG_DESTROY_WITH_PARENT,
+									Gtk.MESSAGE_ERROR,
+									Gtk.BUTTONS_OK,
 									_(
 										"Directory does not exist anymore or is not "
 										"valid. If path is not local check if specified "
@@ -720,11 +720,11 @@ class ItemList(PluginBase):
 
 		if Provider is None:
 			# no provider was found for specified protocol
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self._parent,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_ERROR,
-									gtk.BUTTONS_OK,
+									Gtk.DIALOG_DESTROY_WITH_PARENT,
+									Gtk.MESSAGE_ERROR,
+									Gtk.BUTTONS_OK,
 									_(
 										'Specified protocol ({0}) is not supported by '
 										'this application. Please check for available plugins '
@@ -752,11 +752,11 @@ class ItemList(PluginBase):
 		# check if we actually have data to handle
 		if len(source_provider.get_selection()) == 0:
 			# no provider was found for specified protocol
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self._parent,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_ERROR,
-									gtk.BUTTONS_OK,
+									Gtk.DIALOG_DESTROY_WITH_PARENT,
+									Gtk.MESSAGE_ERROR,
+									Gtk.BUTTONS_OK,
 									_(
 										'Application is unable to handle specified data. '
 										'Check if source items still exist.'
@@ -778,7 +778,7 @@ class ItemList(PluginBase):
 		dialog_result = dialog.get_response()
 
 		# check user response
-		if dialog_result[0] == gtk.RESPONSE_OK:
+		if dialog_result[0] == Gtk.RESPONSE_OK:
 			# user confirmed copying
 			operation = Operation(
 								self._parent,
@@ -975,14 +975,14 @@ class ItemList(PluginBase):
 
 	def _create_popup_menu(self):
 		"""Create popup menu and its constant elements"""
-		result = gtk.Menu()
+		result = Gtk.Menu()
 		menu_manager = self._parent.menu_manager
 
 		# construct menu
 		item = menu_manager.create_menu_item({
 								'label': _('_Open'),
 								'type': 'image',
-								'stock': gtk.STOCK_OPEN,
+								'stock': Gtk.STOCK_OPEN,
 								'callback': self._execute_selected_item,
 							})
 		result.append(item)
@@ -1005,12 +1005,12 @@ class ItemList(PluginBase):
 		item = menu_manager.create_menu_item({
 								'label': _('Open _with'),
 								'type': 'image',
-								'stock': gtk.STOCK_EXECUTE,
+								'stock': Gtk.STOCK_EXECUTE,
 							})
 		result.append(item)
 
 		self._open_with_item = item
-		self._open_with_menu = gtk.Menu()
+		self._open_with_menu = Gtk.Menu()
 		item.set_submenu(self._open_with_menu)
 
 		# additional options menu
@@ -1020,7 +1020,7 @@ class ItemList(PluginBase):
 		result.append(item)
 
 		self._additional_options_item = item
-		self._additional_options_menu = gtk.Menu()
+		self._additional_options_menu = Gtk.Menu()
 		item.set_submenu(self._additional_options_menu)
 
 		# separator
@@ -1031,7 +1031,7 @@ class ItemList(PluginBase):
 		item = menu_manager.create_menu_item({
 								'label': _('Create file'),
 								'type': 'image',
-								'stock': gtk.STOCK_NEW,
+								'stock': Gtk.STOCK_NEW,
 								'callback': self._parent._command_create,
 								'data': 'file'
 							})
@@ -1055,7 +1055,7 @@ class ItemList(PluginBase):
 		item = menu_manager.create_menu_item({
 								'label': _('Cu_t'),
 								'type': 'image',
-								'stock': gtk.STOCK_CUT,
+								'stock': Gtk.STOCK_CUT,
 								'callback': self._cut_files_to_clipboard,
 							})
 		result.append(item)
@@ -1064,7 +1064,7 @@ class ItemList(PluginBase):
 		item = menu_manager.create_menu_item({
 								'label': _('_Copy'),
 								'type': 'image',
-								'stock': gtk.STOCK_COPY,
+								'stock': Gtk.STOCK_COPY,
 								'callback': self._copy_files_to_clipboard,
 							})
 		result.append(item)
@@ -1073,7 +1073,7 @@ class ItemList(PluginBase):
 		item = menu_manager.create_menu_item({
 								'label': _('_Paste'),
 								'type': 'image',
-								'stock': gtk.STOCK_PASTE,
+								'stock': Gtk.STOCK_PASTE,
 								'callback': self._paste_files_from_clipboard,
 							})
 		result.append(item)
@@ -1104,7 +1104,7 @@ class ItemList(PluginBase):
 		item = menu_manager.create_menu_item({
 								'label': _('_Delete'),
 								'type': 'image',
-								'stock': gtk.STOCK_DELETE,
+								'stock': Gtk.STOCK_DELETE,
 								'callback': self._delete_files,
 							})
 		result.append(item)
@@ -1148,7 +1148,7 @@ class ItemList(PluginBase):
 		item = menu_manager.create_menu_item({
 								'label': _('_Properties'),
 								'type': 'image',
-								'stock': gtk.STOCK_PROPERTIES,
+								'stock': Gtk.STOCK_PROPERTIES,
 								'callback': self._item_properties
 							})
 		result.append(item)
@@ -1179,20 +1179,20 @@ class ItemList(PluginBase):
 		if len(item_list) > 0:
 			# create items
 			for item in item_list:
-				menu_item = gtk.MenuItem(item)
+				menu_item = Gtk.MenuItem(item)
 				menu_item.set_data('path', item)
 				menu_item.connect('activate', self._handle_history_click)
 
 				self._history_menu.append(menu_item)
 
 			# add entry to show complete history
-			separator = gtk.SeparatorMenuItem()
+			separator = Gtk.SeparatorMenuItem()
 			self._history_menu.append(separator)
 
-			image = gtk.Image()
-			image.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
+			image = Gtk.Image()
+			image.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
 
-			menu_item = gtk.ImageMenuItem()
+			menu_item = Gtk.ImageMenuItem()
 			menu_item.set_image(image)
 			menu_item.set_label(_('View complete history...'))
 			menu_item.connect('activate', self._show_history_window)
@@ -1200,7 +1200,7 @@ class ItemList(PluginBase):
 
 		else:
 			# no items to create, make blank item
-			menu_item = gtk.MenuItem(_('History is empty'))
+			menu_item = Gtk.MenuItem(_('History is empty'))
 			menu_item.set_sensitive(False)
 
 			self._history_menu.append(menu_item)
@@ -1563,7 +1563,7 @@ class ItemList(PluginBase):
 		response = dialog.get_response()
 
 		# try to navigate to specified path
-		if response[0] == gtk.RESPONSE_OK:
+		if response[0] == Gtk.RESPONSE_OK:
 			self.change_path(os.path.expanduser(response[1]))
 
 		return True

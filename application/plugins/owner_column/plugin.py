@@ -1,5 +1,4 @@
-import gtk
-
+from gi.repository import Gtk
 from plugins.file_list.plugin import Column, FileList
 from plugin_base.column_extension import ColumnExtension
 
@@ -21,10 +20,10 @@ class BaseColumn(ColumnExtension):
 
 	def _create_column(self):
 		"""Create column"""
-		self._cell_renderer = gtk.CellRendererText()
+		self._cell_renderer = Gtk.CellRendererText()
 		self._parent.set_default_font_size(self._get_column_name(), 8)
 
-		self._column = gtk.TreeViewColumn(self._get_column_title())
+		self._column = Gtk.TreeViewColumn(self._get_column_title())
 		self._column.pack_start(self._cell_renderer, True)
 		self._column.set_data('name', self._get_column_name())
 

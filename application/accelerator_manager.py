@@ -1,4 +1,4 @@
-import gtk
+from gi.repository import Gtk
 
 
 class GroupType:
@@ -29,7 +29,7 @@ class AcceleratorManager:
 
 		label = ''
 		if accelerator is not None:
-			label = gtk.accelerator_name(*accelerator)
+			label = Gtk.accelerator_name(*accelerator)
 
 		# don't allow overwriting user's configuration unless strictly specified
 		if not section.has(name) or (section.has(name) and can_overwrite):
@@ -45,7 +45,7 @@ class AcceleratorManager:
 		# try to load only if config has accelerator specified
 		if self._config.has_section(section) \
 		and self._config.section(section).has(name):
-			result = gtk.accelerator_parse(self._config.section(section).get(name))
+			result = Gtk.accelerator_parse(self._config.section(section).get(name))
 
 		return result
 

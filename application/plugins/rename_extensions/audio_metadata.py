@@ -1,6 +1,8 @@
 import os
-import gtk
 import string
+
+from gi.repository import Gtk
+from plugin_base.rename_extension import RenameExtension
 
 try:
 	import mutagen
@@ -8,8 +10,6 @@ try:
 
 except ImportError:
 	USE_MUTAGEN = False
-
-from plugin_base.rename_extension import RenameExtension
 
 
 class AudioMetadataRename(RenameExtension):
@@ -28,53 +28,53 @@ class AudioMetadataRename(RenameExtension):
 				}
 
 		# create template entry
-		label_template = gtk.Label(_('Template:'))
+		label_template = Gtk.Label(_('Template:'))
 		label_template.set_alignment(0, 0.5)
 
-		self._entry_template = gtk.Entry()
+		self._entry_template = Gtk.Entry()
 		self._entry_template.set_text('[[t]] [A] - [T]')
 		self._entry_template.connect('changed', self._update_parent_list)
 
 		# create replace entry
-		label_replace1 = gtk.Label(_('Replace:'))
+		label_replace1 = Gtk.Label(_('Replace:'))
 		label_replace1.set_alignment(0, 0.5)
 
-		self._entry_replace = gtk.Entry()
+		self._entry_replace = Gtk.Entry()
 		self._entry_replace.set_text(',?/')
 		self._entry_replace.connect('changed', self._update_parent_list)
 
 		# create replace combo boxes
-		label_replace2 = gtk.Label(_('With:'))
+		label_replace2 = Gtk.Label(_('With:'))
 		label_replace2.set_alignment(0, 0.5)
 
-		self._combobox_replace = gtk.combo_box_entry_new_text()
+		self._combobox_replace = Gtk.combo_box_entry_new_text()
 		self._combobox_replace.connect('changed', self._update_parent_list)
 
 		for str_rep in ('_', '-', ''):
 			self._combobox_replace.append_text(str_rep)
 
 		# create syntax
-		label_tip = gtk.Label()
+		label_tip = Gtk.Label()
 		label_tip.set_alignment(0, 0)
 		label_tip.set_use_markup(True)
 		label_tip.set_markup('<b>{0}</b>\n{1}'.format(_('Template syntax'),
 			'\n'.join(['{0}\t{1}'.format(k, v[1]) for k, v in self._templates.iteritems()])))
 
 		# create boxes
-		hbox = gtk.HBox(True, 15)
-		vbox_left = gtk.VBox(False, 5)
-		vbox_right = gtk.VBox(False, 0)
-		vbox_template = gtk.VBox(False, 0)
-		table_replace = gtk.Table(2, 2, False)
+		hbox = Gtk.HBox(True, 15)
+		vbox_left = Gtk.VBox(False, 5)
+		vbox_right = Gtk.VBox(False, 0)
+		vbox_template = Gtk.VBox(False, 0)
+		table_replace = Gtk.Table(2, 2, False)
 		table_replace.set_border_width(5)
 
-		frame_replace = gtk.Frame(label=_('Character replacement'))
+		frame_replace = Gtk.Frame(label=_('Character replacement'))
 
 		# disable checkbox if mutagen is not available
 		self._checkbox_active.set_sensitive(USE_MUTAGEN)
 
 		# create warning label
-		label_warning = gtk.Label(_(
+		label_warning = Gtk.Label(_(
 							'In order to use this extension you need <b>mutagen</b> module installed!'
 						))
 		label_warning.set_use_markup(True)
@@ -87,9 +87,9 @@ class AudioMetadataRename(RenameExtension):
 		self.vbox.remove(self._checkbox_active)
 
 		table_replace.attach(label_replace1, 0, 1, 0, 1)
-		table_replace.attach(self._entry_replace, 1, 2, 0, 1, xoptions=gtk.FILL)
+		table_replace.attach(self._entry_replace, 1, 2, 0, 1, xoptions=Gtk.FILL)
 		table_replace.attach(label_replace2, 0, 1, 1, 2)
-		table_replace.attach(self._combobox_replace, 1, 2, 1, 2, xoptions=gtk.FILL)
+		table_replace.attach(self._combobox_replace, 1, 2, 1, 2, xoptions=Gtk.FILL)
 
 		frame_replace.add(table_replace)
 

@@ -1,5 +1,4 @@
-import gtk
-
+from gi.repository import Gtk
 from widgets.settings_page import SettingsPage
 
 
@@ -8,7 +7,6 @@ class Column:
 	DESCRIPTION = 1
 	TYPE = 2
 	ICON = 3
-
 
 
 class ToolbarOptions(SettingsPage):
@@ -20,20 +18,20 @@ class ToolbarOptions(SettingsPage):
 		self._toolbar_manager = self._application.toolbar_manager
 
 		# create list box
-		container = gtk.ScrolledWindow()
-		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-		container.set_shadow_type(gtk.SHADOW_IN)
+		container = Gtk.ScrolledWindow()
+		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
+		container.set_shadow_type(Gtk.SHADOW_IN)
 
-		self._store = gtk.ListStore(str, str, str, str)
-		self._list = gtk.TreeView()
+		self._store = Gtk.ListStore(str, str, str, str)
+		self._list = Gtk.TreeView()
 		self._list.set_model(self._store)
 
-		cell_icon = gtk.CellRendererPixbuf()
-		cell_name = gtk.CellRendererText()
-		cell_type = gtk.CellRendererText()
+		cell_icon = Gtk.CellRendererPixbuf()
+		cell_name = Gtk.CellRendererText()
+		cell_type = Gtk.CellRendererText()
 
 		# create name column
-		col_name = gtk.TreeViewColumn(_('Name'))
+		col_name = Gtk.TreeViewColumn(_('Name'))
 		col_name.set_min_width(200)
 		col_name.set_resizable(True)
 
@@ -44,7 +42,7 @@ class ToolbarOptions(SettingsPage):
 		col_name.add_attribute(cell_name, 'text', Column.NAME)
 
 		# create type column
-		col_type = gtk.TreeViewColumn(_('Type'), cell_type, markup=Column.DESCRIPTION)
+		col_type = Gtk.TreeViewColumn(_('Type'), cell_type, markup=Column.DESCRIPTION)
 		col_type.set_resizable(True)
 		col_type.set_expand(True)
 
@@ -55,29 +53,29 @@ class ToolbarOptions(SettingsPage):
 		container.add(self._list)
 
 		# create controls
-		button_box = gtk.HBox(False, 5)
+		button_box = Gtk.HBox(False, 5)
 
-		button_add = gtk.Button(stock=gtk.STOCK_ADD)
+		button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
 		button_add.connect('clicked', self._add_widget)
 
-		button_delete = gtk.Button(stock=gtk.STOCK_DELETE)
+		button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
 		button_delete.connect('clicked', self._delete_widget)
 
-		button_edit = gtk.Button(stock=gtk.STOCK_EDIT)
+		button_edit = Gtk.Button(stock=Gtk.STOCK_EDIT)
 		button_edit.connect('clicked', self._edit_widget)
 
-		image_up = gtk.Image()
-		image_up.set_from_stock(gtk.STOCK_GO_UP, gtk.ICON_SIZE_BUTTON)
+		image_up = Gtk.Image()
+		image_up.set_from_stock(Gtk.STOCK_GO_UP, Gtk.IconSize.BUTTON)
 
-		button_move_up = gtk.Button(label=None)
+		button_move_up = Gtk.Button(label=None)
 		button_move_up.add(image_up)
 		button_move_up.set_tooltip_text(_('Move Up'))
 		button_move_up.connect('clicked', self._move_widget, -1)
 
-		image_down = gtk.Image()
-		image_down.set_from_stock(gtk.STOCK_GO_DOWN, gtk.ICON_SIZE_BUTTON)
+		image_down = Gtk.Image()
+		image_down.set_from_stock(Gtk.STOCK_GO_DOWN, Gtk.IconSize.BUTTON)
 
-		button_move_down = gtk.Button(label=None)
+		button_move_down = Gtk.Button(label=None)
 		button_move_down.add(image_down)
 		button_move_down.set_tooltip_text(_('Move Down'))
 		button_move_down.connect('clicked', self._move_widget, 1)
@@ -90,42 +88,42 @@ class ToolbarOptions(SettingsPage):
 		button_box.pack_end(button_move_up, False, False, 0)
 
 		# toolbar style
-		label_style = gtk.Label(_('Toolbar style:'))
-		list_styles = gtk.ListStore(str, int)
-		list_styles.append((_('Icons'), gtk.TOOLBAR_ICONS))
-		list_styles.append((_('Text'), gtk.TOOLBAR_TEXT))
-		list_styles.append((_('Both'), gtk.TOOLBAR_BOTH))
-		list_styles.append((_('Both horizontal'), gtk.TOOLBAR_BOTH_HORIZ))
+		label_style = Gtk.Label(_('Toolbar style:'))
+		list_styles = Gtk.ListStore(str, int)
+		list_styles.append((_('Icons'), Gtk.TOOLBAR_ICONS))
+		list_styles.append((_('Text'), Gtk.TOOLBAR_TEXT))
+		list_styles.append((_('Both'), Gtk.TOOLBAR_BOTH))
+		list_styles.append((_('Both horizontal'), Gtk.TOOLBAR_BOTH_HORIZ))
 
-		renderer = gtk.CellRendererText()
+		renderer = Gtk.CellRendererText()
 
-		self._combobox_styles = gtk.ComboBox(list_styles)
+		self._combobox_styles = Gtk.ComboBox(list_styles)
 		self._combobox_styles.pack_start(renderer)
 		self._combobox_styles.add_attribute(renderer, 'text', 0)
 		self._combobox_styles.connect('changed', self._parent.enable_save)
 
 		# toolbar icon size
-		label_icon_size = gtk.Label(_('Icon size:'))
-		list_icon_size = gtk.ListStore(str, int)
-		list_icon_size.append((_('Same as menu item'), gtk.ICON_SIZE_MENU))
-		list_icon_size.append((_('Small toolbar icon'), gtk.ICON_SIZE_SMALL_TOOLBAR))
-		list_icon_size.append((_('Large toolbar icon'), gtk.ICON_SIZE_LARGE_TOOLBAR))
-		list_icon_size.append((_('Same as buttons'), gtk.ICON_SIZE_BUTTON))
-		list_icon_size.append((_('Same as drag icons'), gtk.ICON_SIZE_DND))
-		list_icon_size.append((_('Same as dialog'), gtk.ICON_SIZE_DIALOG))
+		label_icon_size = Gtk.Label(_('Icon size:'))
+		list_icon_size = Gtk.ListStore(str, int)
+		list_icon_size.append((_('Same as menu item'), Gtk.IconSize.MENU))
+		list_icon_size.append((_('Small toolbar icon'), Gtk.IconSize.SMALL_TOOLBAR))
+		list_icon_size.append((_('Large toolbar icon'), Gtk.IconSize.LARGE_TOOLBAR))
+		list_icon_size.append((_('Same as buttons'), Gtk.IconSize.BUTTON))
+		list_icon_size.append((_('Same as drag icons'), Gtk.IconSize.DND))
+		list_icon_size.append((_('Same as dialog'), Gtk.IconSize.DIALOG))
 
-		renderer = gtk.CellRendererText()
+		renderer = Gtk.CellRendererText()
 
-		self._combobox_icon_size = gtk.ComboBox(list_icon_size)
+		self._combobox_icon_size = Gtk.ComboBox(list_icon_size)
 		self._combobox_icon_size.pack_start(renderer)
 		self._combobox_icon_size.add_attribute(renderer, 'text', 0)
 		self._combobox_icon_size.connect('changed', self._parent.enable_save)
 
-		style_box = gtk.HBox(False, 5)
+		style_box = Gtk.HBox(False, 5)
 		style_box.pack_start(label_style, False, False, 0)
 		style_box.pack_start(self._combobox_styles, False, False, 0)
 
-		size_box = gtk.HBox(False, 5)
+		size_box = Gtk.HBox(False, 5)
 		size_box.pack_start(label_icon_size, False, False, 0)
 		size_box.pack_start(self._combobox_icon_size, False, False, 0)
 

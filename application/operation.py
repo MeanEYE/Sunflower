@@ -1,8 +1,7 @@
 import os
-import gtk
-import gobject
 import fnmatch
 
+from gi.repository import Gtk, GObject
 from threading import Thread, Event
 from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OperationError, QuestionOperationError
 from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog, RenameDialog
@@ -79,7 +78,7 @@ class Operation(Thread):
 	def _destroy_ui(self):
 		"""Destroy user interface"""
 		if self._dialog is not None:
-			with gtk.gdk.lock:
+			with Gdk.lock:
 				self._dialog.destroy()
 
 	def _get_free_space_input(self, needed, available):
@@ -99,12 +98,12 @@ class Operation(Thread):
 
 		else:
 			# ask user what to do
-			with gtk.gdk.lock:
-				dialog = gtk.MessageDialog(
+			with Gdk.lock:
+				dialog = Gtk.MessageDialog(
 										self._dialog.get_window(),
-										gtk.DIALOG_DESTROY_WITH_PARENT,
-										gtk.MESSAGE_WARNING,
-										gtk.BUTTONS_YES_NO,
+										Gtk.DIALOG_DESTROY_WITH_PARENT,
+										Gtk.MESSAGE_WARNING,
+										Gtk.BUTTONS_YES_NO,
 										_(
 											'Target file system does not have enough '
 											'free space for this operation to continue.\n\n'
@@ -113,11 +112,11 @@ class Operation(Thread):
 											'Do you wish to continue?'
 										).format(space_needed, space_available)
 									)
-				dialog.set_default_response(gtk.RESPONSE_YES)
+				dialog.set_default_response(Gtk.RESPONSE_YES)
 				result = dialog.run()
 				dialog.destroy()
 
-				should_continue = result == gtk.RESPONSE_YES
+				should_continue = result == Gtk.RESPONSE_YES
 
 		return should_continue
 
@@ -130,7 +129,7 @@ class Operation(Thread):
 
 		else: 
 			# we are not in silent mode, ask user
-			with gtk.gdk.lock:
+			with Gdk.lock:
 				dialog = OverwriteDirectoryDialog(self._application, self._dialog.get_window())
 		
 				title_element = os.path.basename(path)
@@ -152,13 +151,13 @@ class Operation(Thread):
 							)
 		
 				result = dialog.get_response()
-				merge = result[0] == gtk.RESPONSE_YES
+				merge = result[0] == Gtk.RESPONSE_YES
 
 			if result[1][OverwriteOption.APPLY_TO_ALL]:
 				self._merge_all = merge
 
 			# in case user canceled operation
-			if result[0] == gtk.RESPONSE_CANCEL:
+			if result[0] == Gtk.RESPONSE_CANCEL:
 				self.cancel()
 
 		return merge  # return only response for current directory
@@ -173,7 +172,7 @@ class Operation(Thread):
 
 		else:
 			# we are not in silent mode, ask user what to do
-			with gtk.gdk.lock:
+			with Gdk.lock:
 				dialog = OverwriteFileDialog(self._application, self._dialog.get_window())
 		
 				title_element = os.path.basename(path)
@@ -195,13 +194,13 @@ class Operation(Thread):
 								)
 		
 				result = dialog.get_response()
-				overwrite = result[0] == gtk.RESPONSE_YES
+				overwrite = result[0] == Gtk.RESPONSE_YES
 
 			if result[1][OverwriteOption.APPLY_TO_ALL]:
 				self._overwrite_all = overwrite
 
 			# in case user canceled operation
-			if result[0] == gtk.RESPONSE_CANCEL:
+			if result[0] == Gtk.RESPONSE_CANCEL:
 				self.cancel()
 
 			# pass options from input dialog
@@ -214,11 +213,11 @@ class Operation(Thread):
 		if self._options[Option.SILENT]:
 			# we are in silent mode, set response and log error
 			self._error_list.append(str(error))
-			response = gtk.RESPONSE_NO
+			response = Gtk.RESPONSE_NO
 
 		else:
 			# we are not in silent mode, ask user
-			with gtk.gdk.lock:
+			with Gdk.lock:
 				dialog = OperationError(self._application)
 		
 				dialog.set_message(_(
@@ -230,7 +229,7 @@ class Operation(Thread):
 				response = dialog.get_response()
 		
 				# abort operation if user requested
-				if response == gtk.RESPONSE_CANCEL:
+				if response == Gtk.RESPONSE_CANCEL:
 					self.cancel()
 
 		return response
@@ -240,11 +239,11 @@ class Operation(Thread):
 		if self._options[Option.SILENT]:
 			# we are in silent mode, set response and log error
 			self._error_list.append(str(error))
-			response = gtk.RESPONSE_NO
+			response = Gtk.RESPONSE_NO
 
 		else:
 			# we are not in silent mode, ask user
-			with gtk.gdk.lock:
+			with Gdk.lock:
 				dialog = OperationError(self._application)
 		
 				if not is_directory:
@@ -267,7 +266,7 @@ class Operation(Thread):
 				response = dialog.get_response()
 		
 				# abort operation if user requested
-				if response == gtk.RESPONSE_CANCEL:
+				if response == Gtk.RESPONSE_CANCEL:
 					self.cancel()
 
 		return response
@@ -277,11 +276,11 @@ class Operation(Thread):
 		if self._options[Option.SILENT]:
 			# we are in silent mode, set response and log error
 			self._error_list.append(str(error))
-			response = gtk.RESPONSE_NO
+			response = Gtk.RESPONSE_NO
 
 		else:
 			# we are not in silent mode, ask user
-			with gtk.gdk.lock:
+			with Gdk.lock:
 				dialog = OperationError(self._application)
 		
 				dialog.set_message(_(
@@ -295,7 +294,7 @@ class Operation(Thread):
 				response = dialog.get_response()
 		
 				# abort operation if user requested
-				if response == gtk.RESPONSE_CANCEL:
+				if response == Gtk.RESPONSE_CANCEL:
 					self.cancel()
 
 		return response
@@ -305,11 +304,11 @@ class Operation(Thread):
 		if self._options is not None and self._options[Option.SILENT]:
 			# we are in silent mode, set response and log error
 			self._error_list.append(str(error))
-			response = gtk.RESPONSE_NO
+			response = Gtk.RESPONSE_NO
 
 		else:
 			# we are not in silent mode, ask user
-			with gtk.gdk.lock:
+			with Gdk.lock:
 				dialog = OperationError(self._application)
 		
 				dialog.set_message(_(
@@ -321,7 +320,7 @@ class Operation(Thread):
 				response = dialog.get_response()
 		
 				# abort operation if user requested
-				if response == gtk.RESPONSE_CANCEL:
+				if response == Gtk.RESPONSE_CANCEL:
 					self.cancel()
 
 		return response
@@ -331,11 +330,11 @@ class Operation(Thread):
 		if self._options is not None and self._options[Option.SILENT]:
 			# we are in silent mode, set response and log error
 			self._error_list.append(str(error))
-			response = gtk.RESPONSE_NO
+			response = Gtk.RESPONSE_NO
 
 		else:
 			# we are not in silent mode, ask user
-			with gtk.gdk.lock:
+			with Gdk.lock:
 				dialog = QuestionOperationError(self._application)
 		
 				dialog.set_message(_(
@@ -347,7 +346,7 @@ class Operation(Thread):
 				response = dialog.get_response()
 		
 				# abort operation if user requested
-				if response == gtk.RESPONSE_CANCEL:
+				if response == Gtk.RESPONSE_CANCEL:
 					self.cancel()
 
 		return response
@@ -357,11 +356,11 @@ class Operation(Thread):
 		if self._options[Option.SILENT]:
 			# we are in silent mode, set response and log error
 			self._error_list.append(str(error))
-			response = gtk.RESPONSE_NO
+			response = Gtk.RESPONSE_NO
 
 		else:
 			# we are not in silent mode, ask user
-			with gtk.gdk.lock:
+			with Gdk.lock:
 				dialog = OperationError(self._application)
 		
 				dialog.set_message(_(
@@ -373,7 +372,7 @@ class Operation(Thread):
 				response = dialog.get_response()
 		
 				# abort operation if user requested
-				if response == gtk.RESPONSE_CANCEL:
+				if response == Gtk.RESPONSE_CANCEL:
 					self.cancel()
 
 		return response
@@ -383,11 +382,11 @@ class Operation(Thread):
 		if self._options[Option.SILENT]:
 			# we are in silent mode, set response and log error
 			self._error_list.append(str(error))
-			response = gtk.RESPONSE_NO
+			response = Gtk.RESPONSE_NO
 
 		else:
 			# we are not in silent mode, ask user
-			with gtk.gdk.lock:
+			with Gdk.lock:
 				dialog = OperationError(self._application)
 		
 				dialog.set_message(_(
@@ -399,7 +398,7 @@ class Operation(Thread):
 				response = dialog.get_response()
 		
 				# abort operation if user requested
-				if response == gtk.RESPONSE_CANCEL:
+				if response == Gtk.RESPONSE_CANCEL:
 					self.cancel()
 
 		return response
@@ -409,11 +408,11 @@ class Operation(Thread):
 		if self._options[Option.SILENT]:
 			# we are in silent mode, set response and log error
 			self._error_list.append(str(error))
-			response = gtk.RESPONSE_NO
+			response = Gtk.RESPONSE_NO
 
 		else:
 			# we are not in silent mode, ask user
-			with gtk.gdk.lock:
+			with Gdk.lock:
 				dialog = OperationError(self._application)
 		
 				dialog.set_message(_(
@@ -425,7 +424,7 @@ class Operation(Thread):
 				response = dialog.get_response()
 		
 				# abort operation if user requested
-				if response == gtk.RESPONSE_CANCEL:
+				if response == Gtk.RESPONSE_CANCEL:
 					self.cancel()
 
 		return response
@@ -573,7 +572,7 @@ class CopyOperation(Operation):
 			# problem setting mode, ask user
 			response = self._get_mode_set_error_input(error)
 
-			if response == gtk.RESPONSE_YES:
+			if response == Gtk.RESPONSE_YES:
 				self._set_mode(path, mode)  # try to set mode again
 
 			return
@@ -600,7 +599,7 @@ class CopyOperation(Operation):
 			# problem with setting owner, ask user
 			response = self._get_mode_set_error_input(error)
 
-			if response == gtk.RESPONSE_YES:
+			if response == Gtk.RESPONSE_YES:
 				self._set_owner(path, user_id, group_id)  # try to set owner again
 
 			return
@@ -628,7 +627,7 @@ class CopyOperation(Operation):
 			# problem with setting owner, ask user
 			response = self._get_mode_set_error_input(error)
 
-			if response == gtk.RESPONSE_YES:
+			if response == Gtk.RESPONSE_YES:
 				self._set_timestamp(path, access_time, modify_time, change_time)
 
 			return
@@ -643,7 +642,7 @@ class CopyOperation(Operation):
 			# problem with reading specified directory, ask user
 			response = self._get_read_error_input(error)
 
-			if response == gtk.RESPONSE_YES:
+			if response == Gtk.RESPONSE_YES:
 				self._scan_directory(directory)
 
 			return
@@ -719,7 +718,7 @@ class CopyOperation(Operation):
 			response = self._get_create_error_input(error, True)
 
 			# handle user response
-			if response == gtk.RESPONSE_YES:
+			if response == Gtk.RESPONSE_YES:
 				self._create_directory(directory)
 
 			# exit method
@@ -804,7 +803,7 @@ class CopyOperation(Operation):
 			response = self._get_create_error_input(error)
 
 			# handle user response
-			if response == gtk.RESPONSE_YES:
+			if response == Gtk.RESPONSE_YES:
 				self._copy_file(dest_file)  # retry copying this file
 
 			else:
@@ -832,7 +831,7 @@ class CopyOperation(Operation):
 					# handle error
 					response = self._get_write_error_input(error)
 
-					if response == gtk.RESPONSE_YES:
+					if response == Gtk.RESPONSE_YES:
 						gobject.idle_add(self._dialog.increment_current_size, -dh.tell())
 						if hasattr(sh, 'close'): sh.close()
 						if hasattr(dh, 'close'): sh.close()
@@ -909,7 +908,7 @@ class CopyOperation(Operation):
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
 		# set dialog info
-		with gtk.gdk.lock:
+		with Gdk.lock:
 			self._dialog.set_source(self._source_path)
 			self._dialog.set_destination(self._destination_path)
 
@@ -928,7 +927,7 @@ class CopyOperation(Operation):
 				self.cancel()
 
 		# clear selection on source directory
-		with gtk.gdk.lock:
+		with Gdk.lock:
 			parent = self._source.get_parent()
 			if self._source_path == parent.path:
 				parent.deselect_all()
@@ -938,7 +937,7 @@ class CopyOperation(Operation):
 		self._copy_file_list()
 
 		# notify user if window is not focused
-		with gtk.gdk.lock:
+		with Gdk.lock:
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 				notify_manager = self._application.notification_manager
 				
@@ -988,7 +987,7 @@ class MoveOperation(CopyOperation):
 			response = self._get_remove_error_input(error)
 
 			# handle user response
-			if response == gtk.RESPONSE_YES:
+			if response == Gtk.RESPONSE_YES:
 				self._remove_path(path, item_list)  # retry removing path
 
 			else:
@@ -1045,7 +1044,7 @@ class MoveOperation(CopyOperation):
 			response = self._get_move_error_input(error)
 
 			# handle user response
-			if response == gtk.RESPONSE_YES:
+			if response == Gtk.RESPONSE_YES:
 				self._move_file(dest_file)  # retry copying this file
 
 			else:
@@ -1143,7 +1142,7 @@ class MoveOperation(CopyOperation):
 
 		"""
 		# set dialog info
-		with gtk.gdk.lock:
+		with Gdk.lock:
 			self._dialog.set_source(self._source_path)
 			self._dialog.set_destination(self._destination_path)
 
@@ -1160,7 +1159,7 @@ class MoveOperation(CopyOperation):
 				self.cancel()
 
 		# clear selection on source directory
-		with gtk.gdk.lock:
+		with Gdk.lock:
 			parent = self._source.get_parent()
 			if self._source_path == parent.path:
 				parent.deselect_all()
@@ -1180,7 +1179,7 @@ class MoveOperation(CopyOperation):
 			self._delete_file_list()
 
 		# notify user if window is not focused
-		with gtk.gdk.lock:
+		with Gdk.lock:
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 				notify_manager = self._application.notification_manager
 				
@@ -1240,7 +1239,7 @@ class DeleteOperation(Operation):
 			response = self._get_remove_error_input(error)
 
 			# handle user response
-			if response == gtk.RESPONSE_YES:
+			if response == Gtk.RESPONSE_YES:
 				self._remove_path(path)  # retry removing path
 
 			else:
@@ -1263,7 +1262,7 @@ class DeleteOperation(Operation):
 			response = self._get_trash_error_input(error)
 
 			# handle user response
-			if response == gtk.RESPONSE_YES:
+			if response == Gtk.RESPONSE_YES:
 				self._remove_path(path)  # retry removing path
 
 			else:
@@ -1278,7 +1277,7 @@ class DeleteOperation(Operation):
 		"""Main thread method, this is where all the stuff is happening"""
 		self._file_list = self._selection_list[:]  # use predefined selection list
 
-		with gtk.gdk.lock:
+		with Gdk.lock:
 			# clear selection on source directory
 			parent = self._source.get_parent()
 			if self._source_path == parent.path:
@@ -1317,7 +1316,7 @@ class DeleteOperation(Operation):
 				gobject.idle_add(self._dialog.set_current_file_fraction, 1)
 
 		# notify user if window is not focused
-		with gtk.gdk.lock:
+		with Gdk.lock:
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 				notify_manager = self._application.notification_manager
 				
@@ -1370,7 +1369,7 @@ class RenameOperation(Operation):
 			response = self._get_rename_error_input(error)
 
 			# handle user response
-			if response == gtk.RESPONSE_YES:
+			if response == Gtk.RESPONSE_YES:
 				self._remove_path(old_name, new_name, index)  # retry renaming path
 
 			else:
@@ -1398,7 +1397,7 @@ class RenameOperation(Operation):
 				gobject.idle_add(self._dialog.set_current_file_fraction, 1)
 
 		# notify user if window is not focused
-		with gtk.gdk.lock:
+		with Gdk.lock:
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 				notify_manager = self._application.notification_manager
 				

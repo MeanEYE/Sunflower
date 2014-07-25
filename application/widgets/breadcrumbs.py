@@ -1,9 +1,9 @@
 import os
-import gtk
-import pango
+
+from gi.repository import Gtk, Pango
 
 
-class Breadcrumbs(gtk.HBox):
+class Breadcrumbs(Gtk.HBox):
 	"""Widget for displaying paths with clickable segments."""
 
 	TYPE_NONE = 0
@@ -11,7 +11,7 @@ class Breadcrumbs(gtk.HBox):
 	TYPE_SMART = 2
 
 	def __init__(self, parent):
-		gtk.HBox.__init__(self)
+		Gtk.HBox.__init__(self)
 
 		self._parent = parent
 		self._type = self._parent._breadcrumb_type
@@ -19,7 +19,7 @@ class Breadcrumbs(gtk.HBox):
 		self._path = None
 		self._previous_path = None
 		self._colors = None
-		self._state = gtk.STATE_NORMAL
+		self._state = Gtk.STATE_NORMAL
 		self._smart_color = None
 		self._elements_size = None
 		self._elements_width = None
@@ -27,12 +27,12 @@ class Breadcrumbs(gtk.HBox):
 		self._highlight_index = None
 
 		# create user interface
-		self._path_object = gtk.DrawingArea()
+		self._path_object = Gtk.DrawingArea()
 
-		self._path_object.add_events(gtk.gdk.POINTER_MOTION_MASK)
-		self._path_object.add_events(gtk.gdk.LEAVE_NOTIFY_MASK)
-		self._path_object.add_events(gtk.gdk.BUTTON_PRESS_MASK)
-		self._path_object.add_events(gtk.gdk.ENTER_NOTIFY_MASK)
+		self._path_object.add_events(Gdk.POINTER_MOTION_MASK)
+		self._path_object.add_events(Gdk.LEAVE_NOTIFY_MASK)
+		self._path_object.add_events(Gdk.BUTTON_PRESS_MASK)
+		self._path_object.add_events(Gdk.ENTER_NOTIFY_MASK)
 
 		self._path_object.connect('expose-event', self.__expose_event)
 		self._path_object.connect('motion-notify-event', self.__motion_event)
@@ -53,13 +53,13 @@ class Breadcrumbs(gtk.HBox):
 		green = (background.green + foreground.green) / 2
 		blue = (background.blue + foreground.blue) / 2
 
-		return gtk.gdk.Color(red, green, blue)
+		return Gdk.Color(red, green, blue)
 
 	def __realize_event(self, widget, data=None):
 		"""Resize drawing area when object is realized"""
 		layout = widget.create_pango_layout('')
 
-		height = layout.get_size()[1] / pango.SCALE
+		height = layout.get_size()[1] / Pango.SCALE
 		self._path_object.set_size_request(-1, height)
 
 	def __leave_event(self, widget, event):
@@ -83,7 +83,7 @@ class Breadcrumbs(gtk.HBox):
 			path = self._previous_path
 
 		# handle single left mouse click
-		if event.button is 1 and event.type is gtk.gdk.BUTTON_PRESS:
+		if event.button is 1 and event.type is Gdk.BUTTON_PRESS:
 			width = self._elements_size[self._highlight_index]
 			new_path = path[0:width]
 			file_list = self._parent._parent
@@ -130,14 +130,14 @@ class Breadcrumbs(gtk.HBox):
 			self._allocation = widget.get_allocation()
 
 		# create attributes
-		attributes = pango.AttrList()
+		attributes = Pango.AttrList()
 
 		# check if path is part of previous one
 		if self._type is Breadcrumbs.TYPE_SMART \
 		and self._previous_path is not None \
 		and self._previous_path.startswith(self._path):
 			smart_color = (self._smart_color.red, self._smart_color.green, self._smart_color.blue)
-			attributes.insert(pango.AttrForeground(
+			attributes.insert(Pango.AttrForeground(
 											*smart_color,
 											start_index=path_length,
 											end_index=len(self._previous_path)
@@ -169,14 +169,14 @@ class Breadcrumbs(gtk.HBox):
 				layout.set_text(path)
 
 				# add width to the list
-				width = layout.get_size()[0] / pango.SCALE
+				width = layout.get_size()[0] / Pango.SCALE
 				self._elements_size.append(len(path))
 				self._elements_width.append(width)
 
 		# underline hovered path if specified
 		if None not in (self._highlight_index, self._elements_size):
 			width = self._elements_size[self._highlight_index]
-			attributes.insert(pango.AttrUnderline(pango.UNDERLINE_SINGLE, 0, width))
+			attributes.insert(Pango.AttrUnderline(Pango.UNDERLINE_SINGLE, 0, width))
 
 		# prepare text for drawing
 		layout.set_text(text_to_draw)

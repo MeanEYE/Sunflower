@@ -1,5 +1,4 @@
-import gtk
-
+from gi.repository import Gtk
 from gui.input_dialog import InputDialog, ApplicationInputDialog
 from widgets.settings_page import SettingsPage
 
@@ -16,23 +15,23 @@ class AssociationsOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'accelerators', _('Associations'))
 
 		# create interface
-		container = gtk.ScrolledWindow()
-		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-		container.set_shadow_type(gtk.SHADOW_IN)
+		container = Gtk.ScrolledWindow()
+		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
+		container.set_shadow_type(Gtk.SHADOW_IN)
 
-		self._associations = gtk.TreeStore(str, str)
-		self._list = gtk.TreeView(model=self._associations)
+		self._associations = Gtk.TreeStore(str, str)
+		self._list = Gtk.TreeView(model=self._associations)
 		self._list.set_rules_hint(True)
 		self._list.set_headers_visible(False)
 
-		cell_title = gtk.CellRendererText()
-		cell_command = gtk.CellRendererText()
+		cell_title = Gtk.CellRendererText()
+		cell_command = Gtk.CellRendererText()
 
-		col_title = gtk.TreeViewColumn(None, cell_title, text=0)
+		col_title = Gtk.TreeViewColumn(None, cell_title, text=0)
 		col_title.set_min_width(200)
 		col_title.set_resizable(True)
 
-		col_command = gtk.TreeViewColumn(None, cell_command, text=1)
+		col_command = Gtk.TreeViewColumn(None, cell_command, text=1)
 		col_command.set_resizable(True)
 		col_command.set_expand(True)
 
@@ -40,12 +39,12 @@ class AssociationsOptions(SettingsPage):
 		self._list.append_column(col_command)
 
 		# create add menu
-		self._add_menu = gtk.Menu()
+		self._add_menu = Gtk.Menu()
 		
-		item_add_mime_type = gtk.MenuItem(label=_('Add mime type'))
+		item_add_mime_type = Gtk.MenuItem(label=_('Add mime type'))
 		item_add_mime_type.connect('activate', self.__add_mime_type)
 
-		item_add_application = gtk.MenuItem(label=_('Add application to mime type'))
+		item_add_application = Gtk.MenuItem(label=_('Add application to mime type'))
 		item_add_application.connect('activate', self.__add_application)
 		
 		self._add_menu.append(item_add_mime_type)
@@ -54,9 +53,9 @@ class AssociationsOptions(SettingsPage):
 		self._add_menu.show_all()
 		
 		# create controls
-		hbox_controls = gtk.HBox(homogeneous=False, spacing=5)
+		hbox_controls = Gtk.HBox(homogeneous=False, spacing=5)
 		
-		button_add = gtk.Button(stock=gtk.STOCK_ADD)
+		button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
 		button_add.connect('clicked', self.__button_add_clicked)
 		
 		# pack interface
@@ -84,7 +83,7 @@ class AssociationsOptions(SettingsPage):
 		response = dialog.get_response()
 
 		# add new mime type to the table
-		if response[0] == gtk.RESPONSE_OK:
+		if response[0] == Gtk.RESPONSE_OK:
 			mime_type = response[1]
 			description = self._application.associations_manager.get_mime_description(mime_type)
 
@@ -112,7 +111,7 @@ class AssociationsOptions(SettingsPage):
 			response = dialog.get_response()
 
 			# add new mime type to the table
-			if response[0] == gtk.RESPONSE_OK:
+			if response[0] == Gtk.RESPONSE_OK:
 				name = response[1]
 				command = response[2]
 
@@ -124,11 +123,11 @@ class AssociationsOptions(SettingsPage):
 
 		else:
 			# warn user about selection
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self._parent,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_INFO,
-									gtk.BUTTONS_OK,
+									Gtk.DIALOG_DESTROY_WITH_PARENT,
+									Gtk.MESSAGE_INFO,
+									Gtk.BUTTONS_OK,
 									_(
 										'You need to select mime type to which application '
 										'will be added. You can also select another application '

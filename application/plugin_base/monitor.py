@@ -1,5 +1,4 @@
-import gobject
-
+from gi.repository import GObject
 from Queue import Queue, Empty as QueueEmptyException
 from threading import Event
 
@@ -19,7 +18,7 @@ class MonitorSignals:
 	EMBLEM_CHANGED = 8  # list of emblems has changed
 
 
-class Monitor(gobject.GObject):
+class Monitor(GObject.GObject):
 	"""File system monitor base class.
 
 	Monitors are used to watch over a specific path on file system
@@ -34,7 +33,7 @@ class Monitor(gobject.GObject):
 
 	__gtype_name__ = 'Sunflower_Monitor'	
 	__gsignals__ = {
-				'changed': (gobject.SIGNAL_RUN_LAST, None, (int, str, str)),
+				'changed': (GObject.SIGNAL_RUN_LAST, None, (int, str, str)),
 			}
 
 	TIMEOUT = 1000

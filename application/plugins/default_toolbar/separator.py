@@ -1,8 +1,8 @@
-import gtk
+from gi.repository import Gtk
 
 
-class Separator(gtk.SeparatorToolItem):
+class Separator(Gtk.SeparatorToolItem):
 	"""Toolbar separator widget"""
 
 	def __init__(self, application, name, config):
-		gtk.SeparatorToolItem.__init__(self)
+		Gtk.SeparatorToolItem.__init__(self)

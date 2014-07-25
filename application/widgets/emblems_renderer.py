@@ -1,9 +1,9 @@
-import gtk
 import cairo
-import gobject
+
+from gi.repository import Gtk, GObject
 
 
-class CellRendererEmblems(gtk.CellRenderer):
+class CellRendererEmblems(Gtk.CellRenderer):
 	"""Cell renderer that accepts list of icon names."""
 	__gproperties__ = {
 				'emblems': (
@@ -15,7 +15,7 @@ class CellRendererEmblems(gtk.CellRenderer):
 			}
 
 	def __init__(self):
-		gtk.CellRenderer.__init__(self)
+		Gtk.CellRenderer.__init__(self)
 		self.emblems = None
 		self.icon_size = 16
 		self.spacing = 2
@@ -48,7 +48,7 @@ class CellRendererEmblems(gtk.CellRenderer):
 		icon_size = self.icon_size
 		spacing = self.spacing
 		emblems = self.emblems
-		icon_theme = gtk.icon_theme_get_default()
+		icon_theme = Gtk.icon_theme_get_default()
 		context = window.cairo_create()
 
 		# position of next icon

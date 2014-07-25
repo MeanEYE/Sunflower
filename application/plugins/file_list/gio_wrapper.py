@@ -1,5 +1,4 @@
-import gio
-
+from gi.repository import Gio
 from plugin_base.provider import Mode
 
 

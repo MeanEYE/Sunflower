@@ -1,16 +1,16 @@
 import os
-import gio
-import gtk
 import shlex
 import urllib
 import subprocess
 
+from gi.repository import Gtk, Gio
 from common import is_x_app
 from collections import namedtuple
 from parameters import Parameters
 from plugin_base.provider import Mode
 from plugin_base.terminal import TerminalType
 from gui.input_dialog import ApplicationSelectDialog
+
 
 ApplicationInfo = namedtuple(
 				'ApplicationInfo',
@@ -308,6 +308,6 @@ class AssociationManager:
 				dialog = ApplicationSelectDialog(self._application, path)
 				result = dialog.get_response()
 
-				if result[0] == gtk.RESPONSE_OK:
+				if result[0] == Gtk.RESPONSE_OK:
 					self.open_file(selection=(path,), exec_command=result[2])
 

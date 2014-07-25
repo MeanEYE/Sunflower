@@ -1,6 +1,6 @@
 import os
-import gio
 
+from gi.repository import Gio
 from urllib import unquote
 from gio_wrapper import File
 from local_monitor import LocalMonitor as GioMonitor

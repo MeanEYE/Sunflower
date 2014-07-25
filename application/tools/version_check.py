@@ -1,6 +1,6 @@
-import gtk
 import urllib
 
+from gi.repository import Gtk
 from threading import Thread
 
 
@@ -14,7 +14,7 @@ class VersionCheck:
 	URL = 'http://sunflower-fm.googlecode.com/hg/.hgtags'
 
 	def __init__(self, application):
-		self._dialog = gtk.Window(type=gtk.WINDOW_TOPLEVEL)
+		self._dialog = Gtk.Window(type=Gtk.WINDOW_TOPLEVEL)
 
 		self._application = application
 
@@ -22,38 +22,38 @@ class VersionCheck:
 		self._dialog.set_title(_('Version check'))
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 		self._dialog.set_border_width(7)
-		self._dialog.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+		self._dialog.set_position(Gtk.WIN_POS_CENTER_ON_PARENT)
 		self._dialog.set_resizable(False)
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+		self._dialog.set_type_hint(Gdk.WINDOW_TYPE_HINT_DIALOG)
 		self._dialog.connect('key-press-event', self._handle_key_press)
 
 		# create user interface
-		vbox = gtk.VBox(False, 5)
-		hbox = gtk.HBox(False, 0)
-		table = gtk.Table(2, 2)
+		vbox = Gtk.VBox(False, 5)
+		hbox = Gtk.HBox(False, 0)
+		table = Gtk.Table(2, 2)
 
 		table.set_row_spacings(5)
 		table.set_col_spacings(5)
 
-		label_current = gtk.Label(_('Current:'))
+		label_current = Gtk.Label(_('Current:'))
 		label_current.set_alignment(0, 0.5)
 
-		label_latest = gtk.Label(_('Latest:'))
+		label_latest = Gtk.Label(_('Latest:'))
 		label_latest.set_alignment(0, 0.5)
 
-		self._entry_current = gtk.Entry()
+		self._entry_current = Gtk.Entry()
 		self._entry_current.set_editable(False)
 
-		self._entry_latest = gtk.Entry()
+		self._entry_latest = Gtk.Entry()
 		self._entry_latest.set_editable(False)
 
-		separator = gtk.HSeparator()
+		separator = Gtk.HSeparator()
 
 		# create controls
-		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
+		button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
 		button_close.connect('clicked', lambda widget: self._dialog.hide())
 
 		# pack user interface
@@ -82,12 +82,12 @@ class VersionCheck:
 		finally:
 			latest_data = data[-2].split(' ')
 
-			with gtk.gdk.lock:
+			with Gdk.lock:
 				self._entry_latest.set_text(latest_data[1])
 
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys"""
-		if event.keyval == gtk.keysyms.Escape:
+		if event.keyval == Gtk.keysyms.Escape:
 			self._dialog.hide()
 
 	def check(self):

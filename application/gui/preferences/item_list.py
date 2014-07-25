@@ -1,5 +1,4 @@
-import gtk
-
+from gi.repository import Gtk
 from common import AccessModeFormat
 from gui.input_dialog import InputDialog
 from widgets.breadcrumbs import Breadcrumbs
@@ -36,19 +35,19 @@ class ItemListOptions(SettingsPage):
 	def __init__(self, parent, application):
 		SettingsPage.__init__(self, parent, application, 'item_list', _('Item List'))
 
-		notebook = gtk.Notebook()
+		notebook = Gtk.Notebook()
 
 		# create frames
-		label_look_and_feel = gtk.Label(_('Look & feel'))
-		label_operation = gtk.Label(_('Operation'))
-		label_directories = gtk.Label(_('Directories'))
-		label_columns = gtk.Label(_('Columns'))
+		label_look_and_feel = Gtk.Label(_('Look & feel'))
+		label_operation = Gtk.Label(_('Operation'))
+		label_directories = Gtk.Label(_('Directories'))
+		label_columns = Gtk.Label(_('Columns'))
 
 		# vertical boxes
-		vbox_look_and_feel = gtk.VBox(False, 0)
-		vbox_operation = gtk.VBox(False, 0)
-		vbox_directory = gtk.VBox(False, 0)
-		vbox_columns = gtk.VBox(False, 0)
+		vbox_look_and_feel = Gtk.VBox(False, 0)
+		vbox_operation = Gtk.VBox(False, 0)
+		vbox_directory = Gtk.VBox(False, 0)
+		vbox_columns = Gtk.VBox(False, 0)
 
 		vbox_look_and_feel.set_border_width(5)
 		vbox_operation.set_border_width(5)
@@ -57,16 +56,16 @@ class ItemListOptions(SettingsPage):
 		vbox_columns.set_border_width(5)
 
 		# file list options
-		self._checkbox_row_hinting = gtk.CheckButton(_('Row hinting'))
-		self._checkbox_show_hidden = gtk.CheckButton(_('Show hidden files'))
-		self._checkbox_case_sensitive = gtk.CheckButton(_('Case sensitive item sorting'))
-		self._checkbox_number_sensitive = gtk.CheckButton(_('Number sensitive item sorting'))
-		self._checkbox_single_click = gtk.CheckButton(_('Single click navigation'))
-		self._checkbox_right_click = gtk.CheckButton(_('Right click selects items'))
-		self._checkbox_show_headers = gtk.CheckButton(_('Show list headers'))
-		self._checkbox_media_preview = gtk.CheckButton(_('Fast media preview'))
-		self._checkbox_show_expanders = gtk.CheckButton(_('Show tree expanders'))
-		self._checkbox_hide_scrollbar = gtk.CheckButton(_('Hide horizontal scrollbar'))
+		self._checkbox_row_hinting = Gtk.CheckButton(_('Row hinting'))
+		self._checkbox_show_hidden = Gtk.CheckButton(_('Show hidden files'))
+		self._checkbox_case_sensitive = Gtk.CheckButton(_('Case sensitive item sorting'))
+		self._checkbox_number_sensitive = Gtk.CheckButton(_('Number sensitive item sorting'))
+		self._checkbox_single_click = Gtk.CheckButton(_('Single click navigation'))
+		self._checkbox_right_click = Gtk.CheckButton(_('Right click selects items'))
+		self._checkbox_show_headers = Gtk.CheckButton(_('Show list headers'))
+		self._checkbox_media_preview = Gtk.CheckButton(_('Fast media preview'))
+		self._checkbox_show_expanders = Gtk.CheckButton(_('Show tree expanders'))
+		self._checkbox_hide_scrollbar = Gtk.CheckButton(_('Hide horizontal scrollbar'))
 
 		self._checkbox_row_hinting.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
@@ -80,73 +79,73 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_hide_scrollbar.connect('toggled', self._parent.enable_save)
 
 		# bread crumbs type
-		hbox_breadcrumbs = gtk.HBox(False, 5)
-		label_breadcrumbs = gtk.Label(_('Breadcrumbs:'))
+		hbox_breadcrumbs = Gtk.HBox(False, 5)
+		label_breadcrumbs = Gtk.Label(_('Breadcrumbs:'))
 		label_breadcrumbs.set_alignment(0, 0.5)
 		
-		list_breadcrumbs = gtk.ListStore(str, int)
+		list_breadcrumbs = Gtk.ListStore(str, int)
 		list_breadcrumbs.append((_('None'), Breadcrumbs.TYPE_NONE))
 		list_breadcrumbs.append((_('Normal'), Breadcrumbs.TYPE_NORMAL))
 		list_breadcrumbs.append((_('Smart'), Breadcrumbs.TYPE_SMART))
 
-		cell_breadcrumbs = gtk.CellRendererText()
+		cell_breadcrumbs = Gtk.CellRendererText()
 
-		self._combobox_breadcrumbs = gtk.ComboBox(list_breadcrumbs)
+		self._combobox_breadcrumbs = Gtk.ComboBox(list_breadcrumbs)
 		self._combobox_breadcrumbs.connect('changed', self._parent.enable_save)
 		self._combobox_breadcrumbs.pack_start(cell_breadcrumbs)
 		self._combobox_breadcrumbs.add_attribute(cell_breadcrumbs, 'text', 0)
 
 		# file access mode format
-		hbox_mode_format = gtk.HBox(False, 5)
-		label_mode_format = gtk.Label(_('Access mode format:'))
+		hbox_mode_format = Gtk.HBox(False, 5)
+		label_mode_format = Gtk.Label(_('Access mode format:'))
 		label_mode_format.set_alignment(0, 0.5)
 
-		list_mode_format = gtk.ListStore(str, int)
+		list_mode_format = Gtk.ListStore(str, int)
 		list_mode_format.append((_('Octal'), AccessModeFormat.OCTAL))
 		list_mode_format.append((_('Textual'), AccessModeFormat.TEXTUAL))
 
-		cell_mode_format = gtk.CellRendererText()
+		cell_mode_format = Gtk.CellRendererText()
 
-		self._combobox_mode_format = gtk.ComboBox(list_mode_format)
+		self._combobox_mode_format = Gtk.ComboBox(list_mode_format)
 		self._combobox_mode_format.connect('changed', self._parent.enable_save)
 		self._combobox_mode_format.pack_start(cell_mode_format)
 		self._combobox_mode_format.add_attribute(cell_mode_format, 'text', 0)
 
 		# grid lines
-		hbox_grid_lines = gtk.HBox(False, 5)
-		label_grid_lines = gtk.Label(_('Show grid lines:'))
+		hbox_grid_lines = Gtk.HBox(False, 5)
+		label_grid_lines = Gtk.Label(_('Show grid lines:'))
 		label_grid_lines.set_alignment(0, 0.5)
 
-		list_grid_lines = gtk.ListStore(str, int)
-		list_grid_lines.append((_('None'), gtk.TREE_VIEW_GRID_LINES_NONE))
-		list_grid_lines.append((_('Horizontal'), gtk.TREE_VIEW_GRID_LINES_HORIZONTAL))
-		list_grid_lines.append((_('Vertical'), gtk.TREE_VIEW_GRID_LINES_VERTICAL))
-		list_grid_lines.append((_('Both'), gtk.TREE_VIEW_GRID_LINES_BOTH))
+		list_grid_lines = Gtk.ListStore(str, int)
+		list_grid_lines.append((_('None'), Gtk.TREE_VIEW_GRID_LINES_NONE))
+		list_grid_lines.append((_('Horizontal'), Gtk.TREE_VIEW_GRID_LINES_HORIZONTAL))
+		list_grid_lines.append((_('Vertical'), Gtk.TREE_VIEW_GRID_LINES_VERTICAL))
+		list_grid_lines.append((_('Both'), Gtk.TREE_VIEW_GRID_LINES_BOTH))
 
-		cell_grid_lines = gtk.CellRendererText()
+		cell_grid_lines = Gtk.CellRendererText()
 
-		self._combobox_grid_lines = gtk.ComboBox(list_grid_lines)
+		self._combobox_grid_lines = Gtk.ComboBox(list_grid_lines)
 		self._combobox_grid_lines.connect('changed', self._parent.enable_save)
 		self._combobox_grid_lines.pack_start(cell_grid_lines)
 		self._combobox_grid_lines.add_attribute(cell_grid_lines, 'text', 0)
 
 		# selection color
-		hbox_selection_color = gtk.HBox(False, 5)
+		hbox_selection_color = Gtk.HBox(False, 5)
 
-		label_selection_color = gtk.Label(_('Selection color:'))
+		label_selection_color = Gtk.Label(_('Selection color:'))
 		label_selection_color.set_alignment(0, 0.5)
 
-		self._button_selection_color = gtk.ColorButton()
+		self._button_selection_color = Gtk.ColorButton()
 		self._button_selection_color.set_use_alpha(False)
 		self._button_selection_color.connect('color-set', self._parent.enable_save)
 
 		# selection indicator
-		hbox_indicator = gtk.HBox(False, 5)
+		hbox_indicator = Gtk.HBox(False, 5)
 
-		label_indicator = gtk.Label(_('Selection indicator:'))
+		label_indicator = Gtk.Label(_('Selection indicator:'))
 		label_indicator.set_alignment(0, 0.5)
 
-		list_indicator = gtk.ListStore(str)
+		list_indicator = Gtk.ListStore(str)
 		list_indicator.append((u'\u25b6',))
 		list_indicator.append((u'\u25e2',))
 		list_indicator.append((u'\u25c8',))
@@ -155,28 +154,28 @@ class ItemListOptions(SettingsPage):
 		list_indicator.append((u'\u2738',))
 		list_indicator.append((u'\u2731',))
 
-		self._combobox_indicator = gtk.ComboBoxEntry(list_indicator, 0)
+		self._combobox_indicator = Gtk.ComboBoxEntry(list_indicator, 0)
 		self._combobox_indicator.connect('changed', self._parent.enable_save)
 		self._combobox_indicator.set_size_request(100, -1)
 
 		# quick search
-		label_quick_search = gtk.Label(_('Quick search combination:'))
+		label_quick_search = Gtk.Label(_('Quick search combination:'))
 		label_quick_search.set_alignment(0, 0.5)
 		label_quick_search.set_use_markup(True)
-		self._checkbox_control = gtk.CheckButton(_('Control'))
-		self._checkbox_alt = gtk.CheckButton(_('Alt'))
-		self._checkbox_shift = gtk.CheckButton(_('Shift'))
+		self._checkbox_control = Gtk.CheckButton(_('Control'))
+		self._checkbox_alt = Gtk.CheckButton(_('Alt'))
+		self._checkbox_shift = Gtk.CheckButton(_('Shift'))
 
 		self._checkbox_control.connect('toggled', self._parent.enable_save)
 		self._checkbox_alt.connect('toggled', self._parent.enable_save)
 		self._checkbox_shift.connect('toggled', self._parent.enable_save)
 
-		hbox_quick_search = gtk.HBox(False, 5)
+		hbox_quick_search = Gtk.HBox(False, 5)
 
-		vbox_time_format = gtk.VBox(False, 0)
-		label_time_format = gtk.Label(_('Date format:'))
+		vbox_time_format = Gtk.VBox(False, 0)
+		label_time_format = Gtk.Label(_('Date format:'))
 		label_time_format.set_alignment(0, 0.5)
-		self._entry_time_format = gtk.Entry()
+		self._entry_time_format = Gtk.Entry()
 		self._entry_time_format.set_tooltip_markup(
 								'<b>' + _('Time is formed using the format located at:') + '</b>\n'
 								'http://docs.python.org/library/time.html#time.strftime'
@@ -184,65 +183,65 @@ class ItemListOptions(SettingsPage):
 		self._entry_time_format.connect('changed', self._parent.enable_save)
 
 		# create list of directories
-		container_directory = gtk.ScrolledWindow()
-		container_directory.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-		container_directory.set_shadow_type(gtk.SHADOW_IN)
+		container_directory = Gtk.ScrolledWindow()
+		container_directory.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
+		container_directory.set_shadow_type(Gtk.SHADOW_IN)
 
-		self._checkbox_load_directories = gtk.CheckButton(_('Load specified tabs instead of saved'))
+		self._checkbox_load_directories = Gtk.CheckButton(_('Load specified tabs instead of saved'))
 		self._checkbox_load_directories.connect('toggled', self._parent.enable_save)
 
-		self._directory_store = gtk.ListStore(str, bool, bool)
-		self._directory_list = gtk.TreeView(model=self._directory_store)
+		self._directory_store = Gtk.ListStore(str, bool, bool)
+		self._directory_list = Gtk.TreeView(model=self._directory_store)
 
-		cell_directory = gtk.CellRendererText()
-		cell_left_list = gtk.CellRendererToggle()
-		cell_right_list = gtk.CellRendererToggle()
+		cell_directory = Gtk.CellRendererText()
+		cell_left_list = Gtk.CellRendererToggle()
+		cell_right_list = Gtk.CellRendererToggle()
 
 		cell_left_list.connect('toggled', self._toggle_path, Source.LEFT)
 		cell_right_list.connect('toggled', self._toggle_path, Source.RIGHT)
 
-		col_directory = gtk.TreeViewColumn(_('Directory'), cell_directory, text=DirectoryColumn.PATH)
+		col_directory = Gtk.TreeViewColumn(_('Directory'), cell_directory, text=DirectoryColumn.PATH)
 		col_directory.set_min_width(200)
 		col_directory.set_resizable(True)
 		col_directory.set_expand(True)
 
-		col_left_list = gtk.TreeViewColumn(_('Left list'), cell_left_list, active=DirectoryColumn.LEFT_LIST)
-		col_right_list = gtk.TreeViewColumn(_('Right list'), cell_right_list, active=DirectoryColumn.RIGHT_LIST)
+		col_left_list = Gtk.TreeViewColumn(_('Left list'), cell_left_list, active=DirectoryColumn.LEFT_LIST)
+		col_right_list = Gtk.TreeViewColumn(_('Right list'), cell_right_list, active=DirectoryColumn.RIGHT_LIST)
 
 		self._directory_list.append_column(col_directory)
 		self._directory_list.append_column(col_left_list)
 		self._directory_list.append_column(col_right_list)
 
-		hbox_directory = gtk.HBox(False, 5)
+		hbox_directory = Gtk.HBox(False, 5)
 
-		button_add_directory = gtk.Button(stock=gtk.STOCK_ADD)
+		button_add_directory = Gtk.Button(stock=Gtk.STOCK_ADD)
 		button_add_directory.connect('clicked', self.__button_add_clicked)
 
-		button_delete_directory = gtk.Button(stock=gtk.STOCK_DELETE)
+		button_delete_directory = Gtk.Button(stock=Gtk.STOCK_DELETE)
 		button_delete_directory.connect('clicked', self._delete_path)
 
-		image_up = gtk.Image()
-		image_up.set_from_stock(gtk.STOCK_GO_UP, gtk.ICON_SIZE_BUTTON)
+		image_up = Gtk.Image()
+		image_up.set_from_stock(Gtk.STOCK_GO_UP, Gtk.IconSize.BUTTON)
 
-		button_directory_move_up = gtk.Button(label=None)
+		button_directory_move_up = Gtk.Button(label=None)
 		button_directory_move_up.add(image_up)
 		button_directory_move_up.set_tooltip_text(_('Move Up'))
 		button_directory_move_up.connect('clicked', self._move_path, -1)
 
-		image_down = gtk.Image()
-		image_down.set_from_stock(gtk.STOCK_GO_DOWN, gtk.ICON_SIZE_BUTTON)
+		image_down = Gtk.Image()
+		image_down.set_from_stock(Gtk.STOCK_GO_DOWN, Gtk.IconSize.BUTTON)
 
-		button_directory_move_down = gtk.Button(label=None)
+		button_directory_move_down = Gtk.Button(label=None)
 		button_directory_move_down.add(image_down)
 		button_directory_move_down.set_tooltip_text(_('Move Down'))
 		button_directory_move_down.connect('clicked', self._move_path, 1)
 
-		self._menu_add_directory = gtk.Menu()
+		self._menu_add_directory = Gtk.Menu()
 
-		menu_item_custom = gtk.MenuItem(_('Custom directory'))
-		menu_item_separator = gtk.SeparatorMenuItem()
-		menu_item_left_directory = gtk.MenuItem(_('Left directory'))
-		menu_item_right_directory = gtk.MenuItem(_('Right directory'))
+		menu_item_custom = Gtk.MenuItem(_('Custom directory'))
+		menu_item_separator = Gtk.SeparatorMenuItem()
+		menu_item_left_directory = Gtk.MenuItem(_('Left directory'))
+		menu_item_right_directory = Gtk.MenuItem(_('Right directory'))
 
 		menu_item_custom.connect('activate', self._add_path, Source.CUSTOM)
 		menu_item_left_directory.connect('activate', self._add_path, Source.LEFT)
@@ -256,58 +255,58 @@ class ItemListOptions(SettingsPage):
 		self._menu_add_directory.show_all()
 
 		# create columns editor
-		hbox_columns = gtk.HBox(False, 5)
+		hbox_columns = Gtk.HBox(False, 5)
 
-		container_columns = gtk.ScrolledWindow()
-		container_columns.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-		container_columns.set_shadow_type(gtk.SHADOW_IN)
+		container_columns = Gtk.ScrolledWindow()
+		container_columns.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
+		container_columns.set_shadow_type(Gtk.SHADOW_IN)
 
-		container_plugin = gtk.ScrolledWindow()
-		container_plugin.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-		container_plugin.set_shadow_type(gtk.SHADOW_IN)
+		container_plugin = Gtk.ScrolledWindow()
+		container_plugin.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_AUTOMATIC)
+		container_plugin.set_shadow_type(Gtk.SHADOW_IN)
 
 		# create variable to store active extension to
 		self._extensions = {}
 		self._active_extension = None
 
 		# create column list
-		self._columns_store = gtk.ListStore(str, int, bool, str)
-		self._columns_list = gtk.TreeView()
+		self._columns_store = Gtk.ListStore(str, int, bool, str)
+		self._columns_list = Gtk.TreeView()
 
 		self._columns_list.set_model(self._columns_store)
 		self._columns_list.set_rules_hint(True)
 		self._columns_list.set_enable_search(True)
 		self._columns_list.set_search_column(Column.NAME)
 
-		cell_name = gtk.CellRendererText()
-		cell_size = gtk.CellRendererText()
-		cell_visible = gtk.CellRendererToggle()
-		cell_font_size = gtk.CellRendererSpin()
+		cell_name = Gtk.CellRendererText()
+		cell_size = Gtk.CellRendererText()
+		cell_visible = Gtk.CellRendererToggle()
+		cell_font_size = Gtk.CellRendererSpin()
 
 		cell_size.set_property('editable', True)
-		cell_size.set_property('mode', gtk.CELL_RENDERER_MODE_EDITABLE)
+		cell_size.set_property('mode', Gtk.CELL_RENDERER_MODE_EDITABLE)
 		cell_size.connect('edited', self._edited_column_size)
 
 		cell_font_size.set_property('editable', True)
-		cell_font_size.set_property('mode', gtk.CELL_RENDERER_MODE_EDITABLE)
-		adjustment = gtk.Adjustment(0, 0, 100, 1, 10, 0)
+		cell_font_size.set_property('mode', Gtk.CELL_RENDERER_MODE_EDITABLE)
+		adjustment = Gtk.Adjustment(0, 0, 100, 1, 10, 0)
 		cell_font_size.set_property('adjustment', adjustment)
 		cell_font_size.connect('edited', self._edited_column_font_size)
 
 		cell_visible.connect('toggled', self._toggle_column_visible)
 
-		col_name = gtk.TreeViewColumn(_('Column'), cell_name, text=Column.NAME)
+		col_name = Gtk.TreeViewColumn(_('Column'), cell_name, text=Column.NAME)
 		col_name.set_min_width(150)
 		col_name.set_resizable(True)
 		col_name.set_expand(True)
 
-		col_size = gtk.TreeViewColumn(_('Size'), cell_size, text=Column.SIZE)
+		col_size = Gtk.TreeViewColumn(_('Size'), cell_size, text=Column.SIZE)
 		col_size.set_min_width(50)
 
-		col_visible = gtk.TreeViewColumn(_('Visible'), cell_visible, active=Column.VISIBLE)
+		col_visible = Gtk.TreeViewColumn(_('Visible'), cell_visible, active=Column.VISIBLE)
 		col_visible.set_min_width(50)
 
-		col_font_size = gtk.TreeViewColumn(_('Font'), cell_font_size, text=Column.FONT_SIZE)
+		col_font_size = Gtk.TreeViewColumn(_('Font'), cell_font_size, text=Column.FONT_SIZE)
 		col_font_size.set_min_width(50)
 
 		self._columns_list.append_column(col_name)
@@ -316,8 +315,8 @@ class ItemListOptions(SettingsPage):
 		self._columns_list.append_column(col_visible)
 
 		# create plugin list
-		self._extension_store = gtk.ListStore(str, str)
-		self._extension_list = gtk.TreeView()
+		self._extension_store = Gtk.ListStore(str, str)
+		self._extension_list = Gtk.TreeView()
 
 		self._extension_list.set_model(self._extension_store)
 		self._extension_list.set_size_request(130, -1)
@@ -325,8 +324,8 @@ class ItemListOptions(SettingsPage):
 
 		self._extension_list.connect('cursor-changed', self._handle_cursor_change)
 
-		cell_name = gtk.CellRendererText()
-		col_name = gtk.TreeViewColumn(None, cell_name, text=ExtensionColumn.NAME)
+		cell_name = Gtk.CellRendererText()
+		col_name = Gtk.TreeViewColumn(None, cell_name, text=ExtensionColumn.NAME)
 
 		self._extension_list.append_column(col_name)
 
@@ -429,7 +428,7 @@ class ItemListOptions(SettingsPage):
 			
 			response = dialog.get_response()
 
-			if response[0] == gtk.RESPONSE_OK:
+			if response[0] == Gtk.RESPONSE_OK:
 				self._directory_store.append((response[1], False, False))
 
 		else:
@@ -500,11 +499,11 @@ class ItemListOptions(SettingsPage):
 		if widget.get_active() \
 		and self._application.options.section('item_list').get('search_modifier') == '000':
 			# user can't have this quick search combination with VIM bindings
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self._application,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_WARNING,
-									gtk.BUTTONS_OK,
+									Gtk.DIALOG_DESTROY_WITH_PARENT,
+									Gtk.MESSAGE_WARNING,
+									Gtk.BUTTONS_OK,
 									_(
 										'Quick search settings are in conflict with VIM '
 										'navigation style. To resolve this issue your '
@@ -654,7 +653,7 @@ class ItemListOptions(SettingsPage):
 		self._combobox_grid_lines.set_active(section.get('grid_lines'))
 		self._combobox_indicator.child.set_text(section.get('selection_indicator'))
 		self._entry_time_format.set_text(section.get('time_format'))
-		self._button_selection_color.set_color(gtk.gdk.color_parse(section.get('selection_color')))
+		self._button_selection_color.set_color(Gdk.color_parse(section.get('selection_color')))
 		self._checkbox_load_directories.set_active(section.get('force_directories'))
 		self._checkbox_show_expanders.set_active(section.get('show_expanders'))
 		self._checkbox_hide_scrollbar.set_active(section.get('hide_horizontal_scrollbar'))

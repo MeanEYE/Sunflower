@@ -1,7 +1,7 @@
 import os
-import gtk
 import locale
 
+from gi.repository import Gtk
 from ConfigParser import ConfigParser
 from widgets.settings_page import SettingsPage
 
@@ -34,12 +34,12 @@ class PluginsOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'plugins', _('Plugins'))
 
 		# create interface
-		container = gtk.ScrolledWindow()
-		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-		container.set_shadow_type(gtk.SHADOW_IN)
+		container = Gtk.ScrolledWindow()
+		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
+		container.set_shadow_type(Gtk.SHADOW_IN)
 
 		# create list box
-		self._plugins = gtk.ListStore(
+		self._plugins = Gtk.ListStore(
 									bool,	# active
 									str,	# location
 									str,	# name
@@ -50,28 +50,28 @@ class PluginsOptions(SettingsPage):
 									str		# description
 								)
 
-		self._list = gtk.TreeView()
+		self._list = Gtk.TreeView()
 		self._list.set_model(self._plugins)
 		self._list.set_rules_hint(True)
 		self._list.connect('cursor-changed', self.__handle_cursor_change)
 
 		# create and configure cell renderers
-		cell_active = gtk.CellRendererToggle()
+		cell_active = Gtk.CellRendererToggle()
 		cell_active.connect('toggled', self._toggle_plugin)
-		cell_name = gtk.CellRendererText()
-		cell_author = gtk.CellRendererText()
-		cell_version = gtk.CellRendererText()
+		cell_name = Gtk.CellRendererText()
+		cell_author = Gtk.CellRendererText()
+		cell_version = Gtk.CellRendererText()
 
 		# create and pack columns
-		col_active = gtk.TreeViewColumn(_('Active'), cell_active, active=Column.ACTIVE)
+		col_active = Gtk.TreeViewColumn(_('Active'), cell_active, active=Column.ACTIVE)
 
-		col_name = gtk.TreeViewColumn(_('Plugin name'), cell_name, text=Column.NAME)
+		col_name = Gtk.TreeViewColumn(_('Plugin name'), cell_name, text=Column.NAME)
 		col_name.set_resizable(True)
 		col_name.set_expand(True)
 
-		col_version = gtk.TreeViewColumn(_('Version'), cell_version, text=Column.VERSION)
+		col_version = Gtk.TreeViewColumn(_('Version'), cell_version, text=Column.VERSION)
 
-		col_author = gtk.TreeViewColumn(_('Author'), cell_author, text=Column.AUTHOR)
+		col_author = Gtk.TreeViewColumn(_('Author'), cell_author, text=Column.AUTHOR)
 		col_author.set_resizable(True)
 
 		self._list.append_column(col_active)
@@ -80,32 +80,32 @@ class PluginsOptions(SettingsPage):
 		self._list.append_column(col_author)
 
 		# create description
-		self._label_description = gtk.Label()
+		self._label_description = Gtk.Label()
 		self._label_description.set_use_markup(True)
 		self._label_description.set_line_wrap(True)
 		self._label_description.set_selectable(True)
 		self._label_description.set_padding(5, 5)
 		self._label_description.connect('size-allocate', self.__adjust_label)
 
-		self._expander_description = gtk.Expander(_('Description'))
+		self._expander_description = Gtk.Expander(_('Description'))
 		self._expander_description.add(self._label_description)
 
 		# create controls
-		hbox_controls = gtk.HBox(False, 5)
+		hbox_controls = Gtk.HBox(False, 5)
 
-		image_contact = gtk.Image()
-		image_contact.set_from_icon_name('gnome-stock-mail-new', gtk.ICON_SIZE_BUTTON)
+		image_contact = Gtk.Image()
+		image_contact.set_from_icon_name('gnome-stock-mail-new', Gtk.IconSize.BUTTON)
 
-		self._button_contact = gtk.Button()
+		self._button_contact = Gtk.Button()
 		self._button_contact.set_label(_('Contact'))
 		self._button_contact.set_image(image_contact)
 		self._button_contact.set_sensitive(False)
 		self._button_contact.connect('clicked', self.__handle_contact_button_click)
 
-		image_home_page = gtk.Image()
-		image_home_page.set_from_stock(gtk.STOCK_HOME, gtk.ICON_SIZE_BUTTON)
+		image_home_page = Gtk.Image()
+		image_home_page.set_from_stock(Gtk.STOCK_HOME, Gtk.IconSize.BUTTON)
 
-		self._button_home_page = gtk.Button()
+		self._button_home_page = Gtk.Button()
 		self._button_home_page.set_label(_('Visit site'))
 		self._button_home_page.set_image(image_home_page)
 		self._button_home_page.set_sensitive(False)
@@ -173,11 +173,11 @@ class PluginsOptions(SettingsPage):
 
 		else:
 			# plugin is protected, show appropriate message
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self._application,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_INFO,
-									gtk.BUTTONS_OK,
+									Gtk.DIALOG_DESTROY_WITH_PARENT,
+									Gtk.MESSAGE_INFO,
+									Gtk.BUTTONS_OK,
 									_(
 										"{0} is required for "
 										"normal program operation and therefore can "

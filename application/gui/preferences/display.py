@@ -1,5 +1,4 @@
-import gtk
-
+from gi.repository import Gtk
 from common import SizeFormat
 from widgets.settings_page import SettingsPage
 
@@ -22,18 +21,18 @@ class DisplayOptions(SettingsPage):
 	def __init__(self, parent, application):
 		SettingsPage.__init__(self, parent, application, 'display', _('Display'))
 
-		notebook = gtk.Notebook()
+		notebook = Gtk.Notebook()
 
 		# main window options
-		label_main_window = gtk.Label(_('Main window'))
-		vbox_main_window = gtk.VBox(False, 0)
+		label_main_window = Gtk.Label(_('Main window'))
+		vbox_main_window = Gtk.VBox(False, 0)
 		vbox_main_window.set_border_width(5)
 
-		self._checkbox_hide_on_close = gtk.CheckButton(_('Hide main window on close'))
-		self._checkbox_multiple_instances = gtk.CheckButton(_('Allow multiple instances'))
-		self._checkbox_show_toolbar = gtk.CheckButton(_('Show toolbar'))
-		self._checkbox_show_command_bar = gtk.CheckButton(_('Show command bar'))
-		self._checkbox_show_command_entry = gtk.CheckButton(_('Show command entry'))
+		self._checkbox_hide_on_close = Gtk.CheckButton(_('Hide main window on close'))
+		self._checkbox_multiple_instances = Gtk.CheckButton(_('Allow multiple instances'))
+		self._checkbox_show_toolbar = Gtk.CheckButton(_('Show toolbar'))
+		self._checkbox_show_command_bar = Gtk.CheckButton(_('Show command bar'))
+		self._checkbox_show_command_entry = Gtk.CheckButton(_('Show command entry'))
 
 		self._checkbox_hide_on_close.connect('toggled', self._parent.enable_save, True)
 		self._checkbox_multiple_instances.connect('toggled', self._parent.enable_save, True)
@@ -42,17 +41,17 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_show_command_entry.connect('toggled', self._parent.enable_save)
 
 		# tab options
-		label_tabs = gtk.Label(_('Tabs'))
-		vbox_tabs = gtk.VBox(False, 0)
+		label_tabs = Gtk.Label(_('Tabs'))
+		vbox_tabs = Gtk.VBox(False, 0)
 		vbox_tabs.set_border_width(5)
 
-		self._checkbox_focus_new_tab = gtk.CheckButton(_('Focus new tab after opening'))
-		self._checkbox_button_relief = gtk.CheckButton(_('Show normal button relief'))
-		self._checkbox_button_icons = gtk.CheckButton(_('Show icons instead of text in tab buttons'))
-		self._checkbox_tab_close_button = gtk.CheckButton(_('Show close button'))
-		self._checkbox_always_show_tabs = gtk.CheckButton(_('Show tab(s) even if there is only one'))
-		self._checkbox_ubuntu_coloring = gtk.CheckButton(_('Use Ubuntu coloring method for tab title bars'))
-		self._checkbox_superuser_notification = gtk.CheckButton(_('Change title bar color when started as super user'))
+		self._checkbox_focus_new_tab = Gtk.CheckButton(_('Focus new tab after opening'))
+		self._checkbox_button_relief = Gtk.CheckButton(_('Show normal button relief'))
+		self._checkbox_button_icons = Gtk.CheckButton(_('Show icons instead of text in tab buttons'))
+		self._checkbox_tab_close_button = Gtk.CheckButton(_('Show close button'))
+		self._checkbox_always_show_tabs = Gtk.CheckButton(_('Show tab(s) even if there is only one'))
+		self._checkbox_ubuntu_coloring = Gtk.CheckButton(_('Use Ubuntu coloring method for tab title bars'))
+		self._checkbox_superuser_notification = Gtk.CheckButton(_('Change title bar color when started as super user'))
 
 		self._checkbox_focus_new_tab.connect('toggled', self._parent.enable_save)
 		self._checkbox_button_relief.connect('toggled', self._parent.enable_save)
@@ -63,65 +62,65 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_superuser_notification.connect('toggled', self._parent.enable_save)
 
 		# status bar
-		table = gtk.Table(2, 2, False)
+		table = Gtk.Table(2, 2, False)
 		table.set_col_spacing(0, 5)
 		table.set_row_spacings(5)
 
-		label_status_bar = gtk.Label(_('Show status bar:'))
+		label_status_bar = Gtk.Label(_('Show status bar:'))
 		label_status_bar.set_alignment(0, 0.5)
 
-		list_status_bar = gtk.ListStore(str, int)
+		list_status_bar = Gtk.ListStore(str, int)
 		list_status_bar.append((_('Always'), StatusVisible.ALWAYS))
 		list_status_bar.append((_('When needed'), StatusVisible.WHEN_NEEDED))
 		list_status_bar.append((_('Never'), StatusVisible.NEVER))
 
-		cell_status_bar = gtk.CellRendererText()
+		cell_status_bar = Gtk.CellRendererText()
 
-		self._combobox_status_bar = gtk.ComboBox(list_status_bar)
+		self._combobox_status_bar = Gtk.ComboBox(list_status_bar)
 		self._combobox_status_bar.connect('changed', self._parent.enable_save)
 		self._combobox_status_bar.pack_start(cell_status_bar)
 		self._combobox_status_bar.add_attribute(cell_status_bar, 'text', 0)
 
 		# expand tabs
-		label_expand_tab = gtk.Label(_('Expanded tabs:'))
+		label_expand_tab = Gtk.Label(_('Expanded tabs:'))
 		label_expand_tab.set_alignment(0, 0.5)
 
-		list_expand_tab = gtk.ListStore(str, int)
+		list_expand_tab = Gtk.ListStore(str, int)
 		list_expand_tab.append((_('None'), TabExpand.NONE))
 		list_expand_tab.append((_('Active'), TabExpand.ACTIVE))
 		list_expand_tab.append((_('All'), TabExpand.ALL))
 
-		cell_expand_tab = gtk.CellRendererText()
+		cell_expand_tab = Gtk.CellRendererText()
 
-		self._combobox_expand_tabs = gtk.ComboBox(list_expand_tab)
+		self._combobox_expand_tabs = Gtk.ComboBox(list_expand_tab)
 		self._combobox_expand_tabs.connect('changed', self._parent.enable_save)
 		self._combobox_expand_tabs.pack_start(cell_expand_tab)
 		self._combobox_expand_tabs.add_attribute(cell_expand_tab, 'text', 0)
 
 		# other options
-		label_other = gtk.Label(_('Other'))
-		vbox_other = gtk.VBox(False, 0)
+		label_other = Gtk.Label(_('Other'))
+		vbox_other = Gtk.VBox(False, 0)
 		vbox_other.set_border_width(5)
 
-		self._checkbox_hide_window_on_minimize = gtk.CheckButton(_('Hide operation window on minimize'))
-		self._checkbox_show_notifications = gtk.CheckButton(_('Show notifications'))
+		self._checkbox_hide_window_on_minimize = Gtk.CheckButton(_('Hide operation window on minimize'))
+		self._checkbox_show_notifications = Gtk.CheckButton(_('Show notifications'))
 
 		self._checkbox_hide_window_on_minimize.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_notifications.connect('toggled', self._parent.enable_save)
 
 		# size format
-		hbox_size_format = gtk.HBox(False, 5)
-		label_size_format = gtk.Label(_('Size format:'))
+		hbox_size_format = Gtk.HBox(False, 5)
+		label_size_format = Gtk.Label(_('Size format:'))
 		label_size_format.set_alignment(0, 0.5)
 
-		list_size_format = gtk.ListStore(str, int)
+		list_size_format = Gtk.ListStore(str, int)
 		list_size_format.append((_('Localized'), SizeFormat.LOCAL))
 		list_size_format.append((_('SI <small>(1 kB = 1000 B)</small>'), SizeFormat.SI))
 		list_size_format.append((_('IEC <small>(1 KiB = 1024 B)</small>'), SizeFormat.IEC))
 
-		cell_size_format = gtk.CellRendererText()
+		cell_size_format = Gtk.CellRendererText()
 
-		self._combobox_size_format = gtk.ComboBox(list_size_format)
+		self._combobox_size_format = Gtk.ComboBox(list_size_format)
 		self._combobox_size_format.connect('changed', self._parent.enable_save)
 		self._combobox_size_format.pack_start(cell_size_format)
 		self._combobox_size_format.add_attribute(cell_size_format, 'markup', 0)
@@ -130,11 +129,11 @@ class DisplayOptions(SettingsPage):
 		hbox_size_format.pack_start(label_size_format, False, False, 0)
 		hbox_size_format.pack_start(self._combobox_size_format, False, False, 0)
 
-		table.attach(label_status_bar, 0, 1, 0, 1, xoptions=gtk.FILL)
-		table.attach(self._combobox_status_bar, 1, 2, 0, 1, xoptions=gtk.FILL)
+		table.attach(label_status_bar, 0, 1, 0, 1, xoptions=Gtk.FILL)
+		table.attach(self._combobox_status_bar, 1, 2, 0, 1, xoptions=Gtk.FILL)
 
-		table.attach(label_expand_tab, 0, 1, 1, 2, xoptions=gtk.FILL)
-		table.attach(self._combobox_expand_tabs, 1, 2, 1, 2, xoptions=gtk.FILL)
+		table.attach(label_expand_tab, 0, 1, 1, 2, xoptions=Gtk.FILL)
+		table.attach(self._combobox_expand_tabs, 1, 2, 1, 2, xoptions=Gtk.FILL)
 
 		vbox_main_window.pack_start(self._checkbox_hide_on_close, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_multiple_instances, False, False, 0)

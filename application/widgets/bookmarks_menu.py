@@ -1,7 +1,7 @@
-import gtk
 import time
 import urllib
 
+from gi.repository import Gtk
 from parameters import Parameters
 from collections import namedtuple
 
@@ -66,20 +66,20 @@ class BookmarksMenu:
 		self._menus = []
 
 		# create interface
-		self._menu = gtk.Menu()
+		self._menu = Gtk.Menu()
 		self._menu.connect('key-press-event', self.__handle_key_press)
 		self._menu.connect('key-release-event', self.__handle_key_press)
 
 	def __handle_key_press(self, widget, event, data=None):
 		"""Handle key presses on menu"""
-		if event.keyval == gtk.keysyms.Shift_L:
+		if event.keyval == Gtk.keysyms.Shift_L:
 			self._open_in_new_tab = True
 
 		return False
 
 	def __handle_key_release(self, widget, event, data=None):
 		"""Handle key releases on menu"""
-		if event.keyval == gtk.keysyms.Shift_L:
+		if event.keyval == Gtk.keysyms.Shift_L:
 			self._open_in_new_tab = False
 
 		return False
@@ -87,14 +87,14 @@ class BookmarksMenu:
 	def __create_menu_item(self, label, icon, callback, data):
 		"""Create menu item"""
 		if icon is not None:
-			menu_item = gtk.ImageMenuItem()
+			menu_item = Gtk.ImageMenuItem()
 
-			image = gtk.Image()
-			image.set_from_icon_name(icon, gtk.ICON_SIZE_MENU)
+			image = Gtk.Image()
+			image.set_from_icon_name(icon, Gtk.IconSize.MENU)
 			menu_item.set_image(image)
 
 		else:
-			menu_item = gtk.MenuItem()
+			menu_item = Gtk.MenuItem()
 
 		menu_item.set_label(label)
 		menu_item.connect('activate', callback, data)
@@ -117,7 +117,7 @@ class BookmarksMenu:
 								mount.uri
 							)
 
-			separator = gtk.SeparatorMenuItem()
+			separator = Gtk.SeparatorMenuItem()
 			self._menu.append(separator)
 
 		# add bookmarks
@@ -130,7 +130,7 @@ class BookmarksMenu:
 								bookmark.uri
 							)
 
-			separator = gtk.SeparatorMenuItem()
+			separator = Gtk.SeparatorMenuItem()
 			self._menu.append(separator)
 
 		# add system bookmarks
@@ -143,7 +143,7 @@ class BookmarksMenu:
 								bookmark.uri
 							)
 
-			separator = gtk.SeparatorMenuItem()
+			separator = Gtk.SeparatorMenuItem()
 			self._menu.append(separator)
 
 		# add menu items

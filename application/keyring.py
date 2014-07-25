@@ -1,6 +1,4 @@
-import gtk
-import gobject
-
+from gi.repository import Gtk, GObject
 from gui.input_dialog import InputDialog, PasswordDialog
 
 try:
@@ -46,7 +44,7 @@ class KeyringManager:
 		self._timeout = None
 
 		# create status icon
-		self._status_icon = gtk.Image()
+		self._status_icon = Gtk.Image()
 		self._status_icon.show()
 
 		# initialize keyring
@@ -62,7 +60,7 @@ class KeyringManager:
 					_('Keyring is locked')
 				)[is_locked]
 
-		self._status_icon.set_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
+		self._status_icon.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
 		self._status_icon.set_tooltip_text(icon_tooltip)
 
 	def __initialize_keyring(self):
@@ -112,7 +110,7 @@ class KeyringManager:
 
 		response = dialog.get_response()
 
-		if response[0] == gtk.RESPONSE_OK:
+		if response[0] == Gtk.RESPONSE_OK:
 			# try to unlock keyring
 			keyring.unlock_sync(self.KEYRING_NAME, response[1])
 
@@ -316,7 +314,7 @@ class KeyringManager:
 
 			response = dialog.get_response()
 
-			if response[0] == gtk.RESPONSE_OK \
+			if response[0] == Gtk.RESPONSE_OK \
 			and response[1] == response[2]:
 				# create new keyring
 				keyring.create_sync(self.KEYRING_NAME, response[1])

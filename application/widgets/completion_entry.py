@@ -1,22 +1,24 @@
 import os
 import re
-import gtk
 
-class PathCompletionEntry(gtk.Entry):
+from gi.repository import Gtk
+
+
+class PathCompletionEntry(Gtk.Entry):
 	"""Entry with path completion"""
 	number_split = re.compile('([0-9]+)')
 
 	def __init__(self, application):
-		gtk.Entry.__init__(self)
+		Gtk.Entry.__init__(self)
 		self._application = application
-		entry_completion = gtk.EntryCompletion()
+		entry_completion = Gtk.EntryCompletion()
 		self.set_completion(entry_completion)
-		liststore = gtk.ListStore(str, str)
-		liststore.set_sort_column_id(1, gtk.SORT_ASCENDING)
+		liststore = Gtk.ListStore(str, str)
+		liststore.set_sort_column_id(1, Gtk.SORT_ASCENDING)
 		liststore.set_sort_func(1, self._sort_list)
 		entry_completion.set_model(liststore)
 		entry_completion.set_match_func(self._match_completion)
-		cell = gtk.CellRendererText()
+		cell = Gtk.CellRendererText()
 		entry_completion.pack_start(cell)
 		entry_completion.add_attribute(cell, 'text', 1)
 		entry_completion.connect('match-selected', self._completion_selected)

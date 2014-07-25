@@ -1,8 +1,7 @@
 import os
-import gtk
-import pango
 import subprocess
 
+from gi.repository import Gtk, Pango
 from common import executable_exists
 from widgets.status_bar import StatusBar
 from plugin_base.provider import Mode as FileMode
@@ -12,7 +11,7 @@ class Viewer:
 	"""Simple file viewer implementation"""
 
 	def __init__(self, path, provider, parent):
-		self._window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+		self._window = Gtk.Window(Gtk.WINDOW_TOPLEVEL)
 
 		self.path = path
 		self._provider = provider
@@ -30,7 +29,7 @@ class Viewer:
 		# configure window
 		self._window.set_title(_('{0} - Viewer').format(os.path.basename(self.path)))
 		self._window.set_size_request(800, 600)
-		self._window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+		self._window.set_position(Gtk.WIN_POS_CENTER_ON_PARENT)
 		self._window.set_resizable(True)
 		self._window.set_skip_taskbar_hint(False)
 		self._window.set_wmclass('Sunflower', 'Sunflower')
@@ -41,13 +40,13 @@ class Viewer:
 		self._window.connect('key-press-event', self._handle_key_press)
 
 		# create user interface according to mime type
-		vbox = gtk.VBox(homogeneous=False, spacing=0)
+		vbox = Gtk.VBox(homogeneous=False, spacing=0)
 		self.status_bar = StatusBar()
 		self.status_bar.set_border_width(2)
 		self.status_bar.add_group_with_icon('mime_type', 'document-properties', self._mime_type)
 		self.status_bar.show()
 
-		self._notebook = gtk.Notebook()
+		self._notebook = Gtk.Notebook()
 		self._notebook.set_border_width(2)
 
 		# create page for executables
@@ -82,13 +81,13 @@ class Viewer:
 
 		# create image page if needed
 		if self._mime_type.startswith('image/'):
-			container = gtk.ScrolledWindow()
-			container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-			container.set_shadow_type(gtk.SHADOW_NONE)
+			container = Gtk.ScrolledWindow()
+			container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_AUTOMATIC)
+			container.set_shadow_type(Gtk.SHADOW_NONE)
 			container.set_border_width(5)
-			viewport = gtk.Viewport()
+			viewport = Gtk.Viewport()
 
-			image = gtk.Image()
+			image = Gtk.Image()
 			image.set_from_file(self.path)
 
 			viewport.add(image)
@@ -110,11 +109,11 @@ class Viewer:
 
 		else:
 			# show information and close window
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self._application,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_INFO,
-									gtk.BUTTONS_OK,
+									Gtk.DIALOG_DESTROY_WITH_PARENT,
+									Gtk.MESSAGE_INFO,
+									Gtk.BUTTONS_OK,
 									_('Viewer is unable to display this file type.')
 								)
 			dialog.run()
@@ -138,23 +137,23 @@ class Viewer:
 	def _append_page(self, title, container):
 		"""Append new page to viewer"""
 		self._page_count += 1
-		self._notebook.append_page(container, gtk.Label(title))
+		self._notebook.append_page(container, Gtk.Label(title))
 		container.grab_focus()
 
 	def _insert_page(self, title, container, position=0):
 		"""Insert page at desired position in viewer notebook"""
 		self._page_count += 1
-		self._notebook.insert_page(container, gtk.Label(title), position)
+		self._notebook.insert_page(container, Gtk.Label(title), position)
 
 	def _create_text_page(self, title, content, position=0):
 		"""Create text page with specified data"""
-		container = gtk.ScrolledWindow()
-		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-		container.set_shadow_type(gtk.SHADOW_IN)
+		container = Gtk.ScrolledWindow()
+		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_AUTOMATIC)
+		container.set_shadow_type(Gtk.SHADOW_IN)
 		container.set_border_width(5)
 
 		font = pango.FontDescription('monospace 9')
-		text_view = gtk.TextView()
+		text_view = Gtk.TextView()
 		text_view.set_editable(False)
 		text_view.set_cursor_visible(True)
 		text_view.modify_font(font)
@@ -173,14 +172,14 @@ class Viewer:
 		"""Handle pressing keys in history list"""
 		result = False
 
-		if event.keyval == gtk.keysyms.Escape:
+		if event.keyval == Gtk.keysyms.Escape:
 			# close window on escape
 			self._window.destroy()
 			result = True
 
-		elif event.keyval in range(gtk.keysyms._1, gtk.keysyms._9 + 1):
+		elif event.keyval in range(Gtk.keysyms._1, Gtk.keysyms._9 + 1):
 			# switch to specified page
-			index = event.keyval - gtk.keysyms._1
+			index = event.keyval - Gtk.keysyms._1
 
 			if index <= self._notebook.get_n_pages() - 1:
 				self._notebook.set_current_page(index)

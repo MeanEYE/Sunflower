@@ -1,4 +1,4 @@
-import gtk
+from gi.repository import Gtk
 
 try:
 	import vte
@@ -33,7 +33,7 @@ class Terminal(PluginBase):
 	"""Base class for terminal based plugins
 	
 	This class provides access to VTE GTK+ widget. In cases where VTE is
-	not present on the system you can use gtk.Socket to embed external
+	not present on the system you can use Gtk.Socket to embed external
 	application.
 
 	You are strongly encouraged to use predefined methods rather than
@@ -56,16 +56,16 @@ class Terminal(PluginBase):
 		self._title_bar.set_icon_from_name('terminal')
 
 		# terminal menu button
-		self._menu_button = gtk.Button()
+		self._menu_button = Gtk.Button()
 
 		if options.get('tab_button_icons'):
 			# set icon
-			image_menu = gtk.Image()
-			image_menu.set_from_icon_name(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
+			image_menu = Gtk.Image()
+			image_menu.set_from_icon_name(Gtk.STOCK_EDIT, Gtk.IconSize.MENU)
 			self._menu_button.set_image(image_menu)
 		else:
 			# set text
-			self._menu_button = gtk.Button(ButtonText.MENU)
+			self._menu_button = Gtk.Button(ButtonText.MENU)
 
 		self._menu_button.set_focus_on_click(False)
 		self._menu_button.set_tooltip_text(_('Terminal menu'))
@@ -104,22 +104,22 @@ class Terminal(PluginBase):
 				self._terminal.set_font_from_string(section.get('font'))
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
-			self._terminal = gtk.Socket()
+			self._terminal = Gtk.Socket()
 			
 		else:
 			# failsafe when VTE module is not present
 			# NOTE: Cursor needs to be visible for 'close tab' accelerator.
-			self._terminal = gtk.TextView()
+			self._terminal = Gtk.TextView()
 			text = _('\n\nPython VTE module is not installed on this system!')
 			self._terminal.get_buffer().set_text(text)
 			self._terminal.set_editable(False)
-			self._terminal.set_justification(gtk.JUSTIFY_CENTER)
-			self._terminal.set_wrap_mode(gtk.WRAP_WORD)
+			self._terminal.set_justification(Gtk.JUSTIFY_CENTER)
+			self._terminal.set_wrap_mode(Gtk.WRAP_WORD)
 
 		# terminal container
 		if self._terminal_type == TerminalType.VTE:
-			self._container = gtk.ScrolledWindow()
-			self._container.set_shadow_type(gtk.SHADOW_IN)
+			self._container = Gtk.ScrolledWindow()
+			self._container.set_shadow_type(Gtk.SHADOW_IN)
 
 			# apply scrollbar visibility
 			show_scrollbars = section.get('show_scrollbars')
@@ -130,8 +130,8 @@ class Terminal(PluginBase):
 			scrollbar_horizontal.set_child_visible(False)
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
-			self._container = gtk.Viewport()
-			self._container.set_shadow_type(gtk.SHADOW_IN)
+			self._container = Gtk.Viewport()
+			self._container.set_shadow_type(Gtk.SHADOW_IN)
 
 		# pack terminal
 		self._container.add(self._terminal)
@@ -183,15 +183,15 @@ class Terminal(PluginBase):
 
 	def _create_menu(self):
 		"""Create terminal menu"""
-		self._menu = gtk.Menu()
+		self._menu = Gtk.Menu()
 
 		# copy
-		self._menu_item_copy = gtk.ImageMenuItem(stock_id=gtk.STOCK_COPY)
+		self._menu_item_copy = Gtk.ImageMenuItem(stock_id=Gtk.STOCK_COPY)
 		self._menu_item_copy.connect('activate', self._copy_selection)
 		self._menu.append(self._menu_item_copy)
 
 		# paste
-		self._menu_item_paste = gtk.ImageMenuItem(stock_id=gtk.STOCK_PASTE)
+		self._menu_item_paste = Gtk.ImageMenuItem(stock_id=Gtk.STOCK_PASTE)
 		self._menu_item_paste.connect('activate', self._paste_selection)
 		self._menu.append(self._menu_item_paste)
 
@@ -237,7 +237,7 @@ class Terminal(PluginBase):
 	def _configure_accelerators(self):
 		"""Configure accelerator group"""
 		group = AcceleratorGroup(self._parent)
-		keyval = gtk.gdk.keyval_from_name
+		keyval = Gdk.keyval_from_name
 
 		# give parent chance to register its own accelerator group
 		PluginBase._configure_accelerators(self)
@@ -259,11 +259,11 @@ class Terminal(PluginBase):
 		group.add_method('close_tab', _('Close tab'), self._close_tab)
 
 		# configure accelerators
-		group.set_accelerator('create_terminal', keyval('z'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('copy_to_clipboard', keyval('c'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
-		group.set_accelerator('paste_from_clipboard', keyval('v'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
-		group.set_accelerator('focus_opposite_object', keyval('Tab'), gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK)
-		group.set_accelerator('close_tab', keyval('w'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('create_terminal', keyval('z'), Gdk.CONTROL_MASK)
+		group.set_accelerator('copy_to_clipboard', keyval('c'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
+		group.set_accelerator('paste_from_clipboard', keyval('v'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
+		group.set_accelerator('focus_opposite_object', keyval('Tab'), Gdk.CONTROL_MASK | Gdk.MOD1_MASK)
+		group.set_accelerator('close_tab', keyval('w'), Gdk.CONTROL_MASK)
 
 		# add accelerator group to the list
 		self._accelerator_groups.append(group)
@@ -293,21 +293,21 @@ class Terminal(PluginBase):
 		text = selection_data.data
 		
 		# ask user what to do with data
-		dialog = gtk.MessageDialog(
+		dialog = Gtk.MessageDialog(
 								self._parent,
-								gtk.DIALOG_DESTROY_WITH_PARENT,
-								gtk.MESSAGE_QUESTION,
-								gtk.BUTTONS_YES_NO,
+								Gtk.DIALOG_DESTROY_WITH_PARENT,
+								Gtk.MESSAGE_QUESTION,
+								Gtk.BUTTONS_YES_NO,
 								_(
 									'You are about to feed child process with '
 									'following data. Are you sure?\n\n{0}'
 								).format(text)
 							)
-		dialog.set_default_response(gtk.RESPONSE_YES)
+		dialog.set_default_response(Gtk.RESPONSE_YES)
 		result = dialog.run()
 		dialog.destroy()
 		
-		if result == gtk.RESPONSE_YES:
+		if result == Gtk.RESPONSE_YES:
 			self.feed_terminal(text)
 
 		# notify source application about operation outcome
@@ -370,7 +370,7 @@ class Terminal(PluginBase):
 			result = PluginBase.focus_main_object(self)
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
-			self._main_object.child_focus(gtk.DIR_TAB_FORWARD)
+			self._main_object.child_focus(Gtk.DIR_TAB_FORWARD)
 			result = True
 
 		return result

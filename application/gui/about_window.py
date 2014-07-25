@@ -1,10 +1,7 @@
-# coding: utf-8
-
 import os
-import gtk
-import pango
 import sys
 
+from gi.repository import Gtk, Pango
 from collections import namedtuple
 
 
@@ -155,7 +152,7 @@ class AboutWindow:
 
 	def __init__(self, parent):
 		# create main window
-		self._dialog = gtk.AboutDialog()
+		self._dialog = Gtk.AboutDialog()
 
 		# prepare version template
 		if parent.version['stage'] != 'f':
@@ -165,7 +162,7 @@ class AboutWindow:
 
 		# set about dialog image
 		base_path = os.path.dirname(os.path.dirname(sys.argv[0]))
-		image = gtk.Image()
+		image = Gtk.Image()
 		image.set_from_file(os.path.abspath(os.path.join(base_path, 'images', 'splash.png')))
 
 		# configure dialog
@@ -173,7 +170,7 @@ class AboutWindow:
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(parent)
-		self._dialog.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+		self._dialog.set_type_hint(Gdk.WINDOW_TYPE_HINT_DIALOG)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		# connect signals

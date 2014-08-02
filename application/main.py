@@ -20,8 +20,9 @@ if application_path not in sys.path:
 # initialize threads
 gtk.gdk.threads_init()
 
-# construct main application object
-from gui.main_window import MainWindow
+with gtk.gdk.lock:
+	# construct main application object
+	from gui.main_window import MainWindow
 
-app = MainWindow()
-app.run()
+	app = MainWindow()
+	app.run()

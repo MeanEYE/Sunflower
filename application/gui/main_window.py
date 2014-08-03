@@ -150,6 +150,7 @@ class MainWindow(gtk.Window):
 			self.connect('delete-event', self._destroy)
 
 		signal.signal(signal.SIGTERM, self._destroy)
+		signal.signal(signal.SIGINT, self._destroy)
 
 		self.connect('configure-event', self._handle_configure_event)
 		self.connect('window-state-event', self._handle_window_state_event)

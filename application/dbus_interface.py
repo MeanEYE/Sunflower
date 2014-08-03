@@ -10,13 +10,13 @@ class DBus_Client():
 		self._application = app
 		self._bus_name = 'org.sunflower.API'
 		self._path = '/org/sunflower/API'
-		self._bus = dbus.SessionBus()
 		self._proxy = None
 		self.connect()
 
 	def connect(self):
 		"""Connect client to DBus service."""
 		try:
+			self._bus = dbus.SessionBus()
 			self._proxy = self._bus.get_object(self._bus_name, self._path)
 
 		except dbus.exceptions.DBusException:

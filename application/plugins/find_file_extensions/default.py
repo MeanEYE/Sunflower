@@ -83,5 +83,16 @@ class DefaultFindFiles(FindExtension):
 
 	def is_path_ok(self, path):
 		"""Check is specified path fits the cirteria"""
+		result = False
 		file_name = os.path.basename(path)
-		return self._compare_method(file_name, self._pattern)
+
+		# prepare patterns
+		patterns = (self._pattern,) if ';' not in self._pattern else self._pattern.split(';')
+
+		# try to match any of the patterns
+		for pattern in patterns:
+			if self._compare_method(file_name, pattern):
+				result = True
+				break
+
+		return result

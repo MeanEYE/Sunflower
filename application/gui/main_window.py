@@ -2260,7 +2260,8 @@ class MainWindow(gtk.Window):
 					'force_directories': False,
 					'show_expanders': False,
 					'hide_horizontal_scrollbar': False,
-					'breadcrumbs': 2
+					'breadcrumbs': 2,
+					'second_extension': False
 				})
 
 		# create default operation options

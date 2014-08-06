@@ -51,10 +51,11 @@ class ItemList(PluginBase):
 		self._files = {'count': 0, 'selected': 0}
 		self._size = {'total': 0L, 'selected': 0L}
 
-		# local human readable cache
+		# preload commonly used options
 		self._size_format = self._parent.options.get('size_format')
 		self._selection_color = section.get('selection_color')
 		self._selection_indicator = section.get('selection_indicator')
+		self._second_extension = section.get('second_extension')
 
 		# we use this variable to prevent dead loop during column resize
 		self._is_updating = False
@@ -1650,6 +1651,9 @@ class ItemList(PluginBase):
 		# apply selection
 		self._selection_color = section.get('selection_color')
 		self._selection_indicator = section.get('selection_indicator')
+
+		# get support for second level of extension
+		self._second_extension = section.get('second_extension')
 
 		# change status bar visibility
 		show_status_bar = options.get('show_status_bar')

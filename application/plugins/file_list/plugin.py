@@ -1543,8 +1543,15 @@ class FileList(ItemList):
 			formated_file_date = time.strftime(self._time_format, time.localtime(file_date))
 
 			if not is_dir:
-				# item is a file
-				file_info = os.path.splitext(filename)
+				if not self._second_extension:
+					# regular extension split
+					file_info = os.path.splitext(filename)
+
+				else:
+					# split with support for second level of extension
+					raw = filename.rsplit('.', 2)
+					file_info = (raw, '') if len(raw) == 0 else (raw[0], '.{0}'.format('.'.join(raw[1:])))
+
 				if self._show_full_name:
 					file_info = (filename, file_info[1])
 

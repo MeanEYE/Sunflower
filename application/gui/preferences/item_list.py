@@ -67,6 +67,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_media_preview = gtk.CheckButton(_('Fast media preview'))
 		self._checkbox_show_expanders = gtk.CheckButton(_('Show tree expanders'))
 		self._checkbox_hide_scrollbar = gtk.CheckButton(_('Hide horizontal scrollbar'))
+		self._checkbox_second_extension = gtk.CheckButton(_('Support second level extension'))
 
 		self._checkbox_row_hinting.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
@@ -78,6 +79,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_media_preview.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_expanders.connect('toggled', self._parent.enable_save)
 		self._checkbox_hide_scrollbar.connect('toggled', self._parent.enable_save)
+		self._checkbox_second_extension.connect('toggled', self._parent.enable_save)
 
 		# bread crumbs type
 		hbox_breadcrumbs = gtk.HBox(False, 5)
@@ -382,6 +384,7 @@ class ItemListOptions(SettingsPage):
 		vbox_operation.pack_start(self._checkbox_number_sensitive, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_single_click, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_right_click, False, False, 0)
+		vbox_operation.pack_start(self._checkbox_second_extension, False, False, 0)
 		vbox_operation.pack_start(hbox_quick_search, False, False, 5)
 		vbox_operation.pack_start(vbox_time_format, False, False, 5)
 
@@ -658,6 +661,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_load_directories.set_active(section.get('force_directories'))
 		self._checkbox_show_expanders.set_active(section.get('show_expanders'))
 		self._checkbox_hide_scrollbar.set_active(section.get('hide_horizontal_scrollbar'))
+		self._checkbox_second_extension.set_active(section.get('second_extension'))
 
 		search_modifier = section.get('search_modifier')
 		self._checkbox_control.set_active(search_modifier[0] == '1')
@@ -702,6 +706,7 @@ class ItemListOptions(SettingsPage):
 		section.set('force_directories', self._checkbox_load_directories.get_active())
 		section.set('show_expanders', self._checkbox_show_expanders.get_active())
 		section.set('hide_horizontal_scrollbar', self._checkbox_hide_scrollbar.get_active())
+		section.set('second_extension', self._checkbox_second_extension.get_active())
 
 		search_modifier = "%d%d%d" % (
 								self._checkbox_control.get_active(),

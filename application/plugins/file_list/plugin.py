@@ -59,12 +59,13 @@ class Column:
 	FORMATED_TIME = 8
 	IS_DIR = 9
 	IS_PARENT_DIR = 10
-	COLOR = 11
-	ICON = 12
-	SELECTED = 13
-	USER_ID = 14
-	GROUP_ID = 15
-	EMBLEMS = 16
+	IS_LINK = 11
+	COLOR = 12
+	ICON = 13
+	SELECTED = 14
+	USER_ID = 15
+	GROUP_ID = 16
+	EMBLEMS = 17
 
 
 class FileList(ItemList):
@@ -106,6 +107,7 @@ class FileList(ItemList):
 								str,	# Column.FORMATED_DATE
 								bool,	# Column.IS_DIR
 								bool,	# Column.IS_PARENT_DIR
+								bool,	# Column.IS_LINK
 								str,	# Column.COLOR
 								str,	# Column.ICON
 								bool,	# Column.SELECTED
@@ -172,6 +174,7 @@ class FileList(ItemList):
 
 		col_name.add_attribute(cell_icon, 'icon-name', Column.ICON)
 		col_name.add_attribute(cell_emblems, 'emblems', Column.EMBLEMS)
+		col_name.add_attribute(cell_emblems, 'is-link', Column.IS_LINK)
 		col_name.add_attribute(cell_name, 'text', Column.FORMATED_NAME)
 		col_extension.add_attribute(cell_extension, 'text', Column.EXTENSION)
 		col_size.add_attribute(cell_size, 'text', Column.FORMATED_SIZE)
@@ -1505,9 +1508,17 @@ class FileList(ItemList):
 		result = None
 		provider = self.get_provider()
 		full_path = os.path.join(self.path, parent_path) if parent_path else self.path
+		is_link = False
 
+		# get file information
 		file_stat = provider.get_stat(filename, relative_to=full_path)
 
+		# retrieve real information for special files
+		if file_stat.type is FileType.LINK:
+			is_link = True
+			file_stat = provider.get_stat(filename, relative_to=full_path, follow=True)
+
+		# prepare values
 		file_size = file_stat.size
 		file_mode = file_stat.mode
 		file_date = file_stat.time_modify
@@ -1530,7 +1541,7 @@ class FileList(ItemList):
 				self._size['total'] += file_size
 
 		# invalid links or files
-		elif file_stat.type is FileType.INVALID:
+		else:
 			icon = 'image-missing'
 
 			if parent is None:
@@ -1574,6 +1585,7 @@ class FileList(ItemList):
 					formated_file_date,
 					is_dir,
 					False,
+					is_link,
 					None,
 					icon,
 					None,
@@ -1900,6 +1912,7 @@ class FileList(ItemList):
 								'',
 								True,
 								True,
+								False,
 								None,
 								'go-up',
 								None,

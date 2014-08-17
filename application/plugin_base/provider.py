@@ -145,8 +145,14 @@ class Provider:
 		"""Open path in specified mode and return its handle"""
 		pass
 
-	def get_stat(self, path, relative_to=None, extended=False):
-		"""Return file statistics"""
+	def get_stat(self, path, relative_to=None, extended=False, follow=False):
+		"""Return file statistics.
+
+		This method returns FileInfo or FileInfoExtended objects for specified
+		path. Unless otherwise specified by `follow` parameter this method is not
+		suppose to follow symlinks.
+
+		"""
 		pass
 
 	def get_directory_size(self, path, relative_to=None):

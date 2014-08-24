@@ -11,6 +11,7 @@ from column_editor import FileList_ColumnEditor
 from gio_extension import SambaExtension, FtpExtension, DavExtension, SftpExtension
 from gio_provider import NetworkProvider, TrashProvider, DavProvider, DavsProvider
 from gio_provider import SambaProvider, FtpProvider, SftpProvider
+from zip_provider import ZipProvider
 from gui.input_dialog import ApplicationSelectDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog, LinkDialog
@@ -39,6 +40,7 @@ def register_plugin(application):
 	application.register_provider(TrashProvider)
 	application.register_provider(DavProvider)
 	application.register_provider(DavsProvider)
+	application.register_provider(ZipProvider)
 
 	# register mount manager extension
 	application.register_mount_manager_extension(SambaExtension)
@@ -446,12 +448,15 @@ class FileList(ItemList):
 		item_list, selected_iter = selection.get_selected()
 
 		# we need selection for this
-		if selected_iter is None: return
+		if selected_iter is None:
+			return
 
 		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
+		selected_file = self._get_selection()
+		mime_type = self._parent.associations_manager.get_mime_type(path=selected_file)
 
-		if is_dir:
+		if is_dir or self._parent.is_archive_supported(mime_type):
 			# selected item is directory, we need to change path
 			if is_parent:
 				# call specialized change path method
@@ -464,7 +469,6 @@ class FileList(ItemList):
 
 		else:
 			# selected item is just a file, execute it
-			selected_file = self._get_selection()
 			self._parent.associations_manager.execute_file(selected_file, provider=self.get_provider())
 
 		return True  # to prevent command or quick search in single key bindings

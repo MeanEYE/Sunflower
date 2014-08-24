@@ -86,7 +86,7 @@ class Provider:
 		self._parent = parent
 
 		self._path = path
-		self._selection = None
+		self._selection = selection
 
 		# we need only existing items in selection list
 		if selection is not None:

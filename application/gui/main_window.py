@@ -2678,6 +2678,15 @@ class MainWindow(gtk.Window):
 
 		return result
 
+	def get_provider_for_archive(self, mime_type):
+		"""Return provider class for specified archive mime type."""
+		result = None
+
+		if self.archive_provider_classes.has_key(mime_type):
+			result = self.archive_provider_classes[mime_type]
+
+		return result
+
 	def get_column_extension_classes(self, BaseClass):
 		"""Get column extension classes for specified list class"""
 		result = []
@@ -2765,6 +2774,10 @@ class MainWindow(gtk.Window):
 	def is_clipboard_item_list(self):
 		"""Check if clipboard data is URI list"""
 		return self.clipboard.wait_is_uris_available()
+
+	def is_archive_supported(self, mime_type):
+		"""Check if specified archive mime type is supported."""
+		return self.archive_provider_classes.has_key(mime_type)
 
 	def show_about_window(self, widget=None, data=None):
 		"""Show about window"""

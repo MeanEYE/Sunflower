@@ -500,7 +500,13 @@ class CopyOperation(Operation):
 			gobject.idle_add(self._dialog.set_current_file, item)
 			gobject.idle_add(self._dialog.pulse)
 
-			if self._source.is_dir(item, relative_to=self._source_path):
+			if os.path.sep in item:
+				parent_dir,item = os.path.split(item)
+				source_path = os.path.join(self._source_path, parent_dir)
+			else:
+				source_path = self._source_path
+
+			if self._source.is_dir(item, relative_to=source_path):
 				# item is directory
 				can_procede = True
 				can_create = True
@@ -517,12 +523,12 @@ class CopyOperation(Operation):
 				# if user didn't skip directory, scan and update lists
 				if can_procede:
 					self._dir_list.append(item)
-					if can_create: self._dir_list_create.append(item)
-					self._scan_directory(item)
+					if can_create: self._dir_list_create.append([item, source_path])
+					self._scan_directory(item, source_path)
 
 			elif fnmatch.fnmatch(item, self._options[Option.FILE_TYPE]):
 				# item is a file, get stats and update lists
-				item_stat = self._source.get_stat(item, relative_to=self._source_path)
+				item_stat = self._source.get_stat(item, relative_to=source_path)
 
 				gobject.idle_add(self._dialog.increment_total_size, item_stat.size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
@@ -530,27 +536,7 @@ class CopyOperation(Operation):
 				self._total_count += 1
 				self._total_size += item_stat.size
 
-				self._file_list.append(item)
-
-				# if item is part of expanded directory check if we need to add that directory
-				if os.path.sep in item:
-					can_procede = True
-					can_create = True
-					directory = os.path.dirname(item)
-
-					# check if directory exists on destination
-					if self._destination.exists(directory, relative_to=self._destination_path):
-						can_create = False
-
-						if self._merge_all is not None:
-							can_procede = self._merge_all
-						else:
-							can_procede = self._get_merge_input(directory)
-
-					# if user didn't skip directory, scan and update lists
-					if can_procede and directory not in self._dir_list_create:
-						self._dir_list.append(directory)
-						if can_create: self._dir_list_create.append(directory)
+				self._file_list.append([item, source_path])
 
 	def _set_mode(self, path, mode):
 		"""Set mode for specified path"""
@@ -633,18 +619,19 @@ class CopyOperation(Operation):
 
 			return
 
-	def _scan_directory(self, directory):
+	def _scan_directory(self, directory, source_path=None):
 		"""Recursively scan directory and populate list"""
+		source_path = source_path or self._source_path
 		try:
 			# try to get listing from directory
-			item_list = self._source.list_dir(directory, relative_to=self._source_path)
+			item_list = self._source.list_dir(directory, relative_to=source_path)
 
 		except StandardError as error:
 			# problem with reading specified directory, ask user
 			response = self._get_read_error_input(error)
 
 			if response == gtk.RESPONSE_YES:
-				self._scan_directory(directory)
+				self._scan_directory(directory, source_path)
 
 			return
 
@@ -658,7 +645,7 @@ class CopyOperation(Operation):
 			full_name = os.path.join(directory, item)
 
 			# item is a directory, scan it
-			if self._source.is_dir(full_name, relative_to=self._source_path):
+			if self._source.is_dir(full_name, relative_to=source_path):
 				can_procede = True
 				can_create = True
 
@@ -673,12 +660,12 @@ class CopyOperation(Operation):
 				if can_procede:
 					# allow processing specified directory
 					self._dir_list.append(full_name)
-					if can_create: self._dir_list_create.append(full_name)
-					self._scan_directory(full_name)
+					if can_create: self._dir_list_create.append([full_name, source_path])
+					self._scan_directory(full_name, source_path)
 
 			elif fnmatch.fnmatch(item, self._options[Option.FILE_TYPE]):
 				# item is a file, update global statistics
-				item_stat = self._source.get_stat(full_name, relative_to=self._source_path)
+				item_stat = self._source.get_stat(full_name, relative_to=source_path)
 
 				gobject.idle_add(self._dialog.increment_total_size, item_stat.size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
@@ -686,11 +673,12 @@ class CopyOperation(Operation):
 				self._total_count += 1
 				self._total_size += item_stat.size
 
-				self._file_list.append(full_name)
+				self._file_list.append([full_name, source_path])
 
-	def _create_directory(self, directory):
+	def _create_directory(self, directory, source_path=None):
 		"""Create specified directory"""
-		file_stat = self._source.get_stat(directory, relative_to=self._source_path)
+		source_path = source_path or self._source_path
+		file_stat = self._source.get_stat(directory, relative_to=source_path)
 		mode = file_stat.mode if self._options[Option.SET_MODE] else 0755
 
 		try:
@@ -728,9 +716,10 @@ class CopyOperation(Operation):
 		# set owner
 		self._set_owner(directory, file_stat.user_id, file_stat.group_id)
 
-	def _copy_file(self, file_):
+	def _copy_file(self, file_, source_path=None):
 		"""Copy file content"""
 		can_procede = True
+		source_path = source_path or self._source_path
 		dest_file = file_
 		sh = None
 		dh = None
@@ -750,7 +739,7 @@ class CopyOperation(Operation):
 					                    options[OverwriteOption.NEW_NAME]
 					                )
 
-				elif self._source_path == self._destination_path:
+				elif source_path == self._destination_path:
 					can_procede = False
 
 		# if user skipped this file return
@@ -758,17 +747,17 @@ class CopyOperation(Operation):
 			self._file_list.pop(self._file_list.index(file_))
 
 			# update total size
-			file_stat = self._source.get_stat(file_, relative_to=self._source_path)
+			file_stat = self._source.get_stat(file_, relative_to=source_path)
 			gobject.idle_add(self._dialog.increment_current_size, file_stat.size)
 			return
 
 		try:
 			# get file stats
 			destination_size = 0L
-			file_stat = self._source.get_stat(file_, relative_to=self._source_path, extended=True)
+			file_stat = self._source.get_stat(file_, relative_to=source_path, extended=True)
 
 			# get file handles
-			sh = self._source.get_file_handle(file_, FileMode.READ, relative_to=self._source_path)
+			sh = self._source.get_file_handle(file_, FileMode.READ, relative_to=source_path)
 			dh = self._destination.get_file_handle(dest_file, FileMode.WRITE, relative_to=self._destination_path)
 
 			# set buffer size
@@ -880,8 +869,8 @@ class CopyOperation(Operation):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
-			gobject.idle_add(self._dialog.set_current_file, directory)
-			self._create_directory(directory)  # create directory
+			gobject.idle_add(self._dialog.set_current_file, directory[0])
+			self._create_directory(directory[0], directory[1])  # create directory
 
 			gobject.idle_add(
 						self._dialog.set_current_file_fraction,
@@ -896,14 +885,14 @@ class CopyOperation(Operation):
 		list_ = self._file_list[:]
 
 		# copy all the files in list
-		for file_ in list_:
+		for file_, source_path in list_:
 			# abort operation if requested
 			if self._abort.is_set(): break
 			self._can_continue.wait()  # pause lock
 
 			# copy file
 			gobject.idle_add(self._dialog.set_current_file, file_)
-			self._copy_file(file_)
+			self._copy_file(file_, source_path)
 			gobject.idle_add(self._dialog.increment_current_count, 1)
 
 	def run(self):
@@ -972,11 +961,12 @@ class CopyOperation(Operation):
 class MoveOperation(CopyOperation):
 	"""Operation thread used for moving files"""
 
-	def _remove_path(self, path, item_list):
+	def _remove_path(self, path, item_list, source_path=None):
 		"""Remove path"""
+		source_path = source_path or self._source_path
 		try:
 			# try removing specified path
-			self._source.remove_path(path, relative_to=self._source_path)
+			self._source.remove_path(path, relative_to=source_path)
 
 			# push event to the queue
 			if self._source_queue is not None:
@@ -999,9 +989,10 @@ class MoveOperation(CopyOperation):
 		"""Create progress dialog"""
 		self._dialog = MoveDialog(self._application, self)
 
-	def _move_file(self, file_):
+	def _move_file(self, file_, source_path=None):
 		"""Move specified file using provider rename method"""
 		can_procede = True
+		source_path = source_path or self._source_path
 		dest_file = file_
 
 		# check if destination file exists
@@ -1028,7 +1019,7 @@ class MoveOperation(CopyOperation):
 			self._source.rename_path(
 								file_,
 								os.path.join(self._destination_path, dest_file),
-								relative_to=self._source_path
+								relative_to=source_path
 							)
 
 			# push events to the queue
@@ -1060,14 +1051,13 @@ class MoveOperation(CopyOperation):
 		gobject.idle_add(self._update_status, _('Moving files...'))
 
 		list_ = self._file_list[:]
-
-		for file_ in list_:
+		for file_, source_path in list_:
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
 			# move file
 			gobject.idle_add(self._dialog.set_current_file, file_)
-			self._move_file(file_)
+			self._move_file(file_, source_path)
 			gobject.idle_add(self._dialog.increment_current_count, 1)
 
 	def _delete_file_list(self):
@@ -1081,8 +1071,8 @@ class MoveOperation(CopyOperation):
 			self._can_continue.wait()  # pause lock
 
 			# remove path
-			gobject.idle_add(self._dialog.set_current_file, item)
-			self._remove_path(item, self._file_list)
+			gobject.idle_add(self._dialog.set_current_file, item[0])
+			self._remove_path(item[0], self._file_list, item[1])
 
 			# update current count
 			gobject.idle_add(
@@ -1100,15 +1090,16 @@ class MoveOperation(CopyOperation):
 		dir_list.reverse()  # remove deepest directories first
 
 		for number, directory in enumerate(dir_list, 0):
+			directory, source_path = directory[0], directory[1] or self._source_path
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
-			if self._source.exists(directory, relative_to=self._source_path):
+			if self._source.exists(directory, relative_to=source_path):
 				gobject.idle_add(self._dialog.set_current_file, directory)
 
 				# try to get a list of items inside of directory
 				try:
-					item_list = self._source.list_dir(directory, relative_to=self._source_path)
+					item_list = self._source.list_dir(directory, relative_to=source_path)
 
 				except:
 					item_list = None

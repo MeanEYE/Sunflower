@@ -490,7 +490,11 @@ class CopyOperation(Operation):
 	def _get_lists(self):
 		"""Find all files for copying"""
 		gobject.idle_add(self._update_status, _('Searching for files...'))
-		
+
+		# filter files already selected with parent directory
+		for file in self._selection_list:
+			self._selection_list = filter(lambda item: not item.startswith(file+os.path.sep), self._selection_list)
+
 		# traverse through the rest of the items
 		for item in self._selection_list:
 			if self._abort.is_set(): break  # abort operation if requested

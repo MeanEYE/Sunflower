@@ -11,6 +11,7 @@ import subprocess
 import glib
 import urllib
 import signal
+import fcntl
 
 from menus import MenuManager
 from mounts import MountsManager
@@ -1734,11 +1735,16 @@ class MainWindow(gtk.Window):
 
 			else:
 				# check for lockfile
-				if os.path.exists(lock_file):
+				try:
+					lock = open(lock_file, 'w')
+					fcntl.lockf(lock, fcntl.LOCK_EX|fcntl.LOCK_NB)
+					lock.write(str(os.getpid()))
+				except IOError:
+					print "Another copy of Sunflower is already running"
 					sys.exit()
-
-				else:
-					open(lock_file, 'w').close()
+				except OSError as oserror:
+					print "Can't create lock file {}. {}".format(lock_file, oserror)
+					sys.exit()
 
 		# create dbus interface
 		if DBus.is_available():

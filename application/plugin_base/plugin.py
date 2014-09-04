@@ -45,6 +45,9 @@ class PluginBase(gtk.VBox):
 		except:
 			pass
 
+		# create titlebar buttons
+		self._create_buttons()
+
 		# status bar
 		self._status_bar = StatusBar()
 
@@ -69,6 +72,10 @@ class PluginBase(gtk.VBox):
 	def _change_tab_text(self, text):
 		"""Change tab text"""
 		self._tab_label.set_text(text)
+
+	def _create_buttons(self):
+		"""Create titlebar buttons."""
+		pass
 
 	def _connect_main_object(self, object_):
 		"""Create focus chain and connect basic events"""

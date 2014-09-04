@@ -68,59 +68,6 @@ class ItemList(PluginBase):
 		self._sort_number_sensitive = section.get('number_sensitive_sort')
 		self._columns = []
 
-		# bookmarks button
-		self._bookmarks_button = gtk.Button()
-
-		if options.get('tab_button_icons'):
-			image_bookmarks = gtk.Image()
-			image_bookmarks.set_from_icon_name('go-jump', gtk.ICON_SIZE_MENU)
-			self._bookmarks_button.set_image(image_bookmarks)
-
-		else:
-			self._bookmarks_button.set_label(ButtonText.BOOKMARKS)
-
-		self._bookmarks_button.set_focus_on_click(False)
-		self._bookmarks_button.set_tooltip_text(_('Bookmarks'))
-		self._bookmarks_button.connect('clicked', self._bookmarks_button_clicked)
-
-		self._title_bar.add_control(self._bookmarks_button)
-
-		# history button
-		self._history_button = gtk.Button()
-
-		if options.get('tab_button_icons'):
-			# set icon
-			image_history = gtk.Image()
-			image_history.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
-			self._history_button.set_image(image_history)
-		else:
-			# set text
-			self._history_button.set_label(ButtonText.HISTORY)
-
-		self._history_button.set_focus_on_click(False)
-		self._history_button.set_tooltip_text(_('History'))
-		self._history_button.connect('clicked', self._history_button_clicked)
-
-		self._title_bar.add_control(self._history_button)
-
-		# terminal button
-		self._terminal_button = gtk.Button()
-
-		if options.get('tab_button_icons'):
-			# set icon
-			image_terminal = gtk.Image()
-			image_terminal.set_from_icon_name('terminal', gtk.ICON_SIZE_MENU)
-			self._terminal_button.set_image(image_terminal)
-		else:
-			# set text
-			self._terminal_button.set_label(ButtonText.TERMINAL)
-
-		self._terminal_button.set_focus_on_click(False)
-		self._terminal_button.set_tooltip_text(_('Terminal'))
-		self._terminal_button.connect('clicked', self._create_terminal)
-
-		self._title_bar.add_control(self._terminal_button)
-		
 		# configure status bar
 		self._status_bar.add_group_with_icon('dirs', 'folder', '0/0', tooltip=_('Directories (selected/total)'))
 		self._status_bar.add_group_with_icon('files', 'document', '0/0', tooltip=_('Files (selected/total)'))
@@ -223,6 +170,63 @@ class ItemList(PluginBase):
 
 		self.show_all()
 		self._search_panel.hide()
+
+	def _create_buttons(self):
+		"""Create titlebar buttons."""
+		options = self._parent.options
+
+		# bookmarks button
+		self._bookmarks_button = gtk.Button()
+
+		if options.get('tab_button_icons'):
+			image_bookmarks = gtk.Image()
+			image_bookmarks.set_from_icon_name('go-jump', gtk.ICON_SIZE_MENU)
+			self._bookmarks_button.set_image(image_bookmarks)
+
+		else:
+			self._bookmarks_button.set_label(ButtonText.BOOKMARKS)
+
+		self._bookmarks_button.set_focus_on_click(False)
+		self._bookmarks_button.set_tooltip_text(_('Bookmarks'))
+		self._bookmarks_button.connect('clicked', self._bookmarks_button_clicked)
+
+		self._title_bar.add_control(self._bookmarks_button)
+
+		# history button
+		self._history_button = gtk.Button()
+
+		if options.get('tab_button_icons'):
+			# set icon
+			image_history = gtk.Image()
+			image_history.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
+			self._history_button.set_image(image_history)
+		else:
+			# set text
+			self._history_button.set_label(ButtonText.HISTORY)
+
+		self._history_button.set_focus_on_click(False)
+		self._history_button.set_tooltip_text(_('History'))
+		self._history_button.connect('clicked', self._history_button_clicked)
+
+		self._title_bar.add_control(self._history_button)
+
+		# terminal button
+		self._terminal_button = gtk.Button()
+
+		if options.get('tab_button_icons'):
+			# set icon
+			image_terminal = gtk.Image()
+			image_terminal.set_from_icon_name('terminal', gtk.ICON_SIZE_MENU)
+			self._terminal_button.set_image(image_terminal)
+		else:
+			# set text
+			self._terminal_button.set_label(ButtonText.TERMINAL)
+
+		self._terminal_button.set_focus_on_click(False)
+		self._terminal_button.set_tooltip_text(_('Terminal'))
+		self._terminal_button.connect('clicked', self._create_terminal)
+
+		self._title_bar.add_control(self._terminal_button)
 
 	def _configure_accelerators(self):
 		"""Configure accelerator group"""

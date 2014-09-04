@@ -55,22 +55,6 @@ class Terminal(PluginBase):
 		# change list icon
 		self._title_bar.set_icon_from_name('terminal')
 
-		# terminal menu button
-		self._menu_button = gtk.Button()
-
-		if options.get('tab_button_icons'):
-			# set icon
-			image_menu = gtk.Image()
-			image_menu.set_from_icon_name(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
-			self._menu_button.set_image(image_menu)
-		else:
-			# set text
-			self._menu_button = gtk.Button(ButtonText.MENU)
-
-		self._menu_button.set_focus_on_click(False)
-		self._menu_button.set_tooltip_text(_('Terminal menu'))
-		self._menu_button.connect('clicked', self._show_terminal_menu)
-
 		# pack buttons
 		self._title_bar.add_control(self._menu_button)
 
@@ -166,6 +150,26 @@ class Terminal(PluginBase):
 
 			if font_name is not None:
 				self._terminal.set_font_from_string(font_name)
+
+	def _create_buttons(self):
+		"""Create titlebar buttons."""
+		options = self._parent.options
+
+		# terminal menu button
+		self._menu_button = gtk.Button()
+
+		if options.get('tab_button_icons'):
+			# set icon
+			image_menu = gtk.Image()
+			image_menu.set_from_icon_name(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
+			self._menu_button.set_image(image_menu)
+		else:
+			# set text
+			self._menu_button = gtk.Button(ButtonText.MENU)
+
+		self._menu_button.set_focus_on_click(False)
+		self._menu_button.set_tooltip_text(_('Terminal menu'))
+		self._menu_button.connect('clicked', self._show_terminal_menu)
 
 	def _update_title(self, widget, data=None):
 		"""Update title with terminal window text"""

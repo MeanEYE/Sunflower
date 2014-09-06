@@ -328,7 +328,7 @@ class KeyringManager:
 
 		# if keyring is locked, try to unlock it
 		if self.is_locked() and not self.__unlock_keyring():
-			return False 
+			return False
 
 		# store password to existing keyring
 		keyring.item_create_sync(

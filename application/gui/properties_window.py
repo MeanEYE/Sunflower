@@ -5,7 +5,7 @@ import pango
 import locale
 import time
 import pwd
-import grp 
+import grp
 import common
 
 from plugin_base.monitor import MonitorSignals
@@ -207,9 +207,9 @@ class PropertiesWindow(gtk.Window):
 		# add all applications to the list
 		for application in application_list:
 			self._store.append((
-							application.id == default_application.id, 
-							application.icon, 
-							application.name, 
+							application.id == default_application.id,
+							application.icon,
+							application.name,
 							application.id
 						))
 
@@ -310,7 +310,7 @@ class PropertiesWindow(gtk.Window):
 	def _ownership_update(self):
 		"""Update owner and group"""
 		stat = self._provider.get_stat(self._path)
-		
+
 		self._combobox_owner.handler_block_by_func(self._ownership_changed)
 		self._combobox_group.handler_block_by_func(self._ownership_changed)
 
@@ -324,7 +324,7 @@ class PropertiesWindow(gtk.Window):
 				self._list_owner.append((user.pw_name, user.pw_uid))
 				if user.pw_uid == stat.user_id:
 					self._combobox_owner.set_active(i)
-			
+
 			for i, group in enumerate(grp.getgrall()):
 				self._list_group.append((group.gr_name, group.gr_gid))
 				if group.gr_gid == stat.group_id:

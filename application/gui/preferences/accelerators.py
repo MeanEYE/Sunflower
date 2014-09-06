@@ -148,7 +148,7 @@ class AcceleratorOptions(SettingsPage):
 
 		# check if new accelerator has collisions
 		accelerator_manager = self._application.accelerator_manager
-		collisions = accelerator_manager.check_collisions(keyval, modifier, GroupType.ALL_GROUPS) 
+		collisions = accelerator_manager.check_collisions(keyval, modifier, GroupType.ALL_GROUPS)
 
 		if len(collisions) > 0:
 			# ask user what to do with collisions
@@ -277,12 +277,12 @@ class AcceleratorOptions(SettingsPage):
 	def _save_options(self):
 		"""Method called when save button is clicked"""
 		manager = self._application.accelerator_manager
-		
+
 		# iterate over groups
 		for row in self._accels:
 			group_name = self._accels.get_value(row.iter, Column.NAME)
 			children = row.iterchildren()
-			
+
 			# store accelerators for current group
 			for child in children:
 				name = self._accels.get_value(child.iter, Column.NAME)
@@ -298,7 +298,7 @@ class AcceleratorOptions(SettingsPage):
 									primary=True,
 									can_overwrite=True
 								)
-				
+
 				# save secondary accelerator
 				manager._save_accelerator(
 									group_name,
@@ -310,4 +310,4 @@ class AcceleratorOptions(SettingsPage):
 									primary=False,
 									can_overwrite=True
 								)
-				
+

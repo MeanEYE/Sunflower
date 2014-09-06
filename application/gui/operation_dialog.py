@@ -229,9 +229,9 @@ class OperationDialog:
 		"""Create confirmation dialog with specified message and return result"""
 		dialog = gtk.MessageDialog(
 						self._window,
-						gtk.DIALOG_DESTROY_WITH_PARENT, 
+						gtk.DIALOG_DESTROY_WITH_PARENT,
 						gtk.MESSAGE_QUESTION,
-						gtk.BUTTONS_YES_NO, 
+						gtk.BUTTONS_YES_NO,
 						message
 					)
 		dialog.set_default_response(gtk.RESPONSE_YES)
@@ -314,7 +314,7 @@ class OperationDialog:
 		Don't call this method automatically!
 
 		"""
-		if self._paused: 
+		if self._paused:
 			return True  # don't update speed when paused
 
 		speed = self._current_size - self._total_checkpoint  # get current speed
@@ -497,7 +497,7 @@ class CopyDialog(OperationDialog):
 
 		# configure layout
 		self.set_title(_('Copy Selection'))
-		
+
 		# show all elements
 		self._window.show_all()
 
@@ -518,7 +518,7 @@ class MoveDialog(CopyDialog):
 
 		# configure layout
 		self.set_title(_('Move Selection'))
-		
+
 		# show all elements
 		self._window.show_all()
 
@@ -545,7 +545,7 @@ class DeleteDialog(OperationDialog):
 		self.set_title(_('Delete Selection'))
 		self.set_status(_('Removing items...'))
 		self.set_current_file('')
-		
+
 		# show all elements
 		self._window.show_all()
 
@@ -572,7 +572,7 @@ class RenameDialog(OperationDialog):
 		self.set_title(_('Rename Items'))
 		self.set_status(_('Renaming items...'))
 		self.set_current_file('')
-		
+
 		# show all elements
 		self._window.show_all()
 

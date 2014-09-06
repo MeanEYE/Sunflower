@@ -15,7 +15,7 @@ class Breadcrumbs(gtk.HBox):
 
 		self._parent = parent
 		self._type = self._parent._breadcrumb_type
-	
+
 		self._path = None
 		self._previous_path = None
 		self._colors = None
@@ -46,7 +46,7 @@ class Breadcrumbs(gtk.HBox):
 		# pack interface
 		self.pack_start(self._path_object, True, True)
 		self.show_all()
-	
+
 	def __get_color(self, background, foreground):
 		"""Calculate color for the part history part of the path"""
 		red = (background.red + foreground.red) / 2
@@ -195,7 +195,7 @@ class Breadcrumbs(gtk.HBox):
 	def _update_visibility(self, sender=None, data=None):
 		"""Handle path container resize"""
 		self._allocation = self._path_object.get_allocation()
-		
+
 	def apply_color(self, colors):
 		"""Apply colors to all bread crumbs"""
 		self._colors = colors

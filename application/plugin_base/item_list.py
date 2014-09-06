@@ -120,7 +120,7 @@ class ItemList(PluginBase):
 		self._terminal_button.connect('clicked', self._create_terminal)
 
 		self._title_bar.add_control(self._terminal_button)
-		
+
 		# configure status bar
 		self._status_bar.add_group_with_icon('dirs', 'folder', '0/0', tooltip=_('Directories (selected/total)'))
 		self._status_bar.add_group_with_icon('files', 'document', '0/0', tooltip=_('Files (selected/total)'))
@@ -173,7 +173,7 @@ class ItemList(PluginBase):
 		self._open_with_menu = None
 		self._popup_menu = self._create_popup_menu()
 
-		# tab menu 
+		# tab menu
 		self._tab_menu = gtk.Menu()
 		self._title_bar.set_menu(self._tab_menu)
 
@@ -1401,7 +1401,7 @@ class ItemList(PluginBase):
 		"""Toggle selection and move cursor up"""
 		self._toggle_selection(widget, data, advance=False)
 		self._move_marker_up(widget, data)
-	
+
 		return True
 
 	def _toggle_selection_from_cursor_up(self, widget, data=None):
@@ -1544,7 +1544,7 @@ class ItemList(PluginBase):
 	def copy_path_to_command_entry(self, widget=None, data=None):
 		"""Copy current path to command entry and focus it"""
 		self._parent.set_command_entry_text(self.path, True)
-		
+
 	def copy_selection_to_command_entry(self, widget=None, data=None):
 		"""Copy current selection to command entry and focus it"""
 		selection = self._get_selection(relative=True)

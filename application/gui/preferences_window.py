@@ -156,11 +156,11 @@ class PreferencesWindow(gtk.Window):
 			dialog.destroy()
 
 			if result == gtk.RESPONSE_YES:
-				self._save_options()			
+				self._save_options()
 
 			elif result == gtk.RESPONSE_CANCEL:
 				should_close = False
-		
+
 		if should_close:
 			self.hide()
 

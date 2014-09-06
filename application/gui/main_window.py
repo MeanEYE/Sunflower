@@ -566,7 +566,7 @@ class MainWindow(gtk.Window):
 
 		toolbar = self.toolbar_manager.get_toolbar()
 		toolbar.set_property('no-show-all', not self.options.get('show_toolbar'))
-		
+
 
 		# bookmarks menu
 		self.bookmarks = BookmarksMenu(self)
@@ -1001,7 +1001,7 @@ class MainWindow(gtk.Window):
 
 		else:
 			menu_item.set_active(not self.options.get('show_command_bar'))
-		
+
 		return True
 
 	def _toggle_show_command_entry(self, widget, data=None):
@@ -1126,7 +1126,7 @@ class MainWindow(gtk.Window):
 		for file_name in plugin_files:
 			try:
 				# determine whether we need to load user plugin or system plugin
-				user_plugin_exists = os.path.exists(os.path.join(self.user_plugin_path, file_name)) 
+				user_plugin_exists = os.path.exists(os.path.join(self.user_plugin_path, file_name))
 				load_user_plugin = user_plugin_exists and file_name not in self.protected_plugins
 
 				plugin_base_module = 'user_plugins' if load_user_plugin else 'plugins'
@@ -1276,7 +1276,7 @@ class MainWindow(gtk.Window):
 		if hasattr(active_object, '_open_in_new_tab'):
 			active_object._open_in_new_tab()
 			result = True
-		
+
 		return result
 
 	def _command_cut_to_clipboard(self, widget=None, data=None):
@@ -1535,7 +1535,7 @@ class MainWindow(gtk.Window):
 		# read all bookmarks
 		bookmark_list = self.bookmark_options.get('bookmarks')
 
-		# check if index is valid 
+		# check if index is valid
 		if index == 0:
 			path = user.home
 
@@ -1817,7 +1817,7 @@ class MainWindow(gtk.Window):
 		if options is None:
 			options = Parameters()
 
-		# create plugin object 
+		# create plugin object
 		new_tab = plugin_class(self, notebook, options)
 
 		# add page to notebook
@@ -1978,7 +1978,7 @@ class MainWindow(gtk.Window):
 			elif path[0] != os.sep:
 				path = os.path.join(active_object.path, path)
 
-			# if resulting path is a directory, change 
+			# if resulting path is a directory, change
 			if active_object.get_provider().is_dir(path):
 				active_object.change_path(path)
 				active_object.focus_main_object()
@@ -2028,7 +2028,7 @@ class MainWindow(gtk.Window):
 			tab['class'] = page._name
 
 			# add tab to list
-			tab_list.append(tab)		
+			tab_list.append(tab)
 
 		# store tabs to configuration
 		section = self.tab_options.create_section(section)
@@ -2152,7 +2152,7 @@ class MainWindow(gtk.Window):
 		group.set_accelerator('restore_handle_position', keyval('Home'), gtk.gdk.MOD1_MASK)
 		group.set_accelerator('move_handle_left', keyval('Page_Up'), gtk.gdk.MOD1_MASK)
 		group.set_accelerator('move_handle_right', keyval('Page_Down'), gtk.gdk.MOD1_MASK)
-		
+
 		# expose object
 		self._accel_group = group
 
@@ -2652,7 +2652,7 @@ class MainWindow(gtk.Window):
 	def register_popup_menu_action(self, mime_types, menu_item):
 		"""Register handler method for popup menu which will be
 		displayed if file type matches any string in mime_types.
-		
+
 		mime_types - tuple containing mime type strings
 		menu_item - menu item to be included in additional menu
 		"""
@@ -2707,11 +2707,11 @@ class MainWindow(gtk.Window):
 		"""Get list of extension classes for specified mime type"""
 		result = []
 		is_subset = self.associations_manager.is_mime_type_subset
-		
+
 		# get all classes that match any of the mime types defined
 		for mime_types, ExtensionClass in self.viewer_extensions_classes:
 			matched_types = filter(lambda iter_mime_type: is_subset(mime_type, iter_mime_type), mime_types)
-			
+
 			if len(matched_types) > 0:
 				result.append(ExtensionClass)
 

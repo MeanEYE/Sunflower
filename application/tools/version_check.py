@@ -6,7 +6,7 @@ from threading import Thread
 
 class VersionCheck:
 	"""Small class used for checking and displaying current and
-	latest version of software detected by getting a file from 
+	latest version of software detected by getting a file from
 	project hosting site.
 
 	"""
@@ -97,7 +97,7 @@ class VersionCheck:
 		# prepare template
 		if version['stage'] != 'f':
 			template = '{0[major]}.{0[minor]}{0[stage]}-{0[build]}'
-		else: 
+		else:
 			template = '{0[major]}.{0[minor]}-{0[build]}'
 
 		# populate version values

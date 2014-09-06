@@ -144,7 +144,7 @@ class CommandsOptions(SettingsPage):
 		for command in command_list:
 			self._commands.append((
 						command['title'],
-						command['command']	
+						command['command']
 					))
 
 	def _save_options(self):

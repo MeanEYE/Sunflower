@@ -90,7 +90,7 @@ class SambaInputDialog:
 		vbox_domain = gtk.VBox(False, 0)
 		vbox_username = gtk.VBox(False, 0)
 		vbox_password = gtk.VBox(False, 0)
-		
+
 		label_domain = gtk.Label(_('Domain:'))
 		label_username = gtk.Label(_('Username:'))
 		label_password = gtk.Label(_('Password:'))
@@ -173,7 +173,7 @@ class SambaInputDialog:
 										'One or more required fields are empty. '
 										'Please make sure you have entered name, '
 										'server and share.'
-									) 
+									)
 								)
 			dialog.run()
 			dialog.destroy()
@@ -192,7 +192,7 @@ class SambaInputDialog:
 
 		"""
 		self._entry_password.set_sensitive(available)
-	
+
 	def set_name(self, name):
 		"""Set username for editing"""
 		self._entry_name.set_text(name)
@@ -299,7 +299,7 @@ class FtpInputDialog:
 
 		vbox_username = gtk.VBox(False, 0)
 		vbox_password = gtk.VBox(False, 0)
-		
+
 		label_username = gtk.Label(_('Username:'))
 		label_password = gtk.Label(_('Password:'))
 
@@ -369,7 +369,7 @@ class FtpInputDialog:
 									_(
 										'One or more required fields is empty. '
 										'Please make sure you have entered name and server.'
-									) 
+									)
 								)
 			dialog.run()
 			dialog.destroy()
@@ -388,7 +388,7 @@ class FtpInputDialog:
 
 		"""
 		self._entry_password.set_sensitive(available)
-	
+
 	def set_name(self, name):
 		"""Set username for editing"""
 		self._entry_name.set_text(name)

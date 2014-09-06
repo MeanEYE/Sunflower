@@ -85,7 +85,7 @@ class ItemListOptions(SettingsPage):
 		hbox_breadcrumbs = gtk.HBox(False, 5)
 		label_breadcrumbs = gtk.Label(_('Breadcrumbs:'))
 		label_breadcrumbs.set_alignment(0, 0.5)
-		
+
 		list_breadcrumbs = gtk.ListStore(str, int)
 		list_breadcrumbs.append((_('None'), Breadcrumbs.TYPE_NONE))
 		list_breadcrumbs.append((_('Normal'), Breadcrumbs.TYPE_NORMAL))
@@ -429,7 +429,7 @@ class ItemListOptions(SettingsPage):
 			dialog = InputDialog(self._application)
 			dialog.set_title(_('Add custom directory'))
 			dialog.set_label(_('Full path:'))
-			
+
 			response = dialog.get_response()
 
 			if response[0] == gtk.RESPONSE_OK:
@@ -495,7 +495,7 @@ class ItemListOptions(SettingsPage):
 
 		# enable save button
 		self._parent.enable_save()
-	
+
 		return True
 
 	def _vim_bindings_toggled(self, widget, data=None):
@@ -584,7 +584,7 @@ class ItemListOptions(SettingsPage):
 			try:
 				# make sure entered value is integer
 				new_size = int(text)
-			
+
 			except ValueError:
 				# if entered value is not integer, exception
 				# will be raised and we just skip updating storage

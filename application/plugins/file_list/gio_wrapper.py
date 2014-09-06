@@ -56,7 +56,7 @@ class File:
 		"""Truncate the file's size"""
 		if size is None:
 			size = self.tell()
-	
+
 		if self._resource.can_truncate():
 			self._resource.truncate(size)
 

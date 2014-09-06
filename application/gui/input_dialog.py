@@ -577,7 +577,7 @@ class CopyDialog:
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
-		
+
 		self._dialog.vbox.set_spacing(0)
 
 		# create additional components
@@ -801,7 +801,7 @@ class CopyDialog:
 		else:
 			self._dialog_size = self._dialog.get_size()
 			self._dialog.set_size_request(-1, -1)
-		
+
 	def _get_text_variables(self, count):
 		"""Get text variables for update"""
 		title = ngettext(
@@ -853,7 +853,7 @@ class CopyDialog:
 
 		# get affected items
 		pattern = self.entry_type.get_text()
-		match_function = lambda item: source_provider.is_dir(item) or fnmatch.fnmatch(item, pattern) 
+		match_function = lambda item: source_provider.is_dir(item) or fnmatch.fnmatch(item, pattern)
 		affected_items = filter(match_function, source_provider.get_selection())
 		item_count = len(affected_items)
 
@@ -1569,7 +1569,7 @@ class ApplicationInputDialog(InputDialog):
 		button_select.connect('clicked', self.__select_application)
 
 		self._entry_command = gtk.Entry()
-		
+
 		# pack interface
 		hbox_command.pack_start(self._entry_command, True, True, 0)
 		hbox_command.pack_start(button_select, False, False, 0)
@@ -1605,12 +1605,12 @@ class ApplicationInputDialog(InputDialog):
 
 class ApplicationSelectDialog:
 	"""Provides user with a list of installed applications and option to enter command"""
-	
+
 	help_url = 'standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables'
-	
+
 	def __init__(self, application, path=None):
 		self._dialog = gtk.Dialog(parent=application)
-		
+
 		self._application = application
 		self.path = path
 
@@ -1625,45 +1625,45 @@ class ApplicationSelectDialog:
 
 		self._dialog.vbox.set_spacing(0)
 		self._dialog.vbox.set_border_width(0)
-		
+
 		self._container = gtk.VBox(False, 5)
 		self._container.set_border_width(5)
 
-		# create interface		
+		# create interface
 		vbox_list = gtk.VBox(False, 0)
-		
+
 		label_open_with = gtk.Label()
 		label_open_with.set_use_markup(True)
 		label_open_with.set_alignment(0, 0.5)
 		if path is None:
 			label_open_with.set_label(_('Select application:'))
-			
+
 		else:
 			label_open_with.set_label(_('Open <i>{0}</i> with:').format(os.path.basename(path)))
-			
+
 		# create application list
 		list_container = gtk.ScrolledWindow()
 		list_container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 		list_container.set_shadow_type(gtk.SHADOW_IN)
-		
+
 		self._store = gtk.ListStore(str, str, str, str, str)
 		self._list = gtk.TreeView(model=self._store)
-	
+
 		cell_icon = gtk.CellRendererPixbuf()
 		cell_name = gtk.CellRendererText()
 		cell_generic = gtk.CellRendererText()
-		
+
 		column_application = gtk.TreeViewColumn()
 		column_application.pack_start(cell_icon, False)
 		column_application.pack_start(cell_name, True)
 		column_application.add_attribute(cell_icon, 'icon-name', 0)
 		column_application.add_attribute(cell_name, 'text', 1)
 		column_application.set_expand(True)
-		
+
 		column_generic = gtk.TreeViewColumn()
 		column_generic.pack_start(cell_generic, True)
 		column_generic.add_attribute(cell_generic, 'markup', 4)
-		
+
 		self._list.append_column(column_application)
 		self._list.append_column(column_generic)
 		self._list.set_headers_visible(False)
@@ -1671,33 +1671,33 @@ class ApplicationSelectDialog:
 		self._list.set_enable_search(True)
 		self._list.connect('cursor-changed', self.__handle_cursor_change)
 		self._list.connect('row-activated', self.__handle_row_activated)
-		
+
 		self._store.set_sort_column_id(1, gtk.SORT_ASCENDING)
-		
+
 		# create custom command entry
 		self._expander_custom = gtk.Expander(label=_('Use a custom command'))
-		
+
 		hbox_custom = gtk.HBox(False, 7)
-		
+
 		self._entry_custom = gtk.Entry()
-		
+
 		# pack interface
 		list_container.add(self._list)
 		vbox_list.pack_start(label_open_with, False, False, 0)
 		vbox_list.pack_start(list_container, True, True, 0)
-		
+
 		hbox_custom.pack_start(self._entry_custom, True, True, 0)
 		self._expander_custom.add(hbox_custom)
-		
+
 		self._container.pack_start(vbox_list, True, True, 0)
 		self._container.pack_start(self._expander_custom, False, False, 0)
-		
+
 		self._dialog.vbox.pack_start(self._container, True, True, 0)
-				
+
 		# create controls
 		button_help = gtk.Button(stock=gtk.STOCK_HELP)
 		button_help.connect('clicked', self._application.goto_web, self.help_url)
-		
+
 		if path is not None:
 			button_ok = gtk.Button(stock=gtk.STOCK_OPEN)
 
@@ -1705,32 +1705,32 @@ class ApplicationSelectDialog:
 			button_ok = gtk.Button(stock=gtk.STOCK_OK)
 
 		button_ok.set_can_default(True)
-		
+
 		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
-		
+
 		self._dialog.action_area.pack_start(button_help, False, False, 0)
 		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
 		self._dialog.add_action_widget(button_ok, gtk.RESPONSE_OK)
 		self._dialog.set_default_response(gtk.RESPONSE_OK)
-		
+
 		# populate content
 		self._load_applications()
 
 		self._dialog.show_all()
-		
+
 	def __handle_cursor_change(self, widget, data=None):
 		"""Handle setting or changing list cursor"""
 		selection = widget.get_selection()
 		item_store, selected_iter = selection.get_selected()
-		
+
 		if selected_iter is not None:
 			command = item_store.get_value(selected_iter, 3)
 			self._entry_custom.set_text(command)
-			
+
 	def __handle_row_activated(self, path=None, view_column=None, data=None):
 		"""Handle choosing application by presing 'Enter'"""
 		self._dialog.response(gtk.RESPONSE_OK)
-		
+
 	def _load_applications(self):
 		"""Populate application list from config files"""
 		application_list = self._application.associations_manager.get_all()
@@ -1739,19 +1739,19 @@ class ApplicationSelectDialog:
 			if application.command_line is not None \
 			and '%' in application.command_line:
 				self._store.append((
-							application.icon, 
-							application.name, 
-							application.id, 
+							application.icon,
+							application.name,
+							application.id,
 							application.command_line,
 							'<small>{0}</small>'.format(application.description)
 						))
-		
+
 	def get_response(self):
 		"""Get response and destroy dialog"""
 		code = self._dialog.run()
 		is_custom = self._expander_custom.get_expanded()
 		command = self._entry_custom.get_text()
-		
+
 		self._dialog.destroy()
 
 		return code, is_custom, command

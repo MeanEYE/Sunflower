@@ -31,7 +31,7 @@ FileInfoExtended = namedtuple(
 					'device',  # device inode resides on
 					'inode'  # inode number
 				])
-				
+
 
 SystemSize = namedtuple(
 				'SystemSize',
@@ -114,10 +114,10 @@ class Provider:
 
 	def link(self, existing_path, destination_path, relative_to=None, symbolic=True):
 		"""Create hard or symbolic link from existing path.
-		
+
 		Please note that relative_to parameter only applies to destination_path. It
 		should not be applied to existing_path parameter.
-		
+
 		"""
 		pass
 

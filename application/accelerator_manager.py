@@ -90,7 +90,7 @@ class AcceleratorManager:
 		# add group name to the list
 		if group._name not in self._group_names:
 			self._group_names.append(group._name)
-		
+
 		# add group to internal list
 		self._groups.append(group)
 
@@ -159,7 +159,7 @@ class AcceleratorManager:
 
 			if group is not None:
 				accelerator = group.get_accelerator(name, primary)
-				
+
 		return accelerator
 
 	def schedule_groups_for_deactivation(self, groups, owner):

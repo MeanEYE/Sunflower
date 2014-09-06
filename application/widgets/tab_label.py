@@ -10,7 +10,7 @@ class TabLabel:
 
 		self._application = application
 		self._parent = parent
-		
+
 		# initialize tab events
 		self._container.add_events(gtk.gdk.BUTTON_RELEASE_MASK)
 		self._container.connect('button-release-event', self._button_release_event)
@@ -19,7 +19,7 @@ class TabLabel:
 		# create interface
 		self._hbox = gtk.HBox(False, 0)
 		self._container.add(self._hbox)
-		
+
 		self._label = gtk.Label()
 		self._label.set_max_width_chars(20)
 		self._label.set_ellipsize(pango.ELLIPSIZE_END)
@@ -55,7 +55,7 @@ class TabLabel:
 		if self._application.options.get('tab_close_button'):
 			self._button.show()
 			self._hbox.set_spacing(3)
-		
+
 		self._container.show_all()
 
 	def _close_tab(self, widget=None, mode=None):

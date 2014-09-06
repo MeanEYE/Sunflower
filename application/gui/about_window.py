@@ -131,7 +131,7 @@ class AboutWindow:
 			name = 'Táncos Tamás',
 			email = 'h868315@gmail.com',
 			website = None,
-			language = 'Hungarian' 
+			language = 'Hungarian'
 		),
 		Translator(
 			name = 'Radek Otáhal',
@@ -205,13 +205,13 @@ class AboutWindow:
 
 		# set authors
 		self._dialog.set_authors(['{0} <{1}> {2}'.format(
-					contributor.name, 
+					contributor.name,
 					contributor.email,
 					contributor.website or ''
 				) for contributor in self.contributors])
 
 		self._dialog.set_artists(['{0} <{1}> {2}'.format(
-					contributor.name, 
+					contributor.name,
 					contributor.email,
 					contributor.website or ''
 				) for contributor in self.artists])

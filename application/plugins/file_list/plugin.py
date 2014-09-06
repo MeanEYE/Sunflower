@@ -803,7 +803,7 @@ class FileList(ItemList):
 						 	"You are about to delete {0} items.\n"
 						 	"Are you sure about this?",
 						 	len(selection)
-						 ) 
+						 )
 
 			else:
 				message = ngettext(
@@ -812,7 +812,7 @@ class FileList(ItemList):
 						 	"You are about to move {0} items to trash.\n"
 						 	"Are you sure about this?",
 						 	len(selection)
-						 ) 
+						 )
 
 			# user has confirmation dialog enabled
 			dialog = gtk.MessageDialog(
@@ -870,7 +870,7 @@ class FileList(ItemList):
 		if hasattr(opposite_object, 'get_provider'):
 			destination_provider = opposite_object.get_provider()
 			destination_monitor = opposite_object.get_monitor()
-		
+
 		# ask confirmation from user
 		dialog = CopyDialog(
 						self._parent,
@@ -1740,10 +1740,10 @@ class FileList(ItemList):
 		# set title and subtitle
 		self._title_bar.set_title(text)
 		self._title_bar.set_subtitle('{3} {0} - {4} {1} - {2:.2f}%'.format(
-							size_available, 
-							size_total, 
+							size_available,
+							size_total,
 							percent_available,
-							_('Free:'), 
+							_('Free:'),
 							_('Total:')
 						))
 
@@ -2056,7 +2056,7 @@ class FileList(ItemList):
 
 		# get provider for specified URI
 		provider = None
-		self.path = path 
+		self.path = path
 
 		if '://' not in path:
 			scheme = 'file'
@@ -2064,7 +2064,7 @@ class FileList(ItemList):
 		else:
 			data = path.split('://', 1)
 			scheme = data[0]
-			
+
 			# for local storage, use path without scheme
 			if scheme == 'file':
 				self.path = data[1]

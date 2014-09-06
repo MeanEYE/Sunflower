@@ -52,7 +52,7 @@ class Operation(Thread):
 		self._options = options
 		self._source_queue = None
 		self._destination_queue = None
-		
+
 		# daemonize
 		self.daemon = True
 
@@ -71,7 +71,7 @@ class Operation(Thread):
 			self._destination_path = destination_path or self._destination.get_path()
 
 		self._can_continue.set()
-		
+
 	def _create_dialog(self):
 		"""Create operation dialog"""
 		pass
@@ -128,15 +128,15 @@ class Operation(Thread):
 			merge = self._options[Option.SILENT_MERGE]
 			self._merge_all = merge
 
-		else: 
+		else:
 			# we are not in silent mode, ask user
 			with gtk.gdk.lock:
 				dialog = OverwriteDirectoryDialog(self._application, self._dialog.get_window())
-		
+
 				title_element = os.path.basename(path)
 				message_element = os.path.basename(os.path.dirname(
 									os.path.join(self._destination.get_path(), path)))
-		
+
 				dialog.set_title_element(title_element)
 				dialog.set_message_element(message_element)
 				dialog.set_rename_value(title_element)
@@ -150,7 +150,7 @@ class Operation(Thread):
 								path,
 								relative_to=self._destination_path
 							)
-		
+
 				result = dialog.get_response()
 				merge = result[0] == gtk.RESPONSE_YES
 
@@ -175,11 +175,11 @@ class Operation(Thread):
 			# we are not in silent mode, ask user what to do
 			with gtk.gdk.lock:
 				dialog = OverwriteFileDialog(self._application, self._dialog.get_window())
-		
+
 				title_element = os.path.basename(path)
 				message_element = os.path.basename(os.path.dirname(
 									os.path.join(self._destination.get_path(), path)))
-		
+
 				dialog.set_title_element(title_element)
 				dialog.set_message_element(message_element)
 				dialog.set_rename_value(title_element)
@@ -193,7 +193,7 @@ class Operation(Thread):
 								path,
 								relative_to=self._destination_path
 								)
-		
+
 				result = dialog.get_response()
 				overwrite = result[0] == gtk.RESPONSE_YES
 
@@ -220,15 +220,15 @@ class Operation(Thread):
 			# we are not in silent mode, ask user
 			with gtk.gdk.lock:
 				dialog = OperationError(self._application)
-		
+
 				dialog.set_message(_(
 						'There is a problem writing data to destination '
 						'file. What would you like to do?'
 					))
 				dialog.set_error(str(error))
-		
+
 				response = dialog.get_response()
-		
+
 				# abort operation if user requested
 				if response == gtk.RESPONSE_CANCEL:
 					self.cancel()
@@ -246,26 +246,26 @@ class Operation(Thread):
 			# we are not in silent mode, ask user
 			with gtk.gdk.lock:
 				dialog = OperationError(self._application)
-		
+
 				if not is_directory:
 					# set message for file
 					dialog.set_message(_(
 						'An error occurred while trying to create specified '
 						'file. What would you like to do?'
 					))
-		
+
 				else:
 					# set message for directory
 					dialog.set_message(_(
 						'An error occurred while trying to create specified '
 						'directory. What would you like to do?'
 					))
-		
+
 				dialog.set_error(str(error))
-		
+
 				# get user response
 				response = dialog.get_response()
-		
+
 				# abort operation if user requested
 				if response == gtk.RESPONSE_CANCEL:
 					self.cancel()
@@ -283,17 +283,17 @@ class Operation(Thread):
 			# we are not in silent mode, ask user
 			with gtk.gdk.lock:
 				dialog = OperationError(self._application)
-		
+
 				dialog.set_message(_(
 						'Problem with setting path parameter for '
 						'specified path. What would you like to do?'
 					))
-		
+
 				dialog.set_error(str(error))
-		
+
 				# get user response
 				response = dialog.get_response()
-		
+
 				# abort operation if user requested
 				if response == gtk.RESPONSE_CANCEL:
 					self.cancel()
@@ -311,15 +311,15 @@ class Operation(Thread):
 			# we are not in silent mode, ask user
 			with gtk.gdk.lock:
 				dialog = OperationError(self._application)
-		
+
 				dialog.set_message(_(
 						'There was a problem removing specified path. '
 						'What would you like to do?'
 					))
 				dialog.set_error(str(error))
-		
+
 				response = dialog.get_response()
-		
+
 				# abort operation if user requested
 				if response == gtk.RESPONSE_CANCEL:
 					self.cancel()
@@ -337,15 +337,15 @@ class Operation(Thread):
 			# we are not in silent mode, ask user
 			with gtk.gdk.lock:
 				dialog = QuestionOperationError(self._application)
-		
+
 				dialog.set_message(_(
 						'There was a problem trashing specified path. '
 						'Would you like to try removing it instead?'
 					))
 				dialog.set_error(str(error))
-		
+
 				response = dialog.get_response()
-		
+
 				# abort operation if user requested
 				if response == gtk.RESPONSE_CANCEL:
 					self.cancel()
@@ -363,15 +363,15 @@ class Operation(Thread):
 			# we are not in silent mode, ask user
 			with gtk.gdk.lock:
 				dialog = OperationError(self._application)
-		
+
 				dialog.set_message(_(
 						'There was a problem moving specified path. '
 						'What would you like to do?'
 					))
 				dialog.set_error(str(error))
-		
+
 				response = dialog.get_response()
-		
+
 				# abort operation if user requested
 				if response == gtk.RESPONSE_CANCEL:
 					self.cancel()
@@ -389,15 +389,15 @@ class Operation(Thread):
 			# we are not in silent mode, ask user
 			with gtk.gdk.lock:
 				dialog = OperationError(self._application)
-		
+
 				dialog.set_message(_(
 						'There was a problem renaming specified path. '
 						'What would you like to do?'
 					))
 				dialog.set_error(str(error))
-		
+
 				response = dialog.get_response()
-		
+
 				# abort operation if user requested
 				if response == gtk.RESPONSE_CANCEL:
 					self.cancel()
@@ -415,15 +415,15 @@ class Operation(Thread):
 			# we are not in silent mode, ask user
 			with gtk.gdk.lock:
 				dialog = OperationError(self._application)
-		
+
 				dialog.set_message(_(
 						'There was a problem with reading specified directory. '
 						'What would you like to do?'
 					))
 				dialog.set_error(str(error))
-		
+
 				response = dialog.get_response()
-		
+
 				# abort operation if user requested
 				if response == gtk.RESPONSE_CANCEL:
 					self.cancel()
@@ -490,7 +490,7 @@ class CopyOperation(Operation):
 	def _get_lists(self):
 		"""Find all files for copying"""
 		gobject.idle_add(self._update_status, _('Searching for files...'))
-		
+
 		# traverse through the rest of the items
 		for item in self._selection_list:
 			if self._abort.is_set(): break  # abort operation if requested
@@ -612,7 +612,7 @@ class CopyOperation(Operation):
 		try:
 			# try setting timestamp
 			self._destination.set_timestamp(
-									path, 
+									path,
 									access_time,
 									modify_time,
 									change_time,
@@ -777,11 +777,11 @@ class CopyOperation(Operation):
 
 			# reserve file size
 			if self._reserve_size:
-				# try to reserve file size in advance, 
+				# try to reserve file size in advance,
 				# can be slow on memory cards and network
 				try:
 					dh.truncate(file_stat.size)
-					
+
 				except:
 					dh.truncate()
 
@@ -864,8 +864,8 @@ class CopyOperation(Operation):
 				self._set_mode(dest_file, file_stat.mode)
 				self._set_owner(dest_file, file_stat.user_id, file_stat.group_id)
 				self._set_timestamp(
-								dest_file, 
-								file_stat.time_access, 
+								dest_file,
+								file_stat.time_access,
 								file_stat.time_modify,
 								file_stat.time_change
 							)
@@ -941,7 +941,7 @@ class CopyOperation(Operation):
 		with gtk.gdk.lock:
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 				notify_manager = self._application.notification_manager
-				
+
 				title = _('Copy Operation')
 				message = ngettext(
 								'Copying of {0} item from "{1}" to "{2}" is completed!',
@@ -952,7 +952,7 @@ class CopyOperation(Operation):
 								os.path.basename(self._source_path),
 								os.path.basename(self._destination_path)
 							)
-	
+
 				# queue notification
 				notify_manager.notify(title, message)
 
@@ -1183,7 +1183,7 @@ class MoveOperation(CopyOperation):
 		with gtk.gdk.lock:
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 				notify_manager = self._application.notification_manager
-				
+
 				title = _('Move Operation')
 				message = ngettext(
 								'Moving of {0} item from "{1}" to "{2}" is completed!',
@@ -1194,7 +1194,7 @@ class MoveOperation(CopyOperation):
 								os.path.basename(self._source_path),
 								os.path.basename(self._destination_path)
 							)
-	
+
 				# queue notification
 				notify_manager.notify(title, message)
 
@@ -1219,7 +1219,7 @@ class DeleteOperation(Operation):
 
 		# allow users to force deleting items
 		self._force_delete = False
-		
+
 	def _create_dialog(self):
 		"""Create operation dialog"""
 		self._dialog = DeleteDialog(self._application, self)
@@ -1285,7 +1285,7 @@ class DeleteOperation(Operation):
 				parent.deselect_all()
 
 		# select removal method
-		trash_files = self._application.options.section('operations').get('trash_files') 
+		trash_files = self._application.options.section('operations').get('trash_files')
 		trash_available = ProviderSupport.TRASH in self._source.get_support()
 
 		if self._force_delete:
@@ -1293,7 +1293,7 @@ class DeleteOperation(Operation):
 
 		else:
 			remove_method = (
-					self._remove_path, 
+					self._remove_path,
 					self._trash_path
 				)[trash_files and trash_available]
 
@@ -1320,7 +1320,7 @@ class DeleteOperation(Operation):
 		with gtk.gdk.lock:
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 				notify_manager = self._application.notification_manager
-				
+
 				title = _('Delete Operation')
 				message = ngettext(
 								'Removal of {0} item from "{1}" is completed!',
@@ -1330,7 +1330,7 @@ class DeleteOperation(Operation):
 				        len(self._file_list),
 				        os.path.basename(self._source_path)
 				    )
-	
+
 				# queue notification
 				notify_manager.notify(title, message)
 
@@ -1346,7 +1346,7 @@ class RenameOperation(Operation):
 
 		self._source_path = path
 		self._file_list = file_list
-		
+
 	def _create_dialog(self):
 		"""Create operation dialog"""
 		self._dialog = RenameDialog(self._application, self)
@@ -1401,7 +1401,7 @@ class RenameOperation(Operation):
 		with gtk.gdk.lock:
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 				notify_manager = self._application.notification_manager
-				
+
 				title = _('Rename Operation')
 				message = ngettext(
 								'Rename of {0} item from "{1}" is completed!',
@@ -1411,7 +1411,7 @@ class RenameOperation(Operation):
 				        len(self._file_list),
 				        os.path.basename(self._source_path)
 				    )
-	
+
 				# queue notification
 				notify_manager.notify(title, message)
 

@@ -134,7 +134,7 @@ class PluginsOptions(SettingsPage):
 
 			self._button_contact.set_sensitive(has_contact)
 			self._button_home_page.set_sensitive(has_site)
-		
+
 	def __handle_contact_button_click(self, widget, data=None):
 		"""Create new contact email"""
 		selection = self._list.get_selection()

@@ -43,8 +43,8 @@ MenuItem = namedtuple(
 
 class BookmarksMenu:
 	"""Bookmarks menu widget is designed to replace standard popup menu
-	when presenting bookmarks and mounts to user. Before showing this 
-	menu, make sure you call set_object as this object will be used to 
+	when presenting bookmarks and mounts to user. Before showing this
+	menu, make sure you call set_object as this object will be used to
 	navigate to places in this menu.
 
 	"""
@@ -111,9 +111,9 @@ class BookmarksMenu:
 		if len(self._mounts) > 0:
 			for mount in self._mounts:
 				self.__create_menu_item(
-								mount.name, 
-								mount.icon, 
-								self.__open_selected, 
+								mount.name,
+								mount.icon,
+								self.__open_selected,
 								mount.uri
 							)
 
@@ -247,7 +247,7 @@ class BookmarksMenu:
 	def remove_menu_item(self, name):
 		"""Remove menu item from the list"""
 		self._menus = filter(lambda menu_item: menu_item.name != name, self._menus)
-	
+
 	def get_menu_item_count(self):
 		"""Return number of menu items"""
 		return len(self._menus)
@@ -269,7 +269,7 @@ class BookmarksMenu:
 
 		# show menu
 		self._menu.popup(None, None, lambda menu: (pos_x, pos_y, True), 1, 0)
-		
+
 	def apply_settings(self):
 		"""Apply new configuration"""
 		self._show_mounts = self._application.bookmark_options.get('show_mounts')

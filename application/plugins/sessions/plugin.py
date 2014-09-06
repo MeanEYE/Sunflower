@@ -162,7 +162,7 @@ class SessionsOptions(SettingsPage):
 			dialog.destroy()
 
 			return False
-		
+
 		# change name
 		session_iter = self._store.get_iter(path)
 		self._store.set_value(session_iter, column, text)
@@ -171,7 +171,7 @@ class SessionsOptions(SettingsPage):
 		self._parent.enable_save()
 
 		return True
-	
+
 	def _handle_add_session(self, widget, data=None):
 		"""Add new session to the store"""
 		# generate unique name
@@ -183,14 +183,14 @@ class SessionsOptions(SettingsPage):
 
 		while new_name in session_names:
 			new_name = '{0} {1}'.format(name_base, index)
-			index += 1	
+			index += 1
 
 		# add session
 		self._store.append((new_name, 0, -1))
 
 		# enable save button
 		self._parent.enable_save()
-	
+
 	def _handle_delete_session(self, widget, data=None):
 		"""Remove selected field from store"""
 		selection = self._list.get_selection()
@@ -202,7 +202,7 @@ class SessionsOptions(SettingsPage):
 
 			# enable save button if item was removed
 			self._parent.enable_save()
-	
+
 	def _handle_move_session(self, widget, direction):
 		"""Move selected bookmark up or down"""
 		selection = self._list.get_selection()
@@ -349,7 +349,7 @@ def register_plugin(application):
 	"""Method that Sunflower calls once plugin is loaded"""
 	manager = SessionManager(application)
 	settings_page = SessionsOptions(
-				application.preferences_window, 
+				application.preferences_window,
 				application
 			)
 

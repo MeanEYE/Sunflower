@@ -142,7 +142,7 @@ class ViewEditOptions(SettingsPage):
 		selected_index = self._combobox_application.get_active()
 		application_name = None
 		application_command = None
-		
+
 		if selected_index > -1:
 			row = self._store[selected_index]
 			application_name = row[Column.NAME]

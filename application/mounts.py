@@ -104,7 +104,7 @@ class MountsManager:
 		"""Perform unmount by URI"""
 		if uri in self._mounts:
 			self._unmount(self._mounts[uri])
-		
+
 	def _unmount(self, mount):
 		"""Perform unmounting"""
 		if mount.can_unmount():

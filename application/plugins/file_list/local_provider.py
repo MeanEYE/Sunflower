@@ -184,10 +184,10 @@ class LocalProvider(Provider):
 
 	def set_timestamp(self, path, access=None, modify=None, change=None, relative_to=None):
 		"""Set timestamps for specified path
-		
+
 		On Linux/Unix operating system we can't set metadata change timestamp
 		so we just ignore this part until other platforms are supported.
-		
+
 		"""
 		real_path = self._real_path(path, relative_to)
 		os.utime(real_path, (access, modify))
@@ -230,7 +230,7 @@ class LocalProvider(Provider):
 
 			result = SystemSize(
 						block_size = stat.f_bsize,
-						block_total = stat.f_blocks, 
+						block_total = stat.f_blocks,
 						block_available = stat.f_bavail,
 						size_total = space_total,
 						size_available = space_free
@@ -239,7 +239,7 @@ class LocalProvider(Provider):
 		except:
 			result = SystemSize(
 						block_size = 0,
-						block_total = 0, 
+						block_total = 0,
 						block_available = 0,
 						size_total = 0,
 						size_available = 0

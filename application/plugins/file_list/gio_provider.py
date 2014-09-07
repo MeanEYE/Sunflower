@@ -413,6 +413,10 @@ class TrashProvider(GioProvider):
 			Support.SYSTEM_SIZE,
 		)
 
+	def get_root_path(self, path):
+		"""Return root path."""
+		return 'trash://'
+
 
 class DavProvider(GioProvider):
 	is_local = False

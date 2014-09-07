@@ -275,11 +275,13 @@ class FileList(ItemList):
 		self._item_list.set_search_column(Column.NAME)
 
 		# set row hinting
-		row_hinting = self._parent.options.section('item_list').get('row_hinting')
+		section = self._parent.options.section('item_list')
+		row_hinting = section.get('row_hinting')
 		self._item_list.set_rules_hint(row_hinting)
 
 		# set visibility of tree expanders
-		self._item_list.set_show_expanders(self._parent.options.section('item_list').get('show_expanders'))
+		self._show_expanders = section.get('show_expanders')
+		self._item_list.set_show_expanders(self._show_expanders)
 
 		# set grid lines
 		grid_lines = (
@@ -561,7 +563,7 @@ class FileList(ItemList):
 			return True
 
 		# show expanders if they are hidden
-		if not self._item_list.get_show_expanders():
+		if not self._show_expanders:
 			self._item_list.set_show_expanders(True)
 
 		# remove children if directory is already expanded
@@ -1611,6 +1613,10 @@ class FileList(ItemList):
 			for data in self._item_queue:
 				new_iter = self._store.append(parent, data)
 
+				# force showing expanders
+				if self._show_expanders and data[Column.IS_DIR] and not data[Column.IS_PARENT_DIR]:
+					self._store.append(new_iter, tuple(range(18)))
+
 				# focus specified item
 				if self._item_to_focus == data[0]:
 					path = self._store.get_path(new_iter)
@@ -2339,7 +2345,8 @@ class FileList(ItemList):
 		self._item_list.set_rules_hint(row_hinting)
 
 		# apply expander visibility
-		self._item_list.set_show_expanders(section.get('show_expanders'))
+		self._show_expanders = section.get('show_expanders')
+		self._item_list.set_show_expanders(self._show_expanders)
 
 		# apply grid lines
 		grid_lines = (

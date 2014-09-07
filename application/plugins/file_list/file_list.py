@@ -12,7 +12,6 @@ from gui.input_dialog import ApplicationSelectDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog, LinkDialog
 from gui.properties_window import PropertiesWindow
-from local_provider import LocalProvider
 from operation import DeleteOperation, CopyOperation, MoveOperation
 from parameters import Parameters
 from plugin_base.item_list import ItemList
@@ -2017,7 +2016,7 @@ class FileList(ItemList):
 		self._store.set_value(found_iter, Column.EMBLEMS, emblems)
 
 	def change_path(self, path=None, selected=None):
-		"""Change file list path"""
+		"""Change file list path."""
 		# cancel current directory monitor
 		self.cancel_monitors()
 
@@ -2290,7 +2289,7 @@ class FileList(ItemList):
 			column.set_fixed_width(width)
 
 	def get_provider(self):
-		"""Get list provider object"""
+		"""Get list provider object."""
 		if self._provider is None:
 			Provider = self._parent.get_provider_by_protocol(self.scheme)
 

@@ -564,6 +564,7 @@ class FileList(ItemList):
 
 		# show expanders if they are hidden
 		if not self._show_expanders:
+			self._show_expanders = True
 			self._item_list.set_show_expanders(True)
 
 		# remove children if directory is already expanded

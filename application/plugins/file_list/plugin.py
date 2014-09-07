@@ -258,12 +258,9 @@ class FileList(ItemList):
 				self._columns.append(column)
 				self._item_list.append_column(column)
 
-		# resize columns to saved values
+		# restore column properties
 		self._resize_columns(self._columns)
-
 		self._set_font_size(self._columns)
-
-		# set column order
 		self._reorder_columns()
 
 		# release signal block

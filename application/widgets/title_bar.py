@@ -291,7 +291,7 @@ class TitleBar:
 		pos_x = window_x + button_x
 		pos_y = window_y + button_y + button_h
 
-		return (pos_x, pos_y, True)
+		return pos_x, pos_y, True
 
 	def add_control(self, widget):
 		"""Add button control"""

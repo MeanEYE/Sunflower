@@ -1223,7 +1223,7 @@ class FileList(ItemList):
 		x += window_x
 		y += window_y
 
-		return (x, y, True)
+		return x, y, True
 
 	def _set_sort_function(self, widget, data=None):
 		"""Set sorting method stored in data

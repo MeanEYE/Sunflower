@@ -1487,7 +1487,7 @@ class ItemList(PluginBase):
 		self._parent.preferences_window._show(widget, 'bookmarks')
 		return True
 
-	def _directory_changed(monitor, event, path, other_path, parent=None):
+	def _directory_changed(self, event, path, other_path, parent=None):
 		"""Handle signal emitted by monitor"""
 		pass
 

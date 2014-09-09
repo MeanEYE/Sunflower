@@ -43,7 +43,7 @@ class LocalProvider(Provider):
 
 		else:
 			# create a hard link on destination path from existing path
-			self.link(existing_path, real_path)
+			os.link(existing_path, real_path)
 
 	def unlink(self, path, relative_to=None):
 		"""Unlink given path"""

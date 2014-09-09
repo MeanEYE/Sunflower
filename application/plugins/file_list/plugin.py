@@ -316,7 +316,7 @@ class FileList(ItemList):
 			self._show_full_name = 'extension' not in plugin_options.section(self._name).get('columns')
 
 		else:
-			self._show_full_name = False;
+			self._show_full_name = False
 
 		# change to initial path
 		try:
@@ -1223,7 +1223,7 @@ class FileList(ItemList):
 		x += window_x
 		y += window_y
 
-		return (x, y, True)
+		return x, y, True
 
 	def _set_sort_function(self, widget, data=None):
 		"""Set sorting method stored in data
@@ -1961,7 +1961,7 @@ class FileList(ItemList):
 			for item_name in item_list:
 				# check if we are allowed to continue
 				if not self._thread_active.is_set():
-					break;
+					break
 
 				# add item to the list
 				self._add_item(item_name, parent, parent_path)
@@ -2250,7 +2250,7 @@ class FileList(ItemList):
 
 		# update status bar
 		ItemList.select_all(self, pattern)
-		self._update_status_with_statistis();
+		self._update_status_with_statistis()
 
 		return result
 
@@ -2290,7 +2290,7 @@ class FileList(ItemList):
 
 		# update status bar
 		ItemList.select_all(self, pattern)
-		self._update_status_with_statistis();
+		self._update_status_with_statistis()
 
 		return result
 
@@ -2364,7 +2364,7 @@ class FileList(ItemList):
 			self._show_full_name = 'extension' not in plugin_options.section(self._name).get('columns')
 
 		else:
-			self._show_full_name = False;
+			self._show_full_name = False
 
 		# reload file list in order to apply time formatting, hidden files and other
 		self.refresh_file_list()

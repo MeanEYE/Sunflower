@@ -219,7 +219,7 @@ class Terminal(PluginBase):
 		pos_x = window_x + button_x
 		pos_y = window_y + button_y + button_h
 
-		return (pos_x, pos_y, True)
+		return pos_x, pos_y, True
 
 	def _show_terminal_menu(self, widget, data=None):
 		"""History button click event"""

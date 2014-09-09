@@ -103,7 +103,7 @@ class InputDialog:
 
 		self._dialog.destroy()
 
-		return (code, result)
+		return code, result
 
 
 class LinkDialog(InputDialog):
@@ -192,7 +192,7 @@ class LinkDialog(InputDialog):
 
 		self._dialog.destroy()
 
-		return (code, original_path, link_name, hard_link)
+		return code, original_path, link_name, hard_link
 
 
 class CreateDialog(InputDialog):
@@ -422,7 +422,7 @@ class PasswordDialog(InputDialog):
 
 		self._dialog.destroy()
 
-		return (code, password, confirmation)
+		return code, password, confirmation
 
 
 class FileCreateDialog(CreateDialog):
@@ -898,7 +898,7 @@ class CopyDialog:
 
 		self._dialog.destroy()
 
-		return (code, options)
+		return code, options
 
 
 class MoveDialog(CopyDialog):
@@ -1081,7 +1081,7 @@ class OverwriteDialog:
 		str_size = locale.format('%d', size, True)
 		str_date = time.strftime(self._time_format, time.localtime(item_stat.time_modify))
 
-		return (str_size, str_date, icon)
+		return str_size, str_date, icon
 
 	def set_title_element(self, element):
 		"""Set title label with appropriate formatting"""
@@ -1146,7 +1146,7 @@ class OverwriteDialog:
 
 		self._dialog.destroy()
 
-		return (code, options)
+		return code, options
 
 
 class OverwriteFileDialog(OverwriteDialog):
@@ -1308,7 +1308,7 @@ class AddBookmarkDialog:
 
 		self._dialog.destroy()
 
-		return (code, name, path)
+		return code, name, path
 
 
 class OperationError:
@@ -1832,4 +1832,4 @@ class PathInputDialog():
 
 		self._dialog.destroy()
 
-		return (code, result)
+		return code, result

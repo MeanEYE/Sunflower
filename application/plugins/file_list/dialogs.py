@@ -238,7 +238,7 @@ class SambaInputDialog:
 
 		self._dialog.destroy()
 
-		return (code, result)
+		return code, result
 
 
 class FtpInputDialog:
@@ -424,7 +424,7 @@ class FtpInputDialog:
 
 		self._dialog.destroy()
 
-		return (code, result)
+		return code, result
 
 
 class SftpInputDialog(FtpInputDialog):
@@ -636,4 +636,4 @@ class DavInputDialog:
 
 		self._dialog.destroy()
 
-		return (code, result)
+		return code, result

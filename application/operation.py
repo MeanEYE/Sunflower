@@ -724,26 +724,26 @@ class CopyOperation(Operation):
 		# set owner
 		self._set_owner(directory, file_stat.user_id, file_stat.group_id)
 
-	def _copy_file(self, file_, relative_path=None):
+	def _copy_file(self, file_name, relative_path=None):
 		"""Copy file content"""
 		can_procede = True
 		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
-		dest_file = file_
+		dest_file = file_name
 		sh = None
 		dh = None
 
 		# check if destination file exists
-		if self._destination.exists(file_, relative_to=self._destination_path):
+		if self._destination.exists(file_name, relative_to=self._destination_path):
 			if self._overwrite_all is not None:
 				can_procede = self._overwrite_all
 
 			else:
-				can_procede, options = self._get_overwrite_input(file_)
+				can_procede, options = self._get_overwrite_input(file_name)
 
 				# get new name if user specified
 				if options[OverwriteOption.RENAME]:
 					dest_file = os.path.join(
-					                    os.path.dirname(file_),
+					                    os.path.dirname(file_name),
 					                    options[OverwriteOption.NEW_NAME]
 					                )
 
@@ -752,20 +752,20 @@ class CopyOperation(Operation):
 
 		# if user skipped this file return
 		if not can_procede:
-			self._file_list.pop(self._file_list.index(file_))
+			self._file_list.pop(self._file_list.index(file_name))
 
 			# update total size
-			file_stat = self._source.get_stat(file_, relative_to=source_path)
+			file_stat = self._source.get_stat(file_name, relative_to=source_path)
 			gobject.idle_add(self._dialog.increment_current_size, file_stat.size)
 			return
 
 		try:
 			# get file stats
 			destination_size = 0L
-			file_stat = self._source.get_stat(file_, relative_to=source_path, extended=True)
+			file_stat = self._source.get_stat(file_name, relative_to=source_path, extended=True)
 
 			# get file handles
-			sh = self._source.get_file_handle(file_, FileMode.READ, relative_to=source_path)
+			sh = self._source.get_file_handle(file_name, FileMode.READ, relative_to=source_path)
 			dh = self._destination.get_file_handle(dest_file, FileMode.WRITE, relative_to=self._destination_path)
 
 			# set buffer size
@@ -806,7 +806,7 @@ class CopyOperation(Operation):
 
 			else:
 				# user didn't want to retry, remove file from list
-				self._file_list.pop(self._file_list.index(file_))
+				self._file_list.pop(self._file_list.index(file_name))
 
 			# remove amount of copied bytes from total size
 			gobject.idle_add(self._dialog.increment_current_size, -destination_size)
@@ -890,17 +890,17 @@ class CopyOperation(Operation):
 		# update status
 		gobject.idle_add(self._update_status, _('Copying files...'))
 
-		list_ = self._file_list[:]
+		item_list = self._file_list[:]
 
 		# copy all the files in list
-		for file_, source_path in list_:
+		for file_name, source_path in item_list:
 			# abort operation if requested
 			if self._abort.is_set(): break
 			self._can_continue.wait()  # pause lock
 
 			# copy file
-			gobject.idle_add(self._dialog.set_current_file, file_)
-			self._copy_file(file_, source_path)
+			gobject.idle_add(self._dialog.set_current_file, file_name)
+			self._copy_file(file_name, source_path)
 			gobject.idle_add(self._dialog.increment_current_count, 1)
 
 	def run(self):
@@ -997,42 +997,42 @@ class MoveOperation(CopyOperation):
 		"""Create progress dialog"""
 		self._dialog = MoveDialog(self._application, self)
 
-	def _move_file(self, file_, relative_path=None):
+	def _move_file(self, file_name, relative_path=None):
 		"""Move specified file using provider rename method"""
 		can_procede = True
 		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
-		dest_file = file_
+		dest_file = file_name
 
 		# check if destination file exists
-		if self._destination.exists(file_, relative_to=self._destination_path):
+		if self._destination.exists(file_name, relative_to=self._destination_path):
 			if self._overwrite_all is not None:
 				can_procede = self._overwrite_all
 			else:
-				can_procede, options = self._get_overwrite_input(file_)
+				can_procede, options = self._get_overwrite_input(file_name)
 
 				# get new name if user specified
 				if options[OverwriteOption.RENAME]:
 					dest_file = os.path.join(
-					                    os.path.dirname(file_),
+					                    os.path.dirname(file_name),
 					                    options[OverwriteOption.NEW_NAME]
 					                )
 
 		# if user skipped this file return
 		if not can_procede:
-			self._file_list.pop(self._file_list.index(file_))
+			self._file_list.pop(self._file_list.index(file_name))
 			return
 
 		# move file
 		try:
 			self._source.rename_path(
-								file_,
+								file_name,
 								os.path.join(self._destination_path, dest_file),
 								relative_to=source_path
 							)
 
 			# push events to the queue
 			if self._source_queue is not None:
-				event = (MonitorSignals.DELETED, file_, None)
+				event = (MonitorSignals.DELETED, file_name, None)
 				self._source_queue.put(event, False)
 
 			if self._destination_queue is not None:
@@ -1049,7 +1049,7 @@ class MoveOperation(CopyOperation):
 
 			else:
 				# user didn't want to retry, remove file from list
-				self._file_list.pop(self._file_list.index(file_))
+				self._file_list.pop(self._file_list.index(file_name))
 
 			# exit method
 			return
@@ -1058,23 +1058,23 @@ class MoveOperation(CopyOperation):
 		"""Move files from the list"""
 		gobject.idle_add(self._update_status, _('Moving files...'))
 
-		list_ = self._file_list[:]
-		for file_, source_path in list_:
+		item_list = self._file_list[:]
+		for file_name, source_path in item_list:
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
 			# move file
-			gobject.idle_add(self._dialog.set_current_file, file_)
-			self._move_file(file_, source_path)
+			gobject.idle_add(self._dialog.set_current_file, file_name)
+			self._move_file(file_name, source_path)
 			gobject.idle_add(self._dialog.increment_current_count, 1)
 
 	def _delete_file_list(self):
 		"""Remove files from source list"""
 		gobject.idle_add(self._update_status, _('Deleting source files...'))
 
-		list_ = self._file_list[:]
+		item_list = self._file_list[:]
 
-		for number, item in enumerate(list_, 0):
+		for number, item in enumerate(item_list, 0):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
@@ -1085,7 +1085,7 @@ class MoveOperation(CopyOperation):
 			# update current count
 			gobject.idle_add(
 						self._dialog.set_current_file_fraction,
-						float(number) / len(list_)
+						float(number) / len(item_list)
 					)
 
 		self._delete_directories()

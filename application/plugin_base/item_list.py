@@ -939,7 +939,7 @@ class ItemList(PluginBase):
 
 	def _get_popup_menu_position(self, menu, data=None):
 		"""Abstract method for positioning menu properly on given row"""
-		return (0, 0, True)
+		return 0, 0, True
 
 	def _get_history_menu_position(self, menu, button):
 		"""Get history menu position"""
@@ -952,7 +952,7 @@ class ItemList(PluginBase):
 		pos_x = window_x + button_x
 		pos_y = window_y + button_y + button_h
 
-		return (pos_x, pos_y, True)
+		return pos_x, pos_y, True
 
 	def _get_other_provider(self):
 		"""Return provider from opposite list.
@@ -1467,7 +1467,7 @@ class ItemList(PluginBase):
 		"""Swap left and right paths"""
 		opposite_object = self._parent.get_opposite_object(self)
 
-		if (hasattr(opposite_object, 'change_path')):
+		if hasattr(opposite_object, 'change_path'):
 			# get path from opposite object
 			new_path = opposite_object.path
 
@@ -1487,7 +1487,7 @@ class ItemList(PluginBase):
 		self._parent.preferences_window._show(widget, 'bookmarks')
 		return True
 
-	def _directory_changed(monitor, event, path, other_path, parent=None):
+	def _directory_changed(self, event, path, other_path, parent=None):
 		"""Handle signal emitted by monitor"""
 		pass
 

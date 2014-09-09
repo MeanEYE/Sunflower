@@ -420,7 +420,7 @@ class ItemListOptions(SettingsPage):
 		pos_x = window_x + button_x
 		pos_y = window_y + button_y + button_h
 
-		return (pos_x, pos_y, True)
+		return pos_x, pos_y, True
 
 	def _add_path(self, widget, source):
 		"""Add path to the list from specified source"""

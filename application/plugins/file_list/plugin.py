@@ -1613,7 +1613,7 @@ class FileList(ItemList):
 
 				# force showing expanders
 				if self._show_expanders and data[Column.IS_DIR] and not data[Column.IS_PARENT_DIR]:
-					self._store.append(new_iter, tuple(range(18)))
+					self._store.append(new_iter, (0, ) * 18)
 
 				# focus specified item
 				if self._item_to_focus == data[0]:

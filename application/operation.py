@@ -505,9 +505,10 @@ class CopyOperation(Operation):
 			gobject.idle_add(self._dialog.pulse)
 
 			if os.path.sep in item:
-				parent_dir,item = os.path.split(item)
-				source_path = os.path.join(self._source_path, parent_dir)
+				relative_path, item = os.path.split(item)
+				source_path = os.path.join(self._source_path, relative_path)
 			else:
+				relative_path = None
 				source_path = self._source_path
 
 			if self._source.is_dir(item, relative_to=source_path):
@@ -526,8 +527,8 @@ class CopyOperation(Operation):
 
 				# if user didn't skip directory, scan and update lists
 				if can_procede:
-					self._dir_list.append([item, source_path])
-					if can_create: self._dir_list_create.append([item, source_path])
+					self._dir_list.append((item, relative_path))
+					if can_create: self._dir_list_create.append((item, relative_path))
 					self._scan_directory(item, source_path)
 
 			elif fnmatch.fnmatch(item, self._options[Option.FILE_TYPE]):
@@ -540,7 +541,7 @@ class CopyOperation(Operation):
 				self._total_count += 1
 				self._total_size += item_stat.size
 
-				self._file_list.append([item, source_path])
+				self._file_list.append((item, relative_path))
 
 	def _set_mode(self, path, mode):
 		"""Set mode for specified path"""
@@ -623,9 +624,9 @@ class CopyOperation(Operation):
 
 			return
 
-	def _scan_directory(self, directory, source_path=None):
+	def _scan_directory(self, directory, relative_path=None):
 		"""Recursively scan directory and populate list"""
-		source_path = source_path or self._source_path
+		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
 		try:
 			# try to get listing from directory
 			item_list = self._source.list_dir(directory, relative_to=source_path)
@@ -635,7 +636,7 @@ class CopyOperation(Operation):
 			response = self._get_read_error_input(error)
 
 			if response == gtk.RESPONSE_YES:
-				self._scan_directory(directory, source_path)
+				self._scan_directory(directory, relative_path)
 
 			return
 
@@ -664,8 +665,8 @@ class CopyOperation(Operation):
 				if can_procede:
 					# allow processing specified directory
 					self._dir_list.append(full_name)
-					if can_create: self._dir_list_create.append([full_name, source_path])
-					self._scan_directory(full_name, source_path)
+					if can_create: self._dir_list_create.append((full_name, source_path))
+					self._scan_directory(full_name, relative_path)
 
 			elif fnmatch.fnmatch(item, self._options[Option.FILE_TYPE]):
 				# item is a file, update global statistics
@@ -677,11 +678,11 @@ class CopyOperation(Operation):
 				self._total_count += 1
 				self._total_size += item_stat.size
 
-				self._file_list.append([full_name, source_path])
+				self._file_list.append((full_name, relative_path))
 
-	def _create_directory(self, directory, source_path=None):
+	def _create_directory(self, directory, relative_path=None):
 		"""Create specified directory"""
-		source_path = source_path or self._source_path
+		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
 		file_stat = self._source.get_stat(directory, relative_to=source_path)
 		mode = file_stat.mode if self._options[Option.SET_MODE] else 0755
 
@@ -720,10 +721,10 @@ class CopyOperation(Operation):
 		# set owner
 		self._set_owner(directory, file_stat.user_id, file_stat.group_id)
 
-	def _copy_file(self, file_, source_path=None):
+	def _copy_file(self, file_, relative_path=None):
 		"""Copy file content"""
 		can_procede = True
-		source_path = source_path or self._source_path
+		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
 		dest_file = file_
 		sh = None
 		dh = None
@@ -965,9 +966,9 @@ class CopyOperation(Operation):
 class MoveOperation(CopyOperation):
 	"""Operation thread used for moving files"""
 
-	def _remove_path(self, path, item_list, source_path=None):
+	def _remove_path(self, path, item_list, relative_path=None):
 		"""Remove path"""
-		source_path = source_path or self._source_path
+		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
 		try:
 			# try removing specified path
 			self._source.remove_path(path, relative_to=source_path)
@@ -993,10 +994,10 @@ class MoveOperation(CopyOperation):
 		"""Create progress dialog"""
 		self._dialog = MoveDialog(self._application, self)
 
-	def _move_file(self, file_, source_path=None):
+	def _move_file(self, file_, relative_path=None):
 		"""Move specified file using provider rename method"""
 		can_procede = True
-		source_path = source_path or self._source_path
+		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
 		dest_file = file_
 
 		# check if destination file exists
@@ -1094,7 +1095,8 @@ class MoveOperation(CopyOperation):
 		dir_list.reverse()  # remove deepest directories first
 
 		for number, directory in enumerate(dir_list, 0):
-			directory, source_path = directory[0], directory[1] or self._source_path
+			source_path = self._source_path if directory[1] is None else os.path.join(self._source_path, directory[1])
+			directory = directory[0]
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 

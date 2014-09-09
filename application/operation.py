@@ -526,7 +526,7 @@ class CopyOperation(Operation):
 
 				# if user didn't skip directory, scan and update lists
 				if can_procede:
-					self._dir_list.append(item)
+					self._dir_list.append([item, source_path])
 					if can_create: self._dir_list_create.append([item, source_path])
 					self._scan_directory(item, source_path)
 

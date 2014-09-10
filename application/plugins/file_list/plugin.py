@@ -1753,16 +1753,21 @@ class FileList(ItemList):
 
 	def _drag_motion(self, widget, drag_context, x, y, timestamp):
 		"""Handle dragging data over widget"""
-		action = gtk.gdk.ACTION_DEFAULT
 		path = None
+		action = gtk.gdk.ACTION_DEFAULT
+
 		try:
+			# get item under cursor
 			path_at_row, position = widget.get_dest_row_at_pos(x, y)
 			under_cursor = self._store.get_iter(path_at_row)
+
+			# check if drag destination is a directory
 			if self._store.get_value(under_cursor, Column.IS_DIR):
 				path = path_at_row
 				action = drag_context.action
 			else:
 				path = self._store.get_path(self._store.iter_parent(under_cursor))
+
 		except TypeError:
 			pass
 
@@ -1776,33 +1781,56 @@ class FileList(ItemList):
 	def _drag_ask(self):
 		"""Show popup menu and return selected action"""
 		result = []
-		def action_selected(widget, selected_action):
-			result.append(selected_action)
 
-		actions = ({'action': gtk.gdk.ACTION_COPY, 'name': _('Copy here'), 'icon': 'stock_folder-copy'},
-					{'action': gtk.gdk.ACTION_MOVE, 'name': _('Move here'), 'icon': 'stock_folder-move'},
-					{'action': gtk.gdk.ACTION_LINK, 'name': _('Link here'), 'icon': None})
+		# menu items to offer to user
+		actions = (
+				{
+					'action': gtk.gdk.ACTION_COPY,
+					'name': _('Copy here'),
+					'icon': 'stock_folder-copy'
+				},
+				{
+					'action': gtk.gdk.ACTION_MOVE,
+					'name': _('Move here'),
+					'icon': 'stock_folder-move'
+				},
+				{
+					'action': gtk.gdk.ACTION_LINK,
+					'name': _('Link here'),
+					'icon': None
+				}
+			)
 
-
+		# create menu
 		menu = gtk.Menu()
 		for action in actions:
 			menu_item = gtk.ImageMenuItem()
 
 			if action['icon']:
-				image = gtk.image_new_from_icon_name(action['icon'], gtk.ICON_SIZE_MENU)
+				image = gtk.Image()
+				image.set_from_icon_name(action['icon'], gtk.ICON_SIZE_MENU)
 				menu_item.set_image(image)
 
 			menu_item.set_label(action['name'])
-			menu_item.connect('activate', action_selected, action['action'])
+			menu_item.connect(
+					'activate',
+					lambda widget, selected_action: result.append(selected_action),
+					action['action']
+				)
 			menu.append(menu_item)
 
+		# add separator
 		menu.append(gtk.SeparatorMenuItem())
+
+		# create cancel option
+		image = gtk.Image()
+		image.set_from_stock(gtk.STOCK_CANCEL, gtk.ICON_SIZE_MENU)
 		menu_item = gtk.ImageMenuItem()
 		menu_item.set_label(_('Cancel'))
-		image = gtk.image_new_from_stock(gtk.STOCK_CANCEL, gtk.ICON_SIZE_MENU)
 		menu_item.set_image(image)
 		menu.append(menu_item)
 
+		# show menu in separate user interface thread
 		menu.show_all()
 		menu.connect('deactivate', gtk.main_quit)
 		menu.popup(None, None, None, 1, 0)
@@ -1812,11 +1840,13 @@ class FileList(ItemList):
 
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""
+		result = False
 		action = drag_context.action
 		item_list = selection_data.data.splitlines(False)
-		result = False
+
 		# prepare data for copying
 		protocol, path = item_list[0].split('://', 1)
+
 		# handle data
 		if action is gtk.gdk.ACTION_ASK:
 			action = self._drag_ask()
@@ -1827,13 +1857,20 @@ class FileList(ItemList):
 						gtk.gdk.ACTION_COPY: 'copy',
 						gtk.gdk.ACTION_MOVE: 'move'
 					}
+
 			try:
+				# get item at cursor
 				path, position = widget.get_dest_row_at_pos(x, y)
 				destination_iter = self._store.get_iter(path)
+
+				# prepare destination path from selected item
 				destination = self._store.get_value(destination_iter, Column.NAME)
-				destination =  os.path.join(self.path, destination)
+				destination = os.path.join(self.path, destination)
+
+				# handle cases when user select parent directory
 				if self._store.get_value(destination_iter, Column.IS_PARENT_DIR):
 					destination = os.path.dirname(os.path.dirname(destination))
+
 				elif not self._store.get_value(destination_iter, Column.IS_DIR):
 					destination =  os.path.dirname(destination)
 

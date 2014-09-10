@@ -29,7 +29,7 @@ Plugins can be installed locally to: `~/.config/sunflower/user_plugins/<plugin_n
 ### How to contribute
 You can be a part of this project in many ways. We suggest posting on our mailing list or visiting our IRC channel on FreeNode and we'll try to help you get started.
 
-And as usual testers are more than welcome.
+And as usual testers are more than welcome. If you wish to help translate program to your language please join translation team(s) on [Transifex](http://transifex.com/projects/p/sunflower/).
 
 ### Staying in touch
 Preferred way of getting in touch with us is through [mailing list](https://groups.google.com/forum/#!forum/sunflower-fm).

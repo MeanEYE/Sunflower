@@ -53,6 +53,11 @@ class AboutWindow:
 			name = 'Sevka Fedoroff',
 			email = 'sevka.fedoroff@gmail.com',
 			website = None
+		),
+		Contributor(
+			name = 'multiSnow',
+			email = 'infinity.blick.winkel@gmail.com',
+			website = None
 		)
 	]
 
@@ -62,6 +67,11 @@ class AboutWindow:
 			name = 'Andrea Pavlović',
 			email = 'octogirl.design@gmail.com',
 			website = None,
+		),
+		Contributor(
+			name = 'Michael Kerch',
+			email = 'michael@way2cu.com',
+			website = 'misha.co.il',
 		),
 	]
 

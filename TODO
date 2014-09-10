@@ -20,13 +20,9 @@ are same and only one file is selected offer this option by default.
 
 - Show rename when moving a single file in same directory
 
-- Mark symbolic links somehow
-
 - Space counts directory size in separate thread
 
 - Upon receiving focus file list should check validity of its current path
-
-- Set tooltip text for long filenames in file list
 
 - Letter accelerators on labels
 

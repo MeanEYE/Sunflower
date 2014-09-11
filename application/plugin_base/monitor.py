@@ -26,19 +26,19 @@ class Monitor(gobject.GObject):
 	specific to provider that created the monitor. They are created and
 	destroyed automatically on each path change and mainly used by file
 	lists but could have other usages.
-
+	
 	This monitor class also provides custom event queue which can be
 	used to manually emit signals.
 
 	"""
 
-	__gtype_name__ = 'Sunflower_Monitor'
+	__gtype_name__ = 'Sunflower_Monitor'	
 	__gsignals__ = {
 				'changed': (gobject.SIGNAL_RUN_LAST, None, (int, str, str)),
 			}
 
 	TIMEOUT = 1000
-
+	
 	def __init__(self, provider, path):
 		gobject.GObject.__init__(self)
 
@@ -46,7 +46,7 @@ class Monitor(gobject.GObject):
 		self._provider = provider
 		self._monitor = None
 		self._paused = Event()
-
+		
 		# clear initial value
 		self._paused.clear()
 
@@ -84,7 +84,7 @@ class Monitor(gobject.GObject):
 		Use other_path in cases where it seems logical, like moving files.
 		Otherwise None should be used instead. Paths needs to be relative to
 		path specified in constructor.
-
+		
 		"""
 		if not self._paused.is_set():
 			self.emit('changed', signal, path, other_path)
@@ -109,3 +109,7 @@ class Monitor(gobject.GObject):
 	def get_queue(self):
 		"""Return monitor queue"""
 		return self._queue
+
+	def get_path(self):
+		"""Return monitor path"""
+		return self._path

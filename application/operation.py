@@ -491,10 +491,6 @@ class CopyOperation(Operation):
 		"""Find all files for copying"""
 		gobject.idle_add(self._update_status, _('Searching for files...'))
 
-		# filter files already selected with parent directory
-		for file in self._selection_list:
-			self._selection_list = filter(lambda item: not item.startswith(file+os.path.sep), self._selection_list)
-
 		# traverse through the rest of the items
 		for item in self._selection_list:
 			if self._abort.is_set(): break  # abort operation if requested
@@ -505,43 +501,45 @@ class CopyOperation(Operation):
 			gobject.idle_add(self._dialog.pulse)
 
 			if os.path.sep in item:
-				relative_path, item = os.path.split(item)
+				relative_path, basename = os.path.split(item)
 				source_path = os.path.join(self._source_path, relative_path)
 			else:
+				basename = item
 				relative_path = None
 				source_path = self._source_path
 
-			if self._source.is_dir(item, relative_to=source_path):
-				# item is directory
-				can_procede = True
-				can_create = True
+			if relative_path not in self._dir_list:
+				if self._source.is_dir(basename, relative_to=source_path):
+					# item is directory
+					can_procede = True
+					can_create = True
 
-				# check if directory exists on destination
-				if self._destination.exists(item, relative_to=self._destination_path):
-					can_create = False
+					# check if directory exists on destination
+					if self._destination.exists(basename, relative_to=self._destination_path):
+						can_create = False
 
-					if self._merge_all is not None:
-						can_procede = self._merge_all
-					else:
-						can_procede = self._get_merge_input(item)
+						if self._merge_all is not None:
+							can_procede = self._merge_all
+						else:
+							can_procede = self._get_merge_input(basename)
 
-				# if user didn't skip directory, scan and update lists
-				if can_procede:
-					self._dir_list.append((item, relative_path))
-					if can_create: self._dir_list_create.append((item, relative_path))
-					self._scan_directory(item, source_path)
+					# if user didn't skip directory, scan and update lists
+					if can_procede:
+						self._dir_list.append(item)
+						if can_create: self._dir_list_create.append((basename, relative_path))
+						self._scan_directory(basename, source_path)
 
-			elif fnmatch.fnmatch(item, self._options[Option.FILE_TYPE]):
-				# item is a file, get stats and update lists
-				item_stat = self._source.get_stat(item, relative_to=source_path)
+				elif fnmatch.fnmatch(basename, self._options[Option.FILE_TYPE]):
+					# item is a file, get stats and update lists
+					item_stat = self._source.get_stat(basename, relative_to=source_path)
 
-				gobject.idle_add(self._dialog.increment_total_size, item_stat.size)
-				gobject.idle_add(self._dialog.increment_total_count, 1)
+					gobject.idle_add(self._dialog.increment_total_size, item_stat.size)
+					gobject.idle_add(self._dialog.increment_total_count, 1)
 
-				self._total_count += 1
-				self._total_size += item_stat.size
+					self._total_count += 1
+					self._total_size += item_stat.size
 
-				self._file_list.append((item, relative_path))
+					self._file_list.append((basename, relative_path))
 
 	def _set_mode(self, path, mode):
 		"""Set mode for specified path"""
@@ -1095,17 +1093,15 @@ class MoveOperation(CopyOperation):
 		dir_list.reverse()  # remove deepest directories first
 
 		for number, directory in enumerate(dir_list, 0):
-			source_path = self._source_path if directory[1] is None else os.path.join(self._source_path, directory[1])
-			directory = directory[0]
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
-			if self._source.exists(directory, relative_to=source_path):
+			if self._source.exists(directory, relative_to=self._source_path):
 				gobject.idle_add(self._dialog.set_current_file, directory)
 
 				# try to get a list of items inside of directory
 				try:
-					item_list = self._source.list_dir(directory, relative_to=source_path)
+					item_list = self._source.list_dir(directory, relative_to=self._source_path)
 
 				except:
 					item_list = None

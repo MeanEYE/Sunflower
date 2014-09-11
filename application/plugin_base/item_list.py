@@ -290,7 +290,9 @@ class ItemList(PluginBase):
 
 		# configure accelerators
 		group.set_accelerator('execute_item', keyval('Return'), 0)
+		group.set_alt_accelerator('execute_item', keyval('KP_Enter'), 0)
 		group.set_accelerator('item_properties', keyval('Return'), gtk.gdk.MOD1_MASK)
+		group.set_alt_accelerator('item_properties', keyval('KP_Enter'), gtk.gdk.MOD1_MASK)
 		group.set_accelerator('add_bookmark', keyval('d'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('edit_bookmarks', keyval('b'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('cut_to_clipboard', keyval('x'), gtk.gdk.CONTROL_MASK)
@@ -332,7 +334,9 @@ class ItemList(PluginBase):
 		group.set_accelerator('copy_path_to_clipboard', keyval('l'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('copy_selected_path_to_clipboard', keyval('c'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('copy_path_to_command_entry', keyval('Return'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
+		group.set_alt_accelerator('copy_path_to_command_entry', keyval('KP_Enter'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('copy_selection_to_command_entry', keyval('Return'), gtk.gdk.CONTROL_MASK)
+		group.set_alt_accelerator('copy_selection_to_command_entry', keyval('KP_Enter'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('custom_path_entry', keyval('l'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('start_quick_search', keyval('f'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('expand_directory', keyval('Right'), 0)

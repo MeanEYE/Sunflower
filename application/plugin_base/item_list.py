@@ -1610,13 +1610,14 @@ class ItemList(PluginBase):
 		if len(self._monitor_list) > 0 and self._monitor_list[0].is_manual():
 			return
 
-		# create new monitor for specified path
-		provider = self.get_provider()
-		monitor = provider.get_monitor(path)
-		monitor.connect('changed', self._directory_changed, parent)
+		if path not in [monitor.get_path() for monitor in self._monitor_list]:
+			# create new monitor for specified path
+			provider = self.get_provider()
+			monitor = provider.get_monitor(path)
+			monitor.connect('changed', self._directory_changed, parent)
 
-		# add monitor to the list
-		self._monitor_list.append(monitor)
+			# add monitor to the list
+			self._monitor_list.append(monitor)
 
 	def cancel_monitors(self):
 		"""Cancel all monitors"""

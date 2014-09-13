@@ -7,16 +7,16 @@ class ExtensionFeatures:
 
 class MountManagerExtension:
 	"""Base class for mount manager extensions.
-	
-	Mount manager has only one instance and is created on program startup. 
-	Methods defined in this class are called automatically by the mount manager 
+
+	Mount manager has only one instance and is created on program startup.
+	Methods defined in this class are called automatically by the mount manager
 	so you need to implement them.
 
 	"""
 
 	# features extension supports
 	features = ()
-	
+
 	def __init__(self, parent, window):
 		self._parent = parent
 		self._window = window

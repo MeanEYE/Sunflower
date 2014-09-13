@@ -110,7 +110,7 @@ class FileList_ColumnEditor(ColumnEditorExtension):
 
 			else:
 				self._visible.append(column)
-		
+
 		else:
 			# column was visible, hidden now
 			try:

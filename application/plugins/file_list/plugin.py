@@ -58,12 +58,13 @@ class Column:
 	FORMATED_TIME = 8
 	IS_DIR = 9
 	IS_PARENT_DIR = 10
-	COLOR = 11
-	ICON = 12
-	SELECTED = 13
-	USER_ID = 14
-	GROUP_ID = 15
-	EMBLEMS = 16
+	IS_LINK = 11
+	COLOR = 12
+	ICON = 13
+	SELECTED = 14
+	USER_ID = 15
+	GROUP_ID = 16
+	EMBLEMS = 17
 
 
 class FileList(ItemList):
@@ -105,6 +106,7 @@ class FileList(ItemList):
 								str,	# Column.FORMATED_DATE
 								bool,	# Column.IS_DIR
 								bool,	# Column.IS_PARENT_DIR
+								bool,	# Column.IS_LINK
 								str,	# Column.COLOR
 								str,	# Column.ICON
 								bool,	# Column.SELECTED
@@ -171,6 +173,7 @@ class FileList(ItemList):
 
 		col_name.add_attribute(cell_icon, 'icon-name', Column.ICON)
 		col_name.add_attribute(cell_emblems, 'emblems', Column.EMBLEMS)
+		col_name.add_attribute(cell_emblems, 'is-link', Column.IS_LINK)
 		col_name.add_attribute(cell_name, 'text', Column.FORMATED_NAME)
 		col_extension.add_attribute(cell_extension, 'text', Column.EXTENSION)
 		col_size.add_attribute(cell_size, 'text', Column.FORMATED_SIZE)
@@ -254,12 +257,9 @@ class FileList(ItemList):
 				self._columns.append(column)
 				self._item_list.append_column(column)
 
-		# resize columns to saved values
+		# restore column properties
 		self._resize_columns(self._columns)
-
 		self._set_font_size(self._columns)
-
-		# set column order
 		self._reorder_columns()
 
 		# release signal block
@@ -271,11 +271,13 @@ class FileList(ItemList):
 		self._item_list.set_search_column(Column.NAME)
 
 		# set row hinting
-		row_hinting = self._parent.options.section('item_list').get('row_hinting')
+		section = self._parent.options.section('item_list')
+		row_hinting = section.get('row_hinting')
 		self._item_list.set_rules_hint(row_hinting)
 
 		# set visibility of tree expanders
-		self._item_list.set_show_expanders(self._parent.options.section('item_list').get('show_expanders'))
+		self._show_expanders = section.get('show_expanders')
+		self._item_list.set_show_expanders(self._show_expanders)
 
 		# set grid lines
 		grid_lines = (
@@ -313,7 +315,7 @@ class FileList(ItemList):
 			self._show_full_name = 'extension' not in plugin_options.section(self._name).get('columns')
 
 		else:
-			self._show_full_name = False;
+			self._show_full_name = False
 
 		# change to initial path
 		try:
@@ -557,7 +559,8 @@ class FileList(ItemList):
 			return True
 
 		# show expanders if they are hidden
-		if not self._item_list.get_show_expanders():
+		if not self._show_expanders:
+			self._show_expanders = True
 			self._item_list.set_show_expanders(True)
 
 		# remove children if directory is already expanded
@@ -799,7 +802,7 @@ class FileList(ItemList):
 						 	"You are about to delete {0} items.\n"
 						 	"Are you sure about this?",
 						 	len(selection)
-						 ) 
+						 )
 
 			else:
 				message = ngettext(
@@ -808,7 +811,7 @@ class FileList(ItemList):
 						 	"You are about to move {0} items to trash.\n"
 						 	"Are you sure about this?",
 						 	len(selection)
-						 ) 
+						 )
 
 			# user has confirmation dialog enabled
 			dialog = Gtk.MessageDialog(
@@ -866,7 +869,7 @@ class FileList(ItemList):
 		if hasattr(opposite_object, 'get_provider'):
 			destination_provider = opposite_object.get_provider()
 			destination_monitor = opposite_object.get_monitor()
-		
+
 		# ask confirmation from user
 		dialog = CopyDialog(
 						self._parent,
@@ -1219,7 +1222,7 @@ class FileList(ItemList):
 		x += window_x
 		y += window_y
 
-		return (x, y, True)
+		return x, y, True
 
 	def _set_sort_function(self, widget, data=None):
 		"""Set sorting method stored in data
@@ -1504,9 +1507,17 @@ class FileList(ItemList):
 		result = None
 		provider = self.get_provider()
 		full_path = os.path.join(self.path, parent_path) if parent_path else self.path
+		is_link = False
 
+		# get file information
 		file_stat = provider.get_stat(filename, relative_to=full_path)
 
+		# retrieve real information for special files
+		if file_stat.type is FileType.LINK:
+			is_link = True
+			file_stat = provider.get_stat(filename, relative_to=full_path, follow=True)
+
+		# prepare values
 		file_size = file_stat.size
 		file_mode = file_stat.mode
 		file_date = file_stat.time_modify
@@ -1529,7 +1540,7 @@ class FileList(ItemList):
 				self._size['total'] += file_size
 
 		# invalid links or files
-		elif file_stat.type is FileType.INVALID:
+		else:
 			icon = 'image-missing'
 
 			if parent is None:
@@ -1542,8 +1553,15 @@ class FileList(ItemList):
 			formated_file_date = time.strftime(self._time_format, time.localtime(file_date))
 
 			if not is_dir:
-				# item is a file
-				file_info = os.path.splitext(filename)
+				if not self._second_extension:
+					# regular extension split
+					file_info = os.path.splitext(filename)
+
+				else:
+					# split with support for second level of extension
+					raw = filename.rsplit('.', 2)
+					file_info = (raw, '') if len(raw) == 0 else (raw[0], '.{0}'.format('.'.join(raw[1:])))
+
 				if self._show_full_name:
 					file_info = (filename, file_info[1])
 
@@ -1566,6 +1584,7 @@ class FileList(ItemList):
 					formated_file_date,
 					is_dir,
 					False,
+					is_link,
 					None,
 					icon,
 					None,
@@ -1590,6 +1609,10 @@ class FileList(ItemList):
 			# add items
 			for data in self._item_queue:
 				new_iter = self._store.append(parent, data)
+
+				# force showing expanders
+				if self._show_expanders and data[Column.IS_DIR] and not data[Column.IS_PARENT_DIR]:
+					self._store.append(new_iter, (0, ) * 18)
 
 				# focus specified item
 				if self._item_to_focus == data[0]:
@@ -1720,25 +1743,30 @@ class FileList(ItemList):
 		# set title and subtitle
 		self._title_bar.set_title(text)
 		self._title_bar.set_subtitle('{3} {0} - {4} {1} - {2:.2f}%'.format(
-							size_available, 
-							size_total, 
+							size_available,
+							size_total,
 							percent_available,
-							_('Free:'), 
+							_('Free:'),
 							_('Total:')
 						))
 
 	def _drag_motion(self, widget, drag_context, x, y, timestamp):
 		"""Handle dragging data over widget"""
-		action = Gdk.ACTION_DEFAULT
 		path = None
+		action = Gdk.ACTION_DEFAULT
+
 		try:
+			# get item under cursor
 			path_at_row, position = widget.get_dest_row_at_pos(x, y)
 			under_cursor = self._store.get_iter(path_at_row)
+
+			# check if drag destination is a directory
 			if self._store.get_value(under_cursor, Column.IS_DIR):
 				path = path_at_row
 				action = drag_context.action
 			else:
 				path = self._store.get_path(self._store.iter_parent(under_cursor))
+
 		except TypeError:
 			pass
 
@@ -1752,33 +1780,60 @@ class FileList(ItemList):
 	def _drag_ask(self):
 		"""Show popup menu and return selected action"""
 		result = []
+
 		def action_selected(widget, selected_action):
 			result.append(selected_action)
 
-		actions = ({'action': Gdk.ACTION_COPY, 'name': _('Copy here'), 'icon': 'stock_folder-copy'},
-					{'action': Gdk.ACTION_MOVE, 'name': _('Move here'), 'icon': 'stock_folder-move'},
-					{'action': Gdk.ACTION_LINK, 'name': _('Link here'), 'icon': None})
+		# menu items to offer to user
+		actions = (
+				{
+					'action': Gdk.ACTION_COPY,
+					'name': _('Copy here'),
+					'icon': 'stock_folder-copy'
+				},
+				{
+					'action': Gdk.ACTION_MOVE,
+					'name': _('Move here'),
+					'icon': 'stock_folder-move'
+				},
+				{
+					'action': Gdk.ACTION_LINK,
+					'name': _('Link here'),
+					'icon': None
+				}
+			)
 
-
+		# create menu
 		menu = Gtk.Menu()
+
 		for action in actions:
 			menu_item = Gtk.ImageMenuItem()
 
 			if action['icon']:
-				image = Gtk.image_new_from_icon_name(action['icon'], Gtk.IconSize.MENU)
+				image = gtk.Image()
+				image.set_from_icon_name(action['icon'], gtk.ICON_SIZE_MENU)
 				menu_item.set_image(image)
 
 			menu_item.set_label(action['name'])
-			menu_item.connect('activate', action_selected, action['action'])
+			menu_item.connect(
+					'activate',
+					lambda widget, selected_action: result.append(selected_action),
+					action['action']
+				)
 			menu.append(menu_item)
 
-		menu.append(Gtk.SeparatorMenuItem())
-		menu_item = Gtk.ImageMenuItem()
+		# add separator
+		menu.append(gtk.SeparatorMenuItem())
+
+		# create cancel option
+		image = gtk.Image()
+		image.set_from_stock(gtk.STOCK_CANCEL, gtk.ICON_SIZE_MENU)
+		menu_item = gtk.ImageMenuItem()
 		menu_item.set_label(_('Cancel'))
-		image = Gtk.image_new_from_stock(Gtk.STOCK_CANCEL, Gtk.IconSize.MENU)
 		menu_item.set_image(image)
 		menu.append(menu_item)
 
+		# show menu in separate user interface thread
 		menu.show_all()
 		menu.connect('deactivate', Gtk.main_quit)
 		menu.popup(None, None, None, 1, 0)
@@ -1788,11 +1843,13 @@ class FileList(ItemList):
 
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""
+		result = False
 		action = drag_context.action
 		item_list = selection_data.data.splitlines(False)
-		result = False
+
 		# prepare data for copying
 		protocol, path = item_list[0].split('://', 1)
+
 		# handle data
 		if action is Gdk.ACTION_ASK:
 			action = self._drag_ask()
@@ -1803,13 +1860,20 @@ class FileList(ItemList):
 						Gdk.ACTION_COPY: 'copy',
 						Gdk.ACTION_MOVE: 'move'
 					}
+
 			try:
+				# get item at cursor
 				path, position = widget.get_dest_row_at_pos(x, y)
 				destination_iter = self._store.get_iter(path)
+
+				# prepare destination path from selected item
 				destination = self._store.get_value(destination_iter, Column.NAME)
-				destination =  os.path.join(self.path, destination)
+				destination = os.path.join(self.path, destination)
+
+				# handle cases when user select parent directory
 				if self._store.get_value(destination_iter, Column.IS_PARENT_DIR):
 					destination = os.path.dirname(os.path.dirname(destination))
+
 				elif not self._store.get_value(destination_iter, Column.IS_DIR):
 					destination =  os.path.dirname(destination)
 
@@ -1892,6 +1956,7 @@ class FileList(ItemList):
 								'',
 								True,
 								True,
+								False,
 								None,
 								'go-up',
 								None,
@@ -1936,7 +2001,7 @@ class FileList(ItemList):
 			for item_name in item_list:
 				# check if we are allowed to continue
 				if not self._thread_active.is_set():
-					break;
+					break
 
 				# add item to the list
 				self._add_item(item_name, parent, parent_path)
@@ -2035,7 +2100,7 @@ class FileList(ItemList):
 
 		# get provider for specified URI
 		provider = None
-		self.path = path 
+		self.path = path
 
 		if '://' not in path:
 			scheme = 'file'
@@ -2043,7 +2108,7 @@ class FileList(ItemList):
 		else:
 			data = path.split('://', 1)
 			scheme = data[0]
-			
+
 			# for local storage, use path without scheme
 			if scheme == 'file':
 				self.path = data[1]
@@ -2225,7 +2290,7 @@ class FileList(ItemList):
 
 		# update status bar
 		ItemList.select_all(self, pattern)
-		self._update_status_with_statistis();
+		self._update_status_with_statistis()
 
 		return result
 
@@ -2265,7 +2330,7 @@ class FileList(ItemList):
 
 		# update status bar
 		ItemList.select_all(self, pattern)
-		self._update_status_with_statistis();
+		self._update_status_with_statistis()
 
 		return result
 
@@ -2318,7 +2383,8 @@ class FileList(ItemList):
 		self._item_list.set_rules_hint(row_hinting)
 
 		# apply expander visibility
-		self._item_list.set_show_expanders(section.get('show_expanders'))
+		self._show_expanders = section.get('show_expanders')
+		self._item_list.set_show_expanders(self._show_expanders)
 
 		# apply grid lines
 		grid_lines = (
@@ -2338,7 +2404,7 @@ class FileList(ItemList):
 			self._show_full_name = 'extension' not in plugin_options.section(self._name).get('columns')
 
 		else:
-			self._show_full_name = False;
+			self._show_full_name = False
 
 		# reload file list in order to apply time formatting, hidden files and other
 		self.refresh_file_list()

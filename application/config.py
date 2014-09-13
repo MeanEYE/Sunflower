@@ -40,11 +40,11 @@ class Container:
 
 class Config(Container):
 	"""This class provides easy way to create and edit configuration files
-	located in project's configuration directory. 
-	
-	It is recomended that this class is used for all purposes of storing 
+	located in project's configuration directory.
+
+	It is recomended that this class is used for all purposes of storing
 	data used by program itself and	plugins!
-	
+
 	"""
 
 	encoder_options = {
@@ -101,7 +101,7 @@ class Config(Container):
 			# if error occurs, we'll just ignore it
 			# empty config is not that scary
 			pass
-	
+
 		else:
 			# finish the loading
 			for name, values in data.items():

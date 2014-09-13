@@ -159,7 +159,7 @@ class PreferencesWindow(Gtk.Window):
 
 			elif result == Gtk.RESPONSE_CANCEL:
 				should_close = False
-		
+
 		if should_close:
 			self.hide()
 

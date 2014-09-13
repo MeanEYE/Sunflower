@@ -47,7 +47,7 @@ class MountsManagerWindow(Gtk.Window):
 
 		# main menu items
 		self._menu_unmount = None
-		
+
 		# configure window
 		self.set_title(_('Mount manager'))
 		self.set_default_size(700, 400)
@@ -99,11 +99,11 @@ class MountsManagerWindow(Gtk.Window):
 		self._tab_labels.append_column(col_label)
 		self._tab_labels.set_headers_visible(False)
 		self._tab_labels.connect('cursor-changed', self._handle_cursor_change)
-		
+
 		# create buttons
 		button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
 		button_close.connect('clicked', self._hide)
-		
+
 		# pack user interface
 		label_container.add(self._tab_labels)
 
@@ -114,7 +114,7 @@ class MountsManagerWindow(Gtk.Window):
 
 		vbox.pack_start(hbox, True, True, 0)
 		vbox.pack_start(hbox_controls, False, False, 0)
-		
+
 		self.add(vbox)
 
 	def create_extensions(self):
@@ -195,7 +195,7 @@ class MountsManagerWindow(Gtk.Window):
 		"""Method called whenever menu is updated"""
 		has_mounts = self._application.bookmarks.get_mount_count() > 0
 
-		try: 
+		try:
 			self._menu_item_no_mounts.set_visible(not has_mounts)
 
 		except AttributeError:
@@ -292,7 +292,7 @@ class MountsManagerWindow(Gtk.Window):
 
 	def add_page(self, icon_name, name, container, extension):
 		"""Create new page in mounts manager with specified parameters.
-		
+
 		This method provides easy way to extend mounts manager by adding container
 		of your choice to notebook presented to users. Extension parameter must be class
 		descendant of MountManagerExtension.
@@ -331,7 +331,7 @@ class MountsExtension(MountManagerExtension):
 	"""Extension that provides list of all mounted resources"""
 
 	features = set([ExtensionFeatures.SYSTEM_WIDE,])
-	
+
 	def __init__(self, parent, window):
 		MountManagerExtension.__init__(self, parent, window)
 
@@ -410,13 +410,13 @@ class MountsExtension(MountManagerExtension):
 		self._controls.pack_start(button_jump, False, False, 0)
 		self._controls.pack_start(button_new_tab, False, False, 0)
 		self._controls.pack_end(button_unmount, False, False, 0)
-		
+
 		self._container.pack_start(container, True, True, 0)
 
 	def _get_iter_by_uri(self, uri):
 		"""Get mount list iter by URI"""
 		result = None
-		
+
 		# find iter by uuid
 		for mount_row in self._store:
 			if self._store.get_value(mount_row.iter, MountsColumn.URI) == uri:
@@ -433,7 +433,7 @@ class MountsExtension(MountManagerExtension):
 		if selected_iter is not None:
 			uri = item_list.get_value(selected_iter, MountsColumn.URI)
 			active_object = self._application.get_active_object()
-			
+
 			if not in_new_tab and hasattr(active_object, 'change_path'):
 				active_object.change_path(uri)
 
@@ -453,7 +453,7 @@ class MountsExtension(MountManagerExtension):
 		"""Unmount selected item"""
 		selection = self._list.get_selection()
 		item_list, selected_iter = selection.get_selected()
-		
+
 		if selected_iter is not None:
 			uri = item_list.get_value(selected_iter, MountsColumn.URI)
 
@@ -516,7 +516,7 @@ class MountsExtension(MountManagerExtension):
 
 class VolumesExtension(MountManagerExtension):
 	"""Extension that provides access to volumes"""
-	
+
 	def __init__(self, parent, window):
 		MountManagerExtension.__init__(self, parent, window)
 		self._store = Gtk.ListStore(str, str, str, str, bool, object)
@@ -580,7 +580,7 @@ class VolumesExtension(MountManagerExtension):
 	def _get_iter_by_uuid(self, uuid):
 		"""Get volume list iter by UUID"""
 		result = None
-		
+
 		# find iter by uuid
 		for volume_row in self._store:
 			if self._store.get_value(volume_row.iter, VolumesColumn.UUID) == uuid:
@@ -592,7 +592,7 @@ class VolumesExtension(MountManagerExtension):
 	def _get_iter_by_object(self, volume):
 		"""Get volume list iter by UUID"""
 		result = None
-		
+
 		# find iter by uuid
 		for volume_row in self._store:
 			if self._store.get_value(volume_row.iter, VolumesColumn.OBJECT) is volume:
@@ -734,7 +734,7 @@ class VolumesExtension(MountManagerExtension):
 		and should_mount:
 			# show busy spinner if possible
 			self._show_spinner()
-		
+
 			# perform auto-mount of volume
 			volume.mount(None, self._mount_finish, GIO_MOUNT_MOUNT_NONE, None, None)
 

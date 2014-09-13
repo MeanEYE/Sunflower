@@ -4,7 +4,7 @@ from widgets.settings_page import SettingsPage
 
 class OperationOptions(SettingsPage):
 	"""Operation options extension class"""
-	
+
 	def __init__(self, parent, application):
 		SettingsPage.__init__(self, parent, application, 'operation', _('Operation'))
 

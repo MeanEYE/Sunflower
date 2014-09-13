@@ -50,6 +50,11 @@ class AboutWindow:
 			name = 'Sevka Fedoroff',
 			email = 'sevka.fedoroff@gmail.com',
 			website = None
+		),
+		Contributor(
+			name = 'multiSnow',
+			email = 'infinity.blick.winkel@gmail.com',
+			website = None
 		)
 	]
 
@@ -59,6 +64,11 @@ class AboutWindow:
 			name = 'Andrea Pavlović',
 			email = 'octogirl.design@gmail.com',
 			website = None,
+		),
+		Contributor(
+			name = 'Michael Kerch',
+			email = 'michael@way2cu.com',
+			website = 'misha.co.il',
 		),
 	]
 
@@ -128,7 +138,7 @@ class AboutWindow:
 			name = 'Táncos Tamás',
 			email = 'h868315@gmail.com',
 			website = None,
-			language = 'Hungarian' 
+			language = 'Hungarian'
 		),
 		Translator(
 			name = 'Radek Otáhal',
@@ -202,13 +212,13 @@ class AboutWindow:
 
 		# set authors
 		self._dialog.set_authors(['{0} <{1}> {2}'.format(
-					contributor.name, 
+					contributor.name,
 					contributor.email,
 					contributor.website or ''
 				) for contributor in self.contributors])
 
 		self._dialog.set_artists(['{0} <{1}> {2}'.format(
-					contributor.name, 
+					contributor.name,
 					contributor.email,
 					contributor.website or ''
 				) for contributor in self.artists])

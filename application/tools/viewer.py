@@ -102,7 +102,7 @@ class Viewer:
 		vbox.pack_start(self.status_bar, False, False, 0)
 
 		self._window.add(vbox)
-		
+
 		# show all widgets if there are pages present
 		if self._page_count > 0:
 			self._window.show_all()
@@ -157,7 +157,7 @@ class Viewer:
 		text_view.set_editable(False)
 		text_view.set_cursor_visible(True)
 		text_view.modify_font(font)
-		
+
 		text_view.get_buffer().set_text(content)
 
 		# add container to notebook

@@ -71,7 +71,7 @@ class SystemTerminal(Terminal):
 		# parse command
 		terminal_command = self._parent.options.section('terminal').get(command_version)
 		terminal_command = shlex.split(terminal_command.format(socket_id, arguments_string))
-		
+
 		# execute process
 		process = subprocess.Popen(terminal_command, cwd=self.path)
 		self._pid = process.pid
@@ -93,7 +93,7 @@ class SystemTerminal(Terminal):
 
 	def __update_path_from_pid(self):
 		"""Update terminal path from child process"""
-		try: 
+		try:
 			if self._pid is not None and os.path.isdir('/proc/{0}'.format(self._pid)):
 				self.path = os.readlink('/proc/{0}/cwd'.format(self._pid))
 				self._options.set('path', self.path)

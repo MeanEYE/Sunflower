@@ -66,6 +66,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_media_preview = Gtk.CheckButton(_('Fast media preview'))
 		self._checkbox_show_expanders = Gtk.CheckButton(_('Show tree expanders'))
 		self._checkbox_hide_scrollbar = Gtk.CheckButton(_('Hide horizontal scrollbar'))
+		self._checkbox_second_extension = Gtk.CheckButton(_('Support second level extension'))
 
 		self._checkbox_row_hinting.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
@@ -77,6 +78,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_media_preview.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_expanders.connect('toggled', self._parent.enable_save)
 		self._checkbox_hide_scrollbar.connect('toggled', self._parent.enable_save)
+		self._checkbox_second_extension.connect('toggled', self._parent.enable_save)
 
 		# bread crumbs type
 		hbox_breadcrumbs = Gtk.HBox(False, 5)
@@ -381,6 +383,7 @@ class ItemListOptions(SettingsPage):
 		vbox_operation.pack_start(self._checkbox_number_sensitive, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_single_click, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_right_click, False, False, 0)
+		vbox_operation.pack_start(self._checkbox_second_extension, False, False, 0)
 		vbox_operation.pack_start(hbox_quick_search, False, False, 5)
 		vbox_operation.pack_start(vbox_time_format, False, False, 5)
 
@@ -416,7 +419,7 @@ class ItemListOptions(SettingsPage):
 		pos_x = window_x + button_x
 		pos_y = window_y + button_y + button_h
 
-		return (pos_x, pos_y, True)
+		return pos_x, pos_y, True
 
 	def _add_path(self, widget, source):
 		"""Add path to the list from specified source"""
@@ -425,7 +428,7 @@ class ItemListOptions(SettingsPage):
 			dialog = InputDialog(self._application)
 			dialog.set_title(_('Add custom directory'))
 			dialog.set_label(_('Full path:'))
-			
+
 			response = dialog.get_response()
 
 			if response[0] == Gtk.RESPONSE_OK:
@@ -491,7 +494,7 @@ class ItemListOptions(SettingsPage):
 
 		# enable save button
 		self._parent.enable_save()
-	
+
 		return True
 
 	def _vim_bindings_toggled(self, widget, data=None):
@@ -580,7 +583,7 @@ class ItemListOptions(SettingsPage):
 			try:
 				# make sure entered value is integer
 				new_size = int(text)
-			
+
 			except ValueError:
 				# if entered value is not integer, exception
 				# will be raised and we just skip updating storage
@@ -657,6 +660,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_load_directories.set_active(section.get('force_directories'))
 		self._checkbox_show_expanders.set_active(section.get('show_expanders'))
 		self._checkbox_hide_scrollbar.set_active(section.get('hide_horizontal_scrollbar'))
+		self._checkbox_second_extension.set_active(section.get('second_extension'))
 
 		search_modifier = section.get('search_modifier')
 		self._checkbox_control.set_active(search_modifier[0] == '1')
@@ -701,6 +705,7 @@ class ItemListOptions(SettingsPage):
 		section.set('force_directories', self._checkbox_load_directories.get_active())
 		section.set('show_expanders', self._checkbox_show_expanders.get_active())
 		section.set('hide_horizontal_scrollbar', self._checkbox_hide_scrollbar.get_active())
+		section.set('second_extension', self._checkbox_second_extension.get_active())
 
 		search_modifier = "%d%d%d" % (
 								self._checkbox_control.get_active(),

@@ -43,7 +43,7 @@ class LocalProvider(Provider):
 
 		else:
 			# create a hard link on destination path from existing path
-			self.link(existing_path, real_path)
+			os.link(existing_path, real_path)
 
 	def unlink(self, path, relative_to=None):
 		"""Unlink given path"""
@@ -88,13 +88,13 @@ class LocalProvider(Provider):
 		real_mode = ('rb', 'wb', 'ab')[mode]
 		return open(real_path, real_mode)
 
-	def get_stat(self, path, relative_to=None, extended=False):
+	def get_stat(self, path, relative_to=None, extended=False, follow=False):
 		"""Return file statistics"""
 		real_path = self._real_path(path, relative_to)
 
 		try:
 			# try getting file stats
-			file_stat = os.stat(real_path)
+			file_stat = os.lstat(real_path) if not follow else os.stat(real_path)
 
 		except:
 			# handle invalid files/links
@@ -126,13 +126,11 @@ class LocalProvider(Provider):
 			return result
 
 		# get file type
-		item_type = FileType.REGULAR
-
-		if stat.S_ISDIR(file_stat.st_mode):
-			item_type = FileType.DIRECTORY
-
-		elif stat.S_ISLNK(file_stat.st_mode):
+		if stat.S_ISLNK(file_stat.st_mode):
 			item_type = FileType.LINK
+
+		elif stat.S_ISDIR(file_stat.st_mode):
+			item_type = FileType.DIRECTORY
 
 		elif stat.S_ISBLK(file_stat.st_mode):
 			item_type = FileType.DEVICE_BLOCK
@@ -142,6 +140,9 @@ class LocalProvider(Provider):
 
 		elif stat.S_ISSOCK(file_stat.st_mode):
 			item_type = FileType.SOCKET
+
+		else:
+			item_type = FileType.REGULAR
 
 		if not extended:
 			# create normal file information
@@ -183,10 +184,10 @@ class LocalProvider(Provider):
 
 	def set_timestamp(self, path, access=None, modify=None, change=None, relative_to=None):
 		"""Set timestamps for specified path
-		
+
 		On Linux/Unix operating system we can't set metadata change timestamp
 		so we just ignore this part until other platforms are supported.
-		
+
 		"""
 		real_path = self._real_path(path, relative_to)
 		os.utime(real_path, (access, modify))
@@ -229,7 +230,7 @@ class LocalProvider(Provider):
 
 			result = SystemSize(
 						block_size = stat.f_bsize,
-						block_total = stat.f_blocks, 
+						block_total = stat.f_blocks,
 						block_available = stat.f_bavail,
 						size_total = space_total,
 						size_available = space_free
@@ -238,7 +239,7 @@ class LocalProvider(Provider):
 		except:
 			result = SystemSize(
 						block_size = 0,
-						block_total = 0, 
+						block_total = 0,
 						block_available = 0,
 						size_total = 0,
 						size_available = 0

@@ -103,7 +103,7 @@ class InputDialog:
 
 		self._dialog.destroy()
 
-		return (code, result)
+		return code, result
 
 
 class LinkDialog(InputDialog):
@@ -192,7 +192,7 @@ class LinkDialog(InputDialog):
 
 		self._dialog.destroy()
 
-		return (code, original_path, link_name, hard_link)
+		return code, original_path, link_name, hard_link
 
 
 class CreateDialog(InputDialog):
@@ -422,7 +422,7 @@ class PasswordDialog(InputDialog):
 
 		self._dialog.destroy()
 
-		return (code, password, confirmation)
+		return code, password, confirmation
 
 
 class FileCreateDialog(CreateDialog):
@@ -577,7 +577,7 @@ class CopyDialog:
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
-		
+
 		self._dialog.vbox.set_spacing(0)
 
 		# create additional components
@@ -801,7 +801,7 @@ class CopyDialog:
 		else:
 			self._dialog_size = self._dialog.get_size()
 			self._dialog.set_size_request(-1, -1)
-		
+
 	def _get_text_variables(self, count):
 		"""Get text variables for update"""
 		title = ngettext(
@@ -853,7 +853,7 @@ class CopyDialog:
 
 		# get affected items
 		pattern = self.entry_type.get_text()
-		match_function = lambda item: source_provider.is_dir(item) or fnmatch.fnmatch(item, pattern) 
+		match_function = lambda item: source_provider.is_dir(item) or fnmatch.fnmatch(item, pattern)
 		affected_items = filter(match_function, source_provider.get_selection())
 		item_count = len(affected_items)
 
@@ -898,7 +898,7 @@ class CopyDialog:
 
 		self._dialog.destroy()
 
-		return (code, options)
+		return code, options
 
 
 class MoveDialog(CopyDialog):
@@ -1081,7 +1081,7 @@ class OverwriteDialog:
 		str_size = locale.format('%d', size, True)
 		str_date = time.strftime(self._time_format, time.localtime(item_stat.time_modify))
 
-		return (str_size, str_date, icon)
+		return str_size, str_date, icon
 
 	def set_title_element(self, element):
 		"""Set title label with appropriate formatting"""
@@ -1146,7 +1146,7 @@ class OverwriteDialog:
 
 		self._dialog.destroy()
 
-		return (code, options)
+		return code, options
 
 
 class OverwriteFileDialog(OverwriteDialog):
@@ -1308,7 +1308,7 @@ class AddBookmarkDialog:
 
 		self._dialog.destroy()
 
-		return (code, name, path)
+		return code, name, path
 
 
 class OperationError:
@@ -1605,9 +1605,9 @@ class ApplicationInputDialog(InputDialog):
 
 class ApplicationSelectDialog:
 	"""Provides user with a list of installed applications and option to enter command"""
-	
+
 	help_url = 'standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables'
-	
+
 	def __init__(self, application, path=None):
 		self._dialog = Gtk.Dialog(parent=application)
 		
@@ -1637,10 +1637,10 @@ class ApplicationSelectDialog:
 		label_open_with.set_alignment(0, 0.5)
 		if path is None:
 			label_open_with.set_label(_('Select application:'))
-			
+
 		else:
 			label_open_with.set_label(_('Open <i>{0}</i> with:').format(os.path.basename(path)))
-			
+
 		# create application list
 		list_container = Gtk.ScrolledWindow()
 		list_container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
@@ -1663,7 +1663,7 @@ class ApplicationSelectDialog:
 		column_generic = Gtk.TreeViewColumn()
 		column_generic.pack_start(cell_generic, True)
 		column_generic.add_attribute(cell_generic, 'markup', 4)
-		
+
 		self._list.append_column(column_application)
 		self._list.append_column(column_generic)
 		self._list.set_headers_visible(False)
@@ -1685,19 +1685,19 @@ class ApplicationSelectDialog:
 		list_container.add(self._list)
 		vbox_list.pack_start(label_open_with, False, False, 0)
 		vbox_list.pack_start(list_container, True, True, 0)
-		
+
 		hbox_custom.pack_start(self._entry_custom, True, True, 0)
 		self._expander_custom.add(hbox_custom)
-		
+
 		self._container.pack_start(vbox_list, True, True, 0)
 		self._container.pack_start(self._expander_custom, False, False, 0)
-		
+
 		self._dialog.vbox.pack_start(self._container, True, True, 0)
-				
+
 		# create controls
 		button_help = Gtk.Button(stock=Gtk.STOCK_HELP)
 		button_help.connect('clicked', self._application.goto_web, self.help_url)
-		
+
 		if path is not None:
 			button_ok = Gtk.Button(stock=Gtk.STOCK_OPEN)
 
@@ -1705,7 +1705,6 @@ class ApplicationSelectDialog:
 			button_ok = Gtk.Button(stock=Gtk.STOCK_OK)
 
 		button_ok.set_can_default(True)
-		
 		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
 		
 		self._dialog.action_area.pack_start(button_help, False, False, 0)
@@ -1717,16 +1716,16 @@ class ApplicationSelectDialog:
 		self._load_applications()
 
 		self._dialog.show_all()
-		
+
 	def __handle_cursor_change(self, widget, data=None):
 		"""Handle setting or changing list cursor"""
 		selection = widget.get_selection()
 		item_store, selected_iter = selection.get_selected()
-		
+
 		if selected_iter is not None:
 			command = item_store.get_value(selected_iter, 3)
 			self._entry_custom.set_text(command)
-			
+
 	def __handle_row_activated(self, path=None, view_column=None, data=None):
 		"""Handle choosing application by presing 'Enter'"""
 		self._dialog.response(Gtk.RESPONSE_OK)
@@ -1739,19 +1738,19 @@ class ApplicationSelectDialog:
 			if application.command_line is not None \
 			and '%' in application.command_line:
 				self._store.append((
-							application.icon, 
-							application.name, 
-							application.id, 
+							application.icon,
+							application.name,
+							application.id,
 							application.command_line,
 							'<small>{0}</small>'.format(application.description)
 						))
-		
+
 	def get_response(self):
 		"""Get response and destroy dialog"""
 		code = self._dialog.run()
 		is_custom = self._expander_custom.get_expanded()
 		command = self._entry_custom.get_text()
-		
+
 		self._dialog.destroy()
 
 		return code, is_custom, command
@@ -1832,4 +1831,4 @@ class PathInputDialog():
 
 		self._dialog.destroy()
 
-		return (code, result)
+		return code, result

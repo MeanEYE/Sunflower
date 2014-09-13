@@ -64,21 +64,21 @@ class MenuManager:
 	def _open_with_callback(self, widget, data):
 		"""Callback event for menu items from 'open with' menu"""
 		self._application.associations_manager.open_file(
-									data['selection'], 
+									data['selection'],
 									application_info=data['application']
 								)
-	
+
 	def _open_with_custom_callback(self, widget, data):
 		"""Callback event for menu items from custom 'open with' menu"""
 		self._application.associations_manager.open_file(
-									data['selection'], 
+									data['selection'],
 									exec_command=data['command']
 								)
 
 	def _additional_options_callback(self, widget, data):
 		"""Callback event for additional options menu items"""
 		method = data['method']
-		
+
 		if method is not None:
 			method(data['mime_type'], data['selection'], data['provider'])
 
@@ -245,5 +245,5 @@ class MenuManager:
 			if visible: new_item.show()
 
 		new_item.set_property('no-show-all', not visible)
-		
+
 		return new_item

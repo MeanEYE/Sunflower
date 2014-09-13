@@ -17,14 +17,20 @@ class EmblemManager:
 			'emblem-documents',
 			'emblem-downloads',
 			'emblem-favorite',
+			'emblem-generic',
 			'emblem-important',
 			'emblem-mail',
+			'emblem-new',
+			'emblem-package',
 			'emblem-photos',
 			'emblem-readonly',
 			'emblem-shared',
 			'emblem-symbolic-link',
+			'emblem-synchronizing',
 			'emblem-system',
-			'emblem-unreadable'
+			'emblem-unreadable',
+			'emblem-urgent',
+			'emblem-web'
 		)
 
 	def __init__(self, parent):

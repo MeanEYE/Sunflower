@@ -214,7 +214,7 @@ class TitleBar:
 						y_offset - self._box_border_width + border_offset
 					)
 		menu_rectangle = (
-						x + self._box_border_width - border_offset, 
+						x + self._box_border_width - border_offset,
 						y + self._box_border_width - border_offset,
 						x + self._box_border_width + self.__get_menu_width() + border_offset,
 						y_offset - self._box_border_width + border_offset
@@ -290,7 +290,7 @@ class TitleBar:
 		pos_x = window_x + button_x
 		pos_y = window_y + button_y + button_h
 
-		return (pos_x, pos_y, True)
+		return pos_x, pos_y, True
 
 	def add_control(self, widget):
 		"""Add button control"""
@@ -324,7 +324,7 @@ class TitleBar:
 		"""Set title text"""
 		if self._show_breadcrumbs:
 			self._breadcrumbs.refresh(text)
-			
+
 		else:
 			self._title_label.set_markup(text.replace('&', '&amp;'))
 
@@ -339,7 +339,7 @@ class TitleBar:
 	def set_menu(self, menu):
 		"""Set title bar menu"""
 		self._menu = menu
-	
+
 	def get_container(self):
 		"""Return title bar container"""
 		return self._container
@@ -379,7 +379,7 @@ class TitleBar:
 		# determine whether we need to show breadcrumbs
 		section = self._application.options.section('item_list')
 		self._breadcrumb_type = section.get('breadcrumbs')
-		
+
 		if self._breadcrumbs is not None:
 			self._breadcrumbs.apply_settings()
 

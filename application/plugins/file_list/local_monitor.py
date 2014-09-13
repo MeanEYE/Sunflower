@@ -27,7 +27,7 @@ class LocalMonitor(Monitor):
 		Monitor.__init__(self, provider, path)
 
 		if os.path.exists(self._path):
-			try: 
+			try:
 				# create file/directory monitor
 				if os.path.isdir(self._path):
 					self._monitor = gio.File(path).monitor_directory()

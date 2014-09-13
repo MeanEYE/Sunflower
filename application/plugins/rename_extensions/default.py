@@ -193,7 +193,7 @@ class DefaultRename(RenameExtension):
 		pos_x = window_x + button_x
 		pos_y = window_y + button_y + button_h
 
-		return (pos_x, pos_y, True)
+		return pos_x, pos_y, True
 
 	def __add_to_template(self, widget, type):
 		"""Add variable to template"""

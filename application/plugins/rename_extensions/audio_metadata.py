@@ -117,7 +117,7 @@ class AudioMetadataRename(RenameExtension):
 		tags = mutagen.File(path, easy=True)
 
 		# check if filetype is supported by mutagen
-		if tags == None:
+		if tags is None:
 			return new_name
 
 		# fill template

@@ -41,7 +41,7 @@ class GioExtension(MountManagerExtension):
 	"""Base class for all GIO based extensions"""
 	features = set([ExtensionFeatures.SYSTEM_WIDE,])
 	scheme = None
-	
+
 	def __init__(self, parent, window):
 		MountManagerExtension.__init__(self, parent, window)
 
@@ -49,7 +49,7 @@ class GioExtension(MountManagerExtension):
 		"""Perform actual mounting operation with specified data"""
 		self._show_spinner()
 
-		def ask_password(operation, message, default_user, default_domain, flags): 
+		def ask_password(operation, message, default_user, default_domain, flags):
 			# configure mount operation
 			operation.set_domain(domain if domain is not None and domain != '' else default_domain)
 			operation.set_username(username if username is not None and username != '' else default_user)
@@ -122,7 +122,7 @@ class GioExtension(MountManagerExtension):
 		"""Finish unmounting"""
 		try:
 			mount.unmount_finish(result)
-		
+
 		finally:
 			self._hide_spinner()
 
@@ -137,7 +137,7 @@ class GioExtension(MountManagerExtension):
 		if self._spinner is not None:
 			self._spinner.stop()
 			self._spinner.hide()
-	
+
 
 class SambaExtension(GioExtension):
 	"""Mount manager extension that provides editing and mounting
@@ -207,7 +207,7 @@ class SambaExtension(GioExtension):
 
 		# pack user interface
 		list_container.add(self._list)
-		
+
 		self._container.pack_start(list_container, True, True, 0)
 
 		self._controls.pack_start(button_add, False, False, 0)
@@ -297,7 +297,7 @@ class SambaExtension(GioExtension):
 					'directory': row[SambaColumn.DIRECTORY],
 					'domain': row[SambaColumn.DOMAIN],
 					'username': row[SambaColumn.USERNAME],
-					'requires_login': row[SambaColumn.REQUIRES_LOGIN] 
+					'requires_login': row[SambaColumn.REQUIRES_LOGIN]
 				})
 
 	def _add_mount(self, widget, data=None):
@@ -328,7 +328,7 @@ class SambaExtension(GioExtension):
 							}
 						# first, try to store password with keyring
 						keyring_manager.store_password(
-									name, 
+									name,
 									response[1][SambaResult.PASSWORD],
 									attributes,
 									entry_type=EntryType.NETWORK
@@ -430,7 +430,7 @@ class SambaExtension(GioExtension):
 			# remove selected mount
 			if result == Gtk.RESPONSE_YES:
 				item_list.remove(selected_iter)
-				
+
 				# save changes
 				self.__save_list()
 
@@ -561,7 +561,7 @@ class FtpExtension(GioExtension):
 
 		# pack user interface
 		list_container.add(self._list)
-		
+
 		self._container.pack_start(list_container, True, True, 0)
 
 		self._controls.pack_start(button_add, False, False, 0)
@@ -645,7 +645,7 @@ class FtpExtension(GioExtension):
 					'server': row[FtpColumn.SERVER],
 					'directory': row[FtpColumn.DIRECTORY],
 					'username': row[FtpColumn.USERNAME],
-					'requires_login': row[FtpColumn.REQUIRES_LOGIN] 
+					'requires_login': row[FtpColumn.REQUIRES_LOGIN]
 				})
 
 	def _create_dialog(self, parent):
@@ -680,7 +680,7 @@ class FtpExtension(GioExtension):
 							}
 						# first, try to store password with keyring
 						keyring_manager.store_password(
-									name, 
+									name,
 									response[1][FtpResult.PASSWORD],
 									attributes,
 									entry_type=EntryType.NETWORK
@@ -733,7 +733,7 @@ class FtpExtension(GioExtension):
 			# remove selected mount
 			if result == Gtk.RESPONSE_YES:
 				item_list.remove(selected_iter)
-				
+
 				# save changes
 				self.__save_list()
 

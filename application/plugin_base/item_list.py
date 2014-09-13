@@ -51,10 +51,11 @@ class ItemList(PluginBase):
 		self._files = {'count': 0, 'selected': 0}
 		self._size = {'total': 0L, 'selected': 0L}
 
-		# local human readable cache
+		# preload commonly used options
 		self._size_format = self._parent.options.get('size_format')
 		self._selection_color = section.get('selection_color')
 		self._selection_indicator = section.get('selection_indicator')
+		self._second_extension = section.get('second_extension')
 
 		# we use this variable to prevent dead loop during column resize
 		self._is_updating = False
@@ -119,7 +120,7 @@ class ItemList(PluginBase):
 		self._terminal_button.connect('clicked', self._create_terminal)
 
 		self._title_bar.add_control(self._terminal_button)
-		
+
 		# configure status bar
 		self._status_bar.add_group_with_icon('dirs', 'folder', '0/0', tooltip=_('Directories (selected/total)'))
 		self._status_bar.add_group_with_icon('files', 'document', '0/0', tooltip=_('Files (selected/total)'))
@@ -289,7 +290,9 @@ class ItemList(PluginBase):
 
 		# configure accelerators
 		group.set_accelerator('execute_item', keyval('Return'), 0)
+		group.set_alt_accelerator('execute_item', keyval('KP_Enter'), 0)
 		group.set_accelerator('item_properties', keyval('Return'), Gdk.MOD1_MASK)
+		group.set_alt_accelerator('item_properties', keyval('KP_Enter'), Gdk.MOD1_MASK)
 		group.set_accelerator('add_bookmark', keyval('d'), Gdk.CONTROL_MASK)
 		group.set_accelerator('edit_bookmarks', keyval('b'), Gdk.CONTROL_MASK)
 		group.set_accelerator('cut_to_clipboard', keyval('x'), Gdk.CONTROL_MASK)
@@ -331,7 +334,9 @@ class ItemList(PluginBase):
 		group.set_accelerator('copy_path_to_clipboard', keyval('l'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
 		group.set_accelerator('copy_selected_path_to_clipboard', keyval('c'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
 		group.set_accelerator('copy_path_to_command_entry', keyval('Return'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
+		group.set_alt_accelerator('copy_path_to_command_entry', keyval('KP_Enter'), Gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('copy_selection_to_command_entry', keyval('Return'), Gdk.CONTROL_MASK)
+		group.set_alt_accelerator('copy_selection_to_command_entry', keyval('KP_Enter'), Gdk.CONTROL_MASK)
 		group.set_accelerator('custom_path_entry', keyval('l'), Gdk.CONTROL_MASK)
 		group.set_accelerator('start_quick_search', keyval('f'), Gdk.CONTROL_MASK)
 		group.set_accelerator('expand_directory', keyval('Right'), 0)
@@ -938,7 +943,7 @@ class ItemList(PluginBase):
 
 	def _get_popup_menu_position(self, menu, data=None):
 		"""Abstract method for positioning menu properly on given row"""
-		return (0, 0, True)
+		return 0, 0, True
 
 	def _get_history_menu_position(self, menu, button):
 		"""Get history menu position"""
@@ -951,7 +956,7 @@ class ItemList(PluginBase):
 		pos_x = window_x + button_x
 		pos_y = window_y + button_y + button_h
 
-		return (pos_x, pos_y, True)
+		return pos_x, pos_y, True
 
 	def _get_other_provider(self):
 		"""Return provider from opposite list.
@@ -1400,7 +1405,7 @@ class ItemList(PluginBase):
 		"""Toggle selection and move cursor up"""
 		self._toggle_selection(widget, data, advance=False)
 		self._move_marker_up(widget, data)
-	
+
 		return True
 
 	def _toggle_selection_from_cursor_up(self, widget, data=None):
@@ -1466,7 +1471,7 @@ class ItemList(PluginBase):
 		"""Swap left and right paths"""
 		opposite_object = self._parent.get_opposite_object(self)
 
-		if (hasattr(opposite_object, 'change_path')):
+		if hasattr(opposite_object, 'change_path'):
 			# get path from opposite object
 			new_path = opposite_object.path
 
@@ -1486,7 +1491,7 @@ class ItemList(PluginBase):
 		self._parent.preferences_window._show(widget, 'bookmarks')
 		return True
 
-	def _directory_changed(monitor, event, path, other_path, parent=None):
+	def _directory_changed(self, event, path, other_path, parent=None):
 		"""Handle signal emitted by monitor"""
 		pass
 
@@ -1543,7 +1548,7 @@ class ItemList(PluginBase):
 	def copy_path_to_command_entry(self, widget=None, data=None):
 		"""Copy current path to command entry and focus it"""
 		self._parent.set_command_entry_text(self.path, True)
-		
+
 	def copy_selection_to_command_entry(self, widget=None, data=None):
 		"""Copy current selection to command entry and focus it"""
 		selection = self._get_selection(relative=True)
@@ -1650,6 +1655,9 @@ class ItemList(PluginBase):
 		# apply selection
 		self._selection_color = section.get('selection_color')
 		self._selection_indicator = section.get('selection_indicator')
+
+		# get support for second level of extension
+		self._second_extension = section.get('second_extension')
 
 		# change status bar visibility
 		show_status_bar = options.get('show_status_bar')

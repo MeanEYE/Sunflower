@@ -31,7 +31,7 @@ class CursorShape:
 
 class Terminal(PluginBase):
 	"""Base class for terminal based plugins
-	
+
 	This class provides access to VTE GTK+ widget. In cases where VTE is
 	not present on the system you can use Gtk.Socket to embed external
 	application.
@@ -75,8 +75,8 @@ class Terminal(PluginBase):
 		self._title_bar.add_control(self._menu_button)
 
 		# create main object
-		self._terminal_type = section.get('type') 
-	
+		self._terminal_type = section.get('type')
+
 		if self._terminal_type == TerminalType.VTE and vte is not None:
 			self._vte_present = True
 			self._terminal = vte.Terminal()
@@ -139,7 +139,7 @@ class Terminal(PluginBase):
 
 		# connect events to main object
 		self._connect_main_object(self._terminal)
-		
+
 		# create menu
 		self._create_menu()
 
@@ -219,7 +219,7 @@ class Terminal(PluginBase):
 		pos_x = window_x + button_x
 		pos_y = window_y + button_y + button_h
 
-		return (pos_x, pos_y, True)
+		return pos_x, pos_y, True
 
 	def _show_terminal_menu(self, widget, data=None):
 		"""History button click event"""
@@ -291,7 +291,7 @@ class Terminal(PluginBase):
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""
 		text = selection_data.data
-		
+
 		# ask user what to do with data
 		dialog = Gtk.MessageDialog(
 								self._parent,

@@ -114,21 +114,27 @@ class GioProvider(Provider):
 		real_path = self._real_path(path, relative_to)
 		return File(real_path, mode)
 
-	def get_stat(self, path, relative_to=None, extended=False):
+	def get_stat(self, path, relative_to=None, extended=False, follow=False):
 		"""Return file statistics"""
 		real_path = self._real_path(path, relative_to)
 
 		try:
 			# try getting file stats
+			flags = (
+					gio.FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+					gio.FILE_QUERY_INFO_NONE
+				)[follow]
+
 			file_stat = gio.File(real_path).query_info(
 											'standard::size,unix::mode,unix::uid,unix::gid'
 											'time::access,time::modified,time::changed,'
-											'standard::type,unix:device,unix::inode'
+											'standard::type,unix:device,unix::inode',
+											flags
 										)
 
 		except:
 			# handle invalid files/links
-			if not extended: 
+			if not extended:
 				result = FileInfo(
 							size = 0,
 							mode = 0,
@@ -157,16 +163,18 @@ class GioProvider(Provider):
 
 		# get file type
 		file_type = file_stat.get_file_type()
-		item_type = FileType.REGULAR
 
-		if file_type == gio.FILE_TYPE_DIRECTORY:
-			item_type = FileType.DIRECTORY
-
-		elif file_type == gio.FILE_TYPE_SYMBOLIC_LINK:
+		if file_type == gio.FILE_TYPE_SYMBOLIC_LINK:
 			item_type = FileType.LINK
+
+		elif file_type == gio.FILE_TYPE_DIRECTORY:
+			item_type = FileType.DIRECTORY
 
 		elif file_type == gio.FILE_TYPE_SPECIAL:
 			item_type = FileType.DEVICE_BLOCK
+
+		else:
+			item_type = FileType.REGULAR
 
 		if not extended:
 			# create normal file information
@@ -200,8 +208,8 @@ class GioProvider(Provider):
 		"""Set access mode to specified path"""
 		real_path = self._real_path(path, relative_to)
 		gio.File(real_path).set_attribute(
-					gio.FILE_ATTRIBUTE_UNIX_MODE, 
-					gio.FILE_ATTRIBUTE_TYPE_UINT32, 
+					gio.FILE_ATTRIBUTE_UNIX_MODE,
+					gio.FILE_ATTRIBUTE_TYPE_UINT32,
 					mode
 				)
 
@@ -210,7 +218,7 @@ class GioProvider(Provider):
 		real_path = self._real_path(path, relative_to)
 		temp = gio.File(real_path)
 		temp.set_attribute(
-					gio.FILE_ATTRIBUTE_UNIX_UID, 
+					gio.FILE_ATTRIBUTE_UNIX_UID,
 					gio.FILE_ATTRIBUTE_TYPE_UINT32,
 					owner
 				)
@@ -227,7 +235,7 @@ class GioProvider(Provider):
 
 		if access is not None:
 			temp.set_attribute(
-					gio.FILE_ATTRIBUTE_TIME_ACCESS, 
+					gio.FILE_ATTRIBUTE_TIME_ACCESS,
 					gio.FILE_ATTRIBUTE_TYPE_UINT64,
 					long(access)
 				)
@@ -309,7 +317,7 @@ class GioProvider(Provider):
 		except:
 			result = SystemSize(
 						block_size = 0,
-						block_total = 0, 
+						block_total = 0,
 						block_available = 0,
 						size_total = 0,
 						size_available = 0

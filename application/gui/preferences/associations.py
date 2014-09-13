@@ -46,21 +46,21 @@ class AssociationsOptions(SettingsPage):
 
 		item_add_application = Gtk.MenuItem(label=_('Add application to mime type'))
 		item_add_application.connect('activate', self.__add_application)
-		
+
 		self._add_menu.append(item_add_mime_type)
 		self._add_menu.append(item_add_application)
-		
+
 		self._add_menu.show_all()
-		
+
 		# create controls
 		hbox_controls = Gtk.HBox(homogeneous=False, spacing=5)
 		
 		button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
 		button_add.connect('clicked', self.__button_add_clicked)
-		
+
 		# pack interface
 		container.add(self._list)
-		
+
 		hbox_controls.pack_start(button_add, False, False, 0)
 
 		self.pack_start(container, True, True, 0)
@@ -103,7 +103,7 @@ class AssociationsOptions(SettingsPage):
 
 			if level == 0:
 				parent = selected_iter
-			
+
 			else:
 				parent = item_list.iter_parent(selected_iter)
 
@@ -132,11 +132,11 @@ class AssociationsOptions(SettingsPage):
 										'You need to select mime type to which application '
 										'will be added. You can also select another application '
 										'in which case new one will be added to its parent.'
-									) 
+									)
 								)
 			dialog.run()
 			dialog.destroy()
-					
+
 	def __get_menu_position(self, menu, button):
 		"""Get history menu position"""
 		# get coordinates
@@ -148,7 +148,7 @@ class AssociationsOptions(SettingsPage):
 		pos_x = window_x + button_x
 		pos_y = window_y + button_y + button_h
 
-		return (pos_x, pos_y, True)
+		return pos_x, pos_y, True
 
 	def _load_options(self):
 		"""Load options and update interface"""
@@ -177,13 +177,13 @@ class AssociationsOptions(SettingsPage):
 	def _save_options(self):
 		"""Method called when save button is clicked"""
 		config = self._application.association_options
-		
+
 		# iterate over groups
 		for row in self._associations:
 			mime_type = self._associations.get_value(row.iter, Column.COMMAND)
 			children = row.iterchildren()
 			applications = []
-			
+
 			# store accelerators for current group
 			for index, child in enumerate(children, 0):
 

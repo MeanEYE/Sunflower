@@ -12,12 +12,12 @@ def register_plugin(application):
 class GVimViewer(ViewerExtension):
 	"""Viewer extension that embeds GVim window into notebook and allows you to
 	view files using your configuration.
-	
+
 	"""
 
 	def __init__(self, parent):
 		ViewerExtension.__init__(self, parent)
-		
+
 		self._process = None
 
 		# create container
@@ -30,7 +30,7 @@ class GVimViewer(ViewerExtension):
 
 		# pack interface
 		self._container.add(self._socket)
-		
+
 	def __socket_realized(self, widget, data=None):
 		"""Connect process when socket is realized"""
 		socket_id = self._socket.get_id()

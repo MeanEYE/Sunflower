@@ -51,7 +51,7 @@ class Operation(Thread):
 		self._options = options
 		self._source_queue = None
 		self._destination_queue = None
-		
+
 		# daemonize
 		self.daemon = True
 
@@ -70,7 +70,7 @@ class Operation(Thread):
 			self._destination_path = destination_path or self._destination.get_path()
 
 		self._can_continue.set()
-		
+
 	def _create_dialog(self):
 		"""Create operation dialog"""
 		pass
@@ -127,15 +127,15 @@ class Operation(Thread):
 			merge = self._options[Option.SILENT_MERGE]
 			self._merge_all = merge
 
-		else: 
+		else:
 			# we are not in silent mode, ask user
 			with Gdk.lock:
 				dialog = OverwriteDirectoryDialog(self._application, self._dialog.get_window())
-		
+
 				title_element = os.path.basename(path)
 				message_element = os.path.basename(os.path.dirname(
 									os.path.join(self._destination.get_path(), path)))
-		
+
 				dialog.set_title_element(title_element)
 				dialog.set_message_element(message_element)
 				dialog.set_rename_value(title_element)
@@ -149,7 +149,7 @@ class Operation(Thread):
 								path,
 								relative_to=self._destination_path
 							)
-		
+
 				result = dialog.get_response()
 				merge = result[0] == Gtk.RESPONSE_YES
 
@@ -174,11 +174,11 @@ class Operation(Thread):
 			# we are not in silent mode, ask user what to do
 			with Gdk.lock:
 				dialog = OverwriteFileDialog(self._application, self._dialog.get_window())
-		
+
 				title_element = os.path.basename(path)
 				message_element = os.path.basename(os.path.dirname(
 									os.path.join(self._destination.get_path(), path)))
-		
+
 				dialog.set_title_element(title_element)
 				dialog.set_message_element(message_element)
 				dialog.set_rename_value(title_element)
@@ -192,7 +192,7 @@ class Operation(Thread):
 								path,
 								relative_to=self._destination_path
 								)
-		
+
 				result = dialog.get_response()
 				overwrite = result[0] == Gtk.RESPONSE_YES
 
@@ -219,15 +219,15 @@ class Operation(Thread):
 			# we are not in silent mode, ask user
 			with Gdk.lock:
 				dialog = OperationError(self._application)
-		
+
 				dialog.set_message(_(
 						'There is a problem writing data to destination '
 						'file. What would you like to do?'
 					))
 				dialog.set_error(str(error))
-		
+
 				response = dialog.get_response()
-		
+
 				# abort operation if user requested
 				if response == Gtk.RESPONSE_CANCEL:
 					self.cancel()
@@ -245,26 +245,26 @@ class Operation(Thread):
 			# we are not in silent mode, ask user
 			with Gdk.lock:
 				dialog = OperationError(self._application)
-		
+
 				if not is_directory:
 					# set message for file
 					dialog.set_message(_(
 						'An error occurred while trying to create specified '
 						'file. What would you like to do?'
 					))
-		
+
 				else:
 					# set message for directory
 					dialog.set_message(_(
 						'An error occurred while trying to create specified '
 						'directory. What would you like to do?'
 					))
-		
+
 				dialog.set_error(str(error))
-		
+
 				# get user response
 				response = dialog.get_response()
-		
+
 				# abort operation if user requested
 				if response == Gtk.RESPONSE_CANCEL:
 					self.cancel()
@@ -282,17 +282,17 @@ class Operation(Thread):
 			# we are not in silent mode, ask user
 			with Gdk.lock:
 				dialog = OperationError(self._application)
-		
+
 				dialog.set_message(_(
 						'Problem with setting path parameter for '
 						'specified path. What would you like to do?'
 					))
-		
+
 				dialog.set_error(str(error))
-		
+
 				# get user response
 				response = dialog.get_response()
-		
+
 				# abort operation if user requested
 				if response == Gtk.RESPONSE_CANCEL:
 					self.cancel()
@@ -310,15 +310,15 @@ class Operation(Thread):
 			# we are not in silent mode, ask user
 			with Gdk.lock:
 				dialog = OperationError(self._application)
-		
+
 				dialog.set_message(_(
 						'There was a problem removing specified path. '
 						'What would you like to do?'
 					))
 				dialog.set_error(str(error))
-		
+
 				response = dialog.get_response()
-		
+
 				# abort operation if user requested
 				if response == Gtk.RESPONSE_CANCEL:
 					self.cancel()
@@ -336,15 +336,15 @@ class Operation(Thread):
 			# we are not in silent mode, ask user
 			with Gdk.lock:
 				dialog = QuestionOperationError(self._application)
-		
+
 				dialog.set_message(_(
 						'There was a problem trashing specified path. '
 						'Would you like to try removing it instead?'
 					))
 				dialog.set_error(str(error))
-		
+
 				response = dialog.get_response()
-		
+
 				# abort operation if user requested
 				if response == Gtk.RESPONSE_CANCEL:
 					self.cancel()
@@ -362,15 +362,15 @@ class Operation(Thread):
 			# we are not in silent mode, ask user
 			with Gdk.lock:
 				dialog = OperationError(self._application)
-		
+
 				dialog.set_message(_(
 						'There was a problem moving specified path. '
 						'What would you like to do?'
 					))
 				dialog.set_error(str(error))
-		
+
 				response = dialog.get_response()
-		
+
 				# abort operation if user requested
 				if response == Gtk.RESPONSE_CANCEL:
 					self.cancel()
@@ -388,15 +388,15 @@ class Operation(Thread):
 			# we are not in silent mode, ask user
 			with Gdk.lock:
 				dialog = OperationError(self._application)
-		
+
 				dialog.set_message(_(
 						'There was a problem renaming specified path. '
 						'What would you like to do?'
 					))
 				dialog.set_error(str(error))
-		
+
 				response = dialog.get_response()
-		
+
 				# abort operation if user requested
 				if response == Gtk.RESPONSE_CANCEL:
 					self.cancel()
@@ -414,15 +414,15 @@ class Operation(Thread):
 			# we are not in silent mode, ask user
 			with Gdk.lock:
 				dialog = OperationError(self._application)
-		
+
 				dialog.set_message(_(
 						'There was a problem with reading specified directory. '
 						'What would you like to do?'
 					))
 				dialog.set_error(str(error))
-		
+
 				response = dialog.get_response()
-		
+
 				# abort operation if user requested
 				if response == Gtk.RESPONSE_CANCEL:
 					self.cancel()
@@ -489,7 +489,14 @@ class CopyOperation(Operation):
 	def _get_lists(self):
 		"""Find all files for copying"""
 		gobject.idle_add(self._update_status, _('Searching for files...'))
-		
+
+		# exclude files already selected with parent directory
+		for file_name in self._selection_list:
+			self._selection_list = filter(
+					lambda item: not item.startswith(file_name + os.path.sep),
+					self._selection_list
+				)
+
 		# traverse through the rest of the items
 		for item in self._selection_list:
 			if self._abort.is_set(): break  # abort operation if requested
@@ -499,7 +506,14 @@ class CopyOperation(Operation):
 			gobject.idle_add(self._dialog.set_current_file, item)
 			gobject.idle_add(self._dialog.pulse)
 
-			if self._source.is_dir(item, relative_to=self._source_path):
+			if os.path.sep in item:
+				relative_path, item = os.path.split(item)
+				source_path = os.path.join(self._source_path, relative_path)
+			else:
+				relative_path = None
+				source_path = self._source_path
+
+			if self._source.is_dir(item, relative_to=source_path):
 				# item is directory
 				can_procede = True
 				can_create = True
@@ -515,13 +529,13 @@ class CopyOperation(Operation):
 
 				# if user didn't skip directory, scan and update lists
 				if can_procede:
-					self._dir_list.append(item)
-					if can_create: self._dir_list_create.append(item)
-					self._scan_directory(item)
+					self._dir_list.append((item, relative_path))
+					if can_create: self._dir_list_create.append((item, relative_path))
+					self._scan_directory(item, source_path)
 
 			elif fnmatch.fnmatch(item, self._options[Option.FILE_TYPE]):
 				# item is a file, get stats and update lists
-				item_stat = self._source.get_stat(item, relative_to=self._source_path)
+				item_stat = self._source.get_stat(item, relative_to=source_path)
 
 				gobject.idle_add(self._dialog.increment_total_size, item_stat.size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
@@ -529,27 +543,7 @@ class CopyOperation(Operation):
 				self._total_count += 1
 				self._total_size += item_stat.size
 
-				self._file_list.append(item)
-
-				# if item is part of expanded directory check if we need to add that directory
-				if os.path.sep in item:
-					can_procede = True
-					can_create = True
-					directory = os.path.dirname(item)
-
-					# check if directory exists on destination
-					if self._destination.exists(directory, relative_to=self._destination_path):
-						can_create = False
-
-						if self._merge_all is not None:
-							can_procede = self._merge_all
-						else:
-							can_procede = self._get_merge_input(directory)
-
-					# if user didn't skip directory, scan and update lists
-					if can_procede and directory not in self._dir_list_create:
-						self._dir_list.append(directory)
-						if can_create: self._dir_list_create.append(directory)
+				self._file_list.append((item, relative_path))
 
 	def _set_mode(self, path, mode):
 		"""Set mode for specified path"""
@@ -611,7 +605,7 @@ class CopyOperation(Operation):
 		try:
 			# try setting timestamp
 			self._destination.set_timestamp(
-									path, 
+									path,
 									access_time,
 									modify_time,
 									change_time,
@@ -632,18 +626,19 @@ class CopyOperation(Operation):
 
 			return
 
-	def _scan_directory(self, directory):
+	def _scan_directory(self, directory, relative_path=None):
 		"""Recursively scan directory and populate list"""
+		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
 		try:
 			# try to get listing from directory
-			item_list = self._source.list_dir(directory, relative_to=self._source_path)
+			item_list = self._source.list_dir(directory, relative_to=source_path)
 
 		except StandardError as error:
 			# problem with reading specified directory, ask user
 			response = self._get_read_error_input(error)
 
 			if response == Gtk.RESPONSE_YES:
-				self._scan_directory(directory)
+				self._scan_directory(directory, relative_path)
 
 			return
 
@@ -657,7 +652,7 @@ class CopyOperation(Operation):
 			full_name = os.path.join(directory, item)
 
 			# item is a directory, scan it
-			if self._source.is_dir(full_name, relative_to=self._source_path):
+			if self._source.is_dir(full_name, relative_to=source_path):
 				can_procede = True
 				can_create = True
 
@@ -672,12 +667,12 @@ class CopyOperation(Operation):
 				if can_procede:
 					# allow processing specified directory
 					self._dir_list.append(full_name)
-					if can_create: self._dir_list_create.append(full_name)
-					self._scan_directory(full_name)
+					if can_create: self._dir_list_create.append((full_name, source_path))
+					self._scan_directory(full_name, relative_path)
 
 			elif fnmatch.fnmatch(item, self._options[Option.FILE_TYPE]):
 				# item is a file, update global statistics
-				item_stat = self._source.get_stat(full_name, relative_to=self._source_path)
+				item_stat = self._source.get_stat(full_name, relative_to=source_path)
 
 				gobject.idle_add(self._dialog.increment_total_size, item_stat.size)
 				gobject.idle_add(self._dialog.increment_total_count, 1)
@@ -685,11 +680,12 @@ class CopyOperation(Operation):
 				self._total_count += 1
 				self._total_size += item_stat.size
 
-				self._file_list.append(full_name)
+				self._file_list.append((full_name, relative_path))
 
-	def _create_directory(self, directory):
+	def _create_directory(self, directory, relative_path=None):
 		"""Create specified directory"""
-		file_stat = self._source.get_stat(directory, relative_to=self._source_path)
+		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
+		file_stat = self._source.get_stat(directory, relative_to=source_path)
 		mode = file_stat.mode if self._options[Option.SET_MODE] else 0755
 
 		try:
@@ -727,47 +723,48 @@ class CopyOperation(Operation):
 		# set owner
 		self._set_owner(directory, file_stat.user_id, file_stat.group_id)
 
-	def _copy_file(self, file_):
+	def _copy_file(self, file_name, relative_path=None):
 		"""Copy file content"""
 		can_procede = True
-		dest_file = file_
+		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
+		dest_file = file_name
 		sh = None
 		dh = None
 
 		# check if destination file exists
-		if self._destination.exists(file_, relative_to=self._destination_path):
+		if self._destination.exists(file_name, relative_to=self._destination_path):
 			if self._overwrite_all is not None:
 				can_procede = self._overwrite_all
 
 			else:
-				can_procede, options = self._get_overwrite_input(file_)
+				can_procede, options = self._get_overwrite_input(file_name)
 
 				# get new name if user specified
 				if options[OverwriteOption.RENAME]:
 					dest_file = os.path.join(
-					                    os.path.dirname(file_),
+					                    os.path.dirname(file_name),
 					                    options[OverwriteOption.NEW_NAME]
 					                )
 
-				elif self._source_path == self._destination_path:
+				elif source_path == self._destination_path:
 					can_procede = False
 
 		# if user skipped this file return
 		if not can_procede:
-			self._file_list.pop(self._file_list.index(file_))
+			self._file_list.pop(self._file_list.index(file_name))
 
 			# update total size
-			file_stat = self._source.get_stat(file_, relative_to=self._source_path)
+			file_stat = self._source.get_stat(file_name, relative_to=source_path)
 			gobject.idle_add(self._dialog.increment_current_size, file_stat.size)
 			return
 
 		try:
 			# get file stats
 			destination_size = 0L
-			file_stat = self._source.get_stat(file_, relative_to=self._source_path, extended=True)
+			file_stat = self._source.get_stat(file_name, relative_to=source_path, extended=True)
 
 			# get file handles
-			sh = self._source.get_file_handle(file_, FileMode.READ, relative_to=self._source_path)
+			sh = self._source.get_file_handle(file_name, FileMode.READ, relative_to=source_path)
 			dh = self._destination.get_file_handle(dest_file, FileMode.WRITE, relative_to=self._destination_path)
 
 			# set buffer size
@@ -776,11 +773,11 @@ class CopyOperation(Operation):
 
 			# reserve file size
 			if self._reserve_size:
-				# try to reserve file size in advance, 
+				# try to reserve file size in advance,
 				# can be slow on memory cards and network
 				try:
 					dh.truncate(file_stat.size)
-					
+
 				except:
 					dh.truncate()
 
@@ -808,7 +805,7 @@ class CopyOperation(Operation):
 
 			else:
 				# user didn't want to retry, remove file from list
-				self._file_list.pop(self._file_list.index(file_))
+				self._file_list.pop(self._file_list.index(file_name))
 
 			# remove amount of copied bytes from total size
 			gobject.idle_add(self._dialog.increment_current_size, -destination_size)
@@ -863,8 +860,8 @@ class CopyOperation(Operation):
 				self._set_mode(dest_file, file_stat.mode)
 				self._set_owner(dest_file, file_stat.user_id, file_stat.group_id)
 				self._set_timestamp(
-								dest_file, 
-								file_stat.time_access, 
+								dest_file,
+								file_stat.time_access,
 								file_stat.time_modify,
 								file_stat.time_change
 							)
@@ -879,8 +876,8 @@ class CopyOperation(Operation):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
-			gobject.idle_add(self._dialog.set_current_file, directory)
-			self._create_directory(directory)  # create directory
+			gobject.idle_add(self._dialog.set_current_file, directory[0])
+			self._create_directory(directory[0], directory[1])  # create directory
 
 			gobject.idle_add(
 						self._dialog.set_current_file_fraction,
@@ -892,17 +889,17 @@ class CopyOperation(Operation):
 		# update status
 		gobject.idle_add(self._update_status, _('Copying files...'))
 
-		list_ = self._file_list[:]
+		item_list = self._file_list[:]
 
 		# copy all the files in list
-		for file_ in list_:
+		for file_name, source_path in item_list:
 			# abort operation if requested
 			if self._abort.is_set(): break
 			self._can_continue.wait()  # pause lock
 
 			# copy file
-			gobject.idle_add(self._dialog.set_current_file, file_)
-			self._copy_file(file_)
+			gobject.idle_add(self._dialog.set_current_file, file_name)
+			self._copy_file(file_name, source_path)
 			gobject.idle_add(self._dialog.increment_current_count, 1)
 
 	def run(self):
@@ -940,7 +937,7 @@ class CopyOperation(Operation):
 		with Gdk.lock:
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 				notify_manager = self._application.notification_manager
-				
+
 				title = _('Copy Operation')
 				message = ngettext(
 								'Copying of {0} item from "{1}" to "{2}" is completed!',
@@ -951,7 +948,7 @@ class CopyOperation(Operation):
 								os.path.basename(self._source_path),
 								os.path.basename(self._destination_path)
 							)
-	
+
 				# queue notification
 				notify_manager.notify(title, message)
 
@@ -971,11 +968,12 @@ class CopyOperation(Operation):
 class MoveOperation(CopyOperation):
 	"""Operation thread used for moving files"""
 
-	def _remove_path(self, path, item_list):
+	def _remove_path(self, path, item_list, relative_path=None):
 		"""Remove path"""
+		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
 		try:
 			# try removing specified path
-			self._source.remove_path(path, relative_to=self._source_path)
+			self._source.remove_path(path, relative_to=source_path)
 
 			# push event to the queue
 			if self._source_queue is not None:
@@ -998,41 +996,42 @@ class MoveOperation(CopyOperation):
 		"""Create progress dialog"""
 		self._dialog = MoveDialog(self._application, self)
 
-	def _move_file(self, file_):
+	def _move_file(self, file_name, relative_path=None):
 		"""Move specified file using provider rename method"""
 		can_procede = True
-		dest_file = file_
+		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
+		dest_file = file_name
 
 		# check if destination file exists
-		if self._destination.exists(file_, relative_to=self._destination_path):
+		if self._destination.exists(file_name, relative_to=self._destination_path):
 			if self._overwrite_all is not None:
 				can_procede = self._overwrite_all
 			else:
-				can_procede, options = self._get_overwrite_input(file_)
+				can_procede, options = self._get_overwrite_input(file_name)
 
 				# get new name if user specified
 				if options[OverwriteOption.RENAME]:
 					dest_file = os.path.join(
-					                    os.path.dirname(file_),
+					                    os.path.dirname(file_name),
 					                    options[OverwriteOption.NEW_NAME]
 					                )
 
 		# if user skipped this file return
 		if not can_procede:
-			self._file_list.pop(self._file_list.index(file_))
+			self._file_list.pop(self._file_list.index(file_name))
 			return
 
 		# move file
 		try:
 			self._source.rename_path(
-								file_,
+								file_name,
 								os.path.join(self._destination_path, dest_file),
-								relative_to=self._source_path
+								relative_to=source_path
 							)
 
 			# push events to the queue
 			if self._source_queue is not None:
-				event = (MonitorSignals.DELETED, file_, None)
+				event = (MonitorSignals.DELETED, file_name, None)
 				self._source_queue.put(event, False)
 
 			if self._destination_queue is not None:
@@ -1049,7 +1048,7 @@ class MoveOperation(CopyOperation):
 
 			else:
 				# user didn't want to retry, remove file from list
-				self._file_list.pop(self._file_list.index(file_))
+				self._file_list.pop(self._file_list.index(file_name))
 
 			# exit method
 			return
@@ -1058,35 +1057,34 @@ class MoveOperation(CopyOperation):
 		"""Move files from the list"""
 		gobject.idle_add(self._update_status, _('Moving files...'))
 
-		list_ = self._file_list[:]
-
-		for file_ in list_:
+		item_list = self._file_list[:]
+		for file_name, source_path in item_list:
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
 			# move file
-			gobject.idle_add(self._dialog.set_current_file, file_)
-			self._move_file(file_)
+			gobject.idle_add(self._dialog.set_current_file, file_name)
+			self._move_file(file_name, source_path)
 			gobject.idle_add(self._dialog.increment_current_count, 1)
 
 	def _delete_file_list(self):
 		"""Remove files from source list"""
 		gobject.idle_add(self._update_status, _('Deleting source files...'))
 
-		list_ = self._file_list[:]
+		item_list = self._file_list[:]
 
-		for number, item in enumerate(list_, 0):
+		for number, item in enumerate(item_list, 0):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
 			# remove path
-			gobject.idle_add(self._dialog.set_current_file, item)
-			self._remove_path(item, self._file_list)
+			gobject.idle_add(self._dialog.set_current_file, item[0])
+			self._remove_path(item[0], self._file_list, item[1])
 
 			# update current count
 			gobject.idle_add(
 						self._dialog.set_current_file_fraction,
-						float(number) / len(list_)
+						float(number) / len(item_list)
 					)
 
 		self._delete_directories()
@@ -1099,15 +1097,17 @@ class MoveOperation(CopyOperation):
 		dir_list.reverse()  # remove deepest directories first
 
 		for number, directory in enumerate(dir_list, 0):
+			source_path = self._source_path if directory[1] is None else os.path.join(self._source_path, directory[1])
+			directory = directory[0]
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
-			if self._source.exists(directory, relative_to=self._source_path):
+			if self._source.exists(directory, relative_to=source_path):
 				gobject.idle_add(self._dialog.set_current_file, directory)
 
 				# try to get a list of items inside of directory
 				try:
-					item_list = self._source.list_dir(directory, relative_to=self._source_path)
+					item_list = self._source.list_dir(directory, relative_to=source_path)
 
 				except:
 					item_list = None
@@ -1182,7 +1182,7 @@ class MoveOperation(CopyOperation):
 		with Gdk.lock:
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 				notify_manager = self._application.notification_manager
-				
+
 				title = _('Move Operation')
 				message = ngettext(
 								'Moving of {0} item from "{1}" to "{2}" is completed!',
@@ -1193,7 +1193,7 @@ class MoveOperation(CopyOperation):
 								os.path.basename(self._source_path),
 								os.path.basename(self._destination_path)
 							)
-	
+
 				# queue notification
 				notify_manager.notify(title, message)
 
@@ -1218,7 +1218,7 @@ class DeleteOperation(Operation):
 
 		# allow users to force deleting items
 		self._force_delete = False
-		
+
 	def _create_dialog(self):
 		"""Create operation dialog"""
 		self._dialog = DeleteDialog(self._application, self)
@@ -1284,7 +1284,7 @@ class DeleteOperation(Operation):
 				parent.deselect_all()
 
 		# select removal method
-		trash_files = self._application.options.section('operations').get('trash_files') 
+		trash_files = self._application.options.section('operations').get('trash_files')
 		trash_available = ProviderSupport.TRASH in self._source.get_support()
 
 		if self._force_delete:
@@ -1292,7 +1292,7 @@ class DeleteOperation(Operation):
 
 		else:
 			remove_method = (
-					self._remove_path, 
+					self._remove_path,
 					self._trash_path
 				)[trash_files and trash_available]
 
@@ -1319,7 +1319,7 @@ class DeleteOperation(Operation):
 		with Gdk.lock:
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 				notify_manager = self._application.notification_manager
-				
+
 				title = _('Delete Operation')
 				message = ngettext(
 								'Removal of {0} item from "{1}" is completed!',
@@ -1329,7 +1329,7 @@ class DeleteOperation(Operation):
 				        len(self._file_list),
 				        os.path.basename(self._source_path)
 				    )
-	
+
 				# queue notification
 				notify_manager.notify(title, message)
 
@@ -1345,7 +1345,7 @@ class RenameOperation(Operation):
 
 		self._source_path = path
 		self._file_list = file_list
-		
+
 	def _create_dialog(self):
 		"""Create operation dialog"""
 		self._dialog = RenameDialog(self._application, self)
@@ -1400,7 +1400,7 @@ class RenameOperation(Operation):
 		with Gdk.lock:
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 				notify_manager = self._application.notification_manager
-				
+
 				title = _('Rename Operation')
 				message = ngettext(
 								'Rename of {0} item from "{1}" is completed!',
@@ -1410,7 +1410,7 @@ class RenameOperation(Operation):
 				        len(self._file_list),
 				        os.path.basename(self._source_path)
 				    )
-	
+
 				# queue notification
 				notify_manager.notify(title, message)
 

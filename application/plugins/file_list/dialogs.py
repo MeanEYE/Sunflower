@@ -173,7 +173,7 @@ class SambaInputDialog:
 										'One or more required fields are empty. '
 										'Please make sure you have entered name, '
 										'server and share.'
-									) 
+									)
 								)
 			dialog.run()
 			dialog.destroy()
@@ -192,7 +192,7 @@ class SambaInputDialog:
 
 		"""
 		self._entry_password.set_sensitive(available)
-	
+
 	def set_name(self, name):
 		"""Set username for editing"""
 		self._entry_name.set_text(name)
@@ -238,7 +238,7 @@ class SambaInputDialog:
 
 		self._dialog.destroy()
 
-		return (code, result)
+		return code, result
 
 
 class FtpInputDialog:
@@ -369,7 +369,7 @@ class FtpInputDialog:
 									_(
 										'One or more required fields is empty. '
 										'Please make sure you have entered name and server.'
-									) 
+									)
 								)
 			dialog.run()
 			dialog.destroy()
@@ -388,7 +388,7 @@ class FtpInputDialog:
 
 		"""
 		self._entry_password.set_sensitive(available)
-	
+
 	def set_name(self, name):
 		"""Set username for editing"""
 		self._entry_name.set_text(name)
@@ -424,7 +424,7 @@ class FtpInputDialog:
 
 		self._dialog.destroy()
 
-		return (code, result)
+		return code, result
 
 
 class SftpInputDialog(FtpInputDialog):
@@ -636,4 +636,4 @@ class DavInputDialog:
 
 		self._dialog.destroy()
 
-		return (code, result)
+		return code, result

@@ -11,10 +11,18 @@ class Column:
 	DIRECTORY = 2
 
 
-class FindFiles:
+class FindFiles(gobject.GObject):
 	"""Find files tool"""
 
+	__gtype_name__ = 'Sunflower_FindFiles'
+	__gsignals__ = {
+				'notify-start': (gobject.SIGNAL_RUN_LAST, None, ()),
+				'notify-stop': (gobject.SIGNAL_RUN_LAST, None, ())
+			}
+
 	def __init__(self, parent, application):
+		gobject.GObject.__init__(self)
+
 		# store parameters
 		self._parent = parent
 		self._application = application
@@ -233,13 +241,21 @@ class FindFiles:
 			self._image_find.set_from_stock(Gtk.STOCK_MEDIA_PLAY, Gtk.IconSize.BUTTON)
 			self._button_find.set_label(_('Start'))
 
-	def __find_files(self, path, extensions, scan_recursively):
+	def __find_files(self, path, children, scan_recursively):
 		"""Threaded find files method"""
+		scan_queue = []
+		extension_list = []
+
+		# prepare extension objects for operation
+		for child in children:
+			extension_list.append(child.get_data('extension'))
+
+		# tell extensions search is starting
+		self.emit('notify-start')
+
 		# update thread status
 		gobject.idle_add(self.__update_status, True)
 		gobject.idle_add(self.__update_status_label, path)
-
-		scan_queue = []
 
 		# add current path to scan queue
 		try:
@@ -269,18 +285,15 @@ class FindFiles:
 					pass
 
 			# check if item fits cirteria
-			path_score = 0
+			match = True
 
-			for child in extensions:
-				extension = child.get_data('extension')
-
+			for extension in extension_list:
 				if not extension.is_path_ok(item):
+					match = False
 					break
 
-				path_score += 1
-
 			# add item if score is right
-			if path_score == len(extensions):
+			if match:
 				name = os.path.basename(item)
 				path = os.path.dirname(item)
 				icon = self._application.icon_manager.get_icon_for_file(item)
@@ -289,6 +302,9 @@ class FindFiles:
 
 		# update thread status
 		gobject.idle_add(self.__update_status, False)
+
+		# tell extensions search has been stopped
+		self.emit('notify-stop')
 
 	def _close_window(self, widget=None, data=None):
 		"""Close window"""
@@ -386,7 +402,7 @@ class FindFiles:
 			# start the thread
 			params = {
 					'path': path,
-					'extensions': active_children,
+					'children': active_children,
 					'scan_recursively': self._checkbox_recursive.get_active()
 				}
 			thread = Thread(target=self.__find_files, kwargs=params)

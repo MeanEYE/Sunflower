@@ -35,8 +35,8 @@ class PluginsOptions(SettingsPage):
 
 		# create interface
 		container = Gtk.ScrolledWindow()
-		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
-		container.set_shadow_type(Gtk.SHADOW_IN)
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+		container.set_shadow_type(Gtk.ShadowType.IN)
 
 		# create list box
 		self._plugins = Gtk.ListStore(
@@ -87,7 +87,7 @@ class PluginsOptions(SettingsPage):
 		self._label_description.set_padding(5, 5)
 		self._label_description.connect('size-allocate', self.__adjust_label)
 
-		self._expander_description = Gtk.Expander(_('Description'))
+		self._expander_description = Gtk.Expander(label=_('Description'))
 		self._expander_description.add(self._label_description)
 
 		# create controls
@@ -175,9 +175,9 @@ class PluginsOptions(SettingsPage):
 			# plugin is protected, show appropriate message
 			dialog = Gtk.MessageDialog(
 									self._application,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_INFO,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.INFO,
+									Gtk.ButtonsType.OK,
 									_(
 										"{0} is required for "
 										"normal program operation and therefore can "

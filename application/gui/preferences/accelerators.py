@@ -20,11 +20,11 @@ class AcceleratorOptions(SettingsPage):
 
 		# create list box
 		container = Gtk.ScrolledWindow()
-		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
-		container.set_shadow_type(Gtk.SHADOW_IN)
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+		container.set_shadow_type(Gtk.ShadowType.IN)
 
 		self._accels = Gtk.TreeStore(str, str, int, int, int, int)
-		self._accels.set_sort_column_id(Column.TITLE, Gtk.SORT_ASCENDING)
+		self._accels.set_sort_column_id(Column.TITLE, Gtk.SortType.ASCENDING)
 
 		self._list = Gtk.TreeView()
 		self._list.set_model(self._accels)
@@ -37,13 +37,13 @@ class AcceleratorOptions(SettingsPage):
 		cell_primary = Gtk.CellRendererAccel()
 		cell_secondary = Gtk.CellRendererAccel()
 
-		cell_primary.set_property('accel-mode', Gtk.CELL_RENDERER_ACCEL_MODE_OTHER)
+		cell_primary.set_property('accel-mode', Gtk.CellRendererAccelMode.OTHER)
 		cell_primary.set_property('editable', True)
 
 		cell_primary.connect('accel-edited', self.__accel_edited, True)
 		cell_primary.connect('accel-cleared', self.__accel_cleared, True)
 
-		cell_secondary.set_property('accel-mode', Gtk.CELL_RENDERER_ACCEL_MODE_OTHER)
+		cell_secondary.set_property('accel-mode', Gtk.CellRendererAccelMode.OTHER)
 		cell_secondary.set_property('editable', True)
 
 		cell_secondary.connect('accel-edited', self.__accel_edited, False)
@@ -54,7 +54,7 @@ class AcceleratorOptions(SettingsPage):
 		col_name.set_min_width(200)
 		col_name.set_resizable(True)
 		col_name.set_sort_column_id(Column.TITLE)
-		col_name.set_sort_order(Gtk.SORT_ASCENDING)
+		col_name.set_sort_order(Gtk.SortType.ASCENDING)
 
 		col_primary = Gtk.TreeViewColumn(
 									_('Primary'),
@@ -77,7 +77,7 @@ class AcceleratorOptions(SettingsPage):
 		self._list.append_column(col_secondary)
 
 		# warning label
-		label_warning = Gtk.Label(_(
+		label_warning = Gtk.Label(label=_(
 							'<b>Note:</b> You can only edit accelerators from '
 							'objects created at least once in current session. '
 							'To disable accelerator press <i>Backspace</i> '
@@ -160,9 +160,9 @@ class AcceleratorOptions(SettingsPage):
 			# show dialog
 			dialog = Gtk.MessageDialog(
 									self._parent,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_QUESTION,
-									Gtk.BUTTONS_YES_NO,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.QUESTION,
+									Gtk.ButtonsType.YES_NO,
 									_(
 										'Selected accelerator "{0}" is already being '
 										'used. Would you still like to assign accelerator '
@@ -172,11 +172,11 @@ class AcceleratorOptions(SettingsPage):
 										'{1}'
 									).format(accelerator_label, methods)
 								)
-			dialog.set_default_response(Gtk.RESPONSE_NO)
+			dialog.set_default_response(Gtk.ResponseType.NO)
 			result = dialog.run()
 			dialog.destroy()
 
-			if result == Gtk.RESPONSE_YES:
+			if result == Gtk.ResponseType.YES:
 				# reset other accelerators
 				for group, method_name, colliding_primary in collisions:
 					colliding_iter = self.__find_iter_by_method_name(

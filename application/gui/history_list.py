@@ -15,7 +15,7 @@ class HistoryList(Gtk.Window):
 
 	def __init__(self, parent, application):
 		# create main window
-		Gtk.Window.__init__(self, Gtk.WINDOW_TOPLEVEL)
+		GObject.GObject.__init__(self, Gtk.WindowType.TOPLEVEL)
 
 		# store parameters locally, we'll need them later
 		self._parent = parent
@@ -24,7 +24,7 @@ class HistoryList(Gtk.Window):
 		# configure dialog
 		self.set_title(_('History'))
 		self.set_size_request(500, 300)
-		self.set_position(Gtk.WIN_POS_CENTER_ON_PARENT)
+		self.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self.set_resizable(True)
 		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)
@@ -36,8 +36,8 @@ class HistoryList(Gtk.Window):
 		vbox = Gtk.VBox(False, 7)
 
 		list_container = Gtk.ScrolledWindow()
-		list_container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_AUTOMATIC)
-		list_container.set_shadow_type(Gtk.SHADOW_IN)
+		list_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		list_container.set_shadow_type(Gtk.ShadowType.IN)
 
 		self._history = Gtk.ListStore(str, str)
 
@@ -150,8 +150,8 @@ class HistoryList(Gtk.Window):
 		"""Handle pressing keys in history list"""
 		result = False
 
-		if event.keyval == Gtk.keysyms.Return:
-			if event.state & Gdk.CONTROL_MASK:
+		if event.keyval == Gdk.KEY_Return:
+			if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
 				# open path in new tab
 				self._change_path(new_tab=True)
 
@@ -161,7 +161,7 @@ class HistoryList(Gtk.Window):
 
 			result = True
 
-		elif event.keyval == Gtk.keysyms.Escape:
+		elif event.keyval == Gdk.KEY_Escape:
 			# close window on escape
 			self._close()
 			result = True

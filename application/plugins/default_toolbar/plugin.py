@@ -96,9 +96,9 @@ class DefaultToolbar(ToolbarFactory):
 			# there is no configuration dialog for this widget type
 			dialog = Gtk.MessageDialog(
 		                            self._application,
-		                            Gtk.DIALOG_DESTROY_WITH_PARENT,
-		                            Gtk.MESSAGE_INFO,
-		                            Gtk.BUTTONS_OK,
+		                            Gtk.DialogFlags.DESTROY_WITH_PARENT,
+		                            Gtk.MessageType.INFO,
+		                            Gtk.ButtonsType.OK,
 		                            _("This widget has no configuration dialog.")
 		                        )
 			dialog.run()

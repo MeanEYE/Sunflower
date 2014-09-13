@@ -16,7 +16,7 @@ class OperationDialog:
 	MAX_SPEED_POINTS = 20  # how many points to aggregate
 
 	def __init__(self, application, thread):
-		self._window = Gtk.Window(type=Gtk.WINDOW_TOPLEVEL)
+		self._window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
 
 		self._paused = False
 		self._application = application
@@ -41,7 +41,7 @@ class OperationDialog:
 		# set window properties
 		self._window.set_title('Operation Dialog')
 		self._window.set_default_size(500, 10)
-		self._window.set_position(Gtk.WIN_POS_CENTER_ON_PARENT)
+		self._window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self._window.set_resizable(True)
 		self._window.set_skip_taskbar_hint(False)
 		self._window.set_transient_for(application)
@@ -87,15 +87,15 @@ class OperationDialog:
 		table.set_col_spacing(0, 10)
 		table.set_row_spacing(0, 2)
 
-		self._label_source = Gtk.Label(_('Source:'))
-		self._label_destination = Gtk.Label(_('Destination:'))
+		self._label_source = Gtk.Label(label=_('Source:'))
+		self._label_destination = Gtk.Label(label=_('Destination:'))
 
 		self._value_source = Gtk.Label()
 		self._value_destination = Gtk.Label()
 
 		# pack interface
-		table.attach(self._label_source, 0, 1, 0, 1, Gtk.FILL)
-		table.attach(self._label_destination, 0, 1, 1, 2, Gtk.FILL)
+		table.attach(self._label_source, 0, 1, 0, 1, Gtk.AttachOptions.FILL)
+		table.attach(self._label_destination, 0, 1, 1, 2, Gtk.AttachOptions.FILL)
 
 		table.attach(self._value_source, 1, 2, 0, 1)
 		table.attach(self._value_destination, 1, 2, 1, 2)
@@ -108,8 +108,8 @@ class OperationDialog:
 
 		self._value_source.set_alignment(0, 0.5)
 		self._value_destination.set_alignment(0, 0.5)
-		self._value_source.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
-		self._value_destination.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
+		self._value_source.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
+		self._value_destination.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
 
 	def _add_current_file(self):
 		"""Add 'current file' progress to the GUI"""
@@ -119,13 +119,13 @@ class OperationDialog:
 		table.set_row_spacing(0, 2)
 		table.set_col_spacing(0, 10)
 
-		self._label_status = Gtk.Label('Current status...')
+		self._label_status = Gtk.Label(label='Current status...')
 		self._label_current_file = Gtk.Label()
 		self._pb_current_file = Gtk.ProgressBar()
 		self._pb_current_file.set_pulse_step(0.005)
 
 		# pack interface
-		table.attach(self._label_status, 0, 1, 0, 1, Gtk.FILL)
+		table.attach(self._label_status, 0, 1, 0, 1, Gtk.AttachOptions.FILL)
 		table.attach(self._label_current_file, 1, 2, 0, 1)
 		table.attach(self._pb_current_file, 0, 2, 1, 2)
 
@@ -137,7 +137,7 @@ class OperationDialog:
 		# configure components
 		self._label_status.set_alignment(0, 0.5)
 		self._label_current_file.set_alignment(1, 0.5)
-		self._label_current_file.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
+		self._label_current_file.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
 
 	def _add_details(self):
 		"""Add ETA to the dialog"""
@@ -145,10 +145,10 @@ class OperationDialog:
 		table = Gtk.Table(2, 6, False)
 		table.set_border_width(7)
 
-		self._label_eta = Gtk.Label(_('ETA:'))
-		self._label_speed = Gtk.Label(_('Speed:'))
-		self._label_total_size = Gtk.Label(_('Total size:'))
-		self._label_total_count = Gtk.Label(_('Total count:'))
+		self._label_eta = Gtk.Label(label=_('ETA:'))
+		self._label_speed = Gtk.Label(label=_('Speed:'))
+		self._label_total_size = Gtk.Label(label=_('Total size:'))
+		self._label_total_count = Gtk.Label(label=_('Total count:'))
 
 		self._value_eta = Gtk.Label()
 		self._value_speed = Gtk.Label()
@@ -159,10 +159,10 @@ class OperationDialog:
 		self._pb_total_count = Gtk.ProgressBar()
 
 		# pack interface
-		table.attach(self._label_eta, 0, 1, 0, 1, Gtk.FILL)
-		table.attach(self._label_speed, 0, 1, 1, 2, Gtk.FILL)
-		table.attach(self._label_total_size, 0, 1, 2, 3, Gtk.FILL)
-		table.attach(self._label_total_count, 0, 1, 4, 5, Gtk.FILL)
+		table.attach(self._label_eta, 0, 1, 0, 1, Gtk.AttachOptions.FILL)
+		table.attach(self._label_speed, 0, 1, 1, 2, Gtk.AttachOptions.FILL)
+		table.attach(self._label_total_size, 0, 1, 2, 3, Gtk.AttachOptions.FILL)
+		table.attach(self._label_total_count, 0, 1, 4, 5, Gtk.AttachOptions.FILL)
 
 		table.attach(self._value_eta, 1, 2, 0, 1)
 		table.attach(self._value_speed, 1, 2, 1, 2)
@@ -194,7 +194,7 @@ class OperationDialog:
 		table.set_col_spacing(0, 10)
 
 		# add periodical updates for dialog
-		gobject.timeout_add(1000, self._update_speed)
+		GObject.timeout_add(1000, self._update_speed)
 
 	def _add_buttons(self):
 		"""Add button bar"""
@@ -228,16 +228,16 @@ class OperationDialog:
 		"""Create confirmation dialog with specified message and return result"""
 		dialog = Gtk.MessageDialog(
 						self._window,
-						Gtk.DIALOG_DESTROY_WITH_PARENT, 
-						Gtk.MESSAGE_QUESTION,
-						Gtk.BUTTONS_YES_NO, 
+						Gtk.DialogFlags.DESTROY_WITH_PARENT, 
+						Gtk.MessageType.QUESTION,
+						Gtk.ButtonsType.YES_NO, 
 						message
 					)
-		dialog.set_default_response(Gtk.RESPONSE_YES)
+		dialog.set_default_response(Gtk.ResponseType.YES)
 		result = dialog.run()
 		dialog.destroy()
 
-		return result == Gtk.RESPONSE_YES
+		return result == Gtk.ResponseType.YES
 
 	def _minimize_click(self, widget, data=None):
 		"""Handle minimize click"""
@@ -373,7 +373,7 @@ class OperationDialog:
 
 	def _window_state(self, widget, event, data=None):
 		"""Handle change of window state"""
-		if event.new_window_state == Gdk.WINDOW_STATE_ICONIFIED:
+		if event.new_window_state == Gdk.WindowState.ICONIFIED:
 			# window was iconified, show operations menu item
 			self._application.operation_menu_changed()
 

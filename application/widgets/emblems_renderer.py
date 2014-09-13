@@ -7,22 +7,22 @@ class CellRendererEmblems(Gtk.CellRenderer):
 	"""Cell renderer that accepts list of icon names."""
 	__gproperties__ = {
 				'emblems': (
-						gobject.TYPE_PYOBJECT,
+						GObject.TYPE_PYOBJECT,
 						'Emblem list',
 						'List of icon names to display',
-						gobject.PARAM_READWRITE
+						GObject.PARAM_READWRITE
 					),
 				'is-link': (
-						gobject.TYPE_BOOLEAN,
+						GObject.TYPE_BOOLEAN,
 						'Link indicator',
 						'Denotes if item is a link or regular file',
 						False,
-						gobject.PARAM_READWRITE
+						GObject.PARAM_READWRITE
 					)
 			}
 
 	def __init__(self):
-		Gtk.CellRenderer.__init__(self)
+		GObject.GObject.__init__(self)
 
 		self.emblems = None
 		self.is_link = None
@@ -63,7 +63,7 @@ class CellRendererEmblems(Gtk.CellRenderer):
 		icon_size = self.icon_size
 		spacing = self.spacing
 		emblems = self.emblems
-		icon_theme = Gtk.icon_theme_get_default()
+		icon_theme = Gtk.IconTheme.get_default()
 		context = window.cairo_create()
 
 		# add symbolic link emblem if needed

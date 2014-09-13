@@ -6,7 +6,7 @@ except:
 	vte = None
 
 try:
-	import gconf
+	from gi.repository import GConf
 except:
 	gconf = None
 
@@ -113,13 +113,13 @@ class Terminal(PluginBase):
 			text = _('\n\nPython VTE module is not installed on this system!')
 			self._terminal.get_buffer().set_text(text)
 			self._terminal.set_editable(False)
-			self._terminal.set_justification(Gtk.JUSTIFY_CENTER)
-			self._terminal.set_wrap_mode(Gtk.WRAP_WORD)
+			self._terminal.set_justification(Gtk.Justification.CENTER)
+			self._terminal.set_wrap_mode(Gtk.WrapMode.WORD)
 
 		# terminal container
 		if self._terminal_type == TerminalType.VTE:
 			self._container = Gtk.ScrolledWindow()
-			self._container.set_shadow_type(Gtk.SHADOW_IN)
+			self._container.set_shadow_type(Gtk.ShadowType.IN)
 
 			# apply scrollbar visibility
 			show_scrollbars = section.get('show_scrollbars')
@@ -131,7 +131,7 @@ class Terminal(PluginBase):
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
 			self._container = Gtk.Viewport()
-			self._container.set_shadow_type(Gtk.SHADOW_IN)
+			self._container.set_shadow_type(Gtk.ShadowType.IN)
 
 		# pack terminal
 		self._container.add(self._terminal)
@@ -151,8 +151,8 @@ class Terminal(PluginBase):
 		if client is None:
 			if self._terminal.get_data('client') is None:
 				# client wasn't assigned to widget, get default one and set events
-				client = gconf.client_get_default()
-				client.add_dir(path, gconf.CLIENT_PRELOAD_NONE)
+				client = GConf.Client.get_default()
+				client.add_dir(path, GConf.ClientPreloadType.PRELOAD_NONE)
 				client.notify_add(key, self.__set_system_font)
 				self._terminal.set_data('client', client)
 
@@ -259,11 +259,11 @@ class Terminal(PluginBase):
 		group.add_method('close_tab', _('Close tab'), self._close_tab)
 
 		# configure accelerators
-		group.set_accelerator('create_terminal', keyval('z'), Gdk.CONTROL_MASK)
-		group.set_accelerator('copy_to_clipboard', keyval('c'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
-		group.set_accelerator('paste_from_clipboard', keyval('v'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
-		group.set_accelerator('focus_opposite_object', keyval('Tab'), Gdk.CONTROL_MASK | Gdk.MOD1_MASK)
-		group.set_accelerator('close_tab', keyval('w'), Gdk.CONTROL_MASK)
+		group.set_accelerator('create_terminal', keyval('z'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('copy_to_clipboard', keyval('c'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
+		group.set_accelerator('paste_from_clipboard', keyval('v'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
+		group.set_accelerator('focus_opposite_object', keyval('Tab'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('close_tab', keyval('w'), Gdk.ModifierType.CONTROL_MASK)
 
 		# add accelerator group to the list
 		self._accelerator_groups.append(group)
@@ -295,19 +295,19 @@ class Terminal(PluginBase):
 		# ask user what to do with data
 		dialog = Gtk.MessageDialog(
 								self._parent,
-								Gtk.DIALOG_DESTROY_WITH_PARENT,
-								Gtk.MESSAGE_QUESTION,
-								Gtk.BUTTONS_YES_NO,
+								Gtk.DialogFlags.DESTROY_WITH_PARENT,
+								Gtk.MessageType.QUESTION,
+								Gtk.ButtonsType.YES_NO,
 								_(
 									'You are about to feed child process with '
 									'following data. Are you sure?\n\n{0}'
 								).format(text)
 							)
-		dialog.set_default_response(Gtk.RESPONSE_YES)
+		dialog.set_default_response(Gtk.ResponseType.YES)
 		result = dialog.run()
 		dialog.destroy()
 		
-		if result == Gtk.RESPONSE_YES:
+		if result == Gtk.ResponseType.YES:
 			self.feed_terminal(text)
 
 		# notify source application about operation outcome

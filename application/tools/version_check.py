@@ -15,7 +15,7 @@ class VersionCheck:
 	URL = 'https://api.github.com/repos/MeanEYE/Sunflower/releases'
 
 	def __init__(self, application):
-		self._dialog = Gtk.Window(type=Gtk.WINDOW_TOPLEVEL)
+		self._dialog = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
 
 		self._application = application
 
@@ -23,12 +23,12 @@ class VersionCheck:
 		self._dialog.set_title(_('Version check'))
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 		self._dialog.set_border_width(7)
-		self._dialog.set_position(Gtk.WIN_POS_CENTER_ON_PARENT)
+		self._dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self._dialog.set_resizable(False)
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_type_hint(Gdk.WINDOW_TYPE_HINT_DIALOG)
+		self._dialog.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 		self._dialog.connect('key-press-event', self._handle_key_press)
 
 		# create user interface
@@ -39,10 +39,10 @@ class VersionCheck:
 		table.set_row_spacings(5)
 		table.set_col_spacings(5)
 
-		label_current = Gtk.Label(_('Current:'))
+		label_current = Gtk.Label(label=_('Current:'))
 		label_current.set_alignment(0, 0.5)
 
-		label_latest = Gtk.Label(_('Latest:'))
+		label_latest = Gtk.Label(label=_('Latest:'))
 		label_latest.set_alignment(0, 0.5)
 
 		self._entry_current = Gtk.Entry()
@@ -89,7 +89,7 @@ class VersionCheck:
 
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys"""
-		if event.keyval == Gtk.keysyms.Escape:
+		if event.keyval == Gdk.KEY_Escape:
 			self._dialog.hide()
 
 	def check(self):

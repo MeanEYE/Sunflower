@@ -17,7 +17,7 @@ class PluginBase(Gtk.VBox):
 	"""
 
 	def __init__(self, parent, notebook, options):
-		Gtk.VBox.__init__(self, False, 3)
+		GObject.GObject.__init__(self, False, 3)
 
 		self._parent = parent
 		self._options = options
@@ -88,13 +88,13 @@ class PluginBase(Gtk.VBox):
 		if actions is not None:
 			# configure drag and drop features
 			self._main_object.drag_dest_set(
-										Gtk.DEST_DEFAULT_ALL,
+										Gtk.DestDefaults.ALL,
 										types,
 										actions
 									)
 
 			self._main_object.drag_source_set(
-										Gdk.BUTTON1_MASK | Gdk.BUTTON3_MASK,
+										Gdk.ModifierType.BUTTON1_MASK | Gdk.ModifierType.BUTTON3_MASK,
 										types,
 										actions
 									)
@@ -129,13 +129,13 @@ class PluginBase(Gtk.VBox):
 
 		# configure accelerators
 		group.set_accelerator('focus_opposite_object', keyval('Tab'), 0)
-		group.set_accelerator('next_tab', keyval('Tab'), Gdk.CONTROL_MASK)
-		group.set_accelerator('previous_tab', keyval('Tab'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
-		group.set_accelerator('duplicate_tab', keyval('t'), Gdk.CONTROL_MASK)
-		group.set_accelerator('close_tab', keyval('w'), Gdk.CONTROL_MASK)
-		group.set_accelerator('focus_command_entry', keyval('Down'), Gdk.MOD1_MASK)
-		group.set_accelerator('focus_left_object', keyval('Left'), Gdk.MOD1_MASK)
-		group.set_accelerator('focus_right_object', keyval('Right'), Gdk.MOD1_MASK)
+		group.set_accelerator('next_tab', keyval('Tab'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('previous_tab', keyval('Tab'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
+		group.set_accelerator('duplicate_tab', keyval('t'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('close_tab', keyval('w'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('focus_command_entry', keyval('Down'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('focus_left_object', keyval('Left'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('focus_right_object', keyval('Right'), Gdk.ModifierType.MOD1_MASK)
 
 		# add accelerator group to the list
 		self._accelerator_groups.append(group)
@@ -186,8 +186,8 @@ class PluginBase(Gtk.VBox):
 		self._parent._set_active_object(self)
 
 		# update states
-		self.update_state(Gtk.STATE_SELECTED)
-		self._parent.get_opposite_object(self).update_state(Gtk.STATE_NORMAL)
+		self.update_state(Gtk.StateType.SELECTED)
+		self._parent.get_opposite_object(self).update_state(Gtk.StateType.NORMAL)
 
 		# deactivate scheduled accelerators
 		deactivated = self._parent.accelerator_manager.deactivate_scheduled_groups(self)
@@ -257,20 +257,20 @@ class PluginBase(Gtk.VBox):
 		result = False
 
 		special_keys = (
-				Gtk.keysyms.Tab,
-				Gtk.keysyms.Left,
-				Gtk.keysyms.Right,
-				Gtk.keysyms.Up,
-				Gtk.keysyms.Down
+				Gdk.KEY_Tab,
+				Gdk.KEY_Left,
+				Gdk.KEY_Right,
+				Gdk.KEY_Up,
+				Gdk.KEY_Down
 			)
 
 		keyval = event.keyval
-		state = event.state
+		state = event.get_state()
 
 		# pressing Shift + Tab gives ISO_Left_Tab
 		# we need to override this behavior
-		if keyval == Gtk.keysyms.ISO_Left_Tab:
-			keyval = Gtk.keysyms.Tab
+		if keyval == Gdk.KEY_ISO_Left_Tab:
+			keyval = Gdk.KEY_Tab
 
 		if keyval in special_keys:
 			for group in self._accelerator_groups:

@@ -11,7 +11,7 @@ class Viewer:
 	"""Simple file viewer implementation"""
 
 	def __init__(self, path, provider, parent):
-		self._window = Gtk.Window(Gtk.WINDOW_TOPLEVEL)
+		self._window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
 
 		self.path = path
 		self._provider = provider
@@ -29,7 +29,7 @@ class Viewer:
 		# configure window
 		self._window.set_title(_('{0} - Viewer').format(os.path.basename(self.path)))
 		self._window.set_size_request(800, 600)
-		self._window.set_position(Gtk.WIN_POS_CENTER_ON_PARENT)
+		self._window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self._window.set_resizable(True)
 		self._window.set_skip_taskbar_hint(False)
 		self._window.set_wmclass('Sunflower', 'Sunflower')
@@ -82,8 +82,8 @@ class Viewer:
 		# create image page if needed
 		if self._mime_type.startswith('image/'):
 			container = Gtk.ScrolledWindow()
-			container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_AUTOMATIC)
-			container.set_shadow_type(Gtk.SHADOW_NONE)
+			container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+			container.set_shadow_type(Gtk.ShadowType.NONE)
 			container.set_border_width(5)
 			viewport = Gtk.Viewport()
 
@@ -111,9 +111,9 @@ class Viewer:
 			# show information and close window
 			dialog = Gtk.MessageDialog(
 									self._application,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_INFO,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.INFO,
+									Gtk.ButtonsType.OK,
 									_('Viewer is unable to display this file type.')
 								)
 			dialog.run()
@@ -137,22 +137,22 @@ class Viewer:
 	def _append_page(self, title, container):
 		"""Append new page to viewer"""
 		self._page_count += 1
-		self._notebook.append_page(container, Gtk.Label(title))
+		self._notebook.append_page(container, Gtk.Label(label=title))
 		container.grab_focus()
 
 	def _insert_page(self, title, container, position=0):
 		"""Insert page at desired position in viewer notebook"""
 		self._page_count += 1
-		self._notebook.insert_page(container, Gtk.Label(title), position)
+		self._notebook.insert_page(container, Gtk.Label(label=title), position)
 
 	def _create_text_page(self, title, content, position=0):
 		"""Create text page with specified data"""
 		container = Gtk.ScrolledWindow()
-		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_AUTOMATIC)
-		container.set_shadow_type(Gtk.SHADOW_IN)
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		container.set_shadow_type(Gtk.ShadowType.IN)
 		container.set_border_width(5)
 
-		font = pango.FontDescription('monospace 9')
+		font = Pango.FontDescription('monospace 9')
 		text_view = Gtk.TextView()
 		text_view.set_editable(False)
 		text_view.set_cursor_visible(True)
@@ -172,14 +172,14 @@ class Viewer:
 		"""Handle pressing keys in history list"""
 		result = False
 
-		if event.keyval == Gtk.keysyms.Escape:
+		if event.keyval == Gdk.KEY_Escape:
 			# close window on escape
 			self._window.destroy()
 			result = True
 
-		elif event.keyval in range(Gtk.keysyms._1, Gtk.keysyms._9 + 1):
+		elif event.keyval in range(Gdk.KEY__1, Gdk.KEY__9 + 1):
 			# switch to specified page
-			index = event.keyval - Gtk.keysyms._1
+			index = event.keyval - Gdk.KEY__1
 
 			if index <= self._notebook.get_n_pages() - 1:
 				self._notebook.set_current_page(index)

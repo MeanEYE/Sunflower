@@ -7,7 +7,7 @@ class Button(Gtk.ToolButton):
 	"""Bookmark toolbar button"""
 
 	def __init__(self, application, name, config):
-		Gtk.ToolButton.__init__(self)
+		GObject.GObject.__init__(self)
 
 		self._name = name
 		self._config = config
@@ -51,7 +51,7 @@ class ConfigurationDialog(Gtk.Dialog):
 	"""Configuration dialog for bookmark button"""
 
 	def __init__(self, application, name, config=None):
-		Gtk.Dialog.__init__(self, parent=application)
+		GObject.GObject.__init__(self, parent=application)
 
 		self._application = application
 
@@ -72,7 +72,7 @@ class ConfigurationDialog(Gtk.Dialog):
 		# create interface
 		vbox_name = Gtk.VBox(False, 0)
 
-		label_name = Gtk.Label(_('Name:'))
+		label_name = Gtk.Label(label=_('Name:'))
 		label_name.set_alignment(0, 0.5)
 
 		entry_name = Gtk.Entry()
@@ -82,7 +82,7 @@ class ConfigurationDialog(Gtk.Dialog):
 
 		vbox_path = Gtk.VBox(False, 0)
 
-		label_path = Gtk.Label(_('Path:'))
+		label_path = Gtk.Label(label=_('Path:'))
 		label_path.set_alignment(0, 0.5)
 
 		self._entry_path = Gtk.Entry()
@@ -98,10 +98,10 @@ class ConfigurationDialog(Gtk.Dialog):
 		button_save.set_can_default(True)
 		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
 
-		self.add_action_widget(button_cancel, Gtk.RESPONSE_CANCEL)
-		self.add_action_widget(button_save, Gtk.RESPONSE_ACCEPT)
+		self.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
+		self.add_action_widget(button_save, Gtk.ResponseType.ACCEPT)
 
-		self.set_default_response(Gtk.RESPONSE_ACCEPT)
+		self.set_default_response(Gtk.ResponseType.ACCEPT)
 
 		# pack interface
 		vbox_name.pack_start(label_name, False, False, 0)
@@ -125,7 +125,7 @@ class ConfigurationDialog(Gtk.Dialog):
 		# show dialog
 		code = self.run()
 
-		if code == Gtk.RESPONSE_ACCEPT:
+		if code == Gtk.ResponseType.ACCEPT:
 			config = {
 			    'path': self._entry_path.get_text(),
 			    'show_label': self._checkbox_show_label.get_active()

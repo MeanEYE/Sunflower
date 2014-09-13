@@ -15,8 +15,8 @@ class CommandsOptions(SettingsPage):
 
 		# create list box
 		container = Gtk.ScrolledWindow()
-		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
-		container.set_shadow_type(Gtk.SHADOW_IN)
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+		container.set_shadow_type(Gtk.ShadowType.IN)
 
 		self._commands = Gtk.ListStore(str, str)
 
@@ -27,12 +27,12 @@ class CommandsOptions(SettingsPage):
 		# create and configure cell renderers
 		cell_title = Gtk.CellRendererText()
 		cell_title.set_property('editable', True)
-		cell_title.set_property('mode', Gtk.CELL_RENDERER_MODE_EDITABLE)
+		cell_title.set_property('mode', Gtk.CellRendererMode.EDITABLE)
 		cell_title.connect('edited', self._edited_command, 0)
 
 		cell_command = Gtk.CellRendererText()
 		cell_command.set_property('editable', True)
-		cell_command.set_property('mode', Gtk.CELL_RENDERER_MODE_EDITABLE)
+		cell_command.set_property('mode', Gtk.CellRendererMode.EDITABLE)
 		cell_command.connect('edited', self._edited_command, 1)
 
 		# create and pack columns

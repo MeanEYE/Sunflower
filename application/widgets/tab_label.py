@@ -11,7 +11,7 @@ class TabLabel:
 		self._parent = parent
 
 		# initialize tab events
-		self._container.add_events(Gdk.BUTTON_RELEASE_MASK)
+		self._container.add_events(Gdk.EventMask.BUTTON_RELEASE_MASK)
 		self._container.connect('button-release-event', self._button_release_event)
 		self._container.set_visible_window(False)
 
@@ -21,7 +21,7 @@ class TabLabel:
 		
 		self._label = Gtk.Label()
 		self._label.set_max_width_chars(20)
-		self._label.set_ellipsize(pango.ELLIPSIZE_END)
+		self._label.set_ellipsize(Pango.EllipsizeMode.END)
 
 		self._lock_image = Gtk.Image()
 		self._lock_image.set_property('no-show-all', True)
@@ -39,7 +39,7 @@ class TabLabel:
 		self._button = Gtk.Button()
 		self._button.set_focus_on_click(False)
 		self._button.add(image)
-		self._button.set_relief(Gtk.RELIEF_NONE)
+		self._button.set_relief(Gtk.ReliefStyle.NONE)
 		self._button.modify_style(style)
 		self._button.connect('clicked', self._close_tab)
 		self._button.set_property('no-show-all', True)

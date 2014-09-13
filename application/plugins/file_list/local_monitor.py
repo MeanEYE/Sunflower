@@ -9,18 +9,18 @@ class LocalMonitor(Monitor):
 
 	# signals translation table
 	_signal_table = {
-			gio.FILE_MONITOR_EVENT_CHANGED: MonitorSignals.CHANGED,
-			gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT: MonitorSignals.CHANGES_DONE,
-			gio.FILE_MONITOR_EVENT_DELETED: MonitorSignals.DELETED,
-			gio.FILE_MONITOR_EVENT_CREATED: MonitorSignals.CREATED,
-			gio.FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED: MonitorSignals.ATTRIBUTE_CHANGED,
-			gio.FILE_MONITOR_EVENT_PRE_UNMOUNT: MonitorSignals.PRE_UNMOUNT,
-			gio.FILE_MONITOR_EVENT_UNMOUNTED: MonitorSignals.UNMOUNTED,
+			Gio.FileMonitorEvent.CHANGED: MonitorSignals.CHANGED,
+			Gio.FileMonitorEvent.CHANGES_DONE_HINT: MonitorSignals.CHANGES_DONE,
+			Gio.FileMonitorEvent.DELETED: MonitorSignals.DELETED,
+			Gio.FileMonitorEvent.CREATED: MonitorSignals.CREATED,
+			Gio.FileMonitorEvent.ATTRIBUTE_CHANGED: MonitorSignals.ATTRIBUTE_CHANGED,
+			Gio.FileMonitorEvent.PRE_UNMOUNT: MonitorSignals.PRE_UNMOUNT,
+			Gio.FileMonitorEvent.UNMOUNTED: MonitorSignals.UNMOUNTED,
 		}
 
 	# old versions of GIO don't support this signal
-	if cmp(gio.pygio_version, (2, 20, 0)) == 1:
-		_signal_table[gio.FILE_MONITOR_EVENT_MOVED] = MonitorSignals.MOVED
+	if cmp(Gio.pygio_version, (2, 20, 0)) == 1:
+		_signal_table[Gio.FileMonitorEvent.MOVED] = MonitorSignals.MOVED
 
 
 	def __init__(self, provider, path):
@@ -30,12 +30,12 @@ class LocalMonitor(Monitor):
 			try:
 				# create file/directory monitor
 				if os.path.isdir(self._path):
-					self._monitor = gio.File(path).monitor_directory()
+					self._monitor = Gio.File(path).monitor_directory()
 
 				else:
-					self._monitor = gio.File(path).monitor_file()
+					self._monitor = Gio.File(path).monitor_file()
 
-			except gio.Error:
+			except Gio.Error:
 				raise MonitorError('Error creating monitor')
 
 			else:

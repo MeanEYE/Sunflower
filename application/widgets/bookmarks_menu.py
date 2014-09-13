@@ -72,14 +72,14 @@ class BookmarksMenu:
 
 	def __handle_key_press(self, widget, event, data=None):
 		"""Handle key presses on menu"""
-		if event.keyval == Gtk.keysyms.Shift_L:
+		if event.keyval == Gdk.KEY_Shift_L:
 			self._open_in_new_tab = True
 
 		return False
 
 	def __handle_key_release(self, widget, event, data=None):
 		"""Handle key releases on menu"""
-		if event.keyval == Gtk.keysyms.Shift_L:
+		if event.keyval == Gdk.KEY_Shift_L:
 			self._open_in_new_tab = False
 
 		return False

@@ -3,7 +3,7 @@ import gi
 import sys
 
 try:
-	# try to from import gtk
+	# try to from from gi.repository import Gtk
 	gi.require_version('Gtk', '3.0')
 	from gi.repository import Gdk
 
@@ -17,12 +17,8 @@ application_path = os.path.abspath(os.path.dirname(sys.argv[0]))
 if application_path not in sys.path:
 	sys.path.insert(1, application_path)
 
-# initialize threads
-Gdk.threads_init()
+# construct main application object
+from gui.main_window import MainWindow
 
-with gtk.gdk.lock:
-	# construct main application object
-	from gui.main_window import MainWindow
-
-	application = MainWindow()
-	application.run()
+application = MainWindow()
+application.run()

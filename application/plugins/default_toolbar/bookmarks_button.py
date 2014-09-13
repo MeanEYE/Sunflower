@@ -5,7 +5,7 @@ class Button(Gtk.ToolButton):
 	"""Toolbar control used to popup bookmarks menu"""
 
 	def __init__(self, application, name, config):
-		Gtk.ToolButton.__init__(self)
+		GObject.GObject.__init__(self)
 
 		# store parameters locally
 		self._name = name

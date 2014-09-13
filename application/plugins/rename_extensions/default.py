@@ -49,7 +49,7 @@ class DefaultRename(RenameExtension):
 		vbox_template = Gtk.VBox(False, 0)
 		hbox_template = Gtk.HBox(False, 2)
 
-		label_template = Gtk.Label(_('Template:'))
+		label_template = Gtk.Label(label=_('Template:'))
 		label_template.set_alignment(0, 0.5)
 
 		self._entry_template = Gtk.Entry()
@@ -106,21 +106,21 @@ class DefaultRename(RenameExtension):
 		table_counter.set_border_width(5)
 		table_counter.set_col_spacings(5)
 
-		label_start = Gtk.Label(_('Start:'))
+		label_start = Gtk.Label(label=_('Start:'))
 		label_start.set_alignment(0, 0.5)
 
 		adjustment = Gtk.Adjustment(0, 0, 10**10, 1, 10)
 		self._entry_start = Gtk.SpinButton(adjustment, 0, 0)
 		self._entry_start.connect('value-changed', self.__counter_changed)
 
-		label_step = Gtk.Label(_('Step:'))
+		label_step = Gtk.Label(label=_('Step:'))
 		label_step.set_alignment(0, 0.5)
 
 		adjustment = Gtk.Adjustment(1, 1, 10**10, 1, 10)
 		self._entry_step = Gtk.SpinButton(adjustment, 0, 0)
 		self._entry_step.connect('value-changed', self.__counter_changed)
 
-		label_digits = Gtk.Label(_('Digits:'))
+		label_digits = Gtk.Label(label=_('Digits:'))
 		label_digits.set_alignment(0, 0.5)
 
 		adjustment = Gtk.Adjustment(1, 1, 20, 1, 5)
@@ -133,11 +133,11 @@ class DefaultRename(RenameExtension):
 
 		# pack interface
 		table_counter.attach(label_start, 0, 1, 0, 1)
-		table_counter.attach(self._entry_start, 0, 1, 1, 2, xoptions=Gtk.EXPAND|Gtk.FILL)
+		table_counter.attach(self._entry_start, 0, 1, 1, 2, xoptions=Gtk.AttachOptions.EXPAND|Gtk.AttachOptions.FILL)
 		table_counter.attach(label_step, 1, 2, 0, 1)
-		table_counter.attach(self._entry_step, 1, 2, 1, 2, xoptions=Gtk.EXPAND|Gtk.FILL)
+		table_counter.attach(self._entry_step, 1, 2, 1, 2, xoptions=Gtk.AttachOptions.EXPAND|Gtk.AttachOptions.FILL)
 		table_counter.attach(label_digits, 2, 3, 0, 1)
-		table_counter.attach(self._entry_digits, 2, 3, 1, 2, xoptions=Gtk.EXPAND|Gtk.FILL)
+		table_counter.attach(self._entry_digits, 2, 3, 1, 2, xoptions=Gtk.AttachOptions.EXPAND|Gtk.AttachOptions.FILL)
 
 		frame_counter.add(table_counter)
 
@@ -224,7 +224,7 @@ class DefaultRename(RenameExtension):
 			dialog = InputRangeDialog(self._parent._application, text)
 			code, range = dialog.get_response()
 
-			if code == Gtk.RESPONSE_OK:
+			if code == Gtk.ResponseType.OK:
 				# user confirmed range selection, proceed
 
 				if len(range) == 2:
@@ -248,9 +248,9 @@ class DefaultRename(RenameExtension):
 			# list is empty, notify user
 			dialog = Gtk.MessageDialog(
 									self._parent,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_INFO,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.INFO,
+									Gtk.ButtonsType.OK,
 									_(
 										'Item list is empty. Unable to get '
 										'item for range selection!'

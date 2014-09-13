@@ -24,7 +24,7 @@ class DisplayOptions(SettingsPage):
 		notebook = Gtk.Notebook()
 
 		# main window options
-		label_main_window = Gtk.Label(_('Main window'))
+		label_main_window = Gtk.Label(label=_('Main window'))
 		vbox_main_window = Gtk.VBox(False, 0)
 		vbox_main_window.set_border_width(5)
 
@@ -41,7 +41,7 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_show_command_entry.connect('toggled', self._parent.enable_save)
 
 		# tab options
-		label_tabs = Gtk.Label(_('Tabs'))
+		label_tabs = Gtk.Label(label=_('Tabs'))
 		vbox_tabs = Gtk.VBox(False, 0)
 		vbox_tabs.set_border_width(5)
 
@@ -66,7 +66,7 @@ class DisplayOptions(SettingsPage):
 		table.set_col_spacing(0, 5)
 		table.set_row_spacings(5)
 
-		label_status_bar = Gtk.Label(_('Show status bar:'))
+		label_status_bar = Gtk.Label(label=_('Show status bar:'))
 		label_status_bar.set_alignment(0, 0.5)
 
 		list_status_bar = Gtk.ListStore(str, int)
@@ -76,13 +76,13 @@ class DisplayOptions(SettingsPage):
 
 		cell_status_bar = Gtk.CellRendererText()
 
-		self._combobox_status_bar = Gtk.ComboBox(list_status_bar)
+		self._combobox_status_bar = Gtk.ComboBox(model=list_status_bar)
 		self._combobox_status_bar.connect('changed', self._parent.enable_save)
-		self._combobox_status_bar.pack_start(cell_status_bar)
+		self._combobox_status_bar.pack_start(cell_status_bar, True)
 		self._combobox_status_bar.add_attribute(cell_status_bar, 'text', 0)
 
 		# expand tabs
-		label_expand_tab = Gtk.Label(_('Expanded tabs:'))
+		label_expand_tab = Gtk.Label(label=_('Expanded tabs:'))
 		label_expand_tab.set_alignment(0, 0.5)
 
 		list_expand_tab = Gtk.ListStore(str, int)
@@ -92,13 +92,13 @@ class DisplayOptions(SettingsPage):
 
 		cell_expand_tab = Gtk.CellRendererText()
 
-		self._combobox_expand_tabs = Gtk.ComboBox(list_expand_tab)
+		self._combobox_expand_tabs = Gtk.ComboBox(model=list_expand_tab)
 		self._combobox_expand_tabs.connect('changed', self._parent.enable_save)
-		self._combobox_expand_tabs.pack_start(cell_expand_tab)
+		self._combobox_expand_tabs.pack_start(cell_expand_tab, True)
 		self._combobox_expand_tabs.add_attribute(cell_expand_tab, 'text', 0)
 
 		# other options
-		label_other = Gtk.Label(_('Other'))
+		label_other = Gtk.Label(label=_('Other'))
 		vbox_other = Gtk.VBox(False, 0)
 		vbox_other.set_border_width(5)
 
@@ -110,7 +110,7 @@ class DisplayOptions(SettingsPage):
 
 		# size format
 		hbox_size_format = Gtk.HBox(False, 5)
-		label_size_format = Gtk.Label(_('Size format:'))
+		label_size_format = Gtk.Label(label=_('Size format:'))
 		label_size_format.set_alignment(0, 0.5)
 
 		list_size_format = Gtk.ListStore(str, int)
@@ -120,20 +120,20 @@ class DisplayOptions(SettingsPage):
 
 		cell_size_format = Gtk.CellRendererText()
 
-		self._combobox_size_format = Gtk.ComboBox(list_size_format)
+		self._combobox_size_format = Gtk.ComboBox(model=list_size_format)
 		self._combobox_size_format.connect('changed', self._parent.enable_save)
-		self._combobox_size_format.pack_start(cell_size_format)
+		self._combobox_size_format.pack_start(cell_size_format, True)
 		self._combobox_size_format.add_attribute(cell_size_format, 'markup', 0)
 
 		# pack ui
 		hbox_size_format.pack_start(label_size_format, False, False, 0)
 		hbox_size_format.pack_start(self._combobox_size_format, False, False, 0)
 
-		table.attach(label_status_bar, 0, 1, 0, 1, xoptions=Gtk.FILL)
-		table.attach(self._combobox_status_bar, 1, 2, 0, 1, xoptions=Gtk.FILL)
+		table.attach(label_status_bar, 0, 1, 0, 1, xoptions=Gtk.AttachOptions.FILL)
+		table.attach(self._combobox_status_bar, 1, 2, 0, 1, xoptions=Gtk.AttachOptions.FILL)
 
-		table.attach(label_expand_tab, 0, 1, 1, 2, xoptions=Gtk.FILL)
-		table.attach(self._combobox_expand_tabs, 1, 2, 1, 2, xoptions=Gtk.FILL)
+		table.attach(label_expand_tab, 0, 1, 1, 2, xoptions=Gtk.AttachOptions.FILL)
+		table.attach(self._combobox_expand_tabs, 1, 2, 1, 2, xoptions=Gtk.AttachOptions.FILL)
 
 		vbox_main_window.pack_start(self._checkbox_hide_on_close, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_multiple_instances, False, False, 0)

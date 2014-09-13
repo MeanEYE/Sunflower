@@ -28,7 +28,7 @@ class AudioMetadataRename(RenameExtension):
 				}
 
 		# create template entry
-		label_template = Gtk.Label(_('Template:'))
+		label_template = Gtk.Label(label=_('Template:'))
 		label_template.set_alignment(0, 0.5)
 
 		self._entry_template = Gtk.Entry()
@@ -36,7 +36,7 @@ class AudioMetadataRename(RenameExtension):
 		self._entry_template.connect('changed', self._update_parent_list)
 
 		# create replace entry
-		label_replace1 = Gtk.Label(_('Replace:'))
+		label_replace1 = Gtk.Label(label=_('Replace:'))
 		label_replace1.set_alignment(0, 0.5)
 
 		self._entry_replace = Gtk.Entry()
@@ -44,7 +44,7 @@ class AudioMetadataRename(RenameExtension):
 		self._entry_replace.connect('changed', self._update_parent_list)
 
 		# create replace combo boxes
-		label_replace2 = Gtk.Label(_('With:'))
+		label_replace2 = Gtk.Label(label=_('With:'))
 		label_replace2.set_alignment(0, 0.5)
 
 		self._combobox_replace = Gtk.combo_box_entry_new_text()
@@ -74,7 +74,7 @@ class AudioMetadataRename(RenameExtension):
 		self._checkbox_active.set_sensitive(USE_MUTAGEN)
 
 		# create warning label
-		label_warning = Gtk.Label(_(
+		label_warning = Gtk.Label(label=_(
 							'In order to use this extension you need <b>mutagen</b> module installed!'
 						))
 		label_warning.set_use_markup(True)
@@ -87,9 +87,9 @@ class AudioMetadataRename(RenameExtension):
 		self.vbox.remove(self._checkbox_active)
 
 		table_replace.attach(label_replace1, 0, 1, 0, 1)
-		table_replace.attach(self._entry_replace, 1, 2, 0, 1, xoptions=Gtk.FILL)
+		table_replace.attach(self._entry_replace, 1, 2, 0, 1, xoptions=Gtk.AttachOptions.FILL)
 		table_replace.attach(label_replace2, 0, 1, 1, 2)
-		table_replace.attach(self._combobox_replace, 1, 2, 1, 2, xoptions=Gtk.FILL)
+		table_replace.attach(self._combobox_replace, 1, 2, 1, 2, xoptions=Gtk.AttachOptions.FILL)
 
 		frame_replace.add(table_replace)
 

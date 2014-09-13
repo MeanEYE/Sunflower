@@ -15,13 +15,13 @@ class ViewEditOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'view_and_edit', _('View & Edit'))
 
 		# viewer options
-		frame_view = Gtk.Frame(_('View'))
+		frame_view = Gtk.Frame(label=_('View'))
 
-		label_not_implemented = Gtk.Label('This option is not implemented yet.')
+		label_not_implemented = Gtk.Label(label='This option is not implemented yet.')
 		label_not_implemented.set_sensitive(False)
 
 		# editor options
-		frame_edit = Gtk.Frame(_('Edit'))
+		frame_edit = Gtk.Frame(label=_('Edit'))
 
 		vbox_edit = Gtk.VBox(False, 0)
 		vbox_edit.set_border_width(5)
@@ -30,7 +30,7 @@ class ViewEditOptions(SettingsPage):
 		self._radio_application = Gtk.RadioButton(label=_('Use installed application'))
 		self._radio_application.connect('toggled', self._parent.enable_save)
 
-		align_application = Gtk.Alignment(xscale=1)
+		align_application = Gtk.Alignment.new(0, 0, 1, 0)
 		align_application.set_padding(0, 10, 15, 15)
 		vbox_application = Gtk.VBox(False, 0)
 		vbox_application.set_border_width(5)
@@ -52,12 +52,12 @@ class ViewEditOptions(SettingsPage):
 		self._radio_external = Gtk.RadioButton(group=self._radio_application, label=_('Use external command'))
 		self._radio_external.connect('toggled', self._parent.enable_save)
 
-		align_external = Gtk.Alignment(xscale=1)
+		align_external = Gtk.Alignment.new(0, 0, 1, 0)
 		align_external.set_padding(0, 10, 15, 15)
 		vbox_external = Gtk.VBox(False, 0)
 		vbox_external.set_border_width(5)
 
-		label_editor = Gtk.Label(_('Command line:'))
+		label_editor = Gtk.Label(label=_('Command line:'))
 		label_editor.set_alignment(0, 0.5)
 		label_editor.set_use_markup(True)
 		self._entry_editor = Gtk.Entry()

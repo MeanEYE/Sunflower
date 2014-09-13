@@ -17,17 +17,17 @@ class SizeFindFiles(FindExtension):
 		self._adjustment_max = Gtk.Adjustment(value=50.0, lower=0.0, upper=100000.0, step_incr=0.1, page_incr=10.0)
 		self._adjustment_min = Gtk.Adjustment(value=0.0, lower=0.0, upper=10.0, step_incr=0.1, page_incr=10.0)
 
-		label = Gtk.Label('<b>{0}</b>'.format(_('Match file size')))
+		label = Gtk.Label(label='<b>{0}</b>'.format(_('Match file size')))
 		label.set_alignment(0.0, 0.5)
 		label.set_use_markup(True)
 
-		label_min = Gtk.Label(_('Minimum:'))
+		label_min = Gtk.Label(label=_('Minimum:'))
 		label_min.set_alignment(0, 0.5)
-		label_min_unit = Gtk.Label(_('MB'))
+		label_min_unit = Gtk.Label(label=_('MB'))
 
-		label_max = Gtk.Label(_('Maximum:'))
+		label_max = Gtk.Label(label=_('Maximum:'))
 		label_max.set_alignment(0, 0.5)
-		label_max_unit = Gtk.Label(_('MB'))
+		label_max_unit = Gtk.Label(label=_('MB'))
 
 		self._entry_max = Gtk.SpinButton(adjustment=self._adjustment_max, digits=2)
 		self._entry_min = Gtk.SpinButton(adjustment=self._adjustment_min, digits=2)
@@ -37,15 +37,15 @@ class SizeFindFiles(FindExtension):
 		self._entry_min.connect('activate', lambda entry: self._entry_max.grab_focus())
 
 		# pack interface
-		table.attach(label, 0, 3, 0, 1, xoptions=Gtk.FILL)
+		table.attach(label, 0, 3, 0, 1, xoptions=Gtk.AttachOptions.FILL)
 
-		table.attach(label_min, 0, 1, 1, 2, xoptions=Gtk.FILL)
-		table.attach(self._entry_min, 1, 2, 1, 2, xoptions=Gtk.FILL)
-		table.attach(label_min_unit, 2, 3, 1, 2, xoptions=Gtk.FILL)
+		table.attach(label_min, 0, 1, 1, 2, xoptions=Gtk.AttachOptions.FILL)
+		table.attach(self._entry_min, 1, 2, 1, 2, xoptions=Gtk.AttachOptions.FILL)
+		table.attach(label_min_unit, 2, 3, 1, 2, xoptions=Gtk.AttachOptions.FILL)
 
-		table.attach(label_max, 0, 1, 2, 3, xoptions=Gtk.FILL)
-		table.attach(self._entry_max, 1, 2, 2, 3, xoptions=Gtk.FILL)
-		table.attach(label_max_unit, 2, 3, 2, 3, xoptions=Gtk.FILL)
+		table.attach(label_max, 0, 1, 2, 3, xoptions=Gtk.AttachOptions.FILL)
+		table.attach(self._entry_max, 1, 2, 2, 3, xoptions=Gtk.AttachOptions.FILL)
+		table.attach(label_max_unit, 2, 3, 2, 3, xoptions=Gtk.AttachOptions.FILL)
 
 		self.vbox.pack_start(table, False, False, 0)
 

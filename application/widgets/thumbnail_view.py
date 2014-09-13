@@ -21,7 +21,7 @@ class ThumbnailView(Gtk.Window):
 	"""
 
 	def __init__(self, parent, size=None):
-		Gtk.Window.__init__(self, Gtk.WINDOW_POPUP)
+		GObject.GObject.__init__(self, Gtk.WindowType.POPUP)
 
 		self.set_keep_above(True)
 		self.set_resizable(False)
@@ -64,7 +64,7 @@ class ThumbnailView(Gtk.Window):
 		# check for existing thumbnail
 		thumbnail_file = self._factory.lookup(uri, 0)
 		if thumbnail_file and os.path.isfile(thumbnail_file):
-			result = Gdk.pixbuf_new_from_file(thumbnail_file)
+			result = GdkPixbuf.Pixbuf.new_from_file(thumbnail_file)
 
 		# create thumbnail
 		elif self.can_have_thumbnail(uri):

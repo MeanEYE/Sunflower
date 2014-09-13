@@ -63,7 +63,7 @@ class LocalProvider(Provider):
 	def trash_path(self, path, relative_to=None):
 		"""Move path to the trash"""
 		real_path = self._real_path(path, relative_to)
-		tmp = gio.File(real_path)
+		tmp = Gio.File(real_path)
 
 		try:
 			tmp.trash()

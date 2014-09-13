@@ -44,7 +44,7 @@ class InputDialog:
 
 		# create interface
 		vbox = Gtk.VBox(False, 0)
-		self._label = Gtk.Label('Label')
+		self._label = Gtk.Label(label='Label')
 		self._label.set_alignment(0, 0.5)
 
 		self._entry = Gtk.Entry()
@@ -62,9 +62,9 @@ class InputDialog:
 
 		self._container.pack_start(vbox, False, False, 0)
 
-		self._dialog.add_action_widget(button_cancel, Gtk.RESPONSE_CANCEL)
+		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
 		self._dialog.action_area.pack_end(button_ok, False, False, 0)
-		self._dialog.set_default_response(Gtk.RESPONSE_OK)
+		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
 		self._dialog.vbox.pack_start(self._container, True, True, 0)
 		self._dialog.show_all()
@@ -72,7 +72,7 @@ class InputDialog:
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""
 		if self._entry.get_text() != '':
-			self._dialog.response(Gtk.RESPONSE_OK)
+			self._dialog.response(Gtk.ResponseType.OK)
 
 	def set_title(self, title_text):
 		"""Set dialog title"""
@@ -121,7 +121,7 @@ class LinkDialog(InputDialog):
 		vbox_original_path = Gtk.VBox(False, 0)
 		hbox_original_path = Gtk.HBox(False, 5)
 
-		label_original_path = Gtk.Label(_('Original path:'))
+		label_original_path = Gtk.Label(label=_('Original path:'))
 		label_original_path.set_alignment(0, 0.5)
 		self._entry_original_path = Gtk.Entry()
 
@@ -150,17 +150,17 @@ class LinkDialog(InputDialog):
 		dialog = Gtk.FileChooserDialog(
 							title=_('Select original path'),
 							parent=self._application,
-							action=Gtk.FILE_CHOOSER_ACTION_OPEN,
+							action=Gtk.FileChooserAction.OPEN,
 							buttons=(
 								Gtk.STOCK_CANCEL,
-								Gtk.RESPONSE_REJECT,
+								Gtk.ResponseType.REJECT,
 								Gtk.STOCK_OK,
-								Gtk.RESPONSE_ACCEPT
+								Gtk.ResponseType.ACCEPT
 							)
 						)
 		response = dialog.run()
 
-		if response == Gtk.RESPONSE_ACCEPT:
+		if response == Gtk.ResponseType.ACCEPT:
 			self._entry_original_path.set_text(dialog.get_filename())
 
 			# if link name is empty, add original path name
@@ -218,15 +218,15 @@ class CreateDialog(InputDialog):
 		table = Gtk.Table(4, 4, False)
 
 		# create widgets
-		label = Gtk.Label(_('User:'))
+		label = Gtk.Label(label=_('User:'))
 		label.set_alignment(0, 0.5)
 		table.attach(label, 0, 1, 0, 1)
 
-		label = Gtk.Label(_('Group:'))
+		label = Gtk.Label(label=_('Group:'))
 		label.set_alignment(0, 0.5)
 		table.attach(label, 0, 1, 1, 2)
 
-		label = Gtk.Label(_('Others:'))
+		label = Gtk.Label(label=_('Others:'))
 		label.set_alignment(0, 0.5)
 		table.attach(label, 0, 1, 2, 3)
 
@@ -270,7 +270,7 @@ class CreateDialog(InputDialog):
 		table.attach(self._permission_others_execute, 3, 4, 2, 3)
 
 		# octal representation
-		label = Gtk.Label(_('Octal:'))
+		label = Gtk.Label(label=_('Octal:'))
 		label.set_alignment(0, 0.5)
 		table.attach(label, 0, 1, 3, 4)
 
@@ -289,7 +289,7 @@ class CreateDialog(InputDialog):
 		button_save.connect('clicked', self._save_configuration)
 		button_save.set_tooltip_text(_('Save as default configuration'))
 
-		align_save = Gtk.Alignment()
+		align_save = Gtk.Alignment.new()
 		align_save.add(button_save)
 
 		# pack interface
@@ -376,7 +376,7 @@ class PasswordDialog(InputDialog):
 
 		self._label.set_text(_('Password:'))
 
-		label_confirm = Gtk.Label(_('Confirm:'))
+		label_confirm = Gtk.Label(label=_('Confirm:'))
 		label_confirm.set_alignment(0, 0.5)
 		self._entry_confirm = Gtk.Entry()
 
@@ -438,7 +438,7 @@ class FileCreateDialog(CreateDialog):
 
 		# create template list
 		vbox_templates = Gtk.VBox(False, 0)
-		label_templates = Gtk.Label(_('Template:'))
+		label_templates = Gtk.Label(label=_('Template:'))
 		label_templates.set_alignment(0, 0.5)
 
 		self._templates = Gtk.ListStore(str, str, str)
@@ -596,7 +596,7 @@ class CopyDialog:
 		# additional options
 		separator_file_type = Gtk.HSeparator()
 
-		label_type = Gtk.Label(_('Only files of this type:'))
+		label_type = Gtk.Label(label=_('Only files of this type:'))
 		label_type.set_alignment(0, 0.5)
 
 		self.entry_type = Gtk.Entry()
@@ -606,8 +606,8 @@ class CopyDialog:
 		# detailed item list
 		separator_details = Gtk.HSeparator()
 		list_container = Gtk.ScrolledWindow()
-		list_container.set_policy(Gtk.POLICY_NEVER, Gtk.POLICY_AUTOMATIC)
-		list_container.set_shadow_type(Gtk.SHADOW_IN)
+		list_container.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+		list_container.set_shadow_type(Gtk.ShadowType.IN)
 
 		expand_details = Gtk.Expander()
 		expand_details.set_label(_('Affected item list'))
@@ -638,7 +638,7 @@ class CopyDialog:
 		self.checkbox_timestamp = Gtk.CheckButton(_('Set date and time on destination'))
 		self.checkbox_silent = Gtk.CheckButton(_('Silent mode'))
 
-		align_silent = Gtk.Alignment()
+		align_silent = Gtk.Alignment.new()
 		align_silent.set_padding(0, 0, 15, 15)
 		vbox_silent = Gtk.VBox(False, 0)
 		vbox_silent.set_sensitive(False)
@@ -683,7 +683,7 @@ class CopyDialog:
 		self._update_label()
 		self._load_configuration()
 
-		self._dialog.set_default_response(Gtk.RESPONSE_OK)
+		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
 		# show all widgets
 		self._dialog.show_all()
@@ -777,9 +777,9 @@ class CopyDialog:
 		if not (provider_set_owner and provider_set_mode and provider_set_timestamp):
 			dialog = Gtk.MessageDialog(
 									self._dialog,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_INFO,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.INFO,
+									Gtk.ButtonsType.OK,
 									_(
 										'Only options supported by file '
 										'system providers were saved.'
@@ -821,7 +821,7 @@ class CopyDialog:
 		"""Create action buttons"""
 		button_cancel = Gtk.Button(_('Cancel'))
 		button_copy = Gtk.Button(_('Copy'))
-		button_copy.set_flags(Gtk.CAN_DEFAULT)
+		button_copy.set_can_default(True)
 
 		image_save = Gtk.Image()
 		image_save.set_from_stock(Gtk.STOCK_SAVE, Gtk.IconSize.BUTTON)
@@ -830,21 +830,21 @@ class CopyDialog:
 		button_save.connect('clicked', self._save_configuration)
 		button_save.set_tooltip_text(_('Save as default configuration'))
 
-		align_save = Gtk.Alignment()
+		align_save = Gtk.Alignment.new()
 		align_save.add(button_save)
 
 		self._dialog.action_area.pack_start(align_save, True, True, 0)
 		self._dialog.action_area.set_child_secondary(align_save, True)
 
-		self._dialog.add_action_widget(button_cancel, Gtk.RESPONSE_CANCEL)
-		self._dialog.add_action_widget(button_copy, Gtk.RESPONSE_OK)
+		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
+		self._dialog.add_action_widget(button_copy, Gtk.ResponseType.OK)
 
 		self._dialog.action_area.set_homogeneous(False)
 
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""
 		if self.entry_destination.get_text() != '':
-			self._dialog.response(Gtk.RESPONSE_OK)
+			self._dialog.response(Gtk.ResponseType.OK)
 
 	def _update_label(self, widget=None, data=None):
 		"""Update label based on file type and selection"""
@@ -923,10 +923,10 @@ class MoveDialog(CopyDialog):
 		"""Create action buttons"""
 		button_cancel = Gtk.Button(_('Cancel'))
 		button_move = Gtk.Button(_('Move'))
-		button_move.set_flags(Gtk.CAN_DEFAULT)
+		button_move.set_can_default(True)
 
-		self._dialog.add_action_widget(button_cancel, Gtk.RESPONSE_CANCEL)
-		self._dialog.add_action_widget(button_move, Gtk.RESPONSE_OK)
+		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
+		self._dialog.add_action_widget(button_move, Gtk.ResponseType.OK)
 
 
 class RenameDialog(InputDialog):
@@ -1048,8 +1048,8 @@ class OverwriteDialog:
 		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
 		button_skip = Gtk.Button(label=_('Skip'))
 
-		self._dialog.add_action_widget(button_cancel, Gtk.RESPONSE_CANCEL)
-		self._dialog.add_action_widget(button_skip, Gtk.RESPONSE_NO)
+		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
+		self._dialog.add_action_widget(button_skip, Gtk.ResponseType.NO)
 
 	def _apply_to_all_toggled(self, widget, data=None):
 		"""Event called upon clicking on "apply to all" check box"""
@@ -1163,9 +1163,9 @@ class OverwriteFileDialog(OverwriteDialog):
 		self._button_replace.set_can_default(True)
 
 		OverwriteDialog._create_buttons(self)
-		self._dialog.add_action_widget(self._button_replace, Gtk.RESPONSE_YES)
+		self._dialog.add_action_widget(self._button_replace, Gtk.ResponseType.YES)
 
-		self._dialog.set_default_response(Gtk.RESPONSE_YES)
+		self._dialog.set_default_response(Gtk.ResponseType.YES)
 
 	def _rename_button(self, entry):
 		if entry.get_text() == self._rename_value:
@@ -1203,9 +1203,9 @@ class OverwriteDirectoryDialog(OverwriteDialog):
 		button_merge.set_can_default(True)
 
 		OverwriteDialog._create_buttons(self)
-		self._dialog.add_action_widget(button_merge, Gtk.RESPONSE_YES)
+		self._dialog.add_action_widget(button_merge, Gtk.ResponseType.YES)
 
-		self._dialog.set_default_response(Gtk.RESPONSE_YES)
+		self._dialog.set_default_response(Gtk.ResponseType.YES)
 
 	def set_title_element(self, element):
 		"""Set title label with appropriate formatting"""
@@ -1248,7 +1248,7 @@ class AddBookmarkDialog:
 		vbox.set_border_width(5)
 
 		# bookmark name
-		label_name = Gtk.Label(_('Name:'))
+		label_name = Gtk.Label(label=_('Name:'))
 		label_name.set_alignment(0, 0.5)
 		self._entry_name = Gtk.Entry()
 		self._entry_name.connect('activate', self._confirm_entry)
@@ -1256,7 +1256,7 @@ class AddBookmarkDialog:
 		vbox_name = Gtk.VBox(False, 0)
 
 		# bookmark path
-		label_path = Gtk.Label(_('Location:'))
+		label_path = Gtk.Label(label=_('Location:'))
 		label_path.set_alignment(0, 0.5)
 		self._entry_path = Gtk.Entry()
 		self._entry_path.set_text(path)
@@ -1271,9 +1271,9 @@ class AddBookmarkDialog:
 
 		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
 
-		self._dialog.add_action_widget(button_cancel, Gtk.RESPONSE_CANCEL)
+		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
 		self._dialog.action_area.pack_end(button_ok, False, False, 0)
-		self._dialog.set_default_response(Gtk.RESPONSE_OK)
+		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
 		# pack interface
 		vbox_name.pack_start(label_name, False, False, 0)
@@ -1292,7 +1292,7 @@ class AddBookmarkDialog:
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""
 		if self._entry_name.get_text() != '':
-			self._dialog.response(Gtk.RESPONSE_OK)
+			self._dialog.response(Gtk.ResponseType.OK)
 
 	def get_response(self):
 		"""Return value and self-destruct
@@ -1359,12 +1359,12 @@ class OperationError:
 		button_skip = Gtk.Button(label=_('Skip'))
 		button_retry = Gtk.Button(label=_('Retry'))
 
-		self._dialog.add_action_widget(button_cancel, Gtk.RESPONSE_CANCEL)
-		self._dialog.add_action_widget(button_skip, Gtk.RESPONSE_NO)
-		self._dialog.add_action_widget(button_retry, Gtk.RESPONSE_YES)
+		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
+		self._dialog.add_action_widget(button_skip, Gtk.ResponseType.NO)
+		self._dialog.add_action_widget(button_retry, Gtk.ResponseType.YES)
 
 		button_skip.set_can_default(True)
-		self._dialog.set_default_response(Gtk.RESPONSE_NO)
+		self._dialog.set_default_response(Gtk.ResponseType.NO)
 
 		# pack interface
 		vbox_icon.pack_start(icon, False, False, 0)
@@ -1402,8 +1402,8 @@ class QuestionOperationError(OperationError):
 	def __init__(self, application):
 		OperationError.__init__(self, application)
 
-		button_no = self._dialog.get_widget_for_response(Gtk.RESPONSE_NO)
-		button_yes = self._dialog.get_widget_for_response(Gtk.RESPONSE_YES)
+		button_no = self._dialog.get_widget_for_response(Gtk.ResponseType.NO)
+		button_yes = self._dialog.get_widget_for_response(Gtk.ResponseType.YES)
 
 		button_no.set_label(_('No'))
 		button_yes.set_label(_('Yes'))
@@ -1435,14 +1435,14 @@ class CreateToolbarWidgetDialog:
 		# create interfacce
 		vbox_name = Gtk.VBox(False, 0)
 
-		label_name = Gtk.Label(_('Name:'))
+		label_name = Gtk.Label(label=_('Name:'))
 		label_name.set_alignment(0, 0.5)
 
 		self._entry_name = Gtk.Entry(max=30)
 
 		vbox_type = Gtk.VBox(False, 0)
 
-		label_type = Gtk.Label(_('Type:'))
+		label_type = Gtk.Label(label=_('Type:'))
 		label_type.set_alignment(0, 0.5)
 
 		cell_renderer_icon = Gtk.CellRendererPixbuf()
@@ -1461,10 +1461,10 @@ class CreateToolbarWidgetDialog:
 		button_add.set_can_default(True)
 		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
 
-		self._dialog.add_action_widget(button_cancel, Gtk.RESPONSE_CANCEL)
-		self._dialog.add_action_widget(button_add, Gtk.RESPONSE_ACCEPT)
+		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
+		self._dialog.add_action_widget(button_add, Gtk.ResponseType.ACCEPT)
 
-		self._dialog.set_default_response(Gtk.RESPONSE_ACCEPT)
+		self._dialog.set_default_response(Gtk.ResponseType.ACCEPT)
 
 		# pack interface
 		vbox_name.pack_start(label_name, False, False, 0)
@@ -1507,7 +1507,7 @@ class CreateToolbarWidgetDialog:
 		# show dialog
 		code = self._dialog.run()
 
-		if code == Gtk.RESPONSE_ACCEPT \
+		if code == Gtk.ResponseType.ACCEPT \
 		and len(self._type_list) > 0:
 			# get name and type
 			name = self._entry_name.get_text()
@@ -1561,7 +1561,7 @@ class ApplicationInputDialog(InputDialog):
 		vbox_command = Gtk.VBox(False, 0)
 		hbox_command = Gtk.HBox(False, 5)
 
-		label_command = Gtk.Label('Command:')
+		label_command = Gtk.Label(label='Command:')
 		label_command.set_alignment(0, 0.5)
 
 		button_select = Gtk.Button()
@@ -1588,7 +1588,7 @@ class ApplicationInputDialog(InputDialog):
 		dialog = ApplicationSelectDialog(self._application)
 		response = dialog.get_response()
 
-		if response[0] == Gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			self._entry_command.set_text(response[2])
 
 	def get_response(self):
@@ -1643,8 +1643,8 @@ class ApplicationSelectDialog:
 
 		# create application list
 		list_container = Gtk.ScrolledWindow()
-		list_container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
-		list_container.set_shadow_type(Gtk.SHADOW_IN)
+		list_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+		list_container.set_shadow_type(Gtk.ShadowType.IN)
 		
 		self._store = Gtk.ListStore(str, str, str, str, str)
 		self._list = Gtk.TreeView(model=self._store)
@@ -1672,7 +1672,7 @@ class ApplicationSelectDialog:
 		self._list.connect('cursor-changed', self.__handle_cursor_change)
 		self._list.connect('row-activated', self.__handle_row_activated)
 		
-		self._store.set_sort_column_id(1, Gtk.SORT_ASCENDING)
+		self._store.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 		
 		# create custom command entry
 		self._expander_custom = Gtk.Expander(label=_('Use a custom command'))
@@ -1708,9 +1708,9 @@ class ApplicationSelectDialog:
 		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
 		
 		self._dialog.action_area.pack_start(button_help, False, False, 0)
-		self._dialog.add_action_widget(button_cancel, Gtk.RESPONSE_CANCEL)
-		self._dialog.add_action_widget(button_ok, Gtk.RESPONSE_OK)
-		self._dialog.set_default_response(Gtk.RESPONSE_OK)
+		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
+		self._dialog.add_action_widget(button_ok, Gtk.ResponseType.OK)
+		self._dialog.set_default_response(Gtk.ResponseType.OK)
 		
 		# populate content
 		self._load_applications()
@@ -1728,7 +1728,7 @@ class ApplicationSelectDialog:
 
 	def __handle_row_activated(self, path=None, view_column=None, data=None):
 		"""Handle choosing application by presing 'Enter'"""
-		self._dialog.response(Gtk.RESPONSE_OK)
+		self._dialog.response(Gtk.ResponseType.OK)
 		
 	def _load_applications(self):
 		"""Populate application list from config files"""
@@ -1776,7 +1776,7 @@ class PathInputDialog():
 
 		# create interface
 		vbox = Gtk.VBox(False, 0)
-		self._label = Gtk.Label('Label')
+		self._label = Gtk.Label(label='Label')
 		self._label.set_alignment(0, 0.5)
 
 		self._entry = PathCompletionEntry(application)
@@ -1794,9 +1794,9 @@ class PathInputDialog():
 
 		self._container.pack_start(vbox, False, False, 0)
 
-		self._dialog.add_action_widget(button_cancel, Gtk.RESPONSE_CANCEL)
+		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
 		self._dialog.action_area.pack_end(button_ok, False, False, 0)
-		self._dialog.set_default_response(Gtk.RESPONSE_OK)
+		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
 		self._dialog.vbox.pack_start(self._container, True, True, 0)
 		self._dialog.show_all()
@@ -1804,7 +1804,7 @@ class PathInputDialog():
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""
 		if self._entry.get_text() != '':
-			self._dialog.response(Gtk.RESPONSE_OK)
+			self._dialog.response(Gtk.ResponseType.OK)
 
 	def set_title(self, title_text):
 		"""Set dialog title"""

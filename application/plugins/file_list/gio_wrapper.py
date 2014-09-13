@@ -4,19 +4,19 @@ from plugin_base.provider import Mode
 
 class File:
 	"""This is a wrapper class that provides file-like object but
-	uses gio.File for actual operations."""
+	uses Gio.File for actual operations."""
 
 	def __init__(self, path, mode):
 		if mode == Mode.READ:
-			self._resource = gio.File(path).read()
+			self._resource = Gio.File(path).read()
 
 		elif mode == Mode.WRITE:
-			if gio.File(path).query_exists():
-				gio.File(path).delete()
-			self._resource = gio.File(path).create()
+			if Gio.File(path).query_exists():
+				Gio.File(path).delete()
+			self._resource = Gio.File(path).create()
 
 		elif mode == Mode.APPEND:
-			self._resource = gio.File(path).append_to()
+			self._resource = Gio.File(path).append_to()
 
 	def close(self):
 		"""Close file"""

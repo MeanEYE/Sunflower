@@ -81,16 +81,16 @@ class KeyringManager:
 	def __reset_timeout(self):
 		"""Reset autolock timeout"""
 		if self._timeout is not None:
-			gobject.source_remove(self._timeout)
+			GObject.source_remove(self._timeout)
 			self._timeout = None
 
 		timeout = int(self.TIMEOUT * 60 * 1000)
-		self._timeout = gobject.timeout_add(timeout, self.__lock_keyring)
+		self._timeout = GObject.timeout_add(timeout, self.__lock_keyring)
 
 	def __lock_keyring(self):
 		"""Method called after specified amount of time has passed"""
 		if self._timeout is not None:
-			gobject.source_remove(self._timeout)
+			GObject.source_remove(self._timeout)
 			self._timeout = None
 
 		# lock keyring
@@ -110,7 +110,7 @@ class KeyringManager:
 
 		response = dialog.get_response()
 
-		if response[0] == Gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			# try to unlock keyring
 			keyring.unlock_sync(self.KEYRING_NAME, response[1])
 
@@ -314,7 +314,7 @@ class KeyringManager:
 
 			response = dialog.get_response()
 
-			if response[0] == Gtk.RESPONSE_OK \
+			if response[0] == Gtk.ResponseType.OK \
 			and response[1] == response[2]:
 				# create new keyring
 				keyring.create_sync(self.KEYRING_NAME, response[1])

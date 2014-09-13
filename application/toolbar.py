@@ -118,14 +118,14 @@ class ToolbarManager:
 		# get user response
 		response, name, widget_type = dialog.get_response()
 
-		if response == Gtk.RESPONSE_ACCEPT:
+		if response == Gtk.ResponseType.ACCEPT:
 			if None in (name, widget_type) or name == '':
 				# user didn't input all the data
 				dialog = Gtk.MessageDialog(
 					                    self._application,
-					                    Gtk.DIALOG_DESTROY_WITH_PARENT,
-					                    Gtk.MESSAGE_ERROR,
-					                    Gtk.BUTTONS_OK,
+					                    Gtk.DialogFlags.DESTROY_WITH_PARENT,
+					                    Gtk.MessageType.ERROR,
+					                    Gtk.ButtonsType.OK,
 					                    _(
 					                        "Error adding widget. You need to enter unique "
 				                            "name and select widget type."
@@ -138,9 +138,9 @@ class ToolbarManager:
 				# item with the same name already exists
 				dialog = Gtk.MessageDialog(
 					                    self._application,
-					                    Gtk.DIALOG_DESTROY_WITH_PARENT,
-					                    Gtk.MESSAGE_ERROR,
-					                    Gtk.BUTTONS_OK,
+					                    Gtk.DialogFlags.DESTROY_WITH_PARENT,
+					                    Gtk.MessageType.ERROR,
+					                    Gtk.ButtonsType.OK,
 					                    _(
 				                            "Widget with specified name already exists. "
 				                            "You need to enter unique name and select widget type."
@@ -172,9 +172,9 @@ class ToolbarManager:
 			# there is no factory for specified type, show error and return
 			dialog = Gtk.MessageDialog(
 		                            self._application,
-		                            Gtk.DIALOG_DESTROY_WITH_PARENT,
-		                            Gtk.MESSAGE_ERROR,
-		                            Gtk.BUTTONS_OK,
+		                            Gtk.DialogFlags.DESTROY_WITH_PARENT,
+		                            Gtk.MessageType.ERROR,
+		                            Gtk.ButtonsType.OK,
 		                            _(
 		                                "Plugin used to create selected toolbar widget is not active "
 			                            "or not present. In order to edit this entry you need to activate "

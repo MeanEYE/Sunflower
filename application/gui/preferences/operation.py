@@ -9,15 +9,15 @@ class OperationOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'operation', _('Operation'))
 
 		# create frames
-		frame_general = Gtk.Frame(_('General'))
+		frame_general = Gtk.Frame(label=_('General'))
 		vbox_general = Gtk.VBox(False, 0)
 		vbox_general.set_border_width(5)
 
-		frame_mounts = Gtk.Frame(_('Mounts'))
+		frame_mounts = Gtk.Frame(label=_('Mounts'))
 		vbox_mounts = Gtk.VBox(False, 0)
 		vbox_mounts.set_border_width(5)
 
-		frame_confirmations = Gtk.Frame(_('Confirmation'))
+		frame_confirmations = Gtk.Frame(label=_('Confirmation'))
 		vbox_confirmations = Gtk.VBox(False, 0)
 		vbox_confirmations.set_border_width(5)
 
@@ -56,9 +56,9 @@ class OperationOptions(SettingsPage):
 		if not widget.get_active() and not self._checkbox_trash_files.get_active():
 			dialog = Gtk.MessageDialog(
 									self._parent,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_QUESTION,
-									Gtk.BUTTONS_YES_NO,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.QUESTION,
+									Gtk.ButtonsType.YES_NO,
 									_(
 										'With trashing disabled you will not be able to '
 										'restore accidentally deleted items. Are you sure '
@@ -66,11 +66,11 @@ class OperationOptions(SettingsPage):
 										'deleting items?'
 									)
 								)
-			dialog.set_default_response(Gtk.RESPONSE_YES)
+			dialog.set_default_response(Gtk.ResponseType.YES)
 			result = dialog.run()
 			dialog.destroy()
 
-			if result == Gtk.RESPONSE_NO:
+			if result == Gtk.ResponseType.NO:
 				# user changed his mind, restore original value
 				widget.handler_block_by_func(self._confirm_delete_toggle)
 				widget.set_active(True)

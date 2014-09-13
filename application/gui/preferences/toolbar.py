@@ -19,8 +19,8 @@ class ToolbarOptions(SettingsPage):
 
 		# create list box
 		container = Gtk.ScrolledWindow()
-		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
-		container.set_shadow_type(Gtk.SHADOW_IN)
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+		container.set_shadow_type(Gtk.ShadowType.IN)
 
 		self._store = Gtk.ListStore(str, str, str, str)
 		self._list = Gtk.TreeView()
@@ -88,22 +88,22 @@ class ToolbarOptions(SettingsPage):
 		button_box.pack_end(button_move_up, False, False, 0)
 
 		# toolbar style
-		label_style = Gtk.Label(_('Toolbar style:'))
+		label_style = Gtk.Label(label=_('Toolbar style:'))
 		list_styles = Gtk.ListStore(str, int)
-		list_styles.append((_('Icons'), Gtk.TOOLBAR_ICONS))
-		list_styles.append((_('Text'), Gtk.TOOLBAR_TEXT))
-		list_styles.append((_('Both'), Gtk.TOOLBAR_BOTH))
-		list_styles.append((_('Both horizontal'), Gtk.TOOLBAR_BOTH_HORIZ))
+		list_styles.append((_('Icons'), Gtk.ToolbarStyle.ICONS))
+		list_styles.append((_('Text'), Gtk.ToolbarStyle.TEXT))
+		list_styles.append((_('Both'), Gtk.ToolbarStyle.BOTH))
+		list_styles.append((_('Both horizontal'), Gtk.ToolbarStyle.BOTH_HORIZ))
 
 		renderer = Gtk.CellRendererText()
 
-		self._combobox_styles = Gtk.ComboBox(list_styles)
-		self._combobox_styles.pack_start(renderer)
+		self._combobox_styles = Gtk.ComboBox(model=list_styles)
+		self._combobox_styles.pack_start(renderer, True)
 		self._combobox_styles.add_attribute(renderer, 'text', 0)
 		self._combobox_styles.connect('changed', self._parent.enable_save)
 
 		# toolbar icon size
-		label_icon_size = Gtk.Label(_('Icon size:'))
+		label_icon_size = Gtk.Label(label=_('Icon size:'))
 		list_icon_size = Gtk.ListStore(str, int)
 		list_icon_size.append((_('Same as menu item'), Gtk.IconSize.MENU))
 		list_icon_size.append((_('Small toolbar icon'), Gtk.IconSize.SMALL_TOOLBAR))
@@ -114,8 +114,8 @@ class ToolbarOptions(SettingsPage):
 
 		renderer = Gtk.CellRendererText()
 
-		self._combobox_icon_size = Gtk.ComboBox(list_icon_size)
-		self._combobox_icon_size.pack_start(renderer)
+		self._combobox_icon_size = Gtk.ComboBox(model=list_icon_size)
+		self._combobox_icon_size.pack_start(renderer, True)
 		self._combobox_icon_size.add_attribute(renderer, 'text', 0)
 		self._combobox_icon_size.connect('changed', self._parent.enable_save)
 

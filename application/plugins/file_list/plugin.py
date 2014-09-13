@@ -181,20 +181,20 @@ class FileList(ItemList):
 		col_date.add_attribute(cell_date, 'text', Column.FORMATED_TIME)
 
 		col_name.set_resizable(True)
-		col_name.set_sizing(Gtk.TREE_VIEW_COLUMN_FIXED)
+		col_name.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
 
 		col_extension.set_resizable(True)
-		col_extension.set_sizing(Gtk.TREE_VIEW_COLUMN_FIXED)
+		col_extension.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
 
 		col_size.set_resizable(True)
 		col_size.set_alignment(1)
-		col_size.set_sizing(Gtk.TREE_VIEW_COLUMN_FIXED)
+		col_size.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
 
 		col_mode.set_resizable(True)
-		col_mode.set_sizing(Gtk.TREE_VIEW_COLUMN_FIXED)
+		col_mode.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
 
 		col_date.set_resizable(True)
-		col_date.set_sizing(Gtk.TREE_VIEW_COLUMN_FIXED)
+		col_date.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
 
 		# register columns
 		self._columns = [col_name, col_extension, col_size, col_mode, col_date]
@@ -246,7 +246,7 @@ class FileList(ItemList):
 				# configure column
 				column.set_reorderable(True)
 				column.set_resizable(True)
-				column.set_sizing(Gtk.TREE_VIEW_COLUMN_FIXED)
+				column.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
 
 				# connect signals
 				column.connect('notify::width', self._column_resized)
@@ -334,7 +334,7 @@ class FileList(ItemList):
 		options = self._parent.plugin_options.section(self._name)
 
 		for column in columns:
-			column.set_sizing(Gtk.TREE_VIEW_COLUMN_AUTOSIZE)
+			column.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
 
 			column_name = column.get_data('name')
 			font_size = options.get('font_size_{0}'.format(column_name))
@@ -345,7 +345,7 @@ class FileList(ItemList):
 
 			# no font size was specified, skip column
 			if font_size is None:
-				column.set_sizing(Gtk.TREE_VIEW_COLUMN_FIXED)
+				column.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
 				column.set_resizable(True)
 				continue
 
@@ -357,7 +357,7 @@ class FileList(ItemList):
 				except TypeError:
 					pass
 
-			column.set_sizing(Gtk.TREE_VIEW_COLUMN_FIXED)
+			column.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
 			column.set_resizable(True)
 
 	def _control_got_focus(self, widget, data=None):
@@ -475,7 +475,7 @@ class FileList(ItemList):
 			dialog = ApplicationSelectDialog(self._parent, selection[0])
 			response = dialog.get_response()
 
-			if response[0] == Gtk.RESPONSE_OK:
+			if response[0] == Gtk.ResponseType.OK:
 				self._parent.associations_manager.open_file(
 														selection,
 														exec_command=response[2]
@@ -485,9 +485,9 @@ class FileList(ItemList):
 			# invalid selection, warn user
 			dialog = Gtk.MessageDialog(
 									self._parent,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_WARNING,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.WARNING,
+									Gtk.ButtonsType.OK,
 									_('Invalid selection!')
 								)
 			dialog.run()
@@ -614,7 +614,7 @@ class FileList(ItemList):
 		mode = dialog.get_mode()
 
 		# create dialog
-		if response[0] == Gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			try:
 				# set this item to be focused on add
 				self._item_to_focus = response[1]
@@ -631,9 +631,9 @@ class FileList(ItemList):
 				# error creating, report to user
 				dialog = Gtk.MessageDialog(
 										self._parent,
-										Gtk.DIALOG_DESTROY_WITH_PARENT,
-										Gtk.MESSAGE_ERROR,
-										Gtk.BUTTONS_OK,
+										Gtk.DialogFlags.DESTROY_WITH_PARENT,
+										Gtk.MessageType.ERROR,
+										Gtk.ButtonsType.OK,
 										_(
 											"There was an error creating directory. "
 											"Make sure you have enough permissions. "
@@ -657,7 +657,7 @@ class FileList(ItemList):
 		template = dialog.get_template_file()
 
 		# create dialog
-		if response[0] == Gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			try:
 				# try to create file
 				if provider.is_file(os.path.join(self.path, response[1])):
@@ -696,9 +696,9 @@ class FileList(ItemList):
 				# error creating, report to user
 				dialog = Gtk.MessageDialog(
 										self._parent,
-										Gtk.DIALOG_DESTROY_WITH_PARENT,
-										Gtk.MESSAGE_ERROR,
-										Gtk.BUTTONS_OK,
+										Gtk.DialogFlags.DESTROY_WITH_PARENT,
+										Gtk.MessageType.ERROR,
+										Gtk.ButtonsType.OK,
 										_(
 											"There was an error creating file. "
 											"Make sure you have enough permissions."
@@ -737,7 +737,7 @@ class FileList(ItemList):
 			# ask user to confirm linking
 			result = dialog.get_response()
 
-			if result[0] == Gtk.RESPONSE_OK:
+			if result[0] == Gtk.ResponseType.OK:
 				original_path = result[1]
 				link_name = result[2]
 				hard_link = result[3]
@@ -754,9 +754,9 @@ class FileList(ItemList):
 					# there was a problem creating link, let the user know
 					dialog = Gtk.MessageDialog(
 											self._parent,
-											Gtk.DIALOG_DESTROY_WITH_PARENT,
-											Gtk.MESSAGE_ERROR,
-											Gtk.BUTTONS_OK,
+											Gtk.DialogFlags.DESTROY_WITH_PARENT,
+											Gtk.MessageType.ERROR,
+											Gtk.ButtonsType.OK,
 											_(
 												"Error creating new link."
 											) +	"\n\n{0}".format(error)
@@ -771,9 +771,9 @@ class FileList(ItemList):
 			# current file system doesn't support linking
 			dialog = Gtk.MessageDialog(
 									self._parent,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_INFO,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.INFO,
+									Gtk.ButtonsType.OK,
 									_('Current file system does not support linking.')
 								)
 			dialog.run()
@@ -816,16 +816,16 @@ class FileList(ItemList):
 			# user has confirmation dialog enabled
 			dialog = Gtk.MessageDialog(
 									self._parent,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_QUESTION,
-									Gtk.BUTTONS_YES_NO,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.QUESTION,
+									Gtk.ButtonsType.YES_NO,
 									message.format(len(selection))
 								)
-			dialog.set_default_response(Gtk.RESPONSE_YES)
+			dialog.set_default_response(Gtk.ResponseType.YES)
 			result = dialog.run()
 			dialog.destroy()
 
-			can_continue = result == Gtk.RESPONSE_YES
+			can_continue = result == Gtk.ResponseType.YES
 
 		else:
 			# user has confirmation dialog disabled
@@ -879,7 +879,7 @@ class FileList(ItemList):
 					)
 		result = dialog.get_response()
 
-		if result[0] == Gtk.RESPONSE_OK:
+		if result[0] == Gtk.ResponseType.OK:
 			# if user confirmed copying
 			operation = CopyOperation(
 									self._parent,
@@ -922,7 +922,7 @@ class FileList(ItemList):
 					)
 		result = dialog.get_response()
 
-		if result[0] == Gtk.RESPONSE_OK:
+		if result[0] == Gtk.ResponseType.OK:
 			# if user confirmed copying
 			operation = MoveOperation(
 									self._parent,
@@ -959,7 +959,7 @@ class FileList(ItemList):
 		dialog = RenameDialog(self._parent, selection, is_dir)
 		result = dialog.get_response()
 
-		if result[0] == Gtk.RESPONSE_OK:
+		if result[0] == Gtk.ResponseType.OK:
 			if not self.get_provider().exists(result[1], relative_to=self.path):
 				try:
 					# rename selected item
@@ -972,9 +972,9 @@ class FileList(ItemList):
 					# problem renaming item
 					dialog = Gtk.MessageDialog(
 											self,
-											Gtk.DIALOG_DESTROY_WITH_PARENT,
-											Gtk.MESSAGE_ERROR,
-											Gtk.BUTTONS_OK,
+											Gtk.DialogFlags.DESTROY_WITH_PARENT,
+											Gtk.MessageType.ERROR,
+											Gtk.ButtonsType.OK,
 											_(
 												"Error renaming specified item. Make sure "
 												"you have enough permissions."
@@ -987,9 +987,9 @@ class FileList(ItemList):
 				# file/directory already exists
 				dialog = Gtk.MessageDialog(
 										self._parent,
-										Gtk.DIALOG_DESTROY_WITH_PARENT,
-										Gtk.MESSAGE_ERROR,
-										Gtk.BUTTONS_OK,
+										Gtk.DialogFlags.DESTROY_WITH_PARENT,
+										Gtk.MessageType.ERROR,
+										Gtk.ButtonsType.OK,
 										_(
 											"File or directory with specified name already "
 											"exists in current directory. Item could not "
@@ -1253,7 +1253,7 @@ class FileList(ItemList):
 			column.set_sort_indicator(selected)
 
 		# apply sorting function
-		order = [Gtk.SORT_DESCENDING, Gtk.SORT_ASCENDING][self._sort_ascending]
+		order = [Gtk.SortType.DESCENDING, Gtk.SortType.ASCENDING][self._sort_ascending]
 		self._sort_column_widget.set_sort_order(order)
 
 		self._store.set_sort_func(self._sort_column, self._sort_list)
@@ -1753,7 +1753,7 @@ class FileList(ItemList):
 	def _drag_motion(self, widget, drag_context, x, y, timestamp):
 		"""Handle dragging data over widget"""
 		path = None
-		action = Gdk.ACTION_DEFAULT
+		action = Gdk.DragAction.DEFAULT
 
 		try:
 			# get item under cursor
@@ -1773,7 +1773,7 @@ class FileList(ItemList):
 		if drag_context.get_source_widget() is widget and path is None:
 			drag_context.drag_status(action, timestamp)
 
-		widget.set_drag_dest_row(path, Gtk.TREE_VIEW_DROP_INTO_OR_AFTER)
+		widget.set_drag_dest_row(path, Gtk.TreeViewDropPosition.INTO_OR_AFTER)
 
 		return True
 
@@ -1787,17 +1787,17 @@ class FileList(ItemList):
 		# menu items to offer to user
 		actions = (
 				{
-					'action': Gdk.ACTION_COPY,
+					'action': Gdk.DragAction.COPY,
 					'name': _('Copy here'),
 					'icon': 'stock_folder-copy'
 				},
 				{
-					'action': Gdk.ACTION_MOVE,
+					'action': Gdk.DragAction.MOVE,
 					'name': _('Move here'),
 					'icon': 'stock_folder-move'
 				},
 				{
-					'action': Gdk.ACTION_LINK,
+					'action': Gdk.DragAction.LINK,
 					'name': _('Link here'),
 					'icon': None
 				}
@@ -1810,8 +1810,8 @@ class FileList(ItemList):
 			menu_item = Gtk.ImageMenuItem()
 
 			if action['icon']:
-				image = gtk.Image()
-				image.set_from_icon_name(action['icon'], gtk.ICON_SIZE_MENU)
+				image = Gtk.Image()
+				image.set_from_icon_name(action['icon'], Gtk.IconSize.MENU)
 				menu_item.set_image(image)
 
 			menu_item.set_label(action['name'])
@@ -1823,12 +1823,12 @@ class FileList(ItemList):
 			menu.append(menu_item)
 
 		# add separator
-		menu.append(gtk.SeparatorMenuItem())
+		menu.append(Gtk.SeparatorMenuItem())
 
 		# create cancel option
-		image = gtk.Image()
-		image.set_from_stock(gtk.STOCK_CANCEL, gtk.ICON_SIZE_MENU)
-		menu_item = gtk.ImageMenuItem()
+		image = Gtk.Image()
+		image.set_from_stock(Gtk.STOCK_CANCEL, Gtk.IconSize.MENU)
+		menu_item = Gtk.ImageMenuItem()
 		menu_item.set_label(_('Cancel'))
 		menu_item.set_image(image)
 		menu.append(menu_item)
@@ -1851,14 +1851,14 @@ class FileList(ItemList):
 		protocol, path = item_list[0].split('://', 1)
 
 		# handle data
-		if action is Gdk.ACTION_ASK:
+		if action is Gdk.DragAction.ASK:
 			action = self._drag_ask()
 
-		if action in (Gdk.ACTION_COPY, Gdk.ACTION_MOVE):
+		if action in (Gdk.DragAction.COPY, Gdk.DragAction.MOVE):
 			# handle copy and move operations
 			operation = {
-						Gdk.ACTION_COPY: 'copy',
-						Gdk.ACTION_MOVE: 'move'
+						Gdk.DragAction.COPY: 'copy',
+						Gdk.DragAction.MOVE: 'move'
 					}
 
 			try:
@@ -1887,7 +1887,7 @@ class FileList(ItemList):
 											destination
 										)
 
-		elif action is Gdk.ACTION_LINK:
+		elif action is Gdk.DragAction.LINK:
 			# handle linking
 			result = self._create_link(original_path=path)
 
@@ -1913,7 +1913,7 @@ class FileList(ItemList):
 
 	def _get_supported_drag_actions(self):
 		"""Return integer representing supported drag'n'drop actions"""
-		return Gdk.ACTION_COPY | Gdk.ACTION_MOVE | Gdk.ACTION_ASK | Gdk.ACTION_LINK
+		return Gdk.DragAction.COPY | Gdk.DragAction.MOVE | Gdk.DragAction.ASK | Gdk.DragAction.LINK
 
 	def _load_directory(self, path, parent=None, clear_store=False):
 		"""Load directory content into store"""
@@ -2175,15 +2175,15 @@ class FileList(ItemList):
 			# problem with listing directory, ask user what to do
 			dialog = Gtk.MessageDialog(
 									self._parent,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_ERROR,
-									Gtk.BUTTONS_YES_NO,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.ERROR,
+									Gtk.ButtonsType.YES_NO,
 									_(
 										"Error changing working directory to:"
 										"\n{1}\n\n{0}\n\nWould you like to retry?"
 									).format(error, path)
 								)
-			dialog.set_default_response(Gtk.RESPONSE_YES)
+			dialog.set_default_response(Gtk.ResponseType.YES)
 			result = dialog.run()
 			dialog.destroy()
 
@@ -2194,7 +2194,7 @@ class FileList(ItemList):
 			if len(self.history) == 0:
 				self.history.append(user.home)
 
-			if result == Gtk.RESPONSE_YES:
+			if result == Gtk.ResponseType.YES:
 				# retry loading path again
 				self.change_path(path)
 

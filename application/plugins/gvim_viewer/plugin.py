@@ -22,7 +22,7 @@ class GVimViewer(ViewerExtension):
 
 		# create container
 		self._container = Gtk.Viewport()
-		self._container.set_shadow_type(Gtk.SHADOW_IN)
+		self._container.set_shadow_type(Gtk.ShadowType.IN)
 
 		# create socket for embeding GVim window
 		self._socket = Gtk.Socket()

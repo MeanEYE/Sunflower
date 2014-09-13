@@ -10,7 +10,7 @@ import urllib
 import signal
 import fcntl
 
-from gi.repository import Gtk, GLib, GObject
+from gi.repository import Gtk, Gdk, GLib, GObject, Pango
 
 from menus import MenuManager
 from mounts import MountsManager
@@ -68,10 +68,10 @@ class MainWindow(Gtk.Window):
 
 	def __init__(self):
 		# create main window and other widgets
-		Gtk.Window.__init__(self, type=Gtk.WINDOW_TOPLEVEL)
+		GObject.GObject.__init__(self, type=Gtk.WindowType.TOPLEVEL)
 
 		# set application name
-		glib.set_application_name('Sunflower')
+		GLib.set_application_name('Sunflower')
 
 		# local variables
 		self._geometry = None
@@ -600,14 +600,14 @@ class MainWindow(Gtk.Window):
 		self.left_notebook.connect('focus-in-event', self._transfer_focus)
 		self.left_notebook.connect('page-added', self._page_added)
 		self.left_notebook.connect('switch-page', self._page_switched)
-		self.left_notebook.set_group_id(0)
+		self.left_notebook.set_group_name('panel')
 
 		self.right_notebook = Gtk.Notebook()
 		self.right_notebook.set_scrollable(True)
 		self.right_notebook.connect('focus-in-event', self._transfer_focus)
 		self.right_notebook.connect('page-added', self._page_added)
 		self.right_notebook.connect('switch-page', self._page_switched)
-		self.right_notebook.set_group_id(0)
+		self.right_notebook.set_group_name('panel')
 
 		self._paned.pack1(self.left_notebook, resize=True, shrink=False)
 		self._paned.pack2(self.right_notebook, resize=True, shrink=False)
@@ -617,10 +617,10 @@ class MainWindow(Gtk.Window):
 
 		self.path_label = Gtk.Label()
 		self.path_label.set_alignment(1, 0.5)
-		self.path_label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
+		self.path_label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
 		self.path_label.show()
 
-		label_pound = Gtk.Label('$')
+		label_pound = Gtk.Label(label='$')
 		label_pound.set_alignment(0, 0.5)
 		label_pound.show()
 
@@ -844,7 +844,7 @@ class MainWindow(Gtk.Window):
 			self.menu_commands.append(separator)
 
 		# create option for editing tools
-		edit_commands = Gtk.ImageMenuItem(stock_id=Gtk.STOCK_PREFERENCES)
+		edit_commands = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_PREFERENCES)
 		edit_commands.set_label(_('_Edit commands'))
 		edit_commands.connect('activate', self.preferences_window._show, 'commands')
 		self.menu_commands.append(edit_commands)
@@ -863,7 +863,7 @@ class MainWindow(Gtk.Window):
 
 		response = dialog.get_response()
 
-		if response[0] == Gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			self.bookmark_options.get('bookmarks').append({
 					'name': response[1],
 					'uri': response[2]
@@ -922,7 +922,7 @@ class MainWindow(Gtk.Window):
 
 	def _handle_window_state_event(self, widget, event):
 		"""Handle window state change"""
-		in_fullscreen = event.new_window_state is Gdk.WINDOW_STATE_FULLSCREEN
+		in_fullscreen = event.new_window_state is Gdk.WindowState.FULLSCREEN
 		stock = (Gtk.STOCK_FULLSCREEN, Gtk.STOCK_LEAVE_FULLSCREEN)[in_fullscreen]
 
 		# update main menu item
@@ -1371,8 +1371,8 @@ class MainWindow(Gtk.Window):
 		"""Handle key press in command edit"""
 		result = False
 
-		if event.keyval in (Gtk.keysyms.Up, Gtk.keysyms.Escape)\
-		and event.state & Gtk.accelerator_get_default_mod_mask() == 0:
+		if event.keyval in (Gdk.KEY_Up, Gdk.KEY_Escape)\
+		and event.get_state() & Gtk.accelerator_get_default_mod_mask() == 0:
 			self.get_active_object().focus_main_object()
 			result = True
 
@@ -1394,11 +1394,11 @@ class MainWindow(Gtk.Window):
 		state = self.window.get_state()
 		window_state = 0
 
-		if state & Gdk.WINDOW_STATE_FULLSCREEN:
+		if state & Gdk.WindowState.FULLSCREEN:
 			# window is in fullscreen
 			window_state = 2
 
-		elif state & Gdk.WINDOW_STATE_MAXIMIZED:
+		elif state & Gdk.WindowState.MAXIMIZED:
 			# window is maximized
 			window_state = 1
 
@@ -1622,7 +1622,7 @@ class MainWindow(Gtk.Window):
 			response = dialog.get_response()
 
 			# commit selection
-			if response[0] == Gtk.RESPONSE_OK:
+			if response[0] == Gtk.ResponseType.OK:
 				active_object.select_all(response[1])
 
 			result = True
@@ -1678,7 +1678,7 @@ class MainWindow(Gtk.Window):
 			response = dialog.get_response()
 
 			# commit selection
-			if response[0] == Gtk.RESPONSE_OK:
+			if response[0] == Gtk.ResponseType.OK:
 				active_object.deselect_all(response[1])
 
 			result = True
@@ -1704,9 +1704,9 @@ class MainWindow(Gtk.Window):
 			if result_left == result_right == 0:
 				dialog = Gtk.MessageDialog(
 										self,
-										Gtk.DIALOG_DESTROY_WITH_PARENT,
-										Gtk.MESSAGE_INFO,
-										Gtk.BUTTONS_OK,
+										Gtk.DialogFlags.DESTROY_WITH_PARENT,
+										Gtk.MessageType.INFO,
+										Gtk.ButtonsType.OK,
 										_("First level of compared directories is identical.")
 									)
 				dialog.run()
@@ -1866,9 +1866,9 @@ class MainWindow(Gtk.Window):
 			except:
 				dialog = Gtk.MessageDialog(
 										self,
-										Gtk.DIALOG_DESTROY_WITH_PARENT,
-										Gtk.MESSAGE_ERROR,
-										Gtk.BUTTONS_OK,
+										Gtk.DialogFlags.DESTROY_WITH_PARENT,
+										Gtk.MessageType.ERROR,
+										Gtk.ButtonsType.OK,
 										_(
 											'There was a problem starting external '
 											'terminal application. Check if command '
@@ -2081,30 +2081,30 @@ class MainWindow(Gtk.Window):
 
 		# default accelerator map
 		default_accelerator = {
-				'<Sunflower>/File/CreateFile': (keyval('F7'), Gdk.CONTROL_MASK),
+				'<Sunflower>/File/CreateFile': (keyval('F7'), Gdk.ModifierType.CONTROL_MASK),
 				'<Sunflower>/File/CreateDirectory': (keyval('F7'), 0),
-				'<Sunflower>/File/Quit': (keyval('Q'), Gdk.CONTROL_MASK),
-				'<Sunflower>/Edit/Preferences': (keyval('P'), Gdk.CONTROL_MASK | Gdk.MOD1_MASK),
+				'<Sunflower>/File/Quit': (keyval('Q'), Gdk.ModifierType.CONTROL_MASK),
+				'<Sunflower>/Edit/Preferences': (keyval('P'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD1_MASK),
 				'<Sunflower>/Mark/SelectPattern': (keyval('KP_Add'), 0),
 				'<Sunflower>/Mark/DeselectPattern': (keyval('KP_Subtract'), 0),
-				'<Sunflower>/Mark/SelectWithSameExtension': (keyval('KP_Add'), Gdk.MOD1_MASK),
-				'<Sunflower>/Mark/DeselectWithSameExtension': (keyval('KP_Subtract'), Gdk.MOD1_MASK),
+				'<Sunflower>/Mark/SelectWithSameExtension': (keyval('KP_Add'), Gdk.ModifierType.MOD1_MASK),
+				'<Sunflower>/Mark/DeselectWithSameExtension': (keyval('KP_Subtract'), Gdk.ModifierType.MOD1_MASK),
 				'<Sunflower>/Mark/Compare': (keyval('F12'), 0),
-				'<Sunflower>/Tools/FindFiles': (keyval('F7'), Gdk.MOD1_MASK),
-				'<Sunflower>/Tools/SynchronizeDirectories': (keyval('F8'), Gdk.MOD1_MASK),
-				'<Sunflower>/Tools/AdvancedRename': (keyval('M'), Gdk.CONTROL_MASK),
-				'<Sunflower>/Tools/MountManager': (keyval('O'), Gdk.CONTROL_MASK),
+				'<Sunflower>/Tools/FindFiles': (keyval('F7'), Gdk.ModifierType.MOD1_MASK),
+				'<Sunflower>/Tools/SynchronizeDirectories': (keyval('F8'), Gdk.ModifierType.MOD1_MASK),
+				'<Sunflower>/Tools/AdvancedRename': (keyval('M'), Gdk.ModifierType.CONTROL_MASK),
+				'<Sunflower>/Tools/MountManager': (keyval('O'), Gdk.ModifierType.CONTROL_MASK),
 				'<Sunflower>/View/Fullscreen': (keyval('F11'), 0),
-				'<Sunflower>/View/Reload': (keyval('R'), Gdk.CONTROL_MASK),
-				'<Sunflower>/View/FastMediaPreview': (keyval('F3'), Gdk.MOD1_MASK),
-				'<Sunflower>/View/ShowHidden': (keyval('H'), Gdk.CONTROL_MASK),
+				'<Sunflower>/View/Reload': (keyval('R'), Gdk.ModifierType.CONTROL_MASK),
+				'<Sunflower>/View/FastMediaPreview': (keyval('F3'), Gdk.ModifierType.MOD1_MASK),
+				'<Sunflower>/View/ShowHidden': (keyval('H'), Gdk.ModifierType.CONTROL_MASK),
 			}
 
 		alternative_accelerator = {
 				'<Sunflower>/Mark/SelectPattern': (keyval('equal'), 0),
 				'<Sunflower>/Mark/DeselectPattern': (keyval('minus'), 0),
-				'<Sunflower>/Mark/SelectWithSameExtension': (keyval('equal'), Gdk.MOD1_MASK),
-				'<Sunflower>/Mark/DeselectWithSameExtension': (keyval('minus'), Gdk.MOD1_MASK),
+				'<Sunflower>/Mark/SelectWithSameExtension': (keyval('equal'), Gdk.ModifierType.MOD1_MASK),
+				'<Sunflower>/Mark/DeselectWithSameExtension': (keyval('minus'), Gdk.ModifierType.MOD1_MASK),
 			}
 
 		# filter out menu groups without submenu
@@ -2119,7 +2119,7 @@ class MainWindow(Gtk.Window):
 
 				if required_fields.issubset(fields):
 					path = menu_item['path']
-					label = '{0} {1} {2}'.format(
+					label = unicode('{0} {1} {2}').format(
 							group_name,
 							u'\u2192',
 							menu_item['label'].replace('_', '')
@@ -2148,9 +2148,9 @@ class MainWindow(Gtk.Window):
 		group.add_method('move_handle_right', _('Move handle to the right'), self.move_handle, 1)
 
 		# set default accelerators
-		group.set_accelerator('restore_handle_position', keyval('Home'), Gdk.MOD1_MASK)
-		group.set_accelerator('move_handle_left', keyval('Page_Up'), Gdk.MOD1_MASK)
-		group.set_accelerator('move_handle_right', keyval('Page_Down'), Gdk.MOD1_MASK)
+		group.set_accelerator('restore_handle_position', keyval('Home'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('move_handle_left', keyval('Page_Up'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('move_handle_right', keyval('Page_Down'), Gdk.ModifierType.MOD1_MASK)
 		
 		# expose object
 		self._accel_group = group
@@ -2185,9 +2185,9 @@ class MainWindow(Gtk.Window):
 			# notify user about failure
 			dialog = Gtk.MessageDialog(
 									self,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_ERROR,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.ERROR,
+									Gtk.ButtonsType.OK,
 									_(
 										'Error saving configuration to files '
 										'in your home directory. Make sure you have '
@@ -2447,7 +2447,7 @@ class MainWindow(Gtk.Window):
 
 	def toggle_fullscreen(self, widget, data=None):
 		"""Toggle application fullscreen"""
-		if self.window.get_state() & Gdk.WINDOW_STATE_FULLSCREEN:
+		if self.window.get_state() & Gdk.WindowState.FULLSCREEN:
 			self.unfullscreen()
 
 		else:
@@ -2804,9 +2804,9 @@ class MainWindow(Gtk.Window):
 			# active object is not item list
 			dialog = Gtk.MessageDialog(
 								self,
-								Gtk.DIALOG_DESTROY_WITH_PARENT,
-								Gtk.MESSAGE_INFO,
-								Gtk.BUTTONS_OK,
+								Gtk.DialogFlags.DESTROY_WITH_PARENT,
+								Gtk.MessageType.INFO,
+								Gtk.ButtonsType.OK,
 								_(
 									'Active object is not item list. Advanced '
 									'rename tool needs files and directories.'
@@ -2819,9 +2819,9 @@ class MainWindow(Gtk.Window):
 			# no extensions found, report error to user
 			dialog = Gtk.MessageDialog(
 								self,
-								Gtk.DIALOG_DESTROY_WITH_PARENT,
-								Gtk.MESSAGE_INFO,
-								Gtk.BUTTONS_OK,
+								Gtk.DialogFlags.DESTROY_WITH_PARENT,
+								Gtk.MessageType.INFO,
+								Gtk.ButtonsType.OK,
 								_(
 									'No rename extensions were found. Please '
 									'enable basic rename options plugin and try '
@@ -2846,9 +2846,9 @@ class MainWindow(Gtk.Window):
 			# no extensions found, report error to user
 			dialog = Gtk.MessageDialog(
 								self,
-								Gtk.DIALOG_DESTROY_WITH_PARENT,
-								Gtk.MESSAGE_INFO,
-								Gtk.BUTTONS_OK,
+								Gtk.DialogFlags.DESTROY_WITH_PARENT,
+								Gtk.MessageType.INFO,
+								Gtk.ButtonsType.OK,
 								_(
 									'No extensions for finding files were found. Please '
 									'enable basic find file options plugin and try again.'
@@ -2873,9 +2873,9 @@ class MainWindow(Gtk.Window):
 				# keyring is not available, let user know
 				dialog = Gtk.MessageDialog(
 									self,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_INFO,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.INFO,
+									Gtk.ButtonsType.OK,
 									_('Keyring is empty!')
 								)
 				dialog.run()
@@ -2885,9 +2885,9 @@ class MainWindow(Gtk.Window):
 			# keyring is not available, let user know
 			dialog = Gtk.MessageDialog(
 								self,
-								Gtk.DIALOG_DESTROY_WITH_PARENT,
-								Gtk.MESSAGE_INFO,
-								Gtk.BUTTONS_OK,
+								Gtk.DialogFlags.DESTROY_WITH_PARENT,
+								Gtk.MessageType.INFO,
+								Gtk.ButtonsType.OK,
 								_(
 									'Keyring is not available. Make sure you have '
 									'Python Gnome keyring module installed.'

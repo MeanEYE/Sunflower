@@ -11,7 +11,7 @@ class Breadcrumbs(Gtk.HBox):
 	TYPE_SMART = 2
 
 	def __init__(self, parent):
-		Gtk.HBox.__init__(self)
+		GObject.GObject.__init__(self)
 
 		self._parent = parent
 		self._type = self._parent._breadcrumb_type
@@ -19,7 +19,7 @@ class Breadcrumbs(Gtk.HBox):
 		self._path = None
 		self._previous_path = None
 		self._colors = None
-		self._state = Gtk.STATE_NORMAL
+		self._state = Gtk.StateType.NORMAL
 		self._smart_color = None
 		self._elements_size = None
 		self._elements_width = None
@@ -29,10 +29,10 @@ class Breadcrumbs(Gtk.HBox):
 		# create user interface
 		self._path_object = Gtk.DrawingArea()
 
-		self._path_object.add_events(Gdk.POINTER_MOTION_MASK)
-		self._path_object.add_events(Gdk.LEAVE_NOTIFY_MASK)
-		self._path_object.add_events(Gdk.BUTTON_PRESS_MASK)
-		self._path_object.add_events(Gdk.ENTER_NOTIFY_MASK)
+		self._path_object.add_events(Gdk.EventMask.POINTER_MOTION_MASK)
+		self._path_object.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)
+		self._path_object.add_events(Gdk.EventMask.BUTTON_PRESS_MASK)
+		self._path_object.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)
 
 		self._path_object.connect('expose-event', self.__expose_event)
 		self._path_object.connect('motion-notify-event', self.__motion_event)
@@ -83,7 +83,7 @@ class Breadcrumbs(Gtk.HBox):
 			path = self._previous_path
 
 		# handle single left mouse click
-		if event.button is 1 and event.type is Gdk.BUTTON_PRESS:
+		if event.button is 1 and event.type is Gdk.EventType.BUTTON_PRESS:
 			width = self._elements_size[self._highlight_index]
 			new_path = path[0:width]
 			file_list = self._parent._parent
@@ -176,7 +176,7 @@ class Breadcrumbs(Gtk.HBox):
 		# underline hovered path if specified
 		if None not in (self._highlight_index, self._elements_size):
 			width = self._elements_size[self._highlight_index]
-			attributes.insert(Pango.AttrUnderline(Pango.UNDERLINE_SINGLE, 0, width))
+			attributes.insert(Pango.AttrUnderline(Pango.Underline.SINGLE, 0, width))
 
 		# prepare text for drawing
 		layout.set_text(text_to_draw)

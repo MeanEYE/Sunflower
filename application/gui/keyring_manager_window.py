@@ -21,12 +21,12 @@ class KeyringManagerWindow:
 		self._active_keyring = application.keyring_manager.KEYRING_NAME
 
 		# create window
-		self._window = Gtk.Window(Gtk.WINDOW_TOPLEVEL)
+		self._window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
 
 		# configure window
 		self._window.set_title(_('Keyring manager'))
 		self._window.set_size_request(500, 300)
-		self._window.set_position(Gtk.WIN_POS_CENTER_ON_PARENT)
+		self._window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self._window.set_skip_taskbar_hint(False)
 		self._window.set_modal(False)
 		self._window.set_wmclass('Sunflower', 'Sunflower')
@@ -38,8 +38,8 @@ class KeyringManagerWindow:
 		# create user interface
 		vbox = Gtk.VBox(homogeneous=False, spacing=5)
 		container = Gtk.ScrolledWindow()
-		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_AUTOMATIC)
-		container.set_shadow_type(Gtk.SHADOW_IN)
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		container.set_shadow_type(Gtk.ShadowType.IN)
 
 		self._store = Gtk.ListStore(long, str, str)
 		self._list = Gtk.TreeView(model=self._store)
@@ -121,9 +121,9 @@ class KeyringManagerWindow:
 		if selected_iter is None:
 			dialog = Gtk.MessageDialog(
 									self._window,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_WARNING,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.WARNING,
+									Gtk.ButtonsType.OK,
 									_('Please select an entry to delete!')
 								)
 			dialog.run()
@@ -136,9 +136,9 @@ class KeyringManagerWindow:
 		# ask confirmation from user
 		dialog = Gtk.MessageDialog(
 								self._window,
-								Gtk.DIALOG_DESTROY_WITH_PARENT,
-								Gtk.MESSAGE_WARNING,
-								Gtk.BUTTONS_YES_NO,
+								Gtk.DialogFlags.DESTROY_WITH_PARENT,
+								Gtk.MessageType.WARNING,
+								Gtk.ButtonsType.YES_NO,
 								_(
 									'You are about to remove the following '
 									'entry from your keyring. If you do this '
@@ -146,11 +146,11 @@ class KeyringManagerWindow:
 									'manually when needed. Are you sure?\n\n{0}'
 								).format(entry_name)
 							)
-		dialog.set_default_response(Gtk.RESPONSE_YES)
+		dialog.set_default_response(Gtk.ResponseType.YES)
 		response = dialog.run()
 		dialog.destroy()
 
-		if response == Gtk.RESPONSE_YES:
+		if response == Gtk.ResponseType.YES:
 			self._application.keyring_manager.remove_entry(entry_name)
 			self.__populate_list()
 
@@ -165,9 +165,9 @@ class KeyringManagerWindow:
 		if selected_iter is None:
 			dialog = Gtk.MessageDialog(
 									self._window,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_WARNING,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.WARNING,
+									Gtk.ButtonsType.OK,
 									_('Please select an entry to change!')
 								)
 			dialog.run()
@@ -180,7 +180,7 @@ class KeyringManagerWindow:
 
 		response = dialog.get_response()
 
-		if response[0] == Gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			if response[1] == response[2]:
 				# passwords match, change value
 				item_id = item_list.get_value(selected_iter, Column.ID)
@@ -188,9 +188,9 @@ class KeyringManagerWindow:
 
 				dialog = Gtk.MessageDialog(
 										self._window,
-										Gtk.DIALOG_DESTROY_WITH_PARENT,
-										Gtk.MESSAGE_INFO,
-										Gtk.BUTTONS_OK,
+										Gtk.DialogFlags.DESTROY_WITH_PARENT,
+										Gtk.MessageType.INFO,
+										Gtk.ButtonsType.OK,
 										_('Password was changed!')
 									)
 				dialog.run()
@@ -203,9 +203,9 @@ class KeyringManagerWindow:
 				# passwords don't match, notify user
 				dialog = Gtk.MessageDialog(
 										self._window,
-										Gtk.DIALOG_DESTROY_WITH_PARENT,
-										Gtk.MESSAGE_ERROR,
-										Gtk.BUTTONS_OK,
+										Gtk.DialogFlags.DESTROY_WITH_PARENT,
+										Gtk.MessageType.ERROR,
+										Gtk.ButtonsType.OK,
 										_('Passwords do not match! Please try again.')
 									)
 				dialog.run()

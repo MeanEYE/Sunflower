@@ -128,8 +128,8 @@ class ItemList(PluginBase):
 
 		# file list
 		self._container = Gtk.ScrolledWindow()
-		self._container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
-		self._container.set_shadow_type(Gtk.SHADOW_IN)
+		self._container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+		self._container.set_shadow_type(Gtk.ShadowType.IN)
 
 		self._item_list = Gtk.TreeView()
 		self._item_list.set_fixed_height_mode(True)
@@ -155,7 +155,7 @@ class ItemList(PluginBase):
 		# quick search
 		self._search_panel = Gtk.HBox(False, 0)
 
-		label = Gtk.Label(_('Search:'))
+		label = Gtk.Label(label=_('Search:'))
 
 		self._search_entry = Gtk.Entry()
 		self._search_entry.connect('key-press-event', self._handle_search_key_press)
@@ -291,62 +291,62 @@ class ItemList(PluginBase):
 		# configure accelerators
 		group.set_accelerator('execute_item', keyval('Return'), 0)
 		group.set_alt_accelerator('execute_item', keyval('KP_Enter'), 0)
-		group.set_accelerator('item_properties', keyval('Return'), Gdk.MOD1_MASK)
-		group.set_alt_accelerator('item_properties', keyval('KP_Enter'), Gdk.MOD1_MASK)
-		group.set_accelerator('add_bookmark', keyval('d'), Gdk.CONTROL_MASK)
-		group.set_accelerator('edit_bookmarks', keyval('b'), Gdk.CONTROL_MASK)
-		group.set_accelerator('cut_to_clipboard', keyval('x'), Gdk.CONTROL_MASK)
-		group.set_accelerator('copy_to_clipboard', keyval('c'), Gdk.CONTROL_MASK)
-		group.set_accelerator('paste_from_clipboard', keyval('v'), Gdk.CONTROL_MASK)
-		group.set_accelerator('open_in_new_tab', keyval('t'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
-		group.set_accelerator('create_terminal', keyval('z'), Gdk.CONTROL_MASK)
+		group.set_accelerator('item_properties', keyval('Return'), Gdk.ModifierType.MOD1_MASK)
+		group.set_alt_accelerator('item_properties', keyval('KP_Enter'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('add_bookmark', keyval('d'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('edit_bookmarks', keyval('b'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('cut_to_clipboard', keyval('x'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('copy_to_clipboard', keyval('c'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('paste_from_clipboard', keyval('v'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('open_in_new_tab', keyval('t'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
+		group.set_accelerator('create_terminal', keyval('z'), Gdk.ModifierType.CONTROL_MASK)
 		group.set_accelerator('parent_directory', keyval('BackSpace'), 0)
-		group.set_accelerator('root_directory', keyval('backslash'), Gdk.CONTROL_MASK)
-		group.set_accelerator('refresh_list', keyval('R'), Gdk.CONTROL_MASK)
-		group.set_accelerator('show_history', keyval('BackSpace'), Gdk.CONTROL_MASK)
-		group.set_accelerator('back_in_history', keyval('Left'), Gdk.MOD1_MASK)
-		group.set_accelerator('forward_in_history', keyval('Right'), Gdk.MOD1_MASK)
-		group.set_accelerator('select_all', keyval('A'), Gdk.CONTROL_MASK)
-		group.set_accelerator('deselect_all', keyval('A'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
-		group.set_accelerator('invert_selection', keyval('asterisk'), Gdk.SHIFT_MASK)
+		group.set_accelerator('root_directory', keyval('backslash'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('refresh_list', keyval('R'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('show_history', keyval('BackSpace'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('back_in_history', keyval('Left'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('forward_in_history', keyval('Right'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('select_all', keyval('A'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('deselect_all', keyval('A'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
+		group.set_accelerator('invert_selection', keyval('asterisk'), Gdk.ModifierType.SHIFT_MASK)
 		group.set_alt_accelerator('invert_selection', keyval('KP_Multiply'), 0)
 		group.set_accelerator('toggle_selection', keyval('Insert'), 0)
-		group.set_alt_accelerator('toggle_selection', keyval('Down'), Gdk.SHIFT_MASK)
-		group.set_accelerator('toggle_selection_up', keyval('Up'), Gdk.SHIFT_MASK)
+		group.set_alt_accelerator('toggle_selection', keyval('Down'), Gdk.ModifierType.SHIFT_MASK)
+		group.set_accelerator('toggle_selection_up', keyval('Up'), Gdk.ModifierType.SHIFT_MASK)
 		group.set_accelerator('delete_files', keyval('Delete'), 0)
-		group.set_accelerator('force_delete_files', keyval('Delete'), Gdk.SHIFT_MASK)
+		group.set_accelerator('force_delete_files', keyval('Delete'), Gdk.ModifierType.SHIFT_MASK)
 		group.set_alt_accelerator('delete_files', keyval('F8'), 0)
-		group.set_accelerator('show_left_bookmarks', keyval('F1'), Gdk.CONTROL_MASK)
-		group.set_accelerator('show_right_bookmarks', keyval('F2'), Gdk.CONTROL_MASK)
+		group.set_accelerator('show_left_bookmarks', keyval('F1'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('show_right_bookmarks', keyval('F2'), Gdk.ModifierType.CONTROL_MASK)
 		group.set_accelerator('rename_file', keyval('F2'), 0)
-		group.set_alt_accelerator('rename_file', keyval('F6'), Gdk.SHIFT_MASK)
+		group.set_alt_accelerator('rename_file', keyval('F6'), Gdk.ModifierType.SHIFT_MASK)
 		group.set_accelerator('view_selected', keyval('F3'), 0)
 		group.set_accelerator('edit_selected', keyval('F4'), 0)
 		group.set_accelerator('copy_files', keyval('F5'), 0)
 		group.set_accelerator('move_files', keyval('F6'), 0)
 		group.set_accelerator('show_popup_menu', keyval('Menu'), 0)
-		group.set_alt_accelerator('show_popup_menu', keyval('F10'), Gdk.SHIFT_MASK)
-		group.set_accelerator('show_open_with_menu', keyval('Menu'), Gdk.CONTROL_MASK)
-		group.set_accelerator('inherit_left_path', keyval('Right'), Gdk.CONTROL_MASK)
-		group.set_accelerator('inherit_right_path', keyval('Left'), Gdk.CONTROL_MASK)
-		group.set_accelerator('swap_paths', keyval('U'), Gdk.CONTROL_MASK)
-		group.set_accelerator('show_tab_menu', keyval('grave'), Gdk.CONTROL_MASK)
-		group.set_accelerator('copy_path_to_clipboard', keyval('l'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
-		group.set_accelerator('copy_selected_path_to_clipboard', keyval('c'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
-		group.set_accelerator('copy_path_to_command_entry', keyval('Return'), Gdk.CONTROL_MASK | Gdk.SHIFT_MASK)
-		group.set_alt_accelerator('copy_path_to_command_entry', keyval('KP_Enter'), Gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
-		group.set_accelerator('copy_selection_to_command_entry', keyval('Return'), Gdk.CONTROL_MASK)
-		group.set_alt_accelerator('copy_selection_to_command_entry', keyval('KP_Enter'), Gdk.CONTROL_MASK)
-		group.set_accelerator('custom_path_entry', keyval('l'), Gdk.CONTROL_MASK)
-		group.set_accelerator('start_quick_search', keyval('f'), Gdk.CONTROL_MASK)
+		group.set_alt_accelerator('show_popup_menu', keyval('F10'), Gdk.ModifierType.SHIFT_MASK)
+		group.set_accelerator('show_open_with_menu', keyval('Menu'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('inherit_left_path', keyval('Right'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('inherit_right_path', keyval('Left'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('swap_paths', keyval('U'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('show_tab_menu', keyval('grave'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('copy_path_to_clipboard', keyval('l'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
+		group.set_accelerator('copy_selected_path_to_clipboard', keyval('c'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
+		group.set_accelerator('copy_path_to_command_entry', keyval('Return'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
+		group.set_alt_accelerator('copy_path_to_command_entry', keyval('KP_Enter'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
+		group.set_accelerator('copy_selection_to_command_entry', keyval('Return'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_alt_accelerator('copy_selection_to_command_entry', keyval('KP_Enter'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('custom_path_entry', keyval('l'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('start_quick_search', keyval('f'), Gdk.ModifierType.CONTROL_MASK)
 		group.set_accelerator('expand_directory', keyval('Right'), 0)
 		group.set_accelerator('collapse_directory', keyval('Left'), 0)
-		group.set_accelerator('create_link', keyval('F7'), Gdk.SHIFT_MASK)
-		group.set_accelerator('show_emblem_menu', keyval('e'), Gdk.CONTROL_MASK)
+		group.set_accelerator('create_link', keyval('F7'), Gdk.ModifierType.SHIFT_MASK)
+		group.set_accelerator('show_emblem_menu', keyval('e'), Gdk.ModifierType.CONTROL_MASK)
 
 		# create bookmark accelerators
 		group.add_method('bookmark_home', _("Go to '{0}'"), self._parent.activate_bookmark, 0)
-		group.set_accelerator('bookmark_home', keyval('grave'), Gdk.MOD1_MASK)
+		group.set_accelerator('bookmark_home', keyval('grave'), Gdk.ModifierType.MOD1_MASK)
 
 		for number in range(1, 11):
 			group.add_method(
@@ -360,7 +360,7 @@ class ItemList(PluginBase):
 			group.set_accelerator(
 						'bookmark_{0}'.format(number),
 						keyval(str(key_number)),
-						Gdk.MOD1_MASK
+						Gdk.ModifierType.MOD1_MASK
 					)
 
 		# add accelerator group to the list
@@ -511,15 +511,15 @@ class ItemList(PluginBase):
 		right_click_select = self._parent.options.section('item_list').get('right_click_select')
 		single_click_navigation = self._parent.options.section('item_list').get('single_click_navigation')
 
-		shift_active = event.state & Gdk.SHIFT_MASK
-		control_active = event.state & Gdk.CONTROL_MASK
+		shift_active = event.get_state() & Gdk.ModifierType.SHIFT_MASK
+		control_active = event.get_state() & Gdk.ModifierType.CONTROL_MASK
 
 		# handle single click
-		if event.button is 1 and control_active and event.type in (Gdk.BUTTON_PRESS, Gdk.BUTTON_RELEASE):
+		if event.button is 1 and control_active and event.type in (Gdk.EventType.BUTTON_PRESS, Gdk.BUTTON_RELEASE):
 			# we handle left mouse press and release in order to prevent
 			# default widget behavior which leads to unpredictable results
 
-			if event.type is Gdk.BUTTON_PRESS:
+			if event.type is Gdk.EventType.BUTTON_PRESS:
 				# focus clicked item on button press
 				item = self._item_list.get_path_at_pos(int(event.x), int(event.y))
 
@@ -535,7 +535,7 @@ class ItemList(PluginBase):
 			result = True
 
 		# handle range select
-		elif event.button is 1 and shift_active and event.type is Gdk.BUTTON_PRESS:
+		elif event.button is 1 and shift_active and event.type is Gdk.EventType.BUTTON_PRESS:
 			start_path = None
 			end_path = None
 
@@ -579,7 +579,7 @@ class ItemList(PluginBase):
 
 		# handle right click
 		elif event.button is 3:
-			if event.type is Gdk.BUTTON_PRESS:
+			if event.type is Gdk.EventType.BUTTON_PRESS:
 				# record mouse down timestamp
 				self._popup_timestamp = event.get_time()
 
@@ -628,9 +628,9 @@ class ItemList(PluginBase):
 			if not result and key_value > 0:
 				# generate state sting based on modifier state (control, alt, shift)
 				state = "%d%d%d" % (
-							bool(event.state & Gdk.CONTROL_MASK),
-							bool(event.state & Gdk.MOD1_MASK),
-							bool(event.state & Gdk.SHIFT_MASK)
+							bool(event.get_state() & Gdk.ModifierType.CONTROL_MASK),
+							bool(event.get_state() & Gdk.ModifierType.MOD1_MASK),
+							bool(event.get_state() & Gdk.ModifierType.SHIFT_MASK)
 						)
 
 				if state == self._parent.options.section('item_list').get('search_modifier'):
@@ -660,12 +660,12 @@ class ItemList(PluginBase):
 		"""Handle return and escape keys for quick search"""
 		result = False
 
-		if event.keyval == Gtk.keysyms.Return:
+		if event.keyval == Gdk.KEY_Return:
 			self._stop_search(widget)
 			self._execute_selected_item(widget)
 			result = True
 
-		elif event.keyval == Gtk.keysyms.Escape:
+		elif event.keyval == Gdk.KEY_Escape:
 			self._stop_search(widget)
 			result = True
 
@@ -689,9 +689,9 @@ class ItemList(PluginBase):
 			# invalid path, notify user
 			dialog = Gtk.MessageDialog(
 									self,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_ERROR,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.ERROR,
+									Gtk.ButtonsType.OK,
 									_(
 										"Directory does not exist anymore or is not "
 										"valid. If path is not local check if specified "
@@ -727,9 +727,9 @@ class ItemList(PluginBase):
 			# no provider was found for specified protocol
 			dialog = Gtk.MessageDialog(
 									self._parent,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_ERROR,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.ERROR,
+									Gtk.ButtonsType.OK,
 									_(
 										'Specified protocol ({0}) is not supported by '
 										'this application. Please check for available plugins '
@@ -759,9 +759,9 @@ class ItemList(PluginBase):
 			# no provider was found for specified protocol
 			dialog = Gtk.MessageDialog(
 									self._parent,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_ERROR,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.ERROR,
+									Gtk.ButtonsType.OK,
 									_(
 										'Application is unable to handle specified data. '
 										'Check if source items still exist.'
@@ -783,7 +783,7 @@ class ItemList(PluginBase):
 		dialog_result = dialog.get_response()
 
 		# check user response
-		if dialog_result[0] == Gtk.RESPONSE_OK:
+		if dialog_result[0] == Gtk.ResponseType.OK:
 			# user confirmed copying
 			operation = Operation(
 								self._parent,
@@ -1568,7 +1568,7 @@ class ItemList(PluginBase):
 		response = dialog.get_response()
 
 		# try to navigate to specified path
-		if response[0] == Gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			self.change_path(os.path.expanduser(response[1]))
 
 		return True

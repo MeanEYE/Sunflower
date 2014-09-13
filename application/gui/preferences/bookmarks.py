@@ -27,8 +27,8 @@ class BookmarksOptions(SettingsPage):
 
 		# create list box
 		container = Gtk.ScrolledWindow()
-		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
-		container.set_shadow_type(Gtk.SHADOW_IN)
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+		container.set_shadow_type(Gtk.ShadowType.IN)
 
 		self._bookmarks = Gtk.ListStore(str, str)
 
@@ -38,12 +38,12 @@ class BookmarksOptions(SettingsPage):
 
 		cell_title = Gtk.CellRendererText()
 		cell_title.set_property('editable', True)
-		cell_title.set_property('mode', Gtk.CELL_RENDERER_MODE_EDITABLE)
+		cell_title.set_property('mode', Gtk.CellRendererMode.EDITABLE)
 		cell_title.connect('edited', self._edited_bookmark, 0)
 
 		cell_command = Gtk.CellRendererText()
 		cell_command.set_property('editable', True)
-		cell_command.set_property('mode', Gtk.CELL_RENDERER_MODE_EDITABLE)
+		cell_command.set_property('mode', Gtk.CellRendererMode.EDITABLE)
 		cell_command.connect('edited', self._edited_bookmark, 1)
 
 		col_title = Gtk.TreeViewColumn(_('Title'), cell_title, text=Column.NAME)

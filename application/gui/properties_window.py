@@ -27,7 +27,7 @@ class PropertiesWindow(Gtk.Window):
 	"""Properties window for files and directories"""
 
 	def __init__(self, application, provider, path):
-		Gtk.Window.__init__(self, Gtk.WINDOW_TOPLEVEL)
+		GObject.GObject.__init__(self, Gtk.WindowType.TOPLEVEL)
 
 		# store parameters locally
 		self._application = application
@@ -67,10 +67,10 @@ class PropertiesWindow(Gtk.Window):
 		# configure window
 		self.set_title(title)
 		self.set_geometry_hints(min_width=410, min_height=410)
-		self.set_position(Gtk.WIN_POS_CENTER_ON_PARENT)
+		self.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self.set_border_width(5)
 		self.set_icon_name(self._icon_name)
-		self.set_type_hint(Gdk.WINDOW_TYPE_HINT_DIALOG)
+		self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 		self.set_wmclass('Sunflower', 'Sunflower')
 
 		self.connect('key-press-event', self._handle_key_press)
@@ -81,19 +81,19 @@ class PropertiesWindow(Gtk.Window):
 
 		self._notebook.append_page(
 								self._create_basic_tab(),
-								Gtk.Label(_('Basic'))
+								Gtk.Label(label=_('Basic'))
 							)
 		self._notebook.append_page(
 								self._create_permissions_tab(),
-								Gtk.Label(_('Permissions'))
+								Gtk.Label(label=_('Permissions'))
 							)
 		self._notebook.append_page(
 								self._create_open_with_tab(),
-								Gtk.Label(_('Open With'))
+								Gtk.Label(label=_('Open With'))
 							)
 		self._notebook.append_page(
 								self._create_emblems_tab(),
-								Gtk.Label(_('Emblems'))
+								Gtk.Label(label=_('Emblems'))
 							)
 
 		# create buttons
@@ -123,7 +123,7 @@ class PropertiesWindow(Gtk.Window):
 
 	def _item_changes(self, monitor, file, other_file, event, data=None):
 		"""Event triggered when monitored file changes"""
-		if event is gio.FILE_MONITOR_EVENT_DELETED:
+		if event is Gio.FileMonitorEvent.DELETED:
 			# item was removed, close dialog
 			self.destroy()
 
@@ -142,9 +142,9 @@ class PropertiesWindow(Gtk.Window):
 			# item with the same name already exists
 			dialog = Gtk.MessageDialog(
 									self,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_ERROR,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.ERROR,
+									Gtk.ButtonsType.OK,
 									_(
 										"File or directory with specified name already "
 										"exists in current directory. Item could not "
@@ -177,9 +177,9 @@ class PropertiesWindow(Gtk.Window):
 				# problem renaming item
 				dialog = Gtk.MessageDialog(
 										self,
-										Gtk.DIALOG_DESTROY_WITH_PARENT,
-										Gtk.MESSAGE_ERROR,
-										Gtk.BUTTONS_OK,
+										Gtk.DialogFlags.DESTROY_WITH_PARENT,
+										Gtk.MessageType.ERROR,
+										Gtk.ButtonsType.OK,
 										_(
 											"Error renaming specified item. Make sure "
 											"you have enough permissions."
@@ -190,7 +190,7 @@ class PropertiesWindow(Gtk.Window):
 
 	def _create_monitor(self):
 		"""Create item monitor"""
-		self._monitor = gio.File(self._path).monitor_file()
+		self._monitor = Gio.File(self._path).monitor_file()
 		self._monitor.connect('changed', self._item_changes)
 
 	def _load_associated_applications(self):
@@ -243,10 +243,10 @@ class PropertiesWindow(Gtk.Window):
 
 		# get volume
 		try:
-			mount = gio.File(self._path).find_enclosing_mount()
+			mount = Gio.File(self._path).find_enclosing_mount()
 			volume_name = mount.get_name()
 
-		except gio.Error:
+		except Gio.Error:
 			# item is not on any known volume
 			volume_name = _('unknown')
 
@@ -353,9 +353,9 @@ class PropertiesWindow(Gtk.Window):
 		except OSError as error:
 			dialog = Gtk.MessageDialog(
 			                        self,
-			                        Gtk.DIALOG_DESTROY_WITH_PARENT,
-			                        Gtk.MESSAGE_ERROR,
-			                        Gtk.BUTTONS_OK,
+			                        Gtk.DialogFlags.DESTROY_WITH_PARENT,
+			                        Gtk.MessageType.ERROR,
+			                        Gtk.ButtonsType.OK,
 			                        _(
 										'Error changing owner or group'
 									) + '\n\n{0}'.format(error)
@@ -427,16 +427,16 @@ class PropertiesWindow(Gtk.Window):
 
 		vbox_icon = Gtk.VBox(False, 0)
 		vbox_icon.pack_start(icon, False, False)
-		table.attach(vbox_icon, 0, 1, 0, 7, Gtk.SHRINK)
+		table.attach(vbox_icon, 0, 1, 0, 7, Gtk.AttachOptions.SHRINK)
 
 		# labels
-		label_name = Gtk.Label(_('Name:'))
-		label_type = Gtk.Label(_('Type:'))
-		label_size = Gtk.Label(_('Size:'))
-		label_location = Gtk.Label(_('Location:'))
-		label_volume = Gtk.Label(_('Volume:'))
-		label_accessed = Gtk.Label(_('Accessed:'))
-		label_modified = Gtk.Label(_('Modified:'))
+		label_name = Gtk.Label(label=_('Name:'))
+		label_type = Gtk.Label(label=_('Type:'))
+		label_size = Gtk.Label(label=_('Size:'))
+		label_location = Gtk.Label(label=_('Location:'))
+		label_volume = Gtk.Label(label=_('Volume:'))
+		label_accessed = Gtk.Label(label=_('Accessed:'))
+		label_modified = Gtk.Label(label=_('Modified:'))
 
 		# configure labels
 		label_name.set_alignment(0, 0.5)
@@ -472,7 +472,7 @@ class PropertiesWindow(Gtk.Window):
 		self._label_size.set_selectable(True)
 		self._label_location.set_alignment(0, 0)
 		self._label_location.set_selectable(True)
-		self._label_location.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
+		self._label_location.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
 		self._label_volume.set_alignment(0, 0)
 		self._label_volume.set_selectable(True)
 		self._label_accessed.set_alignment(0, 0)
@@ -517,15 +517,15 @@ class PropertiesWindow(Gtk.Window):
 		table_access.set_border_width(5)
 
 		# create widgets
-		label = Gtk.Label(_('User:'))
+		label = Gtk.Label(label=_('User:'))
 		label.set_alignment(0, 0.5)
 		table_access.attach(label, 0, 1, 0, 1)
 
-		label = Gtk.Label(_('Group:'))
+		label = Gtk.Label(label=_('Group:'))
 		label.set_alignment(0, 0.5)
 		table_access.attach(label, 0, 1, 1, 2)
 
-		label = Gtk.Label(_('Others:'))
+		label = Gtk.Label(label=_('Others:'))
 		label.set_alignment(0, 0.5)
 		table_access.attach(label, 0, 1, 2, 3)
 
@@ -569,7 +569,7 @@ class PropertiesWindow(Gtk.Window):
 		table_access.attach(self._permission_others_execute, 3, 4, 2, 3)
 
 		# octal representation
-		label = Gtk.Label(_('Octal:'))
+		label = Gtk.Label(label=_('Octal:'))
 		label.set_alignment(0, 0.5)
 		table_access.attach(label, 0, 1, 3, 4)
 
@@ -587,11 +587,11 @@ class PropertiesWindow(Gtk.Window):
 		table_ownership.set_border_width(5)
 
 		# create widgets
-		label = Gtk.Label(_('User:'))
+		label = Gtk.Label(label=_('User:'))
 		label.set_alignment(0, 0.5)
 		table_ownership.attach(label, 0, 1, 0, 1)
 
-		label = Gtk.Label(_('Group:'))
+		label = Gtk.Label(label=_('Group:'))
 		label.set_alignment(0, 0.5)
 		table_ownership.attach(label, 0, 1, 1, 2)
 
@@ -601,7 +601,7 @@ class PropertiesWindow(Gtk.Window):
 
 		self._combobox_owner = Gtk.ComboBox(self._list_owner)
 		self._combobox_owner.connect('changed', self._ownership_changed)
-		self._combobox_owner.pack_start(cell_owner)
+		self._combobox_owner.pack_start(cell_owner, True, True, 0)
 		self._combobox_owner.add_attribute(cell_owner, 'text', 0)
 
 		table_ownership.attach(self._combobox_owner, 1, 2, 0, 1)
@@ -612,7 +612,7 @@ class PropertiesWindow(Gtk.Window):
 
 		self._combobox_group = Gtk.ComboBox(self._list_group)
 		self._combobox_group.connect('changed', self._ownership_changed)
-		self._combobox_group.pack_start(cell_group)
+		self._combobox_group.pack_start(cell_group, True, True, 0)
 		self._combobox_group.add_attribute(cell_group, 'text', 0)
 
 		table_ownership.attach(self._combobox_group, 1, 2, 1, 2)
@@ -661,15 +661,15 @@ class PropertiesWindow(Gtk.Window):
 				os.path.basename(self._path).replace('&', '&amp;'),
 				description
 			)
-		label = Gtk.Label(text)
+		label = Gtk.Label(label=text)
 		label.set_alignment(0, 0)
 		label.set_line_wrap(True)
 		label.set_use_markup(True)
 
 		# create application list
 		container = Gtk.ScrolledWindow()
-		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_AUTOMATIC)
-		container.set_shadow_type(Gtk.SHADOW_IN)
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		container.set_shadow_type(Gtk.ShadowType.IN)
 
 		self._store = Gtk.ListStore(bool, str, str, str)
 		self._list = Gtk.TreeView()
@@ -713,8 +713,8 @@ class PropertiesWindow(Gtk.Window):
 
 		# create scrollable container
 		container = Gtk.ScrolledWindow()
-		container.set_policy(Gtk.POLICY_NEVER, Gtk.POLICY_AUTOMATIC)
-		container.set_shadow_type(Gtk.SHADOW_IN)
+		container.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+		container.set_shadow_type(Gtk.ShadowType.IN)
 
 		# create list
 		self._emblems_store = Gtk.ListStore(bool, str, str)
@@ -756,11 +756,11 @@ class PropertiesWindow(Gtk.Window):
 		# pack user interface
 		container.add(self._emblems)
 
-		tab.pack_start(container)
+		tab.pack_start(container, True, True, 0)
 
 		return tab
 
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys"""
-		if event.keyval == Gtk.keysyms.Escape:
+		if event.keyval == Gdk.KEY_Escape:
 			self._close_window()

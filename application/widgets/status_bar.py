@@ -5,7 +5,7 @@ class StatusBar(Gtk.HBox):
 	"""Plugin status bar"""
 
 	def __init__(self):
-		Gtk.HBox.__init__(self, False, 15)
+		GObject.GObject.__init__(self, False, 15)
 
 		self.set_border_width(1)
 		self.set_property('no-show-all', True)
@@ -38,7 +38,7 @@ class StatusBar(Gtk.HBox):
 		icon.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
 		icon.show()
 
-		label = Gtk.Label(value)
+		label = Gtk.Label(label=value)
 		label.set_use_markup(True)
 		label.set_alignment(0, 0.5)
 		label.show()

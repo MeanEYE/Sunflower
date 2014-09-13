@@ -1,5 +1,4 @@
 from gi.repository import Gtk, Gio
-from gio import VolumeMonitor
 from gui.mounts_manager_window import MountsManagerWindow
 
 
@@ -14,7 +13,7 @@ class MountsManager:
 		self.window = MountsManagerWindow(self)
 
 		# create volume monitor
-		self._volume_monitor = VolumeMonitor()
+		self._volume_monitor = Gio.VolumeMonitor()
 		self._volume_monitor.connect('mount-added', self._add_mount)
 		self._volume_monitor.connect('mount-removed', self._remove_mount)
 		self._volume_monitor.connect('volume-added', self._add_volume)
@@ -120,9 +119,9 @@ class MountsManager:
 			# print error
 			dialog = Gtk.MessageDialog(
 									self,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_WARNING,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.WARNING,
+									Gtk.ButtonsType.OK,
 									_('Specified item can not be unmounted.')
 								)
 			dialog.run()

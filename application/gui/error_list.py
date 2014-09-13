@@ -11,7 +11,7 @@ class ErrorList:
 
 	def __init__(self, parent):
 		# create main window
-		self._window = Gtk.Window(type=Gtk.WINDOW_TOPLEVEL)
+		self._window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
 
 		# store parameters locally, we'll need them later
 		self._parent = parent
@@ -20,7 +20,7 @@ class ErrorList:
 		# configure dialog
 		self._window.set_title(_('Error list'))
 		self._window.set_size_request(500, 400)
-		self._window.set_position(Gtk.WIN_POS_CENTER_ON_PARENT)
+		self._window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self._window.set_resizable(True)
 		self._window.set_skip_taskbar_hint(False)
 		self._window.set_modal(False)
@@ -37,19 +37,19 @@ class ErrorList:
 		table.set_row_spacings(5)
 		table.set_col_spacings(5)
 
-		label_name = Gtk.Label(_('For:'))
+		label_name = Gtk.Label(label=_('For:'))
 		label_name.set_alignment(0, 0.5)
 
 		self._entry_name = Gtk.Entry()
 		self._entry_name.set_editable(False)
 
-		label_source = Gtk.Label(_('Source:'))
+		label_source = Gtk.Label(label=_('Source:'))
 		label_source.set_alignment(0, 0.5)
 
 		self._entry_source = Gtk.Entry()
 		self._entry_source.set_editable(False)
 
-		label_destination = Gtk.Label(_('Destination:'))
+		label_destination = Gtk.Label(label=_('Destination:'))
 		label_destination.set_alignment(0, 0.5)
 
 		self._entry_destination = Gtk.Entry()
@@ -57,8 +57,8 @@ class ErrorList:
 
 		# create error list
 		list_container = Gtk.ScrolledWindow()
-		list_container.set_policy(Gtk.POLICY_NEVER, Gtk.POLICY_AUTOMATIC)
-		list_container.set_shadow_type(Gtk.SHADOW_IN)
+		list_container.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+		list_container.set_shadow_type(Gtk.ShadowType.IN)
 
 		self._store = Gtk.ListStore(str)
 		self._list = Gtk.TreeView(model=self._store)
@@ -78,13 +78,13 @@ class ErrorList:
 		# pack user interface
 		list_container.add(self._list)
 
-		table.attach(label_name, 0, 1, 0, 1, xoptions=Gtk.SHRINK | Gtk.FILL, yoptions=Gtk.SHRINK)
-		table.attach(self._entry_name, 1, 2, 0, 1, yoptions=Gtk.SHRINK)
-		table.attach(label_source, 0, 1, 1, 2, xoptions=Gtk.SHRINK | Gtk.FILL, yoptions=Gtk.SHRINK)
-		table.attach(self._entry_source, 1, 2, 1, 2, yoptions=Gtk.SHRINK)
-		table.attach(label_destination, 0, 1, 2, 3, xoptions=Gtk.SHRINK | Gtk.FILL, yoptions=Gtk.SHRINK)
-		table.attach(self._entry_destination, 1, 2, 2, 3, yoptions=Gtk.SHRINK)
-		table.attach(list_container, 0, 2, 3, 4, xoptions=Gtk.EXPAND | Gtk.FILL, yoptions=Gtk.EXPAND | Gtk.FILL)
+		table.attach(label_name, 0, 1, 0, 1, xoptions=Gtk.AttachOptions.SHRINK | Gtk.AttachOptions.FILL, yoptions=Gtk.AttachOptions.SHRINK)
+		table.attach(self._entry_name, 1, 2, 0, 1, yoptions=Gtk.AttachOptions.SHRINK)
+		table.attach(label_source, 0, 1, 1, 2, xoptions=Gtk.AttachOptions.SHRINK | Gtk.AttachOptions.FILL, yoptions=Gtk.AttachOptions.SHRINK)
+		table.attach(self._entry_source, 1, 2, 1, 2, yoptions=Gtk.AttachOptions.SHRINK)
+		table.attach(label_destination, 0, 1, 2, 3, xoptions=Gtk.AttachOptions.SHRINK | Gtk.AttachOptions.FILL, yoptions=Gtk.AttachOptions.SHRINK)
+		table.attach(self._entry_destination, 1, 2, 2, 3, yoptions=Gtk.AttachOptions.SHRINK)
+		table.attach(list_container, 0, 2, 3, 4, xoptions=Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL, yoptions=Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL)
 
 		hbox.pack_end(button_close, False, False, 0)
 
@@ -102,7 +102,7 @@ class ErrorList:
 
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys"""
-		if event.keyval == Gtk.keysyms.Escape:
+		if event.keyval == Gdk.KEY_Escape:
 			self._close()
 
 	def set_operation_name(self, operation_name):

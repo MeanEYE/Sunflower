@@ -51,7 +51,7 @@ class MenuManager:
 			result.set_use_underline(True)
 		except:
 			# walk-around for problems with GTK+ on windows systems
-			item = Gtk.Label(item['label'])
+			item = Gtk.Label(label=item['label'])
 			item.set_use_underline(True)
 			item.set_alignment(0, 0.5)
 

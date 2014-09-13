@@ -22,8 +22,8 @@ class SessionsOptions(SettingsPage):
 
 		# create list box
 		container = Gtk.ScrolledWindow()
-		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
-		container.set_shadow_type(Gtk.SHADOW_IN)
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+		container.set_shadow_type(Gtk.ShadowType.IN)
 
 		self._store = Gtk.ListStore(str, int, int)
 
@@ -34,7 +34,7 @@ class SessionsOptions(SettingsPage):
 		# create cell renderers
 		cell_name = Gtk.CellRendererText()
 		cell_name.set_property('editable', True)
-		cell_name.set_property('mode', Gtk.CELL_RENDERER_MODE_EDITABLE)
+		cell_name.set_property('mode', Gtk.CellRendererMode.EDITABLE)
 		cell_name.connect('edited', self._handle_edited_name, 0)
 
 		cell_count = Gtk.CellRendererText()
@@ -152,9 +152,9 @@ class SessionsOptions(SettingsPage):
 		if len(existing_sessions) > 0:
 			dialog = Gtk.MessageDialog(
 									self._parent,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_ERROR,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.ERROR,
+									Gtk.ButtonsType.OK,
 									_('Session with this name already exists.')
 								)
 			dialog.run()

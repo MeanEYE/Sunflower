@@ -1,10 +1,10 @@
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk, Gio, GObject
 from parameters import Parameters
 from plugin_base.mount_manager_extension import MountManagerExtension, ExtensionFeatures
 
 # redefine some GIO constants for legacy support
-GIO_MOUNT_MOUNT_NONE = Gio.MOUNT_MOUNT_NONE if hasattr(Gio, 'MOUNT_MOUNT_NONE') else 0
-GIO_MOUNT_UNMOUNT_NONE = Gio.MOUNT_UNMOUNT_NONE if hasattr(Gio, 'MOUNT_UNMOUNT_NONE') else 0
+GIO_MOUNT_MOUNT_NONE = Gio.MountMountFlags.NONE if hasattr(Gio, 'MOUNT_MOUNT_NONE') else 0
+GIO_MOUNT_UNMOUNT_NONE = Gio.MountUnmountFlags.NONE if hasattr(Gio, 'MOUNT_UNMOUNT_NONE') else 0
 
 
 class MountsColumn:
@@ -36,7 +36,7 @@ class MountsManagerWindow(Gtk.Window):
 
 	def __init__(self, parent):
 		# create mount manager window
-		Gtk.Window.__init__(self, type=Gtk.WINDOW_TOPLEVEL)
+		GObject.GObject.__init__(self, type=Gtk.WindowType.TOPLEVEL)
 
 		self._parent = parent
 		self._application = self._parent._application
@@ -51,7 +51,7 @@ class MountsManagerWindow(Gtk.Window):
 		# configure window
 		self.set_title(_('Mount manager'))
 		self.set_default_size(700, 400)
-		self.set_position(Gtk.WIN_POS_CENTER_ON_PARENT)
+		self.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)
 		self.set_transient_for(self._application)
@@ -76,8 +76,8 @@ class MountsManagerWindow(Gtk.Window):
 
 		# create page list
 		label_container = Gtk.ScrolledWindow()
-		label_container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_AUTOMATIC)
-		label_container.set_shadow_type(Gtk.SHADOW_IN)
+		label_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		label_container.set_shadow_type(Gtk.ShadowType.IN)
 		label_container.set_size_request(130, -1)
 
 		self._tab_labels = Gtk.TreeView(model=self._pages_store)
@@ -205,17 +205,17 @@ class MountsManagerWindow(Gtk.Window):
 		"""Handle pressing keys in mount manager list"""
 		result = False
 
-		if Gtk.keysyms._1 <= event.keyval <= Gtk.keysyms._9:
+		if Gdk.KEY__1 <= event.keyval <= Gdk.KEY__9:
 			# handle switching to page number
-			page_index = event.keyval - int(Gtk.keysyms._1)
+			page_index = event.keyval - int(Gdk.KEY__1)
 			self._tabs.set_current_page(page_index)
 			result = True
 
-		elif event.keyval == Gtk.keysyms.Return:
+		elif event.keyval == Gdk.KEY_Return:
 			# handle pressing return
 			result = True
 
-		elif event.keyval == Gtk.keysyms.Escape:
+		elif event.keyval == Gdk.KEY_Escape:
 			# hide window on escape
 			self._hide()
 			result = True
@@ -341,8 +341,8 @@ class MountsExtension(MountManagerExtension):
 
 		# create interface
 		container = Gtk.ScrolledWindow() 
-		container.set_shadow_type(Gtk.SHADOW_IN)
-		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
+		container.set_shadow_type(Gtk.ShadowType.IN)
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 
 		self._list = Gtk.TreeView(model=self._store)
 		self._list.set_show_expanders(True)
@@ -524,8 +524,8 @@ class VolumesExtension(MountManagerExtension):
 
 		# create interface
 		container = Gtk.ScrolledWindow() 
-		container.set_shadow_type(Gtk.SHADOW_IN)
-		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
+		container.set_shadow_type(Gtk.ShadowType.IN)
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 
 		self._list = Gtk.TreeView(model=self._store)
 		self._list.set_show_expanders(True)

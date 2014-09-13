@@ -5,7 +5,7 @@ class Button(Gtk.ToolButton):
 	"""Go to parent directory toolbar button"""
 
 	def __init__(self, application, name, config):
-		Gtk.ToolButton.__init__(self)
+		GObject.GObject.__init__(self)
 
 		self._name = name
 		self._config = config

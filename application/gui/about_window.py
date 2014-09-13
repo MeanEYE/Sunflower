@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import os
 import sys
 
@@ -180,7 +182,7 @@ class AboutWindow:
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(parent)
-		self._dialog.set_type_hint(Gdk.WINDOW_TYPE_HINT_DIALOG)
+		self._dialog.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		# connect signals

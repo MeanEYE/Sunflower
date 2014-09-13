@@ -10,7 +10,7 @@ class TerminalOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'terminal', _('Terminal'))
 
 		# create vte terminal options
-		align_vte = Gtk.Alignment(xscale=1)
+		align_vte = Gtk.Alignment.new(0, 0, 1, 0)
 		align_vte.set_padding(0, 10, 15, 15)
 		self._vbox_vte = Gtk.VBox(False, 0)
 
@@ -22,14 +22,14 @@ class TerminalOptions(SettingsPage):
 		self._checkbox_scrollbars_visible.connect('toggled', self._parent.enable_save)
 
 		# option for custom font
-		self._align_font = Gtk.Alignment()
+		self._align_font = Gtk.Alignment.new(0, 0, 0, 0)
 		self._align_font.set_padding(0, 0, 15, 15)
 		hbox_font = Gtk.HBox(False, 5)
 
 		self._checkbox_system_font = Gtk.CheckButton(_('Use the system fixed width font'))
 		self._checkbox_system_font.connect('toggled', self.__toggled_system_font)
 
-		label_font = Gtk.Label(_('Font:'))
+		label_font = Gtk.Label(label=_('Font:'))
 		label_font.set_alignment(0, 0.5)
 
 		self._button_font = Gtk.FontButton()
@@ -38,7 +38,7 @@ class TerminalOptions(SettingsPage):
 		# option for cursor shape
 		hbox_cursor_shape = Gtk.HBox(False, 5)
 
-		label_cursor_shape = Gtk.Label(_('Cursor shape:'))
+		label_cursor_shape = Gtk.Label(label=_('Cursor shape:'))
 		label_cursor_shape.set_alignment(0, 0.5)
 
 		list_cursor_shape = Gtk.ListStore(str, int)
@@ -48,9 +48,9 @@ class TerminalOptions(SettingsPage):
 
 		cell_cursor_shape = Gtk.CellRendererText()
 
-		self._combobox_cursor_shape = Gtk.ComboBox(list_cursor_shape)
+		self._combobox_cursor_shape = Gtk.ComboBox(model=list_cursor_shape)
 		self._combobox_cursor_shape.connect('changed', self._parent.enable_save)
-		self._combobox_cursor_shape.pack_start(cell_cursor_shape)
+		self._combobox_cursor_shape.pack_start(cell_cursor_shape, True)
 		self._combobox_cursor_shape.add_attribute(cell_cursor_shape, 'text', 0)
 
 		# option for allowing bold text in terminal
@@ -62,25 +62,25 @@ class TerminalOptions(SettingsPage):
 		self._checkbox_autohide_mouse.connect('toggled', self._parent.enable_save)
 
 		# create external terminal options
-		align_external = Gtk.Alignment(xscale=1)
+		align_external = Gtk.Alignment.new(0, 0, 1, 0)
 		align_external.set_padding(0, 0, 15, 15)
 		self._vbox_external = Gtk.VBox(False, 5)
 
 		self._radio_external = Gtk.RadioButton(group=self._radio_vte, label=_('External terminal'))
 
 		vbox_command = Gtk.VBox(False, 0)
-		label_command = Gtk.Label(_('Command line:'))
+		label_command = Gtk.Label(label=_('Command line:'))
 		label_command.set_alignment(0, 0.5)
 		self._entry_command = Gtk.Entry()
 		self._entry_command.connect('changed', self._parent.enable_save)
 
 		vbox_command2 = Gtk.VBox(False, 0)
-		label_command2 = Gtk.Label(_('Command line for executing specific program:'))
+		label_command2 = Gtk.Label(label=_('Command line for executing specific program:'))
 		label_command2.set_alignment(0, 0.5)
 		self._entry_command2 = Gtk.Entry()
 		self._entry_command2.connect('changed', self._parent.enable_save)
 
-		label_note = Gtk.Label(_(
+		label_note = Gtk.Label(label=_(
 					'<small><i>Note:'
 					'\n\tOmitting {0} will open new terminal application instead of tab.'
 					'\n\t{0} will be replaced with socket/window id.'

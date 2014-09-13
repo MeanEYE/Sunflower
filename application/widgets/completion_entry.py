@@ -9,17 +9,17 @@ class PathCompletionEntry(Gtk.Entry):
 	number_split = re.compile('([0-9]+)')
 
 	def __init__(self, application):
-		Gtk.Entry.__init__(self)
+		GObject.GObject.__init__(self)
 		self._application = application
 		entry_completion = Gtk.EntryCompletion()
 		self.set_completion(entry_completion)
 		liststore = Gtk.ListStore(str, str)
-		liststore.set_sort_column_id(1, Gtk.SORT_ASCENDING)
+		liststore.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 		liststore.set_sort_func(1, self._sort_list)
 		entry_completion.set_model(liststore)
 		entry_completion.set_match_func(self._match_completion)
 		cell = Gtk.CellRendererText()
-		entry_completion.pack_start(cell)
+		entry_completion.pack_start(cell, True, True, 0)
 		entry_completion.add_attribute(cell, 'text', 1)
 		entry_completion.connect('match-selected', self._completion_selected)
 		self.connect('changed', self._fill_completion_list, entry_completion)

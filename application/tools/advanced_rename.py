@@ -22,14 +22,14 @@ class AdvancedRename:
 		self._path = self._parent.path
 
 		# create and configure window
-		self.window = Gtk.Window(type=Gtk.WINDOW_TOPLEVEL)
+		self.window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
 
 		self.window.set_title(_('Advanced rename'))
 		self.window.set_default_size(640, 600)
-		self.window.set_position(Gtk.WIN_POS_CENTER_ON_PARENT)
-		self.window.set_transient_for(application)
+		self.window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
+		self.set_transient_for(application)
 		self.window.set_border_width(7)
-		self.window.set_type_hint(Gdk.WINDOW_TYPE_HINT_DIALOG)
+		self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 		self.window.set_wmclass('Sunflower', 'Sunflower')
 
 		self.window.connect('key-press-event', self._handle_key_press)
@@ -69,13 +69,13 @@ class AdvancedRename:
 		self._names.append_column(col_new_name)
 
 		container = Gtk.ScrolledWindow()
-		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
-		container.set_shadow_type(Gtk.SHADOW_IN)
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+		container.set_shadow_type(Gtk.ShadowType.IN)
 
 		# create location
 		vbox_location = Gtk.VBox(False, 0)
 
-		label_location = Gtk.Label(_('Items located in:'))
+		label_location = Gtk.Label(label=_('Items located in:'))
 		label_location.set_alignment(0, 0.5)
 
 		entry_location = Gtk.Entry()
@@ -128,7 +128,7 @@ class AdvancedRename:
 			container = extension.get_container()
 
 			# add tab
-			self._extension_list.append_page(container, Gtk.Label(title))
+			self._extension_list.append_page(container, Gtk.Label(label=title))
 			self._extension_list.set_tab_reorderable(container, True)
 
 			# store extension for later use
@@ -166,7 +166,7 @@ class AdvancedRename:
 
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys"""
-		if event.keyval == Gtk.keysyms.Escape:
+		if event.keyval == Gdk.KEY_Escape:
 			self.window.destroy()
 
 	def update_list(self):
@@ -194,9 +194,9 @@ class AdvancedRename:
 		"""Rename selected files"""
 		dialog = Gtk.MessageDialog(
 								self.window,
-								Gtk.DIALOG_DESTROY_WITH_PARENT,
-								Gtk.MESSAGE_QUESTION,
-								Gtk.BUTTONS_YES_NO,
+								Gtk.DialogFlags.DESTROY_WITH_PARENT,
+								Gtk.MessageType.QUESTION,
+								Gtk.ButtonsType.YES_NO,
 								ngettext(
 									"You are about to rename {0} item.\n"
 									"Are you sure about this?",
@@ -205,11 +205,11 @@ class AdvancedRename:
 									len(self._list)
 								).format(len(self._list))
 							)
-		dialog.set_default_response(Gtk.RESPONSE_YES)
+		dialog.set_default_response(Gtk.ResponseType.YES)
 		result = dialog.run()
 		dialog.destroy()
 
-		if result == Gtk.RESPONSE_YES:
+		if result == Gtk.ResponseType.YES:
 			# user confirmed rename
 			item_list = []
 			for item in self._list:

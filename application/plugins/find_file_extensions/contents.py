@@ -13,11 +13,11 @@ class ContentsFindFiles(FindExtension):
 		vbox = Gtk.VBox(False, 0)
 
 		viewport = Gtk.ScrolledWindow()
-		viewport.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_AUTOMATIC)
-		viewport.set_shadow_type(Gtk.SHADOW_IN)
+		viewport.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		viewport.set_shadow_type(Gtk.ShadowType.IN)
 
 		# create entry widget
-		label_content = Gtk.Label(_('Search for:'))
+		label_content = Gtk.Label(label=_('Search for:'))
 		label_content.set_alignment(0, 0.5)
 
 		self._buffer = Gtk.TextBuffer()

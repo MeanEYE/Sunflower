@@ -45,11 +45,11 @@ class DefaultFindFiles(FindExtension):
 		# create interface
 		vbox_pattern = Gtk.VBox(False, 0)
 
-		label_pattern = Gtk.Label(_('Search for:'))
+		label_pattern = Gtk.Label(label=_('Search for:'))
 		label_pattern.set_alignment(0, 0.5)
 
-		self._entries = gtk.ListStore(str)
-		self._entry_pattern = gtk.ComboBoxEntry(model=self._entries)
+		self._entries = Gtk.ListStore(str)
+		self._entry_pattern = Gtk.ComboBoxEntry(model=self._entries)
 		self._entry_pattern.connect('changed', self.__handle_pattern_change)
 
 		self._checkbox_case_sensitive = Gtk.CheckButton(_('Case sensitive'))
@@ -84,7 +84,7 @@ class DefaultFindFiles(FindExtension):
 
 	def __handle_pattern_change(self, widget, data=None):
 		"""Handle changing pattern"""
-		self._pattern = widget.child.get_text()
+		self._pattern = widget.get_child().get_text()
 
 	def __handle_notify_start(self, data=None):
 		"""Handle starting search."""
@@ -107,7 +107,7 @@ class DefaultFindFiles(FindExtension):
 
 		# select first entry
 		self._entry_pattern.handler_block_by_func(self.__handle_pattern_change)
-		self._entry_pattern.child.set_text(entries[0])
+		self._entry_pattern.get_child().set_text(entries[0])
 		self._entry_pattern.handler_unblock_by_func(self.__handle_pattern_change)
 
 	def get_title(self):

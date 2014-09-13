@@ -16,8 +16,8 @@ class AssociationsOptions(SettingsPage):
 
 		# create interface
 		container = Gtk.ScrolledWindow()
-		container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_ALWAYS)
-		container.set_shadow_type(Gtk.SHADOW_IN)
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+		container.set_shadow_type(Gtk.ShadowType.IN)
 
 		self._associations = Gtk.TreeStore(str, str)
 		self._list = Gtk.TreeView(model=self._associations)
@@ -83,7 +83,7 @@ class AssociationsOptions(SettingsPage):
 		response = dialog.get_response()
 
 		# add new mime type to the table
-		if response[0] == Gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			mime_type = response[1]
 			description = self._application.associations_manager.get_mime_description(mime_type)
 
@@ -111,7 +111,7 @@ class AssociationsOptions(SettingsPage):
 			response = dialog.get_response()
 
 			# add new mime type to the table
-			if response[0] == Gtk.RESPONSE_OK:
+			if response[0] == Gtk.ResponseType.OK:
 				name = response[1]
 				command = response[2]
 
@@ -125,9 +125,9 @@ class AssociationsOptions(SettingsPage):
 			# warn user about selection
 			dialog = Gtk.MessageDialog(
 									self._parent,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_INFO,
-									Gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.INFO,
+									Gtk.ButtonsType.OK,
 									_(
 										'You need to select mime type to which application '
 										'will be added. You can also select another application '

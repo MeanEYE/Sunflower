@@ -57,7 +57,7 @@ class GioExtension(MountManagerExtension):
 			if password is not None:
 				# set password to stored one
 				operation.set_password(password)
-				operation.reply(gio.MOUNT_OPERATION_HANDLED)
+				operation.reply(Gio.MountOperationResult.HANDLED)
 
 			else:
 				# we don't have stored password, ask user to provide one
@@ -69,16 +69,16 @@ class GioExtension(MountManagerExtension):
 
 					response = dialog.get_response()
 
-					if response[0] == Gtk.RESPONSE_OK:
+					if response[0] == Gtk.ResponseType.OK:
 						operation.set_password(response[1])
-						operation.reply(gio.MOUNT_OPERATION_HANDLED)
+						operation.reply(Gio.MountOperationResult.HANDLED)
 
 		# create new mount operation object
-		operation = gio.MountOperation()
+		operation = Gio.MountOperation()
 		operation.connect('ask-password', ask_password)
 
 		# perform mount
-		path = gio.File(uri)
+		path = Gio.File(uri)
 		path.mount_enclosing_volume(operation, self.__mount_callback)
 
 	def _unmount(self, uri):
@@ -87,7 +87,7 @@ class GioExtension(MountManagerExtension):
 
 		# get mount for specified URI
 		try:
-			mount = gio.File(uri).find_enclosing_mount()
+			mount = Gio.File(uri).find_enclosing_mount()
 			mount.unmount(self.__unmount_callback)
 
 		except:
@@ -101,13 +101,13 @@ class GioExtension(MountManagerExtension):
 		try:
 			path.mount_enclosing_volume_finish(result)
 
-		except gio.Error as error:
+		except Gio.Error as error:
 			with Gdk.lock:
 				dialog = Gtk.MessageDialog(
 										self._parent.window,
-										Gtk.DIALOG_DESTROY_WITH_PARENT,
-										Gtk.MESSAGE_ERROR,
-										Gtk.BUTTONS_OK,
+										Gtk.DialogFlags.DESTROY_WITH_PARENT,
+										Gtk.MessageType.ERROR,
+										Gtk.ButtonsType.OK,
 										_(
 											"Unable to mount:\n{0}\n\n{1}"
 										).format(path.get_uri(), str(error))
@@ -151,8 +151,8 @@ class SambaExtension(GioExtension):
 
 		# create user interface
 		list_container = Gtk.ScrolledWindow()
-		list_container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_AUTOMATIC)
-		list_container.set_shadow_type(Gtk.SHADOW_IN)
+		list_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		list_container.set_shadow_type(Gtk.ShadowType.IN)
 
 		self._store = Gtk.ListStore(str, str, str, str, str, str, bool, str) 
 		self._list = Gtk.TreeView(model=self._store)
@@ -309,7 +309,7 @@ class SambaExtension(GioExtension):
 		dialog.set_keyring_available(keyring_manager.is_available())
 		response = dialog.get_response()
 
-		if response[0] == Gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			name = response[1][SambaResult.NAME]
 			uri = self.__form_uri(
 						response[1][SambaResult.SERVER],
@@ -375,7 +375,7 @@ class SambaExtension(GioExtension):
 			# show editing dialog
 			response = dialog.get_response()
 
-			if response[0] == Gtk.RESPONSE_OK:
+			if response[0] == Gtk.ResponseType.OK:
 				new_name = response[1][SambaResult.NAME]
 
 				# modify list store
@@ -415,20 +415,20 @@ class SambaExtension(GioExtension):
 			# ask user to confirm removal
 			dialog = Gtk.MessageDialog(
 									self._parent.window,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_QUESTION,
-									Gtk.BUTTONS_YES_NO,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.QUESTION,
+									Gtk.ButtonsType.YES_NO,
 									_(
 										"You are about to remove '{0}'.\n"
 										"Are you sure about this?"
 									).format(entry_name)
 								)
-			dialog.set_default_response(Gtk.RESPONSE_YES)
+			dialog.set_default_response(Gtk.ResponseType.YES)
 			result = dialog.run()
 			dialog.destroy()
 
 			# remove selected mount
-			if result == Gtk.RESPONSE_YES:
+			if result == Gtk.ResponseType.YES:
 				item_list.remove(selected_iter)
 
 				# save changes
@@ -505,8 +505,8 @@ class FtpExtension(GioExtension):
 
 		# create user interface
 		list_container = Gtk.ScrolledWindow()
-		list_container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_AUTOMATIC)
-		list_container.set_shadow_type(Gtk.SHADOW_IN)
+		list_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		list_container.set_shadow_type(Gtk.ShadowType.IN)
 
 		self._store = Gtk.ListStore(str, str, str, str, bool, str) 
 		self._list = Gtk.TreeView(model=self._store)
@@ -661,7 +661,7 @@ class FtpExtension(GioExtension):
 		dialog.set_keyring_available(keyring_manager.is_available())
 		response = dialog.get_response()
 
-		if response[0] == Gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			name = response[1][FtpResult.NAME]
 			uri = self.__form_uri(
 						response[1][FtpResult.SERVER],
@@ -718,20 +718,20 @@ class FtpExtension(GioExtension):
 			# ask user to confirm removal
 			dialog = Gtk.MessageDialog(
 									self._parent.window,
-									Gtk.DIALOG_DESTROY_WITH_PARENT,
-									Gtk.MESSAGE_QUESTION,
-									Gtk.BUTTONS_YES_NO,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.QUESTION,
+									Gtk.ButtonsType.YES_NO,
 									_(
 										"You are about to remove '{0}'.\n"
 										"Are you sure about this?"
 									).format(entry_name)
 								)
-			dialog.set_default_response(Gtk.RESPONSE_YES)
+			dialog.set_default_response(Gtk.ResponseType.YES)
 			result = dialog.run()
 			dialog.destroy()
 
 			# remove selected mount
-			if result == Gtk.RESPONSE_YES:
+			if result == Gtk.ResponseType.YES:
 				item_list.remove(selected_iter)
 
 				# save changes
@@ -761,7 +761,7 @@ class FtpExtension(GioExtension):
 			# show editing dialog
 			response = dialog.get_response()
 
-			if response[0] == Gtk.RESPONSE_OK:
+			if response[0] == Gtk.ResponseType.OK:
 				new_name = response[1][FtpResult.NAME]
 
 				# modify list store
@@ -857,8 +857,8 @@ class DavExtension(GioExtension):
 
 		# create user interface
 		list_container = Gtk.ScrolledWindow()
-		list_container.set_policy(Gtk.POLICY_AUTOMATIC, Gtk.POLICY_AUTOMATIC)
-		list_container.set_shadow_type(Gtk.SHADOW_IN)
+		list_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		list_container.set_shadow_type(Gtk.ShadowType.IN)
 
 		self._store = Gtk.ListStore(str, str, int, str, str, bool, str)
 		self._list = Gtk.TreeView(model=self._store)
@@ -1014,7 +1014,7 @@ class DavExtension(GioExtension):
 		dialog.set_keyring_available(keyring_manager.is_available())
 		response = dialog.get_response()
 
-		if response[0] == Gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			name = response[1][DavResult.NAME]
 			uri = self.__form_uri(
 				response[1][DavResult.SERVER],
@@ -1072,20 +1072,20 @@ class DavExtension(GioExtension):
 			# ask user to confirm removal
 			dialog = Gtk.MessageDialog(
 				self._parent.window,
-				Gtk.DIALOG_DESTROY_WITH_PARENT,
-				Gtk.MESSAGE_QUESTION,
-				Gtk.BUTTONS_YES_NO,
+				Gtk.DialogFlags.DESTROY_WITH_PARENT,
+				Gtk.MessageType.QUESTION,
+				Gtk.ButtonsType.YES_NO,
 				_(
 					"You are about to remove '{0}'.\n"
 					"Are you sure about this?"
 				).format(entry_name)
 			)
-			dialog.set_default_response(Gtk.RESPONSE_YES)
+			dialog.set_default_response(Gtk.ResponseType.YES)
 			result = dialog.run()
 			dialog.destroy()
 
 			# remove selected mount
-			if result == Gtk.RESPONSE_YES:
+			if result == Gtk.ResponseType.YES:
 				item_list.remove(selected_iter)
 
 				# save changes
@@ -1115,7 +1115,7 @@ class DavExtension(GioExtension):
 			# show editing dialog
 			response = dialog.get_response()
 
-			if response[0] == Gtk.RESPONSE_OK:
+			if response[0] == Gtk.ResponseType.OK:
 				new_name = response[1][DavResult.NAME]
 
 				# modify list store

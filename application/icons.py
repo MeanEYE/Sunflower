@@ -11,7 +11,7 @@ class IconManager:
 
 	def __init__(self, parent):
 		self._parent = parent
-		self._icon_theme = Gtk.icon_theme_get_default()
+		self._icon_theme = Gtk.IconTheme.get_default()
 		self._user_directories = None
 		self._default_file = None
 		self._default_directory = None

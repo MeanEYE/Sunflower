@@ -78,7 +78,7 @@ class AcceleratorGroup:
 				self._method_names[label] = method_name
 
 				# connect accelerator
-				self._accel_group.connect_group(keyval, modifier, 0, self._handle_activate)
+				self._accel_group.connect(keyval, modifier, 0, self._handle_activate)
 
 	def _handle_activate(self, group, widget, keyval, modifier):
 		"""Handle accelerator activation"""

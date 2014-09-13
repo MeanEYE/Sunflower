@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Gio, GObject
+from gi.repository import Gtk, Gio, GObject, GLib
 from parameters import Parameters
 from plugin_base.mount_manager_extension import MountManagerExtension, ExtensionFeatures
 
@@ -141,7 +141,7 @@ class MountsManagerWindow(Gtk.Window):
 				self._volumes = extension
 
 		# tell parent we are ready for mount list population
-		self._parent._populate_list()
+		GLib.idle_add(self._parent._populate_list)
 
 	def _mount_count_data_function(self, column, renderer, model, current_iter, data=None):
 		"""Set content of cell renderer when drawing number of mounts extension has"""
@@ -172,7 +172,7 @@ class MountsManagerWindow(Gtk.Window):
 		menu_item.set_label(text)
 		menu_item.set_image(image)
 		menu_item.set_always_show_image(True)
-		menu_item.set_data('uri', uri)
+		menu_item.uri = uri
 		menu_item.connect('activate', self._parent._unmount_item_menu_callback)
 		menu_item.show()
 
@@ -186,7 +186,8 @@ class MountsManagerWindow(Gtk.Window):
 		self._application.bookmarks.remove_mount(mount_point)
 
 		for item in self._menu_unmount.get_children():
-			if item.get_data('uri') == mount_point: self._menu_unmount.remove(item)
+			if item.uri == mount_point:
+				self._menu_unmount.remove(item)
 
 		# update menu
 		self._menu_updated()
@@ -236,7 +237,7 @@ class MountsManagerWindow(Gtk.Window):
 
 			# tell extension to take focus
 			new_object = self._tabs.get_nth_page(new_tab)
-			extension = new_object.get_data('extension')
+			extension = new_object.extension
 
 			if extension is not None and hasattr(extension, 'focus_object'):
 				extension.focus_object()
@@ -251,7 +252,7 @@ class MountsManagerWindow(Gtk.Window):
 
 		# tell extension to take focus
 		new_object = self._tabs.get_nth_page(page_num)
-		extension = new_object.get_data('extension')
+		extension = new_object.extension
 
 		if extension is not None and hasattr(extension, 'focus_object'):
 			extension.focus_object()
@@ -303,7 +304,7 @@ class MountsManagerWindow(Gtk.Window):
 		self._pages_store.append((icon_name, name, 0, tab_number))
 
 		# assign extension to container
-		container.set_data('extension', extension)
+		container.extension = extension
 
 		# append new page
 		self._tabs.append_page(container)
@@ -396,7 +397,7 @@ class MountsExtension(MountManagerExtension):
 		button_unmount.connect('clicked', self._unmount_selected)
 
 		# use spinner if possible to denote busy operation
-		if hasattr(gtk, 'Spinner'):
+		if hasattr(Gtk, 'Spinner'):
 			self._spinner = Gtk.Spinner()
 			self._spinner.set_size_request(20, 20)
 			self._spinner.set_property('no-show-all', True)
@@ -559,7 +560,7 @@ class VolumesExtension(MountManagerExtension):
 		button_unmount.connect('clicked', self._unmount_volume)
 
 		# use spinner if possible to denote busy operation
-		if hasattr(gtk, 'Spinner'):
+		if hasattr(Gtk, 'Spinner'):
 			self._spinner = Gtk.Spinner()
 			self._spinner.set_size_request(20, 20)
 			self._spinner.set_property('no-show-all', True)

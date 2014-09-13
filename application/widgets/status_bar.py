@@ -1,11 +1,11 @@
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject
 
 
 class StatusBar(Gtk.HBox):
 	"""Plugin status bar"""
 
 	def __init__(self):
-		GObject.GObject.__init__(self, False, 15)
+		GObject.GObject.__init__(self, homogeneous=False, spacing=15)
 
 		self.set_border_width(1)
 		self.set_property('no-show-all', True)

@@ -5,7 +5,7 @@ import user
 import fnmatch
 import common
 
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, GObject, Gdk, GLib
 from column_editor import FileList_ColumnEditor
 from gio_extension import SambaExtension, FtpExtension, DavExtension, SftpExtension
 from gio_provider import NetworkProvider, TrashProvider, DavProvider, DavsProvider
@@ -148,11 +148,11 @@ class FileList(ItemList):
 		col_date = Gtk.TreeViewColumn(_('Date'))
 
 		# set column names
-		col_name.set_data('name', 'name')
-		col_extension.set_data('name', 'extension')
-		col_size.set_data('name', 'size')
-		col_mode.set_data('name', 'mode')
-		col_date.set_data('name', 'date')
+		col_name.name = 'name'
+		col_extension.name = 'extension'
+		col_size.name = 'size'
+		col_mode.name = 'mode'
+		col_date.name = 'date'
 
 		# add cell renderer to columns
 		col_name.pack_start(cell_icon, False)
@@ -281,10 +281,10 @@ class FileList(ItemList):
 
 		# set grid lines
 		grid_lines = (
-					Gtk.TREE_VIEW_GRID_LINES_NONE,
-					Gtk.TREE_VIEW_GRID_LINES_HORIZONTAL,
-					Gtk.TREE_VIEW_GRID_LINES_VERTICAL,
-					Gtk.TREE_VIEW_GRID_LINES_BOTH,
+					Gtk.TreeViewGridLines.NONE,
+					Gtk.TreeViewGridLines.HORIZONTAL,
+					Gtk.TreeViewGridLines.VERTICAL,
+					Gtk.TreeViewGridLines.BOTH,
 				)[self._parent.options.section('item_list').get('grid_lines')]
 		self._item_list.set_grid_lines(grid_lines)
 
@@ -336,7 +336,7 @@ class FileList(ItemList):
 		for column in columns:
 			column.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
 
-			column_name = column.get_data('name')
+			column_name = column.name
 			font_size = options.get('font_size_{0}'.format(column_name))
 
 			# make sure we have font size specified
@@ -350,7 +350,7 @@ class FileList(ItemList):
 				continue
 
 			# apply font size to all cell renderers
-			for cell_renderer in column.get_cell_renderers():
+			for cell_renderer in column.get_cells():
 				try:
 					cell_renderer.set_property('size-points', font_size)
 
@@ -952,6 +952,7 @@ class FileList(ItemList):
 		# return if there is no selection
 		if selection is None:
 			return
+
 		is_dir = self.get_provider().is_dir(selection)
 		# get base name from selection
 		selection = os.path.basename(selection)
@@ -1335,7 +1336,7 @@ class FileList(ItemList):
 
 				# add item
 				self._add_item(path, parent, parent_path)
-				self._flush_queue(parent)
+				GLib.idle_add(self._flush_queue, parent)
 
 			else:
 				self._update_item_details_by_name(relative_path, parent)
@@ -1596,7 +1597,7 @@ class FileList(ItemList):
 			self._item_queue.append(data)
 
 			if len(self._item_queue) > 50:
-				self._flush_queue(parent)
+				GLib.idle_all(self._flush_queue, parent)
 
 		except Exception as error:
 			print 'Error: {0} - {1}'.format(filename, str(error))
@@ -1605,29 +1606,28 @@ class FileList(ItemList):
 
 	def _flush_queue(self, parent=None):
 		"""Add items in queue to the list"""
-		with Gdk.lock:
-			# add items
-			for data in self._item_queue:
-				new_iter = self._store.append(parent, data)
+		# add items
+		for data in self._item_queue:
+			new_iter = self._store.append(parent, data)
 
-				# force showing expanders
-				if self._show_expanders and data[Column.IS_DIR] and not data[Column.IS_PARENT_DIR]:
-					self._store.append(new_iter, (0, ) * 18)
+			# force showing expanders
+			if self._show_expanders and data[Column.IS_DIR] and not data[Column.IS_PARENT_DIR]:
+				self._store.append(new_iter, (0, ) * 18)
 
-				# focus specified item
-				if self._item_to_focus == data[0]:
-					path = self._store.get_path(new_iter)
+			# focus specified item
+			if self._item_to_focus == data[0]:
+				path = self._store.get_path(new_iter)
 
-					# set cursor position and scroll ti make it visible
-					self._item_list.set_cursor(path)
-					self._item_list.scroll_to_cell(path)
+				# set cursor position and scroll ti make it visible
+				self._item_list.set_cursor(path)
+				self._item_list.scroll_to_cell(path)
 
-			# clear item queue
-			self._item_queue[:] = []
+		# clear item queue
+		self._item_queue[:] = []
 
-			# expand row if needed
-			if parent is not None:
-				self._item_list.expand_row(self._store.get_path(parent), False)
+		# expand row if needed
+		if parent is not None:
+			self._item_list.expand_row(self._store.get_path(parent), False)
 
 	def _delete_item_by_name(self, name, parent):
 		"""Removes item with 'name' from the list"""
@@ -1975,8 +1975,7 @@ class FileList(ItemList):
 			self._thread_active.set()
 
 			# show spinner animation
-			with Gdk.lock:
-				self._title_bar.show_spinner()
+			GLib.idle_add(self._title_bar.show_spinner)
 
 			try:
 				# get list of items to add
@@ -2006,17 +2005,16 @@ class FileList(ItemList):
 				# add item to the list
 				self._add_item(item_name, parent, parent_path)
 
-			self._flush_queue(parent)
+			GLib.idle_add(self._flush_queue, parent)
 
 			# hide spinner animation
-			with Gdk.lock:
-				self._title_bar.hide_spinner()
+			GLib.idle_add(self._title_bar.hide_spinner)
 
-				# update status bar
-				self._update_status_with_statistis()
+			# update status bar
+			GLib.idle_add(self._update_status_with_statistis)
 
-				# turn on sorting
-				self._apply_sort_function()
+			# turn on sorting
+			GLib.idle_add(self._apply_sort_function)
 
 			# load emblems
 			self._load_emblems(parent, parent_path)
@@ -2351,7 +2349,7 @@ class FileList(ItemList):
 
 	def update_column_size(self, name):
 		"""Update column size with global value"""
-		column = filter(lambda item: item.get_data('name') == name, self._columns)[0]
+		column = filter(lambda item: item.name == name, self._columns)[0]
 		width = self._parent.plugin_options.section(self._name).get('size_{0}'.format(name))
 
 		if width is not None:

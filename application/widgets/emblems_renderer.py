@@ -54,7 +54,7 @@ class CellRendererEmblems(Gtk.CellRenderer):
 
 		return result
 
-	def do_render(self, window, widget, background_area, cell_area, expose_area, flags):
+	def do_render(self, context, widget, background_area, cell_area, flags):
 		"""Render emblems on tree view."""
 		if not self.is_link and (self.emblems is None or len(self.emblems) == 0):
 			return
@@ -64,7 +64,6 @@ class CellRendererEmblems(Gtk.CellRenderer):
 		spacing = self.spacing
 		emblems = self.emblems
 		icon_theme = Gtk.IconTheme.get_default()
-		context = window.cairo_create()
 
 		# add symbolic link emblem if needed
 		if self.is_link:

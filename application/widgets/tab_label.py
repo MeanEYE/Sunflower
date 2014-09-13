@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Pango
+from gi.repository import Gtk, Pango, Gdk
 
 
 class TabLabel:
@@ -29,18 +29,19 @@ class TabLabel:
 
 		image = Gtk.Image()
 		image.set_from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU)
-		image_width, image_height = Gtk.icon_size_lookup(Gtk.IconSize.MENU)
+		result, image_width, image_height = Gtk.icon_size_lookup(Gtk.IconSize.MENU)
 		image.show()
 
-		style = Gtk.RcStyle()
-		style.xthickness = 0
-		style.ythickness = 0
+		# TODO: Figure out how to do this in GTK3
+		# style = Gtk.RcStyle()
+		# style.xthickness = 0
+		# style.ythickness = 0
 
 		self._button = Gtk.Button()
 		self._button.set_focus_on_click(False)
 		self._button.add(image)
 		self._button.set_relief(Gtk.ReliefStyle.NONE)
-		self._button.modify_style(style)
+		# self._button.modify_style(style)
 		self._button.connect('clicked', self._close_tab)
 		self._button.set_property('no-show-all', True)
 		self._button.set_size_request(image_width + 2, image_height + 2)

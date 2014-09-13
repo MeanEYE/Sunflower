@@ -1,14 +1,4 @@
-from gi.repository import Gtk
-
-try:
-	import vte
-except:
-	vte = None
-
-try:
-	from gi.repository import GConf
-except:
-	gconf = None
+from gi.repository import Gtk, Gdk, Vte, GConf
 
 from plugin_base.plugin import PluginBase
 from accelerator_group import AcceleratorGroup
@@ -40,8 +30,6 @@ class Terminal(PluginBase):
 	defining your own.
 
 	"""
-
-	_vte_present = False
 
 	def __init__(self, parent, notebook, options):
 		PluginBase.__init__(self, parent, notebook, options)
@@ -77,9 +65,8 @@ class Terminal(PluginBase):
 		# create main object
 		self._terminal_type = section.get('type')
 
-		if self._terminal_type == TerminalType.VTE and vte is not None:
-			self._vte_present = True
-			self._terminal = vte.Terminal()
+		if self._terminal_type == TerminalType.VTE:
+			self._terminal = Vte.Terminal()
 			self._terminal.connect('window-title-changed', self._update_title)
 
 			# unset drag source
@@ -88,16 +75,16 @@ class Terminal(PluginBase):
 			# configure terminal widget
 			shape = section.get('cursor_shape')
 			shape_type = {
-					CursorShape.BLOCK: vte.CURSOR_SHAPE_BLOCK,
-					CursorShape.IBEAM: vte.CURSOR_SHAPE_IBEAM,
-					CursorShape.UNDERLINE: vte.CURSOR_SHAPE_UNDERLINE
+					CursorShape.BLOCK: Vte.TerminalCursorShape.BLOCK,
+					CursorShape.IBEAM: Vte.TerminalCursorShape.IBEAM,
+					CursorShape.UNDERLINE: Vte.TerminalCursorShape.UNDERLINE
 				}
 			self._terminal.set_cursor_shape(shape_type[shape])
 
 			self._terminal.set_allow_bold(section.get('allow_bold'))
 			self._terminal.set_mouse_autohide(section.get('mouse_autohide'))
 
-			if section.get('use_system_font') and gconf is not None:
+			if section.get('use_system_font'):
 				self.__set_system_font()
 
 			else:
@@ -149,18 +136,18 @@ class Terminal(PluginBase):
 		key = '{0}/monospace_font_name'.format(path)
 
 		if client is None:
-			if self._terminal.get_data('client') is None:
+			if not hasattr(self._terminal, 'client'):
 				# client wasn't assigned to widget, get default one and set events
 				client = GConf.Client.get_default()
 				client.add_dir(path, GConf.ClientPreloadType.PRELOAD_NONE)
 				client.notify_add(key, self.__set_system_font)
-				self._terminal.set_data('client', client)
+				self._terminal.client = client
 
 			else:
 				# get assigned client
-				client = self._terminal.get_data('client')
+				client = self._terminal.client
 
-		if client is not None:
+		else:
 			# try to get font and set it
 			font_name = client.get_string(key)
 
@@ -186,12 +173,12 @@ class Terminal(PluginBase):
 		self._menu = Gtk.Menu()
 
 		# copy
-		self._menu_item_copy = Gtk.ImageMenuItem(stock_id=Gtk.STOCK_COPY)
+		self._menu_item_copy = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_COPY)
 		self._menu_item_copy.connect('activate', self._copy_selection)
 		self._menu.append(self._menu_item_copy)
 
 		# paste
-		self._menu_item_paste = Gtk.ImageMenuItem(stock_id=Gtk.STOCK_PASTE)
+		self._menu_item_paste = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_PASTE)
 		self._menu_item_paste.connect('activate', self._paste_selection)
 		self._menu.append(self._menu_item_paste)
 
@@ -356,7 +343,7 @@ class Terminal(PluginBase):
 			self._terminal.set_mouse_autohide(section.get('mouse_autohide'))
 
 			# apply font
-			if section.get('use_system_font') and gconf is not None:
+			if section.get('use_system_font'):
 				self.__set_system_font()
 
 			else:

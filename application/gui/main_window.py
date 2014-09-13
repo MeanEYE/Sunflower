@@ -707,7 +707,8 @@ class MainWindow(Gtk.Window):
 		self._create_commands_menu()
 
 		# restore window size and position
-		self._restore_window_position()
+		# TODO: Fix this for GTK3
+		# self._restore_window_position()
 
 		# load plugins
 		self._load_plugins()
@@ -829,7 +830,7 @@ class MainWindow(Gtk.Window):
 				# normal menu item
 				tool = Gtk.MenuItem(label=command_data['title'])
 				tool.connect('activate', self._handle_command_click)
-				tool.set_data('command', command_data['command'])
+				tool.command = command_data['command']
 
 			else:
 				# separator
@@ -873,7 +874,7 @@ class MainWindow(Gtk.Window):
 
 	def _handle_command_click(self, widget, data=None):
 		"""Handle click on command menu item"""
-		command = widget.get_data('command')
+		command = widget.command
 
 		# grab active objects
 		left_object = self.get_left_object()
@@ -911,13 +912,13 @@ class MainWindow(Gtk.Window):
 	def _handle_new_tab_click(self, widget, data=None):
 		"""Handle clicking on item from 'New tab' menu"""
 		notebook = self.get_active_object()._notebook
-		plugin_class = widget.get_data('class')
+		plugin_class = widget.plugin_class
 
 		self.create_tab(notebook, plugin_class)
 
 	def _handle_configure_event(self, widget, event):
 		"""Handle window resizing"""
-		if self.window.get_state() == 0:
+		if self.get_state() == 0:
 			self._geometry = self.get_size() + self.get_position()
 
 	def _handle_window_state_event(self, widget, event):
@@ -1123,28 +1124,28 @@ class MainWindow(Gtk.Window):
 		plugin_files = filter(lambda file_name: file_name in plugins_to_load, plugin_files)
 
 		for file_name in plugin_files:
-			try:
-				# determine whether we need to load user plugin or system plugin
-				user_plugin_exists = os.path.exists(os.path.join(self.user_plugin_path, file_name))
-				load_user_plugin = user_plugin_exists and file_name not in self.protected_plugins
+			# try:
+			# determine whether we need to load user plugin or system plugin
+			user_plugin_exists = os.path.exists(os.path.join(self.user_plugin_path, file_name))
+			load_user_plugin = user_plugin_exists and file_name not in self.protected_plugins
 
-				plugin_base_module = 'user_plugins' if load_user_plugin else 'plugins'
+			plugin_base_module = 'user_plugins' if load_user_plugin else 'plugins'
 
-				# import module
-				__import__('{0}.{1}.plugin'.format(plugin_base_module, file_name))
-				plugin = sys.modules['{0}.{1}.plugin'.format(plugin_base_module, file_name)]
+			# import module
+			__import__('{0}.{1}.plugin'.format(plugin_base_module, file_name))
+			plugin = sys.modules['{0}.{1}.plugin'.format(plugin_base_module, file_name)]
 
-				# call module register_plugin method
-				if hasattr(plugin, 'register_plugin'):
-					plugin.register_plugin(self)
+			# call module register_plugin method
+			if hasattr(plugin, 'register_plugin'):
+				plugin.register_plugin(self)
 
-			except Exception as error:
-				print 'Error: Unable to load plugin "{0}": {1}'.format(file_name, error)
+			# except Exception as error:
+			# 	print 'Error: Unable to load plugin "{0}": {1}'.format(file_name, error)
 
-				# in case plugin is protected, complain and exit
-				if file_name in self.protected_plugins:
-					print '\nFatal error! Failed to load required plugin, exiting!'
-					sys.exit(3)
+			# 	# in case plugin is protected, complain and exit
+			# 	if file_name in self.protected_plugins:
+			# 		print '\nFatal error! Failed to load required plugin, exiting!'
+			# 		sys.exit(3)
 
 	def _load_translation(self):
 		"""Load translation and install global functions"""
@@ -1391,7 +1392,7 @@ class MainWindow(Gtk.Window):
 		"""Save window position to config"""
 		section = self.window_options.section('main')
 
-		state = self.window.get_state()
+		state = self.get_state()
 		window_state = 0
 
 		if state & Gdk.WindowState.FULLSCREEN:
@@ -1738,11 +1739,13 @@ class MainWindow(Gtk.Window):
 					lock = open(lock_file, 'w')
 					fcntl.lockf(lock, fcntl.LOCK_EX|fcntl.LOCK_NB)
 					lock.write(str(os.getpid()))
+
 				except IOError:
-					print "Another copy of Sunflower is already running"
+					print 'Another copy of Sunflower is already running'
 					sys.exit()
+
 				except OSError as oserror:
-					print "Can't create lock file {}. {}".format(lock_file, oserror)
+					print 'Can''t create lock file {0}. {1}'.format(lock_file, oserror)
 					sys.exit()
 
 		# create dbus interface
@@ -2578,7 +2581,7 @@ class MainWindow(Gtk.Window):
 
 		# create menu item and add it
 		menu_item = Gtk.MenuItem(title)
-		menu_item.set_data('class', PluginClass)
+		menu_item.plugin_class = PluginClass
 		menu_item.connect('activate', self._handle_new_tab_click)
 
 		menu_item.show()

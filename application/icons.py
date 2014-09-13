@@ -77,7 +77,7 @@ class IconManager:
 
 		# get icon names
 		if mime_type is not None:
-			themed_icon = Gio.content_type_get_icon(mime_type)
+			themed_icon = Gio.content_type_get_icon(mime_type[0])
 
 		# get only valid icon names
 		if themed_icon is not None:

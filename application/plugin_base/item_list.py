@@ -2,7 +2,7 @@ import os
 import urllib
 import common
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from plugin import PluginBase
 from operation import CopyOperation, MoveOperation
 from accelerator_group import AcceleratorGroup
@@ -56,6 +56,7 @@ class ItemList(PluginBase):
 		self._selection_color = section.get('selection_color')
 		self._selection_indicator = section.get('selection_indicator')
 		self._second_extension = section.get('second_extension')
+		self._enable_media_preview = options.get('media_preview')
 
 		# we use this variable to prevent dead loop during column resize
 		self._is_updating = False
@@ -427,7 +428,7 @@ class ItemList(PluginBase):
 			return
 
 		columns = self._item_list.get_columns()
-		names = [column.get_data('name') for column in columns]
+		names = [column.name for column in columns]
 
 		# make sure order contains only valid names
 		order = filter(lambda name: name in names, order[:])
@@ -453,7 +454,7 @@ class ItemList(PluginBase):
 
 		# set column visibility
 		for column in columns:
-			visible = column.get_data('name') in order
+			visible = column.name in order
 			column.set_visible(visible)
 
 		# unblock signal handler
@@ -466,7 +467,7 @@ class ItemList(PluginBase):
 
 		# store default column sizes
 		for index, column in enumerate(self._columns):
-			name = 'size_{0}'.format(column.get_data('name'))
+			name = 'size_{0}'.format(column.name)
 			size = self._columns_size[index]
 
 			if not section.has(name):
@@ -679,7 +680,7 @@ class ItemList(PluginBase):
 	def _handle_history_click(self, widget=None, data=None, path=None):
 		"""Handle clicks on bookmark menu"""
 		if path is None:
-			path = widget.get_data('path')
+			path = widget.path
 
 		if self.get_provider().is_dir(path):
 			# path is valid
@@ -1185,7 +1186,7 @@ class ItemList(PluginBase):
 			# create items
 			for item in item_list:
 				menu_item = Gtk.MenuItem(item)
-				menu_item.set_data('path', item)
+				menu_item.path = item
 				menu_item.connect('activate', self._handle_history_click)
 
 				self._history_menu.append(menu_item)
@@ -1315,7 +1316,7 @@ class ItemList(PluginBase):
 	def _column_resized(self, widget, data=None):
 		"""Resize all columns accordingly"""
 		column_width = widget.get_width()
-		column_name = widget.get_data('name')
+		column_name = widget.name
 		option_name = 'size_{0}'.format(column_name)
 
 		# get stored column width
@@ -1333,7 +1334,7 @@ class ItemList(PluginBase):
 	def _column_changed(self, widget, data=None):
 		"""Handle adding, removing and reordering columns"""
 		columns = filter(lambda column: column.get_visible(), self._item_list.get_columns())
-		column_names = map(lambda column: column.get_data('name'), columns)
+		column_names = map(lambda column: column.name, columns)
 
 		# apply column change to other objects
 		self._parent.delegate_to_objects(self, '_reorder_columns', column_names)
@@ -1344,7 +1345,7 @@ class ItemList(PluginBase):
 	def _resize_columns(self, columns):
 		"""Resize columns according to global options"""
 		for column in columns:
-			option_name = 'size_{0}'.format(column.get_data('name'))
+			option_name = 'size_{0}'.format(column.name)
 			width = self._parent.plugin_options.section(self._name).get(option_name)
 
 			if width is not None:

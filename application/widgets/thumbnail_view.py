@@ -1,6 +1,6 @@
 import os
 
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject
 
 try:
 	# try to import module
@@ -21,7 +21,7 @@ class ThumbnailView(Gtk.Window):
 	"""
 
 	def __init__(self, parent, size=None):
-		GObject.GObject.__init__(self, Gtk.WindowType.POPUP)
+		GObject.GObject.__init__(self, type=Gtk.WindowType.POPUP)
 
 		self.set_keep_above(True)
 		self.set_resizable(False)

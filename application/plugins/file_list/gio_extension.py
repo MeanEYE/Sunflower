@@ -197,7 +197,7 @@ class SambaExtension(GioExtension):
 		button_unmount.connect('clicked', self._unmount_selected)
 
 		# use spinner if possible to denote busy operation
-		if hasattr(gtk, 'Spinner'):
+		if hasattr(Gtk, 'Spinner'):
 			self._spinner = Gtk.Spinner()
 			self._spinner.set_size_request(20, 20)
 			self._spinner.set_property('no-show-all', True)
@@ -551,7 +551,7 @@ class FtpExtension(GioExtension):
 		button_unmount.connect('clicked', self._unmount_selected)
 
 		# use spinner if possible to denote busy operation
-		if hasattr(gtk, 'Spinner'):
+		if hasattr(Gtk, 'Spinner'):
 			self._spinner = Gtk.Spinner()
 			self._spinner.set_size_request(20, 20)
 			self._spinner.set_property('no-show-all', True)
@@ -903,7 +903,7 @@ class DavExtension(GioExtension):
 		button_unmount.connect('clicked', self._unmount_selected)
 
 		# use spinner if possible to denote busy operation
-		if hasattr(gtk, 'Spinner'):
+		if hasattr(Gtk, 'Spinner'):
 			self._spinner = Gtk.Spinner()
 			self._spinner.set_size_request(20, 20)
 			self._spinner.set_property('no-show-all', True)

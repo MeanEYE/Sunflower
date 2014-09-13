@@ -1,6 +1,6 @@
 import math
 
-from gi.repository import Gtk, Pango
+from gi.repository import Gtk, Pango, Gdk
 from widgets.breadcrumbs import Breadcrumbs
 
 
@@ -26,7 +26,6 @@ class TitleBar:
 		self._box_spacing = 1
 		self._box_border_width = 4
 		self._super_user_colors = None
-
 
 		# get options
 		options = self._application.options
@@ -55,21 +54,22 @@ class TitleBar:
 		# connect signals
 		self._container.connect('realize', self.__realize_event)
 		self._container.connect('button-release-event', self.__button_release_event)
-		self._hbox.connect('expose-event', self.__expose_event)
+		self._hbox.connect('draw', self.__draw_event)
 
 		# top folder icon as default
 		self._icon = Gtk.Image()
 
+		# TODO: Fix this for GTK3
 		# create plugin main menu button
-		style = Gtk.RcStyle()
-		style.xthickness = 0
-		style.ythickness = 0
+		# style = Gtk.RcStyle()
+		# style.xthickness = 0
+		# style.ythickness = 0
 
 		self._button_menu = Gtk.Button()
 		self._button_menu.add(self._icon)
 		if not self._button_relief:
 			self._button_menu.set_relief(Gtk.ReliefStyle.NONE)
-		self._button_menu.modify_style(style)
+		# self._button_menu.modify_style(style)
 		self._button_menu.set_focus_on_click(False)
 		self._button_menu.set_tooltip_text(_('Context menu'))
 		self._button_menu.connect('clicked', self.show_menu)
@@ -94,7 +94,7 @@ class TitleBar:
 		self._subtitle_label.modify_font(font)
 
 		# create spinner control if it exists
-		if hasattr(gtk, 'Spinner'):
+		if hasattr(Gtk, 'Spinner'):
 			self._spinner = Gtk.Spinner()
 			self._spinner.set_size_request(20, 20)
 			self._spinner.set_property('no-show-all', True)
@@ -120,8 +120,8 @@ class TitleBar:
 
 		if self._state is Gtk.StateType.NORMAL or normal_style:
 			# normal state
-			background = self._style.bg[Gtk.StateType.NORMAL]
-			foreground = self._style.fg[Gtk.StateType.NORMAL]
+			background = self._style.get_background_color(Gtk.StateFlags.NORMAL)
+			foreground = self._style.get_color(Gtk.StateFlags.NORMAL)
 
 		else:
 			if self._mode is Mode.NORMAL \
@@ -130,13 +130,13 @@ class TitleBar:
 				# selected state
 				if self._ubuntu_coloring:
 					# ubuntu coloring method
-					background = self._toolbar_style.bg[Gtk.StateType.NORMAL]
-					foreground = self._toolbar_style.fg[Gtk.StateType.NORMAL]
+					background = self._toolbar_style.get_background_color(Gtk.StateFlags.NORMAL)
+					foreground = self._toolbar_style.get_color(Gtk.StateFlags.NORMAL)
 
 				else:
 					# normal coloring method
-					background = self._style.bg[Gtk.StateType.SELECTED]
-					foreground = self._style.fg[Gtk.StateType.SELECTED]
+					background = self._style.get_background_color(Gtk.StateFlags.SELECTED)
+					foreground = self._style.get_color(Gtk.StateFlags.SELECTED)
 
 			else:
 				# for super user mode we use our custom colors
@@ -158,13 +158,13 @@ class TitleBar:
 
 		# get width of each control
 		for index in range(total_count - self._control_count, total_count):
-			result += controls[index].allocation.width
+			result += controls[index].get_allocation().width
 
 		return result
 
 	def __get_menu_width(self):
 		"""Get width of menu button"""
-		result  = self._button_menu.allocation.width
+		result  = self._button_menu.get_allocation().width
 		return result
 
 	def __button_release_event(self, widget, event, data=None):
@@ -181,8 +181,8 @@ class TitleBar:
 
 	def __realize_event(self, widget, event=None):
 		"""Handle control realize event"""
-		self._style = self._application.left_notebook.get_style().copy()
-		self._toolbar_style = self._application.menu_bar.get_style().copy()
+		self._style = self._application.left_notebook.get_style_context()
+		self._toolbar_style = self._application.menu_bar.get_style_context()
 
 		# apply colors on realize
 		self.__apply_color()
@@ -198,9 +198,10 @@ class TitleBar:
 		context.close_path()
 		context.fill()
 
-	def __expose_event(self, widget=None, event=None):
+	def __draw_event(self, widget, context, event=None):
 		"""We use this event to paint backgrounds"""
-		x, y, w, h = self._hbox.allocation
+		rect = self._hbox.get_allocation()
+		x, y, w, h = rect.x, rect.y, rect.width, rect.height
 		x_offset = x + w
 		y_offset = y + h
 		border_offset = 1
@@ -220,27 +221,24 @@ class TitleBar:
 						y_offset - self._box_border_width + border_offset
 					)
 
-		# create drawing context
-		context = self._container.window.cairo_create()
-
 		# get colors
 		normal_color = self.__get_colors(normal_style=True)[0]
 		active_color = self.__get_colors()[0]
 
 		# clear drawing area first
-		context.set_source_color(normal_color)
+		context.set_source_rgb(normal_color.red, normal_color.green, normal_color.blue)
 		context.rectangle(*hbox_rectangle)
 		context.fill()
 
 		# draw focus if needed
 		if self._state is not Gtk.StateType.NORMAL:
 			# draw background
-			context.set_source_color(active_color)
+			context.set_source_rgb(active_color.red, active_color.green, active_color.blue)
 			self.__draw_rectangle(context, hbox_rectangle, self._radius + 1)
 
 			# draw control space only if button relief is disabled
 			if not self._button_relief:
-				context.set_source_rgba(normal_color.red_float, normal_color.green_float, normal_color.blue_float, 0.4)
+				context.set_source_rgba(normal_color.red, normal_color.green, normal_color.blue, 0.4)
 				self.__draw_rectangle(context, controls_rectangle, self._radius)
 
 				# draw menu space
@@ -257,29 +255,29 @@ class TitleBar:
 			self._breadcrumbs.apply_color(colors)
 
 		else:
-			self._title_label.modify_fg(Gtk.StateType.NORMAL, colors[1])
+			self._title_label.override_color(Gtk.StateFlags.NORMAL, colors[1])
 
-		self._subtitle_label.modify_fg(Gtk.StateType.NORMAL, colors[1])
+		self._subtitle_label.override_color(Gtk.StateFlags.NORMAL, colors[1])
 
 		# apply color to controls
-		self._button_menu.modify_fg(Gtk.StateType.NORMAL, colors[1])
-		self._button_menu.modify_bg(Gtk.StateType.NORMAL, colors[0])
-		self._button_menu.modify_fg(Gtk.StateType.PRELIGHT, colors[1])
-		self._button_menu.modify_bg(Gtk.StateType.PRELIGHT, colors[0])
-		self._button_menu.modify_fg(Gtk.StateType.ACTIVE, colors[1])
-		self._button_menu.modify_bg(Gtk.StateType.ACTIVE, colors[0])
+		self._button_menu.override_color(Gtk.StateFlags.NORMAL, colors[1])
+		self._button_menu.override_background_color(Gtk.StateFlags.NORMAL, colors[0])
+		self._button_menu.override_color(Gtk.StateFlags.PRELIGHT, colors[1])
+		self._button_menu.override_background_color(Gtk.StateFlags.PRELIGHT, colors[0])
+		self._button_menu.override_color(Gtk.StateFlags.ACTIVE, colors[1])
+		self._button_menu.override_background_color(Gtk.StateFlags.ACTIVE, colors[0])
 
 		for control in self._hbox.get_children():
-			control.modify_fg(Gtk.StateType.NORMAL, colors[1])
-			control.modify_bg(Gtk.StateType.NORMAL, colors[0])
-			control.modify_fg(Gtk.StateType.PRELIGHT, colors[1])
-			control.modify_bg(Gtk.StateType.PRELIGHT, colors[0])
-			control.modify_fg(Gtk.StateType.ACTIVE, colors[1])
-			control.modify_bg(Gtk.StateType.ACTIVE, colors[0])
+			control.override_color(Gtk.StateFlags.NORMAL, colors[1])
+			control.override_background_color(Gtk.StateFlags.NORMAL, colors[0])
+			control.override_color(Gtk.StateFlags.PRELIGHT, colors[1])
+			control.override_background_color(Gtk.StateFlags.PRELIGHT, colors[0])
+			control.override_color(Gtk.StateFlags.ACTIVE, colors[1])
+			control.override_background_color(Gtk.StateFlags.ACTIVE, colors[0])
 
 		# apply spinner color
 		if self._spinner is not None:
-			self._spinner.modify_fg(Gtk.StateType.NORMAL, colors[1])
+			self._spinner.override_color(Gtk.StateFlags.NORMAL, colors[1])
 
 	def __get_menu_position(self, menu, button):
 		"""Get bookmarks position"""
@@ -384,8 +382,8 @@ class TitleBar:
 			self._breadcrumbs.apply_settings()
 
 		# get new color styles
-		self._style = self._application.left_notebook.get_style().copy()
-		self._toolbar_style = self._application.menu_bar.get_style().copy()
+		self._style = self._application.left_notebook.get_style_context()
+		self._toolbar_style = self._application.menu_bar.get_style_context()
 
 		# apply button relief
 		relief = (Gtk.ReliefStyle.NONE, Gtk.ReliefStyle.NORMAL)[self._button_relief]

@@ -16,12 +16,8 @@ class LocalMonitor(Monitor):
 			Gio.FileMonitorEvent.ATTRIBUTE_CHANGED: MonitorSignals.ATTRIBUTE_CHANGED,
 			Gio.FileMonitorEvent.PRE_UNMOUNT: MonitorSignals.PRE_UNMOUNT,
 			Gio.FileMonitorEvent.UNMOUNTED: MonitorSignals.UNMOUNTED,
+			Gio.FileMonitorEvent.MOVED: MonitorSignals.MOVED,
 		}
-
-	# old versions of GIO don't support this signal
-	if cmp(Gio.pygio_version, (2, 20, 0)) == 1:
-		_signal_table[Gio.FileMonitorEvent.MOVED] = MonitorSignals.MOVED
-
 
 	def __init__(self, provider, path):
 		Monitor.__init__(self, provider, path)
@@ -29,14 +25,10 @@ class LocalMonitor(Monitor):
 		if os.path.exists(self._path):
 			try:
 				# create file/directory monitor
-				if os.path.isdir(self._path):
-					self._monitor = Gio.File(path).monitor_directory()
+				self._monitor = Gio.File.new_for_path(path).monitor(Gio.FileMonitorFlags.SEND_MOVED)
 
-				else:
-					self._monitor = Gio.File(path).monitor_file()
-
-			except Gio.Error:
-				raise MonitorError('Error creating monitor')
+			except Exception as error:
+				raise MonitorError('Error creating monitor: {0}'.format(repr(error)))
 
 			else:
 				# connect signal

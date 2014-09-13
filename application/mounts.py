@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk, Gio, GLib
 from gui.mounts_manager_window import MountsManagerWindow
 
 
@@ -13,7 +13,7 @@ class MountsManager:
 		self.window = MountsManagerWindow(self)
 
 		# create volume monitor
-		self._volume_monitor = Gio.VolumeMonitor()
+		self._volume_monitor = Gio.VolumeMonitor.get()
 		self._volume_monitor.connect('mount-added', self._add_mount)
 		self._volume_monitor.connect('mount-removed', self._remove_mount)
 		self._volume_monitor.connect('volume-added', self._add_volume)

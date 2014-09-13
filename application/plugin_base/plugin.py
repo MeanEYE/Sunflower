@@ -1,6 +1,6 @@
 import getpass
 
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject, Gdk
 from accelerator_group import AcceleratorGroup
 from widgets.title_bar import TitleBar, Mode as TitleBarMode
 from widgets.status_bar import StatusBar
@@ -17,7 +17,7 @@ class PluginBase(Gtk.VBox):
 	"""
 
 	def __init__(self, parent, notebook, options):
-		GObject.GObject.__init__(self, False, 3)
+		GObject.GObject.__init__(self, homogeneous=False, spacing=3)
 
 		self._parent = parent
 		self._options = options
@@ -87,17 +87,18 @@ class PluginBase(Gtk.VBox):
 
 		if actions is not None:
 			# configure drag and drop features
-			self._main_object.drag_dest_set(
-										Gtk.DestDefaults.ALL,
-										types,
-										actions
-									)
+			# TODO: Fix this for GTK3
+			# self._main_object.drag_dest_set(
+			# 							Gtk.DestDefaults.ALL,
+			# 							types,
+			# 							actions
+			# 						)
 
-			self._main_object.drag_source_set(
-										Gdk.ModifierType.BUTTON1_MASK | Gdk.ModifierType.BUTTON3_MASK,
-										types,
-										actions
-									)
+			# self._main_object.drag_source_set(
+			# 							Gdk.ModifierType.BUTTON1_MASK | Gdk.ModifierType.BUTTON3_MASK,
+			# 							types,
+			# 							actions
+			# 						)
 
 			# connect drag and drop events
 			self._main_object.connect('drag-begin', self._drag_begin)

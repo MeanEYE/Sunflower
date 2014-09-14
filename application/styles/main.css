@@ -1,3 +1,28 @@
 GtkButton.close-tab {
 	padding: 0px;
 }
+
+/**
+ * Tab title bar.
+ */
+GtkHBox.title-bar {
+	border-radius: 3px;
+	background-color: @theme_unfocused_bg_color;
+	color: @theme_unfocused_fg_color;
+}
+
+GtkHBox.title-bar GtkVBox {
+	background-color: @theme_unfocused_bg_color;
+	color: @theme_unfocused_fg_color;
+}
+
+GtkHBox.title-bar GtkHBox {
+	border-radius: 2px;
+	background-color: rgba(255, 255, 255, 0.5);
+}
+
+GtkHBox.title-bar.selected GtkVBox,
+GtkHBox.title-bar.selected {
+	background-color: @theme_selected_bg_color;
+	color: @theme_selected_fg_color;
+}

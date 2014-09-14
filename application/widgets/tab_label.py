@@ -5,7 +5,7 @@ class TabLabel:
 	"""Tab label wrapper class"""
 
 	def __init__(self, application, parent):
-		self._container = Gtk.EventBox()
+		self._container = Gtk.EventBox.new()
 
 		self._application = application
 		self._parent = parent
@@ -16,12 +16,12 @@ class TabLabel:
 		self._container.set_visible_window(False)
 
 		# create interface
-		self._hbox = Gtk.HBox(False, 0)
+		self._hbox = Gtk.HBox(homogeneous=False, spacing=0)
 		self._container.add(self._hbox)
 		
-		self._label = Gtk.Label()
+		self._label = Gtk.Label.new()
 		self._label.set_max_width_chars(20)
-		self._label.set_ellipsize(Pango.EllipsizeMode.END)
+		self._label.set_single_line_mode(True)
 
 		self._lock_image = Gtk.Image()
 		self._lock_image.set_property('no-show-all', True)
@@ -32,19 +32,14 @@ class TabLabel:
 		result, image_width, image_height = Gtk.icon_size_lookup(Gtk.IconSize.MENU)
 		image.show()
 
-		# TODO: Figure out how to do this in GTK3
-		# style = Gtk.RcStyle()
-		# style.xthickness = 0
-		# style.ythickness = 0
-
 		self._button = Gtk.Button()
 		self._button.set_focus_on_click(False)
 		self._button.add(image)
 		self._button.set_relief(Gtk.ReliefStyle.NONE)
-		# self._button.modify_style(style)
 		self._button.connect('clicked', self._close_tab)
 		self._button.set_property('no-show-all', True)
 		self._button.set_size_request(image_width + 2, image_height + 2)
+		self._button.get_style_context().add_class('close-tab')
 
 		# pack interface
 		self._hbox.pack_start(self._lock_image, False, False, 0)

@@ -10,7 +10,7 @@ import urllib
 import signal
 import fcntl
 
-from gi.repository import Gtk, Gdk, GLib, GObject, Pango
+from gi.repository import Gtk, Gdk, GLib, GObject, Pango, Gio
 
 from menus import MenuManager
 from mounts import MountsManager
@@ -77,6 +77,9 @@ class MainWindow(Gtk.Window):
 		self._geometry = None
 		self._active_object = None
 		self._accel_group = None
+
+		# load custom styles
+		self._load_styles()
 
 		# load translations
 		self._load_translation()
@@ -565,7 +568,6 @@ class MainWindow(Gtk.Window):
 
 		toolbar = self.toolbar_manager.get_toolbar()
 		toolbar.set_property('no-show-all', not self.options.get('show_toolbar'))
-
 
 		# bookmarks menu
 		self.bookmarks = BookmarksMenu(self)
@@ -1146,6 +1148,19 @@ class MainWindow(Gtk.Window):
 			# 	if file_name in self.protected_plugins:
 			# 		print '\nFatal error! Failed to load required plugin, exiting!'
 			# 		sys.exit(3)
+
+	def _load_styles(self):
+		"""Load custom application CSS styles."""
+		provider = Gtk.CssProvider.new()
+		screen = Gdk.Screen.get_default()
+
+		# prepare path to load from
+		base_path = os.path.dirname(os.path.dirname(sys.argv[0]))
+		file_name = os.path.join(base_path, 'application', 'styles', 'main.css')
+
+		# load and apply style
+		provider.load_from_file(Gio.File.new_for_path(file_name))
+		Gtk.StyleContext.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
 	def _load_translation(self):
 		"""Load translation and install global functions"""

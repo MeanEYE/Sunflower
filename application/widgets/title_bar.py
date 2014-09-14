@@ -24,7 +24,7 @@ class TitleBar:
 		self._style = None
 		self._toolbar_style = None
 		self._box_spacing = 1
-		self._box_border_width = 4
+		self._box_border_width = 2
 		self._super_user_colors = None
 
 		# get options
@@ -43,10 +43,16 @@ class TitleBar:
 
 		# create container box
 		self._hbox = Gtk.HBox(homogeneous=False, spacing=self._box_spacing)
+		self._hbox.get_style_context().add_class('title-bar')
+		self._hbox.set_border_width(1)
 
-		# configure title bar
-		self._hbox.set_border_width(self._box_border_width)
+		self._hbox_menu = Gtk.HBox(homogeneous=True, spacing=1)
+		self._hbox_menu.set_border_width(self._box_border_width)
 
+		self._hbox_controls = Gtk.HBox(homogeneous=True, spacing=1)
+		self._hbox_controls.set_border_width(self._box_border_width)
+
+		# create container
 		self._container = Gtk.EventBox()
 		self._container.set_app_paintable(True)
 		self._container.add_events(Gdk.EventMask.BUTTON_RELEASE_MASK)
@@ -54,28 +60,23 @@ class TitleBar:
 		# connect signals
 		self._container.connect('realize', self.__realize_event)
 		self._container.connect('button-release-event', self.__button_release_event)
-		self._hbox.connect('draw', self.__draw_event)
 
 		# top folder icon as default
-		self._icon = Gtk.Image()
+		self._icon = Gtk.Image.new()
 
-		# TODO: Fix this for GTK3
-		# create plugin main menu button
-		# style = Gtk.RcStyle()
-		# style.xthickness = 0
-		# style.ythickness = 0
-
-		self._button_menu = Gtk.Button()
+		self._button_menu = Gtk.Button.new()
 		self._button_menu.add(self._icon)
 		if not self._button_relief:
 			self._button_menu.set_relief(Gtk.ReliefStyle.NONE)
-		# self._button_menu.modify_style(style)
 		self._button_menu.set_focus_on_click(False)
 		self._button_menu.set_tooltip_text(_('Context menu'))
 		self._button_menu.connect('clicked', self.show_menu)
+		self._button_menu.get_style_context().add_class('menu')
+
+		self._hbox_menu.pack_start(self._button_menu, True, True, 0)
 
 		# create title box
-		vbox = Gtk.VBox(False, 1)
+		vbox = Gtk.VBox(homogeneous=False, spacing=1)
 		if self._show_breadcrumbs:
 			self._breadcrumbs = Breadcrumbs(self)
 			vbox.pack_start(self._breadcrumbs, True, True, 0)
@@ -94,22 +95,17 @@ class TitleBar:
 		self._subtitle_label.modify_font(font)
 
 		# create spinner control if it exists
-		if hasattr(Gtk, 'Spinner'):
-			self._spinner = Gtk.Spinner()
-			self._spinner.set_size_request(20, 20)
-			self._spinner.set_property('no-show-all', True)
-
-		else:
-			self._spinner = None
+		self._spinner = Gtk.Spinner()
+		self._spinner.set_size_request(20, 20)
+		self._spinner.set_property('no-show-all', True)
 
 		# pack interface
 		vbox.pack_start(self._subtitle_label, False, False, 0)
 
-		self._hbox.pack_start(self._button_menu, False, False, 0)
+		self._hbox.pack_start(self._hbox_menu, False, False, 0)
 		self._hbox.pack_start(vbox, True, True, 4)
-
-		if self._spinner is not None:
-			self._hbox.pack_start(self._spinner, False, False, 5)
+		self._hbox.pack_start(self._spinner, False, False, 5)
+		self._hbox.pack_start(self._hbox_controls, False, False, 0)
 
 		self._container.add(self._hbox)
 
@@ -187,65 +183,6 @@ class TitleBar:
 		# apply colors on realize
 		self.__apply_color()
 
-	def __draw_rectangle(self, context, rectangle, radius):
-		"""Draw rectangle with rounded borders"""
-		half_pi = math.pi / 2
-
-		context.arc(rectangle[0] + radius, rectangle[1] + radius, radius, 2 * half_pi, 3 * half_pi)
-		context.arc(rectangle[2] - radius, rectangle[1] + radius, radius, 3 * half_pi, 4 * half_pi)
-		context.arc(rectangle[2] - radius, rectangle[3] - radius, radius, 0 * half_pi, 1 * half_pi)
-		context.arc(rectangle[0] + radius, rectangle[3] - radius, radius, 1 * half_pi, 2 * half_pi)
-		context.close_path()
-		context.fill()
-
-	def __draw_event(self, widget, context, event=None):
-		"""We use this event to paint backgrounds"""
-		rect = self._hbox.get_allocation()
-		x, y, w, h = rect.x, rect.y, rect.width, rect.height
-		x_offset = x + w
-		y_offset = y + h
-		border_offset = 1
-
-		# calculate parameters
-		hbox_rectangle = (x, y, x_offset, y_offset)
-		controls_rectangle = (
-						x_offset - self.__get_controls_width() - self._box_border_width - border_offset,
-						y + self._box_border_width - border_offset,
-						x_offset - self._box_border_width + border_offset,
-						y_offset - self._box_border_width + border_offset
-					)
-		menu_rectangle = (
-						x + self._box_border_width - border_offset,
-						y + self._box_border_width - border_offset,
-						x + self._box_border_width + self.__get_menu_width() + border_offset,
-						y_offset - self._box_border_width + border_offset
-					)
-
-		# get colors
-		normal_color = self.__get_colors(normal_style=True)[0]
-		active_color = self.__get_colors()[0]
-
-		# clear drawing area first
-		context.set_source_rgb(normal_color.red, normal_color.green, normal_color.blue)
-		context.rectangle(*hbox_rectangle)
-		context.fill()
-
-		# draw focus if needed
-		if self._state is not Gtk.StateType.NORMAL:
-			# draw background
-			context.set_source_rgb(active_color.red, active_color.green, active_color.blue)
-			self.__draw_rectangle(context, hbox_rectangle, self._radius + 1)
-
-			# draw control space only if button relief is disabled
-			if not self._button_relief:
-				context.set_source_rgba(normal_color.red, normal_color.green, normal_color.blue, 0.4)
-				self.__draw_rectangle(context, controls_rectangle, self._radius)
-
-				# draw menu space
-				self.__draw_rectangle(context, menu_rectangle, self._radius)
-
-		return False
-
 	def __apply_color(self):
 		"""Apply text color for title and subtitle"""
 		colors = self.__get_colors()
@@ -293,7 +230,7 @@ class TitleBar:
 	def add_control(self, widget):
 		"""Add button control"""
 		self._control_count += 1
-		self._hbox.pack_end(widget, False, False, 0)
+		self._hbox_controls.pack_end(widget, False, False, 0)
 
 		if issubclass(widget.__class__, Gtk.Button):
 			widget.set_relief((Gtk.ReliefStyle.NONE, Gtk.ReliefStyle.NORMAL)[self._button_relief])
@@ -302,8 +239,13 @@ class TitleBar:
 		"""Set GTK control state for title bar"""
 		self._state = state
 
+		# apply style class to container
+		if state == Gtk.StateType.SELECTED:
+			self._hbox.get_style_context().add_class('selected')
+		else:
+			self._hbox.get_style_context().remove_class('selected')
+
 		# apply new colors
-		self._container.queue_draw()
 		self.__apply_color()
 
 		# let breadcrumbs know about new state

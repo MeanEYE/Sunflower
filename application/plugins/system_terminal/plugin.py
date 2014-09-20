@@ -18,6 +18,8 @@ class SystemTerminal(Terminal):
 	def __init__(self, parent, notebook, options):
 		Terminal.__init__(self, parent, notebook, options)
 
+		self._file_list_button.set_tooltip_text(_('Open current directory'))
+
 		# variable to store process id
 		self._pid = None
 
@@ -115,3 +117,12 @@ class SystemTerminal(Terminal):
 		"""Clean up before closing tab"""
 		Terminal._handle_tab_close(self)
 		self.__update_path_from_pid()
+
+	def _create_file_list(self, widget=None, data=None):
+		"""Create file list in parent notebook"""
+		self.__update_path_from_pid()
+		DefaultList = self._parent.plugin_classes['file_list']
+		options = Parameters()
+		options.set('path', self.path)
+		self._parent.create_tab(self._notebook, DefaultList, options)
+		return True

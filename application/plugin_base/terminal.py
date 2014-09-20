@@ -74,6 +74,42 @@ class Terminal(PluginBase):
 		# pack buttons
 		self._title_bar.add_control(self._menu_button)
 
+		# terminal button
+		self._terminal_button = gtk.Button()
+
+		if options.get('tab_button_icons'):
+			# set icon
+			image_terminal = gtk.Image()
+			image_terminal.set_from_icon_name('terminal', gtk.ICON_SIZE_MENU)
+			self._terminal_button.set_image(image_terminal)
+		else:
+			# set text
+			self._terminal_button.set_label(ButtonText.TERMINAL)
+
+		self._terminal_button.set_focus_on_click(False)
+		self._terminal_button.set_tooltip_text(_('Terminal'))
+		self._terminal_button.connect('clicked', self._create_terminal)
+
+		self._title_bar.add_control(self._terminal_button)
+
+		# file list button
+		self._file_list_button = gtk.Button()
+
+		if options.get('tab_button_icons'):
+			# set icon
+			image_terminal = gtk.Image()
+			image_terminal.set_from_icon_name('folder', gtk.ICON_SIZE_MENU)
+			self._file_list_button.set_image(image_terminal)
+		else:
+			# set text
+			self._file_list_button.set_label(ButtonText.TERMINAL)
+
+		self._file_list_button.set_focus_on_click(False)
+		self._file_list_button.set_tooltip_text(_('Open file list'))
+		self._file_list_button.connect('clicked', self._create_file_list)
+
+		self._title_bar.add_control(self._file_list_button)
+
 		# create main object
 		self._terminal_type = section.get('type')
 
@@ -179,6 +215,12 @@ class Terminal(PluginBase):
 	def _create_terminal(self, widget, data=None):
 		"""Create terminal tab in parent notebook"""
 		self._parent.create_terminal_tab(self._notebook, self._options.copy())
+		return True
+
+	def _create_file_list(self, widget=None, data=None):
+		"""Create file list in parent notebook"""
+		DefaultList = self._parent.plugin_classes['file_list']
+		self._parent.create_tab(self._notebook, DefaultList)
 		return True
 
 	def _create_menu(self):

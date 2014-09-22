@@ -16,6 +16,8 @@ from accelerator_group import AcceleratorGroup
 
 class ButtonText:
 	MENU = u'\u2699'
+	TERMINAL = u'\u2605'
+	ITEM_LIST = u'\u2600'
 
 
 class TerminalType:
@@ -97,12 +99,12 @@ class Terminal(PluginBase):
 
 		if options.get('tab_button_icons'):
 			# set icon
-			image_terminal = gtk.Image()
-			image_terminal.set_from_icon_name('folder', gtk.ICON_SIZE_MENU)
-			self._file_list_button.set_image(image_terminal)
+			image_folder = gtk.Image()
+			image_folder.set_from_icon_name('folder', gtk.ICON_SIZE_MENU)
+			self._file_list_button.set_image(image_folder)
 		else:
 			# set text
-			self._file_list_button.set_label(ButtonText.TERMINAL)
+			self._file_list_button.set_label(ButtonText.ITEM_LIST)
 
 		self._file_list_button.set_focus_on_click(False)
 		self._file_list_button.set_tooltip_text(_('Open file list'))

@@ -28,7 +28,6 @@ class TitleBar:
 		self._box_border_width = 4
 		self._super_user_colors = None
 
-
 		# get options
 		options = self._application.options
 
@@ -381,7 +380,7 @@ class TitleBar:
 		section = self._application.options.section('item_list')
 		self._breadcrumb_type = section.get('breadcrumbs')
 
-		if self._breadcrumbs is not None:
+		if self._show_breadcrumbs:
 			self._breadcrumbs.apply_settings()
 
 		# get new color styles

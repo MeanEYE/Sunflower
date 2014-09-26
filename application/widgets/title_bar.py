@@ -27,6 +27,7 @@ class TitleBar:
 		self._box_spacing = 1
 		self._box_border_width = 4
 		self._super_user_colors = None
+		self._breadcrumbs = None
 
 		# get options
 		options = self._application.options

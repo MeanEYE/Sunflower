@@ -18,6 +18,7 @@ class ButtonText:
 	BOOKMARKS = u'\u2318'
 	HISTORY = u'\u2630'
 	TERMINAL = u'\u2605'
+	TRASH = u'\u239a'
 
 
 class ItemList(PluginBase):

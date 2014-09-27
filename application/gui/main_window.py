@@ -487,6 +487,14 @@ class MainWindow(gtk.Window):
 						'name': 'show_command_entry',
 						'path': '<Sunflower>/View/ShowCommandEntry',
 					},
+					{
+						'label': _('_Horizontal split'),
+						'type': 'checkbox',
+						'active': self.options.get('horizontal_split'),
+						'callback': self._toggle_horizontal_split,
+						'name': 'horizontal_split',
+						'path': '<Sunflower>/View/HorizontalSplit',
+					},
 				)
 			},
 			{
@@ -588,7 +596,7 @@ class MainWindow(gtk.Window):
 		self.menu_tools = menu_item_tools.get_submenu()
 
 		# create notebooks
-		self._paned = gtk.HPaned()
+		self._paned = gtk.VPaned() if self.options.get('horizontal_split') else gtk.HPaned()
 
 		rc_string = (
 				'style "paned-style" {GtkPaned::handle-size = 4}'
@@ -692,13 +700,13 @@ class MainWindow(gtk.Window):
 		vbox.pack_start(self.menu_bar, expand=False, fill=False, padding=0)
 		vbox.pack_start(self.toolbar_manager.get_toolbar(), expand=False, fill=False, padding=0)
 
-		vbox2 = gtk.VBox(False, 4)
-		vbox2.set_border_width(3)
-		vbox2.pack_start(self._paned, expand=True, fill=True, padding=0)
-		vbox2.pack_start(self.command_entry_bar, expand=False, fill=False, padding=0)
-		vbox2.pack_start(self.command_bar, expand=False, fill=False, padding=0)
+		self._vbox2 = gtk.VBox(False, 4)
+		self._vbox2.set_border_width(3)
+		self._vbox2.pack_start(self._paned, expand=True, fill=True, padding=0)
+		self._vbox2.pack_start(self.command_entry_bar, expand=False, fill=False, padding=0)
+		self._vbox2.pack_start(self.command_bar, expand=False, fill=False, padding=0)
 
-		vbox.pack_start(vbox2, True, True, 0)
+		vbox.pack_start(self._vbox2, True, True, 0)
 		self.add(vbox)
 
 		# create bookmarks menu
@@ -985,6 +993,32 @@ class MainWindow(gtk.Window):
 
 			if hasattr(page, 'refresh_file_list'):
 				page.refresh_file_list(widget, data)
+
+		return True
+
+	def _toggle_horizontal_split(self, widget=None, data=None):
+		menu_item = self.menu_manager.get_item_by_name('horizontal_split')
+
+		# NOTE: Calling set_active emits signal causing deadloop,
+		# to work around this issue we check if calling widget is menu item.
+		if widget is menu_item:
+			horizontal_split = menu_item.get_active()
+			self.options.set('horizontal_split', horizontal_split)
+
+			self._paned.remove(self.left_notebook)
+			self._paned.remove(self.right_notebook)
+			self._vbox2.remove(self._paned)
+
+			self._paned = gtk.VPaned() if horizontal_split else gtk.HPaned()
+			self._paned.pack1(self.left_notebook, resize=True, shrink=False)
+			self._paned.pack2(self.right_notebook, resize=True, shrink=False)
+
+			self._vbox2.pack_start(self._paned)
+			self._vbox2.reorder_child(self._paned, 0)
+
+			self._paned.show()
+		else:
+			menu_item.set_active(not self.options.get('horizontal_split'))
 
 		return True
 
@@ -2343,7 +2377,8 @@ class MainWindow(gtk.Window):
 					'media_preview': False,
 					'active_notebook': 0,
 					'size_format': common.SizeFormat.SI,
-					'multiple_instances': False
+					'multiple_instances': False,
+					'horizontal_split': False
 				})
 
 		# set default commands
@@ -2506,6 +2541,10 @@ class MainWindow(gtk.Window):
 		# apply media preview settings
 		media_preview = self.menu_manager.get_item_by_name('fast_media_preview')
 		media_preview.set_active(self.options.get('media_preview'))
+
+		# horizontal split
+		horizontal_split = self.menu_manager.get_item_by_name('horizontal_split')
+		horizontal_split.set_active(self.options.get('horizontal_split'))
 
 		# recreate bookmarks menu
 		self._create_bookmarks_menu()

@@ -3,7 +3,7 @@ import gio
 
 from urllib import unquote
 from gio_wrapper import File
-from local_monitor import LocalMonitor as GioMonitor
+from local_monitor import MonitorError, LocalMonitor
 from plugin_base.provider import Provider, FileType, FileInfo, FileInfoExtended, SystemSize
 from plugin_base.provider import Support
 
@@ -328,8 +328,9 @@ class GioProvider(Provider):
 	def get_monitor(self, path):
 		"""Get file system monitor for specified path"""
 		try:
-			result = GioMonitor(self, path)
-		except:
+			result = LocalMonitor(self, path)
+
+		except MonitorError as error:
 			result = Provider.get_monitor(self, path)
 
 		return result
@@ -409,13 +410,11 @@ class TrashProvider(GioProvider):
 
 	def get_support(self):
 		"""Return supported options by provider"""
-		return (
-			Support.SYSTEM_SIZE,
-		)
+		return ()
 
 	def get_root_path(self, path):
 		"""Return root path."""
-		return 'trash://'
+		return 'trash:///'
 
 
 class DavProvider(GioProvider):

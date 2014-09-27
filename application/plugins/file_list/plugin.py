@@ -11,7 +11,6 @@ def register_plugin(application):
 	application.register_class('file_list', _('Local file list'), FileList)
 	application.register_class('trash_list', _('Trash can'), TrashList)
 
-
 	# register providers
 	application.register_provider(LocalProvider)
 	application.register_provider(SambaProvider)

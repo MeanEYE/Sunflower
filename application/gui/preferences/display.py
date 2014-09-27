@@ -34,12 +34,14 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_show_toolbar = gtk.CheckButton(_('Show toolbar'))
 		self._checkbox_show_command_bar = gtk.CheckButton(_('Show command bar'))
 		self._checkbox_show_command_entry = gtk.CheckButton(_('Show command entry'))
+		self._checkbox_horizontal_split = gtk.CheckButton(_('Horizontal split'))
 
 		self._checkbox_hide_on_close.connect('toggled', self._parent.enable_save, True)
 		self._checkbox_multiple_instances.connect('toggled', self._parent.enable_save, True)
 		self._checkbox_show_toolbar.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_command_bar.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_command_entry.connect('toggled', self._parent.enable_save)
+		self._checkbox_horizontal_split.connect('toggled', self._parent.enable_save)
 
 		# tab options
 		label_tabs = gtk.Label(_('Tabs'))
@@ -141,6 +143,7 @@ class DisplayOptions(SettingsPage):
 		vbox_main_window.pack_start(self._checkbox_show_toolbar, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_command_bar, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_command_entry, False, False, 0)
+		vbox_main_window.pack_start(self._checkbox_horizontal_split, False, False, 0)
 
 		vbox_tabs.pack_start(self._checkbox_focus_new_tab, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_button_relief, False, False, 0)
@@ -183,6 +186,7 @@ class DisplayOptions(SettingsPage):
 		self._combobox_status_bar.set_active(options.get('show_status_bar'))
 		self._combobox_expand_tabs.set_active(options.get('expand_tabs'))
 		self._combobox_size_format.set_active(options.get('size_format'))
+		self._checkbox_horizontal_split.set_active(options.get('horizontal_split'))
 
 	def _save_options(self):
 		"""Save display options"""
@@ -207,4 +211,4 @@ class DisplayOptions(SettingsPage):
 		options.set('show_status_bar', self._combobox_status_bar.get_active())
 		options.set('expand_tabs', self._combobox_expand_tabs.get_active())
 		options.set('size_format', self._combobox_size_format.get_active())
-
+		options.set('horizontal_split', self._checkbox_horizontal_split.get_active())

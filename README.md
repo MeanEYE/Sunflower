@@ -15,7 +15,7 @@ Sunflower package can be downloaded from following locations:
 * [Gentoo](http://packages.gentoo.org/package/x11-misc/sunflower)
     Installation: `emerge --ask x11-misc/sunflower`
 
-[Official packages can be downloaded from here](http://sunflower-fm.org/pub) or releases page above.
+[Official packages can be downloaded from here](http://sunflower-fm.org/download) or releases page above.
 
 ### Plugins
 

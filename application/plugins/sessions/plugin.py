@@ -8,8 +8,9 @@ DEFAULT_NAME = _('Default')
 
 class Column:
 	NAME = 0
-	TAB_COUNT = 1
-	INDEX = 2
+	LOCKED = 1
+	TAB_COUNT = 2
+	INDEX = 3
 
 
 class SessionsOptions(SettingsPage):
@@ -26,7 +27,7 @@ class SessionsOptions(SettingsPage):
 		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 		container.set_shadow_type(gtk.SHADOW_IN)
 
-		self._store = gtk.ListStore(str, int, int)
+		self._store = gtk.ListStore(str, bool, int, int)
 
 		self._list = gtk.TreeView()
 		self._list.set_model(self._store)
@@ -100,7 +101,7 @@ class SessionsOptions(SettingsPage):
 			if right_section is not None and 'tabs' in right_section:
 				tab_count += len(session.get('right').get('tabs'))
 
-			self._store.append((session.get('name'), tab_count, index))
+			self._store.append((session.get('name'), False, tab_count, index))
 
 	def _save_options(self):
 		"""Update sessions config file to reflect running program"""
@@ -115,11 +116,14 @@ class SessionsOptions(SettingsPage):
 
 			if session_index > -1:
 				# update index of active session
-				if row[Column.NAME == active_name]:
+				if row[Column.NAME] == active_name:
 					active_index = len(new_list)
+				row[Column.INDEX] = len(new_list) 
 
 				# append session to the new list
-				new_list.append(session_list[session_index])
+				session_info = session_list[session_index]
+				session_info['name'] = row[Column.NAME]
+				new_list.append(session_info)
 
 			else:
 				# create new session container
@@ -186,7 +190,7 @@ class SessionsOptions(SettingsPage):
 			index += 1
 
 		# add session
-		self._store.append((new_name, 0, -1))
+		self._store.append((new_name, False, 0, -1))
 
 		# enable save button
 		self._parent.enable_save()
@@ -262,6 +266,7 @@ class SessionManager:
 
 	def _update_menu(self):
 		"""Update main window session menu"""
+
 		for item in self._session_menu.get_children():
 			self._session_menu.remove(item)
 
@@ -301,7 +306,7 @@ class SessionManager:
 		session_list = section.get('list')
 		current_session = section.get('current')
 
-		# bail if session is already active
+		# fail if session is already active
 		if current_session == session_index:
 			return
 

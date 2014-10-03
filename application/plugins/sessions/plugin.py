@@ -4,12 +4,14 @@ from widgets.settings_page import SettingsPage
 
 
 DEFAULT_NAME = _('Default')
+DEFAULT_LOCK = False
 
 
 class Column:
 	NAME = 0
-	TAB_COUNT = 1
-	INDEX = 2
+	LOCKED = 1
+	TAB_COUNT = 2
+	INDEX = 3
 
 
 class SessionsOptions(SettingsPage):
@@ -26,7 +28,7 @@ class SessionsOptions(SettingsPage):
 		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 		container.set_shadow_type(gtk.SHADOW_IN)
 
-		self._store = gtk.ListStore(str, int, int)
+		self._store = gtk.ListStore(str, bool, int, int)
 
 		self._list = gtk.TreeView()
 		self._list.set_model(self._store)
@@ -38,6 +40,10 @@ class SessionsOptions(SettingsPage):
 		cell_name.set_property('mode', gtk.CELL_RENDERER_MODE_EDITABLE)
 		cell_name.connect('edited', self._handle_edited_name, 0)
 
+		cell_locked = gtk.CellRendererToggle()
+		cell_locked.set_property('activatable', True)
+		cell_locked.connect('toggled', self._handle_lock_toggled, 0)
+
 		cell_count = gtk.CellRendererText()
 
 		# create columns
@@ -46,9 +52,12 @@ class SessionsOptions(SettingsPage):
 		col_name.set_resizable(True)
 		col_name.set_expand(True)
 
+		col_locked = gtk.TreeViewColumn(_('Locked'), cell_locked, active=Column.LOCKED)
+
 		col_count = gtk.TreeViewColumn(_('Tabs'), cell_count, text=Column.TAB_COUNT)
 
 		self._list.append_column(col_name)
+		self._list.append_column(col_locked)
 		self._list.append_column(col_count)
 
 		# create controls
@@ -100,7 +109,7 @@ class SessionsOptions(SettingsPage):
 			if right_section is not None and 'tabs' in right_section:
 				tab_count += len(session.get('right').get('tabs'))
 
-			self._store.append((session.get('name'), tab_count, index))
+			self._store.append((session.get('name'), session.get('locked'), tab_count, index))
 
 	def _save_options(self):
 		"""Update sessions config file to reflect running program"""
@@ -115,17 +124,22 @@ class SessionsOptions(SettingsPage):
 
 			if session_index > -1:
 				# update index of active session
-				if row[Column.NAME == active_name]:
+				if row[Column.NAME] == active_name:
 					active_index = len(new_list)
+				row[Column.INDEX] = len(new_list) 
 
 				# append session to the new list
-				new_list.append(session_list[session_index])
+				session_info = session_list[session_index]
+				session_info['name'] = row[Column.NAME]
+				session_info['locked'] = row[Column.LOCKED]
+				new_list.append(session_info)
 
 			else:
 				# create new session container
 				session_index = len(new_list)
 				new_list.append({
 						'name': row[Column.NAME],
+						'locked': row[Column.LOCKED],
 						'left': {
 								'active_tab': 0,
 								'tabs': [{'class': DefaultClass.__name__}]
@@ -172,6 +186,16 @@ class SessionsOptions(SettingsPage):
 
 		return True
 
+	def _handle_lock_toggled(self, cell, path, *ignore):
+		"""Handle toggle on session locked state"""
+		iter = self._store.get_iter(path)
+		self._store.set_value(iter, Column.LOCKED, not self._store.get_value(iter, Column.LOCKED))
+		
+		# enable save button
+		self._parent.enable_save()
+
+		return True
+
 	def _handle_add_session(self, widget, data=None):
 		"""Add new session to the store"""
 		# generate unique name
@@ -186,7 +210,7 @@ class SessionsOptions(SettingsPage):
 			index += 1
 
 		# add session
-		self._store.append((new_name, 0, -1))
+		self._store.append((new_name, False, 0, -1))
 
 		# enable save button
 		self._parent.enable_save()
@@ -237,7 +261,7 @@ class SessionManager:
 
 		# make sure we have a list to store sessions to
 		self._options.create_section('sessions').update({
-							'list': [{'name': DEFAULT_NAME}],
+							'list': [{'name': DEFAULT_NAME, 'locked': DEFAULT_LOCK}],
 							'current': 0
 						})
 
@@ -254,6 +278,12 @@ class SessionManager:
 								'sessions'
 							)
 
+		self._save_session_menu_item = gtk.MenuItem(_('Save session'))
+		self._save_session_menu_item.connect(
+								'activate',
+								self._save_session
+							)
+
 		self._application.menu_bar.append(self._session_menu_item)
 
 		# update menu
@@ -262,6 +292,7 @@ class SessionManager:
 
 	def _update_menu(self):
 		"""Update main window session menu"""
+
 		for item in self._session_menu.get_children():
 			self._session_menu.remove(item)
 
@@ -287,6 +318,7 @@ class SessionManager:
 		separator.show()
 
 		self._session_menu.append(separator)
+		self._session_menu.append(self._save_session_menu_item)
 		self._session_menu.append(self._manage_sessions_menu_item)
 
 	def _update_menu_item(self):
@@ -297,11 +329,14 @@ class SessionManager:
 
 	def _switch_session(self, widget, session_index):
 		"""Handle clicking on session menu"""
+
+		left_section = self._options.section('left')
+		right_section = self._options.section('right')
 		section = self._options.section('sessions')
 		session_list = section.get('list')
 		current_session = section.get('current')
 
-		# bail if session is already active
+		# do nothing if session is already active
 		if current_session == session_index:
 			return
 
@@ -312,7 +347,28 @@ class SessionManager:
 		self._application.save_tabs(left_notebook, 'left')
 		self._application.save_tabs(right_notebook, 'right')
 
-		# close tabs
+		# swap configs
+		session_new = session_list[session_index]
+		session_current = session_list[current_session]
+		is_current_session_locked = session_current.get('locked')
+
+		if right_section is not None:
+			if not is_current_session_locked:
+				session_current['right'] = right_section._get_data()
+
+			right_section.set('tabs', session_new['right']['tabs'])
+			right_section.set('active_tab', session_new['right']['active_tab'])
+
+		if left_section is not None:
+			if not is_current_session_locked:
+				session_current['left'] = left_section._get_data()
+
+			left_section.set('tabs', session_new['left']['tabs'])
+			left_section.set('active_tab', session_new['left']['active_tab'])
+
+		section.set('current', session_index)
+
+		# close old tabs
 		for index in xrange(left_notebook.get_n_pages()):
 			page = left_notebook.get_nth_page(0)
 			self._application.close_tab(left_notebook, page, can_close_all=True)
@@ -321,28 +377,34 @@ class SessionManager:
 			page = right_notebook.get_nth_page(0)
 			self._application.close_tab(right_notebook, page, can_close_all=True)
 
-		# swap configs
-		session_new = session_list[session_index]
-		session_current = session_list[current_session]
-		left_section = self._options.section('left')
-		right_section = self._options.section('right')
-
-		session_current['left'] = left_section._get_data()
-		session_current['right'] = right_section._get_data()
-
-		left_section.set('tabs', session_new['left']['tabs'])
-		left_section.set('active_tab', session_new['left']['active_tab'])
-		right_section.set('tabs', session_new['right']['tabs'])
-		right_section.set('active_tab', session_new['right']['active_tab'])
-
-		section.set('current', session_index)
-
-		# reload tabs
+		# load new tabs
 		self._application.load_tabs(self._application.left_notebook, 'left')
 		self._application.load_tabs(self._application.right_notebook, 'right')
 
 		# update menu item to show session name
 		self._update_menu_item()
+
+	def _save_session(self, *ignore):
+		"""Handle clicking on 'save session' menu item"""
+
+		section = self._options.section('sessions')
+		session_list = section.get('list')
+		current_session_index = section.get('current')
+
+		# save current tabs
+		self._application.save_tabs(self._application.left_notebook, 'left')
+		self._application.save_tabs(self._application.right_notebook, 'right')
+
+		# update options
+		left_section = self._options.section('left')
+		right_section = self._options.section('right')
+
+		current_session_options = session_list[current_session_index]
+		current_session_options['left'] = left_section._get_data()
+		current_session_options['right'] = right_section._get_data()
+
+		# save options
+		self._options.save()
 
 
 def register_plugin(application):

@@ -462,7 +462,7 @@ class Operation(Thread):
 class CopyOperation(Operation):
 	"""Operation thread used for copying files"""
 
-	def __init__(self, application, source, destination, options , destination_path=None):
+	def __init__(self, application, source, destination, options, destination_path=None):
 		Operation.__init__(self, application, source, destination, options, destination_path)
 
 		self._merge_all = None
@@ -471,11 +471,23 @@ class CopyOperation(Operation):
 
 		self._total_count = 0
 		self._total_size = 0
+		self._buffer_size = 0
 
 		# cache settings
 		should_reserve = self._application.options.section('operations').get('reserve_size')
 		supported_by_provider = ProviderSupport.RESERVE_SIZE in self._destination.get_support()
 		self._reserve_size = should_reserve and supported_by_provider
+
+		# detect buffer size
+		if self._source.is_local and self._destination.is_local:
+			system_stat = self._destination.get_system_size(self._destination_path)
+
+			if system_stat.block_size:
+				self._buffer_size = system_stat.block_size * 1024
+			else:
+				self._buffer_size = BufferSize.LOCAL
+		else:
+			self._buffer_size = BufferSize.REMOTE
 
 	def _create_dialog(self):
 		"""Create progress dialog"""
@@ -768,18 +780,6 @@ class CopyOperation(Operation):
 			sh = self._source.get_file_handle(file_name, FileMode.READ, relative_to=source_path)
 			dh = self._destination.get_file_handle(dest_file, FileMode.WRITE, relative_to=self._destination_path)
 
-			# set buffer size
-			if self._source.is_local and self._destination.is_local:
-				system_stat = self._destination.get_system_size(self._destination_path)
-
-				if system_stat.block_size:
-					buffer_size = system_stat.block_size * 1024
-				else:
-					buffer_size = BufferSize.LOCAL
-
-			else:
-				buffer_size = BufferSize.REMOTE
-
 			# reserve file size
 			if self._reserve_size:
 				# try to reserve file size in advance,
@@ -826,7 +826,7 @@ class CopyOperation(Operation):
 			if self._abort.is_set(): break
 			self._can_continue.wait()  # pause lock
 
-			data = sh.read(buffer_size)
+			data = sh.read(self._buffer_size)
 
 			if data:
 				try:

@@ -2,6 +2,7 @@ import os
 import gtk
 import urllib
 import common
+import user
 
 from plugin import PluginBase
 from operation import CopyOperation, MoveOperation
@@ -39,7 +40,7 @@ class ItemList(PluginBase):
 		section = options.section('item_list')
 
 		# store local stuff
-		self._provider = None
+		self._providers = {}
 		self._menu_timer = None
 		self._monitor_list = []
 
@@ -1581,9 +1582,73 @@ class ItemList(PluginBase):
 		"""Update column visibility"""
 		pass
 
-	def get_povider(self):
-		"""Get list provider"""
-		return self._provider
+	def create_provider(self, path, is_archive):
+		"""Preemptively create provider object."""
+		result = None
+
+		if not is_archive:
+			scheme = 'file' if '://' not in path else path.split('://', 1)[0]
+
+			# create provider
+			Provider = self._parent.get_provider_by_protocol(scheme)
+
+			if Provider is not None:
+				result = Provider(self, path)
+
+				# cache provider for later use
+				root_path = result.get_root_path(path)
+				self._providers[root_path] = result
+
+		else:
+			mime_type = self._parent.associations_manager.get_mime_type(path=path)
+
+			# create archive provider
+			Provider = self._parent.get_provider_for_archive(mime_type)
+
+			if Provider is not None:
+				result = Provider(self, path)
+				self._providers[path] = result
+
+		# in case no of not supported provider, create one for users home
+		if result is None:
+			Provider = self._parent.get_provider_by_protocol('file')
+			result = Provider(self, user.home)
+
+			# cache provider for later use
+			root_path = result.get_root_path(user.home)
+			self._providers[root_path] = result
+
+		return result
+
+	def get_provider(self, path=None):
+		"""Get existing list provider or create new for specified path."""
+		result = None
+
+		# if not path is specified use current
+		if path is None:
+			path = self.path
+
+		# check if there is a provider for specified path
+		if path in self._providers:
+			result = self._providers[path]
+
+		else:
+			# try to find provider with longest matching path
+			longest_path = 0
+			matching_provider = None
+
+			for provider_path, provider in self._providers.items():
+				if path.startswith(provider_path) and len(provider_path) > longest_path:
+					longest_path = len(provider_path)
+					matching_provider = provider
+
+			result = matching_provider
+
+		# no matching provider was found, create new
+		if result is None:
+			result = self.create_provider(path, False)
+
+		return result
 
 	def get_monitor(self):
 		"""Get file system monitor"""

@@ -769,8 +769,16 @@ class CopyOperation(Operation):
 			dh = self._destination.get_file_handle(dest_file, FileMode.WRITE, relative_to=self._destination_path)
 
 			# set buffer size
-			local_operation = self._source.is_local and self._destination.is_local
-			buffer_size = BufferSize.LOCAL if local_operation else BufferSize.REMOTE
+			if self._source.is_local and self._destination.is_local:
+				system_stat = self._destination.get_system_size(self._destination_path)
+
+				if system_stat.block_size:
+					buffer_size = system_stat.block_size * 1024
+				else:
+					buffer_size = BufferSize.LOCAL
+
+			else:
+				buffer_size = BufferSize.REMOTE
 
 			# reserve file size
 			if self._reserve_size:

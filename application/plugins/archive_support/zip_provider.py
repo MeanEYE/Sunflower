@@ -95,7 +95,8 @@ class ZipProvider(Provider):
 
 	def exists(self, path, relative_to=None):
 		"""Test if given path exists"""
-		pass
+		real_path = self._real_path(path, relative_to)
+		return real_path in self._cache or real_path == ''
 
 	def remove_directory(self, path, recursive, relative_to=None):
 		"""Remove directory and optionally its content"""

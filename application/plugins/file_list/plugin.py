@@ -1947,7 +1947,10 @@ class FileList(ItemList):
 				provider = self.get_provider()
 				item_list = provider.list_dir(path)
 
-			except:
+			except Exception as error:
+				# report error first
+				print 'Load directory error: ', error.message
+
 				# clear locks and exit
 				self._thread_active.clear()
 				self._main_thread_lock.clear()
@@ -2103,10 +2106,6 @@ class FileList(ItemList):
 			# populate list
 			if not provider.exists(self.path):
 				raise OSError(_('No such file or directory'))
-
-			if not provider.is_dir(self.path):
-				selected = os.path.basename(self.path)
-				self.path = os.path.dirname(self.path)
 
 			self._item_to_focus = selected
 			self._load_directory(self.path, clear_store=True)

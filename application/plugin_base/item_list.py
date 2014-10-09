@@ -13,6 +13,7 @@ from gui.input_dialog import CopyDialog, MoveDialog, InputDialog, PathInputDialo
 from gui.preferences.display import StatusVisible
 from gui.history_list import HistoryList
 from history import HistoryManager
+from plugin_base.provider import Mode as FileMode
 
 
 class ButtonText:
@@ -647,9 +648,13 @@ class ItemList(PluginBase):
 		PluginBase._handle_tab_close(self)
 		self._main_object.handler_block_by_func(self._column_changed)
 
+		# save current configuration
 		self._options.set('path', self.path)
 		self._options.set('sort_column', self._sort_column)
 		self._options.set('sort_ascending', self._sort_ascending)
+
+		# allow providers to clean up
+		self.destroy_providers()
 
 		return True
 
@@ -1593,7 +1598,7 @@ class ItemList(PluginBase):
 			Provider = self._parent.get_provider_by_protocol(scheme)
 
 			if Provider is not None:
-				result = Provider(self, path)
+				result = Provider(self)
 
 				# cache provider for later use
 				root_path = result.get_root_path(path)
@@ -1601,12 +1606,19 @@ class ItemList(PluginBase):
 
 		else:
 			mime_type = self._parent.associations_manager.get_mime_type(path=path)
+			current_provider = self.get_provider()
 
 			# create archive provider
 			Provider = self._parent.get_provider_for_archive(mime_type)
 
 			if Provider is not None:
 				result = Provider(self, path)
+
+				# set archive file handle
+				handle = current_provider.get_file_handle(path, FileMode.READ_APPEND)
+				result.set_archive_handle(handle)
+
+				# cache provider locally
 				self._providers[path] = result
 
 		# in case no of not supported provider, create one for users home
@@ -1619,6 +1631,11 @@ class ItemList(PluginBase):
 			self._providers[root_path] = result
 
 		return result
+
+	def destroy_providers(self):
+		"""Allow providers to clean up after themselves."""
+		for path, provider in self._providers.items():
+			provider.release_archive_handle()
 
 	def get_provider(self, path=None):
 		"""Get existing list provider or create new for specified path."""
@@ -1641,6 +1658,8 @@ class ItemList(PluginBase):
 				if path.startswith(provider_path) and len(provider_path) > longest_path:
 					longest_path = len(provider_path)
 					matching_provider = provider
+
+				# TODO: Release file handles if path is different.
 
 			result = matching_provider
 

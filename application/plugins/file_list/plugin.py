@@ -451,12 +451,18 @@ class FileList(ItemList):
 		if selected_iter is None:
 			return
 
-		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
-		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
 		selected_file = self._get_selection()
 		mime_type = self._parent.associations_manager.get_mime_type(path=selected_file)
 
-		if is_dir or self._parent.is_archive_supported(mime_type):
+		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
+		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
+		is_archive = self._parent.is_archive_supported(mime_type)
+
+		# preemptively create provider if selected item is archive
+		if not is_parent and is_archive:
+			self.create_provider(selected_file, True)
+
+		if is_dir or is_archive:
 			# selected item is directory, we need to change path
 			if is_parent:
 				# call specialized change path method
@@ -1940,7 +1946,8 @@ class FileList(ItemList):
 
 			try:
 				# get list of items to add
-				item_list = self._provider.list_dir(path)
+				provider = self.get_provider()
+				item_list = provider.list_dir(path)
 
 			except:
 				# clear locks and exit
@@ -2059,39 +2066,15 @@ class FileList(ItemList):
 			self._thumbnail_view.hide()
 
 		# get provider for specified URI
-		provider = None
-		self.path = path 
+		provider = self.get_provider(path)
 
-		if '://' not in path:
-			scheme = 'file'
-
-		else:
-			data = path.split('://', 1)
-			scheme = data[0]
-			
-			# for local storage, use path without scheme
-			if scheme == 'file':
-				self.path = data[1]
-
-		if scheme == self.scheme:
-			# we are working with same provider
-			provider = self.get_provider()
+		# store path and scheme
+		self.scheme = provider.get_protocol()
+		if self.scheme is None or self.scheme == 'file':
+			self.path = path
 
 		else:
-			# different provider, we need to get it
-			ProviderClass = self._parent.get_provider_by_protocol(scheme)
-
-			if ProviderClass is not None:
-				provider = ProviderClass(self)
-
-				self.scheme = scheme
-				self._provider = provider
-
-		# in case we can't handle specified URI show home directory
-		if provider is None:
-			provider = LocalProvider(self)
-			self._provider = provider
-			self.path = user.home
+			self.path = path.split('://')[1]
 
 		# update options container
 		self._options.set('path', self.path)
@@ -2122,11 +2105,14 @@ class FileList(ItemList):
 			# populate list
 			if not provider.exists(self.path):
 				raise OSError(_('No such file or directory'))
+
 			if not provider.is_dir(self.path):
 				selected = os.path.basename(self.path)
 				self.path = os.path.dirname(self.path)
+
 			self._item_to_focus = selected
 			self._load_directory(self.path, clear_store=True)
+
 			# if no errors occurred during path change,
 			# call parent method which handles history
 			ItemList.change_path(self, self.path)
@@ -2316,16 +2302,6 @@ class FileList(ItemList):
 
 		if width is not None:
 			column.set_fixed_width(width)
-
-	def get_provider(self):
-		"""Get list provider object"""
-		if self._provider is None:
-			Provider = self._parent.get_provider_by_protocol(self.scheme)
-
-			if Provider is not None:
-				self._provider = Provider(self)
-
-		return self._provider
 
 	def apply_settings(self):
 		"""Apply file list settings"""

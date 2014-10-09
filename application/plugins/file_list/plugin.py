@@ -11,7 +11,6 @@ from column_editor import FileList_ColumnEditor
 from gio_extension import SambaExtension, FtpExtension, DavExtension, SftpExtension
 from gio_provider import NetworkProvider, TrashProvider, DavProvider, DavsProvider
 from gio_provider import SambaProvider, FtpProvider, SftpProvider
-from zip_provider import ZipProvider
 from gui.input_dialog import ApplicationSelectDialog
 from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog, LinkDialog
@@ -40,7 +39,6 @@ def register_plugin(application):
 	application.register_provider(TrashProvider)
 	application.register_provider(DavProvider)
 	application.register_provider(DavsProvider)
-	application.register_provider(ZipProvider)
 
 	# register mount manager extension
 	application.register_mount_manager_extension(SambaExtension)

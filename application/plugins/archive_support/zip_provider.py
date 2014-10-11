@@ -1,9 +1,10 @@
 import os
+import io
 import time
 import zipfile
 import datetime
 
-from plugin_base.provider import Provider, Support, SystemSize
+from plugin_base.provider import Provider, Support, SystemSize, Mode
 from plugin_base.provider import FileInfo, FileInfoExtended, FileType
 
 
@@ -22,6 +23,7 @@ class ZipProvider(Provider):
 		Provider.__init__(self, parent, path, selection)
 
 		self._cache = {}
+		self._file_list = []
 		self._zip_file = None
 
 		# get icon name
@@ -62,7 +64,7 @@ class ZipProvider(Provider):
 			# prepare file info
 			file_info = FileInfo(
 					size = info.file_size,
-					mode = 0,
+					mode = int(info.external_attr >> 16),
 					user_id = 0,
 					group_id = 0,
 					time_modify = file_timestamp,
@@ -70,6 +72,7 @@ class ZipProvider(Provider):
 				)
 
 			self._cache[key_name].append((file_name, file_info))
+			self._file_list.append(info.filename)
 
 	def set_archive_handle(self, handle):
 		"""Set archive file handle."""
@@ -83,11 +86,13 @@ class ZipProvider(Provider):
 
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
-		pass
+		real_path = self._real_path(path, relative_to)
+		return real_path in self._file_list and real_path not in self._cache
 
 	def is_dir(self, path, relative_to=None):
 		"""Test if given path is directory"""
-		pass
+		real_path = self._real_path(path, relative_to)
+		return real_path in self._cache
 
 	def is_link(self, path, relative_to=None):
 		"""Test if given path is a link"""
@@ -116,7 +121,19 @@ class ZipProvider(Provider):
 
 	def get_file_handle(self, path, mode, relative_to=None):
 		"""Open path in specified mode and return its handle"""
-		pass
+		result = None
+		real_path = self._real_path(path, relative_to)
+
+		if mode is Mode.READ:
+			result = self._zip_file.open(real_path, 'r')
+
+		elif mode is Mode.WRITE:
+			pass
+
+		else:
+			pass
+
+		return result
 
 	def get_stat(self, path, relative_to=None, extended=False, follow=False):
 		"""Return file statistics.

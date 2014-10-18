@@ -639,56 +639,57 @@ class FileList(ItemList):
 		edit_after = dialog.get_edit_file()
 		template = dialog.get_template_file()
 
-		# create dialog
-		if response[0] == gtk.RESPONSE_OK:
-			try:
-				# try to create file
-				if provider.is_file(os.path.join(self.path, response[1])):
-					raise OSError(_("File already exists: {0}").format(response[1]))
+		if response[0] != gtk.RESPONSE_OK:
+			return True  # value denotes handled shortcut
 
-				if provider.is_dir(os.path.join(self.path, response[1])):
-					raise OSError(_("Directory with same name exists: {0}").format(response[1]))
+		try:
+			# try to create file
+			if provider.is_file(os.path.join(self.path, response[1])):
+				raise OSError(_("File already exists: {0}").format(response[1]))
 
-				# set this item to be focused on add
-				self._item_to_focus = response[1]
+			if provider.is_dir(os.path.join(self.path, response[1])):
+				raise OSError(_("Directory with same name exists: {0}").format(response[1]))
 
-				# create file
-				provider.create_file(response[1], mode=mode, relative_to=self.path)
+			# set this item to be focused on add
+			self._item_to_focus = response[1]
 
-				# push monitor event queue
-				event_queue = self.get_monitor_queue()
-				if event_queue is not None:
-					event_queue.put((MonitorSignals.CREATED, response[1], None), False)
+			# create file
+			provider.create_file(response[1], mode=mode, relative_to=self.path)
 
-				# create file from template
-				if template is not None:
-					with open(template, 'rb') as raw_file:
-						data = raw_file.read()
+			# push monitor event queue
+			event_queue = self.get_monitor_queue()
+			if event_queue is not None:
+				event_queue.put((MonitorSignals.CREATED, response[1], None), False)
 
-					new_file = provider.get_file_handle(response[1], FileMode.WRITE, relative_to=self.path)
-					new_file.truncate()
-					new_file.write(data)
-					new_file.close()
+			# create file from template
+			if template is not None:
+				with open(template, 'rb') as raw_file:
+					data = raw_file.read()
 
-				# if specified, edit file after creating it
-				if edit_after:
-					full_path = os.path.join(provider.get_path(), response[1])
-					self._parent.associations_manager.edit_file((full_path, ))
+				new_file = provider.get_file_handle(response[1], FileMode.WRITE, relative_to=self.path)
+				new_file.truncate()
+				new_file.write(data)
+				new_file.close()
 
-			except OSError as error:
-				# error creating, report to user
-				dialog = gtk.MessageDialog(
-										self._parent,
-										gtk.DIALOG_DESTROY_WITH_PARENT,
-										gtk.MESSAGE_ERROR,
-										gtk.BUTTONS_OK,
-										_(
-											"There was an error creating file. "
-											"Make sure you have enough permissions."
-										) + "\n\n{0}".format(error)
-									)
-				dialog.run()
-				dialog.destroy()
+			# if specified, edit file after creating it
+			if edit_after:
+				full_path = os.path.join(provider.get_path(), response[1])
+				self._parent.associations_manager.edit_file((full_path, ))
+
+		except OSError as error:
+			# error creating, report to user
+			dialog = gtk.MessageDialog(
+									self._parent,
+									gtk.DIALOG_DESTROY_WITH_PARENT,
+									gtk.MESSAGE_ERROR,
+									gtk.BUTTONS_OK,
+									_(
+										"There was an error creating file. "
+										"Make sure you have enough permissions."
+									) + "\n\n{0}".format(error)
+								)
+			dialog.run()
+			dialog.destroy()
 
 		return True
 

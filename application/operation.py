@@ -780,6 +780,13 @@ class CopyOperation(Operation):
 			sh = self._source.get_file_handle(file_name, FileMode.READ, relative_to=source_path)
 			dh = self._destination.get_file_handle(dest_file, FileMode.WRITE, relative_to=self._destination_path)
 
+			# report error properly
+			if sh is None:
+				raise StandardError('Unable to open source file in read mode.')
+
+			if dh is None:
+				raise StandardError('Unable to open destination file in write mode.')
+
 			# reserve file size
 			if self._reserve_size:
 				# try to reserve file size in advance,

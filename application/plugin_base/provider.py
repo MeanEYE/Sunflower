@@ -70,6 +70,7 @@ class Mode:
 	READ = 0
 	WRITE = 1
 	APPEND = 2
+	READ_APPEND = 3
 
 
 class TrashError(Exception): pass
@@ -85,8 +86,9 @@ class Provider:
 	def __init__(self, parent, path=None, selection=None):
 		self._parent = parent
 
-		self._path = path
+		self._path = path  # only used for archives and operations
 		self._selection = selection
+		self._handle = None
 
 		# we need only existing items in selection list
 		if selection is not None:
@@ -95,6 +97,15 @@ class Provider:
 	def _real_path(self, path, relative_to=None):
 		"""Commonly used function to get real path"""
 		return path if relative_to is None else os.path.join(relative_to, path)
+
+	def set_archive_handle(self, handle):
+		"""Set archive file handle."""
+		self._handle = handle
+
+	def release_archive_handle(self):
+		"""Release archive handle when it's no longer needed."""
+		if self._handle is not None:
+			self._handle.close()
 
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""

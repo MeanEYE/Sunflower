@@ -2,6 +2,7 @@ import os
 import gtk
 import urllib
 import common
+import user
 
 from plugin import PluginBase
 from operation import CopyOperation, MoveOperation
@@ -12,6 +13,7 @@ from gui.input_dialog import CopyDialog, MoveDialog, InputDialog, PathInputDialo
 from gui.preferences.display import StatusVisible
 from gui.history_list import HistoryList
 from history import HistoryManager
+from plugin_base.provider import Mode as FileMode
 
 
 class ButtonText:
@@ -40,7 +42,7 @@ class ItemList(PluginBase):
 		section = options.section('item_list')
 
 		# store local stuff
-		self._provider = None
+		self._providers = {}
 		self._menu_timer = None
 		self._monitor_list = []
 
@@ -655,9 +657,13 @@ class ItemList(PluginBase):
 		PluginBase._handle_tab_close(self)
 		self._main_object.handler_block_by_func(self._column_changed)
 
+		# save current configuration
 		self._options.set('path', self.path)
 		self._options.set('sort_column', self._sort_column)
 		self._options.set('sort_ascending', self._sort_ascending)
+
+		# allow providers to clean up
+		self.destroy_providers()
 
 		return True
 
@@ -1590,9 +1596,87 @@ class ItemList(PluginBase):
 		"""Update column visibility"""
 		pass
 
-	def get_povider(self):
-		"""Get list provider"""
-		return self._provider
+	def create_provider(self, path, is_archive):
+		"""Preemptively create provider object."""
+		result = None
+
+		if not is_archive:
+			scheme = 'file' if '://' not in path else path.split('://', 1)[0]
+
+			# create provider
+			Provider = self._parent.get_provider_by_protocol(scheme)
+
+			if Provider is not None:
+				result = Provider(self)
+
+				# cache provider for later use
+				root_path = result.get_root_path(path)
+				self._providers[root_path] = result
+
+		else:
+			mime_type = self._parent.associations_manager.get_mime_type(path=path)
+			current_provider = self.get_provider()
+
+			# create archive provider
+			Provider = self._parent.get_provider_for_archive(mime_type)
+
+			if Provider is not None:
+				result = Provider(self, path)
+
+				# set archive file handle
+				handle = current_provider.get_file_handle(path, FileMode.READ_APPEND)
+				result.set_archive_handle(handle)
+
+				# cache provider locally
+				self._providers[path] = result
+
+		# in case no of not supported provider, create one for users home
+		if result is None:
+			Provider = self._parent.get_provider_by_protocol('file')
+			result = Provider(self, user.home)
+
+			# cache provider for later use
+			root_path = result.get_root_path(user.home)
+			self._providers[root_path] = result
+
+		return result
+
+	def destroy_providers(self):
+		"""Allow providers to clean up after themselves."""
+		for path, provider in self._providers.items():
+			provider.release_archive_handle()
+
+	def get_provider(self, path=None):
+		"""Get existing list provider or create new for specified path."""
+		result = None
+
+		# if not path is specified use current
+		if path is None:
+			path = self.path
+
+		# check if there is a provider for specified path
+		if path in self._providers:
+			result = self._providers[path]
+
+		else:
+			# try to find provider with longest matching path
+			longest_path = 0
+			matching_provider = None
+
+			for provider_path, provider in self._providers.items():
+				if path.startswith(provider_path) and len(provider_path) > longest_path:
+					longest_path = len(provider_path)
+					matching_provider = provider
+
+				# TODO: Release file handles if path is different.
+
+			result = matching_provider
+
+		# no matching provider was found, create new
+		if result is None:
+			result = self.create_provider(path, False)
+
+		return result
 
 	def get_monitor(self):
 		"""Get file system monitor"""

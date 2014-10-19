@@ -429,7 +429,7 @@ class FileList(ItemList):
 		is_archive = self._parent.is_archive_supported(mime_type)
 
 		# preemptively create provider if selected item is archive
-		if not is_parent and is_archive:
+		if not is_parent and is_archive and not self.provider_exists(selected_file):
 			self.create_provider(selected_file, True)
 
 		if is_dir or is_archive:

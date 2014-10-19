@@ -13,6 +13,16 @@ class LocalProvider(Provider):
 	is_local = True
 	protocol = 'file'
 
+	def _real_path(self, path, relative_to=None):
+		"""Get real path based on specified parameters."""
+		if path.startswith('file://'):
+			path = path[7:]
+
+		if relative_to is not None and relative_to.startswith('file://'):
+			relative_to = relative_to[7:]
+
+		return Provider._real_path(self, path, relative_to)
+
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
 		real_path = self._real_path(path, relative_to)
@@ -213,7 +223,7 @@ class LocalProvider(Provider):
 
 	def get_root_path(self, path):
 		"""Get root for specified path"""
-		return os.path.sep if path[0] == os.path.sep else None
+		return 'file:///' if path.startswith('file://') else os.path.sep
 
 	def get_parent_path(self, path):
 		"""Get parent path for specified"""

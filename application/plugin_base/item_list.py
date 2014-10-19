@@ -43,6 +43,7 @@ class ItemList(PluginBase):
 
 		# store local stuff
 		self._providers = {}
+		self._current_provider = None
 		self._menu_timer = None
 		self._monitor_list = []
 
@@ -1650,9 +1651,9 @@ class ItemList(PluginBase):
 		"""Get existing list provider or create new for specified path."""
 		result = None
 
-		# if not path is specified use current
+		# if path is not specified return current provider
 		if path is None:
-			path = self.path
+			return self._current_provider
 
 		# check if there is a provider for specified path
 		if path in self._providers:
@@ -1664,11 +1665,19 @@ class ItemList(PluginBase):
 			matching_provider = None
 
 			for provider_path, provider in self._providers.items():
+				# make sure path is valid, normally this shouldn't happen
+				if provider_path is None:
+					continue
+
 				if path.startswith(provider_path) and len(provider_path) > longest_path:
+					# matched provider for path, store it for later
 					longest_path = len(provider_path)
 					matching_provider = provider
 
-				# TODO: Release file handles if path is different.
+				elif not path.startswith(provider_path):
+					# provider is no longer needed as path is not contained
+					provider.release_archive_handle()
+					del self._providers[provider_path]
 
 			result = matching_provider
 
@@ -1676,7 +1685,14 @@ class ItemList(PluginBase):
 		if result is None:
 			result = self.create_provider(path, False)
 
+		# cache current provider
+		self._current_provider = result
+
 		return result
+
+	def provider_exists(self, path):
+		"""Check if provider for specified path exists."""
+		return path in self._providers
 
 	def get_monitor(self):
 		"""Get file system monitor"""

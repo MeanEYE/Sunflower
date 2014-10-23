@@ -56,15 +56,15 @@ class DefaultRename(RenameExtension):
 		self._entry_template.set_text(self._template)
 		self._entry_template.connect('changed', self.__template_changed)
 
-		style = Gtk.RcStyle()
-		style.xthickness = 0
-		style.ythickness = 0
+		# style = Gtk.RcStyle()
+		# style.xthickness = 0
+		# style.ythickness = 0
 
 		image_add = Gtk.Image()
 		image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
 		button_add = Gtk.Button()
 		button_add.set_image(image_add)
-		button_add.modify_style(style)
+		# button_add.modify_style(style)
 		button_add.connect('clicked', self.__button_add_clicked)
 
 		# create popup menu

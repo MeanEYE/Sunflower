@@ -1,4 +1,4 @@
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from common import AccessModeFormat
 from gui.input_dialog import InputDialog
 from widgets.breadcrumbs import Breadcrumbs

@@ -49,7 +49,7 @@ class DefaultFindFiles(FindExtension):
 		label_pattern.set_alignment(0, 0.5)
 
 		self._entries = Gtk.ListStore(str)
-		self._entry_pattern = Gtk.ComboBoxEntry(model=self._entries)
+		self._entry_pattern = Gtk.ComboBox.new_with_model_and_entry(model=self._entries)
 		self._entry_pattern.connect('changed', self.__handle_pattern_change)
 
 		self._checkbox_case_sensitive = Gtk.CheckButton(_('Case sensitive'))

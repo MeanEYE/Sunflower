@@ -3,7 +3,7 @@
 import os
 import sys
 
-from gi.repository import Gtk, Pango
+from gi.repository import Gtk, Gdk, Pango
 from collections import namedtuple
 
 

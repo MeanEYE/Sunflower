@@ -336,12 +336,11 @@ class FileList(ItemList):
 		for column in columns:
 			column.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
 
-			column_name = column.name
-			font_size = options.get('font_size_{0}'.format(column_name))
+			font_size = options.get('font_size_{0}'.format(column.name))
 
 			# make sure we have font size specified
 			if font_size is None:
-				font_size = self._default_column_font_size.get(column_name, None)
+				font_size = self._default_column_font_size.get(column.name, None)
 
 			# no font size was specified, skip column
 			if font_size is None:

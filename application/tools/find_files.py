@@ -1,7 +1,7 @@
 import os
 import user
 
-from gi.repository import Gtk, Pango, GObject
+from gi.repository import Gtk, Gdk, Pango, GObject
 from threading import Thread, Event
 
 
@@ -43,9 +43,9 @@ class FindFiles(GObject.GObject):
 		self.window.set_title(_('Find files'))
 		self.window.set_default_size(550, 500)
 		self.window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
-		self.set_transient_for(application)
+		self.window.set_transient_for(application)
 		self.window.set_border_width(7)
-		self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
+		self.window.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 		self.window.set_wmclass('Sunflower', 'Sunflower')
 
 		self.window.connect('key-press-event', self._handle_key_press)
@@ -248,7 +248,7 @@ class FindFiles(GObject.GObject):
 
 		# prepare extension objects for operation
 		for child in children:
-			extension_list.append(child.get_data('extension'))
+			extension_list.append(child.extension)
 
 		# tell extensions search is starting
 		self.emit('notify-start')
@@ -372,7 +372,7 @@ class FindFiles(GObject.GObject):
 
 			# get list of active extensions
 			active_children = filter(
-									lambda child: child.get_data('extension').is_active(),
+									lambda child: child.extension.is_active(),
 									self._extension_list.get_children()
 								)
 

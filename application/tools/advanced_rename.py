@@ -1,6 +1,6 @@
 import os
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from operation import RenameOperation
 
 
@@ -27,9 +27,9 @@ class AdvancedRename:
 		self.window.set_title(_('Advanced rename'))
 		self.window.set_default_size(640, 600)
 		self.window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
-		self.set_transient_for(application)
+		self.window.set_transient_for(application)
 		self.window.set_border_width(7)
-		self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
+		self.window.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 		self.window.set_wmclass('Sunflower', 'Sunflower')
 
 		self.window.connect('key-press-event', self._handle_key_press)
@@ -172,12 +172,12 @@ class AdvancedRename:
 	def update_list(self):
 		"""Update file list"""
 		active_children = filter(  # get only active extensions
-								lambda child: child.get_data('extension').is_active(),
+								lambda child: child.extension.is_active(),
 								self._extension_list.get_children()
 							)
 
 		# call reset on all extensions
-		map(lambda child: child.get_data('extension').reset(), active_children)
+		map(lambda child: child.extension.reset(), active_children)
 
 		for row in self._list:
 			old_name = row[Column.OLD_NAME]
@@ -185,7 +185,7 @@ class AdvancedRename:
 
 			# run new name through extensions
 			for child in active_children:
-				new_name = child.get_data('extension').get_new_name(old_name, new_name)
+				new_name = child.extension.get_new_name(old_name, new_name)
 
 			# store new name to list
 			row[Column.NEW_NAME] = new_name

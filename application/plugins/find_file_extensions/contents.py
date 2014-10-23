@@ -21,7 +21,7 @@ class ContentsFindFiles(FindExtension):
 		label_content.set_alignment(0, 0.5)
 
 		self._buffer = Gtk.TextBuffer()
-		self._text_view = Gtk.TextView(self._buffer)
+		self._text_view = Gtk.TextView(buffer=self._buffer)
 
 		# pack interface
 		viewport.add(self._text_view)

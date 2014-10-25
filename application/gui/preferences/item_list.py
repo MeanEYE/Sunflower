@@ -84,52 +84,34 @@ class ItemListOptions(SettingsPage):
 		hbox_breadcrumbs = Gtk.HBox(False, 5)
 		label_breadcrumbs = Gtk.Label(label=_('Breadcrumbs:'))
 		label_breadcrumbs.set_alignment(0, 0.5)
-		
-		list_breadcrumbs = Gtk.ListStore(str, int)
-		list_breadcrumbs.append((_('None'), Breadcrumbs.TYPE_NONE))
-		list_breadcrumbs.append((_('Normal'), Breadcrumbs.TYPE_NORMAL))
-		list_breadcrumbs.append((_('Smart'), Breadcrumbs.TYPE_SMART))
 
-		cell_breadcrumbs = Gtk.CellRendererText()
-
-		self._combobox_breadcrumbs = Gtk.ComboBox(model=list_breadcrumbs)
+		self._combobox_breadcrumbs = Gtk.ComboBoxText.new()
 		self._combobox_breadcrumbs.connect('changed', self._parent.enable_save)
-		self._combobox_breadcrumbs.pack_start(cell_breadcrumbs, True)
-		self._combobox_breadcrumbs.add_attribute(cell_breadcrumbs, 'text', 0)
+		self._combobox_breadcrumbs.append(str(Breadcrumbs.TYPE_NONE), _('None'))
+		self._combobox_breadcrumbs.append(str(Breadcrumbs.TYPE_NORMAL), _('Normal'))
+		self._combobox_breadcrumbs.append(str(Breadcrumbs.TYPE_SMART), _('Smart'))
 
 		# file access mode format
 		hbox_mode_format = Gtk.HBox(False, 5)
 		label_mode_format = Gtk.Label(label=_('Access mode format:'))
 		label_mode_format.set_alignment(0, 0.5)
 
-		list_mode_format = Gtk.ListStore(str, int)
-		list_mode_format.append((_('Octal'), AccessModeFormat.OCTAL))
-		list_mode_format.append((_('Textual'), AccessModeFormat.TEXTUAL))
-
-		cell_mode_format = Gtk.CellRendererText()
-
-		self._combobox_mode_format = Gtk.ComboBox(model=list_mode_format)
+		self._combobox_mode_format = Gtk.ComboBoxText.new()
 		self._combobox_mode_format.connect('changed', self._parent.enable_save)
-		self._combobox_mode_format.pack_start(cell_mode_format, True)
-		self._combobox_mode_format.add_attribute(cell_mode_format, 'text', 0)
+		self._combobox_mode_format.append(str(AccessModeFormat.OCTAL), _('Octal'))
+		self._combobox_mode_format.append(str(AccessModeFormat.TEXTUAL), _('Textual'))
 
 		# grid lines
 		hbox_grid_lines = Gtk.HBox(False, 5)
 		label_grid_lines = Gtk.Label(label=_('Show grid lines:'))
 		label_grid_lines.set_alignment(0, 0.5)
 
-		list_grid_lines = Gtk.ListStore(str, int)
-		list_grid_lines.append((_('None'), Gtk.TreeViewGridLines.NONE))
-		list_grid_lines.append((_('Horizontal'), Gtk.TreeViewGridLines.HORIZONTAL))
-		list_grid_lines.append((_('Vertical'), Gtk.TreeViewGridLines.VERTICAL))
-		list_grid_lines.append((_('Both'), Gtk.TreeViewGridLines.BOTH))
-
-		cell_grid_lines = Gtk.CellRendererText()
-
-		self._combobox_grid_lines = Gtk.ComboBox(model=list_grid_lines)
+		self._combobox_grid_lines = Gtk.ComboBoxText.new()
 		self._combobox_grid_lines.connect('changed', self._parent.enable_save)
-		self._combobox_grid_lines.pack_start(cell_grid_lines, True)
-		self._combobox_grid_lines.add_attribute(cell_grid_lines, 'text', 0)
+		self._combobox_grid_lines.append(str(Gtk.TreeViewGridLines.NONE), _('None'))
+		self._combobox_grid_lines.append(str(Gtk.TreeViewGridLines.HORIZONTAL), _('Horizontal'))
+		self._combobox_grid_lines.append(str(Gtk.TreeViewGridLines.VERTICAL), _('Vertical'))
+		self._combobox_grid_lines.append(str(Gtk.TreeViewGridLines.BOTH), _('Both'))
 
 		# selection color
 		hbox_selection_color = Gtk.HBox(False, 5)
@@ -147,18 +129,16 @@ class ItemListOptions(SettingsPage):
 		label_indicator = Gtk.Label(label=_('Selection indicator:'))
 		label_indicator.set_alignment(0, 0.5)
 
-		list_indicator = Gtk.ListStore(str)
-		list_indicator.append((u'\u25b6',))
-		list_indicator.append((u'\u25e2',))
-		list_indicator.append((u'\u25c8',))
-		list_indicator.append((u'\u263b',))
-		list_indicator.append((u'\u2771',))
-		list_indicator.append((u'\u2738',))
-		list_indicator.append((u'\u2731',))
-
-		self._combobox_indicator = Gtk.ComboBox.new_with_model_and_entry(list_indicator)
+		self._combobox_indicator = Gtk.ComboBoxText.new_with_entry()
 		self._combobox_indicator.connect('changed', self._parent.enable_save)
 		self._combobox_indicator.set_size_request(100, -1)
+		self._combobox_indicator.append_text(u'\u25b6',)
+		self._combobox_indicator.append_text(u'\u25e2',)
+		self._combobox_indicator.append_text(u'\u25c8',)
+		self._combobox_indicator.append_text(u'\u263b',)
+		self._combobox_indicator.append_text(u'\u2771',)
+		self._combobox_indicator.append_text(u'\u2738',)
+		self._combobox_indicator.append_text(u'\u2731',)
 
 		# quick search
 		label_quick_search = Gtk.Label(label=_('Quick search combination:'))
@@ -696,9 +676,9 @@ class ItemListOptions(SettingsPage):
 		section.set('right_click_select', self._checkbox_right_click.get_active())
 		section.set('headers_visible', self._checkbox_show_headers.get_active())
 		options.set('media_preview', self._checkbox_media_preview.get_active())
-		section.set('breadcrumbs', self._combobox_breadcrumbs.get_active())
-		section.set('mode_format', self._combobox_mode_format.get_active())
-		section.set('grid_lines', self._combobox_grid_lines.get_active())
+		section.set('breadcrumbs', self._combobox_breadcrumbs.get_active_id())
+		section.set('mode_format', self._combobox_mode_format.get_active_id())
+		section.set('grid_lines', self._combobox_grid_lines.get_active_id())
 		section.set('time_format', self._entry_time_format.get_text())
 		section.set('selection_color', self._button_selection_color.get_color().to_string())
 		section.set('selection_indicator', self._combobox_indicator.get_active_text())

@@ -44,10 +44,10 @@ class TitleBar:
 
 		# create container box
 		self._hbox = Gtk.HBox(homogeneous=False, spacing=self._box_spacing)
-		self._hbox.get_style_context().add_class('title-bar')
+		self._hbox.get_style_context().add_class('sunflower-title-bar')
 		self._hbox.set_border_width(1)
 
-		self._hbox_menu = Gtk.HBox(homogeneous=True, spacing=1)
+		self._hbox_menu = Gtk.HBox(homogeneous=True, spacing=0)
 		self._hbox_menu.set_border_width(self._box_border_width)
 
 		self._hbox_controls = Gtk.HBox(homogeneous=True, spacing=1)
@@ -72,7 +72,7 @@ class TitleBar:
 		self._button_menu.set_focus_on_click(False)
 		self._button_menu.set_tooltip_text(_('Context menu'))
 		self._button_menu.connect('clicked', self.show_menu)
-		self._button_menu.get_style_context().add_class('menu')
+		self._button_menu.get_style_context().add_class('sunflower-tab-menu')
 
 		self._hbox_menu.pack_start(self._button_menu, True, True, 0)
 

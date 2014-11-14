@@ -18,7 +18,7 @@ class TabLabel:
 		# create interface
 		self._hbox = Gtk.HBox(homogeneous=False, spacing=0)
 		self._container.add(self._hbox)
-		
+
 		self._label = Gtk.Label.new()
 		self._label.set_max_width_chars(20)
 		self._label.set_single_line_mode(True)
@@ -39,7 +39,7 @@ class TabLabel:
 		self._button.connect('clicked', self._close_tab)
 		self._button.set_property('no-show-all', True)
 		self._button.set_size_request(image_width + 2, image_height + 2)
-		self._button.get_style_context().add_class('close-tab')
+		self._button.get_style_context().add_class('sunflower-close-tab')
 
 		# pack interface
 		self._hbox.pack_start(self._lock_image, False, False, 0)

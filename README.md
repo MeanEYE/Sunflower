@@ -9,13 +9,13 @@ Sunflower is a small and highly customizable twin-panel file manager for Linux w
 
 Sunflower package can be downloaded from following locations:
 
-* [Arch Linux AUR](http://aur.archlinux.org/packages.php?ID=49321)
-* [Arch Linux AUR, repository version](http://aur.archlinux.org/packages.php?ID=49725)
+* [Arch Linux AUR](https://aur.archlinux.org/packages/sunflower/)
+* [Arch Linux AUR, repository version](https://aur.archlinux.org/packages/sunflower-hg/)
 * [Ubuntu PPA](https://launchpad.net/~atareao/+archive/sunflower) (usually late by a version or two)
 * [Gentoo](http://packages.gentoo.org/package/x11-misc/sunflower)
     Installation: `emerge --ask x11-misc/sunflower`
 
-[Official packages can be downloaded from here](http://sunflower-fm.org/pub) or releases page above.
+[Official packages can be downloaded from here](http://sunflower-fm.org/download) or releases page above.
 
 ### Plugins
 

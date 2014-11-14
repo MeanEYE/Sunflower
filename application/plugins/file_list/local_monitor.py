@@ -22,7 +22,7 @@ class LocalMonitor(Monitor):
 	def __init__(self, provider, path):
 		Monitor.__init__(self, provider, path)
 
-		if os.path.exists(self._path):
+		if provider.exists(self._path):
 			try:
 				# create file/directory monitor
 				self._monitor = Gio.File.new_for_path(path).monitor(Gio.FileMonitorFlags.SEND_MOVED)

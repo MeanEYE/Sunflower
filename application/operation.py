@@ -87,7 +87,7 @@ class Operation(Thread):
 		space_needed = format_size(needed, size_format)
 		space_available = format_size(available, size_format)
 
-		if self._options[Option.SILENT]:
+		if self._options is not None and self._options[Option.SILENT]:
 			# silent option is enabled, we skip operation by default
 			self._error_list.append(_(
 							'Aborted. Not enough free space on target file system.\n'
@@ -122,7 +122,7 @@ class Operation(Thread):
 
 	def _get_merge_input(self, path):
 		"""Get merge confirmation"""
-		if self._options[Option.SILENT]:
+		if self._options is not None and self._options[Option.SILENT]:
 			# we are in silent mode, do what user specified
 			merge = self._options[Option.SILENT_MERGE]
 			self._merge_all = merge
@@ -164,7 +164,7 @@ class Operation(Thread):
 
 	def _get_overwrite_input(self, path):
 		"""Get overwrite confirmation"""
-		if self._options[Option.SILENT]:
+		if self._options is not None and self._options[Option.SILENT]:
 			# we are in silent mode, do what user specified
 			overwrite = self._options[Option.SILENT_OVERWRITE]
 			self._overwrite_all = overwrite
@@ -210,7 +210,7 @@ class Operation(Thread):
 
 	def _get_write_error_input(self, error):
 		"""Get user response for write error"""
-		if self._options[Option.SILENT]:
+		if self._options is not None and self._options[Option.SILENT]:
 			# we are in silent mode, set response and log error
 			self._error_list.append(str(error))
 			response = Gtk.ResponseType.NO
@@ -236,7 +236,7 @@ class Operation(Thread):
 
 	def _get_create_error_input(self, error, is_directory=False):
 		"""Get user response for create error"""
-		if self._options[Option.SILENT]:
+		if self._options is not None and self._options[Option.SILENT]:
 			# we are in silent mode, set response and log error
 			self._error_list.append(str(error))
 			response = Gtk.ResponseType.NO
@@ -273,7 +273,7 @@ class Operation(Thread):
 
 	def _get_mode_set_error_input(self, error):
 		"""Get user response for mode set error"""
-		if self._options[Option.SILENT]:
+		if self._options is not None and self._options[Option.SILENT]:
 			# we are in silent mode, set response and log error
 			self._error_list.append(str(error))
 			response = Gtk.ResponseType.NO
@@ -353,7 +353,7 @@ class Operation(Thread):
 
 	def _get_move_error_input(self, error):
 		"""Get user response for move error"""
-		if self._options[Option.SILENT]:
+		if self._options is not None and self._options[Option.SILENT]:
 			# we are in silent mode, set response and log error
 			self._error_list.append(str(error))
 			response = Gtk.ResponseType.NO
@@ -379,7 +379,7 @@ class Operation(Thread):
 
 	def _get_rename_error_input(self, error):
 		"""Get user response for rename error"""
-		if self._options[Option.SILENT]:
+		if self._options is not None and self._options[Option.SILENT]:
 			# we are in silent mode, set response and log error
 			self._error_list.append(str(error))
 			response = Gtk.ResponseType.NO
@@ -405,7 +405,7 @@ class Operation(Thread):
 
 	def _get_read_error_input(self, error):
 		"""Get user response for directory listing error"""
-		if self._options[Option.SILENT]:
+		if self._options is not None and self._options[Option.SILENT]:
 			# we are in silent mode, set response and log error
 			self._error_list.append(str(error))
 			response = Gtk.ResponseType.NO
@@ -461,7 +461,7 @@ class Operation(Thread):
 class CopyOperation(Operation):
 	"""Operation thread used for copying files"""
 
-	def __init__(self, application, source, destination, options , destination_path=None):
+	def __init__(self, application, source, destination, options, destination_path=None):
 		Operation.__init__(self, application, source, destination, options, destination_path)
 
 		self._merge_all = None
@@ -470,11 +470,23 @@ class CopyOperation(Operation):
 
 		self._total_count = 0
 		self._total_size = 0
+		self._buffer_size = 0
 
 		# cache settings
 		should_reserve = self._application.options.section('operations').get('reserve_size')
 		supported_by_provider = ProviderSupport.RESERVE_SIZE in self._destination.get_support()
 		self._reserve_size = should_reserve and supported_by_provider
+
+		# detect buffer size
+		if self._source.is_local and self._destination.is_local:
+			system_stat = self._destination.get_system_size(self._destination_path)
+
+			if system_stat.block_size:
+				self._buffer_size = system_stat.block_size * 1024
+			else:
+				self._buffer_size = BufferSize.LOCAL
+		else:
+			self._buffer_size = BufferSize.REMOTE
 
 	def _create_dialog(self):
 		"""Create progress dialog"""
@@ -767,9 +779,12 @@ class CopyOperation(Operation):
 			sh = self._source.get_file_handle(file_name, FileMode.READ, relative_to=source_path)
 			dh = self._destination.get_file_handle(dest_file, FileMode.WRITE, relative_to=self._destination_path)
 
-			# set buffer size
-			local_operation = self._source.is_local and self._destination.is_local
-			buffer_size = BufferSize.LOCAL if local_operation else BufferSize.REMOTE
+			# report error properly
+			if sh is None:
+				raise StandardError('Unable to open source file in read mode.')
+
+			if dh is None:
+				raise StandardError('Unable to open destination file in write mode.')
 
 			# reserve file size
 			if self._reserve_size:
@@ -817,7 +832,7 @@ class CopyOperation(Operation):
 			if self._abort.is_set(): break
 			self._can_continue.wait()  # pause lock
 
-			data = sh.read(buffer_size)
+			data = sh.read(self._buffer_size)
 
 			if data:
 				try:
@@ -1343,6 +1358,8 @@ class RenameOperation(Operation):
 	def __init__(self, application, provider, path, file_list):
 		Operation.__init__(self, application, provider)
 
+		self._destination = provider
+		self._destination_path = path
 		self._source_path = path
 		self._file_list = file_list
 
@@ -1353,16 +1370,33 @@ class RenameOperation(Operation):
 	def _rename_path(self, old_name, new_name, index):
 		"""Rename specified path"""
 		try:
-			# try renaming specified path
-			self._source.rename_path(old_name, new_name, relative_to=self._source_path)
+			# check if specified path already exists
+			if self._destination.exists(new_name, relative_to=self._source_path):
+				can_procede, options = self._get_overwrite_input(new_name)
 
-			# push event to the queue
-			if self._source_queue is not None:
-				delete_event = (MonitorSignals.DELETE, old_name, None)
-				create_event = (MonitorSignals.CREATED, new_name, None)
+				# get new name if user specified
+				if options[OverwriteOption.RENAME]:
+					new_name = os.path.join(
+					                    os.path.dirname(new_name),
+					                    options[OverwriteOption.NEW_NAME]
+					                )
 
-				self._source_queue.put(delete_event, False)
-				self._source_queue.put(create_event, False)
+			if not can_procede:
+				# user canceled overwrite, skip the file
+				self._file_list.pop(index)
+				return
+
+			else:
+				# rename path
+				self._source.rename_path(old_name, new_name, relative_to=self._source_path)
+
+				# push event to the queue
+				if self._source_queue is not None:
+					delete_event = (MonitorSignals.DELETE, old_name, None)
+					create_event = (MonitorSignals.CREATED, new_name, None)
+
+					self._source_queue.put(delete_event, False)
+					self._source_queue.put(create_event, False)
 
 		except StandardError as error:
 			# problem renaming path, ask user what to do

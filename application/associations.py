@@ -94,9 +94,12 @@ class AssociationManager:
 
 	def get_sample_data(self, path, provider):
 		"""Get sample data needed for content detection"""
+		data = None
 		file_handle = provider.get_file_handle(path, Mode.READ)
-		data = file_handle.read(128)
-		file_handle.close()
+
+		if file_handle is not None:
+			data = file_handle.read(128)
+			file_handle.close()
 
 		return data
 

@@ -6,6 +6,8 @@ from accelerator_group import AcceleratorGroup
 
 class ButtonText:
 	MENU = u'\u2699'
+	TERMINAL = u'\u2605'
+	ITEM_LIST = u'\u2600'
 
 
 class TerminalType:
@@ -43,24 +45,44 @@ class Terminal(PluginBase):
 		# change list icon
 		self._title_bar.set_icon_from_name('terminal')
 
-		# terminal menu button
-		self._menu_button = Gtk.Button()
+		# pack buttons
+		self._title_bar.add_control(self._menu_button)
+
+		# terminal button
+		self._terminal_button = gtk.Button()
 
 		if options.get('tab_button_icons'):
 			# set icon
-			image_menu = Gtk.Image()
-			image_menu.set_from_icon_name(Gtk.STOCK_EDIT, Gtk.IconSize.MENU)
-			self._menu_button.set_image(image_menu)
+			image_terminal = gtk.Image()
+			image_terminal.set_from_icon_name('terminal', gtk.ICON_SIZE_MENU)
+			self._terminal_button.set_image(image_terminal)
 		else:
 			# set text
-			self._menu_button = Gtk.Button(ButtonText.MENU)
+			self._terminal_button.set_label(ButtonText.TERMINAL)
 
-		self._menu_button.set_focus_on_click(False)
-		self._menu_button.set_tooltip_text(_('Terminal menu'))
-		self._menu_button.connect('clicked', self._show_terminal_menu)
+		self._terminal_button.set_focus_on_click(False)
+		self._terminal_button.set_tooltip_text(_('Terminal'))
+		self._terminal_button.connect('clicked', self._create_terminal)
 
-		# pack buttons
-		self._title_bar.add_control(self._menu_button)
+		self._title_bar.add_control(self._terminal_button)
+
+		# file list button
+		self._file_list_button = gtk.Button()
+
+		if options.get('tab_button_icons'):
+			# set icon
+			image_folder = gtk.Image()
+			image_folder.set_from_icon_name('folder', gtk.ICON_SIZE_MENU)
+			self._file_list_button.set_image(image_folder)
+		else:
+			# set text
+			self._file_list_button.set_label(ButtonText.ITEM_LIST)
+
+		self._file_list_button.set_focus_on_click(False)
+		self._file_list_button.set_tooltip_text(_('Open file list'))
+		self._file_list_button.connect('clicked', self._create_file_list)
+
+		self._title_bar.add_control(self._file_list_button)
 
 		# create main object
 		self._terminal_type = section.get('type')
@@ -154,6 +176,26 @@ class Terminal(PluginBase):
 			if font_name is not None:
 				self._terminal.set_font_from_string(font_name)
 
+	def _create_buttons(self):
+		"""Create titlebar buttons."""
+		options = self._parent.options
+
+		# terminal menu button
+		self._menu_button = gtk.Button()
+
+		if options.get('tab_button_icons'):
+			# set icon
+			image_menu = gtk.Image()
+			image_menu.set_from_icon_name(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
+			self._menu_button.set_image(image_menu)
+		else:
+			# set text
+			self._menu_button = gtk.Button(ButtonText.MENU)
+
+		self._menu_button.set_focus_on_click(False)
+		self._menu_button.set_tooltip_text(_('Terminal menu'))
+		self._menu_button.connect('clicked', self._show_terminal_menu)
+
 	def _update_title(self, widget, data=None):
 		"""Update title with terminal window text"""
 		self._change_title_text(self._terminal.get_window_title())
@@ -166,6 +208,12 @@ class Terminal(PluginBase):
 	def _create_terminal(self, widget, data=None):
 		"""Create terminal tab in parent notebook"""
 		self._parent.create_terminal_tab(self._notebook, self._options.copy())
+		return True
+
+	def _create_file_list(self, widget=None, data=None):
+		"""Create file list in parent notebook"""
+		DefaultList = self._parent.plugin_classes['file_list']
+		self._parent.create_tab(self._notebook, DefaultList)
 		return True
 
 	def _create_menu(self):

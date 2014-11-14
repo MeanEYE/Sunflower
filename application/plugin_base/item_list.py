@@ -1,6 +1,7 @@
 import os
 import urllib
 import common
+import user
 
 from gi.repository import Gtk, Gdk
 from plugin import PluginBase
@@ -12,12 +13,14 @@ from gui.input_dialog import CopyDialog, MoveDialog, InputDialog, PathInputDialo
 from gui.preferences.display import StatusVisible
 from gui.history_list import HistoryList
 from history import HistoryManager
+from plugin_base.provider import Mode as FileMode
 
 
 class ButtonText:
 	BOOKMARKS = u'\u2318'
 	HISTORY = u'\u2630'
 	TERMINAL = u'\u2605'
+	TRASH = u'\u239a'
 
 
 class ItemList(PluginBase):
@@ -39,7 +42,8 @@ class ItemList(PluginBase):
 		section = options.section('item_list')
 
 		# store local stuff
-		self._provider = None
+		self._providers = {}
+		self._current_provider = None
 		self._menu_timer = None
 		self._monitor_list = []
 
@@ -68,59 +72,6 @@ class ItemList(PluginBase):
 		self._sort_case_sensitive = section.get('case_sensitive_sort')
 		self._sort_number_sensitive = section.get('number_sensitive_sort')
 		self._columns = []
-
-		# bookmarks button
-		self._bookmarks_button = Gtk.Button()
-
-		if options.get('tab_button_icons'):
-			image_bookmarks = Gtk.Image()
-			image_bookmarks.set_from_icon_name('go-jump', Gtk.IconSize.MENU)
-			self._bookmarks_button.set_image(image_bookmarks)
-
-		else:
-			self._bookmarks_button.set_label(ButtonText.BOOKMARKS)
-
-		self._bookmarks_button.set_focus_on_click(False)
-		self._bookmarks_button.set_tooltip_text(_('Bookmarks'))
-		self._bookmarks_button.connect('clicked', self._bookmarks_button_clicked)
-
-		self._title_bar.add_control(self._bookmarks_button)
-
-		# history button
-		self._history_button = Gtk.Button()
-
-		if options.get('tab_button_icons'):
-			# set icon
-			image_history = Gtk.Image()
-			image_history.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
-			self._history_button.set_image(image_history)
-		else:
-			# set text
-			self._history_button.set_label(ButtonText.HISTORY)
-
-		self._history_button.set_focus_on_click(False)
-		self._history_button.set_tooltip_text(_('History'))
-		self._history_button.connect('clicked', self._history_button_clicked)
-
-		self._title_bar.add_control(self._history_button)
-
-		# terminal button
-		self._terminal_button = Gtk.Button()
-
-		if options.get('tab_button_icons'):
-			# set icon
-			image_terminal = Gtk.Image()
-			image_terminal.set_from_icon_name('terminal', Gtk.IconSize.MENU)
-			self._terminal_button.set_image(image_terminal)
-		else:
-			# set text
-			self._terminal_button.set_label(ButtonText.TERMINAL)
-
-		self._terminal_button.set_focus_on_click(False)
-		self._terminal_button.set_tooltip_text(_('Terminal'))
-		self._terminal_button.connect('clicked', self._create_terminal)
-
-		self._title_bar.add_control(self._terminal_button)
 
 		# configure status bar
 		self._status_bar.add_group_with_icon('dirs', 'folder', '0/0', tooltip=_('Directories (selected/total)'))
@@ -224,6 +175,63 @@ class ItemList(PluginBase):
 
 		self.show_all()
 		self._search_panel.hide()
+
+	def _create_buttons(self):
+		"""Create titlebar buttons."""
+		options = self._parent.options
+
+		# bookmarks button
+		self._bookmarks_button = gtk.Button()
+
+		if options.get('tab_button_icons'):
+			image_bookmarks = gtk.Image()
+			image_bookmarks.set_from_icon_name('go-jump', gtk.ICON_SIZE_MENU)
+			self._bookmarks_button.set_image(image_bookmarks)
+
+		else:
+			self._bookmarks_button.set_label(ButtonText.BOOKMARKS)
+
+		self._bookmarks_button.set_focus_on_click(False)
+		self._bookmarks_button.set_tooltip_text(_('Bookmarks'))
+		self._bookmarks_button.connect('clicked', self._bookmarks_button_clicked)
+
+		self._title_bar.add_control(self._bookmarks_button)
+
+		# history button
+		self._history_button = gtk.Button()
+
+		if options.get('tab_button_icons'):
+			# set icon
+			image_history = gtk.Image()
+			image_history.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
+			self._history_button.set_image(image_history)
+		else:
+			# set text
+			self._history_button.set_label(ButtonText.HISTORY)
+
+		self._history_button.set_focus_on_click(False)
+		self._history_button.set_tooltip_text(_('History'))
+		self._history_button.connect('clicked', self._history_button_clicked)
+
+		self._title_bar.add_control(self._history_button)
+
+		# terminal button
+		self._terminal_button = gtk.Button()
+
+		if options.get('tab_button_icons'):
+			# set icon
+			image_terminal = gtk.Image()
+			image_terminal.set_from_icon_name('terminal', gtk.ICON_SIZE_MENU)
+			self._terminal_button.set_image(image_terminal)
+		else:
+			# set text
+			self._terminal_button.set_label(ButtonText.TERMINAL)
+
+		self._terminal_button.set_focus_on_click(False)
+		self._terminal_button.set_tooltip_text(_('Terminal'))
+		self._terminal_button.connect('clicked', self._create_terminal)
+
+		self._title_bar.add_control(self._terminal_button)
 
 	def _configure_accelerators(self):
 		"""Configure accelerator group"""
@@ -651,9 +659,13 @@ class ItemList(PluginBase):
 		PluginBase._handle_tab_close(self)
 		self._main_object.handler_block_by_func(self._column_changed)
 
+		# save current configuration
 		self._options.set('path', self.path)
 		self._options.set('sort_column', self._sort_column)
 		self._options.set('sort_ascending', self._sort_ascending)
+
+		# allow providers to clean up
+		self.destroy_providers()
 
 		return True
 
@@ -1586,9 +1598,102 @@ class ItemList(PluginBase):
 		"""Update column visibility"""
 		pass
 
-	def get_povider(self):
-		"""Get list provider"""
-		return self._provider
+	def create_provider(self, path, is_archive):
+		"""Preemptively create provider object."""
+		result = None
+
+		if not is_archive:
+			scheme = 'file' if '://' not in path else path.split('://', 1)[0]
+
+			# create provider
+			Provider = self._parent.get_provider_by_protocol(scheme)
+
+			if Provider is not None:
+				result = Provider(self)
+
+				# cache provider for later use
+				root_path = result.get_root_path(path)
+				self._providers[root_path] = result
+
+		else:
+			mime_type = self._parent.associations_manager.get_mime_type(path=path)
+			current_provider = self.get_provider()
+
+			# create archive provider
+			Provider = self._parent.get_provider_for_archive(mime_type)
+
+			if Provider is not None:
+				result = Provider(self, path)
+
+				# set archive file handle
+				handle = current_provider.get_file_handle(path, FileMode.READ_APPEND)
+				result.set_archive_handle(handle)
+
+				# cache provider locally
+				self._providers[path] = result
+
+		# in case no of not supported provider, create one for users home
+		if result is None:
+			Provider = self._parent.get_provider_by_protocol('file')
+			result = Provider(self, user.home)
+
+			# cache provider for later use
+			root_path = result.get_root_path(user.home)
+			self._providers[root_path] = result
+
+		return result
+
+	def destroy_providers(self):
+		"""Allow providers to clean up after themselves."""
+		for path, provider in self._providers.items():
+			provider.release_archive_handle()
+
+	def get_provider(self, path=None):
+		"""Get existing list provider or create new for specified path."""
+		result = None
+
+		# if path is not specified return current provider
+		if path is None:
+			return self._current_provider
+
+		# check if there is a provider for specified path
+		if path in self._providers:
+			result = self._providers[path]
+
+		else:
+			# try to find provider with longest matching path
+			longest_path = 0
+			matching_provider = None
+
+			for provider_path, provider in self._providers.items():
+				# make sure path is valid, normally this shouldn't happen
+				if provider_path is None:
+					continue
+
+				if path.startswith(provider_path) and len(provider_path) > longest_path:
+					# matched provider for path, store it for later
+					longest_path = len(provider_path)
+					matching_provider = provider
+
+				elif not path.startswith(provider_path):
+					# provider is no longer needed as path is not contained
+					provider.release_archive_handle()
+					del self._providers[provider_path]
+
+			result = matching_provider
+
+		# no matching provider was found, create new
+		if result is None:
+			result = self.create_provider(path, False)
+
+		# cache current provider
+		self._current_provider = result
+
+		return result
+
+	def provider_exists(self, path):
+		"""Check if provider for specified path exists."""
+		return path in self._providers
 
 	def get_monitor(self):
 		"""Get file system monitor"""
@@ -1611,13 +1716,14 @@ class ItemList(PluginBase):
 		if len(self._monitor_list) > 0 and self._monitor_list[0].is_manual():
 			return
 
-		# create new monitor for specified path
-		provider = self.get_provider()
-		monitor = provider.get_monitor(path)
-		monitor.connect('changed', self._directory_changed, parent)
+		if path not in [monitor.get_path() for monitor in self._monitor_list]:
+			# create new monitor for specified path
+			provider = self.get_provider()
+			monitor = provider.get_monitor(path)
+			monitor.connect('changed', self._directory_changed, parent)
 
-		# add monitor to the list
-		self._monitor_list.append(monitor)
+			# add monitor to the list
+			self._monitor_list.append(monitor)
 
 	def cancel_monitors(self):
 		"""Cancel all monitors"""

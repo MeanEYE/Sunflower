@@ -108,3 +108,7 @@ class Monitor(GObject.GObject):
 	def get_queue(self):
 		"""Return monitor queue"""
 		return self._queue
+
+	def get_path(self):
+		"""Return monitor path"""
+		return self._path

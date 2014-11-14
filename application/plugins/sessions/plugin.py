@@ -276,7 +276,7 @@ class SessionManager:
 								'sessions'
 							)
 
-		self._save_session_menu_item = gtk.MenuItem(_('Save session'))
+		self._save_session_menu_item = Gtk.MenuItem(_('Save session'))
 		self._save_session_menu_item.connect(
 								'activate',
 								self._save_session

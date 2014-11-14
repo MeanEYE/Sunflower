@@ -225,7 +225,12 @@ class AboutWindow:
 					contributor.website or ''
 				) for contributor in self.artists])
 
-		self._dialog.set_translator_credits(_('translator-credits'))
+		self._dialog.set_translator_credits('\n'.join(['{0} <{1}> {2} - {3}'.format(
+					contributor.name,
+					contributor.email,
+					contributor.website or '',
+					contributor.language
+				) for contributor in self.translators]))
 
 	def show(self):
 		"""Show dialog"""

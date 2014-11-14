@@ -701,7 +701,7 @@ class MainWindow(Gtk.Window):
 		vbox.pack_start(self.menu_bar, expand=False, fill=False, padding=0)
 		vbox.pack_start(self.toolbar_manager.get_toolbar(), expand=False, fill=False, padding=0)
 
-		self._vbox2 = gtk.VBox(False, 4)
+		self._vbox2 = Gtk.VBox(False, 4)
 		self._vbox2.set_border_width(3)
 		self._vbox2.pack_start(self._paned, expand=True, fill=True, padding=0)
 		self._vbox2.pack_start(self.command_entry_bar, expand=False, fill=False, padding=0)
@@ -1011,11 +1011,11 @@ class MainWindow(Gtk.Window):
 			self._paned.remove(self.right_notebook)
 			self._vbox2.remove(self._paned)
 
-			self._paned = gtk.VPaned() if horizontal_split else gtk.HPaned()
+			self._paned = Gtk.VPaned() if horizontal_split else Gtk.HPaned()
 			self._paned.pack1(self.left_notebook, resize=True, shrink=False)
 			self._paned.pack2(self.right_notebook, resize=True, shrink=False)
 
-			self._vbox2.pack_start(self._paned)
+			self._vbox2.pack_start(self._paned, True, True, 0)
 			self._vbox2.reorder_child(self._paned, 0)
 
 			self._paned.show()

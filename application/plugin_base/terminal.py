@@ -49,12 +49,12 @@ class Terminal(PluginBase):
 		self._title_bar.add_control(self._menu_button)
 
 		# terminal button
-		self._terminal_button = gtk.Button()
+		self._terminal_button = Gtk.Button()
 
 		if options.get('tab_button_icons'):
 			# set icon
-			image_terminal = gtk.Image()
-			image_terminal.set_from_icon_name('terminal', gtk.ICON_SIZE_MENU)
+			image_terminal = Gtk.Image()
+			image_terminal.set_from_icon_name('terminal', Gtk.IconSize.MENU)
 			self._terminal_button.set_image(image_terminal)
 		else:
 			# set text
@@ -67,12 +67,12 @@ class Terminal(PluginBase):
 		self._title_bar.add_control(self._terminal_button)
 
 		# file list button
-		self._file_list_button = gtk.Button()
+		self._file_list_button = Gtk.Button()
 
 		if options.get('tab_button_icons'):
 			# set icon
-			image_folder = gtk.Image()
-			image_folder.set_from_icon_name('folder', gtk.ICON_SIZE_MENU)
+			image_folder = Gtk.Image()
+			image_folder.set_from_icon_name('folder', Gtk.IconSize.MENU)
 			self._file_list_button.set_image(image_folder)
 		else:
 			# set text
@@ -181,16 +181,16 @@ class Terminal(PluginBase):
 		options = self._parent.options
 
 		# terminal menu button
-		self._menu_button = gtk.Button()
+		self._menu_button = Gtk.Button()
 
 		if options.get('tab_button_icons'):
 			# set icon
-			image_menu = gtk.Image()
-			image_menu.set_from_icon_name(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
+			image_menu = Gtk.Image()
+			image_menu.set_from_icon_name(Gtk.STOCK_EDIT, Gtk.IconSize.MENU)
 			self._menu_button.set_image(image_menu)
 		else:
 			# set text
-			self._menu_button = gtk.Button(ButtonText.MENU)
+			self._menu_button = Gtk.Button(ButtonText.MENU)
 
 		self._menu_button.set_focus_on_click(False)
 		self._menu_button.set_tooltip_text(_('Terminal menu'))

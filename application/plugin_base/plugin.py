@@ -76,9 +76,12 @@ class PluginBase(Gtk.VBox):
 		"""Create titlebar buttons."""
 		pass
 
-	def _connect_main_object(self, object_):
+	def _connect_main_object(self, main_object):
 		"""Create focus chain and connect basic events"""
-		self._main_object = object_
+		self._main_object = main_object
+
+		# set style class
+		self._main_object.get_style_context().add_class('sunflower-main-object')
 
 		# connect events
 		self._main_object.connect('focus-in-event', self._control_got_focus)
@@ -316,6 +319,12 @@ class PluginBase(Gtk.VBox):
 	def update_state(self, state):
 		"""Update plugin state"""
 		self._title_bar.set_state(state)
+
+		# set main object class
+		if state == Gtk.StateType.SELECTED:
+			self._main_object.get_style_context().add_class('selected')
+		else:
+			self._main_object.get_style_context().remove_class('selected')
 
 	def focus_main_object(self):
 		"""Give focus to main object"""

@@ -181,11 +181,10 @@ class ItemList(PluginBase):
 		options = self._parent.options
 
 		# bookmarks button
-		self._bookmarks_button = Gtk.Button()
+		self._bookmarks_button = Gtk.Button.new()
 
 		if options.get('tab_button_icons'):
-			image_bookmarks = Gtk.Image()
-			image_bookmarks.set_from_icon_name('go-jump', Gtk.IconSize.MENU)
+			image_bookmarks = Gtk.Image.new_from_icon_name('go-jump', Gtk.IconSize.MENU)
 			self._bookmarks_button.set_image(image_bookmarks)
 
 		else:
@@ -198,13 +197,13 @@ class ItemList(PluginBase):
 		self._title_bar.add_control(self._bookmarks_button)
 
 		# history button
-		self._history_button = Gtk.Button()
+		self._history_button = Gtk.Button.new()
 
 		if options.get('tab_button_icons'):
 			# set icon
-			image_history = Gtk.Image()
-			image_history.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
+			image_history = Gtk.Image.new_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
 			self._history_button.set_image(image_history)
+
 		else:
 			# set text
 			self._history_button.set_label(ButtonText.HISTORY)
@@ -216,12 +215,11 @@ class ItemList(PluginBase):
 		self._title_bar.add_control(self._history_button)
 
 		# terminal button
-		self._terminal_button = Gtk.Button()
+		self._terminal_button = Gtk.Button.new()
 
 		if options.get('tab_button_icons'):
 			# set icon
-			image_terminal = Gtk.Image()
-			image_terminal.set_from_icon_name('terminal', Gtk.IconSize.MENU)
+			image_terminal = Gtk.Image.new_from_icon_name('terminal', Gtk.IconSize.MENU)
 			self._terminal_button.set_image(image_terminal)
 		else:
 			# set text

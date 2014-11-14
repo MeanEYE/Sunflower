@@ -1,28 +1,75 @@
-GtkButton.close-tab {
+GtkButton.sunflower-close-tab {
 	padding: 0px;
 }
 
 /**
  * Tab title bar.
  */
-GtkHBox.title-bar {
-	border-radius: 3px;
+GtkHBox.sunflower-title-bar {
+	border-radius: 0.3em;
 	background-color: @theme_unfocused_bg_color;
 	color: @theme_unfocused_fg_color;
 }
 
-GtkHBox.title-bar GtkVBox {
+GtkHBox.sunflower-title-bar GtkVBox {
 	background-color: @theme_unfocused_bg_color;
 	color: @theme_unfocused_fg_color;
 }
 
-GtkHBox.title-bar GtkHBox {
-	border-radius: 2px;
-	background-color: rgba(255, 255, 255, 0.5);
-}
-
-GtkHBox.title-bar.selected GtkVBox,
-GtkHBox.title-bar.selected {
+GtkHBox.sunflower-title-bar.selected,
+GtkHBox.sunflower-title-bar.selected GtkVBox {
 	background-color: @theme_selected_bg_color;
 	color: @theme_selected_fg_color;
+}
+
+GtkHBox.sunflower-title-bar GtkHBox {
+	border-radius: 0.2em;
+	background-color: mix(@theme_unfocused_fg_color, @theme_unfocused_bg_color, 0.7);
+}
+
+GtkHBox.sunflower-title-bar.selected GtkHBox {
+	border-radius: 0.2em;
+	background-color: mix(@theme_selected_fg_color, @theme_selected_bg_color, 0.7);
+}
+
+GtkHBox.sunflower-title-bar GtkHBox GtkButton,
+GtkHBox.sunflower-title-bar GtkHBox GtkButton:hover {
+	border: 0em;
+	border-radius: 0em;
+	outline: 0em;
+	box-shadow: none;
+}
+
+GtkHBox.sunflower-title-bar GtkHBox GtkButton:first-child {
+	border-radius: 0.2em 0em 0em 0.2em;
+}
+
+GtkHBox.sunflower-title-bar GtkHBox GtkButton:last-child {
+	border-radius: 0em 0.2em 0.2em 0em;
+}
+
+GtkHBox.sunflower-title-bar GtkButton.sunflower-tab-menu,
+GtkHBox.sunflower-title-bar GtkButton.sunflower-tab-menu:hover {
+	border-radius: 0.2em;
+}
+
+GtkHBox.sunflower-title-bar GtkButton.sunflower-tab-menu {
+	padding: 0.1em 0.3em;
+	background-color: transparent;
+}
+
+GtkHBox.sunflower-title-bar.selected GtkLabel {
+	color: @theme_selected_fg_color;
+}
+
+/**
+ * Item list
+ */
+GtkTreeView.sunflower-main-object:selected {
+	outline: none;
+	background-color: mix(@theme_selected_fg_color, @theme_selected_bg_color, 0.30);
+}
+
+GtkTreeView.sunflower-main-object:selected:focus {
+	background-color: @theme_selected_bg_color;
 }

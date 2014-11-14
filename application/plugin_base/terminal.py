@@ -181,12 +181,11 @@ class Terminal(PluginBase):
 		options = self._parent.options
 
 		# terminal menu button
-		self._menu_button = Gtk.Button()
+		self._menu_button = Gtk.Button.new()
 
 		if options.get('tab_button_icons'):
 			# set icon
-			image_menu = Gtk.Image()
-			image_menu.set_from_icon_name(Gtk.STOCK_EDIT, Gtk.IconSize.MENU)
+			image_menu = Gtk.Image.new_from_icon_name(Gtk.STOCK_EDIT, Gtk.IconSize.MENU)
 			self._menu_button.set_image(image_menu)
 		else:
 			# set text

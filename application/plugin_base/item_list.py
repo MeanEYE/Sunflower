@@ -522,7 +522,7 @@ class ItemList(PluginBase):
 		control_active = event.get_state() & Gdk.ModifierType.CONTROL_MASK
 
 		# handle single click
-		if event.button is 1 and control_active and event.type in (Gdk.EventType.BUTTON_PRESS, Gdk.BUTTON_RELEASE):
+		if event.button == 1 and control_active and event.type in (Gdk.EventType.BUTTON_PRESS, Gdk.EventType.BUTTON_RELEASE):
 			# we handle left mouse press and release in order to prevent
 			# default widget behavior which leads to unpredictable results
 
@@ -542,7 +542,7 @@ class ItemList(PluginBase):
 			result = True
 
 		# handle range select
-		elif event.button is 1 and shift_active and event.type is Gdk.EventType.BUTTON_PRESS:
+		elif event.button == 1 and shift_active and event.type is Gdk.EventType.BUTTON_PRESS:
 			start_path = None
 			end_path = None
 
@@ -570,22 +570,21 @@ class ItemList(PluginBase):
 			result = True
 
 		# handle navigation with double or single click
-		elif event.button is 1 and not (shift_active or control_active) \
-		and ((event.type is Gdk._2BUTTON_PRESS and not single_click_navigation) \
-		or (event.type is Gdk.BUTTON_RELEASE and single_click_navigation)):
-
+		elif event.button == 1 and not (shift_active or control_active) \
+		and ((event.type is Gdk.EventType._2BUTTON_PRESS and not single_click_navigation) \
+		or (event.type is Gdk.EventType.BUTTON_RELEASE and single_click_navigation)):
 			# make sure that clicking on empty space doesn't trigger any action
 			if self._item_list.get_path_at_pos(int(event.x), int(event.y)) is not None:
 				self._execute_selected_item(widget)
 				result = True
 
 		# handle middle click
-		elif event.button is 2 and event.type is Gdk.BUTTON_RELEASE:
+		elif event.button == 2 and event.type is Gdk.EventType.BUTTON_RELEASE:
 			self._open_in_new_tab()
 			result = True
 
 		# handle right click
-		elif event.button is 3:
+		elif event.button == 3:
 			if event.type is Gdk.EventType.BUTTON_PRESS:
 				# record mouse down timestamp
 				self._popup_timestamp = event.get_time()
@@ -594,7 +593,7 @@ class ItemList(PluginBase):
 				if control_active:
 					result = True
 
-			elif event.type is Gdk.BUTTON_RELEASE:
+			elif event.type is Gdk.EventType.BUTTON_RELEASE:
 				# button was released, depending on options call specific method
 				time_valid = event.get_time() - self._popup_timestamp > 500
 				if event.x and event.y:
@@ -609,15 +608,15 @@ class ItemList(PluginBase):
 				result = True
 
 		# handle back button on mouse
-		elif event.button is 8:
-			if event.type is Gdk.BUTTON_RELEASE:
+		elif event.button == 8:
+			if event.type is Gdk.EventType.BUTTON_RELEASE:
 				self.history_manager.back()
 
 			result = True
 
 		# handle forward button on mouse
-		elif event.button is 9:
-			if event.type is Gdk.BUTTON_RELEASE:
+		elif event.button == 9:
+			if event.type is Gdk.EventType.BUTTON_RELEASE:
 				self.history_manager.forward()
 
 			result = True

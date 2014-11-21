@@ -109,11 +109,11 @@ class AssociationManager:
 
 		if path is not None:
 			# detect content type based on file name
-			result = Gio.content_type_guess(filename=path)
+			result = Gio.content_type_guess(filename=path)[0]
 
 		elif data is not None:
 			# detect content type based on data
-			result = Gio.content_type_guess(data=data)
+			result = Gio.content_type_guess(data=data)[0]
 
 		return result
 

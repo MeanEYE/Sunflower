@@ -959,7 +959,7 @@ class ItemList(PluginBase):
 	def _get_history_menu_position(self, menu, button):
 		"""Get history menu position"""
 		# get coordinates
-		window_x, window_y = self._parent.window.get_position()
+		window_x, window_y = self._parent.get_position()
 		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
 		button_h = button.get_allocation().height
 
@@ -1300,11 +1300,7 @@ class ItemList(PluginBase):
 		self._prepare_history_menu()
 
 		# show the menu on calculated location
-		self._history_menu.popup(
-								None, None,
-								self._get_history_menu_position,
-								1, 0, widget
-							)
+		self._history_menu.popup(None, None, self._get_history_menu_position, widget, 1, 0)
 
 	def _duplicate_tab(self, widget, data=None):
 		"""Creates new tab with same path"""

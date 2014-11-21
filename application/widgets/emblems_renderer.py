@@ -1,6 +1,6 @@
 import cairo
 
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, Gdk, GObject
 
 
 class CellRendererEmblems(Gtk.CellRenderer):
@@ -67,11 +67,11 @@ class CellRendererEmblems(Gtk.CellRenderer):
 
 		# add symbolic link emblem if needed
 		if self.is_link:
-			emblems.insert(0, 'emblem-symbolic-link')
+			emblems = ('emblem-symbolic-link',) + emblems
 
 		# position of next icon
-		pos_x = cell_area[0] + cell_area[2]
-		pos_y = cell_area[1] + ((cell_area[3] - icon_size) / 2)
+		pos_x = cell_area.x + cell_area.width
+		pos_y = cell_area.y + ((cell_area.height - icon_size) / 2)
 
 		# draw all the icons
 		for emblem in emblems:
@@ -82,7 +82,7 @@ class CellRendererEmblems(Gtk.CellRenderer):
 			pos_x -= icon_size + spacing
 
 			# draw icon
-			context.set_source_pixbuf(pixbuf, pos_x, pos_y)
+			Gdk.cairo_set_source_pixbuf(context, pixbuf, pos_x, pos_y)
 			context.paint()
 
 	def do_get_size(self, widget, cell_area=None):

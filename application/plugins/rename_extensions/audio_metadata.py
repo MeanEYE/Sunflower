@@ -47,7 +47,7 @@ class AudioMetadataRename(RenameExtension):
 		label_replace2 = Gtk.Label(label=_('With:'))
 		label_replace2.set_alignment(0, 0.5)
 
-		self._combobox_replace = Gtk.combo_box_entry_new_text()
+		self._combobox_replace = Gtk.ComboBoxText.new_with_entry()
 		self._combobox_replace.connect('changed', self._update_parent_list)
 
 		for str_rep in ('_', '-', ''):

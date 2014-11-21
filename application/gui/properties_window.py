@@ -5,7 +5,7 @@ import pwd
 import grp
 import common
 
-from gi.repository import Gtk, Gdk, Gio, Pango
+from gi.repository import Gtk, Gdk, Gio, Pango, GObject
 from plugin_base.monitor import MonitorSignals
 from plugin_base.provider import Support
 
@@ -27,7 +27,7 @@ class PropertiesWindow(Gtk.Window):
 	"""Properties window for files and directories"""
 
 	def __init__(self, application, provider, path):
-		GObject.GObject.__init__(self, Gtk.WindowType.TOPLEVEL)
+		GObject.GObject.__init__(self)
 
 		# store parameters locally
 		self._application = application
@@ -66,7 +66,10 @@ class PropertiesWindow(Gtk.Window):
 
 		# configure window
 		self.set_title(title)
-		self.set_geometry_hints(min_width=410, min_height=410)
+		hints = Gdk.Geometry()
+		hints.min_width = 410
+		hints.min_height = 410
+		self.set_geometry_hints(None, hints, Gdk.WindowHints.MIN_SIZE)
 		self.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self.set_border_width(5)
 		self.set_icon_name(self._icon_name)
@@ -190,7 +193,7 @@ class PropertiesWindow(Gtk.Window):
 
 	def _create_monitor(self):
 		"""Create item monitor"""
-		self._monitor = Gio.File(self._path).monitor_file()
+		self._monitor = Gio.File.new_for_path(self._path).monitor(Gio.FileMonitorFlags.SEND_MOVED)
 		self._monitor.connect('changed', self._item_changes)
 
 	def _load_associated_applications(self):
@@ -246,7 +249,7 @@ class PropertiesWindow(Gtk.Window):
 			mount = Gio.File(self._path).find_enclosing_mount()
 			volume_name = mount.get_name()
 
-		except Gio.Error:
+		except Exception:
 			# item is not on any known volume
 			volume_name = _('unknown')
 
@@ -426,7 +429,7 @@ class PropertiesWindow(Gtk.Window):
 		icon.set_from_icon_name(self._icon_name, Gtk.IconSize.DIALOG)
 
 		vbox_icon = Gtk.VBox(False, 0)
-		vbox_icon.pack_start(icon, False, False)
+		vbox_icon.pack_start(icon, False, False, 0)
 		table.attach(vbox_icon, 0, 1, 0, 7, Gtk.AttachOptions.SHRINK)
 
 		# labels
@@ -573,7 +576,7 @@ class PropertiesWindow(Gtk.Window):
 		label.set_alignment(0, 0.5)
 		table_access.attach(label, 0, 1, 3, 4)
 
-		self._permission_octal_entry = Gtk.Entry(4)
+		self._permission_octal_entry = Gtk.Entry()
 		self._permission_octal_entry.set_width_chars(5)
 		self._permission_octal_entry.connect('activate', self._permission_entry_activate)
 		table_access.attach(self._permission_octal_entry, 1, 2, 3, 4)
@@ -599,9 +602,9 @@ class PropertiesWindow(Gtk.Window):
 		self._list_owner = Gtk.ListStore(str, int)
 		cell_owner = Gtk.CellRendererText()
 
-		self._combobox_owner = Gtk.ComboBox(self._list_owner)
+		self._combobox_owner = Gtk.ComboBox.new_with_model_and_entry(self._list_owner)
 		self._combobox_owner.connect('changed', self._ownership_changed)
-		self._combobox_owner.pack_start(cell_owner, True, True, 0)
+		self._combobox_owner.pack_start(cell_owner, True)
 		self._combobox_owner.add_attribute(cell_owner, 'text', 0)
 
 		table_ownership.attach(self._combobox_owner, 1, 2, 0, 1)
@@ -610,9 +613,9 @@ class PropertiesWindow(Gtk.Window):
 		self._list_group = Gtk.ListStore(str, int)
 		cell_group = Gtk.CellRendererText()
 
-		self._combobox_group = Gtk.ComboBox(self._list_group)
+		self._combobox_group = Gtk.ComboBox.new_with_model_and_entry(self._list_group)
 		self._combobox_group.connect('changed', self._ownership_changed)
-		self._combobox_group.pack_start(cell_group, True, True, 0)
+		self._combobox_group.pack_start(cell_group, True)
 		self._combobox_group.add_attribute(cell_group, 'text', 0)
 
 		table_ownership.attach(self._combobox_group, 1, 2, 1, 2)

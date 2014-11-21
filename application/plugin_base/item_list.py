@@ -1247,11 +1247,11 @@ class ItemList(PluginBase):
 
 		if data is not None:
 			# if this method is called by accelerator data is actually keyval
-			self._popup_menu.popup(None, None, self._get_popup_menu_position, 1, 0)
+			self._popup_menu.popup(None, None, self._get_popup_menu_position, None, 1, 0)
 
 		else:
 			# if called by mouse, we don't have the need to position the menu manually
-			self._popup_menu.popup(None, None, None, 1, 0)
+			self._popup_menu.popup(None, None, None, None, 1, 0)
 
 		return True
 

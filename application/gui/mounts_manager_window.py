@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Gio, GObject, GLib
+from gi.repository import Gtk, Gdk, Gio, GObject, GLib
 from parameters import Parameters
 from plugin_base.mount_manager_extension import MountManagerExtension, ExtensionFeatures
 

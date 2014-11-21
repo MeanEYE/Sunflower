@@ -5,7 +5,7 @@ import pwd
 import grp
 import common
 
-from gi.repository import Gtk, Gio, Pango
+from gi.repository import Gtk, Gdk, Gio, Pango
 from plugin_base.monitor import MonitorSignals
 from plugin_base.provider import Support
 

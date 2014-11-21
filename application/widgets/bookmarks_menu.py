@@ -1,7 +1,7 @@
 import time
 import urllib
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from parameters import Parameters
 from collections import namedtuple
 

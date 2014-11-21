@@ -1,7 +1,7 @@
 import os
 import fnmatch
 
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, Gdk, GObject
 from threading import Thread, Event
 from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OperationError, QuestionOperationError
 from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog, RenameDialog

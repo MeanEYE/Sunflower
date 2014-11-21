@@ -1,6 +1,6 @@
 import os
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from parameters import Parameters
 
 

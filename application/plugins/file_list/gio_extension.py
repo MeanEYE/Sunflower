@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk, Gio, Gdk
 from dialogs import SambaInputDialog, SambaResult
 from dialogs import FtpInputDialog, FtpResult, SftpInputDialog
 from dialogs import DavInputDialog, DavResult

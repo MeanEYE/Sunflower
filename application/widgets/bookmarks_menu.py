@@ -1,7 +1,7 @@
 import time
 import urllib
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from parameters import Parameters
 from collections import namedtuple
 
@@ -257,18 +257,18 @@ class BookmarksMenu:
 		assert self._object is not None
 
 		# calculate window position
-		window_x, window_y = window.window.get_position()
+		window_x, window_y = window.get_position()
 		button_x, button_y = invoker.translate_coordinates(window, 0, 0)
 		button_alloc = invoker.get_allocation()
 
-		pos_x = window_x + button_x + button_alloc.width - invoker.get_allocation()[2]
+		pos_x = window_x + button_x + button_alloc.width - invoker.get_allocation().width
 		pos_y = window_y + button_y + button_alloc.height
 
 		# repopulate list
 		self.__populate_list()
 
 		# show menu
-		self._menu.popup(None, None, lambda menu: (pos_x, pos_y, True), 1, 0)
+		self._menu.popup(None, None, lambda menu, data: (pos_x, pos_y, True), None, 1, 0)
 
 	def apply_settings(self):
 		"""Apply new configuration"""

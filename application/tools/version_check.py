@@ -1,6 +1,6 @@
 import urllib
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from json import JSONDecoder
 from threading import Thread
 

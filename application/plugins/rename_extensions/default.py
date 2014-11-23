@@ -110,21 +110,21 @@ class DefaultRename(RenameExtension):
 		label_start.set_alignment(0, 0.5)
 
 		adjustment = Gtk.Adjustment(0, 0, 10**10, 1, 10)
-		self._entry_start = Gtk.SpinButton(adjustment, 0, 0)
+		self._entry_start = Gtk.SpinButton.new(adjustment, 0, 0)
 		self._entry_start.connect('value-changed', self.__counter_changed)
 
 		label_step = Gtk.Label(label=_('Step:'))
 		label_step.set_alignment(0, 0.5)
 
 		adjustment = Gtk.Adjustment(1, 1, 10**10, 1, 10)
-		self._entry_step = Gtk.SpinButton(adjustment, 0, 0)
+		self._entry_step = Gtk.SpinButton.new(adjustment, 0, 0)
 		self._entry_step.connect('value-changed', self.__counter_changed)
 
 		label_digits = Gtk.Label(label=_('Digits:'))
 		label_digits.set_alignment(0, 0.5)
 
 		adjustment = Gtk.Adjustment(1, 1, 20, 1, 5)
-		self._entry_digits = Gtk.SpinButton(adjustment, 0, 0)
+		self._entry_digits = Gtk.SpinButton.new(adjustment, 0, 0)
 		self._entry_digits.connect('value-changed', self.__counter_changed)
 
 		# repack 'active' check box

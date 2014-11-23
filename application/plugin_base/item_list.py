@@ -522,7 +522,7 @@ class ItemList(PluginBase):
 		control_active = event.get_state() & Gdk.ModifierType.CONTROL_MASK
 
 		# handle single click
-		if event.button is 1 and control_active and event.type in (Gdk.EventType.BUTTON_PRESS, Gdk.BUTTON_RELEASE):
+		if event.button == 1 and control_active and event.type in (Gdk.EventType.BUTTON_PRESS, Gdk.EventType.BUTTON_RELEASE):
 			# we handle left mouse press and release in order to prevent
 			# default widget behavior which leads to unpredictable results
 
@@ -542,7 +542,7 @@ class ItemList(PluginBase):
 			result = True
 
 		# handle range select
-		elif event.button is 1 and shift_active and event.type is Gdk.EventType.BUTTON_PRESS:
+		elif event.button == 1 and shift_active and event.type is Gdk.EventType.BUTTON_PRESS:
 			start_path = None
 			end_path = None
 
@@ -570,22 +570,21 @@ class ItemList(PluginBase):
 			result = True
 
 		# handle navigation with double or single click
-		elif event.button is 1 and not (shift_active or control_active) \
-		and ((event.type is Gdk._2BUTTON_PRESS and not single_click_navigation) \
-		or (event.type is Gdk.BUTTON_RELEASE and single_click_navigation)):
-
+		elif event.button == 1 and not (shift_active or control_active) \
+		and ((event.type is Gdk.EventType._2BUTTON_PRESS and not single_click_navigation) \
+		or (event.type is Gdk.EventType.BUTTON_RELEASE and single_click_navigation)):
 			# make sure that clicking on empty space doesn't trigger any action
 			if self._item_list.get_path_at_pos(int(event.x), int(event.y)) is not None:
 				self._execute_selected_item(widget)
 				result = True
 
 		# handle middle click
-		elif event.button is 2 and event.type is Gdk.BUTTON_RELEASE:
+		elif event.button == 2 and event.type is Gdk.EventType.BUTTON_RELEASE:
 			self._open_in_new_tab()
 			result = True
 
 		# handle right click
-		elif event.button is 3:
+		elif event.button == 3:
 			if event.type is Gdk.EventType.BUTTON_PRESS:
 				# record mouse down timestamp
 				self._popup_timestamp = event.get_time()
@@ -594,7 +593,7 @@ class ItemList(PluginBase):
 				if control_active:
 					result = True
 
-			elif event.type is Gdk.BUTTON_RELEASE:
+			elif event.type is Gdk.EventType.BUTTON_RELEASE:
 				# button was released, depending on options call specific method
 				time_valid = event.get_time() - self._popup_timestamp > 500
 				if event.x and event.y:
@@ -609,15 +608,15 @@ class ItemList(PluginBase):
 				result = True
 
 		# handle back button on mouse
-		elif event.button is 8:
-			if event.type is Gdk.BUTTON_RELEASE:
+		elif event.button == 8:
+			if event.type is Gdk.EventType.BUTTON_RELEASE:
 				self.history_manager.back()
 
 			result = True
 
 		# handle forward button on mouse
-		elif event.button is 9:
-			if event.type is Gdk.BUTTON_RELEASE:
+		elif event.button == 9:
+			if event.type is Gdk.EventType.BUTTON_RELEASE:
 				self.history_manager.forward()
 
 			result = True
@@ -959,7 +958,7 @@ class ItemList(PluginBase):
 	def _get_history_menu_position(self, menu, button):
 		"""Get history menu position"""
 		# get coordinates
-		window_x, window_y = self._parent.window.get_position()
+		window_x, window_y = self._parent.get_position()
 		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
 		button_h = button.get_allocation().height
 
@@ -1247,11 +1246,11 @@ class ItemList(PluginBase):
 
 		if data is not None:
 			# if this method is called by accelerator data is actually keyval
-			self._popup_menu.popup(None, None, self._get_popup_menu_position, 1, 0)
+			self._popup_menu.popup(None, None, self._get_popup_menu_position, None, 1, 0)
 
 		else:
 			# if called by mouse, we don't have the need to position the menu manually
-			self._popup_menu.popup(None, None, None, 1, 0)
+			self._popup_menu.popup(None, None, None, None, 1, 0)
 
 		return True
 
@@ -1300,11 +1299,7 @@ class ItemList(PluginBase):
 		self._prepare_history_menu()
 
 		# show the menu on calculated location
-		self._history_menu.popup(
-								None, None,
-								self._get_history_menu_position,
-								1, 0, widget
-							)
+		self._history_menu.popup(None, None, self._get_history_menu_position, widget, 1, 0)
 
 	def _duplicate_tab(self, widget, data=None):
 		"""Creates new tab with same path"""

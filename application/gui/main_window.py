@@ -141,7 +141,7 @@ class MainWindow(Gtk.Window):
 		self.dbus_interface = None
 
 		# create a clipboard manager
-		self.clipboard = Gtk.Clipboard()
+		self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
 
 		# load config
 		self.load_config()

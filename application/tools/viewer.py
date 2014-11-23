@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-from gi.repository import Gtk, Pango
+from gi.repository import Gtk, Gdk, Pango
 from common import executable_exists
 from widgets.status_bar import StatusBar
 from plugin_base.provider import Mode as FileMode

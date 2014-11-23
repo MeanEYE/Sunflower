@@ -1,6 +1,6 @@
 import common
 
-from gi.repository import Gtk, GObject, Pango
+from gi.repository import Gtk, Gdk, GObject, Pango
 
 
 class OperationDialog:

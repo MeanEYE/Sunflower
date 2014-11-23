@@ -1,6 +1,6 @@
 import os
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk, GObject
 from parameters import Parameters
 
 
@@ -15,7 +15,7 @@ class HistoryList(Gtk.Window):
 
 	def __init__(self, parent, application):
 		# create main window
-		GObject.GObject.__init__(self, Gtk.WindowType.TOPLEVEL)
+		GObject.GObject.__init__(self)
 
 		# store parameters locally, we'll need them later
 		self._parent = parent

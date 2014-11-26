@@ -1,4 +1,4 @@
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 
 
 class GroupType:
@@ -29,7 +29,7 @@ class AcceleratorManager:
 
 		label = ''
 		if accelerator is not None:
-			label = Gtk.accelerator_name(*accelerator)
+			label = Gtk.accelerator_name(accelerator[0], Gdk.ModifierType(accelerator[1]))
 
 		# don't allow overwriting user's configuration unless strictly specified
 		if not section.has(name) or (section.has(name) and can_overwrite):

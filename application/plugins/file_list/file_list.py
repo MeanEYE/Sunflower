@@ -1814,7 +1814,7 @@ class FileList(ItemList):
 		# show menu in separate user interface thread
 		menu.show_all()
 		menu.connect('deactivate', Gtk.main_quit)
-		menu.popup(None, None, None, 1, 0)
+		menu.popup(None, None, None, None, 1, 0)
 		Gtk.main()
 
 		return result[0] if result else None

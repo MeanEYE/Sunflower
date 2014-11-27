@@ -382,11 +382,7 @@ class ItemListOptions(SettingsPage):
 
 	def __button_add_clicked(self, widget, data=None):
 		"""Handle clicking on add button"""
-		self._menu_add_directory.popup(
-						None, None,
-						self.__get_menu_position,
-						1, 0, widget
-					)
+		self._menu_add_directory.popup(None, None, self.__get_menu_position, widget, 1, 0)
 
 	def __get_menu_position(self, menu, button):
 		"""Get history menu position"""

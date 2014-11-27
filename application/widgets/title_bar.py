@@ -293,11 +293,7 @@ class TitleBar:
 		# show menu below the button
 		button = widget if widget is not None else self._button_menu
 
-		self._menu.popup(
-					None, None,
-					self.__get_menu_position,
-					1, 0, button
-				)
+		self._menu.popup(None, None, self.__get_menu_position, button, 1, 0)
 
 	def show_spinner(self):
 		"""Show spinner widget"""

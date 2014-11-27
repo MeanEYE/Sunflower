@@ -827,7 +827,7 @@ class CopyDialog:
 		button_save.connect('clicked', self._save_configuration)
 		button_save.set_tooltip_text(_('Save as default configuration'))
 		button_save.set_halign(1)
-		
+
 		self._dialog.action_area.pack_start(button_save, True, True, 0)
 		self._dialog.action_area.set_child_secondary(button_save, True)
 

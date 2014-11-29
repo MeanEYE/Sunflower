@@ -2411,12 +2411,19 @@ class MainWindow(Gtk.Window):
 
 	def restore_handle_position(self, widget=None, data=None):
 		"""Restore handle position"""
-		position = 3 if self.options.get('horizontal_split') else 2
-		left = self.left_notebook.allocation[position]
-		right = self.right_notebook.allocation[position]
+		left_allocation = self.left_notebook.get_allocation()
+		right_allocation = self.right_notebook.get_allocation()
+
+		if self.options.get('horizontal_split'):
+			left_size = left_allocation.height
+			right_size = right_allocation.height
+
+		else:
+			left_size = left_allocation.width
+			right_size = right_allocation.width
 
 		# calculate middle position
-		new_position = (left + right) / 2
+		new_position = (left_size + right_size) / 2
 		self._paned.set_position(new_position)
 
 		return True

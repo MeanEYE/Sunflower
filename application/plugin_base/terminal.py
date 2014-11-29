@@ -1,3 +1,8 @@
+import gi
+
+# require specific version of Vte
+gi.require_version('Vte', '2.90')
+
 from gi.repository import Gtk, Gdk, Vte, GConf
 
 from plugin_base.plugin import PluginBase
@@ -88,7 +93,7 @@ class Terminal(PluginBase):
 		self._terminal_type = section.get('type')
 
 		if self._terminal_type == TerminalType.VTE:
-			self._terminal = Vte.Terminal()
+			self._terminal = Vte.Terminal.new()
 			self._terminal.connect('window-title-changed', self._update_title)
 
 			# unset drag source
@@ -114,7 +119,7 @@ class Terminal(PluginBase):
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
 			self._terminal = Gtk.Socket()
-			
+
 		else:
 			# failsafe when VTE module is not present
 			# NOTE: Cursor needs to be visible for 'close tab' accelerator.
@@ -245,7 +250,7 @@ class Terminal(PluginBase):
 	def _get_menu_position(self, menu, button):
 		"""Get history menu position"""
 		# get coordinates
-		window_x, window_y = self._parent.window.get_position()
+		window_x, window_y = self._parent.get_position()
 		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
 		button_h = button.get_allocation().height
 
@@ -373,9 +378,9 @@ class Terminal(PluginBase):
 			# apply cursor shape
 			shape = section.get('cursor_shape')
 			shape_type = {
-					CursorShape.BLOCK: vte.CURSOR_SHAPE_BLOCK,
-					CursorShape.IBEAM: vte.CURSOR_SHAPE_IBEAM,
-					CursorShape.UNDERLINE: vte.CURSOR_SHAPE_UNDERLINE
+					CursorShape.BLOCK: Vte.CURSOR_SHAPE_BLOCK,
+					CursorShape.IBEAM: Vte.CURSOR_SHAPE_IBEAM,
+					CursorShape.UNDERLINE: Vte.CURSOR_SHAPE_UNDERLINE
 				}
 			self._terminal.set_cursor_shape(shape_type[shape])
 
@@ -400,7 +405,7 @@ class Terminal(PluginBase):
 			result = PluginBase.focus_main_object(self)
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
-			self._main_object.child_focus(Gtk.DIR_TAB_FORWARD)
+			self._main_object.child_focus(Gtk.DirectionType.TAB_FORWARD)
 			result = True
 
 		return result

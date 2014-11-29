@@ -68,11 +68,7 @@ class AssociationsOptions(SettingsPage):
 
 	def __button_add_clicked(self, widget, data=None):
 		"""Handle clicking on add button"""
-		self._add_menu.popup(
-						None, None,
-						self.__get_menu_position,
-						1, 0, widget
-					)
+		self._add_menu.popup(None, None, self.__get_menu_position, widget, 1, 0)
 
 	def __add_mime_type(self, widget, data=None):
 		"""Show dialog for adding mime type"""

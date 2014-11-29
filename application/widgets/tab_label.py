@@ -116,7 +116,7 @@ class TabLabel:
 			item = menu_manager.create_menu_item(item)
 			menu.append(item)
 
-		menu.popup(None, None, None, 3, 0)
+		menu.popup(None, None, None, None, 3, 0)
 		menu.show_all()
 
 	def _button_release_event(self, widget, event, data=None):

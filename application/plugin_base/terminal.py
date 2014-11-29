@@ -262,11 +262,7 @@ class Terminal(PluginBase):
 
 		# show the menu on calculated location
 
-		self._menu.popup(
-						None, None,
-						self._get_menu_position,
-						1, 0, widget
-					)
+		self._menu.popup(None, None, self._get_menu_position, widget, 1, 0)
 
 	def _configure_accelerators(self):
 		"""Configure accelerator group"""

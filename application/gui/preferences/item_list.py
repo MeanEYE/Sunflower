@@ -382,11 +382,7 @@ class ItemListOptions(SettingsPage):
 
 	def __button_add_clicked(self, widget, data=None):
 		"""Handle clicking on add button"""
-		self._menu_add_directory.popup(
-						None, None,
-						self.__get_menu_position,
-						1, 0, widget
-					)
+		self._menu_add_directory.popup(None, None, self.__get_menu_position, widget, 1, 0)
 
 	def __get_menu_position(self, menu, button):
 		"""Get history menu position"""
@@ -676,9 +672,9 @@ class ItemListOptions(SettingsPage):
 		section.set('right_click_select', self._checkbox_right_click.get_active())
 		section.set('headers_visible', self._checkbox_show_headers.get_active())
 		options.set('media_preview', self._checkbox_media_preview.get_active())
-		section.set('breadcrumbs', self._combobox_breadcrumbs.get_active_id())
-		section.set('mode_format', self._combobox_mode_format.get_active_id())
-		section.set('grid_lines', self._combobox_grid_lines.get_active_id())
+		section.set('breadcrumbs', self._combobox_breadcrumbs.get_active())
+		section.set('mode_format', self._combobox_mode_format.get_active())
+		section.set('grid_lines', self._combobox_grid_lines.get_active())
 		section.set('time_format', self._entry_time_format.get_text())
 		section.set('selection_color', self._button_selection_color.get_color().to_string())
 		section.set('selection_indicator', self._combobox_indicator.get_active_text())

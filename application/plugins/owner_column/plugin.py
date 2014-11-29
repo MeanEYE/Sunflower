@@ -1,5 +1,5 @@
 from gi.repository import Gtk
-from plugins.file_list.plugin import Column, FileList
+from plugins.file_list.file_list import Column, FileList
 from plugin_base.column_extension import ColumnExtension
 
 

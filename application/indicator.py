@@ -65,7 +65,7 @@ class Indicator(object):
 
 	def _status_icon_popup_menu(self, widget, button, activate_time):
 		"""Show popup menu on right click"""
-		self._menu.popup(None, None, None, button, activate_time)
+		self._menu.popup(None, None, None, None, button, activate_time)
 
 	def _change_visibility(self, widget, visible):
 		"""Change main window visibility"""

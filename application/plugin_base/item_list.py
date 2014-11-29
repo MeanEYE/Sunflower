@@ -414,11 +414,11 @@ class ItemList(PluginBase):
 		"""Show quick emblem selection menu."""
 		if data is not None:
 			# if this method is called by accelerator data is actually keyval
-			self._emblem_menu.popup(None, None, self._get_popup_menu_position, 1, 0)
+			self._emblem_menu.popup(None, None, self._get_popup_menu_position, None, 1, 0)
 
 		else:
 			# if called by mouse, we don't have the need to position the menu manually
-			self._emblem_menu.popup(None, None, None, 1, 0)
+			self._emblem_menu.popup(None, None, None, None, 1, 0)
 
 		return True
 
@@ -1233,11 +1233,7 @@ class ItemList(PluginBase):
 		self._prepare_popup_menu()
 
 		# if this method is called by Menu key data is actually event object
-		self._open_with_menu.popup(
-								None, None,
-								self._get_popup_menu_position,
-								1, 0
-							)
+		self._open_with_menu.popup(None, None, self._get_popup_menu_position, None, 1, 0)
 
 	def _show_popup_menu(self, widget=None, data=None):
 		"""Show item menu"""

@@ -638,10 +638,9 @@ class CopyDialog:
 		self.checkbox_timestamp = Gtk.CheckButton(_('Set date and time on destination'))
 		self.checkbox_silent = Gtk.CheckButton(_('Silent mode'))
 
-		align_silent = Gtk.Alignment.new()
-		align_silent.set_padding(0, 0, 15, 15)
 		vbox_silent = Gtk.VBox(False, 0)
 		vbox_silent.set_sensitive(False)
+		vbox_silent.set_margin_start(15)
 
 		self.checkbox_merge = Gtk.CheckButton(_('Merge directories'))
 		self.checkbox_overwrite = Gtk.CheckButton(_('Overwrite files'))
@@ -662,8 +661,6 @@ class CopyDialog:
 		vbox_silent.pack_start(self.checkbox_merge, False, False, 0)
 		vbox_silent.pack_start(self.checkbox_overwrite, False, False, 0)
 
-		align_silent.add(vbox_silent)
-
 		vbox.pack_start(self.label_destination, False, False, 0)
 		vbox.pack_start(self.entry_destination, False, False, 0)
 		vbox.pack_start(separator_file_type, False, False, 5)
@@ -675,7 +672,7 @@ class CopyDialog:
 		vbox.pack_start(self.checkbox_mode, False, False, 0)
 		vbox.pack_start(self.checkbox_timestamp, False, False, 0)
 		vbox.pack_start(self.checkbox_silent, False, False, 0)
-		vbox.pack_start(align_silent, False, False, 0)
+		vbox.pack_start(vbox_silent, False, False, 0)
 
 		self._dialog.vbox.pack_start(vbox, False, False, 0)
 
@@ -829,12 +826,10 @@ class CopyDialog:
 		button_save.set_image(image_save)
 		button_save.connect('clicked', self._save_configuration)
 		button_save.set_tooltip_text(_('Save as default configuration'))
+		button_save.set_halign(1)
 
-		align_save = Gtk.Alignment.new()
-		align_save.add(button_save)
-
-		self._dialog.action_area.pack_start(align_save, True, True, 0)
-		self._dialog.action_area.set_child_secondary(align_save, True)
+		self._dialog.action_area.pack_start(button_save, True, True, 0)
+		self._dialog.action_area.set_child_secondary(button_save, True)
 
 		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
 		self._dialog.add_action_widget(button_copy, Gtk.ResponseType.OK)

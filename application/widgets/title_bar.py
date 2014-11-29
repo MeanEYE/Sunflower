@@ -219,7 +219,7 @@ class TitleBar:
 
 	def __get_menu_position(self, menu, button):
 		"""Get bookmarks position"""
-		window_x, window_y = self._application.window.get_position()
+		window_x, window_y = self._application.get_position()
 		button_x, button_y = button.translate_coordinates(self._application, 0, 0)
 		button_h = button.get_allocation().height
 

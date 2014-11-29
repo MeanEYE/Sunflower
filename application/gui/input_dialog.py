@@ -1490,9 +1490,8 @@ class CreateToolbarWidgetDialog:
 		# show dialog
 		code = self._dialog.run()
 
-		if code == Gtk.ResponseType.ACCEPT \
-		and len(self._type_list) > 0:
-			# get name and type
+		# get name and type
+		if code == Gtk.ResponseType.ACCEPT and len(self._type_list) > 0:
 			name = self._entry_name.get_text()
 			widget_type = self._type_list[self._combobox_type.get_active()][0]
 

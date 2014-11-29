@@ -26,7 +26,7 @@ class InputDialog:
 	"""
 
 	def __init__(self, application):
-		self._dialog = Gtk.Dialog(parent=application)
+		self._dialog = Gtk.Dialog.new(parent=application)
 
 		self._application = application
 
@@ -36,8 +36,6 @@ class InputDialog:
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
-
-		self._dialog.vbox.set_spacing(0)
 
 		self._container = Gtk.VBox(False, 0)
 		self._container.set_border_width(5)
@@ -66,7 +64,7 @@ class InputDialog:
 		self._dialog.action_area.pack_end(button_ok, False, False, 0)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
-		self._dialog.vbox.pack_start(self._container, True, True, 0)
+		self._dialog.get_content_area().pack_start(self._container, True, True, 0)
 		self._dialog.show_all()
 
 	def _confirm_entry(self, widget, data=None):
@@ -578,8 +576,6 @@ class CopyDialog:
 		self._dialog.set_transient_for(application)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
-		self._dialog.vbox.set_spacing(0)
-
 		# create additional components
 		vbox = Gtk.VBox(False, 0)
 		vbox.set_border_width(5)
@@ -674,7 +670,7 @@ class CopyDialog:
 		vbox.pack_start(self.checkbox_silent, False, False, 0)
 		vbox.pack_start(vbox_silent, False, False, 0)
 
-		self._dialog.vbox.pack_start(vbox, False, False, 0)
+		self._dialog.get_content_area().pack_start(vbox, False, False, 0)
 
 		# prepare dialog
 		self._update_label()
@@ -959,8 +955,6 @@ class OverwriteDialog:
 		self._dialog.set_urgency_hint(True)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
-		self._dialog.vbox.set_spacing(0)
-
 		hbox = Gtk.HBox(False, 10)
 		hbox.set_border_width(10)
 
@@ -1033,7 +1027,7 @@ class OverwriteDialog:
 		hbox.pack_start(vbox_icon, False, False, 0)
 		hbox.pack_start(vbox, True, True, 0)
 
-		self._dialog.vbox.pack_start(hbox, True, True, 0)
+		self._dialog.get_content_area().pack_start(hbox, True, True, 0)
 
 		self._create_buttons()
 		self._dialog.show_all()
@@ -1236,8 +1230,6 @@ class AddBookmarkDialog:
 		self._dialog.set_transient_for(application)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
-		self._dialog.vbox.set_spacing(0)
-
 		# create component container
 		vbox = Gtk.VBox(False, 5)
 		vbox.set_border_width(5)
@@ -1280,7 +1272,7 @@ class AddBookmarkDialog:
 		vbox.pack_start(vbox_name, False, False, 0)
 		vbox.pack_start(vbox_path, False, False, 0)
 
-		self._dialog.vbox.pack_start(vbox, False, False, 0)
+		self._dialog.get_content_area().pack_start(vbox, False, False, 0)
 
 		self._dialog.show_all()
 
@@ -1322,8 +1314,6 @@ class OperationError:
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
-
-		self._dialog.vbox.set_spacing(0)
 
 		# create component container
 		hbox = Gtk.HBox(False, 10)
@@ -1370,7 +1360,7 @@ class OperationError:
 		hbox.pack_start(vbox_icon, False, False, 0)
 		hbox.pack_start(vbox, True, True, 0)
 
-		self._dialog.vbox.pack_start(hbox, False, False, 0)
+		self._dialog.get_content_area().pack_start(hbox, False, False, 0)
 
 		# show all components
 		self._dialog.show_all()
@@ -1421,8 +1411,6 @@ class CreateToolbarWidgetDialog:
 		self._dialog.set_transient_for(application)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
-		self._dialog.vbox.set_spacing(0)
-
 		# create component container
 		vbox = Gtk.VBox(False, 5)
 		vbox.set_border_width(5)
@@ -1471,7 +1459,7 @@ class CreateToolbarWidgetDialog:
 		vbox.pack_start(vbox_name, False, False, 0)
 		vbox.pack_start(vbox_type, False, False, 0)
 
-		self._dialog.vbox.pack_start(vbox, False, False, 0)
+		self._dialog.get_content_area().pack_start(vbox, False, False, 0)
 
 		# show all widgets
 		self._dialog.show_all()
@@ -1564,7 +1552,7 @@ class ApplicationInputDialog(InputDialog):
 		button_select.connect('clicked', self.__select_application)
 
 		self._entry_command = Gtk.Entry()
-		
+
 		# pack interface
 		hbox_command.pack_start(self._entry_command, True, True, 0)
 		hbox_command.pack_start(button_select, False, False, 0)
@@ -1605,7 +1593,7 @@ class ApplicationSelectDialog:
 
 	def __init__(self, application, path=None):
 		self._dialog = Gtk.Dialog(parent=application)
-		
+
 		self._application = application
 		self.path = path
 
@@ -1618,15 +1606,12 @@ class ApplicationSelectDialog:
 		self._dialog.set_transient_for(application)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
-		self._dialog.vbox.set_spacing(0)
-		self._dialog.vbox.set_border_width(0)
-		
 		self._container = Gtk.VBox(False, 5)
 		self._container.set_border_width(5)
 
-		# create interface		
+		# create interface
 		vbox_list = Gtk.VBox(False, 0)
-		
+
 		label_open_with = Gtk.Label()
 		label_open_with.set_use_markup(True)
 		label_open_with.set_alignment(0, 0.5)
@@ -1640,21 +1625,21 @@ class ApplicationSelectDialog:
 		list_container = Gtk.ScrolledWindow()
 		list_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 		list_container.set_shadow_type(Gtk.ShadowType.IN)
-		
+
 		self._store = Gtk.ListStore(str, str, str, str, str)
 		self._list = Gtk.TreeView(model=self._store)
-	
+
 		cell_icon = Gtk.CellRendererPixbuf()
 		cell_name = Gtk.CellRendererText()
 		cell_generic = Gtk.CellRendererText()
-		
+
 		column_application = Gtk.TreeViewColumn()
 		column_application.pack_start(cell_icon, False)
 		column_application.pack_start(cell_name, True)
 		column_application.add_attribute(cell_icon, 'icon-name', 0)
 		column_application.add_attribute(cell_name, 'text', 1)
 		column_application.set_expand(True)
-		
+
 		column_generic = Gtk.TreeViewColumn()
 		column_generic.pack_start(cell_generic, True)
 		column_generic.add_attribute(cell_generic, 'markup', 4)
@@ -1666,16 +1651,14 @@ class ApplicationSelectDialog:
 		self._list.set_enable_search(True)
 		self._list.connect('cursor-changed', self.__handle_cursor_change)
 		self._list.connect('row-activated', self.__handle_row_activated)
-		
+
 		self._store.set_sort_column_id(1, Gtk.SortType.ASCENDING)
-		
+
 		# create custom command entry
 		self._expander_custom = Gtk.Expander(label=_('Use a custom command'))
-		
 		hbox_custom = Gtk.HBox(False, 7)
-		
 		self._entry_custom = Gtk.Entry()
-		
+
 		# pack interface
 		list_container.add(self._list)
 		vbox_list.pack_start(label_open_with, False, False, 0)
@@ -1687,7 +1670,7 @@ class ApplicationSelectDialog:
 		self._container.pack_start(vbox_list, True, True, 0)
 		self._container.pack_start(self._expander_custom, False, False, 0)
 
-		self._dialog.vbox.pack_start(self._container, True, True, 0)
+		self._dialog.get_content_area().pack_start(self._container, True, True, 0)
 
 		# create controls
 		button_help = Gtk.Button(stock=Gtk.STOCK_HELP)
@@ -1701,12 +1684,12 @@ class ApplicationSelectDialog:
 
 		button_ok.set_can_default(True)
 		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
-		
+
 		self._dialog.action_area.pack_start(button_help, False, False, 0)
 		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
 		self._dialog.add_action_widget(button_ok, Gtk.ResponseType.OK)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)
-		
+
 		# populate content
 		self._load_applications()
 
@@ -1724,7 +1707,7 @@ class ApplicationSelectDialog:
 	def __handle_row_activated(self, path=None, view_column=None, data=None):
 		"""Handle choosing application by presing 'Enter'"""
 		self._dialog.response(Gtk.ResponseType.OK)
-		
+
 	def _load_applications(self):
 		"""Populate application list from config files"""
 		application_list = self._application.associations_manager.get_all()
@@ -1750,6 +1733,7 @@ class ApplicationSelectDialog:
 
 		return code, is_custom, command
 
+
 class PathInputDialog():
 	"""Input Dialog with path completion entry"""
 	def __init__(self, application):
@@ -1763,8 +1747,6 @@ class PathInputDialog():
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
-
-		self._dialog.vbox.set_spacing(0)
 
 		self._container = Gtk.VBox(False, 0)
 		self._container.set_border_width(5)
@@ -1793,7 +1775,7 @@ class PathInputDialog():
 		self._dialog.action_area.pack_end(button_ok, False, False, 0)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
-		self._dialog.vbox.pack_start(self._container, True, True, 0)
+		self._dialog.get_content_area().pack_start(self._container, True, True, 0)
 		self._dialog.show_all()
 
 	def _confirm_entry(self, widget, data=None):

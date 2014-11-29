@@ -16,7 +16,7 @@ class OperationDialog:
 	MAX_SPEED_POINTS = 20  # how many points to aggregate
 
 	def __init__(self, application, thread):
-		self._window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
+		self._window = Gtk.Window.new(type=Gtk.WindowType.TOPLEVEL)
 
 		self._paused = False
 		self._application = application

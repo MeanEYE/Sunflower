@@ -3,6 +3,8 @@ import fnmatch
 
 from gi.repository import Gtk, Gdk, GObject
 from threading import Thread, Event
+from Queue import Queue
+
 from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OperationError, QuestionOperationError
 from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog, RenameDialog
 from gui.error_list import ErrorList
@@ -78,8 +80,7 @@ class Operation(Thread):
 	def _destroy_ui(self):
 		"""Destroy user interface"""
 		if self._dialog is not None:
-			with Gdk.lock:
-				self._dialog.destroy()
+			GObject.idle_add(self._dialog.destroy)
 
 	def _get_free_space_input(self, needed, available):
 		"""Get user input when there is not enough space"""
@@ -98,7 +99,7 @@ class Operation(Thread):
 
 		else:
 			# ask user what to do
-			with Gdk.lock:
+			def ask_user(queue):
 				dialog = Gtk.MessageDialog(
 										self._dialog.get_window(),
 										Gtk.DialogFlags.DESTROY_WITH_PARENT,
@@ -116,7 +117,13 @@ class Operation(Thread):
 				result = dialog.run()
 				dialog.destroy()
 
-				should_continue = result == Gtk.ResponseType.YES
+				# give the result to thread
+				queue.put(result == Gtk.ResponseType.YES)
+
+			# show dialog in main thread
+			queue = Queue()
+			GObject.idle_add(ask_user, queue)
+			should_continue = queue.get(True)
 
 		return should_continue
 
@@ -129,7 +136,7 @@ class Operation(Thread):
 
 		else:
 			# we are not in silent mode, ask user
-			with Gdk.lock:
+			def ask_user(queue):
 				dialog = OverwriteDirectoryDialog(self._application, self._dialog.get_window())
 
 				title_element = os.path.basename(path)
@@ -153,12 +160,20 @@ class Operation(Thread):
 				result = dialog.get_response()
 				merge = result[0] == Gtk.ResponseType.YES
 
-			if result[1][OverwriteOption.APPLY_TO_ALL]:
-				self._merge_all = merge
+				# send result to thread
+				queue.put((result, merge))
 
-			# in case user canceled operation
-			if result[0] == Gtk.ResponseType.CANCEL:
-				self.cancel()
+			# show dialog in main thread
+			queue = Queue()
+			GObject.idle_add(ask_user, queue)
+			result, merge = queue.get(True)
+
+		if result[1][OverwriteOption.APPLY_TO_ALL]:
+			self._merge_all = merge
+
+		# in case user canceled operation
+		if result[0] == Gtk.ResponseType.CANCEL:
+			self.cancel()
 
 		return merge  # return only response for current directory
 
@@ -172,7 +187,7 @@ class Operation(Thread):
 
 		else:
 			# we are not in silent mode, ask user what to do
-			with Gdk.lock:
+			def ask_user(queue):
 				dialog = OverwriteFileDialog(self._application, self._dialog.get_window())
 
 				title_element = os.path.basename(path)
@@ -196,15 +211,23 @@ class Operation(Thread):
 				result = dialog.get_response()
 				overwrite = result[0] == Gtk.ResponseType.YES
 
-			if result[1][OverwriteOption.APPLY_TO_ALL]:
-				self._overwrite_all = overwrite
+				# give the result to thread
+				queue.put((result, overwrite))
 
-			# in case user canceled operation
-			if result[0] == Gtk.ResponseType.CANCEL:
-				self.cancel()
+			# show dialog in main thread
+			queue = Queue()
+			GObject.idle_add(ask_user, queue)
+			result, overwrite = queue.get(True)
 
-			# pass options from input dialog
-			options = result[1]
+		if result[1][OverwriteOption.APPLY_TO_ALL]:
+			self._overwrite_all = overwrite
+
+		# in case user canceled operation
+		if result[0] == Gtk.ResponseType.CANCEL:
+			self.cancel()
+
+		# pass options from input dialog
+		options = result[1]
 
 		return overwrite, options
 
@@ -217,9 +240,8 @@ class Operation(Thread):
 
 		else:
 			# we are not in silent mode, ask user
-			with Gdk.lock:
+			def ask_user(queue):
 				dialog = OperationError(self._application)
-
 				dialog.set_message(_(
 						'There is a problem writing data to destination '
 						'file. What would you like to do?'
@@ -232,6 +254,14 @@ class Operation(Thread):
 				if response == Gtk.ResponseType.CANCEL:
 					self.cancel()
 
+				# send result to thread
+				queue.put(response)
+
+			# show dialog in main thread
+			queue = Queue()
+			GObject.idle_add(ask_user, queue)
+			response = queue.get(True)
+
 		return response
 
 	def _get_create_error_input(self, error, is_directory=False):
@@ -243,7 +273,7 @@ class Operation(Thread):
 
 		else:
 			# we are not in silent mode, ask user
-			with Gdk.lock:
+			def ask_user(queue):
 				dialog = OperationError(self._application)
 
 				if not is_directory:
@@ -269,6 +299,14 @@ class Operation(Thread):
 				if response == Gtk.ResponseType.CANCEL:
 					self.cancel()
 
+				# send response to thread
+				queue.put(response)
+
+			# show dialog in main thread
+			queue = Queue()
+			GObject.idle_add(ask_user, queue)
+			response = queue.get(True)
+
 		return response
 
 	def _get_mode_set_error_input(self, error):
@@ -280,14 +318,12 @@ class Operation(Thread):
 
 		else:
 			# we are not in silent mode, ask user
-			with Gdk.lock:
+			def ask_user(queue):
 				dialog = OperationError(self._application)
-
 				dialog.set_message(_(
 						'Problem with setting path parameter for '
 						'specified path. What would you like to do?'
 					))
-
 				dialog.set_error(str(error))
 
 				# get user response
@@ -296,6 +332,14 @@ class Operation(Thread):
 				# abort operation if user requested
 				if response == Gtk.ResponseType.CANCEL:
 					self.cancel()
+
+				# send response to thread
+				queue.put(response)
+
+			# show dialog in main thread
+			queue = Queue()
+			GObject.idle_add(ask_user, queue)
+			response = queue.get(True)
 
 		return response
 
@@ -308,9 +352,8 @@ class Operation(Thread):
 
 		else:
 			# we are not in silent mode, ask user
-			with Gdk.lock:
+			def ask_user(queue):
 				dialog = OperationError(self._application)
-
 				dialog.set_message(_(
 						'There was a problem removing specified path. '
 						'What would you like to do?'
@@ -323,6 +366,14 @@ class Operation(Thread):
 				if response == Gtk.ResponseType.CANCEL:
 					self.cancel()
 
+				# send response to thread
+				queue.put(response)
+
+			# show dialog in main thread
+			queue = Queue()
+			GObject.idle_add(ask_user, queue)
+			response = queue.get(True)
+
 		return response
 
 	def _get_trash_error_input(self, error):
@@ -334,9 +385,8 @@ class Operation(Thread):
 
 		else:
 			# we are not in silent mode, ask user
-			with Gdk.lock:
+			def ask_user(queue):
 				dialog = QuestionOperationError(self._application)
-
 				dialog.set_message(_(
 						'There was a problem trashing specified path. '
 						'Would you like to try removing it instead?'
@@ -349,6 +399,14 @@ class Operation(Thread):
 				if response == Gtk.ResponseType.CANCEL:
 					self.cancel()
 
+				# send response to thread
+				queue.put(response)
+
+			# show dialog in main thread
+			queue = Queue()
+			GObject.idle_add(ask_user, queue)
+			response = queue.get(True)
+
 		return response
 
 	def _get_move_error_input(self, error):
@@ -360,9 +418,8 @@ class Operation(Thread):
 
 		else:
 			# we are not in silent mode, ask user
-			with Gdk.lock:
+			def ask_user(queue):
 				dialog = OperationError(self._application)
-
 				dialog.set_message(_(
 						'There was a problem moving specified path. '
 						'What would you like to do?'
@@ -375,6 +432,14 @@ class Operation(Thread):
 				if response == Gtk.ResponseType.CANCEL:
 					self.cancel()
 
+				# send response to thread
+				queue.put(response)
+
+			# show dialog in main thread
+			queue = Queue()
+			GObject.idle_add(ask_user, queue)
+			response = queue.get(True)
+
 		return response
 
 	def _get_rename_error_input(self, error):
@@ -386,9 +451,8 @@ class Operation(Thread):
 
 		else:
 			# we are not in silent mode, ask user
-			with Gdk.lock:
+			def ask_user(queue):
 				dialog = OperationError(self._application)
-
 				dialog.set_message(_(
 						'There was a problem renaming specified path. '
 						'What would you like to do?'
@@ -401,6 +465,14 @@ class Operation(Thread):
 				if response == Gtk.ResponseType.CANCEL:
 					self.cancel()
 
+				# send response to thread
+				queue.put(response)
+
+			# show dialog in main thread
+			queue = Queue()
+			GObject.idle_add(ask_user, queue)
+			response = queue.get(True)
+
 		return response
 
 	def _get_read_error_input(self, error):
@@ -412,9 +484,8 @@ class Operation(Thread):
 
 		else:
 			# we are not in silent mode, ask user
-			with Gdk.lock:
+			def ask_user(queue):
 				dialog = OperationError(self._application)
-
 				dialog.set_message(_(
 						'There was a problem with reading specified directory. '
 						'What would you like to do?'
@@ -426,6 +497,14 @@ class Operation(Thread):
 				# abort operation if user requested
 				if response == Gtk.ResponseType.CANCEL:
 					self.cancel()
+
+				# send response to thread
+				queue.put(response)
+
+			# show dialog in main thread
+			queue = Queue()
+			GObject.idle_add(ask_user, queue)
+			response = queue.get(True)
 
 		return response
 
@@ -920,9 +999,8 @@ class CopyOperation(Operation):
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
 		# set dialog info
-		with Gdk.lock:
-			self._dialog.set_source(self._source_path)
-			self._dialog.set_destination(self._destination_path)
+		GObject.idle_add(self._dialog.set_source, self._source_path)
+		GObject.idle_add(self._dialog.set_destination, self._destination_path)
 
 		# get list of items to copy
 		self._get_lists()
@@ -939,17 +1017,19 @@ class CopyOperation(Operation):
 				self.cancel()
 
 		# clear selection on source directory
-		with Gdk.lock:
+		def clear_selection():
 			parent = self._source.get_parent()
 			if self._source_path == parent.path:
 				parent.deselect_all()
+
+		GObject.idle_add(clear_selection)
 
 		# perform operation
 		self._create_directory_list()
 		self._copy_file_list()
 
 		# notify user if window is not focused
-		with Gdk.lock:
+		def show_notification():
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 				notify_manager = self._application.notification_manager
 
@@ -976,8 +1056,10 @@ class CopyOperation(Operation):
 				error_list.set_errors(self._error_list)
 				error_list.show()
 
+		GObject.idle_add(show_notification)
+
 		# destroy dialog
-		self._destroy_ui()
+		GObject.idle_add(self._destroy_ui)
 
 
 class MoveOperation(CopyOperation):

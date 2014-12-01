@@ -616,13 +616,6 @@ class MainWindow(Gtk.Window):
 		# create notebooks
 		self._paned = Gtk.VPaned() if self.options.get('horizontal_split') else Gtk.HPaned()
 
-		# TODO: Move this to main style sheet.
-		rc_string = (
-				'style "paned-style" {GtkPaned::handle-size = 4}'
-				'class "GtkPaned" style "paned-style"'
-			)
-		Gtk.rc_parse_string(rc_string)
-
 		self.left_notebook = Gtk.Notebook()
 		self.left_notebook.set_scrollable(True)
 		self.left_notebook.connect('focus-in-event', self._transfer_focus)

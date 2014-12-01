@@ -286,7 +286,7 @@ class SessionManager:
 		self._popover_menu.append_section(None, self._options_menu)
 
 		# create container for header bar
-		self._button = Gtk.Button.new_from_icon_name('tab-new', Gtk.IconSize.BUTTON)
+		self._button = Gtk.Button.new_from_icon_name('view-list-details', Gtk.IconSize.BUTTON)
 		self._button.connect('clicked', self.show_session_menu)
 
 		self._popover = Gtk.Popover.new_from_model(self._button, self._popover_menu)

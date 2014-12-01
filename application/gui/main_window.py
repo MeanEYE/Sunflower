@@ -164,8 +164,7 @@ class MainWindow(Gtk.Window):
 
 		# create header bad
 		self.header_bar = Gtk.HeaderBar.new()
-		self.header_bar.set_show_close_button(True)
-		self.header_bar.set_has_subtitle(False)
+		self.header_bar.set_has_subtitle(True)
 		self.header_bar.set_title(_('Sunflower'))
 
 		self.set_titlebar(self.header_bar)
@@ -2000,6 +1999,7 @@ class MainWindow(Gtk.Window):
 
 	def set_location_label(self, path):
 		"""Set location label"""
+		self.header_bar.set_subtitle(path)
 		self.path_label.set_text(path)
 
 	def goto_web(self, widget, uri):

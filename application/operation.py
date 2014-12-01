@@ -1374,11 +1374,13 @@ class DeleteOperation(Operation):
 		"""Main thread method, this is where all the stuff is happening"""
 		self._file_list = self._selection_list[:]  # use predefined selection list
 
-		with Gdk.lock:
-			# clear selection on source directory
+		# clear selection on source directory
+		def clear_selection():
 			parent = self._source.get_parent()
 			if self._source_path == parent.path:
 				parent.deselect_all()
+
+		GObject.idle_add(clear_selection)
 
 		# select removal method
 		trash_files = self._application.options.section('operations').get('trash_files')
@@ -1413,7 +1415,7 @@ class DeleteOperation(Operation):
 				GObject.idle_add(self._dialog.set_current_file_fraction, 1)
 
 		# notify user if window is not focused
-		with Gdk.lock:
+		def show_notification():
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 				notify_manager = self._application.notification_manager
 
@@ -1430,8 +1432,10 @@ class DeleteOperation(Operation):
 				# queue notification
 				notify_manager.notify(title, message)
 
+		GObject.idle_add(show_notification)
+
 		# destroy dialog
-		self._destroy_ui()
+		GObject.idle_add(self._destroy_ui)
 
 
 class RenameOperation(Operation):

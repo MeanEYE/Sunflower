@@ -1,9 +1,20 @@
-from gi.repository import Gtk
+from gi.repository import Gtk, Gio
 from widgets.settings_page import SettingsPage
 
 
 DEFAULT_NAME = _('Default')
 DEFAULT_LOCK = False
+
+
+def register_plugin(application):
+	"""Method that Sunflower calls once plugin is loaded"""
+	manager = SessionManager(application)
+	settings_page = SessionsOptions(
+				application.preferences_window,
+				application
+			)
+
+	settings_page.set_manager(manager)
 
 
 class Column:
@@ -124,7 +135,7 @@ class SessionsOptions(SettingsPage):
 				# update index of active session
 				if row[Column.NAME] == active_name:
 					active_index = len(new_list)
-				row[Column.INDEX] = len(new_list) 
+				row[Column.INDEX] = len(new_list)
 
 				# append session to the new list
 				session_info = session_list[session_index]
@@ -188,7 +199,7 @@ class SessionsOptions(SettingsPage):
 		"""Handle toggle on session locked state"""
 		iter = self._store.get_iter(path)
 		self._store.set_value(iter, Column.LOCKED, not self._store.get_value(iter, Column.LOCKED))
-		
+
 		# enable save button
 		self._parent.enable_save()
 
@@ -264,70 +275,54 @@ class SessionManager:
 						})
 
 		# create menus
-		self._session_menu = Gtk.Menu()
-		self._session_menu_item = Gtk.MenuItem()
-		self._session_menu_item.set_submenu(self._session_menu)
-		self._session_menu_item.set_right_justified(True)
+		self._popover_menu = Gio.Menu()
+		self._sessions_menu = Gio.Menu()
+		self._options_menu = Gio.Menu()
 
-		self._manage_sessions_menu_item = Gtk.MenuItem(_('Manage sessions'))
-		self._manage_sessions_menu_item.connect(
-								'activate',
-								self._application.preferences_window._show,
-								'sessions'
-							)
+		self._options_menu.append(_('Manage sessions'), 'session-options.manage-sessions')
+		self._options_menu.append(_('Save session'), 'session-options.save-session')
 
-		self._save_session_menu_item = Gtk.MenuItem(_('Save session'))
-		self._save_session_menu_item.connect(
-								'activate',
-								self._save_session
-							)
+		self._popover_menu.append_section(None, self._sessions_menu)
+		self._popover_menu.append_section(None, self._options_menu)
 
-		self._application.menu_bar.append(self._session_menu_item)
+		# create container for header bar
+		self._button = Gtk.Button.new_from_icon_name('tab-new', Gtk.IconSize.BUTTON)
+		self._button.connect('clicked', self.show_session_menu)
+
+		self._popover = Gtk.Popover.new_from_model(self._button, self._popover_menu)
+
+		# add session button to header bar
+		self._application.header_bar.pack_end(self._button)
 
 		# update menu
 		self._update_menu()
 		self._update_menu_item()
 
+	def show_session_menu(self, widget=None, data=None):
+		"""Show list of sessions."""
+		self._popover.show_all()
+		return True
+
 	def _update_menu(self):
 		"""Update main window session menu"""
-
-		for item in self._session_menu.get_children():
-			self._session_menu.remove(item)
+		self._sessions_menu.remove_all()
 
 		# get current session index
 		current_session = self._options.section('sessions').get('current')
 
 		# iterate over saved sessions and create menu item for each
-		group = None
 		for index, session in enumerate(self._options.section('sessions').get('list')):
-			menu_item = Gtk.RadioMenuItem(group, session.get('name'))
-			menu_item.set_active(index == current_session)
-			menu_item.connect('activate', self._switch_session, index)
-			menu_item.show()
-
-			# append menu item to menu
-			self._session_menu.append(menu_item)
-
-			# store current item to be used for grouping with others
-			group = menu_item
-
-		# add options
-		separator = Gtk.SeparatorMenuItem()
-		separator.show()
-
-		self._session_menu.append(separator)
-		self._session_menu.append(self._save_session_menu_item)
-		self._session_menu.append(self._manage_sessions_menu_item)
+			session_name = session.get('name')
+			self._sessions_menu.append(session_name, 'session.{0}'.format(session_name))
 
 	def _update_menu_item(self):
 		"""Update main window menu item to contain session name"""
 		current_session = self._options.section('sessions').get('current')
 		session_name = self._options.section('sessions').get('list')[current_session].get('name')
-		self._session_menu_item.set_label('Session: {0}'.format(session_name))
+		self._button.set_label(session_name)
 
 	def _switch_session(self, widget, session_index):
 		"""Handle clicking on session menu"""
-
 		left_section = self._options.section('left')
 		right_section = self._options.section('right')
 		section = self._options.section('sessions')
@@ -403,14 +398,3 @@ class SessionManager:
 
 		# save options
 		self._options.save()
-
-
-def register_plugin(application):
-	"""Method that Sunflower calls once plugin is loaded"""
-	manager = SessionManager(application)
-	settings_page = SessionsOptions(
-				application.preferences_window,
-				application
-			)
-
-	settings_page.set_manager(manager)

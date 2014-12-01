@@ -162,6 +162,14 @@ class MainWindow(Gtk.Window):
 		self.indicator = Indicator(self)
 		self.preferences_window = PreferencesWindow(self)
 
+		# create header bad
+		self.header_bar = Gtk.HeaderBar.new()
+		self.header_bar.set_show_close_button(True)
+		self.header_bar.set_has_subtitle(False)
+		self.header_bar.set_title(_('Sunflower'))
+
+		self.set_titlebar(self.header_bar)
+
 		# define local variables
 		self._in_fullscreen = False
 
@@ -599,6 +607,7 @@ class MainWindow(Gtk.Window):
 		# create notebooks
 		self._paned = Gtk.VPaned() if self.options.get('horizontal_split') else Gtk.HPaned()
 
+		# TODO: Move this to main style sheet.
 		rc_string = (
 				'style "paned-style" {GtkPaned::handle-size = 4}'
 				'class "GtkPaned" style "paned-style"'
@@ -621,6 +630,7 @@ class MainWindow(Gtk.Window):
 
 		self._paned.pack1(self.left_notebook, resize=True, shrink=False)
 		self._paned.pack2(self.right_notebook, resize=True, shrink=False)
+
 		# command line prompt
 		self.command_entry_bar = Gtk.HBox(False, 0)
 		self.status_bar = Gtk.HBox(False, 0)
@@ -696,13 +706,13 @@ class MainWindow(Gtk.Window):
 
 		self.command_bar.set_property('no-show-all', not self.options.get('show_command_bar'))
 
-		# pack gui
+		# pack user interface
 		vbox = Gtk.VBox(False, 0)
+		vbox.pack_start(self.header_bar, expand=False, fill=False, padding=0)
 		vbox.pack_start(self.menu_bar, expand=False, fill=False, padding=0)
 		vbox.pack_start(self.toolbar_manager.get_toolbar(), expand=False, fill=False, padding=0)
 
 		self._vbox2 = Gtk.VBox(False, 4)
-		self._vbox2.set_border_width(3)
 		self._vbox2.pack_start(self._paned, expand=True, fill=True, padding=0)
 		self._vbox2.pack_start(self.command_entry_bar, expand=False, fill=False, padding=0)
 		self._vbox2.pack_start(self.command_bar, expand=False, fill=False, padding=0)

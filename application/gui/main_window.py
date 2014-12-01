@@ -171,7 +171,7 @@ class MainWindow(Gtk.Window):
 
 		# create bar buttons
 		self.button_new = Gtk.Button.new_from_icon_name('add', Gtk.IconSize.BUTTON)
-		self.button_new.set_tooltip_text(_('New tab'))
+		self.button_new.set_label(_('New'))
 
 		self.button_commands = Gtk.Button.new_from_icon_name('gnome-run', Gtk.IconSize.BUTTON)
 		self.button_commands.set_tooltip_text(_('Commands'))

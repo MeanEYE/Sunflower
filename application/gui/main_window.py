@@ -162,12 +162,22 @@ class MainWindow(Gtk.Window):
 		self.indicator = Indicator(self)
 		self.preferences_window = PreferencesWindow(self)
 
-		# create header bad
+		# create header bar
 		self.header_bar = Gtk.HeaderBar.new()
 		self.header_bar.set_has_subtitle(True)
 		self.header_bar.set_title(_('Sunflower'))
 
 		self.set_titlebar(self.header_bar)
+
+		# create bar buttons
+		self.button_new = Gtk.Button.new_from_icon_name('add', Gtk.IconSize.BUTTON)
+		self.button_new.set_tooltip_text(_('New tab'))
+
+		self.button_commands = Gtk.Button.new_from_icon_name('gnome-run', Gtk.IconSize.BUTTON)
+		self.button_commands.set_tooltip_text(_('Commands'))
+
+		self.header_bar.pack_start(self.button_new)
+		self.header_bar.pack_start(self.button_commands)
 
 		# define local variables
 		self._in_fullscreen = False

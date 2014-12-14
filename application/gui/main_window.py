@@ -26,6 +26,7 @@ from accelerator_manager import AcceleratorManager
 from keyring import KeyringManager, InvalidKeyringError
 from parameters import Parameters
 from dbus_common import DBus
+from importlib import import_module
 
 from plugin_base.item_list import ItemList
 from plugin_base.rename_extension import RenameExtension
@@ -1166,8 +1167,7 @@ class MainWindow(gtk.Window):
 				plugin_base_module = 'user_plugins' if load_user_plugin else 'plugins'
 
 				# import module
-				__import__('{0}.{1}.plugin'.format(plugin_base_module, file_name))
-				plugin = sys.modules['{0}.{1}.plugin'.format(plugin_base_module, file_name)]
+				plugin = import_module('{0}.{1}.plugin'.format(plugin_base_module, file_name))
 
 				# call module register_plugin method
 				if hasattr(plugin, 'register_plugin'):

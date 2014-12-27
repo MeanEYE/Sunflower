@@ -274,6 +274,15 @@ class SessionManager:
 							'current': 0
 						})
 
+		# create actions
+		self._manage_action = Gio.SimpleAction.new('manage-sessions', None)
+		self._manage_action.connect('activate', self._switch_session)
+		self._save_action = Gio.SimpleAction.new('session-options.save-session', None)
+
+		# add actions to application
+		self._application.add_action(self._manage_action)
+		self._application.add_action(self._save_action)
+
 		# create menus
 		self._popover_menu = Gio.Menu()
 		self._sessions_menu = Gio.Menu()
@@ -286,10 +295,8 @@ class SessionManager:
 		self._popover_menu.append_section(None, self._options_menu)
 
 		# create container for header bar
-		self._button = Gtk.Button.new_from_icon_name('view-list-details', Gtk.IconSize.BUTTON)
-		self._button.connect('clicked', self.show_session_menu)
-
-		self._popover = Gtk.Popover.new_from_model(self._button, self._popover_menu)
+		self._button = Gtk.MenuButton.new()
+		self._button.set_menu_model(self._popover_menu)
 
 		# add session button to header bar
 		self._application.header_bar.pack_end(self._button)
@@ -297,11 +304,6 @@ class SessionManager:
 		# update menu
 		self._update_menu()
 		self._update_menu_item()
-
-	def show_session_menu(self, widget=None, data=None):
-		"""Show list of sessions."""
-		self._popover.show_all()
-		return True
 
 	def _update_menu(self):
 		"""Update main window session menu"""
@@ -321,7 +323,7 @@ class SessionManager:
 		session_name = self._options.section('sessions').get('list')[current_session].get('name')
 		self._button.set_label(session_name)
 
-	def _switch_session(self, widget, session_index):
+	def _switch_session(self, action, session_index):
 		"""Handle clicking on session menu"""
 		left_section = self._options.section('left')
 		right_section = self._options.section('right')

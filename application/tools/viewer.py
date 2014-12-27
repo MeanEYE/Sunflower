@@ -1,6 +1,7 @@
 import os
 import gtk
 import pango
+import gobject
 import subprocess
 
 from common import executable_exists
@@ -100,7 +101,7 @@ class Viewer:
 				loader.write(raw_data)
 				loader.close()
 
-			except gtk.gdk.GError:
+			except gobject.GError:
 				pass
 
 			else:

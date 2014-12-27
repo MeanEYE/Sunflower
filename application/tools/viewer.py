@@ -87,9 +87,25 @@ class Viewer:
 			container.set_shadow_type(gtk.SHADOW_NONE)
 			container.set_border_width(5)
 			viewport = gtk.Viewport()
-
 			image = gtk.Image()
-			image.set_from_file(self.path)
+
+			# load raw data
+			raw_file = provider.get_file_handle(path, FileMode.READ)
+			raw_data = raw_file.read()
+			raw_file.close()
+
+			# get pixbuf from raw data
+			try:
+				loader = gtk.gdk.PixbufLoader()
+				loader.write(raw_data)
+				loader.close()
+
+			except gtk.gdk.GError:
+				pass
+
+			else:
+				# set image
+				image.set_from_pixbuf(loader.get_pixbuf())
 
 			viewport.add(image)
 			container.add(viewport)

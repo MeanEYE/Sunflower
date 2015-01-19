@@ -137,6 +137,12 @@ class AboutWindow:
 			language = 'Ukrainian',
 		),
 		Translator(
+			name = 'Roman Tuz',
+			email = 'ubuntueasy.com@gmail.com',
+			website = None,
+			language = 'Ukrainian',
+		),
+		Translator(
 			name = 'Táncos Tamás',
 			email = 'h868315@gmail.com',
 			website = None,

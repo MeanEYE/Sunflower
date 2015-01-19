@@ -21,7 +21,6 @@ Translator = namedtuple('Translator', Contributor._fields + ('language',))
 
 
 class AboutWindow:
-
 	# list of contributors
 	contributors = [
 		Contributor(
@@ -160,6 +159,12 @@ class AboutWindow:
 			email = 'clozel.helene@yahoo.fr',
 			website = None,
 			language = 'French'
+		),
+		Translator(
+			name = 'Jack Chen',
+			email = 'turnletgo@gmail.com',
+			website = None,
+			language = 'Chinese (GB2312)'
 		)
 	]
 

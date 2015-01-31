@@ -78,6 +78,7 @@ class ZipProvider(Provider):
 		"""Set archive file handle."""
 		Provider.set_archive_handle(self, handle)
 		self._zip_file = zipfile.ZipFile(self._handle, 'a')
+		self._update_cache()  # immediately needed when opening '/home/foo/bar.zip/subdir' on handle
 
 	def release_archive_handle(self):
 		"""Release archive handle when it's no longer needed."""

@@ -1451,12 +1451,21 @@ class ItemList(PluginBase):
 		"""Inherit path in right list from left"""
 		opposite_object = self._parent.get_opposite_object(self)
 
+		path = self.path
+		selection = self._get_selection()
+		if selection is not None:
+			mime_type = self._parent.associations_manager.get_mime_type(path=selection)
+			is_dir = self.get_provider().is_dir(selection)
+			is_archive = self._parent.is_archive_supported(mime_type)
+			if is_dir or is_archive:
+				path = selection
+
 		if self._notebook is self._parent.left_notebook:
 			if hasattr(opposite_object, 'change_path'):
-				opposite_object.change_path(self.path)
+				opposite_object.change_path(path)
 
 			elif hasattr(opposite_object, 'feed_terminal'):
-				opposite_object.feed_terminal(self.path)
+				opposite_object.feed_terminal(path)
 
 		else:
 			self.change_path(opposite_object.path)
@@ -1467,12 +1476,21 @@ class ItemList(PluginBase):
 		"""Inherit path in left list from right"""
 		opposite_object = self._parent.get_opposite_object(self)
 
+		path = self.path
+		selection = self._get_selection()
+		if selection is not None:
+			mime_type = self._parent.associations_manager.get_mime_type(path=selection)
+			is_dir = self.get_provider().is_dir(selection)
+			is_archive = self._parent.is_archive_supported(mime_type)
+			if is_dir or is_archive:
+				path = selection
+
 		if self._notebook is self._parent.right_notebook:
 			if hasattr(opposite_object, 'change_path'):
-				opposite_object.change_path(self.path)
+				opposite_object.change_path(path)
 
 			elif hasattr(opposite_object, 'feed_terminal'):
-				opposite_object.feed_terminal(self.path)
+				opposite_object.feed_terminal(path)
 
 		else:
 			self.change_path(opposite_object.path)
@@ -1647,6 +1665,19 @@ class ItemList(PluginBase):
 		for path, provider in self._providers.items():
 			provider.release_archive_handle()
 
+	def create_intermediate_archive_provider(self, path=None):
+		""""set up intermediate archive providers if necessary"""
+
+		if path is None or path == '/' or '://' in path or path in self._providers:
+			return
+
+		mime_type = self._parent.associations_manager.get_mime_type(path=path)
+
+		if self._parent.is_archive_supported(mime_type):
+			self.create_provider(path, True)
+		else:
+			self.create_intermediate_archive_provider(os.path.dirname(path))
+
 	def get_provider(self, path=None):
 		"""Get existing list provider or create new for specified path."""
 		result = None
@@ -1655,11 +1686,25 @@ class ItemList(PluginBase):
 		if path is None:
 			return self._current_provider
 
+		# create a local provider if no provider exists yet as fallback in case we are opening an archive
+		if len(self._providers) == 0:
+
+			Provider = self._parent.get_provider_by_protocol('file')
+			result = Provider(self, user.home)
+
+			# cache provider for later use
+			root_path = result.get_root_path(user.home)
+			self._providers[root_path] = result
+			self._current_provider = result
+
 		# check if there is a provider for specified path
 		if path in self._providers:
 			result = self._providers[path]
 
 		else:
+
+			self.create_intermediate_archive_provider(path)
+
 			# try to find provider with longest matching path
 			longest_path = 0
 			matching_provider = None

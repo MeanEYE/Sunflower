@@ -215,10 +215,6 @@ class ZipProvider(Provider):
 		"""Get directory list."""
 		real_path = self._real_path(path, relative_to)
 
-		# update file cache
-		if len(self._cache) == 0:
-			self._update_cache()
-
 		# get file list
 		result = []
 		if real_path in self._cache:

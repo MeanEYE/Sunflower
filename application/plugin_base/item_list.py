@@ -1665,19 +1665,6 @@ class ItemList(PluginBase):
 		for path, provider in self._providers.items():
 			provider.release_archive_handle()
 
-	def create_intermediate_archive_provider(self, path=None):
-		""""set up intermediate archive providers if necessary"""
-
-		if path is None or path == '/' or '://' in path or path in self._providers:
-			return
-
-		mime_type = self._parent.associations_manager.get_mime_type(path=path)
-
-		if self._parent.is_archive_supported(mime_type):
-			self.create_provider(path, True)
-		else:
-			self.create_intermediate_archive_provider(os.path.dirname(path))
-
 	def get_provider(self, path=None):
 		"""Get existing list provider or create new for specified path."""
 		result = None
@@ -1703,7 +1690,16 @@ class ItemList(PluginBase):
 
 		else:
 
-			self.create_intermediate_archive_provider(path)
+			# assuming a path like /home/user/some.zip/subdir1/subdir2
+			# creates intermediate archive provider if necessary
+			p = path
+			while p not in self._providers and p != '/' and '://' not in path:
+				mime_type = self._parent.associations_manager.get_mime_type(path=p)
+				if self._parent.is_archive_supported(mime_type):
+					self.create_provider(p, True)
+					break
+				else:
+					p = os.path.dirname(p)
 
 			# try to find provider with longest matching path
 			longest_path = 0

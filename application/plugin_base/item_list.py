@@ -1619,6 +1619,16 @@ class ItemList(PluginBase):
 		"""Preemptively create provider object."""
 		result = None
 
+		# create a local provider if no provider exists at all - needed when creating archive providers
+		if len(self._providers) == 0:
+			Provider = self._parent.get_provider_by_protocol('file')
+			result = Provider(self, user.home)
+
+			# cache provider for later use
+			root_path = result.get_root_path(user.home)
+			self._providers[root_path] = result
+			self._current_provider = result
+
 		if not is_archive:
 			scheme = 'file' if '://' not in path else path.split('://', 1)[0]
 
@@ -1633,8 +1643,23 @@ class ItemList(PluginBase):
 				self._providers[root_path] = result
 
 		else:
+			# assuming paths like /home/user/some.zip or /home/user/some.zip/subdir1/subdir2
+			# bit by by bit, cut path back to the path of the archive itself
+			p = path
+			while p not in self._providers and p != '/' and '://' not in path:
+				mime_type = self._parent.associations_manager.get_mime_type(path=p)
+				if self._parent.is_archive_supported(mime_type):
+					path = p
+					break
+				else:
+					p = os.path.dirname(p)
+
 			mime_type = self._parent.associations_manager.get_mime_type(path=path)
 			current_provider = self.get_provider()
+
+			# if current provider can't handle this path - try parent directory of path
+			if not current_provider.exists(path):
+				current_provider = self.create_provider(os.path.dirname(path), False)
 
 			# create archive provider
 			Provider = self._parent.get_provider_for_archive(mime_type)
@@ -1673,34 +1698,11 @@ class ItemList(PluginBase):
 		if path is None:
 			return self._current_provider
 
-		# create a local provider if no provider exists yet as fallback in case we are opening an archive
-		if len(self._providers) == 0:
-
-			Provider = self._parent.get_provider_by_protocol('file')
-			result = Provider(self, user.home)
-
-			# cache provider for later use
-			root_path = result.get_root_path(user.home)
-			self._providers[root_path] = result
-			self._current_provider = result
-
 		# check if there is a provider for specified path
 		if path in self._providers:
 			result = self._providers[path]
 
 		else:
-
-			# assuming a path like /home/user/some.zip/subdir1/subdir2
-			# creates intermediate archive provider if necessary
-			p = path
-			while p not in self._providers and p != '/' and '://' not in path:
-				mime_type = self._parent.associations_manager.get_mime_type(path=p)
-				if self._parent.is_archive_supported(mime_type):
-					self.create_provider(p, True)
-					break
-				else:
-					p = os.path.dirname(p)
-
 			# try to find provider with longest matching path
 			longest_path = 0
 			matching_provider = None
@@ -1725,6 +1727,10 @@ class ItemList(PluginBase):
 		# no matching provider was found, create new
 		if result is None:
 			result = self.create_provider(path, False)
+
+		# if path is not supported by provider found - try to create archive provider as necessary
+		if not result.exists(path):
+			result = self.create_provider(path, True)
 
 		# cache current provider
 		self._current_provider = result

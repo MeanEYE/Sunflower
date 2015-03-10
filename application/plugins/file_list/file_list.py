@@ -1880,7 +1880,9 @@ class FileList(ItemList):
 
 		selection = []
 		for file_name in self._get_selection_list():
-			selection.append('{0}://{1}'.format(protocol, file_name))
+			if protocol is 'file':
+				file_name = '{0}://{1}'.format(protocol, file_name)
+			selection.append(file_name)
 
 		selection_data.set(selection_data.target, 8, '\n'.join(selection))
 		return True
@@ -2087,11 +2089,10 @@ class FileList(ItemList):
 
 		# store path and scheme
 		self.scheme = provider.get_protocol()
-		if self.scheme is None or self.scheme == 'file':
-			self.path = path
-
-		else:
+		if (self.scheme is None or self.scheme == 'file') and '://' in path:
 			self.path = path.split('://')[1]
+		else:
+			self.path = path
 
 		# update options container
 		self._options.set('path', self.path)

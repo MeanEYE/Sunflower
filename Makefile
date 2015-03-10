@@ -41,6 +41,7 @@ Usage:
 	dist-rpm-pclinuxos - create a .rpm package for PCLinuxOS
 	dist-all           - create all packages
 	language-template  - update language template
+	language-compile   - compile language files to .mo format
 	clean              - remove all build files
 	version            - print Sunflower version
 	help               - print this help
@@ -182,6 +183,10 @@ dist-all: dist-deb dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-pkg
 language-template:
 	$(info Updating language template...)
 	find . -iname "*.py" | xargs xgettext --language=Python --package-name=Sunflower --package-version=0.1 --output $(working_directory)/translations/sunflower.pot
+
+language-compile:
+	$(info Compiling language templates...)
+	find translations -iname "*.po" -execdir msgfmt sunflower.po -o sunflower.mo \;
 
 clean:
 	rm -rf $(build_directory)

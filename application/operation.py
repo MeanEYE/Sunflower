@@ -1370,6 +1370,8 @@ class RenameOperation(Operation):
 
 	def _rename_path(self, old_name, new_name, index):
 		"""Rename specified path"""
+		can_procede = True
+
 		try:
 			# check if specified path already exists
 			if self._destination.exists(new_name, relative_to=self._source_path):

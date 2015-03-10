@@ -96,6 +96,7 @@ class BookmarksMenu:
 		else:
 			menu_item = gtk.MenuItem()
 
+		menu_item.set_use_underline(True)
 		menu_item.set_label(label)
 		menu_item.connect('activate', callback, data)
 

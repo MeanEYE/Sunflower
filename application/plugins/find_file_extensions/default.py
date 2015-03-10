@@ -74,6 +74,8 @@ class DefaultFindFiles(FindExtension):
 
 		# load saved values
 		self._load_history()
+		self._pattern = self._entry_pattern.get_active_text()
+		self._case_sensitive = False
 
 	def __handle_case_sensitive_toggle(self, widget, data=None):
 		"""Handle toggling case sensitive check box"""
@@ -81,6 +83,7 @@ class DefaultFindFiles(FindExtension):
 							fnmatch.fnmatch,
 							fnmatch.fnmatchcase
 						)[widget.get_active()]
+		self._case_sensitive = widget.get_active()
 
 	def __handle_pattern_change(self, widget, data=None):
 		"""Handle changing pattern"""
@@ -121,6 +124,10 @@ class DefaultFindFiles(FindExtension):
 
 		# prepare patterns
 		patterns = (self._pattern,) if ';' not in self._pattern else self._pattern.split(';')
+
+		if not self._case_sensitive:
+			file_name = file_name.lower()
+			patterns = map(lambda x: x.lower(), patterns)
 
 		# try to match any of the patterns
 		for pattern in patterns:

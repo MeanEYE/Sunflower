@@ -136,6 +136,10 @@ class Provider:
 		"""Unlink given path"""
 		pass
 
+	def readlink(self, path, relative_to=None):
+		"""Return a string representing the path to which the symbolic link points."""
+		pass
+
 	def remove_directory(self, path, recursive, relative_to=None):
 		"""Remove directory and optionally its content"""
 		pass

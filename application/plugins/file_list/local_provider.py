@@ -60,6 +60,11 @@ class LocalProvider(Provider):
 		real_path = self._real_path(path, relative_to)
 		os.remove(real_path)
 
+	def readlink(self, path, relative_to=None):
+		"""Return a string representing the path to which the symbolic link points."""
+		real_path = self._real_path(path, relative_to)
+		return os.readlink(real_path)
+
 	def remove_directory(self, path, relative_to=None):
 		"""Remove directory and optionally its contents"""
 		real_path = self._real_path(path, relative_to)

@@ -62,6 +62,7 @@ class Operation(Thread):
 
 		self._dir_list = []
 		self._file_list = []
+		self._link_list = []
 		self._error_list = []
 		self._selection_list = []
 
@@ -526,6 +527,12 @@ class CopyOperation(Operation):
 				relative_path = None
 				source_path = self._source_path
 
+			if ProviderSupport.SYMBOLIC_LINK in self._source.get_support() and \
+				ProviderSupport.SYMBOLIC_LINK in self._destination.get_support():
+				if self._source.is_link(item, relative_to=source_path):
+					self._link_list.append((item, source_path))
+					continue
+
 			if self._source.is_dir(item, relative_to=source_path):
 				# item is directory
 				can_procede = True
@@ -884,6 +891,54 @@ class CopyOperation(Operation):
 
 				break
 
+	def _create_link(self, link_name, relative_path=None):
+		"""Create specified link"""
+		can_procede = True
+		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
+		file_stat = self._source.get_stat(link_name, relative_to=source_path)
+		target = self._source.readlink(link_name, relative_to=source_path)
+
+		try:
+			if self._destination.exists(link_name, relative_to=self._destination_path):
+				if self._overwrite_all is not None:
+					can_procede = self._overwrite_all
+				else:
+					can_procede, options = self._get_overwrite_input(link_name)
+
+					# get new name if user specified
+					if options[OverwriteOption.RENAME]:
+						link_name = options[OverwriteOption.NEW_NAME]
+					elif source_path == self._destination_path:
+						can_procede = False
+					else:
+						self._source.remove_path(link_name, relative_to=self._destination_path)
+
+
+			# if user skipped this file return
+			if not can_procede:
+				self._link_list.pop(self._file_list.index(link_name))
+				return
+
+			self._destination.link(target, link_name, relative_to=self._destination_path)
+			# push event to the queue
+			if self._destination_queue is not None:
+				event = (MonitorSignals.CREATED, link_name, None)
+				self._destination_queue.put(event, False)
+
+		except StandardError as error:
+			# there was a problem creating directory
+			response = self._get_create_error_input(error, True)
+
+			# handle user response
+			if response == gtk.RESPONSE_YES:
+				self._create_link(link_name)
+
+			# exit method
+			return
+
+		# set owner
+		self._set_owner(link_name, file_stat.user_id, file_stat.group_id)
+
 	def _create_directory_list(self):
 		"""Create all directories in list"""
 		gobject.idle_add(self._update_status, _('Creating directories...'))
@@ -918,6 +973,17 @@ class CopyOperation(Operation):
 			self._copy_file(file_name, source_path)
 			gobject.idle_add(self._dialog.increment_current_count, 1)
 
+	def _create_links(self):
+		gobject.idle_add(self._update_status, _('Creating links...'))
+		for link_name, source_path in self._link_list:
+			# abort operation if requested
+			if self._abort.is_set(): break
+			self._can_continue.wait()  # pause lock
+
+			#create link
+			gobject.idle_add(self._dialog.set_current_file, link_name)
+			self._create_link(link_name, source_path)
+
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
 		# set dialog info
@@ -946,6 +1012,7 @@ class CopyOperation(Operation):
 				parent.deselect_all()
 
 		# perform operation
+		self._create_links()
 		self._create_directory_list()
 		self._copy_file_list()
 
@@ -1181,6 +1248,7 @@ class MoveOperation(CopyOperation):
 				parent.deselect_all()
 
 		# create directories
+		self._create_links()
 		self._create_directory_list()
 
 		# copy/move files

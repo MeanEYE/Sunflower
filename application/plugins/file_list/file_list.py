@@ -1579,9 +1579,6 @@ class FileList(ItemList):
 
 			self._item_queue.append(data)
 
-			if len(self._item_queue) > 50:
-				self._flush_queue(parent)
-
 		except Exception as error:
 			print 'Error: {0} - {1}'.format(filename, str(error))
 

@@ -583,7 +583,7 @@ class FileList(ItemList):
 			# select parent row
 			path = item_list.get_path(parent)
 			self._item_list.set_cursor(path)
-			self._item_list.scroll_to_cell(path)
+			self._item_list.scroll_to_cell(path, None, True, 0.5)
 
 		return True
 
@@ -1399,7 +1399,7 @@ class FileList(ItemList):
 				# iter is not last in the list
 				path = item_list.get_path(next_iter)
 				self._item_list.set_cursor(path)
-				self._item_list.scroll_to_cell(path)
+				self._item_list.scroll_to_cell(path, None, True, 0.5)
 
 			elif item_list.iter_parent(selected_iter) is not None:
 				# if iter is part of expanded directory advance through parent
@@ -1408,7 +1408,7 @@ class FileList(ItemList):
 				if next_iter is not None:
 					path = item_list.get_path(next_iter)
 					self._item_list.set_cursor(path)
-					self._item_list.scroll_to_cell(path)
+					self._item_list.scroll_to_cell(path, None, True, 0.5)
 
 		return True
 
@@ -1604,7 +1604,7 @@ class FileList(ItemList):
 
 					# set cursor position and scroll ti make it visible
 					self._item_list.set_cursor(path)
-					self._item_list.scroll_to_cell(path)
+					self._item_list.scroll_to_cell(path, None, True, 0.5)
 
 			# clear item queue
 			self._item_queue[:] = []
@@ -2004,6 +2004,12 @@ class FileList(ItemList):
 				# turn on sorting
 				self._apply_sort_function()
 
+			selection = self._item_list.get_selection()
+			item_list, iter_to_scroll = selection.get_selected()
+			if iter_to_scroll:
+				path_to_scroll = item_list.get_path(iter_to_scroll)
+				self._item_list.scroll_to_cell(path_to_scroll, None, True, 0.5)
+
 			# load emblems
 			self._load_emblems(parent, parent_path)
 
@@ -2169,7 +2175,7 @@ class FileList(ItemList):
 		and len(self._store) > 0:
 			path = self._store.get_path(self._store.get_iter_first())
 			self._item_list.set_cursor(path)
-			self._item_list.scroll_to_cell(path)
+			self._item_list.scroll_to_cell(path, None, True, 0.5)
 
 	def select_all(self, pattern=None, exclude_list=None):
 		"""Select all items matching pattern"""

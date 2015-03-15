@@ -2165,7 +2165,7 @@ class FileList(ItemList):
 			return
 
 		# if no item was specified, select first one
-		if selected is None \
+		if selected in (None, os.path.pardir) \
 		and len(self._store) > 0:
 			path = self._store.get_path(self._store.get_iter_first())
 			self._item_list.set_cursor(path)

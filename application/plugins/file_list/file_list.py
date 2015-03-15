@@ -1022,13 +1022,13 @@ class FileList(ItemList):
 		result = None
 		selection = self._item_list.get_selection()
 		item_list, selected_iter = selection.get_selected()
+		if selected_iter:
+			is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
+			is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
 
-		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
-		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
-
-		if not is_parent and ((not files_only) or (files_only and not is_dir)):
-			item = item_list.get_value(selected_iter, Column.NAME)
-			result = item if relative else os.path.join(self.path, item)
+			if not is_parent and ((not files_only) or (files_only and not is_dir)):
+				item = item_list.get_value(selected_iter, Column.NAME)
+				result = item if relative else os.path.join(self.path, item)
 
 		return result
 

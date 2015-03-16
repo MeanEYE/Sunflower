@@ -1242,6 +1242,12 @@ class FileList(ItemList):
 
 		self._store.set_sort_func(self._sort_column, self._sort_list)
 		self._store.set_sort_column_id(self._sort_column, order)
+		
+		selection = self._item_list.get_selection()
+		item_list, iter_to_scroll = selection.get_selected()
+		if iter_to_scroll:
+			path_to_scroll = item_list.get_path(iter_to_scroll)
+			self._item_list.scroll_to_cell(path_to_scroll, None, True, 0.5)
 
 	def _clear_sort_function(self):
 		"""Clear sort settings"""
@@ -2003,12 +2009,6 @@ class FileList(ItemList):
 
 				# turn on sorting
 				self._apply_sort_function()
-
-			selection = self._item_list.get_selection()
-			item_list, iter_to_scroll = selection.get_selected()
-			if iter_to_scroll:
-				path_to_scroll = item_list.get_path(iter_to_scroll)
-				self._item_list.scroll_to_cell(path_to_scroll, None, True, 0.5)
 
 			# load emblems
 			self._load_emblems(parent, parent_path)

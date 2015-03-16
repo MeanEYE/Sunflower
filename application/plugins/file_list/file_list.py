@@ -1022,6 +1022,7 @@ class FileList(ItemList):
 		result = None
 		selection = self._item_list.get_selection()
 		item_list, selected_iter = selection.get_selected()
+		
 		if selected_iter:
 			is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
 			is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)

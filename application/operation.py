@@ -679,7 +679,7 @@ class CopyOperation(Operation):
 
 				if can_procede:
 					# allow processing specified directory
-					self._dir_list.append(full_name)
+					self._dir_list.append((full_name, source_path))
 					if can_create: self._dir_list_create.append((full_name, source_path))
 					self._scan_directory(full_name, relative_path)
 
@@ -1130,7 +1130,7 @@ class MoveOperation(CopyOperation):
 
 				# remove directory if empty
 				if item_list is not None and len(item_list) == 0:
-					self._remove_path(directory, dir_list)
+					self._remove_path(directory, dir_list, relative_path=source_path)
 
 				# update current count
 				if len(dir_list) > 0:

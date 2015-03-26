@@ -1747,7 +1747,7 @@ class FileList(ItemList):
 		path = None
 		action = gtk.gdk.ACTION_DEFAULT
 
-		self._dnd_auto_scroll(widget, x, y)
+		self._drag_auto_scroll(widget, x, y)
 
 		try:
 			# get item under cursor
@@ -1771,7 +1771,7 @@ class FileList(ItemList):
 
 		return True
 
-	def _dnd_auto_scroll(self, widget, x, y):
+	def _drag_auto_scroll(self, widget, x, y):
 		vadj = widget.get_vadjustment()
 		hadj = widget.get_hadjustment()
 

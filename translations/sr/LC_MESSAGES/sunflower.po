@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-21 21:04+0200\n"
-"PO-Revision-Date: 2015-02-19 23:36+0000\n"
+"PO-Revision-Date: 2015-03-07 20:50+0000\n"
 "Last-Translator: Bojan Bogdanović (Бојан Богдановић)\n"
 "Language-Team: Serbian (http://www.transifex.com/projects/p/sunflower/language/sr/)\n"
 "MIME-Version: 1.0\n"
@@ -145,95 +145,95 @@ msgstr "Морате одабрати миме тип ком програму т
 
 #: application/gui/preferences/plugins.py:34
 msgid "Plugins"
-msgstr ""
+msgstr "Додаци"
 
 #: application/gui/preferences/plugins.py:66
 #: application/gui/preferences/display.py:91
 msgid "Active"
-msgstr ""
+msgstr "Активни"
 
 #: application/gui/preferences/plugins.py:68
 msgid "Plugin name"
-msgstr ""
+msgstr "Име додатка"
 
 #: application/gui/preferences/plugins.py:72
 msgid "Version"
-msgstr ""
+msgstr "Верзија"
 
 #: application/gui/preferences/plugins.py:74
 msgid "Author"
-msgstr ""
+msgstr "Аутор"
 
 #: application/gui/preferences/plugins.py:90
 #: application/gui/preferences/accelerators.py:54
 msgid "Description"
-msgstr ""
+msgstr "Опис"
 
 #: application/gui/preferences/plugins.py:100
 msgid "Contact"
-msgstr ""
+msgstr "Контакт"
 
 #: application/gui/preferences/plugins.py:109
 msgid "Visit site"
-msgstr ""
+msgstr "Посети сајт"
 
 #: application/gui/preferences/plugins.py:182
 #, python-brace-format
 msgid ""
 "{0} is required for normal program operation and therefore can not be "
 "deactivated!"
-msgstr ""
+msgstr "{0} је потребан за нормално функционисање програма те стога не може бити деактивиран!"
 
 #: application/gui/preferences/plugins.py:213
 msgid "This plugin has no description"
-msgstr ""
+msgstr "Додатак нема опис"
 
 #: application/gui/preferences/plugins.py:272
 msgid "No plugin selected"
-msgstr ""
+msgstr "Нема одабраног додатка"
 
 #: application/gui/preferences/bookmarks.py:15
 #: application/plugins/default_toolbar/bookmarks_button.py:16
 #: application/plugins/default_toolbar/bookmarks_button.py:17
 #: application/plugin_base/item_list.py:82
 msgid "Bookmarks"
-msgstr ""
+msgstr "Обележивачи"
 
 #: application/gui/preferences/bookmarks.py:18
 msgid "Show mount points in bookmarks menu"
-msgstr ""
+msgstr "Прикажи тачке монтирања у менију обележивача"
 
 #: application/gui/preferences/bookmarks.py:22
 msgid "Show system bookmarks"
-msgstr ""
+msgstr "Прикажи системске обележиваче"
 
 #: application/gui/preferences/bookmarks.py:26
 msgid "Add home directory to bookmarks menu"
-msgstr ""
+msgstr "Додај матични директоријум у мени обележивача"
 
 #: application/gui/preferences/bookmarks.py:54
 #: application/tools/find_files.py:89
 msgid "Location"
-msgstr ""
+msgstr "Локација"
 
 #: application/gui/preferences/accelerators.py:20
 msgid "Key bindings"
-msgstr ""
+msgstr "Кључна везивања"
 
 #: application/gui/preferences/accelerators.py:61
 msgid "Primary"
-msgstr ""
+msgstr "Примарни"
 
 #: application/gui/preferences/accelerators.py:69
 msgid "Secondary"
-msgstr ""
+msgstr "Секундарни"
 
 #: application/gui/preferences/accelerators.py:82
 msgid ""
 "<b>Note:</b> You can only edit accelerators from objects created at least "
 "once in current session. To disable accelerator press <i>Backspace</i> in "
 "assign mode."
-msgstr ""
+msgstr "<b>Белешка:</b> Можете само изменити акцелераторе из објеката који су креирани барем једном у текућој сесији. Да онемогућите акцелератор притисните <i>Backspace</i> у моду додељивања."
 
 #: application/gui/preferences/accelerators.py:168
 #, python-brace-format
@@ -242,44 +242,44 @@ msgid ""
 "\n"
 "Collisions:\n"
 "{1}"
-msgstr ""
+msgstr "Одабрани акцелератор \"{0}\" се већ користи. Да ли желите да доделите акцелератор овој функцији? Ово ће ресетоваи излистане функције.\n\nСукоб:\n{1}"
 
 #: application/gui/preferences/accelerators.py:219
 #: application/gui/main_window.py:768
 #: application/plugins/default_toolbar/home_directory_button.py:16
 #: application/plugins/default_toolbar/home_directory_button.py:17
 msgid "Home directory"
-msgstr ""
+msgstr "Матични директоријум"
 
 #: application/gui/preferences/view_and_edit.py:16
 msgid "View & Edit"
-msgstr ""
+msgstr "Прикажи и Измени"
 
 #: application/gui/preferences/view_and_edit.py:19
 #: application/gui/main_window.py:425
 msgid "View"
-msgstr ""
+msgstr "Приказ"
 
 #: application/gui/preferences/view_and_edit.py:25
 #: application/gui/main_window.py:243 application/gui/main_window.py:665
 msgid "Edit"
-msgstr ""
+msgstr "Измени"
 
 #: application/gui/preferences/view_and_edit.py:31
 msgid "Use installed application"
-msgstr ""
+msgstr "Користи инсталиране апликације"
 
 #: application/gui/preferences/view_and_edit.py:53
 msgid "Use external command"
-msgstr ""
+msgstr "Користи спољњу команду"
 
 #: application/gui/preferences/view_and_edit.py:67
 msgid "Execute command in terminal tab"
-msgstr ""
+msgstr "Изврши команду у картици терминала"
 
 #: application/gui/preferences/toolbar.py:18
 msgid "Toolbar"
-msgstr ""
+msgstr "Алатница"
 
 #: application/gui/preferences/toolbar.py:36
 #: application/gui/history_list.py:47
@@ -294,299 +294,299 @@ msgstr ""
 #: application/plugins/rename_extensions/default.py:73
 #: application/tools/find_files.py:86
 msgid "Name"
-msgstr ""
+msgstr "Име"
 
 #: application/gui/preferences/toolbar.py:47
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 #: application/gui/preferences/toolbar.py:93
 msgid "Toolbar style:"
-msgstr ""
+msgstr "Стил алатнице:"
 
 #: application/gui/preferences/toolbar.py:95
 msgid "Icons"
-msgstr ""
+msgstr "Иконе"
 
 #: application/gui/preferences/toolbar.py:96 application/tools/viewer.py:81
 msgid "Text"
-msgstr ""
+msgstr "Текст"
 
 #: application/gui/preferences/toolbar.py:97
 #: application/gui/preferences/item_list.py:124
 msgid "Both"
-msgstr ""
+msgstr "Оба"
 
 #: application/gui/preferences/toolbar.py:98
 msgid "Both horizontal"
-msgstr ""
+msgstr "Оба хоризонтално"
 
 #: application/gui/preferences/toolbar.py:108
 msgid "Icon size:"
-msgstr ""
+msgstr "Величина икона:"
 
 #: application/gui/preferences/toolbar.py:110
 msgid "Same as menu item"
-msgstr ""
+msgstr "исто као и ставке менија"
 
 #: application/gui/preferences/toolbar.py:111
 msgid "Small toolbar icon"
-msgstr ""
+msgstr "Мале иконе алатнице"
 
 #: application/gui/preferences/toolbar.py:112
 msgid "Large toolbar icon"
-msgstr ""
+msgstr "Велике иконе алатнице"
 
 #: application/gui/preferences/toolbar.py:113
 msgid "Same as buttons"
-msgstr ""
+msgstr "Исто као и дугмад"
 
 #: application/gui/preferences/toolbar.py:114
 msgid "Same as drag icons"
-msgstr ""
+msgstr "Исто као и превучене иконе"
 
 #: application/gui/preferences/toolbar.py:115
 msgid "Same as dialog"
-msgstr ""
+msgstr "Исто као дијалог"
 
 #: application/gui/preferences/toolbar.py:217
 msgid "missing plugin"
-msgstr ""
+msgstr "недостајући додатак"
 
 #: application/gui/preferences/operation.py:10
 #: application/gui/preferences/item_list.py:43
 msgid "Operation"
-msgstr ""
+msgstr "Операција"
 
 #: application/gui/preferences/operation.py:13
 msgid "General"
-msgstr ""
+msgstr "Опште"
 
 #: application/gui/preferences/operation.py:17
 #: application/gui/main_window.py:577
 #: application/gui/mounts_manager_window.py:473
 msgid "Mounts"
-msgstr ""
+msgstr "Монтирања"
 
 #: application/gui/preferences/operation.py:21
 msgid "Confirmation"
-msgstr ""
+msgstr "Потврда"
 
 #: application/gui/preferences/operation.py:26
 msgid "Delete items to trashcan"
-msgstr ""
+msgstr "Обришите ставке у канту"
 
 #: application/gui/preferences/operation.py:27
 msgid "Reserve free space on copy/move"
-msgstr ""
+msgstr "Резервиши слободан простор за копирање/померање"
 
 #: application/gui/preferences/operation.py:28
 msgid "Automount drives on start up"
-msgstr ""
+msgstr "Аутоматски монтирај дискове на старту"
 
 #: application/gui/preferences/operation.py:29
 msgid "Automount removable drives when inserted"
-msgstr ""
+msgstr "Аутоматски монтирај изменљиве дискове када се убаце"
 
 #: application/gui/preferences/operation.py:30
 msgid "Show confirmation dialog before deleting items"
-msgstr ""
+msgstr "Прикажи дијалог потврде пре брисања ставки"
 
 #: application/gui/preferences/operation.py:64
 msgid ""
 "With trashing disabled you will not be able to restore accidentally deleted "
 "items. Are you sure you want to disable confirmation dialog when deleting "
 "items?"
-msgstr ""
+msgstr "Са онемогућеном кантом нећете моћи да повратите случајно обрисане ставке. Да ли сте сигурни да желите да онемогућите дијалог потврде када бришете ставке?"
 
 #: application/gui/preferences/display.py:23
 msgid "Display"
-msgstr ""
+msgstr "Приказ"
 
 #: application/gui/preferences/display.py:28
 msgid "Main window"
-msgstr ""
+msgstr "Главни прозор"
 
 #: application/gui/preferences/display.py:32
 msgid "Hide main window on close"
-msgstr ""
+msgstr "Сакриј главни прозор при затварању"
 
 #: application/gui/preferences/display.py:33
 msgid "Allow multiple instances"
-msgstr ""
+msgstr "Дозволи више инстанци"
 
 #: application/gui/preferences/display.py:34
 msgid "Show toolbar"
-msgstr ""
+msgstr "Прикажи алатницу"
 
 #: application/gui/preferences/display.py:35
 msgid "Show command bar"
-msgstr ""
+msgstr "Прикажи линију команди"
 
 #: application/gui/preferences/display.py:36
 msgid "Show command entry"
-msgstr ""
+msgstr "Прикажи унос команди"
 
 #: application/gui/preferences/display.py:45
 #: application/plugins/sessions/plugin.py:49
 msgid "Tabs"
-msgstr ""
+msgstr "Картице"
 
 #: application/gui/preferences/display.py:49
 msgid "Focus new tab after opening"
-msgstr ""
+msgstr "Фокусирај нову картицу по отварању"
 
 #: application/gui/preferences/display.py:50
 msgid "Show normal button relief"
-msgstr ""
+msgstr "Прикажи нормални рељеф дугмета"
 
 #: application/gui/preferences/display.py:51
 msgid "Show icons instead of text in tab buttons"
-msgstr ""
+msgstr "Прикажи иконе уместо текста на дугмету картице"
 
 #: application/gui/preferences/display.py:52
 msgid "Show close button"
-msgstr ""
+msgstr "Прикажи дугме за затварање"
 
 #: application/gui/preferences/display.py:53
 msgid "Show tab(s) even if there is only one"
-msgstr ""
+msgstr "Прикажи картицу(е) чак и ако је само једна"
 
 #: application/gui/preferences/display.py:54
 msgid "Use Ubuntu coloring method for tab title bars"
-msgstr ""
+msgstr "Користи Убунту метод боја за насловну траку картица"
 
 #: application/gui/preferences/display.py:55
 msgid "Change title bar color when started as super user"
-msgstr ""
+msgstr "Промени боју насловне траке када је покренут као супер корисник"
 
 #: application/gui/preferences/display.py:70
 msgid "Show status bar:"
-msgstr ""
+msgstr "Прикажи статусну траку:"
 
 #: application/gui/preferences/display.py:74
 msgid "Always"
-msgstr ""
+msgstr "Увек"
 
 #: application/gui/preferences/display.py:75
 msgid "When needed"
-msgstr ""
+msgstr "Када је потребно"
 
 #: application/gui/preferences/display.py:76
 msgid "Never"
-msgstr ""
+msgstr "Никад"
 
 #: application/gui/preferences/display.py:86
 msgid "Expanded tabs:"
-msgstr ""
+msgstr "Проширене картице:"
 
 #: application/gui/preferences/display.py:90
 #: application/gui/preferences/item_list.py:88
 #: application/gui/preferences/item_list.py:121
 msgid "None"
-msgstr ""
+msgstr "Ниједан"
 
 #: application/gui/preferences/display.py:92
 msgid "All"
-msgstr ""
+msgstr "Све"
 
 #: application/gui/preferences/display.py:102
 msgid "Other"
-msgstr ""
+msgstr "Друго"
 
 #: application/gui/preferences/display.py:106
 msgid "Hide operation window on minimize"
-msgstr ""
+msgstr "Сакриј прозор са операцијама при минимизовању"
 
 #: application/gui/preferences/display.py:107
 msgid "Show notifications"
-msgstr ""
+msgstr "Прокажи обавештења"
 
 #: application/gui/preferences/display.py:114
 msgid "Size format:"
-msgstr ""
+msgstr "Формат величине:"
 
 #: application/gui/preferences/display.py:118
 msgid "Localized"
-msgstr ""
+msgstr "Локализовано"
 
 #: application/gui/preferences/display.py:119
 msgid "SI <small>(1 kB = 1000 B)</small>"
-msgstr ""
+msgstr "СИ <small>(1 кБ = 1000 Б)</small>"
 
 #: application/gui/preferences/display.py:120
 msgid "IEC <small>(1 KiB = 1024 B)</small>"
-msgstr ""
+msgstr "ИЕЦ <small>(1 КиБ = 1024 Б)</small>"
 
 #: application/gui/preferences/item_list.py:37
 #: application/plugins/file_list/column_editor.py:70
 #: application/plugin_base/item_list.py:236
 msgid "Item List"
-msgstr ""
+msgstr "Листа ставки"
 
 #: application/gui/preferences/item_list.py:42
 msgid "Look & feel"
-msgstr ""
+msgstr "Изглед & осећај"
 
 #: application/gui/preferences/item_list.py:44
 msgid "Directories"
-msgstr ""
+msgstr "Директоријуми"
 
 #: application/gui/preferences/item_list.py:45
 msgid "Columns"
-msgstr ""
+msgstr "Колоне"
 
 #: application/gui/preferences/item_list.py:60
 msgid "Row hinting"
-msgstr ""
+msgstr "Наговештавање редова"
 
 #: application/gui/preferences/item_list.py:61
 msgid "Show hidden files"
-msgstr ""
+msgstr "Прикажи скривена документа"
 
 #: application/gui/preferences/item_list.py:62
 msgid "Case sensitive item sorting"
-msgstr ""
+msgstr "Сортирање ставки осетљиво на велика и мала слова"
 
 #: application/gui/preferences/item_list.py:63
 msgid "Number sensitive item sorting"
-msgstr ""
+msgstr "Сортирање ставки осетљиво на бројеве"
 
 #: application/gui/preferences/item_list.py:64
 msgid "Single click navigation"
-msgstr ""
+msgstr "Навигација једним кликом"
 
 #: application/gui/preferences/item_list.py:65
 msgid "Right click selects items"
-msgstr ""
+msgstr "Десни клик селектује ставке"
 
 #: application/gui/preferences/item_list.py:66
 msgid "Show list headers"
-msgstr ""
+msgstr "Прикажи заглавља листи"
 
 #: application/gui/preferences/item_list.py:67
 msgid "Fast media preview"
-msgstr ""
+msgstr "Брзи преглед медија"
 
 #: application/gui/preferences/item_list.py:68
 msgid "Show tree expanders"
-msgstr ""
+msgstr "Прикажи проширења стабла структуре"
 
 #: application/gui/preferences/item_list.py:69
 msgid "Hide horizontal scrollbar"
-msgstr ""
+msgstr "Сакриј хоризонтални клизач"
 
 #: application/gui/preferences/item_list.py:84
 msgid "Breadcrumbs:"
-msgstr ""
+msgstr "Путање за навигацију:"
 
 #: application/gui/preferences/item_list.py:89
 msgid "Normal"
-msgstr ""
+msgstr "Нормално"
 
 #: application/gui/preferences/item_list.py:90
 msgid "Smart"
-msgstr ""
+msgstr "Паметно"
 
 #: application/gui/preferences/item_list.py:101
 msgid "Access mode format:"

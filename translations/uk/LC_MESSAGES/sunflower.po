@@ -4,6 +4,7 @@
 # 
 # Translators:
 # FIRST AUTHOR Халіманенко Тарас <mr.haltar@yandex.ru>, 2012
+# Mladen Mijatov <meaneye.rcf@gmail.com>, 2015
 # Roman Tuz <ubuntueasy.com@gmail.com>, 2015
 # Халіманенко Тарас <mr.haltar@yandex.ru>, 2012
 msgid ""
@@ -11,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-21 21:04+0200\n"
-"PO-Revision-Date: 2015-01-19 22:38+0000\n"
+"PO-Revision-Date: 2015-03-27 12:12+0000\n"
 "Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/projects/p/sunflower/language/uk/)\n"
 "MIME-Version: 1.0\n"
@@ -1730,7 +1731,7 @@ msgstr ""
 
 #: application/gui/about_window.py:215
 msgid "translator-credits"
-msgstr ""
+msgstr "Roman Tuz <ubuntueasy.com@gmail.com>\nАндрій Кондратьєв <kondratiev.work@gmail.com>\nХаліманенко Тарас <mr.haltar@yandex.ru>"
 
 #: application/gui/error_list.py:21
 msgid "Error list"

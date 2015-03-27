@@ -4,13 +4,14 @@
 # 
 # Translators:
 # Balázs László Batári <bayi@bayi.hu>, 2015
+# Mladen Mijatov <meaneye.rcf@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-21 21:04+0200\n"
-"PO-Revision-Date: 2015-03-10 21:08+0000\n"
-"Last-Translator: Balázs László Batári <bayi@bayi.hu>\n"
+"PO-Revision-Date: 2015-03-27 12:11+0000\n"
+"Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/sunflower/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1720,7 +1721,7 @@ msgstr ""
 
 #: application/gui/about_window.py:215
 msgid "translator-credits"
-msgstr ""
+msgstr "Hungarian - Keringer László <keringer.laszlo@gmail.com>\nHungarian - Táncos Tamás <h868315@gmail.com>"
 
 #: application/gui/error_list.py:21
 msgid "Error list"

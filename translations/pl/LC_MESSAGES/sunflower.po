@@ -4,14 +4,15 @@
 # 
 # Translators:
 # Jakub Dyszkiewicz <144.kuba@gmail.com>, 2011
+# Mladen Mijatov <meaneye.rcf@gmail.com>, 2015
 # Paweł Bandura <gawelx@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-21 21:04+0200\n"
-"PO-Revision-Date: 2015-01-31 17:52+0000\n"
-"Last-Translator: Paweł Bandura <gawelx@gmail.com>\n"
+"PO-Revision-Date: 2015-03-27 12:12+0000\n"
+"Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/sunflower/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1729,7 +1730,7 @@ msgstr "Copyright © 2010-2013 Mladen Mijatov i współpracownicy."
 
 #: application/gui/about_window.py:215
 msgid "translator-credits"
-msgstr ""
+msgstr "Jakub Dyszkiewicz <144.kuba@gmail.com>\nWojciech Kluczka <wojtekkluczka@gmail.com>"
 
 #: application/gui/error_list.py:21
 msgid "Error list"

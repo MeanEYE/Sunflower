@@ -29,6 +29,7 @@ class Option:
 	SILENT = 5
 	SILENT_MERGE = 6
 	SILENT_OVERWRITE = 7
+	FOLLOW_TO_SYMLINK = 8
 
 
 class OperationType:
@@ -527,8 +528,7 @@ class CopyOperation(Operation):
 				relative_path = None
 				source_path = self._source_path
 
-			if ProviderSupport.SYMBOLIC_LINK in self._source.get_support() and \
-				ProviderSupport.SYMBOLIC_LINK in self._destination.get_support():
+			if not self._options[Option.FOLLOW_TO_SYMLINK]:
 				if self._source.is_link(item, relative_to=source_path):
 					self._link_list.append((item, source_path))
 					continue

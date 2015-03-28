@@ -2316,7 +2316,8 @@ class MainWindow(gtk.Window):
 					'trash_files': True,
 					'reserve_size': False,
 					'automount_start': False,
-					'automount_insert': False
+					'automount_insert': False,
+					'follow_to_symlink': False
 				})
 
 		# create default create file/directory dialog options

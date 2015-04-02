@@ -764,7 +764,7 @@ class CopyOperation(Operation):
 
 		# if user skipped this file return
 		if not can_procede:
-			self._file_list.pop(self._file_list.index(file_name))
+			self._file_list.pop(self._file_list.index((file_name, relative_path)))
 
 			# update total size
 			file_stat = self._source.get_stat(file_name, relative_to=source_path)
@@ -821,7 +821,7 @@ class CopyOperation(Operation):
 
 			else:
 				# user didn't want to retry, remove file from list
-				self._file_list.pop(self._file_list.index(file_name))
+				self._file_list.pop(self._file_list.index((file_name, relative_path)))
 
 			# remove amount of copied bytes from total size
 			gobject.idle_add(self._dialog.increment_current_size, -destination_size)
@@ -1034,7 +1034,7 @@ class MoveOperation(CopyOperation):
 
 		# if user skipped this file return
 		if not can_procede:
-			self._file_list.pop(self._file_list.index(file_name))
+			self._file_list.pop(self._file_list.index((file_name, relative_path)))
 			return
 
 		# move file
@@ -1064,7 +1064,7 @@ class MoveOperation(CopyOperation):
 
 			else:
 				# user didn't want to retry, remove file from list
-				self._file_list.pop(self._file_list.index(file_name))
+				self._file_list.pop(self._file_list.index((file_name, relative_path)))
 
 			# exit method
 			return

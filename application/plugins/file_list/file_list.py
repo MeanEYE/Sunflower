@@ -922,7 +922,7 @@ class FileList(ItemList):
 
 			destination_queue = opposite_object.get_monitor_queue()
 			if destination_queue is not None:
-				operation.set_destination_queue(destination)
+				operation.set_destination_queue(destination_queue)
 
 			operation.set_selection(selection)
 			operation.start()

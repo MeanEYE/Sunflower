@@ -19,6 +19,12 @@ class File:
 		elif mode == Mode.APPEND:
 			self._resource = gio.File(path).append_to()
 
+	def __enter__(self):
+		return self._resource
+
+	def __exit__(self, exc_type, exc_val, exc_tb):
+		self.close()
+
 	def close(self):
 		"""Close file"""
 		self._resource.close()

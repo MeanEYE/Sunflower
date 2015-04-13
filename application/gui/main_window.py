@@ -2715,6 +2715,10 @@ class MainWindow(gtk.Window):
 
 		return result
 
+	def get_provider_by_path(self, path):
+		protocol = 'file' if '://' not in path else path.split('://', 1)[0]
+		return self.get_provider_by_protocol(protocol)
+
 	def get_provider_by_protocol(self, protocol):
 		"""Return provider class specified by protocol"""
 		result = None

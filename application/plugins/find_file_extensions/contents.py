@@ -1,6 +1,6 @@
 import gtk
 
-from plugin_base.provider import FileType
+from plugin_base.provider import FileType, Mode
 from plugin_base.find_extension import FindExtension
 
 
@@ -9,6 +9,9 @@ class ContentsFindFiles(FindExtension):
 
 	def __init__(self, parent):
 		FindExtension.__init__(self, parent)
+
+		# connect notify signal
+		parent.connect('notify-start', self.__handle_notify_start)
 
 		# create container
 		vbox = gtk.VBox(False, 0)
@@ -32,6 +35,11 @@ class ContentsFindFiles(FindExtension):
 
 		self.vbox.pack_start(vbox, True, True, 0)
 
+	def __handle_notify_start(self, data=None):
+		"""Handle starting search."""
+		provider = self._parent._application.get_provider_by_path(self._parent._entry_path.get_text())
+		self._provider = provider(self._parent._application)
+
 	def get_title(self):
 		"""Return i18n title for extension"""
 		return _('Content')
@@ -39,7 +47,7 @@ class ContentsFindFiles(FindExtension):
 	def is_path_ok(self, path):
 		"""Check is specified path fits the cirteria"""
 		result = False
-		file_type = self._parent._provider.get_stat(path).type
+		file_type = self._provider.get_stat(path).type
 
 		if file_type is FileType.REGULAR:
 			# get buffer
@@ -47,7 +55,7 @@ class ContentsFindFiles(FindExtension):
 
 			# try finding content in file
 			try:
-				with open(path, 'r') as raw_file:  # make sure file is closed afterwards
+				with self._provider.get_file_handle(path, Mode.READ) as raw_file:  # make sure file is closed afterwards
 					result = text in raw_file.read()
 
 			except IOError:

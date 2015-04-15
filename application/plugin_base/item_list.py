@@ -823,7 +823,10 @@ class ItemList(PluginBase):
 		pass
 
 	def _start_search(self, key=None):
-		"""Shows quick search panel and starts searching"""
+		"""Shows quick search panel, deactivates accelerators and starts searching"""
+		for group in self._accelerator_groups:
+			group.deactivate()
+
 		self._search_panel.show()
 		self._search_entry.grab_focus()
 
@@ -832,10 +835,12 @@ class ItemList(PluginBase):
 			self._search_entry.set_position(len(key))
 
 	def _stop_search(self, widget=None, data=None):
-		"""Hide quick search panel and return focus to item list"""
+		"""Hide quick search panel, activate accelerators and return focus to item list"""
 		self._search_panel.hide()
 
 		if widget is not None:
+			for group in self._accelerator_groups:
+				group.activate(self._parent)
 			self._item_list.grab_focus()
 
 		return False

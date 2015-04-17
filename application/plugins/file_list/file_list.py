@@ -1747,6 +1747,8 @@ class FileList(ItemList):
 		path = None
 		action = gtk.gdk.ACTION_DEFAULT
 
+		self._drag_auto_scroll(widget, x, y)
+
 		try:
 			# get item under cursor
 			path_at_row, position = widget.get_dest_row_at_pos(x, y)
@@ -1768,6 +1770,35 @@ class FileList(ItemList):
 		widget.set_drag_dest_row(path, gtk.TREE_VIEW_DROP_INTO_OR_AFTER)
 
 		return True
+
+	def _drag_auto_scroll(self, widget, x, y):
+		vadj = widget.get_vadjustment()
+		hadj = widget.get_hadjustment()
+
+		if vadj is not None:
+			value, upper, lower, step = vadj.get_value(), vadj.get_upper(), vadj.get_lower(), vadj.get_step_increment()
+			size = vadj.get_page_size()
+			row_height = widget.get_cell_area((0,), widget.get_column(0)).height
+
+			if y < row_height*2:
+				value = value - step if value > lower else lower
+			elif y > (widget.get_allocation().height - row_height*2):
+				value = value + step if value < (upper - size) else upper - size
+
+			vadj.set_value(value)
+			vadj.value_changed()
+
+		if hadj is not None:
+			value, upper, lower, step = hadj.get_value(), hadj.get_upper(), hadj.get_lower(), hadj.get_step_increment()
+			size = hadj.get_page_size()
+
+			if x < 40:
+				value = value - step if value > lower else lower
+			elif x > (widget.get_allocation().width - 40):
+				value = value + step if value < (upper - size) else upper - size
+
+			hadj.set_value(value)
+			hadj.value_changed()
 
 	def _drag_ask(self):
 		"""Show popup menu and return selected action"""

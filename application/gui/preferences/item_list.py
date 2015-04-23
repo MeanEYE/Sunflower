@@ -68,6 +68,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_show_expanders = gtk.CheckButton(_('Show tree expanders'))
 		self._checkbox_hide_scrollbar = gtk.CheckButton(_('Hide horizontal scrollbar'))
 		self._checkbox_second_extension = gtk.CheckButton(_('Support second level extension'))
+		self._checkbox_disable_path_input = gtk.CheckButton(_('Disable path lookup when typing in the path location box'))
 
 		self._checkbox_row_hinting.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
@@ -80,6 +81,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_show_expanders.connect('toggled', self._parent.enable_save)
 		self._checkbox_hide_scrollbar.connect('toggled', self._parent.enable_save)
 		self._checkbox_second_extension.connect('toggled', self._parent.enable_save)
+		self._checkbox_disable_path_input.connect('toggled', self._parent.enable_save)
 
 		# bread crumbs type
 		hbox_breadcrumbs = gtk.HBox(False, 5)
@@ -374,6 +376,7 @@ class ItemListOptions(SettingsPage):
 		vbox_look_and_feel.pack_start(self._checkbox_show_hidden, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_show_expanders, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_hide_scrollbar, False, False, 0)
+		vbox_look_and_feel.pack_start(self._checkbox_disable_path_input, False, False, 0)
 		vbox_look_and_feel.pack_start(hbox_breadcrumbs, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_mode_format, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_grid_lines, False, False, 5)
@@ -662,6 +665,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_show_expanders.set_active(section.get('show_expanders'))
 		self._checkbox_hide_scrollbar.set_active(section.get('hide_horizontal_scrollbar'))
 		self._checkbox_second_extension.set_active(section.get('second_extension'))
+		self._checkbox_disable_path_input.set_active(section.get('disable_path_input'))
 
 		search_modifier = section.get('search_modifier')
 		self._checkbox_control.set_active(search_modifier[0] == '1')
@@ -707,6 +711,7 @@ class ItemListOptions(SettingsPage):
 		section.set('show_expanders', self._checkbox_show_expanders.get_active())
 		section.set('hide_horizontal_scrollbar', self._checkbox_hide_scrollbar.get_active())
 		section.set('second_extension', self._checkbox_second_extension.get_active())
+		section.set('disable_path_input', self._checkbox_disable_path_input.get_active())
 
 		search_modifier = "%d%d%d" % (
 								self._checkbox_control.get_active(),

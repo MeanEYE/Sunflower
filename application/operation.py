@@ -1039,7 +1039,7 @@ class MoveOperation(CopyOperation):
 
 		# move file
 		try:
-			self._source.move_path(
+			self._source.rename_path(
 								file_name,
 								os.path.join(self._destination_path, dest_file),
 								relative_to=source_path

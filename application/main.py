@@ -12,6 +12,12 @@ except:
 	print "Error starting Sunflower, missing GTK 2.0+"
 	sys.exit(1)
 
+try:
+	from setproctitle import setproctitle
+	setproctitle('sunflower')
+except ImportError:
+	pass
+
 # add search path
 application_path = os.path.abspath(os.path.dirname(sys.argv[0]))
 if application_path not in sys.path:

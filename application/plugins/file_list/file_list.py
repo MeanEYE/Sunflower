@@ -696,7 +696,13 @@ class FileList(ItemList):
 	def _create_link(self, widget=None, data=None, original_path=None, hard_link=None):
 		"""Create symbolic or hard link"""
 		result = False
-		provider = self.get_provider()
+		if original_path is None:
+			provider = self._get_other_provider()
+			destintation = self._parent.get_opposite_object(self).path
+		else:
+			provider = self.get_provider()
+			destintation = self.path
+
 		supported_options = provider.get_support()
 
 		if ProviderSupport.SYMBOLIC_LINK in supported_options \
@@ -707,12 +713,10 @@ class FileList(ItemList):
 
 			# set original path in dialog
 			if original_path is None:
-				opposite_object = self._parent.get_opposite_object(self)
-
-				if hasattr(opposite_object, '_get_selection'):
-					original_path = opposite_object._get_selection(relative=False)
+					original_path = self._get_selection(relative=False)
 
 			dialog.set_original_path(original_path)
+			dialog.set_text(os.path.basename(original_path))
 
 			# set hard link dialog option for user
 			if hard_link is not None:
@@ -730,7 +734,7 @@ class FileList(ItemList):
 					provider.link(
 							original_path,
 							link_name,
-							relative_to=self.path,
+							relative_to=destintation,
 							symbolic=not hard_link
 						)
 
@@ -1747,6 +1751,8 @@ class FileList(ItemList):
 		path = None
 		action = gtk.gdk.ACTION_DEFAULT
 
+		self._drag_auto_scroll(widget, x, y)
+
 		try:
 			# get item under cursor
 			path_at_row, position = widget.get_dest_row_at_pos(x, y)
@@ -1768,6 +1774,35 @@ class FileList(ItemList):
 		widget.set_drag_dest_row(path, gtk.TREE_VIEW_DROP_INTO_OR_AFTER)
 
 		return True
+
+	def _drag_auto_scroll(self, widget, x, y):
+		vadj = widget.get_vadjustment()
+		hadj = widget.get_hadjustment()
+
+		if vadj is not None:
+			value, upper, lower, step = vadj.get_value(), vadj.get_upper(), vadj.get_lower(), vadj.get_step_increment()
+			size = vadj.get_page_size()
+			row_height = widget.get_cell_area((0,), widget.get_column(0)).height
+
+			if y < row_height*2:
+				value = value - step if value > lower else lower
+			elif y > (widget.get_allocation().height - row_height*2):
+				value = value + step if value < (upper - size) else upper - size
+
+			vadj.set_value(value)
+			vadj.value_changed()
+
+		if hadj is not None:
+			value, upper, lower, step = hadj.get_value(), hadj.get_upper(), hadj.get_lower(), hadj.get_step_increment()
+			size = hadj.get_page_size()
+
+			if x < 40:
+				value = value - step if value > lower else lower
+			elif x > (widget.get_allocation().width - 40):
+				value = value + step if value < (upper - size) else upper - size
+
+			hadj.set_value(value)
+			hadj.value_changed()
 
 	def _drag_ask(self):
 		"""Show popup menu and return selected action"""

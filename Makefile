@@ -87,7 +87,7 @@ define create_rpm
 endef
 
 # configuration options
-default: version help
+all: version help
 
 $(file_path).tgz:
 	$(info Preparing release...)

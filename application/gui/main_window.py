@@ -2379,6 +2379,7 @@ class MainWindow(gtk.Window):
 					'active_notebook': 0,
 					'size_format': common.SizeFormat.SI,
 					'multiple_instances': False,
+					'network_path_completion': True,
 					'horizontal_split': False
 				})
 

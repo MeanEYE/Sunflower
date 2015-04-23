@@ -94,8 +94,6 @@ class ItemList(PluginBase):
 		scrollbar_horizontal = self._container.get_hscrollbar()
 		scrollbar_horizontal.set_child_visible(not hide_scrollbar)
 
-		self.disable_path_input = section.get('disable_path_input')
-
 		# connect events
 		self._item_list.connect('button-press-event', self._handle_button_press)
 		self._item_list.connect('button-release-event', self._handle_button_press)
@@ -1573,10 +1571,7 @@ class ItemList(PluginBase):
 		path = self.path
 
 		# create dialog
-		if self.disable_path_input==True:
-			dialog = InputDialog(self._parent)
-		else:
-			dialog = PathInputDialog(self._parent)
+		dialog = PathInputDialog(self._parent)
 		dialog.set_title(_('Path entry'))
 		dialog.set_label(_('Navigate to:'))
 		dialog.set_text(path)
@@ -1755,8 +1750,6 @@ class ItemList(PluginBase):
 		hide_scrollbar = section.get('hide_horizontal_scrollbar')
 		scrollbar_horizontal = self._container.get_hscrollbar()
 		scrollbar_horizontal.set_child_visible(not hide_scrollbar)
-
-		self.disable_path_input = section.get('disable_path_input')
 
 		# change change sorting sensitivity
 		self._sort_case_sensitive = section.get('case_sensitive_sort')

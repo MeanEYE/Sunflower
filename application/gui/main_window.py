@@ -2301,8 +2301,7 @@ class MainWindow(gtk.Window):
 					'show_expanders': False,
 					'hide_horizontal_scrollbar': False,
 					'breadcrumbs': 2,
-					'second_extension': False,
-					'disable_path_input': False
+					'second_extension': False
 				})
 
 		# create default operation options

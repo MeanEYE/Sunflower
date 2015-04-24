@@ -206,6 +206,10 @@ class ZipProvider(Provider):
 		"""Set timestamp for specified path"""
 		pass
 
+	def move_path(self, source, destination, relative_to=None):
+		"""Rename file/directory """
+		pass
+
 	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""
 		pass

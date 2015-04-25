@@ -1726,7 +1726,7 @@ class ItemList(PluginBase):
 				p = path
 				while p != '/' and p != '':
 					mime_type = self._parent.associations_manager.get_mime_type(path=p)
-					if self._parent.is_archive_supported(mime_type):
+					if self._parent.is_archive_supported(mime_type) and not p.startswith('ftp://'):
 						result = self.create_provider(p, True)
 						break
 					p = os.path.dirname(p)

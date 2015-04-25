@@ -427,7 +427,7 @@ class FileList(ItemList):
 
 		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
-		is_archive = self._parent.is_archive_supported(mime_type)
+		is_archive = self._parent.is_archive_supported(mime_type) and not selected_file.startswith('ftp://')
 
 		# preemptively create provider if selected item is archive
 		if not is_parent and is_archive and not self.provider_exists(selected_file):

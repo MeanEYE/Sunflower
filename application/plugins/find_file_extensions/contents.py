@@ -37,8 +37,8 @@ class ContentsFindFiles(FindExtension):
 
 	def __handle_notify_start(self, data=None):
 		"""Handle starting search."""
-		provider = self._parent._application.get_provider_by_path(self._parent._entry_path.get_text())
-		self._provider = provider(self._parent._application)
+		Provider = self._parent._application.get_provider_by_path(self._parent._entry_path.get_text())
+		self._provider = Provider(self._parent._application)
 
 	def get_title(self):
 		"""Return i18n title for extension"""

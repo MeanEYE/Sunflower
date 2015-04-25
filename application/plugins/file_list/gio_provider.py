@@ -255,7 +255,7 @@ class GioProvider(Provider):
 				)
 
 	def move_path(self, source, destination, relative_to=None):
-		"""Move file/directory """
+		"""Move path on same file system to a different parent node """
 		real_source = self._real_path(source, relative_to)
 		gio.File(real_source).move(gio.File(destination))
 

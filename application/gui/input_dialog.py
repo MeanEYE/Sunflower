@@ -700,25 +700,25 @@ class CopyDialog:
 		source_set_owner = ProviderSupport.SET_OWNER in source_support
 		source_set_mode = ProviderSupport.SET_ACCESS in source_support
 		source_set_timestamp = ProviderSupport.SET_TIMESTAMP in source_support
-		source_symlink = ProviderSupport.SYMBOLIC_LINK in source_support
+		source_symlink_support = ProviderSupport.SYMBOLIC_LINK in source_support
 
 		if self._destination_provider is not None:
 			destination_support = self._destination_provider.get_support()
 			destination_set_owner = ProviderSupport.SET_OWNER in destination_support
 			destination_set_mode = ProviderSupport.SET_ACCESS in destination_support
 			destination_set_timestamp = ProviderSupport.SET_TIMESTAMP in destination_support
-			destination_symlink = ProviderSupport.SYMBOLIC_LINK in source_support
+			destination_symlink_support = ProviderSupport.SYMBOLIC_LINK in source_support
 
 		else:
 			destination_set_owner = False
 			destination_set_mode = False
 			destination_set_timestamp = False
-			destination_symlink = False
+			destination_symlink_support = False
 
 		provider_set_owner = source_set_owner and destination_set_owner
 		provider_set_mode = source_set_mode and destination_set_mode
 		provider_set_timestamp = source_set_timestamp and destination_set_timestamp
-		provider_symlink = source_symlink and destination_symlink
+		symlinks_supported = source_symlink_support and destination_symlink_support
 
 		# disable checkboxes that are not supported by provider
 		if not provider_set_owner:
@@ -733,7 +733,7 @@ class CopyDialog:
 			self.checkbox_timestamp.set_sensitive(False)
 			self.checkbox_timestamp.set_tooltip_text(_('Not supported by file system provider'))
 
-		if not provider_symlink:
+		if not symlinks_supported:
 			self.checkbox_symlink.set_sensitive(False)
 			self.checkbox_symlink.set_tooltip_text(_('Not supported by file system provider'))
 

@@ -29,7 +29,7 @@ class Option:
 	SILENT = 5
 	SILENT_MERGE = 6
 	SILENT_OVERWRITE = 7
-	FOLLOW_TO_SYMLINK = 8
+	FOLLOW_SYMLINK = 8
 
 
 class OperationType:

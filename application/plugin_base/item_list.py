@@ -1647,7 +1647,7 @@ class ItemList(PluginBase):
 				result = Provider(self, path)
 
 				# set archive file handle
-				handle = current_provider.get_file_handle(path, FileMode.READ_APPEND)
+				handle = current_provider.get_file_handle(path, FileMode.READ)
 				result.set_archive_handle(handle)
 
 				# cache provider locally
@@ -1677,14 +1677,24 @@ class ItemList(PluginBase):
 		if path is None:
 			return self._current_provider
 
-		# create a local provider if no provider exists yet as fallback in case we are opening an archive
-		if len(self._providers) == 0:
+		# remove providers no longer needed as path is not contained
+		for provider_path, provider in self._providers.items():
+			if not path.startswith(provider_path):
+				provider.release_archive_handle()
+				del self._providers[provider_path]
 
-			Provider = self._parent.get_provider_by_protocol('file')
-			result = Provider(self, user.home)
+		# create a (e.g. local) provider as fallback in case we are opening an archive
+		if len(self._providers) == 0:
+			if '://' in path:
+				protocol, p = (path.split('://')[0], path)
+			else:
+				protocol, p = ('file', user.home)
+
+			Provider = self._parent.get_provider_by_protocol(protocol)
+			result = Provider(self, p)
 
 			# cache provider for later use
-			root_path = result.get_root_path(user.home)
+			root_path = result.get_root_path(p)
 			self._providers[root_path] = result
 			self._current_provider = result
 
@@ -1707,17 +1717,12 @@ class ItemList(PluginBase):
 					longest_path = len(provider_path)
 					matching_provider = provider
 
-				elif not path.startswith(provider_path):
-					# provider is no longer needed as path is not contained
-					provider.release_archive_handle()
-					del self._providers[provider_path]
-
 			result = matching_provider
 
-			# matched provider can't handle path - path is not directory and later provider.list_dir(path) will fail
-			if not result.is_dir(path) and '://' not in path:
+			# found provider but path is not directory and provider.list_dir(path) will fail later if called
+			if result is not None and not result.is_dir(path):
 				# try creating an archive provider
-				# handle path into archive itself e.g. /home/user/some.zip/subdir1/subdir2
+				# handle deep path into archive e.g. /home/user/some.zip/subdir1/subdir2 or smb://server/share/foo.zip/bar
 				p = path
 				while p != '/' and p != '':
 					mime_type = self._parent.associations_manager.get_mime_type(path=p)

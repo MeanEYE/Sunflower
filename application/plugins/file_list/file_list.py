@@ -6,6 +6,7 @@ import user
 import fnmatch
 import common
 import gobject
+import traceback
 
 from column_editor import FileList_ColumnEditor
 from gui.input_dialog import ApplicationSelectDialog
@@ -2010,7 +2011,8 @@ class FileList(ItemList):
 
 			except Exception as error:
 				# report error first
-				print 'Load directory error: ', error.message
+				print "Load directory error: {0} - path={1}".format(error.message, path)
+				traceback.print_exc()
 
 				# clear locks and exit
 				self._thread_active.clear()

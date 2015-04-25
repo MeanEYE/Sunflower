@@ -12,7 +12,7 @@ class ZipProvider(Provider):
 	"""Provider for handling of ZIP archives."""
 
 	is_local = False
-	protocol = None
+	protocol = 'zip'
 	archives = (
 			'application/zip',
 			'application/jar',

@@ -169,11 +169,11 @@ class MainWindow(gtk.Window):
 
 		menu_items = (
 			{
-				'label': _('File'),
+				'label': _('_File'),
 				'name': 'file',
 				'submenu': (
 					{
-						'label': _('New tab'),
+						'label': _('New _tab'),
 						'name': 'new_tab',
 						'type': 'image',
 						'image': 'tab-new',
@@ -185,7 +185,7 @@ class MainWindow(gtk.Window):
 						'type': 'separator',
 					},
 					{
-						'label': _('Create file'),
+						'label': _('Create _file'),
 						'name': 'create_file',
 						'type': 'image',
 						'stock': gtk.STOCK_NEW,
@@ -194,7 +194,7 @@ class MainWindow(gtk.Window):
 						'path': '<Sunflower>/File/CreateFile',
 					},
 					{
-						'label': _('Create directory'),
+						'label': _('Create _directory'),
 						'name': 'create_directory',
 						'type': 'image',
 						'image': 'folder-new',
@@ -280,7 +280,7 @@ class MainWindow(gtk.Window):
 						'type': 'separator',
 					},
 					{
-						'label': _('Send to...'),
+						'label': _('_Send to...'),
 						'name': 'send_to',
 						'type': 'image',
 						'image': 'document-send',
@@ -326,7 +326,7 @@ class MainWindow(gtk.Window):
 				),
 			},
 			{
-				'label': _('Mark'),
+				'label': _('_Mark'),
 				'submenu': (
 					{
 						'label': _('_Select all'),
@@ -381,11 +381,11 @@ class MainWindow(gtk.Window):
 				)
 			},
 			{
-				'label': _('Tools'),
+				'label': _('_Tools'),
 				'name': 'tools',
 				'submenu': (
 					{
-						'label': _('Find files'),
+						'label': _('_Find files'),
 						'name': 'find_files',
 						'type': 'image',
 						'image': 'system-search',
@@ -393,31 +393,31 @@ class MainWindow(gtk.Window):
 						'callback': self.show_find_files
 					},
 					{
-						'label': _('Find duplicate files'),
+						'label': _('Find _duplicate files'),
 						'name': 'find_duplicate_files',
 						'path': '<Sunflower>/Tools/FindDuplicateFiles'
 					},
 					{
-						'label': _('Synchronize directories'),
+						'label': _('_Synchronize directories'),
 						'name': 'synchronize_directories',
 						'path': '<Sunflower>/Tools/SynchronizeDirectories'
 					},
 					{'type': 'separator'},
 					{
-						'label': _('Advanced rename'),
+						'label': _('Advanced _rename'),
 						'name': 'advanced_rename',
 						'path': '<Sunflower>/Tools/AdvancedRename',
 						'callback': self.show_advanced_rename,
 					},
 					{'type': 'separator'},
 					{
-						'label': _('Mount manager'),
+						'label': _('_Mount manager'),
 						'name': 'mount_manager',
 						'path': '<Sunflower>/Tools/MountManager',
 						'callback': self.mount_manager.show,
 					},
 					{
-						'label': _('Keyring manager'),
+						'label': _('_Keyring manager'),
 						'name': 'keyring_manager',
 						'path': '<Sunflower>/Tools/KeyringManager',
 						'callback': self.show_keyring_manager,
@@ -425,7 +425,7 @@ class MainWindow(gtk.Window):
 				)
 			},
 			{
-				'label': _('View'),
+				'label': _('_View'),
 				'submenu': (
 					{
 						'label': _('Ful_lscreen'),
@@ -499,11 +499,11 @@ class MainWindow(gtk.Window):
 				)
 			},
 			{
-				'label': _('Commands'),
+				'label': _('_Commands'),
 				'name': 'commands',
 			},
 			{
-				'label': _('Operations'),
+				'label': _('_Operations'),
 				'name': 'operations',
 				'submenu': (
 					{
@@ -513,7 +513,7 @@ class MainWindow(gtk.Window):
 				)
 			},
 			{
-				'label': _('Help'),
+				'label': _('_Help'),
 				'submenu': (
 					{
 						'label': _('_Home page'),

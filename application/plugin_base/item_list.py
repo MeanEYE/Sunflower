@@ -1685,18 +1685,7 @@ class ItemList(PluginBase):
 
 		# create a (e.g. local) provider as fallback in case we are opening an archive
 		if len(self._providers) == 0:
-			if '://' in path:
-				protocol, p = (path.split('://')[0], path)
-			else:
-				protocol, p = ('file', user.home)
-
-			Provider = self._parent.get_provider_by_protocol(protocol)
-			result = Provider(self, p)
-
-			# cache provider for later use
-			root_path = result.get_root_path(p)
-			self._providers[root_path] = result
-			self._current_provider = result
+			self._current_provider = self.create_provider(path, False)
 
 		# check if there is a provider for specified path
 		if path in self._providers:

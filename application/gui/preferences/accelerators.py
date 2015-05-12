@@ -200,7 +200,16 @@ class AcceleratorOptions(SettingsPage):
 		accel_iter = self._accels.get_iter(path)
 
 		if accel_iter is not None:
-			self._edit_accel(accel_iter, 0, 0, primary)
+			column_key = Column.PRIMARY_KEY if primary else Column.SECONDARY_KEY
+			column_mods = Column.PRIMARY_MODS if primary else Column.SECONDARY_MODS
+
+			keyval = self._accels.get_value(accel_iter, column_key)
+			modifier = self._accels.get_value(accel_iter, column_mods)
+
+			if keyval == 0 and modifier == 0:
+				self.__accel_edited(widget, path, gtk.gdk.keyval_from_name('BackSpace'), 0, None, primary)
+			else:
+				self.__change_accelerator(accel_iter, 0, 0, primary)
 
 	def _populate_list(self):
 		"""Update accelerator list"""

@@ -207,7 +207,7 @@ class AcceleratorOptions(SettingsPage):
 			modifier = self._accels.get_value(accel_iter, column_mods)
 
 			if keyval == 0 and modifier == 0:
-				self.__accel_edited(widget, path, gtk.gdk.keyval_from_name('BackSpace'), 0, None, primary)
+				self.__accel_edited(widget, path, gtk.keysyms.BackSpace, 0, None, primary)
 			else:
 				self.__change_accelerator(accel_iter, 0, 0, primary)
 

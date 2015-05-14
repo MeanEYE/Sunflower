@@ -563,7 +563,7 @@ class DirectoryCreateDialog(CreateDialog):
 class CopyDialog:
 	"""Dialog which will ask user for additional options before copying"""
 
-	def __init__(self, application, source_provider, destination_provider, path):
+	def __init__(self, application, source_provider, destination_provider, destination_path):
 		self._dialog = gtk.Dialog(parent=application)
 
 		self._application = application
@@ -589,7 +589,7 @@ class CopyDialog:
 		self.label_destination.set_use_markup(True)
 
 		self.entry_destination = gtk.Entry()
-		self.entry_destination.set_text(path)
+		self.entry_destination.set_text(destination_path)
 		self.entry_destination.set_editable(False)
 		self.entry_destination.connect('activate', self._confirm_entry)
 

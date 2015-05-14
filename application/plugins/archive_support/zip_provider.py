@@ -106,19 +106,20 @@ class ZipProvider(Provider):
 
 	def remove_directory(self, path, recursive, relative_to=None):
 		"""Remove directory and optionally its content"""
-		pass
+		raise RuntimeError("Unsupported operation - remove_directory(path={0}, recursive={1}, relative_to={2})".format(path, recursive, relative_to))
 
 	def remove_file(self, path, relative_to=None):
 		"""Remove file"""
-		pass
+		raise RuntimeError("Unsupported operation - remove_file(path={0}, relative_to={1})".format(path, relative_to))
 
 	def create_file(self, path, mode=None, relative_to=None):
 		"""Create empty file with specified mode set"""
 		pass
+		raise RuntimeError("Unsupported operation - create_file(path={0})".format(path))
 
 	def create_directory(self, path, mode=None, relative_to=None):
 		"""Create directory with specified mode set"""
-		pass
+		raise RuntimeError("Unsupported operation - create_directory(path={0})".format(path))
 
 	def get_file_handle(self, path, mode, relative_to=None):
 		"""Open path in specified mode and return its handle"""
@@ -205,11 +206,11 @@ class ZipProvider(Provider):
 
 	def set_timestamp(self, path, access=None, modify=None, change=None, relative_to=None):
 		"""Set timestamp for specified path"""
-		pass
+		raise RuntimeError("Unsupported operation - set_timestamp(path={0})".format(path))
 
 	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""
-		pass
+		raise RuntimeError("Unsupported operation - rename_path(source={0}, destination={1}, relative_to={2})".format(source, destination, relative_to))
 
 	def list_dir(self, path, relative_to=None):
 		"""Get directory list."""

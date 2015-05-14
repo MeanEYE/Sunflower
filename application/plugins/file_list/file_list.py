@@ -874,7 +874,8 @@ class FileList(ItemList):
 									self._parent,
 									source_provider,
 									destination_provider,
-									result[1]  # options from dialog
+									result[1],  # options from dialog
+									self.path
 								)
 
 			# set event queue
@@ -917,7 +918,8 @@ class FileList(ItemList):
 									self._parent,
 									source_provider,
 									destination_provider,
-									result[1]  # options from dialog
+									result[1],  # options from dialog
+									self.path
 								)
 
 			# set event queues

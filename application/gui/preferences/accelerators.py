@@ -143,24 +143,25 @@ class AcceleratorOptions(SettingsPage):
 
 	def __check_collisions(self, keyval, modifier):
 		result = []
-		accelerator_manager = self._application.accelerator_manager
+		if (keyval, modifier) != (0, 0):
+			accelerator_manager = self._application.accelerator_manager
 
-		for row in self._accels:
-			group_name = self._accels.get_value(row.iter, Column.NAME)
-			group = accelerator_manager._get_group_by_name(group_name)
+			for row in self._accels:
+				group_name = self._accels.get_value(row.iter, Column.NAME)
+				group = accelerator_manager._get_group_by_name(group_name)
+				
+				for child in row.iterchildren():
+					name = self._accels.get_value(child.iter, Column.NAME)
+					p_key = self._accels.get_value(child.iter, Column.PRIMARY_KEY)
+					p_mod = self._accels.get_value(child.iter, Column.PRIMARY_MODS)
+					s_key = self._accels.get_value(child.iter, Column.SECONDARY_KEY)
+					s_mod = self._accels.get_value(child.iter, Column.SECONDARY_MODS)
 
-			for child in row.iterchildren():
-				name = self._accels.get_value(child.iter, Column.NAME)
-				p_key = self._accels.get_value(child.iter, Column.PRIMARY_KEY)
-				p_mod = self._accels.get_value(child.iter, Column.PRIMARY_MODS)
-				s_key = self._accels.get_value(child.iter, Column.SECONDARY_KEY)
-				s_mod = self._accels.get_value(child.iter, Column.SECONDARY_MODS)
-
-				if (keyval, modifier) != (0, 0):
 					if (keyval, modifier) == (p_key, p_mod):
 						result.append((group, name, True))
 					if (keyval, modifier) == (s_key, s_mod):
 						result.append((group, name, False))
+
 		return result
 
 	def __accel_edited(self, widget, path, keyval, modifier, hwcode, primary):

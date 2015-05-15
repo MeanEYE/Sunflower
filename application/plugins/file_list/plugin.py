@@ -1,7 +1,7 @@
 from file_list import FileList
 from trash_list import TrashList
 from gio_extension import SambaExtension, FtpExtension, DavExtension, SftpExtension
-from gio_provider import NetworkProvider, TrashProvider, DavProvider, DavsProvider
+from gio_provider import NetworkProvider, TrashProvider, DavProvider, DavsProvider, Gphoto2Provider, MtpProvider
 from gio_provider import SambaProvider, FtpProvider, SftpProvider
 from local_provider import LocalProvider
 
@@ -20,6 +20,8 @@ def register_plugin(application):
 	application.register_provider(TrashProvider)
 	application.register_provider(DavProvider)
 	application.register_provider(DavsProvider)
+	application.register_provider(Gphoto2Provider)
+	application.register_provider(MtpProvider)
 
 	# register mount manager extension
 	application.register_mount_manager_extension(SambaExtension)

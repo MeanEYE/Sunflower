@@ -42,11 +42,21 @@ class MountsManager:
 		mount_uri = mount.get_root().get_uri()
 		volume = mount.get_volume()
 
+		# check if mount has been added as volume already
+		mount_already_in_volume_list = False
+		for v in self.window._volume_list:
+			if v.get_activation_root() is not None and mount_uri == v.get_activation_root().get_uri():
+				mount_already_in_volume_list = True
+
+		# sometimes this method gets called twice for the same mount - ignore call when the volume is not set properly
+		if mount_already_in_volume_list and volume is None:
+			return
+
 		# if mount has volume, set mounted flag
 		if volume is not None:
 			self.window._volume_mounted(volume)
 
-		# add mount to the list
+		# add mount to the list in Mount Manager window
 		self.window._notify_mount_add(mount_icon, mount.get_name(), mount_uri)
 
 		# add bookmark menu item

@@ -1,4 +1,6 @@
 import os
+import chardet
+import codecs
 import gtk
 import pango
 import gobject
@@ -175,6 +177,11 @@ class Viewer:
 		text_view.set_editable(False)
 		text_view.set_cursor_visible(True)
 		text_view.modify_font(font)
+
+		# try to detect file character encoding and convert to Unicode
+		encoding = chardet.detect(content)['encoding']
+		if encoding is not None:
+			content = codecs.decode(content, encoding)
 
 		text_view.get_buffer().set_text(content)
 

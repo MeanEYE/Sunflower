@@ -243,7 +243,7 @@ class MainWindow(gtk.Window):
 				)
 			},
 			{
-				'label': _('Edit'),
+				'label': _('_Edit'),
 				'submenu': (
 					{
 						'label': _('Cu_t'),

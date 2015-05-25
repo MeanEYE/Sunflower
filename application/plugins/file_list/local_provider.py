@@ -202,6 +202,10 @@ class LocalProvider(Provider):
 		real_path = self._real_path(path, relative_to)
 		os.utime(real_path, (access, modify))
 
+	def move_path(self, source, destination, relative_to=None):
+		"""Move path on same file system to a different parent node """
+		return self.rename_path(source,destination,relative_to)
+
 	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""
 		if relative_to is None:

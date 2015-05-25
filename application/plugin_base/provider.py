@@ -221,6 +221,10 @@ class Provider:
 		"""Instead of deleting, move path to the trash"""
 		pass
 
+	def move_path(self, source, destination, relative_to=None):
+		"""Move path on same file system to a different parent node """
+		pass
+
 	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""
 		pass

@@ -641,7 +641,7 @@ class CopyOperation(Operation):
 
 	def _scan_directory(self, directory, relative_path=None):
 		"""Recursively scan directory and populate list"""
-		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
+		source_path = self._source_path if relative_path is None else self._source._real_path(self._source_path,relative_path)
 		try:
 			# try to get listing from directory
 			item_list = self._source.list_dir(directory, relative_to=source_path)
@@ -697,7 +697,7 @@ class CopyOperation(Operation):
 
 	def _create_directory(self, directory, relative_path=None):
 		"""Create specified directory"""
-		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
+		source_path = self._source_path if relative_path is None else self._source._real_path(self._source_path,relative_path)
 		file_stat = self._source.get_stat(directory, relative_to=source_path)
 		mode = file_stat.mode if self._options[Option.SET_MODE] else 0755
 
@@ -739,7 +739,7 @@ class CopyOperation(Operation):
 	def _copy_file(self, file_name, relative_path=None):
 		"""Copy file content"""
 		can_procede = True
-		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
+		source_path = self._source_path if relative_path is None else self._source._real_path(self._source_path,relative_path)
 		dest_file = file_name
 		sh = None
 		dh = None
@@ -986,7 +986,7 @@ class MoveOperation(CopyOperation):
 
 	def _remove_path(self, path, item_list, relative_path=None):
 		"""Remove path"""
-		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
+		source_path = self._source_path if relative_path is None else self._source._real_path(self._source_path, relative_path)
 		try:
 			# try removing specified path
 			self._source.remove_path(path, relative_to=source_path)
@@ -1015,7 +1015,7 @@ class MoveOperation(CopyOperation):
 	def _move_file(self, file_name, relative_path=None):
 		"""Move specified file using provider rename method"""
 		can_procede = True
-		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
+		source_path = self._source_path if relative_path is None else self._source._real_path(self._source_path,relative_path)
 		dest_file = file_name
 
 		# check if destination file exists
@@ -1027,7 +1027,7 @@ class MoveOperation(CopyOperation):
 
 				# get new name if user specified
 				if options[OverwriteOption.RENAME]:
-					dest_file = os.path.join(
+					dest_file = self._destination._real_path(
 					                    os.path.dirname(file_name),
 					                    options[OverwriteOption.NEW_NAME]
 					                )
@@ -1039,9 +1039,9 @@ class MoveOperation(CopyOperation):
 
 		# move file
 		try:
-			self._source.rename_path(
+			self._source.move_path(
 								file_name,
-								os.path.join(self._destination_path, dest_file),
+								self._destination._real_path(dest_file,self._destination_path),
 								relative_to=source_path
 							)
 

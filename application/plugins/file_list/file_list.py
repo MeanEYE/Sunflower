@@ -1966,8 +1966,13 @@ class FileList(ItemList):
 		# cache objects and settings
 		show_hidden = self._parent.options.section('item_list').get('show_hidden')
 
+		# create temp path for comparison as root paths are maintained without trailing slash
+		path_without_trailing_slash = path
+		if path != '/' and path[-1] == '/':
+			path_without_trailing_slash = path[:-1]
+
 		# add parent option for parent directory
-		if path != self.get_provider().get_root_path(path):
+		if path_without_trailing_slash != self.get_provider().get_root_path(path):
 			if parent is None:
 				self._store.append(parent, (
 								os.path.pardir,

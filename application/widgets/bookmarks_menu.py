@@ -161,8 +161,8 @@ class BookmarksMenu:
 
 	def __open_selected(self, widget, path):
 		"""Open selected item in either active, or new tab"""
-		# unquote path before giving it to handler
-		if path is not None and '://' in path:
+		# unquote path before giving it to handler unless it is archive path which has loads of quoted data embedded
+		if path is not None and '://' in path and not path.startswith('archive://'):
 			data = path.split('://', 1)
 			data[1] = urllib.unquote(data[1])
 			path = '://'.join(data)

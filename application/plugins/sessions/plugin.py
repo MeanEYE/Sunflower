@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk, Gio, GLib
 from widgets.settings_page import SettingsPage
 
 
@@ -275,21 +275,20 @@ class SessionManager:
 						})
 
 		# create actions
-		self._manage_action = Gio.SimpleAction.new('manage-sessions', None)
-		self._manage_action.connect('activate', self._switch_session)
-		self._save_action = Gio.SimpleAction.new('session-options.save-session', None)
+		self._manage_action = Gio.SimpleAction.new('manage', None)
+		self._save_action = Gio.SimpleAction.new('save', None)
 
-		# add actions to application
-		self._application.get_application().add_action(self._manage_action)
-		self._application.get_application().add_action(self._save_action)
+		# connect signals
+		self._manage_action.connect('activate', self._manage_sessions)
+		self._save_action.connect('activate', self._save_session)
 
 		# create menus
-		self._popover_menu = Gio.Menu()
-		self._sessions_menu = Gio.Menu()
-		self._options_menu = Gio.Menu()
+		self._popover_menu = Gio.Menu.new()
+		self._sessions_menu = Gio.Menu.new()
+		self._options_menu = Gio.Menu.new()
 
-		self._options_menu.append(_('Manage sessions'), 'session-options.manage-sessions')
-		self._options_menu.append(_('Save session'), 'session-options.save-session')
+		self._options_menu.append(_('Manage sessions'), 'sessions.manage')
+		self._options_menu.append(_('Save session'), 'sessions.save')
 
 		self._popover_menu.append_section(None, self._sessions_menu)
 		self._popover_menu.append_section(None, self._options_menu)
@@ -297,6 +296,12 @@ class SessionManager:
 		# create container for header bar
 		self._button = Gtk.MenuButton.new()
 		self._button.set_menu_model(self._popover_menu)
+
+		self._action_group = Gio.SimpleActionGroup()
+		self._action_group.add_action(self._manage_action)
+		self._action_group.add_action(self._save_action)
+
+		self._button.insert_action_group('sessions', self._action_group)
 
 		# add session button to header bar
 		self._application.header_bar.pack_end(self._button)
@@ -309,13 +314,23 @@ class SessionManager:
 		"""Update main window session menu"""
 		self._sessions_menu.remove_all()
 
+		for action_name in self._action_group.list_actions():
+			if action_name.startswith('switch_to_'):
+				self._action_group.remove(action_name)
+
 		# get current session index
 		current_session = self._options.section('sessions').get('current')
 
 		# iterate over saved sessions and create menu item for each
 		for index, session in enumerate(self._options.section('sessions').get('list')):
 			session_name = session.get('name')
-			self._sessions_menu.append(session_name, 'session.{0}'.format(session_name))
+			action_name = 'switch_to_{0}'.format(index)
+
+			action = Gio.SimpleAction.new(action_name, None)
+			action.connect('activate', self._switch_session, index)
+			self._action_group.add_action(action)
+
+			self._sessions_menu.append(session_name, 'sessions.{0}'.format(action_name))
 
 	def _update_menu_item(self):
 		"""Update main window menu item to contain session name"""
@@ -323,7 +338,7 @@ class SessionManager:
 		session_name = self._options.section('sessions').get('list')[current_session].get('name')
 		self._button.set_label(session_name)
 
-	def _switch_session(self, action, session_index):
+	def _switch_session(self, action, data, session_index):
 		"""Handle clicking on session menu"""
 		left_section = self._options.section('left')
 		right_section = self._options.section('right')
@@ -400,3 +415,7 @@ class SessionManager:
 
 		# save options
 		self._options.save()
+
+	def _manage_sessions(self, widget):
+		"""docstring for _manage_sessions"""
+		pass

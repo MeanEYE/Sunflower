@@ -19,7 +19,7 @@ class Sunflower(Gtk.Application):
 	"""Main application instance."""
 
 	def __init__(self):
-		Gtk.Application.__init__(self)
+		Gtk.Application.__init__(self, application_id='org.sunflower')
 
 	def do_activate(self):
 		"""Handle application activation."""

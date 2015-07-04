@@ -280,8 +280,8 @@ class SessionManager:
 		self._save_action = Gio.SimpleAction.new('session-options.save-session', None)
 
 		# add actions to application
-		# self._application.add_action(self._manage_action)
-		# self._application.add_action(self._save_action)
+		self._application.get_application().add_action(self._manage_action)
+		self._application.get_application().add_action(self._save_action)
 
 		# create menus
 		self._popover_menu = Gio.Menu()

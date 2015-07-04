@@ -52,7 +52,7 @@ from gui.input_dialog import InputDialog, AddBookmarkDialog
 from gui.keyring_manager_window import KeyringManagerWindow
 
 
-class MainWindow(Gtk.Window):
+class MainWindow(Gtk.ApplicationWindow):
 	"""Main application class"""
 
 	# in order to ease version comparing build number will
@@ -66,9 +66,9 @@ class MainWindow(Gtk.Window):
 
 	NAUTILUS_SEND_TO_INSTALLED = common.executable_exists('nautilus-sendto')
 
-	def __init__(self):
+	def __init__(self, application):
 		# create main window and other widgets
-		GObject.GObject.__init__(self, type=Gtk.WindowType.TOPLEVEL)
+		Gtk.Window.__init__(self, application=application)
 
 		# set application name
 		GLib.set_application_name('Sunflower')
@@ -116,7 +116,7 @@ class MainWindow(Gtk.Window):
 
 		# set window title
 		self.set_title(_('Sunflower'))
-		self.set_wmclass('Sunflower', 'Sunflower')
+		# self.set_wmclass('Sunflower', 'Sunflower')
 
 		# set window icon
 		self.icon_manager.set_window_icon(self)
@@ -184,7 +184,7 @@ class MainWindow(Gtk.Window):
 		self._in_fullscreen = False
 
 		# create menu items
-		self.menu_bar = Gtk.MenuBar()
+		self.menu_bar = Gtk.MenuBar.new()
 
 		menu_items = (
 			{
@@ -599,10 +599,10 @@ class MainWindow(Gtk.Window):
 		self.bookmarks = BookmarksMenu(self)
 
 		# mounts menu
-		mounts_image = Gtk.Image()
+		mounts_image = Gtk.Image.new()
 		mounts_image.set_from_icon_name('computer', Gtk.IconSize.MENU)
 
-		self._menu_item_mounts = Gtk.ImageMenuItem()
+		self._menu_item_mounts = Gtk.ImageMenuItem.new()
 		self._menu_item_mounts.set_label(_('Mounts'))
 		self._menu_item_mounts.set_image(mounts_image)
 		self._menu_item_mounts.show()
@@ -617,14 +617,14 @@ class MainWindow(Gtk.Window):
 		# create notebooks
 		self._paned = Gtk.VPaned() if self.options.get('horizontal_split') else Gtk.HPaned()
 
-		self.left_notebook = Gtk.Notebook()
+		self.left_notebook = Gtk.Notebook.new()
 		self.left_notebook.set_scrollable(True)
 		self.left_notebook.connect('focus-in-event', self._transfer_focus)
 		self.left_notebook.connect('page-added', self._page_added)
 		self.left_notebook.connect('switch-page', self._page_switched)
 		self.left_notebook.set_group_name('panel')
 
-		self.right_notebook = Gtk.Notebook()
+		self.right_notebook = Gtk.Notebook.new()
 		self.right_notebook.set_scrollable(True)
 		self.right_notebook.connect('focus-in-event', self._transfer_focus)
 		self.right_notebook.connect('page-added', self._page_added)

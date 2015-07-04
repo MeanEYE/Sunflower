@@ -316,7 +316,7 @@ class SessionManager:
 
 		for action_name in self._action_group.list_actions():
 			if action_name.startswith('switch_to_'):
-				self._action_group.remove(action_name)
+				self._action_group.remove_action(action_name)
 
 		# get current session index
 		current_session = self._options.section('sessions').get('current')

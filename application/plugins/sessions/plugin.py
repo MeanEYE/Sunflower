@@ -297,7 +297,7 @@ class SessionManager:
 		self._button = Gtk.MenuButton.new()
 		self._button.set_menu_model(self._popover_menu)
 
-		self._action_group = Gio.SimpleActionGroup()
+		self._action_group = Gio.SimpleActionGroup.new()
 		self._action_group.add_action(self._manage_action)
 		self._action_group.add_action(self._save_action)
 
@@ -395,8 +395,7 @@ class SessionManager:
 		self._update_menu_item()
 
 	def _save_session(self, *ignore):
-		"""Handle clicking on 'save session' menu item"""
-
+		"""Handle creating a new session."""
 		section = self._options.section('sessions')
 		session_list = section.get('list')
 		current_session_index = section.get('current')
@@ -416,6 +415,6 @@ class SessionManager:
 		# save options
 		self._options.save()
 
-	def _manage_sessions(self, widget):
-		"""docstring for _manage_sessions"""
-		pass
+	def _manage_sessions(self, widget, data=None):
+		"""Show preferences window for managing sessions."""
+		self._application.preferences_window._show(widget, 'sessions')

@@ -116,7 +116,8 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# set window title
 		self.set_title(_('Sunflower'))
-		# self.set_wmclass('Sunflower', 'Sunflower')
+		#self.set_wmclass('Sunflower', 'Sunflower')
+		self.set_border_width(5)
 
 		# set window icon
 		self.icon_manager.set_window_icon(self)
@@ -171,11 +172,21 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.set_titlebar(self.header_bar)
 
 		# create bar buttons
-		self.button_new = Gtk.Button.new_from_icon_name('add', Gtk.IconSize.BUTTON)
-		self.button_new.set_label(_('New'))
+		self.new_tab_actions = Gio.SimpleActionGroup.new()
+		self.new_tab_menu = Gio.Menu()
+		self.commands_actions = Gio.SimpleActionGroup.new()
+		self.commands_menu = Gio.Menu()
 
-		self.button_commands = Gtk.Button.new_from_icon_name('gnome-run', Gtk.IconSize.BUTTON)
-		self.button_commands.set_tooltip_text(_('Commands'))
+		image_new = Gtk.Image.new_from_icon_name('tab-new', Gtk.IconSize.BUTTON)
+		self.button_new = Gtk.MenuButton.new()
+		self.button_new.set_image(image_new)
+		self.button_new.set_menu_model(self.new_tab_menu)
+		self.button_new.insert_action_group('new-tab', self.new_tab_actions)
+
+		self.button_commands = Gtk.MenuButton.new()
+		self.button_commands.set_label(_('Commands'))
+		self.button_commands.set_menu_model(self.commands_menu)
+		self.button_commands.insert_action_group('commands', self.commands_actions)
 
 		self.header_bar.pack_start(self.button_new)
 		self.header_bar.pack_start(self.button_commands)
@@ -842,8 +853,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def _create_commands_menu(self):
 		"""Create commands main menu"""
-		for item in self.menu_commands.get_children():  # remove existing items
-			self.menu_commands.remove(item)
+		self.commands_menu.remove_all()
 
 		command_list = self.command_options.get('commands')
 
@@ -2665,6 +2675,13 @@ class MainWindow(Gtk.ApplicationWindow):
 		# add menu item
 		menu = self.menu_manager.get_item_by_name('new_tab').get_submenu()
 		menu.append(menu_item)
+
+		# create action
+		action = Gio.SimpleAction.new(name, None)
+		action.connect('activate', self._handle_new_tab_click)
+
+		self.new_tab_menu.append(title, 'new-tab.{0}'.format(name))
+		self.new_tab_actions.add_action(action)
 
 		# import class to globals
 		globals()[PluginClass.__name__] = PluginClass

@@ -182,7 +182,6 @@ class Viewer:
 		encoding = chardet.detect(content)['encoding']
 		if encoding is not None:
 			content = codecs.decode(content, encoding)
-
 		text_view.get_buffer().set_text(content)
 
 		# add container to notebook

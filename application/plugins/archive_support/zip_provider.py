@@ -71,6 +71,9 @@ class ZipProvider(Provider):
 					type = file_type
 				)
 
+			if key_name not in self._cache:
+				self._cache[key_name] = []
+
 			self._cache[key_name].append((file_name, file_info))
 			self._file_list.append(info.filename)
 

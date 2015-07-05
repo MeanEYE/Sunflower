@@ -545,7 +545,7 @@ class CopyOperation(Operation):
 				if can_procede:
 					self._dir_list.append((item, relative_path))
 					if can_create: self._dir_list_create.append((item, relative_path))
-					self._scan_directory(item, source_path)
+					self._scan_directory(item, relative_path)
 
 			elif fnmatch.fnmatch(item, self._options[Option.FILE_TYPE]):
 				# item is a file, get stats and update lists

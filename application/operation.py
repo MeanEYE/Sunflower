@@ -2,6 +2,7 @@ import os
 import gtk
 import gobject
 import fnmatch
+import traceback
 
 from threading import Thread, Event
 from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OperationError, QuestionOperationError
@@ -42,13 +43,13 @@ class OperationType:
 class Operation(Thread):
 	"""Parent class for all operation threads"""
 
-	def __init__(self, application, source, destination=None, options=None, destination_path=None):
+	def __init__(self, application, source_provider, destination_provider=None, options=None, source_path=None, destination_path=None):
 		Thread.__init__(self, target=self)
 		self._can_continue = Event()
 		self._abort = Event()
 		self._application = application
-		self._source = source
-		self._destination = destination
+		self._source = source_provider
+		self._destination = destination_provider
 		self._options = options
 		self._source_queue = None
 		self._destination_queue = None
@@ -66,7 +67,7 @@ class Operation(Thread):
 		self._selection_list = []
 
 		# store initial paths
-		self._source_path = self._source.get_path()
+		self._source_path = source_path or self._source.get_path()
 		if self._destination is not None:
 			self._destination_path = destination_path or self._destination.get_path()
 
@@ -462,8 +463,8 @@ class Operation(Thread):
 class CopyOperation(Operation):
 	"""Operation thread used for copying files"""
 
-	def __init__(self, application, source, destination, options, destination_path=None):
-		Operation.__init__(self, application, source, destination, options, destination_path)
+	def __init__(self, application, source_provider, destination_provider, options, source_path=None, destination_path=None):
+		Operation.__init__(self, application, source_provider, destination_provider, options, source_path, destination_path)
 
 		self._merge_all = None
 		self._overwrite_all = None
@@ -813,6 +814,7 @@ class CopyOperation(Operation):
 			if hasattr(sh, 'close'): sh.close()
 			if hasattr(dh, 'close'): sh.close()
 
+			traceback.print_exc()
 			response = self._get_create_error_input(error)
 
 			# handle user response
@@ -1145,8 +1147,8 @@ class MoveOperation(CopyOperation):
 
 	def _check_devices(self):
 		"""Check if source and destination are on the same file system"""
-		dev_source = self._source.get_stat(self._source.get_path(), extended=True).device
-		dev_destination = self._destination.get_stat(self._destination.get_path(), extended=True).device
+		dev_source = self._source.get_stat(self._source_path, extended=True).device
+		dev_destination = self._destination.get_stat(self._destination_path, extended=True).device
 
 		return dev_source == dev_destination
 
@@ -1183,16 +1185,19 @@ class MoveOperation(CopyOperation):
 		# create directories
 		self._create_directory_list()
 
-		# copy/move files
-		if self._check_devices():
-			# both paths are on the same file system, move instead of copy
-			self._move_file_list()
-			self._delete_directories()
+		try:
+			# copy/move files
+			if self._check_devices():
+				# both paths are on the same file system, move instead of copy
+				self._move_file_list()
+				self._delete_directories()
 
-		else:
-			# paths are located on different file systems, copy and remove
-			self._copy_file_list()
-			self._delete_file_list()
+			else:
+				# paths are located on different file systems, copy and remove
+				self._copy_file_list()
+				self._delete_file_list()
+		except:
+			traceback.print_exc()
 
 		# notify user if window is not focused
 		with gtk.gdk.lock:

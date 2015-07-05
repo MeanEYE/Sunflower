@@ -6,6 +6,7 @@ import user
 import fnmatch
 import common
 import gobject
+import traceback
 
 from column_editor import FileList_ColumnEditor
 from gui.input_dialog import ApplicationSelectDialog
@@ -426,7 +427,7 @@ class FileList(ItemList):
 
 		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
-		is_archive = self._parent.is_archive_supported(mime_type)
+		is_archive = self._parent.is_archive_supported(mime_type) and not selected_file.startswith('ftp://')
 
 		# preemptively create provider if selected item is archive
 		if not is_parent and is_archive and not self.provider_exists(selected_file):
@@ -873,7 +874,8 @@ class FileList(ItemList):
 									self._parent,
 									source_provider,
 									destination_provider,
-									result[1]  # options from dialog
+									result[1],  # options from dialog
+									self.path
 								)
 
 			# set event queue
@@ -916,7 +918,8 @@ class FileList(ItemList):
 									self._parent,
 									source_provider,
 									destination_provider,
-									result[1]  # options from dialog
+									result[1],  # options from dialog
+									self.path
 								)
 
 			# set event queues
@@ -2010,7 +2013,8 @@ class FileList(ItemList):
 
 			except Exception as error:
 				# report error first
-				print 'Load directory error: ', error.message
+				print "Load directory error: {0} - path={1}".format(error.message, path)
+				traceback.print_exc()
 
 				# clear locks and exit
 				self._thread_active.clear()

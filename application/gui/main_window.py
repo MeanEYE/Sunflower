@@ -193,6 +193,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# define local variables
 		self._in_fullscreen = False
+		self._window_state = 0
 
 		# create menu items
 		self.menu_bar = Gtk.MenuBar.new()
@@ -741,8 +742,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._create_commands_menu()
 
 		# restore window size and position
-		# TODO: Fix this for GTK3
-		# self._restore_window_position()
+		self._restore_window_position()
 
 		# load plugins
 		self._load_plugins()
@@ -956,8 +956,9 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def _handle_window_state_event(self, widget, event):
 		"""Handle window state change"""
-		in_fullscreen = event.new_window_state is Gdk.WindowState.FULLSCREEN
-		stock = (Gtk.STOCK_FULLSCREEN, Gtk.STOCK_LEAVE_FULLSCREEN)[in_fullscreen]
+		self._in_fullscreen = bool(Gdk.WindowState.FULLSCREEN & event.new_window_state)
+		self._window_state = event.new_window_state
+		stock = (Gtk.STOCK_FULLSCREEN, Gtk.STOCK_LEAVE_FULLSCREEN)[self._in_fullscreen]
 
 		# update main menu item
 		menu_item = self.menu_manager.get_item_by_name('fullscreen_toggle')
@@ -1463,15 +1464,13 @@ class MainWindow(Gtk.ApplicationWindow):
 	def _save_window_position(self):
 		"""Save window position to config"""
 		section = self.window_options.section('main')
-
-		state = self.get_state()
 		window_state = 0
 
-		if state & Gdk.WindowState.FULLSCREEN:
+		if self._window_state & Gdk.WindowState.FULLSCREEN:
 			# window is in fullscreen
 			window_state = 2
 
-		elif state & Gdk.WindowState.MAXIMIZED:
+		elif self._window_state & Gdk.WindowState.MAXIMIZED:
 			# window is maximized
 			window_state = 1
 
@@ -1482,8 +1481,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		section.set('geometry', geometry)
 
 		# save handle position
-		if window_state == 0:
-			section.set('handle_position', self._paned.get_position())
+		section.set('handle_position', self._paned.get_position())
 
 	def _save_active_notebook(self):
 		"""Save active notebook to config"""
@@ -2530,11 +2528,10 @@ class MainWindow(Gtk.ApplicationWindow):
 			if callable(method):
 				method(*args)
 
-	def toggle_fullscreen(self, widget, data=None):
+	def toggle_fullscreen(self, widget=None, data=None):
 		"""Toggle application fullscreen"""
-		if self.window.get_state() & Gdk.WindowState.FULLSCREEN:
+		if self._in_fullscreen:
 			self.unfullscreen()
-
 		else:
 			self.fullscreen()
 

@@ -26,7 +26,7 @@ class InputDialog:
 	"""
 
 	def __init__(self, application):
-		self._dialog = Gtk.Dialog.new(parent=application)
+		self._dialog = Gtk.Dialog(parent=application)
 
 		self._application = application
 
@@ -206,7 +206,7 @@ class CreateDialog(InputDialog):
 		self._container.set_spacing(5)
 
 		# create advanced options expander
-		expander = Gtk.Expander(_('Advanced options'))
+		expander = Gtk.Expander.new(_('Advanced options'))
 		expander.connect('activate', self._expander_event)
 		expander.set_border_width(0)
 
@@ -272,7 +272,7 @@ class CreateDialog(InputDialog):
 		label.set_alignment(0, 0.5)
 		table.attach(label, 0, 1, 3, 4)
 
-		self._permission_octal_entry = Gtk.Entry(4)
+		self._permission_octal_entry = Gtk.Entry()
 		self._permission_octal_entry.set_width_chars(5)
 		self._permission_octal_entry.connect('activate', self._entry_activate)
 		table.attach(self._permission_octal_entry, 1, 2, 3, 4)
@@ -287,7 +287,7 @@ class CreateDialog(InputDialog):
 		button_save.connect('clicked', self._save_configuration)
 		button_save.set_tooltip_text(_('Save as default configuration'))
 
-		align_save = Gtk.Alignment.new()
+		align_save = Gtk.Alignment()
 		align_save.add(button_save)
 
 		# pack interface

@@ -26,7 +26,7 @@ class InputDialog:
 	"""
 
 	def __init__(self, application):
-		self._dialog = Gtk.Dialog.new(parent=application)
+		self._dialog = Gtk.Dialog(parent=application)
 
 		self._application = application
 
@@ -206,7 +206,7 @@ class CreateDialog(InputDialog):
 		self._container.set_spacing(5)
 
 		# create advanced options expander
-		expander = Gtk.Expander(_('Advanced options'))
+		expander = Gtk.Expander.new(_('Advanced options'))
 		expander.connect('activate', self._expander_event)
 		expander.set_border_width(0)
 
@@ -272,7 +272,7 @@ class CreateDialog(InputDialog):
 		label.set_alignment(0, 0.5)
 		table.attach(label, 0, 1, 3, 4)
 
-		self._permission_octal_entry = Gtk.Entry(4)
+		self._permission_octal_entry = Gtk.Entry()
 		self._permission_octal_entry.set_width_chars(5)
 		self._permission_octal_entry.connect('activate', self._entry_activate)
 		table.attach(self._permission_octal_entry, 1, 2, 3, 4)
@@ -287,7 +287,7 @@ class CreateDialog(InputDialog):
 		button_save.connect('clicked', self._save_configuration)
 		button_save.set_tooltip_text(_('Save as default configuration'))
 
-		align_save = Gtk.Alignment.new()
+		align_save = Gtk.Alignment()
 		align_save.add(button_save)
 
 		# pack interface
@@ -1421,7 +1421,8 @@ class CreateToolbarWidgetDialog:
 		label_name = Gtk.Label(label=_('Name:'))
 		label_name.set_alignment(0, 0.5)
 
-		self._entry_name = Gtk.Entry(max=30)
+		self._entry_name = Gtk.Entry()
+		self._entry_name.set_max_width_chars(30)
 
 		vbox_type = Gtk.VBox(False, 0)
 
@@ -1433,7 +1434,7 @@ class CreateToolbarWidgetDialog:
 		cell_renderer_text.set_property('xalign', 0)
 		self._type_list = Gtk.ListStore(str, str, str)
 
-		self._combobox_type = Gtk.ComboBox(self._type_list)
+		self._combobox_type = Gtk.ComboBox.new_with_model(self._type_list)
 		self._combobox_type.pack_start(cell_renderer_icon, False)
 		self._combobox_type.pack_start(cell_renderer_text, True)
 		self._combobox_type.add_attribute(cell_renderer_icon, 'icon-name', 2)
@@ -1454,7 +1455,7 @@ class CreateToolbarWidgetDialog:
 		vbox_name.pack_start(self._entry_name, False, False, 0)
 
 		vbox_type.pack_start(label_type, False, False, 0)
-		vbox_type.pack_start(self._combobox_type, False, False)
+		vbox_type.pack_start(self._combobox_type, False, False, 0)
 
 		vbox.pack_start(vbox_name, False, False, 0)
 		vbox.pack_start(vbox_type, False, False, 0)

@@ -21,8 +21,8 @@
 import os
 import sys
 import subprocess
-
-search_paths = os.environ["PATH"].split(os.pathsep)
+pathsep = os.pathsep
+search_paths = os.environ.get('PATH', pathsep.join(('/bin', '/usr/bin', '/usr/local/bin'))).split(pathsep)
 interpreter_list = ('python2.9', 'python2.8', 'python2.7', 'python2.6')
 application_file = os.path.join(os.path.dirname(sys.argv[0]), 'application', 'main.py')
 

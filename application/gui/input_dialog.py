@@ -1817,6 +1817,9 @@ class PathInputDialog():
 
 	def set_text(self, entry_text):
 		"""Set main entry text"""
+		if not entry_text.endswith(os.path.sep):
+			entry_text = entry_text + os.path.sep
+
 		self._entry.set_text(entry_text)
 		self._entry.set_position(-1)
 

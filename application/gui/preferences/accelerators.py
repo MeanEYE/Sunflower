@@ -89,11 +89,15 @@ class AcceleratorOptions(SettingsPage):
 		label_warning.set_line_wrap(True)
 		label_warning.connect('size-allocate', self._adjust_label)
 
+		label_note = gtk.Label(_('Double click on accelerator to assign new one.'))
+		label_note.set_alignment(0, 0)
+
 		# pack interface
 		container.add(self._list)
 
 		self.pack_start(label_warning, False, False, 0)
 		self.pack_start(container, True, True, 0)
+		self.pack_start(label_note, False, False, 0)
 
 	def __find_iter_by_group_name(self, group_name):
 		"""Find group iter by its name"""

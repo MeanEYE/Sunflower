@@ -148,12 +148,8 @@ def is_x_app(command):
 
 def executable_exists(command):
 	"""Check if specified command exists in search path"""
-	result = False
-	pathsep = os.pathsep
-	paths = os.environ.get('PATH', pathsep.join(('/bin', '/usr/bin', '/usr/local/bin'))).split(pathsep)
-	for path in paths:
-		if os.path.exists(os.path.join(path, command)):
-			result = True
-			break
+	default_paths = os.pathsep.join(('/bin', '/usr/bin', '/usr/local/bin'))
+	search_paths = os.environ.get('PATH', default_paths).split(os.pathsep)
+	found_commands = filter(lambda path: os.path.exists(os.path.join(path, command)), search_paths)
 
-	return result
+	return len(found_commands) > 0

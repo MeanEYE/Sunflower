@@ -230,11 +230,17 @@ class PropertiesWindow(gtk.Window):
 
 		else:
 			# directory size
-			dir_size = len(self._provider.list_dir(self._path))
-			item_size = '{0} {1}'.format(
-								locale.format('%d', dir_size, True),
-								ngettext('item', 'items', dir_size)
-							)
+			try:
+				dir_size = len(self._provider.list_dir(self._path))
+
+			except OSError:
+				dir_size = 0
+
+			finally:
+				item_size = '{0} {1}'.format(
+									locale.format('%d', dir_size, True),
+									ngettext('item', 'items', dir_size)
+								)
 
 		# set mode
 		self._mode = item_stat.mode

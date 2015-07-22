@@ -77,7 +77,7 @@ class AcceleratorManager:
 		result = []
 		groups = self._get_group_by_type(group_type)
 
-		for group in self._groups:
+		for group in groups:
 			result.extend(group.get_collisions(keyval, modifier))
 
 		return result

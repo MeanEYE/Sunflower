@@ -141,15 +141,36 @@ class AcceleratorOptions(SettingsPage):
 		# enable save button
 		self._parent.enable_save(show_restart=True)
 
+	def __check_collisions(self, keyval, modifier):
+		result = []
+		if (keyval, modifier) != (0, 0):
+			accelerator_manager = self._application.accelerator_manager
+
+			for row in self._accels:
+				group_name = self._accels.get_value(row.iter, Column.NAME)
+				group = accelerator_manager._get_group_by_name(group_name)
+				
+				for child in row.iterchildren():
+					name = self._accels.get_value(child.iter, Column.NAME)
+					p_key = self._accels.get_value(child.iter, Column.PRIMARY_KEY)
+					p_mod = self._accels.get_value(child.iter, Column.PRIMARY_MODS)
+					s_key = self._accels.get_value(child.iter, Column.SECONDARY_KEY)
+					s_mod = self._accels.get_value(child.iter, Column.SECONDARY_MODS)
+
+					if (keyval, modifier) == (p_key, p_mod):
+						result.append((group, name, True))
+					if (keyval, modifier) == (s_key, s_mod):
+						result.append((group, name, False))
+
+		return result
+
 	def __accel_edited(self, widget, path, keyval, modifier, hwcode, primary):
 		"""Handle editing accelerator"""
 		selected_iter = self._accels.get_iter(path)
 		accelerator_label = gtk.accelerator_get_label(keyval, modifier)
 
 		# check if new accelerator has collisions
-		accelerator_manager = self._application.accelerator_manager
-		collisions = accelerator_manager.check_collisions(keyval, modifier, GroupType.ALL_GROUPS)
-
+		collisions = self.__check_collisions(keyval, modifier)
 		if len(collisions) > 0:
 			# ask user what to do with collisions
 			method_list = []

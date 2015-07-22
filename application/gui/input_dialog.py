@@ -1313,6 +1313,10 @@ class AddBookmarkDialog:
 
 class OperationError:
 	"""Dialog used to ask user about error occured during certain operation."""
+	RESPONSE_CANCEL = 0
+	RESPONSE_RETRY = 1
+	RESPONSE_SKIP = 2
+	RESPONSE_SKIP_ALL = 3
 
 	def __init__(self, application):
 		self._dialog = gtk.Dialog(parent=application)
@@ -1357,14 +1361,16 @@ class OperationError:
 		# create controls
 		button_cancel = gtk.Button(label=_('Cancel'))
 		button_skip = gtk.Button(label=_('Skip'))
+		button_skip_all = gtk.Button(label=_('Skip all'))
 		button_retry = gtk.Button(label=_('Retry'))
 
-		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
-		self._dialog.add_action_widget(button_skip, gtk.RESPONSE_NO)
-		self._dialog.add_action_widget(button_retry, gtk.RESPONSE_YES)
+		self._dialog.add_action_widget(button_cancel, self.RESPONSE_CANCEL)
+		self._dialog.add_action_widget(button_skip, self.RESPONSE_SKIP)
+		self._dialog.add_action_widget(button_skip_all, self.RESPONSE_SKIP_ALL)
+		self._dialog.add_action_widget(button_retry, self.RESPONSE_RETRY)
 
 		button_skip.set_can_default(True)
-		self._dialog.set_default_response(gtk.RESPONSE_NO)
+		self._dialog.set_default_response(self.RESPONSE_SKIP)
 
 		# pack interface
 		vbox_icon.pack_start(icon, False, False, 0)

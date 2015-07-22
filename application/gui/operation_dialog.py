@@ -273,6 +273,8 @@ class OperationDialog:
 		if self._confirm_cancel(_('Are you sure about canceling current operation?')):
 			self._thread.cancel()
 
+		# TODO: Add 5-10 seconds timeout before forced cancel occurs.
+
 		return True  # handle delete-event properly
 
 	def _operation_click(self, widget, data=None):

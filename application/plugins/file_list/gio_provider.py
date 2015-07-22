@@ -450,3 +450,30 @@ class DavsProvider(GioProvider):
 		return (
 			Support.SYSTEM_SIZE,
 		)
+
+
+class Gphoto2Provider(GioProvider):
+	is_local = True
+	protocol = 'gphoto2'
+
+	def get_protocol_icon(self):
+		"""Return protocol icon name"""
+		return 'camera-photo'
+
+	def get_support(self):
+		"""Return supported options by provider"""
+		return ()
+
+
+class MtpProvider(GioProvider):
+	is_local = True
+	protocol = 'mtp'
+
+	def get_protocol_icon(self):
+		"""Return protocol icon name"""
+		return 'multimedia-player'
+
+	def get_support(self):
+		"""Return supported options by provider"""
+		return ()
+

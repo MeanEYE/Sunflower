@@ -29,8 +29,7 @@ class MountsManager:
 
 		# get list of mounted volumes
 		for mount in self._volume_monitor.get_mounts():
-			if mount.get_volume() is None:
-				self._add_mount(self._volume_monitor, mount)
+			self._add_mount(self._volume_monitor, mount)
 
 		# update menus
 		self.window._menu_updated()

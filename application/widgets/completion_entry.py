@@ -36,10 +36,10 @@ class PathCompletionEntry(gtk.Entry):
 			data = path.split('://', 1)
 			scheme = data[0]
 
-		ProviderClass = self._application.get_provider_by_protocol(scheme)
+		Provider = self._application.get_provider_by_protocol(scheme)
 
-		if ProviderClass is not None:
-			provider = ProviderClass(self._application)
+		if Provider is not None and (Provider.is_local or self._application.options.get('network_path_completion')):
+			provider = Provider(self._application)
 			if provider.exists(dirname):
 				for item in provider.list_dir(dirname):
 					if provider.is_dir(item, relative_to=dirname):

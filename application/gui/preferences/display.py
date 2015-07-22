@@ -107,9 +107,11 @@ class DisplayOptions(SettingsPage):
 
 		self._checkbox_hide_window_on_minimize = gtk.CheckButton(_('Hide operation window on minimize'))
 		self._checkbox_show_notifications = gtk.CheckButton(_('Show notifications'))
+		self._checkbox_network_path_completion = gtk.CheckButton(_('Use path completion on non-local paths'))
 
 		self._checkbox_hide_window_on_minimize.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_notifications.connect('toggled', self._parent.enable_save)
+		self._checkbox_network_path_completion.connect('toggled', self._parent.enable_save)
 
 		# size format
 		hbox_size_format = gtk.HBox(False, 5)
@@ -156,6 +158,7 @@ class DisplayOptions(SettingsPage):
 
 		vbox_other.pack_start(self._checkbox_hide_window_on_minimize, False, False, 0)
 		vbox_other.pack_start(self._checkbox_show_notifications, False, False, 0)
+		vbox_other.pack_start(self._checkbox_network_path_completion, False, False, 0)
 		vbox_other.pack_start(hbox_size_format, False, False, 0)
 
 		notebook.append_page(vbox_main_window, label_main_window)
@@ -183,6 +186,7 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_superuser_notification.set_active(options.get('superuser_notification'))
 		self._checkbox_hide_window_on_minimize.set_active(options.section('operations').get('hide_on_minimize'))
 		self._checkbox_show_notifications.set_active(options.get('show_notifications'))
+		self._checkbox_network_path_completion.set_active(options.get('network_path_completion'))
 		self._combobox_status_bar.set_active(options.get('show_status_bar'))
 		self._combobox_expand_tabs.set_active(options.get('expand_tabs'))
 		self._combobox_size_format.set_active(options.get('size_format'))
@@ -208,6 +212,7 @@ class DisplayOptions(SettingsPage):
 		options.set('superuser_notification', self._checkbox_superuser_notification.get_active())
 		options.section('operations').set('hide_on_minimize', self._checkbox_hide_window_on_minimize.get_active())
 		options.set('show_notifications', self._checkbox_show_notifications.get_active())
+		options.set('network_path_completion', self._checkbox_network_path_completion.get_active())
 		options.set('show_status_bar', self._combobox_status_bar.get_active())
 		options.set('expand_tabs', self._combobox_expand_tabs.get_active())
 		options.set('size_format', self._combobox_size_format.get_active())

@@ -53,6 +53,9 @@ class Viewer:
 		self._notebook = gtk.Notebook()
 		self._notebook.set_border_width(2)
 
+		# create extensions
+		self._create_extensions()
+
 		# create page for executables
 		if self._mime_type in ('application/x-executable', 'application/x-sharedlib') \
 		and executable_exists('nm'):
@@ -113,9 +116,6 @@ class Viewer:
 			viewport.add(image)
 			container.add(viewport)
 			self._insert_page(_('Image'), container)
-
-		# create extensions
-		self._create_extensions()
 
 		# pack user interface
 		vbox.pack_start(self._notebook, True, True, 0)

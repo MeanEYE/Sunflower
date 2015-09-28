@@ -1742,7 +1742,7 @@ class MainWindow(gtk.Window):
 										gtk.DIALOG_DESTROY_WITH_PARENT,
 										gtk.MESSAGE_INFO,
 										gtk.BUTTONS_OK,
-										_("First level of compared directories is identical.")
+										_('First level of compared directories is identical.')
 									)
 				dialog.run()
 				dialog.destroy()

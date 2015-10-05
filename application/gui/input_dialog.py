@@ -563,6 +563,51 @@ class DirectoryCreateDialog(CreateDialog):
 		section.set('directory_mode', self._mode)
 
 
+class DeleteDialog(gtk.MessageDialog):
+	"""Delete item(s) confirmation dialog."""
+
+	def __init__(self, application, message):
+		gtk.MessageDialog.__init__(
+				self,
+				parent=application,
+				flags=gtk.DIALOG_DESTROY_WITH_PARENT,
+				type=gtk.MESSAGE_QUESTION,
+				buttons=gtk.BUTTONS_YES_NO,
+				message_format=message
+			)
+
+		# create user interface for operation queue
+		vbox_queue = gtk.VBox(False, 0)
+
+		label_queue = gtk.Label(_('Operation queue:'))
+		label_queue.set_alignment(0, 0.5)
+
+		cell_name = gtk.CellRendererText()
+
+		self.combobox_queue = gtk.ComboBox(model=OperationQueue.get_model())
+		self.combobox_queue.pack_start(cell_name, True)
+		self.combobox_queue.add_attribute(cell_name, 'text', OperationQueue.COLUMN_TEXT)
+		self.combobox_queue.set_active(0)
+		self.combobox_queue.set_row_separator_func(OperationQueue.handle_separator_check)
+		self.combobox_queue.connect('changed', OperationQueue.handle_queue_select, self)
+		self.combobox_queue.set_size_request(140, -1)
+
+		# pack user interface
+		vbox_queue.pack_start(label_queue, False, False, 0)
+		vbox_queue.pack_start(self.combobox_queue, False, False, 0)
+
+		self.get_content_area().pack_start(vbox_queue, False, False, 0)
+		vbox_queue.show_all()
+		self.get_widget_for_response(gtk.RESPONSE_YES).grab_focus()
+
+	def get_response(self):
+		"""Show dialog and get response code."""
+		code = self.run()
+		queue_index = self.combobox_queue.get_active()
+
+		return code, queue_index
+
+
 class CopyDialog:
 	"""Dialog which will ask user for additional options before copying"""
 
@@ -922,6 +967,7 @@ class CopyDialog:
 				self.checkbox_merge.get_active(),
 				self.checkbox_overwrite.get_active()
 			)
+		queue_index = self.combobox_queue.get_active()
 
 		self._dialog.destroy()
 

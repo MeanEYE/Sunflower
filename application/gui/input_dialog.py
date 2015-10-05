@@ -597,6 +597,8 @@ class DeleteDialog(gtk.MessageDialog):
 
 		self.get_content_area().pack_start(vbox_queue, False, False, 0)
 		vbox_queue.show_all()
+
+		# focus default widget
 		self.get_widget_for_response(gtk.RESPONSE_YES).grab_focus()
 
 	def get_response(self):

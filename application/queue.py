@@ -4,7 +4,9 @@ from Queue import Queue
 class OperationQueue:
 	"""Generic, multi-name, queueing support class."""
 
-	_queue_list = {}
+	_queue_list = {
+				_('Default'): Queue()
+			}
 
 	def __init__(self):
 		pass

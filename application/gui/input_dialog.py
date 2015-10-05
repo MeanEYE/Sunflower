@@ -564,7 +564,7 @@ class DirectoryCreateDialog(CreateDialog):
 
 
 class DeleteDialog(gtk.MessageDialog):
-	"""Delete item(s) confirmation dialog."""
+	"""Confirmation dialog for item removal with operation queue selection."""
 
 	def __init__(self, application, message):
 		gtk.MessageDialog.__init__(
@@ -590,7 +590,6 @@ class DeleteDialog(gtk.MessageDialog):
 		self.combobox_queue.set_active(0)
 		self.combobox_queue.set_row_separator_func(OperationQueue.handle_separator_check)
 		self.combobox_queue.connect('changed', OperationQueue.handle_queue_select, self)
-		self.combobox_queue.set_size_request(140, -1)
 
 		# pack user interface
 		vbox_queue.pack_start(label_queue, False, False, 0)

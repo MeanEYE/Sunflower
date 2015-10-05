@@ -546,6 +546,7 @@ class FileCreateDialog(CreateDialog):
 
 
 class DirectoryCreateDialog(CreateDialog):
+	"""Simple dialog used for creating directories."""
 
 	def __init__(self, application):
 		CreateDialog.__init__(self, application)

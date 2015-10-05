@@ -620,6 +620,7 @@ class CopyDialog:
 		self.combobox_queue.set_active(0)
 		self.combobox_queue.set_row_separator_func(OperationQueue.handle_separator_check)
 		self.combobox_queue.connect('changed', OperationQueue.handle_queue_select, self._dialog)
+		self.combobox_queue.set_size_request(140, -1)
 
 		# detailed item list
 		separator_details = gtk.HSeparator()
@@ -686,7 +687,7 @@ class CopyDialog:
 		vbox_type.pack_start(self.entry_type, False, False, 0)
 
 		vbox_queue.pack_start(label_queue, False, False, 0)
-		vbox_queue.pack_start(self.combobox_queue, True, True, 0)
+		vbox_queue.pack_start(self.combobox_queue, False, False, 0)
 
 		hbox_additional.pack_start(vbox_type, True, True, 0)
 		hbox_additional.pack_start(vbox_queue, True, True, 0)

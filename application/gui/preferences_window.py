@@ -169,8 +169,8 @@ class PreferencesWindow(gtk.Window):
 	def _load_options(self, widget=None, data=None):
 		"""Change interface to present current state of configuration"""
 		# call all tabs to load their options
-		for i in range(self._tabs.get_n_pages()):
-			page = self._tabs.get_nth_page(i)
+		for index in range(self._tabs.get_n_pages()):
+			page = self._tabs.get_nth_page(index)
 
 			if hasattr(page, '_load_options'):
 				page._load_options()
@@ -183,8 +183,8 @@ class PreferencesWindow(gtk.Window):
 	def _save_options(self, widget=None, data=None):
 		"""Save options"""
 		# call all tabs to save their options
-		for i in range(self._tabs.get_n_pages()):
-			page = self._tabs.get_nth_page(i)
+		for index in range(self._tabs.get_n_pages()):
+			page = self._tabs.get_nth_page(index)
 
 			if hasattr(page, '_save_options'):
 				page._save_options()

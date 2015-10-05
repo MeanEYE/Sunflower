@@ -29,7 +29,7 @@ class PreferencesWindow(gtk.Window):
 
 		# configure self
 		self.set_title(_('Preferences'))
-		self.set_size_request(640, 500)
+		self.set_size_request(750, 500)
 		self.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.set_modal(True)
 		self.set_skip_taskbar_hint(True)

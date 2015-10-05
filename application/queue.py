@@ -112,6 +112,7 @@ class OperationQueue:
 		response = dialog.get_response()
 
 		if response[0] != gtk.RESPONSE_OK:
+			widget.set_active(0)
 			return False
 
 		# make sure queue doesn't already exist

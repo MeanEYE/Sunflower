@@ -27,7 +27,7 @@ class PreferencesWindow(gtk.Window):
 		self._parent = parent
 		self._tab_names = {}
 
-		# configure self
+		# configure window
 		self.set_title(_('Preferences'))
 		self.set_size_request(750, 500)
 		self.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
@@ -40,7 +40,7 @@ class PreferencesWindow(gtk.Window):
 		self.connect('delete_event', self._hide)
 		self.connect('key-press-event', self._handle_key_press)
 
-		# create GUI
+		# create user interface
 		vbox = gtk.VBox(False, 7)
 		vbox.set_border_width(7)
 
@@ -99,7 +99,7 @@ class PreferencesWindow(gtk.Window):
 		btn_help.connect(
 					'clicked',
 					parent.goto_web,
-					'code.google.com/p/sunflower-fm/wiki/WelcomePage?tm=6'
+					'github.com/MeanEYE/Sunflower/wiki'
 				)
 
 		# restart label

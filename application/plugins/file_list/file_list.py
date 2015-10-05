@@ -314,8 +314,7 @@ class FileList(ItemList):
 
 			column_name = column.get_data('name')
 			font_size = options.get('font_size_{0}'.format(column_name)) or \
-				self._default_column_font_size.get(column_name, None) or \
-				int(gtk.Settings().get_property('gtk-font-name').split()[-1])
+				self._default_column_font_size.get(column_name, None)
 
 			# no font size was specified, skip column
 			if font_size is None:

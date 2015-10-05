@@ -9,7 +9,7 @@ import gobject
 
 from column_editor import FileList_ColumnEditor
 from gui.input_dialog import ApplicationSelectDialog
-from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog
+from gui.input_dialog import CopyDialog, MoveDialog, RenameDialog, DeleteDialog
 from gui.input_dialog import FileCreateDialog, DirectoryCreateDialog, LinkDialog
 from gui.properties_window import PropertiesWindow
 from operation import DeleteOperation, CopyOperation, MoveOperation
@@ -801,16 +801,9 @@ class FileList(ItemList):
 						 )
 
 			# user has confirmation dialog enabled
-			dialog = gtk.MessageDialog(
-									self._parent,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_QUESTION,
-									gtk.BUTTONS_YES_NO,
-									message.format(len(selection))
-								)
+			dialog = DeleteDialog(self._parent, message.format(len(selection)))
 			dialog.set_default_response(gtk.RESPONSE_YES)
-			result = dialog.run()
-			dialog.destroy()
+			result, queue_index = dialog.get_response()
 
 			can_continue = result == gtk.RESPONSE_YES
 

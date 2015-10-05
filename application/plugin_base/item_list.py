@@ -705,10 +705,10 @@ class ItemList(PluginBase):
 									gtk.MESSAGE_ERROR,
 									gtk.BUTTONS_OK,
 									_(
-										"Directory does not exist anymore or is not "
-										"valid. If path is not local check if specified "
-										"volume is mounted."
-									) +	"\n\n{0}".format(path)
+										'Directory does not exist anymore or is not '
+										'valid. If path is not local check if specified '
+										'volume is mounted.'
+									) +	'\n\n{0}'.format(path)
 								)
 			dialog.run()
 			dialog.destroy()

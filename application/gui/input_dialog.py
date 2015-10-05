@@ -605,6 +605,8 @@ class DeleteDialog(gtk.MessageDialog):
 		code = self.run()
 		queue_index = self.combobox_queue.get_active()
 
+		self.destroy()
+
 		return code, queue_index
 
 

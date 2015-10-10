@@ -1,5 +1,6 @@
 import os
 import gio
+import re
 
 from urllib import unquote
 from gio_wrapper import File
@@ -12,6 +13,16 @@ class GioProvider(Provider):
 	"""Generic provider for file systems supported by GIO"""
 	is_local = False
 	protocol = ''
+
+	def _real_path(self, path, relative_to=None):
+		"""Commonly used function to get real path"""
+		if relative_to is None:
+			return path
+		elif re.match('^[a-zA-Z]+://',path)!=None:
+			return path
+		else:
+			return os.path.join(relative_to,path)
+
 
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""

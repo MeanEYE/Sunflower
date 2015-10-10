@@ -1317,9 +1317,15 @@ class FileList(ItemList):
 		if event is MonitorSignals.CREATED:
 			# temporarily fix problem with duplicating items when file was saved with GIO
 			if self._find_iter_by_name(path, parent) is None:
-				if (not show_hidden) \
-				and (path[0] == '.' or path[-1] == '~'):
-					return
+				if not show_hidden:
+					try:
+						with open(os.path.join(path, '.hidden')) as f:
+							dot_hidden = f.read().splitlines()
+					except Exception:
+						dot_hidden = []
+
+					if (path[0] == '.' or path[-1] == '~') and path in dot_hidden:
+						return
 
 				# add item
 				self._add_item(path, parent, parent_path)
@@ -2010,10 +2016,17 @@ class FileList(ItemList):
 				return
 
 			# remove hidden files if we don't need them
-			item_list = filter(
-							lambda item_name: show_hidden or (item_name[0] != '.' and item_name[-1] != '~'),
-							item_list
-						)
+			if not show_hidden:
+				try:
+					with open(os.path.join(path, '.hidden')) as f:
+						dot_hidden = f.read().splitlines()
+				except Exception:
+					dot_hidden = []
+
+				item_list = filter(
+					lambda item_name: (item_name[0] != '.' and item_name[-1] != '~') and item_name not in dot_hidden,
+					item_list
+				)
 
 			# assign item for selection
 			if not self._item_to_focus in item_list:

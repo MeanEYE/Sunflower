@@ -810,6 +810,9 @@ class ItemList(PluginBase):
 			if event_queue is not None:
 				operation.set_destination_queue(event_queue)
 
+			# set operation queue
+			operation.set_operation_queue(dialog_result[2])
+
 			# start the operation
 			operation.set_selection(selection)
 			operation.start()

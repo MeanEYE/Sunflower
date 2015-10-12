@@ -803,7 +803,7 @@ class FileList(ItemList):
 			# user has confirmation dialog enabled
 			dialog = DeleteDialog(self._parent, message.format(len(selection)))
 			dialog.set_default_response(gtk.RESPONSE_YES)
-			result, queue_index = dialog.get_response()
+			result, queue_name = dialog.get_response()
 
 			can_continue = result == gtk.RESPONSE_YES
 
@@ -827,6 +827,7 @@ class FileList(ItemList):
 			if event_queue is not None:
 				operation.set_source_queue(event_queue)
 
+			operation.set_operation_queue(queue_name)
 			operation.set_selection(selection)
 			operation.start()
 
@@ -871,6 +872,9 @@ class FileList(ItemList):
 			# set event queue
 			if destination_monitor is not None and destination_monitor.is_manual():
 				operation.set_destination_queue(destination_monitor.get_queue())
+
+			# set operation queue
+			operation.set_operation_queue(result[2])
 
 			operation.set_selection(selection)
 			operation.start()

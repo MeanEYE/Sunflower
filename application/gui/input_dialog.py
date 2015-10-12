@@ -604,11 +604,12 @@ class DeleteDialog(gtk.MessageDialog):
 	def get_response(self):
 		"""Show dialog and get response code."""
 		code = self.run()
-		queue_index = self.combobox_queue.get_active()
+		selected_iter = self.combobox_queue.get_active_iter()
+		queue_name = OperationQueue.get_name_from_iter(selected_iter)
 
 		self.destroy()
 
-		return code, queue_index
+		return code, queue_name
 
 
 class CopyDialog:
@@ -955,7 +956,7 @@ class CopyDialog:
 	def get_response(self):
 		"""Return value and self-destruct
 
-		This method returns tupple with response code and
+		This method returns tuple with response code and
 		dictionary with other selected options.
 
 		"""
@@ -970,11 +971,12 @@ class CopyDialog:
 				self.checkbox_merge.get_active(),
 				self.checkbox_overwrite.get_active()
 			)
-		queue_index = self.combobox_queue.get_active()
+		selected_iter = self.combobox_queue.get_active_iter()
+		queue_name = OperationQueue.get_name_from_iter(selected_iter)
 
 		self._dialog.destroy()
 
-		return code, options
+		return code, options, queue_name
 
 
 class MoveDialog(CopyDialog):

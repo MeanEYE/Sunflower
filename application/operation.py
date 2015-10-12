@@ -10,6 +10,7 @@ from gui.error_list import ErrorList
 from plugin_base.provider import Mode as FileMode, TrashError, Support as ProviderSupport
 from plugin_base.monitor import MonitorSignals
 from common import format_size
+from queue import OperationQueue
 
 # import constants
 from gui.input_dialog import OverwriteOption
@@ -66,6 +67,10 @@ class Operation(Thread):
 		self._merge_all = None
 		self._overwrite_all = None
 		self._response_cache = {}
+
+		# operation queue
+		self._operation_queue = None
+		self._operation_queue_name = None
 
 		# daemonize
 		self.daemon = True
@@ -492,12 +497,24 @@ class Operation(Thread):
 		"""Set list of selected items"""
 		self._selection_list.extend(item_list)
 
+	def set_operation_queue(self, queue_name):
+		"""Set operation to wait for queue."""
+		if queue_name is None:
+			return
+
+		# create new queue
+		self._operation_queue = Event()
+		self._operation_queue_name = queue_name
+
+		# schedule operation
+		OperationQueue.add(queue_name, self._operation_queue)
+
 	def set_source_queue(self, queue):
-		"""Set event queue for fallback monitor support"""
+		"""Set event queue for fall-back monitor support"""
 		self._source_queue = queue
 
 	def set_destination_queue(self, queue):
-		"""Set event queue for fallback monitor support"""
+		"""Set event queue for fall-back monitor support"""
 		self._destination_queue = queue
 
 	def pause(self):
@@ -1009,6 +1026,10 @@ class CopyOperation(Operation):
 			self._dialog.set_source(self._source_path)
 			self._dialog.set_destination(self._destination_path)
 
+		# wait for operation queue if needed
+		if self._operation_queue is not None:
+			self._operation_queue.wait()
+
 		# get list of items to copy
 		self._get_lists()
 
@@ -1064,13 +1085,18 @@ class CopyOperation(Operation):
 		# destroy dialog
 		self._destroy_ui()
 
+		# start next operation
+		if self._operation_queue is not None:
+			OperationQueue.start_next(self._operation_queue_name)
+
 
 class MoveOperation(CopyOperation):
 	"""Operation thread used for moving files"""
 
 	def _remove_path(self, path, item_list, relative_path=None):
-		"""Remove path"""
+		"""Remove path specified path."""
 		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
+
 		try:
 			# try removing specified path
 			self._source.remove_path(path, relative_to=source_path)
@@ -1252,6 +1278,11 @@ class MoveOperation(CopyOperation):
 			self._dialog.set_source(self._source_path)
 			self._dialog.set_destination(self._destination_path)
 
+		# wait for operation queue if needed
+		if self._operation_queue is not None:
+			self._operation_queue.wait()
+
+		# get list of items
 		self._get_lists()
 
 		# check for available free space
@@ -1314,6 +1345,10 @@ class MoveOperation(CopyOperation):
 
 		# destroy dialog
 		self._destroy_ui()
+
+		# start next operation
+		if self._operation_queue is not None:
+			OperationQueue.start_next(self._operation_queue_name)
 
 
 class DeleteOperation(Operation):
@@ -1381,6 +1416,10 @@ class DeleteOperation(Operation):
 		"""Main thread method, this is where all the stuff is happening"""
 		self._file_list = self._selection_list[:]  # use predefined selection list
 
+		# wait for operation queue if needed
+		if self._operation_queue is not None:
+			self._operation_queue.wait()
+
 		with gtk.gdk.lock:
 			# clear selection on source directory
 			parent = self._source.get_parent()
@@ -1439,6 +1478,10 @@ class DeleteOperation(Operation):
 
 		# destroy dialog
 		self._destroy_ui()
+
+		# start next operation
+		if self._operation_queue is not None:
+			OperationQueue.start_next(self._operation_queue_name)
 
 
 class RenameOperation(Operation):
@@ -1506,6 +1549,10 @@ class RenameOperation(Operation):
 
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
+		# wait for operation queue if needed
+		if self._operation_queue is not None:
+			self._operation_queue.wait()
+
 		for index, item in enumerate(self._file_list, 1):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
@@ -1544,3 +1591,7 @@ class RenameOperation(Operation):
 
 		# destroy dialog
 		self._destroy_ui()
+
+		# start next operation
+		if self._operation_queue is not None:
+			OperationQueue.start_next(self._operation_queue_name)

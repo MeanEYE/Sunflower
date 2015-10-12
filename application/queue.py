@@ -1,13 +1,16 @@
 import gtk
 
-from Queue import Queue
+from threading import Lock
+from Queue import Queue, Empty
 
 
 class OperationQueue:
-	"""Generic, multi-name, queueing support class."""
+	"""Generic, multi-name, operation queueing support class."""
 
 	_queue_list = {}
+	_active_list = {}
 	_list_store = None
+	_lock = Lock()
 
 	COLUMN_TEXT = 0
 	COLUMN_TYPE = 1
@@ -23,6 +26,7 @@ class OperationQueue:
 	@classmethod
 	def __update_list(cls):
 		"""Update list store to contain all the queues."""
+		# clear options
 		cls._list_store.clear()
 
 		# add no queue option
@@ -31,7 +35,10 @@ class OperationQueue:
 		# create default queue
 		default_name = _('Default')
 		if default_name not in cls._queue_list:
+			cls._lock.acquire()
 			cls._queue_list[default_name] = Queue()
+			cls._active_list[default_name] = False
+			cls._lock.release()
 
 		# add queues
 		for name in cls._queue_list.keys():
@@ -42,30 +49,44 @@ class OperationQueue:
 		cls._list_store.append((_('New queue'), cls.TYPE_NEW))
 
 	@classmethod
-	def add(cls, name, operation):
+	def add(cls, name, event):
 		"""Add operation to queue."""
 		# make sure queue exists
 		if name not in cls._queue_list:
+			cls._lock.acquire()
 			cls._queue_list[name] = Queue()
+			cls._active_list[name] = False
+			cls._lock.release()
 			cls.__update_list()
 
 		# add operation to specified queue
-		self._queue_list[name].put(operation, False)
+		cls._queue_list[name].put(event, False)
 
-		# pause operation so we can resume later
-		if hasattr(operation, 'pause'):
-			operation.pause()
+		# start operation immediately if queue is empty
+		if not cls._active_list[name]:
+			cls._lock.acquire()
+			cls._active_list[name] = True
+			cls._lock.release()
+			cls.start_next(name)
 
 	@classmethod
 	def start_next(cls, name):
-		"""Start next operation in specified queueself."""
+		"""Start next operation in specified queue."""
 		if name not in cls._queue_list:
 			return
 
-		# get operation and call it
-		operation = cls._queue_list.get(False)
-		if hasattr(operation, 'resume'):
-			operation.resume()
+		# get operation event and clear it
+		try:
+			event = cls._queue_list[name].get(False)
+
+		except Empty:
+			# last operation finished, mark as inactive
+			cls._lock.acquire()
+			cls._active_list[name] = False
+			cls._lock.release()
+
+		else:
+			event.set()
 
 	@classmethod
 	def get_list(cls):
@@ -80,6 +101,19 @@ class OperationQueue:
 			cls.__update_list()
 
 		return cls._list_store
+
+	@classmethod
+	def get_name_from_iter(cls, selected_iter):
+		"""Get queue name from specified iter."""
+		result = None
+
+		if selected_iter is not None:
+			selection_type = cls._list_store.get_value(selected_iter, cls.COLUMN_TYPE)
+
+			if selection_type is cls.TYPE_QUEUE:
+				result = cls._list_store.get_value(selected_iter, cls.COLUMN_TEXT)
+
+		return result
 
 	@classmethod
 	def handle_separator_check(cls, model, current_iter, data=None):
@@ -129,7 +163,10 @@ class OperationQueue:
 			return False
 
 		# select newly added queue
+		cls._lock.acquire()
 		cls._queue_list[response[1]] = Queue()
+		cls._active_list[response[1]] = False
+		cls._lock.release()
 		cls.__update_list()
 
 		queue_index = 0

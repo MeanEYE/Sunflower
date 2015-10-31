@@ -1317,23 +1317,33 @@ class FileList(ItemList):
 			while len(path_fragments) > 0:
 				parent = self._find_iter_by_name(path_fragments.pop(0), parent)
 
+		# check for list of always hidden files
+		provider = self.get_provider(parent_path)
+		always_hidden = []
+
+		if not show_hidden and provider.exists('.hidden', relative_to=parent_path):
+			raw_file = provider.get_file_handle('.hidden', FileMode.READ, relative_to=parent_path)
+			always_hidden.extend(raw_file.read().splitlines())
+			raw_file.close()
+
 		# node created
 		if event is MonitorSignals.CREATED:
 			# temporarily fix problem with duplicating items when file was saved with GIO
 			if self._find_iter_by_name(path, parent) is None:
-				if not show_hidden:
-					try:
-						with open(os.path.join(path, '.hidden')) as f:
-							dot_hidden = f.read().splitlines()
-					except Exception:
-						dot_hidden = []
+				should_add = True
 
-					if (path[0] == '.' or path[-1] == '~') and path in dot_hidden:
-						return
+				# check for hidden item or backup file
+				if not show_hidden and (path[0] == '.' or path[-1] == '~'):
+					should_add = False
+
+				# check if path is in any of the filters
+				if should_add and len(always_hidden) > 0:
+					should_add = path not in always_hidden
 
 				# add item
-				self._add_item(path, parent, parent_path)
-				self._flush_queue(parent)
+				if should_add:
+					self._add_item(path, parent, parent_path)
+					self._flush_queue(parent)
 
 			else:
 				self._update_item_details_by_name(relative_path, parent)
@@ -2021,16 +2031,20 @@ class FileList(ItemList):
 
 			# remove hidden files if we don't need them
 			if not show_hidden:
-				try:
-					with open(os.path.join(path, '.hidden')) as f:
-						dot_hidden = f.read().splitlines()
-				except Exception:
-					dot_hidden = []
+				always_hidden = []
 
-				item_list = filter(
-					lambda item_name: (item_name[0] != '.' and item_name[-1] != '~') and item_name not in dot_hidden,
-					item_list
-				)
+				# get list of always hidden files from the directory file
+				if provider.exists('.hidden', relative_to=path):
+					raw_file = provider.get_file_handle('.hidden', FileMode.READ, relative_to=path)
+					always_hidden.extend(raw_file.read().splitlines())
+					raw_file.close()
+
+				# filter out hidden items and backup files
+				item_list = filter(lambda name: name[0] != '.' and name[-1] != '~', item_list)
+
+				# filter out items specified in direcotry file or program
+				if len(always_hidden) > 0:
+					item_list = filter(lambda name: name not in always_hidden, item_list)
 
 			# assign item for selection
 			if not self._item_to_focus in item_list:

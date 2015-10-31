@@ -76,15 +76,7 @@ class TrashList(FileList):
 
 	def change_path(self, path=None, selected=None):
 		"""Change file list path."""
-		if path is not None and not path.startswith('trash:'):
-			path = self.get_provider().get_root_path(None)
+		if path is not None and not path.startswith('trash://'):
+			path = 'trash:///'
 
 		FileList.change_path(self, path, selected)
-
-	def get_provider(self):
-		"""Get list provider object."""
-		if self._provider is None:
-			self._provider = TrashProvider(self)
-
-		return self._provider
-

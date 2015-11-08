@@ -262,7 +262,10 @@ class AssociationManager:
 			self._application.create_terminal_tab(active_object._notebook, options)
 
 		else:
-			os.system('{0} &'.format(exec_string))
+			subprocess.Popen(
+						split_command,
+						cwd=os.path.dirname(selection[0])
+					)
 
 	def execute_file(self, path, provider=None):
 		"""Execute specified item properly."""
@@ -284,7 +287,7 @@ class AssociationManager:
 			# file type is executable
 			if is_x_app(path):
 				subprocess.Popen(
-							(path, ' &'),
+							(path,),
 							cwd=os.path.dirname(path)
 						)
 

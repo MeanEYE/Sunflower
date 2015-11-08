@@ -63,6 +63,9 @@ class FileList(ItemList):
 		self._sort_column = self._options.get('sort_column', 0)
 		self._sort_ascending = self._options.get('sort_ascending', True)
 
+		section = self._parent.options.section('item_list')
+		self._always_visible_items = section.get('always_visible')
+
 		# event object controlling path change thread
 		self._thread_active = Event()
 		self._main_thread_lock = Event()
@@ -1326,6 +1329,9 @@ class FileList(ItemList):
 			always_hidden.extend(raw_file.read().splitlines())
 			raw_file.close()
 
+		# override hidden list with always visible items
+		always_hidden = filter(lambda item: item not in self._always_visible_items, always_hidden)
+
 		# node created
 		if event is MonitorSignals.CREATED:
 			# temporarily fix problem with duplicating items when file was saved with GIO
@@ -1333,7 +1339,9 @@ class FileList(ItemList):
 				should_add = True
 
 				# check for hidden item or backup file
-				if not show_hidden and (path[0] == '.' or path[-1] == '~'):
+				if not show_hidden \
+				and (path[0] == '.' or path[-1] == '~') \
+				and path not in self._always_visible_items:
 					should_add = False
 
 				# check if path is in any of the filters
@@ -2039,8 +2047,11 @@ class FileList(ItemList):
 					always_hidden.extend(raw_file.read().splitlines())
 					raw_file.close()
 
+				# override hidden list with always visible items
+				always_hidden = filter(lambda item: item not in self._always_visible_items, always_hidden)
+
 				# filter out hidden items and backup files
-				item_list = filter(lambda name: name[0] != '.' and name[-1] != '~', item_list)
+				item_list = filter(lambda name: (name[0] != '.' and name[-1] != '~') or name in self._always_visible_items, item_list)
 
 				# filter out items specified in direcotry file or program
 				if len(always_hidden) > 0:
@@ -2389,6 +2400,9 @@ class FileList(ItemList):
 		ItemList.apply_settings(self)  # let parent apply its own settings
 		section = self._parent.options.section('item_list')
 		plugin_options = self._parent.plugin_options
+
+		# load list of always visible items
+		self._always_visible_items = section.get('always_visible')
 
 		# apply column visibility and sizes
 		self._reorder_columns()

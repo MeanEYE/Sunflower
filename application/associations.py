@@ -209,6 +209,7 @@ class AssociationManager:
 
 			if application is not None:
 				if application.supports_uris():
+					selection = map(lambda path: 'file://{0}'.format(path) if not path.startswith('file://') else path, selection)
 					application.launch_uris(selection)
 				else:
 					application.launch([gio.File(path=path) for path in selection])
@@ -225,7 +226,7 @@ class AssociationManager:
 			test_command = split_command[0] if len(split_command) > 1 else exec_string
 
 			if is_x_app(test_command):
-				os.system('{0} &'.format(exec_string))
+				subprocess.Popen(split_command, cwd=os.path.dirname(selection[0]))
 
 			else:
 				active_object = self._application.get_active_object()
@@ -262,10 +263,7 @@ class AssociationManager:
 			self._application.create_terminal_tab(active_object._notebook, options)
 
 		else:
-			subprocess.Popen(
-						split_command,
-						cwd=os.path.dirname(selection[0])
-					)
+			subprocess.Popen(split_command, cwd=os.path.dirname(selection[0]))
 
 	def execute_file(self, path, provider=None):
 		"""Execute specified item properly."""
@@ -286,10 +284,7 @@ class AssociationManager:
 		if gio.content_type_can_be_executable(mime_type) and should_execute:
 			# file type is executable
 			if is_x_app(path):
-				subprocess.Popen(
-							(path,),
-							cwd=os.path.dirname(path)
-						)
+				subprocess.Popen((path,), cwd=os.path.dirname(path))
 
 			else:
 				# command is console based, create terminal tab and fork it

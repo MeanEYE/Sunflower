@@ -284,7 +284,7 @@ class AssociationManager:
 			# file type is executable
 			if is_x_app(path):
 				subprocess.Popen(
-							(path, '&'),
+							(path, ' &'),
 							cwd=os.path.dirname(path)
 						)
 

@@ -481,13 +481,21 @@ class ItemListOptions(SettingsPage):
 
 	def _delete_always_visible(self, widget, data=None):
 		"""Delete selected item from the list of always visible files and directories."""
-		pass
+		selection = self._always_visible_list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		if selected_iter is not None:
+			# remove item from the store
+			item_list.remove(selected_iter)
+
+			# enable save button if item was removed
+			self._parent.enable_save()
 
 	def _add_path(self, widget, source):
 		"""Add path to the list from specified source"""
 		if source == Source.CUSTOM:
 			# show dialog for custom path entry
-			dialog = InputDialog(self._application)
+			dialog = InputDialog(self._parent)
 			dialog.set_title(_('Add custom directory'))
 			dialog.set_label(_('Full path:'))
 

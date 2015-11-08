@@ -737,6 +737,13 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_alt.set_active(search_modifier[1] == '1')
 		self._checkbox_shift.set_active(search_modifier[2] == '1')
 
+		# load always visible items
+		always_visible = section.get('always_visible')
+
+		self._always_visible_store.clear()
+		for item in always_visible:
+			self._always_visible_store.append((item,))
+
 		# load column settings
 		map(lambda extension: extension._load_settings(), self._application.column_editor_extensions)
 
@@ -783,6 +790,10 @@ class ItemListOptions(SettingsPage):
 								self._checkbox_shift.get_active()
 							)
 		section.set('search_modifier', search_modifier)
+
+		# save always visible items
+		always_visible = [ row[0] for row in self._always_visible_store ]
+		section.set('always_visible', always_visible)
 
 		# save column settings
 		map(lambda extension: extension._save_settings(), self._application.column_editor_extensions)

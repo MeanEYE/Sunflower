@@ -17,9 +17,11 @@ class ViewEditOptions(SettingsPage):
 
 		# viewer options
 		frame_view = gtk.Frame(_('View'))
+		vbox_view = gtk.VBox(False, 0)
+		vbox_view.set_border_width(5)
 
-		label_not_implemented = gtk.Label('This option is not implemented yet.')
-		label_not_implemented.set_sensitive(False)
+		self._checkbox_view_word_wrap = gtk.CheckButton(_('Wrap long lines'))
+		self._checkbox_view_word_wrap.connect('toggled', self._parent.enable_save)
 
 		# editor options
 		frame_edit = gtk.Frame(_('Edit'))
@@ -68,6 +70,8 @@ class ViewEditOptions(SettingsPage):
 		self._checkbox_terminal_command.connect('toggled', self._parent.enable_save)
 
 		# pack ui
+		vbox_view.pack_start(self._checkbox_view_word_wrap, False, False, 0)
+
 		vbox_application.pack_start(self._combobox_application, False, False, 0)
 		align_application.add(vbox_application)
 
@@ -81,7 +85,7 @@ class ViewEditOptions(SettingsPage):
 		vbox_edit.pack_start(self._radio_external, False, False, 0)
 		vbox_edit.pack_start(align_external, False, False, 0)
 
-		frame_view.add(label_not_implemented)
+		frame_view.add(vbox_view)
 		frame_edit.add(vbox_edit)
 
 		self.pack_start(frame_view, False, False, 0)
@@ -112,28 +116,31 @@ class ViewEditOptions(SettingsPage):
 
 	def _load_options(self):
 		"""Load options"""
-		options = self._application.options.section('editor')
+		view_options = self._application.options.section('viewer')
+		edit_options = self._application.options.section('editor')
 
 		# populate application list
-		self._populate_list(options.get('application'))
+		self._populate_list(edit_options.get('application'))
 
 		# select proper radio button
-		if options.get('type') == 0:
+		if edit_options.get('type') == 0:
 			self._radio_application.set_active(True)
 
 		else:
 			self._radio_external.set_active(True)
 
 		# configure user interface
-		editor_command = options.get('external_command')
+		editor_command = edit_options.get('external_command')
 		if editor_command is not None:
 			self._entry_editor.set_text(editor_command)
 
-		self._checkbox_terminal_command.set_active(options.get('terminal_command'))
+		self._checkbox_terminal_command.set_active(edit_options.get('terminal_command'))
+		self._checkbox_view_word_wrap.set_active(view_options.get('word_wrap'))
 
 	def _save_options(self):
 		"""Save options"""
-		options = self._application.options.section('editor')
+		view_options = self._application.options.section('viewer')
+		edit_options = self._application.options.section('editor')
 
 		# get external command
 		external_command = self._entry_editor.get_text()
@@ -153,8 +160,9 @@ class ViewEditOptions(SettingsPage):
 		command = application_command if editor_type == 0 else external_command
 
 		# store options to config
-		options.set('type', editor_type)
-		options.set('default_editor', command)
-		options.set('application', application_name)
-		options.set('external_command', external_command)
-		options.set('terminal_command', self._checkbox_terminal_command.get_active())
+		edit_options.set('type', editor_type)
+		edit_options.set('default_editor', command)
+		edit_options.set('application', application_name)
+		edit_options.set('external_command', external_command)
+		edit_options.set('terminal_command', self._checkbox_terminal_command.get_active())
+		view_options.set('word_wrap', self._checkbox_view_word_wrap.get_active())

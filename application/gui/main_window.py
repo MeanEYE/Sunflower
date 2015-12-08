@@ -2349,6 +2349,11 @@ class MainWindow(gtk.Window):
 					'terminal_command': False
 				})
 
+		# create default viewer options
+		self.options.create_section('viewer').update({
+					'word_wrap': False
+				})
+
 		# create default options for bookmarks
 		self.bookmark_options.update({
 					'add_home': True,

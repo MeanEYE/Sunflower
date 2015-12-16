@@ -1330,6 +1330,11 @@ class AddBookmarkDialog:
 		label_name.set_alignment(0, 0.5)
 		self._entry_name = gtk.Entry()
 		self._entry_name.connect('activate', self._confirm_entry)
+		self._entry_name.set_tooltip_text(_(
+					'Underscore in the label text indicates the next character '
+					'should be underlined and used for the mnemonic accelerator '
+					'key if it is the first character so marked.'
+				))
 
 		vbox_name = gtk.VBox(False, 0)
 

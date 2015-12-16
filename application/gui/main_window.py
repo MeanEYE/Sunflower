@@ -36,6 +36,7 @@ from widgets.bookmarks_menu import BookmarksMenu
 from tools.advanced_rename import AdvancedRename
 from tools.find_files import FindFiles
 from tools.version_check import VersionCheck
+from tools.disk_usage import DiskUsage
 from config import Config
 
 # try to import argument parser
@@ -160,6 +161,7 @@ class MainWindow(gtk.Window):
 		# create other interfaces
 		self.indicator = Indicator(self)
 		self.preferences_window = PreferencesWindow(self)
+		self.disk_usage = DiskUsage(self)
 
 		# define local variables
 		self._in_fullscreen = False
@@ -743,6 +745,9 @@ class MainWindow(gtk.Window):
 		# save window properties
 		self._save_window_position()
 		self._save_active_notebook()
+
+		# terminate all disk usage threads
+		self.disk_usage.cancel_all('')
 
 		# lock keyring
 		self.keyring_manager.lock_keyring()

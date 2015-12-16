@@ -255,6 +255,7 @@ class ItemList(PluginBase):
 		group.add_method('paste_from_clipboard', _('Paste items from clipboard'), self._paste_files_from_clipboard)
 		group.add_method('open_in_new_tab', _('Open selected directory in new tab'), self._open_in_new_tab)
 		group.add_method('open_directory', _('Open selected directory'), self._open_directory)
+		group.add_method('calculate_disk_usage', _('Calculate disk usage for directory'), self._calculate_disk_usage)
 		group.add_method('create_terminal', _('Create terminal tab'), self._create_terminal)
 		group.add_method('parent_directory', _('Go to parent directory'), self._parent_directory)
 		group.add_method('root_directory', _('Go to root directory'), self._root_directory)
@@ -307,6 +308,7 @@ class ItemList(PluginBase):
 		group.set_accelerator('copy_to_clipboard', keyval('c'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('paste_from_clipboard', keyval('v'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('open_in_new_tab', keyval('t'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
+		group.set_accelerator('calculate_disk_usage', keyval('space'), 0)
 		group.set_accelerator('create_terminal', keyval('z'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('parent_directory', keyval('BackSpace'), 0)
 		group.set_accelerator('root_directory', keyval('backslash'), gtk.gdk.CONTROL_MASK)
@@ -857,6 +859,10 @@ class ItemList(PluginBase):
 
 	def _open_directory(self, widget=None, data=None):
 		"""Open selected directory"""
+		return True
+
+	def _calculate_disk_usage(self, widget=None, data=None):
+		"""Start calculation of disk usage by the selected directory."""
 		return True
 
 	def _expand_directory(self, widget=None, data=None):

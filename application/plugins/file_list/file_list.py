@@ -398,6 +398,9 @@ class FileList(ItemList):
 		# cancel current directory monitor
 		self.cancel_monitors()
 
+		# cancel disk usage calculations
+		self._parent.disk_usage.cancel_all(self.path)
+
 	def _handle_emblem_toggle(self, widget, emblem=None):
 		"""Handle toggling emblem for selected item."""
 		selection = self._get_selection(relative=True, files_only=False)
@@ -522,6 +525,31 @@ class FileList(ItemList):
 				# just change path
 				name = item_list.get_value(selected_iter, Column.NAME)
 				self.change_path(os.path.join(self.path, name))
+
+		return True
+
+	def _calculate_disk_usage(self, widget=None, data=None):
+		"""Start calculation of disk usage by the selected directory."""
+		selection = self._item_list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		# we need selection for this
+		if selected_iter is None:
+			return True
+
+		name = item_list.get_value(selected_iter, Column.NAME)
+		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
+		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
+
+		# we can only operate on child directories
+		if is_dir and not is_parent:
+			monitor = self.get_monitor()
+
+			self._parent.disk_usage.calculate(
+					monitor.get_queue(),
+					self.get_provider(),
+					os.path.join(self.path, name)
+				)
 
 		return True
 
@@ -1301,6 +1329,10 @@ class FileList(ItemList):
 		"""Callback method fired when contents of directory has been changed"""
 		show_hidden = self._parent.options.section('item_list').get('show_hidden')
 
+		# make sure we are working with relative paths
+		if path.startswith(self.path):
+			path = path[len(self.path)+1:]
+
 		# get parent path
 		relative_path = path
 		parent_path = None
@@ -1318,7 +1350,8 @@ class FileList(ItemList):
 			path_fragments = path_fragments[:-1]
 
 			while len(path_fragments) > 0:
-				parent = self._find_iter_by_name(path_fragments.pop(0), parent)
+				fragment = path_fragments.pop(0)
+				parent = self._find_iter_by_name(fragment, parent)
 
 		# check for list of always hidden files
 		provider = self.get_provider(parent_path)
@@ -1371,6 +1404,10 @@ class FileList(ItemList):
 		# emblem changes
 		elif event is MonitorSignals.EMBLEM_CHANGED:
 			self._update_emblems_by_name(path, parent, parent_path)
+
+		# directory size calculation update
+		elif event is MonitorSignals.DIRECTORY_SIZE_CHANGED:
+			self._update_directory_size_by_name(path, parent)
 
 		self._change_title_text()
 		self._update_status_with_statistis()
@@ -1504,17 +1541,29 @@ class FileList(ItemList):
 		selected = store.get_value(selected_iter, Column.SELECTED)
 		cell.set_property('text', (None, self._selection_indicator)[selected])
 
-	def _find_iter_by_name(self, name, parent):
+	def _find_iter_by_name(self, name, parent=None):
 		""" Find and return item by name"""
 		result = None
+		found_iter = None
 
-		iter = self._store.iter_children(parent)
-		while iter:
-			if self._store.get_value(iter, Column.NAME) == name:
-				result = iter
-				break
+		# find starting point
+		if parent is None:
+			found_iter = self._store.get_iter_root()
+			found_iter = self._store.iter_next(found_iter)  # skip parent directory
 
-			iter = self._store.iter_next(iter)
+		elif self._store.iter_has_child(parent):
+			found_iter = self._store.iter_children(parent)
+			relative_parent = parent
+			name = os.path.join(self._store.get_value(parent, Column.NAME), name)
+
+		# check all the iters for specified name
+		if found_iter is not None:
+			while found_iter:
+				if self._store.get_value(found_iter, Column.NAME) == name:
+					result = found_iter
+					break
+
+				found_iter = self._store.iter_next(found_iter)
 
 		return result
 
@@ -2148,10 +2197,29 @@ class FileList(ItemList):
 		# update list
 		self._store.set_value(found_iter, Column.EMBLEMS, emblems)
 
+	def _update_directory_size_by_name(self, path, parent=None):
+		"""Update directory size for specified iter in list."""
+		found_iter = self._find_iter_by_name(path, parent)
+
+		if not found_iter:
+			return
+
+		# format total size
+		name = self._store.get_value(found_iter, Column.NAME)
+		absolute_path = os.path.join(self.path, name)
+		total_count, total_size = self._parent.disk_usage.get(absolute_path)
+		formated_size = common.format_size(total_size, self._size_format, False)
+
+		# update list
+		self._store.set_value(found_iter, Column.FORMATED_SIZE, formated_size)
+
 	def change_path(self, path=None, selected=None):
 		"""Change file list path."""
 		# cancel current directory monitor
 		self.cancel_monitors()
+
+		# cancel disk usage calculations
+		self._parent.disk_usage.cancel_all(self.path)
 
 		# make sure path is actually string and not unicode object
 		# we still handle unicode strings properly, just avoid issues

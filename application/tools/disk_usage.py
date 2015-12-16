@@ -76,6 +76,9 @@ class DiskUsage:
 
 	def calculate(self, monitor_queue, provider, path):
 		"""Calculate disk usage for specified path."""
+		if path in self._stop_events:
+			return
+
 		# store event to allow stopping thread early
 		stop_event = Event()
 		self._stop_events[path] = stop_event

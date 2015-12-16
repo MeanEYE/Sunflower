@@ -405,13 +405,15 @@ class FileList(ItemList):
 		"""Handle toggling emblem for selected item."""
 		selection = self._get_selection(relative=True, files_only=False)
 		path = self._options.get('path')
+		absolute_path = os.path.join(self._options.get('path'), selection)
 
 		# make sure we have emblem specified
 		if emblem is None:
 			return
 
 		# toggle emblem
-		self._parent.emblem_manager.toggle_emblem(path, selection, emblem)
+		item_path, item_name = os.path.split(absolute_path)
+		self._parent.emblem_manager.toggle_emblem(item_path, item_name, emblem)
 
 		# notify monitor about change
 		queue = self.get_monitor().get_queue()

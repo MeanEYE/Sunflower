@@ -528,7 +528,7 @@ class CopyOperation(Operation):
 				relative_path = None
 				source_path = self._source_path
 
-			if not self._options[Option.FOLLOW_TO_SYMLINK]:
+			if not self._options[Option.FOLLOW_SYMLINK]:
 				if self._source.is_link(item, relative_to=source_path):
 					self._link_list.append((item, source_path))
 					continue

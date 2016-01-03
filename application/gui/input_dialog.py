@@ -653,7 +653,7 @@ class CopyDialog:
 										'they will be presented to you after completion.'
 									))
 
-		self.checkbox_symlink = gtk.CheckButton(_('Follow to symlinks'))
+		self.checkbox_symlink = gtk.CheckButton(_('Follow symlinks'))
 
 		self._create_buttons()
 
@@ -744,7 +744,7 @@ class CopyDialog:
 		self.checkbox_silent.set_active(options.get('silent'))
 		self.checkbox_merge.set_active(options.get('merge_in_silent'))
 		self.checkbox_overwrite.set_active(options.get('overwrite_in_silent'))
-		self.checkbox_symlink.set_active(options.get('follow_to_symlink'))
+		self.checkbox_symlink.set_active(options.get('follow_symlink'))
 
 	def _save_configuration(self, widget=None, data=None):
 		"""Save default dialog configuration"""
@@ -786,7 +786,7 @@ class CopyDialog:
 			options.set('set_timestamp', self.checkbox_timestamp.get_active())
 
 		if provider_symlink:
-			options.set('follow_to_symlink', self.checkbox_symlink.get_active())
+			options.set('follow_symlink', self.checkbox_symlink.get_active())
 
 		options.set('silent', self.checkbox_silent.get_active())
 		options.set('merge_in_silent', self.checkbox_merge.get_active())

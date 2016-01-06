@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-16 19:40+0100\n"
+"POT-Creation-Date: 2016-01-06 23:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1187,7 +1187,7 @@ msgstr ""
 msgid "Permissions"
 msgstr ""
 
-#: application/gui/properties_window.py:94 application/gui/input_dialog.py:1702
+#: application/gui/properties_window.py:94 application/gui/input_dialog.py:1707
 msgid "Open With"
 msgstr ""
 
@@ -1223,7 +1223,7 @@ msgid "Error changing owner or group"
 msgstr ""
 
 #: application/gui/properties_window.py:441
-#: application/gui/input_dialog.py:1329 application/gui/input_dialog.py:1522
+#: application/gui/input_dialog.py:1329 application/gui/input_dialog.py:1527
 #: application/plugins/default_toolbar/bookmark_button.py:74
 #: application/plugins/file_list/dialogs.py:60
 #: application/plugins/file_list/dialogs.py:273
@@ -1232,7 +1232,7 @@ msgid "Name:"
 msgstr ""
 
 #: application/gui/properties_window.py:442
-#: application/gui/input_dialog.py:1529
+#: application/gui/input_dialog.py:1534
 msgid "Type:"
 msgstr ""
 
@@ -1242,7 +1242,7 @@ msgid "Size:"
 msgstr ""
 
 #: application/gui/properties_window.py:444
-#: application/gui/input_dialog.py:1337
+#: application/gui/input_dialog.py:1342
 msgid "Location:"
 msgstr ""
 
@@ -1451,7 +1451,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: application/gui/input_dialog.py:898 application/gui/input_dialog.py:1002
-#: application/gui/input_dialog.py:1440 application/gui/operation_dialog.py:206
+#: application/gui/input_dialog.py:1445 application/gui/operation_dialog.py:206
 #: application/plugins/file_list/file_list.py:1926
 msgid "Cancel"
 msgstr ""
@@ -1489,7 +1489,7 @@ msgstr ""
 msgid "Apply this action to all files"
 msgstr ""
 
-#: application/gui/input_dialog.py:1127 application/gui/input_dialog.py:1441
+#: application/gui/input_dialog.py:1127 application/gui/input_dialog.py:1446
 msgid "Skip"
 msgstr ""
 
@@ -1542,60 +1542,67 @@ msgid ""
 "the files being copied."
 msgstr ""
 
-#: application/gui/input_dialog.py:1405
+#: application/gui/input_dialog.py:1334
+msgid ""
+"Underscore in the label text indicates the next character should be "
+"underlined and used for the mnemonic accelerator key if it is the first "
+"character so marked."
+msgstr ""
+
+#: application/gui/input_dialog.py:1410
 msgid "Operation error"
 msgstr ""
 
-#: application/gui/input_dialog.py:1442
+#: application/gui/input_dialog.py:1447
 msgid "Skip all"
 msgstr ""
 
-#: application/gui/input_dialog.py:1443
+#: application/gui/input_dialog.py:1448
 msgid "Retry"
 msgstr ""
 
-#: application/gui/input_dialog.py:1492
+#: application/gui/input_dialog.py:1497
 msgid "No"
 msgstr ""
 
-#: application/gui/input_dialog.py:1493
+#: application/gui/input_dialog.py:1498
 msgid "Yes"
 msgstr ""
 
-#: application/gui/input_dialog.py:1505
+#: application/gui/input_dialog.py:1510
 msgid "Add toolbar widget"
 msgstr ""
 
-#: application/gui/input_dialog.py:1616
+#: application/gui/input_dialog.py:1621
 msgid "Select range"
 msgstr ""
 
-#: application/gui/input_dialog.py:1617
+#: application/gui/input_dialog.py:1622
 msgid "Select part of the text:"
 msgstr ""
 
-#: application/gui/input_dialog.py:1641
+#: application/gui/input_dialog.py:1646
 msgid "Add application"
 msgstr ""
 
-#: application/gui/input_dialog.py:1642
+#: application/gui/input_dialog.py:1647
 msgid "Application name:"
 msgstr ""
 
-#: application/gui/input_dialog.py:1652
+#: application/gui/input_dialog.py:1657
 msgid "Select"
 msgstr ""
 
-#: application/gui/input_dialog.py:1723
+#: application/gui/input_dialog.py:1728
 msgid "Select application:"
 msgstr ""
 
-#: application/gui/input_dialog.py:1726
+#: application/gui/input_dialog.py:1731
 #, python-brace-format
 msgid "Open <i>{0}</i> with:"
 msgstr ""
 
-#: application/gui/input_dialog.py:1762
+#: application/gui/input_dialog.py:1767
 msgid "Use a custom command"
 msgstr ""
 

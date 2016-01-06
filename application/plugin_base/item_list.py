@@ -288,6 +288,7 @@ class ItemList(PluginBase):
 		group.add_method('show_tab_menu', _('Show tab menu'), self._show_tab_menu)
 		group.add_method('copy_path_to_clipboard', _('Copy path to clipboard'), self.copy_path_to_clipboard)
 		group.add_method('copy_selected_path_to_clipboard', _('Copy selected path to clipboard'), self.copy_selected_path_to_clipboard)
+		group.add_method('copy_selected_item_name_to_clipboard', _('Copy selected item name to clipboard'), self.copy_selected_item_name_to_clipboard)
 		group.add_method('copy_path_to_command_entry', _('Copy path to command entry'), self.copy_path_to_command_entry)
 		group.add_method('copy_selection_to_command_entry', _('Copy selection to command entry'), self.copy_selection_to_command_entry)
 		group.add_method('custom_path_entry', _('Ask and navigate to path'), self.custom_path_entry)
@@ -343,6 +344,7 @@ class ItemList(PluginBase):
 		group.set_accelerator('show_tab_menu', keyval('grave'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('copy_path_to_clipboard', keyval('l'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('copy_selected_path_to_clipboard', keyval('c'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
+		group.set_accelerator('copy_selected_item_name_to_clipboard', keyval('f'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('copy_path_to_command_entry', keyval('Return'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_alt_accelerator('copy_path_to_command_entry', keyval('KP_Enter'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('copy_selection_to_command_entry', keyval('Return'), gtk.gdk.CONTROL_MASK)
@@ -1126,6 +1128,22 @@ class ItemList(PluginBase):
 		item = menu_manager.create_menu_item({'type': 'separator'})
 		result.append(item)
 
+		item = menu_manager.create_menu_item({
+								'label': _('Copy file name'),
+								'callback': self.copy_selected_item_name_to_clipboard
+							})
+		result.append(item)
+
+		item = menu_manager.create_menu_item({
+								'label': _('Copy path'),
+								'callback': self.copy_selected_path_to_clipboard
+							})
+		result.append(item)
+
+		# separator
+		item = menu_manager.create_menu_item({'type': 'separator'})
+		result.append(item)
+
 		# delete
 		item = menu_manager.create_menu_item({
 								'label': _('_Delete'),
@@ -1564,6 +1582,12 @@ class ItemList(PluginBase):
 		"""Copy paths of selected items to clipboard"""
 		selection = self._get_selection_list(relative=False)
 		self._parent.set_clipboard_text('\n'.join(selection))
+		return True
+
+	def copy_selected_item_name_to_clipboard(self, widget=None, data=None):
+		"""Copy basename of selected items to clipboard"""
+		selection = self._get_selection_list(relative=False)
+		self._parent.set_clipboard_text('\n'.join(os.path.basename(item) for item in selection))
 		return True
 
 	def copy_path_to_command_entry(self, widget=None, data=None):

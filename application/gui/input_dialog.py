@@ -721,6 +721,8 @@ class CopyDialog:
 										'they will be presented to you after completion.'
 									))
 
+		self.checkbox_symlink = gtk.CheckButton(_('Follow symlinks'))
+
 		self._create_buttons()
 
 		# pack user interface
@@ -752,6 +754,7 @@ class CopyDialog:
 		vbox.pack_start(self.checkbox_timestamp, False, False, 0)
 		vbox.pack_start(self.checkbox_silent, False, False, 0)
 		vbox.pack_start(align_silent, False, False, 0)
+		vbox.pack_start(self.checkbox_symlink, False, False, 0)
 
 		self._dialog.vbox.pack_start(vbox, False, False, 0)
 
@@ -773,21 +776,25 @@ class CopyDialog:
 		source_set_owner = ProviderSupport.SET_OWNER in source_support
 		source_set_mode = ProviderSupport.SET_ACCESS in source_support
 		source_set_timestamp = ProviderSupport.SET_TIMESTAMP in source_support
+		source_symlink_support = ProviderSupport.SYMBOLIC_LINK in source_support
 
 		if self._destination_provider is not None:
 			destination_support = self._destination_provider.get_support()
 			destination_set_owner = ProviderSupport.SET_OWNER in destination_support
 			destination_set_mode = ProviderSupport.SET_ACCESS in destination_support
 			destination_set_timestamp = ProviderSupport.SET_TIMESTAMP in destination_support
+			destination_symlink_support = ProviderSupport.SYMBOLIC_LINK in source_support
 
 		else:
 			destination_set_owner = False
 			destination_set_mode = False
 			destination_set_timestamp = False
+			destination_symlink_support = False
 
 		provider_set_owner = source_set_owner and destination_set_owner
 		provider_set_mode = source_set_mode and destination_set_mode
 		provider_set_timestamp = source_set_timestamp and destination_set_timestamp
+		symlinks_supported = source_symlink_support and destination_symlink_support
 
 		# disable checkboxes that are not supported by provider
 		if not provider_set_owner:
@@ -802,6 +809,10 @@ class CopyDialog:
 			self.checkbox_timestamp.set_sensitive(False)
 			self.checkbox_timestamp.set_tooltip_text(_('Not supported by file system provider'))
 
+		if not symlinks_supported:
+			self.checkbox_symlink.set_sensitive(False)
+			self.checkbox_symlink.set_tooltip_text(_('Not supported by file system provider'))
+
 		# set checkbox states
 		self.checkbox_owner.set_active(options.get('set_owner') and provider_set_owner)
 		self.checkbox_mode.set_active(options.get('set_mode') and provider_set_mode)
@@ -809,6 +820,7 @@ class CopyDialog:
 		self.checkbox_silent.set_active(options.get('silent'))
 		self.checkbox_merge.set_active(options.get('merge_in_silent'))
 		self.checkbox_overwrite.set_active(options.get('overwrite_in_silent'))
+		self.checkbox_symlink.set_active(options.get('follow_symlink'))
 
 	def _save_configuration(self, widget=None, data=None):
 		"""Save default dialog configuration"""
@@ -819,21 +831,25 @@ class CopyDialog:
 		source_set_owner = ProviderSupport.SET_OWNER in source_support
 		source_set_mode = ProviderSupport.SET_ACCESS in source_support
 		source_set_timestamp = ProviderSupport.SET_TIMESTAMP in source_support
+		source_symlink = ProviderSupport.SYMBOLIC_LINK in source_support
 
 		if self._destination_provider is not None:
 			destination_support = self._destination_provider.get_support()
 			destination_set_owner = ProviderSupport.SET_OWNER in destination_support
 			destination_set_mode = ProviderSupport.SET_ACCESS in destination_support
 			destination_set_timestamp = ProviderSupport.SET_TIMESTAMP in destination_support
+			destination_symlink = ProviderSupport.SYMBOLIC_LINK in source_support
 
 		else:
 			destination_set_owner = False
 			destination_set_mode = False
 			destination_set_timestamp = False
+			destination_symlink = False
 
 		provider_set_owner = source_set_owner and destination_set_owner
 		provider_set_mode = source_set_mode and destination_set_mode
 		provider_set_timestamp = source_set_timestamp and destination_set_timestamp
+		provider_symlink = source_symlink and destination_symlink
 
 		# only save options supported by provider
 		if provider_set_owner:
@@ -845,12 +861,15 @@ class CopyDialog:
 		if provider_set_timestamp:
 			options.set('set_timestamp', self.checkbox_timestamp.get_active())
 
+		if provider_symlink:
+			options.set('follow_symlink', self.checkbox_symlink.get_active())
+
 		options.set('silent', self.checkbox_silent.get_active())
 		options.set('merge_in_silent', self.checkbox_merge.get_active())
 		options.set('overwrite_in_silent', self.checkbox_overwrite.get_active())
 
 		# show message letting user know
-		if not (provider_set_owner and provider_set_mode and provider_set_timestamp):
+		if not (provider_set_owner and provider_set_mode and provider_set_timestamp and provider_symlink):
 			dialog = gtk.MessageDialog(
 									self._dialog,
 									gtk.DIALOG_DESTROY_WITH_PARENT,
@@ -969,7 +988,8 @@ class CopyDialog:
 				self.checkbox_timestamp.get_active(),
 				self.checkbox_silent.get_active(),
 				self.checkbox_merge.get_active(),
-				self.checkbox_overwrite.get_active()
+				self.checkbox_overwrite.get_active(),
+				self.checkbox_symlink.get_active()
 			)
 		selected_iter = self.combobox_queue.get_active_iter()
 		queue_name = OperationQueue.get_name_from_iter(selected_iter)

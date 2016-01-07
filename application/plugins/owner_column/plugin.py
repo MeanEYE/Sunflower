@@ -1,6 +1,7 @@
 import gtk
 
-from plugins.file_list.plugin import Column, FileList
+from plugins.file_list.file_list import Column
+from plugins.file_list.plugin import FileList
 from plugin_base.column_extension import ColumnExtension
 
 

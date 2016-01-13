@@ -898,19 +898,43 @@ class MainWindow(gtk.Window):
 			# get selected item from the left list
 			left_selection_short = left_object._get_selection(True)
 			left_selection_long = left_object._get_selection(False)
+			left_path_short = os.path.basename(left_object.path)
+			left_path_long = left_object.path
+			if not left_selection_short:
+				left_selection_short = "."
+				left_selection_long = left_object.path
 
 		if hasattr(right_object, '_get_selection'):
 			# get selected item from the left list
 			right_selection_short = right_object._get_selection(True)
 			right_selection_long = right_object._get_selection(False)
+			right_path_short = os.path.basename(right_object.path)
+			right_path_long = right_object.path
+			if not right_selection_short:
+				right_selection_short = "."
+				right_selection_long = right_object.path
 
 		# get universal 'selected item' values
 		if self.get_active_object() is left_object:
 			selection_short = left_selection_short
 			selection_long = left_selection_long
+			path_short = left_path_short
+			path_long = left_path_long
+			selection_list_short = left_object._get_selection_list(False, True)
+			selection_list_long = left_object._get_selection_list(False, False)
+			if not selection_list_short:
+				selection_list_short = ['.']
+				selection_list_long = [left_object.path]
 		else:
 			selection_short = right_selection_short
 			selection_long = right_selection_long
+			path_short = right_path_short
+			path_long = right_path_long
+			selection_list_short = right_object._get_selection_list(False, True)
+			selection_list_long = right_object._get_selection_list(False, False)
+			if not selection_list_short:
+				selection_list_short = ['.']
+				selection_list_long = [right_object.path]
 
 		# replace command
 		command = command.replace('%l', str(left_selection_short))
@@ -919,6 +943,25 @@ class MainWindow(gtk.Window):
 		command = command.replace('%R', str(right_selection_long))
 		command = command.replace('%s', str(selection_short))
 		command = command.replace('%S', str(selection_long))
+		command = command.replace('%d', str(path_short))
+		command = command.replace('%D', str(path_long))
+
+		# TODO: Simplify this.
+		if selection_list_short:
+			command = command.replace('%m', '"' + '" "'.join(selection_list_short) + '"')
+
+		if selection_list_short and (len(selection_list_short) > 1 or selection_list_short[0] != selection_short):
+			command = command.replace('%u', '"' + '" "'.join(selection_list_short) + '"')
+		else:
+			command = command.replace('%u', '"' + left_selection_short + '" "' + right_selection_short + '"')
+
+		if selection_list_long:
+			command = command.replace('%M', '"' + '" "'.join(selection_list_long) + '"')
+
+		if selection_list_long and (len(selection_list_long) > 1 or selection_list_long[0] != selection_long):
+			command = command.replace('%U', '"' + '" "'.join(selection_list_long) + '"')
+		else:
+			command = command.replace('%U', '"' + left_selection_long + '" "' + right_selection_long + '"')
 
 		# execute command using programs default handler
 		self.execute_command(widget, command)

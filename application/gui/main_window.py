@@ -62,8 +62,8 @@ class MainWindow(gtk.Window):
 	# continue increasing and will never be reset.
 	version = {
 			'major': 0,
-			'minor': 2,
-			'build': 59,
+			'minor': 3,
+			'build': 60,
 			'stage': 'f'
 		}
 

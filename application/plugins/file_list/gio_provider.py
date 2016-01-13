@@ -483,3 +483,33 @@ class MtpProvider(GioProvider):
 		"""Return supported options by provider"""
 		return ()
 
+
+class ArchiveProvider(GioProvider):
+	is_local = True
+	protocol = 'archive'
+
+	def get_protocol_icon(self):
+		"""Return protocol icon name"""
+		return 'drive-removable-media'
+
+	def get_support(self):
+		"""Return supported options by provider"""
+		return ()
+
+	def get_root_path(self, path):
+		"""Get root for specified path"""
+		result = None
+
+		# try to get mount
+		mount = gio.File(path).find_enclosing_mount()
+
+		# get root directory from mount
+		if mount is not None:
+			result = mount.get_root().get_uri()
+
+		# remove trailing slash
+		if result[-1] == os.path.sep:
+			result = result[:-1]
+
+		return result
+

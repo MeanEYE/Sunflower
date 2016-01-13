@@ -2094,6 +2094,10 @@ class FileList(ItemList):
 				# clear locks and exit
 				self._thread_active.clear()
 				self._main_thread_lock.clear()
+
+				with gtk.gdk.lock:
+					self._title_bar.hide_spinner()
+
 				return
 
 			# remove hidden files if we don't need them

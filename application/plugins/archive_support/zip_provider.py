@@ -30,7 +30,7 @@ class ZipProvider(Provider):
 		icon_manager = self._parent._parent.icon_manager
 		self._protocol_icon = icon_manager.get_icon_for_file(path)
 
-	def _real_path(self, path, relative_to=None):
+	def real_path(self, path, relative_to=None):
 		"""Commonly used function to get real path"""
 		result = path if relative_to is None else os.path.join(relative_to, path)
 

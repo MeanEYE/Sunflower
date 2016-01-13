@@ -89,12 +89,12 @@ class ZipProvider(Provider):
 
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		return real_path in self._file_list and real_path not in self._cache
 
 	def is_dir(self, path, relative_to=None):
 		"""Test if given path is directory"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		return real_path in self._cache
 
 	def is_link(self, path, relative_to=None):
@@ -103,7 +103,7 @@ class ZipProvider(Provider):
 
 	def exists(self, path, relative_to=None):
 		"""Test if given path exists"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		return real_path in self._cache or real_path == ''
 
 	def remove_directory(self, path, recursive, relative_to=None):
@@ -125,7 +125,7 @@ class ZipProvider(Provider):
 	def get_file_handle(self, path, mode, relative_to=None):
 		"""Open path in specified mode and return its handle"""
 		result = None
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 
 		if mode is Mode.READ:
 			result = self._zip_file.open(real_path, 'r')
@@ -147,7 +147,7 @@ class ZipProvider(Provider):
 
 		"""
 		result = None
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		key_name, file_name = os.path.split(real_path)
 
 		if key_name in self._cache:
@@ -219,7 +219,7 @@ class ZipProvider(Provider):
 
 	def list_dir(self, path, relative_to=None):
 		"""Get directory list."""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 
 		# update file cache
 		if len(self._cache) == 0:

@@ -80,7 +80,7 @@ class Provider:
 	"""Abstract provider class used to manipulate items"""
 
 	is_local = True  # if provider handles local files
-	protocol = None # name of supported protocol
+	protocol = None  # name of supported protocol
 	archives = ()  # list of supported archive types
 
 	def __init__(self, parent, path=None, selection=None):
@@ -94,7 +94,7 @@ class Provider:
 		if selection is not None:
 			self._selection = [item for item in selection if self.exists(item, path)]
 
-	def _real_path(self, path, relative_to=None):
+	def real_path(self, path, relative_to=None):
 		"""Commonly used function to get real path"""
 		return path if relative_to is None else os.path.join(relative_to, path)
 

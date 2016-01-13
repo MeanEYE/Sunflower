@@ -399,7 +399,7 @@ class FileList(ItemList):
 		self.cancel_monitors()
 
 		# cancel disk usage calculations
-		self._parent.disk_usage.cancel_all(self.path)
+		self._parent.disk_usage.cancel_all_for_object(self)
 
 	def _handle_emblem_toggle(self, widget, emblem=None):
 		"""Handle toggling emblem for selected item."""
@@ -548,6 +548,7 @@ class FileList(ItemList):
 			monitor = self.get_monitor()
 
 			self._parent.disk_usage.calculate(
+					self,
 					monitor.get_queue(),
 					self.get_provider(),
 					os.path.join(self.path, name)
@@ -2209,7 +2210,7 @@ class FileList(ItemList):
 		# format total size
 		name = self._store.get_value(found_iter, Column.NAME)
 		absolute_path = os.path.join(self.path, name)
-		total_count, total_size = self._parent.disk_usage.get(absolute_path)
+		total_count, total_size = self._parent.disk_usage.get(self, absolute_path)
 		formated_size = common.format_size(total_size, self._size_format, False)
 
 		# update list
@@ -2221,7 +2222,7 @@ class FileList(ItemList):
 		self.cancel_monitors()
 
 		# cancel disk usage calculations
-		self._parent.disk_usage.cancel_all(self.path)
+		self._parent.disk_usage.cancel_all_for_object(self)
 
 		# make sure path is actually string and not unicode object
 		# we still handle unicode strings properly, just avoid issues

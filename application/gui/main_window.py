@@ -747,7 +747,7 @@ class MainWindow(gtk.Window):
 		self._save_active_notebook()
 
 		# terminate all disk usage threads
-		self.disk_usage.cancel_all('')
+		self.disk_usage.cancel_all()
 
 		# lock keyring
 		self.keyring_manager.lock_keyring()

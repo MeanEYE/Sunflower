@@ -258,7 +258,7 @@ class GioProvider(Provider):
 	def move_path(self, source, destination, relative_to=None):
 		"""Move path on same file system to a different parent node """
 		real_source = self.real_path(source, relative_to)
-		gio.File(real_source).move(gio.File(destination))
+		Gio.File(real_source).move(Gio.File(destination))
 
 	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""
@@ -413,7 +413,7 @@ class TrashProvider(GioProvider):
 	def remove_directory(self, path, relative_to=None):
 		"""Remove directory and optionally its contents"""
 		real_path = self.real_path(path, relative_to)
-		gio.File(real_path).delete()
+		Gio.File(real_path).delete()
 
 	def get_protocol_icon(self):
 		"""Return protocol icon name"""
@@ -501,7 +501,7 @@ class ArchiveProvider(GioProvider):
 		result = None
 
 		# try to get mount
-		mount = gio.File(path).find_enclosing_mount()
+		mount = Gio.File(path).find_enclosing_mount()
 
 		# get root directory from mount
 		if mount is not None:

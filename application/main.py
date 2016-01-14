@@ -14,7 +14,7 @@ except:
 
 else:
 	# import required modules
-	from gi.repository import Gtk, Gdk
+	from gi.repository import Gtk, Gdk, GObject
 
 try:
 	# set process title
@@ -34,7 +34,7 @@ class Sunflower(Gtk.Application):
 	"""Main application instance."""
 
 	def __init__(self):
-		Gtk.Application.__init__(self, application_id='org.sunflower')
+		GObject.GObject.__init__(self, application_id='org.sunflower')
 
 	def do_activate(self):
 		"""Handle application activation."""

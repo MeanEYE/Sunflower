@@ -1109,7 +1109,7 @@ class CopyOperation(Operation):
 			response = self._get_create_error_input(error, True)
 
 			# handle user response
-			if response == gtk.RESPONSE_YES:
+			if response == Gtk.ResponseType.YES:
 				self._create_link(link_name)
 
 			# exit method
@@ -1153,14 +1153,14 @@ class CopyOperation(Operation):
 			GObject.idle_add(self._dialog.increment_current_count, 1)
 
 	def _create_links(self):
-		gobject.idle_add(self._update_status, _('Creating links...'))
+		GObject.idle_add(self._update_status, _('Creating links...'))
 		for link_name, source_path in self._link_list:
 			# abort operation if requested
 			if self._abort.is_set(): break
 			self._can_continue.wait()  # pause lock
 
 			#create link
-			gobject.idle_add(self._dialog.set_current_file, link_name)
+			GObject.idle_add(self._dialog.set_current_file, link_name)
 			self._create_link(link_name, source_path)
 
 	def run(self):

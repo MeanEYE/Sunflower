@@ -1,4 +1,4 @@
-import gtk
+from gi.repository import Gtk
 
 from threading import Lock
 from Queue import Queue, Empty
@@ -97,7 +97,7 @@ class OperationQueue:
 	def get_model(cls):
 		"""Return model to be used with different widgets."""
 		if cls._list_store is None:
-			cls._list_store = gtk.ListStore(str, int)
+			cls._list_store = Gtk.ListStore(str, int)
 			cls.__update_list()
 
 		return cls._list_store
@@ -145,17 +145,17 @@ class OperationQueue:
 		# get response from the user
 		response = dialog.get_response()
 
-		if response[0] != gtk.RESPONSE_OK:
+		if response[0] != Gtk.ResponseType.OK:
 			widget.set_active(0)
 			return False
 
 		# make sure queue doesn't already exist
 		if response[1] in cls._queue_list:
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									dialog,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_ERROR,
-									gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.ERROR,
+									Gtk.ButtonsType.OK,
 									_('Operation queue with specified name already exists.')
 								)
 			dialog.run()

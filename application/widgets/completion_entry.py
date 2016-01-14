@@ -1,7 +1,7 @@
 import os
 import re
 
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject
 
 
 
@@ -10,7 +10,7 @@ class PathCompletionEntry(Gtk.Entry):
 	number_split = re.compile('([0-9]+)')
 
 	def __init__(self, application):
-		gtk.Entry.__init__(self)
+		GObject.GObject.__init__(self)
 
 		# store application locally for later use
 		self._application = application
@@ -22,7 +22,7 @@ class PathCompletionEntry(Gtk.Entry):
 		self._store.set_sort_func(0, self._sort_list)
 
 		# create entry field with completion
-		self._completion = gtk.EntryCompletion()
+		self._completion = Gtk.EntryCompletion()
 		self._completion.set_model(self._store)
 		self._completion.set_text_column(0)
 		self._completion.set_inline_completion(True)

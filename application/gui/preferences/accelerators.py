@@ -88,7 +88,7 @@ class AcceleratorOptions(SettingsPage):
 		label_warning.set_line_wrap(True)
 		label_warning.connect('size-allocate', self._adjust_label)
 
-		label_note = gtk.Label(_('Double click on accelerator to assign new one.'))
+		label_note = Gtk.Label(label=_('Double click on accelerator to assign new one.'))
 		label_note.set_alignment(0, 0)
 
 		# pack interface
@@ -236,7 +236,7 @@ class AcceleratorOptions(SettingsPage):
 			modifier = self._accels.get_value(accel_iter, column_mods)
 
 			if keyval == 0 and modifier == 0:
-				self.__accel_edited(widget, path, gtk.keysyms.BackSpace, 0, None, primary)
+				self.__accel_edited(widget, path, Gdk.KEY_BackSpace, 0, None, primary)
 			else:
 				self.__change_accelerator(accel_iter, 0, 0, primary)
 

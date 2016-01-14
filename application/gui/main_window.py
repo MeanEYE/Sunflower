@@ -70,7 +70,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def __init__(self, application):
 		# create main window and other widgets
-		Gtk.Window.__init__(self, application=application)
+		GObject.GObject.__init__(self, application=application)
 
 		# set application name
 		GLib.set_application_name('Sunflower')
@@ -191,8 +191,8 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.button_commands.set_menu_model(self.commands_menu)
 		self.button_commands.insert_action_group('commands', self.commands_actions)
 
-		self.header_bar.pack_start(self.button_new)
-		self.header_bar.pack_start(self.button_commands)
+		self.header_bar.pack_start(self.button_new, True, True, 0)
+		self.header_bar.pack_start(self.button_commands, True, True, 0)
 
 		# define local variables
 		self._in_fullscreen = False

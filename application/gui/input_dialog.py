@@ -289,7 +289,7 @@ class CreateDialog(InputDialog):
 		button_save.connect('clicked', self._save_configuration)
 		button_save.set_tooltip_text(_('Save as default configuration'))
 
-		align_save = Gtk.Alignment()
+		align_save = Gtk.Alignment.new()
 		align_save.add(button_save)
 
 		# pack interface
@@ -561,28 +561,28 @@ class DirectoryCreateDialog(CreateDialog):
 		section.set('directory_mode', self._mode)
 
 
-class DeleteDialog(gtk.MessageDialog):
+class DeleteDialog(Gtk.MessageDialog):
 	"""Confirmation dialog for item removal with operation queue selection."""
 
 	def __init__(self, application, message):
-		gtk.MessageDialog.__init__(
+		GObject.GObject.__init__(
 				self,
 				parent=application,
-				flags=gtk.DIALOG_DESTROY_WITH_PARENT,
-				type=gtk.MESSAGE_QUESTION,
-				buttons=gtk.BUTTONS_YES_NO,
+				flags=Gtk.DialogFlags.DESTROY_WITH_PARENT,
+				type=Gtk.MessageType.QUESTION,
+				buttons=Gtk.ButtonsType.YES_NO,
 				message_format=message
 			)
 
 		# create user interface for operation queue
-		vbox_queue = gtk.VBox(False, 0)
+		vbox_queue = Gtk.VBox(False, 0)
 
-		label_queue = gtk.Label(_('Operation queue:'))
+		label_queue = Gtk.Label(label=_('Operation queue:'))
 		label_queue.set_alignment(0, 0.5)
 
-		cell_name = gtk.CellRendererText()
+		cell_name = Gtk.CellRendererText()
 
-		self.combobox_queue = gtk.ComboBox(model=OperationQueue.get_model())
+		self.combobox_queue = Gtk.ComboBox(model=OperationQueue.get_model())
 		self.combobox_queue.pack_start(cell_name, True)
 		self.combobox_queue.add_attribute(cell_name, 'text', OperationQueue.COLUMN_TEXT)
 		self.combobox_queue.set_active(0)
@@ -597,7 +597,7 @@ class DeleteDialog(gtk.MessageDialog):
 		vbox_queue.show_all()
 
 		# focus default widget
-		self.get_widget_for_response(gtk.RESPONSE_YES).grab_focus()
+		self.get_widget_for_response(Gtk.ResponseType.YES).grab_focus()
 
 	def get_response(self):
 		"""Show dialog and get response code."""
@@ -644,8 +644,8 @@ class CopyDialog:
 		# additional options
 		hbox_additional = Gtk.HBox(False, 10)
 		separator_file_type = Gtk.HSeparator()
-		vbox_type = gtk.VBox(False, 0)
-		vbox_queue = gtk.VBox(False, 0)
+		vbox_type = Gtk.VBox(False, 0)
+		vbox_queue = Gtk.VBox(False, 0)
 
 		label_type = Gtk.Label(label=_('Only files of this type:'))
 		label_type.set_alignment(0, 0.5)
@@ -654,12 +654,12 @@ class CopyDialog:
 		self.entry_type.set_text('*')
 		self.entry_type.connect('changed', self._update_label)
 
-		label_queue = gtk.Label(_('Operation queue:'))
+		label_queue = Gtk.Label(label=_('Operation queue:'))
 		label_queue.set_alignment(0, 0.5)
 
-		cell_name = gtk.CellRendererText()
+		cell_name = Gtk.CellRendererText()
 
-		self.combobox_queue = gtk.ComboBox(model=OperationQueue.get_model())
+		self.combobox_queue = Gtk.ComboBox(model=OperationQueue.get_model())
 		self.combobox_queue.pack_start(cell_name, True)
 		self.combobox_queue.add_attribute(cell_name, 'text', OperationQueue.COLUMN_TEXT)
 		self.combobox_queue.set_active(0)
@@ -716,7 +716,7 @@ class CopyDialog:
 										'they will be presented to you after completion.'
 									))
 
-		self.checkbox_symlink = gtk.CheckButton(_('Follow symlinks'))
+		self.checkbox_symlink = Gtk.CheckButton(_('Follow symlinks'))
 
 		self._create_buttons()
 

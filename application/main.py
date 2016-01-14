@@ -1,5 +1,9 @@
+import os
+import sys
+
+
 try:
-	# try to from from gi.repository import Gtk
+	# check if gtk is available
 	import gi
 	gi.require_version('Gtk', '3.0')
 
@@ -8,9 +12,15 @@ except:
 	print "Error starting Sunflower, missing GTK 3.0+"
 	sys.exit(1)
 
+else:
+	# import required modules
+	from gi.repository import Gtk, Gdk
+
 try:
+	# set process title
 	from setproctitle import setproctitle
 	setproctitle('sunflower')
+
 except ImportError:
 	pass
 
@@ -18,11 +28,6 @@ except ImportError:
 application_path = os.path.abspath(os.path.dirname(sys.argv[0]))
 if application_path not in sys.path:
 	sys.path.insert(1, application_path)
-
-import os
-import sys
-
-from gi.repository import Gtk, Gdk
 
 
 class Sunflower(Gtk.Application):

@@ -39,7 +39,7 @@ class ItemListOptions(SettingsPage):
 
 		# create frames
 		label_look_and_feel = Gtk.Label(label=_('Look & feel'))
-		label_hidden_files = gtk.Label(_('Hidden files'))
+		label_hidden_files = Gtk.Label(label=_('Hidden files'))
 		label_operation = Gtk.Label(label=_('Operation'))
 		label_directories = Gtk.Label(label=_('Directories'))
 		label_columns = Gtk.Label(label=_('Columns'))
@@ -166,34 +166,34 @@ class ItemListOptions(SettingsPage):
 		self._entry_time_format.connect('changed', self._parent.enable_save)
 
 		# hidden files
-		table_always_visible = gtk.Table(rows=3, columns=1, homogeneous=False)
+		table_always_visible = Gtk.Table(rows=3, columns=1, homogeneous=False)
 		table_always_visible.set_row_spacing(1, 5)
 
-		self._checkbox_show_hidden = gtk.CheckButton(_('Show hidden files'))
+		self._checkbox_show_hidden = Gtk.CheckButton(_('Show hidden files'))
 		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
 
-		container_always_visible = gtk.ScrolledWindow()
-		container_always_visible.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-		container_always_visible.set_shadow_type(gtk.SHADOW_IN)
+		container_always_visible = Gtk.ScrolledWindow()
+		container_always_visible.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+		container_always_visible.set_shadow_type(Gtk.ShadowType.IN)
 
-		label_always_visible = gtk.Label(_('Always visible files and directories:'))
+		label_always_visible = Gtk.Label(label=_('Always visible files and directories:'))
 		label_always_visible.set_alignment(0, 0.5)
 
-		self._always_visible_store = gtk.ListStore(str)
-		self._always_visible_list = gtk.TreeView(model=self._always_visible_store)
+		self._always_visible_store = Gtk.ListStore(str)
+		self._always_visible_list = Gtk.TreeView(model=self._always_visible_store)
 		self._always_visible_list.set_headers_visible(False)
 
-		cell_name = gtk.CellRendererText()
-		col_name = gtk.TreeViewColumn(None, cell_name, text=0)
+		cell_name = Gtk.CellRendererText()
+		col_name = Gtk.TreeViewColumn(None, cell_name, text=0)
 
 		self._always_visible_list.append_column(col_name)
 
-		hbox_always_visible = gtk.HBox(False, 5)
+		hbox_always_visible = Gtk.HBox(False, 5)
 
-		button_add_always_visible = gtk.Button(stock=gtk.STOCK_ADD)
+		button_add_always_visible = Gtk.Button(stock=Gtk.STOCK_ADD)
 		button_add_always_visible.connect('clicked', self._add_always_visible)
 
-		button_delete_always_visible = gtk.Button(stock=gtk.STOCK_DELETE)
+		button_delete_always_visible = Gtk.Button(stock=Gtk.STOCK_DELETE)
 		button_delete_always_visible.connect('clicked', self._delete_always_visible)
 
 		# create list of directories
@@ -352,9 +352,9 @@ class ItemListOptions(SettingsPage):
 		hbox_always_visible.pack_start(button_add_always_visible, False, False, 0)
 		hbox_always_visible.pack_start(button_delete_always_visible, False, False, 0)
 
-		table_always_visible.attach(label_always_visible, 0, 1, 0, 1, xoptions=gtk.SHRINK | gtk.FILL, yoptions=gtk.SHRINK)
-		table_always_visible.attach(container_always_visible, 0, 1, 1, 2, xoptions=gtk.EXPAND | gtk.FILL, yoptions=gtk.EXPAND | gtk.FILL)
-		table_always_visible.attach(hbox_always_visible, 0, 1, 2, 3, xoptions=gtk.SHRINK | gtk.FILL, yoptions=gtk.SHRINK)
+		table_always_visible.attach(label_always_visible, 0, 1, 0, 1, xoptions=Gtk.AttachOptions.SHRINK | Gtk.AttachOptions.FILL, yoptions=Gtk.AttachOptions.SHRINK)
+		table_always_visible.attach(container_always_visible, 0, 1, 1, 2, xoptions=Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL, yoptions=Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL)
+		table_always_visible.attach(hbox_always_visible, 0, 1, 2, 3, xoptions=Gtk.AttachOptions.SHRINK | Gtk.AttachOptions.FILL, yoptions=Gtk.AttachOptions.SHRINK)
 
 		hbox_directory.pack_start(button_add_directory, False, False, 0)
 		hbox_directory.pack_start(button_delete_directory, False, False, 0)
@@ -450,7 +450,7 @@ class ItemListOptions(SettingsPage):
 		response = dialog.get_response()
 
 		# add data to the list
-		if response[0] == gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			self._always_visible_store.append((response[1],))
 			self._parent.enable_save()
 

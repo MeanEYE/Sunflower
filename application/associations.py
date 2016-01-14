@@ -1,16 +1,16 @@
 import os
-import gio
-import gtk
 import shlex
 import urllib
 import subprocess
 
+from gi.repository import Gtk, Gio
 from common import is_x_app
 from collections import namedtuple
 from parameters import Parameters
 from plugin_base.provider import Mode
 from plugin_base.terminal import TerminalType
 from gui.input_dialog import ApplicationSelectDialog
+
 
 ApplicationInfo = namedtuple(
 				'ApplicationInfo',
@@ -86,11 +86,11 @@ class AssociationManager:
 
 	def is_mime_type_subset(self, mime_type, super_type):
 		"""Check whether specified mime_type is a subset of super_type"""
-		return gio.content_type_is_a(mime_type, super_type)
+		return Gio.content_type_is_a(mime_type, super_type)
 
 	def is_mime_type_unknown(self, mime_type):
 		"""Check if specified mime_type is unknown"""
-		return gio.content_type_is_unknown(mime_type)
+		return Gio.content_type_is_unknown(mime_type)
 
 	def get_sample_data(self, path, provider):
 		"""Get sample data needed for content detection"""
@@ -109,23 +109,23 @@ class AssociationManager:
 
 		if path is not None:
 			# detect content type based on file name
-			result = gio.content_type_guess(filename=path)
+			result = Gio.content_type_guess(filename=path)[0]
 
 		elif data is not None:
 			# detect content type based on data
-			result = gio.content_type_guess(data=data)
+			result = Gio.content_type_guess(data=data)[0]
 
 		return result
 
 	def get_mime_description(self, mime_type):
 		"""Get description from mime type"""
-		return gio.content_type_get_description(mime_type)
+		return Gio.content_type_get_description(mime_type)
 
 	def get_all(self):
 		"""Return list of all applications"""
 		result = []
 
-		for app_info in gio.app_info_get_all():
+		for app_info in Gio.app_info_get_all():
 			application = ApplicationInfo(
 									id = app_info.get_id(),
 									name = app_info.get_name(),
@@ -143,7 +143,7 @@ class AssociationManager:
 		"""Get GIO AppInfo object for specified Id"""
 		result = None
 
-		for app_info in gio.app_info_get_all():
+		for app_info in Gio.app_info_get_all():
 			if app_info.get_id() == id:
 				result = app_info
 				break
@@ -154,7 +154,7 @@ class AssociationManager:
 		"""Get list of associated programs for specified type"""
 		result = []
 
-		for app_info in gio.app_info_get_all_for_type(mime_type):
+		for app_info in Gio.app_info_get_all_for_type(mime_type):
 			application = ApplicationInfo(
 									id = app_info.get_id(),
 									name = app_info.get_name(),
@@ -170,7 +170,7 @@ class AssociationManager:
 
 	def get_default_application_for_type(self, mime_type):
 		"""Get default application for specified type"""
-		app_info = gio.app_info_get_default_for_type(mime_type, must_support_uris=False)
+		app_info = Gio.app_info_get_default_for_type(mime_type, must_support_uris=False)
 
 		if app_info is not None:
 			# create application container
@@ -193,7 +193,7 @@ class AssociationManager:
 		"""Set default application for specified type"""
 		result = False
 
-		for app_info in gio.app_info_get_all():
+		for app_info in Gio.app_info_get_all():
 			if application_id == app_info.get_id():
 				app_info.set_as_default_for_type(mime_type)
 				result = True
@@ -212,7 +212,7 @@ class AssociationManager:
 					selection = map(lambda path: 'file://{0}'.format(path) if not path.startswith('file://') else path, selection)
 					application.launch_uris(selection)
 				else:
-					application.launch([gio.File(path=path) for path in selection])
+					application.launch([Gio.File.new_for_path(path) for path in selection])
 
 		elif exec_command is not None:
 			# use specified command
@@ -281,7 +281,7 @@ class AssociationManager:
 				data = self.get_sample_data(path, provider)
 				mime_type = self.get_mime_type(data=data)
 
-		if gio.content_type_can_be_executable(mime_type) and should_execute:
+		if Gio.content_type_can_be_executable(mime_type) and should_execute:
 			# file type is executable
 			if is_x_app(path):
 				subprocess.Popen((path,), cwd=os.path.dirname(path))
@@ -309,6 +309,6 @@ class AssociationManager:
 				dialog = ApplicationSelectDialog(self._application, path)
 				result = dialog.get_response()
 
-				if result[0] == gtk.RESPONSE_OK:
+				if result[0] == Gtk.ResponseType.OK:
 					self.open_file(selection=(path,), exec_command=result[2])
 

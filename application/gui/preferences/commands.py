@@ -1,5 +1,4 @@
-import gtk
-
+from gi.repository import Gtk
 from widgets.settings_page import SettingsPage
 
 
@@ -15,33 +14,33 @@ class CommandsOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'commands', _('Commands'))
 
 		# create list box
-		container = gtk.ScrolledWindow()
-		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-		container.set_shadow_type(gtk.SHADOW_IN)
+		container = Gtk.ScrolledWindow()
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+		container.set_shadow_type(Gtk.ShadowType.IN)
 
-		self._commands = gtk.ListStore(str, str)
+		self._commands = Gtk.ListStore(str, str)
 
-		self._list = gtk.TreeView()
+		self._list = Gtk.TreeView()
 		self._list.set_model(self._commands)
 		self._list.set_rules_hint(True)
 
 		# create and configure cell renderers
-		cell_title = gtk.CellRendererText()
+		cell_title = Gtk.CellRendererText()
 		cell_title.set_property('editable', True)
-		cell_title.set_property('mode', gtk.CELL_RENDERER_MODE_EDITABLE)
+		cell_title.set_property('mode', Gtk.CellRendererMode.EDITABLE)
 		cell_title.connect('edited', self._edited_command, 0)
 
-		cell_command = gtk.CellRendererText()
+		cell_command = Gtk.CellRendererText()
 		cell_command.set_property('editable', True)
-		cell_command.set_property('mode', gtk.CELL_RENDERER_MODE_EDITABLE)
+		cell_command.set_property('mode', Gtk.CellRendererMode.EDITABLE)
 		cell_command.connect('edited', self._edited_command, 1)
 
 		# create and pack columns
-		col_title = gtk.TreeViewColumn(_('Title'), cell_title, text=Column.TITLE)
+		col_title = Gtk.TreeViewColumn(_('Title'), cell_title, text=Column.TITLE)
 		col_title.set_min_width(200)
 		col_title.set_resizable(True)
 
-		col_command = gtk.TreeViewColumn(_('Command'), cell_command, text=Column.COMMAND)
+		col_command = Gtk.TreeViewColumn(_('Command'), cell_command, text=Column.COMMAND)
 		col_command.set_resizable(True)
 		col_command.set_expand(True)
 
@@ -51,26 +50,26 @@ class CommandsOptions(SettingsPage):
 		container.add(self._list)
 
 		# create controls
-		button_box = gtk.HBox(False, 5)
+		button_box = Gtk.HBox(False, 5)
 
-		button_add = gtk.Button(stock=gtk.STOCK_ADD)
+		button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
 		button_add.connect('clicked', self._add_command)
 
-		button_delete = gtk.Button(stock=gtk.STOCK_DELETE)
+		button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
 		button_delete.connect('clicked', self._delete_command)
 
-		image_up = gtk.Image()
-		image_up.set_from_stock(gtk.STOCK_GO_UP, gtk.ICON_SIZE_BUTTON)
+		image_up = Gtk.Image()
+		image_up.set_from_stock(Gtk.STOCK_GO_UP, Gtk.IconSize.BUTTON)
 
-		button_move_up = gtk.Button(label=None)
+		button_move_up = Gtk.Button(label=None)
 		button_move_up.add(image_up)
 		button_move_up.set_tooltip_text(_('Move Up'))
 		button_move_up.connect('clicked', self._move_command, -1)
 
-		image_down = gtk.Image()
-		image_down.set_from_stock(gtk.STOCK_GO_DOWN, gtk.ICON_SIZE_BUTTON)
+		image_down = Gtk.Image()
+		image_down.set_from_stock(Gtk.STOCK_GO_DOWN, Gtk.IconSize.BUTTON)
 
-		button_move_down = gtk.Button(label=None)
+		button_move_down = Gtk.Button(label=None)
 		button_move_down.add(image_down)
 		button_move_down.set_tooltip_text(_('Move Down'))
 		button_move_down.connect('clicked', self._move_command, 1)

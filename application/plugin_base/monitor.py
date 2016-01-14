@@ -1,5 +1,4 @@
-import gobject
-
+from gi.repository import GObject
 from Queue import Queue, Empty as QueueEmptyException
 from threading import Event
 
@@ -20,7 +19,7 @@ class MonitorSignals:
 	DIRECTORY_SIZE_CHANGED = 9  # calculated directory size has changed
 
 
-class Monitor(gobject.GObject):
+class Monitor(GObject.GObject):
 	"""File system monitor base class.
 
 	Monitors are used to watch over a specific path on file system
@@ -35,13 +34,13 @@ class Monitor(gobject.GObject):
 
 	__gtype_name__ = 'Sunflower_Monitor'
 	__gsignals__ = {
-				'changed': (gobject.SIGNAL_RUN_LAST, None, (int, str, str)),
+				'changed': (GObject.SignalFlags.RUN_LAST, None, (int, str, str)),
 			}
 
 	TIMEOUT = 1000
 
 	def __init__(self, provider, path):
-		gobject.GObject.__init__(self)
+		GObject.GObject.__init__(self)
 
 		self._path = path
 		self._provider = provider
@@ -56,7 +55,7 @@ class Monitor(gobject.GObject):
 
 	def _start_interval(self):
 		"""Start periodical event emission"""
-		gobject.timeout_add(self.TIMEOUT, self._handle_interval)
+		GObject.timeout_add(self.TIMEOUT, self._handle_interval)
 
 	def _handle_interval(self):
 		"""Handle notification interval"""

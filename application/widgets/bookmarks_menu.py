@@ -1,7 +1,7 @@
-import gtk
 import time
 import urllib
 
+from gi.repository import Gtk, Gdk
 from parameters import Parameters
 from collections import namedtuple
 
@@ -66,20 +66,20 @@ class BookmarksMenu:
 		self._menus = []
 
 		# create interface
-		self._menu = gtk.Menu()
+		self._menu = Gtk.Menu()
 		self._menu.connect('key-press-event', self.__handle_key_press)
 		self._menu.connect('key-release-event', self.__handle_key_press)
 
 	def __handle_key_press(self, widget, event, data=None):
 		"""Handle key presses on menu"""
-		if event.keyval == gtk.keysyms.Shift_L:
+		if event.keyval == Gdk.KEY_Shift_L:
 			self._open_in_new_tab = True
 
 		return False
 
 	def __handle_key_release(self, widget, event, data=None):
 		"""Handle key releases on menu"""
-		if event.keyval == gtk.keysyms.Shift_L:
+		if event.keyval == Gdk.KEY_Shift_L:
 			self._open_in_new_tab = False
 
 		return False
@@ -87,14 +87,14 @@ class BookmarksMenu:
 	def __create_menu_item(self, label, icon, callback, data):
 		"""Create menu item"""
 		if icon is not None:
-			menu_item = gtk.ImageMenuItem()
+			menu_item = Gtk.ImageMenuItem()
 
-			image = gtk.Image()
-			image.set_from_icon_name(icon, gtk.ICON_SIZE_MENU)
+			image = Gtk.Image()
+			image.set_from_icon_name(icon, Gtk.IconSize.MENU)
 			menu_item.set_image(image)
 
 		else:
-			menu_item = gtk.MenuItem()
+			menu_item = Gtk.MenuItem()
 
 		menu_item.set_use_underline(True)
 		menu_item.set_label(label)
@@ -118,7 +118,7 @@ class BookmarksMenu:
 								mount.uri
 							)
 
-			separator = gtk.SeparatorMenuItem()
+			separator = Gtk.SeparatorMenuItem()
 			self._menu.append(separator)
 
 		# add bookmarks
@@ -131,7 +131,7 @@ class BookmarksMenu:
 								bookmark.uri
 							)
 
-			separator = gtk.SeparatorMenuItem()
+			separator = Gtk.SeparatorMenuItem()
 			self._menu.append(separator)
 
 		# add system bookmarks
@@ -144,7 +144,7 @@ class BookmarksMenu:
 								bookmark.uri
 							)
 
-			separator = gtk.SeparatorMenuItem()
+			separator = Gtk.SeparatorMenuItem()
 			self._menu.append(separator)
 
 		# add menu items
@@ -258,18 +258,18 @@ class BookmarksMenu:
 		assert self._object is not None
 
 		# calculate window position
-		window_x, window_y = window.window.get_position()
+		window_x, window_y = window.get_position()
 		button_x, button_y = invoker.translate_coordinates(window, 0, 0)
 		button_alloc = invoker.get_allocation()
 
-		pos_x = window_x + button_x + button_alloc.width - invoker.get_allocation()[2]
+		pos_x = window_x + button_x + button_alloc.width - invoker.get_allocation().width
 		pos_y = window_y + button_y + button_alloc.height
 
 		# repopulate list
 		self.__populate_list()
 
 		# show menu
-		self._menu.popup(None, None, lambda menu: (pos_x, pos_y, True), 1, 0)
+		self._menu.popup(None, None, lambda menu, data: (pos_x, pos_y, True), None, 1, 0)
 
 	def apply_settings(self):
 		"""Apply new configuration"""

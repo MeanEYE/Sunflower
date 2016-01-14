@@ -1,14 +1,9 @@
-import gtk
+import gi
 
-try:
-	import vte
-except:
-	vte = None
+# require specific version of Vte
+gi.require_version('Vte', '2.90')
 
-try:
-	import gconf
-except:
-	gconf = None
+from gi.repository import Gtk, Gdk, Vte, GConf
 
 from plugin_base.plugin import PluginBase
 from accelerator_group import AcceleratorGroup
@@ -35,15 +30,13 @@ class Terminal(PluginBase):
 	"""Base class for terminal based plugins
 
 	This class provides access to VTE GTK+ widget. In cases where VTE is
-	not present on the system you can use gtk.Socket to embed external
+	not present on the system you can use Gtk.Socket to embed external
 	application.
 
 	You are strongly encouraged to use predefined methods rather than
 	defining your own.
 
 	"""
-
-	_vte_present = False
 
 	def __init__(self, parent, notebook, options):
 		PluginBase.__init__(self, parent, notebook, options)
@@ -61,12 +54,12 @@ class Terminal(PluginBase):
 		self._title_bar.add_control(self._menu_button)
 
 		# terminal button
-		self._terminal_button = gtk.Button()
+		self._terminal_button = Gtk.Button()
 
 		if options.get('tab_button_icons'):
 			# set icon
-			image_terminal = gtk.Image()
-			image_terminal.set_from_icon_name('terminal', gtk.ICON_SIZE_MENU)
+			image_terminal = Gtk.Image()
+			image_terminal.set_from_icon_name('terminal', Gtk.IconSize.MENU)
 			self._terminal_button.set_image(image_terminal)
 		else:
 			# set text
@@ -79,12 +72,12 @@ class Terminal(PluginBase):
 		self._title_bar.add_control(self._terminal_button)
 
 		# file list button
-		self._file_list_button = gtk.Button()
+		self._file_list_button = Gtk.Button()
 
 		if options.get('tab_button_icons'):
 			# set icon
-			image_folder = gtk.Image()
-			image_folder.set_from_icon_name('folder', gtk.ICON_SIZE_MENU)
+			image_folder = Gtk.Image()
+			image_folder.set_from_icon_name('folder', Gtk.IconSize.MENU)
 			self._file_list_button.set_image(image_folder)
 		else:
 			# set text
@@ -99,9 +92,8 @@ class Terminal(PluginBase):
 		# create main object
 		self._terminal_type = section.get('type')
 
-		if self._terminal_type == TerminalType.VTE and vte is not None:
-			self._vte_present = True
-			self._terminal = vte.Terminal()
+		if self._terminal_type == TerminalType.VTE:
+			self._terminal = Vte.Terminal.new()
 			self._terminal.connect('window-title-changed', self._update_title)
 
 			# unset drag source
@@ -110,38 +102,38 @@ class Terminal(PluginBase):
 			# configure terminal widget
 			shape = section.get('cursor_shape')
 			shape_type = {
-					CursorShape.BLOCK: vte.CURSOR_SHAPE_BLOCK,
-					CursorShape.IBEAM: vte.CURSOR_SHAPE_IBEAM,
-					CursorShape.UNDERLINE: vte.CURSOR_SHAPE_UNDERLINE
+					CursorShape.BLOCK: Vte.TerminalCursorShape.BLOCK,
+					CursorShape.IBEAM: Vte.TerminalCursorShape.IBEAM,
+					CursorShape.UNDERLINE: Vte.TerminalCursorShape.UNDERLINE
 				}
 			self._terminal.set_cursor_shape(shape_type[shape])
 
 			self._terminal.set_allow_bold(section.get('allow_bold'))
 			self._terminal.set_mouse_autohide(section.get('mouse_autohide'))
 
-			if section.get('use_system_font') and gconf is not None:
+			if section.get('use_system_font'):
 				self.__set_system_font()
 
 			else:
 				self._terminal.set_font_from_string(section.get('font'))
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
-			self._terminal = gtk.Socket()
+			self._terminal = Gtk.Socket()
 
 		else:
 			# failsafe when VTE module is not present
 			# NOTE: Cursor needs to be visible for 'close tab' accelerator.
-			self._terminal = gtk.TextView()
+			self._terminal = Gtk.TextView()
 			text = _('\n\nPython VTE module is not installed on this system!')
 			self._terminal.get_buffer().set_text(text)
 			self._terminal.set_editable(False)
-			self._terminal.set_justification(gtk.JUSTIFY_CENTER)
-			self._terminal.set_wrap_mode(gtk.WRAP_WORD)
+			self._terminal.set_justification(Gtk.Justification.CENTER)
+			self._terminal.set_wrap_mode(Gtk.WrapMode.WORD)
 
 		# terminal container
 		if self._terminal_type == TerminalType.VTE:
-			self._container = gtk.ScrolledWindow()
-			self._container.set_shadow_type(gtk.SHADOW_IN)
+			self._container = Gtk.ScrolledWindow()
+			self._container.set_shadow_type(Gtk.ShadowType.IN)
 
 			# apply scrollbar visibility
 			show_scrollbars = section.get('show_scrollbars')
@@ -152,8 +144,8 @@ class Terminal(PluginBase):
 			scrollbar_horizontal.set_child_visible(False)
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
-			self._container = gtk.Viewport()
-			self._container.set_shadow_type(gtk.SHADOW_IN)
+			self._container = Gtk.Viewport()
+			self._container.set_shadow_type(Gtk.ShadowType.IN)
 
 		# pack terminal
 		self._container.add(self._terminal)
@@ -171,18 +163,18 @@ class Terminal(PluginBase):
 		key = '{0}/monospace_font_name'.format(path)
 
 		if client is None:
-			if self._terminal.get_data('client') is None:
+			if not hasattr(self._terminal, 'client'):
 				# client wasn't assigned to widget, get default one and set events
-				client = gconf.client_get_default()
-				client.add_dir(path, gconf.CLIENT_PRELOAD_NONE)
+				client = GConf.Client.get_default()
+				client.add_dir(path, GConf.ClientPreloadType.PRELOAD_NONE)
 				client.notify_add(key, self.__set_system_font)
-				self._terminal.set_data('client', client)
+				self._terminal.client = client
 
 			else:
 				# get assigned client
-				client = self._terminal.get_data('client')
+				client = self._terminal.client
 
-		if client is not None:
+		else:
 			# try to get font and set it
 			font_name = client.get_string(key)
 
@@ -194,16 +186,15 @@ class Terminal(PluginBase):
 		options = self._parent.options
 
 		# terminal menu button
-		self._menu_button = gtk.Button()
+		self._menu_button = Gtk.Button.new()
 
 		if options.get('tab_button_icons'):
 			# set icon
-			image_menu = gtk.Image()
-			image_menu.set_from_icon_name(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
+			image_menu = Gtk.Image.new_from_icon_name(Gtk.STOCK_EDIT, Gtk.IconSize.MENU)
 			self._menu_button.set_image(image_menu)
 		else:
 			# set text
-			self._menu_button = gtk.Button(ButtonText.MENU)
+			self._menu_button = Gtk.Button(ButtonText.MENU)
 
 		self._menu_button.set_focus_on_click(False)
 		self._menu_button.set_tooltip_text(_('Terminal menu'))
@@ -231,15 +222,15 @@ class Terminal(PluginBase):
 
 	def _create_menu(self):
 		"""Create terminal menu"""
-		self._menu = gtk.Menu()
+		self._menu = Gtk.Menu()
 
 		# copy
-		self._menu_item_copy = gtk.ImageMenuItem(stock_id=gtk.STOCK_COPY)
+		self._menu_item_copy = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_COPY)
 		self._menu_item_copy.connect('activate', self._copy_selection)
 		self._menu.append(self._menu_item_copy)
 
 		# paste
-		self._menu_item_paste = gtk.ImageMenuItem(stock_id=gtk.STOCK_PASTE)
+		self._menu_item_paste = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_PASTE)
 		self._menu_item_paste.connect('activate', self._paste_selection)
 		self._menu.append(self._menu_item_paste)
 
@@ -259,7 +250,7 @@ class Terminal(PluginBase):
 	def _get_menu_position(self, menu, button):
 		"""Get history menu position"""
 		# get coordinates
-		window_x, window_y = self._parent.window.get_position()
+		window_x, window_y = self._parent.get_position()
 		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
 		button_h = button.get_allocation().height
 
@@ -276,16 +267,12 @@ class Terminal(PluginBase):
 
 		# show the menu on calculated location
 
-		self._menu.popup(
-						None, None,
-						self._get_menu_position,
-						1, 0, widget
-					)
+		self._menu.popup(None, None, self._get_menu_position, widget, 1, 0)
 
 	def _configure_accelerators(self):
 		"""Configure accelerator group"""
 		group = AcceleratorGroup(self._parent)
-		keyval = gtk.gdk.keyval_from_name
+		keyval = Gdk.keyval_from_name
 
 		# give parent chance to register its own accelerator group
 		PluginBase._configure_accelerators(self)
@@ -307,11 +294,11 @@ class Terminal(PluginBase):
 		group.add_method('close_tab', _('Close tab'), self._close_tab)
 
 		# configure accelerators
-		group.set_accelerator('create_terminal', keyval('z'), gtk.gdk.CONTROL_MASK)
-		group.set_accelerator('copy_to_clipboard', keyval('c'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
-		group.set_accelerator('paste_from_clipboard', keyval('v'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
-		group.set_accelerator('focus_opposite_object', keyval('Tab'), gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK)
-		group.set_accelerator('close_tab', keyval('w'), gtk.gdk.CONTROL_MASK)
+		group.set_accelerator('create_terminal', keyval('z'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('copy_to_clipboard', keyval('c'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
+		group.set_accelerator('paste_from_clipboard', keyval('v'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
+		group.set_accelerator('focus_opposite_object', keyval('Tab'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('close_tab', keyval('w'), Gdk.ModifierType.CONTROL_MASK)
 
 		# add accelerator group to the list
 		self._accelerator_groups.append(group)
@@ -341,21 +328,21 @@ class Terminal(PluginBase):
 		text = selection_data.data
 
 		# ask user what to do with data
-		dialog = gtk.MessageDialog(
+		dialog = Gtk.MessageDialog(
 								self._parent,
-								gtk.DIALOG_DESTROY_WITH_PARENT,
-								gtk.MESSAGE_QUESTION,
-								gtk.BUTTONS_YES_NO,
+								Gtk.DialogFlags.DESTROY_WITH_PARENT,
+								Gtk.MessageType.QUESTION,
+								Gtk.ButtonsType.YES_NO,
 								_(
 									'You are about to feed child process with '
 									'following data. Are you sure?\n\n{0}'
 								).format(text)
 							)
-		dialog.set_default_response(gtk.RESPONSE_YES)
+		dialog.set_default_response(Gtk.ResponseType.YES)
 		result = dialog.run()
 		dialog.destroy()
-
-		if result == gtk.RESPONSE_YES:
+		
+		if result == Gtk.ResponseType.YES:
 			self.feed_terminal(text)
 
 		# notify source application about operation outcome
@@ -391,9 +378,9 @@ class Terminal(PluginBase):
 			# apply cursor shape
 			shape = section.get('cursor_shape')
 			shape_type = {
-					CursorShape.BLOCK: vte.CURSOR_SHAPE_BLOCK,
-					CursorShape.IBEAM: vte.CURSOR_SHAPE_IBEAM,
-					CursorShape.UNDERLINE: vte.CURSOR_SHAPE_UNDERLINE
+					CursorShape.BLOCK: Vte.CURSOR_SHAPE_BLOCK,
+					CursorShape.IBEAM: Vte.CURSOR_SHAPE_IBEAM,
+					CursorShape.UNDERLINE: Vte.CURSOR_SHAPE_UNDERLINE
 				}
 			self._terminal.set_cursor_shape(shape_type[shape])
 
@@ -404,7 +391,7 @@ class Terminal(PluginBase):
 			self._terminal.set_mouse_autohide(section.get('mouse_autohide'))
 
 			# apply font
-			if section.get('use_system_font') and gconf is not None:
+			if section.get('use_system_font'):
 				self.__set_system_font()
 
 			else:
@@ -418,7 +405,7 @@ class Terminal(PluginBase):
 			result = PluginBase.focus_main_object(self)
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
-			self._main_object.child_focus(gtk.DIR_TAB_FORWARD)
+			self._main_object.child_focus(Gtk.DirectionType.TAB_FORWARD)
 			result = True
 
 		return result

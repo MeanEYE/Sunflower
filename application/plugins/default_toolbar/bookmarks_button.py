@@ -1,11 +1,11 @@
-import gtk
+from gi.repository import Gtk
 
 
-class Button(gtk.ToolButton):
+class Button(Gtk.ToolButton):
 	"""Toolbar control used to popup bookmarks menu"""
 
 	def __init__(self, application, name, config):
-		gtk.ToolButton.__init__(self)
+		GObject.GObject.__init__(self)
 
 		# store parameters locally
 		self._name = name

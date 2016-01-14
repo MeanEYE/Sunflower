@@ -1,4 +1,4 @@
-import gtk
+from gi.repository import Gtk
 
 
 class SambaResult:
@@ -32,7 +32,7 @@ class SambaInputDialog:
 	"""Dialog used for editing and creating Samba connections"""
 
 	def __init__(self, parent):
-		self._dialog = gtk.Dialog(parent=parent)
+		self._dialog = Gtk.Dialog(parent=parent)
 
 		# configure dialog
 		self.set_title(_('Create Samba mount'))
@@ -44,64 +44,64 @@ class SambaInputDialog:
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		self._dialog.vbox.set_spacing(0)
-		self._dialog.set_default_response(gtk.RESPONSE_OK)
+		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
 		# create user interface
-		self._container = gtk.VBox(False, 5)
+		self._container = Gtk.VBox(False, 5)
 		self._container.set_border_width(5)
 
-		hbox_icon = gtk.HBox(False, 0)
-		vbox_icon = gtk.VBox(False, 0)
-		icon = gtk.Image()
-		icon.set_from_icon_name('samba', gtk.ICON_SIZE_DIALOG)
+		hbox_icon = Gtk.HBox(False, 0)
+		vbox_icon = Gtk.VBox(False, 0)
+		icon = Gtk.Image()
+		icon.set_from_icon_name('samba', Gtk.IconSize.DIALOG)
 
-		vbox_name = gtk.VBox(False, 0)
+		vbox_name = Gtk.VBox(False, 0)
 
-		label_name = gtk.Label(_('Name:'))
+		label_name = Gtk.Label(label=_('Name:'))
 		label_name.set_alignment(0, 0.5)
-		self._entry_name = gtk.Entry()
+		self._entry_name = Gtk.Entry()
 		self._entry_name.connect('activate', self._confirm_entry)
 
-		hseparator = gtk.HSeparator()
+		hseparator = Gtk.HSeparator()
 
-		vbox_server = gtk.VBox(False, 0)
+		vbox_server = Gtk.VBox(False, 0)
 
-		label_server = gtk.Label(_('Server:'))
+		label_server = Gtk.Label(label=_('Server:'))
 		label_server.set_alignment(0, 0.5)
-		self._entry_server = gtk.Entry()
+		self._entry_server = Gtk.Entry()
 		self._entry_server.connect('activate', self._confirm_entry)
 
-		vbox_share = gtk.VBox(False, 0)
-		vbox_directory = gtk.VBox(False, 0)
+		vbox_share = Gtk.VBox(False, 0)
+		vbox_directory = Gtk.VBox(False, 0)
 
-		label_share = gtk.Label(_('Share:'))
+		label_share = Gtk.Label(label=_('Share:'))
 		label_share.set_alignment(0, 0.5)
-		label_directory = gtk.Label(_('Directory:'))
+		label_directory = Gtk.Label(label=_('Directory:'))
 		label_directory.set_alignment(0, 0.5)
-		self._entry_share = gtk.Entry()
-		self._entry_directory = gtk.Entry()
+		self._entry_share = Gtk.Entry()
+		self._entry_directory = Gtk.Entry()
 
 		self._entry_share.connect('activate', self._confirm_entry)
 		self._entry_directory.connect('activate', self._confirm_entry)
 
 		# access information
-		hseparator2 = gtk.HSeparator()
+		hseparator2 = Gtk.HSeparator()
 
-		vbox_domain = gtk.VBox(False, 0)
-		vbox_username = gtk.VBox(False, 0)
-		vbox_password = gtk.VBox(False, 0)
-
-		label_domain = gtk.Label(_('Domain:'))
-		label_username = gtk.Label(_('Username:'))
-		label_password = gtk.Label(_('Password:'))
+		vbox_domain = Gtk.VBox(False, 0)
+		vbox_username = Gtk.VBox(False, 0)
+		vbox_password = Gtk.VBox(False, 0)
+		
+		label_domain = Gtk.Label(label=_('Domain:'))
+		label_username = Gtk.Label(label=_('Username:'))
+		label_password = Gtk.Label(label=_('Password:'))
 
 		label_domain.set_alignment(0, 0.5)
 		label_username.set_alignment(0, 0.5)
 		label_password.set_alignment(0, 0.5)
 
-		self._entry_domain = gtk.Entry()
-		self._entry_username = gtk.Entry()
-		self._entry_password = gtk.Entry()
+		self._entry_domain = Gtk.Entry()
+		self._entry_username = Gtk.Entry()
+		self._entry_password = Gtk.Entry()
 
 		self._entry_password.set_property('caps-lock-warning', True)
 		self._entry_password.set_visibility(False)
@@ -111,11 +111,11 @@ class SambaInputDialog:
 		self._entry_password.connect('activate', self._confirm_entry)
 
 		# create controls
-		button_save = gtk.Button(stock=gtk.STOCK_SAVE)
+		button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
 		button_save.connect('clicked', self._confirm_entry)
 		button_save.set_can_default(True)
 
-		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
+		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
 
 		# pack user interface
 		vbox_domain.pack_start(label_domain, False, False, 0)
@@ -149,7 +149,7 @@ class SambaInputDialog:
 		self._container.pack_start(vbox_username, False, False, 0)
 		self._container.pack_start(vbox_password, False, False, 0)
 
-		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
 		self._dialog.action_area.pack_end(button_save, False, False, 0)
 
 		vbox_icon.pack_start(icon, False, False, 0)
@@ -164,11 +164,11 @@ class SambaInputDialog:
 		if self._entry_name.get_text() == '' \
 		or self._entry_server.get_text() == '':
 			# missing required fields
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self._dialog,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_INFO,
-									gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.INFO,
+									Gtk.ButtonsType.OK,
 									_(
 										'One or more required fields are empty. '
 										'Please make sure you have entered name, '
@@ -180,7 +180,7 @@ class SambaInputDialog:
 
 		else:
 			# return response
-			self._dialog.response(gtk.RESPONSE_OK)
+			self._dialog.response(Gtk.ResponseType.OK)
 
 	def set_title(self, title_text):
 		"""Set dialog title"""
@@ -245,7 +245,7 @@ class FtpInputDialog:
 	"""Dialog used for editing and creating FTP connections"""
 
 	def __init__(self, parent):
-		self._dialog = gtk.Dialog(parent=parent)
+		self._dialog = Gtk.Dialog(parent=parent)
 
 		# configure dialog
 		self.set_title(_('Create FTP mount'))
@@ -257,57 +257,57 @@ class FtpInputDialog:
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		self._dialog.vbox.set_spacing(0)
-		self._dialog.set_default_response(gtk.RESPONSE_OK)
+		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
 		# create user interface
-		self._container = gtk.VBox(False, 5)
+		self._container = Gtk.VBox(False, 5)
 		self._container.set_border_width(5)
 
-		hbox_icon = gtk.HBox(False, 0)
-		vbox_icon = gtk.VBox(False, 0)
-		icon = gtk.Image()
-		icon.set_from_icon_name('folder-remote-ftp', gtk.ICON_SIZE_DIALOG)
+		hbox_icon = Gtk.HBox(False, 0)
+		vbox_icon = Gtk.VBox(False, 0)
+		icon = Gtk.Image()
+		icon.set_from_icon_name('folder-remote-ftp', Gtk.IconSize.DIALOG)
 
-		vbox_name = gtk.VBox(False, 0)
+		vbox_name = Gtk.VBox(False, 0)
 
-		label_name = gtk.Label(_('Name:'))
+		label_name = Gtk.Label(label=_('Name:'))
 		label_name.set_alignment(0, 0.5)
-		self._entry_name = gtk.Entry()
+		self._entry_name = Gtk.Entry()
 		self._entry_name.connect('activate', self._confirm_entry)
 
-		hseparator = gtk.HSeparator()
+		hseparator = Gtk.HSeparator()
 
-		vbox_server = gtk.VBox(False, 0)
+		vbox_server = Gtk.VBox(False, 0)
 
-		label_server = gtk.Label(_('Server:'))
+		label_server = Gtk.Label(label=_('Server:'))
 		label_server.set_alignment(0, 0.5)
-		self._entry_server = gtk.Entry()
+		self._entry_server = Gtk.Entry()
 		self._entry_server.connect('activate', self._confirm_entry)
 
-		vbox_directory = gtk.VBox(False, 0)
+		vbox_directory = Gtk.VBox(False, 0)
 
-		label_directory = gtk.Label(_('Directory:'))
+		label_directory = Gtk.Label(label=_('Directory:'))
 		label_directory.set_alignment(0, 0.5)
-		self._entry_share = gtk.Entry()
-		self._entry_directory = gtk.Entry()
+		self._entry_share = Gtk.Entry()
+		self._entry_directory = Gtk.Entry()
 
 		self._entry_share.connect('activate', self._confirm_entry)
 		self._entry_directory.connect('activate', self._confirm_entry)
 
 		# access information
-		hseparator2 = gtk.HSeparator()
+		hseparator2 = Gtk.HSeparator()
 
-		vbox_username = gtk.VBox(False, 0)
-		vbox_password = gtk.VBox(False, 0)
-
-		label_username = gtk.Label(_('Username:'))
-		label_password = gtk.Label(_('Password:'))
+		vbox_username = Gtk.VBox(False, 0)
+		vbox_password = Gtk.VBox(False, 0)
+		
+		label_username = Gtk.Label(label=_('Username:'))
+		label_password = Gtk.Label(label=_('Password:'))
 
 		label_username.set_alignment(0, 0.5)
 		label_password.set_alignment(0, 0.5)
 
-		self._entry_username = gtk.Entry()
-		self._entry_password = gtk.Entry()
+		self._entry_username = Gtk.Entry()
+		self._entry_password = Gtk.Entry()
 
 		self._entry_password.set_property('caps-lock-warning', True)
 		self._entry_password.set_visibility(False)
@@ -316,11 +316,11 @@ class FtpInputDialog:
 		self._entry_password.connect('activate', self._confirm_entry)
 
 		# create controls
-		button_save = gtk.Button(stock=gtk.STOCK_SAVE)
+		button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
 		button_save.connect('clicked', self._confirm_entry)
 		button_save.set_can_default(True)
 
-		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
+		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
 
 		# pack user interface
 		vbox_username.pack_start(label_username, False, False, 0)
@@ -346,7 +346,7 @@ class FtpInputDialog:
 		self._container.pack_start(vbox_username, False, False, 0)
 		self._container.pack_start(vbox_password, False, False, 0)
 
-		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
 		self._dialog.action_area.pack_end(button_save, False, False, 0)
 
 		vbox_icon.pack_start(icon, False, False, 0)
@@ -361,11 +361,11 @@ class FtpInputDialog:
 		if self._entry_name.get_text() == '' \
 		or self._entry_server.get_text() == '':
 			# missing required fields
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self._dialog,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_INFO,
-									gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.INFO,
+									Gtk.ButtonsType.OK,
 									_(
 										'One or more required fields is empty. '
 										'Please make sure you have entered name and server.'
@@ -376,7 +376,7 @@ class FtpInputDialog:
 
 		else:
 			# return response
-			self._dialog.response(gtk.RESPONSE_OK)
+			self._dialog.response(Gtk.ResponseType.OK)
 
 	def set_title(self, title_text):
 		"""Set dialog title"""
@@ -439,7 +439,7 @@ class DavInputDialog:
 	"""Dialog used for editing and creating FTP connections"""
 
 	def __init__(self, parent):
-		self._dialog = gtk.Dialog(parent=parent)
+		self._dialog = Gtk.Dialog(parent=parent)
 
 		# configure dialog
 		self.set_title(_('Create WebDav mount'))
@@ -451,66 +451,66 @@ class DavInputDialog:
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		self._dialog.vbox.set_spacing(0)
-		self._dialog.set_default_response(gtk.RESPONSE_OK)
+		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
 		# create user interface
-		self._container = gtk.VBox(False, 5)
+		self._container = Gtk.VBox(False, 5)
 		self._container.set_border_width(5)
 
-		hbox_icon = gtk.HBox(False, 0)
-		vbox_icon = gtk.VBox(False, 0)
-		icon = gtk.Image()
-		icon.set_from_icon_name('folder-remote-ftp', gtk.ICON_SIZE_DIALOG)
+		hbox_icon = Gtk.HBox(False, 0)
+		vbox_icon = Gtk.VBox(False, 0)
+		icon = Gtk.Image()
+		icon.set_from_icon_name('folder-remote-ftp', Gtk.IconSize.DIALOG)
 
-		vbox_name = gtk.VBox(False, 0)
+		vbox_name = Gtk.VBox(False, 0)
 
-		label_name = gtk.Label(_('Name:'))
+		label_name = Gtk.Label(label=_('Name:'))
 		label_name.set_alignment(0, 0.5)
-		self._entry_name = gtk.Entry()
+		self._entry_name = Gtk.Entry()
 		self._entry_name.connect('activate', self._confirm_entry)
 
-		hseparator = gtk.HSeparator()
+		hseparator = Gtk.HSeparator()
 
-		vbox_server = gtk.VBox(False, 0)
+		vbox_server = Gtk.VBox(False, 0)
 
-		label_server = gtk.Label(_('Server:'))
+		label_server = Gtk.Label(label=_('Server:'))
 		label_server.set_alignment(0, 0.5)
-		self._entry_server = gtk.Entry()
+		self._entry_server = Gtk.Entry()
 		self._entry_server.connect('activate', self._confirm_entry)
 
-		vbox_server_type = gtk.VBox(False, 0)
+		vbox_server_type = Gtk.VBox(False, 0)
 
-		label_server_type = gtk.Label(_('Server type:'))
+		label_server_type = Gtk.Label(label=_('Server type:'))
 		label_server_type.set_alignment(0, 0.5)
-		self._entry_server_type = gtk.combo_box_new_text()
+		self._entry_server_type = Gtk.ComboBoxText()
 		self._entry_server_type.append_text('http')
 		self._entry_server_type.append_text('https')
 		self._entry_server_type.set_active(0)
 
-		vbox_directory = gtk.VBox(False, 0)
+		vbox_directory = Gtk.VBox(False, 0)
 
-		label_directory = gtk.Label(_('Directory:'))
+		label_directory = Gtk.Label(label=_('Directory:'))
 		label_directory.set_alignment(0, 0.5)
-		self._entry_share = gtk.Entry()
-		self._entry_directory = gtk.Entry()
+		self._entry_share = Gtk.Entry()
+		self._entry_directory = Gtk.Entry()
 
 		self._entry_share.connect('activate', self._confirm_entry)
 		self._entry_directory.connect('activate', self._confirm_entry)
 
 		# access information
-		hseparator2 = gtk.HSeparator()
+		hseparator2 = Gtk.HSeparator()
 
-		vbox_username = gtk.VBox(False, 0)
-		vbox_password = gtk.VBox(False, 0)
+		vbox_username = Gtk.VBox(False, 0)
+		vbox_password = Gtk.VBox(False, 0)
 
-		label_username = gtk.Label(_('Username:'))
-		label_password = gtk.Label(_('Password:'))
+		label_username = Gtk.Label(label=_('Username:'))
+		label_password = Gtk.Label(label=_('Password:'))
 
 		label_username.set_alignment(0, 0.5)
 		label_password.set_alignment(0, 0.5)
 
-		self._entry_username = gtk.Entry()
-		self._entry_password = gtk.Entry()
+		self._entry_username = Gtk.Entry()
+		self._entry_password = Gtk.Entry()
 
 		self._entry_password.set_property('caps-lock-warning', True)
 		self._entry_password.set_visibility(False)
@@ -519,11 +519,11 @@ class DavInputDialog:
 		self._entry_password.connect('activate', self._confirm_entry)
 
 		# create controls
-		button_save = gtk.Button(stock=gtk.STOCK_SAVE)
+		button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
 		button_save.connect('clicked', self._confirm_entry)
 		button_save.set_can_default(True)
 
-		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
+		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
 
 		# pack user interface
 		vbox_username.pack_start(label_username, False, False, 0)
@@ -553,7 +553,7 @@ class DavInputDialog:
 		self._container.pack_start(vbox_username, False, False, 0)
 		self._container.pack_start(vbox_password, False, False, 0)
 
-		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
+		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
 		self._dialog.action_area.pack_end(button_save, False, False, 0)
 
 		vbox_icon.pack_start(icon, False, False, 0)
@@ -568,11 +568,11 @@ class DavInputDialog:
 		if self._entry_name.get_text() == ''\
 		or self._entry_server.get_text() == '':
 			# missing required fields
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 				self._dialog,
-				gtk.DIALOG_DESTROY_WITH_PARENT,
-				gtk.MESSAGE_INFO,
-				gtk.BUTTONS_OK,
+				Gtk.DialogFlags.DESTROY_WITH_PARENT,
+				Gtk.MessageType.INFO,
+				Gtk.ButtonsType.OK,
 				_(
 					'One or more required fields is empty. '
 					'Please make sure you have entered name and server.'
@@ -583,7 +583,7 @@ class DavInputDialog:
 
 		else:
 			# return response
-			self._dialog.response(gtk.RESPONSE_OK)
+			self._dialog.response(Gtk.ResponseType.OK)
 
 	def set_title(self, title_text):
 		"""Set dialog title"""

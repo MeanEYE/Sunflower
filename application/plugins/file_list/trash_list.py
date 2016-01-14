@@ -1,4 +1,4 @@
-import gtk
+from gi.repository import Gtk
 
 from file_list import FileList
 from gio_provider import TrashProvider
@@ -23,12 +23,12 @@ class TrashList(FileList):
 		options = self._parent.options
 
 		# empty trash button
-		self._empty_button = gtk.Button()
+		self._empty_button = Gtk.Button()
 
 		if options.get('tab_button_icons'):
 			# set icon
-			image_terminal = gtk.Image()
-			image_terminal.set_from_icon_name('edittrash', gtk.ICON_SIZE_MENU)
+			image_terminal = Gtk.Image()
+			image_terminal.set_from_icon_name('edittrash', Gtk.IconSize.MENU)
 			self._empty_button.set_image(image_terminal)
 
 		else:
@@ -44,22 +44,22 @@ class TrashList(FileList):
 	def empty_trash(self, widget=None, data=None):
 		"""Empty trash can."""
 		# ask user to confirm
-		dialog = gtk.MessageDialog(
+		dialog = Gtk.MessageDialog(
 								self._parent,
-								gtk.DIALOG_DESTROY_WITH_PARENT,
-								gtk.MESSAGE_QUESTION,
-								gtk.BUTTONS_YES_NO,
+								Gtk.DialogFlags.DESTROY_WITH_PARENT,
+								Gtk.MessageType.QUESTION,
+								Gtk.ButtonsType.YES_NO,
 								_(
 									"All items in the Trash will be permanently deleted. "
 									"Are you sure?"
 								)
 							)
-		dialog.set_default_response(gtk.RESPONSE_YES)
+		dialog.set_default_response(Gtk.ResponseType.YES)
 		result = dialog.run()
 		dialog.destroy()
 
 		# remove all items in trash
-		if result == gtk.RESPONSE_YES:
+		if result == Gtk.ResponseType.YES:
 			provider = self.get_provider()
 
 			# create delete operation

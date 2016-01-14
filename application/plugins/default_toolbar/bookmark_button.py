@@ -1,12 +1,13 @@
 import os
-import gtk
+
+from gi.repository import Gtk
 
 
-class Button(gtk.ToolButton):
+class Button(Gtk.ToolButton):
 	"""Bookmark toolbar button"""
 
 	def __init__(self, application, name, config):
-		gtk.ToolButton.__init__(self)
+		GObject.GObject.__init__(self)
 
 		self._name = name
 		self._config = config
@@ -46,11 +47,11 @@ class Button(gtk.ToolButton):
 			active_object.change_path(self._path)
 
 
-class ConfigurationDialog(gtk.Dialog):
+class ConfigurationDialog(Gtk.Dialog):
 	"""Configuration dialog for bookmark button"""
 
 	def __init__(self, application, name, config=None):
-		gtk.Dialog.__init__(self, parent=application)
+		GObject.GObject.__init__(self, parent=application)
 
 		self._application = application
 
@@ -65,27 +66,27 @@ class ConfigurationDialog(gtk.Dialog):
 		self.vbox.set_spacing(0)
 
 		# interface container
-		vbox = gtk.VBox(False, 5)
+		vbox = Gtk.VBox(False, 5)
 		vbox.set_border_width(5)
 
 		# create interface
-		vbox_name = gtk.VBox(False, 0)
+		vbox_name = Gtk.VBox(False, 0)
 
-		label_name = gtk.Label(_('Name:'))
+		label_name = Gtk.Label(label=_('Name:'))
 		label_name.set_alignment(0, 0.5)
 
-		entry_name = gtk.Entry()
+		entry_name = Gtk.Entry()
 		entry_name.set_editable(False)
 		entry_name.set_sensitive(False)
 		entry_name.set_text(name)
 
-		vbox_path = gtk.VBox(False, 0)
+		vbox_path = Gtk.VBox(False, 0)
 
-		label_path = gtk.Label(_('Path:'))
+		label_path = Gtk.Label(label=_('Path:'))
 		label_path.set_alignment(0, 0.5)
 
-		self._entry_path = gtk.Entry()
-		self._checkbox_show_label = gtk.CheckButton(_('Show label'))
+		self._entry_path = Gtk.Entry()
+		self._checkbox_show_label = Gtk.CheckButton(_('Show label'))
 
 		# load default values
 		if config is not None:
@@ -93,14 +94,14 @@ class ConfigurationDialog(gtk.Dialog):
 			self._checkbox_show_label.set_active(config['show_label'] == True)
 
 		# create controls
-		button_save = gtk.Button(stock=gtk.STOCK_SAVE)
+		button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
 		button_save.set_can_default(True)
-		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
+		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
 
-		self.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
-		self.add_action_widget(button_save, gtk.RESPONSE_ACCEPT)
+		self.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
+		self.add_action_widget(button_save, Gtk.ResponseType.ACCEPT)
 
-		self.set_default_response(gtk.RESPONSE_ACCEPT)
+		self.set_default_response(Gtk.ResponseType.ACCEPT)
 
 		# pack interface
 		vbox_name.pack_start(label_name, False, False, 0)
@@ -124,7 +125,7 @@ class ConfigurationDialog(gtk.Dialog):
 		# show dialog
 		code = self.run()
 
-		if code == gtk.RESPONSE_ACCEPT:
+		if code == Gtk.ResponseType.ACCEPT:
 			config = {
 			    'path': self._entry_path.get_text(),
 			    'show_label': self._checkbox_show_label.get_active()

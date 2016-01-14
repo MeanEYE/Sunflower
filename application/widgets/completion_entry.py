@@ -1,9 +1,12 @@
 import os
 import re
-import gtk
+
+from gi.repository import Gtk
 
 
-class PathCompletionEntry(gtk.Entry):
+
+class PathCompletionEntry(Gtk.Entry):
+	"""Entry with path completion"""
 	number_split = re.compile('([0-9]+)')
 
 	def __init__(self, application):
@@ -14,8 +17,8 @@ class PathCompletionEntry(gtk.Entry):
 		self._network_path_completion = self._application.options.get('network_path_completion')
 
 		# create suggestion list
-		self._store = gtk.ListStore(str)
-		self._store.set_sort_column_id(0, gtk.SORT_ASCENDING)
+		self._store = Gtk.ListStore(str)
+		liststore.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 		self._store.set_sort_func(0, self._sort_list)
 
 		# create entry field with completion

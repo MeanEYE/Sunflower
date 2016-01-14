@@ -1,28 +1,28 @@
-import gtk
 import cairo
-import gobject
+
+from gi.repository import Gtk, Gdk, GObject
 
 
-class CellRendererEmblems(gtk.CellRenderer):
+class CellRendererEmblems(Gtk.CellRenderer):
 	"""Cell renderer that accepts list of icon names."""
 	__gproperties__ = {
 				'emblems': (
-						gobject.TYPE_PYOBJECT,
+						GObject.TYPE_PYOBJECT,
 						'Emblem list',
 						'List of icon names to display',
-						gobject.PARAM_READWRITE
+						GObject.PARAM_READWRITE
 					),
 				'is-link': (
-						gobject.TYPE_BOOLEAN,
+						GObject.TYPE_BOOLEAN,
 						'Link indicator',
 						'Denotes if item is a link or regular file',
 						False,
-						gobject.PARAM_READWRITE
+						GObject.PARAM_READWRITE
 					)
 			}
 
 	def __init__(self):
-		gtk.CellRenderer.__init__(self)
+		GObject.GObject.__init__(self)
 
 		self.emblems = None
 		self.is_link = None
@@ -54,7 +54,7 @@ class CellRendererEmblems(gtk.CellRenderer):
 
 		return result
 
-	def do_render(self, window, widget, background_area, cell_area, expose_area, flags):
+	def do_render(self, context, widget, background_area, cell_area, flags):
 		"""Render emblems on tree view."""
 		if not self.is_link and (self.emblems is None or len(self.emblems) == 0):
 			return
@@ -62,17 +62,16 @@ class CellRendererEmblems(gtk.CellRenderer):
 		# cache constants locally
 		icon_size = self.icon_size
 		spacing = self.spacing
-		emblems = self.emblems or []
-		icon_theme = gtk.icon_theme_get_default()
-		context = window.cairo_create()
+		emblems = self.emblems
+		icon_theme = Gtk.IconTheme.get_default()
 
 		# add symbolic link emblem if needed
 		if self.is_link:
-			emblems.insert(0, 'emblem-symbolic-link')
+			emblems = ('emblem-symbolic-link',) + emblems
 
 		# position of next icon
-		pos_x = cell_area[0] + cell_area[2]
-		pos_y = cell_area[1] + ((cell_area[3] - icon_size) / 2)
+		pos_x = cell_area.x + cell_area.width
+		pos_y = cell_area.y + ((cell_area.height - icon_size) / 2)
 
 		# draw all the icons
 		for emblem in emblems:
@@ -83,7 +82,7 @@ class CellRendererEmblems(gtk.CellRenderer):
 			pos_x -= icon_size + spacing
 
 			# draw icon
-			context.set_source_pixbuf(pixbuf, pos_x, pos_y)
+			Gdk.cairo_set_source_pixbuf(context, pixbuf, pos_x, pos_y)
 			context.paint()
 
 	def do_get_size(self, widget, cell_area=None):

@@ -1,9 +1,9 @@
 import os
-import gtk
-import pango
+
+from gi.repository import Gtk, Pango, Gdk, GObject
 
 
-class Breadcrumbs(gtk.HBox):
+class Breadcrumbs(Gtk.HBox):
 	"""Widget for displaying paths with clickable segments."""
 
 	TYPE_NONE = 0
@@ -11,7 +11,7 @@ class Breadcrumbs(gtk.HBox):
 	TYPE_SMART = 2
 
 	def __init__(self, parent):
-		gtk.HBox.__init__(self)
+		GObject.GObject.__init__(self)
 
 		self._parent = parent
 		self._type = self._parent._breadcrumb_type
@@ -19,7 +19,7 @@ class Breadcrumbs(gtk.HBox):
 		self._path = None
 		self._previous_path = None
 		self._colors = None
-		self._state = gtk.STATE_NORMAL
+		self._state = Gtk.StateType.NORMAL
 		self._smart_color = None
 		self._elements_size = None
 		self._elements_width = None
@@ -27,14 +27,15 @@ class Breadcrumbs(gtk.HBox):
 		self._highlight_index = None
 
 		# create user interface
-		self._path_object = gtk.DrawingArea()
+		self._path_object = Gtk.DrawingArea()
 
-		self._path_object.add_events(gtk.gdk.POINTER_MOTION_MASK)
-		self._path_object.add_events(gtk.gdk.LEAVE_NOTIFY_MASK)
-		self._path_object.add_events(gtk.gdk.BUTTON_PRESS_MASK)
-		self._path_object.add_events(gtk.gdk.ENTER_NOTIFY_MASK)
+		self._path_object.add_events(Gdk.EventMask.POINTER_MOTION_MASK)
+		self._path_object.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)
+		self._path_object.add_events(Gdk.EventMask.BUTTON_PRESS_MASK)
+		self._path_object.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)
 
-		self._path_object.connect('expose-event', self.__expose_event)
+		# TODO: Fix for GTK3
+		self._path_object.connect('draw', self.__draw_event)
 		self._path_object.connect('motion-notify-event', self.__motion_event)
 		self._path_object.connect('enter-notify-event', self.__motion_event)
 		self._path_object.connect('leave-notify-event', self.__leave_event)
@@ -44,7 +45,7 @@ class Breadcrumbs(gtk.HBox):
 		self.connect('size_allocate', self._update_visibility)
 
 		# pack interface
-		self.pack_start(self._path_object, True, True)
+		self.pack_start(self._path_object, True, True, 0)
 		self.show_all()
 
 	def __get_color(self, background, foreground):
@@ -53,13 +54,13 @@ class Breadcrumbs(gtk.HBox):
 		green = (background.green + foreground.green) / 2
 		blue = (background.blue + foreground.blue) / 2
 
-		return gtk.gdk.Color(red, green, blue)
+		return Gdk.Color(red, green, blue)
 
 	def __realize_event(self, widget, data=None):
 		"""Resize drawing area when object is realized"""
 		layout = widget.create_pango_layout('')
 
-		height = layout.get_size()[1] / pango.SCALE
+		height = layout.get_size()[1] / Pango.SCALE
 		self._path_object.set_size_request(-1, height)
 
 	def __leave_event(self, widget, event):
@@ -72,7 +73,7 @@ class Breadcrumbs(gtk.HBox):
 		region.x = 0
 
 		# request redraw
-		self._path_object.queue_draw_area(*region)
+		self._path_object.queue_draw_area(region.x, region.y, region.width, region.height)
 
 		return True
 
@@ -83,7 +84,7 @@ class Breadcrumbs(gtk.HBox):
 			path = self._previous_path
 
 		# handle single left mouse click
-		if event.button is 1 and event.type is gtk.gdk.BUTTON_PRESS:
+		if event.button is 1 and event.type is Gdk.EventType.BUTTON_PRESS:
 			width = self._elements_size[self._highlight_index]
 			new_path = path[0:width]
 			file_list = self._parent._parent
@@ -112,14 +113,14 @@ class Breadcrumbs(gtk.HBox):
 			region.x = 0
 
 			# request redraw
-			self._path_object.queue_draw_area(*region)
+			self._path_object.queue_draw_area(region.x, region.y, region.width, region.height)
 
 		return True
 
-	def __expose_event(self, widget, event=None):
+	def __draw_event(self, widget, context, event=None):
 		"""Handle drawing bread crumbs"""
-		foreground_context = widget.get_style().fg_gc[self._state]
-		background_context = widget.window.cairo_create()
+		foreground_context = widget.get_pango_context()
+		background_context = context
 		layout = widget.create_pango_layout('')
 
 		text_to_draw = self._path
@@ -130,18 +131,21 @@ class Breadcrumbs(gtk.HBox):
 			self._allocation = widget.get_allocation()
 
 		# create attributes
-		attributes = pango.AttrList()
+		attributes = Pango.AttrList.new()
 
 		# check if path is part of previous one
 		if self._type is Breadcrumbs.TYPE_SMART \
 		and self._previous_path is not None \
 		and self._previous_path.startswith(self._path):
-			smart_color = (self._smart_color.red, self._smart_color.green, self._smart_color.blue)
-			attributes.insert(pango.AttrForeground(
-											*smart_color,
-											start_index=path_length,
-											end_index=len(self._previous_path)
-										))
+			attribute = Pango.AttrForeground.new(
+					self._smart_color.red,
+					self._smart_color.green,
+					self._smart_color.blue
+				)
+			# start_index=path_length,
+			# end_index=len(self._previous_path)
+
+			attributes.insert(attribute)
 			text_to_draw = self._previous_path
 
 		# calculate width of path elements
@@ -166,29 +170,27 @@ class Breadcrumbs(gtk.HBox):
 			for element in elements:
 				# get path size
 				path = os.path.join(path, element) if path is not None else element
-				layout.set_text(path)
+				layout.set_text(path, -1)
 
 				# add width to the list
-				width = layout.get_size()[0] / pango.SCALE
+				width = layout.get_size()[0] / Pango.SCALE
 				self._elements_size.append(len(path))
 				self._elements_width.append(width)
 
 		# underline hovered path if specified
 		if None not in (self._highlight_index, self._elements_size):
 			width = self._elements_size[self._highlight_index]
-			attributes.insert(pango.AttrUnderline(pango.UNDERLINE_SINGLE, 0, width))
+			# attributes.insert(Pango.AttrUnderline(Pango.Underline.SINGLE, 0, width))
 
 		# prepare text for drawing
-		layout.set_text(text_to_draw)
+		layout.set_text(text_to_draw, -1)
 		layout.set_attributes(attributes)
 
 		# draw background color
-		background_context.set_source_color(self._colors[0])
-		background_context.rectangle(0, 0, self._allocation[2], self._allocation[3])
+		color = self._colors[0]
+		background_context.set_source_rgb(color.red, color.green, color.blue)
+		background_context.rectangle(0, 0, self._allocation.width, self._allocation.height)
 		background_context.fill()
-
-		# draw text
-		widget.window.draw_layout(foreground_context, 0, 0, layout)
 
 		return True
 

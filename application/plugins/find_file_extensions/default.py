@@ -1,7 +1,7 @@
 import os
-import gtk
 import fnmatch
 
+from gi.repository import Gtk
 from plugin_base.find_extension import FindExtension
 
 
@@ -25,7 +25,7 @@ class DefaultFindFiles(FindExtension):
 		self._checkbox_active.set_active(True)
 
 		# create label showing pattern help
-		label_help = gtk.Label()
+		label_help = Gtk.Label()
 		label_help.set_alignment(0, 0)
 		label_help.set_use_markup(True)
 
@@ -38,21 +38,21 @@ class DefaultFindFiles(FindExtension):
 						))
 
 		# create containers
-		hbox = gtk.HBox(True, 15)
-		vbox_left = gtk.VBox(False, 5)
-		vbox_right = gtk.VBox(False, 0)
+		hbox = Gtk.HBox(True, 15)
+		vbox_left = Gtk.VBox(False, 5)
+		vbox_right = Gtk.VBox(False, 0)
 
 		# create interface
-		vbox_pattern = gtk.VBox(False, 0)
+		vbox_pattern = Gtk.VBox(False, 0)
 
-		label_pattern = gtk.Label(_('Search for:'))
+		label_pattern = Gtk.Label(label=_('Search for:'))
 		label_pattern.set_alignment(0, 0.5)
 
-		self._entries = gtk.ListStore(str)
-		self._entry_pattern = gtk.ComboBoxEntry(model=self._entries)
+		self._entries = Gtk.ListStore(str)
+		self._entry_pattern = Gtk.ComboBox.new_with_model_and_entry(model=self._entries)
 		self._entry_pattern.connect('changed', self.__handle_pattern_change)
 
-		self._checkbox_case_sensitive = gtk.CheckButton(_('Case sensitive'))
+		self._checkbox_case_sensitive = Gtk.CheckButton(_('Case sensitive'))
 		self._checkbox_case_sensitive.connect('toggled', self.__handle_case_sensitive_toggle)
 
 		# pack interface
@@ -87,7 +87,7 @@ class DefaultFindFiles(FindExtension):
 
 	def __handle_pattern_change(self, widget, data=None):
 		"""Handle changing pattern"""
-		self._pattern = widget.child.get_text()
+		self._pattern = widget.get_child().get_text()
 
 	def __handle_notify_start(self, data=None):
 		"""Handle starting search."""
@@ -110,7 +110,7 @@ class DefaultFindFiles(FindExtension):
 
 		# select first entry
 		self._entry_pattern.handler_block_by_func(self.__handle_pattern_change)
-		self._entry_pattern.child.set_text(entries[0])
+		self._entry_pattern.get_child().set_text(entries[0])
 		self._entry_pattern.handler_unblock_by_func(self.__handle_pattern_change)
 
 	def get_title(self):

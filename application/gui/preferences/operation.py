@@ -1,5 +1,4 @@
-import gtk
-
+from gi.repository import Gtk
 from widgets.settings_page import SettingsPage
 
 
@@ -10,24 +9,24 @@ class OperationOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'operation', _('Operation'))
 
 		# create frames
-		frame_general = gtk.Frame(_('General'))
-		vbox_general = gtk.VBox(False, 0)
+		frame_general = Gtk.Frame(label=_('General'))
+		vbox_general = Gtk.VBox(False, 0)
 		vbox_general.set_border_width(5)
 
-		frame_mounts = gtk.Frame(_('Mounts'))
-		vbox_mounts = gtk.VBox(False, 0)
+		frame_mounts = Gtk.Frame(label=_('Mounts'))
+		vbox_mounts = Gtk.VBox(False, 0)
 		vbox_mounts.set_border_width(5)
 
-		frame_confirmations = gtk.Frame(_('Confirmation'))
-		vbox_confirmations = gtk.VBox(False, 0)
+		frame_confirmations = Gtk.Frame(label=_('Confirmation'))
+		vbox_confirmations = Gtk.VBox(False, 0)
 		vbox_confirmations.set_border_width(5)
 
 		# create components
-		self._checkbox_trash_files = gtk.CheckButton(_('Delete items to trashcan'))
-		self._checkbox_reserve_size = gtk.CheckButton(_('Reserve free space on copy/move'))
-		self._checkbox_automount_on_start = gtk.CheckButton(_('Automount drives on start up'))
-		self._checkbox_automount_on_insert = gtk.CheckButton(_('Automount removable drives when inserted'))
-		self._checkbox_confirm_delete = gtk.CheckButton(_('Show confirmation dialog before deleting items'))
+		self._checkbox_trash_files = Gtk.CheckButton(_('Delete items to trashcan'))
+		self._checkbox_reserve_size = Gtk.CheckButton(_('Reserve free space on copy/move'))
+		self._checkbox_automount_on_start = Gtk.CheckButton(_('Automount drives on start up'))
+		self._checkbox_automount_on_insert = Gtk.CheckButton(_('Automount removable drives when inserted'))
+		self._checkbox_confirm_delete = Gtk.CheckButton(_('Show confirmation dialog before deleting items'))
 
 		self._checkbox_trash_files.connect('toggled', self._parent.enable_save)
 		self._checkbox_reserve_size.connect('toggled', self._parent.enable_save)
@@ -55,11 +54,11 @@ class OperationOptions(SettingsPage):
 	def _confirm_delete_toggle(self, widget, data=None):
 		"""Make sure user really wants to disable confirmation dialog"""
 		if not widget.get_active() and not self._checkbox_trash_files.get_active():
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self._parent,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_QUESTION,
-									gtk.BUTTONS_YES_NO,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.QUESTION,
+									Gtk.ButtonsType.YES_NO,
 									_(
 										'With trashing disabled you will not be able to '
 										'restore accidentally deleted items. Are you sure '
@@ -67,11 +66,11 @@ class OperationOptions(SettingsPage):
 										'deleting items?'
 									)
 								)
-			dialog.set_default_response(gtk.RESPONSE_YES)
+			dialog.set_default_response(Gtk.ResponseType.YES)
 			result = dialog.run()
 			dialog.destroy()
 
-			if result == gtk.RESPONSE_NO:
+			if result == Gtk.ResponseType.NO:
 				# user changed his mind, restore original value
 				widget.handler_block_by_func(self._confirm_delete_toggle)
 				widget.set_active(True)

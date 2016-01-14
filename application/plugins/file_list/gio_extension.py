@@ -1,6 +1,4 @@
-import gtk
-import gio
-
+from gi.repository import Gtk, Gio, Gdk
 from dialogs import SambaInputDialog, SambaResult
 from dialogs import FtpInputDialog, FtpResult, SftpInputDialog
 from dialogs import DavInputDialog, DavResult
@@ -59,11 +57,11 @@ class GioExtension(MountManagerExtension):
 			if password is not None:
 				# set password to stored one
 				operation.set_password(password)
-				operation.reply(gio.MOUNT_OPERATION_HANDLED)
+				operation.reply(Gio.MountOperationResult.HANDLED)
 
 			else:
 				# we don't have stored password, ask user to provide one
-				with gtk.gdk.lock:
+				with Gdk.lock:
 					dialog = InputDialog(self._application)
 					dialog.set_title(_('Mount operation'))
 					dialog.set_label(message)
@@ -71,16 +69,16 @@ class GioExtension(MountManagerExtension):
 
 					response = dialog.get_response()
 
-					if response[0] == gtk.RESPONSE_OK:
+					if response[0] == Gtk.ResponseType.OK:
 						operation.set_password(response[1])
-						operation.reply(gio.MOUNT_OPERATION_HANDLED)
+						operation.reply(Gio.MountOperationResult.HANDLED)
 
 		# create new mount operation object
-		operation = gio.MountOperation()
+		operation = Gio.MountOperation()
 		operation.connect('ask-password', ask_password)
 
 		# perform mount
-		path = gio.File(uri)
+		path = Gio.File(uri)
 		path.mount_enclosing_volume(operation, self.__mount_callback)
 
 	def _unmount(self, uri):
@@ -89,7 +87,7 @@ class GioExtension(MountManagerExtension):
 
 		# get mount for specified URI
 		try:
-			mount = gio.File(uri).find_enclosing_mount()
+			mount = Gio.File(uri).find_enclosing_mount()
 			mount.unmount(self.__unmount_callback)
 
 		except:
@@ -103,13 +101,13 @@ class GioExtension(MountManagerExtension):
 		try:
 			path.mount_enclosing_volume_finish(result)
 
-		except gio.Error as error:
-			with gtk.gdk.lock:
-				dialog = gtk.MessageDialog(
+		except Gio.Error as error:
+			with Gdk.lock:
+				dialog = Gtk.MessageDialog(
 										self._parent.window,
-										gtk.DIALOG_DESTROY_WITH_PARENT,
-										gtk.MESSAGE_ERROR,
-										gtk.BUTTONS_OK,
+										Gtk.DialogFlags.DESTROY_WITH_PARENT,
+										Gtk.MessageType.ERROR,
+										Gtk.ButtonsType.OK,
 										_(
 											"Unable to mount:\n{0}\n\n{1}"
 										).format(path.get_uri(), str(error))
@@ -152,18 +150,18 @@ class SambaExtension(GioExtension):
 		GioExtension.__init__(self, parent, window)
 
 		# create user interface
-		list_container = gtk.ScrolledWindow()
-		list_container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-		list_container.set_shadow_type(gtk.SHADOW_IN)
+		list_container = Gtk.ScrolledWindow()
+		list_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		list_container.set_shadow_type(Gtk.ShadowType.IN)
 
-		self._store = gtk.ListStore(str, str, str, str, str, str, bool, str)
-		self._list = gtk.TreeView(model=self._store)
+		self._store = Gtk.ListStore(str, str, str, str, str, str, bool, str) 
+		self._list = Gtk.TreeView(model=self._store)
 
-		cell_name = gtk.CellRendererText()
-		cell_uri = gtk.CellRendererText()
+		cell_name = Gtk.CellRendererText()
+		cell_uri = Gtk.CellRendererText()
 
-		col_name = gtk.TreeViewColumn(_('Name'), cell_name, text=SambaColumn.NAME)
-		col_uri = gtk.TreeViewColumn(_('URI'), cell_uri, text=SambaColumn.URI)
+		col_name = Gtk.TreeViewColumn(_('Name'), cell_name, text=SambaColumn.NAME)
+		col_uri = Gtk.TreeViewColumn(_('URI'), cell_uri, text=SambaColumn.URI)
 
 		col_name.set_expand(True)
 
@@ -171,36 +169,36 @@ class SambaExtension(GioExtension):
 		self._list.append_column(col_uri)
 
 		# create controls
-		image_add = gtk.Image()
-		image_add.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_BUTTON)
+		image_add = Gtk.Image()
+		image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
 
-		button_add = gtk.Button()
+		button_add = Gtk.Button()
 		button_add.set_image(image_add)
 		button_add.connect('clicked', self._add_mount)
 
-		image_edit = gtk.Image()
-		image_edit.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_BUTTON)
+		image_edit = Gtk.Image()
+		image_edit.set_from_stock(Gtk.STOCK_EDIT, Gtk.IconSize.BUTTON)
 
-		button_edit = gtk.Button()
+		button_edit = Gtk.Button()
 		button_edit.set_image(image_edit)
 		button_edit.connect('clicked', self._edit_mount)
 
-		image_delete = gtk.Image()
-		image_delete.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_BUTTON)
+		image_delete = Gtk.Image()
+		image_delete.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.BUTTON)
 
-		button_delete = gtk.Button()
+		button_delete = Gtk.Button()
 		button_delete.set_image(image_delete)
 		button_delete.connect('clicked', self._delete_mount)
 
-		button_mount = gtk.Button(_('Mount'))
+		button_mount = Gtk.Button(_('Mount'))
 		button_mount.connect('clicked', self._mount_selected)
 
-		button_unmount = gtk.Button(_('Unmount'))
+		button_unmount = Gtk.Button(_('Unmount'))
 		button_unmount.connect('clicked', self._unmount_selected)
 
 		# use spinner if possible to denote busy operation
-		if hasattr(gtk, 'Spinner'):
-			self._spinner = gtk.Spinner()
+		if hasattr(Gtk, 'Spinner'):
+			self._spinner = Gtk.Spinner()
 			self._spinner.set_size_request(20, 20)
 			self._spinner.set_property('no-show-all', True)
 
@@ -311,7 +309,7 @@ class SambaExtension(GioExtension):
 		dialog.set_keyring_available(keyring_manager.is_available())
 		response = dialog.get_response()
 
-		if response[0] == gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			name = response[1][SambaResult.NAME]
 			uri = self.__form_uri(
 						response[1][SambaResult.SERVER],
@@ -377,7 +375,7 @@ class SambaExtension(GioExtension):
 			# show editing dialog
 			response = dialog.get_response()
 
-			if response[0] == gtk.RESPONSE_OK:
+			if response[0] == Gtk.ResponseType.OK:
 				new_name = response[1][SambaResult.NAME]
 
 				# modify list store
@@ -415,22 +413,22 @@ class SambaExtension(GioExtension):
 			requires_login = item_list.get_value(selected_iter, SambaColumn.REQUIRES_LOGIN)
 
 			# ask user to confirm removal
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self._parent.window,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_QUESTION,
-									gtk.BUTTONS_YES_NO,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.QUESTION,
+									Gtk.ButtonsType.YES_NO,
 									_(
 										"You are about to remove '{0}'.\n"
 										"Are you sure about this?"
 									).format(entry_name)
 								)
-			dialog.set_default_response(gtk.RESPONSE_YES)
+			dialog.set_default_response(Gtk.ResponseType.YES)
 			result = dialog.run()
 			dialog.destroy()
 
 			# remove selected mount
-			if result == gtk.RESPONSE_YES:
+			if result == Gtk.ResponseType.YES:
 				item_list.remove(selected_iter)
 
 				# save changes
@@ -506,18 +504,18 @@ class FtpExtension(GioExtension):
 		GioExtension.__init__(self, parent, window)
 
 		# create user interface
-		list_container = gtk.ScrolledWindow()
-		list_container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-		list_container.set_shadow_type(gtk.SHADOW_IN)
+		list_container = Gtk.ScrolledWindow()
+		list_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		list_container.set_shadow_type(Gtk.ShadowType.IN)
 
-		self._store = gtk.ListStore(str, str, str, str, bool, str)
-		self._list = gtk.TreeView(model=self._store)
+		self._store = Gtk.ListStore(str, str, str, str, bool, str) 
+		self._list = Gtk.TreeView(model=self._store)
 
-		cell_name = gtk.CellRendererText()
-		cell_uri = gtk.CellRendererText()
+		cell_name = Gtk.CellRendererText()
+		cell_uri = Gtk.CellRendererText()
 
-		col_name = gtk.TreeViewColumn(_('Name'), cell_name, text=FtpColumn.NAME)
-		col_uri = gtk.TreeViewColumn(_('URI'), cell_uri, text=FtpColumn.URI)
+		col_name = Gtk.TreeViewColumn(_('Name'), cell_name, text=FtpColumn.NAME)
+		col_uri = Gtk.TreeViewColumn(_('URI'), cell_uri, text=FtpColumn.URI)
 
 		col_name.set_expand(True)
 
@@ -525,36 +523,36 @@ class FtpExtension(GioExtension):
 		self._list.append_column(col_uri)
 
 		# create controls
-		image_add = gtk.Image()
-		image_add.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_BUTTON)
+		image_add = Gtk.Image()
+		image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
 
-		button_add = gtk.Button()
+		button_add = Gtk.Button()
 		button_add.set_image(image_add)
 		button_add.connect('clicked', self._add_mount)
 
-		image_edit = gtk.Image()
-		image_edit.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_BUTTON)
+		image_edit = Gtk.Image()
+		image_edit.set_from_stock(Gtk.STOCK_EDIT, Gtk.IconSize.BUTTON)
 
-		button_edit = gtk.Button()
+		button_edit = Gtk.Button()
 		button_edit.set_image(image_edit)
 		button_edit.connect('clicked', self._edit_mount)
 
-		image_delete = gtk.Image()
-		image_delete.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_BUTTON)
+		image_delete = Gtk.Image()
+		image_delete.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.BUTTON)
 
-		button_delete = gtk.Button()
+		button_delete = Gtk.Button()
 		button_delete.set_image(image_delete)
 		button_delete.connect('clicked', self._delete_mount)
 
-		button_mount = gtk.Button(_('Mount'))
+		button_mount = Gtk.Button(_('Mount'))
 		button_mount.connect('clicked', self._mount_selected)
 
-		button_unmount = gtk.Button(_('Unmount'))
+		button_unmount = Gtk.Button(_('Unmount'))
 		button_unmount.connect('clicked', self._unmount_selected)
 
 		# use spinner if possible to denote busy operation
-		if hasattr(gtk, 'Spinner'):
-			self._spinner = gtk.Spinner()
+		if hasattr(Gtk, 'Spinner'):
+			self._spinner = Gtk.Spinner()
 			self._spinner.set_size_request(20, 20)
 			self._spinner.set_property('no-show-all', True)
 
@@ -663,7 +661,7 @@ class FtpExtension(GioExtension):
 		dialog.set_keyring_available(keyring_manager.is_available())
 		response = dialog.get_response()
 
-		if response[0] == gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			name = response[1][FtpResult.NAME]
 			uri = self.__form_uri(
 						response[1][FtpResult.SERVER],
@@ -718,22 +716,22 @@ class FtpExtension(GioExtension):
 			requires_login = item_list.get_value(selected_iter, FtpColumn.REQUIRES_LOGIN)
 
 			# ask user to confirm removal
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self._parent.window,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_QUESTION,
-									gtk.BUTTONS_YES_NO,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.QUESTION,
+									Gtk.ButtonsType.YES_NO,
 									_(
 										"You are about to remove '{0}'.\n"
 										"Are you sure about this?"
 									).format(entry_name)
 								)
-			dialog.set_default_response(gtk.RESPONSE_YES)
+			dialog.set_default_response(Gtk.ResponseType.YES)
 			result = dialog.run()
 			dialog.destroy()
 
 			# remove selected mount
-			if result == gtk.RESPONSE_YES:
+			if result == Gtk.ResponseType.YES:
 				item_list.remove(selected_iter)
 
 				# save changes
@@ -763,7 +761,7 @@ class FtpExtension(GioExtension):
 			# show editing dialog
 			response = dialog.get_response()
 
-			if response[0] == gtk.RESPONSE_OK:
+			if response[0] == Gtk.ResponseType.OK:
 				new_name = response[1][FtpResult.NAME]
 
 				# modify list store
@@ -858,18 +856,18 @@ class DavExtension(GioExtension):
 		GioExtension.__init__(self, parent, window)
 
 		# create user interface
-		list_container = gtk.ScrolledWindow()
-		list_container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-		list_container.set_shadow_type(gtk.SHADOW_IN)
+		list_container = Gtk.ScrolledWindow()
+		list_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		list_container.set_shadow_type(Gtk.ShadowType.IN)
 
-		self._store = gtk.ListStore(str, str, int, str, str, bool, str)
-		self._list = gtk.TreeView(model=self._store)
+		self._store = Gtk.ListStore(str, str, int, str, str, bool, str)
+		self._list = Gtk.TreeView(model=self._store)
 
-		cell_name = gtk.CellRendererText()
-		cell_uri = gtk.CellRendererText()
+		cell_name = Gtk.CellRendererText()
+		cell_uri = Gtk.CellRendererText()
 
-		col_name = gtk.TreeViewColumn(_('Name'), cell_name, text=DavColumn.NAME)
-		col_uri = gtk.TreeViewColumn(_('URI'), cell_uri, text=DavColumn.URI)
+		col_name = Gtk.TreeViewColumn(_('Name'), cell_name, text=DavColumn.NAME)
+		col_uri = Gtk.TreeViewColumn(_('URI'), cell_uri, text=DavColumn.URI)
 
 		col_name.set_expand(True)
 
@@ -877,36 +875,36 @@ class DavExtension(GioExtension):
 		self._list.append_column(col_uri)
 
 		# create controls
-		image_add = gtk.Image()
-		image_add.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_BUTTON)
+		image_add = Gtk.Image()
+		image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
 
-		button_add = gtk.Button()
+		button_add = Gtk.Button()
 		button_add.set_image(image_add)
 		button_add.connect('clicked', self._add_mount)
 
-		image_edit = gtk.Image()
-		image_edit.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_BUTTON)
+		image_edit = Gtk.Image()
+		image_edit.set_from_stock(Gtk.STOCK_EDIT, Gtk.IconSize.BUTTON)
 
-		button_edit = gtk.Button()
+		button_edit = Gtk.Button()
 		button_edit.set_image(image_edit)
 		button_edit.connect('clicked', self._edit_mount)
 
-		image_delete = gtk.Image()
-		image_delete.set_from_stock(gtk.STOCK_DELETE, gtk.ICON_SIZE_BUTTON)
+		image_delete = Gtk.Image()
+		image_delete.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.BUTTON)
 
-		button_delete = gtk.Button()
+		button_delete = Gtk.Button()
 		button_delete.set_image(image_delete)
 		button_delete.connect('clicked', self._delete_mount)
 
-		button_mount = gtk.Button(_('Mount'))
+		button_mount = Gtk.Button(_('Mount'))
 		button_mount.connect('clicked', self._mount_selected)
 
-		button_unmount = gtk.Button(_('Unmount'))
+		button_unmount = Gtk.Button(_('Unmount'))
 		button_unmount.connect('clicked', self._unmount_selected)
 
 		# use spinner if possible to denote busy operation
-		if hasattr(gtk, 'Spinner'):
-			self._spinner = gtk.Spinner()
+		if hasattr(Gtk, 'Spinner'):
+			self._spinner = Gtk.Spinner()
 			self._spinner.set_size_request(20, 20)
 			self._spinner.set_property('no-show-all', True)
 
@@ -1016,7 +1014,7 @@ class DavExtension(GioExtension):
 		dialog.set_keyring_available(keyring_manager.is_available())
 		response = dialog.get_response()
 
-		if response[0] == gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			name = response[1][DavResult.NAME]
 			uri = self.__form_uri(
 				response[1][DavResult.SERVER],
@@ -1072,22 +1070,22 @@ class DavExtension(GioExtension):
 			requires_login = item_list.get_value(selected_iter, DavColumn.REQUIRES_LOGIN)
 
 			# ask user to confirm removal
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 				self._parent.window,
-				gtk.DIALOG_DESTROY_WITH_PARENT,
-				gtk.MESSAGE_QUESTION,
-				gtk.BUTTONS_YES_NO,
+				Gtk.DialogFlags.DESTROY_WITH_PARENT,
+				Gtk.MessageType.QUESTION,
+				Gtk.ButtonsType.YES_NO,
 				_(
 					"You are about to remove '{0}'.\n"
 					"Are you sure about this?"
 				).format(entry_name)
 			)
-			dialog.set_default_response(gtk.RESPONSE_YES)
+			dialog.set_default_response(Gtk.ResponseType.YES)
 			result = dialog.run()
 			dialog.destroy()
 
 			# remove selected mount
-			if result == gtk.RESPONSE_YES:
+			if result == Gtk.ResponseType.YES:
 				item_list.remove(selected_iter)
 
 				# save changes
@@ -1117,7 +1115,7 @@ class DavExtension(GioExtension):
 			# show editing dialog
 			response = dialog.get_response()
 
-			if response[0] == gtk.RESPONSE_OK:
+			if response[0] == Gtk.ResponseType.OK:
 				new_name = response[1][DavResult.NAME]
 
 				# modify list store

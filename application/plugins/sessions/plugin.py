@@ -1,10 +1,20 @@
-import gtk
-
+from gi.repository import Gtk, Gio, GLib
 from widgets.settings_page import SettingsPage
 
 
 DEFAULT_NAME = _('Default')
 DEFAULT_LOCK = False
+
+
+def register_plugin(application):
+	"""Method that Sunflower calls once plugin is loaded"""
+	manager = SessionManager(application)
+	settings_page = SessionsOptions(
+				application.preferences_window,
+				application
+			)
+
+	settings_page.set_manager(manager)
 
 
 class Column:
@@ -24,61 +34,60 @@ class SessionsOptions(SettingsPage):
 		self._manager = None
 
 		# create list box
-		container = gtk.ScrolledWindow()
-		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-		container.set_shadow_type(gtk.SHADOW_IN)
+		container = Gtk.ScrolledWindow()
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+		container.set_shadow_type(Gtk.ShadowType.IN)
 
-		self._store = gtk.ListStore(str, bool, int, int)
+		self._store = Gtk.ListStore(str, bool, int, int)
 
-		self._list = gtk.TreeView()
+		self._list = Gtk.TreeView()
 		self._list.set_model(self._store)
 		self._list.set_rules_hint(True)
 
 		# create cell renderers
-		cell_name = gtk.CellRendererText()
+		cell_name = Gtk.CellRendererText()
 		cell_name.set_property('editable', True)
-		cell_name.set_property('mode', gtk.CELL_RENDERER_MODE_EDITABLE)
+		cell_name.set_property('mode', Gtk.CellRendererMode.EDITABLE)
 		cell_name.connect('edited', self._handle_edited_name, 0)
 
-		cell_locked = gtk.CellRendererToggle()
+		cell_locked = Gtk.CellRendererToggle()
 		cell_locked.set_property('activatable', True)
 		cell_locked.connect('toggled', self._handle_lock_toggled, 0)
 
-		cell_count = gtk.CellRendererText()
+		cell_count = Gtk.CellRendererText()
 
 		# create columns
-		col_name = gtk.TreeViewColumn(_('Name'), cell_name, text=Column.NAME)
+		col_name = Gtk.TreeViewColumn(_('Name'), cell_name, text=Column.NAME)
 		col_name.set_min_width(200)
 		col_name.set_resizable(True)
 		col_name.set_expand(True)
 
-		col_locked = gtk.TreeViewColumn(_('Locked'), cell_locked, active=Column.LOCKED)
-
-		col_count = gtk.TreeViewColumn(_('Tabs'), cell_count, text=Column.TAB_COUNT)
+		col_locked = Gtk.TreeViewColumn(_('Locked'), cell_locked, active=Column.LOCKED)
+		col_count = Gtk.TreeViewColumn(_('Tabs'), cell_count, text=Column.TAB_COUNT)
 
 		self._list.append_column(col_name)
 		self._list.append_column(col_locked)
 		self._list.append_column(col_count)
 
 		# create controls
-		button_box = gtk.HBox(False, 5)
+		button_box = Gtk.HBox(False, 5)
 
-		button_add = gtk.Button(stock=gtk.STOCK_ADD)
+		button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
 		button_add.connect('clicked', self._handle_add_session)
 
-		button_delete = gtk.Button(stock=gtk.STOCK_DELETE)
+		button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
 		button_delete.connect('clicked', self._handle_delete_session)
 
-		image_up = gtk.Image()
-		image_up.set_from_stock(gtk.STOCK_GO_UP, gtk.ICON_SIZE_BUTTON)
-		button_move_up = gtk.Button(label=None)
+		image_up = Gtk.Image()
+		image_up.set_from_stock(Gtk.STOCK_GO_UP, Gtk.IconSize.BUTTON)
+		button_move_up = Gtk.Button(label=None)
 		button_move_up.add(image_up)
 		button_move_up.set_tooltip_text(_('Move up'))
 		button_move_up.connect('clicked', self._handle_move_session, -1)
 
-		image_down = gtk.Image()
-		image_down.set_from_stock(gtk.STOCK_GO_DOWN, gtk.ICON_SIZE_BUTTON)
-		button_move_down = gtk.Button(label=None)
+		image_down = Gtk.Image()
+		image_down.set_from_stock(Gtk.STOCK_GO_DOWN, Gtk.IconSize.BUTTON)
+		button_move_down = Gtk.Button(label=None)
 		button_move_down.add(image_down)
 		button_move_down.set_tooltip_text(_('Move down'))
 		button_move_down.connect('clicked', self._handle_move_session, 1)
@@ -126,7 +135,7 @@ class SessionsOptions(SettingsPage):
 				# update index of active session
 				if row[Column.NAME] == active_name:
 					active_index = len(new_list)
-				row[Column.INDEX] = len(new_list) 
+				row[Column.INDEX] = len(new_list)
 
 				# append session to the new list
 				session_info = session_list[session_index]
@@ -165,11 +174,11 @@ class SessionsOptions(SettingsPage):
 		existing_sessions = filter(lambda session: text == session[Column.NAME], self._store)
 
 		if len(existing_sessions) > 0:
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self._parent,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_ERROR,
-									gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.ERROR,
+									Gtk.ButtonsType.OK,
 									_('Session with this name already exists.')
 								)
 			dialog.run()
@@ -190,7 +199,7 @@ class SessionsOptions(SettingsPage):
 		"""Handle toggle on session locked state"""
 		iter = self._store.get_iter(path)
 		self._store.set_value(iter, Column.LOCKED, not self._store.get_value(iter, Column.LOCKED))
-		
+
 		# enable save button
 		self._parent.enable_save()
 
@@ -265,26 +274,37 @@ class SessionManager:
 							'current': 0
 						})
 
+		# create actions
+		self._manage_action = Gio.SimpleAction.new('manage', None)
+		self._save_action = Gio.SimpleAction.new('save', None)
+
+		# connect signals
+		self._manage_action.connect('activate', self._manage_sessions)
+		self._save_action.connect('activate', self._save_session)
+
 		# create menus
-		self._session_menu = gtk.Menu()
-		self._session_menu_item = gtk.MenuItem()
-		self._session_menu_item.set_submenu(self._session_menu)
-		self._session_menu_item.set_right_justified(True)
+		self._popover_menu = Gio.Menu.new()
+		self._sessions_menu = Gio.Menu.new()
+		self._options_menu = Gio.Menu.new()
 
-		self._manage_sessions_menu_item = gtk.MenuItem(_('Manage sessions'))
-		self._manage_sessions_menu_item.connect(
-								'activate',
-								self._application.preferences_window._show,
-								'sessions'
-							)
+		self._options_menu.append(_('Manage sessions'), 'sessions.manage')
+		self._options_menu.append(_('Save session'), 'sessions.save')
 
-		self._save_session_menu_item = gtk.MenuItem(_('Save session'))
-		self._save_session_menu_item.connect(
-								'activate',
-								self._save_session
-							)
+		self._popover_menu.append_section(None, self._sessions_menu)
+		self._popover_menu.append_section(None, self._options_menu)
 
-		self._application.menu_bar.append(self._session_menu_item)
+		# create container for header bar
+		self._button = Gtk.MenuButton.new()
+		self._button.set_menu_model(self._popover_menu)
+
+		self._action_group = Gio.SimpleActionGroup.new()
+		self._action_group.add_action(self._manage_action)
+		self._action_group.add_action(self._save_action)
+
+		self._button.insert_action_group('sessions', self._action_group)
+
+		# add session button to header bar
+		self._application.header_bar.pack_end(self._button)
 
 		# update menu
 		self._update_menu()
@@ -292,44 +312,34 @@ class SessionManager:
 
 	def _update_menu(self):
 		"""Update main window session menu"""
+		self._sessions_menu.remove_all()
 
-		for item in self._session_menu.get_children():
-			self._session_menu.remove(item)
+		for action_name in self._action_group.list_actions():
+			if action_name.startswith('switch_to_'):
+				self._action_group.remove_action(action_name)
 
 		# get current session index
 		current_session = self._options.section('sessions').get('current')
 
 		# iterate over saved sessions and create menu item for each
-		group = None
 		for index, session in enumerate(self._options.section('sessions').get('list')):
-			menu_item = gtk.RadioMenuItem(group, session.get('name'))
-			menu_item.set_active(index == current_session)
-			menu_item.connect('activate', self._switch_session, index)
-			menu_item.show()
+			session_name = session.get('name')
+			action_name = 'switch_to_{0}'.format(index)
 
-			# append menu item to menu
-			self._session_menu.append(menu_item)
+			action = Gio.SimpleAction.new(action_name, None)
+			action.connect('activate', self._switch_session, index)
+			self._action_group.add_action(action)
 
-			# store current item to be used for grouping with others
-			group = menu_item
-
-		# add options
-		separator = gtk.SeparatorMenuItem()
-		separator.show()
-
-		self._session_menu.append(separator)
-		self._session_menu.append(self._save_session_menu_item)
-		self._session_menu.append(self._manage_sessions_menu_item)
+			self._sessions_menu.append(session_name, 'sessions.{0}'.format(action_name))
 
 	def _update_menu_item(self):
 		"""Update main window menu item to contain session name"""
 		current_session = self._options.section('sessions').get('current')
 		session_name = self._options.section('sessions').get('list')[current_session].get('name')
-		self._session_menu_item.set_label('Session: {0}'.format(session_name))
+		self._button.set_label(session_name)
 
-	def _switch_session(self, widget, session_index):
+	def _switch_session(self, action, data, session_index):
 		"""Handle clicking on session menu"""
-
 		left_section = self._options.section('left')
 		right_section = self._options.section('right')
 		section = self._options.section('sessions')
@@ -385,8 +395,7 @@ class SessionManager:
 		self._update_menu_item()
 
 	def _save_session(self, *ignore):
-		"""Handle clicking on 'save session' menu item"""
-
+		"""Handle creating a new session."""
 		section = self._options.section('sessions')
 		session_list = section.get('list')
 		current_session_index = section.get('current')
@@ -406,13 +415,6 @@ class SessionManager:
 		# save options
 		self._options.save()
 
-
-def register_plugin(application):
-	"""Method that Sunflower calls once plugin is loaded"""
-	manager = SessionManager(application)
-	settings_page = SessionsOptions(
-				application.preferences_window,
-				application
-			)
-
-	settings_page.set_manager(manager)
+	def _manage_sessions(self, widget, data=None):
+		"""Show preferences window for managing sessions."""
+		self._application.preferences_window._show(widget, 'sessions')

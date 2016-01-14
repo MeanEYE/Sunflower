@@ -1,5 +1,4 @@
-import gtk
-
+from gi.repository import Gtk, Gdk, GObject
 from gui.preferences.display import DisplayOptions
 from gui.preferences.operation import OperationOptions
 from gui.preferences.item_list import ItemListOptions
@@ -18,11 +17,11 @@ class Column:
 	WIDGET = 1
 
 
-class PreferencesWindow(gtk.Window):
+class PreferencesWindow(Gtk.Window):
 	"""Container class for options editors"""
 
 	def __init__(self, parent):
-		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
+		GObject.GObject.__init__(self, type=Gtk.WindowType.TOPLEVEL)
 
 		self._parent = parent
 		self._tab_names = {}
@@ -30,40 +29,40 @@ class PreferencesWindow(gtk.Window):
 		# configure window
 		self.set_title(_('Preferences'))
 		self.set_size_request(750, 500)
-		self.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+		self.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self.set_modal(True)
 		self.set_skip_taskbar_hint(True)
 		self.set_transient_for(parent)
-		self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+		self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 		self.set_wmclass('Sunflower', 'Sunflower')
 
 		self.connect('delete_event', self._hide)
 		self.connect('key-press-event', self._handle_key_press)
 
 		# create user interface
-		vbox = gtk.VBox(False, 7)
+		vbox = Gtk.VBox(False, 7)
 		vbox.set_border_width(7)
 
-		hbox = gtk.HBox(False, 7)
+		hbox = Gtk.HBox(False, 7)
 
 		# create tab label container
-		label_container = gtk.ScrolledWindow()
-		label_container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-		label_container.set_shadow_type(gtk.SHADOW_IN)
+		label_container = Gtk.ScrolledWindow()
+		label_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		label_container.set_shadow_type(Gtk.ShadowType.IN)
 		label_container.set_size_request(130, -1)
 
-		self._labels = gtk.ListStore(str, int)
-		self._tab_labels = gtk.TreeView(model=self._labels)
+		self._labels = Gtk.ListStore(str, int)
+		self._tab_labels = Gtk.TreeView(model=self._labels)
 
-		cell_label = gtk.CellRendererText()
-		col_label = gtk.TreeViewColumn(None, cell_label, text=Column.NAME)
+		cell_label = Gtk.CellRendererText()
+		col_label = Gtk.TreeViewColumn(None, cell_label, text=Column.NAME)
 
 		self._tab_labels.append_column(col_label)
 		self._tab_labels.set_headers_visible(False)
 		self._tab_labels.connect('cursor-changed', self._handle_cursor_change)
 
 		# create tabs
-		self._tabs = gtk.Notebook()
+		self._tabs = Gtk.Notebook()
 		self._tabs.set_show_tabs(False)
 		self._tabs.set_show_border(False)
 		self._tabs.connect('switch-page', self._handle_page_switch)
@@ -84,18 +83,18 @@ class PreferencesWindow(gtk.Window):
 		self._tab_labels.set_cursor((0,))
 
 		# create buttons
-		hbox_controls = gtk.HBox(False, 5)
+		hbox_controls = Gtk.HBox(False, 5)
 
-		btn_close = gtk.Button(stock=gtk.STOCK_CLOSE)
+		btn_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
 		btn_close.connect('clicked', self._hide)
 
-		self._button_save = gtk.Button(stock=gtk.STOCK_SAVE)
+		self._button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
 		self._button_save.connect('clicked', self._save_options)
 
-		self._button_revert = gtk.Button(stock=gtk.STOCK_REVERT_TO_SAVED)
+		self._button_revert = Gtk.Button(stock=Gtk.STOCK_REVERT_TO_SAVED)
 		self._button_revert.connect('clicked', self._load_options)
 
-		btn_help = gtk.Button(stock=gtk.STOCK_HELP)
+		btn_help = Gtk.Button(stock=Gtk.STOCK_HELP)
 		btn_help.connect(
 					'clicked',
 					parent.goto_web,
@@ -103,7 +102,7 @@ class PreferencesWindow(gtk.Window):
 				)
 
 		# restart label
-		self._label_restart = gtk.Label('<i>{0}</i>'.format(_('Program restart required!')))
+		self._label_restart = Gtk.Label(label='<i>{0}</i>'.format(_('Program restart required!')))
 		self._label_restart.set_alignment(0.5, 0.5)
 		self._label_restart.set_use_markup(True)
 		self._label_restart.set_property('no-show-all', True)
@@ -139,26 +138,26 @@ class PreferencesWindow(gtk.Window):
 		should_close = True
 
 		if self._button_save.get_sensitive():
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 			                    self,
-			                    gtk.DIALOG_DESTROY_WITH_PARENT,
-			                    gtk.MESSAGE_QUESTION,
-								gtk.BUTTONS_NONE,
+			                    Gtk.DialogFlags.DESTROY_WITH_PARENT,
+			                    Gtk.MessageType.QUESTION,
+								Gtk.ButtonsType.NONE,
 			                    _("There are unsaved changes.\nDo you want to save them?")
 			                )
 			dialog.add_buttons(
-						gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-						gtk.STOCK_NO, gtk.RESPONSE_NO,
-						gtk.STOCK_YES, gtk.RESPONSE_YES,
+						Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+						Gtk.STOCK_NO, Gtk.ResponseType.NO,
+						Gtk.STOCK_YES, Gtk.ResponseType.YES,
 					)
-			dialog.set_default_response(gtk.RESPONSE_YES)
+			dialog.set_default_response(Gtk.ResponseType.YES)
 			result = dialog.run()
 			dialog.destroy()
 
-			if result == gtk.RESPONSE_YES:
-				self._save_options()
+			if result == Gtk.ResponseType.YES:
+				self._save_options()			
 
-			elif result == gtk.RESPONSE_CANCEL:
+			elif result == Gtk.ResponseType.CANCEL:
 				should_close = False
 
 		if should_close:
@@ -219,7 +218,7 @@ class PreferencesWindow(gtk.Window):
 
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys"""
-		if event.keyval == gtk.keysyms.Escape:
+		if event.keyval == Gdk.KEY_Escape:
 			self._hide()
 
 	def enable_save(self, widget=None, show_restart=None):

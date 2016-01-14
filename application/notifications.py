@@ -2,9 +2,10 @@ import os
 import sys
 
 try:
-	import pynotify
+	from gi.repository import Notify
+
 except:
-	pynotify = None
+	Notify = None
 
 
 class NotificationManager:
@@ -16,8 +17,8 @@ class NotificationManager:
 		self._application = application
 
 		# initialize OS notification system
-		if pynotify is not None:
-			pynotify.init('sunflower')
+		if Notify is not None:
+			Notify.init('sunflower')
 
 		# decide which icon to use
 		if self._application.icon_manager.has_icon('sunflower'):
@@ -37,7 +38,7 @@ class NotificationManager:
 	def notify(self, title, text, icon=None):
 		"""Make system notification"""
 		if not self._application.options.get('show_notifications') \
-		or pynotify is None:
+		or Notify is None:
 			return  # if notifications are disabled
 
 		if icon is None:  # make sure we show notification with icon
@@ -45,7 +46,7 @@ class NotificationManager:
 
 		try:
 			# create notification object
-			notification = pynotify.Notification(title, text, icon)
+			notification = Notify.Notification(title, text, icon)
 
 			# show notification
 			notification.show()

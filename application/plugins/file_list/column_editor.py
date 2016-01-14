@@ -17,7 +17,7 @@ class FileList_ColumnEditor(ColumnEditorExtension):
 		self._columns = []
 
 		for column in self._parent._columns:
-			self._columns.append(column.get_data('name'))
+			self._columns.append(column.name)
 
 	def _save_settings(self):
 		"""Save values to config"""

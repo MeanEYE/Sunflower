@@ -1,17 +1,16 @@
 import os
 import sys
-import gtk
-import pango
 import webbrowser
 import user
 import gettext
 import common
 import shlex
 import subprocess
-import glib
 import urllib
 import signal
 import fcntl
+
+from gi.repository import Gtk, Gdk, GLib, GObject, Pango, Gio
 
 from menus import MenuManager
 from mounts import MountsManager
@@ -55,7 +54,7 @@ from gui.input_dialog import InputDialog, AddBookmarkDialog
 from gui.keyring_manager_window import KeyringManagerWindow
 
 
-class MainWindow(gtk.Window):
+class MainWindow(Gtk.ApplicationWindow):
 	"""Main application class"""
 
 	# in order to ease version comparing build number will
@@ -69,17 +68,20 @@ class MainWindow(gtk.Window):
 
 	NAUTILUS_SEND_TO_INSTALLED = common.executable_exists('nautilus-sendto')
 
-	def __init__(self):
+	def __init__(self, application):
 		# create main window and other widgets
-		gtk.Window.__init__(self, type=gtk.WINDOW_TOPLEVEL)
+		Gtk.Window.__init__(self, application=application)
 
 		# set application name
-		glib.set_application_name('Sunflower')
+		GLib.set_application_name('Sunflower')
 
 		# local variables
 		self._geometry = None
 		self._active_object = None
 		self._accel_group = None
+
+		# load custom styles
+		self._load_styles()
 
 		# load translations
 		self._load_translation()
@@ -116,7 +118,8 @@ class MainWindow(gtk.Window):
 
 		# set window title
 		self.set_title(_('Sunflower'))
-		self.set_wmclass('Sunflower', 'Sunflower')
+		#self.set_wmclass('Sunflower', 'Sunflower')
+		self.set_border_width(5)
 
 		# set window icon
 		self.icon_manager.set_window_icon(self)
@@ -141,7 +144,7 @@ class MainWindow(gtk.Window):
 		self.dbus_interface = None
 
 		# create a clipboard manager
-		self.clipboard = gtk.Clipboard()
+		self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
 
 		# load config
 		self.load_config()
@@ -163,11 +166,40 @@ class MainWindow(gtk.Window):
 		self.preferences_window = PreferencesWindow(self)
 		self.disk_usage = DiskUsage(self)
 
+		# create header bar
+		self.header_bar = Gtk.HeaderBar.new()
+		self.header_bar.set_has_subtitle(True)
+		self.header_bar.set_show_close_button(True)
+		self.header_bar.set_title(_('Sunflower'))
+
+		self.set_titlebar(self.header_bar)
+
+		# create bar buttons
+		self.new_tab_actions = Gio.SimpleActionGroup.new()
+		self.new_tab_menu = Gio.Menu()
+		self.commands_actions = Gio.SimpleActionGroup.new()
+		self.commands_menu = Gio.Menu()
+
+		image_new = Gtk.Image.new_from_icon_name('tab-new', Gtk.IconSize.BUTTON)
+		self.button_new = Gtk.MenuButton.new()
+		self.button_new.set_image(image_new)
+		self.button_new.set_menu_model(self.new_tab_menu)
+		self.button_new.insert_action_group('new-tab', self.new_tab_actions)
+
+		self.button_commands = Gtk.MenuButton.new()
+		self.button_commands.set_label(_('Commands'))
+		self.button_commands.set_menu_model(self.commands_menu)
+		self.button_commands.insert_action_group('commands', self.commands_actions)
+
+		self.header_bar.pack_start(self.button_new)
+		self.header_bar.pack_start(self.button_commands)
+
 		# define local variables
 		self._in_fullscreen = False
+		self._window_state = 0
 
 		# create menu items
-		self.menu_bar = gtk.MenuBar()
+		self.menu_bar = Gtk.MenuBar.new()
 
 		menu_items = (
 			{
@@ -190,7 +222,7 @@ class MainWindow(gtk.Window):
 						'label': _('Create _file'),
 						'name': 'create_file',
 						'type': 'image',
-						'stock': gtk.STOCK_NEW,
+						'stock': Gtk.STOCK_NEW,
 						'callback': self._command_create,
 						'data': 'file',
 						'path': '<Sunflower>/File/CreateFile',
@@ -210,7 +242,7 @@ class MainWindow(gtk.Window):
 					{
 						'label': _('_Open'),
 						'type': 'image',
-						'stock': gtk.STOCK_OPEN,
+						'stock': Gtk.STOCK_OPEN,
 						'callback': self._command_open,
 						'path': '<Sunflower>/File/Open',
 					},
@@ -227,7 +259,7 @@ class MainWindow(gtk.Window):
 					{
 						'label': _('_Properties'),
 						'type': 'image',
-						'stock': gtk.STOCK_PROPERTIES,
+						'stock': Gtk.STOCK_PROPERTIES,
 						'callback': self._command_properties,
 						'path': '<Sunflower>/File/Properties',
 					},
@@ -238,7 +270,7 @@ class MainWindow(gtk.Window):
 						'label': _('_Quit'),
 						'name': 'quit_program',
 						'type': 'image',
-						'stock': gtk.STOCK_QUIT,
+						'stock': Gtk.STOCK_QUIT,
 						'callback' : self._destroy,
 						'path': '<Sunflower>/File/Quit'
 					},
@@ -250,21 +282,21 @@ class MainWindow(gtk.Window):
 					{
 						'label': _('Cu_t'),
 						'type': 'image',
-						'stock': gtk.STOCK_CUT,
+						'stock': Gtk.STOCK_CUT,
 						'callback': self._command_cut_to_clipboard,
 						'path': '<Sunflower>/Edit/Cut',
 					},
 					{
 						'label': _('_Copy'),
 						'type': 'image',
-						'stock': gtk.STOCK_COPY,
+						'stock': Gtk.STOCK_COPY,
 						'callback': self._command_copy_to_clipboard,
 						'path': '<Sunflower>/Edit/Copy',
 					},
 					{
 						'label': _('_Paste'),
 						'type': 'image',
-						'stock': gtk.STOCK_PASTE,
+						'stock': Gtk.STOCK_PASTE,
 						'callback': self._command_paste_from_clipboard,
 						'path': '<Sunflower>/Edit/Paste',
 					},
@@ -274,7 +306,7 @@ class MainWindow(gtk.Window):
 					{
 						'label': _('_Delete'),
 						'type': 'image',
-						'stock': gtk.STOCK_DELETE,
+						'stock': Gtk.STOCK_DELETE,
 						'callback': self._command_delete,
 						'path': '<Sunflower>/Edit/Delete',
 					},
@@ -321,7 +353,7 @@ class MainWindow(gtk.Window):
 						'label': _('_Preferences'),
 						'name': 'show_preferences',
 						'type': 'image',
-						'stock': gtk.STOCK_PREFERENCES,
+						'stock': Gtk.STOCK_PREFERENCES,
 						'callback': self.preferences_window._show,
 						'path': '<Sunflower>/Edit/Preferences',
 					},
@@ -333,7 +365,7 @@ class MainWindow(gtk.Window):
 					{
 						'label': _('_Select all'),
 						'type': 'image',
-						'stock': gtk.STOCK_SELECT_ALL,
+						'stock': Gtk.STOCK_SELECT_ALL,
 						'callback': self.select_all,
 						'path': '<Sunflower>/Mark/SelectAll',
 					},
@@ -432,7 +464,7 @@ class MainWindow(gtk.Window):
 					{
 						'label': _('Ful_lscreen'),
 						'type': 'image',
-						'stock': gtk.STOCK_FULLSCREEN,
+						'stock': Gtk.STOCK_FULLSCREEN,
 						'callback': self.toggle_fullscreen,
 						'path': '<Sunflower>/View/Fullscreen',
 						'name': 'fullscreen_toggle',
@@ -520,7 +552,7 @@ class MainWindow(gtk.Window):
 					{
 						'label': _('_Home page'),
 						'type': 'image',
-						'stock': gtk.STOCK_HOME,
+						'stock': Gtk.STOCK_HOME,
 						'callback': self.goto_web,
 						'data': 'sunflower-fm.org',
 						'path': '<Sunflower>/Help/HomePage',
@@ -544,7 +576,7 @@ class MainWindow(gtk.Window):
 					{
 						'label': _('_About'),
 						'type': 'image',
-						'stock': gtk.STOCK_ABOUT,
+						'stock': Gtk.STOCK_ABOUT,
 						'callback': self.show_about_window,
 						'path': '<Sunflower>/Help/About',
 					}
@@ -560,7 +592,7 @@ class MainWindow(gtk.Window):
 			self.menu_bar.append(self.menu_manager.create_menu_item(item))
 
 		# commands menu
-		self.menu_commands = gtk.Menu()
+		self.menu_commands = Gtk.Menu()
 
 		self._menu_item_commands = self.menu_manager.get_item_by_name('commands')
 		self._menu_item_commands.set_submenu(self.menu_commands)
@@ -578,15 +610,14 @@ class MainWindow(gtk.Window):
 		toolbar = self.toolbar_manager.get_toolbar()
 		toolbar.set_property('no-show-all', not self.options.get('show_toolbar'))
 
-
 		# bookmarks menu
 		self.bookmarks = BookmarksMenu(self)
 
 		# mounts menu
-		mounts_image = gtk.Image()
-		mounts_image.set_from_icon_name('computer', gtk.ICON_SIZE_MENU)
+		mounts_image = Gtk.Image.new()
+		mounts_image.set_from_icon_name('computer', Gtk.IconSize.MENU)
 
-		self._menu_item_mounts = gtk.ImageMenuItem()
+		self._menu_item_mounts = Gtk.ImageMenuItem.new()
 		self._menu_item_mounts.set_label(_('Mounts'))
 		self._menu_item_mounts.set_image(mounts_image)
 		self._menu_item_mounts.show()
@@ -599,54 +630,49 @@ class MainWindow(gtk.Window):
 		self.menu_tools = menu_item_tools.get_submenu()
 
 		# create notebooks
-		self._paned = gtk.VPaned() if self.options.get('horizontal_split') else gtk.HPaned()
+		self._paned = Gtk.VPaned() if self.options.get('horizontal_split') else Gtk.HPaned()
 
-		rc_string = (
-				'style "paned-style" {GtkPaned::handle-size = 4}'
-				'class "GtkPaned" style "paned-style"'
-			)
-		gtk.rc_parse_string(rc_string)
-
-		self.left_notebook = gtk.Notebook()
+		self.left_notebook = Gtk.Notebook.new()
 		self.left_notebook.set_scrollable(True)
 		self.left_notebook.connect('focus-in-event', self._transfer_focus)
 		self.left_notebook.connect('page-added', self._page_added)
 		self.left_notebook.connect('switch-page', self._page_switched)
-		self.left_notebook.set_group_id(0)
+		self.left_notebook.set_group_name('panel')
 
-		self.right_notebook = gtk.Notebook()
+		self.right_notebook = Gtk.Notebook.new()
 		self.right_notebook.set_scrollable(True)
 		self.right_notebook.connect('focus-in-event', self._transfer_focus)
 		self.right_notebook.connect('page-added', self._page_added)
 		self.right_notebook.connect('switch-page', self._page_switched)
-		self.right_notebook.set_group_id(0)
+		self.right_notebook.set_group_name('panel')
 
 		self._paned.pack1(self.left_notebook, resize=True, shrink=False)
 		self._paned.pack2(self.right_notebook, resize=True, shrink=False)
-		# command line prompt
-		self.command_entry_bar = gtk.HBox(False, 0)
-		self.status_bar = gtk.HBox(False, 0)
 
-		self.path_label = gtk.Label()
+		# command line prompt
+		self.command_entry_bar = Gtk.HBox(False, 0)
+		self.status_bar = Gtk.HBox(False, 0)
+
+		self.path_label = Gtk.Label()
 		self.path_label.set_alignment(1, 0.5)
-		self.path_label.set_ellipsize(pango.ELLIPSIZE_MIDDLE)
+		self.path_label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
 		self.path_label.show()
 
-		label_pound = gtk.Label('$')
+		label_pound = Gtk.Label(label='$')
 		label_pound.set_alignment(0, 0.5)
 		label_pound.show()
 
 		# create history list
-		self.command_list = gtk.ListStore(str)
+		self.command_list = Gtk.ListStore(str)
 
 		# create auto-complete entry
-		self.command_completion = gtk.EntryCompletion()
+		self.command_completion = Gtk.EntryCompletion()
 		self.command_completion.set_model(self.command_list)
 		self.command_completion.set_minimum_key_length(2)
 		self.command_completion.set_text_column(0)
 
 		# create editor
-		self.command_edit = gtk.Entry()
+		self.command_edit = Gtk.Entry()
 		self.command_edit.set_completion(self.command_completion)
 		self.command_edit.connect('activate', self.execute_command)
 		self.command_edit.connect('key-press-event', self._command_edit_key_press)
@@ -669,7 +695,7 @@ class MainWindow(gtk.Window):
 		self.command_entry_bar.set_property('no-show-all', not self.options.get('show_command_entry'))
 
 		# command buttons bar
-		self.command_bar = gtk.HBox(True, 0)
+		self.command_bar = Gtk.HBox(True, 0)
 
 		buttons = (
 				(_('Refresh'), _('Reload active item list'), self._command_reload),
@@ -684,7 +710,7 @@ class MainWindow(gtk.Window):
 
 		# create buttons and pack them
 		for text, tooltip, callback in buttons:
-			button = gtk.Button(label=text)
+			button = Gtk.Button(label=text)
 
 			if callback is not None:
 				button.connect('clicked', callback)
@@ -698,13 +724,13 @@ class MainWindow(gtk.Window):
 
 		self.command_bar.set_property('no-show-all', not self.options.get('show_command_bar'))
 
-		# pack gui
-		vbox = gtk.VBox(False, 0)
+		# pack user interface
+		vbox = Gtk.VBox(False, 0)
+		vbox.pack_start(self.header_bar, expand=False, fill=False, padding=0)
 		vbox.pack_start(self.menu_bar, expand=False, fill=False, padding=0)
 		vbox.pack_start(self.toolbar_manager.get_toolbar(), expand=False, fill=False, padding=0)
 
-		self._vbox2 = gtk.VBox(False, 4)
-		self._vbox2.set_border_width(3)
+		self._vbox2 = Gtk.VBox(False, 4)
 		self._vbox2.pack_start(self._paned, expand=True, fill=True, padding=0)
 		self._vbox2.pack_start(self.command_entry_bar, expand=False, fill=False, padding=0)
 		self._vbox2.pack_start(self.command_bar, expand=False, fill=False, padding=0)
@@ -766,7 +792,7 @@ class MainWindow(gtk.Window):
 				os.remove(lock_file)
 
 		# exit main loop
-		gtk.main_quit()
+		Gtk.main_quit()
 
 	def _delete_event(self, widget, data=None):
 		"""Handle delete event"""
@@ -833,8 +859,7 @@ class MainWindow(gtk.Window):
 
 	def _create_commands_menu(self):
 		"""Create commands main menu"""
-		for item in self.menu_commands.get_children():  # remove existing items
-			self.menu_commands.remove(item)
+		self.commands_menu.remove_all()
 
 		command_list = self.command_options.get('commands')
 
@@ -842,24 +867,24 @@ class MainWindow(gtk.Window):
 			# create menu item
 			if command_data['title'] != '-':
 				# normal menu item
-				tool = gtk.MenuItem(label=command_data['title'])
+				tool = Gtk.MenuItem(label=command_data['title'])
 				tool.connect('activate', self._handle_command_click)
-				tool.set_data('command', command_data['command'])
+				tool.command = command_data['command']
 
 			else:
 				# separator
-				tool = gtk.SeparatorMenuItem()
+				tool = Gtk.SeparatorMenuItem()
 
 			# add item to the tools menu
 			self.menu_commands.append(tool)
 
 		# create separator
 		if len(command_list) > 1:
-			separator = gtk.SeparatorMenuItem()
+			separator = Gtk.SeparatorMenuItem()
 			self.menu_commands.append(separator)
 
 		# create option for editing tools
-		edit_commands = gtk.ImageMenuItem(stock_id=gtk.STOCK_PREFERENCES)
+		edit_commands = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_PREFERENCES)
 		edit_commands.set_label(_('_Edit commands'))
 		edit_commands.connect('activate', self.preferences_window._show, 'commands')
 		self.menu_commands.append(edit_commands)
@@ -878,7 +903,7 @@ class MainWindow(gtk.Window):
 
 		response = dialog.get_response()
 
-		if response[0] == gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			self.bookmark_options.get('bookmarks').append({
 					'name': response[1],
 					'uri': response[2]
@@ -888,7 +913,7 @@ class MainWindow(gtk.Window):
 
 	def _handle_command_click(self, widget, data=None):
 		"""Handle click on command menu item"""
-		command = widget.get_data('command')
+		command = widget.command
 
 		# grab active objects
 		left_object = self.get_left_object()
@@ -969,25 +994,26 @@ class MainWindow(gtk.Window):
 	def _handle_new_tab_click(self, widget, data=None):
 		"""Handle clicking on item from 'New tab' menu"""
 		notebook = self.get_active_object()._notebook
-		plugin_class = widget.get_data('class')
+		plugin_class = widget.plugin_class
 
 		self.create_tab(notebook, plugin_class)
 
 	def _handle_configure_event(self, widget, event):
 		"""Handle window resizing"""
-		if self.window.get_state() == 0:
+		if self.get_state() == 0:
 			self._geometry = self.get_size() + self.get_position()
 
 	def _handle_window_state_event(self, widget, event):
 		"""Handle window state change"""
-		in_fullscreen = event.new_window_state is gtk.gdk.WINDOW_STATE_FULLSCREEN
-		stock = (gtk.STOCK_FULLSCREEN, gtk.STOCK_LEAVE_FULLSCREEN)[in_fullscreen]
+		self._in_fullscreen = bool(Gdk.WindowState.FULLSCREEN & event.new_window_state)
+		self._window_state = event.new_window_state
+		stock = (Gtk.STOCK_FULLSCREEN, Gtk.STOCK_LEAVE_FULLSCREEN)[self._in_fullscreen]
 
 		# update main menu item
 		menu_item = self.menu_manager.get_item_by_name('fullscreen_toggle')
 
 		image = menu_item.get_image()
-		image.set_from_stock(stock, gtk.ICON_SIZE_MENU)
+		image.set_from_stock(stock, Gtk.IconSize.MENU)
 
 	def _page_added(self, notebook, child, page_num):
 		"""Handle adding/moving tab accross notebooks"""
@@ -1058,11 +1084,11 @@ class MainWindow(gtk.Window):
 			self._paned.remove(self.right_notebook)
 			self._vbox2.remove(self._paned)
 
-			self._paned = gtk.VPaned() if horizontal_split else gtk.HPaned()
+			self._paned = Gtk.VPaned() if horizontal_split else Gtk.HPaned()
 			self._paned.pack1(self.left_notebook, resize=True, shrink=False)
 			self._paned.pack2(self.right_notebook, resize=True, shrink=False)
 
-			self._vbox2.pack_start(self._paned)
+			self._vbox2.pack_start(self._paned, True, True, 0)
 			self._vbox2.reorder_child(self._paned, 0)
 
 			self._paned.show()
@@ -1228,6 +1254,19 @@ class MainWindow(gtk.Window):
 				if file_name in self.protected_plugins:
 					print '\nFatal error! Failed to load required plugin, exiting!'
 					sys.exit(3)
+
+	def _load_styles(self):
+		"""Load custom application CSS styles."""
+		provider = Gtk.CssProvider.new()
+		screen = Gdk.Screen.get_default()
+
+		# prepare path to load from
+		base_path = os.path.dirname(os.path.dirname(sys.argv[0]))
+		file_name = os.path.join(base_path, 'application', 'styles', 'main.css')
+
+		# load and apply style
+		provider.load_from_file(Gio.File.new_for_path(file_name))
+		Gtk.StyleContext.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
 	def _load_translation(self):
 		"""Load translation and install global functions"""
@@ -1454,8 +1493,8 @@ class MainWindow(gtk.Window):
 		"""Handle key press in command edit"""
 		result = False
 
-		if event.keyval in (gtk.keysyms.Up, gtk.keysyms.Escape)\
-		and event.state & gtk.accelerator_get_default_mod_mask() == 0:
+		if event.keyval in (Gdk.KEY_Up, Gdk.KEY_Escape)\
+		and event.get_state() & Gtk.accelerator_get_default_mod_mask() == 0:
 			self.get_active_object().focus_main_object()
 			result = True
 
@@ -1473,15 +1512,13 @@ class MainWindow(gtk.Window):
 	def _save_window_position(self):
 		"""Save window position to config"""
 		section = self.window_options.section('main')
-
-		state = self.window.get_state()
 		window_state = 0
 
-		if state & gtk.gdk.WINDOW_STATE_FULLSCREEN:
+		if self._window_state & Gdk.WindowState.FULLSCREEN:
 			# window is in fullscreen
 			window_state = 2
 
-		elif state & gtk.gdk.WINDOW_STATE_MAXIMIZED:
+		elif self._window_state & Gdk.WindowState.MAXIMIZED:
 			# window is maximized
 			window_state = 1
 
@@ -1492,8 +1529,7 @@ class MainWindow(gtk.Window):
 		section.set('geometry', geometry)
 
 		# save handle position
-		if window_state == 0:
-			section.set('handle_position', self._paned.get_position())
+		section.set('handle_position', self._paned.get_position())
 
 	def _save_active_notebook(self):
 		"""Save active notebook to config"""
@@ -1705,7 +1741,7 @@ class MainWindow(gtk.Window):
 			response = dialog.get_response()
 
 			# commit selection
-			if response[0] == gtk.RESPONSE_OK:
+			if response[0] == Gtk.ResponseType.OK:
 				active_object.select_all(response[1])
 
 			result = True
@@ -1761,7 +1797,7 @@ class MainWindow(gtk.Window):
 			response = dialog.get_response()
 
 			# commit selection
-			if response[0] == gtk.RESPONSE_OK:
+			if response[0] == Gtk.ResponseType.OK:
 				active_object.deselect_all(response[1])
 
 			result = True
@@ -1785,12 +1821,12 @@ class MainWindow(gtk.Window):
 			result_right = right_object.select_all(exclude_list=left_list)
 
 			if result_left == result_right == 0:
-				dialog = gtk.MessageDialog(
+				dialog = Gtk.MessageDialog(
 										self,
-										gtk.DIALOG_DESTROY_WITH_PARENT,
-										gtk.MESSAGE_INFO,
-										gtk.BUTTONS_OK,
-										_('First level of compared directories is identical.')
+										Gtk.DialogFlags.DESTROY_WITH_PARENT,
+										Gtk.MessageType.INFO,
+										Gtk.ButtonsType.OK,
+										_("First level of compared directories is identical.")
 									)
 				dialog.run()
 				dialog.destroy()
@@ -1821,11 +1857,13 @@ class MainWindow(gtk.Window):
 					lock = open(lock_file, 'w')
 					fcntl.lockf(lock, fcntl.LOCK_EX|fcntl.LOCK_NB)
 					lock.write(str(os.getpid()))
+
 				except IOError:
-					print "Another copy of Sunflower is already running"
+					print 'Another copy of Sunflower is already running'
 					sys.exit()
+
 				except OSError as oserror:
-					print "Can't create lock file {}. {}".format(lock_file, oserror)
+					print 'Can''t create lock file {0}. {1}'.format(lock_file, oserror)
 					sys.exit()
 
 		# create dbus interface
@@ -1892,7 +1930,7 @@ class MainWindow(gtk.Window):
 		notebook.grab_focus()
 
 		# enter main loop
-		gtk.main()
+		Gtk.main()
 
 	def create_tab(self, notebook, plugin_class=None, options=None):
 		"""Safe create tab"""
@@ -1947,11 +1985,11 @@ class MainWindow(gtk.Window):
 				subprocess.Popen(terminal_command, cwd=path, env=environment)
 
 			except:
-				dialog = gtk.MessageDialog(
+				dialog = Gtk.MessageDialog(
 										self,
-										gtk.DIALOG_DESTROY_WITH_PARENT,
-										gtk.MESSAGE_ERROR,
-										gtk.BUTTONS_OK,
+										Gtk.DialogFlags.DESTROY_WITH_PARENT,
+										Gtk.MessageType.ERROR,
+										Gtk.ButtonsType.OK,
 										_(
 											'There was a problem starting external '
 											'terminal application. Check if command '
@@ -2021,6 +2059,7 @@ class MainWindow(gtk.Window):
 
 	def set_location_label(self, path):
 		"""Set location label"""
+		self.header_bar.set_subtitle(path)
 		self.path_label.set_text(path)
 
 	def goto_web(self, widget, uri):
@@ -2155,7 +2194,7 @@ class MainWindow(gtk.Window):
 	def configure_accelerators(self, menu):
 		"""Configure main accelerators group"""
 		group = AcceleratorGroup(self)
-		keyval = gtk.gdk.keyval_from_name
+		keyval = Gdk.keyval_from_name
 		required_fields = set(('label', 'callback', 'path', 'name'))
 
 		# configure accelerator group
@@ -2164,30 +2203,30 @@ class MainWindow(gtk.Window):
 
 		# default accelerator map
 		default_accelerator = {
-				'<Sunflower>/File/CreateFile': (keyval('F7'), gtk.gdk.CONTROL_MASK),
+				'<Sunflower>/File/CreateFile': (keyval('F7'), Gdk.ModifierType.CONTROL_MASK),
 				'<Sunflower>/File/CreateDirectory': (keyval('F7'), 0),
-				'<Sunflower>/File/Quit': (keyval('Q'), gtk.gdk.CONTROL_MASK),
-				'<Sunflower>/Edit/Preferences': (keyval('P'), gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK),
+				'<Sunflower>/File/Quit': (keyval('Q'), Gdk.ModifierType.CONTROL_MASK),
+				'<Sunflower>/Edit/Preferences': (keyval('P'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD1_MASK),
 				'<Sunflower>/Mark/SelectPattern': (keyval('KP_Add'), 0),
 				'<Sunflower>/Mark/DeselectPattern': (keyval('KP_Subtract'), 0),
-				'<Sunflower>/Mark/SelectWithSameExtension': (keyval('KP_Add'), gtk.gdk.MOD1_MASK),
-				'<Sunflower>/Mark/DeselectWithSameExtension': (keyval('KP_Subtract'), gtk.gdk.MOD1_MASK),
+				'<Sunflower>/Mark/SelectWithSameExtension': (keyval('KP_Add'), Gdk.ModifierType.MOD1_MASK),
+				'<Sunflower>/Mark/DeselectWithSameExtension': (keyval('KP_Subtract'), Gdk.ModifierType.MOD1_MASK),
 				'<Sunflower>/Mark/Compare': (keyval('F12'), 0),
-				'<Sunflower>/Tools/FindFiles': (keyval('F7'), gtk.gdk.MOD1_MASK),
-				'<Sunflower>/Tools/SynchronizeDirectories': (keyval('F8'), gtk.gdk.MOD1_MASK),
-				'<Sunflower>/Tools/AdvancedRename': (keyval('M'), gtk.gdk.CONTROL_MASK),
-				'<Sunflower>/Tools/MountManager': (keyval('O'), gtk.gdk.CONTROL_MASK),
+				'<Sunflower>/Tools/FindFiles': (keyval('F7'), Gdk.ModifierType.MOD1_MASK),
+				'<Sunflower>/Tools/SynchronizeDirectories': (keyval('F8'), Gdk.ModifierType.MOD1_MASK),
+				'<Sunflower>/Tools/AdvancedRename': (keyval('M'), Gdk.ModifierType.CONTROL_MASK),
+				'<Sunflower>/Tools/MountManager': (keyval('O'), Gdk.ModifierType.CONTROL_MASK),
 				'<Sunflower>/View/Fullscreen': (keyval('F11'), 0),
-				'<Sunflower>/View/Reload': (keyval('R'), gtk.gdk.CONTROL_MASK),
-				'<Sunflower>/View/FastMediaPreview': (keyval('F3'), gtk.gdk.MOD1_MASK),
-				'<Sunflower>/View/ShowHidden': (keyval('H'), gtk.gdk.CONTROL_MASK),
+				'<Sunflower>/View/Reload': (keyval('R'), Gdk.ModifierType.CONTROL_MASK),
+				'<Sunflower>/View/FastMediaPreview': (keyval('F3'), Gdk.ModifierType.MOD1_MASK),
+				'<Sunflower>/View/ShowHidden': (keyval('H'), Gdk.ModifierType.CONTROL_MASK),
 			}
 
 		alternative_accelerator = {
 				'<Sunflower>/Mark/SelectPattern': (keyval('equal'), 0),
 				'<Sunflower>/Mark/DeselectPattern': (keyval('minus'), 0),
-				'<Sunflower>/Mark/SelectWithSameExtension': (keyval('equal'), gtk.gdk.MOD1_MASK),
-				'<Sunflower>/Mark/DeselectWithSameExtension': (keyval('minus'), gtk.gdk.MOD1_MASK),
+				'<Sunflower>/Mark/SelectWithSameExtension': (keyval('equal'), Gdk.ModifierType.MOD1_MASK),
+				'<Sunflower>/Mark/DeselectWithSameExtension': (keyval('minus'), Gdk.ModifierType.MOD1_MASK),
 			}
 
 		# filter out menu groups without submenu
@@ -2202,7 +2241,7 @@ class MainWindow(gtk.Window):
 
 				if required_fields.issubset(fields):
 					path = menu_item['path']
-					label = '{0} {1} {2}'.format(
+					label = unicode('{0} {1} {2}').format(
 							group_name,
 							u'\u2192',
 							menu_item['label'].replace('_', '')
@@ -2231,10 +2270,10 @@ class MainWindow(gtk.Window):
 		group.add_method('move_handle_right', _('Move handle to the right'), self.move_handle, 1)
 
 		# set default accelerators
-		group.set_accelerator('restore_handle_position', keyval('Home'), gtk.gdk.MOD1_MASK)
-		group.set_accelerator('move_handle_left', keyval('Page_Up'), gtk.gdk.MOD1_MASK)
-		group.set_accelerator('move_handle_right', keyval('Page_Down'), gtk.gdk.MOD1_MASK)
-
+		group.set_accelerator('restore_handle_position', keyval('Home'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('move_handle_left', keyval('Page_Up'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('move_handle_right', keyval('Page_Down'), Gdk.ModifierType.MOD1_MASK)
+		
 		# expose object
 		self._accel_group = group
 
@@ -2266,11 +2305,11 @@ class MainWindow(gtk.Window):
 
 		except IOError as error:
 			# notify user about failure
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_ERROR,
-									gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.ERROR,
+									Gtk.ButtonsType.OK,
 									_(
 										'Error saving configuration to files '
 										'in your home directory. Make sure you have '
@@ -2450,12 +2489,19 @@ class MainWindow(gtk.Window):
 
 	def restore_handle_position(self, widget=None, data=None):
 		"""Restore handle position"""
-		position = 3 if self.options.get('horizontal_split') else 2
-		left = self.left_notebook.allocation[position]
-		right = self.right_notebook.allocation[position]
+		left_allocation = self.left_notebook.get_allocation()
+		right_allocation = self.right_notebook.get_allocation()
+
+		if self.options.get('horizontal_split'):
+			left_size = left_allocation.height
+			right_size = right_allocation.height
+
+		else:
+			left_size = left_allocation.width
+			right_size = right_allocation.width
 
 		# calculate middle position
-		new_position = (left + right) / 2
+		new_position = (left_size + right_size) / 2
 		self._paned.set_position(new_position)
 
 		return True
@@ -2538,17 +2584,16 @@ class MainWindow(gtk.Window):
 			if callable(method):
 				method(*args)
 
-	def toggle_fullscreen(self, widget, data=None):
+	def toggle_fullscreen(self, widget=None, data=None):
 		"""Toggle application fullscreen"""
-		if self.window.get_state() & gtk.gdk.WINDOW_STATE_FULLSCREEN:
+		if self._in_fullscreen:
 			self.unfullscreen()
-
 		else:
 			self.fullscreen()
 
 	def add_operation(self, widget, callback, data=None):
 		"""Add operation to menu"""
-		item = gtk.ImageMenuItem()
+		item = Gtk.ImageMenuItem()
 		item.add(widget)
 		item.connect('activate', callback, data)
 
@@ -2674,8 +2719,8 @@ class MainWindow(gtk.Window):
 		self.plugin_classes[name] = PluginClass
 
 		# create menu item and add it
-		menu_item = gtk.MenuItem(title)
-		menu_item.set_data('class', PluginClass)
+		menu_item = Gtk.MenuItem(title)
+		menu_item.plugin_class = PluginClass
 		menu_item.connect('activate', self._handle_new_tab_click)
 
 		menu_item.show()
@@ -2683,6 +2728,13 @@ class MainWindow(gtk.Window):
 		# add menu item
 		menu = self.menu_manager.get_item_by_name('new_tab').get_submenu()
 		menu.append(menu_item)
+
+		# create action
+		action = Gio.SimpleAction.new(name, None)
+		action.connect('activate', self._handle_new_tab_click)
+
+		self.new_tab_menu.append(title, 'new-tab.{0}'.format(name))
+		self.new_tab_actions.add_action(action)
 
 		# import class to globals
 		globals()[PluginClass.__name__] = PluginClass
@@ -2904,11 +2956,11 @@ class MainWindow(gtk.Window):
 
 		elif not issubclass(self._active_object.__class__, ItemList):
 			# active object is not item list
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 								self,
-								gtk.DIALOG_DESTROY_WITH_PARENT,
-								gtk.MESSAGE_INFO,
-								gtk.BUTTONS_OK,
+								Gtk.DialogFlags.DESTROY_WITH_PARENT,
+								Gtk.MessageType.INFO,
+								Gtk.ButtonsType.OK,
 								_(
 									'Active object is not item list. Advanced '
 									'rename tool needs files and directories.'
@@ -2919,11 +2971,11 @@ class MainWindow(gtk.Window):
 
 		elif len(self.rename_extension_classes) == 0:
 			# no extensions found, report error to user
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 								self,
-								gtk.DIALOG_DESTROY_WITH_PARENT,
-								gtk.MESSAGE_INFO,
-								gtk.BUTTONS_OK,
+								Gtk.DialogFlags.DESTROY_WITH_PARENT,
+								Gtk.MessageType.INFO,
+								Gtk.ButtonsType.OK,
 								_(
 									'No rename extensions were found. Please '
 									'enable basic rename options plugin and try '
@@ -2946,11 +2998,11 @@ class MainWindow(gtk.Window):
 
 		else:
 			# no extensions found, report error to user
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 								self,
-								gtk.DIALOG_DESTROY_WITH_PARENT,
-								gtk.MESSAGE_INFO,
-								gtk.BUTTONS_OK,
+								Gtk.DialogFlags.DESTROY_WITH_PARENT,
+								Gtk.MessageType.INFO,
+								Gtk.ButtonsType.OK,
 								_(
 									'No extensions for finding files were found. Please '
 									'enable basic find file options plugin and try again.'
@@ -2973,11 +3025,11 @@ class MainWindow(gtk.Window):
 
 			except InvalidKeyringError:
 				# keyring is not available, let user know
-				dialog = gtk.MessageDialog(
+				dialog = Gtk.MessageDialog(
 									self,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_INFO,
-									gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.INFO,
+									Gtk.ButtonsType.OK,
 									_('Keyring is empty!')
 								)
 				dialog.run()
@@ -2985,11 +3037,11 @@ class MainWindow(gtk.Window):
 
 		else:
 			# keyring is not available, let user know
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 								self,
-								gtk.DIALOG_DESTROY_WITH_PARENT,
-								gtk.MESSAGE_INFO,
-								gtk.BUTTONS_OK,
+								Gtk.DialogFlags.DESTROY_WITH_PARENT,
+								Gtk.MessageType.INFO,
+								Gtk.ButtonsType.OK,
 								_(
 									'Keyring is not available. Make sure you have '
 									'Python Gnome keyring module installed.'

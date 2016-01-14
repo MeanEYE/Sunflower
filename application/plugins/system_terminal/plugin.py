@@ -36,7 +36,6 @@ class SystemTerminal(Terminal):
 				os.environ['TERM'] = 'xterm-color'
 				os.environ['COLORTERM'] = 'gnome-terminal'
 
-			if self._vte_present:
 				# fork default shell
 				self._terminal.connect('child-exited', self.__child_exited)
 				self._terminal.connect('status-line-changed', self._update_terminal_status)

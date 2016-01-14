@@ -1,6 +1,6 @@
-import gtk
 import time
 
+from gi.repository import Gtk
 from gui.input_dialog import PasswordDialog
 
 
@@ -21,12 +21,12 @@ class KeyringManagerWindow:
 		self._active_keyring = application.keyring_manager.KEYRING_NAME
 
 		# create window
-		self._window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+		self._window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
 
 		# configure window
 		self._window.set_title(_('Keyring manager'))
 		self._window.set_size_request(500, 300)
-		self._window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+		self._window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self._window.set_skip_taskbar_hint(False)
 		self._window.set_modal(False)
 		self._window.set_wmclass('Sunflower', 'Sunflower')
@@ -36,37 +36,37 @@ class KeyringManagerWindow:
 		self._window.connect('delete-event', self.__delete_event)
 
 		# create user interface
-		vbox = gtk.VBox(homogeneous=False, spacing=5)
-		container = gtk.ScrolledWindow()
-		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-		container.set_shadow_type(gtk.SHADOW_IN)
+		vbox = Gtk.VBox(homogeneous=False, spacing=5)
+		container = Gtk.ScrolledWindow()
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		container.set_shadow_type(Gtk.ShadowType.IN)
 
-		self._store = gtk.ListStore(long, str, str)
-		self._list = gtk.TreeView(model=self._store)
+		self._store = Gtk.ListStore(long, str, str)
+		self._list = Gtk.TreeView(model=self._store)
 
-		cell_id = gtk.CellRendererText()
-		cell_name = gtk.CellRendererText()
-		cell_modified = gtk.CellRendererText()
+		cell_id = Gtk.CellRendererText()
+		cell_name = Gtk.CellRendererText()
+		cell_modified = Gtk.CellRendererText()
 
-		col_id = gtk.TreeViewColumn(_('ID'), cell_id, text=Column.ID)
-		col_name = gtk.TreeViewColumn(_('Name'), cell_name, text=Column.NAME)
+		col_id = Gtk.TreeViewColumn(_('ID'), cell_id, text=Column.ID)
+		col_name = Gtk.TreeViewColumn(_('Name'), cell_name, text=Column.NAME)
 		col_name.set_expand(True)
-		col_modified = gtk.TreeViewColumn(_('Modified'), cell_modified, text=Column.MODIFIED)
+		col_modified = Gtk.TreeViewColumn(_('Modified'), cell_modified, text=Column.MODIFIED)
 
 		self._list.append_column(col_id)
 		self._list.append_column(col_name)
 		self._list.append_column(col_modified)
 
 		# create controls
-		hbox = gtk.HBox(homogeneous=False, spacing=5)
+		hbox = Gtk.HBox(homogeneous=False, spacing=5)
 
-		button_edit = gtk.Button(stock=gtk.STOCK_EDIT)
+		button_edit = Gtk.Button(stock=Gtk.STOCK_EDIT)
 		button_edit.connect('clicked', self.__edit_selected)
 
-		button_delete = gtk.Button(stock=gtk.STOCK_DELETE)
+		button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
 		button_delete.connect('clicked', self.__delete_selected)
 
-		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
+		button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
 		button_close.connect('clicked', self.__handle_close)
 
 		# pack components
@@ -119,11 +119,11 @@ class KeyringManagerWindow:
 
 		# show error if no entry is selected
 		if selected_iter is None:
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self._window,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_WARNING,
-									gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.WARNING,
+									Gtk.ButtonsType.OK,
 									_('Please select an entry to delete!')
 								)
 			dialog.run()
@@ -134,11 +134,11 @@ class KeyringManagerWindow:
 		entry_name = item_list.get_value(selected_iter, Column.NAME)
 
 		# ask confirmation from user
-		dialog = gtk.MessageDialog(
+		dialog = Gtk.MessageDialog(
 								self._window,
-								gtk.DIALOG_DESTROY_WITH_PARENT,
-								gtk.MESSAGE_WARNING,
-								gtk.BUTTONS_YES_NO,
+								Gtk.DialogFlags.DESTROY_WITH_PARENT,
+								Gtk.MessageType.WARNING,
+								Gtk.ButtonsType.YES_NO,
 								_(
 									'You are about to remove the following '
 									'entry from your keyring. If you do this '
@@ -146,11 +146,11 @@ class KeyringManagerWindow:
 									'manually when needed. Are you sure?\n\n{0}'
 								).format(entry_name)
 							)
-		dialog.set_default_response(gtk.RESPONSE_YES)
+		dialog.set_default_response(Gtk.ResponseType.YES)
 		response = dialog.run()
 		dialog.destroy()
 
-		if response == gtk.RESPONSE_YES:
+		if response == Gtk.ResponseType.YES:
 			self._application.keyring_manager.remove_entry(entry_name)
 			self.__populate_list()
 
@@ -163,11 +163,11 @@ class KeyringManagerWindow:
 
 		# show error if no entry is selected
 		if selected_iter is None:
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self._window,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_WARNING,
-									gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.WARNING,
+									Gtk.ButtonsType.OK,
 									_('Please select an entry to change!')
 								)
 			dialog.run()
@@ -180,17 +180,17 @@ class KeyringManagerWindow:
 
 		response = dialog.get_response()
 
-		if response[0] == gtk.RESPONSE_OK:
+		if response[0] == Gtk.ResponseType.OK:
 			if response[1] == response[2]:
 				# passwords match, change value
 				item_id = item_list.get_value(selected_iter, Column.ID)
 				self._application.keyring_manager.change_secret(item_id, response[1])
 
-				dialog = gtk.MessageDialog(
+				dialog = Gtk.MessageDialog(
 										self._window,
-										gtk.DIALOG_DESTROY_WITH_PARENT,
-										gtk.MESSAGE_INFO,
-										gtk.BUTTONS_OK,
+										Gtk.DialogFlags.DESTROY_WITH_PARENT,
+										Gtk.MessageType.INFO,
+										Gtk.ButtonsType.OK,
 										_('Password was changed!')
 									)
 				dialog.run()
@@ -201,11 +201,11 @@ class KeyringManagerWindow:
 
 			else:
 				# passwords don't match, notify user
-				dialog = gtk.MessageDialog(
+				dialog = Gtk.MessageDialog(
 										self._window,
-										gtk.DIALOG_DESTROY_WITH_PARENT,
-										gtk.MESSAGE_ERROR,
-										gtk.BUTTONS_OK,
+										Gtk.DialogFlags.DESTROY_WITH_PARENT,
+										Gtk.MessageType.ERROR,
+										Gtk.ButtonsType.OK,
 										_('Passwords do not match! Please try again.')
 									)
 				dialog.run()

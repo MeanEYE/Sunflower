@@ -1,6 +1,6 @@
-import gtk
 import subprocess
 
+from gi.repository import Gtk
 from plugin_base.viewer_extension import ViewerExtension
 
 
@@ -21,11 +21,11 @@ class GVimViewer(ViewerExtension):
 		self._process = None
 
 		# create container
-		self._container = gtk.Viewport()
-		self._container.set_shadow_type(gtk.SHADOW_IN)
+		self._container = Gtk.Viewport()
+		self._container.set_shadow_type(Gtk.ShadowType.IN)
 
 		# create socket for embeding GVim window
-		self._socket = gtk.Socket()
+		self._socket = Gtk.Socket()
 		self._socket.connect('realize', self.__socket_realized)
 
 		# pack interface
@@ -55,4 +55,4 @@ class GVimViewer(ViewerExtension):
 
 	def focus_object(self):
 		"""Focus main object in extension"""
-		self._socket.child_focus(gtk.DIR_TAB_FORWARD)
+		self._socket.child_focus(Gtk.DIR_TAB_FORWARD)

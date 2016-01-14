@@ -1,5 +1,6 @@
 import os
-import gtk
+
+from gi.repository import Gtk, GObject
 
 try:
 	# try to import module
@@ -10,7 +11,7 @@ except:
 	USE_FACTORY = False
 
 
-class ThumbnailView(gtk.Window):
+class ThumbnailView(Gtk.Window):
 	"""Load and display images from Gnome thumbnail factory storage.
 
 	Idea is to create one object and then update thumbnail image as
@@ -20,13 +21,13 @@ class ThumbnailView(gtk.Window):
 	"""
 
 	def __init__(self, parent, size=None):
-		gtk.Window.__init__(self, gtk.WINDOW_POPUP)
+		GObject.GObject.__init__(self, type=Gtk.WindowType.POPUP)
 
 		self.set_keep_above(True)
 		self.set_resizable(False)
 
 		# create image preview
-		self._image = gtk.Image()
+		self._image = Gtk.Image()
 		self._image.show()
 		self.add(self._image)
 
@@ -63,7 +64,7 @@ class ThumbnailView(gtk.Window):
 		# check for existing thumbnail
 		thumbnail_file = self._factory.lookup(uri, 0)
 		if thumbnail_file and os.path.isfile(thumbnail_file):
-			result = gtk.gdk.pixbuf_new_from_file(thumbnail_file)
+			result = GdkPixbuf.Pixbuf.new_from_file(thumbnail_file)
 
 		# create thumbnail
 		elif self.can_have_thumbnail(uri):
@@ -93,7 +94,7 @@ class ThumbnailView(gtk.Window):
 
 		# no pixbuf was found, show missing image
 		else:
-			self._image.set_from_icon_name('gtk-missing-image', gtk.ICON_SIZE_DIALOG)
+			self._image.set_from_icon_name('gtk-missing-image', Gtk.IconSize.DIALOG)
 
 	def move(self, left, top):
 		"""Move thumbnail window"""
@@ -103,4 +104,4 @@ class ThumbnailView(gtk.Window):
 		if top + height > screen.get_height():
 			top = screen.get_height() - height - 5
 
-		gtk.Window.move(self, left, top)
+		Gtk.Window.move(self, left, top)

@@ -1,6 +1,6 @@
 import os
-import gtk
 
+from gi.repository import Gtk, Gdk, GObject
 from parameters import Parameters
 
 
@@ -10,12 +10,12 @@ class Column:
 	TIMESTAMP = 2
 
 
-class HistoryList(gtk.Window):
+class HistoryList(Gtk.Window):
 	"""History list is used to display complete browsing history."""
 
 	def __init__(self, parent, application):
 		# create main window
-		gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
+		GObject.GObject.__init__(self)
 
 		# store parameters locally, we'll need them later
 		self._parent = parent
@@ -24,7 +24,7 @@ class HistoryList(gtk.Window):
 		# configure dialog
 		self.set_title(_('History'))
 		self.set_size_request(500, 300)
-		self.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+		self.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self.set_resizable(True)
 		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)
@@ -33,49 +33,49 @@ class HistoryList(gtk.Window):
 		self.set_border_width(7)
 
 		# create UI
-		vbox = gtk.VBox(False, 7)
+		vbox = Gtk.VBox(False, 7)
 
-		list_container = gtk.ScrolledWindow()
-		list_container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-		list_container.set_shadow_type(gtk.SHADOW_IN)
+		list_container = Gtk.ScrolledWindow()
+		list_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		list_container.set_shadow_type(Gtk.ShadowType.IN)
 
-		self._history = gtk.ListStore(str, str)
+		self._history = Gtk.ListStore(str, str)
 
-		cell_name = gtk.CellRendererText()
-		cell_path = gtk.CellRendererText()
+		cell_name = Gtk.CellRendererText()
+		cell_path = Gtk.CellRendererText()
 
-		col_name = gtk.TreeViewColumn(_('Name'), cell_name, text=Column.NAME)
-		col_path = gtk.TreeViewColumn(_('Path'), cell_path, text=Column.PATH)
+		col_name = Gtk.TreeViewColumn(_('Name'), cell_name, text=Column.NAME)
+		col_path = Gtk.TreeViewColumn(_('Path'), cell_path, text=Column.PATH)
 
-		self._history_list = gtk.TreeView(self._history)
+		self._history_list = Gtk.TreeView(self._history)
 		self._history_list.connect('key-press-event', self._handle_key_press)
 		self._history_list.append_column(col_name)
 		self._history_list.append_column(col_path)
 
 		# create controls
-		hbox_controls = gtk.HBox(False, 5)
+		hbox_controls = Gtk.HBox(False, 5)
 
-		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
+		button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
 		button_close.connect('clicked', self._close)
 
-		image_jump = gtk.Image()
-		image_jump.set_from_stock(gtk.STOCK_OPEN, gtk.ICON_SIZE_BUTTON)
-		button_jump = gtk.Button()
+		image_jump = Gtk.Image()
+		image_jump.set_from_stock(Gtk.STOCK_OPEN, Gtk.IconSize.BUTTON)
+		button_jump = Gtk.Button()
 		button_jump.set_image(image_jump)
 		button_jump.set_label(_('Open'))
 		button_jump.set_can_default(True)
 		button_jump.connect('clicked', self._change_path, False)
 
-		image_new_tab = gtk.Image()
-		image_new_tab.set_from_icon_name('tab-new', gtk.ICON_SIZE_BUTTON)
+		image_new_tab = Gtk.Image()
+		image_new_tab.set_from_icon_name('tab-new', Gtk.IconSize.BUTTON)
 
-		button_new_tab = gtk.Button()
+		button_new_tab = Gtk.Button()
 		button_new_tab.set_image(image_new_tab)
 		button_new_tab.set_label(_('Open in tab'))
 		button_new_tab.set_tooltip_text(_('Open selected path in new tab'))
 		button_new_tab.connect('clicked', self._change_path, True)
 
-		button_opposite = gtk.Button(label=_('Open in opposite list'))
+		button_opposite = Gtk.Button(label=_('Open in opposite list'))
 		button_opposite.set_tooltip_text(_('Open selected path in opposite list'))
 		button_opposite.connect('clicked', self._open_in_opposite_list)
 
@@ -150,8 +150,8 @@ class HistoryList(gtk.Window):
 		"""Handle pressing keys in history list"""
 		result = False
 
-		if event.keyval == gtk.keysyms.Return:
-			if event.state & gtk.gdk.CONTROL_MASK:
+		if event.keyval == Gdk.KEY_Return:
+			if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
 				# open path in new tab
 				self._change_path(new_tab=True)
 
@@ -161,7 +161,7 @@ class HistoryList(gtk.Window):
 
 			result = True
 
-		elif event.keyval == gtk.keysyms.Escape:
+		elif event.keyval == Gdk.KEY_Escape:
 			# close window on escape
 			self._close()
 			result = True

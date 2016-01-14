@@ -1,4 +1,5 @@
-import gtk
+from gi.repository import Gtk
+
 
 class MenuManager:
 	"""Menu handling class
@@ -15,12 +16,12 @@ class MenuManager:
 
 	def _item_normal(self, item):
 		"""Create normal menu item"""
-		return gtk.MenuItem(label = item['label'], use_underline = True)
+		return Gtk.MenuItem(label = item['label'], use_underline = True)
 
 	def _item_checkbox(self, item):
 		"""Create checkbox menu item"""
 		active = item['active'] if 'active' in item else False
-		result = gtk.CheckMenuItem(label = item['label'], use_underline = True)
+		result = Gtk.CheckMenuItem(label = item['label'], use_underline = True)
 		result.set_active(active)
 
 		return result
@@ -28,29 +29,29 @@ class MenuManager:
 	def _item_radio(self, item):
 		"""Create radio menu item"""
 		group = item['group'] if 'group' in item else None
-		return gtk.RadioMenuItem(group, item['label'], use_underline = True)
+		return Gtk.RadioMenuItem(group, item['label'], use_underline = True)
 
 	def _item_separator(self, item):
 		"""Create separator"""
-		return gtk.SeparatorMenuItem()
+		return Gtk.SeparatorMenuItem()
 
 	def _item_image(self, item):
 		"""Create normal menu item with image"""
-		result = gtk.ImageMenuItem()
-		image = gtk.Image()
+		result = Gtk.ImageMenuItem()
+		image = Gtk.Image()
 
 		if 'image' in item:
-			image.set_from_icon_name(item['image'], gtk.ICON_SIZE_MENU)
+			image.set_from_icon_name(item['image'], Gtk.IconSize.MENU)
 
 		elif 'stock' in item:
-			image.set_from_stock(item['stock'], gtk.ICON_SIZE_MENU)
+			image.set_from_stock(item['stock'], Gtk.IconSize.MENU)
 
 		try:
 			result.set_label(item['label'])
 			result.set_use_underline(True)
 		except:
 			# walk-around for problems with GTK+ on windows systems
-			item = gtk.Label(item['label'])
+			item = Gtk.Label(label=item['label'])
 			item.set_use_underline(True)
 			item.set_alignment(0, 0.5)
 
@@ -97,14 +98,14 @@ class MenuManager:
 
 		for application in application_list:
 			# create menu item
-			item = gtk.ImageMenuItem()
+			item = Gtk.ImageMenuItem()
 			item.set_label(application.name)
 			item.set_always_show_image(True)
 
 			# create new image
 			if application.icon:
-				image = gtk.Image()
-				image.set_from_icon_name(application.icon, gtk.ICON_SIZE_MENU)
+				image = Gtk.Image()
+				image.set_from_icon_name(application.icon, Gtk.IconSize.MENU)
 				item.set_image(image)
 
 			# data for handler
@@ -152,7 +153,7 @@ class MenuManager:
 				command = associations.get(mime_type, 'command_{0}'.format(index))
 
 				# create menu item
-				menu_item = gtk.MenuItem(name)
+				menu_item = Gtk.MenuItem(name)
 				menu_item.show()
 
 				# prepare data for item
@@ -185,7 +186,7 @@ class MenuManager:
 
 		# if item has children then make submenu
 		if item_type != 'separator' and 'submenu' in item:
-			submenu = gtk.Menu()
+			submenu = Gtk.Menu()
 
 			if accel_group is None:
 				# no accelerator group was specified, use main window

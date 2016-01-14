@@ -1,8 +1,5 @@
-import gtk
-
+from gi.repository import Gtk
 from plugin_base.toolbar_factory import ToolbarFactory
-
-# import controls
 from bookmark_button import Button as BookmarkButton, ConfigurationDialog as BookmarkButton_Dialog
 from bookmarks_button import Button as BookmarksButton
 from home_directory_button import Button as HomeDirectoryButton
@@ -24,7 +21,7 @@ class DefaultToolbar(ToolbarFactory):
 		self._widgets = {
 		        'parent_directory_button': {
 		            'description': _('Parent directory button'),
-		            'icon': gtk.STOCK_GO_UP,
+		            'icon': Gtk.STOCK_GO_UP,
 		            'dialog': None,
 		            'class': ParentDirectoryButton,
 		        },
@@ -97,11 +94,11 @@ class DefaultToolbar(ToolbarFactory):
 
 		else:
 			# there is no configuration dialog for this widget type
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 		                            self._application,
-		                            gtk.DIALOG_DESTROY_WITH_PARENT,
-		                            gtk.MESSAGE_INFO,
-		                            gtk.BUTTONS_OK,
+		                            Gtk.DialogFlags.DESTROY_WITH_PARENT,
+		                            Gtk.MessageType.INFO,
+		                            Gtk.ButtonsType.OK,
 		                            _("This widget has no configuration dialog.")
 		                        )
 			dialog.run()

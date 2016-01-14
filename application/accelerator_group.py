@@ -1,4 +1,4 @@
-import gtk
+from gi.repository import Gtk
 
 
 class AcceleratorGroup:
@@ -34,7 +34,7 @@ class AcceleratorGroup:
 
 	def _create_group(self):
 		"""Create group and connect accelerators"""
-		self._accel_group = gtk.AccelGroup()
+		self._accel_group = Gtk.AccelGroup()
 
 		# create accelerators
 		self._create_accelerators()
@@ -74,15 +74,15 @@ class AcceleratorGroup:
 				modifier = accelerator[1]
 
 				# create method name cache based on key combination
-				label = gtk.accelerator_get_label(keyval, modifier)
+				label = Gtk.accelerator_get_label(keyval, modifier)
 				self._method_names[label] = method_name
 
 				# connect accelerator
-				self._accel_group.connect_group(keyval, modifier, 0, self._handle_activate)
+				self._accel_group.connect(keyval, modifier, 0, self._handle_activate)
 
 	def _handle_activate(self, group, widget, keyval, modifier):
 		"""Handle accelerator activation"""
-		label = gtk.accelerator_get_label(keyval, modifier)
+		label = Gtk.accelerator_get_label(keyval, modifier)
 		name = self._method_names[label]
 
 		data = self._methods[name]['data']
@@ -207,8 +207,8 @@ class AcceleratorGroup:
 		"""Manually trigger accelerator"""
 		result = False
 
-		modifier = modifier & gtk.accelerator_get_default_mod_mask() # filter out unneeded mods
-		label = gtk.accelerator_get_label(keyval, modifier)
+		modifier = modifier & Gtk.accelerator_get_default_mod_mask() # filter out unneeded mods
+		label = Gtk.accelerator_get_label(keyval, modifier)
 
 		# trigger accelerator only if we have method connected
 		if label in self._method_names:

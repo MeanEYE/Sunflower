@@ -1,7 +1,7 @@
 import re
 import os
-import gtk
 
+from gi.repository import Gtk
 from plugin_base.rename_extension import RenameExtension
 from gui.input_dialog import InputRangeDialog
 from tools.advanced_rename import Column as RenameColumn
@@ -26,13 +26,13 @@ class DefaultRename(RenameExtension):
 		self._counter_digits = 1
 
 		# create user interface
-		hbox = gtk.HBox(True, 15)
+		hbox = Gtk.HBox(True, 15)
 
-		vbox_left = gtk.VBox(False, 5)
-		vbox_right = gtk.VBox(False, 5)
+		vbox_left = Gtk.VBox(False, 5)
+		vbox_right = Gtk.VBox(False, 5)
 
 		# help
-		label_help = gtk.Label()
+		label_help = Gtk.Label()
 		label_help.set_alignment(0, 0)
 		label_help.set_use_markup(True)
 
@@ -46,47 +46,47 @@ class DefaultRename(RenameExtension):
 						))
 
 		# template
-		vbox_template = gtk.VBox(False, 0)
-		hbox_template = gtk.HBox(False, 2)
+		vbox_template = Gtk.VBox(False, 0)
+		hbox_template = Gtk.HBox(False, 2)
 
-		label_template = gtk.Label(_('Template:'))
+		label_template = Gtk.Label(label=_('Template:'))
 		label_template.set_alignment(0, 0.5)
 
-		self._entry_template = gtk.Entry()
+		self._entry_template = Gtk.Entry()
 		self._entry_template.set_text(self._template)
 		self._entry_template.connect('changed', self.__template_changed)
 
-		style = gtk.RcStyle()
-		style.xthickness = 0
-		style.ythickness = 0
+		# style = Gtk.RcStyle()
+		# style.xthickness = 0
+		# style.ythickness = 0
 
-		image_add = gtk.Image()
-		image_add.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_BUTTON)
-		button_add = gtk.Button()
+		image_add = Gtk.Image()
+		image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
+		button_add = Gtk.Button()
 		button_add.set_image(image_add)
-		button_add.modify_style(style)
+		# button_add.modify_style(style)
 		button_add.connect('clicked', self.__button_add_clicked)
 
 		# create popup menu
-		self._add_menu = gtk.Menu()
+		self._add_menu = Gtk.Menu()
 
-		item_add_name = gtk.MenuItem(label=_('Name'))
+		item_add_name = Gtk.MenuItem(label=_('Name'))
 		item_add_name.connect('activate', self.__add_to_template, 'N')
 
-		item_add_name_part = gtk.MenuItem(label=_('Part of name'))
+		item_add_name_part = Gtk.MenuItem(label=_('Part of name'))
 		item_add_name_part.connect('activate', self.__add_range_to_template, 'N')
 
-		item_separator1 = gtk.SeparatorMenuItem()
+		item_separator1 = Gtk.SeparatorMenuItem()
 
-		item_add_extension = gtk.MenuItem(label=_('Extension'))
+		item_add_extension = Gtk.MenuItem(label=_('Extension'))
 		item_add_extension.connect('activate', self.__add_to_template, 'E')
 
-		item_add_extension_part = gtk.MenuItem(label=_('Part of extension'))
+		item_add_extension_part = Gtk.MenuItem(label=_('Part of extension'))
 		item_add_extension_part.connect('activate', self.__add_range_to_template, 'E')
 
-		item_separator2 = gtk.SeparatorMenuItem()
+		item_separator2 = Gtk.SeparatorMenuItem()
 
-		item_add_counter = gtk.MenuItem(label=_('Counter'))
+		item_add_counter = Gtk.MenuItem(label=_('Counter'))
 		item_add_counter.connect('activate', self.__add_to_template, 'C')
 
 		self._add_menu.append(item_add_name)
@@ -100,31 +100,31 @@ class DefaultRename(RenameExtension):
 		self._add_menu.show_all()
 
 		# counter
-		frame_counter = gtk.Frame(label=_('Counter'))
+		frame_counter = Gtk.Frame(label=_('Counter'))
 
-		table_counter = gtk.Table(3, 2)
+		table_counter = Gtk.Table(3, 2)
 		table_counter.set_border_width(5)
 		table_counter.set_col_spacings(5)
 
-		label_start = gtk.Label(_('Start:'))
+		label_start = Gtk.Label(label=_('Start:'))
 		label_start.set_alignment(0, 0.5)
 
-		adjustment = gtk.Adjustment(0, 0, 10**10, 1, 10)
-		self._entry_start = gtk.SpinButton(adjustment, 0, 0)
+		adjustment = Gtk.Adjustment(0, 0, 10**10, 1, 10)
+		self._entry_start = Gtk.SpinButton.new(adjustment, 0, 0)
 		self._entry_start.connect('value-changed', self.__counter_changed)
 
-		label_step = gtk.Label(_('Step:'))
+		label_step = Gtk.Label(label=_('Step:'))
 		label_step.set_alignment(0, 0.5)
 
-		adjustment = gtk.Adjustment(1, 1, 10**10, 1, 10)
-		self._entry_step = gtk.SpinButton(adjustment, 0, 0)
+		adjustment = Gtk.Adjustment(1, 1, 10**10, 1, 10)
+		self._entry_step = Gtk.SpinButton.new(adjustment, 0, 0)
 		self._entry_step.connect('value-changed', self.__counter_changed)
 
-		label_digits = gtk.Label(_('Digits:'))
+		label_digits = Gtk.Label(label=_('Digits:'))
 		label_digits.set_alignment(0, 0.5)
 
-		adjustment = gtk.Adjustment(1, 1, 20, 1, 5)
-		self._entry_digits = gtk.SpinButton(adjustment, 0, 0)
+		adjustment = Gtk.Adjustment(1, 1, 20, 1, 5)
+		self._entry_digits = Gtk.SpinButton.new(adjustment, 0, 0)
 		self._entry_digits.connect('value-changed', self.__counter_changed)
 
 		# repack 'active' check box
@@ -133,11 +133,11 @@ class DefaultRename(RenameExtension):
 
 		# pack interface
 		table_counter.attach(label_start, 0, 1, 0, 1)
-		table_counter.attach(self._entry_start, 0, 1, 1, 2, xoptions=gtk.EXPAND|gtk.FILL)
+		table_counter.attach(self._entry_start, 0, 1, 1, 2, xoptions=Gtk.AttachOptions.EXPAND|Gtk.AttachOptions.FILL)
 		table_counter.attach(label_step, 1, 2, 0, 1)
-		table_counter.attach(self._entry_step, 1, 2, 1, 2, xoptions=gtk.EXPAND|gtk.FILL)
+		table_counter.attach(self._entry_step, 1, 2, 1, 2, xoptions=Gtk.AttachOptions.EXPAND|Gtk.AttachOptions.FILL)
 		table_counter.attach(label_digits, 2, 3, 0, 1)
-		table_counter.attach(self._entry_digits, 2, 3, 1, 2, xoptions=gtk.EXPAND|gtk.FILL)
+		table_counter.attach(self._entry_digits, 2, 3, 1, 2, xoptions=Gtk.AttachOptions.EXPAND|Gtk.AttachOptions.FILL)
 
 		frame_counter.add(table_counter)
 
@@ -176,11 +176,7 @@ class DefaultRename(RenameExtension):
 
 	def __button_add_clicked(self, widget, data=None):
 		"""Handle clicking on add button"""
-		self._add_menu.popup(
-						None, None,
-						self.__get_menu_position,
-						1, 0, widget
-					)
+		self._add_menu.popup(None, None, self.__get_menu_position, widget, 1, 0)
 
 	def __get_menu_position(self, menu, button):
 		"""Get history menu position"""
@@ -224,7 +220,7 @@ class DefaultRename(RenameExtension):
 			dialog = InputRangeDialog(self._parent._application, text)
 			code, range = dialog.get_response()
 
-			if code == gtk.RESPONSE_OK:
+			if code == Gtk.ResponseType.OK:
 				# user confirmed range selection, proceed
 
 				if len(range) == 2:
@@ -246,11 +242,11 @@ class DefaultRename(RenameExtension):
 
 		else:
 			# list is empty, notify user
-			dialog = gtk.MessageDialog(
+			dialog = Gtk.MessageDialog(
 									self._parent,
-									gtk.DIALOG_DESTROY_WITH_PARENT,
-									gtk.MESSAGE_INFO,
-									gtk.BUTTONS_OK,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.INFO,
+									Gtk.ButtonsType.OK,
 									_(
 										'Item list is empty. Unable to get '
 										'item for range selection!'

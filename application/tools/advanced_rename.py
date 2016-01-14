@@ -1,6 +1,6 @@
 import os
-import gtk
 
+from gi.repository import Gtk, Gdk
 from operation import RenameOperation
 
 
@@ -22,37 +22,37 @@ class AdvancedRename:
 		self._path = self._parent.path
 
 		# create and configure window
-		self.window = gtk.Window(type=gtk.WINDOW_TOPLEVEL)
+		self.window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
 
 		self.window.set_title(_('Advanced rename'))
 		self.window.set_default_size(640, 600)
-		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+		self.window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self.window.set_transient_for(application)
 		self.window.set_border_width(7)
-		self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+		self.window.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 		self.window.set_wmclass('Sunflower', 'Sunflower')
 
 		self.window.connect('key-press-event', self._handle_key_press)
 
 		# create interface
-		vbox = gtk.VBox(False, 7)
+		vbox = Gtk.VBox(False, 7)
 
 		# create modifiers notebook
-		self._extension_list = gtk.Notebook()
+		self._extension_list = Gtk.Notebook()
 		self._extension_list.connect('page-reordered', self.__handle_reorder)
 
 		# create list
-		self._list = gtk.ListStore(str, str, str)
-		self._names = gtk.TreeView(model=self._list)
+		self._list = Gtk.ListStore(str, str, str)
+		self._names = Gtk.TreeView(model=self._list)
 
-		cell_icon = gtk.CellRendererPixbuf()
-		cell_old_name = gtk.CellRendererText()
-		cell_new_name = gtk.CellRendererText()
+		cell_icon = Gtk.CellRendererPixbuf()
+		cell_old_name = Gtk.CellRendererText()
+		cell_new_name = Gtk.CellRendererText()
 
-		col_old_name = gtk.TreeViewColumn(_('Old name'))
+		col_old_name = Gtk.TreeViewColumn(_('Old name'))
 		col_old_name.set_expand(True)
 
-		col_new_name = gtk.TreeViewColumn(_('New name'))
+		col_new_name = Gtk.TreeViewColumn(_('New name'))
 		col_new_name.set_expand(True)
 
 		# pack renderer
@@ -68,29 +68,29 @@ class AdvancedRename:
 		self._names.append_column(col_old_name)
 		self._names.append_column(col_new_name)
 
-		container = gtk.ScrolledWindow()
-		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-		container.set_shadow_type(gtk.SHADOW_IN)
+		container = Gtk.ScrolledWindow()
+		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+		container.set_shadow_type(Gtk.ShadowType.IN)
 
 		# create location
-		vbox_location = gtk.VBox(False, 0)
+		vbox_location = Gtk.VBox(False, 0)
 
-		label_location = gtk.Label(_('Items located in:'))
+		label_location = Gtk.Label(label=_('Items located in:'))
 		label_location.set_alignment(0, 0.5)
 
-		entry_location = gtk.Entry()
+		entry_location = Gtk.Entry()
 		entry_location.set_text(self._path)
 		entry_location.set_editable(False)
 
 		# create controls
-		hbox = gtk.HBox(False, 5)
+		hbox = Gtk.HBox(False, 5)
 
-		button_close = gtk.Button(stock=gtk.STOCK_CLOSE)
+		button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
 		button_close.connect('clicked', lambda widget: self.window.destroy())
 
-		image_rename = gtk.Image()
-		image_rename.set_from_icon_name('edit-find-replace', gtk.ICON_SIZE_BUTTON)
-		button_rename = gtk.Button(label=_('Rename'))
+		image_rename = Gtk.Image()
+		image_rename.set_from_icon_name('edit-find-replace', Gtk.IconSize.BUTTON)
+		button_rename = Gtk.Button(label=_('Rename'))
 		button_rename.set_image(image_rename)
 		button_rename.connect('clicked', self.rename_files)
 
@@ -128,7 +128,7 @@ class AdvancedRename:
 			container = extension.get_container()
 
 			# add tab
-			self._extension_list.append_page(container, gtk.Label(title))
+			self._extension_list.append_page(container, Gtk.Label(label=title))
 			self._extension_list.set_tab_reorderable(container, True)
 
 			# store extension for later use
@@ -166,18 +166,18 @@ class AdvancedRename:
 
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys"""
-		if event.keyval == gtk.keysyms.Escape:
+		if event.keyval == Gdk.KEY_Escape:
 			self.window.destroy()
 
 	def update_list(self):
 		"""Update file list"""
 		active_children = filter(  # get only active extensions
-								lambda child: child.get_data('extension').is_active(),
+								lambda child: child.extension.is_active(),
 								self._extension_list.get_children()
 							)
 
 		# call reset on all extensions
-		map(lambda child: child.get_data('extension').reset(), active_children)
+		map(lambda child: child.extension.reset(), active_children)
 
 		for row in self._list:
 			old_name = row[Column.OLD_NAME]
@@ -185,18 +185,18 @@ class AdvancedRename:
 
 			# run new name through extensions
 			for child in active_children:
-				new_name = child.get_data('extension').get_new_name(old_name, new_name)
+				new_name = child.extension.get_new_name(old_name, new_name)
 
 			# store new name to list
 			row[Column.NEW_NAME] = new_name
 
 	def rename_files(self, widget=None, data=None):
 		"""Rename selected files"""
-		dialog = gtk.MessageDialog(
+		dialog = Gtk.MessageDialog(
 								self.window,
-								gtk.DIALOG_DESTROY_WITH_PARENT,
-								gtk.MESSAGE_QUESTION,
-								gtk.BUTTONS_YES_NO,
+								Gtk.DialogFlags.DESTROY_WITH_PARENT,
+								Gtk.MessageType.QUESTION,
+								Gtk.ButtonsType.YES_NO,
 								ngettext(
 									"You are about to rename {0} item.\n"
 									"Are you sure about this?",
@@ -205,11 +205,11 @@ class AdvancedRename:
 									len(self._list)
 								).format(len(self._list))
 							)
-		dialog.set_default_response(gtk.RESPONSE_YES)
+		dialog.set_default_response(Gtk.ResponseType.YES)
 		result = dialog.run()
 		dialog.destroy()
 
-		if result == gtk.RESPONSE_YES:
+		if result == Gtk.ResponseType.YES:
 			# user confirmed rename
 			item_list = []
 			for item in self._list:

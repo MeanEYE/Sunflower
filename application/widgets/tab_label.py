@@ -1,50 +1,45 @@
-import gtk
-import pango
+from gi.repository import Gtk, Pango, Gdk
 
 
 class TabLabel:
 	"""Tab label wrapper class"""
 
 	def __init__(self, application, parent):
-		self._container = gtk.EventBox()
+		self._container = Gtk.EventBox.new()
 
 		self._application = application
 		self._parent = parent
 
 		# initialize tab events
-		self._container.add_events(gtk.gdk.BUTTON_RELEASE_MASK)
+		self._container.add_events(Gdk.EventMask.BUTTON_RELEASE_MASK)
 		self._container.connect('button-release-event', self._button_release_event)
 		self._container.set_visible_window(False)
 
 		# create interface
-		self._hbox = gtk.HBox(False, 0)
+		self._hbox = Gtk.HBox(homogeneous=False, spacing=0)
 		self._container.add(self._hbox)
 
-		self._label = gtk.Label()
+		self._label = Gtk.Label.new()
 		self._label.set_max_width_chars(20)
-		self._label.set_ellipsize(pango.ELLIPSIZE_END)
+		self._label.set_single_line_mode(True)
 
-		self._lock_image = gtk.Image()
+		self._lock_image = Gtk.Image()
 		self._lock_image.set_property('no-show-all', True)
-		self._lock_image.set_from_icon_name('changes-prevent-symbolic', gtk.ICON_SIZE_MENU)
+		self._lock_image.set_from_icon_name('changes-prevent-symbolic', Gtk.IconSize.MENU)
 
-		image = gtk.Image()
-		image.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU)
-		image_width, image_height = gtk.icon_size_lookup(gtk.ICON_SIZE_MENU)
+		image = Gtk.Image()
+		image.set_from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU)
+		result, image_width, image_height = Gtk.icon_size_lookup(Gtk.IconSize.MENU)
 		image.show()
 
-		style = gtk.RcStyle()
-		style.xthickness = 0
-		style.ythickness = 0
-
-		self._button = gtk.Button()
+		self._button = Gtk.Button()
 		self._button.set_focus_on_click(False)
 		self._button.add(image)
-		self._button.set_relief(gtk.RELIEF_NONE)
-		self._button.modify_style(style)
+		self._button.set_relief(Gtk.ReliefStyle.NONE)
 		self._button.connect('clicked', self._close_tab)
 		self._button.set_property('no-show-all', True)
 		self._button.set_size_request(image_width + 2, image_height + 2)
+		self._button.get_style_context().add_class('sunflower-close-tab')
 
 		# pack interface
 		self._hbox.pack_start(self._lock_image, False, False, 0)
@@ -99,7 +94,7 @@ class TabLabel:
 					{
 						'label': _('Close Tab'),
 						'type': 'image',
-						'stock': gtk.STOCK_CLOSE,
+						'stock': Gtk.STOCK_CLOSE,
 						'callback': self._close_tab,
 					},
 					{
@@ -115,13 +110,13 @@ class TabLabel:
 				)
 
 		# create menu
-		menu = gtk.Menu()
+		menu = Gtk.Menu()
 
 		for item in menu_items:
 			item = menu_manager.create_menu_item(item)
 			menu.append(item)
 
-		menu.popup(None, None, None, 3, 0)
+		menu.popup(None, None, None, None, 3, 0)
 		menu.show_all()
 
 	def _button_release_event(self, widget, event, data=None):

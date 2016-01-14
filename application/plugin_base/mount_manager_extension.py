@@ -1,4 +1,4 @@
-import gtk
+from gi.repository import Gtk
 
 
 class ExtensionFeatures:
@@ -23,10 +23,10 @@ class MountManagerExtension:
 		self._application = self._parent._application
 
 		# create user interface
-		self._container = gtk.VBox(False, 5)
-		self._controls = gtk.HBox(False, 5)
+		self._container = Gtk.VBox(False, 5)
+		self._controls = Gtk.HBox(False, 5)
 
-		separator = gtk.HSeparator()
+		separator = Gtk.HSeparator()
 
 		# pack interface
 		self._container.pack_end(separator, False, False, 0)

@@ -1,8 +1,8 @@
 import os
 import chardet
 import codecs
-import gtk
-import pango
+from gi.repository import Gtk
+from gi.repository import Pango
 import subprocess
 
 from gi.repository import Gtk, Gdk, Pango, GObject
@@ -93,8 +93,8 @@ class Viewer:
 			container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 			container.set_shadow_type(Gtk.ShadowType.NONE)
 			container.set_border_width(5)
-			viewport = gtk.Viewport()
-			image = gtk.Image()
+			viewport = Gtk.Viewport()
+			image = Gtk.Image()
 
 			# load raw data
 			raw_file = provider.get_file_handle(path, FileMode.READ)
@@ -103,11 +103,11 @@ class Viewer:
 
 			# get pixbuf from raw data
 			try:
-				loader = gtk.gdk.PixbufLoader()
+				loader = GdkPixbuf.PixbufLoader()
 				loader.write(raw_data)
 				loader.close()
 
-			except gobject.GError:
+			except GObject.GError:
 				pass
 
 			else:
@@ -180,11 +180,11 @@ class Viewer:
 		text_view.modify_font(font)
 
 		if self._options.get('word_wrap'):
-			container.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
-			text_view.set_wrap_mode(gtk.WRAP_WORD)
+			container.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+			text_view.set_wrap_mode(Gtk.WrapMode.WORD)
 
 		else:
-			container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+			container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
 		# try to detect file character encoding and convert to Unicode
 		encoding = chardet.detect(content)['encoding']

@@ -566,7 +566,7 @@ class DeleteDialog(Gtk.MessageDialog):
 	"""Confirmation dialog for item removal with operation queue selection."""
 
 	def __init__(self, application, message):
-		GObject.GObject.__init__(
+		Gtk.MessageDialog.__init__(
 				self,
 				parent=application,
 				flags=Gtk.DialogFlags.DESTROY_WITH_PARENT,

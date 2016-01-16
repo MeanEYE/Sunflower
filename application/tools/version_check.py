@@ -1,6 +1,6 @@
 import urllib
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GLib
 from json import JSONDecoder
 from threading import Thread
 
@@ -84,8 +84,7 @@ class VersionCheck:
 			decoder = JSONDecoder()
 			releases = decoder.decode(data)
 
-			with Gdk.lock:
-				self._entry_latest.set_text(releases[0]['tag_name'])
+			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._entry_latest.set_text, releases[0]['tag_name'])
 
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys"""

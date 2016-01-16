@@ -314,10 +314,8 @@ class FileList(ItemList):
 
 		for column in columns:
 			column.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
-
-			column_name = column.get_data('name')
-			font_size = options.get('font_size_{0}'.format(column_name)) or \
-				self._default_column_font_size.get(column_name, None)
+			font_size = options.get('font_size_{0}'.format(column.name)) or \
+				self._default_column_font_size.get(column.name, None)
 
 			# no font size was specified, skip column
 			if font_size is None:
@@ -2127,9 +2125,9 @@ class FileList(ItemList):
 			# update status bar
 			GLib.idle_add(self._update_status_with_statistis)
 
-				# turn on sorting
-				focus_selected = parent is None
-				GLib.idle_add(self._apply_sort_function, focus_selected)
+			# turn on sorting
+			focus_selected = parent is None
+			GLib.idle_add(self._apply_sort_function, focus_selected)
 
 			# load emblems
 			self._load_emblems(parent, parent_path)

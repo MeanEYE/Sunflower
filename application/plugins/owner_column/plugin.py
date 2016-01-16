@@ -26,7 +26,7 @@ class BaseColumn(ColumnExtension):
 
 		self._column = Gtk.TreeViewColumn(self._get_column_title())
 		self._column.pack_start(self._cell_renderer, True)
-		self._column.set_data('name', self._get_column_name())
+		self._column.name = self._get_column_name()
 
 	def _get_column_name(self):
 		"""Returns column name"""
@@ -49,7 +49,7 @@ class OwnerColumn(BaseColumn):
 		is_parent = store.get_value(selected_iter, Column.IS_PARENT_DIR)
 
 		value = (store.get_value(selected_iter, Column.USER_ID), '')[is_parent]
-		cell.set_property('text', value)
+		cell.set_property('text', str(value))
 
 	def _create_column(self):
 		"""Configure column"""
@@ -77,7 +77,7 @@ class GroupColumn(BaseColumn):
 		is_parent = store.get_value(selected_iter, Column.IS_PARENT_DIR)
 
 		value = (store.get_value(selected_iter, Column.GROUP_ID), '')[is_parent]
-		cell.set_property('text', value)
+		cell.set_property('text', str(value))
 
 	def _create_column(self):
 		"""Configure column"""

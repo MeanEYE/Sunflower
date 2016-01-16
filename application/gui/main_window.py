@@ -68,9 +68,9 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	NAUTILUS_SEND_TO_INSTALLED = common.executable_exists('nautilus-sendto')
 
-	def __init__(self):
+	def __init__(self, application):
 		# create main window and other widgets
-		super(Gtk.ApplicationWindow, self).__init__()
+		Gtk.ApplicationWindow.__init__(self, application=application)
 		# set application name
 		GLib.set_application_name('Sunflower')
 

@@ -31,7 +31,7 @@ class Sunflower(Gtk.Application):
 	"""Main application instance."""
 
 	def __init__(self):
-		super(Gtk.Application, self).__init__()
+		Gtk.Application.__init__(self)
 		self.connect('startup', self.on_startup)
 		self.connect('activate', self.on_activate)
 
@@ -41,10 +41,8 @@ class Sunflower(Gtk.Application):
 		from gui.main_window import MainWindow
 
 		# create main window and show it
-		main_window = MainWindow()
-		self.add_window(main_window)
+		main_window = MainWindow(self)
 		main_window.run()
-
 
 	def on_startup(self, data=None):
 		"""Handle application startup"""

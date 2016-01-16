@@ -15,7 +15,7 @@ class ViewEditOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'view_and_edit', _('View & Edit'))
 
 		# viewer options
-		frame_view = Gtk.Frame(_('View'))
+		frame_view = Gtk.Frame(label=_('View'))
 		vbox_view = Gtk.VBox(False, 0)
 		vbox_view.set_border_width(5)
 

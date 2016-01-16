@@ -6,6 +6,8 @@ try:
 	# check if gtk is available
 	import gi
 	gi.require_version('Gtk', '3.0')
+	gi.require_version('GConf', '2.0')
+	gi.require_version('Notify', '0.7')
 
 except:
 	# print error and die
@@ -24,32 +26,28 @@ try:
 except ImportError:
 	pass
 
-# add search path
-application_path = os.path.abspath(os.path.dirname(sys.argv[0]))
-if application_path not in sys.path:
-	sys.path.insert(1, application_path)
-
 
 class Sunflower(Gtk.Application):
 	"""Main application instance."""
 
 	def __init__(self):
-		GObject.GObject.__init__(self, application_id='org.sunflower')
+		super(Gtk.Application, self).__init__()
+		self.connect('startup', self.on_startup)
+		self.connect('activate', self.on_activate)
 
-	def do_activate(self):
+	def on_activate(self, data=None):
 		"""Handle application activation."""
 		# import main window
 		from gui.main_window import MainWindow
 
 		# create main window and show it
-		main_window = MainWindow(self)
+		main_window = MainWindow()
+		self.add_window(main_window)
 		main_window.run()
 
-	def do_startup(self):
-		"""Handle application startup"""
-		# perform parent startup
-		Gtk.Application.do_startup(self)
 
+	def on_startup(self, data=None):
+		"""Handle application startup"""
 		# add search path
 		application_path = os.path.abspath(os.path.dirname(sys.argv[0]))
 		if application_path not in sys.path:

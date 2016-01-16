@@ -15,7 +15,7 @@ class ColumnExtension:
 	def _create_column(self):
 		"""Create column
 
-		For each column you create, you need to call set_data('name', column_name).
+		For each column you create, you need to add property 'name': column.name = 'Column name'.
 		This information will be used to store sorting and column order in
 		configuration files.
 

@@ -304,7 +304,7 @@ class SessionManager:
 		self._button.insert_action_group('sessions', self._action_group)
 
 		# add session button to header bar
-		self._application.header_bar.pack_end(self._button, True, True, 0)
+		self._application.header_bar.pack_end(self._button)
 
 		# update menu
 		self._update_menu()

@@ -1,7 +1,7 @@
 import os
 import fnmatch
 
-from gi.repository import Gtk, Gdk, GObject, GLib
+from gi.repository import Gtk, Gdk, GObject
 from threading import Thread, Event
 from Queue import Queue
 
@@ -1422,8 +1422,8 @@ class MoveOperation(CopyOperation):
 
 		"""
 		# set dialog info
-		Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._dialog.set_source, self._source_path)
-		Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._dialog.set_destination, self._destination_path)
+		GObject.idle_add(self._dialog.set_source, self._source_path)
+		GObject.idle_add(self._dialog.set_destination, self._destination_path)
 
 		# wait for operation queue if needed
 		if self._operation_queue is not None:
@@ -1448,7 +1448,7 @@ class MoveOperation(CopyOperation):
 			if self._source_path == parent.path:
 				parent.deselect_all()
 
-		Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, clear_selection)
+		GObject.idle_add(clear_selection)
 
 		# create directories
 		self._create_links()
@@ -1493,7 +1493,7 @@ class MoveOperation(CopyOperation):
 				error_list.set_errors(self._error_list)
 				error_list.show()
 
-		Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, notify_is_not_focused)
+		GObject.idle_add(notify_is_not_focused)
 
 		# destroy dialog
 		self._destroy_ui()
@@ -1745,7 +1745,7 @@ class RenameOperation(Operation):
 				# queue notification
 				notify_manager.notify(title, message)
 
-		Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, notify_is_not_focused)
+		GObject.idle_add(GLib.PRIORITY_DEFAULT_IDLE, notify_is_not_focused)
 
 		# destroy dialog
 		self._destroy_ui()

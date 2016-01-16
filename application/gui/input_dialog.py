@@ -289,7 +289,8 @@ class CreateDialog(InputDialog):
 		button_save.connect('clicked', self._save_configuration)
 		button_save.set_tooltip_text(_('Save as default configuration'))
 
-		align_save = Gtk.Alignment.new()
+		#TODO: Gtk.Alignment deprecated since version 3.14: Use Gtk.Widget alignment and margin properties
+		align_save = Gtk.Alignment.new(0,0,0,0)
 		align_save.add(button_save)
 
 		# pack interface
@@ -447,7 +448,7 @@ class FileCreateDialog(CreateDialog):
 		cell_name = Gtk.CellRendererText()
 
 		# create template combobox
-		self._template_list = Gtk.ComboBox(self._templates)
+		self._template_list = Gtk.ComboBox.new_with_model(self._templates)
 		self._template_list.set_row_separator_func(self._row_is_separator)
 		self._template_list.connect('changed', self._template_changed)
 		self._template_list.pack_start(cell_icon, False)

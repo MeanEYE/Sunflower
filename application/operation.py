@@ -1,7 +1,7 @@
 import os
 import fnmatch
 
-from gi.repository import Gtk, Gdk, GObject
+from gi.repository import Gtk, Gdk, GObject, GLib
 from threading import Thread, Event
 from Queue import Queue
 
@@ -1422,9 +1422,8 @@ class MoveOperation(CopyOperation):
 
 		"""
 		# set dialog info
-		with Gdk.lock:
-			self._dialog.set_source(self._source_path)
-			self._dialog.set_destination(self._destination_path)
+		Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._dialog.set_source, self._source_path)
+		Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._dialog.set_destination, self._destination_path)
 
 		# wait for operation queue if needed
 		if self._operation_queue is not None:
@@ -1444,10 +1443,12 @@ class MoveOperation(CopyOperation):
 				self.cancel()
 
 		# clear selection on source directory
-		with Gdk.lock:
+		def clear_selection():
 			parent = self._source.get_parent()
 			if self._source_path == parent.path:
 				parent.deselect_all()
+
+		Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, clear_selection)
 
 		# create directories
 		self._create_links()
@@ -1465,7 +1466,7 @@ class MoveOperation(CopyOperation):
 			self._delete_file_list()
 
 		# notify user if window is not focused
-		with Gdk.lock:
+		def notify_is_not_focused():
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 				notify_manager = self._application.notification_manager
 
@@ -1491,6 +1492,8 @@ class MoveOperation(CopyOperation):
 				error_list.set_destination(self._destination_path)
 				error_list.set_errors(self._error_list)
 				error_list.show()
+
+		Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, notify_is_not_focused)
 
 		# destroy dialog
 		self._destroy_ui()
@@ -1725,7 +1728,7 @@ class RenameOperation(Operation):
 				GObject.idle_add(self._dialog.set_current_file_fraction, 1)
 
 		# notify user if window is not focused
-		with Gdk.lock:
+		def notify_is_not_focused():
 			if not self._dialog.is_active() and not self._application.is_active() and not self._abort.is_set():
 				notify_manager = self._application.notification_manager
 
@@ -1741,6 +1744,8 @@ class RenameOperation(Operation):
 
 				# queue notification
 				notify_manager.notify(title, message)
+
+		Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, notify_is_not_focused)
 
 		# destroy dialog
 		self._destroy_ui()

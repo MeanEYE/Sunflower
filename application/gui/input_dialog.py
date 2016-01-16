@@ -728,7 +728,7 @@ class CopyDialog:
 		vbox_silent.pack_start(self.checkbox_merge, False, False, 0)
 		vbox_silent.pack_start(self.checkbox_overwrite, False, False, 0)
 
-		align_silent.add(vbox_silent)
+		#align_silent.add(vbox_silent)
 
 		vbox_type.pack_start(label_type, False, False, 0)
 		vbox_type.pack_start(self.entry_type, False, False, 0)
@@ -749,7 +749,7 @@ class CopyDialog:
 		vbox.pack_start(self.checkbox_mode, False, False, 0)
 		vbox.pack_start(self.checkbox_timestamp, False, False, 0)
 		vbox.pack_start(self.checkbox_silent, False, False, 0)
-		vbox.pack_start(align_silent, False, False, 0)
+		vbox.pack_start(vbox_silent, False, False, 0)
 		vbox.pack_start(self.checkbox_symlink, False, False, 0)
 
 		self._dialog.get_content_area().pack_start(vbox, False, False, 0)

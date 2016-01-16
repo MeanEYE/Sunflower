@@ -289,7 +289,8 @@ class CreateDialog(InputDialog):
 		button_save.connect('clicked', self._save_configuration)
 		button_save.set_tooltip_text(_('Save as default configuration'))
 
-		align_save = Gtk.Alignment.new()
+		#TODO: Gtk.Alignment deprecated since version 3.14: Use Gtk.Widget alignment and margin properties
+		align_save = Gtk.Alignment.new(0,0,0,0)
 		align_save.add(button_save)
 
 		# pack interface
@@ -447,7 +448,7 @@ class FileCreateDialog(CreateDialog):
 		cell_name = Gtk.CellRendererText()
 
 		# create template combobox
-		self._template_list = Gtk.ComboBox(self._templates)
+		self._template_list = Gtk.ComboBox.new_with_model(self._templates)
 		self._template_list.set_row_separator_func(self._row_is_separator)
 		self._template_list.connect('changed', self._template_changed)
 		self._template_list.pack_start(cell_icon, False)
@@ -565,7 +566,7 @@ class DeleteDialog(Gtk.MessageDialog):
 	"""Confirmation dialog for item removal with operation queue selection."""
 
 	def __init__(self, application, message):
-		GObject.GObject.__init__(
+		Gtk.MessageDialog.__init__(
 				self,
 				parent=application,
 				flags=Gtk.DialogFlags.DESTROY_WITH_PARENT,
@@ -727,7 +728,7 @@ class CopyDialog:
 		vbox_silent.pack_start(self.checkbox_merge, False, False, 0)
 		vbox_silent.pack_start(self.checkbox_overwrite, False, False, 0)
 
-		align_silent.add(vbox_silent)
+		#align_silent.add(vbox_silent)
 
 		vbox_type.pack_start(label_type, False, False, 0)
 		vbox_type.pack_start(self.entry_type, False, False, 0)
@@ -748,7 +749,7 @@ class CopyDialog:
 		vbox.pack_start(self.checkbox_mode, False, False, 0)
 		vbox.pack_start(self.checkbox_timestamp, False, False, 0)
 		vbox.pack_start(self.checkbox_silent, False, False, 0)
-		vbox.pack_start(align_silent, False, False, 0)
+		vbox.pack_start(vbox_silent, False, False, 0)
 		vbox.pack_start(self.checkbox_symlink, False, False, 0)
 
 		self._dialog.get_content_area().pack_start(vbox, False, False, 0)

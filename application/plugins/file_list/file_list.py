@@ -1549,7 +1549,7 @@ class FileList(ItemList):
 
 		# find starting point
 		if parent is None:
-			found_iter = self._store.get_iter_root()
+			found_iter = self._store.get_iter_first()
 			found_iter = self._store.iter_next(found_iter)  # skip parent directory
 
 		elif self._store.iter_has_child(parent):

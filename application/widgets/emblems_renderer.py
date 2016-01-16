@@ -22,7 +22,7 @@ class CellRendererEmblems(Gtk.CellRenderer):
 			}
 
 	def __init__(self):
-		GObject.GObject.__init__(self)
+		Gtk.CellRenderer.__init__(self)
 
 		self.emblems = None
 		self.is_link = None
@@ -62,7 +62,7 @@ class CellRendererEmblems(Gtk.CellRenderer):
 		# cache constants locally
 		icon_size = self.icon_size
 		spacing = self.spacing
-		emblems = self.emblems
+		emblems = self.emblems or ()
 		icon_theme = Gtk.IconTheme.get_default()
 
 		# add symbolic link emblem if needed

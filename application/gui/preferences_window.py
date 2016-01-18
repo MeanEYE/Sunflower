@@ -27,9 +27,9 @@ class PreferencesWindow(gtk.Window):
 		self._parent = parent
 		self._tab_names = {}
 
-		# configure self
+		# configure window
 		self.set_title(_('Preferences'))
-		self.set_size_request(640, 500)
+		self.set_size_request(750, 500)
 		self.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.set_modal(True)
 		self.set_skip_taskbar_hint(True)
@@ -40,7 +40,7 @@ class PreferencesWindow(gtk.Window):
 		self.connect('delete_event', self._hide)
 		self.connect('key-press-event', self._handle_key_press)
 
-		# create GUI
+		# create user interface
 		vbox = gtk.VBox(False, 7)
 		vbox.set_border_width(7)
 
@@ -99,7 +99,7 @@ class PreferencesWindow(gtk.Window):
 		btn_help.connect(
 					'clicked',
 					parent.goto_web,
-					'code.google.com/p/sunflower-fm/wiki/WelcomePage?tm=6'
+					'github.com/MeanEYE/Sunflower/wiki'
 				)
 
 		# restart label
@@ -156,11 +156,11 @@ class PreferencesWindow(gtk.Window):
 			dialog.destroy()
 
 			if result == gtk.RESPONSE_YES:
-				self._save_options()			
+				self._save_options()
 
 			elif result == gtk.RESPONSE_CANCEL:
 				should_close = False
-		
+
 		if should_close:
 			self.hide()
 
@@ -169,8 +169,8 @@ class PreferencesWindow(gtk.Window):
 	def _load_options(self, widget=None, data=None):
 		"""Change interface to present current state of configuration"""
 		# call all tabs to load their options
-		for i in range(self._tabs.get_n_pages()):
-			page = self._tabs.get_nth_page(i)
+		for index in range(self._tabs.get_n_pages()):
+			page = self._tabs.get_nth_page(index)
 
 			if hasattr(page, '_load_options'):
 				page._load_options()
@@ -183,8 +183,8 @@ class PreferencesWindow(gtk.Window):
 	def _save_options(self, widget=None, data=None):
 		"""Save options"""
 		# call all tabs to save their options
-		for i in range(self._tabs.get_n_pages()):
-			page = self._tabs.get_nth_page(i)
+		for index in range(self._tabs.get_n_pages()):
+			page = self._tabs.get_nth_page(index)
 
 			if hasattr(page, '_save_options'):
 				page._save_options()

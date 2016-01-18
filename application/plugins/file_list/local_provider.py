@@ -13,29 +13,39 @@ class LocalProvider(Provider):
 	is_local = True
 	protocol = 'file'
 
+	def real_path(self, path, relative_to=None):
+		"""Get real path based on specified parameters."""
+		if path.startswith('file://'):
+			path = path[7:]
+
+		if relative_to is not None and relative_to.startswith('file://'):
+			relative_to = relative_to[7:]
+
+		return Provider.real_path(self, path, relative_to)
+
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		return os.path.isfile(real_path)
 
 	def is_dir(self, path, relative_to=None):
 		"""Test if given path is directory"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		return os.path.isdir(real_path)
 
 	def is_link(self, path, relative_to=None):
 		"""Test if given path is a link"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		return os.path.islink(real_path)
 
 	def exists(self, path, relative_to=None):
 		"""Test if given path exists"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		return os.path.exists(real_path)
 
 	def link(self, existing_path, destination_path, relative_to=None, symbolic=True):
 		"""Create hard or symbolic link from existing path"""
-		real_path = self._real_path(destination_path, relative_to)
+		real_path = self.real_path(destination_path, relative_to)
 
 		if symbolic:
 			# create a symbolic link on destination path from existing path
@@ -43,26 +53,31 @@ class LocalProvider(Provider):
 
 		else:
 			# create a hard link on destination path from existing path
-			self.link(existing_path, real_path)
+			os.link(existing_path, real_path)
 
 	def unlink(self, path, relative_to=None):
 		"""Unlink given path"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		os.remove(real_path)
+
+	def readlink(self, path, relative_to=None):
+		"""Return a string representing the path to which the symbolic link points."""
+		real_path = self.real_path(path, relative_to)
+		return os.readlink(real_path)
 
 	def remove_directory(self, path, relative_to=None):
 		"""Remove directory and optionally its contents"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		shutil.rmtree(real_path)
 
 	def remove_file(self, path, relative_to=None):
 		"""Remove file"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		os.remove(real_path)
 
 	def trash_path(self, path, relative_to=None):
 		"""Move path to the trash"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		tmp = gio.File(real_path)
 
 		try:
@@ -73,28 +88,28 @@ class LocalProvider(Provider):
 
 	def create_file(self, path, mode=0644, relative_to=None):
 		"""Create empty file with specified mode set"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		open(real_path, 'w').close()
 		self.set_mode(real_path, mode)
 
 	def create_directory(self, path, mode=0755, relative_to=None):
 		"""Create directory with specified mode set"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		os.makedirs(real_path, mode)
 
 	def get_file_handle(self, path, mode, relative_to=None):
 		"""Open path in specified mode and return its handle"""
-		real_path = self._real_path(path, relative_to)
-		real_mode = ('rb', 'wb', 'ab')[mode]
+		real_path = self.real_path(path, relative_to)
+		real_mode = ('rb', 'wb', 'ab', 'rab')[mode]
 		return open(real_path, real_mode)
 
-	def get_stat(self, path, relative_to=None, extended=False):
+	def get_stat(self, path, relative_to=None, extended=False, follow=False):
 		"""Return file statistics"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 
 		try:
 			# try getting file stats
-			file_stat = os.stat(real_path)
+			file_stat = os.lstat(real_path) if not follow else os.stat(real_path)
 
 		except:
 			# handle invalid files/links
@@ -126,13 +141,11 @@ class LocalProvider(Provider):
 			return result
 
 		# get file type
-		item_type = FileType.REGULAR
-
-		if stat.S_ISDIR(file_stat.st_mode):
-			item_type = FileType.DIRECTORY
-
-		elif stat.S_ISLNK(file_stat.st_mode):
+		if stat.S_ISLNK(file_stat.st_mode):
 			item_type = FileType.LINK
+
+		elif stat.S_ISDIR(file_stat.st_mode):
+			item_type = FileType.DIRECTORY
 
 		elif stat.S_ISBLK(file_stat.st_mode):
 			item_type = FileType.DEVICE_BLOCK
@@ -142,6 +155,9 @@ class LocalProvider(Provider):
 
 		elif stat.S_ISSOCK(file_stat.st_mode):
 			item_type = FileType.SOCKET
+
+		else:
+			item_type = FileType.REGULAR
 
 		if not extended:
 			# create normal file information
@@ -173,23 +189,27 @@ class LocalProvider(Provider):
 
 	def set_mode(self, path, mode, relative_to=None):
 		"""Set access mode to specified path"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		os.chmod(real_path, mode)
 
 	def set_owner(self, path, owner=-1, group=-1, relative_to=None):
 		"""Set owner and/or group for specified path"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		os.chown(real_path, owner, group)
 
 	def set_timestamp(self, path, access=None, modify=None, change=None, relative_to=None):
 		"""Set timestamps for specified path
-		
+
 		On Linux/Unix operating system we can't set metadata change timestamp
 		so we just ignore this part until other platforms are supported.
-		
+
 		"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		os.utime(real_path, (access, modify))
+
+	def move_path(self, source, destination, relative_to=None):
+		"""Move path on same file system to a different parent node """
+		return self.rename_path(source,destination,relative_to)
 
 	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""
@@ -207,12 +227,12 @@ class LocalProvider(Provider):
 
 	def list_dir(self, path, relative_to=None):
 		"""Get directory list"""
-		real_path = self._real_path(path, relative_to)
+		real_path = self.real_path(path, relative_to)
 		return os.listdir(real_path)
 
 	def get_root_path(self, path):
 		"""Get root for specified path"""
-		return os.path.sep if path[0] == os.path.sep else None
+		return 'file:///' if path.startswith('file://') else os.path.sep
 
 	def get_parent_path(self, path):
 		"""Get parent path for specified"""
@@ -229,7 +249,7 @@ class LocalProvider(Provider):
 
 			result = SystemSize(
 						block_size = stat.f_bsize,
-						block_total = stat.f_blocks, 
+						block_total = stat.f_blocks,
 						block_available = stat.f_bavail,
 						size_total = space_total,
 						size_available = space_free
@@ -238,7 +258,7 @@ class LocalProvider(Provider):
 		except:
 			result = SystemSize(
 						block_size = 0,
-						block_total = 0, 
+						block_total = 0,
 						block_available = 0,
 						size_total = 0,
 						size_available = 0

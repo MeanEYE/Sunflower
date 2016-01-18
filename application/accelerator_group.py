@@ -72,11 +72,11 @@ class AcceleratorGroup:
 			if accelerator is not None and accelerator[0] > 0:
 				keyval = accelerator[0]
 				modifier = accelerator[1]
-	
+
 				# create method name cache based on key combination
 				label = gtk.accelerator_get_label(keyval, modifier)
 				self._method_names[label] = method_name
-	
+
 				# connect accelerator
 				self._accel_group.connect_group(keyval, modifier, 0, self._handle_activate)
 
@@ -101,11 +101,11 @@ class AcceleratorGroup:
 		"""Activate accelerator group for specified window"""
 		if not self._active:
 			self._window = window
-	
+
 			# connect accelerators if they are not already
 			if self._accel_group is None:
 				self._create_group()
-	
+
 			# add accelerator group to specified window
 			self._window.add_accel_group(self._accel_group)
 

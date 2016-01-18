@@ -16,6 +16,8 @@ from accelerator_group import AcceleratorGroup
 
 class ButtonText:
 	MENU = u'\u2699'
+	TERMINAL = u'\u2605'
+	ITEM_LIST = u'\u2600'
 
 
 class TerminalType:
@@ -31,7 +33,7 @@ class CursorShape:
 
 class Terminal(PluginBase):
 	"""Base class for terminal based plugins
-	
+
 	This class provides access to VTE GTK+ widget. In cases where VTE is
 	not present on the system you can use gtk.Socket to embed external
 	application.
@@ -55,28 +57,48 @@ class Terminal(PluginBase):
 		# change list icon
 		self._title_bar.set_icon_from_name('terminal')
 
-		# terminal menu button
-		self._menu_button = gtk.Button()
-
-		if options.get('tab_button_icons'):
-			# set icon
-			image_menu = gtk.Image()
-			image_menu.set_from_icon_name(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
-			self._menu_button.set_image(image_menu)
-		else:
-			# set text
-			self._menu_button = gtk.Button(ButtonText.MENU)
-
-		self._menu_button.set_focus_on_click(False)
-		self._menu_button.set_tooltip_text(_('Terminal menu'))
-		self._menu_button.connect('clicked', self._show_terminal_menu)
-
 		# pack buttons
 		self._title_bar.add_control(self._menu_button)
 
+		# terminal button
+		self._terminal_button = gtk.Button()
+
+		if options.get('tab_button_icons'):
+			# set icon
+			image_terminal = gtk.Image()
+			image_terminal.set_from_icon_name('terminal', gtk.ICON_SIZE_MENU)
+			self._terminal_button.set_image(image_terminal)
+		else:
+			# set text
+			self._terminal_button.set_label(ButtonText.TERMINAL)
+
+		self._terminal_button.set_focus_on_click(False)
+		self._terminal_button.set_tooltip_text(_('Terminal'))
+		self._terminal_button.connect('clicked', self._create_terminal)
+
+		self._title_bar.add_control(self._terminal_button)
+
+		# file list button
+		self._file_list_button = gtk.Button()
+
+		if options.get('tab_button_icons'):
+			# set icon
+			image_folder = gtk.Image()
+			image_folder.set_from_icon_name('folder', gtk.ICON_SIZE_MENU)
+			self._file_list_button.set_image(image_folder)
+		else:
+			# set text
+			self._file_list_button.set_label(ButtonText.ITEM_LIST)
+
+		self._file_list_button.set_focus_on_click(False)
+		self._file_list_button.set_tooltip_text(_('Open file list'))
+		self._file_list_button.connect('clicked', self._create_file_list)
+
+		self._title_bar.add_control(self._file_list_button)
+
 		# create main object
-		self._terminal_type = section.get('type') 
-	
+		self._terminal_type = section.get('type')
+
 		if self._terminal_type == TerminalType.VTE and vte is not None:
 			self._vte_present = True
 			self._terminal = vte.Terminal()
@@ -105,7 +127,7 @@ class Terminal(PluginBase):
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
 			self._terminal = gtk.Socket()
-			
+
 		else:
 			# failsafe when VTE module is not present
 			# NOTE: Cursor needs to be visible for 'close tab' accelerator.
@@ -139,7 +161,7 @@ class Terminal(PluginBase):
 
 		# connect events to main object
 		self._connect_main_object(self._terminal)
-		
+
 		# create menu
 		self._create_menu()
 
@@ -167,6 +189,26 @@ class Terminal(PluginBase):
 			if font_name is not None:
 				self._terminal.set_font_from_string(font_name)
 
+	def _create_buttons(self):
+		"""Create titlebar buttons."""
+		options = self._parent.options
+
+		# terminal menu button
+		self._menu_button = gtk.Button()
+
+		if options.get('tab_button_icons'):
+			# set icon
+			image_menu = gtk.Image()
+			image_menu.set_from_icon_name(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
+			self._menu_button.set_image(image_menu)
+		else:
+			# set text
+			self._menu_button = gtk.Button(ButtonText.MENU)
+
+		self._menu_button.set_focus_on_click(False)
+		self._menu_button.set_tooltip_text(_('Terminal menu'))
+		self._menu_button.connect('clicked', self._show_terminal_menu)
+
 	def _update_title(self, widget, data=None):
 		"""Update title with terminal window text"""
 		self._change_title_text(self._terminal.get_window_title())
@@ -179,6 +221,12 @@ class Terminal(PluginBase):
 	def _create_terminal(self, widget, data=None):
 		"""Create terminal tab in parent notebook"""
 		self._parent.create_terminal_tab(self._notebook, self._options.copy())
+		return True
+
+	def _create_file_list(self, widget=None, data=None):
+		"""Create file list in parent notebook"""
+		DefaultList = self._parent.plugin_classes['file_list']
+		self._parent.create_tab(self._notebook, DefaultList)
 		return True
 
 	def _create_menu(self):
@@ -219,7 +267,7 @@ class Terminal(PluginBase):
 		pos_x = window_x + button_x
 		pos_y = window_y + button_y + button_h
 
-		return (pos_x, pos_y, True)
+		return pos_x, pos_y, True
 
 	def _show_terminal_menu(self, widget, data=None):
 		"""History button click event"""
@@ -291,7 +339,7 @@ class Terminal(PluginBase):
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""
 		text = selection_data.data
-		
+
 		# ask user what to do with data
 		dialog = gtk.MessageDialog(
 								self._parent,
@@ -306,7 +354,7 @@ class Terminal(PluginBase):
 		dialog.set_default_response(gtk.RESPONSE_YES)
 		result = dialog.run()
 		dialog.destroy()
-		
+
 		if result == gtk.RESPONSE_YES:
 			self.feed_terminal(text)
 

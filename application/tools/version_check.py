@@ -1,17 +1,18 @@
 import gtk
 import urllib
 
+from json import JSONDecoder
 from threading import Thread
 
 
 class VersionCheck:
 	"""Small class used for checking and displaying current and
-	latest version of software detected by getting a file from 
+	latest version of software detected by getting a file from
 	project hosting site.
 
 	"""
 
-	URL = 'http://sunflower-fm.googlecode.com/hg/.hgtags'
+	URL = 'https://api.github.com/repos/MeanEYE/Sunflower/releases'
 
 	def __init__(self, application):
 		self._dialog = gtk.Window(type=gtk.WINDOW_TOPLEVEL)
@@ -77,13 +78,14 @@ class VersionCheck:
 		try:
 			# get data from web
 			url_handler = urllib.urlopen(self.URL)
-			data = url_handler.read().split('\n')
+			data = url_handler.read()
 
 		finally:
-			latest_data = data[-2].split(' ')
+			decoder = JSONDecoder()
+			releases = decoder.decode(data)
 
 			with gtk.gdk.lock:
-				self._entry_latest.set_text(latest_data[1])
+				self._entry_latest.set_text(releases[0]['tag_name'])
 
 	def _handle_key_press(self, widget, event, data=None):
 		"""Handle pressing keys"""
@@ -97,7 +99,7 @@ class VersionCheck:
 		# prepare template
 		if version['stage'] != 'f':
 			template = '{0[major]}.{0[minor]}{0[stage]}-{0[build]}'
-		else: 
+		else:
 			template = '{0[major]}.{0[minor]}-{0[build]}'
 
 		# populate version values

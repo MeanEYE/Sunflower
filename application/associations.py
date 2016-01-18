@@ -29,22 +29,22 @@ class AssociationManager:
 
 	def __init__(self, application):
 		self._application = application
-	
+
 	def __get_icon(self, icon_object):
 		"""Get icon string from GIO icon object"""
 		result = None
-		
+
 		if hasattr(icon_object, 'get_names'):
 			result = icon_object.get_names()[0]
-			
+
 		elif hasattr(icon_object, 'get_file'):
 			result = icon_object.get_file().get_path()
-			
+
 		return result
 
 	def __format_command_string(self, selection, command):
 		"""Format command string"""
-		# we modify exec_string and use 
+		# we modify exec_string and use
 		# command for testing to avoid problem
 		# with Unicode characters in URI
 		exec_string = command
@@ -94,9 +94,12 @@ class AssociationManager:
 
 	def get_sample_data(self, path, provider):
 		"""Get sample data needed for content detection"""
+		data = None
 		file_handle = provider.get_file_handle(path, Mode.READ)
-		data = file_handle.read(128)
-		file_handle.close()
+
+		if file_handle is not None:
+			data = file_handle.read(128)
+			file_handle.close()
 
 		return data
 
@@ -113,7 +116,7 @@ class AssociationManager:
 			result = gio.content_type_guess(data=data)
 
 		return result
-	
+
 	def get_mime_description(self, mime_type):
 		"""Get description from mime type"""
 		return gio.content_type_get_description(mime_type)
@@ -121,7 +124,7 @@ class AssociationManager:
 	def get_all(self):
 		"""Return list of all applications"""
 		result = []
-		
+
 		for app_info in gio.app_info_get_all():
 			application = ApplicationInfo(
 									id = app_info.get_id(),
@@ -131,9 +134,9 @@ class AssociationManager:
 									command_line = app_info.get_commandline(),
 									icon = self.__get_icon(app_info.get_icon())
 								)
-			
+
 			result.append(application)
-			
+
 		return result
 
 	def get_gio_application_by_id(self, id):
@@ -150,7 +153,7 @@ class AssociationManager:
 	def get_application_list_for_type(self, mime_type):
 		"""Get list of associated programs for specified type"""
 		result = []
-		
+
 		for app_info in gio.app_info_get_all_for_type(mime_type):
 			application = ApplicationInfo(
 									id = app_info.get_id(),
@@ -160,15 +163,15 @@ class AssociationManager:
 									command_line = app_info.get_commandline(),
 									icon = self.__get_icon(app_info.get_icon())
 								)
-			
+
 			result.append(application)
-			
+
 		return result
 
 	def get_default_application_for_type(self, mime_type):
 		"""Get default application for specified type"""
 		app_info = gio.app_info_get_default_for_type(mime_type, must_support_uris=False)
-		
+
 		if app_info is not None:
 			# create application container
 			application = ApplicationInfo(
@@ -179,11 +182,11 @@ class AssociationManager:
 									command_line = app_info.get_commandline(),
 									icon = self.__get_icon(app_info.get_icon())
 								)
-								
+
 		else:
 			# return None if there is no default application for this type
 			application = None
-					
+
 		return application
 
 	def set_default_application_for_type(self, mime_type, application_id):
@@ -206,14 +209,15 @@ class AssociationManager:
 
 			if application is not None:
 				if application.supports_uris():
+					selection = map(lambda path: 'file://{0}'.format(path) if not path.startswith('file://') else path, selection)
 					application.launch_uris(selection)
 				else:
 					application.launch([gio.File(path=path) for path in selection])
-			
+
 		elif exec_command is not None:
 			# use specified command
 			command = exec_command
-		
+
 			selection = map(lambda item: item.replace('"', '\\"'), selection)
 			exec_string = self.__format_command_string(selection, command)
 
@@ -222,7 +226,7 @@ class AssociationManager:
 			test_command = split_command[0] if len(split_command) > 1 else exec_string
 
 			if is_x_app(test_command):
-				os.system('{0} &'.format(exec_string))
+				subprocess.Popen(split_command, cwd=os.path.dirname(selection[0]))
 
 			else:
 				active_object = self._application.get_active_object()
@@ -259,7 +263,7 @@ class AssociationManager:
 			self._application.create_terminal_tab(active_object._notebook, options)
 
 		else:
-			os.system('{0} &'.format(exec_string))
+			subprocess.Popen(split_command, cwd=os.path.dirname(selection[0]))
 
 	def execute_file(self, path, provider=None):
 		"""Execute specified item properly."""
@@ -280,10 +284,7 @@ class AssociationManager:
 		if gio.content_type_can_be_executable(mime_type) and should_execute:
 			# file type is executable
 			if is_x_app(path):
-				subprocess.Popen(
-							(path, '&'),
-							cwd=os.path.dirname(path)
-						)
+				subprocess.Popen((path,), cwd=os.path.dirname(path))
 
 			else:
 				# command is console based, create terminal tab and fork it

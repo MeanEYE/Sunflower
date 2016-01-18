@@ -40,17 +40,20 @@ class ItemListOptions(SettingsPage):
 
 		# create frames
 		label_look_and_feel = gtk.Label(_('Look & feel'))
+		label_hidden_files = gtk.Label(_('Hidden files'))
 		label_operation = gtk.Label(_('Operation'))
 		label_directories = gtk.Label(_('Directories'))
 		label_columns = gtk.Label(_('Columns'))
 
 		# vertical boxes
 		vbox_look_and_feel = gtk.VBox(False, 0)
+		vbox_hidden_files = gtk.VBox(False, 0)
 		vbox_operation = gtk.VBox(False, 0)
 		vbox_directory = gtk.VBox(False, 0)
 		vbox_columns = gtk.VBox(False, 0)
 
 		vbox_look_and_feel.set_border_width(5)
+		vbox_hidden_files.set_border_width(5)
 		vbox_operation.set_border_width(5)
 		vbox_directory.set_border_width(5)
 		vbox_directory.set_spacing(5)
@@ -58,7 +61,6 @@ class ItemListOptions(SettingsPage):
 
 		# file list options
 		self._checkbox_row_hinting = gtk.CheckButton(_('Row hinting'))
-		self._checkbox_show_hidden = gtk.CheckButton(_('Show hidden files'))
 		self._checkbox_case_sensitive = gtk.CheckButton(_('Case sensitive item sorting'))
 		self._checkbox_number_sensitive = gtk.CheckButton(_('Number sensitive item sorting'))
 		self._checkbox_single_click = gtk.CheckButton(_('Single click navigation'))
@@ -67,9 +69,9 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_media_preview = gtk.CheckButton(_('Fast media preview'))
 		self._checkbox_show_expanders = gtk.CheckButton(_('Show tree expanders'))
 		self._checkbox_hide_scrollbar = gtk.CheckButton(_('Hide horizontal scrollbar'))
+		self._checkbox_second_extension = gtk.CheckButton(_('Support second level extension'))
 
 		self._checkbox_row_hinting.connect('toggled', self._parent.enable_save)
-		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
 		self._checkbox_case_sensitive.connect('toggled', self._parent.enable_save)
 		self._checkbox_number_sensitive.connect('toggled', self._parent.enable_save)
 		self._checkbox_single_click.connect('toggled', self._parent.enable_save)
@@ -78,12 +80,13 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_media_preview.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_expanders.connect('toggled', self._parent.enable_save)
 		self._checkbox_hide_scrollbar.connect('toggled', self._parent.enable_save)
+		self._checkbox_second_extension.connect('toggled', self._parent.enable_save)
 
 		# bread crumbs type
 		hbox_breadcrumbs = gtk.HBox(False, 5)
 		label_breadcrumbs = gtk.Label(_('Breadcrumbs:'))
 		label_breadcrumbs.set_alignment(0, 0.5)
-		
+
 		list_breadcrumbs = gtk.ListStore(str, int)
 		list_breadcrumbs.append((_('None'), Breadcrumbs.TYPE_NONE))
 		list_breadcrumbs.append((_('Normal'), Breadcrumbs.TYPE_NORMAL))
@@ -182,6 +185,37 @@ class ItemListOptions(SettingsPage):
 								'http://docs.python.org/library/time.html#time.strftime'
 							)
 		self._entry_time_format.connect('changed', self._parent.enable_save)
+
+		# hidden files
+		table_always_visible = gtk.Table(rows=3, columns=1, homogeneous=False)
+		table_always_visible.set_row_spacing(1, 5)
+
+		self._checkbox_show_hidden = gtk.CheckButton(_('Show hidden files'))
+		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
+
+		container_always_visible = gtk.ScrolledWindow()
+		container_always_visible.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+		container_always_visible.set_shadow_type(gtk.SHADOW_IN)
+
+		label_always_visible = gtk.Label(_('Always visible files and directories:'))
+		label_always_visible.set_alignment(0, 0.5)
+
+		self._always_visible_store = gtk.ListStore(str)
+		self._always_visible_list = gtk.TreeView(model=self._always_visible_store)
+		self._always_visible_list.set_headers_visible(False)
+
+		cell_name = gtk.CellRendererText()
+		col_name = gtk.TreeViewColumn(None, cell_name, text=0)
+
+		self._always_visible_list.append_column(col_name)
+
+		hbox_always_visible = gtk.HBox(False, 5)
+
+		button_add_always_visible = gtk.Button(stock=gtk.STOCK_ADD)
+		button_add_always_visible.connect('clicked', self._add_always_visible)
+
+		button_delete_always_visible = gtk.Button(stock=gtk.STOCK_DELETE)
+		button_delete_always_visible.connect('clicked', self._delete_always_visible)
 
 		# create list of directories
 		container_directory = gtk.ScrolledWindow()
@@ -334,6 +368,14 @@ class ItemListOptions(SettingsPage):
 		container_directory.add(self._directory_list)
 		container_columns.add(self._columns_list)
 		container_plugin.add(self._extension_list)
+		container_always_visible.add(self._always_visible_list)
+
+		hbox_always_visible.pack_start(button_add_always_visible, False, False, 0)
+		hbox_always_visible.pack_start(button_delete_always_visible, False, False, 0)
+
+		table_always_visible.attach(label_always_visible, 0, 1, 0, 1, xoptions=gtk.SHRINK | gtk.FILL, yoptions=gtk.SHRINK)
+		table_always_visible.attach(container_always_visible, 0, 1, 1, 2, xoptions=gtk.EXPAND | gtk.FILL, yoptions=gtk.EXPAND | gtk.FILL)
+		table_always_visible.attach(hbox_always_visible, 0, 1, 2, 3, xoptions=gtk.SHRINK | gtk.FILL, yoptions=gtk.SHRINK)
 
 		hbox_directory.pack_start(button_add_directory, False, False, 0)
 		hbox_directory.pack_start(button_delete_directory, False, False, 0)
@@ -369,7 +411,6 @@ class ItemListOptions(SettingsPage):
 		vbox_look_and_feel.pack_start(self._checkbox_row_hinting, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_show_headers, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_media_preview, False, False, 0)
-		vbox_look_and_feel.pack_start(self._checkbox_show_hidden, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_show_expanders, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_hide_scrollbar, False, False, 0)
 		vbox_look_and_feel.pack_start(hbox_breadcrumbs, False, False, 5)
@@ -378,10 +419,14 @@ class ItemListOptions(SettingsPage):
 		vbox_look_and_feel.pack_start(hbox_selection_color, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_indicator, False, False, 5)
 
+		vbox_hidden_files.pack_start(self._checkbox_show_hidden, False, False, 0)
+		vbox_hidden_files.pack_start(table_always_visible, True, True, 0)
+
 		vbox_operation.pack_start(self._checkbox_case_sensitive, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_number_sensitive, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_single_click, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_right_click, False, False, 0)
+		vbox_operation.pack_start(self._checkbox_second_extension, False, False, 0)
 		vbox_operation.pack_start(hbox_quick_search, False, False, 5)
 		vbox_operation.pack_start(vbox_time_format, False, False, 5)
 
@@ -392,6 +437,7 @@ class ItemListOptions(SettingsPage):
 		vbox_columns.pack_start(hbox_columns, True, True, 0)
 
 		notebook.append_page(vbox_look_and_feel, label_look_and_feel)
+		notebook.append_page(vbox_hidden_files, label_hidden_files)
 		notebook.append_page(vbox_operation, label_operation)
 		notebook.append_page(vbox_directory, label_directories)
 		notebook.append_page(vbox_columns, label_columns)
@@ -417,16 +463,42 @@ class ItemListOptions(SettingsPage):
 		pos_x = window_x + button_x
 		pos_y = window_y + button_y + button_h
 
-		return (pos_x, pos_y, True)
+		return pos_x, pos_y, True
+
+	def _add_always_visible(self, widget, data=None):
+		"""Add item name to the list of always visible files and directories."""
+		# show dialog
+		dialog = InputDialog(self._parent)
+		dialog.set_title(_('Add always visible item'))
+		dialog.set_label(_('Full name of file or directory to always show:'))
+
+		response = dialog.get_response()
+
+		# add data to the list
+		if response[0] == gtk.RESPONSE_OK:
+			self._always_visible_store.append((response[1],))
+			self._parent.enable_save()
+
+	def _delete_always_visible(self, widget, data=None):
+		"""Delete selected item from the list of always visible files and directories."""
+		selection = self._always_visible_list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		if selected_iter is not None:
+			# remove item from the store
+			item_list.remove(selected_iter)
+
+			# enable save button if item was removed
+			self._parent.enable_save()
 
 	def _add_path(self, widget, source):
 		"""Add path to the list from specified source"""
 		if source == Source.CUSTOM:
 			# show dialog for custom path entry
-			dialog = InputDialog(self._application)
+			dialog = InputDialog(self._parent)
 			dialog.set_title(_('Add custom directory'))
 			dialog.set_label(_('Full path:'))
-			
+
 			response = dialog.get_response()
 
 			if response[0] == gtk.RESPONSE_OK:
@@ -492,7 +564,7 @@ class ItemListOptions(SettingsPage):
 
 		# enable save button
 		self._parent.enable_save()
-	
+
 		return True
 
 	def _vim_bindings_toggled(self, widget, data=None):
@@ -581,7 +653,7 @@ class ItemListOptions(SettingsPage):
 			try:
 				# make sure entered value is integer
 				new_size = int(text)
-			
+
 			except ValueError:
 				# if entered value is not integer, exception
 				# will be raised and we just skip updating storage
@@ -658,11 +730,19 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_load_directories.set_active(section.get('force_directories'))
 		self._checkbox_show_expanders.set_active(section.get('show_expanders'))
 		self._checkbox_hide_scrollbar.set_active(section.get('hide_horizontal_scrollbar'))
+		self._checkbox_second_extension.set_active(section.get('second_extension'))
 
 		search_modifier = section.get('search_modifier')
 		self._checkbox_control.set_active(search_modifier[0] == '1')
 		self._checkbox_alt.set_active(search_modifier[1] == '1')
 		self._checkbox_shift.set_active(search_modifier[2] == '1')
+
+		# load always visible items
+		always_visible = section.get('always_visible')
+
+		self._always_visible_store.clear()
+		for item in always_visible:
+			self._always_visible_store.append((item,))
 
 		# load column settings
 		map(lambda extension: extension._load_settings(), self._application.column_editor_extensions)
@@ -702,6 +782,7 @@ class ItemListOptions(SettingsPage):
 		section.set('force_directories', self._checkbox_load_directories.get_active())
 		section.set('show_expanders', self._checkbox_show_expanders.get_active())
 		section.set('hide_horizontal_scrollbar', self._checkbox_hide_scrollbar.get_active())
+		section.set('second_extension', self._checkbox_second_extension.get_active())
 
 		search_modifier = "%d%d%d" % (
 								self._checkbox_control.get_active(),
@@ -709,6 +790,10 @@ class ItemListOptions(SettingsPage):
 								self._checkbox_shift.get_active()
 							)
 		section.set('search_modifier', search_modifier)
+
+		# save always visible items
+		always_visible = [ row[0] for row in self._always_visible_store ]
+		section.set('always_visible', always_visible)
 
 		# save column settings
 		map(lambda extension: extension._save_settings(), self._application.column_editor_extensions)

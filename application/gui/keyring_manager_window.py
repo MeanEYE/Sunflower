@@ -19,7 +19,7 @@ class KeyringManagerWindow:
 	def __init__(self, application):
 		self._application = application
 		self._active_keyring = application.keyring_manager.KEYRING_NAME
-		
+
 		# create window
 		self._window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 
@@ -97,10 +97,10 @@ class KeyringManagerWindow:
 		section = self._application.options.section('item_list')
 		keyring_manager = self._application.keyring_manager
 		time_format = section.get('time_format')
-		
+
 		for uid, name, modified in keyring_manager.get_entries():
 			formatted_time = time.strftime(time_format, time.localtime(modified))
-			self._store.append((uid, name, formatted_time)) 
+			self._store.append((uid, name, formatted_time))
 
 	def __delete_event(self, widget, data=None):
 		"""Cleanup on window delete event"""

@@ -11,6 +11,7 @@ import subprocess
 import glib
 import urllib
 import signal
+import fcntl
 
 from menus import MenuManager
 from mounts import MountsManager
@@ -25,6 +26,7 @@ from accelerator_manager import AcceleratorManager
 from keyring import KeyringManager, InvalidKeyringError
 from parameters import Parameters
 from dbus_common import DBus
+from importlib import import_module
 
 from plugin_base.item_list import ItemList
 from plugin_base.rename_extension import RenameExtension
@@ -34,6 +36,7 @@ from widgets.bookmarks_menu import BookmarksMenu
 from tools.advanced_rename import AdvancedRename
 from tools.find_files import FindFiles
 from tools.version_check import VersionCheck
+from tools.disk_usage import DiskUsage
 from config import Config
 
 # try to import argument parser
@@ -59,8 +62,8 @@ class MainWindow(gtk.Window):
 	# continue increasing and will never be reset.
 	version = {
 			'major': 0,
-			'minor': 2,
-			'build': 59,
+			'minor': 3,
+			'build': 60,
 			'stage': 'f'
 		}
 
@@ -150,6 +153,7 @@ class MainWindow(gtk.Window):
 			self.connect('delete-event', self._destroy)
 
 		signal.signal(signal.SIGTERM, self._destroy)
+		signal.signal(signal.SIGINT, self._destroy)
 
 		self.connect('configure-event', self._handle_configure_event)
 		self.connect('window-state-event', self._handle_window_state_event)
@@ -157,6 +161,7 @@ class MainWindow(gtk.Window):
 		# create other interfaces
 		self.indicator = Indicator(self)
 		self.preferences_window = PreferencesWindow(self)
+		self.disk_usage = DiskUsage(self)
 
 		# define local variables
 		self._in_fullscreen = False
@@ -166,11 +171,11 @@ class MainWindow(gtk.Window):
 
 		menu_items = (
 			{
-				'label': _('File'),
+				'label': _('_File'),
 				'name': 'file',
 				'submenu': (
 					{
-						'label': _('New tab'),
+						'label': _('New _tab'),
 						'name': 'new_tab',
 						'type': 'image',
 						'image': 'tab-new',
@@ -182,7 +187,7 @@ class MainWindow(gtk.Window):
 						'type': 'separator',
 					},
 					{
-						'label': _('Create file'),
+						'label': _('Create _file'),
 						'name': 'create_file',
 						'type': 'image',
 						'stock': gtk.STOCK_NEW,
@@ -191,7 +196,7 @@ class MainWindow(gtk.Window):
 						'path': '<Sunflower>/File/CreateFile',
 					},
 					{
-						'label': _('Create directory'),
+						'label': _('Create _directory'),
 						'name': 'create_directory',
 						'type': 'image',
 						'image': 'folder-new',
@@ -240,7 +245,7 @@ class MainWindow(gtk.Window):
 				)
 			},
 			{
-				'label': _('Edit'),
+				'label': _('_Edit'),
 				'submenu': (
 					{
 						'label': _('Cu_t'),
@@ -277,7 +282,7 @@ class MainWindow(gtk.Window):
 						'type': 'separator',
 					},
 					{
-						'label': _('Send to...'),
+						'label': _('_Send to...'),
 						'name': 'send_to',
 						'type': 'image',
 						'image': 'document-send',
@@ -323,7 +328,7 @@ class MainWindow(gtk.Window):
 				),
 			},
 			{
-				'label': _('Mark'),
+				'label': _('_Mark'),
 				'submenu': (
 					{
 						'label': _('_Select all'),
@@ -378,11 +383,11 @@ class MainWindow(gtk.Window):
 				)
 			},
 			{
-				'label': _('Tools'),
+				'label': _('_Tools'),
 				'name': 'tools',
 				'submenu': (
 					{
-						'label': _('Find files'),
+						'label': _('_Find files'),
 						'name': 'find_files',
 						'type': 'image',
 						'image': 'system-search',
@@ -390,31 +395,31 @@ class MainWindow(gtk.Window):
 						'callback': self.show_find_files
 					},
 					{
-						'label': _('Find duplicate files'),
+						'label': _('Find _duplicate files'),
 						'name': 'find_duplicate_files',
 						'path': '<Sunflower>/Tools/FindDuplicateFiles'
 					},
 					{
-						'label': _('Synchronize directories'),
+						'label': _('_Synchronize directories'),
 						'name': 'synchronize_directories',
 						'path': '<Sunflower>/Tools/SynchronizeDirectories'
 					},
 					{'type': 'separator'},
 					{
-						'label': _('Advanced rename'),
+						'label': _('Advanced _rename'),
 						'name': 'advanced_rename',
 						'path': '<Sunflower>/Tools/AdvancedRename',
 						'callback': self.show_advanced_rename,
 					},
 					{'type': 'separator'},
 					{
-						'label': _('Mount manager'),
+						'label': _('_Mount manager'),
 						'name': 'mount_manager',
 						'path': '<Sunflower>/Tools/MountManager',
 						'callback': self.mount_manager.show,
 					},
 					{
-						'label': _('Keyring manager'),
+						'label': _('_Keyring manager'),
 						'name': 'keyring_manager',
 						'path': '<Sunflower>/Tools/KeyringManager',
 						'callback': self.show_keyring_manager,
@@ -422,7 +427,7 @@ class MainWindow(gtk.Window):
 				)
 			},
 			{
-				'label': _('View'),
+				'label': _('_View'),
 				'submenu': (
 					{
 						'label': _('Ful_lscreen'),
@@ -485,14 +490,22 @@ class MainWindow(gtk.Window):
 						'name': 'show_command_entry',
 						'path': '<Sunflower>/View/ShowCommandEntry',
 					},
+					{
+						'label': _('_Horizontal split'),
+						'type': 'checkbox',
+						'active': self.options.get('horizontal_split'),
+						'callback': self._toggle_horizontal_split,
+						'name': 'horizontal_split',
+						'path': '<Sunflower>/View/HorizontalSplit',
+					},
 				)
 			},
 			{
-				'label': _('Commands'),
+				'label': _('_Commands'),
 				'name': 'commands',
 			},
 			{
-				'label': _('Operations'),
+				'label': _('_Operations'),
 				'name': 'operations',
 				'submenu': (
 					{
@@ -502,7 +515,7 @@ class MainWindow(gtk.Window):
 				)
 			},
 			{
-				'label': _('Help'),
+				'label': _('_Help'),
 				'submenu': (
 					{
 						'label': _('_Home page'),
@@ -564,7 +577,7 @@ class MainWindow(gtk.Window):
 
 		toolbar = self.toolbar_manager.get_toolbar()
 		toolbar.set_property('no-show-all', not self.options.get('show_toolbar'))
-		
+
 
 		# bookmarks menu
 		self.bookmarks = BookmarksMenu(self)
@@ -586,7 +599,7 @@ class MainWindow(gtk.Window):
 		self.menu_tools = menu_item_tools.get_submenu()
 
 		# create notebooks
-		self._paned = gtk.HPaned()
+		self._paned = gtk.VPaned() if self.options.get('horizontal_split') else gtk.HPaned()
 
 		rc_string = (
 				'style "paned-style" {GtkPaned::handle-size = 4}'
@@ -690,13 +703,13 @@ class MainWindow(gtk.Window):
 		vbox.pack_start(self.menu_bar, expand=False, fill=False, padding=0)
 		vbox.pack_start(self.toolbar_manager.get_toolbar(), expand=False, fill=False, padding=0)
 
-		vbox2 = gtk.VBox(False, 4)
-		vbox2.set_border_width(3)
-		vbox2.pack_start(self._paned, expand=True, fill=True, padding=0)
-		vbox2.pack_start(self.command_entry_bar, expand=False, fill=False, padding=0)
-		vbox2.pack_start(self.command_bar, expand=False, fill=False, padding=0)
+		self._vbox2 = gtk.VBox(False, 4)
+		self._vbox2.set_border_width(3)
+		self._vbox2.pack_start(self._paned, expand=True, fill=True, padding=0)
+		self._vbox2.pack_start(self.command_entry_bar, expand=False, fill=False, padding=0)
+		self._vbox2.pack_start(self.command_bar, expand=False, fill=False, padding=0)
 
-		vbox.pack_start(vbox2, True, True, 0)
+		vbox.pack_start(self._vbox2, True, True, 0)
 		self.add(vbox)
 
 		# create bookmarks menu
@@ -732,6 +745,9 @@ class MainWindow(gtk.Window):
 		# save window properties
 		self._save_window_position()
 		self._save_active_notebook()
+
+		# terminate all disk usage threads
+		self.disk_usage.cancel_all()
 
 		# lock keyring
 		self.keyring_manager.lock_keyring()
@@ -882,19 +898,43 @@ class MainWindow(gtk.Window):
 			# get selected item from the left list
 			left_selection_short = left_object._get_selection(True)
 			left_selection_long = left_object._get_selection(False)
+			left_path_short = os.path.basename(left_object.path)
+			left_path_long = left_object.path
+			if not left_selection_short:
+				left_selection_short = "."
+				left_selection_long = left_object.path
 
 		if hasattr(right_object, '_get_selection'):
 			# get selected item from the left list
 			right_selection_short = right_object._get_selection(True)
 			right_selection_long = right_object._get_selection(False)
+			right_path_short = os.path.basename(right_object.path)
+			right_path_long = right_object.path
+			if not right_selection_short:
+				right_selection_short = "."
+				right_selection_long = right_object.path
 
 		# get universal 'selected item' values
 		if self.get_active_object() is left_object:
 			selection_short = left_selection_short
 			selection_long = left_selection_long
+			path_short = left_path_short
+			path_long = left_path_long
+			selection_list_short = left_object._get_selection_list(False, True)
+			selection_list_long = left_object._get_selection_list(False, False)
+			if not selection_list_short:
+				selection_list_short = ['.']
+				selection_list_long = [left_object.path]
 		else:
 			selection_short = right_selection_short
 			selection_long = right_selection_long
+			path_short = right_path_short
+			path_long = right_path_long
+			selection_list_short = right_object._get_selection_list(False, True)
+			selection_list_long = right_object._get_selection_list(False, False)
+			if not selection_list_short:
+				selection_list_short = ['.']
+				selection_list_long = [right_object.path]
 
 		# replace command
 		command = command.replace('%l', str(left_selection_short))
@@ -903,6 +943,25 @@ class MainWindow(gtk.Window):
 		command = command.replace('%R', str(right_selection_long))
 		command = command.replace('%s', str(selection_short))
 		command = command.replace('%S', str(selection_long))
+		command = command.replace('%d', str(path_short))
+		command = command.replace('%D', str(path_long))
+
+		# TODO: Simplify this.
+		if selection_list_short:
+			command = command.replace('%m', '"' + '" "'.join(selection_list_short) + '"')
+
+		if selection_list_short and (len(selection_list_short) > 1 or selection_list_short[0] != selection_short):
+			command = command.replace('%u', '"' + '" "'.join(selection_list_short) + '"')
+		else:
+			command = command.replace('%u', '"' + left_selection_short + '" "' + right_selection_short + '"')
+
+		if selection_list_long:
+			command = command.replace('%M', '"' + '" "'.join(selection_list_long) + '"')
+
+		if selection_list_long and (len(selection_list_long) > 1 or selection_list_long[0] != selection_long):
+			command = command.replace('%U', '"' + '" "'.join(selection_list_long) + '"')
+		else:
+			command = command.replace('%U', '"' + left_selection_long + '" "' + right_selection_long + '"')
 
 		# execute command using programs default handler
 		self.execute_command(widget, command)
@@ -986,6 +1045,32 @@ class MainWindow(gtk.Window):
 
 		return True
 
+	def _toggle_horizontal_split(self, widget=None, data=None):
+		menu_item = self.menu_manager.get_item_by_name('horizontal_split')
+
+		# NOTE: Calling set_active emits signal causing deadloop,
+		# to work around this issue we check if calling widget is menu item.
+		if widget is menu_item:
+			horizontal_split = menu_item.get_active()
+			self.options.set('horizontal_split', horizontal_split)
+
+			self._paned.remove(self.left_notebook)
+			self._paned.remove(self.right_notebook)
+			self._vbox2.remove(self._paned)
+
+			self._paned = gtk.VPaned() if horizontal_split else gtk.HPaned()
+			self._paned.pack1(self.left_notebook, resize=True, shrink=False)
+			self._paned.pack2(self.right_notebook, resize=True, shrink=False)
+
+			self._vbox2.pack_start(self._paned)
+			self._vbox2.reorder_child(self._paned, 0)
+
+			self._paned.show()
+		else:
+			menu_item.set_active(not self.options.get('horizontal_split'))
+
+		return True
+
 	def _toggle_show_command_bar(self, widget, data=None):
 		"""Show/hide command bar"""
 		menu_item = self.menu_manager.get_item_by_name('show_command_bar')
@@ -999,7 +1084,7 @@ class MainWindow(gtk.Window):
 
 		else:
 			menu_item.set_active(not self.options.get('show_command_bar'))
-		
+
 		return True
 
 	def _toggle_show_command_entry(self, widget, data=None):
@@ -1124,14 +1209,13 @@ class MainWindow(gtk.Window):
 		for file_name in plugin_files:
 			try:
 				# determine whether we need to load user plugin or system plugin
-				user_plugin_exists = os.path.exists(os.path.join(self.user_plugin_path, file_name)) 
+				user_plugin_exists = os.path.exists(os.path.join(self.user_plugin_path, file_name))
 				load_user_plugin = user_plugin_exists and file_name not in self.protected_plugins
 
 				plugin_base_module = 'user_plugins' if load_user_plugin else 'plugins'
 
 				# import module
-				__import__('{0}.{1}.plugin'.format(plugin_base_module, file_name))
-				plugin = sys.modules['{0}.{1}.plugin'.format(plugin_base_module, file_name)]
+				plugin = import_module('{0}.{1}.plugin'.format(plugin_base_module, file_name))
 
 				# call module register_plugin method
 				if hasattr(plugin, 'register_plugin'):
@@ -1274,7 +1358,7 @@ class MainWindow(gtk.Window):
 		if hasattr(active_object, '_open_in_new_tab'):
 			active_object._open_in_new_tab()
 			result = True
-		
+
 		return result
 
 	def _command_cut_to_clipboard(self, widget=None, data=None):
@@ -1533,7 +1617,7 @@ class MainWindow(gtk.Window):
 		# read all bookmarks
 		bookmark_list = self.bookmark_options.get('bookmarks')
 
-		# check if index is valid 
+		# check if index is valid
 		if index == 0:
 			path = user.home
 
@@ -1706,7 +1790,7 @@ class MainWindow(gtk.Window):
 										gtk.DIALOG_DESTROY_WITH_PARENT,
 										gtk.MESSAGE_INFO,
 										gtk.BUTTONS_OK,
-										_("First level of compared directories is identical.")
+										_('First level of compared directories is identical.')
 									)
 				dialog.run()
 				dialog.destroy()
@@ -1733,11 +1817,16 @@ class MainWindow(gtk.Window):
 
 			else:
 				# check for lockfile
-				if os.path.exists(lock_file):
+				try:
+					lock = open(lock_file, 'w')
+					fcntl.lockf(lock, fcntl.LOCK_EX|fcntl.LOCK_NB)
+					lock.write(str(os.getpid()))
+				except IOError:
+					print "Another copy of Sunflower is already running"
 					sys.exit()
-
-				else:
-					open(lock_file, 'w').close()
+				except OSError as oserror:
+					print "Can't create lock file {}. {}".format(lock_file, oserror)
+					sys.exit()
 
 		# create dbus interface
 		if DBus.is_available():
@@ -1810,7 +1899,7 @@ class MainWindow(gtk.Window):
 		if options is None:
 			options = Parameters()
 
-		# create plugin object 
+		# create plugin object
 		new_tab = plugin_class(self, notebook, options)
 
 		# add page to notebook
@@ -1971,7 +2060,7 @@ class MainWindow(gtk.Window):
 			elif path[0] != os.sep:
 				path = os.path.join(active_object.path, path)
 
-			# if resulting path is a directory, change 
+			# if resulting path is a directory, change
 			if active_object.get_provider().is_dir(path):
 				active_object.change_path(path)
 				active_object.focus_main_object()
@@ -2021,7 +2110,7 @@ class MainWindow(gtk.Window):
 			tab['class'] = page._name
 
 			# add tab to list
-			tab_list.append(tab)		
+			tab_list.append(tab)
 
 		# store tabs to configuration
 		section = self.tab_options.create_section(section)
@@ -2145,7 +2234,7 @@ class MainWindow(gtk.Window):
 		group.set_accelerator('restore_handle_position', keyval('Home'), gtk.gdk.MOD1_MASK)
 		group.set_accelerator('move_handle_left', keyval('Page_Up'), gtk.gdk.MOD1_MASK)
 		group.set_accelerator('move_handle_right', keyval('Page_Down'), gtk.gdk.MOD1_MASK)
-		
+
 		# expose object
 		self._accel_group = group
 
@@ -2259,7 +2348,9 @@ class MainWindow(gtk.Window):
 					'force_directories': False,
 					'show_expanders': False,
 					'hide_horizontal_scrollbar': False,
-					'breadcrumbs': 2
+					'breadcrumbs': 2,
+					'second_extension': False,
+					'always_visible': []
 				})
 
 		# create default operation options
@@ -2274,7 +2365,8 @@ class MainWindow(gtk.Window):
 					'trash_files': True,
 					'reserve_size': False,
 					'automount_start': False,
-					'automount_insert': False
+					'automount_insert': False,
+					'follow_symlink': False
 				})
 
 		# create default create file/directory dialog options
@@ -2306,6 +2398,11 @@ class MainWindow(gtk.Window):
 					'terminal_command': False
 				})
 
+		# create default viewer options
+		self.options.create_section('viewer').update({
+					'word_wrap': False
+				})
+
 		# create default options for bookmarks
 		self.bookmark_options.update({
 					'add_home': True,
@@ -2335,7 +2432,9 @@ class MainWindow(gtk.Window):
 					'media_preview': False,
 					'active_notebook': 0,
 					'size_format': common.SizeFormat.SI,
-					'multiple_instances': False
+					'multiple_instances': False,
+					'network_path_completion': True,
+					'horizontal_split': False
 				})
 
 		# set default commands
@@ -2351,11 +2450,12 @@ class MainWindow(gtk.Window):
 
 	def restore_handle_position(self, widget=None, data=None):
 		"""Restore handle position"""
-		left_width = self.left_notebook.allocation[2]
-		right_width = self.right_notebook.allocation[2]
+		position = 3 if self.options.get('horizontal_split') else 2
+		left = self.left_notebook.allocation[position]
+		right = self.right_notebook.allocation[position]
 
 		# calculate middle position
-		new_position = (left_width + right_width) / 2
+		new_position = (left + right) / 2
 		self._paned.set_position(new_position)
 
 		return True
@@ -2498,6 +2598,10 @@ class MainWindow(gtk.Window):
 		# apply media preview settings
 		media_preview = self.menu_manager.get_item_by_name('fast_media_preview')
 		media_preview.set_active(self.options.get('media_preview'))
+
+		# horizontal split
+		horizontal_split = self.menu_manager.get_item_by_name('horizontal_split')
+		horizontal_split.set_active(self.options.get('horizontal_split'))
 
 		# recreate bookmarks menu
 		self._create_bookmarks_menu()
@@ -2644,7 +2748,7 @@ class MainWindow(gtk.Window):
 	def register_popup_menu_action(self, mime_types, menu_item):
 		"""Register handler method for popup menu which will be
 		displayed if file type matches any string in mime_types.
-		
+
 		mime_types - tuple containing mime type strings
 		menu_item - menu item to be included in additional menu
 		"""
@@ -2667,12 +2771,26 @@ class MainWindow(gtk.Window):
 
 		return result
 
+	def get_provider_by_path(self, path):
+		"""Return provider class related to path"""
+		protocol = 'file' if '://' not in path else path.split('://', 1)[0]
+		return self.get_provider_by_protocol(protocol)
+
 	def get_provider_by_protocol(self, protocol):
 		"""Return provider class specified by protocol"""
 		result = None
 
 		if protocol in self.provider_classes.keys():
 			result = self.provider_classes[protocol]
+
+		return result
+
+	def get_provider_for_archive(self, mime_type):
+		"""Return provider class for specified archive mime type."""
+		result = None
+
+		if self.archive_provider_classes.has_key(mime_type):
+			result = self.archive_provider_classes[mime_type]
 
 		return result
 
@@ -2690,11 +2808,11 @@ class MainWindow(gtk.Window):
 		"""Get list of extension classes for specified mime type"""
 		result = []
 		is_subset = self.associations_manager.is_mime_type_subset
-		
+
 		# get all classes that match any of the mime types defined
 		for mime_types, ExtensionClass in self.viewer_extensions_classes:
 			matched_types = filter(lambda iter_mime_type: is_subset(mime_type, iter_mime_type), mime_types)
-			
+
 			if len(matched_types) > 0:
 				result.append(ExtensionClass)
 
@@ -2763,6 +2881,10 @@ class MainWindow(gtk.Window):
 	def is_clipboard_item_list(self):
 		"""Check if clipboard data is URI list"""
 		return self.clipboard.wait_is_uris_available()
+
+	def is_archive_supported(self, mime_type):
+		"""Check if specified archive mime type is supported."""
+		return self.archive_provider_classes.has_key(mime_type)
 
 	def show_about_window(self, widget=None, data=None):
 		"""Show about window"""

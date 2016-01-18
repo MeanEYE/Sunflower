@@ -11,12 +11,21 @@ class CellRendererEmblems(gtk.CellRenderer):
 						'Emblem list',
 						'List of icon names to display',
 						gobject.PARAM_READWRITE
+					),
+				'is-link': (
+						gobject.TYPE_BOOLEAN,
+						'Link indicator',
+						'Denotes if item is a link or regular file',
+						False,
+						gobject.PARAM_READWRITE
 					)
 			}
 
 	def __init__(self):
 		gtk.CellRenderer.__init__(self)
+
 		self.emblems = None
+		self.is_link = None
 		self.icon_size = 16
 		self.spacing = 2
 		self.padding = 1
@@ -26,6 +35,9 @@ class CellRendererEmblems(gtk.CellRenderer):
 		if prop.name == 'emblems':
 			self.emblems = value
 
+		elif prop.name == 'is-link':
+			self.is_link = value
+
 		else:
 			setattr(self, prop.name, value)
 
@@ -34,6 +46,9 @@ class CellRendererEmblems(gtk.CellRenderer):
 		if prop.name == 'emblems':
 			result = self.emblems
 
+		elif prop.name == 'is-link':
+			result = self.is_link
+
 		else:
 			result = getattr(self, prop.name)
 
@@ -41,15 +56,19 @@ class CellRendererEmblems(gtk.CellRenderer):
 
 	def do_render(self, window, widget, background_area, cell_area, expose_area, flags):
 		"""Render emblems on tree view."""
-		if self.emblems is None or len(self.emblems) == 0:
+		if not self.is_link and (self.emblems is None or len(self.emblems) == 0):
 			return
 
 		# cache constants locally
 		icon_size = self.icon_size
 		spacing = self.spacing
-		emblems = self.emblems
+		emblems = self.emblems or []
 		icon_theme = gtk.icon_theme_get_default()
 		context = window.cairo_create()
+
+		# add symbolic link emblem if needed
+		if self.is_link:
+			emblems.insert(0, 'emblem-symbolic-link')
 
 		# position of next icon
 		pos_x = cell_area[0] + cell_area[2]

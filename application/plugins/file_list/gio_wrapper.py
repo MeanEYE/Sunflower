@@ -19,6 +19,14 @@ class File:
 		elif mode == Mode.APPEND:
 			self._resource = gio.File(path).append_to()
 
+	def __enter__(self):
+		"""Set opened file as runtime context"""
+		return self._resource
+
+	def __exit__(self, exc_type, exc_val, exc_tb):
+		"""Close file on exit from context"""
+		self.close()
+
 	def close(self):
 		"""Close file"""
 		self._resource.close()
@@ -56,7 +64,7 @@ class File:
 		"""Truncate the file's size"""
 		if size is None:
 			size = self.tell()
-	
+
 		if self._resource.can_truncate():
 			self._resource.truncate(size)
 

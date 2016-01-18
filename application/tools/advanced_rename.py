@@ -229,6 +229,3 @@ class AdvancedRename:
 				operation.set_source_queue(event_queue)
 
 			operation.start()
-
-			# destroy window
-			self._close_window()

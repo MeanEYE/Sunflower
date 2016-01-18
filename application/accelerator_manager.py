@@ -77,7 +77,7 @@ class AcceleratorManager:
 		result = []
 		groups = self._get_group_by_type(group_type)
 
-		for group in self._groups:
+		for group in groups:
 			result.extend(group.get_collisions(keyval, modifier))
 
 		return result
@@ -90,7 +90,7 @@ class AcceleratorManager:
 		# add group name to the list
 		if group._name not in self._group_names:
 			self._group_names.append(group._name)
-		
+
 		# add group to internal list
 		self._groups.append(group)
 
@@ -159,7 +159,7 @@ class AcceleratorManager:
 
 			if group is not None:
 				accelerator = group.get_accelerator(name, primary)
-				
+
 		return accelerator
 
 	def schedule_groups_for_deactivation(self, groups, owner):

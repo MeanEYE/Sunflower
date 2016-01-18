@@ -18,6 +18,8 @@ class SystemTerminal(Terminal):
 	def __init__(self, parent, notebook, options):
 		Terminal.__init__(self, parent, notebook, options)
 
+		self._file_list_button.set_tooltip_text(_('Open current directory'))
+
 		# variable to store process id
 		self._pid = None
 
@@ -71,7 +73,7 @@ class SystemTerminal(Terminal):
 		# parse command
 		terminal_command = self._parent.options.section('terminal').get(command_version)
 		terminal_command = shlex.split(terminal_command.format(socket_id, arguments_string))
-		
+
 		# execute process
 		process = subprocess.Popen(terminal_command, cwd=self.path)
 		self._pid = process.pid
@@ -93,7 +95,7 @@ class SystemTerminal(Terminal):
 
 	def __update_path_from_pid(self):
 		"""Update terminal path from child process"""
-		try: 
+		try:
 			if self._pid is not None and os.path.isdir('/proc/{0}'.format(self._pid)):
 				self.path = os.readlink('/proc/{0}/cwd'.format(self._pid))
 				self._options.set('path', self.path)
@@ -115,3 +117,12 @@ class SystemTerminal(Terminal):
 		"""Clean up before closing tab"""
 		Terminal._handle_tab_close(self)
 		self.__update_path_from_pid()
+
+	def _create_file_list(self, widget=None, data=None):
+		"""Create file list in parent notebook"""
+		self.__update_path_from_pid()
+		DefaultList = self._parent.plugin_classes['file_list']
+		options = Parameters()
+		options.set('path', self.path)
+		self._parent.create_tab(self._notebook, DefaultList, options)
+		return True

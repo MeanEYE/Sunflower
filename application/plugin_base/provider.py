@@ -31,7 +31,7 @@ FileInfoExtended = namedtuple(
 					'device',  # device inode resides on
 					'inode'  # inode number
 				])
-				
+
 
 SystemSize = namedtuple(
 				'SystemSize',
@@ -70,6 +70,7 @@ class Mode:
 	READ = 0
 	WRITE = 1
 	APPEND = 2
+	READ_APPEND = 3
 
 
 class TrashError(Exception): pass
@@ -79,22 +80,32 @@ class Provider:
 	"""Abstract provider class used to manipulate items"""
 
 	is_local = True  # if provider handles local files
-	protocol = None # name of supported protocol
+	protocol = None  # name of supported protocol
 	archives = ()  # list of supported archive types
 
 	def __init__(self, parent, path=None, selection=None):
 		self._parent = parent
 
-		self._path = path
-		self._selection = None
+		self._path = path  # only used for archives and operations
+		self._selection = selection
+		self._handle = None
 
 		# we need only existing items in selection list
 		if selection is not None:
 			self._selection = [item for item in selection if self.exists(item, path)]
 
-	def _real_path(self, path, relative_to=None):
+	def real_path(self, path, relative_to=None):
 		"""Commonly used function to get real path"""
 		return path if relative_to is None else os.path.join(relative_to, path)
+
+	def set_archive_handle(self, handle):
+		"""Set archive file handle."""
+		self._handle = handle
+
+	def release_archive_handle(self):
+		"""Release archive handle when it's no longer needed."""
+		if self._handle is not None:
+			self._handle.close()
 
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
@@ -114,15 +125,19 @@ class Provider:
 
 	def link(self, existing_path, destination_path, relative_to=None, symbolic=True):
 		"""Create hard or symbolic link from existing path.
-		
+
 		Please note that relative_to parameter only applies to destination_path. It
 		should not be applied to existing_path parameter.
-		
+
 		"""
 		pass
 
 	def unlink(self, path, relative_to=None):
 		"""Unlink given path"""
+		pass
+
+	def readlink(self, path, relative_to=None):
+		"""Return a string representing the path to which the symbolic link points."""
 		pass
 
 	def remove_directory(self, path, recursive, relative_to=None):
@@ -145,8 +160,14 @@ class Provider:
 		"""Open path in specified mode and return its handle"""
 		pass
 
-	def get_stat(self, path, relative_to=None, extended=False):
-		"""Return file statistics"""
+	def get_stat(self, path, relative_to=None, extended=False, follow=False):
+		"""Return file statistics.
+
+		This method returns FileInfo or FileInfoExtended objects for specified
+		path. Unless otherwise specified by `follow` parameter this method is not
+		suppose to follow symlinks.
+
+		"""
 		pass
 
 	def get_directory_size(self, path, relative_to=None):
@@ -202,6 +223,10 @@ class Provider:
 
 	def trash_path(self, path, relative_to=None):
 		"""Instead of deleting, move path to the trash"""
+		pass
+
+	def move_path(self, source, destination, relative_to=None):
+		"""Move path on same file system to a different parent node """
 		pass
 
 	def rename_path(self, source, destination, relative_to=None):

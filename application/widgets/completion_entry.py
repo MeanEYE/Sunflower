@@ -2,67 +2,68 @@ import os
 import re
 import gtk
 
+
 class PathCompletionEntry(gtk.Entry):
-	"""Entry with path completion"""
 	number_split = re.compile('([0-9]+)')
 
 	def __init__(self, application):
 		gtk.Entry.__init__(self)
+
+		# store application locally for later use
 		self._application = application
-		entry_completion = gtk.EntryCompletion()
-		self.set_completion(entry_completion)
-		liststore = gtk.ListStore(str, str)
-		liststore.set_sort_column_id(1, gtk.SORT_ASCENDING)
-		liststore.set_sort_func(1, self._sort_list)
-		entry_completion.set_model(liststore)
-		entry_completion.set_match_func(self._match_completion)
-		cell = gtk.CellRendererText()
-		entry_completion.pack_start(cell)
-		entry_completion.add_attribute(cell, 'text', 1)
-		entry_completion.connect('match-selected', self._completion_selected)
-		self.connect('changed', self._fill_completion_list, entry_completion)
+		self._network_path_completion = self._application.options.get('network_path_completion')
 
-	def _fill_completion_list(self, entry, entry_completion):
-		"""Populate a list of file names from entered path"""
-		model = entry_completion.get_model()
-		model.clear()
-		path = entry.get_text()
-		dirname = os.path.dirname(path)
+		# create suggestion list
+		self._store = gtk.ListStore(str)
+		self._store.set_sort_column_id(0, gtk.SORT_ASCENDING)
+		self._store.set_sort_func(0, self._sort_list)
 
-		if '://' not in path:
+		# create entry field with completion
+		self._completion = gtk.EntryCompletion()
+		self._completion.set_model(self._store)
+		self._completion.set_text_column(0)
+		self._completion.set_inline_completion(True)
+		self._completion.set_inline_selection(True)
+
+		# configure entry
+		self.set_completion(self._completion)
+
+		# TODO: Add delayed populate to avoid spamming
+		self.connect('changed', self._populate_list)
+
+	def _populate_list(self, widget, data=None):
+		"""Populate a list of file names from entered path."""
+		self._store.clear()
+		original_path = widget.get_text()
+		directory = os.path.dirname(original_path)
+
+		# separate protocol from path
+		if '://' not in original_path:
 			scheme = 'file'
 
 		else:
-			data = path.split('://', 1)
-			scheme = data[0]
+			scheme = original_path.split('://', 1)[1]
 
-		ProviderClass = self._application.get_provider_by_protocol(scheme)
+		# get associated provider
+		Provider = self._application.get_provider_by_protocol(scheme)
+		can_lookup = Provider.is_local or self._network_path_completion
 
-		if ProviderClass is not None:
-			provider = ProviderClass(self._application)
-			if provider.exists(dirname):
-				for item in provider.list_dir(dirname):
-					if provider.is_dir(item, relative_to=dirname):
-						model.append([os.path.join(dirname, item), item])
+		if Provider is not None and can_lookup:
+			provider = Provider(self._application)
 
-	def _match_completion(self, completion, key, iter):
-		"""Match function for EntryCompletion"""
-		model = completion.get_model()
-		dir = model.get_value(iter, 0)
-		key = completion.get_entry().get_text()
-		return True if dir and dir.startswith(key) else False
+			# make sure path exists
+			if not provider.exists(directory):
+				return
 
-	def _completion_selected(self, completion, model, iter):
-		"""Paste selected path to entry"""
-		self.set_text(model[iter][0])
-		self.set_position(-1)
-		return True
+			# populate list
+			item_list = provider.list_dir(directory)
+			item_list = filter(lambda path: provider.is_dir(path, relative_to=directory), item_list)
+			map(lambda path: self._store.append((os.path.join(directory, path),)), item_list)
 
 	def _sort_list(self, item_list, iter1, iter2, data=None):
-		"""Compare two items for sorting process"""
-
-		value1 = item_list.get_value(iter1, 1)
-		value2 = item_list.get_value(iter2, 1)
+		"""Compare two items for sorting process."""
+		value1 = item_list.get_value(iter1, 0)
+		value2 = item_list.get_value(iter2, 0)
 
 		value1 = value1.lower()
 		value1 = [int(part) if part.isdigit() else part for part in self.number_split.split(value1)]

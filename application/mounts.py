@@ -29,8 +29,7 @@ class MountsManager:
 
 		# get list of mounted volumes
 		for mount in self._volume_monitor.get_mounts():
-			if mount.get_volume() is None:
-				self._add_mount(self._volume_monitor, mount)
+			self._add_mount(self._volume_monitor, mount)
 
 		# update menus
 		self.window._menu_updated()
@@ -46,7 +45,7 @@ class MountsManager:
 		if volume is not None:
 			self.window._volume_mounted(volume)
 
-		# add mount to the list
+		# add mount to the list in Mount Manager window
 		self.window._notify_mount_add(mount_icon, mount.get_name(), mount_uri)
 
 		# add bookmark menu item
@@ -104,7 +103,7 @@ class MountsManager:
 		"""Perform unmount by URI"""
 		if uri in self._mounts:
 			self._unmount(self._mounts[uri])
-		
+
 	def _unmount(self, mount):
 		"""Perform unmounting"""
 		if mount.can_unmount():

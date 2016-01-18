@@ -3,7 +3,7 @@ import gtk
 
 class SettingsPage(gtk.VBox):
 	"""Abstract class used to build pages in preferences window."""
-	
+
 	def __init__(self, parent, application, name, title):
 		gtk.VBox.__init__(self, False, 0)
 
@@ -15,10 +15,10 @@ class SettingsPage(gtk.VBox):
 		# configure self
 		self.set_spacing(5)
 		self.set_border_width(0)
-		
+
 		# add page to preferences window
 		self._parent.add_tab(self._page_name, self._page_title, self)
-		
+
 	def _load_options(self):
 		"""Load options and update interface"""
 		pass

@@ -89,11 +89,15 @@ class AcceleratorOptions(SettingsPage):
 		label_warning.set_line_wrap(True)
 		label_warning.connect('size-allocate', self._adjust_label)
 
+		label_note = gtk.Label(_('Double click on accelerator to assign new one.'))
+		label_note.set_alignment(0, 0)
+
 		# pack interface
 		container.add(self._list)
 
 		self.pack_start(label_warning, False, False, 0)
 		self.pack_start(container, True, True, 0)
+		self.pack_start(label_note, False, False, 0)
 
 	def __find_iter_by_group_name(self, group_name):
 		"""Find group iter by its name"""
@@ -141,21 +145,47 @@ class AcceleratorOptions(SettingsPage):
 		# enable save button
 		self._parent.enable_save(show_restart=True)
 
+	def __check_collisions(self, keyval, modifier):
+		"""Check specified keyval/modifier combination against other key bindings for collisions."""
+		result = []
+		accelerator_manager = self._application.accelerator_manager
+
+		# don't check empty values
+		if (keyval, modifier) == (0, 0):
+			return result
+
+		# check against already defined accelerators
+		for row in self._accels:
+			group_name = self._accels.get_value(row.iter, Column.NAME)
+			group = accelerator_manager._get_group_by_name(group_name)
+
+			for child in row.iterchildren():
+				name = self._accels.get_value(child.iter, Column.NAME)
+				p_key = self._accels.get_value(child.iter, Column.PRIMARY_KEY)
+				p_mod = self._accels.get_value(child.iter, Column.PRIMARY_MODS)
+				s_key = self._accels.get_value(child.iter, Column.SECONDARY_KEY)
+				s_mod = self._accels.get_value(child.iter, Column.SECONDARY_MODS)
+
+				if (keyval, modifier) == (p_key, p_mod):
+					result.append((group, name, True))
+				if (keyval, modifier) == (s_key, s_mod):
+					result.append((group, name, False))
+
+		return result
+
 	def __accel_edited(self, widget, path, keyval, modifier, hwcode, primary):
 		"""Handle editing accelerator"""
 		selected_iter = self._accels.get_iter(path)
 		accelerator_label = gtk.accelerator_get_label(keyval, modifier)
 
-		# check if new accelerator has collisions
-		accelerator_manager = self._application.accelerator_manager
-		collisions = accelerator_manager.check_collisions(keyval, modifier, GroupType.ALL_GROUPS) 
+		# get list of collisions
+		collisions = self.__check_collisions(keyval, modifier)
 
+		# ask user what to do with collisions
 		if len(collisions) > 0:
-			# ask user what to do with collisions
 			method_list = []
 			for group, method_name, colliding_primary in collisions:
 				method_list.append(group.get_method_title(method_name))
-
 			methods = '\n'.join([method_name for method_name in method_list])
 
 			# show dialog
@@ -200,7 +230,16 @@ class AcceleratorOptions(SettingsPage):
 		accel_iter = self._accels.get_iter(path)
 
 		if accel_iter is not None:
-			self._edit_accel(accel_iter, 0, 0, primary)
+			column_key = Column.PRIMARY_KEY if primary else Column.SECONDARY_KEY
+			column_mods = Column.PRIMARY_MODS if primary else Column.SECONDARY_MODS
+
+			keyval = self._accels.get_value(accel_iter, column_key)
+			modifier = self._accels.get_value(accel_iter, column_mods)
+
+			if keyval == 0 and modifier == 0:
+				self.__accel_edited(widget, path, gtk.keysyms.BackSpace, 0, None, primary)
+			else:
+				self.__change_accelerator(accel_iter, 0, 0, primary)
 
 	def _populate_list(self):
 		"""Update accelerator list"""
@@ -277,12 +316,12 @@ class AcceleratorOptions(SettingsPage):
 	def _save_options(self):
 		"""Method called when save button is clicked"""
 		manager = self._application.accelerator_manager
-		
+
 		# iterate over groups
 		for row in self._accels:
 			group_name = self._accels.get_value(row.iter, Column.NAME)
 			children = row.iterchildren()
-			
+
 			# store accelerators for current group
 			for child in children:
 				name = self._accels.get_value(child.iter, Column.NAME)
@@ -298,7 +337,7 @@ class AcceleratorOptions(SettingsPage):
 									primary=True,
 									can_overwrite=True
 								)
-				
+
 				# save secondary accelerator
 				manager._save_accelerator(
 									group_name,
@@ -310,4 +349,4 @@ class AcceleratorOptions(SettingsPage):
 									primary=False,
 									can_overwrite=True
 								)
-				
+

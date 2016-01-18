@@ -15,7 +15,7 @@ Sunflower package can be downloaded from following locations:
 * [Gentoo](http://packages.gentoo.org/package/x11-misc/sunflower)
     Installation: `emerge --ask x11-misc/sunflower`
 
-[Official packages can be downloaded from here](http://sunflower-fm.org/pub) or releases page above.
+[Official packages can be downloaded from here](http://sunflower-fm.org/download) or releases page above.
 
 ### Plugins
 
@@ -29,7 +29,7 @@ Plugins can be installed locally to: `~/.config/sunflower/user_plugins/<plugin_n
 ### How to contribute
 You can be a part of this project in many ways. We suggest posting on our mailing list or visiting our IRC channel on FreeNode and we'll try to help you get started.
 
-And as usual testers are more than welcome.
+And as usual testers are more than welcome. If you wish to help translate program to your language please join translation team(s) on [Transifex](http://transifex.com/projects/p/sunflower/).
 
 ### Staying in touch
 Preferred way of getting in touch with us is through [mailing list](https://groups.google.com/forum/#!forum/sunflower-fm).
@@ -37,6 +37,6 @@ Preferred way of getting in touch with us is through [mailing list](https://grou
 I like talking to people a lot so please feel free to contact me any time. You can always follow me on my [twitter account](http://twitter.com/MeanEYE_rcf) and [Google+](http://gplus.to/MeanEYE). We also have IRC channel, `#sunflower` on `irc.freenode.org`. Central place for news is now on Google+ [page](https://plus.google.com/104972396836379309898).
 
 ### Screenshots
-Check out [screenshots](https://picasaweb.google.com/MeanEYE.rcf/Sunflower).
+Check out [screenshots](http://sunflower-fm.org/screenshots).
 
 Please note that screen shots and videos are months old, but they will help you know a little bit more what you are getting with this program. 

@@ -14,10 +14,17 @@ class DefaultFindFiles(FindExtension):
 		self._pattern = '*'
 		self._compare_method = fnmatch.fnmatch
 
+		# prepare options
+		plugin_options = parent._application.plugin_options
+		self._options = plugin_options.create_section(self.__class__.__name__)
+
+		# connect notify signal
+		parent.connect('notify-start', self.__handle_notify_start)
+
 		# enabled by default
 		self._checkbox_active.set_active(True)
 
-		# help
+		# create label showing pattern help
 		label_help = gtk.Label()
 		label_help.set_alignment(0, 0)
 		label_help.set_use_markup(True)
@@ -41,10 +48,9 @@ class DefaultFindFiles(FindExtension):
 		label_pattern = gtk.Label(_('Search for:'))
 		label_pattern.set_alignment(0, 0.5)
 
-		self._entry_pattern = gtk.Entry()
-		self._entry_pattern.set_text('*')
+		self._entries = gtk.ListStore(str)
+		self._entry_pattern = gtk.ComboBoxEntry(model=self._entries)
 		self._entry_pattern.connect('changed', self.__handle_pattern_change)
-		self._entry_pattern.connect('activate', self._parent.find_files)
 
 		self._checkbox_case_sensitive = gtk.CheckButton(_('Case sensitive'))
 		self._checkbox_case_sensitive.connect('toggled', self.__handle_case_sensitive_toggle)
@@ -66,16 +72,46 @@ class DefaultFindFiles(FindExtension):
 
 		self.vbox.pack_start(hbox, True, True, 0)
 
+		# load saved values
+		self._load_history()
+		self._pattern = self._entry_pattern.get_active_text()
+		self._case_sensitive = False
+
 	def __handle_case_sensitive_toggle(self, widget, data=None):
 		"""Handle toggling case sensitive check box"""
 		self._compare_method = (
 							fnmatch.fnmatch,
 							fnmatch.fnmatchcase
 						)[widget.get_active()]
+		self._case_sensitive = widget.get_active()
 
 	def __handle_pattern_change(self, widget, data=None):
 		"""Handle changing pattern"""
-		self._pattern = widget.get_text()
+		self._pattern = widget.child.get_text()
+
+	def __handle_notify_start(self, data=None):
+		"""Handle starting search."""
+		entries = self._options.get('patterns') or []
+
+		# insert pattern to search history
+		if self._pattern is not None and self._pattern not in entries:
+			entries.insert(0, self._pattern)
+			entries = entries[:20]
+
+			# save history
+			self._options.set('patterns', entries)
+
+	def _load_history(self):
+		"""Load previously stored patterns."""
+		entries = self._options.get('patterns') or ['*']
+
+		for entry in entries:
+			self._entries.append((entry,))
+
+		# select first entry
+		self._entry_pattern.handler_block_by_func(self.__handle_pattern_change)
+		self._entry_pattern.child.set_text(entries[0])
+		self._entry_pattern.handler_unblock_by_func(self.__handle_pattern_change)
 
 	def get_title(self):
 		"""Return i18n title for extension"""
@@ -83,5 +119,20 @@ class DefaultFindFiles(FindExtension):
 
 	def is_path_ok(self, path):
 		"""Check is specified path fits the cirteria"""
+		result = False
 		file_name = os.path.basename(path)
-		return self._compare_method(file_name, self._pattern)
+
+		# prepare patterns
+		patterns = (self._pattern,) if ';' not in self._pattern else self._pattern.split(';')
+
+		if not self._case_sensitive:
+			file_name = file_name.lower()
+			patterns = map(lambda x: x.lower(), patterns)
+
+		# try to match any of the patterns
+		for pattern in patterns:
+			if self._compare_method(file_name, pattern):
+				result = True
+				break
+
+		return result

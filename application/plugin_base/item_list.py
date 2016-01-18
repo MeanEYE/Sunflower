@@ -2,6 +2,7 @@ import os
 import gtk
 import urllib
 import common
+import user
 
 from plugin import PluginBase
 from operation import CopyOperation, MoveOperation
@@ -12,12 +13,14 @@ from gui.input_dialog import CopyDialog, MoveDialog, InputDialog, PathInputDialo
 from gui.preferences.display import StatusVisible
 from gui.history_list import HistoryList
 from history import HistoryManager
+from plugin_base.provider import Mode as FileMode
 
 
 class ButtonText:
 	BOOKMARKS = u'\u2318'
 	HISTORY = u'\u2630'
 	TERMINAL = u'\u2605'
+	TRASH = u'\u239a'
 
 
 class ItemList(PluginBase):
@@ -39,7 +42,8 @@ class ItemList(PluginBase):
 		section = options.section('item_list')
 
 		# store local stuff
-		self._provider = None
+		self._providers = {}
+		self._current_provider = None
 		self._menu_timer = None
 		self._monitor_list = []
 
@@ -51,10 +55,11 @@ class ItemList(PluginBase):
 		self._files = {'count': 0, 'selected': 0}
 		self._size = {'total': 0L, 'selected': 0L}
 
-		# local human readable cache
+		# preload commonly used options
 		self._size_format = self._parent.options.get('size_format')
 		self._selection_color = section.get('selection_color')
 		self._selection_indicator = section.get('selection_indicator')
+		self._second_extension = section.get('second_extension')
 
 		# we use this variable to prevent dead loop during column resize
 		self._is_updating = False
@@ -66,6 +71,113 @@ class ItemList(PluginBase):
 		self._sort_case_sensitive = section.get('case_sensitive_sort')
 		self._sort_number_sensitive = section.get('number_sensitive_sort')
 		self._columns = []
+
+		# configure status bar
+		self._status_bar.add_group_with_icon('dirs', 'folder', '0/0', tooltip=_('Directories (selected/total)'))
+		self._status_bar.add_group_with_icon('files', 'document', '0/0', tooltip=_('Files (selected/total)'))
+		self._status_bar.add_group_with_icon('size', 'add', '0/0', tooltip=_('Size (selected/total)'))
+
+		# file list
+		self._container = gtk.ScrolledWindow()
+		self._container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+		self._container.set_shadow_type(gtk.SHADOW_IN)
+
+		self._item_list = gtk.TreeView()
+		self._item_list.set_fixed_height_mode(True)
+
+		# apply header visibility
+		headers_visible = section.get('headers_visible')
+		self._item_list.set_headers_visible(headers_visible)
+
+		# apply scrollbar visibility
+		hide_scrollbar = section.get('hide_horizontal_scrollbar')
+		scrollbar_horizontal = self._container.get_hscrollbar()
+		scrollbar_horizontal.set_child_visible(not hide_scrollbar)
+
+		# connect events
+		self._item_list.connect('button-press-event', self._handle_button_press)
+		self._item_list.connect('button-release-event', self._handle_button_press)
+		self._item_list.connect('cursor-changed', self._handle_cursor_change)
+		self._item_list.connect('columns-changed', self._column_changed)
+		self._connect_main_object(self._item_list)
+
+		self._container.add(self._item_list)
+
+		# quick search
+		self._search_panel = gtk.HBox(False, 0)
+
+		label = gtk.Label(_('Search:'))
+
+		self._search_entry = gtk.Entry()
+		self._search_entry.connect('key-press-event', self._handle_search_key_press)
+		self._search_entry.connect('focus-out-event', self._stop_search)
+		self._item_list.set_search_entry(self._search_entry)
+
+		compare = lambda model, column, key, iter_: key.lower() not in model.get_value(iter_, column).lower()
+		self._item_list.set_search_equal_func(compare)
+
+		self._search_panel.pack_start(label, False, False, 3)
+		self._search_panel.pack_start(self._search_entry, True, True, 0)
+
+		# popup menu
+		self._open_with_item = None
+		self._open_with_menu = None
+		self._popup_menu = self._create_popup_menu()
+
+		# tab menu
+		self._tab_menu = gtk.Menu()
+		self._title_bar.set_menu(self._tab_menu)
+
+		# create reload menu item
+		image_refresh = gtk.Image()
+		image_refresh.set_from_icon_name('reload', gtk.ICON_SIZE_MENU)
+
+		menu_item_refresh = gtk.ImageMenuItem()
+		menu_item_refresh.set_label(_('Reload item list'))
+		menu_item_refresh.set_image(image_refresh)
+		menu_item_refresh.connect('activate', self.refresh_file_list)
+		menu_item_refresh.show()
+		self._tab_menu.append(menu_item_refresh)
+
+		# create copy path item
+		separator_path = gtk.SeparatorMenuItem()
+		separator_path.show()
+		self._tab_menu.append(separator_path)
+
+		image_copy = gtk.Image()
+		image_copy.set_from_stock(gtk.STOCK_COPY, gtk.ICON_SIZE_MENU)
+
+		menu_item_copy_path = gtk.ImageMenuItem()
+		menu_item_copy_path.set_label(_('Copy path to clipboard'))
+		menu_item_copy_path.set_image(image_copy)
+		menu_item_copy_path.connect('activate', self.copy_path_to_clipboard)
+		menu_item_copy_path.show()
+		self._tab_menu.append(menu_item_copy_path)
+
+		# create path entry item
+		menu_path_entry = gtk.MenuItem()
+		menu_path_entry.set_label(_('Enter path...'))
+		menu_path_entry.connect('activate', self.custom_path_entry)
+		menu_path_entry.show()
+		self._tab_menu.append(menu_path_entry)
+
+		# history menu
+		self._history_menu = gtk.Menu()
+
+		# emblem menu
+		self._emblem_menu = gtk.Menu()
+		self._prepare_emblem_menu()
+
+		# pack gui
+		self.pack_start(self._container, True, True, 0)
+		self.pack_start(self._search_panel, False, False, 0)
+
+		self.show_all()
+		self._search_panel.hide()
+
+	def _create_buttons(self):
+		"""Create titlebar buttons."""
+		options = self._parent.options
 
 		# bookmarks button
 		self._bookmarks_button = gtk.Button()
@@ -119,109 +231,6 @@ class ItemList(PluginBase):
 		self._terminal_button.connect('clicked', self._create_terminal)
 
 		self._title_bar.add_control(self._terminal_button)
-		
-		# configure status bar
-		self._status_bar.add_group_with_icon('dirs', 'folder', '0/0', tooltip=_('Directories (selected/total)'))
-		self._status_bar.add_group_with_icon('files', 'document', '0/0', tooltip=_('Files (selected/total)'))
-		self._status_bar.add_group_with_icon('size', 'add', '0/0', tooltip=_('Size (selected/total)'))
-
-		# file list
-		self._container = gtk.ScrolledWindow()
-		self._container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-		self._container.set_shadow_type(gtk.SHADOW_IN)
-
-		self._item_list = gtk.TreeView()
-		self._item_list.set_fixed_height_mode(True)
-
-		# apply header visibility
-		headers_visible = section.get('headers_visible')
-		self._item_list.set_headers_visible(headers_visible)
-
-		# apply scrollbar visibility
-		hide_scrollbar = section.get('hide_horizontal_scrollbar')
-		scrollbar_horizontal = self._container.get_hscrollbar()
-		scrollbar_horizontal.set_child_visible(not hide_scrollbar)
-
-		# connect events
-		self._item_list.connect('button-press-event', self._handle_button_press)
-		self._item_list.connect('button-release-event', self._handle_button_press)
-		self._item_list.connect('cursor-changed', self._handle_cursor_change)
-		self._item_list.connect('columns-changed', self._column_changed)
-		self._connect_main_object(self._item_list)
-
-		self._container.add(self._item_list)
-
-		# quick search
-		self._search_panel = gtk.HBox(False, 0)
-
-		label = gtk.Label(_('Search:'))
-
-		self._search_entry = gtk.Entry()
-		self._search_entry.connect('key-press-event', self._handle_search_key_press)
-		self._search_entry.connect('focus-out-event', self._stop_search)
-		self._item_list.set_search_entry(self._search_entry)
-
-		compare = lambda model, column, key, iter_: key.lower() not in model.get_value(iter_, column).lower()
-		self._item_list.set_search_equal_func(compare)
-
-		self._search_panel.pack_start(label, False, False, 3)
-		self._search_panel.pack_start(self._search_entry, True, True, 0)
-
-		# popup menu
-		self._open_with_item = None
-		self._open_with_menu = None
-		self._popup_menu = self._create_popup_menu()
-
-		# tab menu 
-		self._tab_menu = gtk.Menu()
-		self._title_bar.set_menu(self._tab_menu)
-
-		# create reload menu item
-		image_refresh = gtk.Image()
-		image_refresh.set_from_icon_name('reload', gtk.ICON_SIZE_MENU)
-
-		menu_item_refresh = gtk.ImageMenuItem()
-		menu_item_refresh.set_label(_('Reload item list'))
-		menu_item_refresh.set_image(image_refresh)
-		menu_item_refresh.connect('activate', self.refresh_file_list)
-		menu_item_refresh.show()
-		self._tab_menu.append(menu_item_refresh)
-
-		# create copy path item
-		separator_path = gtk.SeparatorMenuItem()
-		separator_path.show()
-		self._tab_menu.append(separator_path)
-
-		image_copy = gtk.Image()
-		image_copy.set_from_stock(gtk.STOCK_COPY, gtk.ICON_SIZE_MENU)
-
-		menu_item_copy_path = gtk.ImageMenuItem()
-		menu_item_copy_path.set_label(_('Copy path to clipboard'))
-		menu_item_copy_path.set_image(image_copy)
-		menu_item_copy_path.connect('activate', self.copy_path_to_clipboard)
-		menu_item_copy_path.show()
-		self._tab_menu.append(menu_item_copy_path)
-
-		# create path entry item
-		menu_path_entry = gtk.MenuItem()
-		menu_path_entry.set_label(_('Enter path...'))
-		menu_path_entry.connect('activate', self.custom_path_entry)
-		menu_path_entry.show()
-		self._tab_menu.append(menu_path_entry)
-
-		# history menu
-		self._history_menu = gtk.Menu()
-
-		# emblem menu
-		self._emblem_menu = gtk.Menu()
-		self._prepare_emblem_menu()
-
-		# pack gui
-		self.pack_start(self._container, True, True, 0)
-		self.pack_start(self._search_panel, False, False, 0)
-
-		self.show_all()
-		self._search_panel.hide()
 
 	def _configure_accelerators(self):
 		"""Configure accelerator group"""
@@ -246,6 +255,7 @@ class ItemList(PluginBase):
 		group.add_method('paste_from_clipboard', _('Paste items from clipboard'), self._paste_files_from_clipboard)
 		group.add_method('open_in_new_tab', _('Open selected directory in new tab'), self._open_in_new_tab)
 		group.add_method('open_directory', _('Open selected directory'), self._open_directory)
+		group.add_method('calculate_disk_usage', _('Calculate disk usage for directory'), self._calculate_disk_usage)
 		group.add_method('create_terminal', _('Create terminal tab'), self._create_terminal)
 		group.add_method('parent_directory', _('Go to parent directory'), self._parent_directory)
 		group.add_method('root_directory', _('Go to root directory'), self._root_directory)
@@ -278,6 +288,7 @@ class ItemList(PluginBase):
 		group.add_method('show_tab_menu', _('Show tab menu'), self._show_tab_menu)
 		group.add_method('copy_path_to_clipboard', _('Copy path to clipboard'), self.copy_path_to_clipboard)
 		group.add_method('copy_selected_path_to_clipboard', _('Copy selected path to clipboard'), self.copy_selected_path_to_clipboard)
+		group.add_method('copy_selected_item_name_to_clipboard', _('Copy selected item name to clipboard'), self.copy_selected_item_name_to_clipboard)
 		group.add_method('copy_path_to_command_entry', _('Copy path to command entry'), self.copy_path_to_command_entry)
 		group.add_method('copy_selection_to_command_entry', _('Copy selection to command entry'), self.copy_selection_to_command_entry)
 		group.add_method('custom_path_entry', _('Ask and navigate to path'), self.custom_path_entry)
@@ -289,13 +300,16 @@ class ItemList(PluginBase):
 
 		# configure accelerators
 		group.set_accelerator('execute_item', keyval('Return'), 0)
+		group.set_alt_accelerator('execute_item', keyval('KP_Enter'), 0)
 		group.set_accelerator('item_properties', keyval('Return'), gtk.gdk.MOD1_MASK)
+		group.set_alt_accelerator('item_properties', keyval('KP_Enter'), gtk.gdk.MOD1_MASK)
 		group.set_accelerator('add_bookmark', keyval('d'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('edit_bookmarks', keyval('b'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('cut_to_clipboard', keyval('x'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('copy_to_clipboard', keyval('c'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('paste_from_clipboard', keyval('v'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('open_in_new_tab', keyval('t'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
+		group.set_accelerator('calculate_disk_usage', keyval('space'), 0)
 		group.set_accelerator('create_terminal', keyval('z'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('parent_directory', keyval('BackSpace'), 0)
 		group.set_accelerator('root_directory', keyval('backslash'), gtk.gdk.CONTROL_MASK)
@@ -330,8 +344,11 @@ class ItemList(PluginBase):
 		group.set_accelerator('show_tab_menu', keyval('grave'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('copy_path_to_clipboard', keyval('l'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('copy_selected_path_to_clipboard', keyval('c'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
+		group.set_accelerator('copy_selected_item_name_to_clipboard', keyval('f'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('copy_path_to_command_entry', keyval('Return'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
+		group.set_alt_accelerator('copy_path_to_command_entry', keyval('KP_Enter'), gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		group.set_accelerator('copy_selection_to_command_entry', keyval('Return'), gtk.gdk.CONTROL_MASK)
+		group.set_alt_accelerator('copy_selection_to_command_entry', keyval('KP_Enter'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('custom_path_entry', keyval('l'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('start_quick_search', keyval('f'), gtk.gdk.CONTROL_MASK)
 		group.set_accelerator('expand_directory', keyval('Right'), 0)
@@ -645,9 +662,13 @@ class ItemList(PluginBase):
 		PluginBase._handle_tab_close(self)
 		self._main_object.handler_block_by_func(self._column_changed)
 
+		# save current configuration
 		self._options.set('path', self.path)
 		self._options.set('sort_column', self._sort_column)
 		self._options.set('sort_ascending', self._sort_ascending)
+
+		# allow providers to clean up
+		self.destroy_providers()
 
 		return True
 
@@ -688,10 +709,10 @@ class ItemList(PluginBase):
 									gtk.MESSAGE_ERROR,
 									gtk.BUTTONS_OK,
 									_(
-										"Directory does not exist anymore or is not "
-										"valid. If path is not local check if specified "
-										"volume is mounted."
-									) +	"\n\n{0}".format(path)
+										'Directory does not exist anymore or is not '
+										'valid. If path is not local check if specified '
+										'volume is mounted.'
+									) +	'\n\n{0}'.format(path)
 								)
 			dialog.run()
 			dialog.destroy()
@@ -793,6 +814,9 @@ class ItemList(PluginBase):
 			if event_queue is not None:
 				operation.set_destination_queue(event_queue)
 
+			# set operation queue
+			operation.set_operation_queue(dialog_result[2])
+
 			# start the operation
 			operation.set_selection(selection)
 			operation.start()
@@ -837,6 +861,10 @@ class ItemList(PluginBase):
 
 	def _open_directory(self, widget=None, data=None):
 		"""Open selected directory"""
+		return True
+
+	def _calculate_disk_usage(self, widget=None, data=None):
+		"""Start calculation of disk usage by the selected directory."""
 		return True
 
 	def _expand_directory(self, widget=None, data=None):
@@ -938,7 +966,7 @@ class ItemList(PluginBase):
 
 	def _get_popup_menu_position(self, menu, data=None):
 		"""Abstract method for positioning menu properly on given row"""
-		return (0, 0, True)
+		return 0, 0, True
 
 	def _get_history_menu_position(self, menu, button):
 		"""Get history menu position"""
@@ -951,7 +979,7 @@ class ItemList(PluginBase):
 		pos_x = window_x + button_x
 		pos_y = window_y + button_y + button_h
 
-		return (pos_x, pos_y, True)
+		return pos_x, pos_y, True
 
 	def _get_other_provider(self):
 		"""Return provider from opposite list.
@@ -1093,6 +1121,22 @@ class ItemList(PluginBase):
 		item = menu_manager.create_menu_item({
 								'label': _('Move to other...'),
 								'callback': self._move_files
+							})
+		result.append(item)
+
+		# separator
+		item = menu_manager.create_menu_item({'type': 'separator'})
+		result.append(item)
+
+		item = menu_manager.create_menu_item({
+								'label': _('Copy file name'),
+								'callback': self.copy_selected_item_name_to_clipboard
+							})
+		result.append(item)
+
+		item = menu_manager.create_menu_item({
+								'label': _('Copy path'),
+								'callback': self.copy_selected_path_to_clipboard
 							})
 		result.append(item)
 
@@ -1400,7 +1444,7 @@ class ItemList(PluginBase):
 		"""Toggle selection and move cursor up"""
 		self._toggle_selection(widget, data, advance=False)
 		self._move_marker_up(widget, data)
-	
+
 		return True
 
 	def _toggle_selection_from_cursor_up(self, widget, data=None):
@@ -1466,7 +1510,7 @@ class ItemList(PluginBase):
 		"""Swap left and right paths"""
 		opposite_object = self._parent.get_opposite_object(self)
 
-		if (hasattr(opposite_object, 'change_path')):
+		if hasattr(opposite_object, 'change_path'):
 			# get path from opposite object
 			new_path = opposite_object.path
 
@@ -1486,7 +1530,7 @@ class ItemList(PluginBase):
 		self._parent.preferences_window._show(widget, 'bookmarks')
 		return True
 
-	def _directory_changed(monitor, event, path, other_path, parent=None):
+	def _directory_changed(self, event, path, other_path, parent=None):
 		"""Handle signal emitted by monitor"""
 		pass
 
@@ -1540,10 +1584,16 @@ class ItemList(PluginBase):
 		self._parent.set_clipboard_text('\n'.join(selection))
 		return True
 
+	def copy_selected_item_name_to_clipboard(self, widget=None, data=None):
+		"""Copy basename of selected items to clipboard"""
+		selection = self._get_selection_list(relative=False)
+		self._parent.set_clipboard_text('\n'.join(os.path.basename(item) for item in selection))
+		return True
+
 	def copy_path_to_command_entry(self, widget=None, data=None):
 		"""Copy current path to command entry and focus it"""
 		self._parent.set_command_entry_text(self.path, True)
-		
+
 	def copy_selection_to_command_entry(self, widget=None, data=None):
 		"""Copy current selection to command entry and focus it"""
 		selection = self._get_selection(relative=True)
@@ -1580,9 +1630,102 @@ class ItemList(PluginBase):
 		"""Update column visibility"""
 		pass
 
-	def get_povider(self):
-		"""Get list provider"""
-		return self._provider
+	def create_provider(self, path, is_archive):
+		"""Preemptively create provider object."""
+		result = None
+
+		if not is_archive:
+			scheme = 'file' if '://' not in path else path.split('://', 1)[0]
+
+			# create provider
+			Provider = self._parent.get_provider_by_protocol(scheme)
+
+			if Provider is not None:
+				result = Provider(self)
+
+				# cache provider for later use
+				root_path = result.get_root_path(path)
+				self._providers[root_path] = result
+
+		else:
+			mime_type = self._parent.associations_manager.get_mime_type(path=path)
+			current_provider = self.get_provider()
+
+			# create archive provider
+			Provider = self._parent.get_provider_for_archive(mime_type)
+
+			if Provider is not None:
+				result = Provider(self, path)
+
+				# set archive file handle
+				handle = current_provider.get_file_handle(path, FileMode.READ_APPEND)
+				result.set_archive_handle(handle)
+
+				# cache provider locally
+				self._providers[path] = result
+
+		# in case no of not supported provider, create one for users home
+		if result is None:
+			Provider = self._parent.get_provider_by_protocol('file')
+			result = Provider(self, user.home)
+
+			# cache provider for later use
+			root_path = result.get_root_path(user.home)
+			self._providers[root_path] = result
+
+		return result
+
+	def destroy_providers(self):
+		"""Allow providers to clean up after themselves."""
+		for path, provider in self._providers.items():
+			provider.release_archive_handle()
+
+	def get_provider(self, path=None):
+		"""Get existing list provider or create new for specified path."""
+		result = None
+
+		# if path is not specified return current provider
+		if path is None:
+			return self._current_provider
+
+		# check if there is a provider for specified path
+		if path in self._providers:
+			result = self._providers[path]
+
+		else:
+			# try to find provider with longest matching path
+			longest_path = 0
+			matching_provider = None
+
+			for provider_path, provider in self._providers.items():
+				# make sure path is valid, normally this shouldn't happen
+				if provider_path is None:
+					continue
+
+				if path.startswith(provider_path) and len(provider_path) > longest_path:
+					# matched provider for path, store it for later
+					longest_path = len(provider_path)
+					matching_provider = provider
+
+				elif not path.startswith(provider_path):
+					# provider is no longer needed as path is not contained
+					provider.release_archive_handle()
+					del self._providers[provider_path]
+
+			result = matching_provider
+
+		# no matching provider was found, create new
+		if result is None:
+			result = self.create_provider(path, False)
+
+		# cache current provider
+		self._current_provider = result
+
+		return result
+
+	def provider_exists(self, path):
+		"""Check if provider for specified path exists."""
+		return path in self._providers
 
 	def get_monitor(self):
 		"""Get file system monitor"""
@@ -1605,13 +1748,14 @@ class ItemList(PluginBase):
 		if len(self._monitor_list) > 0 and self._monitor_list[0].is_manual():
 			return
 
-		# create new monitor for specified path
-		provider = self.get_provider()
-		monitor = provider.get_monitor(path)
-		monitor.connect('changed', self._directory_changed, parent)
+		if path not in [monitor.get_path() for monitor in self._monitor_list]:
+			# create new monitor for specified path
+			provider = self.get_provider()
+			monitor = provider.get_monitor(path)
+			monitor.connect('changed', self._directory_changed, parent)
 
-		# add monitor to the list
-		self._monitor_list.append(monitor)
+			# add monitor to the list
+			self._monitor_list.append(monitor)
 
 	def cancel_monitors(self):
 		"""Cancel all monitors"""
@@ -1650,6 +1794,9 @@ class ItemList(PluginBase):
 		# apply selection
 		self._selection_color = section.get('selection_color')
 		self._selection_indicator = section.get('selection_indicator')
+
+		# get support for second level of extension
+		self._second_extension = section.get('second_extension')
 
 		# change status bar visibility
 		show_status_bar = options.get('show_status_bar')

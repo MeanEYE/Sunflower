@@ -17,11 +17,7 @@ Contributor = namedtuple(
 				])
 
 
-Translator = namedtuple('Translator', Contributor._fields + ('language',))
-
-
 class AboutWindow:
-
 	# list of contributors
 	contributors = [
 		Contributor(
@@ -53,6 +49,11 @@ class AboutWindow:
 			name = 'Sevka Fedoroff',
 			email = 'sevka.fedoroff@gmail.com',
 			website = None
+		),
+		Contributor(
+			name = 'multiSnow',
+			email = 'infinity.blick.winkel@gmail.com',
+			website = None
 		)
 	]
 
@@ -63,94 +64,11 @@ class AboutWindow:
 			email = 'octogirl.design@gmail.com',
 			website = None,
 		),
-	]
-
-	# list of translators
-	translators = [
-		Translator(
-			name = 'Radek Tříška',
-			email = 'radek@fastlinux.eu',
-			website = 'http://www.fastlinux.eu',
-			language = 'Czech',
+		Contributor(
+			name = 'Michael Kerch',
+			email = 'michael@way2cu.com',
+			website = 'misha.co.il',
 		),
-		Translator(
-			name = 'Jakub Dyszkiewicz',
-			email = '144.kuba@gmail.com',
-			website = None,
-			language = 'Polish',
-		),
-		Translator(
-			name = 'Wojciech Kluczka',
-			email = 'wojtekkluczka@gmail.com',
-			website = None,
-			language = 'Polish',
-		),
-		Translator(
-			name = 'Vladimir Kolev',
-			email = 'vladimir.r.kolev@gmail.com',
-			website = None,
-			language = 'Bulgarian',
-		),
-		Translator(
-			name = 'Keringer László',
-			email = 'keringer.laszlo@gmail.com',
-			website = None,
-			language = 'Hungarian',
-		),
-		Translator(
-			name = 'Sergey Malkin',
-			email = 'adresatt@gmail.com',
-			website = None,
-			language = 'Russian',
-		),
-		Translator(
-			name = 'Sebastian Gaul',
-			email = 'sebastian@dev.mgvmedia.com',
-			website = 'http://sgaul.de',
-			language = 'German',
-		),
-		Translator(
-			name = 'Damián Nohales',
-			email = 'damiannohales@gmail.com',
-			website = None,
-			language = 'Spanish',
-		),
-		Translator(
-			name = 'Андрій Кондратьєв',
-			email = 'kondratiev.work@gmail.com',
-			website = None,
-			language = 'Ukrainian',
-		),
-		Translator(
-			name = 'Халіманенко Тарас',
-			email = 'mr.haltar@yandex.ru',
-			website = None,
-			language = 'Ukrainian',
-		),
-		Translator(
-			name = 'Táncos Tamás',
-			email = 'h868315@gmail.com',
-			website = None,
-			language = 'Hungarian' 
-		),
-		Translator(
-			name = 'Radek Otáhal',
-			email = 'radek.otahal@gmail.com',
-			website = None,
-			language = 'Czech'
-		),
-		Translator(
-			name = 'Kevin Pellet',
-			email = 'ilphrin@autistici.org',
-			website = None,
-			language = 'French'
-		),
-		Translator(
-			name = 'Helene Clozel',
-			email = 'clozel.helene@yahoo.fr',
-			website = None,
-			language = 'French'
-		)
 	]
 
 	def __init__(self, parent):
@@ -188,7 +106,7 @@ class AboutWindow:
 		self._dialog.set_comments(_('Twin-panel file manager for Linux.'))
 
 		# set license
-		self._dialog.set_copyright(_(u'Copyright \u00a9 2010-2013 by Mladen Mijatov and contributors.'))
+		self._dialog.set_copyright(_(u'Copyright \u00a9 2010-2016 by Mladen Mijatov and contributors.'))
 
 		if os.path.isfile('COPYING'):
 			license_file = open('COPYING', 'r')
@@ -205,13 +123,13 @@ class AboutWindow:
 
 		# set authors
 		self._dialog.set_authors(['{0} <{1}> {2}'.format(
-					contributor.name, 
+					contributor.name,
 					contributor.email,
 					contributor.website or ''
 				) for contributor in self.contributors])
 
 		self._dialog.set_artists(['{0} <{1}> {2}'.format(
-					contributor.name, 
+					contributor.name,
 					contributor.email,
 					contributor.website or ''
 				) for contributor in self.artists])

@@ -8,6 +8,8 @@ import user
 from plugin_base.provider import FileType, Support as ProviderSupport
 from common import get_user_directory, UserDirectory
 from widgets.completion_entry import PathCompletionEntry
+from queue import OperationQueue
+
 
 # constants
 class OverwriteOption:
@@ -103,7 +105,7 @@ class InputDialog:
 
 		self._dialog.destroy()
 
-		return (code, result)
+		return code, result
 
 
 class LinkDialog(InputDialog):
@@ -192,7 +194,7 @@ class LinkDialog(InputDialog):
 
 		self._dialog.destroy()
 
-		return (code, original_path, link_name, hard_link)
+		return code, original_path, link_name, hard_link
 
 
 class CreateDialog(InputDialog):
@@ -422,7 +424,7 @@ class PasswordDialog(InputDialog):
 
 		self._dialog.destroy()
 
-		return (code, password, confirmation)
+		return code, password, confirmation
 
 
 class FileCreateDialog(CreateDialog):
@@ -546,6 +548,7 @@ class FileCreateDialog(CreateDialog):
 
 
 class DirectoryCreateDialog(CreateDialog):
+	"""Simple dialog used for creating directories."""
 
 	def __init__(self, application):
 		CreateDialog.__init__(self, application)
@@ -560,6 +563,55 @@ class DirectoryCreateDialog(CreateDialog):
 		section.set('directory_mode', self._mode)
 
 
+class DeleteDialog(gtk.MessageDialog):
+	"""Confirmation dialog for item removal with operation queue selection."""
+
+	def __init__(self, application, message):
+		gtk.MessageDialog.__init__(
+				self,
+				parent=application,
+				flags=gtk.DIALOG_DESTROY_WITH_PARENT,
+				type=gtk.MESSAGE_QUESTION,
+				buttons=gtk.BUTTONS_YES_NO,
+				message_format=message
+			)
+
+		# create user interface for operation queue
+		vbox_queue = gtk.VBox(False, 0)
+
+		label_queue = gtk.Label(_('Operation queue:'))
+		label_queue.set_alignment(0, 0.5)
+
+		cell_name = gtk.CellRendererText()
+
+		self.combobox_queue = gtk.ComboBox(model=OperationQueue.get_model())
+		self.combobox_queue.pack_start(cell_name, True)
+		self.combobox_queue.add_attribute(cell_name, 'text', OperationQueue.COLUMN_TEXT)
+		self.combobox_queue.set_active(0)
+		self.combobox_queue.set_row_separator_func(OperationQueue.handle_separator_check)
+		self.combobox_queue.connect('changed', OperationQueue.handle_queue_select, self)
+
+		# pack user interface
+		vbox_queue.pack_start(label_queue, False, False, 0)
+		vbox_queue.pack_start(self.combobox_queue, False, False, 0)
+
+		self.get_content_area().pack_start(vbox_queue, False, False, 0)
+		vbox_queue.show_all()
+
+		# focus default widget
+		self.get_widget_for_response(gtk.RESPONSE_YES).grab_focus()
+
+	def get_response(self):
+		"""Show dialog and get response code."""
+		code = self.run()
+		selected_iter = self.combobox_queue.get_active_iter()
+		queue_name = OperationQueue.get_name_from_iter(selected_iter)
+
+		self.destroy()
+
+		return code, queue_name
+
+
 class CopyDialog:
 	"""Dialog which will ask user for additional options before copying"""
 
@@ -571,13 +623,13 @@ class CopyDialog:
 		self._destination_provider = destination_provider
 
 		self._dialog_size = None
-		self._dialog.set_default_size(340, 10)
+		self._dialog.set_default_size(400, 10)
 		self._dialog.set_resizable(True)
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
-		
+
 		self._dialog.vbox.set_spacing(0)
 
 		# create additional components
@@ -594,7 +646,10 @@ class CopyDialog:
 		self.entry_destination.connect('activate', self._confirm_entry)
 
 		# additional options
+		hbox_additional = gtk.HBox(False, 10)
 		separator_file_type = gtk.HSeparator()
+		vbox_type = gtk.VBox(False, 0)
+		vbox_queue = gtk.VBox(False, 0)
 
 		label_type = gtk.Label(_('Only files of this type:'))
 		label_type.set_alignment(0, 0.5)
@@ -602,6 +657,19 @@ class CopyDialog:
 		self.entry_type = gtk.Entry()
 		self.entry_type.set_text('*')
 		self.entry_type.connect('changed', self._update_label)
+
+		label_queue = gtk.Label(_('Operation queue:'))
+		label_queue.set_alignment(0, 0.5)
+
+		cell_name = gtk.CellRendererText()
+
+		self.combobox_queue = gtk.ComboBox(model=OperationQueue.get_model())
+		self.combobox_queue.pack_start(cell_name, True)
+		self.combobox_queue.add_attribute(cell_name, 'text', OperationQueue.COLUMN_TEXT)
+		self.combobox_queue.set_active(0)
+		self.combobox_queue.set_row_separator_func(OperationQueue.handle_separator_check)
+		self.combobox_queue.connect('changed', OperationQueue.handle_queue_select, self._dialog)
+		self.combobox_queue.set_size_request(140, -1)
 
 		# detailed item list
 		separator_details = gtk.HSeparator()
@@ -653,6 +721,8 @@ class CopyDialog:
 										'they will be presented to you after completion.'
 									))
 
+		self.checkbox_symlink = gtk.CheckButton(_('Follow symlinks'))
+
 		self._create_buttons()
 
 		# pack user interface
@@ -664,11 +734,19 @@ class CopyDialog:
 
 		align_silent.add(vbox_silent)
 
+		vbox_type.pack_start(label_type, False, False, 0)
+		vbox_type.pack_start(self.entry_type, False, False, 0)
+
+		vbox_queue.pack_start(label_queue, False, False, 0)
+		vbox_queue.pack_start(self.combobox_queue, False, False, 0)
+
+		hbox_additional.pack_start(vbox_type, True, True, 0)
+		hbox_additional.pack_start(vbox_queue, True, True, 0)
+
 		vbox.pack_start(self.label_destination, False, False, 0)
 		vbox.pack_start(self.entry_destination, False, False, 0)
 		vbox.pack_start(separator_file_type, False, False, 5)
-		vbox.pack_start(label_type, False, False, 0)
-		vbox.pack_start(self.entry_type, False, False, 0)
+		vbox.pack_start(hbox_additional, False, False, 0)
 		vbox.pack_start(expand_details, False, False, 0)
 		vbox.pack_start(separator_details, False, False, 5)
 		vbox.pack_start(self.checkbox_owner, False, False, 0)
@@ -676,6 +754,7 @@ class CopyDialog:
 		vbox.pack_start(self.checkbox_timestamp, False, False, 0)
 		vbox.pack_start(self.checkbox_silent, False, False, 0)
 		vbox.pack_start(align_silent, False, False, 0)
+		vbox.pack_start(self.checkbox_symlink, False, False, 0)
 
 		self._dialog.vbox.pack_start(vbox, False, False, 0)
 
@@ -697,21 +776,25 @@ class CopyDialog:
 		source_set_owner = ProviderSupport.SET_OWNER in source_support
 		source_set_mode = ProviderSupport.SET_ACCESS in source_support
 		source_set_timestamp = ProviderSupport.SET_TIMESTAMP in source_support
+		source_symlink_support = ProviderSupport.SYMBOLIC_LINK in source_support
 
 		if self._destination_provider is not None:
 			destination_support = self._destination_provider.get_support()
 			destination_set_owner = ProviderSupport.SET_OWNER in destination_support
 			destination_set_mode = ProviderSupport.SET_ACCESS in destination_support
 			destination_set_timestamp = ProviderSupport.SET_TIMESTAMP in destination_support
+			destination_symlink_support = ProviderSupport.SYMBOLIC_LINK in source_support
 
 		else:
 			destination_set_owner = False
 			destination_set_mode = False
 			destination_set_timestamp = False
+			destination_symlink_support = False
 
 		provider_set_owner = source_set_owner and destination_set_owner
 		provider_set_mode = source_set_mode and destination_set_mode
 		provider_set_timestamp = source_set_timestamp and destination_set_timestamp
+		symlinks_supported = source_symlink_support and destination_symlink_support
 
 		# disable checkboxes that are not supported by provider
 		if not provider_set_owner:
@@ -726,6 +809,10 @@ class CopyDialog:
 			self.checkbox_timestamp.set_sensitive(False)
 			self.checkbox_timestamp.set_tooltip_text(_('Not supported by file system provider'))
 
+		if not symlinks_supported:
+			self.checkbox_symlink.set_sensitive(False)
+			self.checkbox_symlink.set_tooltip_text(_('Not supported by file system provider'))
+
 		# set checkbox states
 		self.checkbox_owner.set_active(options.get('set_owner') and provider_set_owner)
 		self.checkbox_mode.set_active(options.get('set_mode') and provider_set_mode)
@@ -733,6 +820,7 @@ class CopyDialog:
 		self.checkbox_silent.set_active(options.get('silent'))
 		self.checkbox_merge.set_active(options.get('merge_in_silent'))
 		self.checkbox_overwrite.set_active(options.get('overwrite_in_silent'))
+		self.checkbox_symlink.set_active(options.get('follow_symlink'))
 
 	def _save_configuration(self, widget=None, data=None):
 		"""Save default dialog configuration"""
@@ -743,21 +831,25 @@ class CopyDialog:
 		source_set_owner = ProviderSupport.SET_OWNER in source_support
 		source_set_mode = ProviderSupport.SET_ACCESS in source_support
 		source_set_timestamp = ProviderSupport.SET_TIMESTAMP in source_support
+		source_symlink = ProviderSupport.SYMBOLIC_LINK in source_support
 
 		if self._destination_provider is not None:
 			destination_support = self._destination_provider.get_support()
 			destination_set_owner = ProviderSupport.SET_OWNER in destination_support
 			destination_set_mode = ProviderSupport.SET_ACCESS in destination_support
 			destination_set_timestamp = ProviderSupport.SET_TIMESTAMP in destination_support
+			destination_symlink = ProviderSupport.SYMBOLIC_LINK in source_support
 
 		else:
 			destination_set_owner = False
 			destination_set_mode = False
 			destination_set_timestamp = False
+			destination_symlink = False
 
 		provider_set_owner = source_set_owner and destination_set_owner
 		provider_set_mode = source_set_mode and destination_set_mode
 		provider_set_timestamp = source_set_timestamp and destination_set_timestamp
+		provider_symlink = source_symlink and destination_symlink
 
 		# only save options supported by provider
 		if provider_set_owner:
@@ -769,12 +861,15 @@ class CopyDialog:
 		if provider_set_timestamp:
 			options.set('set_timestamp', self.checkbox_timestamp.get_active())
 
+		if provider_symlink:
+			options.set('follow_symlink', self.checkbox_symlink.get_active())
+
 		options.set('silent', self.checkbox_silent.get_active())
 		options.set('merge_in_silent', self.checkbox_merge.get_active())
 		options.set('overwrite_in_silent', self.checkbox_overwrite.get_active())
 
 		# show message letting user know
-		if not (provider_set_owner and provider_set_mode and provider_set_timestamp):
+		if not (provider_set_owner and provider_set_mode and provider_set_timestamp and provider_symlink):
 			dialog = gtk.MessageDialog(
 									self._dialog,
 									gtk.DIALOG_DESTROY_WITH_PARENT,
@@ -801,7 +896,7 @@ class CopyDialog:
 		else:
 			self._dialog_size = self._dialog.get_size()
 			self._dialog.set_size_request(-1, -1)
-		
+
 	def _get_text_variables(self, count):
 		"""Get text variables for update"""
 		title = ngettext(
@@ -853,7 +948,7 @@ class CopyDialog:
 
 		# get affected items
 		pattern = self.entry_type.get_text()
-		match_function = lambda item: source_provider.is_dir(item) or fnmatch.fnmatch(item, pattern) 
+		match_function = lambda item: source_provider.is_dir(item) or fnmatch.fnmatch(item, pattern)
 		affected_items = filter(match_function, source_provider.get_selection())
 		item_count = len(affected_items)
 
@@ -880,7 +975,7 @@ class CopyDialog:
 	def get_response(self):
 		"""Return value and self-destruct
 
-		This method returns tupple with response code and
+		This method returns tuple with response code and
 		dictionary with other selected options.
 
 		"""
@@ -893,12 +988,15 @@ class CopyDialog:
 				self.checkbox_timestamp.get_active(),
 				self.checkbox_silent.get_active(),
 				self.checkbox_merge.get_active(),
-				self.checkbox_overwrite.get_active()
+				self.checkbox_overwrite.get_active(),
+				self.checkbox_symlink.get_active()
 			)
+		selected_iter = self.combobox_queue.get_active_iter()
+		queue_name = OperationQueue.get_name_from_iter(selected_iter)
 
 		self._dialog.destroy()
 
-		return (code, options)
+		return code, options, queue_name
 
 
 class MoveDialog(CopyDialog):
@@ -1081,7 +1179,7 @@ class OverwriteDialog:
 		str_size = locale.format('%d', size, True)
 		str_date = time.strftime(self._time_format, time.localtime(item_stat.time_modify))
 
-		return (str_size, str_date, icon)
+		return str_size, str_date, icon
 
 	def set_title_element(self, element):
 		"""Set title label with appropriate formatting"""
@@ -1146,7 +1244,7 @@ class OverwriteDialog:
 
 		self._dialog.destroy()
 
-		return (code, options)
+		return code, options
 
 
 class OverwriteFileDialog(OverwriteDialog):
@@ -1252,6 +1350,11 @@ class AddBookmarkDialog:
 		label_name.set_alignment(0, 0.5)
 		self._entry_name = gtk.Entry()
 		self._entry_name.connect('activate', self._confirm_entry)
+		self._entry_name.set_tooltip_text(_(
+					'Underscore in the label text indicates the next character '
+					'should be underlined and used for the mnemonic accelerator '
+					'key if it is the first character so marked.'
+				))
 
 		vbox_name = gtk.VBox(False, 0)
 
@@ -1308,11 +1411,15 @@ class AddBookmarkDialog:
 
 		self._dialog.destroy()
 
-		return (code, name, path)
+		return code, name, path
 
 
 class OperationError:
 	"""Dialog used to ask user about error occured during certain operation."""
+	RESPONSE_CANCEL = 0
+	RESPONSE_RETRY = 1
+	RESPONSE_SKIP = 2
+	RESPONSE_SKIP_ALL = 3
 
 	def __init__(self, application):
 		self._dialog = gtk.Dialog(parent=application)
@@ -1357,14 +1464,16 @@ class OperationError:
 		# create controls
 		button_cancel = gtk.Button(label=_('Cancel'))
 		button_skip = gtk.Button(label=_('Skip'))
+		button_skip_all = gtk.Button(label=_('Skip all'))
 		button_retry = gtk.Button(label=_('Retry'))
 
-		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
-		self._dialog.add_action_widget(button_skip, gtk.RESPONSE_NO)
-		self._dialog.add_action_widget(button_retry, gtk.RESPONSE_YES)
+		self._dialog.add_action_widget(button_cancel, self.RESPONSE_CANCEL)
+		self._dialog.add_action_widget(button_skip, self.RESPONSE_SKIP)
+		self._dialog.add_action_widget(button_skip_all, self.RESPONSE_SKIP_ALL)
+		self._dialog.add_action_widget(button_retry, self.RESPONSE_RETRY)
 
 		button_skip.set_can_default(True)
-		self._dialog.set_default_response(gtk.RESPONSE_NO)
+		self._dialog.set_default_response(self.RESPONSE_SKIP)
 
 		# pack interface
 		vbox_icon.pack_start(icon, False, False, 0)
@@ -1569,7 +1678,7 @@ class ApplicationInputDialog(InputDialog):
 		button_select.connect('clicked', self.__select_application)
 
 		self._entry_command = gtk.Entry()
-		
+
 		# pack interface
 		hbox_command.pack_start(self._entry_command, True, True, 0)
 		hbox_command.pack_start(button_select, False, False, 0)
@@ -1605,12 +1714,12 @@ class ApplicationInputDialog(InputDialog):
 
 class ApplicationSelectDialog:
 	"""Provides user with a list of installed applications and option to enter command"""
-	
+
 	help_url = 'standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables'
-	
+
 	def __init__(self, application, path=None):
 		self._dialog = gtk.Dialog(parent=application)
-		
+
 		self._application = application
 		self.path = path
 
@@ -1625,45 +1734,45 @@ class ApplicationSelectDialog:
 
 		self._dialog.vbox.set_spacing(0)
 		self._dialog.vbox.set_border_width(0)
-		
+
 		self._container = gtk.VBox(False, 5)
 		self._container.set_border_width(5)
 
-		# create interface		
+		# create interface
 		vbox_list = gtk.VBox(False, 0)
-		
+
 		label_open_with = gtk.Label()
 		label_open_with.set_use_markup(True)
 		label_open_with.set_alignment(0, 0.5)
 		if path is None:
 			label_open_with.set_label(_('Select application:'))
-			
+
 		else:
 			label_open_with.set_label(_('Open <i>{0}</i> with:').format(os.path.basename(path)))
-			
+
 		# create application list
 		list_container = gtk.ScrolledWindow()
 		list_container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
 		list_container.set_shadow_type(gtk.SHADOW_IN)
-		
+
 		self._store = gtk.ListStore(str, str, str, str, str)
 		self._list = gtk.TreeView(model=self._store)
-	
+
 		cell_icon = gtk.CellRendererPixbuf()
 		cell_name = gtk.CellRendererText()
 		cell_generic = gtk.CellRendererText()
-		
+
 		column_application = gtk.TreeViewColumn()
 		column_application.pack_start(cell_icon, False)
 		column_application.pack_start(cell_name, True)
 		column_application.add_attribute(cell_icon, 'icon-name', 0)
 		column_application.add_attribute(cell_name, 'text', 1)
 		column_application.set_expand(True)
-		
+
 		column_generic = gtk.TreeViewColumn()
 		column_generic.pack_start(cell_generic, True)
 		column_generic.add_attribute(cell_generic, 'markup', 4)
-		
+
 		self._list.append_column(column_application)
 		self._list.append_column(column_generic)
 		self._list.set_headers_visible(False)
@@ -1671,33 +1780,33 @@ class ApplicationSelectDialog:
 		self._list.set_enable_search(True)
 		self._list.connect('cursor-changed', self.__handle_cursor_change)
 		self._list.connect('row-activated', self.__handle_row_activated)
-		
+
 		self._store.set_sort_column_id(1, gtk.SORT_ASCENDING)
-		
+
 		# create custom command entry
 		self._expander_custom = gtk.Expander(label=_('Use a custom command'))
-		
+
 		hbox_custom = gtk.HBox(False, 7)
-		
+
 		self._entry_custom = gtk.Entry()
-		
+
 		# pack interface
 		list_container.add(self._list)
 		vbox_list.pack_start(label_open_with, False, False, 0)
 		vbox_list.pack_start(list_container, True, True, 0)
-		
+
 		hbox_custom.pack_start(self._entry_custom, True, True, 0)
 		self._expander_custom.add(hbox_custom)
-		
+
 		self._container.pack_start(vbox_list, True, True, 0)
 		self._container.pack_start(self._expander_custom, False, False, 0)
-		
+
 		self._dialog.vbox.pack_start(self._container, True, True, 0)
-				
+
 		# create controls
 		button_help = gtk.Button(stock=gtk.STOCK_HELP)
 		button_help.connect('clicked', self._application.goto_web, self.help_url)
-		
+
 		if path is not None:
 			button_ok = gtk.Button(stock=gtk.STOCK_OPEN)
 
@@ -1705,32 +1814,32 @@ class ApplicationSelectDialog:
 			button_ok = gtk.Button(stock=gtk.STOCK_OK)
 
 		button_ok.set_can_default(True)
-		
+
 		button_cancel = gtk.Button(stock=gtk.STOCK_CANCEL)
-		
+
 		self._dialog.action_area.pack_start(button_help, False, False, 0)
 		self._dialog.add_action_widget(button_cancel, gtk.RESPONSE_CANCEL)
 		self._dialog.add_action_widget(button_ok, gtk.RESPONSE_OK)
 		self._dialog.set_default_response(gtk.RESPONSE_OK)
-		
+
 		# populate content
 		self._load_applications()
 
 		self._dialog.show_all()
-		
+
 	def __handle_cursor_change(self, widget, data=None):
 		"""Handle setting or changing list cursor"""
 		selection = widget.get_selection()
 		item_store, selected_iter = selection.get_selected()
-		
+
 		if selected_iter is not None:
 			command = item_store.get_value(selected_iter, 3)
 			self._entry_custom.set_text(command)
-			
+
 	def __handle_row_activated(self, path=None, view_column=None, data=None):
 		"""Handle choosing application by presing 'Enter'"""
 		self._dialog.response(gtk.RESPONSE_OK)
-		
+
 	def _load_applications(self):
 		"""Populate application list from config files"""
 		application_list = self._application.associations_manager.get_all()
@@ -1739,19 +1848,19 @@ class ApplicationSelectDialog:
 			if application.command_line is not None \
 			and '%' in application.command_line:
 				self._store.append((
-							application.icon, 
-							application.name, 
-							application.id, 
+							application.icon,
+							application.name,
+							application.id,
 							application.command_line,
 							'<small>{0}</small>'.format(application.description)
 						))
-		
+
 	def get_response(self):
 		"""Get response and destroy dialog"""
 		code = self._dialog.run()
 		is_custom = self._expander_custom.get_expanded()
 		command = self._entry_custom.get_text()
-		
+
 		self._dialog.destroy()
 
 		return code, is_custom, command
@@ -1817,6 +1926,9 @@ class PathInputDialog():
 
 	def set_text(self, entry_text):
 		"""Set main entry text"""
+		if not entry_text.endswith(os.path.sep):
+			entry_text = entry_text + os.path.sep
+
 		self._entry.set_text(entry_text)
 		self._entry.set_position(-1)
 
@@ -1832,4 +1944,4 @@ class PathInputDialog():
 
 		self._dialog.destroy()
 
-		return (code, result)
+		return code, result

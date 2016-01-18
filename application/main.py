@@ -12,6 +12,12 @@ except:
 	print "Error starting Sunflower, missing GTK 2.0+"
 	sys.exit(1)
 
+try:
+	from setproctitle import setproctitle
+	setproctitle('sunflower')
+except ImportError:
+	pass
+
 # add search path
 application_path = os.path.abspath(os.path.dirname(sys.argv[0]))
 if application_path not in sys.path:
@@ -20,8 +26,9 @@ if application_path not in sys.path:
 # initialize threads
 gtk.gdk.threads_init()
 
-# construct main application object
-from gui.main_window import MainWindow
+with gtk.gdk.lock:
+	# construct main application object
+	from gui.main_window import MainWindow
 
-app = MainWindow()
-app.run()
+	app = MainWindow()
+	app.run()

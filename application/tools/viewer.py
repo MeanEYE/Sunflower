@@ -1,6 +1,9 @@
 import os
+import chardet
+import codecs
 import gtk
 import pango
+import gobject
 import subprocess
 
 from common import executable_exists
@@ -19,6 +22,7 @@ class Viewer:
 		self._parent = parent
 		self._application = self._parent._parent
 		self._page_count = 0
+		self._options = self._application.options.section('viewer')
 
 		associations_manager = self._application.associations_manager
 		self._mime_type = associations_manager.get_mime_type(path)
@@ -49,6 +53,9 @@ class Viewer:
 
 		self._notebook = gtk.Notebook()
 		self._notebook.set_border_width(2)
+
+		# create extensions
+		self._create_extensions()
 
 		# create page for executables
 		if self._mime_type in ('application/x-executable', 'application/x-sharedlib') \
@@ -87,23 +94,36 @@ class Viewer:
 			container.set_shadow_type(gtk.SHADOW_NONE)
 			container.set_border_width(5)
 			viewport = gtk.Viewport()
-
 			image = gtk.Image()
-			image.set_from_file(self.path)
+
+			# load raw data
+			raw_file = provider.get_file_handle(path, FileMode.READ)
+			raw_data = raw_file.read()
+			raw_file.close()
+
+			# get pixbuf from raw data
+			try:
+				loader = gtk.gdk.PixbufLoader()
+				loader.write(raw_data)
+				loader.close()
+
+			except gobject.GError:
+				pass
+
+			else:
+				# set image
+				image.set_from_pixbuf(loader.get_pixbuf())
 
 			viewport.add(image)
 			container.add(viewport)
 			self._insert_page(_('Image'), container)
-
-		# create extensions
-		self._create_extensions()
 
 		# pack user interface
 		vbox.pack_start(self._notebook, True, True, 0)
 		vbox.pack_start(self.status_bar, False, False, 0)
 
 		self._window.add(vbox)
-		
+
 		# show all widgets if there are pages present
 		if self._page_count > 0:
 			self._window.show_all()
@@ -149,7 +169,6 @@ class Viewer:
 	def _create_text_page(self, title, content, position=0):
 		"""Create text page with specified data"""
 		container = gtk.ScrolledWindow()
-		container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
 		container.set_shadow_type(gtk.SHADOW_IN)
 		container.set_border_width(5)
 
@@ -158,7 +177,19 @@ class Viewer:
 		text_view.set_editable(False)
 		text_view.set_cursor_visible(True)
 		text_view.modify_font(font)
-		
+
+		if self._options.get('word_wrap'):
+			container.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+			text_view.set_wrap_mode(gtk.WRAP_WORD)
+
+		else:
+			container.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+
+		# try to detect file character encoding and convert to Unicode
+		encoding = chardet.detect(content)['encoding']
+		if encoding is not None:
+			content = codecs.decode(content, encoding)
+
 		text_view.get_buffer().set_text(content)
 
 		# add container to notebook

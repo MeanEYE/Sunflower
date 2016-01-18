@@ -2312,7 +2312,8 @@ class MainWindow(gtk.Window):
 		self.window_options.create_section('main').update({
 					'geometry': '960x550',
 					'state': 0,
-					'hide_on_close': False
+					'hide_on_close': False,
+					"handle_position": 480,
 				})
 
 		# create default terminal options

@@ -59,7 +59,7 @@ define dist_install
 	@mkdir -p $(install_directory)
 
 	# untar archive
-	@cd $(build_directory); tar -xf $(file_name).tar
+	@tar -xf $(file_path).tar -C $(build_directory)
 
 	# install files
 	@install -Dm755 $(working_directory)/dist/sunflower "$(install_directory)/usr/bin/sunflower"

@@ -56,6 +56,7 @@ export HELP
 # Auxiliary macro for installing sunflower while creating .deb's and .rpm's.
 # Remember to synchronize changes with /dist/PKGBUILD!
 define dist_install
+	# create install directory
 	@mkdir -p $(install_directory)
 
 	# untar archive
@@ -73,7 +74,7 @@ endef
 # Auxiliary macro for building .spec.
 # Requires field intentionally not filled!
 define create_spec
-	# coping and configuring spec file
+	# copying and configuring spec file
 	@cp $(working_directory)/dist/sunflower.spec $(build_directory)
 	@sed -i s/@version@/$(version)/ $(build_directory)/sunflower.spec
 	@sed -i s/@release@/$(release)/ $(build_directory)/sunflower.spec
@@ -84,7 +85,7 @@ endef
 # Auxiliary macro for building .rpm's from spec
 define create_rpm
 	# building package...
-	@rpmbuild -bb $(build_directory)/sunflower.spec --buildroot $(install_directory)
+	@rpmbuild -bb $(build_directory)/sunflower.spec --buildroot "$(install_directory)"
 
 	# copying to $@
 	@cp ~/rpmbuild/RPMS/noarch/sunflower-$(version)-$(release).noarch.rpm $@
@@ -116,7 +117,7 @@ $(deb_file_path): $(file_path).tar
 	$(info Building package for Debian, Mint, Ubuntu...)
 	$(dist_install)
 
-	# coping and configuring control file
+	# copying and configuring control file
 	@mkdir -p $(install_directory)/DEBIAN
 	@cp $(working_directory)/dist/control $(install_directory)/DEBIAN
 	@sed -i s/@version@/$(version)/ $(install_directory)/DEBIAN/control
@@ -136,10 +137,10 @@ $(pkg_file_path): $(file_path).tgz
 	$(info Building package for ArchLinux...)
 	@mkdir -p $(install_directory)
 
-	# coping tarball
+	# copying tarball
 	@cp $(file_path).tgz $(install_directory)
 
-	# coping and configuring PKGBUILD
+	# copying and configuring PKGBUILD
 	@cp $(working_directory)/dist/PKGBUILD $(working_directory)/dist/sunflower $(install_directory)
 	@sed -i s/@version@/$(version)/ $(install_directory)/PKGBUILD
 	@sed -i s/@release@/$(release)/ $(install_directory)/PKGBUILD

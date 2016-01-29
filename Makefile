@@ -1,14 +1,15 @@
-# Directories
+# directories
 working_directory := $(dir $(lastword $(MAKEFILE_LIST)))
 build_directory ?= $(working_directory)/build
 install_directory = $(build_directory)/sunflower
 
-# Version
+# version
 version_major := $(shell cat $(working_directory)/application/gui/main_window.py | grep \'major\': | cut -f 2 -d : | tr -d [:space:][,])
 version_minor := $(shell cat $(working_directory)/application/gui/main_window.py | grep \'minor\': | cut -f 2 -d : | tr -d [:space:][,])
 version_build := $(shell cat $(working_directory)/application/gui/main_window.py | grep \'build\': | cut -f 2 -d : | tr -d [:space:][,])
 version_stage := $(shell cat $(working_directory)/application/gui/main_window.py | grep \'stage\': | cut -f 2 -d : | tr -d [:space:][\'][,])
 
+# generate file name based on version
 ifeq ($(version_stage),f)
 version = $(version_major).$(version_minor).$(version_build)
 file_name = sunflower-$(version_major).$(version_minor)-$(version_build)
@@ -17,12 +18,12 @@ version = $(version_major).$(version_minor)$(version_stage).$(version_build)
 file_name = sunflower-$(version_major).$(version_minor)$(version_stage)-$(version_build)
 endif
 
-# Variables
+# variables used in packages
 release ?= 1
 packager ?= ""
 short_description = "Small and highly customizable twin-panel file manager for Linux with support for plugins."
 
-# Paths
+# additional directories
 file_path = $(build_directory)/$(file_name)
 deb_file_path = $(build_directory)/sunflower-$(version)-$(release).all.deb
 pkg_file_path = $(build_directory)/sunflower-$(version)-$(release)-any.pkg.tar.xz
@@ -30,7 +31,7 @@ rpm_file_path = $(build_directory)/sunflower-$(version)-$(release).noarch.rpm
 rpm_opensuse_file_path = $(build_directory)/sunflower-$(version)-$(release).noarch.opensuse.rpm
 rpm_pclinuxos_file_path = $(build_directory)/sunflower-$(version)-$(release).noarch.pclinuxos.rpm
 
-# define help
+# prepare help
 define HELP
 Usage:
 	dist               - create a distribution tgz file
@@ -46,17 +47,20 @@ Usage:
 	version            - print Sunflower version
 	help               - print this help
 
-Options for dist-*:
+Options for dist-* passed through environment variables:
 	release=1   - release number
 	packager="" - packagers name (e.i. "John Smith <mail@example.com>")
 endef
 export HELP
 
-# Auxiliary macro for installing sunflower while creating .deb's and .rpm's (Remember to symchronize changes with /dist/PKGBUILD!)
+# Auxiliary macro for installing sunflower while creating .deb's and .rpm's.
+# Remember to synchronize changes with /dist/PKGBUILD!
 define dist_install
 	@mkdir -p $(install_directory)
+
 	# untar archive
 	@tar -xf $(file_path).tar -C $(build_directory)
+
 	# install files
 	@install -Dm755 $(working_directory)/dist/sunflower "$(install_directory)/usr/bin/sunflower"
 	@install -d "$(install_directory)/usr/share/sunflower"
@@ -66,7 +70,8 @@ define dist_install
 	@install -Dm644 "$(build_directory)/Sunflower/Sunflower.desktop" "$(install_directory)/usr/share/applications/sunflower.desktop"
 endef
 
-# Auxiliary macro for building .spec ('Requires' field intentionally not filled!)
+# Auxiliary macro for building .spec.
+# Requires field intentionally not filled!
 define create_spec
 	# coping and configuring spec file
 	@cp $(working_directory)/dist/sunflower.spec $(build_directory)
@@ -80,11 +85,14 @@ endef
 define create_rpm
 	# building package...
 	@rpmbuild -bb $(build_directory)/sunflower.spec --buildroot $(install_directory)
-	# coping to $@
+
+	# copying to $@
 	@cp ~/rpmbuild/RPMS/noarch/sunflower-$(version)-$(release).noarch.rpm $@
+
 	# cleaning up
 	@rm -rf $(install_directory) $(build_directory)/sunflower.spec $(build_directory)/Sunflower
 endef
+
 
 # configuration options
 all: version help
@@ -96,10 +104,10 @@ $(file_path).tgz:
 	# archive files
 	@git archive \
 		--format=tar.gz --output=$(file_path).tgz \
-		--prefix=Sunflower/ release
+		--prefix=Sunflower/ master
 
 	# making checksum
-	@shasum -a 256 build/* > $(file_path).tgz.sha256
+	@sha256sum build/* > $(file_path).tgz.sha256
 
 $(file_path).tar: $(file_path).tgz
 	@gunzip -c $(file_path).tgz > $(file_path).tar

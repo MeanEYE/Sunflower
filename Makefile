@@ -112,7 +112,7 @@ $(deb_file_path): $(file_path).tar
 	@mkdir -p $(install_directory)/DEBIAN
 	@cp $(working_directory)/dist/control $(install_directory)/DEBIAN
 	@sed -i s/@version@/$(version)/ $(install_directory)/DEBIAN/control
-	@sed -i s/@packager@/"$(packager)"/ $(install_directory)/DEBIAN/control
+	@sed -i s/@packager@/$(packager)/ $(install_directory)/DEBIAN/control
 	@sed -i s/@short_description@/$(short_description)/ $(install_directory)/DEBIAN/control
 
 	# building package

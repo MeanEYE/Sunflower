@@ -20,6 +20,7 @@ from plugin_base.provider import FileType, Mode as FileMode, Support as Provider
 from threading import Thread, Event
 from widgets.thumbnail_view import ThumbnailView
 from widgets.emblems_renderer import CellRendererEmblems
+from queue import OperationQueue
 
 
 class Column:
@@ -802,6 +803,7 @@ class FileList(ItemList):
 
 	def _delete_files(self, widget=None, force_delete=None):
 		"""Delete selected files"""
+		queue_name = None
 		selection = self._get_selection_list(relative=True)
 
 		# return if there is no selection

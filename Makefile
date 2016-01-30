@@ -1,5 +1,5 @@
 # directories
-working_directory := $(dir $(lastword $(MAKEFILE_LIST)))
+working_directory := $(shell pwd)
 build_directory ?= $(working_directory)/build
 install_directory = $(build_directory)/sunflower
 
@@ -54,12 +54,17 @@ endef
 export HELP
 
 # Auxiliary macro for installing sunflower while creating .deb's and .rpm's.
-# Remember to synchronize changes with /dist/PKGBUILD!
-define dist_install
+define prepare_install
 	@mkdir -p $(install_directory)
 
 	# untar archive
 	@tar -xf $(file_path).tar -C $(build_directory)
+endef
+
+# Auxiliary macro for installing sunflower while creating .deb's and .rpm's.
+# Remember to synchronize changes with /dist/PKGBUILD and /dist/sunflower.spec!
+define dist_install
+	$(prepare_install)
 
 	# install files
 	@install -Dm755 $(working_directory)/dist/sunflower "$(install_directory)/usr/bin/sunflower"
@@ -118,6 +123,7 @@ $(deb_file_path): $(file_path).tar
 
 	# coping and configuring control file
 	@mkdir -p $(install_directory)/DEBIAN
+	@chmod -s $(install_directory)/DEBIAN
 	@cp $(working_directory)/dist/control $(install_directory)/DEBIAN
 	@sed -i s/@version@/$(version)/ $(install_directory)/DEBIAN/control
 	@sed -i s/@packager@/"$(packager)"/ $(install_directory)/DEBIAN/control
@@ -137,7 +143,7 @@ $(pkg_file_path): $(file_path).tgz
 	@mkdir -p $(install_directory)
 
 	# coping tarball
-	@cp $(file_path).tgz $(install_directory)
+	@cp $(file_path).tgz $(install_directory)/sunflower-$(version).tgz
 
 	# coping and configuring PKGBUILD
 	@cp $(working_directory)/dist/PKGBUILD $(working_directory)/dist/sunflower $(install_directory)
@@ -146,7 +152,7 @@ $(pkg_file_path): $(file_path).tgz
 	@sed -i s/@short_description@/$(short_description)/ $(install_directory)/PKGBUILD
 
 	# generating checksum
-	@cd $(install_directory); makepkg -g >> PKGBUILD
+	cd $(install_directory); makepkg -g >> $(install_directory)/PKGBUILD
 
 	# building
 	@cd $(install_directory); makepkg
@@ -159,24 +165,23 @@ $(pkg_file_path): $(file_path).tgz
 
 $(rpm_file_path): $(file_path).tar
 	$(info Building package for Fedora, Mageia, Mandriva...)
-	$(dist_install)
+	$(prepare_install)
 	$(create_spec)
 	@sed -i s/@requires@/pygtk2/ $(build_directory)/sunflower.spec
 	$(create_rpm)
 
 $(rpm_opensuse_file_path): $(file_path).tar
 	$(info Building package for OpenSUSE...)
-	$(dist_install)
+	$(prepare_install)
 	$(create_spec)
 	@sed -i s/@requires@/python-gtk/ $(build_directory)/sunflower.spec
 	$(create_rpm)
 
 $(rpm_pclinuxos_file_path): $(file_path).tar
 	$(info Building package for PCLinuxOS...)
-	$(dist_install)
+	$(prepare_install)
 	$(create_spec)
 	@sed -i s/@requires@/pygtk2.0/ $(build_directory)/sunflower.spec
-	@desktop-file-edit --add-category="X-MandrivaLinux-System-FileTools" "$(install_directory)/usr/share/applications/sunflower.desktop"
 	$(create_rpm)
 
 dist: $(file_path).tgz

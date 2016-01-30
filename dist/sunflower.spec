@@ -14,6 +14,13 @@ Requires: @requires@
 
 
 %install
+install -Dm755 %{buildroot}/../../dist/sunflower "%{buildroot}/usr/bin/sunflower"
+install -d "%{buildroot}/usr/share/sunflower"
+cp -r %{buildroot}/../Sunflower/* "%{buildroot}/usr/share/sunflower"
+install -Dm644 "%{buildroot}/../Sunflower/images/sunflower.png" "%{buildroot}/usr/share/pixmaps/sunflower.png"
+install -Dm644 "%{buildroot}/../Sunflower/images/sunflower.svg" "%{buildroot}/usr/share/pixmaps/sunflower.svg"
+install -Dm644 "%{buildroot}/../Sunflower/Sunflower.desktop" "%{buildroot}/usr/share/applications/sunflower.desktop"
+
 
 %files
 %defattr(0644,root,root,0755)

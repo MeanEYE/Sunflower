@@ -15,7 +15,7 @@ Small and highly customizable twin-panel file manager for Linux with support for
 %install
 mkdir -p "$RPM_BUILD_ROOT/usr/bin"
 mkdir -p "$RPM_BUILD_ROOT/usr/share/applications"
-tar -xf sunflower-*.tgz -C build/
+tar -xf sunflower-*.tar -C build/
 install -Dm755 "dist/sunflower" "$RPM_BUILD_ROOT/usr/bin/sunflower"
 install -d "$RPM_BUILD_ROOT/usr/share/sunflower"
 cp -r "build/Sunflower/*" "$RPM_BUILD_ROOT/usr/share/sunflower"

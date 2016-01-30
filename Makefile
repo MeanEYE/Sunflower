@@ -132,7 +132,6 @@ dist-rpm-pclinuxos: archive
 	$(info Building package for PCLinuxOS...)
 	$(CREATE_RPM_SPEC_FILE)
 	sed -i s/@requires@/pygtk2.0/ $(BUILD_DIRECTORY)/sunflower.spec
-	desktop-file-edit --add-category="X-MandrivaLinux-System-FileTools" "$(FEDORA_BUILD_DIRECTORY)/usr/share/applications/sunflower.desktop"
 	rpmbuild -bb $(BUILD_DIRECTORY)/sunflower.spec --build-in-place --buildroot "$(abspath $(FEDORA_BUILD_DIRECTORY))"
 	cp ~/rpmbuild/RPMS/noarch/sunflower-$(VERSION)-$(RELEASE).noarch.rpm $(RPM_PCLINUXOS_FILE_PATH)
 	sha256sum $(RPM_PCLINUXOS_FILE_PATH) > $(RPM_PCLINUXOS_FILE_PATH).sha256

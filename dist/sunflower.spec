@@ -22,6 +22,7 @@ cp -r build/Sunflower/* "$RPM_BUILD_ROOT/usr/share/sunflower"
 install -Dm644 "build/Sunflower/images/sunflower.png" "$RPM_BUILD_ROOT/usr/share/pixmaps/sunflower.png"
 install -Dm644 "build/Sunflower/images/sunflower.svg" "$RPM_BUILD_ROOT/usr/share/pixmaps/sunflower.svg"
 install -Dm644 "build/Sunflower/Sunflower.desktop" "$RPM_BUILD_ROOT/usr/share/applications/sunflower.desktop"
+desktop-file-edit --add-category="X-MandrivaLinux-System-FileTools" "$RPM_BUILD_ROOT/usr/share/applications/sunflower.desktop"
 
 %files
 %defattr(0644,root,root,0755)

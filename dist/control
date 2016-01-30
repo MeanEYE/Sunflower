@@ -7,6 +7,6 @@ Depends: python, python-gtk2
 Recommends: python-notify
 Suggests: python-gnome2, python-argparse, python-mutagen, python-vte
 Maintainer: @packager@
-Installed-Size: 5000
-Description: @short_description@
+Installed-Size: @size@
+Description: Small and highly customizable twin-panel file manager for Linux with support for plugins.
 

@@ -8,7 +8,7 @@ depends=(pygtk)
 optdepends=('python2-notify: notifications',
             'python2-gnomekeyring: access to saved passwords',
             'vte: support for built-in terminal')
-pkgdesc="@short_description@"
+pkgdesc="Small and highly customizable twin-panel file manager for Linux with support for plugins."
 options=(!strip !zipman)
 source=(./${pkgname}-${pkgver//a./a-}.tgz ./sunflower)
 

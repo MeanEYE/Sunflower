@@ -45,11 +45,19 @@ class DiskUsage:
 				continue
 
 			# get list of items in specified directory
-			item_list = provider.list_dir(scan_path, relative_to=path)
-			relative_path = os.path.join(path, scan_path)
+			try:
+				item_list = provider.list_dir(scan_path, relative_to=path)
+
+			except OSError:
+				# silently ignore errors
+				continue
+
+			else:
+				relative_path = os.path.join(path, scan_path)
 
 			for item in item_list:
-				if provider.is_dir(item, relative_to=relative_path):
+				if provider.is_dir(item, relative_to=relative_path) \
+				and not provider.is_link(item, relative_to=relative_path):
 					# queue up new directory to check
 					scan_list.append(os.path.join(scan_path, item))
 
@@ -63,6 +71,9 @@ class DiskUsage:
 				if total_count % 50 == 0:
 					self.__update_totals(parent_id, path, total_count, total_size)
 					monitor_queue.put((MonitorSignals.DIRECTORY_SIZE_CHANGED, path, None), False)
+
+		# notify monitor we are done
+		monitor_queue.put((MonitorSignals.DIRECTORY_SIZE_STOPPED, path, None), False)
 
 	def get(self, parent_object, path):
 		"""Get statistics for specified path."""
@@ -83,7 +94,7 @@ class DiskUsage:
 
 		# if for some strange reason calculation is requested again
 		if key in self._stop_events:
-			return
+			return False
 
 		# store event to allow stopping thread early
 		stop_event = Event()
@@ -91,6 +102,8 @@ class DiskUsage:
 
 		# start calculation in new thread
 		Thread(target=self.__calculate_usage, args=(key[0], monitor_queue, provider, path, stop_event)).start()
+
+		return True
 
 	def cancel(self, parent_object, path):
 		"""Cancel disk usage calculation for specified path requested by parent_object."""

@@ -545,12 +545,15 @@ class FileList(ItemList):
 		if is_dir and not is_parent:
 			monitor = self.get_monitor()
 
-			self._parent.disk_usage.calculate(
+			# start calculation thread
+			if self._parent.disk_usage.calculate(
 					self,
 					monitor.get_queue(),
 					self.get_provider(),
 					os.path.join(self.path, name)
-				)
+					):
+				# show spinner
+				self._title_bar.show_spinner()
 
 		return True
 
@@ -1411,6 +1414,10 @@ class FileList(ItemList):
 		elif event is MonitorSignals.DIRECTORY_SIZE_CHANGED:
 			self._update_directory_size_by_name(path, parent)
 
+		# directory size calculation has finied
+		elif event is MonitorSignals.DIRECTORY_SIZE_STOPPED:
+			self._title_bar.hide_spinner()
+
 		self._change_title_text()
 		self._update_status_with_statistis()
 
@@ -2084,6 +2091,10 @@ class FileList(ItemList):
 				# clear locks and exit
 				self._thread_active.clear()
 				self._main_thread_lock.clear()
+
+				with gtk.gdk.lock:
+					self._title_bar.hide_spinner()
+
 				return
 
 			# remove hidden files if we don't need them

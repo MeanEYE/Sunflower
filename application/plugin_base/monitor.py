@@ -17,6 +17,7 @@ class MonitorSignals:
 	MOVED = 7  # file was moved
 	EMBLEM_CHANGED = 8  # list of emblems has changed
 	DIRECTORY_SIZE_CHANGED = 9  # calculated directory size has changed
+	DIRECTORY_SIZE_STOPPED = 10  # directory size calculation has finished
 
 
 class Monitor(GObject.GObject):

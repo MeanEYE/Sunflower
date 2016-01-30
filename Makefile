@@ -110,31 +110,32 @@ dist-arch: dist
 	cd $(ARCH_BUILD_DIRECTORY); makepkg -g >> PKGBUILD
 	cd $(ARCH_BUILD_DIRECTORY); makepkg
 	mv $(ARCH_BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE)-any.pkg.tar.xz $(PKG_FILE_PATH)
+	sha256sum $(PKG_FILE_PATH) > $(PKG_FILE_PATH).sha256
 
 dist-rpm: archive
 	$(info Building package for Fedora, Mageia, Mandriva...)
 	$(CREATE_RPM_SPEC_FILE)
 	sed -i s/@requires@/pygtk2/ $(BUILD_DIRECTORY)/sunflower.spec
-	rpmbuild -bb $(BUILD_DIRECTORY)/sunflower.spec --buildroot "$(abspath $(FEDORA_BUILD_DIRECTORY))"
+	rpmbuild -bb $(BUILD_DIRECTORY)/sunflower.spec --build-in-place --buildroot "$(abspath $(FEDORA_BUILD_DIRECTORY))"
 	cp ~/rpmbuild/RPMS/noarch/sunflower-$(VERSION)-$(RELEASE).noarch.rpm $(RPM_FILE_PATH)
-	rm -rf $(FEDORA_BUILD_DIRECTORY) $(BUILD_DIRECTORY)/sunflower.spec $(BUILD_DIRECTORY)/Sunflower
+	sha256sum $(RPM_FILE_PATH) > $(RPM_FILE_PATH).sha256
 
 dist-rpm-opensuse: archive
 	$(info Building package for OpenSUSE...)
 	$(CREATE_RPM_SPEC_FILE)
 	sed -i s/@requires@/python-gtk/ $(BUILD_DIRECTORY)/sunflower.spec
-	rpmbuild -bb $(BUILD_DIRECTORY)/sunflower.spec --buildroot "$(abspath $(FEDORA_BUILD_DIRECTORY))"
+	rpmbuild -bb $(BUILD_DIRECTORY)/sunflower.spec --build-in-place --buildroot "$(abspath $(FEDORA_BUILD_DIRECTORY))"
 	cp ~/rpmbuild/RPMS/noarch/sunflower-$(VERSION)-$(RELEASE).noarch.rpm $(RPM_OPENSUSE_FILE_PATH)
-	rm -rf $(FEDORA_BUILD_DIRECTORY) $(BUILD_DIRECTORY)/sunflower.spec $(BUILD_DIRECTORY)/Sunflower
+	sha256sum $(RPM_OPENSUSE_FILE_PATH) > $(RPM_OPENSUSE_FILE_PATH).sha256
 
 dist-rpm-pclinuxos: archive
 	$(info Building package for PCLinuxOS...)
 	$(CREATE_RPM_SPEC_FILE)
 	sed -i s/@requires@/pygtk2.0/ $(BUILD_DIRECTORY)/sunflower.spec
 	desktop-file-edit --add-category="X-MandrivaLinux-System-FileTools" "$(FEDORA_BUILD_DIRECTORY)/usr/share/applications/sunflower.desktop"
-	rpmbuild -bb $(BUILD_DIRECTORY)/sunflower.spec --buildroot "$(abspath $(FEDORA_BUILD_DIRECTORY))"
+	rpmbuild -bb $(BUILD_DIRECTORY)/sunflower.spec --build-in-place --buildroot "$(abspath $(FEDORA_BUILD_DIRECTORY))"
 	cp ~/rpmbuild/RPMS/noarch/sunflower-$(VERSION)-$(RELEASE).noarch.rpm $(RPM_PCLINUXOS_FILE_PATH)
-	rm -rf $(FEDORA_BUILD_DIRECTORY) $(BUILD_DIRECTORY)/sunflower.spec $(BUILD_DIRECTORY)/Sunflower
+	sha256sum $(RPM_PCLINUXOS_FILE_PATH) > $(RPM_PCLINUXOS_FILE_PATH).sha256
 
 dist-all: dist-deb dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-pkg
 

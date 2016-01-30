@@ -1,3 +1,50 @@
+Version 0.3-60
+  + Ability to find text inside remote directories.
+  + Add MTP, Gphoto2 and GIO Provider to handle Android phones and other multimedia devices.
+  + Add context menu items to copy path or file name of selected item.
+  + Add option to support second level extension.
+  + Add support for GVFS archive mounts.
+  + Added 'skip all' option to operation dialogs.
+  + Added keyboard shortcuts for menus.
+  + Added ability to lock session.
+  + Added option to avoid following symlinks in operations.
+  + Added support for calculating directory usage.
+  + Added viewer word wrap option.
+  + Check collisions on changed accelerators.
+  + Custom dialog for confirming removal.
+  + Enabled mnemonics in bookmark list.
+  + Hide files listed in .hidden file.
+  + Initial archive support.
+  + Initial support for trash.
+  + List of paths to be treated as always visible.
+  + Main window: Add %P,%M and %U variables in commands.
+  + Make viewer try to detect character encoding of file in order to better handle none ASCII/UTF-8 cases.
+  + Operation queue implemented.
+  + Option to turn on network path completion.
+  + Properly handle system signals.
+  + Properly support symbolic links.
+  + Set 'sunflower' as process name if setproctitle module available.
+  + Single instance support through DBus and fnctl.
+  + Support for horizontal split.
+  + Support for multiple patterns when matching items in find files tool.
+  + Support for saving previously used patterns in find files tool.
+  + Support link emblems though emblem manager.
+  * Switched to GitHub API for version check.
+  * Show extensions tabs first in viewer.
+  * Set buffer size from system block size to improve performance in operations.
+  * Selecting "open file list" will open current terminal path instead of initial.
+  * Select first item when selected item is parent directory.
+  * Scroll to item after applying sort function.
+  * Improved path entry dialog.
+  * Fixed some issues with making hard links.
+  * Fixed setting emblems on expanded directories.
+  * Fixed issues with overwriting files in multiple rename tool.
+  * Fix issues with threads on some systems.
+  * Fix issues with opening files and setting current working directory.
+  * Changed the way application imports plugins.
+  * Change operations to work with expanded directories.
+  * Always show tree expanders when option is turned on.
+
 Version 0.2-59
   + Support for multiple file system monitors.
   + Support for drag and drop in same directory.

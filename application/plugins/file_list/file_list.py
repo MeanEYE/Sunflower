@@ -20,7 +20,6 @@ from plugin_base.provider import FileType, Mode as FileMode, Support as Provider
 from threading import Thread, Event
 from widgets.thumbnail_view import ThumbnailView
 from widgets.emblems_renderer import CellRendererEmblems
-from queue import OperationQueue
 
 
 class Column:

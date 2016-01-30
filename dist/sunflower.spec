@@ -10,7 +10,7 @@ Packager: @packager@
 Requires: @requires@
 
 %description
-@short_description@
+Small and highly customizable twin-panel file manager for Linux with support for plugins.
 
 
 %install
@@ -23,4 +23,3 @@ Requires: @requires@
 %attr(0644,root,root) /usr/share/pixmaps/sunflower.png
 %attr(0644,root,root) /usr/share/pixmaps/sunflower.svg
 %attr(0644,root,root) /usr/share/applications/sunflower.desktop
-

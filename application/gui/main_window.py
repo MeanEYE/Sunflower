@@ -632,6 +632,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._paned = Gtk.VPaned() if self.options.get('horizontal_split') else Gtk.HPaned()
 
 		self.left_notebook = Gtk.Notebook.new()
+		self.left_notebook.get_accessible().set_name('left_notebook')
 		self.left_notebook.set_scrollable(True)
 		self.left_notebook.connect('focus-in-event', self._transfer_focus)
 		self.left_notebook.connect('page-added', self._page_added)
@@ -639,6 +640,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.left_notebook.set_group_name('panel')
 
 		self.right_notebook = Gtk.Notebook.new()
+		self.right_notebook.get_accessible().set_name('right_notebook')
 		self.right_notebook.set_scrollable(True)
 		self.right_notebook.connect('focus-in-event', self._transfer_focus)
 		self.right_notebook.connect('page-added', self._page_added)

@@ -18,7 +18,7 @@ class PathCompletionEntry(Gtk.Entry):
 
 		# create suggestion list
 		self._store = Gtk.ListStore(str)
-		liststore.set_sort_column_id(1, Gtk.SortType.ASCENDING)
+		self._store.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 		self._store.set_sort_func(0, self._sort_list)
 
 		# create entry field with completion

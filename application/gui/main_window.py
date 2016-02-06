@@ -2080,7 +2080,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		else:
 			# no data is specified so we try to process command entry
 			raw_command = self.command_edit.get_text()
-			self.command_edit.insert_text(raw_command)
+			self.command_edit.insert_text(raw_command, 0)
 			self.command_edit.set_text('')
 
 		handled = False

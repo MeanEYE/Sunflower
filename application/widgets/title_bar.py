@@ -109,6 +109,7 @@ class TitleBar:
 		self._hbox.pack_start(self._hbox_controls, False, False, 0)
 
 		self._container.add(self._hbox)
+		self._spinner_counter = 0
 
 	def __get_colors(self, normal_style=False):
 		"""Get copy of the style for current state"""

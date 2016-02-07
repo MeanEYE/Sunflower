@@ -167,7 +167,8 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# create header bar
 		self.header_bar = Gtk.HeaderBar.new()
-		self.header_bar.set_has_subtitle(True)
+		if hasattr(self.header_bar, 'set_has_subtitle'):
+			self.header_bar.set_has_subtitle(True)
 		self.header_bar.set_show_close_button(True)
 		self.header_bar.set_title(_('Sunflower'))
 

@@ -2025,7 +2025,7 @@ class FileList(ItemList):
 			self._thread_active.clear()
 
 			while self._main_thread_lock.is_set():
-				Gtk.main_iteration(block=False)
+				Gtk.main_iteration_do(blocking=False)
 
 		# clear list
 		if clear_store:

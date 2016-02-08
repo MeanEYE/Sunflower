@@ -2,11 +2,6 @@ from gi.repository import Gtk, Gdk, Gio, GObject, GLib
 from parameters import Parameters
 from plugin_base.mount_manager_extension import MountManagerExtension, ExtensionFeatures
 
-# redefine some GIO constants for legacy support
-GIO_MOUNT_MOUNT_NONE = Gio.MountMountFlags.NONE if hasattr(Gio, 'MOUNT_MOUNT_NONE') else 0
-GIO_MOUNT_UNMOUNT_NONE = Gio.MountUnmountFlags.NONE if hasattr(Gio, 'MOUNT_UNMOUNT_NONE') else 0
-
-
 class MountsColumn:
 	ICON = 0
 	NAME = 1
@@ -146,7 +141,7 @@ class MountsManagerWindow(Gtk.Window):
 	def _mount_count_data_function(self, column, renderer, model, current_iter, data=None):
 		"""Set content of cell renderer when drawing number of mounts extension has"""
 		count = model.get_value(current_iter, PagesColumn.COUNT)
-		renderer.set_property('text', count if count > 0 else '')
+		renderer.set_property('text', str(count) if count > 0 else '')
 
 	def _attach_menus(self):
 		"""Attach menu items to main window"""
@@ -168,10 +163,11 @@ class MountsManagerWindow(Gtk.Window):
 		image = Gtk.Image()
 		image.set_from_icon_name(icon, Gtk.IconSize.MENU)
 
-		menu_item = Gtk.ImageMenuItem()
-		menu_item.set_label(text)
-		menu_item.set_image(image)
-		menu_item.set_always_show_image(True)
+		menu_item = Gtk.MenuItem()
+		menu_item_box = Gtk.VBox(False, 0)
+		menu_item_box.pack_start(image, True, True, 0)
+		menu_item_box.pack_start(Gtk.Label(text), True, True, 0)
+		menu_item.add(menu_item_box)
 		menu_item.uri = uri
 		menu_item.connect('activate', self._parent._unmount_item_menu_callback)
 		menu_item.show()
@@ -186,7 +182,7 @@ class MountsManagerWindow(Gtk.Window):
 		self._application.bookmarks.remove_mount(mount_point)
 
 		for item in self._menu_unmount.get_children():
-			if item.uri == mount_point:
+			if self._menu_item_no_mounts != item and item.uri == mount_point:
 				self._menu_unmount.remove(item)
 
 		# update menu
@@ -206,9 +202,9 @@ class MountsManagerWindow(Gtk.Window):
 		"""Handle pressing keys in mount manager list"""
 		result = False
 
-		if Gdk.KEY__1 <= event.keyval <= Gdk.KEY__9:
+		if Gdk.KEY_1 <= event.keyval <= Gdk.KEY_9:
 			# handle switching to page number
-			page_index = event.keyval - int(Gdk.KEY__1)
+			page_index = event.keyval - int(Gdk.KEY_1)
 			self._tabs.set_current_page(page_index)
 			result = True
 
@@ -625,11 +621,11 @@ class VolumesExtension(MountManagerExtension):
 		if is_mounted:
 			# unmount volume
 			mount = volume.get_mount()
-			mount.unmount(self._unmount_finish, GIO_MOUNT_UNMOUNT_NONE, None, volume)
+			mount.unmount(Gio.MountUnmountFlags.FORCE, None, self._unmount_finish, volume)
 
 		else:
 			# mount volume
-			volume.mount(None, self._mount_finish, GIO_MOUNT_MOUNT_NONE, None, None)
+			volume.mount(Gio.MountMountFlags.NONE, None, None, self._mount_finish, None)
 
 	def _mount_finish(self, volume, result, data=None):
 		"""Callback function for volume mount"""
@@ -675,7 +671,7 @@ class VolumesExtension(MountManagerExtension):
 
 			# perform auto-mount of volume
 			volume = item_list.get_value(selected_iter, VolumesColumn.OBJECT)
-			volume.mount(None, self._mount_finish, GIO_MOUNT_MOUNT_NONE, None, None)
+			volume.mount(Gio.MountMountFlags.NONE, None, None, self._mount_finish, None)
 
 	def _unmount_volume(self, widget, data=None):
 		"""Unmount selected volume"""
@@ -690,7 +686,7 @@ class VolumesExtension(MountManagerExtension):
 			# unmount
 			volume = item_list.get_value(selected_iter, VolumesColumn.OBJECT)
 			mount = volume.get_mount()
-			mount.unmount(self._unmount_finish, GIO_MOUNT_UNMOUNT_NONE, None, volume)
+			mount.unmount(Gio.MountUnmountFlags.FORCE, None, self._unmount_finish, volume)
 
 	def get_information(self):
 		"""Get extension information"""
@@ -737,7 +733,7 @@ class VolumesExtension(MountManagerExtension):
 			self._show_spinner()
 
 			# perform auto-mount of volume
-			volume.mount(None, self._mount_finish, GIO_MOUNT_MOUNT_NONE, None, None)
+			volume.mount(Gio.MountMountFlags.NONE, None, None, self._mount_finish, None)
 
 		# notify main window about number change
 		self._window.set_count(self, len(self._store))

@@ -107,6 +107,9 @@ class FileList(ItemList):
 		cell_date = gtk.CellRendererText()
 		cell_emblems = CellRendererEmblems()
 
+		cell_name.set_property('single-paragraph-mode', True)
+		cell_extension.set_property('single-paragraph-mode', True)
+
 		cell_selected.set_property('width', 30)  # leave enough room for various characters
 		cell_selected.set_property('xalign', 1)
 		cell_size.set_property('xalign', 1)

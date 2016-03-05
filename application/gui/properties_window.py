@@ -252,7 +252,7 @@ class PropertiesWindow(Gtk.Window):
 
 		# get volume
 		try:
-			mount = Gio.File(self._path).find_enclosing_mount()
+			mount = Gio.File.new_for_commandline_arg(self._path).find_enclosing_mount()
 			volume_name = mount.get_name()
 
 		except Exception:
@@ -263,7 +263,7 @@ class PropertiesWindow(Gtk.Window):
 		self._entry_name.set_text(os.path.basename(self._path))
 		self._label_type.set_text('{0}\n{1}'.format(description, self._mime_type))
 		self._label_size.set_text(item_size)
-		self._label_location.set_text(os.path.dirname(os.path.abspath(self._path)))
+		self._label_location.set_text(os.path.dirname(self._path))
 		self._label_volume.set_text(volume_name)
 		self._label_accessed.set_text(item_a_date)
 		self._label_modified.set_text(item_m_date)
@@ -339,8 +339,8 @@ class PropertiesWindow(Gtk.Window):
 
 		# for remote file systems simply set owner and group
 		else:
-			self._list_owner.append((stat.user_id, stat.user_id))
-			self._list_group.append((stat.group_id, stat.group_id))
+			self._list_owner.append((str(stat.user_id), stat.user_id))
+			self._list_group.append((str(stat.group_id), stat.group_id))
 			self._combobox_owner.set_active(0)
 			self._combobox_group.set_active(0)
 

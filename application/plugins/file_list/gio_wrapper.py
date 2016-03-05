@@ -1,6 +1,8 @@
-from gi.repository import Gio
+from gi.repository import Gio, GLib, GObject
 from plugin_base.provider import Mode
 
+# GFile.read_bytes() has upper limit for size of G_MAXSSIZE (9223372036854775807) which is unsensibly large
+MAX_READ_FILE_SIZE = 4*1024*1024*1024
 
 class File:
 	"""This is a wrapper class that provides file-like object but
@@ -8,15 +10,15 @@ class File:
 
 	def __init__(self, path, mode):
 		if mode == Mode.READ:
-			self._resource = Gio.File(path).read()
+			self._resource = Gio.File.new_for_commandline_arg(path).read()
 
 		elif mode == Mode.WRITE:
-			if Gio.File(path).query_exists():
-				Gio.File(path).delete()
-			self._resource = Gio.File(path).create()
+			if Gio.File.new_for_commandline_arg(path).query_exists():
+				Gio.File.new_for_commandline_arg(path).delete()
+			self._resource = Gio.File.new_for_commandline_arg(path).create()
 
 		elif mode == Mode.APPEND:
-			self._resource = Gio.File(path).append_to()
+			self._resource = Gio.File.new_for_commandline_arg(path).append_to()
 
 	def __enter__(self):
 		"""Set opened file as runtime context"""
@@ -39,14 +41,14 @@ class File:
 		if hasattr(self._resource, 'flush'):
 			self._resource.flush()
 
-	def read(self, size=-1):
+	def read(self, size=MAX_READ_FILE_SIZE):
 		"""Read at most _size_ bytes from the file"""
-		result = self._resource.read(size)
+		result = self._resource.read_bytes(size)
 
 		if result is True:
 			result = ""
 
-		return result
+		return result.get_data()
 
 	def seek(self, offset, whence=0):
 		"""Set the file's current position"""

@@ -48,8 +48,7 @@ class DefaultFindFiles(FindExtension):
 		label_pattern = Gtk.Label(label=_('Search for:'))
 		label_pattern.set_alignment(0, 0.5)
 
-		self._entries = Gtk.ListStore(str)
-		self._entry_pattern = Gtk.ComboBox.new_with_model_and_entry(model=self._entries)
+		self._entry_pattern = Gtk.ComboBoxText.new_with_entry()
 		self._entry_pattern.connect('changed', self.__handle_pattern_change)
 
 		self._checkbox_case_sensitive = Gtk.CheckButton(_('Case sensitive'))
@@ -106,7 +105,7 @@ class DefaultFindFiles(FindExtension):
 		entries = self._options.get('patterns') or ['*']
 
 		for entry in entries:
-			self._entries.append((entry,))
+			self._entry_pattern.append_text(entry)
 
 		# select first entry
 		self._entry_pattern.handler_block_by_func(self.__handle_pattern_change)

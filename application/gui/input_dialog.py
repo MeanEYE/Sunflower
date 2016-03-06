@@ -705,7 +705,8 @@ class CopyDialog:
 
 		vbox_silent = Gtk.VBox(False, 0)
 		vbox_silent.set_sensitive(False)
-		vbox_silent.set_margin_start(15)
+		if hasattr(vbox_silent, 'set_margin_start'):
+			vbox_silent.set_margin_start(15)
 
 		self.checkbox_merge = Gtk.CheckButton(_('Merge directories'))
 		self.checkbox_overwrite = Gtk.CheckButton(_('Overwrite files'))

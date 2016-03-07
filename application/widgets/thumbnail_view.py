@@ -1,10 +1,10 @@
 import os
 
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, GObject, GdkPixbuf
 
 try:
 	# try to import module
-	import gnome.ui
+	from gi.repository import GnomeDesktop
 	USE_FACTORY = True
 
 except:
@@ -39,10 +39,10 @@ class ThumbnailView(Gtk.Window):
 		if USE_FACTORY:
 			# set default thumbnail size
 			if self._thumbnail_size is None:
-				self._thumbnail_size = gnome.ui.THUMBNAIL_SIZE_NORMAL
+				self._thumbnail_size = GnomeDesktop.DesktopThumbnailSize.NORMAL
 
 			# create a factory
-			self._factory = gnome.ui.ThumbnailFactory(self._thumbnail_size)
+			self._factory = GnomeDesktop.DesktopThumbnailFactory.new(self._thumbnail_size)
 
 		else:
 			self._factory = None

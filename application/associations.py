@@ -51,10 +51,10 @@ class AssociationManager:
 
 		if selection is not None:
 			# prepare lists
-			normal_list = ['"{0}"'.format(item) for item in selection]
-			uri_list = ['"{0}"'.format(item) for item in selection]
-			dir_list = ['"{0}"'.format(os.path.dirname(item) for item in selection)]
-			names_list = ['"{0}"'.format(os.path.basename(item) for item in selection)]
+			normal_list = ['"{0}"'.format(item.replace('"', '\\"')) for item in selection]
+			uri_list = ['"{0}"'.format(item.replace('"', '\\"')) for item in selection]
+			dir_list = ['"{0}"'.format(os.path.dirname(item).replace('"', '\\"') for item in selection)]
+			names_list = ['"{0}"'.format(os.path.basename(item).replace('"', '\\"') for item in selection)]
 
 			# prepare single item selection
 			if '%f' in command:

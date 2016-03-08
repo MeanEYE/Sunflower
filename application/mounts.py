@@ -33,7 +33,7 @@ class MountsManager:
 		for mount in self._volume_monitor.get_mounts():
 			if mount.get_root().get_uri() not in mounts_added:
 				self._add_mount(self._volume_monitor, mount)
-				mounts_added.append(volume.get_activation_root().get_uri())
+				mounts_added.append(mount.get_root().get_uri())
 
 		# update menus
 		self.window._menu_updated()

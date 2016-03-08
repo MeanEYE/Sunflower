@@ -5,7 +5,7 @@ from gi.repository import Gtk
 from gi.repository import Pango
 import subprocess
 
-from gi.repository import Gtk, Gdk, Pango, GObject
+from gi.repository import Gtk, Gdk, Pango, GObject, GdkPixbuf
 from common import executable_exists
 from widgets.status_bar import StatusBar
 from plugin_base.provider import Mode as FileMode

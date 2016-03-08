@@ -50,7 +50,7 @@ class ContentsFindFiles(FindExtension):
 
 		if file_type is FileType.REGULAR:
 			# get buffer
-			text = self._buffer.get_text(*self._buffer.get_bounds())
+			text = self._buffer.get_text(*self._buffer.get_bounds(), include_hidden_chars=True)
 
 			# try finding content in file
 			try:

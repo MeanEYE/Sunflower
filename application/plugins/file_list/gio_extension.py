@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Gio, Gdk
+from gi.repository import Gtk, Gio, Gdk, GLib
 from dialogs import SambaInputDialog, SambaResult
 from dialogs import FtpInputDialog, FtpResult, SftpInputDialog
 from dialogs import DavInputDialog, DavResult
@@ -78,8 +78,8 @@ class GioExtension(MountManagerExtension):
 		operation.connect('ask-password', ask_password)
 
 		# perform mount
-		path = Gio.File(uri)
-		path.mount_enclosing_volume(operation, self.__mount_callback)
+		path = Gio.File.new_for_commandline_arg(uri)
+		path.mount_enclosing_volume(Gio.MountMountFlags.NONE, operation, None, self.__mount_callback, None)
 
 	def _unmount(self, uri):
 		"""Perform unmount on specified URI"""
@@ -87,8 +87,8 @@ class GioExtension(MountManagerExtension):
 
 		# get mount for specified URI
 		try:
-			mount = Gio.File(uri).find_enclosing_mount()
-			mount.unmount(self.__unmount_callback)
+			mount = Gio.File.new_for_commandline_arg(uri).find_enclosing_mount()
+			mount.unmount(Gio.MountUnmountFlags.FORCE, None, self.__unmount_callback, None)
 
 		except:
 			pass
@@ -96,12 +96,12 @@ class GioExtension(MountManagerExtension):
 		finally:
 			self._hide_spinner()
 
-	def __mount_callback(self, path, result):
+	def __mount_callback(self, path, result, user_data=None):
 		"""Finish mounting"""
 		try:
 			path.mount_enclosing_volume_finish(result)
 
-		except Gio.Error as error:
+		except GLib.GError as error:
 			with Gdk.lock:
 				dialog = Gtk.MessageDialog(
 										self._parent.window,
@@ -118,11 +118,12 @@ class GioExtension(MountManagerExtension):
 		finally:
 			self._hide_spinner()
 
-	def __unmount_callback(self, mount, result):
+	def __unmount_callback(self, mount, result, user_data=None):
 		"""Finish unmounting"""
 		try:
 			mount.unmount_finish(result)
-
+		except GLib.GError as error:
+			pass
 		finally:
 			self._hide_spinner()
 

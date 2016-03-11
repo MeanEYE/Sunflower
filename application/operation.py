@@ -1,7 +1,7 @@
 import os
 import fnmatch
 
-from gi.repository import Gtk, Gdk, GObject
+from gi.repository import Gtk, GObject
 from threading import Thread, Event
 from Queue import Queue
 
@@ -1031,7 +1031,7 @@ class CopyOperation(Operation):
 
 					# try to write data again
 					if response == OperationError.RESPONSE_RETRY:
-						Gobject.idle_add(self._dialog.increment_current_size, -dh.tell())
+						GObject.idle_add(self._dialog.increment_current_size, -dh.tell())
 						if hasattr(sh, 'close'): sh.close()
 						if hasattr(dh, 'close'): sh.close()
 
@@ -1745,7 +1745,7 @@ class RenameOperation(Operation):
 				# queue notification
 				notify_manager.notify(title, message)
 
-		GObject.idle_add(GLib.PRIORITY_DEFAULT_IDLE, notify_is_not_focused)
+		GObject.idle_add(notify_is_not_focused)
 
 		# destroy dialog
 		self._destroy_ui()

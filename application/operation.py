@@ -1,7 +1,7 @@
 import os
 import fnmatch
 
-from gi.repository import Gtk, Gdk, GLib
+from gi.repository import Gtk, GObject
 from threading import Thread, Event
 from Queue import Queue
 
@@ -101,7 +101,7 @@ class Operation(Thread):
 	def _destroy_ui(self):
 		"""Destroy user interface"""
 		if self._dialog is not None:
-			GLib.idle_add(self._dialog.destroy)
+			GObject.idle_add(self._dialog.destroy)
 
 	def _get_free_space_input(self, needed, available):
 		"""Get user input when there is not enough space"""
@@ -143,7 +143,7 @@ class Operation(Thread):
 
 			# show dialog in main thread
 			queue = Queue()
-			GLib.idle_add(ask_user, queue)
+			GObject.idle_add(ask_user, queue)
 			should_continue = queue.get(True)
 
 		return should_continue
@@ -185,7 +185,7 @@ class Operation(Thread):
 
 			# show dialog in main thread
 			queue = Queue()
-			GLib.idle_add(ask_user, queue)
+			GObject.idle_add(ask_user, queue)
 			result, merge = queue.get(True)
 
 		if result[1][OverwriteOption.APPLY_TO_ALL]:
@@ -235,7 +235,7 @@ class Operation(Thread):
 
 			# show dialog in main thread
 			queue = Queue()
-			GLib.idle_add(ask_user, queue)
+			GObject.idle_add(ask_user, queue)
 			result, overwrite = queue.get(True)
 
 		if result[1][OverwriteOption.APPLY_TO_ALL]:
@@ -284,7 +284,7 @@ class Operation(Thread):
 
 			# show dialog in main thread
 			queue = Queue()
-			GLib.idle_add(ask_user, queue)
+			GObject.idle_add(ask_user, queue)
 			response = queue.get(True)
 
 		return response
@@ -334,7 +334,7 @@ class Operation(Thread):
 
 			# show dialog in main thread
 			queue = Queue()
-			GLib.idle_add(ask_user, queue)
+			GObject.idle_add(ask_user, queue)
 			response = queue.get(True)
 
 		return response
@@ -373,7 +373,7 @@ class Operation(Thread):
 
 			# show dialog in main thread
 			queue = Queue()
-			GLib.idle_add(ask_user, queue)
+			GObject.idle_add(ask_user, queue)
 			response = queue.get(True)
 
 		return response
@@ -412,7 +412,7 @@ class Operation(Thread):
 
 			# show dialog in main thread
 			queue = Queue()
-			GLib.idle_add(ask_user, queue)
+			GObject.idle_add(ask_user, queue)
 			response = queue.get(True)
 
 		return response
@@ -451,7 +451,7 @@ class Operation(Thread):
 
 			# show dialog in main thread
 			queue = Queue()
-			GLib.idle_add(ask_user, queue)
+			GObject.idle_add(ask_user, queue)
 			response = queue.get(True)
 
 		return response
@@ -490,7 +490,7 @@ class Operation(Thread):
 
 			# show dialog in main thread
 			queue = Queue()
-			GLib.idle_add(ask_user, queue)
+			GObject.idle_add(ask_user, queue)
 			response = queue.get(True)
 
 		return response
@@ -529,7 +529,7 @@ class Operation(Thread):
 
 			# show dialog in main thread
 			queue = Queue()
-			GLib.idle_add(ask_user, queue)
+			GObject.idle_add(ask_user, queue)
 			response = queue.get(True)
 
 		return response
@@ -568,7 +568,7 @@ class Operation(Thread):
 
 			# show dialog in main thread
 			queue = Queue()
-			GLib.idle_add(ask_user, queue)
+			GObject.idle_add(ask_user, queue)
 			response = queue.get(True)
 
 		return response
@@ -656,7 +656,7 @@ class CopyOperation(Operation):
 
 	def _get_lists(self):
 		"""Find all files for copying"""
-		GLib.idle_add(self._update_status, _('Searching for files...'))
+		GObject.idle_add(self._update_status, _('Searching for files...'))
 
 		# exclude files already selected with parent directory
 		for file_name in self._selection_list:
@@ -671,8 +671,8 @@ class CopyOperation(Operation):
 			self._can_continue.wait()  # pause lock
 
 			# update current file label
-			GLib.idle_add(self._dialog.set_current_file, item)
-			GLib.idle_add(self._dialog.pulse)
+			GObject.idle_add(self._dialog.set_current_file, item)
+			GObject.idle_add(self._dialog.pulse)
 
 			if os.path.sep in item:
 				relative_path, item = os.path.split(item)
@@ -710,8 +710,8 @@ class CopyOperation(Operation):
 				# item is a file, get stats and update lists
 				item_stat = self._source.get_stat(item, relative_to=source_path)
 
-				GLib.idle_add(self._dialog.increment_total_size, item_stat.size)
-				GLib.idle_add(self._dialog.increment_total_count, 1)
+				GObject.idle_add(self._dialog.increment_total_size, item_stat.size)
+				GObject.idle_add(self._dialog.increment_total_count, 1)
 
 				self._total_count += 1
 				self._total_size += item_stat.size
@@ -835,8 +835,8 @@ class CopyOperation(Operation):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
-			GLib.idle_add(self._dialog.set_current_file, os.path.join(directory, item))
-			GLib.idle_add(self._dialog.pulse)
+			GObject.idle_add(self._dialog.set_current_file, os.path.join(directory, item))
+			GObject.idle_add(self._dialog.pulse)
 
 			full_name = os.path.join(directory, item)
 
@@ -863,8 +863,8 @@ class CopyOperation(Operation):
 				# item is a file, update global statistics
 				item_stat = self._source.get_stat(full_name, relative_to=source_path)
 
-				GLib.idle_add(self._dialog.increment_total_size, item_stat.size)
-				GLib.idle_add(self._dialog.increment_total_count, 1)
+				GObject.idle_add(self._dialog.increment_total_size, item_stat.size)
+				GObject.idle_add(self._dialog.increment_total_count, 1)
 
 				self._total_count += 1
 				self._total_size += item_stat.size
@@ -947,7 +947,7 @@ class CopyOperation(Operation):
 
 			# update total size
 			file_stat = self._source.get_stat(file_name, relative_to=source_path)
-			GLib.idle_add(self._dialog.increment_current_size, file_stat.size)
+			GObject.idle_add(self._dialog.increment_current_size, file_stat.size)
 			return
 
 		try:
@@ -1006,7 +1006,7 @@ class CopyOperation(Operation):
 				self._file_list.pop(self._file_list.index((file_name, relative_path)))
 
 			# remove amount of copied bytes from total size
-			GLib.idle_add(self._dialog.increment_current_size, -destination_size)
+			GObject.idle_add(self._dialog.increment_current_size, -destination_size)
 
 			# exit method
 			return
@@ -1031,7 +1031,7 @@ class CopyOperation(Operation):
 
 					# try to write data again
 					if response == OperationError.RESPONSE_RETRY:
-						GLib.idle_add(self._dialog.increment_current_size, -dh.tell())
+						GObject.idle_add(self._dialog.increment_current_size, -dh.tell())
 						if hasattr(sh, 'close'): sh.close()
 						if hasattr(dh, 'close'): sh.close()
 
@@ -1040,14 +1040,14 @@ class CopyOperation(Operation):
 					return
 
 				destination_size += len(data)
-				GLib.idle_add(self._dialog.increment_current_size, len(data))
+				GObject.idle_add(self._dialog.increment_current_size, len(data))
 				if file_stat.size > 0:  # ensure we don't end up with error on 0 size files
-					GLib.idle_add(
+					GObject.idle_add(
 									self._dialog.set_current_file_fraction,
 									destination_size / float(file_stat.size)
 								)
 				else:
-					GLib.idle_add(self._dialog.set_current_file_fraction, 1)
+					GObject.idle_add(self._dialog.set_current_file_fraction, 1)
 
 				# push event to the queue
 				if self._destination_queue is not None:
@@ -1120,16 +1120,16 @@ class CopyOperation(Operation):
 
 	def _create_directory_list(self):
 		"""Create all directories in list"""
-		GLib.idle_add(self._update_status, _('Creating directories...'))
+		GObject.idle_add(self._update_status, _('Creating directories...'))
 
 		for number, directory in enumerate(self._dir_list_create, 0):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
-			GLib.idle_add(self._dialog.set_current_file, directory[0])
+			GObject.idle_add(self._dialog.set_current_file, directory[0])
 			self._create_directory(directory[0], directory[1])  # create directory
 
-			GLib.idle_add(
+			GObject.idle_add(
 						self._dialog.set_current_file_fraction,
 						float(number) / len(self._dir_list)
 					)
@@ -1137,7 +1137,7 @@ class CopyOperation(Operation):
 	def _copy_file_list(self):
 		"""Copy list of files to destination path"""
 		# update status
-		GLib.idle_add(self._update_status, _('Copying files...'))
+		GObject.idle_add(self._update_status, _('Copying files...'))
 
 		item_list = self._file_list[:]
 
@@ -1148,26 +1148,26 @@ class CopyOperation(Operation):
 			self._can_continue.wait()  # pause lock
 
 			# copy file
-			GLib.idle_add(self._dialog.set_current_file, file_name)
+			GObject.idle_add(self._dialog.set_current_file, file_name)
 			self._copy_file(file_name, source_path)
-			GLib.idle_add(self._dialog.increment_current_count, 1)
+			GObject.idle_add(self._dialog.increment_current_count, 1)
 
 	def _create_links(self):
-		GLib.idle_add(self._update_status, _('Creating links...'))
+		GObject.idle_add(self._update_status, _('Creating links...'))
 		for link_name, source_path in self._link_list:
 			# abort operation if requested
 			if self._abort.is_set(): break
 			self._can_continue.wait()  # pause lock
 
 			#create link
-			GLib.idle_add(self._dialog.set_current_file, link_name)
+			GObject.idle_add(self._dialog.set_current_file, link_name)
 			self._create_link(link_name, source_path)
 
 	def run(self):
 		"""Main thread method, this is where all the stuff is happening"""
 		# set dialog info
-		GLib.idle_add(self._dialog.set_source, self._source_path)
-		GLib.idle_add(self._dialog.set_destination, self._destination_path)
+		GObject.idle_add(self._dialog.set_source, self._source_path)
+		GObject.idle_add(self._dialog.set_destination, self._destination_path)
 
 		# wait for operation queue if needed
 		if self._operation_queue is not None:
@@ -1193,7 +1193,7 @@ class CopyOperation(Operation):
 			if self._source_path == parent.path:
 				parent.deselect_all()
 
-		GLib.idle_add(clear_selection)
+		GObject.idle_add(clear_selection)
 
 		# perform operation
 		self._create_links()
@@ -1228,10 +1228,10 @@ class CopyOperation(Operation):
 				error_list.set_errors(self._error_list)
 				error_list.show()
 
-		GLib.idle_add(show_notification)
+		GObject.idle_add(show_notification)
 
 		# destroy dialog
-		GLib.idle_add(self._destroy_ui)
+		GObject.idle_add(self._destroy_ui)
 
 		# start next operation
 		if self._operation_queue is not None:
@@ -1335,7 +1335,7 @@ class MoveOperation(CopyOperation):
 
 	def _move_file_list(self):
 		"""Move files from the list"""
-		GLib.idle_add(self._update_status, _('Moving files...'))
+		GObject.idle_add(self._update_status, _('Moving files...'))
 
 		item_list = self._file_list[:]
 		for file_name, source_path in item_list:
@@ -1343,13 +1343,13 @@ class MoveOperation(CopyOperation):
 			self._can_continue.wait()  # pause lock
 
 			# move file
-			GLib.idle_add(self._dialog.set_current_file, file_name)
+			GObject.idle_add(self._dialog.set_current_file, file_name)
 			self._move_file(file_name, source_path)
-			GLib.idle_add(self._dialog.increment_current_count, 1)
+			GObject.idle_add(self._dialog.increment_current_count, 1)
 
 	def _delete_file_list(self):
 		"""Remove files from source list"""
-		GLib.idle_add(self._update_status, _('Deleting source files...'))
+		GObject.idle_add(self._update_status, _('Deleting source files...'))
 
 		item_list = self._file_list[:]
 
@@ -1358,11 +1358,11 @@ class MoveOperation(CopyOperation):
 			self._can_continue.wait()  # pause lock
 
 			# remove path
-			GLib.idle_add(self._dialog.set_current_file, item[0])
+			GObject.idle_add(self._dialog.set_current_file, item[0])
 			self._remove_path(item[0], self._file_list, item[1])
 
 			# update current count
-			GLib.idle_add(
+			GObject.idle_add(
 						self._dialog.set_current_file_fraction,
 						float(number) / len(item_list)
 					)
@@ -1371,7 +1371,7 @@ class MoveOperation(CopyOperation):
 
 	def _delete_directories(self):
 		"""Remove empty directories after moving files"""
-		GLib.idle_add(self._update_status, _('Deleting source directories...'))
+		GObject.idle_add(self._update_status, _('Deleting source directories...'))
 
 		dir_list = self._dir_list[:]
 		dir_list.reverse()  # remove deepest directories first
@@ -1383,7 +1383,7 @@ class MoveOperation(CopyOperation):
 			self._can_continue.wait()  # pause lock
 
 			if self._source.exists(directory, relative_to=source_path):
-				GLib.idle_add(self._dialog.set_current_file, directory)
+				GObject.idle_add(self._dialog.set_current_file, directory)
 
 				# try to get a list of items inside of directory
 				try:
@@ -1398,14 +1398,14 @@ class MoveOperation(CopyOperation):
 
 				# update current count
 				if len(dir_list) > 0:
-					GLib.idle_add(
+					GObject.idle_add(
 								self._dialog.set_current_file_fraction,
 								float(number) / len(dir_list)
 							)
 
 				else:
 					# prevent division by zero
-					GLib.idle_add(self._dialog.set_current_file_fraction, 1)
+					GObject.idle_add(self._dialog.set_current_file_fraction, 1)
 
 	def _check_devices(self):
 		"""Check if source and destination are on the same file system"""
@@ -1422,8 +1422,8 @@ class MoveOperation(CopyOperation):
 
 		"""
 		# set dialog info
-		GLib.idle_add(self._dialog.set_source, self._source_path)
-		GLib.idle_add(self._dialog.set_destination, self._destination_path)
+		GObject.idle_add(self._dialog.set_source, self._source_path)
+		GObject.idle_add(self._dialog.set_destination, self._destination_path)
 
 		# wait for operation queue if needed
 		if self._operation_queue is not None:
@@ -1448,7 +1448,7 @@ class MoveOperation(CopyOperation):
 			if self._source_path == parent.path:
 				parent.deselect_all()
 
-		GLib.idle_add(clear_selection)
+		GObject.idle_add(clear_selection)
 
 		# create directories
 		self._create_links()
@@ -1493,7 +1493,7 @@ class MoveOperation(CopyOperation):
 				error_list.set_errors(self._error_list)
 				error_list.show()
 
-		GLib.idle_add(notify_is_not_focused)
+		GObject.idle_add(notify_is_not_focused)
 
 		# destroy dialog
 		self._destroy_ui()
@@ -1578,7 +1578,7 @@ class DeleteOperation(Operation):
 			if self._source_path == parent.path:
 				parent.deselect_all()
 
-		GLib.idle_add(clear_selection)
+		GObject.idle_add(clear_selection)
 
 		# select removal method
 		trash_files = self._application.options.section('operations').get('trash_files')
@@ -1598,19 +1598,19 @@ class DeleteOperation(Operation):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
-			GLib.idle_add(self._dialog.set_current_file, item)
+			GObject.idle_add(self._dialog.set_current_file, item)
 			remove_method(item)
 
 			# update current count
 			if len(self._file_list) > 0:
-				GLib.idle_add(
+				GObject.idle_add(
 							self._dialog.set_current_file_fraction,
 							float(index) / len(self._file_list)
 						)
 
 			else:
 				# prevent division by zero
-				GLib.idle_add(self._dialog.set_current_file_fraction, 1)
+				GObject.idle_add(self._dialog.set_current_file_fraction, 1)
 
 		# notify user if window is not focused
 		def show_notification():
@@ -1630,10 +1630,10 @@ class DeleteOperation(Operation):
 				# queue notification
 				notify_manager.notify(title, message)
 
-		GLib.idle_add(show_notification)
+		GObject.idle_add(show_notification)
 
 		# destroy dialog
-		GLib.idle_add(self._destroy_ui)
+		GObject.idle_add(self._destroy_ui)
 
 		# start next operation
 		if self._operation_queue is not None:
@@ -1713,19 +1713,19 @@ class RenameOperation(Operation):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
-			GLib.idle_add(self._dialog.set_current_file, item[0])
+			GObject.idle_add(self._dialog.set_current_file, item[0])
 			self._rename_path(item[0], item[1], index-1)
 
 			# update current count
 			if len(self._file_list) > 0:
-				GLib.idle_add(
+				GObject.idle_add(
 							self._dialog.set_current_file_fraction,
 							float(index) / len(self._file_list)
 						)
 
 			else:
 				# prevent division by zero
-				GLib.idle_add(self._dialog.set_current_file_fraction, 1)
+				GObject.idle_add(self._dialog.set_current_file_fraction, 1)
 
 		# notify user if window is not focused
 		def notify_is_not_focused():
@@ -1745,7 +1745,7 @@ class RenameOperation(Operation):
 				# queue notification
 				notify_manager.notify(title, message)
 
-		GLib.idle_add(notify_is_not_focused)
+		GObject.idle_add(notify_is_not_focused)
 
 		# destroy dialog
 		self._destroy_ui()

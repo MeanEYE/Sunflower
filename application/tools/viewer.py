@@ -210,9 +210,9 @@ class Viewer:
 			self._window.destroy()
 			result = True
 
-		elif event.keyval in range(Gdk.KEY__1, Gdk.KEY__9 + 1):
+		elif event.keyval in range(Gdk.KEY_1, Gdk.KEY_9 + 1):
 			# switch to specified page
-			index = event.keyval - Gdk.KEY__1
+			index = event.keyval - Gdk.KEY_1
 
 			if index <= self._notebook.get_n_pages() - 1:
 				self._notebook.set_current_page(index)

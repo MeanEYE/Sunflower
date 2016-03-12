@@ -46,7 +46,7 @@ class NotificationManager:
 
 		try:
 			# create notification object
-			notification = Notify.Notification(title, text, icon)
+			notification = Notify.Notification.new(title, text, icon)
 
 			# show notification
 			notification.show()

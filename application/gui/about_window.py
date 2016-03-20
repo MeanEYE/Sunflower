@@ -70,6 +70,10 @@ class AboutWindow:
 		),
 	]
 
+	translators = [
+
+	]
+
 	def __init__(self, parent):
 		# create main window
 		self._dialog = Gtk.AboutDialog()

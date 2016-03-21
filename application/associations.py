@@ -2,6 +2,7 @@ import os
 import shlex
 import urllib
 import subprocess
+import re
 
 from gi.repository import Gtk, Gio
 from common import is_x_app
@@ -209,7 +210,7 @@ class AssociationManager:
 
 			if application is not None:
 				if application.supports_uris():
-					selection = map(lambda path: 'file://{0}'.format(path) if not path.startswith('file://') else path, selection)
+					selection = map(lambda path: 'file://{0}'.format(path) if not re.match(r'^\w+://', path) else path, selection)
 					application.launch_uris(selection)
 				else:
 					application.launch([Gio.File.new_for_path(path) for path in selection])

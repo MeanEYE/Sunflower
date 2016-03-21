@@ -1492,19 +1492,6 @@ class OperationError:
 		return code
 
 
-class QuestionOperationError(OperationError):
-	"""Operation error with modified buttons labels."""
-
-	def __init__(self, application):
-		OperationError.__init__(self, application)
-
-		button_no = self._dialog.get_widget_for_response(Gtk.ResponseType.NO)
-		button_yes = self._dialog.get_widget_for_response(Gtk.ResponseType.YES)
-
-		button_no.set_label(_('No'))
-		button_yes.set_label(_('Yes'))
-
-
 class CreateToolbarWidgetDialog:
 	"""Create widget persisten dialog."""
 

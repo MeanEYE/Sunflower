@@ -1294,20 +1294,17 @@ class FileList(ItemList):
 		"""Clear sort settings"""
 		self._store.set_sort_column_id(Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, True)
 
-	def _sort_list(self, item_list, iter1, iter2, data=None):
-		"""Compare two items for sorting process"""
-		reverse = (1, -1)[self._sort_ascending]
-
-		sort_column = self._sort_column
+	def _sort_list_by_column(self, item_list, iter1, iter2, sort_column, reverse):
+		"""Compare two items by given column for sorting process"""
 		value1 = item_list.get_value(iter1, sort_column)
 		value2 = item_list.get_value(iter2, sort_column)
 
 		if sort_column is Column.NAME or sort_column is Column.EXTENSION:
 			# make values lowercase for case insensitive comparison
 			if not self._sort_case_sensitive:
-				value1 = value1.lower()
-
-				if value2 is not None:  # make sure we have extension to make lowercase
+				if value1 is not None:
+					value1 = value1.lower()
+				if value2 is not None:
 					value2 = value2.lower()
 
 			# split values to list containing characters and numbers
@@ -1328,6 +1325,24 @@ class FileList(ItemList):
 			)
 
 		return cmp(item1, item2)
+
+	def _sort_list(self, item_list, iter1, iter2, data=None):
+		"""Compare two items for sorting process"""
+		reverse = (1, -1)[self._sort_ascending]
+
+		sort_column = self._sort_column
+		cmp_result = self._sort_list_by_column(item_list, iter1, iter2, sort_column, reverse)
+		if cmp_result != 0:
+			return cmp_result
+
+		# Use second sort column (avoid chaos in case of multiple identical values)
+		if sort_column is Column.NAME:
+			sort_continues = Column.EXTENSION
+		else:
+			sort_continues = Column.NAME
+		if sort_continues is not None:
+			cmp_result = self._sort_list_by_column(item_list, iter1, iter2, sort_continues, 1)
+		return cmp_result
 
 	def _clear_list(self):
 		"""Clear item list"""

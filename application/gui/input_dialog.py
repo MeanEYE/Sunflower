@@ -707,9 +707,19 @@ class CopyDialog:
 		vbox_silent.set_sensitive(False)
 
 		self.checkbox_merge = Gtk.CheckButton(_('Merge directories'))
-		self.checkbox_overwrite = Gtk.CheckButton(_('Overwrite files'))
 
-		self.checkbox_silent.connect('toggled', self._toggled_silent_mode, vbox_silent)
+		self.option_overwrite = 0
+		hbox_overwrite = Gtk.HBox(False, 0)
+		hbox_overwrite.set_sensitive(False)
+		self.label_overwrite = Gtk.Label(_('If destination exists'))
+		self.radio_overwrite_skip    = Gtk.RadioButton(None, _('Skip'));
+		self.radio_overwrite_update  = Gtk.RadioButton(self.radio_overwrite_skip, _('Update'));
+		self.radio_overwrite_replace = Gtk.RadioButton(self.radio_overwrite_skip, _('Replace'));
+		self.radio_overwrite_skip.connect("toggled", self._toggled_overwrite, 0)
+		self.radio_overwrite_update.connect("toggled", self._toggled_overwrite, 2)
+		self.radio_overwrite_replace.connect("toggled", self._toggled_overwrite, 1)
+
+		self.checkbox_silent.connect('toggled', self._toggled_silent_mode, vbox_silent, hbox_overwrite)
 		self.checkbox_silent.set_tooltip_text(_(
 										'Silent mode will enable operation to finish '
 										'without disturbing you. If any errors occur, '
@@ -725,7 +735,13 @@ class CopyDialog:
 		expand_details.add(list_container)
 
 		vbox_silent.pack_start(self.checkbox_merge, False, False, 0)
-		vbox_silent.pack_start(self.checkbox_overwrite, False, False, 0)
+
+		hbox_overwrite.set_spacing(8)
+		hbox_overwrite.pack_start(self.label_overwrite, False, False, 0)
+		hbox_overwrite.pack_start(self.radio_overwrite_skip, False, False, 0)
+		hbox_overwrite.pack_start(self.radio_overwrite_update, False, False, 0)
+		hbox_overwrite.pack_start(self.radio_overwrite_replace, False, False, 0)
+		vbox_silent.pack_start(hbox_overwrite, False, False, 0)
 
 		#align_silent.add(vbox_silent)
 
@@ -814,7 +830,15 @@ class CopyDialog:
 		self.checkbox_timestamp.set_active(options.get('set_timestamp') and provider_set_timestamp)
 		self.checkbox_silent.set_active(options.get('silent'))
 		self.checkbox_merge.set_active(options.get('merge_in_silent'))
-		self.checkbox_overwrite.set_active(options.get('overwrite_in_silent'))
+
+		self.option_overwrite = options.get('overwrite_in_silent')
+		if self.option_overwrite == 1:
+			self.radio_overwrite_replace.set_active(True)
+		elif self.option_overwrite == 2:
+			self.radio_overwrite_update.set_active(True)
+		else:
+			self.radio_overwrite_skip.set_active(True)
+
 		self.checkbox_symlink.set_active(options.get('follow_symlink'))
 
 	def _save_configuration(self, widget=None, data=None):
@@ -861,7 +885,7 @@ class CopyDialog:
 
 		options.set('silent', self.checkbox_silent.get_active())
 		options.set('merge_in_silent', self.checkbox_merge.get_active())
-		options.set('overwrite_in_silent', self.checkbox_overwrite.get_active())
+		options.set('overwrite_in_silent', self.option_overwrite)
 
 		# show message letting user know
 		if not (provider_set_owner and provider_set_mode and provider_set_timestamp and provider_symlink):
@@ -878,9 +902,14 @@ class CopyDialog:
 			dialog.run()
 			dialog.destroy()
 
-	def _toggled_silent_mode(self, widget, container):
+	def _toggled_silent_mode(self, widget, vbox, hbox):
 		"""Set container sensitivity based on widget status"""
-		container.set_sensitive(widget.get_active())
+		vbox.set_sensitive(widget.get_active())
+		hbox.set_sensitive(widget.get_active())
+
+	def _toggled_overwrite(self, widget, data=None):
+		if widget.get_active():
+			self.option_overwrite = data
 
 	def _handle_expand(self, widget, data=None):
 		"""Handle expanding and collapsing affected list."""
@@ -981,7 +1010,7 @@ class CopyDialog:
 				self.checkbox_timestamp.get_active(),
 				self.checkbox_silent.get_active(),
 				self.checkbox_merge.get_active(),
-				self.checkbox_overwrite.get_active(),
+				self.option_overwrite,
 				self.checkbox_symlink.get_active()
 			)
 		selected_iter = self.combobox_queue.get_active_iter()
@@ -1248,10 +1277,14 @@ class OverwriteFileDialog(OverwriteDialog):
 
 	def _create_buttons(self):
 		"""Create dialog specific button"""
+		OverwriteDialog._create_buttons(self)
+
+		self._button_update = gtk.Button(label=_('Update'))
+		self._dialog.add_action_widget(self._button_update, gtk.RESPONSE_APPLY)
+
 		self._button_replace = Gtk.Button(label=_('Replace'))
 		self._button_replace.set_can_default(True)
 
-		OverwriteDialog._create_buttons(self)
 		self._dialog.add_action_widget(self._button_replace, Gtk.ResponseType.YES)
 
 		self._dialog.set_default_response(Gtk.ResponseType.YES)

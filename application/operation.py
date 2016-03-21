@@ -228,7 +228,12 @@ class Operation(Thread):
 								)
 
 				result = dialog.get_response()
-				overwrite = result[0] == Gtk.ResponseType.YES
+				if result[0] == gtk.RESPONSE_YES:
+					overwrite = 1
+				elif result[0] == gtk.RESPONSE_APPLY:
+					overwrite = 2;
+				else:
+					overwrite = 0;
 
 				# give the result to thread
 				queue.put((result, overwrite))
@@ -917,8 +922,9 @@ class CopyOperation(Operation):
 
 	def _copy_file(self, file_name, relative_path=None):
 		"""Copy file content"""
-		can_procede = True
+		can_overwrite = 1
 		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
+		file_stat = self._source.get_stat(file_name, relative_to=source_path, extended=True)
 		dest_file = file_name
 		sh = None
 		dh = None
@@ -926,10 +932,10 @@ class CopyOperation(Operation):
 		# check if destination file exists
 		if self._destination.exists(file_name, relative_to=self._destination_path):
 			if self._overwrite_all is not None:
-				can_procede = self._overwrite_all
+				can_overwrite = self._overwrite_all
 
 			else:
-				can_procede, options = self._get_overwrite_input(file_name)
+				can_overwrite, options = self._get_overwrite_input(file_name)
 
 				# get new name if user specified
 				if options[OverwriteOption.RENAME]:
@@ -939,10 +945,15 @@ class CopyOperation(Operation):
 					                )
 
 				elif source_path == self._destination_path:
-					can_procede = False
+					can_overwrite = 0
+
+		if can_overwrite == 2:
+			destination_stat = self._destination.get_stat(dest_file, relative_to=self._destination_path, extended=True)
+			if file_stat.time_modify < destination_stat.time_modify + 0.5: # do not compare float for equality
+				can_overwrite = 0
 
 		# if user skipped this file return
-		if not can_procede:
+		if can_overwrite == 0:
 			self._file_list.pop(self._file_list.index((file_name, relative_path)))
 
 			# update total size
@@ -953,7 +964,6 @@ class CopyOperation(Operation):
 		try:
 			# get file stats
 			destination_size = 0L
-			file_stat = self._source.get_stat(file_name, relative_to=source_path, extended=True)
 
 			# get file handles
 			sh = self._source.get_file_handle(file_name, FileMode.READ, relative_to=source_path)
@@ -1072,7 +1082,7 @@ class CopyOperation(Operation):
 
 	def _create_link(self, link_name, relative_path=None):
 		"""Create specified link"""
-		can_procede = True
+		can_overwrite = 1
 		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
 		file_stat = self._source.get_stat(link_name, relative_to=source_path)
 		target = self._source.readlink(link_name, relative_to=source_path)
@@ -1080,21 +1090,26 @@ class CopyOperation(Operation):
 		try:
 			if self._destination.exists(link_name, relative_to=self._destination_path):
 				if self._overwrite_all is not None:
-					can_procede = self._overwrite_all
+					can_overwrite = self._overwrite_all
 				else:
-					can_procede, options = self._get_overwrite_input(link_name)
+					can_overwrite, options = self._get_overwrite_input(link_name)
 
 					# get new name if user specified
 					if options[OverwriteOption.RENAME]:
 						link_name = options[OverwriteOption.NEW_NAME]
 					elif source_path == self._destination_path:
-						can_procede = False
+						can_overwrite = 0
 					else:
 						self._source.remove_path(link_name, relative_to=self._destination_path)
 
 
+			if can_overwrite == 2:
+				destination_stat = self._destination.get_stat(link_name, relative_to=self._destination_path, extended=True)
+				if file_stat.time_modify < destination_stat.time_modify + 0.5: # do not compare float for equality
+					can_overwrite = 0
+
 			# if user skipped this file return
-			if not can_procede:
+			if can_overwrite == 0:
 				self._link_list.pop(self._file_list.index(link_name))
 				return
 
@@ -1275,16 +1290,16 @@ class MoveOperation(CopyOperation):
 
 	def _move_file(self, file_name, relative_path=None):
 		"""Move specified file using provider rename method"""
-		can_procede = True
+		can_overwrite = 1
 		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
 		dest_file = file_name
 
 		# check if destination file exists
 		if self._destination.exists(file_name, relative_to=self._destination_path):
 			if self._overwrite_all is not None:
-				can_procede = self._overwrite_all
+				can_overwrite = self._overwrite_all
 			else:
-				can_procede, options = self._get_overwrite_input(file_name)
+				can_overwrite, options = self._get_overwrite_input(file_name)
 
 				# get new name if user specified
 				if options[OverwriteOption.RENAME]:
@@ -1293,8 +1308,14 @@ class MoveOperation(CopyOperation):
 					                    options[OverwriteOption.NEW_NAME]
 					                )
 
+		if can_overwrite == 2:
+			source_stat = self._source.get_stat(file_name, relative_to=source_path, extended=True)
+			destination_stat = self._destination.get_stat(dest_file, relative_to=self._destination_path, extended=True)
+			if source_stat.time_modify < destination_stat.time_modify + 0.5: # do not compare float for equality
+				can_overwrite = 0
+
 		# if user skipped this file return
-		if not can_procede:
+		if can_overwrite == 0:
 			self._file_list.pop(self._file_list.index((file_name, relative_path)))
 			return
 
@@ -1657,12 +1678,12 @@ class RenameOperation(Operation):
 
 	def _rename_path(self, old_name, new_name, index):
 		"""Rename specified path"""
-		can_procede = True
+		can_overwrite = 1
 
 		try:
 			# check if specified path already exists
 			if self._destination.exists(new_name, relative_to=self._source_path):
-				can_procede, options = self._get_overwrite_input(new_name)
+				can_overwrite, options = self._get_overwrite_input(new_name)
 
 				# get new name if user specified
 				if options[OverwriteOption.RENAME]:
@@ -1671,7 +1692,13 @@ class RenameOperation(Operation):
 					                    options[OverwriteOption.NEW_NAME]
 					                )
 
-			if not can_procede:
+			if can_overwrite == 2:
+				source_stat = self._source.get_stat(old_name, relative_to=source_path, extended=True)
+				destination_stat = self._destination.get_stat(new_name, relative_to=self._source_path, extended=True)
+				if source_stat.time_modify < destination_stat.time_modify + 0.5: # do not compare float for equality
+					can_overwrite = 0
+
+			if can_overwrite == 0:
 				# user canceled overwrite, skip the file
 				self._file_list.pop(index)
 				return

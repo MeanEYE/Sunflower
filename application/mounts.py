@@ -27,7 +27,8 @@ class MountsManager:
 		# get list of volumes
 		for volume in self._volume_monitor.get_volumes():
 			self.window._add_volume(volume, startup=True)
-			mounts_added.append(volume.get_activation_root().get_uri())
+			if volume.get_activation_root() is not None:
+				mounts_added.append(volume.get_activation_root().get_uri())
 
 		# get list of mounted volumes
 		for mount in self._volume_monitor.get_mounts():

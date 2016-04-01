@@ -5,7 +5,7 @@ from gi.repository import Gtk, GObject
 from threading import Thread, Event
 from Queue import Queue
 
-from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OperationError, QuestionOperationError
+from gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OperationError
 from gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog, RenameDialog
 from gui.error_list import ErrorList
 from plugin_base.provider import Mode as FileMode, TrashError, Support as ProviderSupport
@@ -427,7 +427,7 @@ class Operation(Thread):
 		else:
 			# we are not in silent mode, ask user
 			def ask_user(queue):
-				dialog = QuestionOperationError(self._application)
+				dialog = OperationError(self._application)
 				dialog.set_message(_(
 						'There was a problem trashing specified path. '
 						'Would you like to try removing it instead?'

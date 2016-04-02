@@ -563,23 +563,32 @@ class DirectoryCreateDialog(CreateDialog):
 		section.set('directory_mode', self._mode)
 
 
-class DeleteDialog(Gtk.MessageDialog):
+class DeleteDialog:
 	"""Confirmation dialog for item removal with operation queue selection."""
 
 	def __init__(self, application, message):
-		Gtk.MessageDialog.__init__(
-				self,
+		self._dialog = Gtk.Dialog(
 				parent=application,
-				flags=Gtk.DialogFlags.DESTROY_WITH_PARENT,
-				type=Gtk.MessageType.QUESTION,
-				buttons=Gtk.ButtonsType.YES_NO,
-				message_format=message
+				use_header_bar=True
 			)
 
+		self._dialog.set_modal(True)
+		self._dialog.set_default_size(450, -1)
+		self._dialog.set_transient_for(application)
+		self._dialog.set_wmclass('Sunflower', 'Sunflower')
+		
+		header_bar = self._dialog.get_header_bar()
+		header_bar.set_title(_('Delete file/directory'))
+		header_bar.set_show_close_button(False)
+
 		# create user interface for operation queue
+		label_message = Gtk.Label.new(message)
+		label_message.set_alignment(0, 0)
+		label_message.set_use_markup(True)
+
 		vbox_queue = Gtk.VBox(False, 0)
 
-		label_queue = Gtk.Label(label=_('Operation queue:'))
+		label_queue = Gtk.Label.new(_('Operation queue:'))
 		label_queue.set_alignment(0, 0.5)
 
 		cell_name = Gtk.CellRendererText()
@@ -591,23 +600,34 @@ class DeleteDialog(Gtk.MessageDialog):
 		self.combobox_queue.set_row_separator_func(OperationQueue.handle_separator_check)
 		self.combobox_queue.connect('changed', OperationQueue.handle_queue_select, self)
 
+		# create controls
+		button_yes = Gtk.Button(stock=Gtk.STOCK_YES)
+		button_yes.set_can_default(True)
+		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
+
 		# pack user interface
 		vbox_queue.pack_start(label_queue, False, False, 0)
 		vbox_queue.pack_start(self.combobox_queue, False, False, 0)
 
-		self.get_content_area().pack_start(vbox_queue, False, False, 0)
-		vbox_queue.show_all()
+		content_area = self._dialog.get_content_area()
+		content_area.set_spacing(10)
+		content_area.set_border_width(10)
+		content_area.pack_start(label_message, True, True, 0)
+		content_area.pack_start(vbox_queue, False, False, 0)
+		content_area.show_all()
 
-		# focus default widget
-		self.get_widget_for_response(Gtk.ResponseType.YES).grab_focus()
+		self._dialog.add_action_widget(button_yes, Gtk.ResponseType.YES)
+		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
+		self._dialog.set_default_response(Gtk.ResponseType.YES)
+		self._dialog.show_all()
 
 	def get_response(self):
 		"""Show dialog and get response code."""
-		code = self.run()
+		code = self._dialog.run()
 		selected_iter = self.combobox_queue.get_active_iter()
 		queue_name = OperationQueue.get_name_from_iter(selected_iter)
 
-		self.destroy()
+		self._dialog.destroy()
 
 		return code, queue_name
 

@@ -40,8 +40,10 @@ class PreferencesWindow(Gtk.Window):
 		self.connect('key-press-event', self._handle_key_press)
 
 		# create user interface
-		vbox = Gtk.VBox(False, 7)
-		vbox.set_border_width(7)
+		header_bar = Gtk.HeaderBar.new()
+		header_bar.set_show_close_button(True)
+		header_bar.set_title(_('Preferences'))
+		self.set_titlebar(header_bar)
 
 		hbox = Gtk.HBox(False, 7)
 
@@ -83,19 +85,14 @@ class PreferencesWindow(Gtk.Window):
 		self._tab_labels.set_cursor((0,))
 
 		# create buttons
-		hbox_controls = Gtk.HBox(False, 5)
-
-		btn_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
-		btn_close.connect('clicked', self._hide)
-
 		self._button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
 		self._button_save.connect('clicked', self._save_options)
 
 		self._button_revert = Gtk.Button(stock=Gtk.STOCK_REVERT_TO_SAVED)
 		self._button_revert.connect('clicked', self._load_options)
 
-		btn_help = Gtk.Button(stock=Gtk.STOCK_HELP)
-		btn_help.connect(
+		button_help = Gtk.Button(stock=Gtk.STOCK_HELP)
+		button_help.connect(
 					'clicked',
 					parent.goto_web,
 					'github.com/MeanEYE/Sunflower/wiki'
@@ -113,17 +110,12 @@ class PreferencesWindow(Gtk.Window):
 		hbox.pack_start(label_container, False, False, 0)
 		hbox.pack_start(self._tabs, True, True, 0)
 
-		hbox_controls.pack_start(btn_help, False, False, 0)
-		hbox_controls.pack_start(self._label_restart, True, True, 0)
-		hbox_controls.pack_end(btn_close, False, False, 0)
-		hbox_controls.pack_end(self._button_save, False, False, 0)
-		hbox_controls.pack_end(self._button_revert, False, False, 0)
+		header_bar.pack_start(button_help)
+		header_bar.pack_start(self._label_restart)
+		header_bar.pack_end(self._button_save)
+		header_bar.pack_end(self._button_revert)
 
-		# pack UI
-		vbox.pack_start(hbox, True, True, 0)
-		vbox.pack_start(hbox_controls, False, False, 0)
-
-		self.add(vbox)
+		self.add(hbox)
 
 	def _show(self, widget, tab_name=None):
 		"""Show dialog and reload options"""

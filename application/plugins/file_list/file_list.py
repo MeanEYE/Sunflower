@@ -22,6 +22,8 @@ from widgets.thumbnail_view import ThumbnailView
 from widgets.emblems_renderer import CellRendererEmblems
 
 
+UNSORTED_SORT_COLUMN_ID = -2 # same as Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID which doesn't seem to be defined in at least Gtk 3.10.8
+
 class Column:
 	NAME = 0
 	FORMATED_NAME = 1
@@ -1291,7 +1293,7 @@ class FileList(ItemList):
 
 	def _clear_sort_function(self):
 		"""Clear sort settings"""
-		self._store.set_sort_column_id(Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, True)
+		self._store.set_sort_column_id(UNSORTED_SORT_COLUMN_ID, True)
 
 	def _sort_list(self, item_list, iter1, iter2, data=None):
 		"""Compare two items for sorting process"""

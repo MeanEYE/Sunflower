@@ -26,6 +26,10 @@ try:
 except ImportError:
 	pass
 
+# Sunflower has to handle UTF-8 encoded strings while interacting with GTK
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 class Sunflower(Gtk.Application):
 	"""Main application instance."""

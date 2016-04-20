@@ -2,17 +2,15 @@ from gi.repository import Gtk, GObject
 from gui.input_dialog import InputDialog, PasswordDialog
 
 try:
-	import gnomekeyring as keyring
-
+	from gi.repository import GnomeKeyring as keyring
 except:
 	keyring = None
 
 
 class EntryType:
-	NO_TYPE = 0
-	GENERIC = 1
-	NETWORK = 2
-	NOTE = 3
+	GENERIC = 0
+	NETWORK = 1
+	NOTE = 2
 
 
 class KeyringCreateError(Exception): pass
@@ -32,10 +30,9 @@ class KeyringManager:
 
 	if keyring is not None:
 		KEYRING_TYPE = {
-				EntryType.NO_TYPE: keyring.ITEM_NO_TYPE,
-				EntryType.GENERIC: keyring.ITEM_GENERIC_SECRET,
-				EntryType.NETWORK: keyring.ITEM_NETWORK_PASSWORD,
-				EntryType.NOTE: keyring.ITEM_NOTE
+				EntryType.GENERIC: keyring.ItemType.GENERIC_SECRET,
+				EntryType.NETWORK: keyring.ItemType.NETWORK_PASSWORD,
+				EntryType.NOTE: keyring.ItemType.NOTE
 			}
 
 	def __init__(self, application):
@@ -73,7 +70,7 @@ class KeyringManager:
 
 	def __update_info(self):
 		"""Update keyring status information"""
-		self._info = keyring.get_info_sync(self.KEYRING_NAME)
+		self._info = keyring.get_info_sync(self.KEYRING_NAME)[1]
 
 		# update icon
 		self.__update_icon()
@@ -128,8 +125,8 @@ class KeyringManager:
 		"""Get entry info object"""
 		result = None
 
-		for item_id in keyring.list_item_ids_sync(self.KEYRING_NAME):
-			info = keyring.item_get_info_sync(self.KEYRING_NAME, item_id)
+		for item_id in keyring.list_item_ids_sync(self.KEYRING_NAME)[1]:
+			info = keyring.item_get_info_sync(self.KEYRING_NAME, item_id)[1]
 
 			if info.get_display_name() == entry:
 				result = info
@@ -141,8 +138,8 @@ class KeyringManager:
 		"""Get entry ID"""
 		result = None
 
-		for item_id in keyring.list_item_ids_sync(self.KEYRING_NAME):
-			info = keyring.item_get_info_sync(self.KEYRING_NAME, item_id)
+		for item_id in keyring.list_item_ids_sync(self.KEYRING_NAME)[1]:
+			info = keyring.item_get_info_sync(self.KEYRING_NAME, item_id)[1]
 
 			if info.get_display_name() == entry:
 				result = item_id
@@ -160,7 +157,7 @@ class KeyringManager:
 		result = False
 
 		if self.is_available():
-			result = self.KEYRING_NAME in keyring.list_keyring_names_sync()
+			result = self.KEYRING_NAME in keyring.list_keyring_names_sync()[1]
 
 		return result
 
@@ -188,7 +185,7 @@ class KeyringManager:
 
 		# get entry information
 		entry_id = self.__get_entry_id(entry)
-		info = keyring.item_get_info_sync(self.KEYRING_NAME, entry_id)
+		info = keyring.item_get_info_sync(self.KEYRING_NAME, entry_id)[1]
 
 		if info is not None:
 			info.set_display_name(new_name)
@@ -209,7 +206,7 @@ class KeyringManager:
 			return result
 
 		# get entry information
-		info = keyring.item_get_info_sync(self.KEYRING_NAME, entry_id)
+		info = keyring.item_get_info_sync(self.KEYRING_NAME, entry_id)[1]
 
 		if info is not None:
 			info.set_secret(secret)
@@ -250,8 +247,8 @@ class KeyringManager:
 			return result
 
 		# populate result list
-		for item_id in keyring.list_item_ids_sync(self.KEYRING_NAME):
-			info = keyring.item_get_info_sync(self.KEYRING_NAME, item_id)
+		for item_id in keyring.list_item_ids_sync(self.KEYRING_NAME)[1]:
+			info = keyring.item_get_info_sync(self.KEYRING_NAME, item_id)[1]
 			result.append((item_id, info.get_display_name(), info.get_mtime()))
 
 		return result
@@ -303,7 +300,7 @@ class KeyringManager:
 		assert self.is_available()
 
 		# create a new keyring if it doesn't exist
-		if not self.KEYRING_NAME in keyring.list_keyring_names_sync():
+		if not self.KEYRING_NAME in keyring.list_keyring_names_sync()[1]:
 			dialog = PasswordDialog(self._application)
 			dialog.set_title(_('New keyring'))
 			dialog.set_label(_(
@@ -328,12 +325,16 @@ class KeyringManager:
 		if self.is_locked() and not self.__unlock_keyring():
 			return False
 
+		attribute_array = keyring.Attribute.list_new()
+		for key in attributes:
+			keyring.Attribute.list_append_string(attribute_array, key, attributes[key])
+
 		# store password to existing keyring
 		keyring.item_create_sync(
 					self.KEYRING_NAME,
 					self.KEYRING_TYPE[entry_type],
 					entry,
-					attributes if attributes is not None else {},
+					attribute_array,
 					password,
 					True  # update if exists
 				)

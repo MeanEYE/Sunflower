@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Gio, Gdk, GLib
+from gi.repository import Gtk, Gio, Gdk, GLib, GObject
 from dialogs import SambaInputDialog, SambaResult
 from dialogs import FtpInputDialog, FtpResult, SftpInputDialog
 from dialogs import DavInputDialog, DavResult
@@ -61,17 +61,16 @@ class GioExtension(MountManagerExtension):
 
 			else:
 				# we don't have stored password, ask user to provide one
-				with Gdk.lock:
-					dialog = InputDialog(self._application)
-					dialog.set_title(_('Mount operation'))
-					dialog.set_label(message)
-					dialog.set_password()
+				dialog = InputDialog(self._application)
+				dialog.set_title(_('Mount operation'))
+				dialog.set_label(message)
+				dialog.set_password()
 
-					response = dialog.get_response()
+				response = dialog.get_response()
 
-					if response[0] == Gtk.ResponseType.OK:
-						operation.set_password(response[1])
-						operation.reply(Gio.MountOperationResult.HANDLED)
+				if response[0] == Gtk.ResponseType.OK:
+					operation.set_password(response[1])
+					operation.reply(Gio.MountOperationResult.HANDLED)
 
 		# create new mount operation object
 		operation = Gio.MountOperation()
@@ -102,18 +101,17 @@ class GioExtension(MountManagerExtension):
 			path.mount_enclosing_volume_finish(result)
 
 		except GLib.GError as error:
-			with Gdk.lock:
-				dialog = Gtk.MessageDialog(
-										self._parent.window,
-										Gtk.DialogFlags.DESTROY_WITH_PARENT,
-										Gtk.MessageType.ERROR,
-										Gtk.ButtonsType.OK,
-										_(
-											"Unable to mount:\n{0}\n\n{1}"
-										).format(path.get_uri(), str(error))
-									)
-				dialog.run()
-				dialog.destroy()
+			dialog = Gtk.MessageDialog(
+									self._parent.window,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.ERROR,
+									Gtk.ButtonsType.OK,
+									_(
+										"Unable to mount:\n{0}\n\n{1}"
+									).format(path.get_uri(), str(error))
+								)
+			dialog.run()
+			dialog.destroy()
 
 		finally:
 			self._hide_spinner()

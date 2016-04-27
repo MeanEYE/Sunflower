@@ -92,7 +92,7 @@ class SystemTerminal(Terminal):
 			'child_setup': None,
 			'child_setup_data': None }
 
-		# Note: Since VTE 0.38 fork_command_full has been renamed spawn_sync
+		# since VTE 0.38 fork_command_full has been renamed spawn_sync
 		if hasattr(self._terminal, 'fork_command_full'):
 			(result, self._pid) = self._terminal.fork_command_full(**command)
 		else:

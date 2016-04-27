@@ -391,7 +391,7 @@ class Terminal(PluginBase):
 			# apply cursor shape
 			shape = section.get('cursor_shape')
 
-			# Since Vte 0.38 Vte.TerminalCursorShape has been renamed Vte.CursorShape
+			# since Vte 0.38 Vte.TerminalCursorShape has been renamed Vte.CursorShape
 			if hasattr(Vte, 'TerminalCursorShape'):
 				cursorshape = Vte.TerminalCursorShape
 			else:

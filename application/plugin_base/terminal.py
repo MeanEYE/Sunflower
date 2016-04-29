@@ -3,9 +3,10 @@ import gi
 from gi.repository import Gtk, Gdk, Vte
 
 try:
-	from gi.repository import GConf as gconf
+	from gi.repository import GConf
+	gconf_loaded = True
 except:
-	gconf = None
+	gconf_loaded = False
 
 from plugin_base.plugin import PluginBase
 from accelerator_group import AcceleratorGroup
@@ -169,7 +170,7 @@ class Terminal(PluginBase):
 	def __set_system_font(self, client=None, *args, **kwargs):
 		"""Set system font to terminal"""
 
-		if gconf is None:
+		if gconf_loaded:
 			return
 
 		path = '/desktop/gnome/interface'
@@ -178,8 +179,8 @@ class Terminal(PluginBase):
 		if client is None:
 			if not hasattr(self._terminal, 'client'):
 				# client wasn't assigned to widget, get default one and set events
-				client = gconf.Client.get_default()
-				client.add_dir(path, gconf.ClientPreloadType.PRELOAD_NONE)
+				client = GConf.Client.get_default()
+				client.add_dir(path, GConf.ClientPreloadType.PRELOAD_NONE)
 				client.notify_add(key, self.__set_system_font)
 				self._terminal.client = client
 

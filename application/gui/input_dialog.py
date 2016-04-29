@@ -28,11 +28,11 @@ class InputDialog:
 	"""
 
 	def __init__(self, application):
-		self._dialog = Gtk.Dialog(parent=application)
+		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
 
 		self._application = application
 
-		self._dialog.set_default_size(340, 10)
+		self._dialog.set_default_size(450, 10)
 		self._dialog.set_resizable(True)
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
@@ -63,7 +63,7 @@ class InputDialog:
 		self._container.pack_start(vbox, False, False, 0)
 
 		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
-		self._dialog.action_area.pack_end(button_ok, False, False, 0)
+		self._dialog.add_action_widget(button_ok, Gtk.ResponseType.OK)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
 		self._dialog.get_content_area().pack_start(self._container, True, True, 0)
@@ -427,6 +427,7 @@ class PasswordDialog(InputDialog):
 
 
 class FileCreateDialog(CreateDialog):
+	"""Dialog providing input of details for creating new file."""
 
 	def __init__(self, application):
 		CreateDialog.__init__(self, application)
@@ -562,23 +563,32 @@ class DirectoryCreateDialog(CreateDialog):
 		section.set('directory_mode', self._mode)
 
 
-class DeleteDialog(Gtk.MessageDialog):
+class DeleteDialog:
 	"""Confirmation dialog for item removal with operation queue selection."""
 
 	def __init__(self, application, message):
-		Gtk.MessageDialog.__init__(
-				self,
+		self._dialog = Gtk.Dialog(
 				parent=application,
-				flags=Gtk.DialogFlags.DESTROY_WITH_PARENT,
-				type=Gtk.MessageType.QUESTION,
-				buttons=Gtk.ButtonsType.YES_NO,
-				message_format=message
+				use_header_bar=True
 			)
 
+		self._dialog.set_modal(True)
+		self._dialog.set_default_size(450, -1)
+		self._dialog.set_transient_for(application)
+		self._dialog.set_wmclass('Sunflower', 'Sunflower')
+		
+		header_bar = self._dialog.get_header_bar()
+		header_bar.set_title(_('Delete file/directory'))
+		header_bar.set_show_close_button(False)
+
 		# create user interface for operation queue
+		label_message = Gtk.Label.new(message)
+		label_message.set_alignment(0, 0)
+		label_message.set_use_markup(True)
+
 		vbox_queue = Gtk.VBox(False, 0)
 
-		label_queue = Gtk.Label(label=_('Operation queue:'))
+		label_queue = Gtk.Label.new(_('Operation queue:'))
 		label_queue.set_alignment(0, 0.5)
 
 		cell_name = Gtk.CellRendererText()
@@ -590,23 +600,34 @@ class DeleteDialog(Gtk.MessageDialog):
 		self.combobox_queue.set_row_separator_func(OperationQueue.handle_separator_check)
 		self.combobox_queue.connect('changed', OperationQueue.handle_queue_select, self)
 
+		# create controls
+		button_yes = Gtk.Button(stock=Gtk.STOCK_YES)
+		button_yes.set_can_default(True)
+		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
+
 		# pack user interface
 		vbox_queue.pack_start(label_queue, False, False, 0)
 		vbox_queue.pack_start(self.combobox_queue, False, False, 0)
 
-		self.get_content_area().pack_start(vbox_queue, False, False, 0)
-		vbox_queue.show_all()
+		content_area = self._dialog.get_content_area()
+		content_area.set_spacing(10)
+		content_area.set_border_width(10)
+		content_area.pack_start(label_message, True, True, 0)
+		content_area.pack_start(vbox_queue, False, False, 0)
+		content_area.show_all()
 
-		# focus default widget
-		self.get_widget_for_response(Gtk.ResponseType.YES).grab_focus()
+		self._dialog.add_action_widget(button_yes, Gtk.ResponseType.YES)
+		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
+		self._dialog.set_default_response(Gtk.ResponseType.YES)
+		self._dialog.show_all()
 
 	def get_response(self):
 		"""Show dialog and get response code."""
-		code = self.run()
+		code = self._dialog.run()
 		selected_iter = self.combobox_queue.get_active_iter()
 		queue_name = OperationQueue.get_name_from_iter(selected_iter)
 
-		self.destroy()
+		self._dialog.destroy()
 
 		return code, queue_name
 
@@ -615,14 +636,14 @@ class CopyDialog:
 	"""Dialog which will ask user for additional options before copying"""
 
 	def __init__(self, application, source_provider, destination_provider, path):
-		self._dialog = Gtk.Dialog(parent=application)
+		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
 
 		self._application = application
 		self._source_provider = source_provider
 		self._destination_provider = destination_provider
 
 		self._dialog_size = None
-		self._dialog.set_default_size(400, 10)
+		self._dialog.set_default_size(500, 10)
 		self._dialog.set_resizable(True)
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
@@ -726,8 +747,6 @@ class CopyDialog:
 
 		vbox_silent.pack_start(self.checkbox_merge, False, False, 0)
 		vbox_silent.pack_start(self.checkbox_overwrite, False, False, 0)
-
-		#align_silent.add(vbox_silent)
 
 		vbox_type.pack_start(label_type, False, False, 0)
 		vbox_type.pack_start(self.entry_type, False, False, 0)
@@ -921,13 +940,9 @@ class CopyDialog:
 		button_save.set_tooltip_text(_('Save as default configuration'))
 		button_save.set_halign(1)
 
-		self._dialog.action_area.pack_start(button_save, True, True, 0)
-		self._dialog.action_area.set_child_secondary(button_save, True)
-
 		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
 		self._dialog.add_action_widget(button_copy, Gtk.ResponseType.OK)
-
-		self._dialog.action_area.set_homogeneous(False)
+		self._dialog.get_header_bar().pack_end(button_save)
 
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""
@@ -1041,13 +1056,13 @@ class OverwriteDialog:
 	"""Dialog used for confirmation of file/directory overwrite"""
 
 	def __init__(self, application, parent):
-		self._dialog = Gtk.Dialog(parent=parent)
+		self._dialog = Gtk.Dialog(parent=parent, use_header_bar=True)
 
 		self._application = application
 		self._rename_value = ''
 		self._time_format = application.options.section('item_list').get('time_format')
 
-		self._dialog.set_default_size(400, 10)
+		self._dialog.set_default_size(500, 10)
 		self._dialog.set_resizable(True)
 		self._dialog.set_skip_taskbar_hint(False)
 		self._dialog.set_modal(True)
@@ -1317,13 +1332,13 @@ class AddBookmarkDialog:
 	"""This dialog enables user to change data before adding new bookmark"""
 
 	def __init__(self, application, path):
-		self._dialog = Gtk.Dialog(parent=application)
+		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
 
 		self._application = application
 
 		# configure dialog
 		self._dialog.set_title(_('Add bookmark'))
-		self._dialog.set_default_size(340, 10)
+		self._dialog.set_default_size(450, 10)
 		self._dialog.set_resizable(True)
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
@@ -1411,13 +1426,12 @@ class OperationError:
 	RESPONSE_SKIP_ALL = 3
 
 	def __init__(self, application):
-		self._dialog = Gtk.Dialog(parent=application)
-
+		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
 		self._application = application
 
 		# configure dialog
 		self._dialog.set_title(_('Operation error'))
-		self._dialog.set_default_size(340, 10)
+		self._dialog.set_default_size(450, 10)
 		self._dialog.set_resizable(True)
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
@@ -1496,13 +1510,12 @@ class CreateToolbarWidgetDialog:
 	"""Create widget persisten dialog."""
 
 	def __init__(self, application):
-		self._dialog = Gtk.Dialog(parent=application)
-
+		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
 		self._application = application
 
 		# configure dialog
 		self._dialog.set_title(_('Add toolbar widget'))
-		self._dialog.set_default_size(340, 10)
+		self._dialog.set_default_size(450, 10)
 		self._dialog.set_resizable(True)
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
@@ -1690,7 +1703,7 @@ class ApplicationSelectDialog:
 	help_url = 'standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables'
 
 	def __init__(self, application, path=None):
-		self._dialog = Gtk.Dialog(parent=application)
+		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
 
 		self._application = application
 		self.path = path
@@ -1835,11 +1848,11 @@ class ApplicationSelectDialog:
 class PathInputDialog():
 	"""Input Dialog with path completion entry"""
 	def __init__(self, application):
-		self._dialog = Gtk.Dialog(parent=application)
+		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
 
 		self._application = application
 
-		self._dialog.set_default_size(340, 10)
+		self._dialog.set_default_size(450, 10)
 		self._dialog.set_resizable(True)
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)

@@ -21,6 +21,8 @@ from threading import Thread, Event
 from widgets.thumbnail_view import ThumbnailView
 from widgets.emblems_renderer import CellRendererEmblems
 
+# defined here as Gtk 3.10.8 doesn't define Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID
+UNSORTED_SORT_COLUMN_ID = -2
 
 class Column:
 	NAME = 0
@@ -823,25 +825,24 @@ class FileList(ItemList):
 			# get context sensitive message
 			if force_delete or not trash_items:
 				message = ngettext(
-						 	"You are about to delete {0} item.\n"
+						 	"You are about to <i><b>delete</b></i> {0} item.\n"
 						 	"Are you sure about this?",
-						 	"You are about to delete {0} items.\n"
+						 	"You are about to <i><b>delete</b></i> {0} items.\n"
 						 	"Are you sure about this?",
 						 	len(selection)
 						 )
 
 			else:
 				message = ngettext(
-						 	"You are about to move {0} item to trash.\n"
+						 	"You are about to move {0} item to <i><b>trash</b></i>.\n"
 						 	"Are you sure about this?",
-						 	"You are about to move {0} items to trash.\n"
+						 	"You are about to move {0} items to <i><b>trash</b></i>.\n"
 						 	"Are you sure about this?",
 						 	len(selection)
 						 )
 
 			# user has confirmation dialog enabled
 			dialog = DeleteDialog(self._parent, message.format(len(selection)))
-			dialog.set_default_response(Gtk.ResponseType.YES)
 			result, queue_name = dialog.get_response()
 
 			can_continue = result == Gtk.ResponseType.YES
@@ -1292,7 +1293,7 @@ class FileList(ItemList):
 
 	def _clear_sort_function(self):
 		"""Clear sort settings"""
-		self._store.set_sort_column_id(Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, True)
+		self._store.set_sort_column_id(UNSORTED_SORT_COLUMN_ID, True)
 
 	def _sort_list(self, item_list, iter1, iter2, data=None):
 		"""Compare two items for sorting process"""

@@ -130,6 +130,10 @@ class PropertiesWindow(Gtk.Window):
 			# item was removed, close dialog
 			self.destroy()
 
+		elif event is Gio.FileMonitorEvent.MOVED:
+			# item was moved/renamed - probably within same file system but not necessarily within same directory - close dialog
+			self.destroy()
+
 		else:
 			# item was changed, update data
 			self._update_data()
@@ -193,6 +197,8 @@ class PropertiesWindow(Gtk.Window):
 
 	def _create_monitor(self):
 		"""Create item monitor"""
+		if hasattr(self, '_monitor') and self._monitor is not None and not self._monitor.is_cancelled():
+			self._monitor.cancel()
 		self._monitor = Gio.File.new_for_path(self._path).monitor(Gio.FileMonitorFlags.SEND_MOVED)
 		self._monitor.connect('changed', self._item_changes)
 

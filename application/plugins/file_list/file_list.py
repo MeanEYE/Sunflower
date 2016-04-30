@@ -1396,6 +1396,34 @@ class FileList(ItemList):
 			else:
 				self._update_item_details_by_name(relative_path, parent)
 
+		# node renamed
+		elif event is MonitorSignals.MOVED:
+
+			should_add = True
+
+			# make sure we are working with relative paths
+			if other_path.startswith(self.path):
+				other_path = other_path[len(self.path) + 1:]
+
+			# check for hidden item or backup file
+			if not show_hidden \
+					and (other_path[0] == '.' or other_path[-1] == '~') \
+					and other_path not in self._always_visible_items:
+				should_add = False
+
+			# check if path is in any of the filters
+			if should_add and len(always_hidden) > 0:
+				should_add = other_path not in always_hidden
+
+			self._delete_item_by_name(relative_path, parent)
+
+			if other_path is None:
+				return
+
+			if should_add:
+				self._add_item(other_path, parent, parent_path)
+				self._flush_queue(parent)
+
 		# node deleted
 		elif event is MonitorSignals.DELETED:
 			self._delete_item_by_name(relative_path, parent)

@@ -40,12 +40,21 @@ class LocalMonitor(Monitor):
 
 	def _changed(self, monitor, path, other_path, event_type):
 		"""Handle GIO signal"""
-		signal = self._signal_table[event_type]
+
+		if event_type is Gio.FileMonitorEvent.MOVED:
+			if path.get_parent().get_path() == self._path and other_path.get_parent().get_path() != self._path:
+				# path moved to somewhere else - emit DELETED
+				signal = MonitorSignals.DELETED
+			else:
+				# path renamed within same directory - emit MOVED
+				signal = MonitorSignals.MOVED
+				if other_path is not None:
+					other_path = other_path.get_basename()
+		else:
+			signal = self._signal_table[event_type]
+
 		if path is not None:
 			path = path.get_basename()
-
-		if other_path is not None:
-			other_path = other_path.get_basename()
 
 		self._emit_signal(signal, path, other_path)
 

@@ -431,7 +431,7 @@ class ItemListOptions(SettingsPage):
 	def __get_menu_position(self, menu, button):
 		"""Get history menu position"""
 		# get coordinates
-		window_x, window_y = self._parent.window.get_position()
+		window_x, window_y = self._parent.get_window().get_position()
 		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
 		button_h = button.get_allocation().height
 

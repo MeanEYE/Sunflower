@@ -1231,7 +1231,7 @@ class FileList(ItemList):
 		tree_rect = self._item_list.get_visible_rect()
 
 		# grab window coordinates
-		window_x, window_y = self._parent.window.get_position()
+		window_x, window_y = self._parent.get_window().get_position()
 
 		# relative to tree
 		x, y = rect.x, rect.y + rect.height

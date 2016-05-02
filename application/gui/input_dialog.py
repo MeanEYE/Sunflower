@@ -17,9 +17,6 @@ class OverwriteOption:
 	NEW_NAME = 1
 	APPLY_TO_ALL = 2
 
-# header bars are only available in GTK 3.12 and up
-_use_header_bar = { 'use_header_bar': True } if hasattr(Gtk.Dialog, 'get_header_bar') else {}
-
 class InputDialog:
 	"""Simple input dialog
 
@@ -28,9 +25,11 @@ class InputDialog:
 	contains single label and text entry, along with two buttons.
 
 	"""
+	# header bars are only available in GTK 3.12 and up
+	use_header_bar = {'use_header_bar': True} if hasattr(Gtk.Dialog, 'get_header_bar') else {}
 
 	def __init__(self, application):
-		self._dialog = Gtk.Dialog(parent=application, **_use_header_bar)
+		self._dialog = Gtk.Dialog(parent=application, **use_header_bar)
 
 		self._application = application
 
@@ -569,14 +568,14 @@ class DeleteDialog:
 	"""Confirmation dialog for item removal with operation queue selection."""
 
 	def __init__(self, application, message):
-		self._dialog = Gtk.Dialog(parent=application, **_use_header_bar)
+		self._dialog = Gtk.Dialog(parent=application, **InputDialog.use_header_bar)
 
 		self._dialog.set_modal(True)
 		self._dialog.set_default_size(450, -1)
 		self._dialog.set_transient_for(application)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
-		if _use_header_bar:
+		if InputDialog.use_header_bar:
 			header_bar = self._dialog.get_header_bar()
 			header_bar.set_title(_('Delete file/directory'))
 			header_bar.set_show_close_button(False)
@@ -636,7 +635,7 @@ class CopyDialog:
 	"""Dialog which will ask user for additional options before copying"""
 
 	def __init__(self, application, source_provider, destination_provider, path):
-		self._dialog = Gtk.Dialog(parent=application, **_use_header_bar)
+		self._dialog = Gtk.Dialog(parent=application, **InputDialog.use_header_bar)
 
 		self._application = application
 		self._source_provider = source_provider
@@ -943,7 +942,7 @@ class CopyDialog:
 		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
 		self._dialog.add_action_widget(button_copy, Gtk.ResponseType.OK)
 
-		if _use_header_bar:
+		if InputDialog.use_header_bar:
 			self._dialog.get_header_bar().pack_end(button_save)
 		else:
 			self._dialog.action_area.set_homogeneous(False)
@@ -1062,7 +1061,7 @@ class OverwriteDialog:
 	"""Dialog used for confirmation of file/directory overwrite"""
 
 	def __init__(self, application, parent):
-		self._dialog = Gtk.Dialog(parent=parent, **_use_header_bar)
+		self._dialog = Gtk.Dialog(parent=parent, **InputDialog.use_header_bar)
 
 		self._application = application
 		self._rename_value = ''
@@ -1338,7 +1337,7 @@ class AddBookmarkDialog:
 	"""This dialog enables user to change data before adding new bookmark"""
 
 	def __init__(self, application, path):
-		self._dialog = Gtk.Dialog(parent=application, **_use_header_bar)
+		self._dialog = Gtk.Dialog(parent=application, **InputDialog.use_header_bar)
 
 		self._application = application
 
@@ -1432,7 +1431,7 @@ class OperationError:
 	RESPONSE_SKIP_ALL = 3
 
 	def __init__(self, application):
-		self._dialog = Gtk.Dialog(parent=application, **_use_header_bar)
+		self._dialog = Gtk.Dialog(parent=application, **InputDialog.use_header_bar)
 		self._application = application
 
 		# configure dialog
@@ -1516,7 +1515,7 @@ class CreateToolbarWidgetDialog:
 	"""Create widget persisten dialog."""
 
 	def __init__(self, application):
-		self._dialog = Gtk.Dialog(parent=application, **_use_header_bar)
+		self._dialog = Gtk.Dialog(parent=application, **InputDialog.use_header_bar)
 		self._application = application
 
 		# configure dialog
@@ -1709,7 +1708,7 @@ class ApplicationSelectDialog:
 	help_url = 'standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables'
 
 	def __init__(self, application, path=None):
-		self._dialog = Gtk.Dialog(parent=application, **_use_header_bar)
+		self._dialog = Gtk.Dialog(parent=application, **InputDialog.use_header_bar)
 
 		self._application = application
 		self.path = path
@@ -1854,7 +1853,7 @@ class ApplicationSelectDialog:
 class PathInputDialog():
 	"""Input Dialog with path completion entry"""
 	def __init__(self, application):
-		self._dialog = Gtk.Dialog(parent=application, **_use_header_bar)
+		self._dialog = Gtk.Dialog(parent=application, **InputDialog.use_header_bar)
 
 		self._application = application
 

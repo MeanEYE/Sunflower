@@ -130,6 +130,10 @@ class PropertiesWindow(Gtk.Window):
 			# item was removed, close dialog
 			self.destroy()
 
+		elif event is Gio.FileMonitorEvent.MOVED:
+			# item was moved/renamed - probably within same file system but not necessarily within same directory - close dialog
+			self.destroy()
+
 		else:
 			# item was changed, update data
 			self._update_data()

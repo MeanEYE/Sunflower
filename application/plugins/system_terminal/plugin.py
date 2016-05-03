@@ -3,6 +3,8 @@ import user
 import shlex
 import subprocess
 
+from gi.repository import GLib, Vte
+
 from parameters import Parameters
 from plugin_base.terminal import Terminal, TerminalType
 
@@ -36,10 +38,10 @@ class SystemTerminal(Terminal):
 				os.environ['TERM'] = 'xterm-color'
 				os.environ['COLORTERM'] = 'gnome-terminal'
 
-				# fork default shell
-				self._terminal.connect('child-exited', self.__child_exited)
-				self._terminal.connect('status-line-changed', self._update_terminal_status)
-				self._terminal.connect('realize', self.__terminal_realized)
+			# fork default shell
+			self._terminal.connect('child-exited', self.__child_exited)
+			self._terminal.connect('status-line-changed', self._update_terminal_status)
+			self._terminal.connect('realize', self.__terminal_realized)
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
 			# connect signals
@@ -80,12 +82,21 @@ class SystemTerminal(Terminal):
 	def __terminal_realized(self, widget, data=None):
 		"""Event called once terminal emulator is realized"""
 		shell_command = self._options.get('shell_command', os.environ['SHELL'])
-		arguments = self._options.get('arguments', [shell_command])
-		self._pid = self._terminal.fork_command(
-								command=shell_command,
-								argv=arguments,
-								directory=self.path
-							)
+
+		command = {
+			'pty_flags': Vte.PtyFlags.DEFAULT,
+			'working_directory': self.path,
+			'argv': self._options.get('arguments', [shell_command]),
+			'envv': [],
+			'spawn_flags': GLib.SpawnFlags.DO_NOT_REAP_CHILD,
+			'child_setup': None,
+			'child_setup_data': None }
+
+		# since VTE 0.38 fork_command_full has been renamed spawn_sync
+		if hasattr(self._terminal, 'fork_command_full'):
+			(result, self._pid) = self._terminal.fork_command_full(**command)
+		else:
+			(result, self._pid) = self._terminal.spawn_sync(**command)
 
 	def __child_exited(self, widget, data=None):
 		"""Handle child process termination"""

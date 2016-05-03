@@ -1,9 +1,12 @@
 import gi
 
-# require specific version of Vte
-gi.require_version('Vte', '2.90')
+from gi.repository import Gtk, Gdk, Vte
 
-from gi.repository import Gtk, Gdk, Vte, GConf
+try:
+	from gi.repository import GConf
+	gconf_loaded = True
+except:
+	gconf_loaded = False
 
 from plugin_base.plugin import PluginBase
 from accelerator_group import AcceleratorGroup
@@ -101,10 +104,17 @@ class Terminal(PluginBase):
 
 			# configure terminal widget
 			shape = section.get('cursor_shape')
+
+			# Since Vte 0.38 Vte.TerminalCursorShape has been renamed Vte.CursorShape
+			if hasattr(Vte, 'TerminalCursorShape'):
+				cursorshape = Vte.TerminalCursorShape
+			else:
+				cursorshape = Vte.CursorShape
+
 			shape_type = {
-					CursorShape.BLOCK: Vte.TerminalCursorShape.BLOCK,
-					CursorShape.IBEAM: Vte.TerminalCursorShape.IBEAM,
-					CursorShape.UNDERLINE: Vte.TerminalCursorShape.UNDERLINE
+					CursorShape.BLOCK: cursorshape.BLOCK,
+					CursorShape.IBEAM: cursorshape.IBEAM,
+					CursorShape.UNDERLINE: cursorshape.UNDERLINE
 				}
 			self._terminal.set_cursor_shape(shape_type[shape])
 
@@ -159,6 +169,10 @@ class Terminal(PluginBase):
 
 	def __set_system_font(self, client=None, *args, **kwargs):
 		"""Set system font to terminal"""
+
+		if gconf_loaded:
+			return
+
 		path = '/desktop/gnome/interface'
 		key = '{0}/monospace_font_name'.format(path)
 
@@ -377,11 +391,18 @@ class Terminal(PluginBase):
 
 			# apply cursor shape
 			shape = section.get('cursor_shape')
+
+			# since Vte 0.38 Vte.TerminalCursorShape has been renamed Vte.CursorShape
+			if hasattr(Vte, 'TerminalCursorShape'):
+				cursorshape = Vte.TerminalCursorShape
+			else:
+				cursorshape = Vte.CursorShape
+
 			shape_type = {
-					CursorShape.BLOCK: Vte.CURSOR_SHAPE_BLOCK,
-					CursorShape.IBEAM: Vte.CURSOR_SHAPE_IBEAM,
-					CursorShape.UNDERLINE: Vte.CURSOR_SHAPE_UNDERLINE
-				}
+				CursorShape.BLOCK: cursorshape.BLOCK,
+				CursorShape.IBEAM: cursorshape.IBEAM,
+				CursorShape.UNDERLINE: cursorshape.UNDERLINE
+			}
 			self._terminal.set_cursor_shape(shape_type[shape])
 
 			# apply allow bold

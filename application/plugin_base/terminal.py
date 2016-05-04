@@ -3,9 +3,10 @@ import gi
 from gi.repository import Gtk, Gdk, Vte
 
 try:
-	from gi.repository import GConf as gconf
+	from gi.repository import GConf
+	gconf_loaded = True
 except:
-	gconf = None
+	gconf_loaded = False
 
 from plugin_base.plugin import PluginBase
 from accelerator_group import AcceleratorGroup
@@ -169,7 +170,7 @@ class Terminal(PluginBase):
 	def __set_system_font(self, client=None, *args, **kwargs):
 		"""Set system font to terminal"""
 
-		if gconf is None:
+		if gconf_loaded:
 			return
 
 		path = '/desktop/gnome/interface'
@@ -391,7 +392,7 @@ class Terminal(PluginBase):
 			# apply cursor shape
 			shape = section.get('cursor_shape')
 
-			# Since Vte 0.38 Vte.TerminalCursorShape has been renamed Vte.CursorShape
+			# since Vte 0.38 Vte.TerminalCursorShape has been renamed Vte.CursorShape
 			if hasattr(Vte, 'TerminalCursorShape'):
 				cursorshape = Vte.TerminalCursorShape
 			else:

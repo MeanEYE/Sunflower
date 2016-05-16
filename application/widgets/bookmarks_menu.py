@@ -269,7 +269,7 @@ class BookmarksMenu:
 		self.__populate_list()
 
 		# show menu
-		self._menu.popup(None, None, lambda menu, data: (pos_x, pos_y, True), None, 1, 0)
+		self._menu.popup(None, None, lambda menu, *args: (pos_x, pos_y, True), None, 1, 0)
 
 	def apply_settings(self):
 		"""Apply new configuration"""

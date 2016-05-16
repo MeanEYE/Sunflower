@@ -218,8 +218,9 @@ class TitleBar:
 		if self._spinner is not None:
 			self._spinner.override_color(Gtk.StateFlags.NORMAL, colors[1])
 
-	def __get_menu_position(self, menu, button):
+	def __get_menu_position(self, menu, *args):
 		"""Get bookmarks position"""
+		button = args[-1]
 		window_x, window_y = self._application.get_position()
 		button_x, button_y = button.translate_coordinates(self._application, 0, 0)
 		button_h = button.get_allocation().height

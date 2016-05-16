@@ -261,9 +261,10 @@ class Terminal(PluginBase):
 		PluginBase._duplicate_tab(self, None, self._options)
 		return True
 
-	def _get_menu_position(self, menu, button):
+	def _get_menu_position(self, menu, *args):
 		"""Get history menu position"""
 		# get coordinates
+		button = args[-1]
 		window_x, window_y = self._parent.get_position()
 		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
 		button_h = button.get_allocation().height

@@ -178,9 +178,10 @@ class DefaultRename(RenameExtension):
 		"""Handle clicking on add button"""
 		self._add_menu.popup(None, None, self.__get_menu_position, widget, 1, 0)
 
-	def __get_menu_position(self, menu, button):
+	def __get_menu_position(self, menu, *args):
 		"""Get history menu position"""
 		# get coordinates
+		button = args[-1]
 		window_x, window_y = self._parent.window.get_window().get_position()
 		button_x, button_y = button.translate_coordinates(self._parent.window, 0, 0)
 		button_h = button.get_allocation().height

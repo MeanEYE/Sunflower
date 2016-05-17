@@ -962,13 +962,14 @@ class ItemList(PluginBase):
 		"""
 		pass
 
-	def _get_popup_menu_position(self, menu, data=None):
+	def _get_popup_menu_position(self, menu, *args):
 		"""Abstract method for positioning menu properly on given row"""
 		return 0, 0, True
 
-	def _get_history_menu_position(self, menu, button):
+	def _get_history_menu_position(self, menu, *args):
 		"""Get history menu position"""
 		# get coordinates
+		button = args[-1]
 		window_x, window_y = self._parent.get_position()
 		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
 		button_h = button.get_allocation().height

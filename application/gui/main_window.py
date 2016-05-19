@@ -2,7 +2,6 @@ import os
 import sys
 import webbrowser
 import user
-import gettext
 import common
 import shlex
 import subprocess
@@ -24,7 +23,6 @@ from accelerator_group import AcceleratorGroup
 from accelerator_manager import AcceleratorManager
 from keyring import KeyringManager, InvalidKeyringError
 from parameters import Parameters
-from dbus_common import DBus
 from importlib import import_module
 
 from plugin_base.item_list import ItemList
@@ -37,14 +35,6 @@ from tools.find_files import FindFiles
 from tools.version_check import VersionCheck
 from tools.disk_usage import DiskUsage
 from config import Config
-
-# try to import argument parser
-try:
-	from argparse import ArgumentParser
-	USE_ARGPARSE = True
-
-except:
-	USE_ARGPARSE = False
 
 # GUI imports
 from gui.about_window import AboutWindow
@@ -68,7 +58,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	NAUTILUS_SEND_TO_INSTALLED = common.executable_exists('nautilus-sendto')
 
-	def __init__(self, application):
+	def __init__(self, application, dont_load_plugins):
 		# create main window and other widgets
 		Gtk.ApplicationWindow.__init__(self, application=application)
 		# set application name
@@ -81,13 +71,6 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# load custom styles
 		self._load_styles()
-
-		# load translations
-		self._load_translation()
-
-		# parse arguments
-		self.arguments = None
-		self._parse_arguments()
 
 		# containers
 		self.plugin_classes = {}
@@ -138,9 +121,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.config_path = None
 		self.system_plugin_path = None
 		self.user_plugin_path = None
-
-		# DBus interface object
-		self.dbus_interface = None
 
 		# create a clipboard manager
 		self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
@@ -748,7 +728,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._restore_window_position()
 
 		# load plugins
-		self._load_plugins()
+		self._load_plugins(dont_load_plugins)
 
 		# create mount manager extensions
 		self.mount_manager.create_extensions()
@@ -780,16 +760,6 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# save config changes
 		self.save_config()
-
-		# remove lockfile if needed
-		multiple_instances = self.options.get('multiple_instances')
-		hide_on_close = self.window_options.section('main').get('hide_on_close')
-
-		if (not multiple_instances or hide_on_close) and not DBus.is_available():
-			lock_file = '/tmp/sunflower-{}.lock'.format(os.geteuid())
-
-			if os.path.exists(lock_file):
-				os.remove(lock_file)
 
 		# exit main loop
 		Gtk.main_quit()
@@ -1216,7 +1186,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		return plugin_list
 
-	def _load_plugins(self):
+	def _load_plugins(self, dont_load_plugins):
 		"""Dynamically load plugins"""
 		plugin_files = self._get_plugin_list()
 		plugins_to_load = self.options.get('plugins')
@@ -1226,7 +1196,7 @@ class MainWindow(Gtk.ApplicationWindow):
 			sys.path.append(self.config_path)
 
 		# only load protected plugins if command line parameter is specified
-		if self.arguments is not None and self.arguments.dont_load_plugins:
+		if dont_load_plugins:
 			plugins_to_load = self.protected_plugins
 
 		# filter list for loading
@@ -1267,31 +1237,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		# load and apply style
 		provider.load_from_file(Gio.File.new_for_path(file_name))
 		Gtk.StyleContext.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
-
-	def _load_translation(self):
-		"""Load translation and install global functions"""
-		# get directory for translations
-		base_path = os.path.dirname(os.path.dirname(sys.argv[0]))
-		directory = os.path.join(base_path, 'translations')
-
-		# function params
-		params = {
-				'domain': 'sunflower',
-				'fallback': True
-			}
-
-		# install translations from local directory if needed
-		if os.path.isdir(directory):
-			params.update({'localedir': directory})
-
-		# get translation
-		translation = gettext.translation(**params)
-
-		# install global functions for translating
-		__builtins__.update({
-						'_': translation.gettext,
-						'ngettext': translation.ngettext
-					})
 
 	def _command_reload(self, widget=None, data=None):
 		"""Handle command button click"""
@@ -1570,80 +1515,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.handler_unblock_by_func(self._handle_configure_event)
 		self.handler_unblock_by_func(self._handle_window_state_event)
 
-	def _parse_arguments(self):
-		"""Parse command-line arguments passed to the application"""
-		if not USE_ARGPARSE: return
-
-		def make_absolute_path(path):
-			if '://' not in path:
-				path = os.path.abspath(path)
-			return path
-
-		parser = ArgumentParser(
-							description=_('Sunflower file manager'),
-							prog='Sunflower.py'
-						)
-
-		# add parameters to parser
-		parser.add_argument(
-						'-v', '--version',
-						action='version',
-						version=(
-								'{0} {1[major]}.{1[minor]}'
-								'{1[stage]} ({1[build]})'
-							).format(
-								_('Sunflower'),
-								self.version
-							),
-						help=_('print version and exit')
-					)
-		parser.add_argument(
-						'-p', '--no-plugins',
-						action='store_true',
-						help=_('skip loading additional plugins'),
-						dest='dont_load_plugins'
-					)
-		parser.add_argument(
-						'-t', '--no-load-tabs',
-						action='store_true',
-						help=_('skip loading saved tabs'),
-						dest='dont_load_tabs'
-					)
-		parser.add_argument(
-						'-l', '--left-tab',
-						action='append',
-						help=_('open new tab on the left notebook'),
-						metavar='PATH',
-						dest='left_tabs',
-						type=make_absolute_path
-					)
-		parser.add_argument(
-						'-r', '--right-tab',
-						action='append',
-						help=_('open new tab on the right notebook'),
-						metavar='PATH',
-						dest='right_tabs',
-						type=make_absolute_path
-					)
-		parser.add_argument(
-						'-L', '--left-terminal',
-						action='append',
-						help=_('open terminal tab on the left notebook'),
-						metavar='PATH',
-						dest='left_terminals',
-						type=make_absolute_path
-					)
-		parser.add_argument(
-						'-R', '--right-terminal',
-						action='append',
-						help=_('open terminal tab on the right notebook'),
-						metavar='PATH',
-						dest='right_terminals',
-						type=make_absolute_path
-					)
-
-		self.arguments = parser.parse_args()
-
 	def activate_bookmark(self, widget=None, index=0):
 		"""Activate bookmark by index"""
 		path = None
@@ -1835,75 +1706,38 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		return result
 
-	def run(self):
-		"""Start application"""
-		# check for mutliple instances
-		lock_file = '/tmp/sunflower-{}.lock'.format(os.geteuid())
-		multiple_instances = self.options.get('multiple_instances')
-		hide_on_close = self.window_options.section('main').get('hide_on_close')
+	def create_tabs(self, arguments):
+		"""Create all tabs taking into all (local or remote) account command line arguments"""
 
-		if not multiple_instances or hide_on_close:
-			if DBus.is_available():
-				dbus_client = DBus.get_client(self)
+		if not arguments.is_remote:
+			section = self.options.section('item_list')
+			config_prevents_load = section.get('force_directories')
+			arguments_prevents_load = arguments is not None and arguments.dont_load_tabs
 
-				if dbus_client.is_connected():
-					dbus_client.one_instance()
+			# load saved tabs if needed
+			if not (config_prevents_load or arguments_prevents_load):
+				self.load_tabs(self.left_notebook, 'left')
+				self.load_tabs(self.right_notebook, 'right')
 
-				dbus_client.disconnect()
-
-			else:
-				# check for lockfile
-				try:
-					lock = open(lock_file, 'w')
-					fcntl.lockf(lock, fcntl.LOCK_EX|fcntl.LOCK_NB)
-					lock.write(str(os.getpid()))
-
-				except IOError:
-					print 'Another copy of Sunflower is already running'
-					sys.exit()
-
-				except OSError as oserror:
-					print 'Can''t create lock file {0}. {1}'.format(lock_file, oserror)
-					sys.exit()
-
-		# create dbus interface
-		if DBus.is_available():
-			self.dbus_interface = DBus.get_service(self)
-
-		# prepare for tab loading
 		left_list = []
 		right_list = []
 
 		DefaultList = self.plugin_classes['file_list']
 		DefaultTerminal = self.plugin_classes['system_terminal']
 
-		section = self.options.section('item_list')
-		config_prevents_load = section.get('force_directories')
-		arguments_prevents_load = self.arguments is not None and self.arguments.dont_load_tabs
-
-		# load saved tabs if needed
-		if not (config_prevents_load or arguments_prevents_load):
-			self.load_tabs(self.left_notebook, 'left')
-			self.load_tabs(self.right_notebook, 'right')
-
 		# populate lists with command line arguments
-		if self.arguments is not None:
-			if self.arguments.left_tabs is not None:
-				left_list.extend(map(lambda path: (DefaultList, path), self.arguments.left_tabs))
+		if arguments is not None:
+			if arguments.left_tabs is not None:
+				left_list.extend(map(lambda path: (DefaultList, path), arguments.left_tabs))
 
-			if self.arguments.right_tabs is not None:
-				right_list.extend(map(lambda path: (DefaultList, path), self.arguments.right_tabs))
+			if arguments.right_tabs is not None:
+				right_list.extend(map(lambda path: (DefaultList, path), arguments.right_tabs))
 
-			if self.arguments.left_terminals is not None:
-				left_list.extend(map(lambda path: (DefaultTerminal, path), self.arguments.left_terminals))
+			if arguments.left_terminals is not None:
+				left_list.extend(map(lambda path: (DefaultTerminal, path), arguments.left_terminals))
 
-			if self.arguments.right_terminals is not None:
-				right_list.extend(map(lambda path: (DefaultTerminal, path), self.arguments.right_terminals))
-
-		# populate list with specified config directories
-		if config_prevents_load:
-			left_list.extend(map(lambda path: (DefaultList, path), section.get('left_directories')))
-			right_list.extend(map(lambda path: (DefaultList, path), section.get('right_directories')))
+			if arguments.right_terminals is not None:
+				right_list.extend(map(lambda path: (DefaultTerminal, path), arguments.right_terminals))
 
 		# finally create additional tabs
 		for Class, path in left_list:
@@ -1923,14 +1757,11 @@ class MainWindow(Gtk.ApplicationWindow):
 		if self.right_notebook.get_n_pages() == 0:
 			self.create_tab(self.right_notebook, DefaultList)
 
-		# focus active notebook
-		active_notebook_index = self.options.get('active_notebook')
-		notebook = (self.left_notebook, self.right_notebook)[active_notebook_index]
-
-		notebook.grab_focus()
-
-		# enter main loop
-		Gtk.main()
+		if not arguments.is_remote:
+			# focus active notebook
+			active_notebook_index = self.options.get('active_notebook')
+			notebook = (self.left_notebook, self.right_notebook)[active_notebook_index]
+			notebook.grab_focus()
 
 	def create_tab(self, notebook, plugin_class=None, options=None):
 		"""Safe create tab"""
@@ -2321,28 +2152,23 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def load_config(self):
 		"""Load configuration from file located in users home directory"""
-		config_directory = common.get_config_directory()
-
-		if os.path.isdir(config_directory):
-			self.config_path = os.path.join(config_directory, 'sunflower')
-		else:
-			self.config_path = os.path.join(user.home, '.sunflower')
+		self.config_path = common.get_config_path()
 
 		# generate plugins paths
 		self.user_plugin_path = os.path.join(self.config_path, 'user_plugins')
 		self.system_plugin_path = os.path.join(os.path.dirname(sys.argv[0]), 'plugins')
 
 		# create config parsers
-		self.options = Config('config', self)
-		self.window_options = Config('windows', self)
-		self.plugin_options = Config('plugins', self)
-		self.tab_options = Config('tabs', self)
-		self.bookmark_options = Config('bookmarks', self)
-		self.toolbar_options = Config('toolbar', self)
-		self.command_options = Config('commands', self)
-		self.accel_options = Config('accelerators', self)
-		self.association_options = Config('associations', self)
-		self.mount_options = Config('mounts', self)
+		self.options = Config('config', self.config_path)
+		self.window_options = Config('windows', self.config_path)
+		self.plugin_options = Config('plugins', self.config_path)
+		self.tab_options = Config('tabs', self.config_path)
+		self.bookmark_options = Config('bookmarks', self.config_path)
+		self.toolbar_options = Config('toolbar', self.config_path)
+		self.command_options = Config('commands', self.config_path)
+		self.accel_options = Config('accelerators', self.config_path)
+		self.association_options = Config('associations', self.config_path)
+		self.mount_options = Config('mounts', self.config_path)
 
 		# load accelerators
 		self.accelerator_manager.load(self.accel_options)

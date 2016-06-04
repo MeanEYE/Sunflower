@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the Sunflower package.
 # 
 # Translators:
-# Mladen Mijatov <meaneye.rcf@gmail.com>, 2015
+# Mladen Mijatov <meaneye.rcf@gmail.com>, 2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-06 23:05+0100\n"
-"PO-Revision-Date: 2016-01-07 20:04+0000\n"
+"PO-Revision-Date: 2016-04-10 11:39+0000\n"
 "Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
 "Language-Team: Bulgarian (http://www.transifex.com/way2cu/sunflower/language/bg/)\n"
 "MIME-Version: 1.0\n"
@@ -149,7 +149,7 @@ msgstr "Добавки"
 #: application/gui/preferences/plugins.py:66
 #: application/gui/preferences/display.py:93
 msgid "Active"
-msgstr "Активен"
+msgstr "Активную"
 
 #: application/gui/preferences/plugins.py:68
 msgid "Plugin name"

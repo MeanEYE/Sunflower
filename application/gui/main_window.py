@@ -71,6 +71,7 @@ class MainWindow(Gtk.ApplicationWindow):
 	def __init__(self, application):
 		# create main window and other widgets
 		Gtk.ApplicationWindow.__init__(self, application=application)
+
 		# set application name
 		GLib.set_application_name('Sunflower')
 
@@ -117,7 +118,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# set window title
 		self.set_title(_('Sunflower'))
-		#self.set_wmclass('Sunflower', 'Sunflower')
+		self.set_wmclass('Sunflower', 'Sunflower')
 		self.set_border_width(5)
 
 		# set window icon
@@ -167,11 +168,9 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# create header bar
 		self.header_bar = Gtk.HeaderBar.new()
-		if hasattr(self.header_bar, 'set_has_subtitle'):
-			self.header_bar.set_has_subtitle(True)
+		self.header_bar.set_has_subtitle(True)
 		self.header_bar.set_show_close_button(True)
 		self.header_bar.set_title(_('Sunflower'))
-
 		self.set_titlebar(self.header_bar)
 
 		# create bar buttons

@@ -1,7 +1,7 @@
 import gi
 
 gi.require_version('Vte', '2.91')
-from gi.repository import Gtk, Gdk, Vte
+from gi.repository import Gtk, Gdk, Vte, Pango
 
 try:
 	gi.require_version('GConf', '1.0')
@@ -62,7 +62,7 @@ class Terminal(PluginBase):
 		# file list button
 		self._file_list_button = Gtk.Button.new_from_icon_name('folder', Gtk.IconSize.MENU)
 		self._file_list_button.set_focus_on_click(False)
-		self._file_list_button.set_tooltip_text(_('Open file list'))
+		self._file_list_button.set_tooltip_text(_('Open current directory'))
 		self._file_list_button.connect('clicked', self._create_file_list)
 		self._title_bar.add_control(self._file_list_button)
 
@@ -91,7 +91,6 @@ class Terminal(PluginBase):
 					CursorShape.UNDERLINE: cursorshape.UNDERLINE
 				}
 			self._terminal.set_cursor_shape(shape_type[shape])
-
 			self._terminal.set_allow_bold(section.get('allow_bold'))
 			self._terminal.set_mouse_autohide(section.get('mouse_autohide'))
 
@@ -99,7 +98,8 @@ class Terminal(PluginBase):
 				self.__set_system_font()
 
 			else:
-				self._terminal.set_font_from_string(section.get('font'))
+				font = Pango.FontDescription(section.get('font'))
+				self._terminal.set_font(font)
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
 			self._terminal = Gtk.Socket()
@@ -143,7 +143,6 @@ class Terminal(PluginBase):
 
 	def __set_system_font(self, client=None, *args, **kwargs):
 		"""Set system font to terminal"""
-
 		if gconf_loaded:
 			return
 
@@ -167,14 +166,15 @@ class Terminal(PluginBase):
 			font_name = client.get_string(key)
 
 			if font_name is not None:
-				self._terminal.set_font_from_string(font_name)
+				font = Pango.FontDescription(font_name)
+				self._terminal.set_font(font_name)
 
 	def _create_buttons(self):
 		"""Create titlebar buttons."""
 		options = self._parent.options
 
 		# terminal menu button
-		self._menu_button = Gtk.Button.new_from_stock(Gtk.STOCK_EDIT)
+		self._menu_button = Gtk.Button.new_from_icon_name(Gtk.STOCK_EDIT, Gtk.IconSize.MENU)
 		self._menu_button.set_focus_on_click(False)
 		self._menu_button.set_tooltip_text(_('Terminal menu'))
 		self._menu_button.connect('clicked', self._show_terminal_menu)
@@ -183,10 +183,6 @@ class Terminal(PluginBase):
 		"""Update title with terminal window text"""
 		self._change_title_text(self._terminal.get_window_title())
 		return True
-
-	def _update_terminal_status(self, widget, data=None):
-		"""Update status bar text with terminal data"""
-		self.update_status(self._terminal.get_status_line())
 
 	def _create_terminal(self, widget, data=None):
 		"""Create terminal tab in parent notebook"""
@@ -246,7 +242,6 @@ class Terminal(PluginBase):
 		self._prepare_menu()
 
 		# show the menu on calculated location
-
 		self._menu.popup(None, None, self._get_menu_position, widget, 1, 0)
 
 	def _configure_accelerators(self):
@@ -321,7 +316,7 @@ class Terminal(PluginBase):
 		dialog.set_default_response(Gtk.ResponseType.YES)
 		result = dialog.run()
 		dialog.destroy()
-		
+
 		if result == Gtk.ResponseType.YES:
 			self.feed_terminal(text)
 

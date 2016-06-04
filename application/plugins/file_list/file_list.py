@@ -394,6 +394,8 @@ class FileList(ItemList):
 			# hide preview if item thumbnail is not available
 			self._thumbnail_view.hide()
 
+		return True
+
 	def _handle_tab_close(self):
 		"""Handle tab closing"""
 		ItemList._handle_tab_close(self)
@@ -421,6 +423,8 @@ class FileList(ItemList):
 		# notify monitor about change
 		queue = self.get_monitor().get_queue()
 		queue.put((MonitorSignals.EMBLEM_CHANGED, os.path.join(path, selection), None))
+
+		return True
 
 	def _execute_selected_item(self, widget=None, data=None):
 		"""Execute/Open selected item"""

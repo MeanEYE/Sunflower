@@ -143,7 +143,8 @@ class Terminal(PluginBase):
 
 	def __set_system_font(self, client=None, *args, **kwargs):
 		"""Set system font to terminal"""
-		if gconf_loaded:
+		# TODO: Switch to using dconf
+		if not gconf_loaded:
 			return
 
 		path = '/desktop/gnome/interface'

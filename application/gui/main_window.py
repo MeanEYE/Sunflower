@@ -590,6 +590,36 @@ class MainWindow(Gtk.ApplicationWindow):
 		for item in menu_items:
 			self.menu_bar.append(self.menu_manager.create_menu_item(item))
 
+		# create application menu
+		self._application_menu = Gio.Menu.new()
+		self._features_section = Gio.Menu.new()
+		self._program_section = Gio.Menu.new()
+		self._tools_menu = Gio.Menu.new()
+
+		# create actions
+		preferences_action = Gio.SimpleAction.new('preferences', None)
+		preferences_action.connect('activate', self.preferences_window._show)
+		self.add_action(preferences_action)
+
+		help_action = Gio.SimpleAction.new('help', None)
+
+		self._tools_menu.append(_('_Find files'), 'tools.find_files')
+		self._tools_menu.append(_('Find _duplicate files'), 'tools.find_duplicate_files')
+		self._tools_menu.append(_('_Synchronize directories'), 'tools.synchronize_directories')
+		self._tools_menu.append(_('Advanced _rename'), 'tools.advanced_rename')
+		self._tools_menu.append(_('_Mount manager'), 'tools.mount_manager')
+		self._tools_menu.append(_('_Keyring manager'), 'tools.keyring_manager')
+		self._features_section.append_submenu(_('Tools'), self._tools_menu)
+		self._features_section.append(_('Preferences'), 'win.preferences')
+
+		self._program_section.append(_('Help'), 'win.help')
+		self._program_section.append(_('About'), 'win.about')
+		self._program_section.append(_('Quit'), 'win.quit')
+
+		self._application_menu.append_section(None, self._features_section)
+		self._application_menu.append_section(None, self._program_section)
+		application.set_app_menu(self._application_menu)
+
 		# commands menu
 		self.menu_commands = Gtk.Menu()
 

@@ -26,9 +26,9 @@ except ImportError:
 	pass
 
 # Sunflower has to handle UTF-8 encoded strings while interacting with GTK
-import sys
-reload(sys)
+import sys; reload(sys)
 sys.setdefaultencoding("utf-8")
+
 
 class Sunflower(Gtk.Application):
 	"""Main application instance."""
@@ -53,6 +53,7 @@ class Sunflower(Gtk.Application):
 		application_path = os.path.abspath(os.path.dirname(sys.argv[0]))
 		if application_path not in sys.path:
 			sys.path.insert(1, application_path)
+
 
 # create application
 application = Sunflower()

@@ -33,13 +33,12 @@ class TabLabel:
 		image.show()
 
 		self._button = Gtk.Button()
-		self._button.set_focus_on_click(False)
 		self._button.add(image)
-		self._button.set_relief(Gtk.ReliefStyle.NONE)
+		self._button.set_focus_on_click(False)
 		self._button.connect('clicked', self._close_tab)
 		self._button.set_property('no-show-all', True)
-		self._button.set_size_request(image_width + 2, image_height + 2)
 		self._button.get_style_context().add_class('sunflower-close-tab')
+		self._button.get_style_context().add_class('flat')
 
 		# pack interface
 		self._hbox.pack_start(self._lock_image, False, False, 0)

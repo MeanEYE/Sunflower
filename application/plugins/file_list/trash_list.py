@@ -2,7 +2,6 @@ from gi.repository import Gtk
 
 from file_list import FileList
 from gio_provider import TrashProvider
-from plugin_base.item_list import ButtonText
 from operation import DeleteOperation
 
 
@@ -23,22 +22,10 @@ class TrashList(FileList):
 		options = self._parent.options
 
 		# empty trash button
-		self._empty_button = Gtk.Button()
-
-		if options.get('tab_button_icons'):
-			# set icon
-			image_terminal = Gtk.Image()
-			image_terminal.set_from_icon_name('edittrash', Gtk.IconSize.MENU)
-			self._empty_button.set_image(image_terminal)
-
-		else:
-			# set text
-			self._empty_button.set_label(ButtonText.TRASH)
-
+		self._empty_button = Gtk.Button.new_from_icon_name('edittrash', Gtk.IconSize.MENU)
 		self._empty_button.set_focus_on_click(False)
 		self._empty_button.set_tooltip_text(_('Empty trash'))
 		self._empty_button.connect('clicked', self.empty_trash)
-
 		self._title_bar.add_control(self._empty_button)
 
 	def empty_trash(self, widget=None, data=None):

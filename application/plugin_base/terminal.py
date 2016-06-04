@@ -14,12 +14,6 @@ from plugin_base.plugin import PluginBase
 from accelerator_group import AcceleratorGroup
 
 
-class ButtonText:
-	MENU = u'\u2699'
-	TERMINAL = u'\u2605'
-	ITEM_LIST = u'\u2600'
-
-
 class TerminalType:
 	VTE = 0
 	EXTERNAL = 1
@@ -59,39 +53,17 @@ class Terminal(PluginBase):
 		self._title_bar.add_control(self._menu_button)
 
 		# terminal button
-		self._terminal_button = Gtk.Button()
-
-		if options.get('tab_button_icons'):
-			# set icon
-			image_terminal = Gtk.Image()
-			image_terminal.set_from_icon_name('terminal', Gtk.IconSize.MENU)
-			self._terminal_button.set_image(image_terminal)
-		else:
-			# set text
-			self._terminal_button.set_label(ButtonText.TERMINAL)
-
+		self._terminal_button = Gtk.Button.new_from_icon_name('terminal', Gtk.IconSize.MENU)
 		self._terminal_button.set_focus_on_click(False)
 		self._terminal_button.set_tooltip_text(_('Terminal'))
 		self._terminal_button.connect('clicked', self._create_terminal)
-
 		self._title_bar.add_control(self._terminal_button)
 
 		# file list button
-		self._file_list_button = Gtk.Button()
-
-		if options.get('tab_button_icons'):
-			# set icon
-			image_folder = Gtk.Image()
-			image_folder.set_from_icon_name('folder', Gtk.IconSize.MENU)
-			self._file_list_button.set_image(image_folder)
-		else:
-			# set text
-			self._file_list_button.set_label(ButtonText.ITEM_LIST)
-
+		self._file_list_button = Gtk.Button.new_from_icon_name('folder', Gtk.IconSize.MENU)
 		self._file_list_button.set_focus_on_click(False)
 		self._file_list_button.set_tooltip_text(_('Open file list'))
 		self._file_list_button.connect('clicked', self._create_file_list)
-
 		self._title_bar.add_control(self._file_list_button)
 
 		# create main object
@@ -202,16 +174,7 @@ class Terminal(PluginBase):
 		options = self._parent.options
 
 		# terminal menu button
-		self._menu_button = Gtk.Button.new()
-
-		if options.get('tab_button_icons'):
-			# set icon
-			image_menu = Gtk.Image.new_from_icon_name(Gtk.STOCK_EDIT, Gtk.IconSize.MENU)
-			self._menu_button.set_image(image_menu)
-		else:
-			# set text
-			self._menu_button = Gtk.Button(ButtonText.MENU)
-
+		self._menu_button = Gtk.Button.new_from_stock(Gtk.STOCK_EDIT)
 		self._menu_button.set_focus_on_click(False)
 		self._menu_button.set_tooltip_text(_('Terminal menu'))
 		self._menu_button.connect('clicked', self._show_terminal_menu)

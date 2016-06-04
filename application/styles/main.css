@@ -1,3 +1,6 @@
+/**
+ * Close tab buttons.
+ */
 button.sunflower-close-tab {
 	padding: 0px;
 }
@@ -6,12 +9,16 @@ button.sunflower-close-tab {
  * Tab title bar.
  */
 box.horizontal.sunflower-title-bar {
-	border-radius: 0.3em;
+	border-radius: 0.2em;
 	background-color: @theme_unfocused_bg_color;
 	color: @theme_unfocused_fg_color;
 }
 
+/**
+ * Box containing path and mount free space.
+ */
 box.horizontal.sunflower-title-bar box.vertical {
+	padding: 0.1em 0;
 	background-color: @theme_unfocused_bg_color;
 	color: @theme_unfocused_fg_color;
 }
@@ -22,48 +29,12 @@ box.horizontal.sunflower-title-bar.selected box.vertical {
 	color: @theme_selected_fg_color;
 }
 
-box.horizontal.sunflower-title-bar > box.horizontal {
-	border-radius: 0.2em;
-	background-color: alpha(@theme_unfocused_fg_color, 0.3);
-}
-
-box.horizontal.sunflower-title-bar.selected > box.horizontal {
-	border-radius: 0.2em;
-	background-color: alpha(@theme_selected_fg_color, 0.3);
-}
-
-box.horizontal.sunflower-title-bar box.horizontal button,
-box.horizontal.sunflower-title-bar box.horizontal button:hover {
-	border: 0em;
-	border-radius: 0em;
-	outline: 0em;
-	box-shadow: none;
-}
-
-box.horizontal.sunflower-title-bar box.horizontal button:first-child {
-	border-radius: 0.2em 0em 0em 0.2em;
-}
-
-box.horizontal.sunflower-title-bar box.horizontal button:last-child {
-	border-radius: 0em 0.2em 0.2em 0em;
-}
-
-box.horizontal.sunflower-title-bar button.sunflower-tab-menu,
-box.horizontal.sunflower-title-bar button.sunflower-tab-menu:hover {
-	border-radius: 0.2em;
-}
-
-box.horizontal.sunflower-title-bar button.sunflower-tab-menu {
-	padding: 0.1em 0.3em;
-	background-color: transparent;
-}
-
 box.horizontal.sunflower-title-bar.selected label {
 	color: @theme_selected_fg_color;
 }
 
 /**
- * Item list
+ * Item list.
  */
 treeview.sunflower-main-object:selected {
 	outline: none;

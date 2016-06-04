@@ -2,6 +2,7 @@ from gi.repository import Gtk, GObject
 from gui.input_dialog import InputDialog, PasswordDialog
 
 try:
+	gi.require_version('GnomeKeyring', '1.0')
 	from gi.repository import GnomeKeyring as keyring
 except:
 	keyring = None

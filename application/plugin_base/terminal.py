@@ -1,8 +1,10 @@
 import gi
 
+gi.require_version('Vte', '2.91')
 from gi.repository import Gtk, Gdk, Vte
 
 try:
+	gi.require_version('GConf', '1.0')
 	from gi.repository import GConf
 	gconf_loaded = True
 except:

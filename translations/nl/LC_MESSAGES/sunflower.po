@@ -3,26 +3,20 @@
 # This file is distributed under the same license as the Sunflower package.
 # 
 # Translators:
-# Andrey <python36@yandex.ru>, 2015
-# FIRST AUTHOR Халіманенко Тарас <mr.haltar@yandex.ru>, 2012
-# insolor, 2016
-# Mladen Mijatov <meaneye.rcf@gmail.com>, 2015
-# Roman Tuz <ubuntueasy.com@gmail.com>, 2015
-# Микола Ткач <Stuartlittle1970@gmail.com>, 2016
-# Халіманенко Тарас <mr.haltar@yandex.ru>, 2012
+# Ruud W. Blau <rwblau@aim.com>, 2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-06 23:05+0100\n"
-"PO-Revision-Date: 2016-02-05 09:03+0000\n"
-"Last-Translator: Микола Ткач <Stuartlittle1970@gmail.com>\n"
-"Language-Team: Ukrainian (Ukraine) (http://www.transifex.com/way2cu/sunflower/language/uk_UA/)\n"
+"PO-Revision-Date: 2016-01-16 11:26+0000\n"
+"Last-Translator: Ruud W. Blau <rwblau@aim.com>\n"
+"Language-Team: Dutch (http://www.transifex.com/way2cu/sunflower/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: uk_UA\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: application/gui/preferences/terminal.py:11
 #: application/plugins/system_terminal/plugin.py:54
@@ -31,60 +25,60 @@ msgstr ""
 #: application/plugin_base/terminal.py:300
 #: application/plugin_base/item_list.py:230
 msgid "Terminal"
-msgstr "Термінал"
+msgstr "Terminal"
 
 #: application/gui/preferences/terminal.py:18
 msgid "VTE based terminal"
-msgstr "Термінал, заснований на VTE"
+msgstr "Virtuele terminal"
 
 #: application/gui/preferences/terminal.py:22
 msgid "Show scrollbars when needed"
-msgstr "Показувати смуги прокручування при необхідності"
+msgstr "Toon schuifbalken wanneer nodig"
 
 #: application/gui/preferences/terminal.py:30
 msgid "Use the system fixed width font"
-msgstr "Використовувати системний моноширинний шрифт"
+msgstr "Gebruik niet-proportioneel systeemlettertype"
 
 #: application/gui/preferences/terminal.py:33
 msgid "Font:"
-msgstr "Шрифт:"
+msgstr "Lettertype:"
 
 #: application/gui/preferences/terminal.py:42
 msgid "Cursor shape:"
-msgstr "Форма вказівника:"
+msgstr "Cursorvorm:"
 
 #: application/gui/preferences/terminal.py:46
 msgid "Block"
-msgstr "Блок"
+msgstr "Blok"
 
 #: application/gui/preferences/terminal.py:47
 msgid "I-Beam"
-msgstr "I-подібний"
+msgstr "Balk"
 
 #: application/gui/preferences/terminal.py:48
 msgid "Underline"
-msgstr "Підкреслення"
+msgstr "Onderstrepen"
 
 #: application/gui/preferences/terminal.py:58
 msgid "Allow bold text"
-msgstr "Дозволяти жирний текст"
+msgstr "Vetgedrukte tekst toestaan"
 
 #: application/gui/preferences/terminal.py:62
 msgid "Automatically hide mouse when typing"
-msgstr "Автоматично приховувати вказівник при наборі тексту"
+msgstr "Muis verbergen tijdens typen"
 
 #: application/gui/preferences/terminal.py:70
 msgid "External terminal"
-msgstr "Зовнішній термінал"
+msgstr "Extern terminalvenster"
 
 #: application/gui/preferences/terminal.py:73
 #: application/gui/preferences/view_and_edit.py:63
 msgid "Command line:"
-msgstr "Команда:"
+msgstr "Opdrachtregel:"
 
 #: application/gui/preferences/terminal.py:79
 msgid "Command line for executing specific program:"
-msgstr "Команда для виконання певної проґрами:"
+msgstr "Opdrachtregel voor uitvoeren specifiek programma:"
 
 #: application/gui/preferences/terminal.py:85
 #, python-brace-format
@@ -94,155 +88,155 @@ msgid ""
 "\t{0} will be replaced with socket/window id.\n"
 "\t{1} will be replaced with specified command and its parameters.\n"
 "\t{2} will be replaced with current working directory.</i></small>"
-msgstr "<small><i>Нотатка:\n\tЯкщо пропустити{0} то термінал відкриється у новому вікні, а не вкладці.\n\t{0} буде замінено на id сокета/вікна.\n\t{1} буде замінено на вказану команду та її параметри.\n\t{2} буде замінено на поточний робочий каталог.</i></small>"
+msgstr "<small><i>Opmerking:\n⇥Weglaten {0} opent nieuwe terminal-applicatie in plaats van een tab.\n⇥{0} wordt vervangen door socket/window-id.\n⇥{1} wordt vervangen door geselecteerde commando en parameters.\n⇥{2} wordt vervangen door huidige werkdirectory.</i></small>"
 
 #: application/gui/preferences/commands.py:15
 msgid "Commands"
-msgstr "Команди"
+msgstr "Commando's"
 
 #: application/gui/preferences/commands.py:40
 #: application/gui/preferences/bookmarks.py:50
 #: application/plugins/rename_extensions/audio_metadata.py:24
 msgid "Title"
-msgstr "Заголовок"
+msgstr "Titel"
 
 #: application/gui/preferences/commands.py:44
 msgid "Command"
-msgstr "Команда"
+msgstr "Commando"
 
 #: application/gui/preferences/commands.py:67
 #: application/gui/preferences/bookmarks.py:77
 #: application/gui/preferences/toolbar.py:74
 #: application/gui/preferences/item_list.py:263
 msgid "Move Up"
-msgstr "Перемістити вище"
+msgstr "Omhoog"
 
 #: application/gui/preferences/commands.py:75
 #: application/gui/preferences/bookmarks.py:85
 #: application/gui/preferences/toolbar.py:82
 #: application/gui/preferences/item_list.py:271
 msgid "Move Down"
-msgstr "Перемістити нижче"
+msgstr "Omlaag"
 
 #: application/gui/preferences/associations.py:16
 msgid "Associations"
-msgstr "Асоціяції"
+msgstr "Koppelingen"
 
 #: application/gui/preferences/associations.py:45
 #: application/gui/preferences/associations.py:81
 msgid "Add mime type"
-msgstr "Додати MIME-тип"
+msgstr "MIME-type toevoegen"
 
 #: application/gui/preferences/associations.py:48
 msgid "Add application to mime type"
-msgstr "Додати додаток для MIME-типу"
+msgstr "Applicatie aan MIME-type toevoegen"
 
 #: application/gui/preferences/associations.py:82
 msgid "Enter MIME type (eg. image/png):"
-msgstr "Уведіть MIME (наприклад, image/png):"
+msgstr "Geef MIME-type (bv. image/png):"
 
 #: application/gui/preferences/associations.py:133
 msgid ""
 "You need to select mime type to which application will be added. You can "
 "also select another application in which case new one will be added to its "
 "parent."
-msgstr "Необхідно вибрати MIME-тип, для якого додається додаток. Ви можете так само вибрати інший додаток, в цьому випадку нове буде додано до батьківського."
+msgstr "Selecteer het MIME-type waaraan de applicatie wordt gekoppeld. U kunt ook een andere applicatie selecteren, in dat geval zal die worden toegevoegd aan het bovenliggende type."
 
 #: application/gui/preferences/plugins.py:34
 msgid "Plugins"
-msgstr "Модулі"
+msgstr "Plugins"
 
 #: application/gui/preferences/plugins.py:66
 #: application/gui/preferences/display.py:93
 msgid "Active"
-msgstr "Активні"
+msgstr "Actief"
 
 #: application/gui/preferences/plugins.py:68
 msgid "Plugin name"
-msgstr "Ім'я модуля"
+msgstr "Pluginnaam"
 
 #: application/gui/preferences/plugins.py:72
 msgid "Version"
-msgstr "Версія"
+msgstr "Versie"
 
 #: application/gui/preferences/plugins.py:74
 msgid "Author"
-msgstr "Автор"
+msgstr "Auteur"
 
 #: application/gui/preferences/plugins.py:90
 #: application/gui/preferences/accelerators.py:54
 msgid "Description"
-msgstr "Опис"
+msgstr "Omschrijving"
 
 #: application/gui/preferences/plugins.py:100
 msgid "Contact"
-msgstr "Зв'язатися з розробником"
+msgstr "Contact"
 
 #: application/gui/preferences/plugins.py:109
 msgid "Visit site"
-msgstr "Відвідати сайт"
+msgstr "Bezoek website"
 
 #: application/gui/preferences/plugins.py:182
 #, python-brace-format
 msgid ""
 "{0} is required for normal program operation and therefore can not be "
 "deactivated!"
-msgstr "{0} необхідний для нормального функціонування проґрами і, отже, не може бути деактивовано!"
+msgstr "{0} is nodig voor het functioneren van het programma en kan daarom niet gedeactiveerd worden!"
 
 #: application/gui/preferences/plugins.py:213
 msgid "This plugin has no description"
-msgstr "Цей модуль не має опису"
+msgstr "Deze plugin heeft geen omschrijving"
 
 #: application/gui/preferences/plugins.py:272
 msgid "No plugin selected"
-msgstr "Не обраний жоден модуль"
+msgstr "Geen plugin geselecteerd"
 
 #: application/gui/preferences/bookmarks.py:15
 #: application/plugins/default_toolbar/bookmarks_button.py:16
 #: application/plugins/default_toolbar/bookmarks_button.py:17
 #: application/plugin_base/item_list.py:194
 msgid "Bookmarks"
-msgstr "Закладки"
+msgstr "Bladwijzers"
 
 #: application/gui/preferences/bookmarks.py:18
 msgid "Show mount points in bookmarks menu"
-msgstr "Показувати точки монтування в меню закладок"
+msgstr "Toon mountpoints in bladwijzermenu"
 
 #: application/gui/preferences/bookmarks.py:22
 msgid "Show system bookmarks"
-msgstr "Показати системні закладки"
+msgstr "Toon systeembladwijzers"
 
 #: application/gui/preferences/bookmarks.py:26
 msgid "Add home directory to bookmarks menu"
-msgstr "Додати домашній каталог в меню закладок"
+msgstr "Homedirectory toevoegen aan bladwijzermenu"
 
 #: application/gui/preferences/bookmarks.py:54
 #: application/tools/find_files.py:97
 msgid "Location"
-msgstr "Розташування"
+msgstr "Locatie"
 
 #: application/gui/preferences/accelerators.py:20
 msgid "Key bindings"
-msgstr "Сполучення клавіш"
+msgstr "Sneltoetsen"
 
 #: application/gui/preferences/accelerators.py:61
 msgid "Primary"
-msgstr "Основне"
+msgstr "Primair"
 
 #: application/gui/preferences/accelerators.py:69
 msgid "Secondary"
-msgstr "Додаткове"
+msgstr "Secundair"
 
 #: application/gui/preferences/accelerators.py:82
 msgid ""
 "<b>Note:</b> You can only edit accelerators from objects created at least "
 "once in current session. To disable accelerator press <i>Backspace</i> in "
 "assign mode."
-msgstr "<b>Увага:</b> Ви можете змінювати сполучення клавіш тільки для об'єктів, створених як мінімум один раз на поточній сесії. Щоб вимкнути поєднання, натисніть <i>Backspace</i> в режимі призначення."
+msgstr "<b>Opmerking:</b> Sneltoetsen slechts eenmaal per sessie bewerkt worden. Druk op <i>Backspace</i> tijdens het toewijzen om de betreffende sneltoets uit te schakelen."
 
 #: application/gui/preferences/accelerators.py:92
 msgid "Double click on accelerator to assign new one."
-msgstr "Подвійний клац на гарячій клавіші створить нове призначення."
+msgstr "Dubbelklik op sneltoets om er een nieuwe functie aan toe te wijzen,"
 
 #: application/gui/preferences/accelerators.py:198
 #, python-brace-format
@@ -251,47 +245,47 @@ msgid ""
 "\n"
 "Collisions:\n"
 "{1}"
-msgstr "Вибрана комбінація \"{0}\" уже використовується. Ви бажаєте її перепризначити? Ця дія скине комбінації для наступних функцій.\n\nКонфлікти:\n{1}"
+msgstr "De sneltoets \"{0}\" is al in gebruik. Wil je deze toch aan deze functie toewijzen? De sneltoetsen voor onderstaande functies worden dan uitgeschakeld.\n\n\nIn conflict met:\n{1}"
 
 #: application/gui/preferences/accelerators.py:258
 #: application/gui/main_window.py:784
 #: application/plugins/default_toolbar/home_directory_button.py:16
 #: application/plugins/default_toolbar/home_directory_button.py:17
 msgid "Home directory"
-msgstr "Домашній каталог"
+msgstr "Homedirectory"
 
 #: application/gui/preferences/view_and_edit.py:16
 msgid "View & Edit"
-msgstr "Перегляд і редагування"
+msgstr "Bekijk & Bewerk"
 
 #: application/gui/preferences/view_and_edit.py:19
 msgid "View"
-msgstr "Перегляд"
+msgstr "Bekijken"
 
 #: application/gui/preferences/view_and_edit.py:23
 msgid "Wrap long lines"
-msgstr "Переносити довгі рядки"
+msgstr "Regelafbreking"
 
 #: application/gui/preferences/view_and_edit.py:27
 #: application/gui/main_window.py:678
 msgid "Edit"
-msgstr "Зміни"
+msgstr "Bewerken"
 
 #: application/gui/preferences/view_and_edit.py:33
 msgid "Use installed application"
-msgstr "Використовувати встановлену проґраму"
+msgstr "Gebruik geïnstalleerde applicatie"
 
 #: application/gui/preferences/view_and_edit.py:55
 msgid "Use external command"
-msgstr "Використовувати зовнішню команду"
+msgstr "Gebruik extern commando"
 
 #: application/gui/preferences/view_and_edit.py:69
 msgid "Execute command in terminal tab"
-msgstr "Виконати команду у вкладці терміналу"
+msgstr "Commando uitvoeren in terminaltab"
 
 #: application/gui/preferences/toolbar.py:18
 msgid "Toolbar"
-msgstr "Панель інструментів"
+msgstr "Werkbalk"
 
 #: application/gui/preferences/toolbar.py:36
 #: application/gui/history_list.py:47
@@ -306,347 +300,347 @@ msgstr "Панель інструментів"
 #: application/plugins/rename_extensions/default.py:73
 #: application/tools/find_files.py:94
 msgid "Name"
-msgstr "Ім'я"
+msgstr "Naam"
 
 #: application/gui/preferences/toolbar.py:47
 msgid "Type"
-msgstr "Тип"
+msgstr "Type"
 
 #: application/gui/preferences/toolbar.py:93
 msgid "Toolbar style:"
-msgstr "Стиль панелі інструментів:"
+msgstr "Werkbalkstijl:"
 
 #: application/gui/preferences/toolbar.py:95
 msgid "Icons"
-msgstr "Піктограми"
+msgstr "Iconen"
 
 #: application/gui/preferences/toolbar.py:96 application/tools/viewer.py:88
 msgid "Text"
-msgstr "Текст"
+msgstr "Tekst"
 
 #: application/gui/preferences/toolbar.py:97
 #: application/gui/preferences/item_list.py:127
 msgid "Both"
-msgstr "Усі"
+msgstr "Beide"
 
 #: application/gui/preferences/toolbar.py:98
 msgid "Both horizontal"
-msgstr "Обидва горизонтально"
+msgstr "Beiden horizontaal"
 
 #: application/gui/preferences/toolbar.py:108
 msgid "Icon size:"
-msgstr "Розмір піктограми:"
+msgstr "Icoongrootte:"
 
 #: application/gui/preferences/toolbar.py:110
 msgid "Same as menu item"
-msgstr "Такий як у пункту меню"
+msgstr "Zelfde als menu-item"
 
 #: application/gui/preferences/toolbar.py:111
 msgid "Small toolbar icon"
-msgstr "Малі значки на панелі"
+msgstr "Klein werkbalkicoon"
 
 #: application/gui/preferences/toolbar.py:112
 msgid "Large toolbar icon"
-msgstr "Великі значки на панелі"
+msgstr "Groot werkbalkicoon"
 
 #: application/gui/preferences/toolbar.py:113
 msgid "Same as buttons"
-msgstr "Такі як у кнопок"
+msgstr "Zoals knoppen"
 
 #: application/gui/preferences/toolbar.py:114
 msgid "Same as drag icons"
-msgstr "Такі як у значків перетягування"
+msgstr "Zoals sleepiconen"
 
 #: application/gui/preferences/toolbar.py:115
 msgid "Same as dialog"
-msgstr "Такі як у діялоґу"
+msgstr "Zoals dialoog"
 
 #: application/gui/preferences/toolbar.py:217
 msgid "missing plugin"
-msgstr "відсутній модуль"
+msgstr "ontbrekende plugin"
 
 #: application/gui/preferences/operation.py:10
 #: application/gui/preferences/item_list.py:44
 msgid "Operation"
-msgstr "Режим роботи"
+msgstr "Actie"
 
 #: application/gui/preferences/operation.py:13
 msgid "General"
-msgstr "Загальние"
+msgstr "Algemeen"
 
 #: application/gui/preferences/operation.py:17
 #: application/gui/main_window.py:590
 #: application/gui/mounts_manager_window.py:473
 msgid "Mounts"
-msgstr "Точки монтування"
+msgstr "Mounts"
 
 #: application/gui/preferences/operation.py:21
 msgid "Confirmation"
-msgstr "Підтвердження"
+msgstr "Bevestiging"
 
 #: application/gui/preferences/operation.py:26
 msgid "Delete items to trashcan"
-msgstr "Вилучення елементів у смітник"
+msgstr "Verwijder items naar vuilnisbak"
 
 #: application/gui/preferences/operation.py:27
 msgid "Reserve free space on copy/move"
-msgstr "Резервування вільного простору для копіювання/переміщення"
+msgstr "Reserveer vrije ruimte bij kopieer/verplaats"
 
 #: application/gui/preferences/operation.py:28
 msgid "Automount drives on start up"
-msgstr "Автоматичне монтування дисків при запуску"
+msgstr "Schijven automatisch mounten bij opstarten"
 
 #: application/gui/preferences/operation.py:29
 msgid "Automount removable drives when inserted"
-msgstr "Автоматичне монтування знімних дисків при вставлянні"
+msgstr "Verwijderbare schijven automatisch mounten"
 
 #: application/gui/preferences/operation.py:30
 msgid "Show confirmation dialog before deleting items"
-msgstr "Показати діялоґове вікно підтвердження перед вилученням об'єктів"
+msgstr "Om bevestiging vragen bij verwijderen"
 
 #: application/gui/preferences/operation.py:64
 msgid ""
 "With trashing disabled you will not be able to restore accidentally deleted "
 "items. Are you sure you want to disable confirmation dialog when deleting "
 "items?"
-msgstr "При відімкненні Ви можете остаточно втратити важливі файли! Точно слід вимкнути діялоґ вилучення файлів?"
+msgstr "Indien items niet naar de vuilnisbak worden verwijderd, kunnen ze niet teruggehaald worden. Weet u zeker dat u geen bevestiging wilt bij verwijderen?"
 
 #: application/gui/preferences/display.py:23
 msgid "Display"
-msgstr "Зовнішній вигляд"
+msgstr "Beeld"
 
 #: application/gui/preferences/display.py:28
 msgid "Main window"
-msgstr "Основне вікно"
+msgstr "Hoofdvenster"
 
 #: application/gui/preferences/display.py:32
 msgid "Hide main window on close"
-msgstr "Згортати основне вікно в трей при закритті"
+msgstr "Verberg hoofdvenster bij afsluiten"
 
 #: application/gui/preferences/display.py:33
 msgid "Allow multiple instances"
-msgstr "Дозволити декілька екземплярів проґрами"
+msgstr "Meerdere kopieën toestaan"
 
 #: application/gui/preferences/display.py:34
 msgid "Show toolbar"
-msgstr "Показувати панель інструментів"
+msgstr "Toon werkbalk"
 
 #: application/gui/preferences/display.py:35
 msgid "Show command bar"
-msgstr "Показувати панель команд"
+msgstr "Toon opdrachtbalk"
 
 #: application/gui/preferences/display.py:36
 msgid "Show command entry"
-msgstr "Показувати командний рядок"
+msgstr "Toon opdrachtregel"
 
 #: application/gui/preferences/display.py:37
 msgid "Horizontal split"
-msgstr "Горизонтальне розбиття вікна"
+msgstr "Horizontaal verdelen"
 
 #: application/gui/preferences/display.py:47
 #: application/plugins/sessions/plugin.py:57
 msgid "Tabs"
-msgstr "Вкладки"
+msgstr "Tabs"
 
 #: application/gui/preferences/display.py:51
 msgid "Focus new tab after opening"
-msgstr "Переводити фокус на нову вкладку після відкриття"
+msgstr "Focus op nieuwe tab na opening"
 
 #: application/gui/preferences/display.py:52
 msgid "Show normal button relief"
-msgstr "Показувати нормальний рельєф кнопок"
+msgstr "Toon normaal knoprelief"
 
 #: application/gui/preferences/display.py:53
 msgid "Show icons instead of text in tab buttons"
-msgstr "Показувати піктограми замість тексту на кнопках вкладок"
+msgstr "Toon iconen in plaats van tekst op tabknoppen"
 
 #: application/gui/preferences/display.py:54
 msgid "Show close button"
-msgstr "Показувати кнопку закриття"
+msgstr "Toon afsluitknop"
 
 #: application/gui/preferences/display.py:55
 msgid "Show tab(s) even if there is only one"
-msgstr "Показувати вкладку навіть якщо вона одна"
+msgstr "Tab(s) tonen zelfs als er maar een van is"
 
 #: application/gui/preferences/display.py:56
 msgid "Use Ubuntu coloring method for tab title bars"
-msgstr "Забарвлювати заголовок вкладки як в Ubuntu"
+msgstr "Gebruik voor titelbalk van tabs de kleurmethode van Ubuntu"
 
 #: application/gui/preferences/display.py:57
 msgid "Change title bar color when started as super user"
-msgstr "Змінити колір заголовку вікна, у режимі суперкористувача"
+msgstr "Wijzig kleur titelbalk indien opgestart als superuser"
 
 #: application/gui/preferences/display.py:72
 msgid "Show status bar:"
-msgstr "Показувати рядок стану:"
+msgstr "Toon statusbalk:"
 
 #: application/gui/preferences/display.py:76
 msgid "Always"
-msgstr "Завжди"
+msgstr "Altijd"
 
 #: application/gui/preferences/display.py:77
 msgid "When needed"
-msgstr "При необхідності"
+msgstr "Indien nodig"
 
 #: application/gui/preferences/display.py:78
 msgid "Never"
-msgstr "Ніколи"
+msgstr "Nooit"
 
 #: application/gui/preferences/display.py:88
 msgid "Expanded tabs:"
-msgstr "Розтягувати вкладки:"
+msgstr "Verbrede tabs:"
 
 #: application/gui/preferences/display.py:92
 #: application/gui/preferences/item_list.py:91
 #: application/gui/preferences/item_list.py:124 application/queue.py:33
 msgid "None"
-msgstr "Ніколи"
+msgstr "Geen"
 
 #: application/gui/preferences/display.py:94
 msgid "All"
-msgstr "Усі"
+msgstr "Alle"
 
 #: application/gui/preferences/display.py:104
 msgid "Other"
-msgstr "Інше"
+msgstr "Overig"
 
 #: application/gui/preferences/display.py:108
 msgid "Hide operation window on minimize"
-msgstr "Приховувати вікно операцій при згортанні"
+msgstr "Verberg uitvoeringsvenster bij minimaliseren"
 
 #: application/gui/preferences/display.py:109
 msgid "Show notifications"
-msgstr "Показувати сповіщення"
+msgstr "Toon notificaties"
 
 #: application/gui/preferences/display.py:110
 msgid "Use path completion on non-local paths"
-msgstr "Автодоповнення шляху нелокальних шляхів"
+msgstr "Pad aanvullen bij niet lokale paden."
 
 #: application/gui/preferences/display.py:118
 msgid "Size format:"
-msgstr "розмір формату:"
+msgstr "Format voor grootte:"
 
 #: application/gui/preferences/display.py:122
 msgid "Localized"
-msgstr "Локалізований"
+msgstr "Aangepast"
 
 #: application/gui/preferences/display.py:123
 msgid "SI <small>(1 kB = 1000 B)</small>"
-msgstr "СІ<small>(1 КБ = 1000 Б)</small>"
+msgstr "SI <small>(1 kB = 1000 B)</small>"
 
 #: application/gui/preferences/display.py:124
 msgid "IEC <small>(1 KiB = 1024 B)</small>"
-msgstr "МЕК <small>(1 КиБ = 1024 Б)</small>"
+msgstr "IEC <small>(1 KiB = 1024 B)</small>"
 
 #: application/gui/preferences/item_list.py:37
 #: application/plugins/file_list/column_editor.py:70
 #: application/plugin_base/item_list.py:245
 msgid "Item List"
-msgstr "Перелік файлів"
+msgstr "Items"
 
 #: application/gui/preferences/item_list.py:42
 msgid "Look & feel"
-msgstr "Зовнішній вигляд"
+msgstr "Look & feel"
 
 #: application/gui/preferences/item_list.py:43
 msgid "Hidden files"
-msgstr "Приховані файли"
+msgstr "Verborgen bestanden"
 
 #: application/gui/preferences/item_list.py:45
 msgid "Directories"
-msgstr "Каталоги"
+msgstr "Directory's"
 
 #: application/gui/preferences/item_list.py:46
 msgid "Columns"
-msgstr "Колонки"
+msgstr "Kolommen"
 
 #: application/gui/preferences/item_list.py:63
 msgid "Row hinting"
-msgstr "Підсвічування рядків"
+msgstr "Regelaanduiding"
 
 #: application/gui/preferences/item_list.py:64
 msgid "Case sensitive item sorting"
-msgstr "Враховувати регістр при сортуванні файлів"
+msgstr "Hoofdlettergevoelig sorteren"
 
 #: application/gui/preferences/item_list.py:65
 msgid "Number sensitive item sorting"
-msgstr "Числене сортування файлів"
+msgstr "Numeriek sorteren"
 
 #: application/gui/preferences/item_list.py:66
 msgid "Single click navigation"
-msgstr "Навігація одним клацом"
+msgstr "Eenmaal klikken"
 
 #: application/gui/preferences/item_list.py:67
 msgid "Right click selects items"
-msgstr "Виділяти файли правим клацом"
+msgstr "Items selecteren met rechter muisknop"
 
 #: application/gui/preferences/item_list.py:68
 msgid "Show list headers"
-msgstr "Показувати назви стовпців"
+msgstr "Toon lijstkoppen"
 
 #: application/gui/preferences/item_list.py:69
 msgid "Fast media preview"
-msgstr "Швидкий попередній перегляд медіяфайлів"
+msgstr "Snelle media preview"
 
 #: application/gui/preferences/item_list.py:70
 msgid "Show tree expanders"
-msgstr "Показувати піктограми розкриття дерева"
+msgstr "Toon knop voor uitklappen boom"
 
 #: application/gui/preferences/item_list.py:71
 msgid "Hide horizontal scrollbar"
-msgstr "Приховати горизонтальну смугу прокрутки"
+msgstr "Verberg horizontale schuifbalk"
 
 #: application/gui/preferences/item_list.py:72
 msgid "Support second level extension"
-msgstr "Підтримка розширень другого рівню"
+msgstr "Ondersteun tweede niveau extensie"
 
 #: application/gui/preferences/item_list.py:87
 msgid "Breadcrumbs:"
-msgstr "Хлібні крихти:"
+msgstr "Kruimelpad:"
 
 #: application/gui/preferences/item_list.py:92
 msgid "Normal"
-msgstr "нормальний"
+msgstr "Normaal"
 
 #: application/gui/preferences/item_list.py:93
 msgid "Smart"
-msgstr "розумний"
+msgstr "Slim"
 
 #: application/gui/preferences/item_list.py:104
 msgid "Access mode format:"
-msgstr "Формат режиму доступу:"
+msgstr "Format toegangsmodus:"
 
 #: application/gui/preferences/item_list.py:108
 msgid "Octal"
-msgstr "Вісімковий вигляд"
+msgstr "Octaal"
 
 #: application/gui/preferences/item_list.py:109
 msgid "Textual"
-msgstr "Текстовий"
+msgstr "Tekstueel"
 
 #: application/gui/preferences/item_list.py:120
 msgid "Show grid lines:"
-msgstr "Показувати лінії ґратки:"
+msgstr "Toon gridlijnen"
 
 #: application/gui/preferences/item_list.py:125
 msgid "Horizontal"
-msgstr "Горизонтальні"
+msgstr "Horizontaal"
 
 #: application/gui/preferences/item_list.py:126
 msgid "Vertical"
-msgstr "Вертикальні"
+msgstr "Verticaal"
 
 #: application/gui/preferences/item_list.py:139
 msgid "Selection color:"
-msgstr "Колір виділення:"
+msgstr "Selectiekleur:"
 
 #: application/gui/preferences/item_list.py:149
 msgid "Selection indicator:"
-msgstr "Індикатор виділення:"
+msgstr "Selectie-indicator:"
 
 #: application/gui/preferences/item_list.py:166
 msgid "Quick search combination:"
-msgstr "Комбінація для швидкого пошуку:"
+msgstr "Snel zoeken:"
 
 #: application/gui/preferences/item_list.py:169
 msgid "Control"
@@ -662,582 +656,581 @@ msgstr "Shift"
 
 #: application/gui/preferences/item_list.py:180
 msgid "Date format:"
-msgstr "Формат дати:"
+msgstr "Datumformat:"
 
 #: application/gui/preferences/item_list.py:184
 msgid "Time is formed using the format located at:"
-msgstr "Час формується з використанням формату, розташованого за адресою:"
+msgstr "Tijdstip baseren op:"
 
 #: application/gui/preferences/item_list.py:193
 msgid "Show hidden files"
-msgstr "Показувати приховані файли"
+msgstr "Toon verborgen bestanden"
 
 #: application/gui/preferences/item_list.py:200
 msgid "Always visible files and directories:"
-msgstr "Завжди видимі файли та каталоги"
+msgstr "Bestanden en directory's die overal zichtbaar zijn:"
 
 #: application/gui/preferences/item_list.py:225
 msgid "Load specified tabs instead of saved"
-msgstr "Завантажити вказані вкладки замість збережених"
+msgstr "Laad gespecificeerde tabs in plaats van opgeslagen tabs"
 
 #: application/gui/preferences/item_list.py:238
 msgid "Directory"
-msgstr "Каталог"
+msgstr "Directory"
 
 #: application/gui/preferences/item_list.py:243
 msgid "Left list"
-msgstr "лівий перелік"
+msgstr "Linker lijst"
 
 #: application/gui/preferences/item_list.py:244
 msgid "Right list"
-msgstr "правий перелік"
+msgstr "Rechter lijst"
 
 #: application/gui/preferences/item_list.py:276
 msgid "Custom directory"
-msgstr "вказати каталог"
+msgstr "Aangepaste directory"
 
 #: application/gui/preferences/item_list.py:278
 msgid "Left directory"
-msgstr "лівий каталог"
+msgstr "Linker directory"
 
 #: application/gui/preferences/item_list.py:279
 msgid "Right directory"
-msgstr "правий каталог"
+msgstr "Rechter directory"
 
 #: application/gui/preferences/item_list.py:333
 msgid "Column"
-msgstr "Колонка"
+msgstr "Kolom"
 
 #: application/gui/preferences/item_list.py:338
 #: application/plugins/file_list/file_list.py:125
 #: application/plugins/find_file_extensions/size.py:63
 msgid "Size"
-msgstr "Розмір"
+msgstr "Grootte"
 
 #: application/gui/preferences/item_list.py:341
 msgid "Visible"
-msgstr "Видимий"
+msgstr "Zichtbaar"
 
 #: application/gui/preferences/item_list.py:344
 msgid "Font"
-msgstr "Шрифт"
+msgstr "Lettertype"
 
 #: application/gui/preferences/item_list.py:472
 msgid "Add always visible item"
-msgstr "Додати завжди видимий елемент"
+msgstr "Altijd zichtbaar item toevoegen"
 
 #: application/gui/preferences/item_list.py:473
 msgid "Full name of file or directory to always show:"
-msgstr "Повне ім’я файлу або каталогу, який не потрібно приховувати:"
+msgstr "Volledige naam van bestand of directory die altijd zichtbaar moet zijn:"
 
 #: application/gui/preferences/item_list.py:499
 msgid "Add custom directory"
-msgstr "додати вказаний каталог"
+msgstr "Aangepaste directory toevoegen"
 
 #: application/gui/preferences/item_list.py:500
 msgid "Full path:"
-msgstr "Повний шлях:"
+msgstr "Volledig pad:"
 
 #: application/gui/preferences/item_list.py:581
 msgid ""
 "Quick search settings are in conflict with VIM navigation style. To resolve "
 "this issue your quick search settings were restored to default."
-msgstr "Налаштування швидкого пошуку конфліктують з навігацією в стилі VIM. Для вирішення цієї проблеми у Ваших налаштуваннях швидкого пошуку відновлені типові значення."
+msgstr "De snelzoekinstellingen wijken af van de VIM-navigatiestijl en zijn daarom teruggezet naar de standaard instellingen."
 
 #: application/gui/main_window.py:118 application/gui/main_window.py:1516
 #: application/gui/about_window.py:101 application/gui/about_window.py:102
 msgid "Sunflower"
-msgstr "Соняшник"
+msgstr "Sunflower"
 
 #: application/gui/main_window.py:174
 msgid "_File"
-msgstr "_Файл"
+msgstr "_Bestand"
 
 #: application/gui/main_window.py:178
 msgid "New _tab"
-msgstr "Нова _вкладка"
+msgstr "Nieuwe _tab"
 
 #: application/gui/main_window.py:190
 msgid "Create _file"
-msgstr "Створити _файл"
+msgstr "Maak _bestand"
 
 #: application/gui/main_window.py:199
 msgid "Create _directory"
-msgstr "Створити _каталог"
+msgstr "Maak _directory"
 
 #: application/gui/main_window.py:211
 #: application/plugin_base/item_list.py:1009
 msgid "_Open"
-msgstr "Відкрити"
+msgstr "_Open"
 
 #: application/gui/main_window.py:218
 #: application/plugin_base/item_list.py:1018
 msgid "Open in new ta_b"
-msgstr "Відкрити в новій вкладці"
+msgstr "Open in nieuwe ta_b"
 
 #: application/gui/main_window.py:228
 #: application/plugin_base/item_list.py:1175
 msgid "_Properties"
-msgstr "Властивості"
+msgstr "_Eigenschappen"
 
 #: application/gui/main_window.py:238 application/indicator.py:49
 msgid "_Quit"
-msgstr "Вийти"
+msgstr "_Afsluiten"
 
 #: application/gui/main_window.py:248
 msgid "_Edit"
-msgstr "_Зміни"
+msgstr "_Bewerk"
 
 #: application/gui/main_window.py:251
 #: application/plugin_base/item_list.py:1082
 msgid "Cu_t"
-msgstr "Вирізати"
+msgstr "Knippen"
 
 #: application/gui/main_window.py:258
 #: application/plugin_base/item_list.py:1091
 msgid "_Copy"
-msgstr "Копіювати"
+msgstr "Kopiëren"
 
 #: application/gui/main_window.py:265
 #: application/plugin_base/item_list.py:1100
 msgid "_Paste"
-msgstr "Вставити"
+msgstr "_Plakken"
 
 #: application/gui/main_window.py:275
 #: application/plugin_base/item_list.py:1131
 msgid "_Delete"
-msgstr "Вилучити"
+msgstr "Verwijderen"
 
 #: application/gui/main_window.py:285
 msgid "_Send to..."
-msgstr "_Відправити..."
+msgstr "_Verzenden naar..."
 
 #: application/gui/main_window.py:294
 #: application/plugin_base/item_list.py:1156
 msgid "Ma_ke link"
-msgstr "Створити посилання"
+msgstr "Maak snelkoppeling"
 
 #: application/gui/main_window.py:300
 #: application/plugin_base/item_list.py:1162
 msgid "_Rename..."
-msgstr "Перейменувати..."
+msgstr "Hernoemen..."
 
 #: application/gui/main_window.py:308
 msgid "_Unmount"
-msgstr "Відмонтувати"
+msgstr "_Unmount"
 
 #: application/gui/main_window.py:312
 msgid "Mount list is empty"
-msgstr "Перелік точок монтування порожній"
+msgstr "Mountlijst is leeg"
 
 #: application/gui/main_window.py:321
 msgid "_Preferences"
-msgstr "Налаштування"
+msgstr "Voorkeuren"
 
 #: application/gui/main_window.py:331
 msgid "_Mark"
-msgstr "В_иділення"
+msgstr "_Markeer"
 
 #: application/gui/main_window.py:334
 msgid "_Select all"
-msgstr "Виділити усе"
+msgstr "Alles _selecteteren"
 
 #: application/gui/main_window.py:341
 msgid "_Deselect all"
-msgstr "Скасувати виділення"
+msgstr "Alles _Deselecteren"
 
 #: application/gui/main_window.py:346
 msgid "Invert select_ion"
-msgstr "Обернути виділення"
+msgstr "Inverteer select_ie"
 
 #: application/gui/main_window.py:352
 msgid "S_elect with pattern"
-msgstr "Виділити за маскою"
+msgstr "S_electeer met patroon"
 
 #: application/gui/main_window.py:358
 msgid "Deselect with pa_ttern"
-msgstr "Зняти виділення по масці"
+msgstr "Deselecteer met pa_troon"
 
 #: application/gui/main_window.py:365
 msgid "Select with same e_xtension"
-msgstr "Виділити файли з цим розширенням"
+msgstr "Selecteer zelfde e_xtensie"
 
 #: application/gui/main_window.py:371
 msgid "Deselect with same exte_nsion"
-msgstr "Зняти виділення файлів з тим самим розширенням"
+msgstr "Deselecteer zelfde exte_nsie"
 
 #: application/gui/main_window.py:378
 msgid "Compare _directories"
-msgstr "Порівняти каталоги"
+msgstr "_Directories vergelijken"
 
 #: application/gui/main_window.py:386
 msgid "_Tools"
-msgstr "_Знаряддя"
+msgstr "_Gereedschappen"
 
 #: application/gui/main_window.py:390
 msgid "_Find files"
-msgstr "_Шукати файли"
+msgstr "_Zoek bestanden"
 
 #: application/gui/main_window.py:398
 msgid "Find _duplicate files"
-msgstr "Знайти _дублікати файлів"
+msgstr "Zoek _dubbele bestanden"
 
 #: application/gui/main_window.py:403
 msgid "_Synchronize directories"
-msgstr "_Синхронізувати каталоги"
+msgstr "Directory's _synchroniseren"
 
 #: application/gui/main_window.py:409
 msgid "Advanced _rename"
-msgstr "Розширене _перейменування"
+msgstr "Geavanceerd _hernoemen"
 
 #: application/gui/main_window.py:416
 msgid "_Mount manager"
-msgstr "_Керування монтуванням"
+msgstr "_Mounts beheren"
 
 #: application/gui/main_window.py:422
 msgid "_Keyring manager"
-msgstr "_Керування паролями"
+msgstr "_Sleutelring beheren"
 
 #: application/gui/main_window.py:430
 msgid "_View"
-msgstr "_Вигляд"
+msgstr "_Bekijken"
 
 #: application/gui/main_window.py:433
 msgid "Ful_lscreen"
-msgstr "На повний екран"
+msgstr "Vol_ledig scherm"
 
 #: application/gui/main_window.py:441
 msgid "Rel_oad item list"
-msgstr "Оновити перелік файлів"
+msgstr "Itemlijst herladen"
 
 #: application/gui/main_window.py:451
 msgid "Fast m_edia preview"
-msgstr "Швидкий попередній перегляд медіяфайлів"
+msgstr "Snelle media preview"
 
 #: application/gui/main_window.py:462
 msgid "Show _hidden files"
-msgstr "Показувати приховані файли"
+msgstr "Toon verborgen bestanden"
 
 #: application/gui/main_window.py:470
 msgid "Show _toolbar"
-msgstr "Показувати панель інструментів"
+msgstr "Toon werkbalk"
 
 #: application/gui/main_window.py:478
 msgid "Show _command bar"
-msgstr "Показувати кнопки операцій"
+msgstr "Toon _opdrachtbalk"
 
 #: application/gui/main_window.py:486
 msgid "Show co_mmand entry"
-msgstr "Показувати командний рядок"
+msgstr "Toon co_mmandoregel"
 
 #: application/gui/main_window.py:494
 msgid "_Horizontal split"
-msgstr "_Горизонтальне розбиття"
+msgstr "_Horizontaal verdelen"
 
 #: application/gui/main_window.py:504
 msgid "_Commands"
-msgstr "_Команди"
+msgstr "_Commando's"
 
 #: application/gui/main_window.py:508
 msgid "_Operations"
-msgstr "_Операції"
+msgstr "_Acties"
 
 #: application/gui/main_window.py:512
 msgid "There are no active operations"
-msgstr "Активні операції відсутні"
+msgstr "Er zijn geen actieve acties"
 
 #: application/gui/main_window.py:518
 msgid "_Help"
-msgstr "_Допомога"
+msgstr "_Help"
 
 #: application/gui/main_window.py:521
 msgid "_Home page"
-msgstr "Домашня сторінка"
+msgstr "_Home page"
 
 #: application/gui/main_window.py:529
 msgid "Check for new version"
-msgstr "Перевірити на наявність оновлень"
+msgstr "Controleer op updates"
 
 #: application/gui/main_window.py:536
 msgid "File a _bug report"
-msgstr "Оформити звіт про помилку"
+msgstr "_Bug rapporteren"
 
 #: application/gui/main_window.py:545
 msgid "_About"
-msgstr "Про проґраму"
+msgstr "Over"
 
 #: application/gui/main_window.py:675
 msgid "Refresh"
-msgstr "Оновити"
+msgstr "Verversen"
 
 #: application/gui/main_window.py:675
 msgid "Reload active item list"
-msgstr "Оновити активну панель"
+msgstr "Lijst met actieve items verversen"
 
 #: application/gui/main_window.py:676 application/tools/advanced_rename.py:93
 msgid "Rename"
-msgstr "Перейменувати"
+msgstr "Hernoemen"
 
 #: application/gui/main_window.py:676
 msgid "Rename selected file"
-msgstr "Перейменувати виділений об'єкт"
+msgstr "Hernoem geselecteerd bestand"
 
 #: application/gui/main_window.py:677
 msgid "Preview"
-msgstr "Перегляд"
+msgstr "Voorbeeldweergave"
 
 #: application/gui/main_window.py:677
 msgid "Preview selected file"
-msgstr "Показати обраний файл"
+msgstr "Voorbeeldweergave geselecteerd bestand"
 
 #: application/gui/main_window.py:678
 msgid "Edit selected file"
-msgstr "Змінити вибраний файл"
+msgstr "Bewerken geselecteerd bestand"
 
 #: application/gui/main_window.py:679 application/gui/input_dialog.py:899
 #: application/gui/input_dialog.py:1253
 msgid "Copy"
-msgstr "Копіювати"
+msgstr "Kopiëren"
 
 #: application/gui/main_window.py:679
 msgid "Copy selected items from active to opposite list"
-msgstr "Копіювати вибрані файли з активної панелі в сусідню"
+msgstr "Kopieer geselecteerde items naar tegenoverliggende lijst"
 
 #: application/gui/main_window.py:680 application/gui/input_dialog.py:1003
 msgid "Move"
-msgstr "Перемістити"
+msgstr "Verplaatsen"
 
 #: application/gui/main_window.py:680
 msgid "Move selected items from active to opposite list"
-msgstr "Перемістити вибрані файли з активної панелі в сусідню"
+msgstr "Verplaats geselecteerde items naar tegenoverliggende lijst"
 
 #: application/gui/main_window.py:681
 msgid "Create"
-msgstr "Створити"
+msgstr "Maak"
 
 #: application/gui/main_window.py:681
 msgid "Create new directory"
-msgstr "Створити новий каталог"
+msgstr "Maak nieuwe directory"
 
 #: application/gui/main_window.py:682
 msgid "Delete"
-msgstr "Вилучити"
+msgstr "Verwijderen"
 
 #: application/gui/main_window.py:682
 msgid "Delete selected items"
-msgstr "Вилучити вибрані файли"
+msgstr "Verwijder geselecteerde items"
 
 #: application/gui/main_window.py:823 application/gui/input_dialog.py:1314
 msgid "Add bookmark"
-msgstr "Додати закладку"
+msgstr "Bladwijzer toevoegen"
 
 #: application/gui/main_window.py:828 application/plugin_base/item_list.py:252
 msgid "Edit bookmarks"
-msgstr "Змінити закладки"
+msgstr "Bladwijzer bewerken"
 
 #: application/gui/main_window.py:863
 msgid "_Edit commands"
-msgstr "Змінити команди"
+msgstr "Commando's  bewerken"
 
 #: application/gui/main_window.py:1504
 msgid "Sunflower file manager"
-msgstr "Файловий менеджер Sunflower"
+msgstr "Sunflower file manager"
 
 #: application/gui/main_window.py:1519
 msgid "print version and exit"
-msgstr "показати версію і вийти"
+msgstr "Print versie en afsluiten"
 
 #: application/gui/main_window.py:1524
 msgid "skip loading additional plugins"
-msgstr "пропустити завантаження додаткових втулок"
+msgstr "Laden additionele plugins overslaan"
 
 #: application/gui/main_window.py:1530
 msgid "skip loading saved tabs"
-msgstr "пропустити завантаження збережених вкладок"
+msgstr "Laden opgeslagen tabs overslaan"
 
 #: application/gui/main_window.py:1536
 msgid "open new tab on the left notebook"
-msgstr "відкрити нову вкладку на лівій панелі"
+msgstr "Nieuwe tab openen in linker notebook"
 
 #: application/gui/main_window.py:1544
 msgid "open new tab on the right notebook"
-msgstr "відкрити нову вкладку на правій панелі"
+msgstr "Nieuwe tab openen in rechter noteboek"
 
 #: application/gui/main_window.py:1552
 msgid "open terminal tab on the left notebook"
-msgstr "відкрити термінал на лівій панелі"
+msgstr "Terminal openen in linker notebook"
 
 #: application/gui/main_window.py:1560
 msgid "open terminal tab on the right notebook"
-msgstr "відкрити термінал на правій панелі"
+msgstr "Terminal openen in rechter notebook"
 
 #: application/gui/main_window.py:1657
 msgid "Select items"
-msgstr "Виділити файли"
+msgstr "Geselecteerde items"
 
 #: application/gui/main_window.py:1658 application/gui/main_window.py:1714
 msgid "Selection pattern (eg.: *.jpg):"
-msgstr "Маска виділення (тобто: *.jpg):"
+msgstr "Selectiepatroon (bv.: *.jpg):"
 
 #: application/gui/main_window.py:1713
 msgid "Deselect items"
-msgstr "зняти виділення з файлів"
+msgstr "Deselecteer items"
 
 #: application/gui/main_window.py:1750
 msgid "First level of compared directories is identical."
-msgstr "Перший рівень порівнюваних каталогів ідентичний."
+msgstr "Eerste niveau van vergeleken directories is identiek"
 
 #: application/gui/main_window.py:1913
 msgid ""
 "There was a problem starting external terminal application. Check if command"
 " is valid!"
-msgstr "Проблеми із застосування зовнішнього терміналу. Перевірте, чи дійсна команда!"
+msgstr "Probleem bij het starten van extern terminalvenster. Controleer of de opdracht correct is!"
 
 #: application/gui/main_window.py:2120
 msgid "Main Menu"
-msgstr "Головне меню"
+msgstr "Hoofdmenu"
 
 #: application/gui/main_window.py:2186
 msgid "Restore handle position"
-msgstr "Відновити позицію вказівника"
+msgstr "Herstel handvatpositie"
 
 #: application/gui/main_window.py:2187
 msgid "Move handle to the left"
-msgstr "Перемістити вказівник наліво"
+msgstr "Verplaats handvat naar links"
 
 #: application/gui/main_window.py:2188
 msgid "Move handle to the right"
-msgstr "Перемістити вказівник направо"
+msgstr "Verplaats handvat naar rechts"
 
 #: application/gui/main_window.py:2232
 msgid ""
 "Error saving configuration to files in your home directory. Make sure you "
 "have enough permissions."
-msgstr "Помилка збереження кофігурації в файли у Вашому домашньому каталозі. Переконайтеся, що Ви маєте необхідні привілеї."
+msgstr "Fout bij het opslaan van configuratiebestand in Home directory. Controleer of u over de juiste rechten beschikt."
 
 #: application/gui/main_window.py:2869
 msgid ""
 "Active object is not item list. Advanced rename tool needs files and "
 "directories."
-msgstr "Активний об'єкт не є переліком файлів. Розширений інструмент перейменування працює з файлами і каталогами."
+msgstr "Actief object is geen itemlijst. De tool voor geavanceerd hernoemen werkt met bestanden en directory's."
 
 #: application/gui/main_window.py:2884
 msgid ""
 "No rename extensions were found. Please enable basic rename options plugin "
 "and try again."
-msgstr "Модулі перейменування не знайдені. Будь ласка, увімкніть модуль \"Basic rename options\", і спробуйте знову."
+msgstr "Geen programma-uitbreidingen voor hernoemen gevonden. Activeer de plugin voor hernoemopties en probeer het opnieuw. "
 
 #: application/gui/main_window.py:2911
 msgid ""
 "No extensions for finding files were found. Please enable basic find file "
 "options plugin and try again."
-msgstr "Модулі пошуку файлів не знайдені. Будь ласка, активуйте модуль \"find_file_extensions\" і спробуйте знову."
+msgstr "Geen programma-uitbreidingen voor zoeken gevonden. Activeer de plugin voor zoekopties en probeer het opnieuw."
 
 #: application/gui/main_window.py:2937
 msgid "Keyring is empty!"
-msgstr "В'язка ключів порожня!"
+msgstr "Sleutelring is leeg!"
 
 #: application/gui/main_window.py:2950
 msgid ""
 "Keyring is not available. Make sure you have Python Gnome keyring module "
 "installed."
-msgstr "В'язка не доступна. Переконайтеся, що у Вас є Python Gnome та  встановлено модуль ключів."
+msgstr "Sleutelring niet beschikbaar. Controleer of de Python Gnome keyring module geïnstaleerd is."
 
 #: application/gui/preferences_window.py:31
 msgid "Preferences"
-msgstr "Налаштування"
+msgstr "Voorkeuren"
 
 #: application/gui/preferences_window.py:106
 msgid "Program restart required!"
-msgstr "Потрібний перезапуск проґрами!"
+msgstr "Programma moet opnieuw gestart worden!"
 
 #: application/gui/preferences_window.py:147
 msgid ""
 "There are unsaved changes.\n"
 "Do you want to save them?"
-msgstr "Деякі зміни не збережено.\nВи волієте зберегти їх?"
+msgstr "Er zijn nog niet opgeslagen wijzigingen.\nWilt u die opslaan?"
 
 #: application/gui/history_list.py:25 application/plugin_base/item_list.py:212
 msgid "History"
-msgstr "Журнал"
+msgstr "Geschiedenis"
 
 #: application/gui/history_list.py:48
 msgid "Path"
-msgstr "Шлях"
+msgstr "Pad"
 
 #: application/gui/history_list.py:65
 #: application/gui/mounts_manager_window.py:381
 msgid "Open"
-msgstr "Відкрити"
+msgstr "Open"
 
 #: application/gui/history_list.py:74
 #: application/gui/mounts_manager_window.py:392
 msgid "Open in tab"
-msgstr "Відкрити у вкладці"
+msgstr "Open in tab"
 
 #: application/gui/history_list.py:75
 msgid "Open selected path in new tab"
-msgstr "Відкрити вибраний шлях в новій вкладці"
+msgstr "Open geselecteerd pad in nieuwe tab"
 
 #: application/gui/history_list.py:78
 msgid "Open in opposite list"
-msgstr "Відкрити у іншій панелі"
+msgstr "Open in tegenoverliggende lijst"
 
 #: application/gui/history_list.py:79
 msgid "Open selected path in opposite list"
-msgstr "Відкрити вибраний шлях у протилежній панелі"
+msgstr "Open geselecteerde pad in tegenoverliggende lijst"
 
 #: application/gui/properties_window.py:58
 #, python-brace-format
 msgid "{0} Properties"
-msgstr "Властивості {0}"
+msgstr "{0} Eigenschappen"
 
 #: application/gui/properties_window.py:86
 #: application/plugins/rename_extensions/default.py:268
 #: application/plugins/find_file_extensions/default.py:118
 msgid "Basic"
-msgstr "Основне"
+msgstr "Basis"
 
 #: application/gui/properties_window.py:90
 msgid "Permissions"
-msgstr "Права"
+msgstr "Permissies"
 
 #: application/gui/properties_window.py:94
 #: application/gui/input_dialog.py:1707
 msgid "Open With"
-msgstr "Відкрити за допомогою"
+msgstr "Openen met"
 
 #: application/gui/properties_window.py:98
 msgid "Emblems"
-msgstr "емблеми"
+msgstr "Emblemen"
 
 #: application/gui/properties_window.py:151
 #: application/plugins/file_list/file_list.py:1011
 msgid ""
 "File or directory with specified name already exists in current directory. "
 "Item could not be renamed."
-msgstr "Файл або каталог з вказаним ім'ям вже існує в даному каталозі. Об'єкт не може бути перейменований."
+msgstr "Bestand of directory bestaat al. Hernoemen niet uitgevoerd."
 
 #: application/gui/properties_window.py:186
 #: application/plugins/file_list/file_list.py:996
 msgid "Error renaming specified item. Make sure you have enough permissions."
-msgstr "Помилка при перейменуванні зазначеного об'єкту. Переконайтеся, що Ви маєте достатні привілеї."
+msgstr "Fout bij hernoemen van item. Controleer of u over voldoende rechten beschikt."
 
 #: application/gui/properties_window.py:242
 msgid "item"
 msgid_plural "items"
-msgstr[0] "об'єкт"
-msgstr[1] "об'єкта"
-msgstr[2] "об'єктів"
+msgstr[0] "item"
+msgstr[1] "items"
 
 #: application/gui/properties_window.py:259
 #: application/gui/operation_dialog.py:362
 msgid "unknown"
-msgstr "невідомий"
+msgstr "onbekend"
 
 #: application/gui/properties_window.py:368
 msgid "Error changing owner or group"
-msgstr "Помилка при зміні власника або групи"
+msgstr "Fout bij wijzigen eigenaar of groep"
 
 #: application/gui/properties_window.py:441
 #: application/gui/input_dialog.py:1329 application/gui/input_dialog.py:1527
@@ -1246,56 +1239,56 @@ msgstr "Помилка при зміні власника або групи"
 #: application/plugins/file_list/dialogs.py:273
 #: application/plugins/file_list/dialogs.py:467
 msgid "Name:"
-msgstr "Ім'я:"
+msgstr "Naam:"
 
 #: application/gui/properties_window.py:442
 #: application/gui/input_dialog.py:1534
 msgid "Type:"
-msgstr "Тип:"
+msgstr "Type:"
 
 #: application/gui/properties_window.py:443
 #: application/gui/input_dialog.py:1184 application/gui/input_dialog.py:1201
 msgid "Size:"
-msgstr "Розмір:"
+msgstr "Grootte:"
 
 #: application/gui/properties_window.py:444
 #: application/gui/input_dialog.py:1342
 msgid "Location:"
-msgstr "Розташування:"
+msgstr "Locatie:"
 
 #: application/gui/properties_window.py:445
 msgid "Volume:"
-msgstr "Том:"
+msgstr "Volume:"
 
 #: application/gui/properties_window.py:446
 msgid "Accessed:"
-msgstr "Останній доступ:"
+msgstr "Gebruikt:"
 
 #: application/gui/properties_window.py:447
 #: application/gui/input_dialog.py:1185 application/gui/input_dialog.py:1202
 msgid "Modified:"
-msgstr "Змінено:"
+msgstr "Gewijzigd:"
 
 #: application/gui/properties_window.py:522
 msgid "Access"
-msgstr "Доступ"
+msgstr "Toegang"
 
 #: application/gui/properties_window.py:528
 #: application/gui/properties_window.py:598
 #: application/gui/input_dialog.py:223
 msgid "User:"
-msgstr "Користувач:"
+msgstr "Gebruiker:"
 
 #: application/gui/properties_window.py:532
 #: application/gui/properties_window.py:602
 #: application/gui/input_dialog.py:227
 msgid "Group:"
-msgstr "Група:"
+msgstr "Groep:"
 
 #: application/gui/properties_window.py:536
 #: application/gui/input_dialog.py:231
 msgid "Others:"
-msgstr "Решта:"
+msgstr "Anderen:"
 
 #: application/gui/properties_window.py:541
 #: application/gui/properties_window.py:554
@@ -1303,7 +1296,7 @@ msgstr "Решта:"
 #: application/gui/input_dialog.py:236 application/gui/input_dialog.py:249
 #: application/gui/input_dialog.py:262
 msgid "Read"
-msgstr "Читання"
+msgstr "Lezen"
 
 #: application/gui/properties_window.py:545
 #: application/gui/properties_window.py:558
@@ -1311,7 +1304,7 @@ msgstr "Читання"
 #: application/gui/input_dialog.py:240 application/gui/input_dialog.py:253
 #: application/gui/input_dialog.py:266
 msgid "Write"
-msgstr "Запис"
+msgstr "Schrijven"
 
 #: application/gui/properties_window.py:549
 #: application/gui/properties_window.py:562
@@ -1319,248 +1312,244 @@ msgstr "Запис"
 #: application/gui/input_dialog.py:244 application/gui/input_dialog.py:257
 #: application/gui/input_dialog.py:270
 msgid "Execute"
-msgstr "Виконання"
+msgstr "Uitvoeren"
 
 #: application/gui/properties_window.py:580
 #: application/gui/input_dialog.py:275
 msgid "Octal:"
-msgstr "Вісімковий вигляд:"
+msgstr "Octaal:"
 
 #: application/gui/properties_window.py:592
 msgid "Ownership"
-msgstr "Власність"
+msgstr "Eigenaar"
 
 #: application/gui/properties_window.py:666
 #, python-brace-format
 msgid "Select an application to open <i>{0}</i> and other files of type \"{1}\""
-msgstr "Виберіть проґраму для відкриття <i>{0}</i> та інших файлів типу \"{1}\""
+msgstr "Selecteer een applicatie om <i>{0}</i> en andere bestanden van het type \"{1}\" te openen"
 
 #: application/gui/input_dialog.py:117
 msgid "Create link"
-msgstr "Створити посилання"
+msgstr "Verwijzing maken"
 
 #: application/gui/input_dialog.py:118
 msgid "Enter new link name:"
-msgstr "Уведіть нове ім’я посилання:"
+msgstr "Geef de naam voor de nieuwe verwijzing:"
 
 #: application/gui/input_dialog.py:126
 msgid "Original path:"
-msgstr "Оригінальний шлях:"
+msgstr "Oorspronkelijk pad:"
 
 #: application/gui/input_dialog.py:131
 msgid "Create hard link"
-msgstr "стоворити жорстке посилання"
+msgstr "Maak hard link"
 
 #: application/gui/input_dialog.py:134 application/tools/find_files.py:77
 msgid "Browse"
-msgstr "Огляд"
+msgstr "Bladeren"
 
 #: application/gui/input_dialog.py:153
 msgid "Select original path"
-msgstr "виберіть шлях до оригіналу"
+msgstr "Selecteer origineel pad"
 
 #: application/gui/input_dialog.py:213
 msgid "Advanced options"
-msgstr "Розширені налаштування"
+msgstr "Geavanceerde opties"
 
 #: application/gui/input_dialog.py:292 application/gui/input_dialog.py:907
 msgid "Save as default configuration"
-msgstr "Зберегти як типову конфігурацію"
+msgstr "Opslaan als standaard configuartie"
 
 #: application/gui/input_dialog.py:379
 #: application/plugins/file_list/dialogs.py:96
 #: application/plugins/file_list/dialogs.py:304
 #: application/plugins/file_list/dialogs.py:507
 msgid "Password:"
-msgstr "Пароль:"
+msgstr "Wachtwoord:"
 
 #: application/gui/input_dialog.py:381
 msgid "Confirm:"
-msgstr "Підтвердження:"
+msgstr "Bevestig:"
 
 #: application/gui/input_dialog.py:435
 msgid "Create empty file"
-msgstr "Створити порожній файл"
+msgstr "Maak leeg bestand"
 
 #: application/gui/input_dialog.py:436
 msgid "Enter new file name:"
-msgstr "Уведіть нове ім'я файлу:"
+msgstr "Geef nieuwe bestandsnaam:"
 
 #: application/gui/input_dialog.py:439
 msgid "Open file in editor"
-msgstr "Відкрити файл в редакторі"
+msgstr "Open bestand in editor"
 
 #: application/gui/input_dialog.py:443
 #: application/plugins/rename_extensions/default.py:52
 #: application/plugins/rename_extensions/audio_metadata.py:31
 msgid "Template:"
-msgstr "Шаблон:"
+msgstr "Sjabloon:"
 
 #: application/gui/input_dialog.py:503
 msgid "Empty File"
-msgstr "Порожній файл"
+msgstr "Leeg Bestand"
 
 #: application/gui/input_dialog.py:556
 #: application/plugin_base/item_list.py:1068
 msgid "Create directory"
-msgstr "Створити каталог"
+msgstr "Nieuwe directory"
 
 #: application/gui/input_dialog.py:557
 msgid "Enter new directory name:"
-msgstr "Уведіть нове ім'я каталогу:"
+msgstr "Geen nieuwe directorynaam:"
 
 #: application/gui/input_dialog.py:582 application/gui/input_dialog.py:661
 msgid "Operation queue:"
-msgstr "Черга операцій:"
+msgstr "Wachtrij:"
 
 #: application/gui/input_dialog.py:654
 msgid "Only files of this type:"
-msgstr "Тільки файли такого типу:"
+msgstr "Alleen bestanden van het type:"
 
 #: application/gui/input_dialog.py:681
 msgid "Affected item list"
-msgstr "Перелік порушених файлів"
+msgstr "Lijst van geraakte bestanden"
 
 #: application/gui/input_dialog.py:704
 msgid "Set owner on destination"
-msgstr "Встановити власника цільового каталогу"
+msgstr "Stel eigenaar in op bestemming"
 
 #: application/gui/input_dialog.py:705
 msgid "Set access mode on destination"
-msgstr "Встановити права на цільовий каталог"
+msgstr "Stel toegangsrechten in op bestemming"
 
 #: application/gui/input_dialog.py:706
 msgid "Set date and time on destination"
-msgstr "Встановити дату і час для цільового каталогу"
+msgstr "Stel datum en tijd in op bestemming"
 
 #: application/gui/input_dialog.py:707
 msgid "Silent mode"
-msgstr "Тихий режим"
+msgstr "Silent mode"
 
 #: application/gui/input_dialog.py:714
 msgid "Merge directories"
-msgstr "Злити каталоги"
+msgstr "Directory's samenvoegen"
 
 #: application/gui/input_dialog.py:715
 msgid "Overwrite files"
-msgstr "Перезаписувати файли"
+msgstr "Bestanden overschrijven"
 
 #: application/gui/input_dialog.py:719
 msgid ""
 "Silent mode will enable operation to finish without disturbing you. If any "
 "errors occur, they will be presented to you after completion."
-msgstr "У тихому режимі операція закінчиться не турбуючи Вас. Якщо виникнуть якісь помилки, вони будуть показані Вам по завершенні."
+msgstr "Silent mode zorgt dat de actie wordt uitgevoerd zonder u te storen. Eventuele fouten worden pas na afronding van de actie kenbaar gemaakt."
 
 #: application/gui/input_dialog.py:795 application/gui/input_dialog.py:799
 #: application/gui/input_dialog.py:803
 msgid "Not supported by file system provider"
-msgstr "Не підтримується файловою системою постачальника"
+msgstr "Niet ondersteund door file system provider"
 
 #: application/gui/input_dialog.py:860
 msgid "Only options supported by file system providers were saved."
-msgstr "Тільки параметри, підтримувані постачальниками файлової системи, були збережені."
+msgstr "Alleen opties die worden ondersteund door de file system provider zijn opgeslagen."
 
 #: application/gui/input_dialog.py:884
 msgid "Copy item"
 msgid_plural "Copy items"
-msgstr[0] "Копіювати об'єкт"
-msgstr[1] "Копіювати об'єкти"
-msgstr[2] "Копіювати об'єкти"
+msgstr[0] "Kopieer item"
+msgstr[1] "Kopieer itens"
 
 #: application/gui/input_dialog.py:889
 #, python-brace-format
 msgid "Copy <b>{0}</b> item to:"
 msgid_plural "Copy <b>{0}</b> items to:"
-msgstr[0] "Копіювати об'єкт <b>{0}</b> до:"
-msgstr[1] "Копіювати об'єкти <b>{0}</b> до:"
-msgstr[2] "Копіювати об'єкти <b>{0}</b> до:"
+msgstr[0] "Kopieer <b>{0}</b> item naar:"
+msgstr[1] "Kopieer <b>{0}</b> items naar:"
 
 #: application/gui/input_dialog.py:898 application/gui/input_dialog.py:1002
 #: application/gui/input_dialog.py:1445
 #: application/gui/operation_dialog.py:206
 #: application/plugins/file_list/file_list.py:1926
 msgid "Cancel"
-msgstr "Скасувати"
+msgstr "Annuleren"
 
 #: application/gui/input_dialog.py:988
 msgid "Move item"
 msgid_plural "Move items"
-msgstr[0] "Перемістити об'єкт"
-msgstr[1] "Перемістити об'єкти"
-msgstr[2] "Перемістити об'єкти"
+msgstr[0] "Verplaats item"
+msgstr[1] "Verplaats items"
 
 #: application/gui/input_dialog.py:993
 #, python-brace-format
 msgid "Move <b>{0}</b> item to:"
 msgid_plural "Move <b>{0}</b> items to:"
-msgstr[0] "Перемістити об'єкт <b>{0}</b> до:"
-msgstr[1] "Перемістити об'єкти <b>{0}</b> до:"
-msgstr[2] "Перемістити об'єкти <b>{0}</b> до:"
+msgstr[0] "Verplaats <b>{0}</b> items naar:"
+msgstr[1] "Verplaats <b>{0}</b> items naar:"
 
 #: application/gui/input_dialog.py:1016
 msgid "Rename file/directory"
-msgstr "Перейменувати файл/каталог"
+msgstr "Hernoem bestand/directory"
 
 #: application/gui/input_dialog.py:1017
 msgid "Enter a new name for this item:"
-msgstr "Уведіть нове ім'я для цього об'єкту:"
+msgstr "Geef nieuwe naam voor item:"
 
 #: application/gui/input_dialog.py:1083
 msgid "Select a new name for the destination"
-msgstr "Виберіть нове ім'я для цільового каталогу"
+msgstr "Selecteer een nieuwe naam voor de bestemming"
 
 #: application/gui/input_dialog.py:1088
 msgid "Reset"
-msgstr "Скинути"
+msgstr "Reset"
 
 #: application/gui/input_dialog.py:1092
 msgid "Apply this action to all files"
-msgstr "Застосувати до усіх файлів"
+msgstr "Doe dit voor alle bestanden"
 
 #: application/gui/input_dialog.py:1127 application/gui/input_dialog.py:1446
 msgid "Skip"
-msgstr "Пропустити"
+msgstr "Overslaan"
 
 #: application/gui/input_dialog.py:1183
 msgid "Original"
-msgstr "Оригінал"
+msgstr "Origineel"
 
 #: application/gui/input_dialog.py:1200
 msgid "Replace with"
-msgstr "Замінити на"
+msgstr "Vervangen door"
 
 #: application/gui/input_dialog.py:1235
 msgid "File conflict"
-msgstr "Конфлікт файлів"
+msgstr "bestandconflict"
 
 #: application/gui/input_dialog.py:1240 application/gui/input_dialog.py:1250
 msgid "Replace"
-msgstr "Замінити"
+msgstr "Vervangen"
 
 #: application/gui/input_dialog.py:1257
 #, python-brace-format
 msgid "Replace file \"{0}\"?"
-msgstr "Замінити файл \"{0}\"?"
+msgstr "Vervang bestand \"{0}\"?"
 
 #: application/gui/input_dialog.py:1263
 #, python-brace-format
 msgid ""
 "Another file with the same name already exists in \"{0}\". Replacing it will"
 " overwrite its content."
-msgstr "Файл з такою назвою вже присутній в \"{0}\". Заміна цього файлу перезапише його вміст."
+msgstr "Een bestand met die naam bestaat reeds in \"{0}\". Het zal worden overschreven."
 
 #: application/gui/input_dialog.py:1276
 msgid "Directory conflict"
-msgstr "Кофлікт каталогів"
+msgstr "Directoryconflict"
 
 #: application/gui/input_dialog.py:1280
 msgid "Merge"
-msgstr "Об'єднати"
+msgstr "Samenvoegen"
 
 #: application/gui/input_dialog.py:1290
 #, python-brace-format
 msgid "Merge directory \"{0}\"?"
-msgstr "Об'єднати каталог \"{0}\"?"
+msgstr "Directory \"{0}\" samenvoegen?"
 
 #: application/gui/input_dialog.py:1296
 #, python-brace-format
@@ -1568,169 +1557,166 @@ msgid ""
 "Directory with the same name already exists in \"{0}\". Merging will ask for"
 " confirmation before replacing any files in the directory that conflict with"
 " the files being copied."
-msgstr "Каталог з таким ім'ям вже присутній в \"{0}\". При об'єднанні у Вас запитають схвалення для заміни кожного файлу в каталозі, що конфліктує з копійованими файлами."
+msgstr "Een directory met die naam bestaat al in \"{0}\". U zult worden gevraagd om een bevestiging indien bestanden in die directory zouden worden overschreven door te kopiëren bestanden."
 
 #: application/gui/input_dialog.py:1334
 msgid ""
 "Underscore in the label text indicates the next character should be "
 "underlined and used for the mnemonic accelerator key if it is the first "
 "character so marked."
-msgstr "Знак підкреслювання у тексті означає, що наступний символ повинен бути підкреслений та буде використовуватися у якості гарячої клавіші, якщо це перший підкреслений символ."
+msgstr "Met een underscore in de labeltekst wordt aangegeven dat het karakter rechts ervan moet worden onderstreept. Het eerste onderstreepte karakter in een label dient als sneltoets."
 
 #: application/gui/input_dialog.py:1410
 msgid "Operation error"
-msgstr "При виконанні операції сталася помилка"
+msgstr "Uitvoeringsfout"
 
 #: application/gui/input_dialog.py:1447
 msgid "Skip all"
-msgstr "Пропустити усе"
+msgstr "Alles overslaan"
 
 #: application/gui/input_dialog.py:1448
 msgid "Retry"
-msgstr "Повторити"
+msgstr "Opnieuw proberen"
 
 #: application/gui/input_dialog.py:1497
 msgid "No"
-msgstr "Ні"
+msgstr "Nee"
 
 #: application/gui/input_dialog.py:1498
 msgid "Yes"
-msgstr "Так"
+msgstr "Ja"
 
 #: application/gui/input_dialog.py:1510
 msgid "Add toolbar widget"
-msgstr "Додати віджет на панель інструментів"
+msgstr "Werkbalk widget toevoegen"
 
 #: application/gui/input_dialog.py:1621
 msgid "Select range"
-msgstr "Вибрати діяпазон"
+msgstr "Selecteer reeks"
 
 #: application/gui/input_dialog.py:1622
 msgid "Select part of the text:"
-msgstr "Виділити частину тексту:"
+msgstr "Selecteer deel van de tekst:"
 
 #: application/gui/input_dialog.py:1646
 msgid "Add application"
-msgstr "Додати додаток"
+msgstr "Applicatie toevoegen"
 
 #: application/gui/input_dialog.py:1647
 msgid "Application name:"
-msgstr "Ім'я проґрами:"
+msgstr "Applicatienaam:"
 
 #: application/gui/input_dialog.py:1657
 msgid "Select"
-msgstr "Вибрати"
+msgstr "Selecteer"
 
 #: application/gui/input_dialog.py:1728
 msgid "Select application:"
-msgstr "Виберіть проґраму:"
+msgstr "Selecteer applicatie:"
 
 #: application/gui/input_dialog.py:1731
 #, python-brace-format
 msgid "Open <i>{0}</i> with:"
-msgstr "Відкрити <i>{0}</i> за допомогою:"
+msgstr "Open <i>{0}</i> met:"
 
 #: application/gui/input_dialog.py:1767
 msgid "Use a custom command"
-msgstr "Використовувати налаштовувану команду"
+msgstr "Gebruik een aangepast commando"
 
 #: application/gui/operation_dialog.py:91 application/gui/error_list.py:46
 msgid "Source:"
-msgstr "Джерело:"
+msgstr "Bron:"
 
 #: application/gui/operation_dialog.py:92 application/gui/error_list.py:52
 msgid "Destination:"
-msgstr "Призначення:"
+msgstr "Doel:"
 
 #: application/gui/operation_dialog.py:149
 msgid "ETA:"
-msgstr "Залишилось:"
+msgstr "ETA:"
 
 #: application/gui/operation_dialog.py:150
 msgid "Speed:"
-msgstr "Швидкість:"
+msgstr "Snelheid:"
 
 #: application/gui/operation_dialog.py:151
 msgid "Total size:"
-msgstr "Розмір:"
+msgstr "Totale grootte:"
 
 #: application/gui/operation_dialog.py:152
 msgid "Total count:"
-msgstr "Кількість:"
+msgstr "Totaal aantal:"
 
 #: application/gui/operation_dialog.py:205
 msgid "Minimize"
-msgstr "Згорнути"
+msgstr "Minimaliseren"
 
 #: application/gui/operation_dialog.py:213
 #: application/gui/operation_dialog.py:268
 msgid "Pause"
-msgstr "Призупинити"
+msgstr "Pauze"
 
 #: application/gui/operation_dialog.py:261
 msgid "Resume"
-msgstr "Відновити"
+msgstr "Doorgaan"
 
 #: application/gui/operation_dialog.py:273
 msgid "Are you sure about canceling current operation?"
-msgstr "Ви впевнені, що бажаєте скасувати поточну операцію?"
+msgstr "Weet u zeker dat u de huidige actie wilt afbreken?"
 
 #: application/gui/operation_dialog.py:343
 msgid "second"
 msgid_plural "seconds"
-msgstr[0] "секунда"
-msgstr[1] "секунди"
-msgstr[2] "секунд"
+msgstr[0] "seconde"
+msgstr[1] "seconden"
 
 #: application/gui/operation_dialog.py:349
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] "хвилина"
-msgstr[1] "хвилини"
-msgstr[2] "хвилин"
+msgstr[0] "minuut"
+msgstr[1] "minuten"
 
 #: application/gui/operation_dialog.py:356
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] "годину"
-msgstr[1] "години"
-msgstr[2] "годин"
+msgstr[0] "uur"
+msgstr[1] "uren"
 
 #: application/gui/operation_dialog.py:501
 msgid "Copy Selection"
-msgstr "Копіювати Виділене"
+msgstr "Kopieer selectie"
 
 #: application/gui/operation_dialog.py:522
 msgid "Move Selection"
-msgstr "Перемістити Виділене"
+msgstr "Verplaats selectie"
 
 #: application/gui/operation_dialog.py:547
 msgid "Delete Selection"
-msgstr "Вилучити Виділене"
+msgstr "Verwijder selectie"
 
 #: application/gui/operation_dialog.py:548
 msgid "Removing items..."
-msgstr "Вилучення..."
+msgstr "Verwijderen items..."
 
 #: application/gui/operation_dialog.py:574
 msgid "Rename Items"
-msgstr "Перейменувати файли"
+msgstr "Items hernoemen"
 
 #: application/gui/operation_dialog.py:575
 msgid "Renaming items..."
-msgstr "Перейменування..."
+msgstr "Hernoemen items..."
 
 #: application/gui/mounts_manager_window.py:54
 msgid "Mount manager"
-msgstr "Керування точками монтування"
+msgstr "Mounts beheren"
 
 #: application/gui/mounts_manager_window.py:371
 msgid "Systemwide"
-msgstr "Загольносистемний"
+msgstr "Systemwide"
 
 #: application/gui/mounts_manager_window.py:393
 msgid "Open selected URI in new tab"
-msgstr "Відкрити вибраний шлях в новій вкладці"
+msgstr "Open geselecteerde URI in nieuwe tab"
 
 #: application/gui/mounts_manager_window.py:397
 #: application/gui/mounts_manager_window.py:560
@@ -1738,26 +1724,26 @@ msgstr "Відкрити вибраний шлях в новій вкладці"
 #: application/plugins/file_list/gio_extension.py:552
 #: application/plugins/file_list/gio_extension.py:904
 msgid "Unmount"
-msgstr "Розмонтувати"
+msgstr "Unmount"
 
 #: application/gui/mounts_manager_window.py:549
 msgid "Mounted"
-msgstr "Змонтований"
+msgstr "Mounted"
 
 #: application/gui/mounts_manager_window.py:556
 #: application/plugins/file_list/gio_extension.py:195
 #: application/plugins/file_list/gio_extension.py:549
 #: application/plugins/file_list/gio_extension.py:901
 msgid "Mount"
-msgstr "Монтувати"
+msgstr "Mount"
 
 #: application/gui/mounts_manager_window.py:698
 msgid "Volumes"
-msgstr "Томи"
+msgstr "Volumes"
 
 #: application/gui/keyring_manager_window.py:27
 msgid "Keyring manager"
-msgstr "В'язки ключів"
+msgstr "Sleutelring beheren"
 
 #: application/gui/keyring_manager_window.py:51
 msgid "ID"
@@ -1765,11 +1751,11 @@ msgstr "ID"
 
 #: application/gui/keyring_manager_window.py:54
 msgid "Modified"
-msgstr "Змінено"
+msgstr "Gewijzigd"
 
 #: application/gui/keyring_manager_window.py:127
 msgid "Please select an entry to delete!"
-msgstr "Будь ласка, виберіть запис для вилучення!"
+msgstr "Geef op wat u wilt verwijderen!"
 
 #: application/gui/keyring_manager_window.py:143
 #, python-brace-format
@@ -1777,250 +1763,250 @@ msgid ""
 "You are about to remove the following entry from your keyring. If you do this you will have to provide password manually when needed. Are you sure?\n"
 "\n"
 "{0}"
-msgstr "Ви збираєтеся вилучити наступний запис з ваших ключів. Якщо Ви зробите це, то повинні будете уводити паролі вручну за потреби. Ви впевнені?\n\n{0}"
+msgstr "U gaat het onderstaande item van uw sleutelring verwijderen. Als u dat doet, dan moet u desgevraagd handmatig een wachtwoord invoeren. Weet u het zeker?\n\n{0}"
 
 #: application/gui/keyring_manager_window.py:171
 msgid "Please select an entry to change!"
-msgstr "Будь ласка, виберіть запис, щоб змінити!"
+msgstr "Geef op wat u wilt veranderen!"
 
 #: application/gui/keyring_manager_window.py:178
 msgid "Change password"
-msgstr "Змінити пароль"
+msgstr "Wijzig wachtwoord"
 
 #: application/gui/keyring_manager_window.py:179
 msgid "Enter new password for selected keyring entry."
-msgstr "Уведіть новий пароль для обраних ключів."
+msgstr "Geef een nieuw wachtwoord voor het geselecteerde item aan uw sleutelring"
 
 #: application/gui/keyring_manager_window.py:194
 msgid "Password was changed!"
-msgstr "Пароль був змінений!"
+msgstr "Wachtwoord gewijzigd!"
 
 #: application/gui/keyring_manager_window.py:209
 msgid "Passwords do not match! Please try again."
-msgstr "Паролі не збігаються! Будь ласка, спробуйте ще раз."
+msgstr "Wachtwoorden zijn niet gelijk! Probeer opnieuw."
 
 #: application/gui/about_window.py:106
 msgid "Twin-panel file manager for Linux."
-msgstr "Двопанельний файловий менеджер для Linux."
+msgstr "Bestandsmanager met twee panelen voor Linux."
 
 #: application/gui/about_window.py:109
 msgid "Copyright © 2010-2015 by Mladen Mijatov and contributors."
-msgstr "Авторське право © 2010-2015 Mladen Mijatov та інші учасники проєкту."
+msgstr "Copyright © 2010-2015 by Mladen Mijatov and contributors."
 
 #: application/gui/about_window.py:137
 msgid "translator-credits"
-msgstr "Roman Tuz <ubuntueasy.com@gmail.com>\nАндрій Кондратьєв <kondratiev.work@gmail.com>\nХаліманенко Тарас <mr.haltar@yandex.ru>\nМикола Ткач <Stuartlittle1970@gmail.com>"
+msgstr "Raymond W. Blau"
 
 #: application/gui/error_list.py:21
 msgid "Error list"
-msgstr "Перелік помилок"
+msgstr "Lijst met fouten"
 
 #: application/gui/error_list.py:40
 msgid "For:"
-msgstr "Для:"
+msgstr "Voor:"
 
 #: application/widgets/title_bar.py:75
 msgid "Context menu"
-msgstr "Контекстне меню"
+msgstr "Contextmenu"
 
 #: application/widgets/tab_label.py:85
 msgid "Unlock"
-msgstr "Розблокувати"
+msgstr "Openen"
 
 #: application/widgets/tab_label.py:85
 msgid "Lock"
-msgstr "Заблокувати"
+msgstr "Sluiten"
 
 #: application/widgets/tab_label.py:89 application/plugin_base/plugin.py:132
 msgid "Duplicate tab"
-msgstr "Дублювати вкладку"
+msgstr "Tab dupliceren"
 
 #: application/widgets/tab_label.py:93
 msgid "Move to opposite panel"
-msgstr "Перенести на протилежну панель"
+msgstr "Verplaats naar tegenoverliggend paneel"
 
 #: application/widgets/tab_label.py:100
 msgid "Close Tab"
-msgstr "Закрити вкладку"
+msgstr "Tab sluiten"
 
 #: application/widgets/tab_label.py:106
 msgid "Close All"
-msgstr "Закрити усі"
+msgstr "Alles sluiten"
 
 #: application/widgets/tab_label.py:111
 msgid "Close Other Tabs"
-msgstr "Закрити інші вкладки"
+msgstr "Sluit overige tabs"
 
 #: application/queue.py:36 application/plugins/sessions/plugin.py:6
 msgid "Default"
-msgstr "Типово"
+msgstr "Default"
 
 #: application/queue.py:49
 msgid "New queue"
-msgstr "Нова черга"
+msgstr "Nieuwe wachtrij"
 
 #: application/queue.py:142
 msgid "New operation queue"
-msgstr "Нова черга операцій"
+msgstr "Nieuwe wachtrij"
 
 #: application/queue.py:143
 msgid "Enter name for new operation queue:"
-msgstr "Уведіть назву нової черги операцій:"
+msgstr "Geef naam voor nieuwe wachtrij:"
 
 #: application/queue.py:159
 msgid "Operation queue with specified name already exists."
-msgstr "Черга з таким ім'ям вже існує."
+msgstr "Er bestaat al een wachtrij met deze naam."
 
 #: application/mounts.py:126
 msgid "Specified item can not be unmounted."
-msgstr "Вказаний том не може бути змонтований."
+msgstr "Unmounten van item is niet mogelijk"
 
 #: application/keyring.py:61
 msgid "Keyring is unlocked"
-msgstr "В'язка ключів розблокована"
+msgstr "Sleutelring is geopend"
 
 #: application/keyring.py:62
 msgid "Keyring is locked"
-msgstr "В’язка ключів заблокована"
+msgstr "Sleutelring is gesloten"
 
 #: application/keyring.py:109
 msgid "Unlock keyring"
-msgstr "Розблокувати в'язку ключів"
+msgstr "Sleutelring openen"
 
 #: application/keyring.py:110
 msgid "Please enter your keyring password:"
-msgstr "Будь ласка, уведіть ваш пароль для в'язки ключів:"
+msgstr "Geef het wachtwoord van uw sleutelring:"
 
 #: application/keyring.py:310
 msgid "New keyring"
-msgstr "Нова в'язка ключів"
+msgstr "Nieuwe sleutelring"
 
 #: application/keyring.py:312
 msgid ""
 "We need to create a new keyring to safely store your passwords. Choose the "
 "password you want to use for it."
-msgstr "Ви повинні створити нову в'язку ключів для безпечного зберігання паролів. Виберіть пароль, який Ви бажаєте використовувати для цього."
+msgstr "Er moet een nieuwe sleutelring gemaakt worden om uw wachtwoorden in op de slaan. Kies een wachtwoord voor die nieuwe sleutelring."
 
 #: application/toolbar.py:131
 msgid ""
 "Error adding widget. You need to enter unique name and select widget type."
-msgstr "Помилка додавання віджету. Необхідно увести унікальне ім'я та вибрати тип віджету."
+msgstr "Fout bij toevoegen widget. Gebruik een unieke widgetnaam en selecteer een widgettype."
 
 #: application/toolbar.py:146
 msgid ""
 "Widget with specified name already exists. You need to enter unique name and"
 " select widget type."
-msgstr "Віджет з вказаним ім'ям вже існує. Необхідно увести унікальне ім'я та вибрати тип віджету."
+msgstr "Er is al een widget met deze naam. Gebruik een unieke widgetnaam en selecteer een widgettype."
 
 #: application/toolbar.py:180
 msgid ""
 "Plugin used to create selected toolbar widget is not active or not present. "
 "In order to edit this entry you need to activate plugin used to create it."
-msgstr "Модуль, використаний для створення обраного віджету неактивний або відсутній. Для редагування цього елементу потрібно активувати модуль, використаний для його створення."
+msgstr "De plugin waarmee de geselecteerde werkbalkwidget is gemaakt is niet actief of ontbreekt. U heeft die plugin nodig om dit item te kunnen bewerken."
 
 #: application/plugins/default_toolbar/parent_directory_button.py:14
 #: application/plugins/default_toolbar/parent_directory_button.py:15
 #: application/plugin_base/item_list.py:260
 msgid "Go to parent directory"
-msgstr "Перейти в батьківський каталог"
+msgstr "Ga naar bovenliggende directory"
 
 #: application/plugins/default_toolbar/bookmark_button.py:58
 msgid "Configure bookmark button"
-msgstr "Налаштувати кнопку закладки"
+msgstr "Configureer bladwijzerknop"
 
 #: application/plugins/default_toolbar/bookmark_button.py:84
 msgid "Path:"
-msgstr "Шлях:"
+msgstr "Pad:"
 
 #: application/plugins/default_toolbar/bookmark_button.py:88
 msgid "Show label"
-msgstr "Показувати ім'я"
+msgstr "Toon label"
 
 #: application/plugins/default_toolbar/plugin.py:26
 msgid "Parent directory button"
-msgstr "Кнопка переходу в батьківський каталог"
+msgstr "Knop voor bovenliggende directory"
 
 #: application/plugins/default_toolbar/plugin.py:32
 msgid "Home directory button"
-msgstr "Кнопка переходу в домашній каталог"
+msgstr "Knop voor Home directory"
 
 #: application/plugins/default_toolbar/plugin.py:38
 msgid "Bookmark button"
-msgstr "Кнопка закладки"
+msgstr "Knop voor bladwijzer"
 
 #: application/plugins/default_toolbar/plugin.py:44
 msgid "Bookmarks menu"
-msgstr "Меню закладок"
+msgstr "Bladwijzermenu"
 
 #: application/plugins/default_toolbar/plugin.py:50
 msgid "Separator"
-msgstr "Роздільник"
+msgstr "Separator"
 
 #: application/plugins/default_toolbar/plugin.py:105
 msgid "This widget has no configuration dialog."
-msgstr "У цього віджету немає діялоґу налаштування."
+msgstr "Deze widget kan niet verder geconfigureerd worden."
 
 #: application/plugins/owner_column/plugin.py:65
 msgid "Owner"
-msgstr "Власник"
+msgstr "Eigenaar"
 
 #: application/plugins/owner_column/plugin.py:93
 msgid "Group"
-msgstr "Група"
+msgstr "Groep"
 
 #: application/plugins/file_list/plugin.py:11
 msgid "Local file list"
-msgstr "Перелік локальних файлів"
+msgstr "Lijst van lokale bestanden"
 
 #: application/plugins/file_list/plugin.py:12
 msgid "Trash can"
-msgstr "Смітник"
+msgstr "Prullenbak"
 
 #: application/plugins/file_list/file_list.py:124
 msgid "Ext"
-msgstr "Розширення"
+msgstr "Ext"
 
 #: application/plugins/file_list/file_list.py:126
 msgid "Mode"
-msgstr "Права"
+msgstr "Mode"
 
 #: application/plugins/file_list/file_list.py:127
 #: application/plugins/rename_extensions/audio_metadata.py:26
 msgid "Date"
-msgstr "Дата"
+msgstr "Datum"
 
 #: application/plugins/file_list/file_list.py:481
 msgid "Invalid selection!"
-msgstr "Неправильне виділення!"
+msgstr "Ongeldige selectie!"
 
 #: application/plugins/file_list/file_list.py:653
 msgid ""
 "There was an error creating directory. Make sure you have enough "
 "permissions. "
-msgstr "Помилка створення каталогу. Переконайтеся, що Ви маєте необхідні привілеї. "
+msgstr "Fout bij aanmaken directory. Zorg dat u over de juiste rechten beschikt."
 
 #: application/plugins/file_list/file_list.py:680
 #, python-brace-format
 msgid "File already exists: {0}"
-msgstr "Файл вже існує: {0}"
+msgstr "Bestand bestaat al: {0}"
 
 #: application/plugins/file_list/file_list.py:683
 #, python-brace-format
 msgid "Directory with same name exists: {0}"
-msgstr "Каталог з таким ім'ям існує: {0}"
+msgstr "Directory bestaat al: {0}"
 
 #: application/plugins/file_list/file_list.py:719
 msgid ""
 "There was an error creating file. Make sure you have enough permissions."
-msgstr "Помилка створення файлу. Переконайтеся, що Ви маєте необхідні привілеї."
+msgstr "Fout bij aanmaken bestand. Zorg dat u over de juiste rechten beschikt."
 
 #: application/plugins/file_list/file_list.py:781
 msgid "Error creating new link."
-msgstr "Помилка створення посилання"
+msgstr "Fout bij maken nieuwe verwijzing."
 
 #: application/plugins/file_list/file_list.py:797
 msgid "Current file system does not support linking."
-msgstr "Поточна файлова система не підтримує посилання."
+msgstr "Het huidige bestandsysteem ondersteunt verwijzingen niet."
 
 #: application/plugins/file_list/file_list.py:820
 #, python-brace-format
@@ -2030,9 +2016,8 @@ msgid ""
 msgid_plural ""
 "You are about to delete {0} items.\n"
 "Are you sure about this?"
-msgstr[0] "Ви збираєтеся вилучити {0} об’єкт.\nВи впевнені, що волієте зробити це?"
-msgstr[1] "Ви збираєтеся вилучити {0} об’єкти.\nВи впевнені, що волієте зробити це?"
-msgstr[2] "Ви збираєтеся вилучити {0} об’єктів.\nВи впевнені, що волієте зробити це?"
+msgstr[0] "U staat op het punt {0} item te verwijderen.\nWeet u het zeker?"
+msgstr[1] "U staat op het punt {0} items te verwijderen.\nWeet u het zeker?"
 
 #: application/plugins/file_list/file_list.py:829
 #, python-brace-format
@@ -2042,37 +2027,36 @@ msgid ""
 msgid_plural ""
 "You are about to move {0} items to trash.\n"
 "Are you sure about this?"
-msgstr[0] "Ви збираєтеся перемістити {0} об’єкт у смітник.\nВи впевнені, що волієте зробити це?"
-msgstr[1] "Ви збираєтеся перемістити {0} об’єкти у смітник.\nВи впевнені, що волієте зробити це?"
-msgstr[2] "Ви збираєтеся перемістити {0} об’єктів у смітник.\nВи впевнені, що волієте зробити це?"
+msgstr[0] "U staat op het punt {0} item naar de prullenbak te verplaatsen.\nWeet u het zeker?"
+msgstr[1] "U staat op het punt {0} items naar de prullenbak te verplaatsen.\nWeet u het zeker?"
 
 #: application/plugins/file_list/file_list.py:1180
 msgid "Other application..."
-msgstr "Інше додаток..."
+msgstr "Andere applicatie..."
 
 #: application/plugins/file_list/file_list.py:1816
 msgid "Free:"
-msgstr "Вільно:"
+msgstr "Vrij:"
 
 #: application/plugins/file_list/file_list.py:1817
 msgid "Total:"
-msgstr "Всього:"
+msgstr "Totaal:"
 
 #: application/plugins/file_list/file_list.py:1886
 msgid "Copy here"
-msgstr "Копіювати сюди"
+msgstr "Kopieer hier"
 
 #: application/plugins/file_list/file_list.py:1891
 msgid "Move here"
-msgstr "Перемістити сюди"
+msgstr "Verplaats hier"
 
 #: application/plugins/file_list/file_list.py:1896
 msgid "Link here"
-msgstr "створити посилання"
+msgstr "Verwijs hier"
 
 #: application/plugins/file_list/file_list.py:2273
 msgid "No such file or directory"
-msgstr "Файл або каталог не знайдені"
+msgstr "Bestand of directory bestaat niet"
 
 #: application/plugins/file_list/file_list.py:2290
 #, python-brace-format
@@ -2083,19 +2067,19 @@ msgid ""
 "{0}\n"
 "\n"
 "Would you like to retry?"
-msgstr "Помилка при зміні робочого каталогу на:\n{1}\n\n{0}\n\nБажаєте повторити спробу?"
+msgstr "Fout bij wijzigen werkdirectory naar:\n{1}\n\n{0}\n\nNogmaals proberen?"
 
 #: application/plugins/file_list/trash_list.py:39
 msgid "Empty trash"
-msgstr "Спорожнити смітник"
+msgstr "Prullenbak legen"
 
 #: application/plugins/file_list/trash_list.py:53
 msgid "All items in the Trash will be permanently deleted. Are you sure?"
-msgstr "Усі об’єкти, що знаходяться у Смітнику, будуть остаточно вилучені. Ви справді волієте це зробити?"
+msgstr "Alle items in de prullenbak worden definitief verwijderd. Weet je het zeker?"
 
 #: application/plugins/file_list/gio_extension.py:68
 msgid "Mount operation"
-msgstr "Операція монтування"
+msgstr "Mount actie"
 
 #: application/plugins/file_list/gio_extension.py:114
 #, python-brace-format
@@ -2104,13 +2088,13 @@ msgid ""
 "{0}\n"
 "\n"
 "{1}"
-msgstr "Не вдається змонтувати:\n{0}\n\n{1}"
+msgstr "Mounten mislukt:\n{0}\n\n{1}"
 
 #: application/plugins/file_list/gio_extension.py:166
 #: application/plugins/file_list/gio_extension.py:520
 #: application/plugins/file_list/gio_extension.py:872
 msgid "URI"
-msgstr "Шлях"
+msgstr "URI"
 
 #: application/plugins/file_list/gio_extension.py:424
 #: application/plugins/file_list/gio_extension.py:727
@@ -2119,133 +2103,133 @@ msgstr "Шлях"
 msgid ""
 "You are about to remove '{0}'.\n"
 "Are you sure about this?"
-msgstr "Ви збираєтеся вилучити '{0}'об'єкт.\nВи впевнені, що бажаєте зробити це?"
+msgstr "U gaat '{0}' verwijderen.\nWeet u het zeker?"
 
 #: application/plugins/file_list/dialogs.py:38
 msgid "Create Samba mount"
-msgstr "Створити монтування Samba"
+msgstr "Maak Samba mount"
 
 #: application/plugins/file_list/dialogs.py:69
 #: application/plugins/file_list/dialogs.py:282
 #: application/plugins/file_list/dialogs.py:476
 msgid "Server:"
-msgstr "Сервер:"
+msgstr "Server:"
 
 #: application/plugins/file_list/dialogs.py:77
 msgid "Share:"
-msgstr "Поділитися:"
+msgstr "Share:"
 
 #: application/plugins/file_list/dialogs.py:79
 #: application/plugins/file_list/dialogs.py:289
 #: application/plugins/file_list/dialogs.py:492
 msgid "Directory:"
-msgstr "Каталог:"
+msgstr "Directory:"
 
 #: application/plugins/file_list/dialogs.py:94
 msgid "Domain:"
-msgstr "Домен:"
+msgstr "Domain:"
 
 #: application/plugins/file_list/dialogs.py:95
 #: application/plugins/file_list/dialogs.py:303
 #: application/plugins/file_list/dialogs.py:506
 msgid "Username:"
-msgstr "Користувач:"
+msgstr "Username:"
 
 #: application/plugins/file_list/dialogs.py:173
 msgid ""
 "One or more required fields are empty. Please make sure you have entered "
 "name, server and share."
-msgstr "Одне або декілька із обов’язкових полів порожні. Будь ласка, переконайтеся, що Ви увели ім’я та сервер."
+msgstr "Een of meerdere verplichte velden zijn leeg. Vul naam, server en share in."
 
 #: application/plugins/file_list/dialogs.py:251
 msgid "Create FTP mount"
-msgstr "Створити FTP монтування"
+msgstr "Maak FTP mount"
 
 #: application/plugins/file_list/dialogs.py:370
 #: application/plugins/file_list/dialogs.py:577
 msgid ""
 "One or more required fields is empty. Please make sure you have entered name"
 " and server."
-msgstr "Одне або декілька обов'язкових полів порожні. Будь ласка, переконайтеся, що увели ім'я та сервер."
+msgstr "Een of meerdere verplichte velden zijn leeg. Vul naam en server in."
 
 #: application/plugins/file_list/dialogs.py:435
 msgid "Create SFTP mount"
-msgstr "Створити точку монтування SFTP"
+msgstr "Maak SFTP mount"
 
 #: application/plugins/file_list/dialogs.py:445
 msgid "Create WebDav mount"
-msgstr "Створити точку монтування WebDav"
+msgstr "Maak WebDav mount"
 
 #: application/plugins/file_list/dialogs.py:483
 msgid "Server type:"
-msgstr "Тип сервера:"
+msgstr "Server type:"
 
 #: application/plugins/sessions/plugin.py:21
 msgid "Sessions"
-msgstr "Сесії"
+msgstr "Sessions"
 
 #: application/plugins/sessions/plugin.py:55
 msgid "Locked"
-msgstr "Закріплено"
+msgstr "Gesloten"
 
 #: application/plugins/sessions/plugin.py:76
 msgid "Move up"
-msgstr "Перемістити вгору"
+msgstr "Omhoog"
 
 #: application/plugins/sessions/plugin.py:83
 msgid "Move down"
-msgstr "Перемістити вниз"
+msgstr "Omlaag"
 
 #: application/plugins/sessions/plugin.py:173
 msgid "Session with this name already exists."
-msgstr "Сесія з таким ім'ям вже існує."
+msgstr "Session met deze naam bestaat al."
 
 #: application/plugins/sessions/plugin.py:204
 msgid "New session"
-msgstr "Нова сесія"
+msgstr "Nieuwe session"
 
 #: application/plugins/sessions/plugin.py:274
 msgid "Manage sessions"
-msgstr "Керування сесіями"
+msgstr "Beheer sessions"
 
 #: application/plugins/sessions/plugin.py:281
 msgid "Save session"
-msgstr "Зберегти сесію"
+msgstr "Session opslaan"
 
 #: application/plugins/rename_extensions/letter_case.py:15
 #: application/plugins/rename_extensions/letter_case.py:23
 msgid "Do nothing"
-msgstr "Не змінювати"
+msgstr "Doe niets"
 
 #: application/plugins/rename_extensions/letter_case.py:16
 msgid "Capitalize"
-msgstr "Перетворити перші літери в заголовні"
+msgstr "Omzetten naar hoofdletters"
 
 #: application/plugins/rename_extensions/letter_case.py:17
 #: application/plugins/rename_extensions/letter_case.py:24
 msgid "Upper case"
-msgstr "У верхній регістр"
+msgstr "Grote letters"
 
 #: application/plugins/rename_extensions/letter_case.py:18
 #: application/plugins/rename_extensions/letter_case.py:25
 msgid "Lower case"
-msgstr "У нижній регістр"
+msgstr "Kleine letters"
 
 #: application/plugins/rename_extensions/letter_case.py:19
 msgid "Swap case"
-msgstr "Обернути регістр"
+msgstr "Hoofdletters en kleine letters omwisselen"
 
 #: application/plugins/rename_extensions/letter_case.py:29
 msgid "Item name:"
-msgstr "Ім'я файлу:"
+msgstr "Itemnaam:"
 
 #: application/plugins/rename_extensions/letter_case.py:32
 msgid "Extension:"
-msgstr "Розширення:"
+msgstr "Extensie:"
 
 #: application/plugins/rename_extensions/letter_case.py:87
 msgid "Letter Case"
-msgstr "Літеровий регістр"
+msgstr "Hoofd of kleine letters"
 
 #: application/plugins/rename_extensions/default.py:40
 msgid ""
@@ -2256,98 +2240,98 @@ msgid ""
 "\n"
 "For name and extension you can\n"
 "use range in format [N#-#]."
-msgstr "<b>Синтаксис шаблонів</b>\n[N] \tІм'я файлу\n[E] \tРозширення\n[C] \tЛічільник\n\nДля імені та розширення Ви можете\nВикористовувати діяпазони у форматі [N#-#]."
+msgstr "<b>Sjabloon syntax</b>\n[N]⇥Item naam\n[E]⇥Extensie\n[C]⇥Teller\n\nBij naam en extensie kunt u\neen reeks maken in het format [N#-#]."
 
 #: application/plugins/rename_extensions/default.py:76
 msgid "Part of name"
-msgstr "Частина імені"
+msgstr "Deel van de naam"
 
 #: application/plugins/rename_extensions/default.py:81
 msgid "Extension"
-msgstr "Розширення"
+msgstr "Extensie"
 
 #: application/plugins/rename_extensions/default.py:84
 msgid "Part of extension"
-msgstr "Частина розширення"
+msgstr "Deel van de extensie"
 
 #: application/plugins/rename_extensions/default.py:89
 #: application/plugins/rename_extensions/default.py:103
 msgid "Counter"
-msgstr "Лічильник"
+msgstr "Teller"
 
 #: application/plugins/rename_extensions/default.py:109
 msgid "Start:"
-msgstr "Початок:"
+msgstr "Start:"
 
 #: application/plugins/rename_extensions/default.py:116
 msgid "Step:"
-msgstr "Крок:"
+msgstr "Stap:"
 
 #: application/plugins/rename_extensions/default.py:123
 msgid "Digits:"
-msgstr "Цифри:"
+msgstr "Cijfers:"
 
 #: application/plugins/rename_extensions/default.py:255
 msgid "Item list is empty. Unable to get item for range selection!"
-msgstr "Перелік файлів порожній. Неможливо вибрати файл для виділення діяпазону!"
+msgstr "Itemlijst is leeg. Kan geen item in deze reeks vinden!"
 
 #: application/plugins/rename_extensions/audio_metadata.py:22
 msgid "Album"
-msgstr "Альбом"
+msgstr "Album"
 
 #: application/plugins/rename_extensions/audio_metadata.py:23
 msgid "Artist"
-msgstr "Виконавець"
+msgstr "Artist"
 
 #: application/plugins/rename_extensions/audio_metadata.py:25
 msgid "Genre"
-msgstr "Жанр"
+msgstr "Genre"
 
 #: application/plugins/rename_extensions/audio_metadata.py:27
 msgid "Track number"
-msgstr "Номер доріжки"
+msgstr "Track nummer"
 
 #: application/plugins/rename_extensions/audio_metadata.py:39
 msgid "Replace:"
-msgstr "Замінити:"
+msgstr "Vervang:"
 
 #: application/plugins/rename_extensions/audio_metadata.py:47
 msgid "With:"
-msgstr "На:"
+msgstr "Door:"
 
 #: application/plugins/rename_extensions/audio_metadata.py:60
 msgid "Template syntax"
-msgstr "Синтаксис шаблону"
+msgstr "Sjabloon syntax"
 
 #: application/plugins/rename_extensions/audio_metadata.py:71
 msgid "Character replacement"
-msgstr "Заміна символів"
+msgstr "Karakter vervanging"
 
 #: application/plugins/rename_extensions/audio_metadata.py:78
 msgid ""
 "In order to use this extension you need <b>mutagen</b> module installed!"
-msgstr "Для використання цього розширення необхідний встановлений модуль <b>mutagen</b>!"
+msgstr "Voor het gebruik van deze programma-uitbreiding moet de module <b>mutagen</b> geïnstalleerd zijn!"
 
 #: application/plugins/rename_extensions/audio_metadata.py:110
 msgid "Audio Metadata"
-msgstr "Метадані аудіо"
+msgstr "Audio metadata"
 
 #: application/plugins/find_file_extensions/size.py:21
 msgid "Match file size"
-msgstr "Пошук за розміром файлу"
+msgstr "Match bestandsgrootte"
 
 #: application/plugins/find_file_extensions/size.py:25
 msgid "Minimum:"
-msgstr "Мінімальний:"
+msgstr "Minimum:"
 
 #: application/plugins/find_file_extensions/size.py:27
 #: application/plugins/find_file_extensions/size.py:31
 msgid "MB"
-msgstr "Мб"
+msgstr "MB"
 
 #: application/plugins/find_file_extensions/size.py:29
 msgid "Maximum:"
-msgstr "Максимальний:"
+msgstr "Maximum:"
 
 #: application/plugins/find_file_extensions/default.py:33
 msgid ""
@@ -2356,28 +2340,28 @@ msgid ""
 "?\t\tAny single character\n"
 "[seq]\tAny character in <i>seq</i>\n"
 "[!seq]\tAny character <u>not</u> in <i>seq</i>"
-msgstr "<b>Пошук за шаблоном</b>\n*\t\tБудь-який набір символів\n?\t\tБудь-який одинарний символ\n[seq]\tБудь-який символ з <i>seq</i>\n[!seq]\tБудь-який символ <u>не</u> з <i>seq</i>"
+msgstr "<b>Pattern matching</b>\n*⇥⇥Alles\n?⇥⇥Een karakter\n[seq]⇥Een karakter in <i>seq</i>\n[!seq]⇥Een karakter <u>niet</u> in <i>seq</i>"
 
 #: application/plugins/find_file_extensions/default.py:48
 #: application/plugins/find_file_extensions/contents.py:24
 msgid "Search for:"
-msgstr "Шукати:"
+msgstr "Zoek naar:"
 
 #: application/plugins/find_file_extensions/default.py:55
 msgid "Case sensitive"
-msgstr "Враховувати регістр"
+msgstr "Hoofdlettergevoelig"
 
 #: application/plugins/find_file_extensions/contents.py:45
 msgid "Content"
-msgstr "Вміст"
+msgstr "Inhoud"
 
 #: application/plugins/system_terminal/plugin.py:12
 msgid "System terminal"
-msgstr "Системний термінал"
+msgstr "System terminal"
 
 #: application/plugins/system_terminal/plugin.py:21
 msgid "Open current directory"
-msgstr "Відкрити поточну директорію"
+msgstr "Open huidige directory"
 
 #: application/plugins/gvim_viewer/plugin.py:50
 msgid "GVim"
@@ -2386,70 +2370,70 @@ msgstr "GVim"
 #: application/plugin_base/rename_extension.py:22
 #: application/plugin_base/find_extension.py:23
 msgid "Use this extension"
-msgstr "Використовувати це розширення"
+msgstr "Gebruik deze extensie"
 
 #: application/plugin_base/plugin.py:126
 msgid "Plugin Base"
-msgstr "База модулів"
+msgstr "Plugin Base"
 
 #: application/plugin_base/plugin.py:129
 #: application/plugin_base/terminal.py:306
 msgid "Focus opposite object"
-msgstr "Фокус на протилежний об'єкт"
+msgstr "Focus tegenoverliggende object"
 
 #: application/plugin_base/plugin.py:130
 msgid "Next tab"
-msgstr "Наступна вкладка"
+msgstr "Volgende tab"
 
 #: application/plugin_base/plugin.py:131
 msgid "Previous tab"
-msgstr "Попередня вкладка"
+msgstr "Vorige tab"
 
 #: application/plugin_base/plugin.py:133
 #: application/plugin_base/terminal.py:307
 msgid "Close tab"
-msgstr "Закрити вкладку"
+msgstr "Sluit tab"
 
 #: application/plugin_base/plugin.py:134
 msgid "Focus command entry"
-msgstr "Фокус на командний рядок"
+msgstr "Activeer opdrachtregel"
 
 #: application/plugin_base/plugin.py:135
 msgid "Focus left object"
-msgstr "Фокус на лівий об'єкт"
+msgstr "Focus linker object"
 
 #: application/plugin_base/plugin.py:136
 msgid "Focus right object"
-msgstr "Фокус на правий об'єкт"
+msgstr "Focus rechter object"
 
 #: application/plugin_base/terminal.py:94
 msgid "Open file list"
-msgstr "Відкрити перелік файлів"
+msgstr "Open bestandslijst"
 
 #: application/plugin_base/terminal.py:135
 msgid ""
 "\n"
 "\n"
 "Python VTE module is not installed on this system!"
-msgstr "\n\nVTE модуль Python не встановлено у Вашій системі!"
+msgstr "\n\nModule Python VTE  is niet geïnstalleerd op dit systeem!"
 
 #: application/plugin_base/terminal.py:209
 msgid "Terminal menu"
-msgstr "Меню терміналу"
+msgstr "Terminal menu"
 
 #: application/plugin_base/terminal.py:303
 #: application/plugin_base/item_list.py:259
 msgid "Create terminal tab"
-msgstr "Створити вкладку з терміналом"
+msgstr "Maak terminal tab"
 
 #: application/plugin_base/terminal.py:304
 #: application/plugin_base/item_list.py:254
 msgid "Copy selection to clipboard"
-msgstr "Скопіювати виділене в буфер обміну"
+msgstr "Kopieer naar klembord"
 
 #: application/plugin_base/terminal.py:305
 msgid "Paste from clipboard"
-msgstr "Вставити з буферу обміну"
+msgstr "Plak vanaf klembord"
 
 #: application/plugin_base/terminal.py:350
 #, python-brace-format
@@ -2457,293 +2441,293 @@ msgid ""
 "You are about to feed child process with following data. Are you sure?\n"
 "\n"
 "{0}"
-msgstr "Ви збираєтеся послати дочірньому процесові ці дані. Ви впевнені?\n\n{0}"
+msgstr "U staat op het punt de volgende gegevens door te geven aan het onderliggende proces. Weet u het zeker?\n\n{0}"
 
 #: application/plugin_base/item_list.py:76
 msgid "Directories (selected/total)"
-msgstr "Каталоги (вибрані / всього)"
+msgstr "Directory's (geselecteerd/totaal)"
 
 #: application/plugin_base/item_list.py:77
 msgid "Files (selected/total)"
-msgstr "Файли (вибраного / всього)"
+msgstr "Bestanden (geselecteerd/totaal)"
 
 #: application/plugin_base/item_list.py:78
 msgid "Size (selected/total)"
-msgstr "Розмір (вибрані / всього)"
+msgstr "Grootte (geselecteerd/totaal)"
 
 #: application/plugin_base/item_list.py:109
 msgid "Search:"
-msgstr "Шукати:"
+msgstr "Zoek:"
 
 #: application/plugin_base/item_list.py:136
 msgid "Reload item list"
-msgstr "Оновити перелік файлів"
+msgstr "Itemlijst verversen"
 
 #: application/plugin_base/item_list.py:151
 #: application/plugin_base/item_list.py:289
 msgid "Copy path to clipboard"
-msgstr "Скопіювати виділене в буфер обміну"
+msgstr "Kopieer pad naar klembord"
 
 #: application/plugin_base/item_list.py:159
 msgid "Enter path..."
-msgstr "Уведіть шлях..."
+msgstr "Geeft pad..."
 
 #: application/plugin_base/item_list.py:248
 msgid "Execute selected item"
-msgstr "Виконати виділений об'єкт"
+msgstr "Uitvoeren geselecteerd item"
 
 #: application/plugin_base/item_list.py:249
 msgid "Select application and execute item"
-msgstr "Вибрати додаток і відкрити файл"
+msgstr "Selecteer applicatie en voer item uit"
 
 #: application/plugin_base/item_list.py:250
 msgid "Show selected item properties"
-msgstr "Показати властивості виділеного об'єкту"
+msgstr "Toon eigenschappen van geselecteerd item"
 
 #: application/plugin_base/item_list.py:251
 msgid "Bookmark current directory"
-msgstr "Додати поточний каталог в закладки"
+msgstr "Maak bladwijzer voor huidige directory"
 
 #: application/plugin_base/item_list.py:253
 msgid "Cut selection to clipboard"
-msgstr "Вирізати виділене в буфер обміну"
+msgstr "Knip selectie naar klembord"
 
 #: application/plugin_base/item_list.py:255
 msgid "Paste items from clipboard"
-msgstr "Вставити об'єкти з буферу обміну"
+msgstr "Plak items vanaf klembord"
 
 #: application/plugin_base/item_list.py:256
 msgid "Open selected directory in new tab"
-msgstr "Відкрити виділений каталог в новій вкладці"
+msgstr "Open geselecteerde directory in nieuwe tab"
 
 #: application/plugin_base/item_list.py:257
 msgid "Open selected directory"
-msgstr "Відкрити виділений каталог в новій вкладці"
+msgstr "Open geselecteerde directory"
 
 #: application/plugin_base/item_list.py:258
 msgid "Calculate disk usage for directory"
-msgstr "Вирахувати місце, займане каталогом"
+msgstr "Bereken schijfruimte voor directory"
 
 #: application/plugin_base/item_list.py:261
 msgid "Go to root directory"
-msgstr "Перейти у кореневий каталог"
+msgstr "Ga naar root directory"
 
 #: application/plugin_base/item_list.py:262
 msgid "Reload items in current directory"
-msgstr "Оновити перелік файлів у поточному каталозі"
+msgstr "Huidige directory opnieuw inlezen"
 
 #: application/plugin_base/item_list.py:263
 msgid "Show history browser"
-msgstr "Показати переглядач історії"
+msgstr "Toon geschiedenis"
 
 #: application/plugin_base/item_list.py:264
 msgid "Go back in history"
-msgstr "перейди назад в історії"
+msgstr "Terug in geschiedenis"
 
 #: application/plugin_base/item_list.py:265
 msgid "Go forward in history"
-msgstr "перейти вперед в історії"
+msgstr "Vooruit in geschiedenis"
 
 #: application/plugin_base/item_list.py:266
 msgid "Select all"
-msgstr "Виділити усе"
+msgstr "Selecteer alles"
 
 #: application/plugin_base/item_list.py:267
 msgid "Deselect all"
-msgstr "Скасувати виділення"
+msgstr "Deselecteer alles"
 
 #: application/plugin_base/item_list.py:268
 msgid "Invert selection"
-msgstr "Обернути виділення"
+msgstr "Selectie omkeren"
 
 #: application/plugin_base/item_list.py:269
 msgid "Toggle selection"
-msgstr "Перемикнути виділення"
+msgstr "Toggle selectie"
 
 #: application/plugin_base/item_list.py:270
 msgid "Toggle selection and move marker up"
-msgstr "Перемикнути виділення і перемістити маркер вище"
+msgstr "Toggle selectie en verplaats aanwijzer omhoog"
 
 #: application/plugin_base/item_list.py:271
 msgid "Trash or delete selected items"
-msgstr "Перемістити у смітник або вилучити вибрані об'єкти"
+msgstr "Verwijder geselecteerde items"
 
 #: application/plugin_base/item_list.py:272
 msgid "Force deleting selected items"
-msgstr "Остаточно вилучити вибрані файли"
+msgstr "Definitief verwijderen geselecteerde items"
 
 #: application/plugin_base/item_list.py:273
 msgid "Show bookmarks for current list"
-msgstr "Показати закладки для даної панелі"
+msgstr "Toon bladwijzers voor huidige lijst"
 
 #: application/plugin_base/item_list.py:274
 msgid "Show bookmarks for left list"
-msgstr "Показати закладки для лівої панелі"
+msgstr "Toon bladwijzers van linker lijst"
 
 #: application/plugin_base/item_list.py:275
 msgid "Show bookmarks for right list"
-msgstr "Показати закладки для правої панелі"
+msgstr "Toon bladwijzers van rechter lijst"
 
 #: application/plugin_base/item_list.py:276
 msgid "Rename selected item"
-msgstr "Перейменувати виділений об'єкт"
+msgstr "Hernoem geselecteerde item"
 
 #: application/plugin_base/item_list.py:277
 msgid "View selected item"
-msgstr "Переглянути обраний файл"
+msgstr "Bekijk geselecteerd item"
 
 #: application/plugin_base/item_list.py:278
 msgid "Edit selected item"
-msgstr "Змінити виділений об'єкт"
+msgstr "Bewerk geselecteerd item"
 
 #: application/plugin_base/item_list.py:279
 msgid "Copy selected items"
-msgstr "Копіювати виділені об'єкти"
+msgstr "Kopieer geselecteerde items"
 
 #: application/plugin_base/item_list.py:280
 msgid "Move selected items"
-msgstr "Перемістити виділені об'єкти"
+msgstr "Verplaats geselecteerde items"
 
 #: application/plugin_base/item_list.py:281
 msgid "Show context menu"
-msgstr "Показати контекстне меню"
+msgstr "Toon contextmenu"
 
 #: application/plugin_base/item_list.py:282
 msgid "Show \"open with\" menu"
-msgstr "Показати меню \"відкрити з допомогою\""
+msgstr "Toon menu \"openen met\""
 
 #: application/plugin_base/item_list.py:283
 msgid "Assign path from left list"
-msgstr "Призначити шлях з лівої панелі"
+msgstr "Wijs pad toe uit linker lijst"
 
 #: application/plugin_base/item_list.py:284
 msgid "Assign path from right list"
-msgstr "Призначити шлях з правої панелі"
+msgstr "Wijs pad toe uit rechter lijst"
 
 #: application/plugin_base/item_list.py:285
 msgid "Swap right and left paths"
-msgstr "Поміняти місцями панелі"
+msgstr "Rechter en linker paden omwisselen"
 
 #: application/plugin_base/item_list.py:286
 msgid "Move selection marker up"
-msgstr "Перемістити маркер виділення вище"
+msgstr "Aanwijzer omhoog"
 
 #: application/plugin_base/item_list.py:287
 msgid "Move selection marker down"
-msgstr "Перемістити маркер виділення нижче"
+msgstr "Aanwijzer omlaag"
 
 #: application/plugin_base/item_list.py:288
 msgid "Show tab menu"
-msgstr "Показати контекстне меню"
+msgstr "Toon tabmenu"
 
 #: application/plugin_base/item_list.py:290
 msgid "Copy selected path to clipboard"
-msgstr "Скопіювати вибраний шлях у буфер обміну"
+msgstr "Kopieer geselecteerde pad naar het klembord"
 
 #: application/plugin_base/item_list.py:291
 msgid "Copy path to command entry"
-msgstr "Скопіювати шлях у командний рядок"
+msgstr "Kopieer geselecteerde pad naar opdrachtregel"
 
 #: application/plugin_base/item_list.py:292
 msgid "Copy selection to command entry"
-msgstr "Скопіювати виділене у командний рядок"
+msgstr "Kopieer selectie naar opdrachtregel"
 
 #: application/plugin_base/item_list.py:293
 msgid "Ask and navigate to path"
-msgstr "Запитати та перейти за адресою"
+msgstr "Vraag en ga naar pad"
 
 #: application/plugin_base/item_list.py:294
 msgid "Start quick search"
-msgstr "Почати швидкий пошук"
+msgstr "Start snelzoeken"
 
 #: application/plugin_base/item_list.py:295
 msgid "Expand directory"
-msgstr "Розгорнути каталог"
+msgstr "Directory uitklappen"
 
 #: application/plugin_base/item_list.py:296
 msgid "Collapse directory"
-msgstr "Згорнути каталог"
+msgstr "Directory inklappen"
 
 #: application/plugin_base/item_list.py:297
 msgid "Create symbolic or hard link"
-msgstr "Створити символьне або жорстке посилання"
+msgstr "Maak symbolic of hard link"
 
 #: application/plugin_base/item_list.py:298
 msgid "Show emblem menu"
-msgstr "Відобразити меню емблем"
+msgstr "Toon embleemmenu"
 
 #: application/plugin_base/item_list.py:358
 #: application/plugin_base/item_list.py:364
 #, python-brace-format
 msgid "Go to '{0}'"
-msgstr "Перейти до '{0}'"
+msgstr "Ga naar '{0}'"
 
 #: application/plugin_base/item_list.py:710
 msgid ""
 "Directory does not exist anymore or is not valid. If path is not local check"
 " if specified volume is mounted."
-msgstr "Каталог більше не існує, або невірний. Якщо шлях не локальний, перевірте, чи змонтований зазначений том."
+msgstr "Directory bestaat niet of is ongeldig. Controleer of het betreffende volume gemount is."
 
 #: application/plugin_base/item_list.py:748
 #, python-brace-format
 msgid ""
 "Specified protocol ({0}) is not supported by this application. Please check "
 "for available plugins or create a feature request."
-msgstr "Вказаний протокол ({0}) не підтримується даним додатком. Перевірте наявність доступних модулів, або залиште побажання в багтрекері."
+msgstr "Het protocol ({0}) wordt niet ondersteund door deze applicatie. Controleer of er een plugin beschikbaar is of dien een feature request in."
 
 #: application/plugin_base/item_list.py:780
 msgid ""
 "Application is unable to handle specified data. Check if source items still "
 "exist."
-msgstr "Додаток не може опрацювати зазначені дані. Перевірте, чи існують вихідні об'єти."
+msgstr "De applicatie kan de data niet verwerken. Controleer of de bronitems nog bestaan."
 
 #: application/plugin_base/item_list.py:1032
 msgid "Open _with"
-msgstr "Відкрити за допомогою"
+msgstr "Openen met"
 
 #: application/plugin_base/item_list.py:1044
 msgid "Additional options"
-msgstr "Розширені налаштування"
+msgstr "Extra opties"
 
 #: application/plugin_base/item_list.py:1058
 msgid "Create file"
-msgstr "Створити файл"
+msgstr "Nieuw bestand"
 
 #: application/plugin_base/item_list.py:1114
 msgid "Copy to other..."
-msgstr "Копіювати до іншого..."
+msgstr "Kopieer naar andere..."
 
 #: application/plugin_base/item_list.py:1120
 msgid "Move to other..."
-msgstr "Перемістити до іншого..."
+msgstr "Verplaats naar andere..."
 
 #: application/plugin_base/item_list.py:1145
 msgid "Send to..."
-msgstr "Відправити до..."
+msgstr "Send to..."
 
 #: application/plugin_base/item_list.py:1223
 msgid "View complete history..."
-msgstr "Показати повну історію..."
+msgstr "Toon volledige geschiedenis..."
 
 #: application/plugin_base/item_list.py:1229
 msgid "History is empty"
-msgstr "Історія відсутня"
+msgstr "Geschiedenis is leeg"
 
 #: application/plugin_base/item_list.py:1584
 msgid "Path entry"
-msgstr "Шлях"
+msgstr "Pad invoerregel"
 
 #: application/plugin_base/item_list.py:1585
 msgid "Navigate to:"
-msgstr "Перейти в:"
+msgstr "Navigeer naar:"
 
 #: application/indicator.py:31
 msgid "Sh_ow main window"
-msgstr "Показати головне вікно"
+msgstr "To_on hoofdvenster"
 
 #: application/indicator.py:40
 msgid "_Hide main window"
-msgstr "Сховати головне вікно"
+msgstr "Verberg hoofdvenster"
 
 #: application/operation.py:113
 #, python-brace-format
@@ -2751,7 +2735,7 @@ msgid ""
 "Aborted. Not enough free space on target file system.\n"
 "Needed: {0}\n"
 "Available: {1}"
-msgstr "Скасовано. Бракує вільного місця на цільовій файловій системі.\nНеобхідно: {0}\nДоступно: {1}"
+msgstr "Afgebroken. Niet genoeg vrije ruimte op doel bestandsysteem.\nBenodigd: {0}\nBeschikbaar: {1}"
 
 #: application/operation.py:128
 #, python-brace-format
@@ -2762,222 +2746,218 @@ msgid ""
 "Available: {1}\n"
 "\n"
 "Do you wish to continue?"
-msgstr "Цільова файлова система не має вдосталь вільного простору для цієї операції.\n\nНеобхідно: {0}\nДоступно: {1}\n\nПродовжити?"
+msgstr "Doel bestandsysteem heeft onvoldoende vrije ruimte voor deze actie.\n\nBenodigd: {0}\nBeschikbaar: {1}\n\nWilt u doorgaan?"
 
 #: application/operation.py:242
 msgid ""
 "There is a problem writing data to destination file. What would you like to "
 "do?"
-msgstr "Проблема при копіюванні даних у файл призначення. Яке Ви приймете рішення?"
+msgstr "Probleem bij het schrijven van data naar het doelbestand. Wat wilt u doen?"
 
 #: application/operation.py:276
 msgid ""
 "An error occurred while trying to create specified file. What would you like"
 " to do?"
-msgstr "При спробі створити вказаний файл сталася помилка. Яке Ви приймете рішення?"
+msgstr "Er trad een fout op bij het aanmaken van het opgegeven bestand. Wat wilt u doen?"
 
 #: application/operation.py:283
 msgid ""
 "An error occurred while trying to create specified directory. What would you"
 " like to do?"
-msgstr "При спробі створити вказаний каталог сталася помилка. Яке Ви приймете рішення?"
+msgstr "Er trad een fout op bij het aanmaken van de opgegeven directory. Wat wilt u doen?"
 
 #: application/operation.py:316
 msgid ""
 "Problem with setting path parameter for specified path. What would you like "
 "to do?"
-msgstr "Проблема при вказуванні параметрів для вказаного шляху. Яке Ви приймете рішення?"
+msgstr "Probleem met het instellen van parameter voor het opgegeven pad. Wat wilt u doen? "
 
 #: application/operation.py:349
 msgid ""
 "There was a problem removing specified path. What would you like to do?"
-msgstr "При спробі вилучити зазначений шлях сталася помилка. Яке Ви приймете рішення?"
+msgstr "Probleem bij het verwijderen van het opgegeven pad. Wat wilt u doen?"
 
 #: application/operation.py:381
 msgid ""
 "There was a problem trashing specified path. Would you like to try removing "
 "it instead?"
-msgstr "При спробі вилучити зазначений шлях сталася помилка. Повторити?"
+msgstr "Probleem bij het verplaatsen van het opgegeven pad naar de prullenbak. Wilt u het definitief verwijderen?"
 
 #: application/operation.py:413
 msgid "There was a problem moving specified path. What would you like to do?"
-msgstr "При спробі перемістити зазначений шлях сталася помилка. Яке Ви приймете рішення?"
+msgstr "Probleem bij het verplaatsen van het opgegeven pad. Wat wilt u doen?"
 
 #: application/operation.py:445
 msgid ""
 "There was a problem renaming specified path. What would you like to do?"
-msgstr "При спробі перейменувати зазначений шлях сталася помилка. Яке Ви приймете рішення?"
+msgstr "Probleem met het hernoemen van het opgegeven pad. Wat wilt u doen?"
 
 #: application/operation.py:477
 msgid ""
 "There was a problem with reading specified directory. What would you like to"
 " do?"
-msgstr "При спробі прочитати зазначений каталог сталася помилка. Яке Ви приймете рішення?"
+msgstr "Probleem bij het lezen van de opgegeven directory. Wat wilt u doen?"
 
 #: application/operation.py:579
 msgid "Searching for files..."
-msgstr "Пошук у файлах..."
+msgstr "Bestanden zoeken..."
 
 #: application/operation.py:800
 msgid ""
 "Unable to create directory because file with the same name already exists in"
 " target directory."
-msgstr "Неможливо створити каталог, оскільки файл з вказаним ім’ям вже існує у цільовому каталозі."
+msgstr "Kan directory niet maken omdat de opgegeven naam al bestaat in de doeldirectory."
 
 #: application/operation.py:990
 msgid "Creating directories..."
-msgstr "Створення каталогів..."
+msgstr "Directory's aanmaken..."
 
 #: application/operation.py:1007
 msgid "Copying files..."
-msgstr "Копіювання файлів..."
+msgstr "Bestanden kopiëren..."
 
 #: application/operation.py:1062 application/operation.py:1079
 msgid "Copy Operation"
-msgstr "Операція копіювання"
+msgstr "Kopieeractie"
 
 #: application/operation.py:1064
 #, python-brace-format
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
-msgstr[0] "Копіювання {0} об'єкта з \"{1}\"в \"{2}\" завершено!"
-msgstr[1] "Копіювання {0} об'єктів з \"{1}\"в \"{2}\" завершено!"
-msgstr[2] "Копіювання {0} об'єктів з \"{1}\"в \"{2}\" завершено!"
+msgstr[0] "Kopiëren van {0} item van \"{1}\" naar \"{2}\" gereed!"
+msgstr[1] "Kopiëren van {0} items van \"{1}\" naar \"{2}\" gereed!"
 
 #: application/operation.py:1190
 msgid "Moving files..."
-msgstr "Переміщення файлів..."
+msgstr "Bestanden verplaatsen..."
 
 #: application/operation.py:1204
 msgid "Deleting source files..."
-msgstr "Вилучення джерельних файлів..."
+msgstr "Bronbestanden verwijderen..."
 
 #: application/operation.py:1226
 msgid "Deleting source directories..."
-msgstr "Вилучення джерельних каталогів..."
+msgstr "Brondirectory's verwijderen..."
 
 #: application/operation.py:1323 application/operation.py:1340
 msgid "Move Operation"
-msgstr "Операція переміщення"
+msgstr "Verplaatsactie"
 
 #: application/operation.py:1325
 #, python-brace-format
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
-msgstr[0] "Переміщення {0} об'єкта з \"{1}\" до \"{2}\" завершено!"
-msgstr[1] "Переміщення {0} об'єктів з \"{1}\" до \"{2}\" завершено!"
-msgstr[2] "Переміщення {0} об'єктів з \"{1}\" до \"{2}\" завершено!"
+msgstr[0] "Verplaatsen van {0} item van \"{1}\" naar \"{2}\" gereed!"
+msgstr[1] "Verplaatsen van {0} items van \"{1}\" naar \"{2}\" gereed!"
 
 #: application/operation.py:1466
 msgid "Delete Operation"
-msgstr "Операція вилучення"
+msgstr "Verwijderactie"
 
 #: application/operation.py:1468
 #, python-brace-format
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
-msgstr[0] "Вилучення {0} об'єкту з \"{1}\" завершено!"
-msgstr[1] "Вилучення {0} об'єктів з \"{1}\" завершено!"
-msgstr[2] "Вилучення {0} об'єктів з \"{1}\" завершено!"
+msgstr[0] "Verwijderen van {0} item van \"{1}\" gereed!"
+msgstr[1] "Verwijderen van {0} items van \"{1}\" gereed!"
 
 #: application/operation.py:1579
 msgid "Rename Operation"
-msgstr "Операція перейменування"
+msgstr "Hernoemactie"
 
 #: application/operation.py:1581
 #, python-brace-format
 msgid "Rename of {0} item from \"{1}\" is completed!"
 msgid_plural "Rename of {0} items from \"{1}\" is completed!"
-msgstr[0] "Перейменування {0} об'єкта з \"{1}\" завершено!"
-msgstr[1] "Перейменування {0} об'єктів з \"{1}\" завершено!"
-msgstr[2] "Перейменування {0} об'єктів з \"{1}\" завершено!"
+msgstr[0] "Hernoemen van {0} item van \"{1}\" gereed!"
+msgstr[1] "Hernoemen van {0} items van \"{1}\" gereed!"
 
 #: application/tools/viewer.py:35
 #, python-brace-format
 msgid "{0} - Viewer"
-msgstr "{0} - Засіб перегляду"
+msgstr "{0} - Viewer"
 
 #: application/tools/viewer.py:78
 msgid "Executable"
-msgstr "Запуск"
+msgstr "Programma"
 
 #: application/tools/viewer.py:119
 msgid "Image"
-msgstr "Зображення"
+msgstr "Afbeelding"
 
 #: application/tools/viewer.py:138
 msgid "Viewer is unable to display this file type."
-msgstr "Засіб перегляду не може відобразити цей тип файлів."
+msgstr "Viewer kan dit bestandstype niet weergeven."
 
 #: application/tools/find_files.py:45 application/tools/find_files.py:319
 msgid "Find files"
-msgstr "Знайти файли"
+msgstr "Zoek bestanden"
 
 #: application/tools/find_files.py:63
 msgid "Search in:"
-msgstr "Шукати в:"
+msgstr "Zoeken in:"
 
 #: application/tools/find_files.py:80
 msgid "Search recursively"
-msgstr "Шукати рекурсивно"
+msgstr "Recursief zoeken"
 
 #: application/tools/find_files.py:132 application/tools/find_files.py:244
 msgid "Start"
-msgstr "Почати"
+msgstr "Start"
 
 #: application/tools/find_files.py:194
 msgid ""
 "Active object doesn't support changing path. Set focus on a different "
 "object, preferably file list, and try again."
-msgstr "Активний об'єкт не підтримує зміну шляху. Перемістіть фокус на інший об'єкт, бажано, перелік файлів, і спробуйте знову."
+msgstr "Het actieve object ondersteunt het wijzigen van het pad niet. Kies een ander object, bij voorkeur de bestandslijst, en probeer het opnieuw."
 
 #: application/tools/find_files.py:232
 msgid "Stop"
-msgstr "Зупинити"
+msgstr "Stop"
 
 #: application/tools/find_files.py:365
 msgid ""
 "Specified path is not valid or doesn't exist anymore. Please check your "
 "selection and try again."
-msgstr "Вказаний шлях недійсний, або більше не існує. Будь ласка, перевірте Ваш вибір і спробуйте знову."
+msgstr "Opgegeven pad bestaat niet of is ongeldig. Controleer uw selectie en probeer het opnieuw."
 
 #: application/tools/find_files.py:388
 msgid ""
 "You need to enable at least one extension in order to find files and "
 "directories!"
-msgstr "Необхідно активувати хоча б один модуль для пошуку файлів і каталогів!"
+msgstr "U moet minimaal één programma-uitbreiding activeren om bestanden en directory's te kunnen vinden!"
 
 #: application/tools/version_check.py:23
 msgid "Version check"
-msgstr "Перевірка версії"
+msgstr "Versiecontrole"
 
 #: application/tools/version_check.py:42
 msgid "Current:"
-msgstr "Поточна:"
+msgstr "Huidig:"
 
 #: application/tools/version_check.py:45
 msgid "Latest:"
-msgstr "Остання:"
+msgstr "Laatste:"
 
 #: application/tools/version_check.py:107
 msgid "Checking..."
-msgstr "Перевірка..."
+msgstr "Controleren..."
 
 #: application/tools/advanced_rename.py:27
 msgid "Advanced rename"
-msgstr "Розширене перейменування"
+msgstr "Geavanceerd hernoemen"
 
 #: application/tools/advanced_rename.py:52
 msgid "Old name"
-msgstr "Старе ім'я"
+msgstr "Oude naam"
 
 #: application/tools/advanced_rename.py:55
 msgid "New name"
-msgstr "Нове ім'я"
+msgstr "Nieuwe naam"
 
 #: application/tools/advanced_rename.py:78
 msgid "Items located in:"
-msgstr "Об'єкти, розташовані в:"
+msgstr "Items aanwezig in:"
 
 #: application/tools/advanced_rename.py:201
 #, python-brace-format
@@ -2987,6 +2967,5 @@ msgid ""
 msgid_plural ""
 "You are about to rename {0} items.\n"
 "Are you sure about this?"
-msgstr[0] "Ви збираєтеся перейменувати {0} об'єкт.\nВи впевнені?"
-msgstr[1] "Ви збираєтеся перейменувати {0} об'єкта.\nВи впевнені?"
-msgstr[2] "Ви збираєтеся перейменувати {0} об'єктів.\nВи впевнені?"
+msgstr[0] "U staat op het punt om {0} item te hernoemen.\nWeet u het zeker?"
+msgstr[1] "U staat op het punt om {0} items te hernoemen.\nWeet u het zeker?"

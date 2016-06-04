@@ -4,15 +4,15 @@
 # 
 # Translators:
 # Mladen Mijatov <meaneye.rcf@gmail.com>, 2015
-# Petr Šimáček <petr.simacek@gmail.com>, 2014
+# Petr Šimáček <petr.simacek@gmail.com>, 2014,2016
 # Radek <radek@fastlinux.eu>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-06 23:05+0100\n"
-"PO-Revision-Date: 2016-01-07 20:04+0000\n"
-"Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
+"PO-Revision-Date: 2016-03-01 19:50+0000\n"
+"Last-Translator: Petr Šimáček <petr.simacek@gmail.com>\n"
 "Language-Team: Czech (http://www.transifex.com/way2cu/sunflower/language/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -238,7 +238,7 @@ msgstr "<b>Upozornění:</b> Můžete upravovat pouze akcelerátory z objektů v
 
 #: application/gui/preferences/accelerators.py:92
 msgid "Double click on accelerator to assign new one."
-msgstr ""
+msgstr "Dvojklik na urychlovač přiřadí nový."
 
 #: application/gui/preferences/accelerators.py:198
 #, python-brace-format
@@ -266,7 +266,7 @@ msgstr "Zobrazit"
 
 #: application/gui/preferences/view_and_edit.py:23
 msgid "Wrap long lines"
-msgstr ""
+msgstr "Sbalit dlouhé řádky"
 
 #: application/gui/preferences/view_and_edit.py:27
 #: application/gui/main_window.py:678
@@ -437,7 +437,7 @@ msgstr "Zobrazovat příkazový řádek"
 
 #: application/gui/preferences/display.py:37
 msgid "Horizontal split"
-msgstr ""
+msgstr "Horizontální rozdělení"
 
 #: application/gui/preferences/display.py:47
 #: application/plugins/sessions/plugin.py:57
@@ -546,7 +546,7 @@ msgstr "Vzhled a chování"
 
 #: application/gui/preferences/item_list.py:43
 msgid "Hidden files"
-msgstr ""
+msgstr "Skryté soubory"
 
 #: application/gui/preferences/item_list.py:45
 msgid "Directories"
@@ -594,7 +594,7 @@ msgstr "Skrýt horizontální posuvník"
 
 #: application/gui/preferences/item_list.py:72
 msgid "Support second level extension"
-msgstr ""
+msgstr "Podpora rozšíření druhé úrovně"
 
 #: application/gui/preferences/item_list.py:87
 msgid "Breadcrumbs:"
@@ -670,7 +670,7 @@ msgstr "Zobrazovat skryté soubory"
 
 #: application/gui/preferences/item_list.py:200
 msgid "Always visible files and directories:"
-msgstr ""
+msgstr "Vždy viditelné soubory a adresáře:"
 
 #: application/gui/preferences/item_list.py:225
 msgid "Load specified tabs instead of saved"
@@ -720,11 +720,11 @@ msgstr "Font"
 
 #: application/gui/preferences/item_list.py:472
 msgid "Add always visible item"
-msgstr ""
+msgstr "Přidat vždy viditelné položky"
 
 #: application/gui/preferences/item_list.py:473
 msgid "Full name of file or directory to always show:"
-msgstr ""
+msgstr "Vždy zobrazovat úplný název souboru nebo adresáře:"
 
 #: application/gui/preferences/item_list.py:499
 msgid "Add custom directory"
@@ -747,19 +747,19 @@ msgstr "Sunflower"
 
 #: application/gui/main_window.py:174
 msgid "_File"
-msgstr ""
+msgstr "_Soubor"
 
 #: application/gui/main_window.py:178
 msgid "New _tab"
-msgstr ""
+msgstr "Nová _karta"
 
 #: application/gui/main_window.py:190
 msgid "Create _file"
-msgstr ""
+msgstr "Vytvořit _soubor"
 
 #: application/gui/main_window.py:199
 msgid "Create _directory"
-msgstr ""
+msgstr "Vytvořit _adresář"
 
 #: application/gui/main_window.py:211
 #: application/plugin_base/item_list.py:1009
@@ -782,7 +782,7 @@ msgstr "U_končit"
 
 #: application/gui/main_window.py:248
 msgid "_Edit"
-msgstr ""
+msgstr "_Upravit"
 
 #: application/gui/main_window.py:251
 #: application/plugin_base/item_list.py:1082
@@ -806,7 +806,7 @@ msgstr "_Smazat"
 
 #: application/gui/main_window.py:285
 msgid "_Send to..."
-msgstr ""
+msgstr "_Poslat"
 
 #: application/gui/main_window.py:294
 #: application/plugin_base/item_list.py:1156
@@ -832,7 +832,7 @@ msgstr "_Nastavení"
 
 #: application/gui/main_window.py:331
 msgid "_Mark"
-msgstr ""
+msgstr "_Označit"
 
 #: application/gui/main_window.py:334
 msgid "_Select all"
@@ -868,35 +868,35 @@ msgstr "Porovnat a_dresáře"
 
 #: application/gui/main_window.py:386
 msgid "_Tools"
-msgstr ""
+msgstr "_Nástroje"
 
 #: application/gui/main_window.py:390
 msgid "_Find files"
-msgstr ""
+msgstr "_Hledat soubory"
 
 #: application/gui/main_window.py:398
 msgid "Find _duplicate files"
-msgstr ""
+msgstr "Hledat _duplicitní soubory"
 
 #: application/gui/main_window.py:403
 msgid "_Synchronize directories"
-msgstr ""
+msgstr "Synchronizovat adresáře"
 
 #: application/gui/main_window.py:409
 msgid "Advanced _rename"
-msgstr ""
+msgstr "Pokročilé _přejmenování"
 
 #: application/gui/main_window.py:416
 msgid "_Mount manager"
-msgstr ""
+msgstr "_Správce připojení"
 
 #: application/gui/main_window.py:422
 msgid "_Keyring manager"
-msgstr ""
+msgstr "_Klíčenka"
 
 #: application/gui/main_window.py:430
 msgid "_View"
-msgstr ""
+msgstr "_Pohled"
 
 #: application/gui/main_window.py:433
 msgid "Ful_lscreen"
@@ -928,15 +928,15 @@ msgstr "Zobrazovat příkazový řádek"
 
 #: application/gui/main_window.py:494
 msgid "_Horizontal split"
-msgstr ""
+msgstr "_Vodorovné rozdělení"
 
 #: application/gui/main_window.py:504
 msgid "_Commands"
-msgstr ""
+msgstr "_Příkazy"
 
 #: application/gui/main_window.py:508
 msgid "_Operations"
-msgstr ""
+msgstr "_Operace"
 
 #: application/gui/main_window.py:512
 msgid "There are no active operations"
@@ -944,7 +944,7 @@ msgstr "Žádné aktivní operace"
 
 #: application/gui/main_window.py:518
 msgid "_Help"
-msgstr ""
+msgstr "_Pomoc"
 
 #: application/gui/main_window.py:521
 msgid "_Home page"
@@ -1407,7 +1407,7 @@ msgstr "Zadat nový název adresáře:"
 
 #: application/gui/input_dialog.py:582 application/gui/input_dialog.py:661
 msgid "Operation queue:"
-msgstr ""
+msgstr "Fronta operací:"
 
 #: application/gui/input_dialog.py:654
 msgid "Only files of this type:"
@@ -1579,7 +1579,7 @@ msgstr "Funkční chyba"
 
 #: application/gui/input_dialog.py:1447
 msgid "Skip all"
-msgstr ""
+msgstr "Přeskočit vše"
 
 #: application/gui/input_dialog.py:1448
 msgid "Retry"
@@ -1801,7 +1801,7 @@ msgstr "Doupanelový správce souborů pro Linux."
 
 #: application/gui/about_window.py:109
 msgid "Copyright © 2010-2015 by Mladen Mijatov and contributors."
-msgstr ""
+msgstr "Copyright © 2010-2015 Mladen Mijatov a přispěvatelé."
 
 #: application/gui/about_window.py:137
 msgid "translator-credits"
@@ -1853,19 +1853,19 @@ msgstr "Výchozí"
 
 #: application/queue.py:49
 msgid "New queue"
-msgstr ""
+msgstr "Nová fronta"
 
 #: application/queue.py:142
 msgid "New operation queue"
-msgstr ""
+msgstr "Nová fronta operací"
 
 #: application/queue.py:143
 msgid "Enter name for new operation queue:"
-msgstr ""
+msgstr "Zadat název nové fronty operací: "
 
 #: application/queue.py:159
 msgid "Operation queue with specified name already exists."
-msgstr ""
+msgstr "Fronta operací s daným názvem již existuje."
 
 #: application/mounts.py:126
 msgid "Specified item can not be unmounted."
@@ -1970,7 +1970,7 @@ msgstr "Seznam lokálních souborů"
 
 #: application/plugins/file_list/plugin.py:12
 msgid "Trash can"
-msgstr ""
+msgstr "Koš"
 
 #: application/plugins/file_list/file_list.py:124
 msgid "Ext"
@@ -2083,11 +2083,11 @@ msgstr "Chyba při změně pracovního adresáře na: \n{1}\n\n{0}\n\nChcete akc
 
 #: application/plugins/file_list/trash_list.py:39
 msgid "Empty trash"
-msgstr ""
+msgstr "Vyprázdnit koš"
 
 #: application/plugins/file_list/trash_list.py:53
 msgid "All items in the Trash will be permanently deleted. Are you sure?"
-msgstr ""
+msgstr "Všechny položky v koši budou trvale odstraněny. Opravdu je chcete vyhodit?"
 
 #: application/plugins/file_list/gio_extension.py:68
 msgid "Mount operation"
@@ -2182,7 +2182,7 @@ msgstr "Sezení"
 
 #: application/plugins/sessions/plugin.py:55
 msgid "Locked"
-msgstr ""
+msgstr "Zamčeno"
 
 #: application/plugins/sessions/plugin.py:76
 msgid "Move up"
@@ -2206,7 +2206,7 @@ msgstr "Správa sezení"
 
 #: application/plugins/sessions/plugin.py:281
 msgid "Save session"
-msgstr ""
+msgstr "Uložit sezení"
 
 #: application/plugins/rename_extensions/letter_case.py:15
 #: application/plugins/rename_extensions/letter_case.py:23
@@ -2373,7 +2373,7 @@ msgstr "Systémový terminál"
 
 #: application/plugins/system_terminal/plugin.py:21
 msgid "Open current directory"
-msgstr ""
+msgstr "Otevřít současný adresář"
 
 #: application/plugins/gvim_viewer/plugin.py:50
 msgid "GVim"
@@ -2420,7 +2420,7 @@ msgstr "Zaměřit objekt vpravo "
 
 #: application/plugin_base/terminal.py:94
 msgid "Open file list"
-msgstr ""
+msgstr "Otevřít seznam souborů"
 
 #: application/plugin_base/terminal.py:135
 msgid ""
@@ -2518,7 +2518,7 @@ msgstr "Otevřít vybraný adresář v nové záložce"
 
 #: application/plugin_base/item_list.py:258
 msgid "Calculate disk usage for directory"
-msgstr ""
+msgstr "Vypočítat využití disku pro adresář"
 
 #: application/plugin_base/item_list.py:261
 msgid "Go to root directory"

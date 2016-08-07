@@ -1,7 +1,9 @@
 import os
 import user
+import gettext
 import subprocess
 import locale
+import sys
 
 
 # user directories
@@ -96,6 +98,14 @@ def get_config_directory():
 
 	return result
 
+def get_config_path():
+	"""Get path to configuration files"""
+	config_directory = get_config_directory()
+	if os.path.isdir(config_directory):
+		return os.path.join(config_directory, 'sunflower')
+	else:
+		return os.path.join(user.home, '.sunflower')
+
 def get_data_directory():
 	"""Get full path to user data files."""
 	if 'XDG_DATA_HOME' in os.environ:
@@ -153,3 +163,29 @@ def executable_exists(command):
 	found_commands = filter(lambda path: os.path.exists(os.path.join(path, command)), search_paths)
 
 	return len(found_commands) > 0
+
+
+def load_translation():
+	"""Load translation and install global functions"""
+	# get directory for translations
+	base_path = os.path.dirname(os.path.dirname(sys.argv[0]))
+	directory = os.path.join(base_path, 'translations')
+
+	# function params
+	params = {
+			'domain': 'sunflower',
+			'fallback': True
+		}
+
+	# install translations from local directory if needed
+	if os.path.isdir(directory):
+		params.update({'localedir': directory})
+
+	# get translation
+	translation = gettext.translation(**params)
+
+	# install global functions for translating
+	__builtins__.update({
+			'_': translation.gettext,
+			'ngettext': translation.ngettext
+		})

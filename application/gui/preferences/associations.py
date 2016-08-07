@@ -133,9 +133,10 @@ class AssociationsOptions(SettingsPage):
 			dialog.run()
 			dialog.destroy()
 
-	def __get_menu_position(self, menu, button):
+	def __get_menu_position(self, menu, *args):
 		"""Get history menu position"""
 		# get coordinates
+		button = args[-1]
 		window_x, window_y = self._parent.get_window().get_position()
 		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
 		button_h = button.get_allocation().height

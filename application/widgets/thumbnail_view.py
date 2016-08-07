@@ -4,6 +4,7 @@ from gi.repository import Gtk, GObject, GdkPixbuf
 
 try:
 	# try to import module
+	gi.require_versoin('GnomeDesktop', '3.0')
 	from gi.repository import GnomeDesktop
 	USE_FACTORY = True
 

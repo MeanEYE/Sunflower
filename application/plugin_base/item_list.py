@@ -16,13 +16,6 @@ from history import HistoryManager
 from plugin_base.provider import Mode as FileMode
 
 
-class ButtonText:
-	BOOKMARKS = u'\u2318'
-	HISTORY = u'\u2630'
-	TERMINAL = u'\u2605'
-	TRASH = u'\u239a'
-
-
 class ItemList(PluginBase):
 	"""General item list
 
@@ -125,7 +118,7 @@ class ItemList(PluginBase):
 		self._open_with_menu = None
 		self._popup_menu = self._create_popup_menu()
 
-		# tab menu 
+		# tab menu
 		self._tab_menu = Gtk.Menu()
 		self._title_bar.set_menu(self._tab_menu)
 
@@ -181,14 +174,7 @@ class ItemList(PluginBase):
 		options = self._parent.options
 
 		# bookmarks button
-		self._bookmarks_button = Gtk.Button.new()
-
-		if options.get('tab_button_icons'):
-			image_bookmarks = Gtk.Image.new_from_icon_name('go-jump', Gtk.IconSize.MENU)
-			self._bookmarks_button.set_image(image_bookmarks)
-
-		else:
-			self._bookmarks_button.set_label(ButtonText.BOOKMARKS)
+		self._bookmarks_button = Gtk.Button.new_from_icon_name('go-jump', Gtk.IconSize.MENU)
 
 		self._bookmarks_button.set_focus_on_click(False)
 		self._bookmarks_button.set_tooltip_text(_('Bookmarks'))
@@ -197,16 +183,7 @@ class ItemList(PluginBase):
 		self._title_bar.add_control(self._bookmarks_button)
 
 		# history button
-		self._history_button = Gtk.Button.new()
-
-		if options.get('tab_button_icons'):
-			# set icon
-			image_history = Gtk.Image.new_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
-			self._history_button.set_image(image_history)
-
-		else:
-			# set text
-			self._history_button.set_label(ButtonText.HISTORY)
+		self._history_button = Gtk.Button.new_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
 
 		self._history_button.set_focus_on_click(False)
 		self._history_button.set_tooltip_text(_('History'))
@@ -215,16 +192,7 @@ class ItemList(PluginBase):
 		self._title_bar.add_control(self._history_button)
 
 		# terminal button
-		self._terminal_button = Gtk.Button.new()
-
-		if options.get('tab_button_icons'):
-			# set icon
-			image_terminal = Gtk.Image.new_from_icon_name('terminal', Gtk.IconSize.MENU)
-			self._terminal_button.set_image(image_terminal)
-		else:
-			# set text
-			self._terminal_button.set_label(ButtonText.TERMINAL)
-
+		self._terminal_button = Gtk.Button.new_from_icon_name('terminal', Gtk.IconSize.MENU)
 		self._terminal_button.set_focus_on_click(False)
 		self._terminal_button.set_tooltip_text(_('Terminal'))
 		self._terminal_button.connect('clicked', self._create_terminal)
@@ -962,13 +930,14 @@ class ItemList(PluginBase):
 		"""
 		pass
 
-	def _get_popup_menu_position(self, menu, data=None):
+	def _get_popup_menu_position(self, menu, *args):
 		"""Abstract method for positioning menu properly on given row"""
 		return 0, 0, True
 
-	def _get_history_menu_position(self, menu, button):
+	def _get_history_menu_position(self, menu, *args):
 		"""Get history menu position"""
 		# get coordinates
+		button = args[-1]
 		window_x, window_y = self._parent.get_position()
 		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
 		button_h = button.get_allocation().height

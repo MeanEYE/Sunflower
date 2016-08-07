@@ -20,8 +20,6 @@ class SystemTerminal(Terminal):
 	def __init__(self, parent, notebook, options):
 		Terminal.__init__(self, parent, notebook, options)
 
-		self._file_list_button.set_tooltip_text(_('Open current directory'))
-
 		# variable to store process id
 		self._pid = None
 
@@ -29,8 +27,6 @@ class SystemTerminal(Terminal):
 		self.path = self._options.get('path', user.home)
 		self._close_on_child_exit = self._options.get('close_with_child', True)
 		self._terminal_type = self._parent.options.section('terminal').get('type')
-
-		shell_command = self._options.get('shell_command', os.environ['SHELL'])
 
 		if self._terminal_type == TerminalType.VTE:
 			# we need TERM environment variable set
@@ -40,7 +36,6 @@ class SystemTerminal(Terminal):
 
 			# fork default shell
 			self._terminal.connect('child-exited', self.__child_exited)
-			self._terminal.connect('status-line-changed', self._update_terminal_status)
 			self._terminal.connect('realize', self.__terminal_realized)
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
@@ -50,6 +45,8 @@ class SystemTerminal(Terminal):
 
 			# disable controls
 			self._menu_button.set_sensitive(False)
+
+		shell_command = self._options.get('shell_command', os.environ['SHELL'])
 
 		# change titles
 		self._change_tab_text(_('Terminal'))

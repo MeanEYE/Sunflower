@@ -28,6 +28,7 @@ desktop-file-edit --add-category="X-MandrivaLinux-System-FileTools" "$RPM_BUILD_
 %defattr(0644,root,root,0755)
 /usr/share/sunflower/*
 %attr(0755,root,root) /usr/bin/sunflower
+%attr(0755,root,root) /usr/share/sunflower/Sunflower.py
 %attr(0644,root,root) /usr/share/pixmaps/sunflower.png
 %attr(0644,root,root) /usr/share/pixmaps/sunflower.svg
 %attr(0644,root,root) /usr/share/applications/sunflower.desktop

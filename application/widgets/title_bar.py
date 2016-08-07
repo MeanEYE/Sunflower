@@ -16,16 +16,12 @@ class TitleBar:
 		self._application = application
 		self._parent = parent
 
-		self._radius = 3
 		self._control_count = 0
 		self._state = Gtk.StateType.NORMAL
 		self._mode = Mode.NORMAL
 		self._menu = None
-		self._style = None
-		self._toolbar_style = None
 		self._box_spacing = 1
-		self._box_border_width = 2
-		self._super_user_colors = None
+		self._box_border_width = 3
 		self._breadcrumbs = None
 
 		# get options
@@ -45,13 +41,13 @@ class TitleBar:
 		# create container box
 		self._hbox = Gtk.HBox(homogeneous=False, spacing=self._box_spacing)
 		self._hbox.get_style_context().add_class('sunflower-title-bar')
-		self._hbox.set_border_width(1)
 
 		self._hbox_menu = Gtk.HBox(homogeneous=True, spacing=0)
 		self._hbox_menu.set_border_width(self._box_border_width)
 
-		self._hbox_controls = Gtk.HBox(homogeneous=True, spacing=1)
+		self._hbox_controls = Gtk.HBox(homogeneous=True, spacing=0)
 		self._hbox_controls.set_border_width(self._box_border_width)
+		self._hbox_controls.get_style_context().add_class('linked')
 
 		# create container
 		self._container = Gtk.EventBox()
@@ -59,7 +55,6 @@ class TitleBar:
 		self._container.add_events(Gdk.EventMask.BUTTON_RELEASE_MASK)
 
 		# connect signals
-		self._container.connect('realize', self.__realize_event)
 		self._container.connect('button-release-event', self.__button_release_event)
 
 		# top folder icon as default
@@ -67,8 +62,6 @@ class TitleBar:
 
 		self._button_menu = Gtk.Button.new()
 		self._button_menu.add(self._icon)
-		if not self._button_relief:
-			self._button_menu.set_relief(Gtk.ReliefStyle.NONE)
 		self._button_menu.set_focus_on_click(False)
 		self._button_menu.set_tooltip_text(_('Context menu'))
 		self._button_menu.connect('clicked', self.show_menu)
@@ -77,7 +70,7 @@ class TitleBar:
 		self._hbox_menu.pack_start(self._button_menu, True, True, 0)
 
 		# create title box
-		vbox = Gtk.VBox(homogeneous=False, spacing=1)
+		vbox = Gtk.VBox(homogeneous=False, spacing=0)
 		if self._show_breadcrumbs:
 			self._breadcrumbs = Breadcrumbs(self)
 			vbox.pack_start(self._breadcrumbs, True, True, 0)
@@ -97,7 +90,6 @@ class TitleBar:
 
 		# create spinner control if it exists
 		self._spinner = Gtk.Spinner()
-		self._spinner.set_size_request(20, 20)
 		self._spinner.set_property('no-show-all', True)
 
 		# pack interface
@@ -111,60 +103,6 @@ class TitleBar:
 		self._container.add(self._hbox)
 		self._spinner_counter = 0
 
-	def __get_colors(self, normal_style=False):
-		"""Get copy of the style for current state"""
-		if self._style is None:
-			return
-
-		if self._state is Gtk.StateType.NORMAL or normal_style:
-			# normal state
-			background = self._style.get_background_color(Gtk.StateFlags.NORMAL)
-			foreground = self._style.get_color(Gtk.StateFlags.NORMAL)
-
-		else:
-			if self._mode is Mode.NORMAL \
-			or self._mode is Mode.SUPER_USER and not self._superuser_notification:
-
-				# selected state
-				if self._ubuntu_coloring:
-					# ubuntu coloring method
-					background = self._toolbar_style.get_background_color(Gtk.StateFlags.NORMAL)
-					foreground = self._toolbar_style.get_color(Gtk.StateFlags.NORMAL)
-
-				else:
-					# normal coloring method
-					background = self._style.get_background_color(Gtk.StateFlags.SELECTED)
-					foreground = self._style.get_color(Gtk.StateFlags.SELECTED)
-
-			else:
-				# for super user mode we use our custom colors
-				background, foreground = self._super_user_colors
-
-		return background, foreground
-
-	def __get_controls_width(self):
-		"""Get widget of all controls together"""
-		result = 0
-		spacing = self._box_spacing
-
-		# account for control spacing
-		result += spacing * (self._control_count - 1)
-
-		# get list of controls
-		controls = self._hbox.get_children()
-		total_count = len(controls)
-
-		# get width of each control
-		for index in range(total_count - self._control_count, total_count):
-			result += controls[index].get_allocation().width
-
-		return result
-
-	def __get_menu_width(self):
-		"""Get width of menu button"""
-		result  = self._button_menu.get_allocation().width
-		return result
-
 	def __button_release_event(self, widget, event, data=None):
 		"""Handle button release event"""
 		if event.button == 1:
@@ -177,49 +115,9 @@ class TitleBar:
 
 		return True
 
-	def __realize_event(self, widget, event=None):
-		"""Handle control realize event"""
-		self._style = self._application.left_notebook.get_style_context()
-		self._toolbar_style = self._application.menu_bar.get_style_context()
-
-		# apply colors on realize
-		self.__apply_color()
-
-	def __apply_color(self):
-		"""Apply text color for title and subtitle"""
-		colors = self.__get_colors()
-
-		# apply text color to labels
-		if self._show_breadcrumbs:
-			self._breadcrumbs.apply_color(colors)
-
-		else:
-			self._title_label.override_color(Gtk.StateFlags.NORMAL, colors[1])
-
-		self._subtitle_label.override_color(Gtk.StateFlags.NORMAL, colors[1])
-
-		# apply color to controls
-		self._button_menu.override_color(Gtk.StateFlags.NORMAL, colors[1])
-		self._button_menu.override_background_color(Gtk.StateFlags.NORMAL, colors[0])
-		self._button_menu.override_color(Gtk.StateFlags.PRELIGHT, colors[1])
-		self._button_menu.override_background_color(Gtk.StateFlags.PRELIGHT, colors[0])
-		self._button_menu.override_color(Gtk.StateFlags.ACTIVE, colors[1])
-		self._button_menu.override_background_color(Gtk.StateFlags.ACTIVE, colors[0])
-
-		for control in self._hbox.get_children():
-			control.override_color(Gtk.StateFlags.NORMAL, colors[1])
-			control.override_background_color(Gtk.StateFlags.NORMAL, colors[0])
-			control.override_color(Gtk.StateFlags.PRELIGHT, colors[1])
-			control.override_background_color(Gtk.StateFlags.PRELIGHT, colors[0])
-			control.override_color(Gtk.StateFlags.ACTIVE, colors[1])
-			control.override_background_color(Gtk.StateFlags.ACTIVE, colors[0])
-
-		# apply spinner color
-		if self._spinner is not None:
-			self._spinner.override_color(Gtk.StateFlags.NORMAL, colors[1])
-
-	def __get_menu_position(self, menu, button):
+	def __get_menu_position(self, menu, *args):
 		"""Get bookmarks position"""
+		button = args[-1]
 		window_x, window_y = self._application.get_position()
 		button_x, button_y = button.translate_coordinates(self._application, 0, 0)
 		button_h = button.get_allocation().height
@@ -234,9 +132,6 @@ class TitleBar:
 		self._control_count += 1
 		self._hbox_controls.pack_end(widget, False, False, 0)
 
-		if issubclass(widget.__class__, Gtk.Button):
-			widget.set_relief((Gtk.ReliefStyle.NONE, Gtk.ReliefStyle.NORMAL)[self._button_relief])
-
 	def set_state(self, state):
 		"""Set GTK control state for title bar"""
 		self._state = state
@@ -247,9 +142,6 @@ class TitleBar:
 		else:
 			self._hbox.get_style_context().remove_class('selected')
 
-		# apply new colors
-		self.__apply_color()
-
 		# let breadcrumbs know about new state
 		if self._show_breadcrumbs:
 			self._breadcrumbs.set_state(state)
@@ -257,10 +149,9 @@ class TitleBar:
 	def set_mode(self, mode):
 		"""Set title bar mode"""
 		self._mode = mode
-		self._super_user_colors = (
-						Gdk.color_parse('red'),
-						Gdk.color_parse('white')
-					)
+
+		if self._mode == Mode.SUPER_USER:
+			self._hbox.get_style_context().add_class('superuser')
 
 	def set_title(self, text):
 		"""Set title text"""
@@ -336,10 +227,6 @@ class TitleBar:
 		if self._show_breadcrumbs:
 			self._breadcrumbs.apply_settings()
 
-		# get new color styles
-		self._style = self._application.left_notebook.get_style_context()
-		self._toolbar_style = self._application.menu_bar.get_style_context()
-
 		# apply button relief
 		relief = (Gtk.ReliefStyle.NONE, Gtk.ReliefStyle.NORMAL)[self._button_relief]
 
@@ -349,4 +236,3 @@ class TitleBar:
 
 		# apply new colors
 		self._container.queue_draw()
-		self.__apply_color()

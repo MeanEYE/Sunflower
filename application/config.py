@@ -46,7 +46,6 @@ class Config(Container):
 	data used by program itself and	plugins!
 
 	"""
-
 	encoder_options = {
 				'skipkeys': True,
 				'check_circular': True,
@@ -54,12 +53,12 @@ class Config(Container):
 				'indent': 4
 			}
 
-	def __init__(self, name, application):
+	def __init__(self, name, config_path):
 		Container.__init__(self)
 
 		self._name = name
 		self._sections = {}
-		self._application = application
+		self._config_path = config_path
 
 		self._encoder = json.JSONEncoder(**self.encoder_options)
 		self._decoder = json.JSONDecoder()
@@ -71,7 +70,7 @@ class Config(Container):
 		"""Save options to configuration file"""
 		data = self._get_data()
 		file_name = os.path.join(
-						self._application.config_path,
+						self._config_path,
 						'{0}.json'.format(self._name)
 					)
 
@@ -86,7 +85,7 @@ class Config(Container):
 	def load(self):
 		"""Load options from configuration file"""
 		file_name = os.path.join(
-						self._application.config_path,
+						self._config_path,
 						'{0}.json'.format(self._name)
 					)
 

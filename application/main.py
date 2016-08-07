@@ -73,7 +73,7 @@ class Sunflower(Gtk.Application):
 		version_entry.flags = 0
 		version_entry.arg = GLib.OptionArg.NONE
 		version_entry.arg_date = None
-		version_entry.description = _('Version')
+		version_entry.description = _('Show version number')
 		version_entry.arg_description = None
 
 		no_plugins_entry = GLib.OptionEntry()
@@ -82,7 +82,7 @@ class Sunflower(Gtk.Application):
 		no_plugins_entry.flags = 0
 		no_plugins_entry.arg = GLib.OptionArg.NONE
 		no_plugins_entry.arg_date = None
-		no_plugins_entry.description = _('skip loading additional plugins')
+		no_plugins_entry.description = _('Skip loading additional plugins')
 		no_plugins_entry.arg_description = None
 
 		no_load_tabs_entry = GLib.OptionEntry()
@@ -91,7 +91,7 @@ class Sunflower(Gtk.Application):
 		no_load_tabs_entry.flags = 0
 		no_load_tabs_entry.arg = GLib.OptionArg.NONE
 		no_load_tabs_entry.arg_date = None
-		no_load_tabs_entry.description = _('skip loading additional plugins')
+		no_load_tabs_entry.description = _('Skip loading additional plugins')
 		no_load_tabs_entry.arg_description = None
 
 		left_tab_entry = GLib.OptionEntry()
@@ -100,7 +100,7 @@ class Sunflower(Gtk.Application):
 		left_tab_entry.flags = 0
 		left_tab_entry.arg = GLib.OptionArg.STRING_ARRAY
 		left_tab_entry.arg_date = None
-		left_tab_entry.description = _('open new tab on the left notebook')
+		left_tab_entry.description = _('Open new tab on the left notebook')
 		left_tab_entry.arg_description = None
 
 		right_tab_entry = GLib.OptionEntry()
@@ -109,7 +109,7 @@ class Sunflower(Gtk.Application):
 		right_tab_entry.flags = 0
 		right_tab_entry.arg = GLib.OptionArg.STRING_ARRAY
 		right_tab_entry.arg_date = None
-		right_tab_entry.description = _('open new tab on the right notebook')
+		right_tab_entry.description = _('Open new tab on the right notebook')
 		right_tab_entry.arg_description = None
 
 		left_terminal_entry = GLib.OptionEntry()
@@ -118,7 +118,7 @@ class Sunflower(Gtk.Application):
 		left_terminal_entry.flags = 0
 		left_terminal_entry.arg = GLib.OptionArg.STRING_ARRAY
 		left_terminal_entry.arg_date = None
-		left_terminal_entry.description = _('open terminal tab on the left notebook')
+		left_terminal_entry.description = _('Open terminal tab on the left notebook')
 		left_terminal_entry.arg_description = None
 
 		right_terminal_entry = GLib.OptionEntry()
@@ -127,7 +127,7 @@ class Sunflower(Gtk.Application):
 		right_terminal_entry.flags = 0
 		right_terminal_entry.arg = GLib.OptionArg.STRING_ARRAY
 		right_terminal_entry.arg_date = None
-		right_terminal_entry.description = _('open terminal tab on the right notebook')
+		right_terminal_entry.description = _('Open terminal tab on the right notebook')
 		right_terminal_entry.arg_description = None
 
 		option_entries = [

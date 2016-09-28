@@ -29,7 +29,7 @@ class InputDialog:
 	use_header_bar = {'use_header_bar': True} if hasattr(Gtk.Dialog, 'get_header_bar') else {}
 
 	def __init__(self, application):
-		self._dialog = Gtk.Dialog(parent=application, **use_header_bar)
+		self._dialog = Gtk.Dialog(parent=application, **InputDialog.use_header_bar)
 
 		self._application = application
 

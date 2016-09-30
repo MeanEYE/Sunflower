@@ -614,7 +614,7 @@ class PropertiesWindow(Gtk.Window):
 		self._list_owner = Gtk.ListStore(str, int)
 		cell_owner = Gtk.CellRendererText()
 
-		self._combobox_owner = Gtk.ComboBox.new_with_model_and_entry(self._list_owner)
+		self._combobox_owner = Gtk.ComboBox.new_with_model(self._list_owner)
 		self._combobox_owner.connect('changed', self._ownership_changed)
 		self._combobox_owner.pack_start(cell_owner, True)
 		self._combobox_owner.add_attribute(cell_owner, 'text', 0)
@@ -625,7 +625,7 @@ class PropertiesWindow(Gtk.Window):
 		self._list_group = Gtk.ListStore(str, int)
 		cell_group = Gtk.CellRendererText()
 
-		self._combobox_group = Gtk.ComboBox.new_with_model_and_entry(self._list_group)
+		self._combobox_group = Gtk.ComboBox.new_with_model(self._list_group)
 		self._combobox_group.connect('changed', self._ownership_changed)
 		self._combobox_group.pack_start(cell_group, True)
 		self._combobox_group.add_attribute(cell_group, 'text', 0)

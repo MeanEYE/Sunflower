@@ -38,10 +38,9 @@ class SessionsOptions(SettingsPage):
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 		container.set_shadow_type(Gtk.ShadowType.IN)
 
-		self._store = Gtk.ListStore(str, bool, int, int)
+		self._store = Gtk.ListStore.new((str, bool, int, int))
 
-		self._list = Gtk.TreeView()
-		self._list.set_model(self._store)
+		self._list = Gtk.TreeView.new_with_model(self._store)
 		self._list.set_rules_hint(True)
 
 		# create cell renderers
@@ -92,7 +91,7 @@ class SessionsOptions(SettingsPage):
 		button_move_down.set_tooltip_text(_('Move down'))
 		button_move_down.connect('clicked', self._handle_move_session, 1)
 
-		# pack ui
+		# pack interface
 		container.add(self._list)
 
 		button_box.pack_start(button_add, False, False, 0)
@@ -202,7 +201,6 @@ class SessionsOptions(SettingsPage):
 
 		# enable save button
 		self._parent.enable_save()
-
 		return True
 
 	def _handle_add_session(self, widget, data=None):
@@ -274,37 +272,72 @@ class SessionManager:
 							'current': 0
 						})
 
-		# create actions
-		self._manage_action = Gio.SimpleAction.new('manage', None)
-		self._save_action = Gio.SimpleAction.new('save', None)
+		# create header button and its popover
+		self._button = Gtk.Button.new_with_label(label='Session')
 
-		# connect signals
-		self._manage_action.connect('activate', self._manage_sessions)
-		self._save_action.connect('activate', self._save_session)
+		popover = Gtk.Popover.new()
+		popover.set_relative_to(self._button)
+		self._button.connect('clicked', self._show_popover, popover)
+		vbox_popover = Gtk.VBox.new(False, 5)
+		vbox_popover.set_border_width(5)
 
-		# create menus
-		self._popover_menu = Gio.Menu.new()
-		self._sessions_menu = Gio.Menu.new()
-		self._options_menu = Gio.Menu.new()
+		# create session list storage
+		quick_search = Gtk.SearchEntry.new()
+		quick_search.connect('activate', self._switch_session)
 
-		self._options_menu.append(_('Manage sessions'), 'sessions.manage')
-		self._options_menu.append(_('Save session'), 'sessions.save')
+		self._store = Gtk.ListStore.new((str, bool, int, int))
+		self._item_list = Gtk.TreeView.new_with_model(self._store)
+		self._item_list.set_search_entry(quick_search)
+		self._item_list.set_headers_visible(False)
+		self._item_list.set_activate_on_single_click(True)
+		self._item_list.connect('row-activated', self._switch_session)
 
-		self._popover_menu.append_section(None, self._sessions_menu)
-		self._popover_menu.append_section(None, self._options_menu)
+		# create cell renders
+		cell_text = Gtk.CellRendererText.new()
 
-		# create container for header bar
-		self._button = Gtk.MenuButton.new()
-		self._button.set_menu_model(self._popover_menu)
+		# create columns
+		column_name = Gtk.TreeViewColumn.new()
+		column_name.pack_start(cell_text, True)
+		column_name.add_attribute(cell_text, 'text', Column.NAME)
+		self._item_list.append_column(column_name)
 
-		self._action_group = Gio.SimpleActionGroup.new()
-		self._action_group.add_action(self._manage_action)
-		self._action_group.add_action(self._save_action)
+		# create scrolled container for list
+		list_container = Gtk.ScrolledWindow.new()
+		list_container.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+		list_container.set_shadow_type(Gtk.ShadowType.IN)
+		list_container.set_size_request(300, 200)
 
-		self._button.insert_action_group('sessions', self._action_group)
+		list_container.add(self._item_list)
 
-		# add session button to header bar
+		# create additional popover options
+		vbox_options = Gtk.HBox.new(False, 5)
+
+		image_lock = Gtk.Image.new_from_icon_name('changes-prevent-symbolic', Gtk.IconSize.BUTTON)
+		self._button_lock = Gtk.ToggleButton.new()
+		self._button_lock.set_image(image_lock)
+		self._button_lock.set_tooltip_text(_('Locked session preserves tab layout at the time of locking.'))
+		self._button_lock.connect('toggled', self._toggle_session_lock)
+
+		button_manage = Gtk.Button.new_with_label(label=_('Manage sessions'))
+		button_manage.connect('clicked', self._manage_sessions)
+
+		button_save = Gtk.Button.new_with_label(label=_('Save session'))
+		button_save.connect('clicked', self._save_session)
+
+		# pack interface elements
 		self._application.header_bar.pack_end(self._button)
+		popover.add(vbox_popover)
+
+		vbox_options.pack_start(self._button_lock, True, False, 0)
+		vbox_options.pack_start(button_manage, True, True, 0)
+		vbox_options.pack_start(button_save, True, True, 0)
+
+		vbox_popover.pack_start(quick_search, True, False, 0)
+		vbox_popover.pack_start(list_container, True, True, 0)
+		vbox_popover.pack_start(vbox_options, True, False, 0)
+
+		# show all created widgets
+		vbox_popover.show_all()
 
 		# update menu
 		self._update_menu()
@@ -312,43 +345,57 @@ class SessionManager:
 
 	def _update_menu(self):
 		"""Update main window session menu"""
-		self._sessions_menu.remove_all()
+		self._store.clear()
 
-		for action_name in self._action_group.list_actions():
-			if action_name.startswith('switch_to_'):
-				self._action_group.remove_action(action_name)
-
-		# get current session index
-		current_session = self._options.section('sessions').get('current')
-
-		# iterate over saved sessions and create menu item for each
 		for index, session in enumerate(self._options.section('sessions').get('list')):
-			session_name = session.get('name')
-			action_name = 'switch_to_{0}'.format(index)
+			tab_count = 0
+			left_section = session.get('left')
+			right_section = session.get('right')
 
-			action = Gio.SimpleAction.new(action_name, None)
-			action.connect('activate', self._switch_session, index)
-			self._action_group.add_action(action)
+			if left_section is not None and 'tabs' in left_section:
+				tab_count += len(session.get('left').get('tabs'))
 
-			self._sessions_menu.append(session_name, 'sessions.{0}'.format(action_name))
+			if right_section is not None and 'tabs' in right_section:
+				tab_count += len(session.get('right').get('tabs'))
+
+			self._store.append((session.get('name'), session.get('locked'), tab_count, index))
 
 	def _update_menu_item(self):
 		"""Update main window menu item to contain session name"""
 		current_session = self._options.section('sessions').get('current')
-		session_name = self._options.section('sessions').get('list')[current_session].get('name')
-		self._button.set_label(session_name)
+		session = self._options.section('sessions').get('list')[current_session]
 
-	def _switch_session(self, action, data, session_index):
+		self._button.set_label(session.get('name'))
+		self._button_lock.set_active(session.get('locked'))
+
+	def _show_popover(self, widget, popover):
+		"""Handle clicking on header bar button."""
+		popover.popup()
+		return True
+
+	def _toggle_session_lock(self, widget, data=None):
+		"""Handle toggling session lock by clicking on lock button."""
+		current_session = self._options.section('sessions').get('current')
+		session = self._options.section('sessions').get('list')[current_session]
+		session['locked'] = widget.get_active()
+
+		return True
+
+	def _switch_session(self, widget, *args):
 		"""Handle clicking on session menu"""
-		left_section = self._options.section('left')
-		right_section = self._options.section('right')
 		section = self._options.section('sessions')
-		session_list = section.get('list')
 		current_session = section.get('current')
+		selected_iter = self._store.get_iter(self._item_list.get_cursor()[0])
+		session_index = self._store.get_value(selected_iter, Column.INDEX)
 
 		# do nothing if session is already active
 		if current_session == session_index:
 			return
+
+		# get stored configuration
+		session_list = section.get('list')
+		left_section = self._options.section('left')
+		right_section = self._options.section('right')
 
 		# save current session
 		left_notebook = self._application.left_notebook

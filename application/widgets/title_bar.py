@@ -10,7 +10,12 @@ class Mode:
 
 
 class TitleBar:
-	"""Title bar wrapper class"""
+	"""Tab titlebar class.
+
+	This class provides many different features, including tab specific
+	controls, menus and coloring.
+
+	"""
 
 	def __init__(self, application, parent):
 		self._application = application
@@ -32,21 +37,17 @@ class TitleBar:
 		self._button_relief = options.get('button_relief')
 
 		# determine whether we need to show breadcrumbs
-		from plugin_base.item_list import ItemList
+		from plugin_base.item_list import ItemList  # must be included here to avoid cyclic import
 		section = options.section('item_list')
 		is_list = isinstance(parent, ItemList)
 		self._breadcrumb_type = section.get('breadcrumbs')
 		self._show_breadcrumbs = self._breadcrumb_type != Breadcrumbs.TYPE_NONE and is_list
 
 		# create container box
-		self._hbox = Gtk.HBox(homogeneous=False, spacing=self._box_spacing)
+		self._hbox = Gtk.HBox.new(False, self._box_spacing)
 		self._hbox.get_style_context().add_class('sunflower-title-bar')
 
-		self._hbox_menu = Gtk.HBox(homogeneous=True, spacing=0)
-		self._hbox_menu.set_border_width(self._box_border_width)
-
-		self._hbox_controls = Gtk.HBox(homogeneous=True, spacing=0)
-		self._hbox_controls.set_border_width(self._box_border_width)
+		self._hbox_controls = Gtk.HBox.new(False, 0)
 		self._hbox_controls.get_style_context().add_class('linked')
 
 		# create container
@@ -67,10 +68,9 @@ class TitleBar:
 		self._button_menu.connect('clicked', self.show_menu)
 		self._button_menu.get_style_context().add_class('sunflower-tab-menu')
 
-		self._hbox_menu.pack_start(self._button_menu, True, True, 0)
-
 		# create title box
-		vbox = Gtk.VBox(homogeneous=False, spacing=0)
+		vbox = Gtk.VBox.new(False, 0)
+
 		if self._show_breadcrumbs:
 			self._breadcrumbs = Breadcrumbs(self)
 			vbox.pack_start(self._breadcrumbs, True, True, 0)
@@ -95,7 +95,7 @@ class TitleBar:
 		# pack interface
 		vbox.pack_start(self._subtitle_label, False, False, 0)
 
-		self._hbox.pack_start(self._hbox_menu, False, False, 0)
+		self._hbox.pack_start(self._button_menu, False, False, 0)
 		self._hbox.pack_start(vbox, True, True, 4)
 		self._hbox.pack_start(self._spinner, False, False, 5)
 		self._hbox.pack_start(self._hbox_controls, False, False, 0)

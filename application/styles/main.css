@@ -9,6 +9,7 @@ button.sunflower-close-tab {
  * Tab title bar.
  */
 box.horizontal.sunflower-title-bar {
+	border: 2px solid @theme_unfocused_bg_color;
 	border-radius: 0.2em;
 	background-color: @theme_unfocused_bg_color;
 	color: @theme_unfocused_fg_color;
@@ -25,6 +26,7 @@ box.horizontal.sunflower-title-bar box.vertical {
 
 box.horizontal.sunflower-title-bar.selected,
 box.horizontal.sunflower-title-bar.selected box.vertical {
+	border-color: @theme_selected_bg_color;
 	background-color: @theme_selected_bg_color;
 	color: @theme_selected_fg_color;
 }

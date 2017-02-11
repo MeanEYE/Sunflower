@@ -1,5 +1,6 @@
-from gi.repository import Gtk, Gio, GLib
+from gi.repository import Gtk, Gio, GLib, Gdk
 from widgets.settings_page import SettingsPage
+from accelerator_group import AcceleratorGroup
 
 
 DEFAULT_NAME = _('Default')
@@ -342,6 +343,25 @@ class SessionManager:
 		# update menu
 		self._update_menu()
 		self._update_menu_item()
+
+		# configure accelerators
+		self._configure_accelerators(popover)
+
+	def _configure_accelerators(self, popover):
+		"""Configure global accelerators for session management."""
+		group = AcceleratorGroup(self._application)
+		group.set_name('sessions')
+		group.set_title(_('Sessions'))
+		keyval = Gdk.keyval_from_name
+
+		# add methods to group
+		group.add_method('show_list', _('Show session list'), self._show_popover, popover)
+
+		# configure default accelerators
+		group.set_accelerator('show_list', keyval('s'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD1_MASK)
+
+		# make group active
+		group.activate(self._application)
 
 	def _update_menu(self):
 		"""Update main window session menu"""

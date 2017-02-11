@@ -618,7 +618,7 @@ class ItemList(PluginBase):
 
 				else:
 					# otherwise focus command entry
-					self._focus_command_line(unichr(key_value))
+					self._parent.set_command_entry_text(unichr(key_value))
 					result = True
 
 		return result
@@ -1267,15 +1267,6 @@ class ItemList(PluginBase):
 
 		return True
 
-	def _focus_command_line(self, key):
-		"""Focus command-line control"""
-		if self._parent.options.get('show_command_entry'):
-			self._parent.command_edit.grab_focus()
-			self._parent.command_edit.set_text(key)
-			self._parent.command_edit.set_position(len(key))
-
-		return True
-
 	def _control_got_focus(self, widget, data=None):
 		"""List focus in event"""
 		PluginBase._control_got_focus(self, widget, data)
@@ -1551,12 +1542,14 @@ class ItemList(PluginBase):
 
 	def copy_path_to_command_entry(self, widget=None, data=None):
 		"""Copy current path to command entry and focus it"""
-		self._parent.set_command_entry_text(self.path, True)
+		self._parent.append_text_to_command_entry(self.path)
+		return True
 
 	def copy_selection_to_command_entry(self, widget=None, data=None):
 		"""Copy current selection to command entry and focus it"""
 		selection = self._get_selection(relative=True)
-		self._parent.set_command_entry_text(selection, True)
+		self._parent.append_text_to_command_entry(selection)
+		return True
 
 	def custom_path_entry(self, widget=None, data=None):
 		"""Ask user to enter path"""

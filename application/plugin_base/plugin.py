@@ -134,7 +134,6 @@ class PluginBase(Gtk.VBox):
 		group.add_method('previous_tab', _('Previous tab'), self._notebook_previous_tab)
 		group.add_method('duplicate_tab', _('Duplicate tab'), self._duplicate_tab)
 		group.add_method('close_tab', _('Close tab'), self._close_tab)
-		group.add_method('focus_command_entry', _('Focus command entry'), self._focus_command_entry)
 		group.add_method('focus_left_object', _('Focus left object'), self._focus_left_object)
 		group.add_method('focus_right_object', _('Focus right object'), self._focus_right_object)
 
@@ -144,7 +143,6 @@ class PluginBase(Gtk.VBox):
 		group.set_accelerator('previous_tab', keyval('Tab'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
 		group.set_accelerator('duplicate_tab', keyval('t'), Gdk.ModifierType.CONTROL_MASK)
 		group.set_accelerator('close_tab', keyval('w'), Gdk.ModifierType.CONTROL_MASK)
-		group.set_accelerator('focus_command_entry', keyval('Down'), Gdk.ModifierType.MOD1_MASK)
 		group.set_accelerator('focus_left_object', keyval('Left'), Gdk.ModifierType.MOD1_MASK)
 		group.set_accelerator('focus_right_object', keyval('Right'), Gdk.ModifierType.MOD1_MASK)
 
@@ -221,11 +219,6 @@ class PluginBase(Gtk.VBox):
 	def _notebook_previous_tab(self, widget, data=None):
 		"""Go to previous tab in parent Notebook"""
 		self._parent.previous_tab(self._notebook)
-		return True
-
-	def _focus_command_entry(self, widget=None, data=None):
-		"""Focus command entry in main window"""
-		self._parent.focus_command_entry()
 		return True
 
 	def _focus_left_object(self, widget=None, data=None):

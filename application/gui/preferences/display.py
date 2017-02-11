@@ -32,14 +32,12 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_multiple_instances = Gtk.CheckButton(_('Allow multiple instances'))
 		self._checkbox_show_toolbar = Gtk.CheckButton(_('Show toolbar'))
 		self._checkbox_show_command_bar = Gtk.CheckButton(_('Show command bar'))
-		self._checkbox_show_command_entry = Gtk.CheckButton(_('Show command entry'))
 		self._checkbox_horizontal_split = Gtk.CheckButton(_('Horizontal split'))
 
 		self._checkbox_hide_on_close.connect('toggled', self._parent.enable_save, True)
 		self._checkbox_multiple_instances.connect('toggled', self._parent.enable_save, True)
 		self._checkbox_show_toolbar.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_command_bar.connect('toggled', self._parent.enable_save)
-		self._checkbox_show_command_entry.connect('toggled', self._parent.enable_save)
 		self._checkbox_horizontal_split.connect('toggled', self._parent.enable_save)
 
 		# tab options
@@ -139,7 +137,6 @@ class DisplayOptions(SettingsPage):
 		vbox_main_window.pack_start(self._checkbox_multiple_instances, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_toolbar, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_command_bar, False, False, 0)
-		vbox_main_window.pack_start(self._checkbox_show_command_entry, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_horizontal_split, False, False, 0)
 
 		vbox_tabs.pack_start(self._checkbox_focus_new_tab, False, False, 0)
@@ -170,7 +167,6 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_focus_new_tab.set_active(options.get('focus_new_tab'))
 		self._checkbox_show_toolbar.set_active(options.get('show_toolbar'))
 		self._checkbox_show_command_bar.set_active(options.get('show_command_bar'))
-		self._checkbox_show_command_entry.set_active(options.get('show_command_entry'))
 		self._checkbox_tab_close_button.set_active(options.get('tab_close_button'))
 		self._checkbox_always_show_tabs.set_active(options.get('always_show_tabs'))
 		self._checkbox_ubuntu_coloring.set_active(options.get('ubuntu_coloring'))
@@ -194,7 +190,6 @@ class DisplayOptions(SettingsPage):
 		options.set('focus_new_tab', self._checkbox_focus_new_tab.get_active())
 		options.set('show_toolbar', self._checkbox_show_toolbar.get_active())
 		options.set('show_command_bar', self._checkbox_show_command_bar.get_active())
-		options.set('show_command_entry', self._checkbox_show_command_entry.get_active())
 		options.set('tab_close_button', self._checkbox_tab_close_button.get_active())
 		options.set('always_show_tabs', self._checkbox_always_show_tabs.get_active())
 		options.set('ubuntu_coloring', self._checkbox_ubuntu_coloring.get_active())

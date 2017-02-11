@@ -102,7 +102,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		# set window title
 		self.set_title(_('Sunflower'))
 		self.set_wmclass('Sunflower', 'Sunflower')
-		self.set_border_width(5)
 
 		# set window icon
 		self.icon_manager.set_window_icon(self)
@@ -494,14 +493,6 @@ class MainWindow(Gtk.ApplicationWindow):
 						'path': '<Sunflower>/View/ShowCommandBar',
 					},
 					{
-						'label': _('Show co_mmand entry'),
-						'type': 'checkbox',
-						'active': self.options.get('show_command_entry'),
-						'callback': self._toggle_show_command_entry,
-						'name': 'show_command_entry',
-						'path': '<Sunflower>/View/ShowCommandEntry',
-					},
-					{
 						'label': _('_Horizontal split'),
 						'type': 'checkbox',
 						'active': self.options.get('horizontal_split'),
@@ -659,29 +650,33 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._paned.pack2(self.right_notebook, resize=True, shrink=False)
 
 		# command line prompt
-		self.command_entry_bar = Gtk.HBox(False, 0)
+		self.command_popover = Gtk.Popover.new()
+		self.command_popover.set_relative_to(self.header_bar)
+		self.command_popover.set_modal(False)
+		self.command_popover.connect('closed', self.hide_command_entry)
+
+		vbox_popover = Gtk.VBox.new(False, 0)
+		vbox_popover.set_border_width(5)
+		vbox_popover.set_size_request(400, -1)
+
 		self.status_bar = Gtk.HBox(False, 0)
+		self.header_bar.pack_end(self.status_bar)
 
-		self.path_label = Gtk.Label()
-		self.path_label.set_alignment(1, 0.5)
-		self.path_label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
-		self.path_label.show()
-
-		label_pound = Gtk.Label(label='$')
-		label_pound.set_alignment(0, 0.5)
-		label_pound.show()
+		label_command_entry = Gtk.Label(label=_('Execute command:'))
+		label_command_entry.set_alignment(0, 0.5)
+		label_command_entry.show()
 
 		# create history list
 		self.command_list = Gtk.ListStore(str)
 
 		# create auto-complete entry
-		self.command_completion = Gtk.EntryCompletion()
+		self.command_completion = Gtk.EntryCompletion.new()
 		self.command_completion.set_model(self.command_list)
 		self.command_completion.set_minimum_key_length(2)
 		self.command_completion.set_text_column(0)
 
 		# create editor
-		self.command_edit = Gtk.Entry()
+		self.command_edit = Gtk.Entry.new()
 		self.command_edit.set_completion(self.command_completion)
 		self.command_edit.connect('activate', self.execute_command)
 		self.command_edit.connect('key-press-event', self._command_edit_key_press)
@@ -692,16 +687,15 @@ class MainWindow(Gtk.ApplicationWindow):
 		# load history file
 		self._load_history()
 
+		# pack command entry popover
+		self.command_popover.add(vbox_popover)
+		vbox_popover.pack_start(label_command_entry, False, False, 0)
+		vbox_popover.pack_start(self.command_edit, True, True, 0)
+		vbox_popover.show_all()
+
 		# pack command entry bar
 		if self.keyring_manager.is_available():
 			self.status_bar.pack_start(self.keyring_manager._status_icon, False, False, 0)
-
-		self.command_entry_bar.pack_start(self.status_bar, False, False, 5)
-		self.command_entry_bar.pack_start(self.path_label, True, True, 5)
-		self.command_entry_bar.pack_start(label_pound, False, False, 0)
-		self.command_entry_bar.pack_start(self.command_edit, True, True, 0)
-
-		self.command_entry_bar.set_property('no-show-all', not self.options.get('show_command_entry'))
 
 		# command buttons bar
 		self.command_bar = Gtk.HBox(True, 0)
@@ -741,7 +735,6 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		self._vbox2 = Gtk.VBox(False, 4)
 		self._vbox2.pack_start(self._paned, expand=True, fill=True, padding=0)
-		self._vbox2.pack_start(self.command_entry_bar, expand=False, fill=False, padding=0)
 		self._vbox2.pack_start(self.command_bar, expand=False, fill=False, padding=0)
 
 		vbox.pack_start(self._vbox2, True, True, 0)
@@ -1112,22 +1105,6 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		return True
 
-	def _toggle_show_command_entry(self, widget, data=None):
-		"""Show/hide command entry"""
-		menu_item = self.menu_manager.get_item_by_name('show_command_entry')
-
-		# NOTE: Calling set_active emits signal causing deadloop,
-		# to work around this issue we check if calling widget is menu item.
-		if widget is menu_item:
-			show_command_entry = menu_item.get_active()
-			self.options.set('show_command_entry', show_command_entry)
-			self.command_entry_bar.set_visible(show_command_entry)
-
-		else:
-			menu_item.set_active(not self.options.get('show_command_entry'))
-
-		return True
-
 	def _toggle_show_toolbar(self, widget, data=None):
 		"""Show/hide toolbar"""
 		menu_item = self.menu_manager.get_item_by_name('show_toolbar')
@@ -1464,13 +1441,20 @@ class MainWindow(Gtk.ApplicationWindow):
 		return result
 
 	def _command_edit_key_press(self, widget, event):
-		"""Handle key press in command edit"""
+		"""Handle key press in command edit."""
 		result = False
 
-		if event.keyval in (Gdk.KEY_Up, Gdk.KEY_Escape)\
-		and event.get_state() & Gtk.accelerator_get_default_mod_mask() == 0:
-			self.get_active_object().focus_main_object()
-			result = True
+		if event.get_state() & Gtk.accelerator_get_default_mod_mask() == 0:
+			# handle pressing down in command entry
+			if event.keyval == Gdk.KEY_Down:
+				self.get_active_object().focus_main_object()
+				result = True
+
+			# handle pressing escape in command entry
+			elif event.keyval == Gdk.KEY_Escape:
+				self.get_active_object().focus_main_object()
+				self.hide_command_entry()
+				result = True
 
 		return result
 
@@ -1920,7 +1904,6 @@ class MainWindow(Gtk.ApplicationWindow):
 	def set_location_label(self, path):
 		"""Set location label"""
 		self.header_bar.set_subtitle(path)
-		self.path_label.set_text(path)
 
 	def goto_web(self, widget, uri):
 		"""Open URL stored in data"""
@@ -1939,17 +1922,17 @@ class MainWindow(Gtk.ApplicationWindow):
 			raw_command = data
 
 		else:
-			# no data is specified so we try to process command entry
+			# get command from command entry
 			raw_command = self.command_edit.get_text()
-			self.command_edit.insert_text(raw_command, 0)
 			self.command_edit.set_text('')
+			self.hide_command_entry()
 
 		handled = False
 		active_object = self.get_active_object()
 		command = shlex.split(raw_command)
 
 		if command[0] == 'cd' and hasattr(active_object, 'change_path'):
-			# handle CD command
+			# handle change directory command
 			path = command[1] if len(command) >= 2 else user.home
 
 			# apply path modifications
@@ -2128,11 +2111,13 @@ class MainWindow(Gtk.ApplicationWindow):
 		group.add_method('restore_handle_position', _('Restore handle position'), self.restore_handle_position)
 		group.add_method('move_handle_left', _('Move handle to the left'), self.move_handle, -1)
 		group.add_method('move_handle_right', _('Move handle to the right'), self.move_handle, 1)
+		group.add_method('show_command_entry', _('Show command entry'), self.show_command_entry)
 
 		# set default accelerators
 		group.set_accelerator('restore_handle_position', keyval('Home'), Gdk.ModifierType.MOD1_MASK)
 		group.set_accelerator('move_handle_left', keyval('Page_Up'), Gdk.ModifierType.MOD1_MASK)
 		group.set_accelerator('move_handle_right', keyval('Page_Down'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('show_command_entry', keyval('Down'), Gdk.ModifierType.MOD1_MASK)
 
 		# expose object
 		self._accel_group = group
@@ -2364,7 +2349,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		"""Move handle to specified direction """
 		new_position = self._paned.get_position() + (direction * 5)
 		self._paned.set_position(new_position)
-
 		return True
 
 	def focus_opposite_object(self, widget, data=None):
@@ -2374,20 +2358,28 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		return True
 
-	def focus_command_entry(self, widget=None, data=None):
-		"""Focus main command entry widget"""
-		if self.options.get('show_command_entry'):
-			self.command_edit.grab_focus()
+	def show_command_entry(self, widget=None, data=None):
+		"""Show command entry popover and set focus to it."""
+		self.command_popover.popup()
+		self.command_edit.grab_focus()
+		return True
+
+	def hide_command_entry(self, widget=None, data=None):
+		"""Hide command entry popover."""
+		self.command_popover.popdown()
+		return True
 
 	def focus_left_object(self, widget=None, data=None):
 		"""Focus object in the left notebook"""
 		left_object = self.get_left_object()
 		left_object.focus_main_object()
+		return True
 
 	def focus_right_object(self, widget=None, data=None):
 		"""Focus object in the right notebook"""
 		right_object = self.get_right_object()
 		right_object.focus_main_object()
+		return True
 
 	def get_active_object(self):
 		"""Return active object"""
@@ -2724,12 +2716,25 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		return result
 
-	def set_command_entry_text(self, text, focus=True):
-		"""Set command entry text and focus if specified"""
+	def set_command_entry_text(self, text):
+		"""Set command entry text and focus if specified."""
 		self.command_edit.set_text(text)
+		self.command_edit.set_position(len(text))
+		self.show_command_entry()
 
-		if focus:
-			self.focus_command_entry()
+	def append_text_to_command_entry(self, text):
+		"""Append additional text to command entry."""
+		current_text = self.command_edit.get_text()
+		current_position = self.command_edit.get_position()
+
+		if len(current_text) > 0:
+			current_text += ' '
+
+		current_text += text
+
+		self.command_edit.set_text(current_text)
+		self.command_edit.set_position(current_position)
+		self.show_command_entry()
 
 	def set_clipboard_text(self, text):
 		"""Set text data to clipboard"""

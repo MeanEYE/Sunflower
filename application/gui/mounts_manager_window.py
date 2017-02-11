@@ -58,7 +58,7 @@ class MountsManagerWindow(Gtk.Window):
 
 		# create store for window list
 		self._pages_store = Gtk.ListStore(str, str, int, int)
-		
+
 		# create user interface
 		vbox = Gtk.VBox(False, 5)
 		hbox = Gtk.HBox(False, 5)
@@ -70,7 +70,7 @@ class MountsManagerWindow(Gtk.Window):
 		self._tabs.connect('switch-page', self._handle_page_switch)
 
 		# create page list
-		label_container = Gtk.ScrolledWindow()
+		label_container = Gtk.ScrolledWindow.new()
 		label_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 		label_container.set_shadow_type(Gtk.ShadowType.IN)
 		label_container.set_size_request(130, -1)
@@ -337,7 +337,7 @@ class MountsExtension(MountManagerExtension):
 		self._mounts = {}
 
 		# create interface
-		container = Gtk.ScrolledWindow() 
+		container = Gtk.ScrolledWindow.new()
 		container.set_shadow_type(Gtk.ShadowType.IN)
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 
@@ -520,7 +520,7 @@ class VolumesExtension(MountManagerExtension):
 		self._volumes = {}
 
 		# create interface
-		container = Gtk.ScrolledWindow() 
+		container = Gtk.ScrolledWindow.new()
 		container.set_shadow_type(Gtk.ShadowType.IN)
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 

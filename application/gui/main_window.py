@@ -2133,7 +2133,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		group.set_accelerator('restore_handle_position', keyval('Home'), Gdk.ModifierType.MOD1_MASK)
 		group.set_accelerator('move_handle_left', keyval('Page_Up'), Gdk.ModifierType.MOD1_MASK)
 		group.set_accelerator('move_handle_right', keyval('Page_Down'), Gdk.ModifierType.MOD1_MASK)
-		
+
 		# expose object
 		self._accel_group = group
 

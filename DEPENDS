@@ -2,6 +2,7 @@ Require:
   python-gtk2 (>= 2.15.0)
   python-notify (>= 0.1)
   python-gobject
+  python-gi-cairo
   gir1.2-gtk-3.0
   gir1.2-pango
   gir1.2-vte-2.90

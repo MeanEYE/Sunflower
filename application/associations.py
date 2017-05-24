@@ -209,7 +209,7 @@ class AssociationManager:
 
 			if application is not None:
 				if application.supports_uris():
-					selection = map(lambda path: 'file://{0}'.format(urllib.pathname2url(path)) if not path.startswith('file://') else path, selection)
+					selection = map(lambda path: 'file://{0}'.format(urllib.pathname2url(path)) if path.startswith('/') else path, selection)
 					application.launch_uris(selection)
 				else:
 					application.launch([Gio.File.new_for_path(path) for path in selection])
@@ -263,7 +263,10 @@ class AssociationManager:
 			self._application.create_terminal_tab(active_object._notebook, options)
 
 		else:
-			subprocess.Popen(split_command, cwd=os.path.dirname(selection[0]))
+			cwd = None
+			if selection[0].startswith('/'):
+				cwd = os.path.dirname(selection[0])
+			subprocess.Popen(split_command, cwd=cwd)
 
 	def execute_file(self, path, provider=None):
 		"""Execute specified item properly."""

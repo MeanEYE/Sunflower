@@ -153,8 +153,8 @@ class Terminal(PluginBase):
 		if client is None:
 			if not hasattr(self._terminal, 'client'):
 				# client wasn't assigned to widget, get default one and set events
-				client = GConf.Client.get_default()
-				client.add_dir(path, GConf.ClientPreloadType.PRELOAD_NONE)
+				client = gconf.Client.get_default()
+				client.add_dir(path, gconf.ClientPreloadType.PRELOAD_NONE)
 				client.notify_add(key, self.__set_system_font)
 				self._terminal.client = client
 

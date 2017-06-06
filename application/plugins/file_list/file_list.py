@@ -24,6 +24,8 @@ from widgets.emblems_renderer import CellRendererEmblems
 # defined here as Gtk 3.10.8 doesn't define Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID
 UNSORTED_SORT_COLUMN_ID = -2
 
+UNSORTED_SORT_COLUMN_ID = -2 # same as Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID which doesn't seem to be defined in at least Gtk 3.10.8
+
 class Column:
 	NAME = 0
 	FORMATED_NAME = 1

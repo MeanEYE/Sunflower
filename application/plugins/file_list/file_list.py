@@ -2335,6 +2335,7 @@ class FileList(ItemList):
 										"\n{1}\n\n{0}\n\nWould you like to retry?"
 									).format(error, path)
 								)
+			dialog.get_accessible().set_name('switch_dir_failed')
 			dialog.set_default_response(Gtk.ResponseType.YES)
 			result = dialog.run()
 			dialog.destroy()

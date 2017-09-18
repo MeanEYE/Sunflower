@@ -14,6 +14,7 @@ from gui.preferences.display import StatusVisible
 from gui.history_list import HistoryList
 from history import HistoryManager
 from plugin_base.provider import Mode as FileMode
+from widgets.location_menu import LocationMenu
 
 
 class ItemList(PluginBase):
@@ -94,12 +95,10 @@ class ItemList(PluginBase):
 		self._item_list.connect('cursor-changed', self._handle_cursor_change)
 		self._item_list.connect('columns-changed', self._column_changed)
 		self._connect_main_object(self._item_list)
-
 		self._container.add(self._item_list)
 
 		# quick search
 		self._search_panel = Gtk.HBox(False, 0)
-
 		label = Gtk.Label(label=_('Search:'))
 
 		self._search_entry = Gtk.Entry()
@@ -118,7 +117,7 @@ class ItemList(PluginBase):
 		self._open_with_menu = None
 		self._popup_menu = self._create_popup_menu()
 
-		# create free space indicator
+		# create free space indicator in context menu
 		vbox_free_space = Gtk.VBox.new(False, 2)
 		self._label_free_space = Gtk.Label.new()
 		self._label_free_space.set_alignment(0, 0.5)
@@ -129,21 +128,22 @@ class ItemList(PluginBase):
 
 		# create context menu button container
 		hbox_buttons = Gtk.ButtonBox.new(Gtk.Orientation.HORIZONTAL)
+		hbox_buttons.get_style_context().add_class('linked')
 
 		# create reload menu item
-		menu_item_refresh = Gtk.Button.new_from_icon_name('reload', Gtk.IconSize.MENU)
+		menu_item_refresh = Gtk.Button.new_from_icon_name('reload', Gtk.IconSize.BUTTON)
 		menu_item_refresh.set_tooltip_text(_('Reload item list'))
 		menu_item_refresh.connect('clicked', self.refresh_file_list)
 		hbox_buttons.pack_start(menu_item_refresh, False, False, 0)
 
 		# create copy path item
-		menu_item_copy_path = Gtk.Button.new_from_icon_name(Gtk.STOCK_COPY, Gtk.IconSize.MENU)
+		menu_item_copy_path = Gtk.Button.new_from_icon_name(Gtk.STOCK_COPY, Gtk.IconSize.BUTTON)
 		menu_item_copy_path.set_tooltip_text(_('Copy path to clipboard'))
 		menu_item_copy_path.connect('clicked', self.copy_path_to_clipboard)
 		hbox_buttons.pack_start(menu_item_copy_path, False, False, 0)
 
 		# create path entry item
-		menu_path_entry = Gtk.Button.new_from_icon_name('go-jump', Gtk.IconSize.MENU)
+		menu_path_entry = Gtk.Button.new_from_icon_name('go-jump', Gtk.IconSize.BUTTON)
 		menu_path_entry.set_tooltip_text(_('Enter path...'))
 		menu_path_entry.connect('clicked', self.custom_path_entry)
 		hbox_buttons.pack_start(menu_path_entry, False, False, 0)
@@ -170,30 +170,30 @@ class ItemList(PluginBase):
 		"""Create titlebar buttons."""
 		options = self._parent.options
 
-		# bookmarks button
-		self._bookmarks_button = Gtk.Button.new_from_icon_name('go-jump', Gtk.IconSize.MENU)
+		# locations button
+		locations_button = Gtk.Button.new_from_icon_name('go-jump', Gtk.IconSize.BUTTON)
+		locations_button.set_focus_on_click(False)
+		locations_button.set_tooltip_text(_('Locations'))
+		locations_button.connect('clicked', self._locations_button_clicked)
+		self._title_bar.add_control(locations_button)
 
-		self._bookmarks_button.set_focus_on_click(False)
-		self._bookmarks_button.set_tooltip_text(_('Bookmarks'))
-		self._bookmarks_button.connect('clicked', self._bookmarks_button_clicked)
-
-		self._title_bar.add_control(self._bookmarks_button)
+		# create locations menu
+		self.locations_menu = LocationMenu(self, locations_button)
 
 		# history button
-		self._history_button = Gtk.Button.new_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
+		# self._history_button = Gtk.Button.new_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
 
-		self._history_button.set_focus_on_click(False)
-		self._history_button.set_tooltip_text(_('History'))
-		self._history_button.connect('clicked', self._history_button_clicked)
+		# self._history_button.set_focus_on_click(False)
+		# self._history_button.set_tooltip_text(_('History'))
+		# self._history_button.connect('clicked', self._history_button_clicked)
 
-		self._title_bar.add_control(self._history_button)
+		# self._title_bar.add_control(self._history_button)
 
 		# terminal button
 		self._terminal_button = Gtk.Button.new_from_icon_name('terminal', Gtk.IconSize.MENU)
 		self._terminal_button.set_focus_on_click(False)
 		self._terminal_button.set_tooltip_text(_('Terminal'))
 		self._terminal_button.connect('clicked', self._create_terminal)
-
 		self._title_bar.add_control(self._terminal_button)
 
 	def _configure_accelerators(self):
@@ -1269,9 +1269,10 @@ class ItemList(PluginBase):
 		PluginBase._control_got_focus(self, widget, data)
 		self._parent.set_location_label(self.path)
 
-	def _bookmarks_button_clicked(self, widget, data=None):
-		"""Bookmarks button click event"""
-		self._parent.show_bookmarks_menu(widget, self._notebook)
+	def _locations_button_clicked(self, widget, data=None):
+		"""Handle clicking on locations button."""
+		self.locations_menu.show()
+		return True
 
 	def _history_button_clicked(self, widget, data=None):
 		"""History button click event"""

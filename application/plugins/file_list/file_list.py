@@ -61,8 +61,8 @@ class FileList(ItemList):
 		ItemList.__init__(self, parent, notebook, options)
 
 		self.scheme = 'file'
-
 		self.path = self._options.get('path', user.home)
+
 		self._sort_column = self._options.get('sort_column', 0)
 		self._sort_ascending = self._options.get('sort_ascending', True)
 

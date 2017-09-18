@@ -312,6 +312,7 @@ class SessionManager:
 
 		# create additional popover options
 		hbox_buttons = Gtk.ButtonBox.new(Gtk.Orientation.HORIZONTAL)
+		hbox_buttons.get_style_context().add_class('linked')
 
 		image_lock = Gtk.Image.new_from_icon_name('changes-prevent-symbolic', Gtk.IconSize.BUTTON)
 		self._button_lock = Gtk.ToggleButton.new()

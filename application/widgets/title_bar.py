@@ -2,6 +2,7 @@ import math
 
 from gi.repository import Gtk, Pango, Gdk
 from widgets.breadcrumbs import Breadcrumbs
+from widgets.context_menu import ContextMenu
 
 
 class Mode:
@@ -24,9 +25,7 @@ class TitleBar:
 		self._control_count = 0
 		self._state = Gtk.StateType.NORMAL
 		self._mode = Mode.NORMAL
-		self._menu = None
-		self._box_spacing = 1
-		self._box_border_width = 3
+		self.context_menu = None
 		self._breadcrumbs = None
 
 		# get options
@@ -44,19 +43,11 @@ class TitleBar:
 		self._show_breadcrumbs = self._breadcrumb_type != Breadcrumbs.TYPE_NONE and is_list
 
 		# create container box
-		self._hbox = Gtk.HBox.new(False, self._box_spacing)
-		self._hbox.get_style_context().add_class('sunflower-title-bar')
+		self._container = Gtk.HBox.new(False, 1)
+		self._container.get_style_context().add_class('sunflower-title-bar')
 
-		self._hbox_controls = Gtk.HBox.new(False, 0)
-		self._hbox_controls.get_style_context().add_class('linked')
-
-		# create container
-		self._container = Gtk.EventBox()
-		self._container.set_app_paintable(True)
-		self._container.add_events(Gdk.EventMask.BUTTON_RELEASE_MASK)
-
-		# connect signals
-		self._container.connect('button-release-event', self.__button_release_event)
+		self._container_controls = Gtk.HBox.new(False, 0)
+		self._container_controls.get_style_context().add_class('linked')
 
 		# top folder icon as default
 		self._icon = Gtk.Image.new()
@@ -65,8 +56,11 @@ class TitleBar:
 		self._button_menu.add(self._icon)
 		self._button_menu.set_focus_on_click(False)
 		self._button_menu.set_tooltip_text(_('Context menu'))
-		self._button_menu.connect('clicked', self.show_menu)
-		self._button_menu.get_style_context().add_class('sunflower-tab-menu')
+		self._button_menu.connect('clicked', self.show_context_menu)
+		self._button_menu.get_style_context().add_class('sunflower-context-menu')
+
+		# create context menu
+		self.context_menu = ContextMenu(self, self._button_menu)
 
 		# create title box
 		vbox = Gtk.VBox.new(False, 0)
@@ -95,52 +89,27 @@ class TitleBar:
 		# pack interface
 		vbox.pack_start(self._subtitle_label, False, False, 0)
 
-		self._hbox.pack_start(self._button_menu, False, False, 0)
-		self._hbox.pack_start(vbox, True, True, 4)
-		self._hbox.pack_start(self._spinner, False, False, 5)
-		self._hbox.pack_start(self._hbox_controls, False, False, 0)
+		self._container.pack_start(self._button_menu, False, False, 0)
+		self._container.pack_start(vbox, True, True, 4)
+		self._container.pack_start(self._spinner, False, False, 5)
+		self._container.pack_start(self._container_controls, False, False, 0)
 
-		self._container.add(self._hbox)
 		self._spinner_counter = 0
 
-	def __button_release_event(self, widget, event, data=None):
-		"""Handle button release event"""
-		if event.button == 1:
-			# focus main object on left click
-			self._parent.focus_main_object()
-
-		elif event.button == 2:
-			# duplicate tab on middle click
-			self._parent._duplicate_tab(widget)
-
-		return True
-
-	def __get_menu_position(self, menu, *args):
-		"""Get bookmarks position"""
-		button = args[-1]
-		window_x, window_y = self._application.get_position()
-		button_x, button_y = button.translate_coordinates(self._application, 0, 0)
-		button_h = button.get_allocation().height
-
-		pos_x = window_x + button_x
-		pos_y = window_y + button_y + button_h
-
-		return pos_x, pos_y, True
-
 	def add_control(self, widget):
-		"""Add button control"""
+		"""Add control to button bar."""
 		self._control_count += 1
-		self._hbox_controls.pack_end(widget, False, False, 0)
+		self._container_controls.pack_end(widget, False, False, 0)
 
 	def set_state(self, state):
-		"""Set GTK control state for title bar"""
+		"""Set GTK control state for title bar."""
 		self._state = state
 
 		# apply style class to container
 		if state == Gtk.StateType.SELECTED:
-			self._hbox.get_style_context().add_class('selected')
+			self._container.get_style_context().add_class('selected')
 		else:
-			self._hbox.get_style_context().remove_class('selected')
+			self._container.get_style_context().remove_class('selected')
 
 		# let breadcrumbs know about new state
 		if self._show_breadcrumbs:
@@ -151,7 +120,7 @@ class TitleBar:
 		self._mode = mode
 
 		if self._mode == Mode.SUPER_USER:
-			self._hbox.get_style_context().add_class('superuser')
+			self._container.get_style_context().add_class('superuser')
 
 	def set_title(self, text):
 		"""Set title text"""
@@ -169,23 +138,14 @@ class TitleBar:
 		"""Set icon from specified name"""
 		self._icon.set_from_icon_name(icon_name, Gtk.IconSize.LARGE_TOOLBAR)
 
-	def set_menu(self, menu):
-		"""Set title bar menu"""
-		self._menu = menu
-
 	def get_container(self):
 		"""Return title bar container"""
 		return self._container
 
-	def show_menu(self, widget=None, data=None):
+	def show_context_menu(self, widget=None, data=None):
 		"""Show title bar menu"""
-		if self._menu is None:
-			return
-
-		# show menu below the button
-		button = widget if widget is not None else self._button_menu
-
-		self._menu.popup(None, None, self.__get_menu_position, button, 1, 0)
+		self.context_menu.show()
+		return True
 
 	def show_spinner(self):
 		"""Show spinner widget"""
@@ -230,9 +190,6 @@ class TitleBar:
 		# apply button relief
 		relief = (Gtk.ReliefStyle.NONE, Gtk.ReliefStyle.NORMAL)[self._button_relief]
 
-		for control in self._hbox.get_children():
+		for control in self._container.get_children():
 			if issubclass(control.__class__, Gtk.Button):
 				control.set_relief(relief)
-
-		# apply new colors
-		self._container.queue_draw()

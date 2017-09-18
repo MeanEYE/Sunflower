@@ -24,6 +24,7 @@ from widgets.emblems_renderer import CellRendererEmblems
 # defined here as Gtk 3.10.8 doesn't define Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID
 UNSORTED_SORT_COLUMN_ID = -2
 
+
 class Column:
 	NAME = 0
 	FORMATED_NAME = 1
@@ -1851,13 +1852,13 @@ class FileList(ItemList):
 
 		# set title and subtitle
 		self._title_bar.set_title(text)
-		self._title_bar.set_subtitle('{3} {0} - {4} {1} - {2:.2f}%'.format(
+		self._label_free_space.set_text('{2} {0} - {3} {1}'.format(
 							size_available,
 							size_total,
-							percent_available,
 							_('Free:'),
 							_('Total:')
 						))
+		self._progress_free_space.set_fraction(percent_available / 100)
 
 	def _drag_motion(self, widget, drag_context, x, y, timestamp):
 		"""Handle dragging data over widget"""

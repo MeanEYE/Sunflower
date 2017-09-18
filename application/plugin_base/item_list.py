@@ -118,42 +118,39 @@ class ItemList(PluginBase):
 		self._open_with_menu = None
 		self._popup_menu = self._create_popup_menu()
 
-		# tab menu
-		self._tab_menu = Gtk.Menu()
-		self._title_bar.set_menu(self._tab_menu)
+		# create free space indicator
+		vbox_free_space = Gtk.VBox.new(False, 2)
+		self._label_free_space = Gtk.Label.new()
+		self._label_free_space.set_alignment(0, 0.5)
+		vbox_free_space.pack_start(self._label_free_space, False, False, 0)
+
+		self._progress_free_space = Gtk.ProgressBar.new()
+		vbox_free_space.pack_start(self._progress_free_space, False, False, 0)
+
+		# create context menu button container
+		hbox_buttons = Gtk.ButtonBox.new(Gtk.Orientation.HORIZONTAL)
 
 		# create reload menu item
-		image_refresh = Gtk.Image()
-		image_refresh.set_from_icon_name('reload', Gtk.IconSize.MENU)
-
-		menu_item_refresh = Gtk.ImageMenuItem()
-		menu_item_refresh.set_label(_('Reload item list'))
-		menu_item_refresh.set_image(image_refresh)
-		menu_item_refresh.connect('activate', self.refresh_file_list)
-		menu_item_refresh.show()
-		self._tab_menu.append(menu_item_refresh)
+		menu_item_refresh = Gtk.Button.new_from_icon_name('reload', Gtk.IconSize.MENU)
+		menu_item_refresh.set_tooltip_text(_('Reload item list'))
+		menu_item_refresh.connect('clicked', self.refresh_file_list)
+		hbox_buttons.pack_start(menu_item_refresh, False, False, 0)
 
 		# create copy path item
-		separator_path = Gtk.SeparatorMenuItem()
-		separator_path.show()
-		self._tab_menu.append(separator_path)
-
-		image_copy = Gtk.Image()
-		image_copy.set_from_stock(Gtk.STOCK_COPY, Gtk.IconSize.MENU)
-
-		menu_item_copy_path = Gtk.ImageMenuItem()
-		menu_item_copy_path.set_label(_('Copy path to clipboard'))
-		menu_item_copy_path.set_image(image_copy)
-		menu_item_copy_path.connect('activate', self.copy_path_to_clipboard)
-		menu_item_copy_path.show()
-		self._tab_menu.append(menu_item_copy_path)
+		menu_item_copy_path = Gtk.Button.new_from_icon_name(Gtk.STOCK_COPY, Gtk.IconSize.MENU)
+		menu_item_copy_path.set_tooltip_text(_('Copy path to clipboard'))
+		menu_item_copy_path.connect('clicked', self.copy_path_to_clipboard)
+		hbox_buttons.pack_start(menu_item_copy_path, False, False, 0)
 
 		# create path entry item
-		menu_path_entry = Gtk.MenuItem()
-		menu_path_entry.set_label(_('Enter path...'))
-		menu_path_entry.connect('activate', self.custom_path_entry)
-		menu_path_entry.show()
-		self._tab_menu.append(menu_path_entry)
+		menu_path_entry = Gtk.Button.new_from_icon_name('go-jump', Gtk.IconSize.MENU)
+		menu_path_entry.set_tooltip_text(_('Enter path...'))
+		menu_path_entry.connect('clicked', self.custom_path_entry)
+		hbox_buttons.pack_start(menu_path_entry, False, False, 0)
+
+		# add containers to context menu
+		self._title_bar.context_menu.add_control(vbox_free_space)
+		self._title_bar.context_menu.add_control(hbox_buttons)
 
 		# history menu
 		self._history_menu = Gtk.Menu()
@@ -379,7 +376,7 @@ class ItemList(PluginBase):
 
 	def _show_tab_menu(self, widget, data=None):
 		"""Show title bar menu"""
-		self._title_bar.show_menu()
+		self._title_bar.show_context_menu()
 		return True
 
 	def _show_emblem_menu(self, widget, data=None):

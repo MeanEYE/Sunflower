@@ -311,7 +311,7 @@ class SessionManager:
 		list_container.add(self._item_list)
 
 		# create additional popover options
-		vbox_options = Gtk.HBox.new(False, 5)
+		hbox_buttons = Gtk.ButtonBox.new(Gtk.Orientation.HORIZONTAL)
 
 		image_lock = Gtk.Image.new_from_icon_name('changes-prevent-symbolic', Gtk.IconSize.BUTTON)
 		self._button_lock = Gtk.ToggleButton.new()
@@ -329,13 +329,14 @@ class SessionManager:
 		self._application.header_bar.pack_end(self._button)
 		popover.add(vbox_popover)
 
-		vbox_options.pack_start(self._button_lock, True, False, 0)
-		vbox_options.pack_start(button_manage, True, True, 0)
-		vbox_options.pack_start(button_save, True, True, 0)
+		hbox_buttons.pack_start(self._button_lock, True, False, 0)
+		hbox_buttons.pack_start(button_manage, True, True, 0)
+		hbox_buttons.pack_start(button_save, True, True, 0)
+		hbox_buttons.set_child_non_homogeneous(self._button_lock, True)
 
 		vbox_popover.pack_start(quick_search, True, False, 0)
 		vbox_popover.pack_start(list_container, True, True, 0)
-		vbox_popover.pack_start(vbox_options, True, False, 0)
+		vbox_popover.pack_start(hbox_buttons, True, False, 0)
 
 		# show all created widgets
 		vbox_popover.show_all()

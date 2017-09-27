@@ -22,10 +22,10 @@ class ContextMenu:
 		# pack interface
 		self._popover.add(self._container)
 
-	def add_control(self, control, fill=False):
+	def add_control(self, control, fill=False, spacing=0):
 		"""Add specified control to the context menu."""
 		control.show_all()
-		self._container.pack_start(control, fill, False, 0)
+		self._container.pack_start(control, fill, False, spacing)
 
 	def show(self):
 		"""Show context menu for current directory."""

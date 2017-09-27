@@ -73,11 +73,11 @@ class ItemList(PluginBase):
 		self._status_bar.add_group_with_icon('size', 'add', '0/0', tooltip=_('Size (selected/total)'))
 
 		# file list
-		self._container = Gtk.ScrolledWindow()
+		self._container = Gtk.ScrolledWindow.new()
 		self._container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 		self._container.set_shadow_type(Gtk.ShadowType.IN)
 
-		self._item_list = Gtk.TreeView()
+		self._item_list = Gtk.TreeView.new()
 		self._item_list.set_fixed_height_mode(True)
 
 		# apply header visibility

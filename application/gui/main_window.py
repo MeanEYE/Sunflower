@@ -158,7 +158,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.commands_actions = Gio.SimpleActionGroup.new()
 		self.commands_menu = Gio.Menu()
 
-		image_new = Gtk.Image.new_from_icon_name('tab-new', Gtk.IconSize.BUTTON)
+		image_new = Gtk.Image.new_from_icon_name('tab-new-symbolic', Gtk.IconSize.BUTTON)
 		self.button_new = Gtk.MenuButton.new()
 		self.button_new.set_image(image_new)
 		self.button_new.set_menu_model(self.new_tab_menu)

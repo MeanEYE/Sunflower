@@ -130,20 +130,26 @@ class ItemList(PluginBase):
 		hbox_buttons = Gtk.ButtonBox.new(Gtk.Orientation.HORIZONTAL)
 		hbox_buttons.get_style_context().add_class('linked')
 
+		# create swap panes item
+		menu_swap_paths = Gtk.Button.new_from_icon_name('object-flip-horizontal-symbolic', Gtk.IconSize.BUTTON)
+		menu_swap_paths.set_tooltip_text(_('Swap right and left paths'))
+		menu_swap_paths.connect('clicked', self._swap_paths)
+		hbox_buttons.pack_start(menu_swap_paths, False, False, 0)
+
 		# create reload menu item
-		menu_item_refresh = Gtk.Button.new_from_icon_name('reload', Gtk.IconSize.BUTTON)
+		menu_item_refresh = Gtk.Button.new_from_icon_name('view-refresh-symbolic', Gtk.IconSize.BUTTON)
 		menu_item_refresh.set_tooltip_text(_('Reload item list'))
 		menu_item_refresh.connect('clicked', self.refresh_file_list)
 		hbox_buttons.pack_start(menu_item_refresh, False, False, 0)
 
 		# create copy path item
-		menu_item_copy_path = Gtk.Button.new_from_icon_name(Gtk.STOCK_COPY, Gtk.IconSize.BUTTON)
+		menu_item_copy_path = Gtk.Button.new_from_icon_name('edit-copy-symbolic', Gtk.IconSize.BUTTON)
 		menu_item_copy_path.set_tooltip_text(_('Copy path to clipboard'))
 		menu_item_copy_path.connect('clicked', self.copy_path_to_clipboard)
 		hbox_buttons.pack_start(menu_item_copy_path, False, False, 0)
 
 		# create path entry item
-		menu_path_entry = Gtk.Button.new_from_icon_name('go-jump', Gtk.IconSize.BUTTON)
+		menu_path_entry = Gtk.Button.new_from_icon_name('go-jump-symbolic', Gtk.IconSize.BUTTON)
 		menu_path_entry.set_tooltip_text(_('Enter path...'))
 		menu_path_entry.connect('clicked', self.custom_path_entry)
 		hbox_buttons.pack_start(menu_path_entry, False, False, 0)

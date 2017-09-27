@@ -7,6 +7,10 @@ class LocationMenu:
 	def __init__(self, parent, relative_to):
 		self._parent = parent
 
+		# storage containers for different locations
+		# self._bookmarks = Gtk.ListStore.new()
+		# self._mounts = Gtk.ListStore.new()
+
 		# create popover interface
 		self._popover = Gtk.Popover.new()
 		self._popover.set_relative_to(relative_to)
@@ -26,22 +30,22 @@ class LocationMenu:
 		hbox_buttons = Gtk.ButtonBox.new(Gtk.Orientation.HORIZONTAL)
 		hbox_buttons.get_style_context().add_class('linked')
 
-		button_open = Gtk.Button.new_from_icon_name('document-open', Gtk.IconSize.BUTTON)
+		button_open = Gtk.Button.new_from_icon_name('document-open-symbolic', Gtk.IconSize.BUTTON)
 		button_open.connect('clicked', self.__handle_open_click)
 		button_open.set_tooltip_text(_('Open'))
 		hbox_buttons.pack_start(button_open, False, False, 0)
 
-		button_open_tab = Gtk.Button.new_from_icon_name('tab-new', Gtk.IconSize.BUTTON)
+		button_open_tab = Gtk.Button.new_from_icon_name('tab-new-symbolic', Gtk.IconSize.BUTTON)
 		button_open_tab.connect('clicked', self.__handle_open_tab_click)
 		button_open_tab.set_tooltip_text(_('Open selected path in new tab'))
 		hbox_buttons.pack_start(button_open_tab, False, False, 0)
 
-		self._button_open_opposite = Gtk.Button.new_from_icon_name('go-right', Gtk.IconSize.BUTTON)
+		self._button_open_opposite = Gtk.Button.new_from_icon_name('go-next-symbolic', Gtk.IconSize.BUTTON)
 		self._button_open_opposite.connect('clicked', self.__handle_open_opposite_click)
 		self._button_open_opposite.set_tooltip_text(_('Open selected path in opposite list'))
 		hbox_buttons.pack_start(self._button_open_opposite, False, False, 0)
 
-		button_open_terminal = Gtk.Button.new_from_icon_name('terminal', Gtk.IconSize.BUTTON)
+		button_open_terminal = Gtk.Button.new_from_icon_name('utilities-terminal-symbolic', Gtk.IconSize.BUTTON)
 		button_open_terminal.connect('clicked', self.__handle_open_opposite_click)
 		button_open_terminal.set_tooltip_text(_('Open terminal at selected path'))
 		hbox_buttons.pack_start(button_open_terminal, False, False, 0)
@@ -74,8 +78,13 @@ class LocationMenu:
 		"""Handle clicking on open in terminal button."""
 		pass
 
-	def add_list(self, control):
-		"""Add list control with specified name to the notebook."""
+	def add_list(self, name, title, control):
+		"""Add list control with specified name to the notebook.
+
+		If list with the specified name already exists it will be replaced by
+		new control. This is to allow pane-specific lists.
+
+		"""
 		pass
 
 	def show(self):
@@ -83,8 +92,8 @@ class LocationMenu:
 		application = self._parent._parent
 
 		if application.get_left_object() == self._parent:
-			self._button_open_opposite.get_image().set_from_icon_name('go-right', Gtk.IconSize.BUTTON)
+			self._button_open_opposite.get_image().set_from_icon_name('go-next-symbolic', Gtk.IconSize.BUTTON)
 		else:
-			self._button_open_opposite.get_image().set_from_icon_name('go-left', Gtk.IconSize.BUTTON)
+			self._button_open_opposite.get_image().set_from_icon_name('go-previous-symbolic', Gtk.IconSize.BUTTON)
 
 		self._popover.popup()

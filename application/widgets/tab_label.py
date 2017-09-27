@@ -27,13 +27,7 @@ class TabLabel:
 		self._lock_image.set_property('no-show-all', True)
 		self._lock_image.set_from_icon_name('changes-prevent-symbolic', Gtk.IconSize.MENU)
 
-		image = Gtk.Image()
-		image.set_from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU)
-		result, image_width, image_height = Gtk.icon_size_lookup(Gtk.IconSize.MENU)
-		image.show()
-
-		self._button = Gtk.Button()
-		self._button.add(image)
+		self._button = Gtk.Button.new_from_icon_name('window-close-symbolic', Gtk.IconSize.MENU)
 		self._button.set_focus_on_click(False)
 		self._button.connect('clicked', self._close_tab)
 		self._button.set_property('no-show-all', True)

@@ -1858,7 +1858,7 @@ class FileList(ItemList):
 							_('Free:'),
 							_('Total:')
 						))
-		self._progress_free_space.set_fraction(percent_available / 100)
+		self._progress_free_space.set_fraction(1 - (percent_available / 100))
 
 	def _drag_motion(self, widget, drag_context, x, y, timestamp):
 		"""Handle dragging data over widget"""

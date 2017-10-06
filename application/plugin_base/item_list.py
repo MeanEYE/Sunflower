@@ -14,7 +14,6 @@ from gui.preferences.display import StatusVisible
 from gui.history_list import HistoryList
 from history import HistoryManager
 from plugin_base.provider import Mode as FileMode
-from widgets.location_menu import LocationMenu
 
 
 class ItemList(PluginBase):
@@ -182,18 +181,6 @@ class ItemList(PluginBase):
 		locations_button.set_tooltip_text(_('Locations'))
 		locations_button.connect('clicked', self._locations_button_clicked)
 		self._title_bar.add_control(locations_button)
-
-		# create locations menu
-		self.locations_menu = LocationMenu(self, locations_button)
-
-		# history button
-		# self._history_button = Gtk.Button.new_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
-
-		# self._history_button.set_focus_on_click(False)
-		# self._history_button.set_tooltip_text(_('History'))
-		# self._history_button.connect('clicked', self._history_button_clicked)
-
-		# self._title_bar.add_control(self._history_button)
 
 		# terminal button
 		self._terminal_button = Gtk.Button.new_from_icon_name('terminal', Gtk.IconSize.MENU)
@@ -1277,7 +1264,8 @@ class ItemList(PluginBase):
 
 	def _locations_button_clicked(self, widget, data=None):
 		"""Handle clicking on locations button."""
-		self.locations_menu.show()
+		self._parent.locations.set_current(self)
+		self._parent.locations.show(widget)
 		return True
 
 	def _history_button_clicked(self, widget, data=None):

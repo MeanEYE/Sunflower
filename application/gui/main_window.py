@@ -30,13 +30,14 @@ from plugin_base.rename_extension import RenameExtension
 from plugin_base.find_extension import FindExtension
 from plugin_base.terminal import TerminalType
 from widgets.bookmarks_menu import BookmarksMenu
+from widgets.location_menu import LocationMenu
 from tools.advanced_rename import AdvancedRename
 from tools.find_files import FindFiles
 from tools.version_check import VersionCheck
 from tools.disk_usage import DiskUsage
 from config import Config
 
-# GUI imports
+# user interface imports
 from gui.about_window import AboutWindow
 from gui.preferences_window import PreferencesWindow
 from gui.preferences.display import TabExpand
@@ -612,6 +613,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# bookmarks menu
 		self.bookmarks = BookmarksMenu(self)
+		self.locations = LocationMenu(self)
 
 		# mounts menu
 		mounts_image = Gtk.Image.new()
@@ -1722,7 +1724,6 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def create_tabs(self, arguments):
 		"""Create all tabs taking into all (local or remote) account command line arguments"""
-
 		if not arguments.is_remote:
 			section = self.options.section('item_list')
 			config_prevents_load = section.get('force_directories')
@@ -2343,7 +2344,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		# calculate middle position
 		new_position = (left_size + right_size) / 2
 		self._paned.set_position(new_position)
-
 		return True
 
 	def move_handle(self, widget=None, direction=1):
@@ -2356,7 +2356,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		"""Sets focus on opposite item list"""
 		opposite_object = self.get_opposite_object(self.get_active_object())
 		opposite_object.focus_main_object()
-
 		return True
 
 	def show_command_entry(self, widget=None, data=None):

@@ -68,7 +68,15 @@ class LocationMenu:
 		mounts_container.add(self._mounts)
 
 		self._bookmarks.add(GroupTitle(_('User defined')))
+		self._bookmarks.add(Bookmark('/home/meaneye', 'folder', 'Home'))
+		self._bookmarks.add(Bookmark('/usr/share', 'folder', 'User shared'))
 		self._bookmarks.add(GroupTitle(_('System wide')))
+		self._bookmarks.add(Bookmark('/', 'computer', 'Root'))
+		self._bookmarks.add(Bookmark('/', 'computer', 'Root'))
+		self._bookmarks.add(Bookmark('/', 'computer', 'Root'))
+		self._bookmarks.add(Bookmark('/', 'computer', 'Root'))
+		self._bookmarks.add(Bookmark('/', 'computer', 'Root'))
+		self._bookmarks.add(Bookmark('/', 'computer', 'Root'))
 
 		# pack interface
 		self.add_list('bookmarks', Gtk.Label.new(_('Bookmarks')), bookmarks_container, self._bookmarks)

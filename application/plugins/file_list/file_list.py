@@ -1827,10 +1827,14 @@ class FileList(ItemList):
 			file_stat = provider.get_stat(name, relative_to=self.path)
 
 			file_mode = file_stat.mode
+			file_date = file_stat.time_modify
 			formated_file_mode = common.format_mode(file_mode, self._mode_format)
+			formated_file_date = time.strftime(self._time_format, time.localtime(file_date))
 
 			self._store.set_value(found_iter, Column.MODE, file_mode)
+			self._store.set_value(found_iter, Column.TIME, file_date)
 			self._store.set_value(found_iter, Column.FORMATED_MODE, formated_file_mode)
+			self._store.set_value(found_iter, Column.FORMATED_TIME, formated_file_date)
 
 	def _change_title_text(self, text=None):
 		"""Change title label text and add free space display"""

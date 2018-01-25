@@ -92,6 +92,9 @@ class LocationMenu:
 		options = self._application.bookmark_options
 		icon_manager = self._application.icon_manager
 
+		# clear existing entries
+		self._bookmarks.foreach(self._bookmarks.remove)
+
 		# sunflower bookmarks
 		self._bookmarks.add(GroupTitle(_('User defined')))
 

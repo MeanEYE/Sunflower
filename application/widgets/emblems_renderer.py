@@ -56,6 +56,7 @@ class CellRendererEmblems(Gtk.CellRenderer):
 
 	def do_render(self, context, widget, background_area, cell_area, flags):
 		"""Render emblems on tree view."""
+		return
 		if not self.is_link and (self.emblems is None or len(self.emblems) == 0):
 			return
 

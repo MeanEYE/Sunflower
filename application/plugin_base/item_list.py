@@ -176,18 +176,18 @@ class ItemList(PluginBase):
 		options = self._parent.options
 
 		# locations button
-		locations_button = Gtk.Button.new_from_icon_name('go-jump', Gtk.IconSize.BUTTON)
-		locations_button.set_focus_on_click(False)
-		locations_button.set_tooltip_text(_('Locations'))
-		locations_button.connect('clicked', self._locations_button_clicked)
-		self._title_bar.add_control(locations_button)
+		self.locations_button = Gtk.Button.new_from_icon_name('go-jump', Gtk.IconSize.BUTTON)
+		self.locations_button.set_focus_on_click(False)
+		self.locations_button.set_tooltip_text(_('Locations'))
+		self.locations_button.connect('clicked', self._locations_button_clicked)
+		self._title_bar.add_control(self.locations_button)
 
 		# terminal button
-		self._terminal_button = Gtk.Button.new_from_icon_name('terminal', Gtk.IconSize.MENU)
-		self._terminal_button.set_focus_on_click(False)
-		self._terminal_button.set_tooltip_text(_('Terminal'))
-		self._terminal_button.connect('clicked', self._create_terminal)
-		self._title_bar.add_control(self._terminal_button)
+		self.terminal_button = Gtk.Button.new_from_icon_name('terminal', Gtk.IconSize.MENU)
+		self.terminal_button.set_focus_on_click(False)
+		self.terminal_button.set_tooltip_text(_('Terminal'))
+		self.terminal_button.connect('clicked', self._create_terminal)
+		self._title_bar.add_control(self.terminal_button)
 
 	def _configure_accelerators(self):
 		"""Configure accelerator group"""
@@ -337,7 +337,7 @@ class ItemList(PluginBase):
 
 	def _show_bookmarks(self, widget=None, data=None):
 		"""Show bookmarks for current panel"""
-		self._parent.show_bookmarks_menu(None, self._notebook)
+		self._parent.show_bookmarks_menu()
 		return True
 
 	def _show_left_bookmarks(self, widget, data=None):
@@ -1264,8 +1264,7 @@ class ItemList(PluginBase):
 
 	def _locations_button_clicked(self, widget, data=None):
 		"""Handle clicking on locations button."""
-		self._parent.locations.set_current(self)
-		self._parent.locations.show(widget)
+		self._parent.show_bookmarks_menu(widget, self._notebook)
 		return True
 
 	def _history_button_clicked(self, widget, data=None):

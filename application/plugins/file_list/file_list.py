@@ -21,6 +21,7 @@ from threading import Thread, Event
 from widgets.thumbnail_view import ThumbnailView
 from widgets.emblems_renderer import CellRendererEmblems
 
+# TODO: Lowest supported is Gtk 3.20, this is not needed
 # defined here as Gtk 3.10.8 doesn't define Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID
 UNSORTED_SORT_COLUMN_ID = -2
 

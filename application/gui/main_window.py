@@ -29,7 +29,6 @@ from plugin_base.item_list import ItemList
 from plugin_base.rename_extension import RenameExtension
 from plugin_base.find_extension import FindExtension
 from plugin_base.terminal import TerminalType
-from widgets.bookmarks_menu import BookmarksMenu
 from widgets.location_menu import LocationMenu
 from tools.advanced_rename import AdvancedRename
 from tools.find_files import FindFiles
@@ -612,7 +611,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		toolbar.set_property('no-show-all', not self.options.get('show_toolbar'))
 
 		# bookmarks menu
-		self.bookmarks = BookmarksMenu(self)
 		self.locations = LocationMenu(self)
 
 		# mounts menu
@@ -743,9 +741,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		vbox.pack_start(self._vbox2, True, True, 0)
 		self.add(vbox)
 
-		# create bookmarks menu
-		self._create_bookmarks_menu()
-
 		# create commands menu
 		self._create_commands_menu()
 
@@ -795,62 +790,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.indicator.adjust_visibility_items(False)
 
 		return True  # prevent default handler
-
-	def _create_bookmarks_menu(self):
-		"""Create bookmarks menu as defined in options"""
-		self.bookmarks.clear_bookmarks()
-
-		# add home if specified
-		if self.bookmark_options.get('add_home'):
-			self.bookmarks.add_bookmark(_('Home directory'), 'user-home', user.home)
-
-		# create bookmark menu items
-		bookmark_list = self.bookmark_options.get('bookmarks')
-
-		for bookmark_data in bookmark_list:
-			icon_name = self.icon_manager.get_icon_for_directory(bookmark_data['uri'])
-			self.bookmarks.add_bookmark(bookmark_data['name'], icon_name, bookmark_data['uri'])
-
-		# add system bookmarks if needed
-		bookmarks_files = (
-					os.path.join(user.home, '.gtk-bookmarks'),
-					os.path.join(common.get_config_directory(), 'gtk-3.0', 'bookmarks')
-				)
-
-		available_files = filter(lambda path: os.path.exists(path), bookmarks_files)
-
-		if self.bookmark_options.get('system_bookmarks') and len(available_files) > 0:
-			lines = []
-			with open(available_files[0], 'r') as raw_file:
-				lines.extend(raw_file.readlines(False))
-
-			# add bookmarks
-			for line in lines:
-				try:
-					uri, name = line.strip().split(' ', 1)
-
-				except:
-					uri = line.strip()
-					name = urllib.unquote(uri.split('://')[1]) if '://' in uri else uri
-					name = os.path.basename(name)
-
-				# add entry
-				icon_name = self.icon_manager.get_icon_for_directory(uri)
-				self.bookmarks.add_bookmark(name, icon_name, uri, system=True)
-
-		# create additional options
-		if self.bookmarks.get_menu_item_count() == 0:
-			self.bookmarks.add_menu_item(
-						_('Add bookmark'),
-						'bookmark-new',
-						self._add_bookmark
-					)
-			self.bookmarks.add_menu_item(
-						_('Edit bookmarks'),
-						None,
-						self.preferences_window._show,
-						'bookmarks'
-					)
 
 	def _create_commands_menu(self):
 		"""Create commands main menu"""
@@ -904,7 +843,7 @@ class MainWindow(Gtk.ApplicationWindow):
 					'uri': response[2]
 				})
 
-			self._create_bookmarks_menu()
+			self.locations.update_bookmarks()
 
 	def _handle_command_click(self, widget, data=None):
 		"""Handle click on command menu item"""
@@ -1555,24 +1494,20 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		return result
 
-	def show_bookmarks_menu(self, widget=None, notebook=None):
+	def show_bookmarks_menu(self, reference=None, notebook=None):
 		"""Position bookmarks menu properly and show it"""
-		button = None
-
 		if notebook is not None:
-			# show request was triggered by global shortcut
-			active_object = notebook.get_nth_page(notebook.get_current_page())
-			if hasattr(active_object, '_bookmarks_button'):
-				button = active_object._bookmarks_button
-
+			target_object = notebook.get_nth_page(notebook.get_current_page())
 		else:
-			# button called for menu
-			button = widget
-			active_object = self.get_active_object()
+			target_object = self.get_active_object()
 
-		if button is not None:
-			self.bookmarks.set_object(active_object)
-			self.bookmarks.show(self, button)
+		# make sure we have reference object
+		if reference is None:
+			reference = target_object.locations_button
+
+		# show locations menu
+		self.locations.set_current(target_object)
+		self.locations.show(reference)
 
 		return True
 
@@ -2495,10 +2430,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		horizontal_split.set_active(self.options.get('horizontal_split'))
 
 		# recreate bookmarks menu
-		self._create_bookmarks_menu()
-
-		# apply bookmark settings
-		self.bookmarks.apply_settings()
+		self.locations.update_bookmarks()
 
 		# recreate tools menu
 		self._create_commands_menu()

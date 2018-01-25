@@ -1,4 +1,9 @@
-from gi.repository import Gtk
+import os
+import user
+import urllib
+import common
+
+from gi.repository import Gtk, Pango
 
 from parameters import Parameters
 from plugin_base.item_list import ItemList
@@ -14,6 +19,7 @@ class LocationMenu:
 		# create popover interface
 		self._popover = Gtk.Popover.new()
 		self._popover.set_position(Gtk.PositionType.BOTTOM)
+		self._popover.set_modal(True)
 
 		# create widget container
 		container = Gtk.VBox.new(False, 0)
@@ -67,16 +73,8 @@ class LocationMenu:
 		self._mounts = Gtk.ListBox.new()
 		mounts_container.add(self._mounts)
 
-		self._bookmarks.add(GroupTitle(_('User defined')))
-		self._bookmarks.add(Bookmark('/home/meaneye', 'folder', 'Home'))
-		self._bookmarks.add(Bookmark('/usr/share', 'folder', 'User shared'))
-		self._bookmarks.add(GroupTitle(_('System wide')))
-		self._bookmarks.add(Bookmark('/', 'computer', 'Root'))
-		self._bookmarks.add(Bookmark('/', 'computer', 'Root'))
-		self._bookmarks.add(Bookmark('/', 'computer', 'Root'))
-		self._bookmarks.add(Bookmark('/', 'computer', 'Root'))
-		self._bookmarks.add(Bookmark('/', 'computer', 'Root'))
-		self._bookmarks.add(Bookmark('/', 'computer', 'Root'))
+		# populate lists
+		self.update_bookmarks()
 
 		# pack interface
 		self.add_list('bookmarks', Gtk.Label.new(_('Bookmarks')), bookmarks_container, self._bookmarks)
@@ -88,6 +86,49 @@ class LocationMenu:
 
 		container.show_all()
 		self._popover.add(container)
+
+	def update_bookmarks(self):
+		"""Populate bookmarks menu."""
+		options = self._application.bookmark_options
+		icon_manager = self._application.icon_manager
+
+		# sunflower bookmarks
+		self._bookmarks.add(GroupTitle(_('User defined')))
+
+		if options.get('add_home'):
+			self._bookmarks.add(Bookmark(user.home, 'user-home', _('Home directory')))
+
+		for data in options.get('bookmarks'):
+			icon_name = icon_manager.get_icon_for_directory(data['uri'])
+			self._bookmarks.add(Bookmark(data['uri'], icon_name, data['name']))
+
+		# gnome bookmarks
+		bookmarks_files = (
+					os.path.join(user.home, '.gtk-bookmarks'),
+					os.path.join(common.get_config_directory(), 'gtk-3.0', 'bookmarks')
+				)
+		available_files = filter(lambda path: os.path.exists(path), bookmarks_files)
+
+		if options.get('system_bookmarks') and len(available_files) > 0:
+			self._bookmarks.add(GroupTitle(_('System wide')))
+
+			lines = []
+			with open(available_files[0], 'r') as raw_file:
+				lines.extend(raw_file.readlines(False))
+
+			# parse files
+			for line in lines:
+				try:
+					uri, name = line.strip().split(' ', 1)
+
+				except:
+					uri = line.strip()
+					name = urllib.unquote(uri.split('://')[1]) if '://' in uri else uri
+					name = os.path.basename(name)
+
+				# add entry
+				icon_name = icon_manager.get_icon_for_directory(uri)
+				self._bookmarks.add(Bookmark(uri, icon_name, name))
 
 	def __get_selected_location(self):
 		"""Return location object selected or None."""
@@ -156,6 +197,7 @@ class LocationMenu:
 		# create new tab
 		TabClass = self._application.plugin_classes['system_terminal']
 		self._application.create_tab(self._control._notebook, TabClass, options)
+
 		return True
 
 	def add_list(self, name, title, container, list_control):
@@ -271,10 +313,12 @@ class Bookmark(Location):
 		# create title
 		self._title = Gtk.Label.new()
 		self._title.set_alignment(0, 0.5)
+		self._title.set_ellipsize(Pango.EllipsizeMode.END)
 
 		self._subtitle = Gtk.Label.new('<small>{}</small>'.format(self.get_location()))
 		self._subtitle.set_alignment(0, 0.5)
 		self._subtitle.set_use_markup(True)
+		self._subtitle.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
 
 		# pack user interface
 		title_container.pack_start(self._title, True, False, 0)

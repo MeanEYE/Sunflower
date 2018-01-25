@@ -156,7 +156,8 @@ class MountsManagerWindow(Gtk.Window):
 
 	def _add_item(self, text, uri, icon):
 		"""Add new menu item to the list"""
-		self._application.bookmarks.add_mount(text, icon, uri)
+		# TODO: Implement locations menu
+		# self._application.bookmarks.add_mount(text, icon, uri)
 
 	def _add_unmount_item(self, text, uri, icon):
 		"""Add new menu item used for unmounting"""
@@ -179,7 +180,8 @@ class MountsManagerWindow(Gtk.Window):
 
 	def _remove_item(self, mount_point):
 		"""Remove item based on device name"""
-		self._application.bookmarks.remove_mount(mount_point)
+		# TODO: Implement locations menu
+		# self._application.bookmarks.remove_mount(mount_point)
 
 		for item in self._menu_unmount.get_children():
 			if self._menu_item_no_mounts != item and item.uri == mount_point:
@@ -190,7 +192,9 @@ class MountsManagerWindow(Gtk.Window):
 
 	def _menu_updated(self):
 		"""Method called whenever menu is updated"""
-		has_mounts = self._application.bookmarks.get_mount_count() > 0
+		# TODO: Probably no longer needed
+		# has_mounts = self._application.bookmarks.get_mount_count() > 0
+		return
 
 		try:
 			self._menu_item_no_mounts.set_visible(not has_mounts)

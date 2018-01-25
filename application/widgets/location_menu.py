@@ -99,15 +99,22 @@ class LocationMenu:
 		selected_location = self.__get_selected_location()
 		assert self._control is not None or selected_location is not None
 
+		# close menu
+		self._popover.popdown()
+
 		# open selected path in currently active list
 		if isinstance(self._control, ItemList):
 			self._control.change_path(selected_location.get_location())
+
 		return True
 
 	def __handle_open_tab_click(self, widget, data=None):
 		"""Handle clicking on open in new tab button."""
 		selected_location = self.__get_selected_location()
 		assert self._control is not None or selected_location is not None
+
+		# close menu
+		self._popover.popdown()
 
 		# create options to pass to new tab
 		options = Parameters()
@@ -116,12 +123,16 @@ class LocationMenu:
 		# create new tab
 		TabClass = self._application.plugin_classes['file_list']
 		self._application.create_tab(self._control._notebook, TabClass, options)
+
 		return True
 
 	def __handle_open_opposite_click(self, widget, data=None):
 		"""Handle slicking on open in opposite panel button."""
 		selected_location = self.__get_selected_location()
 		assert self._control is not None or selected_location is not None
+
+		# close menu
+		self._popover.popdown()
 
 		# open in opposite object
 		opposite_object = self._application.get_opposite_object(self._control)
@@ -134,6 +145,9 @@ class LocationMenu:
 		"""Handle clicking on open in terminal button."""
 		selected_location = self.__get_selected_location()
 		assert self._control is not None or selected_location is not None
+
+		# close menu
+		self._popover.popdown()
 
 		# create options to pass to new tab
 		options = Parameters()

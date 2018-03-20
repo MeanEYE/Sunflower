@@ -1,5 +1,5 @@
-from gi.repository import Gtk, Gio, GLib
-from gui.mounts_manager_window import MountsManagerWindow
+from gi.repository import Gtk, Gio, GLib, Pango
+from widgets.location_menu import Location
 
 
 class MountsManager:
@@ -8,122 +8,50 @@ class MountsManager:
 	def __init__(self, application):
 		self._application = application
 		self._mounts = {}
-
-		# create user interface
-		self.window = MountsManagerWindow(self)
+		self._mounts_list = None
+		self._location_menu = None
 
 		# create volume monitor
 		self._volume_monitor = Gio.VolumeMonitor.get()
-		self._volume_monitor.connect('mount-added', self._add_mount)
-		self._volume_monitor.connect('mount-removed', self._remove_mount)
-		self._volume_monitor.connect('volume-added', self._add_volume)
-		self._volume_monitor.connect('volume-removed', self._remove_volume)
+		self._volume_monitor.connect('volume-added', self._handle_add_volume)
 
-	def _populate_list(self):
-		"""Populate mount/volume list"""
+	def attach_location_menu(self, location_menu):
+		"""Use notification from location menu to populate list with mounts and volumes."""
+		self._location_menu = location_menu
+		self._mounts_list = self._location_menu.get_list('mounts')
 
-		mounts_added = []
+		for volume in self._volume_monitor.get_volumes():
+			self._mounts_list.add(Volume(self, volume))
 
 		# get list of volumes
-		for volume in self._volume_monitor.get_volumes():
-			self.window._add_volume(volume, startup=True)
-			if volume.get_activation_root() is not None:
-				mounts_added.append(volume.get_activation_root().get_uri())
+		# volumes = self._volume_monitor.get_volumes()
+		# volumes = map(lambda volume: volume.get_activation_root(), volumes)
+		# volumes = filter(lambda uri: uri is not None, volumes)
+		# mounts_added.extend(volumes)
 
-		# get list of mounted volumes
-		for mount in self._volume_monitor.get_mounts():
-			if mount.get_root().get_uri() not in mounts_added:
-				self._add_mount(self._volume_monitor, mount)
-				mounts_added.append(mount.get_root().get_uri())
+		# # get list of mounted volumes
+		# mounts = self._volume_monitor.get_mounts()
+		# mounts = map(lambda mount: mount.get_root().get_uri(), mounts)
+		# mounts = filter(lambda uri: uri is not None and uri not in mounts_added, mounts)
+		# mounts_added.extend(mounts)
 
-		# update menus
-		self.window._menu_updated()
+	def _handle_add_volume(self, monitor, volume):
+		"""Event called when new volume is connected."""
+		self._mounts_list.add(Volume(self, volume))
 
-	def _add_mount(self, monitor, mount):
-		"""Catch volume-mounted signal and update mounts menu"""
-		icon_names = mount.get_icon().to_string()
-		mount_icon = self._application.icon_manager.get_mount_icon_name(icon_names)
-		mount_uri = mount.get_root().get_uri()
-		volume = mount.get_volume()
+	def _handle_remove_volume(self, widget, volume):
+		"""Event called when volume is removed."""
+		self._mounts_list.remove(widget)
 
-		# if mount has volume, set mounted flag
-		if volume is not None:
-			self.window._volume_mounted(volume)
+	def __handle_unmount_finish(self, mount, result, user_data=None):
+		"""Callback for unmount events"""
+		mount.unmount_finish(result)
 
-		# this gets called twice on the back of some 'mount-added' events
-		if mount_uri in self._mounts:
-			return
-
-		# add mount to the list in Mount Manager window
-		self.window._notify_mount_add(mount_icon, mount.get_name(), mount_uri)
-
-		# add bookmark menu item
-		self.window._add_item(
-				mount.get_name(),
-				mount_uri,
-				mount_icon
-			)
-
-		# add unmount menu item
-		self.window._add_unmount_item(
-				mount.get_name(),
-				mount_uri,
-				mount_icon
-			)
-
-		# add mount object to local cache list
-		self._mounts[mount_uri] = mount
-
-	def _remove_mount(self, monitor, mount):
-		"""Remove volume menu item from the mounts menu"""
-		volume = mount.get_volume()
-		mount_uri = mount.get_root().get_uri()
-
-		# update volume list if possible
-		if volume is not None:
-			self.window._volume_unmounted(volume)
-
-		# remove mount from list
-		self.window._notify_mount_remove(mount_uri)
-
-		# remove item from menus
-		self.window._remove_item(mount_uri)
-
-		# remove mount object from cache list
-		if mount_uri in self._mounts:
-			self._mounts.pop(mount_uri)
-
-	def _add_volume(self, monitor, volume):
-		"""Event called when new volume is connected"""
-		self.window._add_volume(volume)
-
-	def _remove_volume(self, monitor, volume):
-		"""Event called when volume is removed/unmounted"""
-		self.window._remove_volume(volume)
-
-	def _unmount_item_menu_callback(self, widget, data=None):
-		"""Event called by the unmount menu item or unmount button from manager"""
-		uri = widget.uri
-
-		if uri is not None:
-			self._unmount(self._mounts[uri])
-
-	def _unmount_by_uri(self, uri):
-		"""Perform unmount by URI"""
-		if uri in self._mounts:
-			self._unmount(self._mounts[uri])
-
-	def _unmount(self, mount):
+	def unmount(self, mount):
 		"""Perform unmounting"""
 		if mount.can_unmount():
-			# notify volume manager extension if mount is part of volume
-			volume = mount.get_volume()
-
-			if volume is not None:
-				self.window._volume_unmounted(volume)
-
 			# we can safely unmount
-			mount.unmount(Gio.MountUnmountFlags.FORCE, None, self._unmount_finish, None)
+			mount.unmount(Gio.MountUnmountFlags.FORCE, None, self.__handle_unmount_finish, None)
 
 		else:
 			# print error
@@ -137,22 +65,9 @@ class MountsManager:
 			dialog.run()
 			dialog.destroy()
 
-	def _unmount_finish(self, mount, result, user_data=None):
-		"""Callback for unmount events"""
-		mount.unmount_finish(result)
-
-	def _attach_menus(self):
-		"""Attach mounts to menus"""
-		self.window._attach_menus()
-
-	def show(self, widget=None, data=None):
-		"""Show mounts manager window"""
-		self.window.show_all()
-		return True
-
 	def create_extensions(self):
 		"""Create mounts manager extensions"""
-		self.window.create_extensions()
+		pass
 
 	def is_mounted(self, path):
 		"""Check if specified path is mounted"""
@@ -161,3 +76,59 @@ class MountsManager:
 	def mount_path(self, path):
 		"""Mount specified path if extensions know how"""
 		pass
+
+
+class Volume(Location):
+	"""Generic volume handling class."""
+
+	def __init__(self, manager, volume):
+		Location.__init__(self)
+		self._manager = manager
+		self._volume = volume
+
+		# interface elements
+		self._icon = None
+		self._title = None
+		self._unmount = None
+
+		# create user interface
+		self._create_interface()
+		self.show_all()
+
+		# connect events
+		self._volume.connect('removed', self.__handle_remove)
+
+	def __handle_remove(self, volume):
+		"""Handle volume remove event."""
+		self._manager._handle_remove_volume(self, volume)
+
+	def _create_interface(self):
+		"""Create interface for the widget to display."""
+		container = Gtk.HBox.new(False, 5)
+		container.set_border_width(5)
+
+		# create volume icon
+		self._icon = Gtk.Image.new_from_gicon(
+					self._volume.get_icon(),
+					Gtk.IconSize.LARGE_TOOLBAR
+				)
+
+		# create volume name label
+		self._title = Gtk.Label.new(self._volume.get_name())
+		self._title.set_alignment(0, 0.5)
+		self._title.set_ellipsize(Pango.EllipsizeMode.END)
+
+		# create controls
+		self._unmount = Gtk.Button.new_from_icon_name('unmount', Gtk.IconSize.BUTTON)
+
+		# pack interface
+		container.pack_start(self._icon, False, False, 0)
+		container.pack_start(self._title, True, True, 0)
+		container.pack_start(self._unmount, False, False, 0)
+
+		self.add(container)
+
+	def get_location(self):
+		"""Return location path."""
+		return None
+

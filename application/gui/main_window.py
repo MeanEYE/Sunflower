@@ -423,12 +423,6 @@ class MainWindow(Gtk.ApplicationWindow):
 					},
 					{'type': 'separator'},
 					{
-						'label': _('_Mount manager'),
-						'name': 'mount_manager',
-						'path': '<Sunflower>/Tools/MountManager',
-						'callback': self.mount_manager.show,
-					},
-					{
 						'label': _('_Keyring manager'),
 						'name': 'keyring_manager',
 						'path': '<Sunflower>/Tools/KeyringManager',
@@ -612,18 +606,6 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# bookmarks menu
 		self.locations = LocationMenu(self)
-
-		# mounts menu
-		mounts_image = Gtk.Image.new()
-		mounts_image.set_from_icon_name('computer', Gtk.IconSize.MENU)
-
-		self._menu_item_mounts = Gtk.ImageMenuItem.new()
-		self._menu_item_mounts.set_label(_('Mounts'))
-		self._menu_item_mounts.set_image(mounts_image)
-		self._menu_item_mounts.show()
-
-		# tell mounts manager to attach menu items
-		self.mount_manager._attach_menus()
 
 		# tools menu
 		menu_item_tools = self.menu_manager.get_item_by_name('tools')

@@ -87,6 +87,9 @@ class LocationMenu:
 		container.show_all()
 		self._popover.add(container)
 
+		# attach location menu to mount manager
+		self._application.mount_manager.attach_location_menu(self)
+
 	def update_bookmarks(self):
 		"""Populate bookmarks menu."""
 		options = self._application.bookmark_options
@@ -225,6 +228,16 @@ class LocationMenu:
 			self._notebook.insert_page(container, title, index)
 			self._page_index[index] = list_control
 
+	def get_list(self, name):
+		"""Return list control for the specified name."""
+		result = None
+
+		if name in self._page_names:
+			index = self._page_names[name]
+			result = self._page_index[index]
+
+		return result
+
 	def set_current(self, control):
 		"""Set current control to be used as default target for changing path."""
 		self._control = control
@@ -275,15 +288,9 @@ class GroupTitle(Gtk.ListBoxRow):
 class Location(Gtk.ListBoxRow):
 	"""Generic location widget."""
 
-	def __init__(self, location):
+	def __init__(self):
 		Gtk.ListBoxRow.__init__(self)
 		self.set_activatable(True)
-
-		self._location = location
-
-		# create user interface
-		self._create_interface()
-		self.show_all()
 
 	def _create_interface(self):
 		"""Create interface for the widget to display."""
@@ -291,18 +298,28 @@ class Location(Gtk.ListBoxRow):
 
 	def get_location(self):
 		"""Return location path."""
-		return self._location
+		return None
 
 
 class Bookmark(Location):
 	"""Bookmark list item used for displaying and handling individual bookmarked paths."""
 
 	def __init__(self, location, icon, title):
-		Location.__init__(self, location)
+		Location.__init__(self)
+		self._location = location
 
-		# configure elements
+		# interface elements
+		self._icon = None
+		self._title = None
+		self._subtitle = None
+
+		# create user interface
+		self._create_interface()
 		self._icon.set_from_icon_name(icon, Gtk.IconSize.LARGE_TOOLBAR)
 		self._title.set_text(title)
+		self._subtitle.set_markup('<small>{}</small>'.format(location))
+
+		self.show_all()
 
 	def _create_interface(self):
 		"""Create interface for the widget to display."""
@@ -318,7 +335,7 @@ class Bookmark(Location):
 		self._title.set_alignment(0, 0.5)
 		self._title.set_ellipsize(Pango.EllipsizeMode.END)
 
-		self._subtitle = Gtk.Label.new('<small>{}</small>'.format(self.get_location()))
+		self._subtitle = Gtk.Label.new()
 		self._subtitle.set_alignment(0, 0.5)
 		self._subtitle.set_use_markup(True)
 		self._subtitle.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
@@ -329,3 +346,7 @@ class Bookmark(Location):
 		container.pack_start(self._icon, False, False, 0)
 		container.pack_start(title_container, True, True, 0)
 		self.add(container)
+
+	def get_location(self):
+		"""Return location associated with bookmark."""
+		return self._location

@@ -832,19 +832,19 @@ class FileList(ItemList):
 			# get context sensitive message
 			if force_delete or not trash_items:
 				message = ngettext(
-						 	"You are about to <i><b>delete</b></i> {0} item.\n"
-						 	"Are you sure about this?",
-						 	"You are about to <i><b>delete</b></i> {0} items.\n"
-						 	"Are you sure about this?",
+						 	'You are about to <i><b>delete</b></i> {0} item.\n'
+						 	'Are you sure about this?',
+						 	'You are about to <i><b>delete</b></i> {0} items.\n'
+						 	'Are you sure about this?',
 						 	len(selection)
 						 )
 
 			else:
 				message = ngettext(
-						 	"You are about to move {0} item to <i><b>trash</b></i>.\n"
-						 	"Are you sure about this?",
-						 	"You are about to move {0} items to <i><b>trash</b></i>.\n"
-						 	"Are you sure about this?",
+						 	'You are about to move {0} item to <i><b>trash</b></i>.\n'
+						 	'Are you sure about this?',
+						 	'You are about to move {0} items to <i><b>trash</b></i>.\n'
+						 	'Are you sure about this?',
 						 	len(selection)
 						 )
 

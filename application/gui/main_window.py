@@ -249,7 +249,7 @@ class MainWindow(Gtk.ApplicationWindow):
 						'name': 'quit_program',
 						'type': 'image',
 						'stock': Gtk.STOCK_QUIT,
-						'callback' : self._destroy,
+						'callback' : self._quit,
 						'path': '<Sunflower>/File/Quit'
 					},
 				)
@@ -765,6 +765,11 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# exit main loop
 		Gtk.main_quit()
+
+	def _quit(self, widget=None, data=None):
+		"""Trigger destory action from Quit menu item"""
+		if not self.emit('delete-event', Gdk.Event.new(Gdk.EventType.DELETE)):
+			self.destroy()
 
 	def _delete_event(self, widget, data=None):
 		"""Handle delete event"""

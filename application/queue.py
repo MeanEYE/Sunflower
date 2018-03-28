@@ -6,7 +6,6 @@ from Queue import Queue, Empty
 
 class OperationQueue:
 	"""Generic, multi-name, operation queueing support class."""
-
 	_queue_list = {}
 	_active_list = {}
 	_list_store = None
@@ -19,9 +18,6 @@ class OperationQueue:
 	TYPE_NONE = 1
 	TYPE_NEW = 2
 	TYPE_SEPARATOR = 3
-
-	def __init__(self):
-		pass
 
 	@classmethod
 	def __update_list(cls):

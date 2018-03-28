@@ -28,7 +28,7 @@ class PreferencesWindow(Gtk.Window):
 
 		# configure window
 		self.set_title(_('Preferences'))
-		self.set_size_request(750, 500)
+		self.set_default_size(750, 500)
 		self.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self.set_modal(True)
 		self.set_skip_taskbar_hint(True)
@@ -45,7 +45,7 @@ class PreferencesWindow(Gtk.Window):
 		header_bar.set_title(_('Preferences'))
 		self.set_titlebar(header_bar)
 
-		hbox = Gtk.HBox(False, 7)
+		hbox = Gtk.HBox(False, 0)
 
 		# create tab label container
 		label_container = Gtk.ScrolledWindow()
@@ -67,6 +67,7 @@ class PreferencesWindow(Gtk.Window):
 		self._tabs = Gtk.Notebook()
 		self._tabs.set_show_tabs(False)
 		self._tabs.set_show_border(False)
+		self._tabs.set_border_width(7)
 		self._tabs.connect('switch-page', self._handle_page_switch)
 
 		DisplayOptions(self, parent)

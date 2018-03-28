@@ -279,6 +279,7 @@ class ItemListOptions(SettingsPage):
 		container_plugin = Gtk.ScrolledWindow()
 		container_plugin.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 		container_plugin.set_shadow_type(Gtk.ShadowType.IN)
+		container_plugin.set_size_request(170, -1)
 
 		# create variable to store active extension to
 		self._extensions = {}
@@ -287,7 +288,6 @@ class ItemListOptions(SettingsPage):
 		# create column list
 		self._columns_store = Gtk.ListStore(str, int, bool, str)
 		self._columns_list = Gtk.TreeView()
-
 		self._columns_list.set_model(self._columns_store)
 		self._columns_list.set_rules_hint(True)
 		self._columns_list.set_enable_search(True)
@@ -332,9 +332,7 @@ class ItemListOptions(SettingsPage):
 		# create plugin list
 		self._extension_store = Gtk.ListStore(str, str)
 		self._extension_list = Gtk.TreeView()
-
 		self._extension_list.set_model(self._extension_store)
-		self._extension_list.set_size_request(130, -1)
 		self._extension_list.set_headers_visible(False)
 
 		self._extension_list.connect('cursor-changed', self._handle_cursor_change)

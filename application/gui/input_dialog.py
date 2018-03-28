@@ -569,26 +569,16 @@ class DeleteDialog:
 		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
 
 		self._dialog.set_modal(True)
-		self._dialog.set_default_size(450, -1)
 		self._dialog.set_transient_for(application)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
-
-		header_bar = self._dialog.get_header_bar()
-		header_bar.set_title(_('Delete file/directory'))
-		header_bar.set_show_close_button(False)
+		self._dialog.set_default_size(-1, 0)
 
 		# create user interface for operation queue
 		label_message = Gtk.Label.new(message)
 		label_message.set_alignment(0, 0)
 		label_message.set_use_markup(True)
 
-		vbox_queue = Gtk.VBox(False, 0)
-
-		label_queue = Gtk.Label.new(_('Operation queue:'))
-		label_queue.set_alignment(0, 0.5)
-
 		cell_name = Gtk.CellRendererText()
-
 		self.combobox_queue = Gtk.ComboBox(model=OperationQueue.get_model())
 		self.combobox_queue.pack_start(cell_name, True)
 		self.combobox_queue.add_attribute(cell_name, 'text', OperationQueue.COLUMN_TEXT)
@@ -597,24 +587,22 @@ class DeleteDialog:
 		self.combobox_queue.connect('changed', OperationQueue.handle_queue_select, self)
 
 		# create controls
-		button_yes = Gtk.Button(stock=Gtk.STOCK_YES)
+		button_yes = Gtk.Button.new_with_label(_('Yes'))
 		button_yes.set_can_default(True)
-		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
+		button_no = Gtk.Button.new_with_label(_('No'))
 
-		# pack user interface
-		vbox_queue.pack_start(label_queue, False, False, 0)
-		vbox_queue.pack_start(self.combobox_queue, False, False, 0)
+		button_queue = Gtk.Button.new_from_icon_name('stock_bottom', Gtk.IconSize.BUTTON)
+		button_queue.set_always_show_image(True)
+		button_queue.set_label('None')
 
 		content_area = self._dialog.get_content_area()
-		content_area.set_spacing(10)
 		content_area.set_border_width(10)
 		content_area.pack_start(label_message, True, True, 0)
-		content_area.pack_start(vbox_queue, False, False, 0)
-		content_area.show_all()
 
 		self._dialog.add_action_widget(button_yes, Gtk.ResponseType.YES)
-		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
+		self._dialog.add_action_widget(button_no, Gtk.ResponseType.CANCEL)
 		self._dialog.set_default_response(Gtk.ResponseType.YES)
+		self._dialog.get_header_bar().pack_end(button_queue)
 		self._dialog.show_all()
 
 	def get_response(self):

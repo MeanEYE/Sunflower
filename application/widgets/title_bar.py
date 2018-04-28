@@ -27,16 +27,17 @@ class TitleBar:
 		self._mode = Mode.NORMAL
 		self.context_menu = None
 		self._breadcrumbs = None
+		self._title_label = None
+		self._subtitle_label = None
 
 		# get options
 		options = self._application.options
 
-		self._ubuntu_coloring = options.get('ubuntu_coloring')
 		self._superuser_notification = options.get('superuser_notification')
 		self._button_relief = options.get('button_relief')
 
 		# create container box
-		self._container = Gtk.HBox.new(False, 1)
+		self._container = Gtk.HBox.new(False, 5)
 		self._container.get_style_context().add_class('sunflower-title-bar')
 
 		self._container_controls = Gtk.HBox.new(False, 0)
@@ -55,39 +56,43 @@ class TitleBar:
 		# create context menu
 		self.context_menu = ContextMenu(self, self._button_menu)
 
-		# create title box
-		vbox = Gtk.VBox.new(False, 0)
-
-		# TODO: Create breadcrumbs by default.
-		# if self._show_breadcrumbs:
-		# 	self._breadcrumbs = Breadcrumbs(self)
-		# 	vbox.pack_start(self._breadcrumbs, True, True, 0)
-
-		self._title_label = Gtk.Label()
-		self._title_label.set_alignment(0, 0.5)
-		self._title_label.set_use_markup(True)
-		self._title_label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
-		vbox.pack_start(self._title_label, True, True, 0)
-
-		font = Pango.FontDescription('8')
-		self._subtitle_label = Gtk.Label()
-		self._subtitle_label.set_alignment(0, 0.5)
-		self._subtitle_label.set_use_markup(False)
-		self._subtitle_label.modify_font(font)
-
 		# create spinner control if it exists
 		self._spinner = Gtk.Spinner()
 		self._spinner.set_property('no-show-all', True)
 
 		# pack interface
-		vbox.pack_start(self._subtitle_label, False, False, 0)
-
 		self._container.pack_start(self._button_menu, False, False, 0)
-		self._container.pack_start(vbox, True, True, 4)
-		self._container.pack_start(self._spinner, False, False, 5)
-		self._container.pack_start(self._container_controls, False, False, 0)
+		self._container.pack_end(self._container_controls, False, False, 0)
+		self._container.pack_end(self._spinner, False, False, 0)
 
 		self._spinner_counter = 0
+
+	def create_breadcrumbs(self):
+		"""Create breadcrumbs as main control."""
+		self._breadcrumbs = Breadcrumbs(self)
+		self._container.pack_start(self._breadcrumbs, False, False, 0)
+
+	def create_title(self):
+		"""Create title as main control."""
+		vbox = Gtk.VBox.new(False, 0)
+
+		# create main tab title
+		self._title_label = Gtk.Label.new()
+		self._title_label.set_alignment(0, 0.5)
+		self._title_label.set_use_markup(True)
+		self._title_label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
+
+		# create smaller subtitle
+		font = Pango.FontDescription('8')
+		self._subtitle_label = Gtk.Label.new()
+		self._subtitle_label.set_alignment(0, 0.5)
+		self._subtitle_label.set_use_markup(False)
+		self._subtitle_label.modify_font(font)
+
+		# pack interface
+		vbox.pack_start(self._title_label, True, True, 0)
+		vbox.pack_start(self._subtitle_label, False, False, 0)
+		self._container.pack_start(vbox)
 
 	def add_control(self, widget):
 		"""Add control to button bar."""
@@ -104,11 +109,6 @@ class TitleBar:
 		else:
 			self._container.get_style_context().remove_class('selected')
 
-		# TODO: Determine if this is needed once breadcrumbs are reimplemented.
-		# # let breadcrumbs know about new state
-		# if self._show_breadcrumbs:
-		# 	self._breadcrumbs.set_state(state)
-
 	def set_mode(self, mode):
 		"""Set title bar mode"""
 		self._mode = mode
@@ -118,10 +118,10 @@ class TitleBar:
 
 	def set_title(self, text):
 		"""Set title text"""
-		# TODO: Update once breadcrums are implemented.
-		# if self._show_breadcrumbs:
-		# 	self._breadcrumbs.refresh(text)
-		self._title_label.set_markup(text.replace('&', '&amp;'))
+		if self._breadcrumbs is not None:
+			self._breadcrumbs.refresh(text)
+		else:
+			self._title_label.set_markup(text.replace('&', '&amp;'))
 
 	def set_subtitle(self, text):
 		"""Set subtitle text"""
@@ -169,7 +169,6 @@ class TitleBar:
 
 	def apply_settings(self):
 		"""Method called when system applies new settings"""
-		self._ubuntu_coloring = self._application.options.get('ubuntu_coloring')
 		self._superuser_notification = self._application.options.get('superuser_notification')
 		self._button_relief = self._application.options.get('button_relief')
 

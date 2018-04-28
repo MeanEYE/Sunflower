@@ -31,6 +31,9 @@ class ItemList(PluginBase):
 		# call parent constructor
 		PluginBase.__init__(self, parent, notebook, options)
 
+		# finalize title bar construction
+		self._title_bar.create_breadcrumbs()
+
 		options = self._parent.options
 		section = options.section('item_list')
 
@@ -352,6 +355,7 @@ class ItemList(PluginBase):
 
 	def _show_history_window(self, widget, data=None):
 		"""Show history browser"""
+		# TODO: Show popover and focus history toolbar.
 		HistoryList(self, self._parent)
 		return True
 

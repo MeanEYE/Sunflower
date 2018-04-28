@@ -2332,6 +2332,8 @@ class FileList(ItemList):
 
 		except OSError as error:
 			# problem with listing directory, ask user what to do
+			# TODO: Solve problem when program is not able to go up the
+			# history lane but can't change to specified directory.
 			dialog = Gtk.MessageDialog(
 									self._parent,
 									Gtk.DialogFlags.DESTROY_WITH_PARENT,

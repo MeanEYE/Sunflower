@@ -40,6 +40,9 @@ class Terminal(PluginBase):
 	def __init__(self, parent, notebook, options):
 		PluginBase.__init__(self, parent, notebook, options)
 
+		# finalize title bar construction
+		self._title_bar.create_title()
+
 		# make options available in local namespace
 		options = self._parent.options
 		section = options.section('terminal')

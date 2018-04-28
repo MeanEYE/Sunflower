@@ -7,7 +7,7 @@ class StatusBar(Gtk.HBox):
 	def __init__(self):
 		GObject.GObject.__init__(self, homogeneous=False, spacing=15)
 
-		self.set_border_width(1)
+		self.set_border_width(4)
 		self.set_property('no-show-all', True)
 
 		self._icons = {}

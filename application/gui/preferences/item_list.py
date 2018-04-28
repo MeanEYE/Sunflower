@@ -82,17 +82,6 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_hide_scrollbar.connect('toggled', self._parent.enable_save)
 		self._checkbox_second_extension.connect('toggled', self._parent.enable_save)
 
-		# bread crumbs type
-		hbox_breadcrumbs = Gtk.HBox(False, 5)
-		label_breadcrumbs = Gtk.Label(label=_('Breadcrumbs:'))
-		label_breadcrumbs.set_alignment(0, 0.5)
-
-		self._combobox_breadcrumbs = Gtk.ComboBoxText.new()
-		self._combobox_breadcrumbs.connect('changed', self._parent.enable_save)
-		self._combobox_breadcrumbs.append(str(Breadcrumbs.TYPE_NONE), _('None'))
-		self._combobox_breadcrumbs.append(str(Breadcrumbs.TYPE_NORMAL), _('Normal'))
-		self._combobox_breadcrumbs.append(str(Breadcrumbs.TYPE_SMART), _('Smart'))
-
 		# file access mode format
 		hbox_mode_format = Gtk.HBox(False, 5)
 		label_mode_format = Gtk.Label(label=_('Access mode format:'))
@@ -374,9 +363,6 @@ class ItemListOptions(SettingsPage):
 		hbox_quick_search.pack_start(self._checkbox_alt, False, False, 0)
 		hbox_quick_search.pack_start(self._checkbox_shift, False, False, 0)
 
-		hbox_breadcrumbs.pack_start(label_breadcrumbs, False, False, 0)
-		hbox_breadcrumbs.pack_start(self._combobox_breadcrumbs, False, False, 0)
-
 		hbox_mode_format.pack_start(label_mode_format, False, False, 0)
 		hbox_mode_format.pack_start(self._combobox_mode_format, False, False, 0)
 
@@ -391,7 +377,6 @@ class ItemListOptions(SettingsPage):
 		vbox_look_and_feel.pack_start(self._checkbox_media_preview, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_show_expanders, False, False, 0)
 		vbox_look_and_feel.pack_start(self._checkbox_hide_scrollbar, False, False, 0)
-		vbox_look_and_feel.pack_start(hbox_breadcrumbs, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_mode_format, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_grid_lines, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_selection_color, False, False, 5)
@@ -696,7 +681,6 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_right_click.set_active(section.get('right_click_select'))
 		self._checkbox_show_headers.set_active(section.get('headers_visible'))
 		self._checkbox_media_preview.set_active(options.get('media_preview'))
-		self._combobox_breadcrumbs.set_active(section.get('breadcrumbs'))
 		self._combobox_mode_format.set_active(section.get('mode_format'))
 		self._combobox_grid_lines.set_active(section.get('grid_lines'))
 		self._combobox_indicator.get_child().set_text(section.get('selection_indicator'))
@@ -748,7 +732,6 @@ class ItemListOptions(SettingsPage):
 		section.set('right_click_select', self._checkbox_right_click.get_active())
 		section.set('headers_visible', self._checkbox_show_headers.get_active())
 		options.set('media_preview', self._checkbox_media_preview.get_active())
-		section.set('breadcrumbs', self._combobox_breadcrumbs.get_active())
 		section.set('mode_format', self._combobox_mode_format.get_active())
 		section.set('grid_lines', self._combobox_grid_lines.get_active())
 		section.set('time_format', self._entry_time_format.get_text())

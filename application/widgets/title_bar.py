@@ -35,13 +35,6 @@ class TitleBar:
 		self._superuser_notification = options.get('superuser_notification')
 		self._button_relief = options.get('button_relief')
 
-		# determine whether we need to show breadcrumbs
-		from plugin_base.item_list import ItemList  # must be included here to avoid cyclic import
-		section = options.section('item_list')
-		is_list = isinstance(parent, ItemList)
-		self._breadcrumb_type = section.get('breadcrumbs')
-		self._show_breadcrumbs = self._breadcrumb_type != Breadcrumbs.TYPE_NONE and is_list
-
 		# create container box
 		self._container = Gtk.HBox.new(False, 1)
 		self._container.get_style_context().add_class('sunflower-title-bar')
@@ -65,16 +58,16 @@ class TitleBar:
 		# create title box
 		vbox = Gtk.VBox.new(False, 0)
 
-		if self._show_breadcrumbs:
-			self._breadcrumbs = Breadcrumbs(self)
-			vbox.pack_start(self._breadcrumbs, True, True, 0)
+		# TODO: Create breadcrumbs by default.
+		# if self._show_breadcrumbs:
+		# 	self._breadcrumbs = Breadcrumbs(self)
+		# 	vbox.pack_start(self._breadcrumbs, True, True, 0)
 
-		else:
-			self._title_label = Gtk.Label()
-			self._title_label.set_alignment(0, 0.5)
-			self._title_label.set_use_markup(True)
-			self._title_label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
-			vbox.pack_start(self._title_label, True, True, 0)
+		self._title_label = Gtk.Label()
+		self._title_label.set_alignment(0, 0.5)
+		self._title_label.set_use_markup(True)
+		self._title_label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
+		vbox.pack_start(self._title_label, True, True, 0)
 
 		font = Pango.FontDescription('8')
 		self._subtitle_label = Gtk.Label()
@@ -111,9 +104,10 @@ class TitleBar:
 		else:
 			self._container.get_style_context().remove_class('selected')
 
-		# let breadcrumbs know about new state
-		if self._show_breadcrumbs:
-			self._breadcrumbs.set_state(state)
+		# TODO: Determine if this is needed once breadcrumbs are reimplemented.
+		# # let breadcrumbs know about new state
+		# if self._show_breadcrumbs:
+		# 	self._breadcrumbs.set_state(state)
 
 	def set_mode(self, mode):
 		"""Set title bar mode"""
@@ -124,11 +118,10 @@ class TitleBar:
 
 	def set_title(self, text):
 		"""Set title text"""
-		if self._show_breadcrumbs:
-			self._breadcrumbs.refresh(text)
-
-		else:
-			self._title_label.set_markup(text.replace('&', '&amp;'))
+		# TODO: Update once breadcrums are implemented.
+		# if self._show_breadcrumbs:
+		# 	self._breadcrumbs.refresh(text)
+		self._title_label.set_markup(text.replace('&', '&amp;'))
 
 	def set_subtitle(self, text):
 		"""Set subtitle text"""
@@ -179,13 +172,6 @@ class TitleBar:
 		self._ubuntu_coloring = self._application.options.get('ubuntu_coloring')
 		self._superuser_notification = self._application.options.get('superuser_notification')
 		self._button_relief = self._application.options.get('button_relief')
-
-		# determine whether we need to show breadcrumbs
-		section = self._application.options.section('item_list')
-		self._breadcrumb_type = section.get('breadcrumbs')
-
-		if self._show_breadcrumbs:
-			self._breadcrumbs.apply_settings()
 
 		# apply button relief
 		relief = (Gtk.ReliefStyle.NONE, Gtk.ReliefStyle.NORMAL)[self._button_relief]

@@ -2221,7 +2221,7 @@ class MainWindow(Gtk.ApplicationWindow):
 					'always_show_tabs': True,
 					'expand_tabs': 0,
 					'show_notifications': True,
-					'ubuntu_coloring': False,
+					'ubuntu_coloring': False,  # TODO: Remove, outdated
 					'superuser_notification': True,
 					'tab_close_button': True,
 					'show_status_bar': 0,

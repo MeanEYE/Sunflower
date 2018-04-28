@@ -17,7 +17,7 @@ class PluginBase(Gtk.VBox):
 	"""
 
 	def __init__(self, parent, notebook, options):
-		GObject.GObject.__init__(self, homogeneous=False, spacing=3)
+		GObject.GObject.__init__(self, homogeneous=False, spacing=0)
 
 		self._parent = parent
 		self._options = options
@@ -29,7 +29,7 @@ class PluginBase(Gtk.VBox):
 		self._configure_accelerators()
 
 		# configure self
-		self.set_border_width(2)
+		# self.set_border_width(2)
 
 		# create tab label
 		self._tab_label = TabLabel(self._parent, self)

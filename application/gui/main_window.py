@@ -2035,13 +2035,11 @@ class MainWindow(Gtk.ApplicationWindow):
 		group.add_method('restore_handle_position', _('Restore handle position'), self.restore_handle_position)
 		group.add_method('move_handle_left', _('Move handle to the left'), self.move_handle, -1)
 		group.add_method('move_handle_right', _('Move handle to the right'), self.move_handle, 1)
-		group.add_method('show_command_entry', _('Show command entry'), self.show_command_entry)
 
 		# set default accelerators
 		group.set_accelerator('restore_handle_position', keyval('Home'), Gdk.ModifierType.MOD1_MASK)
 		group.set_accelerator('move_handle_left', keyval('Page_Up'), Gdk.ModifierType.MOD1_MASK)
 		group.set_accelerator('move_handle_right', keyval('Page_Down'), Gdk.ModifierType.MOD1_MASK)
-		group.set_accelerator('show_command_entry', keyval('Down'), Gdk.ModifierType.MOD1_MASK)
 
 		# expose object
 		self._accel_group = group
@@ -2219,7 +2217,6 @@ class MainWindow(Gtk.ApplicationWindow):
 					'plugins': ['file_list', 'system_terminal', 'default_toolbar'],
 					'show_toolbar': False,
 					'show_command_bar': False,
-					'show_command_entry': True,
 					'history_file': '.bash_history',
 					'last_version': 0,
 					'focus_new_tab': True,
@@ -2394,10 +2391,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		# show or hide command bar depending on settings
 		show_command_bar = self.menu_manager.get_item_by_name('show_command_bar')
 		show_command_bar.set_active(self.options.get('show_command_bar'))
-
-		# show or hide command bar depending on settings
-		show_command_entry = self.menu_manager.get_item_by_name('show_command_entry')
-		show_command_entry.set_active(self.options.get('show_command_entry'))
 
 		# show or hide toolbar depending on settings
 		show_toolbar = self.menu_manager.get_item_by_name('show_toolbar')

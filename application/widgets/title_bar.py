@@ -70,7 +70,7 @@ class TitleBar:
 	def create_breadcrumbs(self):
 		"""Create breadcrumbs as main control."""
 		self._breadcrumbs = Breadcrumbs(self)
-		self._container.pack_start(self._breadcrumbs, False, False, 0)
+		self._container.pack_start(self._breadcrumbs, True, True, 0)
 
 	def create_title(self):
 		"""Create title as main control."""
@@ -92,7 +92,7 @@ class TitleBar:
 		# pack interface
 		vbox.pack_start(self._title_label, True, True, 0)
 		vbox.pack_start(self._subtitle_label, False, False, 0)
-		self._container.pack_start(vbox)
+		self._container.pack_start(vbox, True, True, 0)
 
 	def add_control(self, widget):
 		"""Add control to button bar."""

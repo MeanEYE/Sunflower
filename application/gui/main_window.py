@@ -711,7 +711,6 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# pack user interface
 		vbox = Gtk.VBox(False, 0)
-		vbox.pack_start(self.header_bar, expand=False, fill=False, padding=0)
 		# TODO: Get rid of this
 		# vbox.pack_start(self.menu_bar, expand=False, fill=False, padding=0)
 		vbox.pack_start(self.toolbar_manager.get_toolbar(), expand=False, fill=False, padding=0)

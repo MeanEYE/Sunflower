@@ -37,7 +37,7 @@ class TitleBar:
 		self._button_relief = options.get('button_relief')
 
 		# create container box
-		self._container = Gtk.HBox.new(False, 5)
+		self._container = Gtk.HBox.new(False, 7)
 		self._container.get_style_context().add_class('sunflower-title-bar')
 
 		self._container_controls = Gtk.HBox.new(False, 0)

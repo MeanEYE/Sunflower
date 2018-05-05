@@ -921,7 +921,7 @@ class MainWindow(Gtk.ApplicationWindow):
 	def _handle_configure_event(self, widget, event):
 		"""Handle window resizing"""
 		if self.get_state() == 0:
-			self._geometry = self.get_size() + self.get_position()
+			self._geometry = self.get_size()
 
 	def _handle_window_state_event(self, widget, event):
 		"""Handle window state change"""
@@ -1411,8 +1411,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.window_options.section('main').set('state', window_state)
 
 		# save window size and position
-		geometry = '{0}x{1}+{2}+{3}'.format(*self._geometry)
-		section.set('geometry', geometry)
+		section.set('geometry', self._geometry)
 
 		# save handle position
 		section.set('handle_position', self._paned.get_position())
@@ -1433,8 +1432,10 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.handler_block_by_func(self._handle_window_state_event)
 
 		# restore window geometry
-		self.parse_geometry(section.get('geometry'))
-		self._geometry = self.get_size() + self.get_position()
+		geometry = section.get('geometry')
+		if isinstance(geometry, list):
+			self.set_default_size(*geometry)
+			self._geometry = geometry
 
 		# restore window state
 		window_state = self.window_options.section('main').get('state')

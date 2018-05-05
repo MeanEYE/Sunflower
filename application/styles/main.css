@@ -7,6 +7,11 @@ box.horizontal.sunflower-title-bar {
 	color: @theme_unfocused_fg_color;
 }
 
+box.horizontal.sunflower-title-bar.selected {
+	border-color: mix(@theme_unfocused_bg_color, @theme_selected_bg_color, 0.3);
+	background-color: mix(@theme_unfocused_bg_color, @theme_selected_bg_color, 0.3);
+}
+
 /**
  * Item list.
  */

@@ -115,7 +115,7 @@ class FileList(ItemList):
 		cell_name.set_property('single-paragraph-mode', True)
 		cell_extension.set_property('single-paragraph-mode', True)
 
-		cell_selected.set_property('width', 30)  # leave enough room for various characters
+		# cell_selected.set_property('width', 30)  # leave enough room for various characters
 		cell_selected.set_property('xalign', 1)
 		cell_size.set_property('xalign', 1)
 
@@ -142,16 +142,17 @@ class FileList(ItemList):
 		col_date.name = 'date'
 
 		# add cell renderer to columns
+		col_name.pack_start(cell_selected, False)
+		# col_name.pack_start(cell_emblems, False)
 		col_name.pack_start(cell_icon, False)
 		col_name.pack_start(cell_name, True)
-		# col_name.pack_end(cell_emblems, False)
-		col_name.pack_end(cell_selected, False)
 		col_extension.pack_start(cell_extension, True)
 		col_size.pack_start(cell_size, True)
 		col_mode.pack_start(cell_mode, True)
 		col_date.pack_start(cell_date, True)
 
 		col_name.add_attribute(cell_name, 'foreground', Column.COLOR)
+		col_name.add_attribute(cell_selected, 'foreground', Column.COLOR)
 		col_name.set_cell_data_func(cell_selected, self._selected_data_func)
 		col_extension.add_attribute(cell_extension, 'foreground', Column.COLOR)
 		col_size.add_attribute(cell_size, 'foreground', Column.COLOR)

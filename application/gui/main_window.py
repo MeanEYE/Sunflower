@@ -570,6 +570,10 @@ class MainWindow(Gtk.ApplicationWindow):
 		about_action.connect('activate', self.show_about_window);
 		self.add_action(about_action)
 
+		quit_action = Gio.SimpleAction.new('quit', None)
+		quit_action.connect('activate', self._quit)
+		self.add_action(quit_action)
+
 		help_action = Gio.SimpleAction.new('help', None)
 
 		self._tools_menu.append(_('_Find files'), 'tools.find_files')

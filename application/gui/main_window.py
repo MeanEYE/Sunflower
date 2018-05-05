@@ -762,9 +762,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		# save config changes
 		self.save_config()
 
-		# exit main loop
-		Gtk.main_quit()
-
 	def _quit(self, widget=None, data=None):
 		"""Trigger destory action from Quit menu item"""
 		if not self.emit('delete-event', Gdk.Event.new(Gdk.EventType.DELETE)):

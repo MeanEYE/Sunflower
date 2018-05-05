@@ -434,14 +434,6 @@ class MainWindow(Gtk.ApplicationWindow):
 				'label': _('_View'),
 				'submenu': (
 					{
-						'label': _('Ful_lscreen'),
-						'type': 'image',
-						'stock': Gtk.STOCK_FULLSCREEN,
-						'callback': self.toggle_fullscreen,
-						'path': '<Sunflower>/View/Fullscreen',
-						'name': 'fullscreen_toggle',
-					},
-					{
 						'label': _('Rel_oad item list'),
 						'type': 'image',
 						'image': 'reload',
@@ -555,38 +547,44 @@ class MainWindow(Gtk.ApplicationWindow):
 		for item in menu_items:
 			self.menu_bar.append(self.menu_manager.create_menu_item(item))
 
+		# create actions
+		action_list = (
+					('tools.find_files', self.show_find_files),
+					('tools.advanced_rename', self.show_advanced_rename),
+					# ('tools.mount_manager', self.show_mounts),
+					('tools.keyring_manager', self.show_keyring_manager),
+					('help.home_page', self.goto_web),
+					('help.check_version', self.check_for_new_version),
+					('help.about', self.show_about_window),
+					('preferences', self.preferences_window._show),
+					('quit', self._quit)
+				)
+
+		for data in action_list:
+			action = Gio.SimpleAction.new(data[0], None)
+			action.connect('activate', data[1]);
+			self.add_action(action)
+
 		# create application menu
 		self._application_menu = Gio.Menu.new()
 		self._features_section = Gio.Menu.new()
 		self._program_section = Gio.Menu.new()
 		self._tools_menu = Gio.Menu.new()
+		self._help_menu = Gio.Menu.new()
 
-		# create actions
-		preferences_action = Gio.SimpleAction.new('preferences', None)
-		preferences_action.connect('activate', self.preferences_window._show)
-		self.add_action(preferences_action)
+		self._tools_menu.append(_('_Find files'), 'win.tools.find_files')
+		self._tools_menu.append(_('Advanced _rename'), 'win.tools.advanced_rename')
+		self._tools_menu.append(_('_Mount manager'), 'win.tools.mount_manager')
+		self._tools_menu.append(_('_Keyring manager'), 'win.tools.keyring_manager')
 
-		about_action = Gio.SimpleAction.new('about', None)
-		about_action.connect('activate', self.show_about_window);
-		self.add_action(about_action)
+		self._help_menu.append(_('Home page'), 'win.help.home_page')
+		self._help_menu.append(_('Check for new version'), 'win.help.check_version')
+		self._help_menu.append(_('_About'), 'win.help.about')
 
-		quit_action = Gio.SimpleAction.new('quit', None)
-		quit_action.connect('activate', self._quit)
-		self.add_action(quit_action)
-
-		help_action = Gio.SimpleAction.new('help', None)
-
-		self._tools_menu.append(_('_Find files'), 'tools.find_files')
-		self._tools_menu.append(_('Find _duplicate files'), 'tools.find_duplicate_files')
-		self._tools_menu.append(_('_Synchronize directories'), 'tools.synchronize_directories')
-		self._tools_menu.append(_('Advanced _rename'), 'tools.advanced_rename')
-		self._tools_menu.append(_('_Mount manager'), 'tools.mount_manager')
-		self._tools_menu.append(_('_Keyring manager'), 'tools.keyring_manager')
 		self._features_section.append_submenu(_('Tools'), self._tools_menu)
+		self._features_section.append_submenu(_('Help'), self._help_menu)
 		self._features_section.append(_('Preferences'), 'win.preferences')
 
-		self._program_section.append(_('Help'), 'win.help')
-		self._program_section.append(_('About'), 'win.about')
 		self._program_section.append(_('Quit'), 'win.quit')
 
 		self._application_menu.append_section(None, self._features_section)
@@ -934,13 +932,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		"""Handle window state change"""
 		self._in_fullscreen = bool(Gdk.WindowState.FULLSCREEN & event.new_window_state)
 		self._window_state = event.new_window_state
-		stock = (Gtk.STOCK_FULLSCREEN, Gtk.STOCK_LEAVE_FULLSCREEN)[self._in_fullscreen]
-
-		# update main menu item
-		menu_item = self.menu_manager.get_item_by_name('fullscreen_toggle')
-
-		image = menu_item.get_image()
-		image.set_from_stock(stock, Gtk.IconSize.MENU)
 
 	def _page_added(self, notebook, child, page_num):
 		"""Handle adding/moving tab accross notebooks"""
@@ -2354,13 +2345,6 @@ class MainWindow(Gtk.ApplicationWindow):
 
 			if callable(method):
 				method(*args)
-
-	def toggle_fullscreen(self, widget=None, data=None):
-		"""Toggle application fullscreen"""
-		if self._in_fullscreen:
-			self.unfullscreen()
-		else:
-			self.fullscreen()
 
 	def add_operation(self, widget, callback, data=None):
 		"""Add operation to menu"""

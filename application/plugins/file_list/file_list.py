@@ -629,7 +629,6 @@ class FileList(ItemList):
 			# select parent row
 			path = item_list.get_path(parent)
 			self._item_list.set_cursor(path)
-			self._item_list.scroll_to_cell(path)
 
 		return True
 
@@ -1516,7 +1515,6 @@ class FileList(ItemList):
 				# iter is not last in the list
 				path = item_list.get_path(next_iter)
 				self._item_list.set_cursor(path)
-				self._item_list.scroll_to_cell(path)
 
 			elif item_list.iter_parent(selected_iter) is not None:
 				# if iter is part of expanded directory advance through parent
@@ -1525,7 +1523,6 @@ class FileList(ItemList):
 				if next_iter is not None:
 					path = item_list.get_path(next_iter)
 					self._item_list.set_cursor(path)
-					self._item_list.scroll_to_cell(path)
 
 		return True
 
@@ -1708,7 +1705,7 @@ class FileList(ItemList):
 
 			self._item_queue.append(data)
 
-			if len(self._item_queue) > 50:
+			if len(self._item_queue) > 100:
 				GLib.idle_add(self._flush_queue, parent)
 
 		except Exception as error:
@@ -1718,7 +1715,9 @@ class FileList(ItemList):
 
 	def _flush_queue(self, parent=None):
 		"""Add items in queue to the list"""
-		# add items
+		path_to_select = None
+
+		# add items from the queue
 		for data in self._item_queue:
 			new_iter = self._store.append(parent, data)
 
@@ -1728,11 +1727,13 @@ class FileList(ItemList):
 
 			# focus specified item
 			if self._item_to_focus == data[0]:
-				path = self._store.get_path(new_iter)
+				path_to_select = self._store.get_path(new_iter)
 
-				# set cursor position and scroll ti make it visible
-				self._item_list.set_cursor(path)
-				self._item_list.scroll_to_cell(path)
+		# select path if needed
+		if path_to_select is not None:
+			GLib.idle_add(self._item_list.set_cursor, path_to_select)
+			# self._item_list.set_cursor(path_to_select)
+			# self._item_list.scroll_to_cell(path_to_select)
 
 		# clear item queue
 		self._item_queue[:] = []
@@ -2370,7 +2371,6 @@ class FileList(ItemList):
 		and len(self._store) > 0:
 			path = self._store.get_path(self._store.get_iter_first())
 			self._item_list.set_cursor(path)
-			self._item_list.scroll_to_cell(path)
 
 	def select_all(self, pattern=None, exclude_list=None):
 		"""Select all items matching pattern"""

@@ -576,7 +576,6 @@ class ItemListOptions(SettingsPage):
 		if len(self._extension_store) > 0:
 			path = self._extension_store.get_path(self._extension_store.get_iter_first())
 			self._extension_list.set_cursor(path)
-			self._extension_list.scroll_to_cell(path)
 
 	def _handle_cursor_change(self, widget, data=None):
 		"""Handle selecting column editor extension"""

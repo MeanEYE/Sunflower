@@ -499,7 +499,6 @@ class ItemList(PluginBase):
 				if item is not None:
 					path = item[0]
 					self._item_list.set_cursor(path)
-					self._item_list.scroll_to_cell(path)
 
 			else:
 				# toggle selection on button release
@@ -531,7 +530,6 @@ class ItemList(PluginBase):
 
 				# select end item
 				self._item_list.set_cursor(end_path)
-				self._item_list.scroll_to_cell(end_path)
 
 			result = True
 

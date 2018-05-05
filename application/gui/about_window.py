@@ -85,16 +85,16 @@ class AboutWindow:
 			version = '{0[major]}.{0[minor]} ({0[build]})'.format(parent.version)
 
 		# set about dialog image
-		base_path = os.path.dirname(os.path.dirname(sys.argv[0]))
+		base_path = os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[0])))
+		image_path = os.path.join(base_path, 'images', 'splash.png')
+		path = os.path.abspath(image_path)
+
 		image = Gtk.Image()
-		image.set_from_file(os.path.abspath(os.path.join(base_path, 'images', 'splash.png')))
+		image.set_from_file(path)
 
 		# configure dialog
-		self._dialog.set_resizable(False)
-		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(parent)
-		self._dialog.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		# connect signals
@@ -105,11 +105,11 @@ class AboutWindow:
 		self._dialog.set_program_name(_('Sunflower'))
 		self._dialog.set_version(version)
 		self._dialog.set_logo(image.get_pixbuf())
-		self._dialog.set_website('github.com/MeanEYE/Sunflower')
+		self._dialog.set_website('sunflower-fm.org')
 		self._dialog.set_comments(_('Twin-panel file manager for Linux.'))
 
 		# set license
-		self._dialog.set_copyright(_(u'Copyright \u00a9 2010-2016 by Mladen Mijatov and contributors.'))
+		self._dialog.set_copyright(_(u'Copyright \u00a9 2010-2018 by Mladen Mijatov and contributors.'))
 
 		if os.path.isfile('COPYING'):
 			license_file = open('COPYING', 'r')

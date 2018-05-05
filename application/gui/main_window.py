@@ -566,6 +566,10 @@ class MainWindow(Gtk.ApplicationWindow):
 		preferences_action.connect('activate', self.preferences_window._show)
 		self.add_action(preferences_action)
 
+		about_action = Gio.SimpleAction.new('about', None)
+		about_action.connect('activate', self.show_about_window);
+		self.add_action(about_action)
+
 		help_action = Gio.SimpleAction.new('help', None)
 
 		self._tools_menu.append(_('_Find files'), 'tools.find_files')
@@ -761,6 +765,8 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# save config changes
 		self.save_config()
+
+		# TODO: Make sure all threads are stopped at this point.
 
 	def _quit(self, widget=None, data=None):
 		"""Trigger destory action from Quit menu item"""
@@ -2709,7 +2715,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		"""Show about window"""
 		window = AboutWindow(self)
 		window.show()
-
 		return True
 
 	def show_advanced_rename(self, widget, data=None):

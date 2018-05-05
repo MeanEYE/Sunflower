@@ -12,6 +12,7 @@ class Breadcrumbs(Gtk.HBox):
 		# change the look of container
 		self.set_focus_on_click(False)
 		self.get_style_context().add_class('linked')
+		self.get_style_context().add_class('path-bar')
 
 		self._path = None
 		self._parent = parent

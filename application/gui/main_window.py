@@ -1167,7 +1167,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# prepare path to load from
 		base_path = os.path.dirname(os.path.dirname(sys.argv[0]))
-		file_name = os.path.join(base_path, 'application', 'styles', 'main.css')
+		file_name = os.path.join(base_path, 'styles', 'main.css')
 
 		# load and apply style
 		provider.load_from_file(Gio.File.new_for_path(file_name))

@@ -3,7 +3,7 @@ Sunflower
 
 Sunflower is a small and highly customizable twin-panel file manager for Linux with support for plugins. It is intended to be an easy-to-use and powerful file manager that seamlessly integrates into the GNOME desktop environment (but not limited to).
 
-![Screen shot](http://img713.imageshack.us/img713/3218/sunflowerpreview.png)
+![Screen shot](https://i.imgur.com/NahcTbh.png)
 
 ### Packages
 

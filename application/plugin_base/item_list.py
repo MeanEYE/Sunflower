@@ -71,8 +71,8 @@ class ItemList(PluginBase):
 
 		# configure status bar
 		self._status_bar.add_group_with_icon('dirs', 'folder', '0/0', tooltip=_('Directories (selected/total)'))
-		self._status_bar.add_group_with_icon('files', 'document', '0/0', tooltip=_('Files (selected/total)'))
-		self._status_bar.add_group_with_icon('size', 'add', '0/0', tooltip=_('Size (selected/total)'))
+		self._status_bar.add_group_with_icon('files', 'text-x-generic', '0/0', tooltip=_('Files (selected/total)'))
+		self._status_bar.add_group_with_icon('size', 'list-add', '0/0', tooltip=_('Size (selected/total)'))
 
 		# file list
 		self._container = Gtk.ScrolledWindow.new()
@@ -186,7 +186,7 @@ class ItemList(PluginBase):
 		self._title_bar.add_control(self.locations_button)
 
 		# terminal button
-		self.terminal_button = Gtk.Button.new_from_icon_name('terminal', Gtk.IconSize.MENU)
+		self.terminal_button = Gtk.Button.new_from_icon_name('utilities-terminal', Gtk.IconSize.MENU)
 		self.terminal_button.set_focus_on_click(False)
 		self.terminal_button.set_tooltip_text(_('Terminal'))
 		self.terminal_button.connect('clicked', self._create_terminal)

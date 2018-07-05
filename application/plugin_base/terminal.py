@@ -50,13 +50,13 @@ class Terminal(PluginBase):
 		self._menu = None
 
 		# change list icon
-		self._title_bar.set_icon_from_name('terminal')
+		self._title_bar.set_icon_from_name('utilities-terminal')
 
 		# pack buttons
 		self._title_bar.add_control(self._menu_button)
 
 		# terminal button
-		self._terminal_button = Gtk.Button.new_from_icon_name('terminal', Gtk.IconSize.MENU)
+		self._terminal_button = Gtk.Button.new_from_icon_name('utilities-terminal', Gtk.IconSize.MENU)
 		self._terminal_button.set_focus_on_click(False)
 		self._terminal_button.set_tooltip_text(_('Terminal'))
 		self._terminal_button.connect('clicked', self._create_terminal)
@@ -82,16 +82,10 @@ class Terminal(PluginBase):
 			# configure terminal widget
 			shape = section.get('cursor_shape')
 
-			# Since Vte 0.38 Vte.TerminalCursorShape has been renamed Vte.CursorShape
-			if hasattr(Vte, 'TerminalCursorShape'):
-				cursorshape = Vte.TerminalCursorShape
-			else:
-				cursorshape = Vte.CursorShape
-
 			shape_type = {
-					CursorShape.BLOCK: cursorshape.BLOCK,
-					CursorShape.IBEAM: cursorshape.IBEAM,
-					CursorShape.UNDERLINE: cursorshape.UNDERLINE
+					CursorShape.BLOCK: Vte.CursorShape.BLOCK,
+					CursorShape.IBEAM: Vte.CursorShape.IBEAM,
+					CursorShape.UNDERLINE: Vte.CursorShape.UNDERLINE
 				}
 			self._terminal.set_cursor_shape(shape_type[shape])
 			self._terminal.set_allow_bold(section.get('allow_bold'))

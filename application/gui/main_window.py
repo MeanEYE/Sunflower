@@ -525,7 +525,7 @@ class MainWindow(Gtk.ApplicationWindow):
 						'type': 'image',
 						'image': 'lpi-bug',
 						'callback': self.goto_web,
-						'data': 'github.com/MeanEYE/Sunflower/issues/new',
+						'data': 'gitlab.com/MeanEYE/Sunflower/issues/new',
 						'path': '<Sunflower>/Help/BugReport',
 					},
 					{'type': 'separator'},

@@ -96,7 +96,7 @@ class PreferencesWindow(Gtk.Window):
 		button_help.connect(
 					'clicked',
 					parent.goto_web,
-					'github.com/MeanEYE/Sunflower/wiki'
+					'gitlab.com/MeanEYE/Sunflower/wikis/home'
 				)
 
 		# restart label

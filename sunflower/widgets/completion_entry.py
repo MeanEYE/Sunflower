@@ -45,7 +45,7 @@ class PathCompletionEntry(Gtk.Entry):
 			scheme = 'file'
 
 		else:
-			scheme = original_path.split('://', 1)[1]
+			scheme = original_path.split('://', 1)[0]
 
 		# get associated provider
 		Provider = self._application.get_provider_by_protocol(scheme)

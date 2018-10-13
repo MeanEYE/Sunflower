@@ -1640,7 +1640,7 @@ class ItemList(PluginBase):
 			longest_path = 0
 			matching_provider = None
 
-			for provider_path, provider in self._providers.items():
+			for provider_path, provider in list(self._providers.items()):
 				# make sure path is valid, normally this shouldn't happen
 				if provider_path is None:
 					continue

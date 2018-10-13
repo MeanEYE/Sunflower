@@ -35,7 +35,7 @@ class Monitor(GObject.GObject):
 
 	__gtype_name__ = 'Sunflower_Monitor'
 	__gsignals__ = {
-				'changed': (GObject.SignalFlags.RUN_LAST, None, (int, str, str)),
+				'changed': (GObject.SignalFlags.RUN_LAST, None, (int, GObject.TYPE_PYOBJECT, GObject.TYPE_PYOBJECT)),
 			}
 
 	TIMEOUT = 1000

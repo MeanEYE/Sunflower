@@ -137,7 +137,7 @@ def get_user_directory(directory):
 	return result
 
 def is_x_app(command):
-	"""Checks if command uses grafical user interfaces."""
+	"""Checks if command uses graphical user interfaces."""
 	try:
 		env = os.environ.copy()
 		env.update({'LD_TRACE_LOADED_OBJECTS': '1'})
@@ -151,7 +151,7 @@ def is_x_app(command):
 		# report error to user
 		raise error
 
-	libraries = ('libX11.so', 'libvlc.so')
+	libraries = (b'libX11.so', b'libvlc.so')
 	matching = [library for library in libraries if library in output[0]]
 
 	return len(matching) > 0
@@ -189,3 +189,24 @@ def load_translation():
 			'_': translation.gettext,
 			'ngettext': translation.ngettext
 		})
+
+def disp_fn(fn):
+	"""
+	Replaces surrogate codepoints in a filename with a replacement character
+	to display non-UTF-8 filenames.
+	"""
+	if isinstance(fn, bytes):
+		return fn.decode('utf-8', 'replace')
+	else:
+		return disp_fn(encode_fn(fn))
+
+def display_basename(fn):
+	return disp_fn(os.path.basename(fn))
+
+def encode_fn(fn):
+	"""
+	Encodes a filename to bytes so it can be passed to GI APIs that expect a
+	file name (and specify 'filename' as their argument type in the GIR 
+	bindings)
+	"""
+	return str(fn).encode('utf-8', 'surrogateescape')

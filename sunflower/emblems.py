@@ -3,7 +3,7 @@ import os
 import sqlite3 as sql
 
 from gi.repository import Gtk
-from .common import get_cache_directory
+from .common import get_cache_directory, encode_fn
 
 
 class EmblemManager:
@@ -259,7 +259,7 @@ class EmblemManager:
 		cursor = self._get_cursor()
 
 		# get all the items in path
-		cursor.execute('SELECT id, name FROM items WHERE path=?', (path,))
+		cursor.execute('SELECT id, name FROM items WHERE path=?', (encode_fn(path),))
 		items = cursor.fetchall()
 
 		# exit if there are no items in path

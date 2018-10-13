@@ -1261,7 +1261,7 @@ class ItemList(PluginBase):
 	def _control_got_focus(self, widget, data=None):
 		"""List focus in event"""
 		PluginBase._control_got_focus(self, widget, data)
-		self._parent.set_location_label(self.path)
+		self._parent.set_location_label(common.disp_fn(self.path))
 
 	def _locations_button_clicked(self, widget, data=None):
 		"""Handle clicking on locations button."""

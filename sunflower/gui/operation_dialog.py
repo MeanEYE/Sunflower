@@ -411,7 +411,7 @@ class OperationDialog:
 
 	def set_current_file(self, path):
 		"""Set current file name"""
-		self._label_current_file.set_label(path)
+		self._label_current_file.set_label(common.disp_fn(path))
 
 	def set_current_file_fraction(self, fraction):
 		"""Set current file progress bar position"""

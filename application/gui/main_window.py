@@ -2479,6 +2479,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# create action
 		action = Gio.SimpleAction.new(name, None)
+		action.plugin_class = PluginClass
 		action.connect('activate', self._handle_new_tab_click)
 
 		self.new_tab_menu.append(title, 'new-tab.{0}'.format(name))

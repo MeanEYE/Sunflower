@@ -6,7 +6,7 @@ import fnmatch
 
 from gi.repository import Gtk
 from ..plugin_base.provider import FileType, Support as ProviderSupport
-from ..common import get_user_directory, UserDirectory
+from ..common import get_user_directory, UserDirectory, display_basename
 from ..widgets.completion_entry import PathCompletionEntry
 from ..queue import OperationQueue
 
@@ -164,7 +164,7 @@ class LinkDialog(InputDialog):
 
 			# if link name is empty, add original path name
 			if self._entry.get_text() == '':
-				self._entry.set_text(os.path.basename(dialog.get_filename()))
+				self._entry.set_text(display_basename(dialog.get_filename()))
 
 		dialog.destroy()
 
@@ -957,7 +957,7 @@ class CopyDialog:
 			else:
 				icon = icon_manager.get_icon_for_file(item)
 
-			self._affected.append((icon, os.path.basename(item)))
+			self._affected.append((icon, display_basename(item)))
 
 	def set_title(self, title_text):
 		"""Set dialog title"""
@@ -1713,7 +1713,7 @@ class ApplicationSelectDialog:
 			label_open_with.set_label(_('Select application:'))
 
 		else:
-			label_open_with.set_label(_('Open <i>{0}</i> with:').format(os.path.basename(path)))
+			label_open_with.set_label(_('Open <i>{0}</i> with:').format(display_basename(path)))
 
 		# create application list
 		list_container = Gtk.ScrolledWindow()

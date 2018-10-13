@@ -79,7 +79,9 @@ class FileList(ItemList):
 
 		# storage system for list items
 		self._store = Gtk.TreeStore(
-								str,	# Column.NAME
+								# name is a string, but it can contain surrogates,
+								# so it can't be marshalled as a gstring.
+								GObject.TYPE_PYOBJECT,	# Column.NAME
 								str,	# Column.FORMATED_NAME
 								str,	# Column.EXTENSION
 								float,	# Column.SIZE
@@ -986,7 +988,7 @@ class FileList(ItemList):
 			return
 		is_dir = self.get_provider().is_dir(selection)
 		# get base name from selection
-		selection = os.path.basename(selection)
+		selection = common.display_basename(selection)
 
 		dialog = RenameDialog(self._parent, selection, is_dir)
 		result = dialog.get_response()
@@ -1691,8 +1693,8 @@ class FileList(ItemList):
 
 			data = (
 					os.path.join(parent_path, filename) if parent_path else filename,
-					file_info[0],
-					file_info[1][1:],
+					common.disp_fn(file_info[0]),
+					common.disp_fn(file_info[1][1:]),
 					file_size,
 					formated_file_size,
 					file_mode,
@@ -2303,11 +2305,11 @@ class FileList(ItemList):
 		if path_name == "":
 			path_name = self.path
 
-		self._change_tab_text(path_name)
+		self._change_tab_text(common.disp_fn(path_name))
 		self._change_title_text(self.path)
 
 		if self._parent.get_active_object() is self:
-			self._parent.set_location_label(self.path)
+			self._parent.set_location_label(common.disp_fn(self.path))
 
 		# change list icon
 		self._title_bar.set_icon_from_name(provider.get_protocol_icon())
@@ -2344,7 +2346,7 @@ class FileList(ItemList):
 									_(
 										"Error changing working directory to:"
 										"\n{1}\n\n{0}\n\nWould you like to retry?"
-									).format(error, path)
+									).format(error, common.disp_fn(path))
 								)
 			dialog.set_default_response(Gtk.ResponseType.YES)
 			result = dialog.run()

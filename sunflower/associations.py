@@ -5,7 +5,7 @@ import subprocess
 from gi.repository import Gtk, Gio
 from urllib.request import pathname2url
 from collections import namedtuple
-from .common import is_x_app
+from .common import is_x_app, disp_fn, encode_fn
 from .parameters import Parameters
 from .plugin_base.provider import Mode
 from .plugin_base.terminal import TerminalType
@@ -109,6 +109,9 @@ class AssociationManager:
 
 		if path is not None:
 			# detect content type based on file name
+			# due to a bug in the GI bindings of GIO, we can't pass non-UTF-8
+			# file names in here. In this case, that probably doesn't matter.
+			path = disp_fn(path)
 			result = Gio.content_type_guess(filename=path)[0]
 
 		elif data is not None:
@@ -209,10 +212,13 @@ class AssociationManager:
 
 			if application is not None:
 				if application.supports_uris():
-					selection = ['file://{0}'.format(pathname2url(path)) if not path.startswith('file://') else path for path in selection]
+					selection = [
+						'file://{0}'.format(pathname2url(encode_fn(path)))
+						if not path.startswith('file://') else encode_fn(path)
+						for path in selection]
 					application.launch_uris(selection)
 				else:
-					application.launch([Gio.File.new_for_path(path) for path in selection])
+					application.launch([Gio.File.new_for_path(encode_fn(path)) for path in selection])
 
 		elif exec_command is not None:
 			# use specified command

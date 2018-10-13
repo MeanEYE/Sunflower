@@ -170,7 +170,7 @@ class TitleBar:
 	def apply_settings(self):
 		"""Method called when system applies new settings"""
 		self._superuser_notification = self._application.options.get('superuser_notification')
-		self._button_relief = self._application.options.get('button_relief')
+		self._button_relief = self._application.options.get('button_relief') or 0
 
 		# apply button relief
 		relief = (Gtk.ReliefStyle.NONE, Gtk.ReliefStyle.NORMAL)[self._button_relief]

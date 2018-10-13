@@ -2307,7 +2307,7 @@ class FileList(ItemList):
 			path_name = self.path
 
 		self._change_tab_text(common.disp_fn(path_name))
-		self._change_title_text(common.disp_fn(self.path))
+		self._change_title_text(self.path)
 
 		if self._parent.get_active_object() is self:
 			self._parent.set_location_label(common.disp_fn(self.path))

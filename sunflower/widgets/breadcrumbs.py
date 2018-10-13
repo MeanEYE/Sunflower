@@ -1,7 +1,7 @@
 import os
 
 from gi.repository import Gtk, GObject
-
+from ..common import disp_fn
 
 class Breadcrumbs(Gtk.HBox):
 	"""Linked list of buttons navigating to different paths."""
@@ -75,7 +75,7 @@ class Breadcrumbs(Gtk.HBox):
 					control = Gtk.RadioButton.new()
 
 				control.set_focus_on_click(False)
-				control.set_label(element)
+				control.set_label(disp_fn(element))
 				control.set_mode(False)
 				control.connect('clicked', self.__fragment_click)
 				control.path = current_path

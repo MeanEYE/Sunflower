@@ -3,7 +3,7 @@ import math
 from gi.repository import Gtk, Pango, Gdk
 from .breadcrumbs import Breadcrumbs
 from .context_menu import ContextMenu
-
+from ..common import disp_fn
 
 class Mode:
 	NORMAL = 0
@@ -116,12 +116,12 @@ class TitleBar:
 		if self._mode == Mode.SUPER_USER:
 			self._container.get_style_context().add_class('superuser')
 
-	def set_title(self, text):
+	def set_title(self, path):
 		"""Set title text"""
 		if self._breadcrumbs is not None:
-			self._breadcrumbs.refresh(text)
+			self._breadcrumbs.refresh(path)
 		else:
-			self._title_label.set_markup(text.replace('&', '&amp;'))
+			self._title_label.set_markup(disp_fn(path).replace('&', '&amp;'))
 
 	def set_subtitle(self, text):
 		"""Set subtitle text"""

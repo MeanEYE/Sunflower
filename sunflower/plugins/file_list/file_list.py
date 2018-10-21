@@ -2139,7 +2139,7 @@ class FileList(ItemList):
 
 			except Exception as error:
 				# report error first
-				print('Load directory error: ', error.message)
+				print('Load directory error: ', str(error))
 
 				# clear locks and exit
 				self._thread_active.clear()

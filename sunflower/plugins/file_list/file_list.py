@@ -1555,7 +1555,7 @@ class FileList(ItemList):
 		selected = not self._store.get_value(current_iter, Column.SELECTED)
 		color = (None, self._selection_color)[selected]
 
-		for index in xrange(start_path[0], end_path[0] + 1):
+		for index in range(start_path[0], end_path[0] + 1):
 			current_iter = self._store.get_iter((index, ))
 
 			# get current iter information

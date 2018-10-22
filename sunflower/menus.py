@@ -148,7 +148,7 @@ class MenuManager:
 			item_count = len(associations.options(mime_type)) / 2
 
 			# add options for mime type
-			for index in xrange(1, item_count + 1):
+			for index in range(1, item_count + 1):
 				name = associations.get(mime_type, 'name_{0}'.format(index))
 				command = associations.get(mime_type, 'command_{0}'.format(index))
 

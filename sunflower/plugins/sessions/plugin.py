@@ -448,11 +448,11 @@ class SessionManager:
 		section.set('current', session_index)
 
 		# close old tabs
-		for index in xrange(left_notebook.get_n_pages()):
+		for index in range(left_notebook.get_n_pages()):
 			page = left_notebook.get_nth_page(0)
 			self._application.close_tab(left_notebook, page, can_close_all=True)
 
-		for index in xrange(right_notebook.get_n_pages()):
+		for index in range(right_notebook.get_n_pages()):
 			page = right_notebook.get_nth_page(0)
 			self._application.close_tab(right_notebook, page, can_close_all=True)
 

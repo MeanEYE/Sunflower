@@ -167,7 +167,7 @@ class AssociationsOptions(SettingsPage):
 			applications = config.get(mime_type)
 			count = len(applications) / 2
 
-			for index in xrange(1, count + 1):
+			for index in range(1, count + 1):
 				application = applications[index-1]
 				self._associations.append(parent, (application['name'], application['command']))
 

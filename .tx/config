@@ -3,6 +3,7 @@ host = https://www.transifex.com
 
 [sunflower.main]
 file_filter = translations/<lang>/LC_MESSAGES/sunflower.po
+source_file = translations/sunflower.pot
 source_lang = en
 type = PO
 

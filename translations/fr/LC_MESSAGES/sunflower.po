@@ -3,7 +3,8 @@
 # This file is distributed under the same license as the Sunflower package.
 # 
 # Translators:
-# Ilphrin <ilphrin@autistici.org>, 2014
+# Fabien Devaux <fdev31@gmail.com>, 2016
+# b1e52df2ef53ff1f23446fe6b85619b4, 2014
 # Mladen Mijatov <meaneye.rcf@gmail.com>, 2015
 # xavier <xavier@ouvaton.org>, 2015
 msgid ""
@@ -11,8 +12,8 @@ msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-06 23:05+0100\n"
-"PO-Revision-Date: 2016-01-07 20:04+0000\n"
-"Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
+"PO-Revision-Date: 2017-09-23 20:05+0000\n"
+"Last-Translator: Fabien Devaux <fdev31@gmail.com>\n"
 "Language-Team: French (http://www.transifex.com/way2cu/sunflower/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -238,7 +239,7 @@ msgstr "<b>Note:</b> Vous ne pouvez éditer qu'un accélérateur provenant d'obj
 
 #: application/gui/preferences/accelerators.py:92
 msgid "Double click on accelerator to assign new one."
-msgstr ""
+msgstr "Double-cliquez sur un raccourci pour le redéfinir."
 
 #: application/gui/preferences/accelerators.py:198
 #, python-brace-format
@@ -266,7 +267,7 @@ msgstr "Vue"
 
 #: application/gui/preferences/view_and_edit.py:23
 msgid "Wrap long lines"
-msgstr ""
+msgstr "Retours à la ligne"
 
 #: application/gui/preferences/view_and_edit.py:27
 #: application/gui/main_window.py:678
@@ -437,7 +438,7 @@ msgstr "Afficher la zone de commande"
 
 #: application/gui/preferences/display.py:37
 msgid "Horizontal split"
-msgstr ""
+msgstr "Séparation horizontale"
 
 #: application/gui/preferences/display.py:47
 #: application/plugins/sessions/plugin.py:57
@@ -516,7 +517,7 @@ msgstr "Afficher les notifications"
 
 #: application/gui/preferences/display.py:110
 msgid "Use path completion on non-local paths"
-msgstr ""
+msgstr "Activer la complétion des chemins distants"
 
 #: application/gui/preferences/display.py:118
 msgid "Size format:"
@@ -546,7 +547,7 @@ msgstr "Apparence"
 
 #: application/gui/preferences/item_list.py:43
 msgid "Hidden files"
-msgstr ""
+msgstr "Fichiers cachés"
 
 #: application/gui/preferences/item_list.py:45
 msgid "Directories"
@@ -594,7 +595,7 @@ msgstr "Cacher la barre de défilement horizontale"
 
 #: application/gui/preferences/item_list.py:72
 msgid "Support second level extension"
-msgstr ""
+msgstr "Supporter les extensions de second niveau"
 
 #: application/gui/preferences/item_list.py:87
 msgid "Breadcrumbs:"
@@ -670,7 +671,7 @@ msgstr "Afficher les fichiers cachés"
 
 #: application/gui/preferences/item_list.py:200
 msgid "Always visible files and directories:"
-msgstr ""
+msgstr "Fichiers et répertoires toujours visibles:"
 
 #: application/gui/preferences/item_list.py:225
 msgid "Load specified tabs instead of saved"
@@ -720,11 +721,11 @@ msgstr "Police"
 
 #: application/gui/preferences/item_list.py:472
 msgid "Add always visible item"
-msgstr ""
+msgstr "Ajouter un élément toujours visible"
 
 #: application/gui/preferences/item_list.py:473
 msgid "Full name of file or directory to always show:"
-msgstr ""
+msgstr "Chemin complet de l'élément à toujours afficher:"
 
 #: application/gui/preferences/item_list.py:499
 msgid "Add custom directory"
@@ -747,19 +748,19 @@ msgstr "Sunflower"
 
 #: application/gui/main_window.py:174
 msgid "_File"
-msgstr ""
+msgstr "_Fichier"
 
 #: application/gui/main_window.py:178
 msgid "New _tab"
-msgstr ""
+msgstr "_Nouvel onglet"
 
 #: application/gui/main_window.py:190
 msgid "Create _file"
-msgstr ""
+msgstr "Nouveau _Fichier"
 
 #: application/gui/main_window.py:199
 msgid "Create _directory"
-msgstr ""
+msgstr "Créer un _Dossier"
 
 #: application/gui/main_window.py:211
 #: application/plugin_base/item_list.py:1009
@@ -782,7 +783,7 @@ msgstr "_Quitter"
 
 #: application/gui/main_window.py:248
 msgid "_Edit"
-msgstr ""
+msgstr "_Editer"
 
 #: application/gui/main_window.py:251
 #: application/plugin_base/item_list.py:1082
@@ -806,7 +807,7 @@ msgstr "_Supprimer"
 
 #: application/gui/main_window.py:285
 msgid "_Send to..."
-msgstr ""
+msgstr "Envoyer _vers..."
 
 #: application/gui/main_window.py:294
 #: application/plugin_base/item_list.py:1156
@@ -832,7 +833,7 @@ msgstr "_Préférences"
 
 #: application/gui/main_window.py:331
 msgid "_Mark"
-msgstr ""
+msgstr "_Marquer"
 
 #: application/gui/main_window.py:334
 msgid "_Select all"
@@ -868,35 +869,35 @@ msgstr "Comparer les _dossiers"
 
 #: application/gui/main_window.py:386
 msgid "_Tools"
-msgstr ""
+msgstr "_Outils"
 
 #: application/gui/main_window.py:390
 msgid "_Find files"
-msgstr ""
+msgstr "_Chercher"
 
 #: application/gui/main_window.py:398
 msgid "Find _duplicate files"
-msgstr ""
+msgstr "Chercher les _doublons"
 
 #: application/gui/main_window.py:403
 msgid "_Synchronize directories"
-msgstr ""
+msgstr "_Synchroniser les répertoires"
 
 #: application/gui/main_window.py:409
 msgid "Advanced _rename"
-msgstr ""
+msgstr "_Renommage avancé"
 
 #: application/gui/main_window.py:416
 msgid "_Mount manager"
-msgstr ""
+msgstr "Gestionnaire de _montages"
 
 #: application/gui/main_window.py:422
 msgid "_Keyring manager"
-msgstr ""
+msgstr "Gestionnaire de _clés"
 
 #: application/gui/main_window.py:430
 msgid "_View"
-msgstr ""
+msgstr "_Vue"
 
 #: application/gui/main_window.py:433
 msgid "Ful_lscreen"
@@ -928,15 +929,15 @@ msgstr "Afficher la zone de co_mmande"
 
 #: application/gui/main_window.py:494
 msgid "_Horizontal split"
-msgstr ""
+msgstr "Séparation _Horizontale"
 
 #: application/gui/main_window.py:504
 msgid "_Commands"
-msgstr ""
+msgstr "_Commandes"
 
 #: application/gui/main_window.py:508
 msgid "_Operations"
-msgstr ""
+msgstr "_Opérations"
 
 #: application/gui/main_window.py:512
 msgid "There are no active operations"
@@ -944,7 +945,7 @@ msgstr "Il n'y a pas d'opérations actives"
 
 #: application/gui/main_window.py:518
 msgid "_Help"
-msgstr ""
+msgstr "_Aide"
 
 #: application/gui/main_window.py:521
 msgid "_Home page"
@@ -1406,7 +1407,7 @@ msgstr "Entrez un nom de répertoire :"
 
 #: application/gui/input_dialog.py:582 application/gui/input_dialog.py:661
 msgid "Operation queue:"
-msgstr ""
+msgstr "Liste d'opérations:"
 
 #: application/gui/input_dialog.py:654
 msgid "Only files of this type:"
@@ -1566,7 +1567,7 @@ msgid ""
 "Underscore in the label text indicates the next character should be "
 "underlined and used for the mnemonic accelerator key if it is the first "
 "character so marked."
-msgstr ""
+msgstr "Un caractère de soulignement devant un mot d'un nom indique que le caractère suivant (premier caractère du mot) doit être souligné et utilisé comme raccourci clavier."
 
 #: application/gui/input_dialog.py:1410
 msgid "Operation error"
@@ -1574,7 +1575,7 @@ msgstr "Erreur d'opération"
 
 #: application/gui/input_dialog.py:1447
 msgid "Skip all"
-msgstr ""
+msgstr "Tout passer"
 
 #: application/gui/input_dialog.py:1448
 msgid "Retry"
@@ -1793,7 +1794,7 @@ msgstr "Gestionnaire de fichiers en vis-à-vis pour Linux"
 
 #: application/gui/about_window.py:109
 msgid "Copyright © 2010-2015 by Mladen Mijatov and contributors."
-msgstr ""
+msgstr "Copyright © 2010-2015 par Mladen Mijatov et contributeurs."
 
 #: application/gui/about_window.py:137
 msgid "translator-credits"
@@ -1845,19 +1846,19 @@ msgstr "Défaut"
 
 #: application/queue.py:49
 msgid "New queue"
-msgstr ""
+msgstr "Nouvelle liste"
 
 #: application/queue.py:142
 msgid "New operation queue"
-msgstr ""
+msgstr "Nouvelle liste d'opérations"
 
 #: application/queue.py:143
 msgid "Enter name for new operation queue:"
-msgstr ""
+msgstr "Entrez le nom de la nouvelle liste d'opérations:"
 
 #: application/queue.py:159
 msgid "Operation queue with specified name already exists."
-msgstr ""
+msgstr "Une liste d'opérations du même nom existe déjà."
 
 #: application/mounts.py:126
 msgid "Specified item can not be unmounted."
@@ -1962,7 +1963,7 @@ msgstr "Liste de fichier local"
 
 #: application/plugins/file_list/plugin.py:12
 msgid "Trash can"
-msgstr ""
+msgstr "Corbeille"
 
 #: application/plugins/file_list/file_list.py:124
 msgid "Ext"
@@ -2073,11 +2074,11 @@ msgstr "Erreur lors du changement de répertoire courant à:\n{1}\n\n{0}\n\nVoul
 
 #: application/plugins/file_list/trash_list.py:39
 msgid "Empty trash"
-msgstr ""
+msgstr "Vider la corbeille"
 
 #: application/plugins/file_list/trash_list.py:53
 msgid "All items in the Trash will be permanently deleted. Are you sure?"
-msgstr ""
+msgstr "Tous les éléments vont être définitivement supprimés. Êtes vous certain ?"
 
 #: application/plugins/file_list/gio_extension.py:68
 msgid "Mount operation"
@@ -2172,7 +2173,7 @@ msgstr "Sessions"
 
 #: application/plugins/sessions/plugin.py:55
 msgid "Locked"
-msgstr ""
+msgstr "Verrouillé"
 
 #: application/plugins/sessions/plugin.py:76
 msgid "Move up"
@@ -2196,7 +2197,7 @@ msgstr "Gérer les sessions"
 
 #: application/plugins/sessions/plugin.py:281
 msgid "Save session"
-msgstr ""
+msgstr "Enregistrer la session"
 
 #: application/plugins/rename_extensions/letter_case.py:15
 #: application/plugins/rename_extensions/letter_case.py:23
@@ -2363,7 +2364,7 @@ msgstr "Terminal système"
 
 #: application/plugins/system_terminal/plugin.py:21
 msgid "Open current directory"
-msgstr ""
+msgstr "Ouvrir le répertoire courant"
 
 #: application/plugins/gvim_viewer/plugin.py:50
 msgid "GVim"
@@ -2410,7 +2411,7 @@ msgstr "Focus sur l'objet de droite"
 
 #: application/plugin_base/terminal.py:94
 msgid "Open file list"
-msgstr ""
+msgstr "Ouvrir la liste des fichiers"
 
 #: application/plugin_base/terminal.py:135
 msgid ""
@@ -2508,7 +2509,7 @@ msgstr "Ouvrir le répertoire sélectionné"
 
 #: application/plugin_base/item_list.py:258
 msgid "Calculate disk usage for directory"
-msgstr ""
+msgstr "Calculer l'occupation disque du répertoire"
 
 #: application/plugin_base/item_list.py:261
 msgid "Go to root directory"

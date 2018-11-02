@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-06 23:05+0100\n"
-"PO-Revision-Date: 2016-01-07 20:04+0000\n"
+"PO-Revision-Date: 2017-09-21 23:15+0000\n"
 "Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
 "Language-Team: Slovak (http://www.transifex.com/way2cu/sunflower/language/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: sk\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
 
 #: application/gui/preferences/terminal.py:11
 #: application/plugins/system_terminal/plugin.py:54
@@ -1223,6 +1223,7 @@ msgid_plural "items"
 msgstr[0] "položka"
 msgstr[1] "položky"
 msgstr[2] "položiek"
+msgstr[3] "položiek"
 
 #: application/gui/properties_window.py:259
 #: application/gui/operation_dialog.py:362
@@ -1460,6 +1461,7 @@ msgid_plural "Copy items"
 msgstr[0] "Kopírovať položku"
 msgstr[1] "Kopírovať položky"
 msgstr[2] "Kopírovať položiek"
+msgstr[3] "Kopírovať položiek"
 
 #: application/gui/input_dialog.py:889
 #, python-brace-format
@@ -1468,6 +1470,7 @@ msgid_plural "Copy <b>{0}</b> items to:"
 msgstr[0] "Kopírovať <b>{0}</b> položku do:"
 msgstr[1] "Kopírovať <b>{0}</b> položky do:"
 msgstr[2] "Kopírovať <b>{0}</b> položiek do:"
+msgstr[3] "Kopírovať <b>{0}</b> položiek do:"
 
 #: application/gui/input_dialog.py:898 application/gui/input_dialog.py:1002
 #: application/gui/input_dialog.py:1445
@@ -1482,6 +1485,7 @@ msgid_plural "Move items"
 msgstr[0] "Presunúť položku"
 msgstr[1] "Presunúť položky"
 msgstr[2] "Presunúť položiek"
+msgstr[3] "Presunúť položiek"
 
 #: application/gui/input_dialog.py:993
 #, python-brace-format
@@ -1490,6 +1494,7 @@ msgid_plural "Move <b>{0}</b> items to:"
 msgstr[0] "Presunúť <b>{0}</b> položku do:"
 msgstr[1] "Presunúť <b>{0}</b> položky do:"
 msgstr[2] "Presunúť <b>{0}</b> položiek do:"
+msgstr[3] "Presunúť <b>{0}</b> položiek do:"
 
 #: application/gui/input_dialog.py:1016
 msgid "Rename file/directory"
@@ -1675,6 +1680,7 @@ msgid_plural "seconds"
 msgstr[0] "sekunda"
 msgstr[1] "sekundy"
 msgstr[2] "sekúnd"
+msgstr[3] "sekúnd"
 
 #: application/gui/operation_dialog.py:349
 msgid "minute"
@@ -1682,6 +1688,7 @@ msgid_plural "minutes"
 msgstr[0] "minúta"
 msgstr[1] "minúty"
 msgstr[2] "minút"
+msgstr[3] "minút"
 
 #: application/gui/operation_dialog.py:356
 msgid "hour"
@@ -1689,6 +1696,7 @@ msgid_plural "hours"
 msgstr[0] "hodina"
 msgstr[1] "hodiny"
 msgstr[2] "hodín"
+msgstr[3] "hodín"
 
 #: application/gui/operation_dialog.py:501
 msgid "Copy Selection"
@@ -2027,6 +2035,7 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: application/plugins/file_list/file_list.py:829
 #, python-brace-format
@@ -2039,6 +2048,7 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: application/plugins/file_list/file_list.py:1180
 msgid "Other application..."
@@ -2837,6 +2847,7 @@ msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: application/operation.py:1190
 msgid "Moving files..."
@@ -2861,6 +2872,7 @@ msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: application/operation.py:1466
 msgid "Delete Operation"
@@ -2873,6 +2885,7 @@ msgid_plural "Removal of {0} items from \"{1}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: application/operation.py:1579
 msgid "Rename Operation"
@@ -2885,6 +2898,7 @@ msgid_plural "Rename of {0} items from \"{1}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: application/tools/viewer.py:35
 #, python-brace-format
@@ -2984,3 +2998,4 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""

@@ -12,14 +12,14 @@ msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-06 23:05+0100\n"
-"PO-Revision-Date: 2016-01-08 20:48+0000\n"
+"PO-Revision-Date: 2017-09-20 08:13+0000\n"
 "Last-Translator: Wojciech Kluczka\n"
 "Language-Team: Polish (http://www.transifex.com/way2cu/sunflower/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pl\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
 #: application/gui/preferences/terminal.py:11
 #: application/plugins/system_terminal/plugin.py:54
@@ -1226,6 +1226,7 @@ msgid_plural "items"
 msgstr[0] "plik"
 msgstr[1] "pliki"
 msgstr[2] "plików"
+msgstr[3] "plików"
 
 #: application/gui/properties_window.py:259
 #: application/gui/operation_dialog.py:362
@@ -1463,6 +1464,7 @@ msgid_plural "Copy items"
 msgstr[0] "Kopiowanie elementu"
 msgstr[1] "Kopiowanie elementów"
 msgstr[2] "Kopiowanie elementów"
+msgstr[3] "Kopiowanie elementów"
 
 #: application/gui/input_dialog.py:889
 #, python-brace-format
@@ -1471,6 +1473,7 @@ msgid_plural "Copy <b>{0}</b> items to:"
 msgstr[0] "Kopiowanie <b>{0}</b> elementu do:"
 msgstr[1] "Kopiowanie <b>{0}</b> elementów do:"
 msgstr[2] "Kopiowanie <b>{0}</b> elementów do:"
+msgstr[3] "Kopiowanie <b>{0}</b> elementów do:"
 
 #: application/gui/input_dialog.py:898 application/gui/input_dialog.py:1002
 #: application/gui/input_dialog.py:1445
@@ -1485,6 +1488,7 @@ msgid_plural "Move items"
 msgstr[0] "Przenieś plik"
 msgstr[1] "Przenieś pliki"
 msgstr[2] "Przenieś pliki"
+msgstr[3] "Przenieś pliki"
 
 #: application/gui/input_dialog.py:993
 #, python-brace-format
@@ -1493,6 +1497,7 @@ msgid_plural "Move <b>{0}</b> items to:"
 msgstr[0] "Przenieś <b>{0}</b> plik do:"
 msgstr[1] "Przenieś <b>{0}</b> pliki do:"
 msgstr[2] "Przenieś <b>{0}</b> pliki do:"
+msgstr[3] "Przenieś <b>{0}</b> pliki do:"
 
 #: application/gui/input_dialog.py:1016
 msgid "Rename file/directory"
@@ -1678,6 +1683,7 @@ msgid_plural "seconds"
 msgstr[0] "sekunda"
 msgstr[1] "sekundy"
 msgstr[2] "sekund"
+msgstr[3] "sekund"
 
 #: application/gui/operation_dialog.py:349
 msgid "minute"
@@ -1685,6 +1691,7 @@ msgid_plural "minutes"
 msgstr[0] "minuta"
 msgstr[1] "minuty"
 msgstr[2] "minut"
+msgstr[3] "minut"
 
 #: application/gui/operation_dialog.py:356
 msgid "hour"
@@ -1692,6 +1699,7 @@ msgid_plural "hours"
 msgstr[0] "godzina"
 msgstr[1] "godziny"
 msgstr[2] "godzin"
+msgstr[3] "godzin"
 
 #: application/gui/operation_dialog.py:501
 msgid "Copy Selection"
@@ -2030,6 +2038,7 @@ msgid_plural ""
 msgstr[0] "Usuwanie {0} pliku.\nJesteś pewny?"
 msgstr[1] "Usuwanie {0} plików.\nJesteś pewny?"
 msgstr[2] "Usuwanie {0} plików.\nJesteś pewny?"
+msgstr[3] "Usuwanie {0} plików.\nJesteś pewny?"
 
 #: application/plugins/file_list/file_list.py:829
 #, python-brace-format
@@ -2042,6 +2051,7 @@ msgid_plural ""
 msgstr[0] "Przenoszenie {0} pliku do kosza.\nJesteś pewny?"
 msgstr[1] "Przenoszenie {0} plików do kosza.\nJesteś pewny?"
 msgstr[2] "Przenoszenie {0} plików do kosza.\nJesteś pewny?"
+msgstr[3] "Przenoszenie {0} plików do kosza.\nJesteś pewny?"
 
 #: application/plugins/file_list/file_list.py:1180
 msgid "Other application..."
@@ -2840,6 +2850,7 @@ msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] "Zakończono kopiowanie {0} pliku z \"{1}\" do \"{2}\"!"
 msgstr[1] "Zakończono kopiowanie {0} plików z \"{1}\" do \"{2}\"!"
 msgstr[2] "Zakończono kopiowanie {0} plików z \"{1}\" do \"{2}\"!"
+msgstr[3] "Zakończono kopiowanie {0} plików z \"{1}\" do \"{2}\"!"
 
 #: application/operation.py:1190
 msgid "Moving files..."
@@ -2864,6 +2875,7 @@ msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] "Zakończono przenoszenie {0} pliku z \"{1}\" do \"{2}\"!"
 msgstr[1] "Zakończono przenoszenie {0} plików z \"{1}\" do \"{2}\"!"
 msgstr[2] "Zakończono przenoszenie {0} plików z \"{1}\" do \"{2}\"!"
+msgstr[3] "Zakończono przenoszenie {0} plików z \"{1}\" do \"{2}\"!"
 
 #: application/operation.py:1466
 msgid "Delete Operation"
@@ -2876,6 +2888,7 @@ msgid_plural "Removal of {0} items from \"{1}\" is completed!"
 msgstr[0] "Zakończono usuwanie {0} pliku z \"{1}\"!"
 msgstr[1] "Zakończono usuwanie {0} plików z \"{1}\"!"
 msgstr[2] "Zakończono usuwanie {0} plików z \"{1}\"!"
+msgstr[3] "Zakończono usuwanie {0} plików z \"{1}\"!"
 
 #: application/operation.py:1579
 msgid "Rename Operation"
@@ -2888,6 +2901,7 @@ msgid_plural "Rename of {0} items from \"{1}\" is completed!"
 msgstr[0] "Zakończono usuwanie {0} pliku z \"{1}\"!"
 msgstr[1] "Zakończono usuwanie {0} plików z \"{1}\"!"
 msgstr[2] "Zakończono usuwanie {0} plików z \"{1}\"!"
+msgstr[3] "Zakończono usuwanie {0} plików z \"{1}\"!"
 
 #: application/tools/viewer.py:35
 #, python-brace-format
@@ -2987,3 +3001,4 @@ msgid_plural ""
 msgstr[0] "Usuwanie {0} pliku.\nJesteś pewny?"
 msgstr[1] "Usuwanie {0} plików.\nJesteś pewny?"
 msgstr[2] "Usuwanie {0} plików.\nJesteś pewny?"
+msgstr[3] "Usuwanie {0} plików.\nJesteś pewny?"

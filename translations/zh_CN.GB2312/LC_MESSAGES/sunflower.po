@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-06 23:05+0100\n"
-"PO-Revision-Date: 2017-09-23 20:26+0000\n"
-"Last-Translator: Aaron Chen <aaron74316@gmail.com>\n"
+"POT-Creation-Date: 2018-11-02 01:35+0100\n"
+"PO-Revision-Date: 2018-11-02 00:52+0000\n"
+"Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
 "Language-Team: Chinese (China) (GB2312) (http://www.transifex.com/way2cu/sunflower/language/zh_CN.GB2312/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,69 +20,69 @@ msgstr ""
 "Language: zh_CN.GB2312\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: application/gui/preferences/terminal.py:11
-#: application/plugins/system_terminal/plugin.py:54
-#: application/plugins/system_terminal/plugin.py:55
-#: application/plugin_base/terminal.py:76
-#: application/plugin_base/terminal.py:300
-#: application/plugin_base/item_list.py:230
+#: application/gui/preferences/terminal.py:10
+#: application/plugins/system_terminal/plugin.py:52
+#: application/plugins/system_terminal/plugin.py:53
+#: application/plugin_base/terminal.py:61
+#: application/plugin_base/terminal.py:260
+#: application/plugin_base/item_list.py:191
 msgid "Terminal"
 msgstr "终端"
 
-#: application/gui/preferences/terminal.py:18
+#: application/gui/preferences/terminal.py:17
 msgid "VTE based terminal"
 msgstr "基于 VTE 的终端"
 
-#: application/gui/preferences/terminal.py:22
+#: application/gui/preferences/terminal.py:21
 msgid "Show scrollbars when needed"
 msgstr "按需显示滚动条"
 
-#: application/gui/preferences/terminal.py:30
+#: application/gui/preferences/terminal.py:29
 msgid "Use the system fixed width font"
 msgstr "使用系统等宽字体"
 
-#: application/gui/preferences/terminal.py:33
+#: application/gui/preferences/terminal.py:32
 msgid "Font:"
 msgstr "字体"
 
-#: application/gui/preferences/terminal.py:42
+#: application/gui/preferences/terminal.py:41
 msgid "Cursor shape:"
 msgstr "光标形状"
 
-#: application/gui/preferences/terminal.py:46
+#: application/gui/preferences/terminal.py:45
 msgid "Block"
 msgstr "方块"
 
-#: application/gui/preferences/terminal.py:47
+#: application/gui/preferences/terminal.py:46
 msgid "I-Beam"
 msgstr "I-型标"
 
-#: application/gui/preferences/terminal.py:48
+#: application/gui/preferences/terminal.py:47
 msgid "Underline"
 msgstr "下划线"
 
-#: application/gui/preferences/terminal.py:58
+#: application/gui/preferences/terminal.py:57
 msgid "Allow bold text"
 msgstr "允许粗体文本"
 
-#: application/gui/preferences/terminal.py:62
+#: application/gui/preferences/terminal.py:61
 msgid "Automatically hide mouse when typing"
 msgstr "键入时自动隐藏鼠标"
 
-#: application/gui/preferences/terminal.py:70
+#: application/gui/preferences/terminal.py:69
 msgid "External terminal"
 msgstr "外部终端"
 
-#: application/gui/preferences/terminal.py:73
-#: application/gui/preferences/view_and_edit.py:63
+#: application/gui/preferences/terminal.py:72
+#: application/gui/preferences/view_and_edit.py:62
 msgid "Command line:"
 msgstr "命令行"
 
-#: application/gui/preferences/terminal.py:79
+#: application/gui/preferences/terminal.py:78
 msgid "Command line for executing specific program:"
 msgstr "执行特定程序的命令行"
 
-#: application/gui/preferences/terminal.py:85
+#: application/gui/preferences/terminal.py:84
 #, python-brace-format
 msgid ""
 "<small><i>Note:\n"
@@ -92,52 +92,53 @@ msgid ""
 "\t{2} will be replaced with current working directory.</i></small>"
 msgstr "提示：\n忽略 {0} 将会在新的终端打开而非 tab.\n{0} 将被替换为套接字/窗口 id.\n{1} 将被替换为指定命令及其参数.\n{2} 将被替换为当前工作目录."
 
-#: application/gui/preferences/commands.py:15
+#: application/gui/preferences/commands.py:14
+#: application/gui/main_window.py:168
 msgid "Commands"
 msgstr "命令"
 
-#: application/gui/preferences/commands.py:40
-#: application/gui/preferences/bookmarks.py:50
+#: application/gui/preferences/commands.py:39
+#: application/gui/preferences/bookmarks.py:49
 #: application/plugins/rename_extensions/audio_metadata.py:24
 msgid "Title"
 msgstr "标题"
 
-#: application/gui/preferences/commands.py:44
+#: application/gui/preferences/commands.py:43
 msgid "Command"
 msgstr "命令"
 
-#: application/gui/preferences/commands.py:67
-#: application/gui/preferences/bookmarks.py:77
-#: application/gui/preferences/toolbar.py:74
-#: application/gui/preferences/item_list.py:263
+#: application/gui/preferences/commands.py:66
+#: application/gui/preferences/bookmarks.py:76
+#: application/gui/preferences/toolbar.py:72
+#: application/gui/preferences/item_list.py:232
 msgid "Move Up"
 msgstr "上移"
 
-#: application/gui/preferences/commands.py:75
-#: application/gui/preferences/bookmarks.py:85
-#: application/gui/preferences/toolbar.py:82
-#: application/gui/preferences/item_list.py:271
+#: application/gui/preferences/commands.py:74
+#: application/gui/preferences/bookmarks.py:84
+#: application/gui/preferences/toolbar.py:80
+#: application/gui/preferences/item_list.py:240
 msgid "Move Down"
 msgstr "下移"
 
-#: application/gui/preferences/associations.py:16
+#: application/gui/preferences/associations.py:15
 msgid "Associations"
 msgstr "关联"
 
-#: application/gui/preferences/associations.py:45
-#: application/gui/preferences/associations.py:81
+#: application/gui/preferences/associations.py:44
+#: application/gui/preferences/associations.py:76
 msgid "Add mime type"
 msgstr "添加 mime 类型"
 
-#: application/gui/preferences/associations.py:48
+#: application/gui/preferences/associations.py:47
 msgid "Add application to mime type"
 msgstr "关联程序到 mime 类型"
 
-#: application/gui/preferences/associations.py:82
+#: application/gui/preferences/associations.py:77
 msgid "Enter MIME type (eg. image/png):"
 msgstr "输入 MIME 类型（如 image/png）"
 
-#: application/gui/preferences/associations.py:133
+#: application/gui/preferences/associations.py:128
 msgid ""
 "You need to select mime type to which application will be added. You can "
 "also select another application in which case new one will be added to its "
@@ -149,7 +150,7 @@ msgid "Plugins"
 msgstr "插件"
 
 #: application/gui/preferences/plugins.py:66
-#: application/gui/preferences/display.py:93
+#: application/gui/preferences/display.py:86
 msgid "Active"
 msgstr "启用"
 
@@ -166,7 +167,7 @@ msgid "Author"
 msgstr "作者"
 
 #: application/gui/preferences/plugins.py:90
-#: application/gui/preferences/accelerators.py:54
+#: application/gui/preferences/accelerators.py:53
 msgid "Description"
 msgstr "描述"
 
@@ -193,54 +194,54 @@ msgstr "这个插件没有说明"
 msgid "No plugin selected"
 msgstr "未选择插件"
 
-#: application/gui/preferences/bookmarks.py:15
+#: application/gui/preferences/bookmarks.py:14
+#: application/widgets/location_menu.py:80
 #: application/plugins/default_toolbar/bookmarks_button.py:16
 #: application/plugins/default_toolbar/bookmarks_button.py:17
-#: application/plugin_base/item_list.py:194
 msgid "Bookmarks"
 msgstr "书签"
 
-#: application/gui/preferences/bookmarks.py:18
+#: application/gui/preferences/bookmarks.py:17
 msgid "Show mount points in bookmarks menu"
 msgstr "在书签菜单中显示挂载点"
 
-#: application/gui/preferences/bookmarks.py:22
+#: application/gui/preferences/bookmarks.py:21
 msgid "Show system bookmarks"
 msgstr "显示系统书签"
 
-#: application/gui/preferences/bookmarks.py:26
+#: application/gui/preferences/bookmarks.py:25
 msgid "Add home directory to bookmarks menu"
 msgstr "书签菜单中添加家目录"
 
-#: application/gui/preferences/bookmarks.py:54
-#: application/tools/find_files.py:97
+#: application/gui/preferences/bookmarks.py:53
+#: application/tools/find_files.py:95
 msgid "Location"
 msgstr "位置"
 
-#: application/gui/preferences/accelerators.py:20
+#: application/gui/preferences/accelerators.py:19
 msgid "Key bindings"
 msgstr "快捷键绑定"
 
-#: application/gui/preferences/accelerators.py:61
+#: application/gui/preferences/accelerators.py:60
 msgid "Primary"
 msgstr "主要的"
 
-#: application/gui/preferences/accelerators.py:69
+#: application/gui/preferences/accelerators.py:68
 msgid "Secondary"
 msgstr "次要的"
 
-#: application/gui/preferences/accelerators.py:82
+#: application/gui/preferences/accelerators.py:81
 msgid ""
 "<b>Note:</b> You can only edit accelerators from objects created at least "
 "once in current session. To disable accelerator press <i>Backspace</i> in "
 "assign mode."
 msgstr "<b>注意:</b> You can only edit accelerators from objects created at least once in current session. 禁用快捷键, 可在分配模式下使用 <i>Backspace</i>."
 
-#: application/gui/preferences/accelerators.py:92
+#: application/gui/preferences/accelerators.py:91
 msgid "Double click on accelerator to assign new one."
 msgstr "双击快捷键新建一个标记。"
 
-#: application/gui/preferences/accelerators.py:198
+#: application/gui/preferences/accelerators.py:197
 #, python-brace-format
 msgid ""
 "Selected accelerator \"{0}\" is already being used. Would you still like to assign accelerator to this function? This will reset listed functions.\n"
@@ -249,294 +250,278 @@ msgid ""
 "{1}"
 msgstr "所选快捷键 \"{0}\" 已被使用. 您仍要分配分配快捷键到此功能? 如此将重置所列功能.\n\n冲突:\n{1}"
 
-#: application/gui/preferences/accelerators.py:258
-#: application/gui/main_window.py:784
+#: application/gui/preferences/accelerators.py:257
+#: application/widgets/location_menu.py:105
 #: application/plugins/default_toolbar/home_directory_button.py:16
 #: application/plugins/default_toolbar/home_directory_button.py:17
 msgid "Home directory"
 msgstr "家目录"
 
-#: application/gui/preferences/view_and_edit.py:16
+#: application/gui/preferences/view_and_edit.py:15
 msgid "View & Edit"
 msgstr "查看 & 编辑"
 
-#: application/gui/preferences/view_and_edit.py:19
+#: application/gui/preferences/view_and_edit.py:18
 msgid "View"
 msgstr "查看"
 
-#: application/gui/preferences/view_and_edit.py:23
+#: application/gui/preferences/view_and_edit.py:22
 msgid "Wrap long lines"
 msgstr "折叠较长的行"
 
-#: application/gui/preferences/view_and_edit.py:27
-#: application/gui/main_window.py:678
+#: application/gui/preferences/view_and_edit.py:26
+#: application/gui/main_window.py:695
 msgid "Edit"
 msgstr "编辑"
 
-#: application/gui/preferences/view_and_edit.py:33
+#: application/gui/preferences/view_and_edit.py:32
 msgid "Use installed application"
 msgstr "使用已安装程序"
 
-#: application/gui/preferences/view_and_edit.py:55
+#: application/gui/preferences/view_and_edit.py:54
 msgid "Use external command"
 msgstr "使用外部命令"
 
-#: application/gui/preferences/view_and_edit.py:69
+#: application/gui/preferences/view_and_edit.py:68
 msgid "Execute command in terminal tab"
 msgstr "在终端标签内执行命令"
 
-#: application/gui/preferences/toolbar.py:18
+#: application/gui/preferences/toolbar.py:16
 msgid "Toolbar"
 msgstr "工具栏"
 
-#: application/gui/preferences/toolbar.py:36
+#: application/gui/preferences/toolbar.py:34
 #: application/gui/history_list.py:47
-#: application/gui/mounts_manager_window.py:363
-#: application/gui/mounts_manager_window.py:541
 #: application/gui/keyring_manager_window.py:52
-#: application/plugins/file_list/file_list.py:123
-#: application/plugins/file_list/gio_extension.py:165
-#: application/plugins/file_list/gio_extension.py:519
-#: application/plugins/file_list/gio_extension.py:871
-#: application/plugins/sessions/plugin.py:50
+#: application/plugins/file_list/file_list.py:131
+#: application/plugins/file_list/gio_extension.py:162
+#: application/plugins/file_list/gio_extension.py:516
+#: application/plugins/file_list/gio_extension.py:868
+#: application/plugins/sessions/plugin.py:60
 #: application/plugins/rename_extensions/default.py:73
-#: application/tools/find_files.py:94
+#: application/tools/find_files.py:92
 msgid "Name"
 msgstr "名称"
 
-#: application/gui/preferences/toolbar.py:47
+#: application/gui/preferences/toolbar.py:45
 msgid "Type"
 msgstr "类型"
 
-#: application/gui/preferences/toolbar.py:93
+#: application/gui/preferences/toolbar.py:91
 msgid "Toolbar style:"
 msgstr "工具栏风格:"
 
-#: application/gui/preferences/toolbar.py:95
+#: application/gui/preferences/toolbar.py:93
 msgid "Icons"
 msgstr "图标"
 
-#: application/gui/preferences/toolbar.py:96 application/tools/viewer.py:88
+#: application/gui/preferences/toolbar.py:94 application/tools/viewer.py:88
 msgid "Text"
 msgstr "文本"
 
-#: application/gui/preferences/toolbar.py:97
-#: application/gui/preferences/item_list.py:127
+#: application/gui/preferences/toolbar.py:95
+#: application/gui/preferences/item_list.py:105
 msgid "Both"
 msgstr "两者"
 
-#: application/gui/preferences/toolbar.py:98
+#: application/gui/preferences/toolbar.py:96
 msgid "Both horizontal"
 msgstr "均水平"
 
-#: application/gui/preferences/toolbar.py:108
+#: application/gui/preferences/toolbar.py:106
 msgid "Icon size:"
 msgstr "图标大小："
 
-#: application/gui/preferences/toolbar.py:110
+#: application/gui/preferences/toolbar.py:108
 msgid "Same as menu item"
 msgstr "与菜单项相同"
 
-#: application/gui/preferences/toolbar.py:111
+#: application/gui/preferences/toolbar.py:109
 msgid "Small toolbar icon"
 msgstr "小型工具栏图标"
 
-#: application/gui/preferences/toolbar.py:112
+#: application/gui/preferences/toolbar.py:110
 msgid "Large toolbar icon"
 msgstr "大型工具栏图标"
 
-#: application/gui/preferences/toolbar.py:113
+#: application/gui/preferences/toolbar.py:111
 msgid "Same as buttons"
 msgstr "与按钮相同"
 
-#: application/gui/preferences/toolbar.py:114
+#: application/gui/preferences/toolbar.py:112
 msgid "Same as drag icons"
 msgstr "与拖放按钮相同"
 
-#: application/gui/preferences/toolbar.py:115
+#: application/gui/preferences/toolbar.py:113
 msgid "Same as dialog"
 msgstr "与对话框相同"
 
-#: application/gui/preferences/toolbar.py:217
+#: application/gui/preferences/toolbar.py:215
 msgid "missing plugin"
 msgstr "缺失的插件"
 
-#: application/gui/preferences/operation.py:10
+#: application/gui/preferences/operation.py:9
 #: application/gui/preferences/item_list.py:44
 msgid "Operation"
 msgstr "操作"
 
-#: application/gui/preferences/operation.py:13
+#: application/gui/preferences/operation.py:12
 msgid "General"
 msgstr "一般"
 
-#: application/gui/preferences/operation.py:17
-#: application/gui/main_window.py:590
-#: application/gui/mounts_manager_window.py:473
+#: application/gui/preferences/operation.py:16
+#: application/widgets/location_menu.py:81
 msgid "Mounts"
 msgstr "挂载项"
 
-#: application/gui/preferences/operation.py:21
+#: application/gui/preferences/operation.py:20
 msgid "Confirmation"
 msgstr "确认"
 
-#: application/gui/preferences/operation.py:26
+#: application/gui/preferences/operation.py:25
 msgid "Delete items to trashcan"
 msgstr "删除到回收站"
 
-#: application/gui/preferences/operation.py:27
+#: application/gui/preferences/operation.py:26
 msgid "Reserve free space on copy/move"
 msgstr "复制/移动文件时预留可用空间"
 
-#: application/gui/preferences/operation.py:28
+#: application/gui/preferences/operation.py:27
 msgid "Automount drives on start up"
 msgstr "启动时自动挂载盘符"
 
-#: application/gui/preferences/operation.py:29
+#: application/gui/preferences/operation.py:28
 msgid "Automount removable drives when inserted"
 msgstr "插入时自动挂载可移动设备"
 
-#: application/gui/preferences/operation.py:30
+#: application/gui/preferences/operation.py:29
 msgid "Show confirmation dialog before deleting items"
 msgstr "删除时显示确认"
 
-#: application/gui/preferences/operation.py:64
+#: application/gui/preferences/operation.py:63
 msgid ""
 "With trashing disabled you will not be able to restore accidentally deleted "
 "items. Are you sure you want to disable confirmation dialog when deleting "
 "items?"
 msgstr "若禁用回收站, 您将无法恢复误删项目. 确定要禁用删除确认对话框?"
 
-#: application/gui/preferences/display.py:23
+#: application/gui/preferences/display.py:22
 msgid "Display"
 msgstr "显示"
 
-#: application/gui/preferences/display.py:28
+#: application/gui/preferences/display.py:27
 msgid "Main window"
 msgstr "主窗口"
 
-#: application/gui/preferences/display.py:32
+#: application/gui/preferences/display.py:31
 msgid "Hide main window on close"
 msgstr "关闭时隐藏窗口"
 
-#: application/gui/preferences/display.py:33
+#: application/gui/preferences/display.py:32
 msgid "Allow multiple instances"
 msgstr "允许程序多开"
 
-#: application/gui/preferences/display.py:34
+#: application/gui/preferences/display.py:33
 msgid "Show toolbar"
 msgstr "显示工具栏"
 
-#: application/gui/preferences/display.py:35
+#: application/gui/preferences/display.py:34
 msgid "Show command bar"
 msgstr "显示命令栏"
 
-#: application/gui/preferences/display.py:36
-msgid "Show command entry"
-msgstr "显示命令"
-
-#: application/gui/preferences/display.py:37
+#: application/gui/preferences/display.py:35
 msgid "Horizontal split"
 msgstr "水平分割"
 
-#: application/gui/preferences/display.py:47
-#: application/plugins/sessions/plugin.py:57
+#: application/gui/preferences/display.py:44
+#: application/plugins/sessions/plugin.py:66
 msgid "Tabs"
 msgstr "标签"
 
-#: application/gui/preferences/display.py:51
+#: application/gui/preferences/display.py:48
 msgid "Focus new tab after opening"
 msgstr "开新标签页时立即转向"
 
-#: application/gui/preferences/display.py:52
-msgid "Show normal button relief"
-msgstr "显示普通按钮浮凸"
-
-#: application/gui/preferences/display.py:53
-msgid "Show icons instead of text in tab buttons"
-msgstr "在标签按钮上显示图标而非文字"
-
-#: application/gui/preferences/display.py:54
+#: application/gui/preferences/display.py:49
 msgid "Show close button"
 msgstr "显示关闭按钮"
 
-#: application/gui/preferences/display.py:55
+#: application/gui/preferences/display.py:50
 msgid "Show tab(s) even if there is only one"
 msgstr "只有一个标签时仍显示标签栏"
 
-#: application/gui/preferences/display.py:56
+#: application/gui/preferences/display.py:51
 msgid "Use Ubuntu coloring method for tab title bars"
 msgstr "标签标题条使用 Ubuntu 着色"
 
-#: application/gui/preferences/display.py:57
+#: application/gui/preferences/display.py:52
 msgid "Change title bar color when started as super user"
 msgstr "超级用户启动时改变标签的标题条颜色"
 
-#: application/gui/preferences/display.py:72
+#: application/gui/preferences/display.py:65
 msgid "Show status bar:"
 msgstr "显示状态栏："
 
-#: application/gui/preferences/display.py:76
+#: application/gui/preferences/display.py:69
 msgid "Always"
 msgstr "总是"
 
-#: application/gui/preferences/display.py:77
+#: application/gui/preferences/display.py:70
 msgid "When needed"
 msgstr "按需"
 
-#: application/gui/preferences/display.py:78
+#: application/gui/preferences/display.py:71
 msgid "Never"
 msgstr "从不"
 
-#: application/gui/preferences/display.py:88
+#: application/gui/preferences/display.py:81
 msgid "Expanded tabs:"
 msgstr "扩展式标签"
 
-#: application/gui/preferences/display.py:92
-#: application/gui/preferences/item_list.py:91
-#: application/gui/preferences/item_list.py:124 application/queue.py:33
+#: application/gui/preferences/display.py:85
+#: application/gui/preferences/item_list.py:102 application/queue.py:29
 msgid "None"
 msgstr "无"
 
-#: application/gui/preferences/display.py:94
+#: application/gui/preferences/display.py:87
 msgid "All"
 msgstr "所有"
 
-#: application/gui/preferences/display.py:104
+#: application/gui/preferences/display.py:97
 msgid "Other"
 msgstr "其它"
 
-#: application/gui/preferences/display.py:108
+#: application/gui/preferences/display.py:101
 msgid "Hide operation window on minimize"
 msgstr "最小化时隐藏操作窗口"
 
-#: application/gui/preferences/display.py:109
+#: application/gui/preferences/display.py:102
 msgid "Show notifications"
 msgstr "显示确认"
 
-#: application/gui/preferences/display.py:110
+#: application/gui/preferences/display.py:103
 msgid "Use path completion on non-local paths"
 msgstr "非本地路径使用路径补全"
 
-#: application/gui/preferences/display.py:118
+#: application/gui/preferences/display.py:111
 msgid "Size format:"
 msgstr "文件大小格式："
 
-#: application/gui/preferences/display.py:122
+#: application/gui/preferences/display.py:115
 msgid "Localized"
 msgstr "本地化"
 
-#: application/gui/preferences/display.py:123
+#: application/gui/preferences/display.py:116
 msgid "SI <small>(1 kB = 1000 B)</small>"
 msgstr "SI <small>(1 kB = 1000 B)</small>"
 
-#: application/gui/preferences/display.py:124
+#: application/gui/preferences/display.py:117
 msgid "IEC <small>(1 KiB = 1024 B)</small>"
 msgstr "IEC <small>(1 KiB = 1024 B)</small>"
 
 #: application/gui/preferences/item_list.py:37
 #: application/plugins/file_list/column_editor.py:70
-#: application/plugin_base/item_list.py:245
+#: application/plugin_base/item_list.py:205
 msgid "Item List"
 msgstr "文件列表"
 
@@ -597,563 +582,523 @@ msgid "Support second level extension"
 msgstr "支持第二级扩展"
 
 #: application/gui/preferences/item_list.py:87
-msgid "Breadcrumbs:"
-msgstr "面包屑:"
-
-#: application/gui/preferences/item_list.py:92
-msgid "Normal"
-msgstr "普通的"
-
-#: application/gui/preferences/item_list.py:93
-msgid "Smart"
-msgstr "智能"
-
-#: application/gui/preferences/item_list.py:104
 msgid "Access mode format:"
 msgstr "访问模式格式："
 
-#: application/gui/preferences/item_list.py:108
+#: application/gui/preferences/item_list.py:92
 msgid "Octal"
 msgstr "八进制"
 
-#: application/gui/preferences/item_list.py:109
+#: application/gui/preferences/item_list.py:93
 msgid "Textual"
 msgstr "文本"
 
-#: application/gui/preferences/item_list.py:120
+#: application/gui/preferences/item_list.py:97
 msgid "Show grid lines:"
 msgstr "显示网格行："
 
-#: application/gui/preferences/item_list.py:125
+#: application/gui/preferences/item_list.py:103
 msgid "Horizontal"
 msgstr "水平的"
 
-#: application/gui/preferences/item_list.py:126
+#: application/gui/preferences/item_list.py:104
 msgid "Vertical"
 msgstr "垂直的"
 
-#: application/gui/preferences/item_list.py:139
+#: application/gui/preferences/item_list.py:110
 msgid "Selection color:"
 msgstr "选择项颜色："
 
-#: application/gui/preferences/item_list.py:149
+#: application/gui/preferences/item_list.py:120
 msgid "Selection indicator:"
 msgstr "选择项指示器："
 
-#: application/gui/preferences/item_list.py:166
+#: application/gui/preferences/item_list.py:135
 msgid "Quick search combination:"
 msgstr "快速搜索组合："
 
-#: application/gui/preferences/item_list.py:169
+#: application/gui/preferences/item_list.py:138
 msgid "Control"
 msgstr "Control"
 
-#: application/gui/preferences/item_list.py:170
+#: application/gui/preferences/item_list.py:139
 msgid "Alt"
 msgstr "Alt"
 
-#: application/gui/preferences/item_list.py:171
+#: application/gui/preferences/item_list.py:140
 msgid "Shift"
 msgstr "Shift"
 
-#: application/gui/preferences/item_list.py:180
+#: application/gui/preferences/item_list.py:149
 msgid "Date format:"
 msgstr "日期格式："
 
-#: application/gui/preferences/item_list.py:184
+#: application/gui/preferences/item_list.py:153
 msgid "Time is formed using the format located at:"
 msgstr "时间格式的所在地:"
 
-#: application/gui/preferences/item_list.py:193
+#: application/gui/preferences/item_list.py:162
 msgid "Show hidden files"
 msgstr "显示隐藏文件"
 
-#: application/gui/preferences/item_list.py:200
+#: application/gui/preferences/item_list.py:169
 msgid "Always visible files and directories:"
 msgstr "始终可见的文件和目录："
 
-#: application/gui/preferences/item_list.py:225
+#: application/gui/preferences/item_list.py:194
 msgid "Load specified tabs instead of saved"
 msgstr "加载指定的而非已保存标签"
 
-#: application/gui/preferences/item_list.py:238
+#: application/gui/preferences/item_list.py:207
 msgid "Directory"
 msgstr "目录"
 
-#: application/gui/preferences/item_list.py:243
+#: application/gui/preferences/item_list.py:212
 msgid "Left list"
 msgstr "左侧列表"
 
-#: application/gui/preferences/item_list.py:244
+#: application/gui/preferences/item_list.py:213
 msgid "Right list"
 msgstr "右侧列表"
 
-#: application/gui/preferences/item_list.py:276
+#: application/gui/preferences/item_list.py:245
 msgid "Custom directory"
 msgstr "自定义目录"
 
-#: application/gui/preferences/item_list.py:278
+#: application/gui/preferences/item_list.py:247
 msgid "Left directory"
 msgstr "左侧目录"
 
-#: application/gui/preferences/item_list.py:279
+#: application/gui/preferences/item_list.py:248
 msgid "Right directory"
 msgstr "右侧目录"
 
-#: application/gui/preferences/item_list.py:333
+#: application/gui/preferences/item_list.py:302
 msgid "Column"
 msgstr "栏"
 
-#: application/gui/preferences/item_list.py:338
-#: application/plugins/file_list/file_list.py:125
-#: application/plugins/find_file_extensions/size.py:63
+#: application/gui/preferences/item_list.py:307
+#: application/plugins/file_list/file_list.py:133
+#: application/plugins/find_file_extensions/size.py:62
 msgid "Size"
 msgstr "大小"
 
-#: application/gui/preferences/item_list.py:341
+#: application/gui/preferences/item_list.py:310
 msgid "Visible"
 msgstr "可见"
 
-#: application/gui/preferences/item_list.py:344
+#: application/gui/preferences/item_list.py:313
 msgid "Font"
 msgstr "字体"
 
-#: application/gui/preferences/item_list.py:472
+#: application/gui/preferences/item_list.py:432
 msgid "Add always visible item"
 msgstr "添加始终可见项"
 
-#: application/gui/preferences/item_list.py:473
+#: application/gui/preferences/item_list.py:433
 msgid "Full name of file or directory to always show:"
 msgstr "始终可见的文件或目录全名："
 
-#: application/gui/preferences/item_list.py:499
+#: application/gui/preferences/item_list.py:459
 msgid "Add custom directory"
 msgstr "添加自定义目录"
 
-#: application/gui/preferences/item_list.py:500
+#: application/gui/preferences/item_list.py:460
 msgid "Full path:"
 msgstr "绝对路径："
 
-#: application/gui/preferences/item_list.py:581
+#: application/gui/preferences/item_list.py:541
 msgid ""
 "Quick search settings are in conflict with VIM navigation style. To resolve "
 "this issue your quick search settings were restored to default."
 msgstr "快速搜索设置与 VIM 导航模式冲突. 为解决此问题您的快速搜索设置将重置为默认."
 
-#: application/gui/main_window.py:118 application/gui/main_window.py:1516
-#: application/gui/about_window.py:101 application/gui/about_window.py:102
+#: application/gui/main_window.py:103 application/gui/main_window.py:152
+#: application/gui/about_window.py:104 application/gui/about_window.py:105
+#: application/sunflower.py:220
 msgid "Sunflower"
 msgstr "向日葵"
 
-#: application/gui/main_window.py:174
+#: application/gui/main_window.py:184
 msgid "_File"
 msgstr "_文件"
 
-#: application/gui/main_window.py:178
+#: application/gui/main_window.py:188
 msgid "New _tab"
 msgstr "新建 _标签"
 
-#: application/gui/main_window.py:190
+#: application/gui/main_window.py:200
 msgid "Create _file"
 msgstr "新建 _文件"
 
-#: application/gui/main_window.py:199
+#: application/gui/main_window.py:209
 msgid "Create _directory"
 msgstr "新建 _目录"
 
-#: application/gui/main_window.py:211
-#: application/plugin_base/item_list.py:1009
+#: application/gui/main_window.py:221 application/plugin_base/item_list.py:970
 msgid "_Open"
 msgstr "打开(O)"
 
-#: application/gui/main_window.py:218
-#: application/plugin_base/item_list.py:1018
+#: application/gui/main_window.py:228 application/plugin_base/item_list.py:979
 msgid "Open in new ta_b"
 msgstr "在新标签页中打开(b)"
 
-#: application/gui/main_window.py:228
-#: application/plugin_base/item_list.py:1175
+#: application/gui/main_window.py:238
+#: application/plugin_base/item_list.py:1152
 msgid "_Properties"
 msgstr "属性(P)"
 
-#: application/gui/main_window.py:238 application/indicator.py:49
+#: application/gui/main_window.py:248 application/indicator.py:50
 msgid "_Quit"
 msgstr "退出(Q)"
 
-#: application/gui/main_window.py:248
+#: application/gui/main_window.py:258
 msgid "_Edit"
 msgstr "_编辑"
 
-#: application/gui/main_window.py:251
-#: application/plugin_base/item_list.py:1082
+#: application/gui/main_window.py:261
+#: application/plugin_base/item_list.py:1043
 msgid "Cu_t"
 msgstr "剪切(t)"
 
-#: application/gui/main_window.py:258
-#: application/plugin_base/item_list.py:1091
+#: application/gui/main_window.py:268
+#: application/plugin_base/item_list.py:1052
 msgid "_Copy"
 msgstr "拷贝(C)"
 
-#: application/gui/main_window.py:265
-#: application/plugin_base/item_list.py:1100
+#: application/gui/main_window.py:275
+#: application/plugin_base/item_list.py:1061
 msgid "_Paste"
 msgstr "粘贴(P)"
 
-#: application/gui/main_window.py:275
-#: application/plugin_base/item_list.py:1131
+#: application/gui/main_window.py:285
+#: application/plugin_base/item_list.py:1108
 msgid "_Delete"
 msgstr "删除(D)"
 
-#: application/gui/main_window.py:285
+#: application/gui/main_window.py:295
 msgid "_Send to..."
 msgstr "_发送至..."
 
-#: application/gui/main_window.py:294
-#: application/plugin_base/item_list.py:1156
+#: application/gui/main_window.py:304
+#: application/plugin_base/item_list.py:1133
 msgid "Ma_ke link"
 msgstr "添加快捷方式(k)"
 
-#: application/gui/main_window.py:300
-#: application/plugin_base/item_list.py:1162
+#: application/gui/main_window.py:310
+#: application/plugin_base/item_list.py:1139
 msgid "_Rename..."
 msgstr "重命名(R)"
 
-#: application/gui/main_window.py:308
+#: application/gui/main_window.py:318
 msgid "_Unmount"
 msgstr "卸载(U)"
 
-#: application/gui/main_window.py:312
+#: application/gui/main_window.py:322
 msgid "Mount list is empty"
 msgstr "挂载列表为空"
 
-#: application/gui/main_window.py:321
+#: application/gui/main_window.py:331
 msgid "_Preferences"
 msgstr "配置(P)"
 
-#: application/gui/main_window.py:331
+#: application/gui/main_window.py:341
 msgid "_Mark"
 msgstr "_标记"
 
-#: application/gui/main_window.py:334
+#: application/gui/main_window.py:344
 msgid "_Select all"
 msgstr "全选(S)"
 
-#: application/gui/main_window.py:341
+#: application/gui/main_window.py:351
 msgid "_Deselect all"
 msgstr "取消全选(D)"
 
-#: application/gui/main_window.py:346
+#: application/gui/main_window.py:356
 msgid "Invert select_ion"
 msgstr "反向选择(i)"
 
-#: application/gui/main_window.py:352
+#: application/gui/main_window.py:362
 msgid "S_elect with pattern"
 msgstr "模式选择(e)"
 
-#: application/gui/main_window.py:358
+#: application/gui/main_window.py:368
 msgid "Deselect with pa_ttern"
 msgstr "模式弃选(t)"
 
-#: application/gui/main_window.py:365
+#: application/gui/main_window.py:375
 msgid "Select with same e_xtension"
 msgstr "选择扩展相同的文件"
 
-#: application/gui/main_window.py:371
+#: application/gui/main_window.py:381
 msgid "Deselect with same exte_nsion"
 msgstr "弃选扩展相同的文件"
 
-#: application/gui/main_window.py:378
+#: application/gui/main_window.py:388
 msgid "Compare _directories"
 msgstr "比较目录"
 
-#: application/gui/main_window.py:386
+#: application/gui/main_window.py:396
 msgid "_Tools"
 msgstr "_工具"
 
-#: application/gui/main_window.py:390
+#: application/gui/main_window.py:400 application/gui/main_window.py:575
 msgid "_Find files"
 msgstr "_查找文件"
 
-#: application/gui/main_window.py:398
+#: application/gui/main_window.py:408
 msgid "Find _duplicate files"
 msgstr "查找 _重复的文件"
 
-#: application/gui/main_window.py:403
+#: application/gui/main_window.py:413
 msgid "_Synchronize directories"
 msgstr "_同步目录"
 
-#: application/gui/main_window.py:409
+#: application/gui/main_window.py:419 application/gui/main_window.py:576
 msgid "Advanced _rename"
 msgstr "高级 _改名"
 
-#: application/gui/main_window.py:416
-msgid "_Mount manager"
-msgstr "_挂载管理"
-
-#: application/gui/main_window.py:422
+#: application/gui/main_window.py:426 application/gui/main_window.py:578
 msgid "_Keyring manager"
 msgstr "_密钥管理"
 
-#: application/gui/main_window.py:430
+#: application/gui/main_window.py:434
 msgid "_View"
 msgstr "_视图"
 
-#: application/gui/main_window.py:433
-msgid "Ful_lscreen"
-msgstr "全屏(l)"
-
-#: application/gui/main_window.py:441
+#: application/gui/main_window.py:437
 msgid "Rel_oad item list"
 msgstr "刷新列表(o)"
 
-#: application/gui/main_window.py:451
+#: application/gui/main_window.py:447
 msgid "Fast m_edia preview"
 msgstr "快速媒体预览(e)"
 
-#: application/gui/main_window.py:462
+#: application/gui/main_window.py:458
 msgid "Show _hidden files"
 msgstr "显示隐藏文件(h)"
 
-#: application/gui/main_window.py:470
+#: application/gui/main_window.py:466
 msgid "Show _toolbar"
 msgstr "显示工具栏(t)"
 
-#: application/gui/main_window.py:478
+#: application/gui/main_window.py:474
 msgid "Show _command bar"
 msgstr "显示命令栏(c)"
 
-#: application/gui/main_window.py:486
-msgid "Show co_mmand entry"
-msgstr "显示命令行(m)"
-
-#: application/gui/main_window.py:494
+#: application/gui/main_window.py:482
 msgid "_Horizontal split"
 msgstr "_水平分割"
 
-#: application/gui/main_window.py:504
+#: application/gui/main_window.py:492
 msgid "_Commands"
 msgstr "_命令"
 
-#: application/gui/main_window.py:508
+#: application/gui/main_window.py:496
 msgid "_Operations"
 msgstr "_动作"
 
-#: application/gui/main_window.py:512
+#: application/gui/main_window.py:500
 msgid "There are no active operations"
 msgstr "无活跃操作"
 
-#: application/gui/main_window.py:518
+#: application/gui/main_window.py:506
 msgid "_Help"
 msgstr "_帮助"
 
-#: application/gui/main_window.py:521
+#: application/gui/main_window.py:509
 msgid "_Home page"
 msgstr "主页(H)"
 
-#: application/gui/main_window.py:529
+#: application/gui/main_window.py:517 application/gui/main_window.py:581
 msgid "Check for new version"
 msgstr "检查新版本"
 
-#: application/gui/main_window.py:536
+#: application/gui/main_window.py:524
 msgid "File a _bug report"
 msgstr "报 bug(b)"
 
-#: application/gui/main_window.py:545
+#: application/gui/main_window.py:533 application/gui/main_window.py:582
 msgid "_About"
 msgstr "关于(A)"
 
-#: application/gui/main_window.py:675
+#: application/gui/main_window.py:577
+msgid "_Mount manager"
+msgstr "_挂载管理"
+
+#: application/gui/main_window.py:580
+msgid "Home page"
+msgstr ""
+
+#: application/gui/main_window.py:584
+msgid "Tools"
+msgstr ""
+
+#: application/gui/main_window.py:585
+msgid "Help"
+msgstr ""
+
+#: application/gui/main_window.py:586 application/gui/preferences_window.py:30
+#: application/gui/preferences_window.py:45
+msgid "Preferences"
+msgstr "配置"
+
+#: application/gui/main_window.py:588
+msgid "Quit"
+msgstr ""
+
+#: application/gui/main_window.py:653
+msgid "Execute command:"
+msgstr ""
+
+#: application/gui/main_window.py:692
 msgid "Refresh"
 msgstr "刷新"
 
-#: application/gui/main_window.py:675
+#: application/gui/main_window.py:692
 msgid "Reload active item list"
 msgstr "刷新当前列表"
 
-#: application/gui/main_window.py:676 application/tools/advanced_rename.py:93
+#: application/gui/main_window.py:693 application/tools/advanced_rename.py:93
 msgid "Rename"
 msgstr "重命名"
 
-#: application/gui/main_window.py:676
+#: application/gui/main_window.py:693
 msgid "Rename selected file"
 msgstr "重命名所选文件"
 
-#: application/gui/main_window.py:677
+#: application/gui/main_window.py:694
 msgid "Preview"
 msgstr "预览"
 
-#: application/gui/main_window.py:677
+#: application/gui/main_window.py:694
 msgid "Preview selected file"
 msgstr "预览所选文件"
 
-#: application/gui/main_window.py:678
+#: application/gui/main_window.py:695
 msgid "Edit selected file"
 msgstr "编辑所选文件"
 
-#: application/gui/main_window.py:679 application/gui/input_dialog.py:899
-#: application/gui/input_dialog.py:1253
+#: application/gui/main_window.py:696 application/gui/input_dialog.py:916
+#: application/gui/input_dialog.py:1263
 msgid "Copy"
 msgstr "拷贝"
 
-#: application/gui/main_window.py:679
+#: application/gui/main_window.py:696
 msgid "Copy selected items from active to opposite list"
 msgstr "拷贝当前选择项至另一侧列表"
 
-#: application/gui/main_window.py:680 application/gui/input_dialog.py:1003
+#: application/gui/main_window.py:697 application/gui/input_dialog.py:1015
 msgid "Move"
 msgstr "移动"
 
-#: application/gui/main_window.py:680
+#: application/gui/main_window.py:697
 msgid "Move selected items from active to opposite list"
 msgstr "移动当前选择项至另一侧列表"
 
-#: application/gui/main_window.py:681
+#: application/gui/main_window.py:698
 msgid "Create"
 msgstr "创建"
 
-#: application/gui/main_window.py:681
+#: application/gui/main_window.py:698
 msgid "Create new directory"
 msgstr "新建文件夹"
 
-#: application/gui/main_window.py:682
+#: application/gui/main_window.py:699
 msgid "Delete"
 msgstr "删除"
 
-#: application/gui/main_window.py:682
+#: application/gui/main_window.py:699
 msgid "Delete selected items"
 msgstr "删除选择项"
 
-#: application/gui/main_window.py:823 application/gui/input_dialog.py:1314
-msgid "Add bookmark"
-msgstr "添加书签"
-
-#: application/gui/main_window.py:828 application/plugin_base/item_list.py:252
-msgid "Edit bookmarks"
-msgstr "编辑书签"
-
-#: application/gui/main_window.py:863
+#: application/gui/main_window.py:813
 msgid "_Edit commands"
 msgstr "编辑命令(E)"
 
-#: application/gui/main_window.py:1504
-msgid "Sunflower file manager"
-msgstr "向日葵文件管理器"
-
-#: application/gui/main_window.py:1519
-msgid "print version and exit"
-msgstr "打印版本号然后退出"
-
-#: application/gui/main_window.py:1524
-msgid "skip loading additional plugins"
-msgstr "不加载额外的插件"
-
-#: application/gui/main_window.py:1530
-msgid "skip loading saved tabs"
-msgstr "不加载已保存的标签页"
-
-#: application/gui/main_window.py:1536
-msgid "open new tab on the left notebook"
-msgstr "左笔记本中新建标签"
-
-#: application/gui/main_window.py:1544
-msgid "open new tab on the right notebook"
-msgstr "右笔记本中新建标签"
-
-#: application/gui/main_window.py:1552
-msgid "open terminal tab on the left notebook"
-msgstr "左笔记本中打开终端标签"
-
-#: application/gui/main_window.py:1560
-msgid "open terminal tab on the right notebook"
-msgstr "右笔记本中打开终端标签"
-
-#: application/gui/main_window.py:1657
+#: application/gui/main_window.py:1543
 msgid "Select items"
 msgstr "选择各项"
 
-#: application/gui/main_window.py:1658 application/gui/main_window.py:1714
+#: application/gui/main_window.py:1544 application/gui/main_window.py:1600
 msgid "Selection pattern (eg.: *.jpg):"
 msgstr "选择的模式(如 *.jpg)"
 
-#: application/gui/main_window.py:1713
+#: application/gui/main_window.py:1599
 msgid "Deselect items"
 msgstr "取消选择项"
 
-#: application/gui/main_window.py:1750
+#: application/gui/main_window.py:1636
 msgid "First level of compared directories is identical."
 msgstr "所比较文件夹的第一级完全相同."
 
-#: application/gui/main_window.py:1913
+#: application/gui/main_window.py:1760
 msgid ""
 "There was a problem starting external terminal application. Check if command"
 " is valid!"
 msgstr "启动外部终端程序失败. 请检查命令是否有效!"
 
-#: application/gui/main_window.py:2120
+#: application/gui/main_window.py:1967
 msgid "Main Menu"
 msgstr "主菜单"
 
-#: application/gui/main_window.py:2186
+#: application/gui/main_window.py:2033
 msgid "Restore handle position"
 msgstr "恢复把手位置"
 
-#: application/gui/main_window.py:2187
+#: application/gui/main_window.py:2034
 msgid "Move handle to the left"
 msgstr "移动把手到左侧"
 
-#: application/gui/main_window.py:2188
+#: application/gui/main_window.py:2035
 msgid "Move handle to the right"
 msgstr "移动把手到右侧"
 
-#: application/gui/main_window.py:2232
+#: application/gui/main_window.py:2079
 msgid ""
 "Error saving configuration to files in your home directory. Make sure you "
 "have enough permissions."
 msgstr "保存配置到家目录出错.  请确保有足够权限."
 
-#: application/gui/main_window.py:2869
+#: application/gui/main_window.py:2725
 msgid ""
 "Active object is not item list. Advanced rename tool needs files and "
 "directories."
 msgstr "当前对象非列表项. 高级重命名工具需要文件和文件夹."
 
-#: application/gui/main_window.py:2884
+#: application/gui/main_window.py:2740
 msgid ""
 "No rename extensions were found. Please enable basic rename options plugin "
 "and try again."
 msgstr "未找到重命名扩展. 请启用简单重命名选项插件后重试."
 
-#: application/gui/main_window.py:2911
+#: application/gui/main_window.py:2767
 msgid ""
 "No extensions for finding files were found. Please enable basic find file "
 "options plugin and try again."
 msgstr "未找到文件查找扩展. 请启用简单文件查找选项插件后重试."
 
-#: application/gui/main_window.py:2937
+#: application/gui/main_window.py:2793
 msgid "Keyring is empty!"
 msgstr "密钥环为空!"
 
-#: application/gui/main_window.py:2950
+#: application/gui/main_window.py:2806
 msgid ""
 "Keyring is not available. Make sure you have Python Gnome keyring module "
 "installed."
 msgstr "密钥环不可用. 请确认 python 的 gnome 密钥环模块已安装."
 
-#: application/gui/preferences_window.py:31
-msgid "Preferences"
-msgstr "配置"
-
-#: application/gui/preferences_window.py:106
+#: application/gui/preferences_window.py:103
 msgid "Program restart required!"
 msgstr "需要重启程序!"
 
-#: application/gui/preferences_window.py:147
+#: application/gui/preferences_window.py:139
 msgid ""
 "There are unsaved changes.\n"
 "Do you want to save them?"
 msgstr "有未保存的改动.\n是否保存?"
 
-#: application/gui/history_list.py:25 application/plugin_base/item_list.py:212
+#: application/gui/history_list.py:25
 msgid "History"
 msgstr "历史"
 
@@ -1161,17 +1106,15 @@ msgstr "历史"
 msgid "Path"
 msgstr "路径"
 
-#: application/gui/history_list.py:65
-#: application/gui/mounts_manager_window.py:381
+#: application/gui/history_list.py:65 application/widgets/location_menu.py:42
 msgid "Open"
 msgstr "打开"
 
 #: application/gui/history_list.py:74
-#: application/gui/mounts_manager_window.py:392
 msgid "Open in tab"
 msgstr "在标签中打开"
 
-#: application/gui/history_list.py:75
+#: application/gui/history_list.py:75 application/widgets/location_menu.py:47
 msgid "Open selected path in new tab"
 msgstr "在新标签页中打开所选路径"
 
@@ -1179,255 +1122,263 @@ msgstr "在新标签页中打开所选路径"
 msgid "Open in opposite list"
 msgstr "在另一侧列表中打开"
 
-#: application/gui/history_list.py:79
+#: application/gui/history_list.py:79 application/widgets/location_menu.py:52
 msgid "Open selected path in opposite list"
 msgstr "在另一侧列表中打开所选路径"
 
-#: application/gui/properties_window.py:58
+#: application/gui/properties_window.py:56
 #, python-brace-format
 msgid "{0} Properties"
 msgstr "{0} 属性"
 
-#: application/gui/properties_window.py:86
-#: application/plugins/rename_extensions/default.py:268
-#: application/plugins/find_file_extensions/default.py:118
+#: application/gui/properties_window.py:87
+#: application/plugins/rename_extensions/default.py:265
+#: application/plugins/find_file_extensions/default.py:117
 msgid "Basic"
 msgstr "基本"
 
-#: application/gui/properties_window.py:90
+#: application/gui/properties_window.py:91
 msgid "Permissions"
 msgstr "权限"
 
-#: application/gui/properties_window.py:94
-#: application/gui/input_dialog.py:1707
+#: application/gui/properties_window.py:95
+#: application/gui/input_dialog.py:1696
 msgid "Open With"
 msgstr "打开方式"
 
-#: application/gui/properties_window.py:98
+#: application/gui/properties_window.py:99
 msgid "Emblems"
 msgstr "徽章"
 
-#: application/gui/properties_window.py:151
-#: application/plugins/file_list/file_list.py:1011
+#: application/gui/properties_window.py:156
+#: application/plugins/file_list/file_list.py:1025
 msgid ""
 "File or directory with specified name already exists in current directory. "
 "Item could not be renamed."
 msgstr "指定名称的文件或文件夹在当前目录中已存在. 无法重命名."
 
-#: application/gui/properties_window.py:186
-#: application/plugins/file_list/file_list.py:996
+#: application/gui/properties_window.py:191
+#: application/plugins/file_list/file_list.py:1010
 msgid "Error renaming specified item. Make sure you have enough permissions."
 msgstr "重命名指定项出错. 确保有足够权限."
 
-#: application/gui/properties_window.py:242
+#: application/gui/properties_window.py:247
 msgid "item"
 msgid_plural "items"
 msgstr[0] "项目"
 
-#: application/gui/properties_window.py:259
-#: application/gui/operation_dialog.py:362
+#: application/gui/properties_window.py:264
+#: application/gui/operation_dialog.py:361
 msgid "unknown"
 msgstr "未知的"
 
-#: application/gui/properties_window.py:368
+#: application/gui/properties_window.py:373
 msgid "Error changing owner or group"
 msgstr "更改拥有者或用户组时出错"
 
-#: application/gui/properties_window.py:441
-#: application/gui/input_dialog.py:1329 application/gui/input_dialog.py:1527
-#: application/plugins/default_toolbar/bookmark_button.py:74
+#: application/gui/properties_window.py:446
+#: application/gui/input_dialog.py:1337 application/gui/input_dialog.py:1516
+#: application/plugins/default_toolbar/bookmark_button.py:75
 #: application/plugins/file_list/dialogs.py:60
 #: application/plugins/file_list/dialogs.py:273
 #: application/plugins/file_list/dialogs.py:467
 msgid "Name:"
 msgstr "名称:"
 
-#: application/gui/properties_window.py:442
-#: application/gui/input_dialog.py:1534
+#: application/gui/properties_window.py:447
+#: application/gui/input_dialog.py:1524
 msgid "Type:"
 msgstr "类型:"
 
-#: application/gui/properties_window.py:443
-#: application/gui/input_dialog.py:1184 application/gui/input_dialog.py:1201
+#: application/gui/properties_window.py:448
+#: application/gui/input_dialog.py:1194 application/gui/input_dialog.py:1211
 msgid "Size:"
 msgstr "大小:"
 
-#: application/gui/properties_window.py:444
-#: application/gui/input_dialog.py:1342
+#: application/gui/properties_window.py:449
+#: application/gui/input_dialog.py:1350
 msgid "Location:"
 msgstr "位置:"
 
-#: application/gui/properties_window.py:445
+#: application/gui/properties_window.py:450
 msgid "Volume:"
 msgstr "卷:"
 
-#: application/gui/properties_window.py:446
+#: application/gui/properties_window.py:451
 msgid "Accessed:"
 msgstr "已存取:"
 
-#: application/gui/properties_window.py:447
-#: application/gui/input_dialog.py:1185 application/gui/input_dialog.py:1202
+#: application/gui/properties_window.py:452
+#: application/gui/input_dialog.py:1195 application/gui/input_dialog.py:1212
 msgid "Modified:"
 msgstr "已修改:"
 
-#: application/gui/properties_window.py:522
+#: application/gui/properties_window.py:527
 msgid "Access"
 msgstr "存取"
 
-#: application/gui/properties_window.py:528
-#: application/gui/properties_window.py:598
-#: application/gui/input_dialog.py:223
+#: application/gui/properties_window.py:533
+#: application/gui/properties_window.py:603
+#: application/gui/input_dialog.py:220
 msgid "User:"
 msgstr "用户:"
 
-#: application/gui/properties_window.py:532
-#: application/gui/properties_window.py:602
-#: application/gui/input_dialog.py:227
+#: application/gui/properties_window.py:537
+#: application/gui/properties_window.py:607
+#: application/gui/input_dialog.py:224
 msgid "Group:"
 msgstr "用户组:"
 
-#: application/gui/properties_window.py:536
-#: application/gui/input_dialog.py:231
+#: application/gui/properties_window.py:541
+#: application/gui/input_dialog.py:228
 msgid "Others:"
 msgstr "其他:"
 
-#: application/gui/properties_window.py:541
-#: application/gui/properties_window.py:554
-#: application/gui/properties_window.py:567
-#: application/gui/input_dialog.py:236 application/gui/input_dialog.py:249
-#: application/gui/input_dialog.py:262
+#: application/gui/properties_window.py:546
+#: application/gui/properties_window.py:559
+#: application/gui/properties_window.py:572
+#: application/gui/input_dialog.py:233 application/gui/input_dialog.py:246
+#: application/gui/input_dialog.py:259
 msgid "Read"
 msgstr "读"
 
-#: application/gui/properties_window.py:545
-#: application/gui/properties_window.py:558
-#: application/gui/properties_window.py:571
-#: application/gui/input_dialog.py:240 application/gui/input_dialog.py:253
-#: application/gui/input_dialog.py:266
+#: application/gui/properties_window.py:550
+#: application/gui/properties_window.py:563
+#: application/gui/properties_window.py:576
+#: application/gui/input_dialog.py:237 application/gui/input_dialog.py:250
+#: application/gui/input_dialog.py:263
 msgid "Write"
 msgstr "写"
 
-#: application/gui/properties_window.py:549
-#: application/gui/properties_window.py:562
-#: application/gui/properties_window.py:575
-#: application/gui/input_dialog.py:244 application/gui/input_dialog.py:257
-#: application/gui/input_dialog.py:270
+#: application/gui/properties_window.py:554
+#: application/gui/properties_window.py:567
+#: application/gui/properties_window.py:580
+#: application/gui/input_dialog.py:241 application/gui/input_dialog.py:254
+#: application/gui/input_dialog.py:267
 msgid "Execute"
 msgstr "执行"
 
-#: application/gui/properties_window.py:580
-#: application/gui/input_dialog.py:275
+#: application/gui/properties_window.py:585
+#: application/gui/input_dialog.py:272
 msgid "Octal:"
 msgstr "八进制:"
 
-#: application/gui/properties_window.py:592
+#: application/gui/properties_window.py:597
 msgid "Ownership"
 msgstr "所有权"
 
-#: application/gui/properties_window.py:666
+#: application/gui/properties_window.py:671
 #, python-brace-format
 msgid "Select an application to open <i>{0}</i> and other files of type \"{1}\""
 msgstr "选择程序打开 <i>{0}</i> 及其它文件类型 \"{1}\""
 
-#: application/gui/input_dialog.py:117
+#: application/gui/input_dialog.py:114
 msgid "Create link"
 msgstr "创建符号链接"
 
-#: application/gui/input_dialog.py:118
+#: application/gui/input_dialog.py:115
 msgid "Enter new link name:"
 msgstr "输入新链接名称:"
 
-#: application/gui/input_dialog.py:126
+#: application/gui/input_dialog.py:123
 msgid "Original path:"
 msgstr "原始路径:"
 
-#: application/gui/input_dialog.py:131
+#: application/gui/input_dialog.py:128
 msgid "Create hard link"
 msgstr "创建硬链接"
 
-#: application/gui/input_dialog.py:134 application/tools/find_files.py:77
+#: application/gui/input_dialog.py:131 application/tools/find_files.py:75
 msgid "Browse"
 msgstr "浏览"
 
-#: application/gui/input_dialog.py:153
+#: application/gui/input_dialog.py:150
 msgid "Select original path"
 msgstr "选择原始路径"
 
-#: application/gui/input_dialog.py:213
+#: application/gui/input_dialog.py:210
 msgid "Advanced options"
 msgstr "高级选项"
 
-#: application/gui/input_dialog.py:292 application/gui/input_dialog.py:907
+#: application/gui/input_dialog.py:289 application/gui/input_dialog.py:924
 msgid "Save as default configuration"
 msgstr "保存为默认配置"
 
-#: application/gui/input_dialog.py:379
+#: application/gui/input_dialog.py:377
 #: application/plugins/file_list/dialogs.py:96
 #: application/plugins/file_list/dialogs.py:304
 #: application/plugins/file_list/dialogs.py:507
 msgid "Password:"
 msgstr "密码:"
 
-#: application/gui/input_dialog.py:381
+#: application/gui/input_dialog.py:379
 msgid "Confirm:"
 msgstr "确认:"
 
-#: application/gui/input_dialog.py:435
+#: application/gui/input_dialog.py:434
 msgid "Create empty file"
 msgstr "创建空文件"
 
-#: application/gui/input_dialog.py:436
+#: application/gui/input_dialog.py:435
 msgid "Enter new file name:"
 msgstr "输入新文件名:"
 
-#: application/gui/input_dialog.py:439
+#: application/gui/input_dialog.py:438
 msgid "Open file in editor"
 msgstr "在编辑器中打开文件"
 
-#: application/gui/input_dialog.py:443
+#: application/gui/input_dialog.py:442
 #: application/plugins/rename_extensions/default.py:52
 #: application/plugins/rename_extensions/audio_metadata.py:31
 msgid "Template:"
 msgstr "模板:"
 
-#: application/gui/input_dialog.py:503
+#: application/gui/input_dialog.py:502
 msgid "Empty File"
 msgstr "空文件"
 
-#: application/gui/input_dialog.py:556
-#: application/plugin_base/item_list.py:1068
+#: application/gui/input_dialog.py:555
+#: application/plugin_base/item_list.py:1029
 msgid "Create directory"
 msgstr "新建文件夹"
 
-#: application/gui/input_dialog.py:557
+#: application/gui/input_dialog.py:556
 msgid "Enter new directory name:"
 msgstr "输入新目录名:"
 
-#: application/gui/input_dialog.py:582 application/gui/input_dialog.py:661
-msgid "Operation queue:"
-msgstr "动作队列："
+#: application/gui/input_dialog.py:590
+msgid "Yes"
+msgstr "是"
 
-#: application/gui/input_dialog.py:654
+#: application/gui/input_dialog.py:592
+msgid "No"
+msgstr "否"
+
+#: application/gui/input_dialog.py:656
 msgid "Only files of this type:"
 msgstr "仅此类型文件:"
 
-#: application/gui/input_dialog.py:681
+#: application/gui/input_dialog.py:663
+msgid "Operation queue:"
+msgstr "动作队列："
+
+#: application/gui/input_dialog.py:683
 msgid "Affected item list"
 msgstr "受影响的列表项"
 
-#: application/gui/input_dialog.py:704
+#: application/gui/input_dialog.py:706
 msgid "Set owner on destination"
 msgstr "设置目标所有者"
 
-#: application/gui/input_dialog.py:705
+#: application/gui/input_dialog.py:707
 msgid "Set access mode on destination"
 msgstr "设置目标存取模式"
 
-#: application/gui/input_dialog.py:706
+#: application/gui/input_dialog.py:708
 msgid "Set date and time on destination"
 msgstr "设置目标时间"
 
-#: application/gui/input_dialog.py:707
+#: application/gui/input_dialog.py:709
 msgid "Silent mode"
 msgstr "静默模式"
 
@@ -1445,110 +1396,114 @@ msgid ""
 "errors occur, they will be presented to you after completion."
 msgstr "静默模式将使用操作无打扰方式. 若期间有错误发生, 将会在操作完成后显示."
 
-#: application/gui/input_dialog.py:795 application/gui/input_dialog.py:799
-#: application/gui/input_dialog.py:803
+#: application/gui/input_dialog.py:724
+msgid "Follow symlinks"
+msgstr ""
+
+#: application/gui/input_dialog.py:800 application/gui/input_dialog.py:804
+#: application/gui/input_dialog.py:808 application/gui/input_dialog.py:812
 msgid "Not supported by file system provider"
 msgstr "未被文件系统提供者支持"
 
-#: application/gui/input_dialog.py:860
+#: application/gui/input_dialog.py:877
 msgid "Only options supported by file system providers were saved."
 msgstr "只有被文件系统提供者支持的选项被保存."
 
-#: application/gui/input_dialog.py:884
+#: application/gui/input_dialog.py:901
 msgid "Copy item"
 msgid_plural "Copy items"
 msgstr[0] "拷贝项目"
 
-#: application/gui/input_dialog.py:889
+#: application/gui/input_dialog.py:906
 #, python-brace-format
 msgid "Copy <b>{0}</b> item to:"
 msgid_plural "Copy <b>{0}</b> items to:"
 msgstr[0] "复制 <b>{0}</b> 项目到:"
 
-#: application/gui/input_dialog.py:898 application/gui/input_dialog.py:1002
-#: application/gui/input_dialog.py:1445
-#: application/gui/operation_dialog.py:206
-#: application/plugins/file_list/file_list.py:1926
+#: application/gui/input_dialog.py:915 application/gui/input_dialog.py:1014
+#: application/gui/input_dialog.py:1450
+#: application/gui/operation_dialog.py:205
+#: application/plugins/file_list/file_list.py:1977
 msgid "Cancel"
 msgstr "取消"
 
-#: application/gui/input_dialog.py:988
+#: application/gui/input_dialog.py:1000
 msgid "Move item"
 msgid_plural "Move items"
 msgstr[0] "移动项目"
 
-#: application/gui/input_dialog.py:993
+#: application/gui/input_dialog.py:1005
 #, python-brace-format
 msgid "Move <b>{0}</b> item to:"
 msgid_plural "Move <b>{0}</b> items to:"
 msgstr[0] "移动 <b>{0}</b> 项目到:"
 
-#: application/gui/input_dialog.py:1016
+#: application/gui/input_dialog.py:1028
 msgid "Rename file/directory"
 msgstr "重命名文件/目录"
 
-#: application/gui/input_dialog.py:1017
+#: application/gui/input_dialog.py:1029
 msgid "Enter a new name for this item:"
 msgstr "为该项输入新名称:"
 
-#: application/gui/input_dialog.py:1083
+#: application/gui/input_dialog.py:1093
 msgid "Select a new name for the destination"
 msgstr "为目标选择新名称"
 
-#: application/gui/input_dialog.py:1088
+#: application/gui/input_dialog.py:1098
 msgid "Reset"
 msgstr "重置"
 
-#: application/gui/input_dialog.py:1092
+#: application/gui/input_dialog.py:1102
 msgid "Apply this action to all files"
 msgstr "将此动作应用到所有文件"
 
-#: application/gui/input_dialog.py:1127 application/gui/input_dialog.py:1446
+#: application/gui/input_dialog.py:1137 application/gui/input_dialog.py:1451
 msgid "Skip"
 msgstr "跳过"
 
-#: application/gui/input_dialog.py:1183
+#: application/gui/input_dialog.py:1193
 msgid "Original"
 msgstr "初始的"
 
-#: application/gui/input_dialog.py:1200
+#: application/gui/input_dialog.py:1210
 msgid "Replace with"
 msgstr "替换选择"
 
-#: application/gui/input_dialog.py:1235
+#: application/gui/input_dialog.py:1245
 msgid "File conflict"
 msgstr "文件冲突"
 
-#: application/gui/input_dialog.py:1240 application/gui/input_dialog.py:1250
+#: application/gui/input_dialog.py:1250 application/gui/input_dialog.py:1260
 msgid "Replace"
 msgstr "替换"
 
-#: application/gui/input_dialog.py:1257
+#: application/gui/input_dialog.py:1267
 #, python-brace-format
 msgid "Replace file \"{0}\"?"
 msgstr "替换文件 \"{0}\"?"
 
-#: application/gui/input_dialog.py:1263
+#: application/gui/input_dialog.py:1273
 #, python-brace-format
 msgid ""
 "Another file with the same name already exists in \"{0}\". Replacing it will"
 " overwrite its content."
 msgstr "有相同文件名的文件存在于 \"{0}\". 替换它将会覆盖其内容."
 
-#: application/gui/input_dialog.py:1276
+#: application/gui/input_dialog.py:1286
 msgid "Directory conflict"
 msgstr "目录冲突"
 
-#: application/gui/input_dialog.py:1280
+#: application/gui/input_dialog.py:1290
 msgid "Merge"
 msgstr "合并"
 
-#: application/gui/input_dialog.py:1290
+#: application/gui/input_dialog.py:1300
 #, python-brace-format
 msgid "Merge directory \"{0}\"?"
 msgstr "合并目录 \"{0}\"?"
 
-#: application/gui/input_dialog.py:1296
+#: application/gui/input_dialog.py:1306
 #, python-brace-format
 msgid ""
 "Directory with the same name already exists in \"{0}\". Merging will ask for"
@@ -1556,184 +1511,145 @@ msgid ""
 " the files being copied."
 msgstr "相同名称的文件夹已存在于 \"{0}\". 合并时, 若有任何文件复制冲突将提示确认."
 
-#: application/gui/input_dialog.py:1334
+#: application/gui/input_dialog.py:1324
+msgid "Add bookmark"
+msgstr "添加书签"
+
+#: application/gui/input_dialog.py:1342
 msgid ""
 "Underscore in the label text indicates the next character should be "
 "underlined and used for the mnemonic accelerator key if it is the first "
 "character so marked."
 msgstr "标签文本中的下划线表示其后的字符将带有下划线并用做快捷键字符"
 
-#: application/gui/input_dialog.py:1410
+#: application/gui/input_dialog.py:1417
 msgid "Operation error"
 msgstr "操作出错"
 
-#: application/gui/input_dialog.py:1447
+#: application/gui/input_dialog.py:1452
 msgid "Skip all"
 msgstr "全部跳过"
 
-#: application/gui/input_dialog.py:1448
+#: application/gui/input_dialog.py:1453
 msgid "Retry"
 msgstr "重试"
 
-#: application/gui/input_dialog.py:1497
-msgid "No"
-msgstr "否"
-
-#: application/gui/input_dialog.py:1498
-msgid "Yes"
-msgstr "是"
-
-#: application/gui/input_dialog.py:1510
+#: application/gui/input_dialog.py:1501
 msgid "Add toolbar widget"
 msgstr "添加工具栏"
 
-#: application/gui/input_dialog.py:1621
+#: application/gui/input_dialog.py:1610
 msgid "Select range"
 msgstr "选择范围"
 
-#: application/gui/input_dialog.py:1622
+#: application/gui/input_dialog.py:1611
 msgid "Select part of the text:"
 msgstr "选择部分文本:"
 
-#: application/gui/input_dialog.py:1646
+#: application/gui/input_dialog.py:1635
 msgid "Add application"
 msgstr "添加程序"
 
-#: application/gui/input_dialog.py:1647
+#: application/gui/input_dialog.py:1636
 msgid "Application name:"
 msgstr "程序名:"
 
-#: application/gui/input_dialog.py:1657
+#: application/gui/input_dialog.py:1646
 msgid "Select"
 msgstr "选择"
 
-#: application/gui/input_dialog.py:1728
+#: application/gui/input_dialog.py:1714
 msgid "Select application:"
 msgstr "选择程序:"
 
-#: application/gui/input_dialog.py:1731
+#: application/gui/input_dialog.py:1717
 #, python-brace-format
 msgid "Open <i>{0}</i> with:"
 msgstr "打开 <i>{0}</i> 以:"
 
-#: application/gui/input_dialog.py:1767
+#: application/gui/input_dialog.py:1753
 msgid "Use a custom command"
 msgstr "使用自定义命令"
 
-#: application/gui/operation_dialog.py:91 application/gui/error_list.py:46
+#: application/gui/operation_dialog.py:90 application/gui/error_list.py:46
 msgid "Source:"
 msgstr "源:"
 
-#: application/gui/operation_dialog.py:92 application/gui/error_list.py:52
+#: application/gui/operation_dialog.py:91 application/gui/error_list.py:52
 msgid "Destination:"
 msgstr "目标:"
 
-#: application/gui/operation_dialog.py:149
+#: application/gui/operation_dialog.py:148
 msgid "ETA:"
 msgstr "预计时间:"
 
-#: application/gui/operation_dialog.py:150
+#: application/gui/operation_dialog.py:149
 msgid "Speed:"
 msgstr "速度:"
 
-#: application/gui/operation_dialog.py:151
+#: application/gui/operation_dialog.py:150
 msgid "Total size:"
 msgstr "总大小:"
 
-#: application/gui/operation_dialog.py:152
+#: application/gui/operation_dialog.py:151
 msgid "Total count:"
 msgstr "总数量:"
 
-#: application/gui/operation_dialog.py:205
+#: application/gui/operation_dialog.py:204
 msgid "Minimize"
 msgstr "最小化"
 
-#: application/gui/operation_dialog.py:213
-#: application/gui/operation_dialog.py:268
+#: application/gui/operation_dialog.py:212
+#: application/gui/operation_dialog.py:267
 msgid "Pause"
 msgstr "暂停"
 
-#: application/gui/operation_dialog.py:261
+#: application/gui/operation_dialog.py:260
 msgid "Resume"
 msgstr "恢复"
 
-#: application/gui/operation_dialog.py:273
+#: application/gui/operation_dialog.py:272
 msgid "Are you sure about canceling current operation?"
 msgstr "确认取消当前操作?"
 
-#: application/gui/operation_dialog.py:343
+#: application/gui/operation_dialog.py:342
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] "秒"
 
-#: application/gui/operation_dialog.py:349
+#: application/gui/operation_dialog.py:348
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "分"
 
-#: application/gui/operation_dialog.py:356
+#: application/gui/operation_dialog.py:355
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "时"
 
-#: application/gui/operation_dialog.py:501
+#: application/gui/operation_dialog.py:500
 msgid "Copy Selection"
 msgstr "复制所选"
 
-#: application/gui/operation_dialog.py:522
+#: application/gui/operation_dialog.py:521
 msgid "Move Selection"
 msgstr "移动所选"
 
-#: application/gui/operation_dialog.py:547
+#: application/gui/operation_dialog.py:546
 msgid "Delete Selection"
 msgstr "删除所选"
 
-#: application/gui/operation_dialog.py:548
+#: application/gui/operation_dialog.py:547
 msgid "Removing items..."
 msgstr "移除项目中..."
 
-#: application/gui/operation_dialog.py:574
+#: application/gui/operation_dialog.py:573
 msgid "Rename Items"
 msgstr "重命名项目"
 
-#: application/gui/operation_dialog.py:575
+#: application/gui/operation_dialog.py:574
 msgid "Renaming items..."
 msgstr "重命名项目中..."
-
-#: application/gui/mounts_manager_window.py:54
-msgid "Mount manager"
-msgstr "挂载管理"
-
-#: application/gui/mounts_manager_window.py:371
-msgid "Systemwide"
-msgstr "系统范围"
-
-#: application/gui/mounts_manager_window.py:393
-msgid "Open selected URI in new tab"
-msgstr "新建标签打开所选 URI"
-
-#: application/gui/mounts_manager_window.py:397
-#: application/gui/mounts_manager_window.py:560
-#: application/plugins/file_list/gio_extension.py:198
-#: application/plugins/file_list/gio_extension.py:552
-#: application/plugins/file_list/gio_extension.py:904
-msgid "Unmount"
-msgstr "卸载"
-
-#: application/gui/mounts_manager_window.py:549
-msgid "Mounted"
-msgstr "已挂载"
-
-#: application/gui/mounts_manager_window.py:556
-#: application/plugins/file_list/gio_extension.py:195
-#: application/plugins/file_list/gio_extension.py:549
-#: application/plugins/file_list/gio_extension.py:901
-msgid "Mount"
-msgstr "挂载"
-
-#: application/gui/mounts_manager_window.py:698
-msgid "Volumes"
-msgstr "卷"
 
 #: application/gui/keyring_manager_window.py:27
 msgid "Keyring manager"
@@ -1779,17 +1695,13 @@ msgstr "密码已修改!"
 msgid "Passwords do not match! Please try again."
 msgstr "密码不匹配! 请重试."
 
-#: application/gui/about_window.py:106
+#: application/gui/about_window.py:109
 msgid "Twin-panel file manager for Linux."
 msgstr "Linux 双面板文件管理器"
 
-#: application/gui/about_window.py:109
-msgid "Copyright © 2010-2015 by Mladen Mijatov and contributors."
-msgstr "Copyright © 2010-2015 by Mladen Mijatov and contributors。"
-
-#: application/gui/about_window.py:137
-msgid "translator-credits"
-msgstr "Jack Chen <turnletgo@gmail.com>"
+#: application/gui/about_window.py:112
+msgid "Copyright © 2010-2018 by Mladen Mijatov and contributors."
+msgstr ""
 
 #: application/gui/error_list.py:21
 msgid "Error list"
@@ -1799,100 +1711,136 @@ msgstr "错误列表"
 msgid "For:"
 msgstr "为:"
 
-#: application/widgets/title_bar.py:75
+#: application/sunflower.py:95
+msgid "Show version number"
+msgstr ""
+
+#: application/sunflower.py:104 application/sunflower.py:113
+msgid "Skip loading additional plugins"
+msgstr ""
+
+#: application/sunflower.py:122
+msgid "Open new tab on the left notebook"
+msgstr ""
+
+#: application/sunflower.py:131
+msgid "Open new tab on the right notebook"
+msgstr ""
+
+#: application/sunflower.py:140
+msgid "Open terminal tab on the left notebook"
+msgstr ""
+
+#: application/sunflower.py:149
+msgid "Open terminal tab on the right notebook"
+msgstr ""
+
+#: application/widgets/location_menu.py:57
+msgid "Open terminal at selected path"
+msgstr ""
+
+#: application/widgets/location_menu.py:102
+msgid "User defined"
+msgstr ""
+
+#: application/widgets/location_menu.py:119
+msgid "System wide"
+msgstr ""
+
+#: application/widgets/title_bar.py:52
 msgid "Context menu"
 msgstr "上下文菜单"
 
-#: application/widgets/tab_label.py:85
+#: application/widgets/tab_label.py:73
 msgid "Unlock"
 msgstr "解锁"
 
-#: application/widgets/tab_label.py:85
+#: application/widgets/tab_label.py:73
 msgid "Lock"
 msgstr "锁定"
 
-#: application/widgets/tab_label.py:89 application/plugin_base/plugin.py:132
+#: application/widgets/tab_label.py:77 application/plugin_base/plugin.py:135
 msgid "Duplicate tab"
 msgstr "复制标签"
 
-#: application/widgets/tab_label.py:93
+#: application/widgets/tab_label.py:81
 msgid "Move to opposite panel"
 msgstr "移动到另一侧面板"
 
-#: application/widgets/tab_label.py:100
+#: application/widgets/tab_label.py:88
 msgid "Close Tab"
 msgstr "关闭标签"
 
-#: application/widgets/tab_label.py:106
+#: application/widgets/tab_label.py:94
 msgid "Close All"
 msgstr "关闭所有"
 
-#: application/widgets/tab_label.py:111
+#: application/widgets/tab_label.py:99
 msgid "Close Other Tabs"
 msgstr "关闭其它标签"
 
-#: application/queue.py:36 application/plugins/sessions/plugin.py:6
+#: application/queue.py:32 application/plugins/sessions/plugin.py:6
 msgid "Default"
 msgstr "默认"
 
-#: application/queue.py:49
+#: application/queue.py:45
 msgid "New queue"
 msgstr "新队列"
 
-#: application/queue.py:142
+#: application/queue.py:138
 msgid "New operation queue"
 msgstr "新操作队列"
 
-#: application/queue.py:143
+#: application/queue.py:139
 msgid "Enter name for new operation queue:"
 msgstr "输入新操作队列的名称："
 
-#: application/queue.py:159
+#: application/queue.py:155
 msgid "Operation queue with specified name already exists."
 msgstr "指定的操作队列名称已存在。"
 
-#: application/mounts.py:126
+#: application/mounts.py:63
 msgid "Specified item can not be unmounted."
 msgstr "指定项目无法卸载."
 
-#: application/keyring.py:61
+#: application/keyring.py:57
 msgid "Keyring is unlocked"
 msgstr "密钥环被解锁"
 
-#: application/keyring.py:62
+#: application/keyring.py:58
 msgid "Keyring is locked"
 msgstr "密钥环已锁"
 
-#: application/keyring.py:109
+#: application/keyring.py:105
 msgid "Unlock keyring"
 msgstr "解锁密钥环"
 
-#: application/keyring.py:110
+#: application/keyring.py:106
 msgid "Please enter your keyring password:"
 msgstr "请输入密钥环密码:"
 
-#: application/keyring.py:310
+#: application/keyring.py:306
 msgid "New keyring"
 msgstr "新密钥环"
 
-#: application/keyring.py:312
+#: application/keyring.py:308
 msgid ""
 "We need to create a new keyring to safely store your passwords. Choose the "
 "password you want to use for it."
 msgstr "我们需要创建新密钥环来安全保存您的密码. 请选择存储密码."
 
-#: application/toolbar.py:131
+#: application/toolbar.py:130
 msgid ""
 "Error adding widget. You need to enter unique name and select widget type."
 msgstr "添加小部件出错. 需要输入不重复的名称并选中部件类型."
 
-#: application/toolbar.py:146
+#: application/toolbar.py:145
 msgid ""
 "Widget with specified name already exists. You need to enter unique name and"
 " select widget type."
 msgstr "指定名称的部件已存在. 您需要输入不重复的名称并选中部件类型."
 
-#: application/toolbar.py:180
+#: application/toolbar.py:179
 msgid ""
 "Plugin used to create selected toolbar widget is not active or not present. "
 "In order to edit this entry you need to activate plugin used to create it."
@@ -1900,43 +1848,43 @@ msgstr "用来创建工具栏小部件的插件未激活或不存在. 为编辑�
 
 #: application/plugins/default_toolbar/parent_directory_button.py:14
 #: application/plugins/default_toolbar/parent_directory_button.py:15
-#: application/plugin_base/item_list.py:260
+#: application/plugin_base/item_list.py:220
 msgid "Go to parent directory"
 msgstr "转到父目录"
 
-#: application/plugins/default_toolbar/bookmark_button.py:58
+#: application/plugins/default_toolbar/bookmark_button.py:59
 msgid "Configure bookmark button"
 msgstr "配置书签按钮"
 
-#: application/plugins/default_toolbar/bookmark_button.py:84
+#: application/plugins/default_toolbar/bookmark_button.py:85
 msgid "Path:"
 msgstr "路径:"
 
-#: application/plugins/default_toolbar/bookmark_button.py:88
+#: application/plugins/default_toolbar/bookmark_button.py:89
 msgid "Show label"
 msgstr "显示 label"
 
-#: application/plugins/default_toolbar/plugin.py:26
+#: application/plugins/default_toolbar/plugin.py:23
 msgid "Parent directory button"
 msgstr "父目录按钮"
 
-#: application/plugins/default_toolbar/plugin.py:32
+#: application/plugins/default_toolbar/plugin.py:29
 msgid "Home directory button"
 msgstr "家目录按钮"
 
-#: application/plugins/default_toolbar/plugin.py:38
+#: application/plugins/default_toolbar/plugin.py:35
 msgid "Bookmark button"
 msgstr "书签按钮"
 
-#: application/plugins/default_toolbar/plugin.py:44
+#: application/plugins/default_toolbar/plugin.py:41
 msgid "Bookmarks menu"
 msgstr "书签菜单"
 
-#: application/plugins/default_toolbar/plugin.py:50
+#: application/plugins/default_toolbar/plugin.py:47
 msgid "Separator"
 msgstr "分隔符"
 
-#: application/plugins/default_toolbar/plugin.py:105
+#: application/plugins/default_toolbar/plugin.py:102
 msgid "This widget has no configuration dialog."
 msgstr "此部件没有配置框."
 
@@ -1956,101 +1904,101 @@ msgstr "本地文件列表"
 msgid "Trash can"
 msgstr "垃圾桶"
 
-#: application/plugins/file_list/file_list.py:124
+#: application/plugins/file_list/file_list.py:132
 msgid "Ext"
 msgstr "扩展名"
 
-#: application/plugins/file_list/file_list.py:126
+#: application/plugins/file_list/file_list.py:134
 msgid "Mode"
 msgstr "模式"
 
-#: application/plugins/file_list/file_list.py:127
+#: application/plugins/file_list/file_list.py:135
 #: application/plugins/rename_extensions/audio_metadata.py:26
 msgid "Date"
 msgstr "日期"
 
-#: application/plugins/file_list/file_list.py:481
+#: application/plugins/file_list/file_list.py:492
 msgid "Invalid selection!"
 msgstr "无效选择!"
 
-#: application/plugins/file_list/file_list.py:653
+#: application/plugins/file_list/file_list.py:667
 msgid ""
 "There was an error creating directory. Make sure you have enough "
 "permissions. "
 msgstr "创建目录时出错. 确保有足够权限."
 
-#: application/plugins/file_list/file_list.py:680
+#: application/plugins/file_list/file_list.py:694
 #, python-brace-format
 msgid "File already exists: {0}"
 msgstr "文件已存在: {0}"
 
-#: application/plugins/file_list/file_list.py:683
+#: application/plugins/file_list/file_list.py:697
 #, python-brace-format
 msgid "Directory with same name exists: {0}"
 msgstr "相同名称的目录已存在: {0}"
 
-#: application/plugins/file_list/file_list.py:719
+#: application/plugins/file_list/file_list.py:733
 msgid ""
 "There was an error creating file. Make sure you have enough permissions."
 msgstr "创建文件出错. 确保有足够权限."
 
-#: application/plugins/file_list/file_list.py:781
+#: application/plugins/file_list/file_list.py:795
 msgid "Error creating new link."
 msgstr "创建软链接出错."
 
-#: application/plugins/file_list/file_list.py:797
+#: application/plugins/file_list/file_list.py:811
 msgid "Current file system does not support linking."
 msgstr "当前文件系统不支持软链接."
 
-#: application/plugins/file_list/file_list.py:820
+#: application/plugins/file_list/file_list.py:835
 #, python-brace-format
 msgid ""
-"You are about to delete {0} item.\n"
+"You are about to <i><b>delete</b></i> {0} item.\n"
 "Are you sure about this?"
 msgid_plural ""
-"You are about to delete {0} items.\n"
+"You are about to <i><b>delete</b></i> {0} items.\n"
 "Are you sure about this?"
-msgstr[0] "将要删除 {0} 个项目.\n确定吗?"
+msgstr[0] ""
 
-#: application/plugins/file_list/file_list.py:829
+#: application/plugins/file_list/file_list.py:844
 #, python-brace-format
 msgid ""
-"You are about to move {0} item to trash.\n"
+"You are about to move {0} item to <i><b>trash</b></i>.\n"
 "Are you sure about this?"
 msgid_plural ""
-"You are about to move {0} items to trash.\n"
+"You are about to move {0} items to <i><b>trash</b></i>.\n"
 "Are you sure about this?"
-msgstr[0] "将要移动 {0} 个项目到回收站.\n确认吗?"
+msgstr[0] ""
 
-#: application/plugins/file_list/file_list.py:1180
+#: application/plugins/file_list/file_list.py:1194
 msgid "Other application..."
 msgstr "其它程序..."
 
-#: application/plugins/file_list/file_list.py:1816
+#: application/plugins/file_list/file_list.py:1866
 msgid "Free:"
 msgstr "可用:"
 
-#: application/plugins/file_list/file_list.py:1817
+#: application/plugins/file_list/file_list.py:1867
 msgid "Total:"
 msgstr "总数:"
 
-#: application/plugins/file_list/file_list.py:1886
+#: application/plugins/file_list/file_list.py:1937
 msgid "Copy here"
 msgstr "拷贝至此"
 
-#: application/plugins/file_list/file_list.py:1891
+#: application/plugins/file_list/file_list.py:1942
 msgid "Move here"
 msgstr "移动至此"
 
-#: application/plugins/file_list/file_list.py:1896
+#: application/plugins/file_list/file_list.py:1947
 msgid "Link here"
 msgstr "链接至此"
 
-#: application/plugins/file_list/file_list.py:2273
+#: application/plugins/file_list/file_list.py:2326
 msgid "No such file or directory"
 msgstr "无此文件或文件夹"
 
-#: application/plugins/file_list/file_list.py:2290
+#: application/plugins/file_list/file_list.py:2345
 #, python-brace-format
 msgid ""
 "Error changing working directory to:\n"
@@ -2061,19 +2009,19 @@ msgid ""
 "Would you like to retry?"
 msgstr "更改工作文件夹出错:\n{1}\n\n{0}\n\n是否重试?"
 
-#: application/plugins/file_list/trash_list.py:39
+#: application/plugins/file_list/trash_list.py:27
 msgid "Empty trash"
 msgstr "清空垃圾"
 
-#: application/plugins/file_list/trash_list.py:53
+#: application/plugins/file_list/trash_list.py:40
 msgid "All items in the Trash will be permanently deleted. Are you sure?"
 msgstr "垃圾桶中的所有内容将被永久删除。确认吗？"
 
-#: application/plugins/file_list/gio_extension.py:68
+#: application/plugins/file_list/gio_extension.py:65
 msgid "Mount operation"
 msgstr "挂载操作"
 
-#: application/plugins/file_list/gio_extension.py:114
+#: application/plugins/file_list/gio_extension.py:110
 #, python-brace-format
 msgid ""
 "Unable to mount:\n"
@@ -2082,15 +2030,27 @@ msgid ""
 "{1}"
 msgstr "无法挂载:\n{0}\n\n{1}"
 
-#: application/plugins/file_list/gio_extension.py:166
-#: application/plugins/file_list/gio_extension.py:520
-#: application/plugins/file_list/gio_extension.py:872
+#: application/plugins/file_list/gio_extension.py:163
+#: application/plugins/file_list/gio_extension.py:517
+#: application/plugins/file_list/gio_extension.py:869
 msgid "URI"
 msgstr "URI"
 
-#: application/plugins/file_list/gio_extension.py:424
-#: application/plugins/file_list/gio_extension.py:727
-#: application/plugins/file_list/gio_extension.py:1081
+#: application/plugins/file_list/gio_extension.py:192
+#: application/plugins/file_list/gio_extension.py:546
+#: application/plugins/file_list/gio_extension.py:898
+msgid "Mount"
+msgstr "挂载"
+
+#: application/plugins/file_list/gio_extension.py:195
+#: application/plugins/file_list/gio_extension.py:549
+#: application/plugins/file_list/gio_extension.py:901
+msgid "Unmount"
+msgstr "卸载"
+
+#: application/plugins/file_list/gio_extension.py:421
+#: application/plugins/file_list/gio_extension.py:724
+#: application/plugins/file_list/gio_extension.py:1078
 #, python-brace-format
 msgid ""
 "You are about to remove '{0}'.\n"
@@ -2156,37 +2116,46 @@ msgstr "创建 WebDav 挂载"
 msgid "Server type:"
 msgstr "服务器类型:"
 
-#: application/plugins/sessions/plugin.py:21
+#: application/plugins/sessions/plugin.py:32
+#: application/plugins/sessions/plugin.py:356
 msgid "Sessions"
 msgstr "会话"
 
-#: application/plugins/sessions/plugin.py:55
+#: application/plugins/sessions/plugin.py:65
 msgid "Locked"
 msgstr "已锁定"
 
-#: application/plugins/sessions/plugin.py:76
+#: application/plugins/sessions/plugin.py:85
 msgid "Move up"
 msgstr "上移"
 
-#: application/plugins/sessions/plugin.py:83
+#: application/plugins/sessions/plugin.py:92
 msgid "Move down"
 msgstr "下移"
 
-#: application/plugins/sessions/plugin.py:173
+#: application/plugins/sessions/plugin.py:182
 msgid "Session with this name already exists."
 msgstr "此名称的会话已存在."
 
-#: application/plugins/sessions/plugin.py:204
+#: application/plugins/sessions/plugin.py:212
 msgid "New session"
 msgstr "新建会话"
 
-#: application/plugins/sessions/plugin.py:274
+#: application/plugins/sessions/plugin.py:320
+msgid "Locked session preserves tab layout at the time of locking."
+msgstr ""
+
+#: application/plugins/sessions/plugin.py:323
 msgid "Manage sessions"
 msgstr "管理会话"
 
-#: application/plugins/sessions/plugin.py:281
+#: application/plugins/sessions/plugin.py:326
 msgid "Save session"
 msgstr "保存会话"
+
+#: application/plugins/sessions/plugin.py:360
+msgid "Show session list"
+msgstr ""
 
 #: application/plugins/rename_extensions/letter_case.py:15
 #: application/plugins/rename_extensions/letter_case.py:23
@@ -2263,7 +2232,7 @@ msgstr "步进:"
 msgid "Digits:"
 msgstr "数字:"
 
-#: application/plugins/rename_extensions/default.py:255
+#: application/plugins/rename_extensions/default.py:252
 msgid "Item list is empty. Unable to get item for range selection!"
 msgstr "列表为空. 无法范围选择项目!"
 
@@ -2308,20 +2277,20 @@ msgstr "为使用此扩展, 您需要安装 <b>mutagen</b> 模块!"
 msgid "Audio Metadata"
 msgstr "音频元数据"
 
-#: application/plugins/find_file_extensions/size.py:21
+#: application/plugins/find_file_extensions/size.py:20
 msgid "Match file size"
 msgstr "匹配文件大小"
 
-#: application/plugins/find_file_extensions/size.py:25
+#: application/plugins/find_file_extensions/size.py:24
 msgid "Minimum:"
 msgstr "最小:"
 
-#: application/plugins/find_file_extensions/size.py:27
-#: application/plugins/find_file_extensions/size.py:31
+#: application/plugins/find_file_extensions/size.py:26
+#: application/plugins/find_file_extensions/size.py:30
 msgid "MB"
 msgstr "MB"
 
-#: application/plugins/find_file_extensions/size.py:29
+#: application/plugins/find_file_extensions/size.py:28
 msgid "Maximum:"
 msgstr "最大:"
 
@@ -2335,25 +2304,21 @@ msgid ""
 msgstr "<b>模式匹配</b>\n*        所有\n?        单个任意字符\n[seq]    在 <i>seq</i> 中的任意字符\n[!seq]    <u>不</u>在 <i>seq</i> 中的任意字符"
 
 #: application/plugins/find_file_extensions/default.py:48
-#: application/plugins/find_file_extensions/contents.py:24
+#: application/plugins/find_file_extensions/contents.py:23
 msgid "Search for:"
 msgstr "检索:"
 
-#: application/plugins/find_file_extensions/default.py:55
+#: application/plugins/find_file_extensions/default.py:54
 msgid "Case sensitive"
 msgstr "大小写敏感"
 
-#: application/plugins/find_file_extensions/contents.py:45
+#: application/plugins/find_file_extensions/contents.py:44
 msgid "Content"
 msgstr "内容"
 
-#: application/plugins/system_terminal/plugin.py:12
+#: application/plugins/system_terminal/plugin.py:14
 msgid "System terminal"
 msgstr "系统终端"
-
-#: application/plugins/system_terminal/plugin.py:21
-msgid "Open current directory"
-msgstr "打开当前目录"
 
 #: application/plugins/gvim_viewer/plugin.py:50
 msgid "GVim"
@@ -2364,70 +2329,66 @@ msgstr "GVim"
 msgid "Use this extension"
 msgstr "使用此扩展"
 
-#: application/plugin_base/plugin.py:126
+#: application/plugin_base/plugin.py:129
 msgid "Plugin Base"
 msgstr "插件基础"
 
-#: application/plugin_base/plugin.py:129
-#: application/plugin_base/terminal.py:306
+#: application/plugin_base/plugin.py:132
+#: application/plugin_base/terminal.py:266
 msgid "Focus opposite object"
 msgstr "聚焦另一侧物体"
 
-#: application/plugin_base/plugin.py:130
+#: application/plugin_base/plugin.py:133
 msgid "Next tab"
 msgstr "下一个标签"
 
-#: application/plugin_base/plugin.py:131
+#: application/plugin_base/plugin.py:134
 msgid "Previous tab"
 msgstr "上一个标签"
 
-#: application/plugin_base/plugin.py:133
-#: application/plugin_base/terminal.py:307
+#: application/plugin_base/plugin.py:136
+#: application/plugin_base/terminal.py:267
 msgid "Close tab"
 msgstr "关闭标签"
 
-#: application/plugin_base/plugin.py:134
-msgid "Focus command entry"
-msgstr "焦点移至命令行"
-
-#: application/plugin_base/plugin.py:135
+#: application/plugin_base/plugin.py:137
 msgid "Focus left object"
 msgstr "聚焦左侧物体"
 
-#: application/plugin_base/plugin.py:136
+#: application/plugin_base/plugin.py:138
 msgid "Focus right object"
 msgstr "聚焦右侧物体"
 
-#: application/plugin_base/terminal.py:94
-msgid "Open file list"
-msgstr "打开文件列表"
+#: application/plugin_base/terminal.py:68
+msgid "Open current directory"
+msgstr "打开当前目录"
 
-#: application/plugin_base/terminal.py:135
+#: application/plugin_base/terminal.py:108
 msgid ""
 "\n"
 "\n"
 "Python VTE module is not installed on this system!"
 msgstr "\n\nPython VTE 模块在此系统中未安装!"
 
-#: application/plugin_base/terminal.py:209
+#: application/plugin_base/terminal.py:177
 msgid "Terminal menu"
 msgstr "终端菜单"
 
-#: application/plugin_base/terminal.py:303
-#: application/plugin_base/item_list.py:259
+#: application/plugin_base/terminal.py:263
+#: application/plugin_base/item_list.py:219
 msgid "Create terminal tab"
 msgstr "创建终端标签页"
 
-#: application/plugin_base/terminal.py:304
-#: application/plugin_base/item_list.py:254
+#: application/plugin_base/terminal.py:264
+#: application/plugin_base/item_list.py:214
 msgid "Copy selection to clipboard"
 msgstr "复制所选到剪贴板"
 
-#: application/plugin_base/terminal.py:305
+#: application/plugin_base/terminal.py:265
 msgid "Paste from clipboard"
 msgstr "从剪贴板粘贴"
 
-#: application/plugin_base/terminal.py:350
+#: application/plugin_base/terminal.py:310
 #, python-brace-format
 msgid ""
 "You are about to feed child process with following data. Are you sure?\n"
@@ -2435,293 +2396,314 @@ msgid ""
 "{0}"
 msgstr "将要传入如下数据给子进程. 确定吗?\n\n{0}"
 
-#: application/plugin_base/item_list.py:76
+#: application/plugin_base/item_list.py:73
 msgid "Directories (selected/total)"
 msgstr "目录 (已选择/全部)"
 
-#: application/plugin_base/item_list.py:77
+#: application/plugin_base/item_list.py:74
 msgid "Files (selected/total)"
 msgstr "文件 (已选择/全部)"
 
-#: application/plugin_base/item_list.py:78
+#: application/plugin_base/item_list.py:75
 msgid "Size (selected/total)"
 msgstr "大小 (已选择/全部)"
 
-#: application/plugin_base/item_list.py:109
+#: application/plugin_base/item_list.py:104
 msgid "Search:"
 msgstr "搜索: "
 
-#: application/plugin_base/item_list.py:136
-msgid "Reload item list"
-msgstr "刷新项目列表"
-
-#: application/plugin_base/item_list.py:151
-#: application/plugin_base/item_list.py:289
-msgid "Copy path to clipboard"
-msgstr "复制路径到剪贴板"
-
-#: application/plugin_base/item_list.py:159
-msgid "Enter path..."
-msgstr "输入路径..."
-
-#: application/plugin_base/item_list.py:248
-msgid "Execute selected item"
-msgstr "执行选中项"
-
-#: application/plugin_base/item_list.py:249
-msgid "Select application and execute item"
-msgstr "选择程序并执行项目"
-
-#: application/plugin_base/item_list.py:250
-msgid "Show selected item properties"
-msgstr "显示选中项属性"
-
-#: application/plugin_base/item_list.py:251
-msgid "Bookmark current directory"
-msgstr "收藏当前目录到书签"
-
-#: application/plugin_base/item_list.py:253
-msgid "Cut selection to clipboard"
-msgstr "剪切选中到剪贴板"
-
-#: application/plugin_base/item_list.py:255
-msgid "Paste items from clipboard"
-msgstr "从剪贴板粘贴项目"
-
-#: application/plugin_base/item_list.py:256
-msgid "Open selected directory in new tab"
-msgstr "打开所选文件夹在新标签中"
-
-#: application/plugin_base/item_list.py:257
-msgid "Open selected directory"
-msgstr "打开所选文件夹"
-
-#: application/plugin_base/item_list.py:258
-msgid "Calculate disk usage for directory"
-msgstr "计算目录占用磁盘空间"
-
-#: application/plugin_base/item_list.py:261
-msgid "Go to root directory"
-msgstr "转至根目录"
-
-#: application/plugin_base/item_list.py:262
-msgid "Reload items in current directory"
-msgstr "刷新当前目录条目"
-
-#: application/plugin_base/item_list.py:263
-msgid "Show history browser"
-msgstr "显示历史浏览器"
-
-#: application/plugin_base/item_list.py:264
-msgid "Go back in history"
-msgstr "转到上个历史"
-
-#: application/plugin_base/item_list.py:265
-msgid "Go forward in history"
-msgstr "转到下个历史"
-
-#: application/plugin_base/item_list.py:266
-msgid "Select all"
-msgstr "全选"
-
-#: application/plugin_base/item_list.py:267
-msgid "Deselect all"
-msgstr "取消选择"
-
-#: application/plugin_base/item_list.py:268
-msgid "Invert selection"
-msgstr "反选"
-
-#: application/plugin_base/item_list.py:269
-msgid "Toggle selection"
-msgstr "切换选择"
-
-#: application/plugin_base/item_list.py:270
-msgid "Toggle selection and move marker up"
-msgstr "切换选择并上移标记"
-
-#: application/plugin_base/item_list.py:271
-msgid "Trash or delete selected items"
-msgstr "回收站或删除选中项"
-
-#: application/plugin_base/item_list.py:272
-msgid "Force deleting selected items"
-msgstr "强制删除选中项"
-
-#: application/plugin_base/item_list.py:273
-msgid "Show bookmarks for current list"
-msgstr "为当前列表显示书签"
-
-#: application/plugin_base/item_list.py:274
-msgid "Show bookmarks for left list"
-msgstr "为左侧列表显示书签"
-
-#: application/plugin_base/item_list.py:275
-msgid "Show bookmarks for right list"
-msgstr "为右侧列表显示书签"
-
-#: application/plugin_base/item_list.py:276
-msgid "Rename selected item"
-msgstr "重命名选中项"
-
-#: application/plugin_base/item_list.py:277
-msgid "View selected item"
-msgstr "查看选中项"
-
-#: application/plugin_base/item_list.py:278
-msgid "Edit selected item"
-msgstr "编辑选中项"
-
-#: application/plugin_base/item_list.py:279
-msgid "Copy selected items"
-msgstr "复制选中项"
-
-#: application/plugin_base/item_list.py:280
-msgid "Move selected items"
-msgstr "移动选中项"
-
-#: application/plugin_base/item_list.py:281
-msgid "Show context menu"
-msgstr "显示上下文菜单"
-
-#: application/plugin_base/item_list.py:282
-msgid "Show \"open with\" menu"
-msgstr "显示\"打开方式\"菜单"
-
-#: application/plugin_base/item_list.py:283
-msgid "Assign path from left list"
-msgstr "从左侧列表分配路径"
-
-#: application/plugin_base/item_list.py:284
-msgid "Assign path from right list"
-msgstr "从右侧列表"
-
-#: application/plugin_base/item_list.py:285
+#: application/plugin_base/item_list.py:137
+#: application/plugin_base/item_list.py:245
 msgid "Swap right and left paths"
 msgstr "交换左右路径"
 
-#: application/plugin_base/item_list.py:286
+#: application/plugin_base/item_list.py:143
+msgid "Reload item list"
+msgstr "刷新项目列表"
+
+#: application/plugin_base/item_list.py:149
+#: application/plugin_base/item_list.py:249
+msgid "Copy path to clipboard"
+msgstr "复制路径到剪贴板"
+
+#: application/plugin_base/item_list.py:155
+msgid "Enter path..."
+msgstr "输入路径..."
+
+#: application/plugin_base/item_list.py:184
+msgid "Locations"
+msgstr ""
+
+#: application/plugin_base/item_list.py:208
+msgid "Execute selected item"
+msgstr "执行选中项"
+
+#: application/plugin_base/item_list.py:209
+msgid "Select application and execute item"
+msgstr "选择程序并执行项目"
+
+#: application/plugin_base/item_list.py:210
+msgid "Show selected item properties"
+msgstr "显示选中项属性"
+
+#: application/plugin_base/item_list.py:211
+msgid "Bookmark current directory"
+msgstr "收藏当前目录到书签"
+
+#: application/plugin_base/item_list.py:212
+msgid "Edit bookmarks"
+msgstr "编辑书签"
+
+#: application/plugin_base/item_list.py:213
+msgid "Cut selection to clipboard"
+msgstr "剪切选中到剪贴板"
+
+#: application/plugin_base/item_list.py:215
+msgid "Paste items from clipboard"
+msgstr "从剪贴板粘贴项目"
+
+#: application/plugin_base/item_list.py:216
+msgid "Open selected directory in new tab"
+msgstr "打开所选文件夹在新标签中"
+
+#: application/plugin_base/item_list.py:217
+msgid "Open selected directory"
+msgstr "打开所选文件夹"
+
+#: application/plugin_base/item_list.py:218
+msgid "Calculate disk usage for directory"
+msgstr "计算目录占用磁盘空间"
+
+#: application/plugin_base/item_list.py:221
+msgid "Go to root directory"
+msgstr "转至根目录"
+
+#: application/plugin_base/item_list.py:222
+msgid "Reload items in current directory"
+msgstr "刷新当前目录条目"
+
+#: application/plugin_base/item_list.py:223
+msgid "Show history browser"
+msgstr "显示历史浏览器"
+
+#: application/plugin_base/item_list.py:224
+msgid "Go back in history"
+msgstr "转到上个历史"
+
+#: application/plugin_base/item_list.py:225
+msgid "Go forward in history"
+msgstr "转到下个历史"
+
+#: application/plugin_base/item_list.py:226
+msgid "Select all"
+msgstr "全选"
+
+#: application/plugin_base/item_list.py:227
+msgid "Deselect all"
+msgstr "取消选择"
+
+#: application/plugin_base/item_list.py:228
+msgid "Invert selection"
+msgstr "反选"
+
+#: application/plugin_base/item_list.py:229
+msgid "Toggle selection"
+msgstr "切换选择"
+
+#: application/plugin_base/item_list.py:230
+msgid "Toggle selection and move marker up"
+msgstr "切换选择并上移标记"
+
+#: application/plugin_base/item_list.py:231
+msgid "Trash or delete selected items"
+msgstr "回收站或删除选中项"
+
+#: application/plugin_base/item_list.py:232
+msgid "Force deleting selected items"
+msgstr "强制删除选中项"
+
+#: application/plugin_base/item_list.py:233
+msgid "Show bookmarks for current list"
+msgstr "为当前列表显示书签"
+
+#: application/plugin_base/item_list.py:234
+msgid "Show bookmarks for left list"
+msgstr "为左侧列表显示书签"
+
+#: application/plugin_base/item_list.py:235
+msgid "Show bookmarks for right list"
+msgstr "为右侧列表显示书签"
+
+#: application/plugin_base/item_list.py:236
+msgid "Rename selected item"
+msgstr "重命名选中项"
+
+#: application/plugin_base/item_list.py:237
+msgid "View selected item"
+msgstr "查看选中项"
+
+#: application/plugin_base/item_list.py:238
+msgid "Edit selected item"
+msgstr "编辑选中项"
+
+#: application/plugin_base/item_list.py:239
+msgid "Copy selected items"
+msgstr "复制选中项"
+
+#: application/plugin_base/item_list.py:240
+msgid "Move selected items"
+msgstr "移动选中项"
+
+#: application/plugin_base/item_list.py:241
+msgid "Show context menu"
+msgstr "显示上下文菜单"
+
+#: application/plugin_base/item_list.py:242
+msgid "Show \"open with\" menu"
+msgstr "显示\"打开方式\"菜单"
+
+#: application/plugin_base/item_list.py:243
+msgid "Assign path from left list"
+msgstr "从左侧列表分配路径"
+
+#: application/plugin_base/item_list.py:244
+msgid "Assign path from right list"
+msgstr "从右侧列表"
+
+#: application/plugin_base/item_list.py:246
 msgid "Move selection marker up"
 msgstr "上移选择标记"
 
-#: application/plugin_base/item_list.py:287
+#: application/plugin_base/item_list.py:247
 msgid "Move selection marker down"
 msgstr "下移选择标记"
 
-#: application/plugin_base/item_list.py:288
+#: application/plugin_base/item_list.py:248
 msgid "Show tab menu"
 msgstr "显示标签菜单"
 
-#: application/plugin_base/item_list.py:290
+#: application/plugin_base/item_list.py:250
 msgid "Copy selected path to clipboard"
 msgstr "复制所选路径到剪贴板"
 
-#: application/plugin_base/item_list.py:291
+#: application/plugin_base/item_list.py:251
+msgid "Copy selected item name to clipboard"
+msgstr ""
+
+#: application/plugin_base/item_list.py:252
 msgid "Copy path to command entry"
 msgstr "复制路径到命令行"
 
-#: application/plugin_base/item_list.py:292
+#: application/plugin_base/item_list.py:253
 msgid "Copy selection to command entry"
 msgstr "复制所选到命令行"
 
-#: application/plugin_base/item_list.py:293
+#: application/plugin_base/item_list.py:254
 msgid "Ask and navigate to path"
 msgstr "询问并导航至路径"
 
-#: application/plugin_base/item_list.py:294
+#: application/plugin_base/item_list.py:255
 msgid "Start quick search"
 msgstr "开始快速搜索"
 
-#: application/plugin_base/item_list.py:295
+#: application/plugin_base/item_list.py:256
 msgid "Expand directory"
 msgstr "展开目录"
 
-#: application/plugin_base/item_list.py:296
+#: application/plugin_base/item_list.py:257
 msgid "Collapse directory"
 msgstr "收起目录"
 
-#: application/plugin_base/item_list.py:297
+#: application/plugin_base/item_list.py:258
 msgid "Create symbolic or hard link"
 msgstr "创建符号或硬链接"
 
-#: application/plugin_base/item_list.py:298
+#: application/plugin_base/item_list.py:259
 msgid "Show emblem menu"
 msgstr "显示"
 
-#: application/plugin_base/item_list.py:358
-#: application/plugin_base/item_list.py:364
+#: application/plugin_base/item_list.py:320
+#: application/plugin_base/item_list.py:326
 #, python-brace-format
 msgid "Go to '{0}'"
 msgstr "转到 '{0}'"
 
-#: application/plugin_base/item_list.py:710
+#: application/plugin_base/item_list.py:670
 msgid ""
 "Directory does not exist anymore or is not valid. If path is not local check"
 " if specified volume is mounted."
 msgstr "文件夹已不存在或无效. 如果路径非本地, 检查相关卷是否已挂载."
 
-#: application/plugin_base/item_list.py:748
+#: application/plugin_base/item_list.py:708
 #, python-brace-format
 msgid ""
 "Specified protocol ({0}) is not supported by this application. Please check "
 "for available plugins or create a feature request."
 msgstr "指定协议 ({0}) 此程序不支持. 请检查可用插件或创建一个特性请求."
 
-#: application/plugin_base/item_list.py:780
+#: application/plugin_base/item_list.py:740
 msgid ""
 "Application is unable to handle specified data. Check if source items still "
 "exist."
 msgstr "程序无法处理指定数据. 检查是否源项目仍存在."
 
-#: application/plugin_base/item_list.py:1032
+#: application/plugin_base/item_list.py:993
 msgid "Open _with"
 msgstr "打开方式(w)"
 
-#: application/plugin_base/item_list.py:1044
+#: application/plugin_base/item_list.py:1005
 msgid "Additional options"
 msgstr "附加选项"
 
-#: application/plugin_base/item_list.py:1058
+#: application/plugin_base/item_list.py:1019
 msgid "Create file"
 msgstr "新建文件"
 
-#: application/plugin_base/item_list.py:1114
+#: application/plugin_base/item_list.py:1075
 msgid "Copy to other..."
 msgstr "复制到其它..."
 
-#: application/plugin_base/item_list.py:1120
+#: application/plugin_base/item_list.py:1081
 msgid "Move to other..."
 msgstr "移动到其它"
 
-#: application/plugin_base/item_list.py:1145
+#: application/plugin_base/item_list.py:1091
+msgid "Copy file name"
+msgstr ""
+
+#: application/plugin_base/item_list.py:1097
+msgid "Copy path"
+msgstr ""
+
+#: application/plugin_base/item_list.py:1122
 msgid "Send to..."
 msgstr "发送到..."
 
-#: application/plugin_base/item_list.py:1223
+#: application/plugin_base/item_list.py:1200
 msgid "View complete history..."
 msgstr "查看完整历史..."
 
-#: application/plugin_base/item_list.py:1229
+#: application/plugin_base/item_list.py:1206
 msgid "History is empty"
 msgstr "历史为空"
 
-#: application/plugin_base/item_list.py:1584
+#: application/plugin_base/item_list.py:1553
 msgid "Path entry"
 msgstr "路径条目"
 
-#: application/plugin_base/item_list.py:1585
+#: application/plugin_base/item_list.py:1554
 msgid "Navigate to:"
 msgstr "导航至:"
 
-#: application/indicator.py:31
+#: application/indicator.py:32
 msgid "Sh_ow main window"
 msgstr "显示主窗口(o)"
 
-#: application/indicator.py:40
+#: application/indicator.py:41
 msgid "_Hide main window"
 msgstr "隐藏主窗口(H)"
 
-#: application/operation.py:113
+#: application/operation.py:115
 #, python-brace-format
 msgid ""
 "Aborted. Not enough free space on target file system.\n"
@@ -2729,7 +2711,7 @@ msgid ""
 "Available: {1}"
 msgstr "终止. 目标文件系统无足够可用空间.\n需要: {0}\n可用: {1}"
 
-#: application/operation.py:128
+#: application/operation.py:130
 #, python-brace-format
 msgid ""
 "Target file system does not have enough free space for this operation to continue.\n"
@@ -2740,121 +2722,125 @@ msgid ""
 "Do you wish to continue?"
 msgstr "目标文件系统无足够可用空间以使操作继续.\n\n需要: {0}\n可用: {1}\n\n是否继续?"
 
-#: application/operation.py:242
+#: application/operation.py:265
 msgid ""
 "There is a problem writing data to destination file. What would you like to "
 "do?"
 msgstr "写入数据到目标文件时出现问题. 怎么办?"
 
-#: application/operation.py:276
+#: application/operation.py:307
 msgid ""
 "An error occurred while trying to create specified file. What would you like"
 " to do?"
 msgstr "试图创建指定文件时发生错误. 怎么办?"
 
-#: application/operation.py:283
+#: application/operation.py:314
 msgid ""
 "An error occurred while trying to create specified directory. What would you"
 " like to do?"
 msgstr "试图创建指定文件夹时发生错误. 怎么办?"
 
-#: application/operation.py:316
+#: application/operation.py:354
 msgid ""
 "Problem with setting path parameter for specified path. What would you like "
 "to do?"
 msgstr "设置指定路径的参数时出现问题. 怎么办?"
 
-#: application/operation.py:349
+#: application/operation.py:393
 msgid ""
 "There was a problem removing specified path. What would you like to do?"
 msgstr "移除指定路径时出现问题. 怎么办?"
 
-#: application/operation.py:381
+#: application/operation.py:432
 msgid ""
 "There was a problem trashing specified path. Would you like to try removing "
 "it instead?"
 msgstr "回收指定路径时出现问题. 是否尝试将其移除?"
 
-#: application/operation.py:413
+#: application/operation.py:471
 msgid "There was a problem moving specified path. What would you like to do?"
 msgstr "移动指定路径时出现问题. 怎么办?"
 
-#: application/operation.py:445
+#: application/operation.py:510
 msgid ""
 "There was a problem renaming specified path. What would you like to do?"
 msgstr "重命名指定路径时出现问题. 怎么办?"
 
-#: application/operation.py:477
+#: application/operation.py:549
 msgid ""
 "There was a problem with reading specified directory. What would you like to"
 " do?"
 msgstr "读取指定目录时出现问题. 怎么办?"
 
-#: application/operation.py:579
+#: application/operation.py:659
 msgid "Searching for files..."
 msgstr "搜索文件..."
 
-#: application/operation.py:800
+#: application/operation.py:885
 msgid ""
 "Unable to create directory because file with the same name already exists in"
 " target directory."
 msgstr "无法创建文件夹因为目标文件夹已存在相同文件名."
 
-#: application/operation.py:990
+#: application/operation.py:1123
 msgid "Creating directories..."
 msgstr "新建文件夹..."
 
-#: application/operation.py:1007
+#: application/operation.py:1140
 msgid "Copying files..."
 msgstr "复制文件..."
 
-#: application/operation.py:1062 application/operation.py:1079
+#: application/operation.py:1156
+msgid "Creating links..."
+msgstr ""
+
+#: application/operation.py:1208 application/operation.py:1225
 msgid "Copy Operation"
 msgstr "复制操作"
 
-#: application/operation.py:1064
+#: application/operation.py:1210
 #, python-brace-format
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] "复制 {0} 项目从 \"{1}\" 到 \"{2}\" 已完成!"
 
-#: application/operation.py:1190
+#: application/operation.py:1338
 msgid "Moving files..."
 msgstr "移动文件..."
 
-#: application/operation.py:1204
+#: application/operation.py:1352
 msgid "Deleting source files..."
 msgstr "删除源文件中..."
 
-#: application/operation.py:1226
+#: application/operation.py:1374
 msgid "Deleting source directories..."
 msgstr "删除源目录中..."
 
-#: application/operation.py:1323 application/operation.py:1340
+#: application/operation.py:1473 application/operation.py:1490
 msgid "Move Operation"
 msgstr "移动操作"
 
-#: application/operation.py:1325
+#: application/operation.py:1475
 #, python-brace-format
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] "移动 {0} 项目从 \"{1}\" 到 \"{2}\" 已完成!"
 
-#: application/operation.py:1466
+#: application/operation.py:1620
 msgid "Delete Operation"
 msgstr "删除操作"
 
-#: application/operation.py:1468
+#: application/operation.py:1622
 #, python-brace-format
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
 msgstr[0] "从 \"{1}\" 中移除 {0} 项目已完成!"
 
-#: application/operation.py:1579
+#: application/operation.py:1735
 msgid "Rename Operation"
 msgstr "重命名操作"
 
-#: application/operation.py:1581
+#: application/operation.py:1737
 #, python-brace-format
 msgid "Rename of {0} item from \"{1}\" is completed!"
 msgid_plural "Rename of {0} items from \"{1}\" is completed!"
@@ -2877,39 +2863,39 @@ msgstr "映像"
 msgid "Viewer is unable to display this file type."
 msgstr "查看器无法显示此文件类型."
 
-#: application/tools/find_files.py:45 application/tools/find_files.py:319
+#: application/tools/find_files.py:43 application/tools/find_files.py:317
 msgid "Find files"
 msgstr "查找文件"
 
-#: application/tools/find_files.py:63
+#: application/tools/find_files.py:61
 msgid "Search in:"
 msgstr "搜索在:"
 
-#: application/tools/find_files.py:80
+#: application/tools/find_files.py:78
 msgid "Search recursively"
 msgstr "递归式搜索"
 
-#: application/tools/find_files.py:132 application/tools/find_files.py:244
+#: application/tools/find_files.py:130 application/tools/find_files.py:242
 msgid "Start"
 msgstr "开始"
 
-#: application/tools/find_files.py:194
+#: application/tools/find_files.py:192
 msgid ""
 "Active object doesn't support changing path. Set focus on a different "
 "object, preferably file list, and try again."
 msgstr "当前对象不支持更改路径. 移动焦点到其它对象上, 最好是文件列表, 然后重试."
 
-#: application/tools/find_files.py:232
+#: application/tools/find_files.py:230
 msgid "Stop"
 msgstr "停止"
 
-#: application/tools/find_files.py:365
+#: application/tools/find_files.py:363
 msgid ""
 "Specified path is not valid or doesn't exist anymore. Please check your "
 "selection and try again."
 msgstr "指定路径无效或已不存在. 请检查选择并重试."
 
-#: application/tools/find_files.py:388
+#: application/tools/find_files.py:386
 msgid ""
 "You need to enable at least one extension in order to find files and "
 "directories!"
@@ -2927,7 +2913,7 @@ msgstr "当前:"
 msgid "Latest:"
 msgstr "最新:"
 
-#: application/tools/version_check.py:107
+#: application/tools/version_check.py:106
 msgid "Checking..."
 msgstr "检查中..."
 

@@ -1,0 +1,2958 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Sunflower package.
+# 
+# Translators:
+# Apóstolos Papaðimitríu <apostolos.papadimitriu@gmail.com>, 2016
+# Apóstolos Papaðimitríu <apostolos.papadimitriu@gmail.com>, 2017
+msgid ""
+msgstr ""
+"Project-Id-Version: Sunflower\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-11-02 01:35+0100\n"
+"PO-Revision-Date: 2018-11-02 00:52+0000\n"
+"Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
+"Language-Team: Greek (http://www.transifex.com/way2cu/sunflower/language/el/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: el\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: application/gui/preferences/terminal.py:10
+#: application/plugins/system_terminal/plugin.py:52
+#: application/plugins/system_terminal/plugin.py:53
+#: application/plugin_base/terminal.py:61
+#: application/plugin_base/terminal.py:260
+#: application/plugin_base/item_list.py:191
+msgid "Terminal"
+msgstr "Τερματικό"
+
+#: application/gui/preferences/terminal.py:17
+msgid "VTE based terminal"
+msgstr "Τερματικό βασισμένο στο VTE"
+
+#: application/gui/preferences/terminal.py:21
+msgid "Show scrollbars when needed"
+msgstr "Εμφάνιση γραμμών κύλισης όταν απαιτείται"
+
+#: application/gui/preferences/terminal.py:29
+msgid "Use the system fixed width font"
+msgstr "Χρήση γραμματοσειράς σταθερού πλάτους συστήματος"
+
+#: application/gui/preferences/terminal.py:32
+msgid "Font:"
+msgstr "Γραμματοσειρά:"
+
+#: application/gui/preferences/terminal.py:41
+msgid "Cursor shape:"
+msgstr "Σχήμα κέρσορα:"
+
+#: application/gui/preferences/terminal.py:45
+msgid "Block"
+msgstr "Μπλοκ"
+
+#: application/gui/preferences/terminal.py:46
+msgid "I-Beam"
+msgstr "δείκτης I-Beam"
+
+#: application/gui/preferences/terminal.py:47
+msgid "Underline"
+msgstr "Υπογράμμιση"
+
+#: application/gui/preferences/terminal.py:57
+msgid "Allow bold text"
+msgstr "Να επιτρέπεται το έντονο κείμενο"
+
+#: application/gui/preferences/terminal.py:61
+msgid "Automatically hide mouse when typing"
+msgstr "Αυτόματη απόκρυψη του ποντικιού κατά την πληκτρολόγηση"
+
+#: application/gui/preferences/terminal.py:69
+msgid "External terminal"
+msgstr "Εξωτερικό τερματικό"
+
+#: application/gui/preferences/terminal.py:72
+#: application/gui/preferences/view_and_edit.py:62
+msgid "Command line:"
+msgstr "Γραμμή εντολών:"
+
+#: application/gui/preferences/terminal.py:78
+msgid "Command line for executing specific program:"
+msgstr "Γραμμή εντολών για εκτέλεση συγκεκριμένου προγράμματος:"
+
+#: application/gui/preferences/terminal.py:84
+#, python-brace-format
+msgid ""
+"<small><i>Note:\n"
+"\tOmitting {0} will open new terminal application instead of tab.\n"
+"\t{0} will be replaced with socket/window id.\n"
+"\t{1} will be replaced with specified command and its parameters.\n"
+"\t{2} will be replaced with current working directory.</i></small>"
+msgstr ""
+
+#: application/gui/preferences/commands.py:14
+#: application/gui/main_window.py:168
+msgid "Commands"
+msgstr "Εντολές"
+
+#: application/gui/preferences/commands.py:39
+#: application/gui/preferences/bookmarks.py:49
+#: application/plugins/rename_extensions/audio_metadata.py:24
+msgid "Title"
+msgstr "Τίτλος"
+
+#: application/gui/preferences/commands.py:43
+msgid "Command"
+msgstr "Εντολή"
+
+#: application/gui/preferences/commands.py:66
+#: application/gui/preferences/bookmarks.py:76
+#: application/gui/preferences/toolbar.py:72
+#: application/gui/preferences/item_list.py:232
+msgid "Move Up"
+msgstr "Μετακίνηση πάνω"
+
+#: application/gui/preferences/commands.py:74
+#: application/gui/preferences/bookmarks.py:84
+#: application/gui/preferences/toolbar.py:80
+#: application/gui/preferences/item_list.py:240
+msgid "Move Down"
+msgstr "Μετακίνηση Κάτω"
+
+#: application/gui/preferences/associations.py:15
+msgid "Associations"
+msgstr "Συσχετισμοί"
+
+#: application/gui/preferences/associations.py:44
+#: application/gui/preferences/associations.py:76
+msgid "Add mime type"
+msgstr "Προσθήκη τύπου περιεχομένου"
+
+#: application/gui/preferences/associations.py:47
+msgid "Add application to mime type"
+msgstr "Προσθήκη εφαρμογής στον τύπο περιεχομένου"
+
+#: application/gui/preferences/associations.py:77
+msgid "Enter MIME type (eg. image/png):"
+msgstr "Εισάγετε τύπο περιεχομένου (π.χ. image/png)"
+
+#: application/gui/preferences/associations.py:128
+msgid ""
+"You need to select mime type to which application will be added. You can "
+"also select another application in which case new one will be added to its "
+"parent."
+msgstr ""
+
+#: application/gui/preferences/plugins.py:34
+msgid "Plugins"
+msgstr "Πρόσθετα"
+
+#: application/gui/preferences/plugins.py:66
+#: application/gui/preferences/display.py:86
+msgid "Active"
+msgstr "Ενεργή καρτέλα"
+
+#: application/gui/preferences/plugins.py:68
+msgid "Plugin name"
+msgstr "Όνομα προσθέτου"
+
+#: application/gui/preferences/plugins.py:72
+msgid "Version"
+msgstr "Έκδοση"
+
+#: application/gui/preferences/plugins.py:74
+msgid "Author"
+msgstr "Δημιουργός"
+
+#: application/gui/preferences/plugins.py:90
+#: application/gui/preferences/accelerators.py:53
+msgid "Description"
+msgstr "Περιγραφή"
+
+#: application/gui/preferences/plugins.py:100
+msgid "Contact"
+msgstr "Επικοινωνία"
+
+#: application/gui/preferences/plugins.py:109
+msgid "Visit site"
+msgstr "Επίσκεψη στην ιστοσελίδα"
+
+#: application/gui/preferences/plugins.py:182
+#, python-brace-format
+msgid ""
+"{0} is required for normal program operation and therefore can not be "
+"deactivated!"
+msgstr "Το {0} απαιτείται για την κανονική λειτουργία του προγράμματος και γι' αυτό δεν μπορεί να απενεργοποιηθεί!"
+
+#: application/gui/preferences/plugins.py:213
+msgid "This plugin has no description"
+msgstr "Το πρόσθετο δεν έχει περιγραφή"
+
+#: application/gui/preferences/plugins.py:272
+msgid "No plugin selected"
+msgstr "Δεν επιλέχθηκε πρόσθετο"
+
+#: application/gui/preferences/bookmarks.py:14
+#: application/widgets/location_menu.py:80
+#: application/plugins/default_toolbar/bookmarks_button.py:16
+#: application/plugins/default_toolbar/bookmarks_button.py:17
+msgid "Bookmarks"
+msgstr "Σελιδοδείκτες"
+
+#: application/gui/preferences/bookmarks.py:17
+msgid "Show mount points in bookmarks menu"
+msgstr "Εμφάνιση σημείων προσάρτησης στο μενού σελιδοδεικτών"
+
+#: application/gui/preferences/bookmarks.py:21
+msgid "Show system bookmarks"
+msgstr "Εμφάνιση σελιδοδεικτών συστήματος"
+
+#: application/gui/preferences/bookmarks.py:25
+msgid "Add home directory to bookmarks menu"
+msgstr "Προσθήκη καταλόγου home στο μενού σελιδοδεικτών"
+
+#: application/gui/preferences/bookmarks.py:53
+#: application/tools/find_files.py:95
+msgid "Location"
+msgstr "Τοποθεσία"
+
+#: application/gui/preferences/accelerators.py:19
+msgid "Key bindings"
+msgstr "Συνδυασμοί πλήκτρων"
+
+#: application/gui/preferences/accelerators.py:60
+msgid "Primary"
+msgstr "Πρωτεύον"
+
+#: application/gui/preferences/accelerators.py:68
+msgid "Secondary"
+msgstr "Δευτερεύον"
+
+#: application/gui/preferences/accelerators.py:81
+msgid ""
+"<b>Note:</b> You can only edit accelerators from objects created at least "
+"once in current session. To disable accelerator press <i>Backspace</i> in "
+"assign mode."
+msgstr ""
+
+#: application/gui/preferences/accelerators.py:91
+msgid "Double click on accelerator to assign new one."
+msgstr "Διπλό κλικ στην συντόμευση για προσθήκη νέας."
+
+#: application/gui/preferences/accelerators.py:197
+#, python-brace-format
+msgid ""
+"Selected accelerator \"{0}\" is already being used. Would you still like to assign accelerator to this function? This will reset listed functions.\n"
+"\n"
+"Collisions:\n"
+"{1}"
+msgstr ""
+
+#: application/gui/preferences/accelerators.py:257
+#: application/widgets/location_menu.py:105
+#: application/plugins/default_toolbar/home_directory_button.py:16
+#: application/plugins/default_toolbar/home_directory_button.py:17
+msgid "Home directory"
+msgstr "Κατάλογος home"
+
+#: application/gui/preferences/view_and_edit.py:15
+msgid "View & Edit"
+msgstr "Επεξεργασία"
+
+#: application/gui/preferences/view_and_edit.py:18
+msgid "View"
+msgstr "Προβολή"
+
+#: application/gui/preferences/view_and_edit.py:22
+msgid "Wrap long lines"
+msgstr "Αναδίπλωση μακρών γραμμών"
+
+#: application/gui/preferences/view_and_edit.py:26
+#: application/gui/main_window.py:695
+msgid "Edit"
+msgstr "Επεξεργασία"
+
+#: application/gui/preferences/view_and_edit.py:32
+msgid "Use installed application"
+msgstr "Χρήση εγκατεστημένης εφαρμογής"
+
+#: application/gui/preferences/view_and_edit.py:54
+msgid "Use external command"
+msgstr "Χρήση εξωτερικής εντολής"
+
+#: application/gui/preferences/view_and_edit.py:68
+msgid "Execute command in terminal tab"
+msgstr "Εκτέλεση εντολής σε καρτέλα τερματικού"
+
+#: application/gui/preferences/toolbar.py:16
+msgid "Toolbar"
+msgstr "Εργαλειοθήκη"
+
+#: application/gui/preferences/toolbar.py:34
+#: application/gui/history_list.py:47
+#: application/gui/keyring_manager_window.py:52
+#: application/plugins/file_list/file_list.py:131
+#: application/plugins/file_list/gio_extension.py:162
+#: application/plugins/file_list/gio_extension.py:516
+#: application/plugins/file_list/gio_extension.py:868
+#: application/plugins/sessions/plugin.py:60
+#: application/plugins/rename_extensions/default.py:73
+#: application/tools/find_files.py:92
+msgid "Name"
+msgstr "Όνομα"
+
+#: application/gui/preferences/toolbar.py:45
+msgid "Type"
+msgstr "Τύπος"
+
+#: application/gui/preferences/toolbar.py:91
+msgid "Toolbar style:"
+msgstr "Στυλ εργαλειοθήκης:"
+
+#: application/gui/preferences/toolbar.py:93
+msgid "Icons"
+msgstr "Εικονίδια"
+
+#: application/gui/preferences/toolbar.py:94 application/tools/viewer.py:88
+msgid "Text"
+msgstr "Κείμενο"
+
+#: application/gui/preferences/toolbar.py:95
+#: application/gui/preferences/item_list.py:105
+msgid "Both"
+msgstr "Και τα δύο"
+
+#: application/gui/preferences/toolbar.py:96
+msgid "Both horizontal"
+msgstr "Και τα δύο οριζόντια"
+
+#: application/gui/preferences/toolbar.py:106
+msgid "Icon size:"
+msgstr "Μέγεθος εικονιδίου:"
+
+#: application/gui/preferences/toolbar.py:108
+msgid "Same as menu item"
+msgstr "Το ίδιο με το αντικείμενο μενού"
+
+#: application/gui/preferences/toolbar.py:109
+msgid "Small toolbar icon"
+msgstr "Μικρό εικονίδιο εργαλειοθήκης"
+
+#: application/gui/preferences/toolbar.py:110
+msgid "Large toolbar icon"
+msgstr "Μεγάλο εικονίδιο εργαλειοθήκης"
+
+#: application/gui/preferences/toolbar.py:111
+msgid "Same as buttons"
+msgstr "Το ίδιο με τα κουμπιά"
+
+#: application/gui/preferences/toolbar.py:112
+msgid "Same as drag icons"
+msgstr "Το ίδιο με τα εικονίδια έλξης"
+
+#: application/gui/preferences/toolbar.py:113
+msgid "Same as dialog"
+msgstr "Το ίδιο με το διάλογο"
+
+#: application/gui/preferences/toolbar.py:215
+msgid "missing plugin"
+msgstr "λείπει πρόσθετο"
+
+#: application/gui/preferences/operation.py:9
+#: application/gui/preferences/item_list.py:44
+msgid "Operation"
+msgstr "Λειτουργία"
+
+#: application/gui/preferences/operation.py:12
+msgid "General"
+msgstr "Γενικά"
+
+#: application/gui/preferences/operation.py:16
+#: application/widgets/location_menu.py:81
+msgid "Mounts"
+msgstr "Σημεία προσάρτησης"
+
+#: application/gui/preferences/operation.py:20
+msgid "Confirmation"
+msgstr "Επιβεβαίωση"
+
+#: application/gui/preferences/operation.py:25
+msgid "Delete items to trashcan"
+msgstr "Μεταφορά αντικειμένων στα απορρίμματα"
+
+#: application/gui/preferences/operation.py:26
+msgid "Reserve free space on copy/move"
+msgstr "Διατήρηση ελεύθερου χώρου κατά την αντιγραφή/μετακίνηση"
+
+#: application/gui/preferences/operation.py:27
+msgid "Automount drives on start up"
+msgstr "Αυτόματη προσάρτηση δίσκων κατά την εκκίνηση"
+
+#: application/gui/preferences/operation.py:28
+msgid "Automount removable drives when inserted"
+msgstr "Αυτόματη προσάρτηση αφαιρούμενων μέσων κατά την εισαγωγή τους"
+
+#: application/gui/preferences/operation.py:29
+msgid "Show confirmation dialog before deleting items"
+msgstr "Εμφάνιση διαλόγου επιβεβαίωσης πριν τη διαγραφή αντικειμένων"
+
+#: application/gui/preferences/operation.py:63
+msgid ""
+"With trashing disabled you will not be able to restore accidentally deleted "
+"items. Are you sure you want to disable confirmation dialog when deleting "
+"items?"
+msgstr "Με τα απορρίμματα απενεργοποιημένα δεν θα μπορείτε να επαναφέρετε τα κατά λάθος διαγραμμένα αντικείμενα. Είστε σίγουροι πως θέλετε να απενεργοποιήσετε το διάλογο επιβεβαίωσης όταν διαγράφετε αντικείμενα;"
+
+#: application/gui/preferences/display.py:22
+msgid "Display"
+msgstr "Προβολή"
+
+#: application/gui/preferences/display.py:27
+msgid "Main window"
+msgstr "Κύριο παράθυρο"
+
+#: application/gui/preferences/display.py:31
+msgid "Hide main window on close"
+msgstr "Απόκρυψη κυρίου παραθύρου στο κλείσιμο"
+
+#: application/gui/preferences/display.py:32
+msgid "Allow multiple instances"
+msgstr "Να επιτρέπονται πολλαπλά στιγμιότυπα (instances)"
+
+#: application/gui/preferences/display.py:33
+msgid "Show toolbar"
+msgstr "Εμφάνιση εργαλειοθήκης"
+
+#: application/gui/preferences/display.py:34
+msgid "Show command bar"
+msgstr "Εμφάνιση μπάρας εντολών"
+
+#: application/gui/preferences/display.py:35
+msgid "Horizontal split"
+msgstr "Οριζόντιος διαχωρισμός"
+
+#: application/gui/preferences/display.py:44
+#: application/plugins/sessions/plugin.py:66
+msgid "Tabs"
+msgstr "Καρτέλες"
+
+#: application/gui/preferences/display.py:48
+msgid "Focus new tab after opening"
+msgstr "Εστίαση στη νέα καρτέλα μετά το άνοιγμα"
+
+#: application/gui/preferences/display.py:49
+msgid "Show close button"
+msgstr "Εμφάνιση κουμπιού τερματισμού"
+
+#: application/gui/preferences/display.py:50
+msgid "Show tab(s) even if there is only one"
+msgstr "Εμφάνιση καρτέλας(-ων) ακόμα κι αν υπάρχει μόνο μία"
+
+#: application/gui/preferences/display.py:51
+msgid "Use Ubuntu coloring method for tab title bars"
+msgstr "Χρήση της μεθόδου χρωματισμού των γραμμών τίτλου των καρτελών του Ubuntu"
+
+#: application/gui/preferences/display.py:52
+msgid "Change title bar color when started as super user"
+msgstr "Αλλαγή του χρώματος της γραμμής τίτλου όταν εκκινείται το πρόγραμμα ως υπερχρήστης"
+
+#: application/gui/preferences/display.py:65
+msgid "Show status bar:"
+msgstr "Εμφάνιση γραμμής κατάστασης"
+
+#: application/gui/preferences/display.py:69
+msgid "Always"
+msgstr "Πάντα"
+
+#: application/gui/preferences/display.py:70
+msgid "When needed"
+msgstr "Όταν απαιτείται"
+
+#: application/gui/preferences/display.py:71
+msgid "Never"
+msgstr "Ποτέ"
+
+#: application/gui/preferences/display.py:81
+msgid "Expanded tabs:"
+msgstr "Ανάπτυξη καρτελών:"
+
+#: application/gui/preferences/display.py:85
+#: application/gui/preferences/item_list.py:102 application/queue.py:29
+msgid "None"
+msgstr "Κανένα"
+
+#: application/gui/preferences/display.py:87
+msgid "All"
+msgstr "Όλες"
+
+#: application/gui/preferences/display.py:97
+msgid "Other"
+msgstr "Άλλο"
+
+#: application/gui/preferences/display.py:101
+msgid "Hide operation window on minimize"
+msgstr "Απόκρυψη παραθύρου εργασιών κατά την ελαχιστοποίηση"
+
+#: application/gui/preferences/display.py:102
+msgid "Show notifications"
+msgstr "Εμφάνιση ειδοποιήσεων"
+
+#: application/gui/preferences/display.py:103
+msgid "Use path completion on non-local paths"
+msgstr "Χρήση αυτόματης συμπλήρωσης διαδρομής σε μη τοπικές διαδρομές"
+
+#: application/gui/preferences/display.py:111
+msgid "Size format:"
+msgstr "Μορφή μεγέθους:"
+
+#: application/gui/preferences/display.py:115
+msgid "Localized"
+msgstr "Τοπικοποιημένη"
+
+#: application/gui/preferences/display.py:116
+msgid "SI <small>(1 kB = 1000 B)</small>"
+msgstr "SI <small>(1 kB = 1000 B)</small>"
+
+#: application/gui/preferences/display.py:117
+msgid "IEC <small>(1 KiB = 1024 B)</small>"
+msgstr "IEC <small>(1 KiB = 1024 B)</small>"
+
+#: application/gui/preferences/item_list.py:37
+#: application/plugins/file_list/column_editor.py:70
+#: application/plugin_base/item_list.py:205
+msgid "Item List"
+msgstr "Λίστα αντικειμένων"
+
+#: application/gui/preferences/item_list.py:42
+msgid "Look & feel"
+msgstr "Εμφάνιση"
+
+#: application/gui/preferences/item_list.py:43
+msgid "Hidden files"
+msgstr "Κρυφά αρχεία"
+
+#: application/gui/preferences/item_list.py:45
+msgid "Directories"
+msgstr "Κατάλογοι"
+
+#: application/gui/preferences/item_list.py:46
+msgid "Columns"
+msgstr "Στήλες"
+
+#: application/gui/preferences/item_list.py:63
+msgid "Row hinting"
+msgstr "Υπόδειξη σειράς"
+
+#: application/gui/preferences/item_list.py:64
+msgid "Case sensitive item sorting"
+msgstr "Ταξινόμηση αντικειμένων με ταίριασμα πεζών-κεφαλαίων"
+
+#: application/gui/preferences/item_list.py:65
+msgid "Number sensitive item sorting"
+msgstr "Ταξινόμηση με βάση τους αριθμούς"
+
+#: application/gui/preferences/item_list.py:66
+msgid "Single click navigation"
+msgstr "Πλοήγηση με μονό κλικ"
+
+#: application/gui/preferences/item_list.py:67
+msgid "Right click selects items"
+msgstr "Το δεξί κλικ επιλέγει αντικείμενα"
+
+#: application/gui/preferences/item_list.py:68
+msgid "Show list headers"
+msgstr "Εμφάνιση κεφαλίδων λίστας"
+
+#: application/gui/preferences/item_list.py:69
+msgid "Fast media preview"
+msgstr "Γρήγορη επισκόπηση πολυμέσων"
+
+#: application/gui/preferences/item_list.py:70
+msgid "Show tree expanders"
+msgstr ""
+
+#: application/gui/preferences/item_list.py:71
+msgid "Hide horizontal scrollbar"
+msgstr "Απόκρυψη οριζόντιας γραμμής κύλισης"
+
+#: application/gui/preferences/item_list.py:72
+msgid "Support second level extension"
+msgstr ""
+
+#: application/gui/preferences/item_list.py:87
+msgid "Access mode format:"
+msgstr ""
+
+#: application/gui/preferences/item_list.py:92
+msgid "Octal"
+msgstr "Οκταδικό"
+
+#: application/gui/preferences/item_list.py:93
+msgid "Textual"
+msgstr "Με κείμενο"
+
+#: application/gui/preferences/item_list.py:97
+msgid "Show grid lines:"
+msgstr "Εμφάνιση γραμμών πλέγματος:"
+
+#: application/gui/preferences/item_list.py:103
+msgid "Horizontal"
+msgstr "Οριζοντίως"
+
+#: application/gui/preferences/item_list.py:104
+msgid "Vertical"
+msgstr "Καθέτως"
+
+#: application/gui/preferences/item_list.py:110
+msgid "Selection color:"
+msgstr "Χρώμα επιλογής:"
+
+#: application/gui/preferences/item_list.py:120
+msgid "Selection indicator:"
+msgstr "Δείκτης επιλογής:"
+
+#: application/gui/preferences/item_list.py:135
+msgid "Quick search combination:"
+msgstr "Συνδυασμός γρήγορης αναζήτησης:"
+
+#: application/gui/preferences/item_list.py:138
+msgid "Control"
+msgstr "Control"
+
+#: application/gui/preferences/item_list.py:139
+msgid "Alt"
+msgstr "Alt"
+
+#: application/gui/preferences/item_list.py:140
+msgid "Shift"
+msgstr "Shift"
+
+#: application/gui/preferences/item_list.py:149
+msgid "Date format:"
+msgstr "Μορφή ημερομηνίας:"
+
+#: application/gui/preferences/item_list.py:153
+msgid "Time is formed using the format located at:"
+msgstr "Ο χρόνος χρησιμοποιεί τη μορφοποίηση που βρίσκεται σε :"
+
+#: application/gui/preferences/item_list.py:162
+msgid "Show hidden files"
+msgstr "Εμφάνιση κρυφών αρχείων"
+
+#: application/gui/preferences/item_list.py:169
+msgid "Always visible files and directories:"
+msgstr "Πάντα ορατά αρχεία και κατάλογοι:"
+
+#: application/gui/preferences/item_list.py:194
+msgid "Load specified tabs instead of saved"
+msgstr "Φόρτωση καθορισμένων καρτελών αντί για τις αποθηκευμένες"
+
+#: application/gui/preferences/item_list.py:207
+msgid "Directory"
+msgstr "Κατάλογος"
+
+#: application/gui/preferences/item_list.py:212
+msgid "Left list"
+msgstr "Αριστερή λίστα"
+
+#: application/gui/preferences/item_list.py:213
+msgid "Right list"
+msgstr "Δεξιά λίστα"
+
+#: application/gui/preferences/item_list.py:245
+msgid "Custom directory"
+msgstr "Προσαρμοσμένος κατάλογος"
+
+#: application/gui/preferences/item_list.py:247
+msgid "Left directory"
+msgstr "Αριστερός κατάλογος"
+
+#: application/gui/preferences/item_list.py:248
+msgid "Right directory"
+msgstr "Δεξιός κατάλογος"
+
+#: application/gui/preferences/item_list.py:302
+msgid "Column"
+msgstr "Στήλη"
+
+#: application/gui/preferences/item_list.py:307
+#: application/plugins/file_list/file_list.py:133
+#: application/plugins/find_file_extensions/size.py:62
+msgid "Size"
+msgstr "Μέγεθος"
+
+#: application/gui/preferences/item_list.py:310
+msgid "Visible"
+msgstr "Ορατή"
+
+#: application/gui/preferences/item_list.py:313
+msgid "Font"
+msgstr "Γραμματοσειρά"
+
+#: application/gui/preferences/item_list.py:432
+msgid "Add always visible item"
+msgstr "Προσθήκη πάντοτε ορατού αντικειμένου"
+
+#: application/gui/preferences/item_list.py:433
+msgid "Full name of file or directory to always show:"
+msgstr "Πλήρες όνομα αρχείου ή καταλόγου προς προβολή πάντοτε:"
+
+#: application/gui/preferences/item_list.py:459
+msgid "Add custom directory"
+msgstr "Προσθήκη πλήρους καταλόγου"
+
+#: application/gui/preferences/item_list.py:460
+msgid "Full path:"
+msgstr "Πλήρης διαδρομή"
+
+#: application/gui/preferences/item_list.py:541
+msgid ""
+"Quick search settings are in conflict with VIM navigation style. To resolve "
+"this issue your quick search settings were restored to default."
+msgstr "Οι ρυθμίσεις γρήγορης αναζήτησης βρίσκονται σε σύγκρουση με το στυλ πλοήγησης τύπου VIM. Για την επίλυση αυτού του προβλήματος έγινε επαναφορά των ρυθμίσεων γρήγορης αναζήτησης στις προεπιλεγμένες."
+
+#: application/gui/main_window.py:103 application/gui/main_window.py:152
+#: application/gui/about_window.py:104 application/gui/about_window.py:105
+#: application/sunflower.py:220
+msgid "Sunflower"
+msgstr "Sunflower"
+
+#: application/gui/main_window.py:184
+msgid "_File"
+msgstr "_Αρχείο"
+
+#: application/gui/main_window.py:188
+msgid "New _tab"
+msgstr "_Νέα καρτέλα"
+
+#: application/gui/main_window.py:200
+msgid "Create _file"
+msgstr "Δημιουργία _αρχείου"
+
+#: application/gui/main_window.py:209
+msgid "Create _directory"
+msgstr "Δημιουργία _καταλόγου"
+
+#: application/gui/main_window.py:221 application/plugin_base/item_list.py:970
+msgid "_Open"
+msgstr "_Άνοιγμα"
+
+#: application/gui/main_window.py:228 application/plugin_base/item_list.py:979
+msgid "Open in new ta_b"
+msgstr "Άνοιγμα σε νέα καρτέ_λα"
+
+#: application/gui/main_window.py:238
+#: application/plugin_base/item_list.py:1152
+msgid "_Properties"
+msgstr "_Ιδιότητες"
+
+#: application/gui/main_window.py:248 application/indicator.py:50
+msgid "_Quit"
+msgstr "_Τερματισμός"
+
+#: application/gui/main_window.py:258
+msgid "_Edit"
+msgstr "_Επεξεργασία"
+
+#: application/gui/main_window.py:261
+#: application/plugin_base/item_list.py:1043
+msgid "Cu_t"
+msgstr "Α_ποκοπή"
+
+#: application/gui/main_window.py:268
+#: application/plugin_base/item_list.py:1052
+msgid "_Copy"
+msgstr "_Αντιγραφή"
+
+#: application/gui/main_window.py:275
+#: application/plugin_base/item_list.py:1061
+msgid "_Paste"
+msgstr "_Επικόλληση"
+
+#: application/gui/main_window.py:285
+#: application/plugin_base/item_list.py:1108
+msgid "_Delete"
+msgstr "_Διαγραφή"
+
+#: application/gui/main_window.py:295
+msgid "_Send to..."
+msgstr "Αποστολή _προς..."
+
+#: application/gui/main_window.py:304
+#: application/plugin_base/item_list.py:1133
+msgid "Ma_ke link"
+msgstr "Δημιουργία _συνδέσμου"
+
+#: application/gui/main_window.py:310
+#: application/plugin_base/item_list.py:1139
+msgid "_Rename..."
+msgstr "_Μετονομασία..."
+
+#: application/gui/main_window.py:318
+msgid "_Unmount"
+msgstr "Αποπ_ροσάρτηση"
+
+#: application/gui/main_window.py:322
+msgid "Mount list is empty"
+msgstr "Η λίστα προσάρτησης είναι άδεια"
+
+#: application/gui/main_window.py:331
+msgid "_Preferences"
+msgstr "_Προτιμήσεις"
+
+#: application/gui/main_window.py:341
+msgid "_Mark"
+msgstr "Επι_σήμανση"
+
+#: application/gui/main_window.py:344
+msgid "_Select all"
+msgstr "_Επιλογή όλων"
+
+#: application/gui/main_window.py:351
+msgid "_Deselect all"
+msgstr "_Αποεπιλογή όλων"
+
+#: application/gui/main_window.py:356
+msgid "Invert select_ion"
+msgstr "Αντιστροφή επι_λογής"
+
+#: application/gui/main_window.py:362
+msgid "S_elect with pattern"
+msgstr "Επιλογή με _μοτίβο"
+
+#: application/gui/main_window.py:368
+msgid "Deselect with pa_ttern"
+msgstr "Αποεπιλογή με μοτί_βο"
+
+#: application/gui/main_window.py:375
+msgid "Select with same e_xtension"
+msgstr "Επιλογή με την ίδια ε_πέκταση"
+
+#: application/gui/main_window.py:381
+msgid "Deselect with same exte_nsion"
+msgstr "Αποεπιλογή με την ίδια επέκτα_ση"
+
+#: application/gui/main_window.py:388
+msgid "Compare _directories"
+msgstr "Σύγκριση _καταλόγων"
+
+#: application/gui/main_window.py:396
+msgid "_Tools"
+msgstr "Ερ_γαλεία"
+
+#: application/gui/main_window.py:400 application/gui/main_window.py:575
+msgid "_Find files"
+msgstr "_Εύρεση αρχείων"
+
+#: application/gui/main_window.py:408
+msgid "Find _duplicate files"
+msgstr "Εύρεση _διπλότυπων αρχείων"
+
+#: application/gui/main_window.py:413
+msgid "_Synchronize directories"
+msgstr "_Συγχρονισμός καταλόγων"
+
+#: application/gui/main_window.py:419 application/gui/main_window.py:576
+msgid "Advanced _rename"
+msgstr "_Μετονομασία για προχωρημένους"
+
+#: application/gui/main_window.py:426 application/gui/main_window.py:578
+msgid "_Keyring manager"
+msgstr "Διαχειριστής _κλειδοθήκης"
+
+#: application/gui/main_window.py:434
+msgid "_View"
+msgstr "_Προβολή"
+
+#: application/gui/main_window.py:437
+msgid "Rel_oad item list"
+msgstr "Επαναφόρτωση _λίστας αντικειμένων"
+
+#: application/gui/main_window.py:447
+msgid "Fast m_edia preview"
+msgstr "Γ_ρήγορη προεπισκόπηση πολυμέσων"
+
+#: application/gui/main_window.py:458
+msgid "Show _hidden files"
+msgstr "Εμφάνιση _κρυφών αρχείων"
+
+#: application/gui/main_window.py:466
+msgid "Show _toolbar"
+msgstr "Εμφάνιση _εργαλειοθήκης"
+
+#: application/gui/main_window.py:474
+msgid "Show _command bar"
+msgstr "Εμφάνιση _μπάρας εντολών"
+
+#: application/gui/main_window.py:482
+msgid "_Horizontal split"
+msgstr "_Οριζόντιος διαχωρισμός"
+
+#: application/gui/main_window.py:492
+msgid "_Commands"
+msgstr "Ε_ντολές"
+
+#: application/gui/main_window.py:496
+msgid "_Operations"
+msgstr "_Λειτουργίες"
+
+#: application/gui/main_window.py:500
+msgid "There are no active operations"
+msgstr "Δεν υπάρχουν ενεργές λειτουργίες"
+
+#: application/gui/main_window.py:506
+msgid "_Help"
+msgstr "_Βοήθεια"
+
+#: application/gui/main_window.py:509
+msgid "_Home page"
+msgstr "_Αρχική σελίδα"
+
+#: application/gui/main_window.py:517 application/gui/main_window.py:581
+msgid "Check for new version"
+msgstr "Έλεγχος για _νέα έκδοση"
+
+#: application/gui/main_window.py:524
+msgid "File a _bug report"
+msgstr "Αναφέρετε κάποιo σ_φάλμα"
+
+#: application/gui/main_window.py:533 application/gui/main_window.py:582
+msgid "_About"
+msgstr "_Σχετικά"
+
+#: application/gui/main_window.py:577
+msgid "_Mount manager"
+msgstr "Διαχειριστής _προσαρτήσης"
+
+#: application/gui/main_window.py:580
+msgid "Home page"
+msgstr ""
+
+#: application/gui/main_window.py:584
+msgid "Tools"
+msgstr ""
+
+#: application/gui/main_window.py:585
+msgid "Help"
+msgstr ""
+
+#: application/gui/main_window.py:586 application/gui/preferences_window.py:30
+#: application/gui/preferences_window.py:45
+msgid "Preferences"
+msgstr "Προτιμήσεις"
+
+#: application/gui/main_window.py:588
+msgid "Quit"
+msgstr ""
+
+#: application/gui/main_window.py:653
+msgid "Execute command:"
+msgstr ""
+
+#: application/gui/main_window.py:692
+msgid "Refresh"
+msgstr "Ανανέωση"
+
+#: application/gui/main_window.py:692
+msgid "Reload active item list"
+msgstr "Επαναφόρτωση ενεργής λίστας αντικειμένων"
+
+#: application/gui/main_window.py:693 application/tools/advanced_rename.py:93
+msgid "Rename"
+msgstr "Μετονομασία"
+
+#: application/gui/main_window.py:693
+msgid "Rename selected file"
+msgstr "Μετονομασία επιλεγμένου αρχείου"
+
+#: application/gui/main_window.py:694
+msgid "Preview"
+msgstr "Προεπισκόπηση"
+
+#: application/gui/main_window.py:694
+msgid "Preview selected file"
+msgstr "Προεπισκόπηση επιλεγμένου αρχείου"
+
+#: application/gui/main_window.py:695
+msgid "Edit selected file"
+msgstr "Επεξεργασία επιλεγμένου αρχείου"
+
+#: application/gui/main_window.py:696 application/gui/input_dialog.py:916
+#: application/gui/input_dialog.py:1263
+msgid "Copy"
+msgstr "Αντιγραφή"
+
+#: application/gui/main_window.py:696
+msgid "Copy selected items from active to opposite list"
+msgstr "Αντιγραφή επιλεγμένων αντικειμένων από την ενεργή στην απέναντι λίστα"
+
+#: application/gui/main_window.py:697 application/gui/input_dialog.py:1015
+msgid "Move"
+msgstr "Μετακίνηση"
+
+#: application/gui/main_window.py:697
+msgid "Move selected items from active to opposite list"
+msgstr "Μετακίνηση επιλεγμένων αντικειμένων από την ενεργή στην απέναντι λίστα"
+
+#: application/gui/main_window.py:698
+msgid "Create"
+msgstr "Δημιουργία"
+
+#: application/gui/main_window.py:698
+msgid "Create new directory"
+msgstr "Δημιουργία νέου καταλόγου"
+
+#: application/gui/main_window.py:699
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: application/gui/main_window.py:699
+msgid "Delete selected items"
+msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+
+#: application/gui/main_window.py:813
+msgid "_Edit commands"
+msgstr "_Επεξεργασία εντολών"
+
+#: application/gui/main_window.py:1543
+msgid "Select items"
+msgstr "Επιλογή αντικειμένων"
+
+#: application/gui/main_window.py:1544 application/gui/main_window.py:1600
+msgid "Selection pattern (eg.: *.jpg):"
+msgstr "Μοτίβο επιλογής (π.χ.: *.jpg):"
+
+#: application/gui/main_window.py:1599
+msgid "Deselect items"
+msgstr "Αποεπιλογή αντικειμένων"
+
+#: application/gui/main_window.py:1636
+msgid "First level of compared directories is identical."
+msgstr "Το πρώτο επίπεδο των προς σύγκριση καταλόγων είναι πανομοιότυπο."
+
+#: application/gui/main_window.py:1760
+msgid ""
+"There was a problem starting external terminal application. Check if command"
+" is valid!"
+msgstr "Παρουσιάστηκε ένα πρόβλημα κατά την εκκίνηση εξωτερικής εφαρμογής τερματικού. Ελέγξτε αν η εντολή είναι έγκυρη!"
+
+#: application/gui/main_window.py:1967
+msgid "Main Menu"
+msgstr "Κύριο Μενού"
+
+#: application/gui/main_window.py:2033
+msgid "Restore handle position"
+msgstr "Επαναφορά θέσης λαβής"
+
+#: application/gui/main_window.py:2034
+msgid "Move handle to the left"
+msgstr "Μετακίνηση λαβής αριστερά"
+
+#: application/gui/main_window.py:2035
+msgid "Move handle to the right"
+msgstr "Μετακίνηση λαβής δεξιά"
+
+#: application/gui/main_window.py:2079
+msgid ""
+"Error saving configuration to files in your home directory. Make sure you "
+"have enough permissions."
+msgstr ""
+
+#: application/gui/main_window.py:2725
+msgid ""
+"Active object is not item list. Advanced rename tool needs files and "
+"directories."
+msgstr "Το ενεργό αντικείμενο δεν είναι λίστα αντικειμένων. Το εργαλείο μετονομασίας για προχωρημένους χρειάζεται αρχεία ή καταλόγους."
+
+#: application/gui/main_window.py:2740
+msgid ""
+"No rename extensions were found. Please enable basic rename options plugin "
+"and try again."
+msgstr "Δεν βρέθηκαν επεκτάσεις μετονομασίας. Ενεργοποιήστε το πρόσθετο βασικών επιλογών μετονομασίας και προσπαθήστε ξανά."
+
+#: application/gui/main_window.py:2767
+msgid ""
+"No extensions for finding files were found. Please enable basic find file "
+"options plugin and try again."
+msgstr "Δεν βρέθηκαν επεκτάσεις για αναζήτηση αρχείων. Ενεργοποιήστε το πρόσθετο βασικών επιλογών αναζήτησης αρχείων και προσπαθήστε ξανά."
+
+#: application/gui/main_window.py:2793
+msgid "Keyring is empty!"
+msgstr "Η κλειδοθήκη είναι άδεια!"
+
+#: application/gui/main_window.py:2806
+msgid ""
+"Keyring is not available. Make sure you have Python Gnome keyring module "
+"installed."
+msgstr "H κλειδοθήκη δεν είναι διαθέσιμη. Διασφαλίστε πως έχετε εγκατεστημένο το άρθρωμα Python Gnome keyring."
+
+#: application/gui/preferences_window.py:103
+msgid "Program restart required!"
+msgstr "Απαιτείται επανεκκίνηση του προγράμματος!"
+
+#: application/gui/preferences_window.py:139
+msgid ""
+"There are unsaved changes.\n"
+"Do you want to save them?"
+msgstr "Υπάρχουν μη αποθηκευμένες αλλαγές\nΘέλετε να τις αποθηκεύσετε;"
+
+#: application/gui/history_list.py:25
+msgid "History"
+msgstr "Ιστορικό"
+
+#: application/gui/history_list.py:48
+msgid "Path"
+msgstr "Διαδρομή"
+
+#: application/gui/history_list.py:65 application/widgets/location_menu.py:42
+msgid "Open"
+msgstr "Άνοιγμα"
+
+#: application/gui/history_list.py:74
+msgid "Open in tab"
+msgstr "Άνοιγμα σε καρτέλα"
+
+#: application/gui/history_list.py:75 application/widgets/location_menu.py:47
+msgid "Open selected path in new tab"
+msgstr "Άνοιγμα επιλεγμένης διαδρομής σε νέα καρτέλα"
+
+#: application/gui/history_list.py:78
+msgid "Open in opposite list"
+msgstr "Άνοιγμα στην απέναντι λίστα"
+
+#: application/gui/history_list.py:79 application/widgets/location_menu.py:52
+msgid "Open selected path in opposite list"
+msgstr "Άνοιγμα επιλεγμένης διαδρομής στην απέναντι λίστα"
+
+#: application/gui/properties_window.py:56
+#, python-brace-format
+msgid "{0} Properties"
+msgstr "{0} Ιδιότητες"
+
+#: application/gui/properties_window.py:87
+#: application/plugins/rename_extensions/default.py:265
+#: application/plugins/find_file_extensions/default.py:117
+msgid "Basic"
+msgstr "Βασική"
+
+#: application/gui/properties_window.py:91
+msgid "Permissions"
+msgstr "Δικαιώματα"
+
+#: application/gui/properties_window.py:95
+#: application/gui/input_dialog.py:1696
+msgid "Open With"
+msgstr "Άνοιγμα με"
+
+#: application/gui/properties_window.py:99
+msgid "Emblems"
+msgstr "Εμβλήματα"
+
+#: application/gui/properties_window.py:156
+#: application/plugins/file_list/file_list.py:1025
+msgid ""
+"File or directory with specified name already exists in current directory. "
+"Item could not be renamed."
+msgstr "Ένα αρχείο ή κατάλογος με το συγκεκριμένο όνομα υπάρχει ήδη στον κατάλογο. Το αντικείμενο δεν ήταν δυνατό να μετονομαστεί."
+
+#: application/gui/properties_window.py:191
+#: application/plugins/file_list/file_list.py:1010
+msgid "Error renaming specified item. Make sure you have enough permissions."
+msgstr "Σφάλμα κατά τη μετονομασία του συγκεκριμένου αντικειμένου. Διασφαλίστε ότι έχετε τα απαραίτητα δικαιώματα,"
+
+#: application/gui/properties_window.py:247
+msgid "item"
+msgid_plural "items"
+msgstr[0] "αντικείμενο"
+msgstr[1] "αντικείμενα"
+
+#: application/gui/properties_window.py:264
+#: application/gui/operation_dialog.py:361
+msgid "unknown"
+msgstr "άγνωστο"
+
+#: application/gui/properties_window.py:373
+msgid "Error changing owner or group"
+msgstr "Σφάλμα κατά την αλλαγή ιδιοκτήτη ή ομάδας"
+
+#: application/gui/properties_window.py:446
+#: application/gui/input_dialog.py:1337 application/gui/input_dialog.py:1516
+#: application/plugins/default_toolbar/bookmark_button.py:75
+#: application/plugins/file_list/dialogs.py:60
+#: application/plugins/file_list/dialogs.py:273
+#: application/plugins/file_list/dialogs.py:467
+msgid "Name:"
+msgstr "Όνομα"
+
+#: application/gui/properties_window.py:447
+#: application/gui/input_dialog.py:1524
+msgid "Type:"
+msgstr "Τύπος:"
+
+#: application/gui/properties_window.py:448
+#: application/gui/input_dialog.py:1194 application/gui/input_dialog.py:1211
+msgid "Size:"
+msgstr "Μέγεθος:"
+
+#: application/gui/properties_window.py:449
+#: application/gui/input_dialog.py:1350
+msgid "Location:"
+msgstr "Τοποθεσία:"
+
+#: application/gui/properties_window.py:450
+msgid "Volume:"
+msgstr "Τόμος:"
+
+#: application/gui/properties_window.py:451
+msgid "Accessed:"
+msgstr ""
+
+#: application/gui/properties_window.py:452
+#: application/gui/input_dialog.py:1195 application/gui/input_dialog.py:1212
+msgid "Modified:"
+msgstr "Τροποποιημένο:"
+
+#: application/gui/properties_window.py:527
+msgid "Access"
+msgstr "Πρόσβαση"
+
+#: application/gui/properties_window.py:533
+#: application/gui/properties_window.py:603
+#: application/gui/input_dialog.py:220
+msgid "User:"
+msgstr "Χρήστης:"
+
+#: application/gui/properties_window.py:537
+#: application/gui/properties_window.py:607
+#: application/gui/input_dialog.py:224
+msgid "Group:"
+msgstr "Ομάδα:"
+
+#: application/gui/properties_window.py:541
+#: application/gui/input_dialog.py:228
+msgid "Others:"
+msgstr "Άλλοι:"
+
+#: application/gui/properties_window.py:546
+#: application/gui/properties_window.py:559
+#: application/gui/properties_window.py:572
+#: application/gui/input_dialog.py:233 application/gui/input_dialog.py:246
+#: application/gui/input_dialog.py:259
+msgid "Read"
+msgstr "Ανάγνωση"
+
+#: application/gui/properties_window.py:550
+#: application/gui/properties_window.py:563
+#: application/gui/properties_window.py:576
+#: application/gui/input_dialog.py:237 application/gui/input_dialog.py:250
+#: application/gui/input_dialog.py:263
+msgid "Write"
+msgstr "Εγγραφή"
+
+#: application/gui/properties_window.py:554
+#: application/gui/properties_window.py:567
+#: application/gui/properties_window.py:580
+#: application/gui/input_dialog.py:241 application/gui/input_dialog.py:254
+#: application/gui/input_dialog.py:267
+msgid "Execute"
+msgstr "Εκτέλεση"
+
+#: application/gui/properties_window.py:585
+#: application/gui/input_dialog.py:272
+msgid "Octal:"
+msgstr "Οκταδικό:"
+
+#: application/gui/properties_window.py:597
+msgid "Ownership"
+msgstr "Ιδιοκτησία"
+
+#: application/gui/properties_window.py:671
+#, python-brace-format
+msgid "Select an application to open <i>{0}</i> and other files of type \"{1}\""
+msgstr ""
+
+#: application/gui/input_dialog.py:114
+msgid "Create link"
+msgstr "Δημιουργία συνδέσμου"
+
+#: application/gui/input_dialog.py:115
+msgid "Enter new link name:"
+msgstr "Εισάγετε νέο όνομα συνδέσμου"
+
+#: application/gui/input_dialog.py:123
+msgid "Original path:"
+msgstr "Αρχική διαδρομή:"
+
+#: application/gui/input_dialog.py:128
+msgid "Create hard link"
+msgstr "Δημιουργία κανονικού συνδέσμου (hard link)"
+
+#: application/gui/input_dialog.py:131 application/tools/find_files.py:75
+msgid "Browse"
+msgstr "Περιήγηση"
+
+#: application/gui/input_dialog.py:150
+msgid "Select original path"
+msgstr "Επιλέξτε την αρχική διαδρομή"
+
+#: application/gui/input_dialog.py:210
+msgid "Advanced options"
+msgstr "Επιλογές για προχωρημένους"
+
+#: application/gui/input_dialog.py:289 application/gui/input_dialog.py:924
+msgid "Save as default configuration"
+msgstr "Αποθήκευση ως προεπιλεγμένη ρύθμιση"
+
+#: application/gui/input_dialog.py:377
+#: application/plugins/file_list/dialogs.py:96
+#: application/plugins/file_list/dialogs.py:304
+#: application/plugins/file_list/dialogs.py:507
+msgid "Password:"
+msgstr "Κωδικός:"
+
+#: application/gui/input_dialog.py:379
+msgid "Confirm:"
+msgstr "Επιβεβαίωση"
+
+#: application/gui/input_dialog.py:434
+msgid "Create empty file"
+msgstr "Δημιουργία κενού αρχείου"
+
+#: application/gui/input_dialog.py:435
+msgid "Enter new file name:"
+msgstr "Εισαγωγή νέου ονόματος αρχείου:"
+
+#: application/gui/input_dialog.py:438
+msgid "Open file in editor"
+msgstr "Άνοιγμα αρχείου σε επεξεργαστή"
+
+#: application/gui/input_dialog.py:442
+#: application/plugins/rename_extensions/default.py:52
+#: application/plugins/rename_extensions/audio_metadata.py:31
+msgid "Template:"
+msgstr "Πρότυπο:"
+
+#: application/gui/input_dialog.py:502
+msgid "Empty File"
+msgstr "Κενό Αρχείο"
+
+#: application/gui/input_dialog.py:555
+#: application/plugin_base/item_list.py:1029
+msgid "Create directory"
+msgstr "Δημιουργία καταλόγου"
+
+#: application/gui/input_dialog.py:556
+msgid "Enter new directory name:"
+msgstr "Εισαγωγή νέου ονόματος καταλόγου:"
+
+#: application/gui/input_dialog.py:590
+msgid "Yes"
+msgstr "Ναι"
+
+#: application/gui/input_dialog.py:592
+msgid "No"
+msgstr "Όχι"
+
+#: application/gui/input_dialog.py:656
+msgid "Only files of this type:"
+msgstr "Μόνο αρχεία του συγκεκριμένου τύπου:"
+
+#: application/gui/input_dialog.py:663
+msgid "Operation queue:"
+msgstr "Σειρά αναμονής διεργασιών:"
+
+#: application/gui/input_dialog.py:683
+msgid "Affected item list"
+msgstr "Λίστα επηρεαζόμενων αντικειμένων"
+
+#: application/gui/input_dialog.py:706
+msgid "Set owner on destination"
+msgstr "Καθορισμός ιδιοκτήτη στον προορισμό"
+
+#: application/gui/input_dialog.py:707
+msgid "Set access mode on destination"
+msgstr ""
+
+#: application/gui/input_dialog.py:708
+msgid "Set date and time on destination"
+msgstr "Ορισμός ημερομηνίας και ώρας στον προορισμό"
+
+#: application/gui/input_dialog.py:709
+msgid "Silent mode"
+msgstr "Σιωπηλή κατάσταση λειτουργίας"
+
+#: application/gui/input_dialog.py:714
+msgid "Merge directories"
+msgstr "Συγχώνευση καταλόγων"
+
+#: application/gui/input_dialog.py:715
+msgid "Overwrite files"
+msgstr "Αντικατάσταση αρχείων"
+
+#: application/gui/input_dialog.py:719
+msgid ""
+"Silent mode will enable operation to finish without disturbing you. If any "
+"errors occur, they will be presented to you after completion."
+msgstr "Η σιωπηλή κατάσταση λειτουργίας θα επιτρέψει στην εργασία να ολοκληρωθεί χωρίς να σας ενοχλήσει. Αν συμβούν οποιουδήποτε είδους σφάλματα, θα παρουσιαστούν σε εσάς μετά την ολοκλήρωση."
+
+#: application/gui/input_dialog.py:724
+msgid "Follow symlinks"
+msgstr ""
+
+#: application/gui/input_dialog.py:800 application/gui/input_dialog.py:804
+#: application/gui/input_dialog.py:808 application/gui/input_dialog.py:812
+msgid "Not supported by file system provider"
+msgstr "Δεν υποστηρίζεται από τον πάροχο συστήματος αρχείων"
+
+#: application/gui/input_dialog.py:877
+msgid "Only options supported by file system providers were saved."
+msgstr "Μόνο οι επιλογές που υποστηρίζονται από τους παρόχους συστήματος αρχείων αποθηκεύονται."
+
+#: application/gui/input_dialog.py:901
+msgid "Copy item"
+msgid_plural "Copy items"
+msgstr[0] "Αντιγραφή αντικειμένου"
+msgstr[1] "Αντιγραφή αντικειμένων"
+
+#: application/gui/input_dialog.py:906
+#, python-brace-format
+msgid "Copy <b>{0}</b> item to:"
+msgid_plural "Copy <b>{0}</b> items to:"
+msgstr[0] "Αντιγραφή <b>{0}</b> αντικειμένου σε:"
+msgstr[1] "Αντιγραφή <b>{0}</b> αντικειμένων σε:"
+
+#: application/gui/input_dialog.py:915 application/gui/input_dialog.py:1014
+#: application/gui/input_dialog.py:1450
+#: application/gui/operation_dialog.py:205
+#: application/plugins/file_list/file_list.py:1977
+msgid "Cancel"
+msgstr "Ακύρωση"
+
+#: application/gui/input_dialog.py:1000
+msgid "Move item"
+msgid_plural "Move items"
+msgstr[0] "Μετακίνηση αντικειμένου"
+msgstr[1] "Μετακίνηση αντικειμένων"
+
+#: application/gui/input_dialog.py:1005
+#, python-brace-format
+msgid "Move <b>{0}</b> item to:"
+msgid_plural "Move <b>{0}</b> items to:"
+msgstr[0] "Μετακίνηση <b>{0}</b> αντικειμένου σε:"
+msgstr[1] "Μετακίνηση <b>{0}</b> αντικειμένων σε:"
+
+#: application/gui/input_dialog.py:1028
+msgid "Rename file/directory"
+msgstr "Μετονομασία αρχείου/καταλόγου"
+
+#: application/gui/input_dialog.py:1029
+msgid "Enter a new name for this item:"
+msgstr "Εισάγετε ένα νέο όνομα για το συγκεκριμένο αντικείμενο"
+
+#: application/gui/input_dialog.py:1093
+msgid "Select a new name for the destination"
+msgstr "Επιλέξτε ένα νέο όνομα για τον προορισμό"
+
+#: application/gui/input_dialog.py:1098
+msgid "Reset"
+msgstr "Επναφορά"
+
+#: application/gui/input_dialog.py:1102
+msgid "Apply this action to all files"
+msgstr "Εφαρμογή της συγκεκριμένης ενέργειας σε όλα τα αρχεία"
+
+#: application/gui/input_dialog.py:1137 application/gui/input_dialog.py:1451
+msgid "Skip"
+msgstr "Παράβλεψη"
+
+#: application/gui/input_dialog.py:1193
+msgid "Original"
+msgstr "Αρχικό"
+
+#: application/gui/input_dialog.py:1210
+msgid "Replace with"
+msgstr "Αντικατάσταση με"
+
+#: application/gui/input_dialog.py:1245
+msgid "File conflict"
+msgstr "Σύγκρουση αρχείων"
+
+#: application/gui/input_dialog.py:1250 application/gui/input_dialog.py:1260
+msgid "Replace"
+msgstr "Αντικατάσταση"
+
+#: application/gui/input_dialog.py:1267
+#, python-brace-format
+msgid "Replace file \"{0}\"?"
+msgstr "Αντικατάσταση αρχείου \"{0}\";"
+
+#: application/gui/input_dialog.py:1273
+#, python-brace-format
+msgid ""
+"Another file with the same name already exists in \"{0}\". Replacing it will"
+" overwrite its content."
+msgstr "Ένα άλλο αρχείο με το ίδιο όνομα υπάρχει ήδη στο \"{0}\". Η αντικατάστασή σου θα προκαλέσει απώλεια του περιεχομένου του."
+
+#: application/gui/input_dialog.py:1286
+msgid "Directory conflict"
+msgstr "Σύγκρουση καταλόγων"
+
+#: application/gui/input_dialog.py:1290
+msgid "Merge"
+msgstr "Συγχώνευση"
+
+#: application/gui/input_dialog.py:1300
+#, python-brace-format
+msgid "Merge directory \"{0}\"?"
+msgstr "Συγχώνευση καταλόγου \"{0}\"?"
+
+#: application/gui/input_dialog.py:1306
+#, python-brace-format
+msgid ""
+"Directory with the same name already exists in \"{0}\". Merging will ask for"
+" confirmation before replacing any files in the directory that conflict with"
+" the files being copied."
+msgstr "Υπάρχει ήδη κατάλογος με το ίδιο όνομα στο \"{0}\". Θα εμφανιστεί διάλογος επιβεβαίωσης πριν αντικατασταθεί οποιοδήποτε αρχείο που συγκρούεται με αρχεία που αντιγράφονται."
+
+#: application/gui/input_dialog.py:1324
+msgid "Add bookmark"
+msgstr "Προσθήκη σελιδοδείκτη"
+
+#: application/gui/input_dialog.py:1342
+msgid ""
+"Underscore in the label text indicates the next character should be "
+"underlined and used for the mnemonic accelerator key if it is the first "
+"character so marked."
+msgstr ""
+
+#: application/gui/input_dialog.py:1417
+msgid "Operation error"
+msgstr "Σφάλμα λειτουργίας"
+
+#: application/gui/input_dialog.py:1452
+msgid "Skip all"
+msgstr "Παράβλεψη όλων"
+
+#: application/gui/input_dialog.py:1453
+msgid "Retry"
+msgstr "Επανάληψη"
+
+#: application/gui/input_dialog.py:1501
+msgid "Add toolbar widget"
+msgstr "Προσθήκη γραφικού στοιχείου εργαλειοθήκης"
+
+#: application/gui/input_dialog.py:1610
+msgid "Select range"
+msgstr "Επιλογή εύρους"
+
+#: application/gui/input_dialog.py:1611
+msgid "Select part of the text:"
+msgstr "Επιλογή μέρους του κειμένου:"
+
+#: application/gui/input_dialog.py:1635
+msgid "Add application"
+msgstr "Προσθήκη εφαρμογής:"
+
+#: application/gui/input_dialog.py:1636
+msgid "Application name:"
+msgstr "Όνομα εφαρμογής:"
+
+#: application/gui/input_dialog.py:1646
+msgid "Select"
+msgstr "Επιλογή"
+
+#: application/gui/input_dialog.py:1714
+msgid "Select application:"
+msgstr "Επιλογή εφαρμογής:"
+
+#: application/gui/input_dialog.py:1717
+#, python-brace-format
+msgid "Open <i>{0}</i> with:"
+msgstr "Άνοιγμα του <i>{0}</i> με:"
+
+#: application/gui/input_dialog.py:1753
+msgid "Use a custom command"
+msgstr "Χρήση προσαρμοσμένης εντολής"
+
+#: application/gui/operation_dialog.py:90 application/gui/error_list.py:46
+msgid "Source:"
+msgstr "Πηγή:"
+
+#: application/gui/operation_dialog.py:91 application/gui/error_list.py:52
+msgid "Destination:"
+msgstr "Προορισμός:"
+
+#: application/gui/operation_dialog.py:148
+msgid "ETA:"
+msgstr ""
+
+#: application/gui/operation_dialog.py:149
+msgid "Speed:"
+msgstr "Ταχύτητα:"
+
+#: application/gui/operation_dialog.py:150
+msgid "Total size:"
+msgstr "Συνολικό μέγεθος:"
+
+#: application/gui/operation_dialog.py:151
+msgid "Total count:"
+msgstr "Σύνολο:"
+
+#: application/gui/operation_dialog.py:204
+msgid "Minimize"
+msgstr "Ελαχιστοποίηση"
+
+#: application/gui/operation_dialog.py:212
+#: application/gui/operation_dialog.py:267
+msgid "Pause"
+msgstr "Παύση"
+
+#: application/gui/operation_dialog.py:260
+msgid "Resume"
+msgstr "Επιστροφή"
+
+#: application/gui/operation_dialog.py:272
+msgid "Are you sure about canceling current operation?"
+msgstr "Είστε σίγουροι πως θέλετε να ακυρώσετε την τρέχουσα εργασία;"
+
+#: application/gui/operation_dialog.py:342
+msgid "second"
+msgid_plural "seconds"
+msgstr[0] "δευτερόλεπτο"
+msgstr[1] "δευτερόλεπτα"
+
+#: application/gui/operation_dialog.py:348
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "λεπτό"
+msgstr[1] "λεπτά"
+
+#: application/gui/operation_dialog.py:355
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] "ώρα"
+msgstr[1] "ώρες"
+
+#: application/gui/operation_dialog.py:500
+msgid "Copy Selection"
+msgstr "Αντιγραφή επιλογής"
+
+#: application/gui/operation_dialog.py:521
+msgid "Move Selection"
+msgstr "Μετακίνηση επιλογής"
+
+#: application/gui/operation_dialog.py:546
+msgid "Delete Selection"
+msgstr "Διαγραφή επιλογής"
+
+#: application/gui/operation_dialog.py:547
+msgid "Removing items..."
+msgstr "Αφαίρεση αντικειμένων"
+
+#: application/gui/operation_dialog.py:573
+msgid "Rename Items"
+msgstr "Μετονομασία αντικειμένων"
+
+#: application/gui/operation_dialog.py:574
+msgid "Renaming items..."
+msgstr "Μετονομασία αντικειμένων..."
+
+#: application/gui/keyring_manager_window.py:27
+msgid "Keyring manager"
+msgstr "Διαχειριστής κλειδοθήκης"
+
+#: application/gui/keyring_manager_window.py:51
+msgid "ID"
+msgstr "ID"
+
+#: application/gui/keyring_manager_window.py:54
+msgid "Modified"
+msgstr "Τροποποιημένο"
+
+#: application/gui/keyring_manager_window.py:127
+msgid "Please select an entry to delete!"
+msgstr "Επιλέξτε μια καταχώριση προς διαγραφή!"
+
+#: application/gui/keyring_manager_window.py:143
+#, python-brace-format
+msgid ""
+"You are about to remove the following entry from your keyring. If you do this you will have to provide password manually when needed. Are you sure?\n"
+"\n"
+"{0}"
+msgstr ""
+
+#: application/gui/keyring_manager_window.py:171
+msgid "Please select an entry to change!"
+msgstr "Επιλέξτε μια καταχώριση προς αλλαγή!"
+
+#: application/gui/keyring_manager_window.py:178
+msgid "Change password"
+msgstr "Αλλαγή κωδικού"
+
+#: application/gui/keyring_manager_window.py:179
+msgid "Enter new password for selected keyring entry."
+msgstr "Εισάγετε νέο κωδικό για την επιλεγμένη καταχώριση κλειδοθήκης."
+
+#: application/gui/keyring_manager_window.py:194
+msgid "Password was changed!"
+msgstr "Ο κωδικός άλλαξε"
+
+#: application/gui/keyring_manager_window.py:209
+msgid "Passwords do not match! Please try again."
+msgstr "Οι κωδικοί δεν ταιριάζουν. Προσπαθήστε ξανά."
+
+#: application/gui/about_window.py:109
+msgid "Twin-panel file manager for Linux."
+msgstr "Διαχειριστής αρχείων με διπλό πλαίσιο για το Linux."
+
+#: application/gui/about_window.py:112
+msgid "Copyright © 2010-2018 by Mladen Mijatov and contributors."
+msgstr ""
+
+#: application/gui/error_list.py:21
+msgid "Error list"
+msgstr "Λίστα σφαλμάτων"
+
+#: application/gui/error_list.py:40
+msgid "For:"
+msgstr "Για:"
+
+#: application/sunflower.py:95
+msgid "Show version number"
+msgstr ""
+
+#: application/sunflower.py:104 application/sunflower.py:113
+msgid "Skip loading additional plugins"
+msgstr ""
+
+#: application/sunflower.py:122
+msgid "Open new tab on the left notebook"
+msgstr ""
+
+#: application/sunflower.py:131
+msgid "Open new tab on the right notebook"
+msgstr ""
+
+#: application/sunflower.py:140
+msgid "Open terminal tab on the left notebook"
+msgstr ""
+
+#: application/sunflower.py:149
+msgid "Open terminal tab on the right notebook"
+msgstr ""
+
+#: application/widgets/location_menu.py:57
+msgid "Open terminal at selected path"
+msgstr ""
+
+#: application/widgets/location_menu.py:102
+msgid "User defined"
+msgstr ""
+
+#: application/widgets/location_menu.py:119
+msgid "System wide"
+msgstr ""
+
+#: application/widgets/title_bar.py:52
+msgid "Context menu"
+msgstr "Μενού περιβάλλοντος"
+
+#: application/widgets/tab_label.py:73
+msgid "Unlock"
+msgstr "Ξεκλείδωμα"
+
+#: application/widgets/tab_label.py:73
+msgid "Lock"
+msgstr "Κλείδωμα"
+
+#: application/widgets/tab_label.py:77 application/plugin_base/plugin.py:135
+msgid "Duplicate tab"
+msgstr "Διπλασιασμός καρτέλας"
+
+#: application/widgets/tab_label.py:81
+msgid "Move to opposite panel"
+msgstr "Μετακίνηση στο απέναντι πλαίσιο"
+
+#: application/widgets/tab_label.py:88
+msgid "Close Tab"
+msgstr "Κλείσιμο καρτέλας"
+
+#: application/widgets/tab_label.py:94
+msgid "Close All"
+msgstr "Κλείσιμο όλων"
+
+#: application/widgets/tab_label.py:99
+msgid "Close Other Tabs"
+msgstr "Κλείσιμο Λοιπών Καρτελών"
+
+#: application/queue.py:32 application/plugins/sessions/plugin.py:6
+msgid "Default"
+msgstr "Προεπιλεγμένη"
+
+#: application/queue.py:45
+msgid "New queue"
+msgstr "Νέα σειρά"
+
+#: application/queue.py:138
+msgid "New operation queue"
+msgstr "Νέα εργασία στην σειρά"
+
+#: application/queue.py:139
+msgid "Enter name for new operation queue:"
+msgstr "Eισάγετε όνομα για τη νέα εργασία στη σειρά"
+
+#: application/queue.py:155
+msgid "Operation queue with specified name already exists."
+msgstr "Υπάρχει ήδη εργασία στη σειρά με το συγκεκριμένο όνομα."
+
+#: application/mounts.py:63
+msgid "Specified item can not be unmounted."
+msgstr "Το συγκεκριμένο αντικείμενο δεν είναι δυνατό να αποπροσαρτηθεί."
+
+#: application/keyring.py:57
+msgid "Keyring is unlocked"
+msgstr "Η κλειδοθήκη είναι ξεκλείδωτη"
+
+#: application/keyring.py:58
+msgid "Keyring is locked"
+msgstr "Η κλειδοθήκη είναι κλειδωμένη"
+
+#: application/keyring.py:105
+msgid "Unlock keyring"
+msgstr "Ξεκλείδωμα κλειδοθήκης"
+
+#: application/keyring.py:106
+msgid "Please enter your keyring password:"
+msgstr "Εισάγετε τον κωδικό της κλειδοθήκης:"
+
+#: application/keyring.py:306
+msgid "New keyring"
+msgstr "Νέα κλειδοθήκη"
+
+#: application/keyring.py:308
+msgid ""
+"We need to create a new keyring to safely store your passwords. Choose the "
+"password you want to use for it."
+msgstr "Χρειάζεται να δημιουργηθεί νέα κλειδοθήκη για την ασφαλή αποθήκευση των κωδικών σας. Επιλέξτε ένα κωδικό για χρήση με αυτή."
+
+#: application/toolbar.py:130
+msgid ""
+"Error adding widget. You need to enter unique name and select widget type."
+msgstr "Σφάλμα κατά την προσθήκη γραφικού στοιχείου. Χρειάζεται να εισάγετε μοναδικό όνομα και να επιλέξετε τον τύπο του γραφικού στοιχείου."
+
+#: application/toolbar.py:145
+msgid ""
+"Widget with specified name already exists. You need to enter unique name and"
+" select widget type."
+msgstr "Το γραφικό στοιχείο με το συγκεκριμένο όνομα ήδη υπάρχει. Πρέπει να επιλέξετε ένα μοναδικό όνομα και να επιλέξετε τον τύπο του στοιχείου."
+
+#: application/toolbar.py:179
+msgid ""
+"Plugin used to create selected toolbar widget is not active or not present. "
+"In order to edit this entry you need to activate plugin used to create it."
+msgstr "Το πρόσθετο που χρησιμοποιείται για τη δημιουργία του επιλεγμένου γραφικού στοιχείου εργαλειοθήκης δεν είναι ενεργό ή  δεν υπάρχει. Για να επεξεργαστείτε τη συγκεκριμένη καταχώριση χρειάζεται να ενεργοποιήσετε το πρόσθετο που χρησιμοποιείται για τη δημιουργία της."
+
+#: application/plugins/default_toolbar/parent_directory_button.py:14
+#: application/plugins/default_toolbar/parent_directory_button.py:15
+#: application/plugin_base/item_list.py:220
+msgid "Go to parent directory"
+msgstr "Μετακίνηση στο γονικό κατάλογο"
+
+#: application/plugins/default_toolbar/bookmark_button.py:59
+msgid "Configure bookmark button"
+msgstr "Ρύθμιση κουμπιού σελιδοδείκτη"
+
+#: application/plugins/default_toolbar/bookmark_button.py:85
+msgid "Path:"
+msgstr "Διαδρομή:"
+
+#: application/plugins/default_toolbar/bookmark_button.py:89
+msgid "Show label"
+msgstr "Εμφάνιση ετικέτας"
+
+#: application/plugins/default_toolbar/plugin.py:23
+msgid "Parent directory button"
+msgstr "Κουμπί γονικού καταλόγου"
+
+#: application/plugins/default_toolbar/plugin.py:29
+msgid "Home directory button"
+msgstr "Κουμπί καταλόγου home"
+
+#: application/plugins/default_toolbar/plugin.py:35
+msgid "Bookmark button"
+msgstr "Κουμπί σελιδοδείκτη"
+
+#: application/plugins/default_toolbar/plugin.py:41
+msgid "Bookmarks menu"
+msgstr "Μενού σελιδοδεικτών"
+
+#: application/plugins/default_toolbar/plugin.py:47
+msgid "Separator"
+msgstr "Διαχωριστικό"
+
+#: application/plugins/default_toolbar/plugin.py:102
+msgid "This widget has no configuration dialog."
+msgstr "Το γραφικό στοιχείο δεν έχει κάποιο διάλογο ρυθμίσεων."
+
+#: application/plugins/owner_column/plugin.py:65
+msgid "Owner"
+msgstr "Ιδιοκτήτης"
+
+#: application/plugins/owner_column/plugin.py:93
+msgid "Group"
+msgstr "Ομάδα"
+
+#: application/plugins/file_list/plugin.py:11
+msgid "Local file list"
+msgstr "Λίστα τοπικών αρχείων"
+
+#: application/plugins/file_list/plugin.py:12
+msgid "Trash can"
+msgstr "Απορρίμματα"
+
+#: application/plugins/file_list/file_list.py:132
+msgid "Ext"
+msgstr "Επέκταση"
+
+#: application/plugins/file_list/file_list.py:134
+msgid "Mode"
+msgstr "Δικαιώματα"
+
+#: application/plugins/file_list/file_list.py:135
+#: application/plugins/rename_extensions/audio_metadata.py:26
+msgid "Date"
+msgstr "Ημερομηνία"
+
+#: application/plugins/file_list/file_list.py:492
+msgid "Invalid selection!"
+msgstr "Άκυρη επιλογή!"
+
+#: application/plugins/file_list/file_list.py:667
+msgid ""
+"There was an error creating directory. Make sure you have enough "
+"permissions. "
+msgstr "Σφάλμα κατά τη δημιουργία καταλόγου. Διασφαλίστε ότι έχετε τα  απαραίτητα δικαιώματα."
+
+#: application/plugins/file_list/file_list.py:694
+#, python-brace-format
+msgid "File already exists: {0}"
+msgstr "Το αρχείο ήδη υπάρχει: {0}"
+
+#: application/plugins/file_list/file_list.py:697
+#, python-brace-format
+msgid "Directory with same name exists: {0}"
+msgstr "Υπάρχει κατάλογος με το ίδιο όνομα: {0}"
+
+#: application/plugins/file_list/file_list.py:733
+msgid ""
+"There was an error creating file. Make sure you have enough permissions."
+msgstr "Σφάλμα κατά τη δημιουργία αρχείου. Διασφαλίστε ότι έχετε τα απαραίτητα δικαιώματα."
+
+#: application/plugins/file_list/file_list.py:795
+msgid "Error creating new link."
+msgstr "Σφάλμα κατά τη δημιουργία νέου συνδέσμου"
+
+#: application/plugins/file_list/file_list.py:811
+msgid "Current file system does not support linking."
+msgstr "Το τρέχων σύστημα αρχείων δεν επιτρέπει τη δημιουργία συνδέσμων"
+
+#: application/plugins/file_list/file_list.py:835
+#, python-brace-format
+msgid ""
+"You are about to <i><b>delete</b></i> {0} item.\n"
+"Are you sure about this?"
+msgid_plural ""
+"You are about to <i><b>delete</b></i> {0} items.\n"
+"Are you sure about this?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: application/plugins/file_list/file_list.py:844
+#, python-brace-format
+msgid ""
+"You are about to move {0} item to <i><b>trash</b></i>.\n"
+"Are you sure about this?"
+msgid_plural ""
+"You are about to move {0} items to <i><b>trash</b></i>.\n"
+"Are you sure about this?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: application/plugins/file_list/file_list.py:1194
+msgid "Other application..."
+msgstr "Άλλη εφαρμογή..."
+
+#: application/plugins/file_list/file_list.py:1866
+msgid "Free:"
+msgstr "Ελεύθερα:"
+
+#: application/plugins/file_list/file_list.py:1867
+msgid "Total:"
+msgstr "Σύνολο:"
+
+#: application/plugins/file_list/file_list.py:1937
+msgid "Copy here"
+msgstr "Αντιγραφή εδώ"
+
+#: application/plugins/file_list/file_list.py:1942
+msgid "Move here"
+msgstr "Μετακίνηση εδώ"
+
+#: application/plugins/file_list/file_list.py:1947
+msgid "Link here"
+msgstr "Δημιουργία συνδέσμου εδώ"
+
+#: application/plugins/file_list/file_list.py:2326
+msgid "No such file or directory"
+msgstr "Δεν υπάρχει τέτοιο αρχείο ή κατάλογος"
+
+#: application/plugins/file_list/file_list.py:2345
+#, python-brace-format
+msgid ""
+"Error changing working directory to:\n"
+"{1}\n"
+"\n"
+"{0}\n"
+"\n"
+"Would you like to retry?"
+msgstr "Σφάλμα κατά την αλλαγή καταλόγου σε:\n{1}\n\n{0}\n\nΘα θέλατε να ξαναπροσπαθήσετε;"
+
+#: application/plugins/file_list/trash_list.py:27
+msgid "Empty trash"
+msgstr "Άδειασμα απορριμάτων"
+
+#: application/plugins/file_list/trash_list.py:40
+msgid "All items in the Trash will be permanently deleted. Are you sure?"
+msgstr "Όλα τα αντικείμενα στα απορρίμματα θα διαγραφούν για πάντα. Είστε σίγουροι;"
+
+#: application/plugins/file_list/gio_extension.py:65
+msgid "Mount operation"
+msgstr "Λειτουργία προσάρτησης"
+
+#: application/plugins/file_list/gio_extension.py:110
+#, python-brace-format
+msgid ""
+"Unable to mount:\n"
+"{0}\n"
+"\n"
+"{1}"
+msgstr "Αδυναμία προσάρτησης:\n{0}\n\n{1}"
+
+#: application/plugins/file_list/gio_extension.py:163
+#: application/plugins/file_list/gio_extension.py:517
+#: application/plugins/file_list/gio_extension.py:869
+msgid "URI"
+msgstr "URI"
+
+#: application/plugins/file_list/gio_extension.py:192
+#: application/plugins/file_list/gio_extension.py:546
+#: application/plugins/file_list/gio_extension.py:898
+msgid "Mount"
+msgstr "Προσάρτηση"
+
+#: application/plugins/file_list/gio_extension.py:195
+#: application/plugins/file_list/gio_extension.py:549
+#: application/plugins/file_list/gio_extension.py:901
+msgid "Unmount"
+msgstr "Αποπροσάρτηση"
+
+#: application/plugins/file_list/gio_extension.py:421
+#: application/plugins/file_list/gio_extension.py:724
+#: application/plugins/file_list/gio_extension.py:1078
+#, python-brace-format
+msgid ""
+"You are about to remove '{0}'.\n"
+"Are you sure about this?"
+msgstr "Πρόκειται να διαγράψετε το '{0}'.\nΕίστε σίγουροι για αυτό;"
+
+#: application/plugins/file_list/dialogs.py:38
+msgid "Create Samba mount"
+msgstr "Δημιουργία σημείου προσάρτησης Samba"
+
+#: application/plugins/file_list/dialogs.py:69
+#: application/plugins/file_list/dialogs.py:282
+#: application/plugins/file_list/dialogs.py:476
+msgid "Server:"
+msgstr "Εξυπηρετητής:"
+
+#: application/plugins/file_list/dialogs.py:77
+msgid "Share:"
+msgstr "Κοινή χρήση:"
+
+#: application/plugins/file_list/dialogs.py:79
+#: application/plugins/file_list/dialogs.py:289
+#: application/plugins/file_list/dialogs.py:492
+msgid "Directory:"
+msgstr "Κατάλογος:"
+
+#: application/plugins/file_list/dialogs.py:94
+msgid "Domain:"
+msgstr "Διεύθυνση:"
+
+#: application/plugins/file_list/dialogs.py:95
+#: application/plugins/file_list/dialogs.py:303
+#: application/plugins/file_list/dialogs.py:506
+msgid "Username:"
+msgstr "Όνομα χρήστη:"
+
+#: application/plugins/file_list/dialogs.py:173
+msgid ""
+"One or more required fields are empty. Please make sure you have entered "
+"name, server and share."
+msgstr ""
+
+#: application/plugins/file_list/dialogs.py:251
+msgid "Create FTP mount"
+msgstr "Δημιουργία σημείου προσάρτησης FTP"
+
+#: application/plugins/file_list/dialogs.py:370
+#: application/plugins/file_list/dialogs.py:577
+msgid ""
+"One or more required fields is empty. Please make sure you have entered name"
+" and server."
+msgstr "Ένα ή περισσότερα από τα απαιτούμενα πεδία είναι άδειο. Διασφαλίστε ότι έχει εισάγει όνομα και εξυπηρετητή."
+
+#: application/plugins/file_list/dialogs.py:435
+msgid "Create SFTP mount"
+msgstr "Δημιουργία σημείου προσάρτησης SFTP"
+
+#: application/plugins/file_list/dialogs.py:445
+msgid "Create WebDav mount"
+msgstr "Δημιουργία σημείου προσάρτησης WebDav"
+
+#: application/plugins/file_list/dialogs.py:483
+msgid "Server type:"
+msgstr "Τύπος εξυπηρετητή:"
+
+#: application/plugins/sessions/plugin.py:32
+#: application/plugins/sessions/plugin.py:356
+msgid "Sessions"
+msgstr "Συνεδρίες"
+
+#: application/plugins/sessions/plugin.py:65
+msgid "Locked"
+msgstr "Κλειδωμένη"
+
+#: application/plugins/sessions/plugin.py:85
+msgid "Move up"
+msgstr "Μετακίνηση πάνω"
+
+#: application/plugins/sessions/plugin.py:92
+msgid "Move down"
+msgstr "Μετακίνηση κάτω"
+
+#: application/plugins/sessions/plugin.py:182
+msgid "Session with this name already exists."
+msgstr "Υπάρχει ήδη συνεδρία με το συγκεκριμένο όνομα."
+
+#: application/plugins/sessions/plugin.py:212
+msgid "New session"
+msgstr "Νέα συνεδρία"
+
+#: application/plugins/sessions/plugin.py:320
+msgid "Locked session preserves tab layout at the time of locking."
+msgstr ""
+
+#: application/plugins/sessions/plugin.py:323
+msgid "Manage sessions"
+msgstr "Διαχείριση συνεδριών"
+
+#: application/plugins/sessions/plugin.py:326
+msgid "Save session"
+msgstr "Αποθήκευση συνεδρίας"
+
+#: application/plugins/sessions/plugin.py:360
+msgid "Show session list"
+msgstr ""
+
+#: application/plugins/rename_extensions/letter_case.py:15
+#: application/plugins/rename_extensions/letter_case.py:23
+msgid "Do nothing"
+msgstr "Καμία ενέργεια"
+
+#: application/plugins/rename_extensions/letter_case.py:16
+msgid "Capitalize"
+msgstr "Με Το Πρώτο Γράμμα Κεφαλαίο"
+
+#: application/plugins/rename_extensions/letter_case.py:17
+#: application/plugins/rename_extensions/letter_case.py:24
+msgid "Upper case"
+msgstr "Κεφαλαία"
+
+#: application/plugins/rename_extensions/letter_case.py:18
+#: application/plugins/rename_extensions/letter_case.py:25
+msgid "Lower case"
+msgstr "Πεζά"
+
+#: application/plugins/rename_extensions/letter_case.py:19
+msgid "Swap case"
+msgstr "Εναλλαγή μορφής"
+
+#: application/plugins/rename_extensions/letter_case.py:29
+msgid "Item name:"
+msgstr "Όνομα αντικειμένου:"
+
+#: application/plugins/rename_extensions/letter_case.py:32
+msgid "Extension:"
+msgstr "Επέκταση"
+
+#: application/plugins/rename_extensions/letter_case.py:87
+msgid "Letter Case"
+msgstr "Μορφή γραμμάτων"
+
+#: application/plugins/rename_extensions/default.py:40
+msgid ""
+"<b>Template syntax</b>\n"
+"[N]\tItem name\n"
+"[E]\tExtension\n"
+"[C]\tCounter\n"
+"\n"
+"For name and extension you can\n"
+"use range in format [N#-#]."
+msgstr ""
+
+#: application/plugins/rename_extensions/default.py:76
+msgid "Part of name"
+msgstr "Μέρος ονόματος"
+
+#: application/plugins/rename_extensions/default.py:81
+msgid "Extension"
+msgstr "Επέκταση"
+
+#: application/plugins/rename_extensions/default.py:84
+msgid "Part of extension"
+msgstr "Μέρος της επέκτασης"
+
+#: application/plugins/rename_extensions/default.py:89
+#: application/plugins/rename_extensions/default.py:103
+msgid "Counter"
+msgstr "Μετρητής"
+
+#: application/plugins/rename_extensions/default.py:109
+msgid "Start:"
+msgstr "Έναρξη:"
+
+#: application/plugins/rename_extensions/default.py:116
+msgid "Step:"
+msgstr "Βήμα:"
+
+#: application/plugins/rename_extensions/default.py:123
+msgid "Digits:"
+msgstr "Ψηφία:"
+
+#: application/plugins/rename_extensions/default.py:252
+msgid "Item list is empty. Unable to get item for range selection!"
+msgstr "Η λίστα αντικειμένων είναι άδεια. Αδυναμία εύρεσης αντικειμένων στο εύρος επιλογής!"
+
+#: application/plugins/rename_extensions/audio_metadata.py:22
+msgid "Album"
+msgstr "Άλμπουμ"
+
+#: application/plugins/rename_extensions/audio_metadata.py:23
+msgid "Artist"
+msgstr "Καλλιτέχνης"
+
+#: application/plugins/rename_extensions/audio_metadata.py:25
+msgid "Genre"
+msgstr "Είδος"
+
+#: application/plugins/rename_extensions/audio_metadata.py:27
+msgid "Track number"
+msgstr "Αριθμός κομματιού"
+
+#: application/plugins/rename_extensions/audio_metadata.py:39
+msgid "Replace:"
+msgstr "Αντικατάσταση:"
+
+#: application/plugins/rename_extensions/audio_metadata.py:47
+msgid "With:"
+msgstr "Με:"
+
+#: application/plugins/rename_extensions/audio_metadata.py:60
+msgid "Template syntax"
+msgstr "Πρότυπη σύνταξη"
+
+#: application/plugins/rename_extensions/audio_metadata.py:71
+msgid "Character replacement"
+msgstr "Αντικατάσταση χαρακτήρων"
+
+#: application/plugins/rename_extensions/audio_metadata.py:78
+msgid ""
+"In order to use this extension you need <b>mutagen</b> module installed!"
+msgstr "Για να χρησιμοποιήσετε αυτήν την επέκταση πρέπει να έχετε το άρθρωμα <b>mutagen<b/> εγκατεστημένο!"
+
+#: application/plugins/rename_extensions/audio_metadata.py:110
+msgid "Audio Metadata"
+msgstr "Μεταδεδομένα Ήχου"
+
+#: application/plugins/find_file_extensions/size.py:20
+msgid "Match file size"
+msgstr "Ταίριασμα μεγέθους αρχείου"
+
+#: application/plugins/find_file_extensions/size.py:24
+msgid "Minimum:"
+msgstr "Ελάχιστο:"
+
+#: application/plugins/find_file_extensions/size.py:26
+#: application/plugins/find_file_extensions/size.py:30
+msgid "MB"
+msgstr "MB"
+
+#: application/plugins/find_file_extensions/size.py:28
+msgid "Maximum:"
+msgstr "Μέγιστο:"
+
+#: application/plugins/find_file_extensions/default.py:33
+msgid ""
+"<b>Pattern matching</b>\n"
+"*\t\tEverything\n"
+"?\t\tAny single character\n"
+"[seq]\tAny character in <i>seq</i>\n"
+"[!seq]\tAny character <u>not</u> in <i>seq</i>"
+msgstr "<b>Ταίριασμα με μοτίβο</b>\n*\t\tΟτιδήποτε\n?\t\tΟποιοσδήποτε μονός χαρακτήρας\n[seq]\tΟποιοσδήποτε χαρακτήρας σε <i>seq</i>\n[!seq]\tΟποιοσδήποτε χαρακτήρας <u>όχι</u> σε <i>seq</i>"
+
+#: application/plugins/find_file_extensions/default.py:48
+#: application/plugins/find_file_extensions/contents.py:23
+msgid "Search for:"
+msgstr "Αναζήτηση για:"
+
+#: application/plugins/find_file_extensions/default.py:54
+msgid "Case sensitive"
+msgstr "Με ταίριασμα πεζών-κεφαλαίων"
+
+#: application/plugins/find_file_extensions/contents.py:44
+msgid "Content"
+msgstr "Περιεχόμενο"
+
+#: application/plugins/system_terminal/plugin.py:14
+msgid "System terminal"
+msgstr "Τερματικό συστήματος"
+
+#: application/plugins/gvim_viewer/plugin.py:50
+msgid "GVim"
+msgstr "GVim"
+
+#: application/plugin_base/rename_extension.py:22
+#: application/plugin_base/find_extension.py:23
+msgid "Use this extension"
+msgstr "Χρήση αυτής της επέκτασης"
+
+#: application/plugin_base/plugin.py:129
+msgid "Plugin Base"
+msgstr "Βάση προσθέτων"
+
+#: application/plugin_base/plugin.py:132
+#: application/plugin_base/terminal.py:266
+msgid "Focus opposite object"
+msgstr "Εστίαση στο απέναντι αντικείμενο"
+
+#: application/plugin_base/plugin.py:133
+msgid "Next tab"
+msgstr "Επόμενη καρτέλα"
+
+#: application/plugin_base/plugin.py:134
+msgid "Previous tab"
+msgstr "Προηγούμενη καρτέλα"
+
+#: application/plugin_base/plugin.py:136
+#: application/plugin_base/terminal.py:267
+msgid "Close tab"
+msgstr "Κλείσιμο καρτέλας"
+
+#: application/plugin_base/plugin.py:137
+msgid "Focus left object"
+msgstr "Εστίαση αριστερού αντικειμένου"
+
+#: application/plugin_base/plugin.py:138
+msgid "Focus right object"
+msgstr "Εστίαση δεξιού αντικειμένου"
+
+#: application/plugin_base/terminal.py:68
+msgid "Open current directory"
+msgstr "Άνοιγμα τρέχοντος καταλόγου"
+
+#: application/plugin_base/terminal.py:108
+msgid ""
+"\n"
+"\n"
+"Python VTE module is not installed on this system!"
+msgstr "\n\nΤο άρθρωμα Python VTE δεν έχει εγκατασταθεί σε αυτό το σύστημα!"
+
+#: application/plugin_base/terminal.py:177
+msgid "Terminal menu"
+msgstr "Μενού τερματικού"
+
+#: application/plugin_base/terminal.py:263
+#: application/plugin_base/item_list.py:219
+msgid "Create terminal tab"
+msgstr "Δημιουργία καρτέλας τερματικού"
+
+#: application/plugin_base/terminal.py:264
+#: application/plugin_base/item_list.py:214
+msgid "Copy selection to clipboard"
+msgstr "Αντιγραφή επιλογής στο πρόχειρο"
+
+#: application/plugin_base/terminal.py:265
+msgid "Paste from clipboard"
+msgstr "Επικόλληση από το πρόχειρο"
+
+#: application/plugin_base/terminal.py:310
+#, python-brace-format
+msgid ""
+"You are about to feed child process with following data. Are you sure?\n"
+"\n"
+"{0}"
+msgstr ""
+
+#: application/plugin_base/item_list.py:73
+msgid "Directories (selected/total)"
+msgstr "Κατάλογοι (επιλεγμένοι/σύνολο)"
+
+#: application/plugin_base/item_list.py:74
+msgid "Files (selected/total)"
+msgstr "Αρχεία (επιλεγμένα/σύνολο)"
+
+#: application/plugin_base/item_list.py:75
+msgid "Size (selected/total)"
+msgstr "Μέγεθος (επιλεγμένα/σύνολο)"
+
+#: application/plugin_base/item_list.py:104
+msgid "Search:"
+msgstr "Αναζήτηση:"
+
+#: application/plugin_base/item_list.py:137
+#: application/plugin_base/item_list.py:245
+msgid "Swap right and left paths"
+msgstr "Εναλλαγή της δεξιάς με την αριστερή διαδρομή"
+
+#: application/plugin_base/item_list.py:143
+msgid "Reload item list"
+msgstr "Επαναφόρτωση λίστας αντικειμένων"
+
+#: application/plugin_base/item_list.py:149
+#: application/plugin_base/item_list.py:249
+msgid "Copy path to clipboard"
+msgstr "Αντιγραφή διαδρομής στο πρόχειρο"
+
+#: application/plugin_base/item_list.py:155
+msgid "Enter path..."
+msgstr "Εισαγωγή διαδρομής..."
+
+#: application/plugin_base/item_list.py:184
+msgid "Locations"
+msgstr ""
+
+#: application/plugin_base/item_list.py:208
+msgid "Execute selected item"
+msgstr "Εκτέλεση επιλεγμένης εντολής"
+
+#: application/plugin_base/item_list.py:209
+msgid "Select application and execute item"
+msgstr "Επιλογή εφαρμογής και εκτέλεση αντικειμένου"
+
+#: application/plugin_base/item_list.py:210
+msgid "Show selected item properties"
+msgstr "Εμφάνιση ιδιοτήτων επιλεγμένου αντικειμένου"
+
+#: application/plugin_base/item_list.py:211
+msgid "Bookmark current directory"
+msgstr "Προσθήκη τρέχοντος καταλόγου στους σελιδοδείκτες"
+
+#: application/plugin_base/item_list.py:212
+msgid "Edit bookmarks"
+msgstr "Επεξεργασία σελιδοδεικτών"
+
+#: application/plugin_base/item_list.py:213
+msgid "Cut selection to clipboard"
+msgstr "Αποκοπή επιλογής στο πρόχειρο"
+
+#: application/plugin_base/item_list.py:215
+msgid "Paste items from clipboard"
+msgstr "Επικόλληση αντικειμένων από το πρόχειρο"
+
+#: application/plugin_base/item_list.py:216
+msgid "Open selected directory in new tab"
+msgstr "Άνοιγμα επιλεγμένου καταλόγου σε νέα καρτέλα"
+
+#: application/plugin_base/item_list.py:217
+msgid "Open selected directory"
+msgstr "Άνοιγμα επιλεγμένου καταλόγου"
+
+#: application/plugin_base/item_list.py:218
+msgid "Calculate disk usage for directory"
+msgstr "Υπολογισμός χρήσης δίσκου για τον κατάλογο"
+
+#: application/plugin_base/item_list.py:221
+msgid "Go to root directory"
+msgstr "Μετακίνηση στο ριζικό κατάλογο"
+
+#: application/plugin_base/item_list.py:222
+msgid "Reload items in current directory"
+msgstr "Επαναφόρτωση αντικειμένων του τρέχοντος καταλόγου"
+
+#: application/plugin_base/item_list.py:223
+msgid "Show history browser"
+msgstr "Εμφάνιση περιηγητή ιστορικού"
+
+#: application/plugin_base/item_list.py:224
+msgid "Go back in history"
+msgstr "Πήγαινε πίσω στο ιστορικό"
+
+#: application/plugin_base/item_list.py:225
+msgid "Go forward in history"
+msgstr "Πήγαινε μπροστά στο ιστορικό"
+
+#: application/plugin_base/item_list.py:226
+msgid "Select all"
+msgstr "Επιλογή όλων"
+
+#: application/plugin_base/item_list.py:227
+msgid "Deselect all"
+msgstr "Αποεπιλογή όλων"
+
+#: application/plugin_base/item_list.py:228
+msgid "Invert selection"
+msgstr "Αντιστροφή επιλογής"
+
+#: application/plugin_base/item_list.py:229
+msgid "Toggle selection"
+msgstr ""
+
+#: application/plugin_base/item_list.py:230
+msgid "Toggle selection and move marker up"
+msgstr ""
+
+#: application/plugin_base/item_list.py:231
+msgid "Trash or delete selected items"
+msgstr "Μετακίνηση στα απορρίμματα ή διαγραφή επιλεγμένων αντικειμένων"
+
+#: application/plugin_base/item_list.py:232
+msgid "Force deleting selected items"
+msgstr "Εξαναγκασμός διαγραφής επιλεγμένων αντικειμένων"
+
+#: application/plugin_base/item_list.py:233
+msgid "Show bookmarks for current list"
+msgstr "Εμφάνιση σελιδοδεικτών για την τρέχουσα λίστα"
+
+#: application/plugin_base/item_list.py:234
+msgid "Show bookmarks for left list"
+msgstr "Εμφάνιση σελιδοδεικτών για την αριστερή λίστα"
+
+#: application/plugin_base/item_list.py:235
+msgid "Show bookmarks for right list"
+msgstr "Εμφάνιση σελιδοδεικτών για τη δεξιά λίστα"
+
+#: application/plugin_base/item_list.py:236
+msgid "Rename selected item"
+msgstr "Μετονομασία επιλεγμένου αντικειμένου"
+
+#: application/plugin_base/item_list.py:237
+msgid "View selected item"
+msgstr "Προβολή επιλεγμένου αντικειμένου"
+
+#: application/plugin_base/item_list.py:238
+msgid "Edit selected item"
+msgstr "Επεξεργασία επιλεγμένου αντικειμένου"
+
+#: application/plugin_base/item_list.py:239
+msgid "Copy selected items"
+msgstr "Αντιγραφή επιλεγμένων αντικειμένων"
+
+#: application/plugin_base/item_list.py:240
+msgid "Move selected items"
+msgstr "Μετακίνηση επιλεγμένων αντικειμένων"
+
+#: application/plugin_base/item_list.py:241
+msgid "Show context menu"
+msgstr "Εμφάνιση μενού περιβάλλοντος"
+
+#: application/plugin_base/item_list.py:242
+msgid "Show \"open with\" menu"
+msgstr "Εμφάνιση του μενού «Άνοιγμα με»"
+
+#: application/plugin_base/item_list.py:243
+msgid "Assign path from left list"
+msgstr ""
+
+#: application/plugin_base/item_list.py:244
+msgid "Assign path from right list"
+msgstr ""
+
+#: application/plugin_base/item_list.py:246
+msgid "Move selection marker up"
+msgstr "Μετακίνηση του δείκτη επιλογής πάνω"
+
+#: application/plugin_base/item_list.py:247
+msgid "Move selection marker down"
+msgstr "Μετακίνηση του δείκτη επιλογής κάτω"
+
+#: application/plugin_base/item_list.py:248
+msgid "Show tab menu"
+msgstr "Εμφάνιση μενού καρτέλας"
+
+#: application/plugin_base/item_list.py:250
+msgid "Copy selected path to clipboard"
+msgstr "Αντιγραφή επιλεγμένης διαδρομής στο πρόχειρο"
+
+#: application/plugin_base/item_list.py:251
+msgid "Copy selected item name to clipboard"
+msgstr ""
+
+#: application/plugin_base/item_list.py:252
+msgid "Copy path to command entry"
+msgstr "Αντιγραφή διαδρομής στη γραμμή καταχώρισης εντολών"
+
+#: application/plugin_base/item_list.py:253
+msgid "Copy selection to command entry"
+msgstr "Αντιγραφή επιλογής στην γραμμή καταχώρισης εντολών"
+
+#: application/plugin_base/item_list.py:254
+msgid "Ask and navigate to path"
+msgstr "Ερώτηση και μεταφορά στη διαδρομή"
+
+#: application/plugin_base/item_list.py:255
+msgid "Start quick search"
+msgstr "Έναρξη γρήγορης αναζήτησης"
+
+#: application/plugin_base/item_list.py:256
+msgid "Expand directory"
+msgstr "Ανάπτυξη καταλόγου"
+
+#: application/plugin_base/item_list.py:257
+msgid "Collapse directory"
+msgstr ""
+
+#: application/plugin_base/item_list.py:258
+msgid "Create symbolic or hard link"
+msgstr "Δημιουργία συμβολικού ή κανονικού συνδέσμου"
+
+#: application/plugin_base/item_list.py:259
+msgid "Show emblem menu"
+msgstr "Εμφάνιση μενού εμβλημάτων"
+
+#: application/plugin_base/item_list.py:320
+#: application/plugin_base/item_list.py:326
+#, python-brace-format
+msgid "Go to '{0}'"
+msgstr "Μετάβαση στο '{0}'"
+
+#: application/plugin_base/item_list.py:670
+msgid ""
+"Directory does not exist anymore or is not valid. If path is not local check"
+" if specified volume is mounted."
+msgstr "Ο κατάλογος δεν υπάρχει πλέον ή δεν είναι έγκυρος. Αν η διαδρομή δεν είναι τοπική ελέγξτε αν ο συγκεκριμένος τόμος είναι προσαρτημένος."
+
+#: application/plugin_base/item_list.py:708
+#, python-brace-format
+msgid ""
+"Specified protocol ({0}) is not supported by this application. Please check "
+"for available plugins or create a feature request."
+msgstr "Το συγκεκριμένο πρωτόκολλο ({0}) δεν υποστηρίζεται από τη συγκεκριμένη εφαρμογή. Ελέγξτε τα διαθέσιμα πρόσθετα ή ζητήστε προσθήκη νέων χαρακτηριστικών."
+
+#: application/plugin_base/item_list.py:740
+msgid ""
+"Application is unable to handle specified data. Check if source items still "
+"exist."
+msgstr "Η εφαρμογή αδυνατεί να χειριστεί τα συγκεκριμένα δεδομένα. Ελέγξτε αν τα πηγαία αντικείμενα υπάρχουν ακόμα."
+
+#: application/plugin_base/item_list.py:993
+msgid "Open _with"
+msgstr "Άνοιγμα _με"
+
+#: application/plugin_base/item_list.py:1005
+msgid "Additional options"
+msgstr "Επιπρόσθετες ρυθμίσεις"
+
+#: application/plugin_base/item_list.py:1019
+msgid "Create file"
+msgstr "Δημιουργία αρχείου"
+
+#: application/plugin_base/item_list.py:1075
+msgid "Copy to other..."
+msgstr "Αντιγραφή στο άλλο..."
+
+#: application/plugin_base/item_list.py:1081
+msgid "Move to other..."
+msgstr "Μετακίνηση στο άλλο..."
+
+#: application/plugin_base/item_list.py:1091
+msgid "Copy file name"
+msgstr ""
+
+#: application/plugin_base/item_list.py:1097
+msgid "Copy path"
+msgstr ""
+
+#: application/plugin_base/item_list.py:1122
+msgid "Send to..."
+msgstr "Αποστολή σε..."
+
+#: application/plugin_base/item_list.py:1200
+msgid "View complete history..."
+msgstr "Προβολή πλήρους ιστορικού..."
+
+#: application/plugin_base/item_list.py:1206
+msgid "History is empty"
+msgstr "Το ιστορικό είναι άδειο"
+
+#: application/plugin_base/item_list.py:1553
+msgid "Path entry"
+msgstr "Εισαγωγή διαδρομής"
+
+#: application/plugin_base/item_list.py:1554
+msgid "Navigate to:"
+msgstr "Μεταφορά σε:"
+
+#: application/indicator.py:32
+msgid "Sh_ow main window"
+msgstr "Εμ_φάνιση κυρίου παραθύρου"
+
+#: application/indicator.py:41
+msgid "_Hide main window"
+msgstr "_Απόκρυψη κύριου παραθύρου"
+
+#: application/operation.py:115
+#, python-brace-format
+msgid ""
+"Aborted. Not enough free space on target file system.\n"
+"Needed: {0}\n"
+"Available: {1}"
+msgstr "Ματαίωση. Δεν υπάρχει αρκετός διαθέσιμος χώρος στο σύστημα αρχείων\nΑπαιτούμενος χώρος: {0}\nΔιαθέσιμος χώρος: {1}"
+
+#: application/operation.py:130
+#, python-brace-format
+msgid ""
+"Target file system does not have enough free space for this operation to continue.\n"
+"\n"
+"Needed: {0}\n"
+"Available: {1}\n"
+"\n"
+"Do you wish to continue?"
+msgstr "Το σύστημα αρχείων δεν έχει αρκετό ελεύθερο χώρο για τη συνέχιση της εργασίας.\n\nΑπαιτούμενος χώρος: {0}\nΔιαθέσιμος χώρος: {1}\n\nΘα θέλατε να συνεχίσετε;"
+
+#: application/operation.py:265
+msgid ""
+"There is a problem writing data to destination file. What would you like to "
+"do?"
+msgstr "Υπήρξε πρόβλημα κατά την εγγραφή δεδομένων στο αρχείο προορισμού. Τι θα θέλατε να κάνετε;"
+
+#: application/operation.py:307
+msgid ""
+"An error occurred while trying to create specified file. What would you like"
+" to do?"
+msgstr "Ένα σφάλμα συνέβη κατά τη δημιουργία του συγκεκριμένου αρχείου. Τι θα θέλατε να κάνετε;"
+
+#: application/operation.py:314
+msgid ""
+"An error occurred while trying to create specified directory. What would you"
+" like to do?"
+msgstr "Ένα σφάλμα συνέβη με τη δημιουργία του συγκεκριμένου καταλόγου. Τι θα θέλατε να κάνετε;"
+
+#: application/operation.py:354
+msgid ""
+"Problem with setting path parameter for specified path. What would you like "
+"to do?"
+msgstr "Πρόβλημα με τον ορισμό παραμέτρου διαδρομής για τη συγκεκριμένη διαδρομή. Τι θα θέλατε να κάνετε;"
+
+#: application/operation.py:393
+msgid ""
+"There was a problem removing specified path. What would you like to do?"
+msgstr "Υπήρξε πρόβλημα με την αφαίρεση της συγκεκριμένης διαδρομής. Τι θα θέλατε να κάνετε;"
+
+#: application/operation.py:432
+msgid ""
+"There was a problem trashing specified path. Would you like to try removing "
+"it instead?"
+msgstr "Υπήρξε πρόβλημα με την μεταφορά στα απορρίμματα της συγκεκριμένης διαδρομής. Τι θα θέλατε να κάνετε;"
+
+#: application/operation.py:471
+msgid "There was a problem moving specified path. What would you like to do?"
+msgstr "Υπήρξε πρόβλημα με την μετακίνηση της συγκεκριμένης διαδρομής. Τι θα θέλατε να κάνετε;"
+
+#: application/operation.py:510
+msgid ""
+"There was a problem renaming specified path. What would you like to do?"
+msgstr "Υπήρξε ένα πρόβλημα με την μετονομασία της συγκεκριμένης διαδρομής. Τι θα θέλατε να κάνετε;"
+
+#: application/operation.py:549
+msgid ""
+"There was a problem with reading specified directory. What would you like to"
+" do?"
+msgstr "Υπήρξε πρόβλημα με την ανάγνωση του συγκεκριμένου καταλόγου. Τι θα θέλατε να κάνετε;"
+
+#: application/operation.py:659
+msgid "Searching for files..."
+msgstr "Αναζήτηση αρχείων..."
+
+#: application/operation.py:885
+msgid ""
+"Unable to create directory because file with the same name already exists in"
+" target directory."
+msgstr "Αδυναμία δημιουργίας καταλόγου επειδή υπάρχει ήδη αρχείο με το ίδιο όνομα στον κατάλογο."
+
+#: application/operation.py:1123
+msgid "Creating directories..."
+msgstr "Δημιουργία καταλόγων..."
+
+#: application/operation.py:1140
+msgid "Copying files..."
+msgstr "Αντιγραφή αρχείων..."
+
+#: application/operation.py:1156
+msgid "Creating links..."
+msgstr ""
+
+#: application/operation.py:1208 application/operation.py:1225
+msgid "Copy Operation"
+msgstr "Λειτουργία Αντιγραφής"
+
+#: application/operation.py:1210
+#, python-brace-format
+msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
+msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
+msgstr[0] "Η αντιγραφή {0} αντικειμένου από το \"{1}\" στο \"{2}\" ολοκληρώθηκε!"
+msgstr[1] "Η αντιγραφή {0} αντικειμένων από το \"{1}\" στο \"{2}\" ολοκληρώθηκε!"
+
+#: application/operation.py:1338
+msgid "Moving files..."
+msgstr "Μετακίνηση αρχείων..."
+
+#: application/operation.py:1352
+msgid "Deleting source files..."
+msgstr "Διαγραφή πηγαίων αρχείων..."
+
+#: application/operation.py:1374
+msgid "Deleting source directories..."
+msgstr "Διαγραφή πηγαίων καταλόγων..."
+
+#: application/operation.py:1473 application/operation.py:1490
+msgid "Move Operation"
+msgstr "Λειτουργία Μετακίνησης"
+
+#: application/operation.py:1475
+#, python-brace-format
+msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
+msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
+msgstr[0] "Η μετακίνηση {0} αντικειμένου από το \"{1}\" ολοκληρώθηκε!"
+msgstr[1] "Η μετακίνηση {0} αντικειμένων από το \"{1}\" ολοκληρώθηκε!"
+
+#: application/operation.py:1620
+msgid "Delete Operation"
+msgstr "Λειτουργία Διαγραφής"
+
+#: application/operation.py:1622
+#, python-brace-format
+msgid "Removal of {0} item from \"{1}\" is completed!"
+msgid_plural "Removal of {0} items from \"{1}\" is completed!"
+msgstr[0] "Η αφαίρεση {0} αντικειμένου από το \"{1}\" ολοκληρώθηκε!"
+msgstr[1] "Η αφαίρεση {0} αντικειμένων από το \"{1}\" ολοκληρώθηκε!"
+
+#: application/operation.py:1735
+msgid "Rename Operation"
+msgstr "Λειτουργία Μετονομασίας"
+
+#: application/operation.py:1737
+#, python-brace-format
+msgid "Rename of {0} item from \"{1}\" is completed!"
+msgid_plural "Rename of {0} items from \"{1}\" is completed!"
+msgstr[0] "Η μετονομασία {0} αντικειμένου από το \"{1}\" ολοκληρώθηκε!"
+msgstr[1] "Η μετονομασία {0} αντικειμένων από το \"{1}\" ολοκληρώθηκε!"
+
+#: application/tools/viewer.py:35
+#, python-brace-format
+msgid "{0} - Viewer"
+msgstr "{0} - Προεπισκόπηση"
+
+#: application/tools/viewer.py:78
+msgid "Executable"
+msgstr "Εκτελέσιμο"
+
+#: application/tools/viewer.py:119
+msgid "Image"
+msgstr "Εικόνα"
+
+#: application/tools/viewer.py:138
+msgid "Viewer is unable to display this file type."
+msgstr "Η λειτουργία προεπισκόπησης αδυνατεί να προβάλλει το συγκεκριμένο τύπο αρχείου."
+
+#: application/tools/find_files.py:43 application/tools/find_files.py:317
+msgid "Find files"
+msgstr "Εύρεση αρχείων"
+
+#: application/tools/find_files.py:61
+msgid "Search in:"
+msgstr "Αναζήτηση σε:"
+
+#: application/tools/find_files.py:78
+msgid "Search recursively"
+msgstr "Αναδρομική αναζήτηση"
+
+#: application/tools/find_files.py:130 application/tools/find_files.py:242
+msgid "Start"
+msgstr "Έναρξη"
+
+#: application/tools/find_files.py:192
+msgid ""
+"Active object doesn't support changing path. Set focus on a different "
+"object, preferably file list, and try again."
+msgstr "Το ενεργό αντικείμενο δεν υποστηρίζει την αλλαγή διαδρομής. Εστιάστε σε ένα διαφορετικό αντικείμενο, κατά προτίμηση μια λίστα αρχείων και προσπαθήστε ξανά."
+
+#: application/tools/find_files.py:230
+msgid "Stop"
+msgstr "Διακοπή"
+
+#: application/tools/find_files.py:363
+msgid ""
+"Specified path is not valid or doesn't exist anymore. Please check your "
+"selection and try again."
+msgstr "Η διαδρομή που έχει οριστεί δεν είναι έγκυρη ή δεν υπάρχει πλέον. Ελέγξτε την επιλογή σας και προσπαθήστε ξανά."
+
+#: application/tools/find_files.py:386
+msgid ""
+"You need to enable at least one extension in order to find files and "
+"directories!"
+msgstr "Χρειάζεται να ενεργοποιήσετε τουλάχιστον μία επέκταση για να μπορείτε να αναζητήσετε αρχεία και φακέλους!"
+
+#: application/tools/version_check.py:23
+msgid "Version check"
+msgstr "Έλεγχος έκδοσης"
+
+#: application/tools/version_check.py:42
+msgid "Current:"
+msgstr "Τρέχουσα:"
+
+#: application/tools/version_check.py:45
+msgid "Latest:"
+msgstr "Νεότερη:"
+
+#: application/tools/version_check.py:106
+msgid "Checking..."
+msgstr "Έλεγχος..."
+
+#: application/tools/advanced_rename.py:27
+msgid "Advanced rename"
+msgstr "Μετονομασία για προχωρημένους"
+
+#: application/tools/advanced_rename.py:52
+msgid "Old name"
+msgstr "Παλαιό όνομα"
+
+#: application/tools/advanced_rename.py:55
+msgid "New name"
+msgstr "Νέο όνομα"
+
+#: application/tools/advanced_rename.py:78
+msgid "Items located in:"
+msgstr "Αντικείμενα που βρίσκονται σε:"
+
+#: application/tools/advanced_rename.py:201
+#, python-brace-format
+msgid ""
+"You are about to rename {0} item.\n"
+"Are you sure about this?"
+msgid_plural ""
+"You are about to rename {0} items.\n"
+"Are you sure about this?"
+msgstr[0] "Πρόκειται να μετονομάσετε {0} αντικείμενο\nΕίστε σίγουροι για αυτό;"
+msgstr[1] "Πρόκειται να μετονομάσετε {0} αντικείμενα\nΕίστε σίγουροι για αυτό;"

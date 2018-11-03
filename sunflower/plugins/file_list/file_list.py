@@ -2347,7 +2347,7 @@ class FileList(ItemList):
 									_(
 										"Error changing working directory to:"
 										"\n{1}\n\n{0}\n\nWould you like to retry?"
-									).format(error, path)
+									).format(error, common.disp_fn(path))
 								)
 			dialog.set_default_response(Gtk.ResponseType.YES)
 			result = dialog.run()

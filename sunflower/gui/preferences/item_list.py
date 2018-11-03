@@ -703,7 +703,8 @@ class ItemListOptions(SettingsPage):
 			self._always_visible_store.append((item,))
 
 		# load column settings
-		map(lambda extension: extension._load_settings(), self._application.column_editor_extensions)
+		for extension in self._application.column_editor_extensions:
+			extension._load_settings()
 
 		# populate editor
 		self._populate_column_editor_extensions()
@@ -753,7 +754,8 @@ class ItemListOptions(SettingsPage):
 		section.set('always_visible', always_visible)
 
 		# save column settings
-		map(lambda extension: extension._save_settings(), self._application.column_editor_extensions)
+		for extension in self._application.column_editor_extensions:
+			extension._save_settings()
 
 		# save directories
 		left_list = []

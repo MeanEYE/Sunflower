@@ -228,7 +228,7 @@ class ZipProvider(Provider):
 		# get file list
 		result = []
 		if real_path in self._cache:
-			result = map(lambda info: info[0], self._cache[real_path])
+			result = [info[0] for info in self._cache[real_path]]
 
 		return result
 

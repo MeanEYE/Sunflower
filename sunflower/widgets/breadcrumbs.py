@@ -1,8 +1,9 @@
 from __future__ import absolute_import
 
+import itertools
 import os
 
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, GObject, GLib, Gdk
 from ..common import disp_fn
 
 class Breadcrumbs(Gtk.HBox):
@@ -19,6 +20,7 @@ class Breadcrumbs(Gtk.HBox):
 		self._path = None
 		self._parent = parent
 		self._updating = False
+		self._truncated = False
 
 	def __fragment_click(self, widget, data=None):
 		"""Handle clicking on path fragment."""
@@ -41,7 +43,7 @@ class Breadcrumbs(Gtk.HBox):
 		# prevent signal dead-loops
 		self._updating = True
 
-		if self._path is not None and self._path.startswith(path):
+		if self._path is not None and self._path.startswith(path) and not self._truncated:
 			# path is a subset, update highlight and exit
 			for control in self.get_children():
 				if control.path == path:
@@ -52,6 +54,7 @@ class Breadcrumbs(Gtk.HBox):
 			# prepare for parsing
 			self._path = path
 			self.foreach(self.remove)
+			self._truncated = False
 
 			# split root element from others
 			root_element = provider.get_root_path(path)
@@ -64,13 +67,24 @@ class Breadcrumbs(Gtk.HBox):
 			# split elements
 			elements = other_elements.split(os.path.sep)
 			elements.insert(0, root_element)
+			paths = list(itertools.accumulate(elements, os.path.join))
 
 			# create controls
 			control = None
 			current_path = None
-			for element in elements:
-				current_path = os.path.join(current_path, element) if current_path is not None else element
 
+			my_width = self.get_allocated_width()
+			# We need the width to properly draw the breadcrumbs. Wait until it's allocated.
+			if my_width == 1:
+				self._updating = False
+				self._path = None
+				Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE-10, self.refresh, path)
+				return
+
+			reversed_controls = []
+			required_width = 0
+
+			for current_path, element in zip(reversed(paths), reversed(elements)):
 				if control is not None:
 					control = Gtk.RadioButton.new_from_widget(control)
 				else:
@@ -83,6 +97,17 @@ class Breadcrumbs(Gtk.HBox):
 				control.path = current_path
 				control.show()
 
+				min_w, natural_w = control.get_preferred_width()
+				required_width += natural_w
+
+				if required_width >= my_width:
+					reversed_controls[-1].set_label('…')
+					self._truncated = True
+					break
+
+				reversed_controls.append(control)
+
+			for control in reversed(reversed_controls):
 				self.pack_start(control, False, False, 0)
 
 			if control is not None:

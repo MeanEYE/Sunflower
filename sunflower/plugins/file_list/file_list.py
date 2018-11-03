@@ -1408,7 +1408,7 @@ class FileList(ItemList):
 				# add item
 				if should_add:
 					self._add_item(path, parent, parent_path)
-					self._flush_queue(parent)
+					Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
 
 			else:
 				self._update_item_details_by_name(relative_path, parent)
@@ -1439,7 +1439,7 @@ class FileList(ItemList):
 
 			if should_add:
 				self._add_item(other_path, parent, parent_path)
-				self._flush_queue(parent)
+				Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
 
 		# node deleted
 		elif event is MonitorSignals.DELETED:
@@ -1715,7 +1715,7 @@ class FileList(ItemList):
 			self._item_queue.append(data)
 
 			if len(self._item_queue) > 100:
-				GLib.idle_add(self._flush_queue, parent)
+				Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
 
 		except Exception as error:
 			print('Error: {0} - {1}'.format(filename, str(error)))
@@ -1740,7 +1740,7 @@ class FileList(ItemList):
 
 		# select path if needed
 		if path_to_select is not None:
-			GLib.idle_add(self._item_list.set_cursor, path_to_select)
+			Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._item_list.set_cursor, path_to_select)
 			# self._item_list.set_cursor(path_to_select)
 			# self._item_list.scroll_to_cell(path_to_select)
 
@@ -2130,7 +2130,7 @@ class FileList(ItemList):
 			self._thread_active.set()
 
 			# show spinner animation
-			GLib.idle_add(self._title_bar.show_spinner)
+			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._title_bar.show_spinner)
 
 			try:
 				# get list of items to add
@@ -2145,8 +2145,7 @@ class FileList(ItemList):
 				self._thread_active.clear()
 				self._main_thread_lock.clear()
 
-				with gtk.gdk.lock:
-					self._title_bar.hide_spinner()
+				Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._title_bar.hide_spinner)
 
 				return
 
@@ -2182,17 +2181,17 @@ class FileList(ItemList):
 				# add item to the list
 				self._add_item(item_name, parent, parent_path)
 
-			self._flush_queue(parent)
+			Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
 
 			# hide spinner animation
-			GLib.idle_add(self._title_bar.hide_spinner)
+			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._title_bar.hide_spinner)
 
 			# update status bar
-			GLib.idle_add(self._update_status_with_statistis)
+			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._update_status_with_statistis)
 
 			# turn on sorting
 			focus_selected = parent is None
-			GLib.idle_add(self._apply_sort_function, focus_selected)
+			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._apply_sort_function, focus_selected)
 
 			# load emblems
 			self._load_emblems(parent, parent_path)

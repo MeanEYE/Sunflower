@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from gi.repository import Gtk
 from sunflower.plugin_base.provider import FileType, Mode
 from sunflower.plugin_base.find_extension import FindExtension

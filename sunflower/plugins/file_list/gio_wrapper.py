@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from gi.repository import Gio, GLib, GObject
 from sunflower.plugin_base.provider import Mode
 

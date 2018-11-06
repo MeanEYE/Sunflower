@@ -195,6 +195,9 @@ def disp_fn(fn):
 	Replaces surrogate codepoints in a filename with a replacement character
 	to display non-UTF-8 filenames.
 	"""
+	if sys.version_info[0] == 2:
+		return fn
+
 	if isinstance(fn, bytes):
 		return fn.decode('utf-8', 'replace')
 	else:
@@ -209,4 +212,7 @@ def encode_fn(fn):
 	file name (and specify 'filename' as their argument type in the GIR 
 	bindings)
 	"""
-	return str(fn).encode('utf-8', 'surrogateescape')
+	if sys.version_info[0] == 2:
+		return fn
+	else:
+		return str(fn).encode('utf-8', 'surrogateescape')

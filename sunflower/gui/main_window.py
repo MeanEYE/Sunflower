@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from builtins import map, filter
+
 import os
 import sys
 import webbrowser
@@ -1110,12 +1113,12 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# get list of system wide plugins
 		plugin_list = [ plugin_dir.name for plugin_dir in system_path.iterdir()
-						if (plugin_dir/'plugin.py').exists() ]
+						if plugin_dir.is_dir() and (plugin_dir/'plugin.py').exists() ]
 
 		# get user specific plugins
-		if os.path.isdir(user_path):
+		if user_path.is_dir():
 			plugin_list += [ plugin_dir.name for plugin_dir in user_path.iterdir()
-						     if (plugin_dir/'plugin.py').exists() ]
+						     if plugin_dir.is_dir() and (plugin_dir/'plugin.py').exists() ]
 
 		return plugin_list
 
@@ -2007,7 +2010,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 				if required_fields.issubset(fields):
 					path = menu_item['path']
-					label = '{0} {1} {2}'.format(
+					label = u'{0} {1} {2}'.format(
 							group_name,
 							u'\u2192',
 							menu_item['label'].replace('_', '')

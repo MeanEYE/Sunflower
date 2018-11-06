@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from gi.repository import Gtk
 from sunflower.plugins.file_list.file_list import Column
 from sunflower.plugins.file_list.plugin import FileList

@@ -1,5 +1,6 @@
-import os
+from __future__ import absolute_import
 
+import os
 
 from gi.repository import Gtk, Gdk, Pango, GObject
 from threading import Thread, Event

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from gi.repository import Gtk
 from sunflower.plugin_base.toolbar_factory import ToolbarFactory
 from .bookmark_button import Button as BookmarkButton, ConfigurationDialog as BookmarkButton_Dialog

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from .default import DefaultRename
 from .letter_case import LetterCaseRename
 from .audio_metadata import AudioMetadataRename

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import getpass
 
 from gi.repository import Gtk, GObject, Gdk

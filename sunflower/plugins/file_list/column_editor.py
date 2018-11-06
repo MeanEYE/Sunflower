@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from sunflower.plugin_base.column_editor_extension import ColumnEditorExtension
 
 

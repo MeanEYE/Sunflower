@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from .. import common
 
 from gi.repository import Gtk, Gdk, GObject, Pango

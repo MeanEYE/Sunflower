@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from gi.repository import Gtk
 from .gui.input_dialog import CreateToolbarWidgetDialog
 

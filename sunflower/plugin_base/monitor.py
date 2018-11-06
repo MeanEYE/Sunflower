@@ -1,3 +1,9 @@
+from __future__ import absolute_import
+import sys
+if sys.version_info[0] == 2:
+	import future.standard_library
+	future.standard_library.install_aliases()
+
 from gi.repository import GObject
 from queue import Queue, Empty as QueueEmptyException
 from threading import Event

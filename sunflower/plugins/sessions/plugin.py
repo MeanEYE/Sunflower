@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from gi.repository import Gtk, Gio, GLib, Gdk
 from sunflower.widgets.settings_page import SettingsPage
 from sunflower.accelerator_group import AcceleratorGroup

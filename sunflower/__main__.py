@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 #	Sunflower File Manager
 #	http://sunflower-fm.org
 #
@@ -17,9 +17,15 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import absolute_import, print_function
+
 import os
 import sys
 
+if sys.version_info[0] == 2:
+	reload(sys)
+	sys.setdefaultencoding('utf8')
+	sys.path.append(os.path.dirname(__file__)) # Not necessary for us, but it might help old plugins
 
 try:
 	# check if gtk is available

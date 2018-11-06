@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from gi.repository import Gtk, Gdk, GObject
 from .preferences.display import DisplayOptions
 from .preferences.operation import OperationOptions

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from gi.repository import Gtk, Gio, Gdk, GLib, GObject
 from .dialogs import SambaInputDialog, SambaResult
 from .dialogs import FtpInputDialog, FtpResult, SftpInputDialog

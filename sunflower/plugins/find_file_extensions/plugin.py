@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from .default import DefaultFindFiles
 from .size import SizeFindFiles
 from .contents import ContentsFindFiles

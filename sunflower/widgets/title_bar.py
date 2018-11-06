@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import math
 
 from gi.repository import Gtk, Pango, Gdk

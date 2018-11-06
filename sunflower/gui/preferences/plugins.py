@@ -1,8 +1,13 @@
+from __future__ import absolute_import
+
 import os
 import locale
 
 from gi.repository import Gtk
-from configparser import ConfigParser
+try:
+	from configparser import ConfigParser
+except:
+	from ConfigParser import ConfigParser
 from sunflower.widgets.settings_page import SettingsPage
 
 

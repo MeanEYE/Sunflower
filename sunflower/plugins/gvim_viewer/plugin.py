@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import subprocess
 
 from gi.repository import Gtk

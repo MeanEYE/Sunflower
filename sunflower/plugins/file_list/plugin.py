@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from .file_list import FileList
 from .trash_list import TrashList
 from .gio_extension import SambaExtension, FtpExtension, DavExtension, SftpExtension

@@ -103,7 +103,7 @@ class LocalProvider(Provider):
 	def get_file_handle(self, path, mode, relative_to=None):
 		"""Open path in specified mode and return its handle"""
 		real_path = self.real_path(path, relative_to)
-		real_mode = ('rb', 'wb', 'ab', 'rab')[mode]
+		real_mode = ('rb', 'wb', 'ab', 'a+b')[mode]
 		return open(real_path, real_mode)
 
 	def get_stat(self, path, relative_to=None, extended=False, follow=False):

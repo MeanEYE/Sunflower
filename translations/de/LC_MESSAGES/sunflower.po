@@ -7,6 +7,7 @@
 # Lars Bürk <larsb@vtxmail.ch>, 2014
 # Mladen Mijatov <meaneye.rcf@gmail.com>, 2015
 # Sebastian Gaul <sebastian@dev.mgvmedia.com>, 2011
+# Thomas Jollans <t@jollybox.de>, 2018
 # t m <tmrd2513@freenet.de>, 2016
 # Torsten <torsten.funck@googlemail.com>, 2015
 msgid ""
@@ -14,8 +15,8 @@ msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-02 01:35+0100\n"
-"PO-Revision-Date: 2018-11-02 00:52+0000\n"
-"Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
+"PO-Revision-Date: 2018-11-11 09:34+0000\n"
+"Last-Translator: Thomas Jollans <t@jollybox.de>\n"
 "Language-Team: German (http://www.transifex.com/way2cu/sunflower/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -931,15 +932,15 @@ msgstr "_Mount-Manager"
 
 #: application/gui/main_window.py:580
 msgid "Home page"
-msgstr ""
+msgstr "Homepage"
 
 #: application/gui/main_window.py:584
 msgid "Tools"
-msgstr ""
+msgstr "Werkzeuge"
 
 #: application/gui/main_window.py:585
 msgid "Help"
-msgstr ""
+msgstr "Hilfe"
 
 #: application/gui/main_window.py:586 application/gui/preferences_window.py:30
 #: application/gui/preferences_window.py:45
@@ -948,11 +949,11 @@ msgstr "Einstellungen"
 
 #: application/gui/main_window.py:588
 msgid "Quit"
-msgstr ""
+msgstr "Beenden"
 
 #: application/gui/main_window.py:653
 msgid "Execute command:"
-msgstr ""
+msgstr "Befehl ausführen:"
 
 #: application/gui/main_window.py:692
 msgid "Refresh"
@@ -1402,7 +1403,7 @@ msgstr "Der unbeaufsichtigte Modus bearbeitet alle Operationen, ohne Sie zu unte
 
 #: application/gui/input_dialog.py:724
 msgid "Follow symlinks"
-msgstr ""
+msgstr "Symlinks folgen"
 
 #: application/gui/input_dialog.py:800 application/gui/input_dialog.py:804
 #: application/gui/input_dialog.py:808 application/gui/input_dialog.py:812
@@ -1724,39 +1725,39 @@ msgstr "Bei:"
 
 #: application/sunflower.py:95
 msgid "Show version number"
-msgstr ""
+msgstr "Versionsnummer anzeigen"
 
 #: application/sunflower.py:104 application/sunflower.py:113
 msgid "Skip loading additional plugins"
-msgstr ""
+msgstr "Keine zusätzlichen Plugins laden"
 
 #: application/sunflower.py:122
 msgid "Open new tab on the left notebook"
-msgstr ""
+msgstr "Neues Tab in der linken Liste öffnen"
 
 #: application/sunflower.py:131
 msgid "Open new tab on the right notebook"
-msgstr ""
+msgstr "Neues Tab in der rechten Liste öffnen"
 
 #: application/sunflower.py:140
 msgid "Open terminal tab on the left notebook"
-msgstr ""
+msgstr "Neues Teminal links starten"
 
 #: application/sunflower.py:149
 msgid "Open terminal tab on the right notebook"
-msgstr ""
+msgstr "Neues Teminal rechts starten"
 
 #: application/widgets/location_menu.py:57
 msgid "Open terminal at selected path"
-msgstr ""
+msgstr "Neues Terminal am ausgewählten Pfad"
 
 #: application/widgets/location_menu.py:102
 msgid "User defined"
-msgstr ""
+msgstr "Benutzerdefiniert"
 
 #: application/widgets/location_menu.py:119
 msgid "System wide"
-msgstr ""
+msgstr "Global"
 
 #: application/widgets/title_bar.py:52
 msgid "Context menu"
@@ -1969,8 +1970,8 @@ msgid ""
 msgid_plural ""
 "You are about to <i><b>delete</b></i> {0} items.\n"
 "Are you sure about this?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} Objekt wird <i><b>entfernt</b></i>!\nSind Sie sich sicher?"
+msgstr[1] "{0} Objekte werden <i><b>entfernt</b></i>!\nSind Sie sich sicher?"
 
 #: application/plugins/file_list/file_list.py:844
 #, python-brace-format
@@ -1980,8 +1981,8 @@ msgid ""
 msgid_plural ""
 "You are about to move {0} items to <i><b>trash</b></i>.\n"
 "Are you sure about this?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} Objekt wird <i><b>in den Papierkorb</b></i> verschoben!\nSind Sie sich sicher?"
+msgstr[1] "{0} Objekte werden <i><b>in den Papierkorb</b></i> verschoben!\nSind Sie sich sicher?"
 
 #: application/plugins/file_list/file_list.py:1194
 msgid "Other application..."
@@ -2156,7 +2157,7 @@ msgstr "Neue Sitzung"
 
 #: application/plugins/sessions/plugin.py:320
 msgid "Locked session preserves tab layout at the time of locking."
-msgstr ""
+msgstr "Gesperrte Sitzungen behalten nach dem Sperren ihre Tabs bei."
 
 #: application/plugins/sessions/plugin.py:323
 msgid "Manage sessions"
@@ -2168,7 +2169,7 @@ msgstr "Sitzung speichern"
 
 #: application/plugins/sessions/plugin.py:360
 msgid "Show session list"
-msgstr ""
+msgstr "Sitzungen anzeigen"
 
 #: application/plugins/rename_extensions/letter_case.py:15
 #: application/plugins/rename_extensions/letter_case.py:23
@@ -2445,7 +2446,7 @@ msgstr "Pfad angeben..."
 
 #: application/plugin_base/item_list.py:184
 msgid "Locations"
-msgstr ""
+msgstr "Orte"
 
 #: application/plugin_base/item_list.py:208
 msgid "Execute selected item"
@@ -2601,7 +2602,7 @@ msgstr "Kopiere markierten Pfad in Zwischenablage"
 
 #: application/plugin_base/item_list.py:251
 msgid "Copy selected item name to clipboard"
-msgstr ""
+msgstr "Ausgewählten Pfad in die Zwischenablage kopieren"
 
 #: application/plugin_base/item_list.py:252
 msgid "Copy path to command entry"
@@ -2682,11 +2683,11 @@ msgstr "Verschieben nach ...."
 
 #: application/plugin_base/item_list.py:1091
 msgid "Copy file name"
-msgstr ""
+msgstr "Dateinamen kopieren"
 
 #: application/plugin_base/item_list.py:1097
 msgid "Copy path"
-msgstr ""
+msgstr "Pfad kopieren"
 
 #: application/plugin_base/item_list.py:1122
 msgid "Send to..."
@@ -2805,7 +2806,7 @@ msgstr "Kopiere Dateien..."
 
 #: application/operation.py:1156
 msgid "Creating links..."
-msgstr ""
+msgstr "Erstelle Verweise"
 
 #: application/operation.py:1208 application/operation.py:1225
 msgid "Copy Operation"

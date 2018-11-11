@@ -3,13 +3,15 @@
 # This file is distributed under the same license as the Sunflower package.
 # 
 # Translators:
+# Rentaro YOSHIDUMI <rentaroyoshidumi4592307816@gmail.com>, 2018
+# Rentaro YOSHIDUMI <rentaroyoshidumi4592307816@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-02 01:35+0100\n"
-"PO-Revision-Date: 2018-11-02 00:52+0000\n"
-"Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
+"PO-Revision-Date: 2018-11-06 20:37+0000\n"
+"Last-Translator: Rentaro YOSHIDUMI <rentaroyoshidumi4592307816@gmail.com>\n"
 "Language-Team: Japanese (Japan) (http://www.transifex.com/way2cu/sunflower/language/ja_JP/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,60 +26,60 @@ msgstr ""
 #: application/plugin_base/terminal.py:260
 #: application/plugin_base/item_list.py:191
 msgid "Terminal"
-msgstr ""
+msgstr "端末エミュレータ"
 
 #: application/gui/preferences/terminal.py:17
 msgid "VTE based terminal"
-msgstr ""
+msgstr "VTEベースの端末エミュレータ"
 
 #: application/gui/preferences/terminal.py:21
 msgid "Show scrollbars when needed"
-msgstr ""
+msgstr "スクロールバーが必要であれば表示する"
 
 #: application/gui/preferences/terminal.py:29
 msgid "Use the system fixed width font"
-msgstr ""
+msgstr "システムの固定幅フォントを使用する"
 
 #: application/gui/preferences/terminal.py:32
 msgid "Font:"
-msgstr ""
+msgstr "フォント:"
 
 #: application/gui/preferences/terminal.py:41
 msgid "Cursor shape:"
-msgstr ""
+msgstr "カーソルの形状:"
 
 #: application/gui/preferences/terminal.py:45
 msgid "Block"
-msgstr ""
+msgstr "ブロック"
 
 #: application/gui/preferences/terminal.py:46
 msgid "I-Beam"
-msgstr ""
+msgstr "Iビーム"
 
 #: application/gui/preferences/terminal.py:47
 msgid "Underline"
-msgstr ""
+msgstr "下線"
 
 #: application/gui/preferences/terminal.py:57
 msgid "Allow bold text"
-msgstr ""
+msgstr "太字を許可する"
 
 #: application/gui/preferences/terminal.py:61
 msgid "Automatically hide mouse when typing"
-msgstr ""
+msgstr "入力する際、自動的にマウスポインタを隠す"
 
 #: application/gui/preferences/terminal.py:69
 msgid "External terminal"
-msgstr ""
+msgstr "外部端末エミュレータ"
 
 #: application/gui/preferences/terminal.py:72
 #: application/gui/preferences/view_and_edit.py:62
 msgid "Command line:"
-msgstr ""
+msgstr "コマンドライン:"
 
 #: application/gui/preferences/terminal.py:78
 msgid "Command line for executing specific program:"
-msgstr ""
+msgstr "特別に実行するコマンドライン:"
 
 #: application/gui/preferences/terminal.py:84
 #, python-brace-format
@@ -87,156 +89,156 @@ msgid ""
 "\t{0} will be replaced with socket/window id.\n"
 "\t{1} will be replaced with specified command and its parameters.\n"
 "\t{2} will be replaced with current working directory.</i></small>"
-msgstr ""
+msgstr "<small><i>註:\n\t{0}を省略した場合はタブの代わりに新規端末エミュレータを開きます。\n\t{0}はソケットまたはウィンドウのIDに置換されます。\n\t{1}は指定したコマンドおよびその引数に置換されます。\n\t{2}は現在の作業ディレクトリに置換されます。</i></small>"
 
 #: application/gui/preferences/commands.py:14
 #: application/gui/main_window.py:168
 msgid "Commands"
-msgstr ""
+msgstr "コマンド"
 
 #: application/gui/preferences/commands.py:39
 #: application/gui/preferences/bookmarks.py:49
 #: application/plugins/rename_extensions/audio_metadata.py:24
 msgid "Title"
-msgstr ""
+msgstr "タイトル"
 
 #: application/gui/preferences/commands.py:43
 msgid "Command"
-msgstr ""
+msgstr "コマンドの内容"
 
 #: application/gui/preferences/commands.py:66
 #: application/gui/preferences/bookmarks.py:76
 #: application/gui/preferences/toolbar.py:72
 #: application/gui/preferences/item_list.py:232
 msgid "Move Up"
-msgstr ""
+msgstr "一つ上に移動"
 
 #: application/gui/preferences/commands.py:74
 #: application/gui/preferences/bookmarks.py:84
 #: application/gui/preferences/toolbar.py:80
 #: application/gui/preferences/item_list.py:240
 msgid "Move Down"
-msgstr ""
+msgstr "下に移動"
 
 #: application/gui/preferences/associations.py:15
 msgid "Associations"
-msgstr ""
+msgstr "関連付け"
 
 #: application/gui/preferences/associations.py:44
 #: application/gui/preferences/associations.py:76
 msgid "Add mime type"
-msgstr ""
+msgstr "メディアタイプを追加する"
 
 #: application/gui/preferences/associations.py:47
 msgid "Add application to mime type"
-msgstr ""
+msgstr "メディアタイプに対応するアプリケーションを追加する"
 
 #: application/gui/preferences/associations.py:77
 msgid "Enter MIME type (eg. image/png):"
-msgstr ""
+msgstr "メディアタイプを入力する（例: image/png）:"
 
 #: application/gui/preferences/associations.py:128
 msgid ""
 "You need to select mime type to which application will be added. You can "
 "also select another application in which case new one will be added to its "
 "parent."
-msgstr ""
+msgstr "アプリケーションが追加されるメディアタイプを選択する必要があります。別のアプリケーションを選択して、新しいアプリケーションをその親に追加することもできます。"
 
 #: application/gui/preferences/plugins.py:34
 msgid "Plugins"
-msgstr ""
+msgstr "プラグイン"
 
 #: application/gui/preferences/plugins.py:66
 #: application/gui/preferences/display.py:86
 msgid "Active"
-msgstr ""
+msgstr "有効"
 
 #: application/gui/preferences/plugins.py:68
 msgid "Plugin name"
-msgstr ""
+msgstr "プラグイン名"
 
 #: application/gui/preferences/plugins.py:72
 msgid "Version"
-msgstr ""
+msgstr "バージョン"
 
 #: application/gui/preferences/plugins.py:74
 msgid "Author"
-msgstr ""
+msgstr "作者"
 
 #: application/gui/preferences/plugins.py:90
 #: application/gui/preferences/accelerators.py:53
 msgid "Description"
-msgstr ""
+msgstr "説明"
 
 #: application/gui/preferences/plugins.py:100
 msgid "Contact"
-msgstr ""
+msgstr "連絡先"
 
 #: application/gui/preferences/plugins.py:109
 msgid "Visit site"
-msgstr ""
+msgstr "Webサイト"
 
 #: application/gui/preferences/plugins.py:182
 #, python-brace-format
 msgid ""
 "{0} is required for normal program operation and therefore can not be "
 "deactivated!"
-msgstr ""
+msgstr "{0}は通常の操作に必須であるので、無効にすることは出来ません。"
 
 #: application/gui/preferences/plugins.py:213
 msgid "This plugin has no description"
-msgstr ""
+msgstr "説明がありません"
 
 #: application/gui/preferences/plugins.py:272
 msgid "No plugin selected"
-msgstr ""
+msgstr "プラグインが選択されていません"
 
 #: application/gui/preferences/bookmarks.py:14
 #: application/widgets/location_menu.py:80
 #: application/plugins/default_toolbar/bookmarks_button.py:16
 #: application/plugins/default_toolbar/bookmarks_button.py:17
 msgid "Bookmarks"
-msgstr ""
+msgstr "栞"
 
 #: application/gui/preferences/bookmarks.py:17
 msgid "Show mount points in bookmarks menu"
-msgstr ""
+msgstr "栞一覧にマウントポイントを表示する"
 
 #: application/gui/preferences/bookmarks.py:21
 msgid "Show system bookmarks"
-msgstr ""
+msgstr "システムの栞を表示する"
 
 #: application/gui/preferences/bookmarks.py:25
 msgid "Add home directory to bookmarks menu"
-msgstr ""
+msgstr "栞一覧にホームディレクトリを追加する"
 
 #: application/gui/preferences/bookmarks.py:53
 #: application/tools/find_files.py:95
 msgid "Location"
-msgstr ""
+msgstr "場所"
 
 #: application/gui/preferences/accelerators.py:19
 msgid "Key bindings"
-msgstr ""
+msgstr "ショートカットキー"
 
 #: application/gui/preferences/accelerators.py:60
 msgid "Primary"
-msgstr ""
+msgstr "優先"
 
 #: application/gui/preferences/accelerators.py:68
 msgid "Secondary"
-msgstr ""
+msgstr "代替"
 
 #: application/gui/preferences/accelerators.py:81
 msgid ""
 "<b>Note:</b> You can only edit accelerators from objects created at least "
 "once in current session. To disable accelerator press <i>Backspace</i> in "
 "assign mode."
-msgstr ""
+msgstr "<b>注意:</b> You can only edit accelerators from objects created at least once in current session. また、ショートカットを無効にするには、キーの組合せを入力する際に<i>バックスペースキー</i>を押下してください。"
 
 #: application/gui/preferences/accelerators.py:91
 msgid "Double click on accelerator to assign new one."
-msgstr ""
+msgstr "ダブルクリックして新しいキーの組合せを入力してください。"
 
 #: application/gui/preferences/accelerators.py:197
 #, python-brace-format
@@ -245,47 +247,47 @@ msgid ""
 "\n"
 "Collisions:\n"
 "{1}"
-msgstr ""
+msgstr "キーの組合せ「{0}」は既に割当て済みです。このキーの組合せを適用すると以下の機能に割当てられていたキーの組合せは削除されます。\n\n衝突:\n{1}"
 
 #: application/gui/preferences/accelerators.py:257
 #: application/widgets/location_menu.py:105
 #: application/plugins/default_toolbar/home_directory_button.py:16
 #: application/plugins/default_toolbar/home_directory_button.py:17
 msgid "Home directory"
-msgstr ""
+msgstr "ホームディレクトリ"
 
 #: application/gui/preferences/view_and_edit.py:15
 msgid "View & Edit"
-msgstr ""
+msgstr "表示・編集"
 
 #: application/gui/preferences/view_and_edit.py:18
 msgid "View"
-msgstr ""
+msgstr "表示"
 
 #: application/gui/preferences/view_and_edit.py:22
 msgid "Wrap long lines"
-msgstr ""
+msgstr "長い行を折り返す"
 
 #: application/gui/preferences/view_and_edit.py:26
 #: application/gui/main_window.py:695
 msgid "Edit"
-msgstr ""
+msgstr "編集"
 
 #: application/gui/preferences/view_and_edit.py:32
 msgid "Use installed application"
-msgstr ""
+msgstr "インストールされているアプリケーションを使用する"
 
 #: application/gui/preferences/view_and_edit.py:54
 msgid "Use external command"
-msgstr ""
+msgstr "外部コマンドを使用する"
 
 #: application/gui/preferences/view_and_edit.py:68
 msgid "Execute command in terminal tab"
-msgstr ""
+msgstr "端末エミュレータタブ内でコマンドを実行する"
 
 #: application/gui/preferences/toolbar.py:16
 msgid "Toolbar"
-msgstr ""
+msgstr "ツールバー"
 
 #: application/gui/preferences/toolbar.py:34
 #: application/gui/history_list.py:47
@@ -298,562 +300,562 @@ msgstr ""
 #: application/plugins/rename_extensions/default.py:73
 #: application/tools/find_files.py:92
 msgid "Name"
-msgstr ""
+msgstr "名前"
 
 #: application/gui/preferences/toolbar.py:45
 msgid "Type"
-msgstr ""
+msgstr "種類"
 
 #: application/gui/preferences/toolbar.py:91
 msgid "Toolbar style:"
-msgstr ""
+msgstr "ツールバーの表示方式:"
 
 #: application/gui/preferences/toolbar.py:93
 msgid "Icons"
-msgstr ""
+msgstr "アイコンのみ"
 
 #: application/gui/preferences/toolbar.py:94 application/tools/viewer.py:88
 msgid "Text"
-msgstr ""
+msgstr "文字のみ"
 
 #: application/gui/preferences/toolbar.py:95
 #: application/gui/preferences/item_list.py:105
 msgid "Both"
-msgstr ""
+msgstr "アイコンおよび文字"
 
 #: application/gui/preferences/toolbar.py:96
 msgid "Both horizontal"
-msgstr ""
+msgstr "アイコンの下に文字"
 
 #: application/gui/preferences/toolbar.py:106
 msgid "Icon size:"
-msgstr ""
+msgstr "アイコンの大きさ"
 
 #: application/gui/preferences/toolbar.py:108
 msgid "Same as menu item"
-msgstr ""
+msgstr "メニュー"
 
 #: application/gui/preferences/toolbar.py:109
 msgid "Small toolbar icon"
-msgstr ""
+msgstr "小さいツールバー"
 
 #: application/gui/preferences/toolbar.py:110
 msgid "Large toolbar icon"
-msgstr ""
+msgstr "大きいツールバー"
 
 #: application/gui/preferences/toolbar.py:111
 msgid "Same as buttons"
-msgstr ""
+msgstr "ボタン"
 
 #: application/gui/preferences/toolbar.py:112
 msgid "Same as drag icons"
-msgstr ""
+msgstr "ドラッグ・アンド・ドロップ"
 
 #: application/gui/preferences/toolbar.py:113
 msgid "Same as dialog"
-msgstr ""
+msgstr "ダイアログ"
 
 #: application/gui/preferences/toolbar.py:215
 msgid "missing plugin"
-msgstr ""
+msgstr "プラグインが見付かりません"
 
 #: application/gui/preferences/operation.py:9
 #: application/gui/preferences/item_list.py:44
 msgid "Operation"
-msgstr ""
+msgstr "操作"
 
 #: application/gui/preferences/operation.py:12
 msgid "General"
-msgstr ""
+msgstr "全般"
 
 #: application/gui/preferences/operation.py:16
 #: application/widgets/location_menu.py:81
 msgid "Mounts"
-msgstr ""
+msgstr "マウント"
 
 #: application/gui/preferences/operation.py:20
 msgid "Confirmation"
-msgstr ""
+msgstr "設定"
 
 #: application/gui/preferences/operation.py:25
 msgid "Delete items to trashcan"
-msgstr ""
+msgstr "アイテムをゴミ箱に捨てる"
 
 #: application/gui/preferences/operation.py:26
 msgid "Reserve free space on copy/move"
-msgstr ""
+msgstr "コピーおよび移動に十分な空き容量があるか検査する"
 
 #: application/gui/preferences/operation.py:27
 msgid "Automount drives on start up"
-msgstr ""
+msgstr "起動時にドライブを自動でマウントする"
 
 #: application/gui/preferences/operation.py:28
 msgid "Automount removable drives when inserted"
-msgstr ""
+msgstr "リムーバブルドライブが挿入されたら自動的にマウントする"
 
 #: application/gui/preferences/operation.py:29
 msgid "Show confirmation dialog before deleting items"
-msgstr ""
+msgstr "アイテムを消去する前に確認ダイアログを表示する"
 
 #: application/gui/preferences/operation.py:63
 msgid ""
 "With trashing disabled you will not be able to restore accidentally deleted "
 "items. Are you sure you want to disable confirmation dialog when deleting "
 "items?"
-msgstr ""
+msgstr "ゴミ箱を無効にすると、誤って削除したアイテムを復元できなくなります。アイテムを消去する前の確認ダイアログを非表示にしてよろしいですか？"
 
 #: application/gui/preferences/display.py:22
 msgid "Display"
-msgstr ""
+msgstr "表示"
 
 #: application/gui/preferences/display.py:27
 msgid "Main window"
-msgstr ""
+msgstr "主ウィンドウ"
 
 #: application/gui/preferences/display.py:31
 msgid "Hide main window on close"
-msgstr ""
+msgstr "閉じたら主ウィンドウを隠す"
 
 #: application/gui/preferences/display.py:32
 msgid "Allow multiple instances"
-msgstr ""
+msgstr "複数起動を許可する"
 
 #: application/gui/preferences/display.py:33
 msgid "Show toolbar"
-msgstr ""
+msgstr "ツールバーを表示する"
 
 #: application/gui/preferences/display.py:34
 msgid "Show command bar"
-msgstr ""
+msgstr "コマンドバーを表示する"
 
 #: application/gui/preferences/display.py:35
 msgid "Horizontal split"
-msgstr ""
+msgstr "水平に分割する"
 
 #: application/gui/preferences/display.py:44
 #: application/plugins/sessions/plugin.py:66
 msgid "Tabs"
-msgstr ""
+msgstr "タブ"
 
 #: application/gui/preferences/display.py:48
 msgid "Focus new tab after opening"
-msgstr ""
+msgstr "新しいタブで開いたとき、そのタブに移動する"
 
 #: application/gui/preferences/display.py:49
 msgid "Show close button"
-msgstr ""
+msgstr "閉じるボタンを表示する"
 
 #: application/gui/preferences/display.py:50
 msgid "Show tab(s) even if there is only one"
-msgstr ""
+msgstr "常にタブを表示する"
 
 #: application/gui/preferences/display.py:51
 msgid "Use Ubuntu coloring method for tab title bars"
-msgstr ""
+msgstr "タブのタイトルバーの配色をUbuntu風にする"
 
 #: application/gui/preferences/display.py:52
 msgid "Change title bar color when started as super user"
-msgstr ""
+msgstr "管理者として起動した場合にタイトルバーの色を変える"
 
 #: application/gui/preferences/display.py:65
 msgid "Show status bar:"
-msgstr ""
+msgstr "ステータスバーを表示する:"
 
 #: application/gui/preferences/display.py:69
 msgid "Always"
-msgstr ""
+msgstr "常に"
 
 #: application/gui/preferences/display.py:70
 msgid "When needed"
-msgstr ""
+msgstr "賢く"
 
 #: application/gui/preferences/display.py:71
 msgid "Never"
-msgstr ""
+msgstr "しない"
 
 #: application/gui/preferences/display.py:81
 msgid "Expanded tabs:"
-msgstr ""
+msgstr "タブを幅いっぱいに広げる:"
 
 #: application/gui/preferences/display.py:85
 #: application/gui/preferences/item_list.py:102 application/queue.py:29
 msgid "None"
-msgstr ""
+msgstr "広げない"
 
 #: application/gui/preferences/display.py:87
 msgid "All"
-msgstr ""
+msgstr "全て"
 
 #: application/gui/preferences/display.py:97
 msgid "Other"
-msgstr ""
+msgstr "その他"
 
 #: application/gui/preferences/display.py:101
 msgid "Hide operation window on minimize"
-msgstr ""
+msgstr "最小化した際にオペレーションウィンドウを隠す"
 
 #: application/gui/preferences/display.py:102
 msgid "Show notifications"
-msgstr ""
+msgstr "通知を表示"
 
 #: application/gui/preferences/display.py:103
 msgid "Use path completion on non-local paths"
-msgstr ""
+msgstr "ローカルにないパスに対してもパスを補完する"
 
 #: application/gui/preferences/display.py:111
 msgid "Size format:"
-msgstr ""
+msgstr "大きさの形式:"
 
 #: application/gui/preferences/display.py:115
 msgid "Localized"
-msgstr ""
+msgstr "システムの設定"
 
 #: application/gui/preferences/display.py:116
 msgid "SI <small>(1 kB = 1000 B)</small>"
-msgstr ""
+msgstr "国際単位系（1 kB = 1000 B）"
 
 #: application/gui/preferences/display.py:117
 msgid "IEC <small>(1 KiB = 1024 B)</small>"
-msgstr ""
+msgstr "国際電気標準会議規格（1 KiB = 1024 B）"
 
 #: application/gui/preferences/item_list.py:37
 #: application/plugins/file_list/column_editor.py:70
 #: application/plugin_base/item_list.py:205
 msgid "Item List"
-msgstr ""
+msgstr "アイテム表示欄"
 
 #: application/gui/preferences/item_list.py:42
 msgid "Look & feel"
-msgstr ""
+msgstr "振る舞い"
 
 #: application/gui/preferences/item_list.py:43
 msgid "Hidden files"
-msgstr ""
+msgstr "隠しファイル"
 
 #: application/gui/preferences/item_list.py:45
 msgid "Directories"
-msgstr ""
+msgstr "ディレクトリ"
 
 #: application/gui/preferences/item_list.py:46
 msgid "Columns"
-msgstr ""
+msgstr "列"
 
 #: application/gui/preferences/item_list.py:63
 msgid "Row hinting"
-msgstr ""
+msgstr "低ヒンティング"
 
 #: application/gui/preferences/item_list.py:64
 msgid "Case sensitive item sorting"
-msgstr ""
+msgstr "大文字小文字を区別して並び換える"
 
 #: application/gui/preferences/item_list.py:65
 msgid "Number sensitive item sorting"
-msgstr ""
+msgstr "数字に従って並び換える"
 
 #: application/gui/preferences/item_list.py:66
 msgid "Single click navigation"
-msgstr ""
+msgstr "シングルクリックで操作する"
 
 #: application/gui/preferences/item_list.py:67
 msgid "Right click selects items"
-msgstr ""
+msgstr "右クリックでアイテムを選択する"
 
 #: application/gui/preferences/item_list.py:68
 msgid "Show list headers"
-msgstr ""
+msgstr "列を表示する"
 
 #: application/gui/preferences/item_list.py:69
 msgid "Fast media preview"
-msgstr ""
+msgstr "メディアファイルをすばやくプレビューする"
 
 #: application/gui/preferences/item_list.py:70
 msgid "Show tree expanders"
-msgstr ""
+msgstr "樹展開を表示する"
 
 #: application/gui/preferences/item_list.py:71
 msgid "Hide horizontal scrollbar"
-msgstr ""
+msgstr "水平スクロールバーを表示しない"
 
 #: application/gui/preferences/item_list.py:72
 msgid "Support second level extension"
-msgstr ""
+msgstr "二重拡張子を考慮する"
 
 #: application/gui/preferences/item_list.py:87
 msgid "Access mode format:"
-msgstr ""
+msgstr "パーミッションの形式:"
 
 #: application/gui/preferences/item_list.py:92
 msgid "Octal"
-msgstr ""
+msgstr "8進数"
 
 #: application/gui/preferences/item_list.py:93
 msgid "Textual"
-msgstr ""
+msgstr "記号表記"
 
 #: application/gui/preferences/item_list.py:97
 msgid "Show grid lines:"
-msgstr ""
+msgstr "グリッド線の表示:"
 
 #: application/gui/preferences/item_list.py:103
 msgid "Horizontal"
-msgstr ""
+msgstr "水平方向"
 
 #: application/gui/preferences/item_list.py:104
 msgid "Vertical"
-msgstr ""
+msgstr "垂直方向"
 
 #: application/gui/preferences/item_list.py:110
 msgid "Selection color:"
-msgstr ""
+msgstr "選択色:"
 
 #: application/gui/preferences/item_list.py:120
 msgid "Selection indicator:"
-msgstr ""
+msgstr "選択表示:"
 
 #: application/gui/preferences/item_list.py:135
 msgid "Quick search combination:"
-msgstr ""
+msgstr "入力逐次検索を行うキーl組合せ"
 
 #: application/gui/preferences/item_list.py:138
 msgid "Control"
-msgstr ""
+msgstr "Control"
 
 #: application/gui/preferences/item_list.py:139
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: application/gui/preferences/item_list.py:140
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #: application/gui/preferences/item_list.py:149
 msgid "Date format:"
-msgstr ""
+msgstr "日付の形式:"
 
 #: application/gui/preferences/item_list.py:153
 msgid "Time is formed using the format located at:"
-msgstr ""
+msgstr "日時は以下に記述された表記法で表記される:"
 
 #: application/gui/preferences/item_list.py:162
 msgid "Show hidden files"
-msgstr ""
+msgstr "隠しファイルを表示する"
 
 #: application/gui/preferences/item_list.py:169
 msgid "Always visible files and directories:"
-msgstr ""
+msgstr "常に表示するファイルおよびディレクトリ"
 
 #: application/gui/preferences/item_list.py:194
 msgid "Load specified tabs instead of saved"
-msgstr ""
+msgstr "保存されたものではなく指定したタブを読み込む"
 
 #: application/gui/preferences/item_list.py:207
 msgid "Directory"
-msgstr ""
+msgstr "ディレクトリ"
 
 #: application/gui/preferences/item_list.py:212
 msgid "Left list"
-msgstr ""
+msgstr "左パネルのリスト"
 
 #: application/gui/preferences/item_list.py:213
 msgid "Right list"
-msgstr ""
+msgstr "右パネルのリスト"
 
 #: application/gui/preferences/item_list.py:245
 msgid "Custom directory"
-msgstr ""
+msgstr "任意のディレクトリ"
 
 #: application/gui/preferences/item_list.py:247
 msgid "Left directory"
-msgstr ""
+msgstr "左パネルのディレクトリ"
 
 #: application/gui/preferences/item_list.py:248
 msgid "Right directory"
-msgstr ""
+msgstr "右パネルのディレクトリ"
 
 #: application/gui/preferences/item_list.py:302
 msgid "Column"
-msgstr ""
+msgstr "列"
 
 #: application/gui/preferences/item_list.py:307
 #: application/plugins/file_list/file_list.py:133
 #: application/plugins/find_file_extensions/size.py:62
 msgid "Size"
-msgstr ""
+msgstr "大きさ"
 
 #: application/gui/preferences/item_list.py:310
 msgid "Visible"
-msgstr ""
+msgstr "表示"
 
 #: application/gui/preferences/item_list.py:313
 msgid "Font"
-msgstr ""
+msgstr "フォント"
 
 #: application/gui/preferences/item_list.py:432
 msgid "Add always visible item"
-msgstr ""
+msgstr "常に表示するアイテムを追加"
 
 #: application/gui/preferences/item_list.py:433
 msgid "Full name of file or directory to always show:"
-msgstr ""
+msgstr "常に表示するファイルもしくはディレクトリのフルパスを入力:"
 
 #: application/gui/preferences/item_list.py:459
 msgid "Add custom directory"
-msgstr ""
+msgstr "任意のディレクトリを追加"
 
 #: application/gui/preferences/item_list.py:460
 msgid "Full path:"
-msgstr ""
+msgstr "フルパス:"
 
 #: application/gui/preferences/item_list.py:541
 msgid ""
 "Quick search settings are in conflict with VIM navigation style. To resolve "
 "this issue your quick search settings were restored to default."
-msgstr ""
+msgstr "入力逐次検索の設定がVimバインディングと衝突しています。解消するために入力逐次検索の設定を既定に戻します。"
 
 #: application/gui/main_window.py:103 application/gui/main_window.py:152
 #: application/gui/about_window.py:104 application/gui/about_window.py:105
 #: application/sunflower.py:220
 msgid "Sunflower"
-msgstr ""
+msgstr "ひまわり"
 
 #: application/gui/main_window.py:184
 msgid "_File"
-msgstr ""
+msgstr "ファイル(_F)"
 
 #: application/gui/main_window.py:188
 msgid "New _tab"
-msgstr ""
+msgstr "新しいタブ(_T)"
 
 #: application/gui/main_window.py:200
 msgid "Create _file"
-msgstr ""
+msgstr "ファイルの作成(_F)"
 
 #: application/gui/main_window.py:209
 msgid "Create _directory"
-msgstr ""
+msgstr "ディレクトリの作成(_D)"
 
 #: application/gui/main_window.py:221 application/plugin_base/item_list.py:970
 msgid "_Open"
-msgstr ""
+msgstr "開く(_O)"
 
 #: application/gui/main_window.py:228 application/plugin_base/item_list.py:979
 msgid "Open in new ta_b"
-msgstr ""
+msgstr "新しいタブで開く(_B)"
 
 #: application/gui/main_window.py:238
 #: application/plugin_base/item_list.py:1152
 msgid "_Properties"
-msgstr ""
+msgstr "プロパティ(_P)"
 
 #: application/gui/main_window.py:248 application/indicator.py:50
 msgid "_Quit"
-msgstr ""
+msgstr "終了(_Q)"
 
 #: application/gui/main_window.py:258
 msgid "_Edit"
-msgstr ""
+msgstr "編集(_E)"
 
 #: application/gui/main_window.py:261
 #: application/plugin_base/item_list.py:1043
 msgid "Cu_t"
-msgstr ""
+msgstr "切り取り(_T)"
 
 #: application/gui/main_window.py:268
 #: application/plugin_base/item_list.py:1052
 msgid "_Copy"
-msgstr ""
+msgstr "コピー(_C)"
 
 #: application/gui/main_window.py:275
 #: application/plugin_base/item_list.py:1061
 msgid "_Paste"
-msgstr ""
+msgstr "貼り付け(_P)"
 
 #: application/gui/main_window.py:285
 #: application/plugin_base/item_list.py:1108
 msgid "_Delete"
-msgstr ""
+msgstr "削除(_D)"
 
 #: application/gui/main_window.py:295
 msgid "_Send to..."
-msgstr ""
+msgstr "送る(_S)"
 
 #: application/gui/main_window.py:304
 #: application/plugin_base/item_list.py:1133
 msgid "Ma_ke link"
-msgstr ""
+msgstr "リンクを張る(_K)"
 
 #: application/gui/main_window.py:310
 #: application/plugin_base/item_list.py:1139
 msgid "_Rename..."
-msgstr ""
+msgstr "名前の変更(_R)"
 
 #: application/gui/main_window.py:318
 msgid "_Unmount"
-msgstr ""
+msgstr "アンマウント(_U)"
 
 #: application/gui/main_window.py:322
 msgid "Mount list is empty"
-msgstr ""
+msgstr "マウント一覧になにもありません"
 
 #: application/gui/main_window.py:331
 msgid "_Preferences"
-msgstr ""
+msgstr "設定(_P)"
 
 #: application/gui/main_window.py:341
 msgid "_Mark"
-msgstr ""
+msgstr "印を付ける(_M)"
 
 #: application/gui/main_window.py:344
 msgid "_Select all"
-msgstr ""
+msgstr "すべて選択(_S)"
 
 #: application/gui/main_window.py:351
 msgid "_Deselect all"
-msgstr ""
+msgstr "全選択を解除(_D)"
 
 #: application/gui/main_window.py:356
 msgid "Invert select_ion"
-msgstr ""
+msgstr "選択範囲を反転(_I)"
 
 #: application/gui/main_window.py:362
 msgid "S_elect with pattern"
-msgstr ""
+msgstr "パターンで選択(_E)"
 
 #: application/gui/main_window.py:368
 msgid "Deselect with pa_ttern"
-msgstr ""
+msgstr "パターン選択を解除(_T)"
 
 #: application/gui/main_window.py:375
 msgid "Select with same e_xtension"
-msgstr ""
+msgstr "同じ拡張子で選択(_X)"
 
 #: application/gui/main_window.py:381
 msgid "Deselect with same exte_nsion"
-msgstr ""
+msgstr "拡張子選択を解除(_N)"
 
 #: application/gui/main_window.py:388
 msgid "Compare _directories"
-msgstr ""
+msgstr "ディレクトリを比較する(_D)"
 
 #: application/gui/main_window.py:396
 msgid "_Tools"
-msgstr ""
+msgstr "ツール(_T)"
 
 #: application/gui/main_window.py:400 application/gui/main_window.py:575
 msgid "_Find files"
-msgstr ""
+msgstr "ファイルを検索(_F)"
 
 #: application/gui/main_window.py:408
 msgid "Find _duplicate files"
-msgstr ""
+msgstr "重複したファイルを検索(_D)"
 
 #: application/gui/main_window.py:413
 msgid "_Synchronize directories"
-msgstr ""
+msgstr "ディレクトリを同期する(_S)"
 
 #: application/gui/main_window.py:419 application/gui/main_window.py:576
 msgid "Advanced _rename"
-msgstr ""
+msgstr "高度な名前の変更(_R)"
 
 #: application/gui/main_window.py:426 application/gui/main_window.py:578
 msgid "_Keyring manager"

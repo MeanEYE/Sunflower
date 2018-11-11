@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 
 import os
-
 import sqlite3 as sql
 
 from gi.repository import Gtk

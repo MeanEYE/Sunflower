@@ -5,7 +5,6 @@ import time
 import locale
 import fnmatch
 
-
 from gi.repository import Gtk
 from ..plugin_base.provider import FileType, Support as ProviderSupport
 from ..common import get_user_directory, UserDirectory, display_basename

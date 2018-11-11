@@ -23,6 +23,7 @@ from __future__ import absolute_import, print_function
 import os
 import sys
 
+
 if sys.version_info[0] == 2:
 	reload(sys)
 	sys.setdefaultencoding('utf8')
@@ -50,6 +51,7 @@ try:
 
 except ImportError:
 	pass
+
 
 from . import common
 from .config import Config

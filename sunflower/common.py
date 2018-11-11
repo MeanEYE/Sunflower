@@ -1,5 +1,4 @@
 import os
-
 import gettext
 import subprocess
 import locale

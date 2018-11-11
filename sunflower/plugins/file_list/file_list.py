@@ -4,7 +4,6 @@ import os
 import re
 import time
 import sys
-
 import fnmatch
 
 from gi.repository import GObject, Gtk, Gdk, GLib

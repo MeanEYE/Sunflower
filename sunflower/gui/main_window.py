@@ -4,7 +4,6 @@ from builtins import map, filter
 import os
 import sys
 import webbrowser
-
 import shlex
 import subprocess
 import signal
@@ -1794,8 +1793,9 @@ class MainWindow(Gtk.ApplicationWindow):
 	def close_all_tabs(self, notebook, excluded=None):
 		tabs = notebook.get_children()
 		for tab in tabs:
-			if not tab.is_tab_locked() and tab is not excluded:
-				self.close_tab(notebook, tab)
+			if tab.is_tab_locked() or tab is excluded:
+				continue
+			self.close_tab(notebook, tab)
 
 	def next_tab(self, notebook):
 		"""Select next tab on given notebook"""

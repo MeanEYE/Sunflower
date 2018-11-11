@@ -1,6 +1,21 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import absolute_import
 
-import itertools
+import sys
+if sys.version_info[0] == 2:
+	def accumulate(iterable, func):
+		def accumuloreductrix(so_far, and_beyond):
+			return so_far + [func(so_far[-1], and_beyond)]
+		it = iter(iterable)
+		try:
+			first = it.next()
+		except StopIteration:
+			return []
+		return reduce(accumuloreductrix, it, [first])
+else:
+	from itertools import accumulate
+
 import os
 
 from gi.repository import Gtk, GObject, GLib, Gdk
@@ -67,7 +82,7 @@ class Breadcrumbs(Gtk.HBox):
 			# split elements
 			elements = other_elements.split(os.path.sep)
 			elements.insert(0, root_element)
-			paths = list(itertools.accumulate(elements, os.path.join))
+			paths = list(accumulate(elements, os.path.join))
 
 			# create controls
 			control = None

@@ -596,27 +596,31 @@ class ItemList(PluginBase):
 		"""Handles key events in item list"""
 		result = PluginBase._handle_key_press(self, widget, event)
 
-		if not result:
-			# retrieve human readable key representation
-			key_value = Gdk.keyval_to_unicode(event.keyval)
+		# bail early
+		if result:
+			return result
 
-			if not result and key_value > 0:
-				# generate state sting based on modifier state (control, alt, shift)
-				state = "%d%d%d" % (
-							bool(event.get_state() & Gdk.ModifierType.CONTROL_MASK),
-							bool(event.get_state() & Gdk.ModifierType.MOD1_MASK),
-							bool(event.get_state() & Gdk.ModifierType.SHIFT_MASK)
-						)
+		# retrieve human readable key representation
+		key_value = Gdk.keyval_to_unicode(event.keyval)
 
-				if state == self._parent.options.section('item_list').get('search_modifier'):
-					# start quick search if modifier combination is right
-					self._start_search(chr(key_value))
-					result = True
+		if not result and key_value > 0 \
+		and event.keyval != Gdk.KEY_Escape:
+			# generate state sting based on modifier state (control, alt, shift)
+			state = "%d%d%d" % (
+						bool(event.get_state() & Gdk.ModifierType.CONTROL_MASK),
+						bool(event.get_state() & Gdk.ModifierType.MOD1_MASK),
+						bool(event.get_state() & Gdk.ModifierType.SHIFT_MASK)
+					)
 
-				else:
-					# otherwise focus command entry
-					self._parent.set_command_entry_text(chr(key_value))
-					result = True
+			if state == self._parent.options.section('item_list').get('search_modifier'):
+				# start quick search if modifier combination is right
+				self._start_search(chr(key_value))
+				result = True
+
+			else:
+				# otherwise focus command entry
+				self._parent.set_command_entry_text(chr(key_value))
+				result = True
 
 		return result
 

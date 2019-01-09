@@ -77,6 +77,7 @@ if len(interpreters) > 0:
 		if process.returncode == 0:
 			# if interpreter manages to run
 			# we don't need to execute others
+			code = 0
 			break
 
 		else:

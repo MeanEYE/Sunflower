@@ -3,14 +3,12 @@ from __future__ import absolute_import
 import os
 import chardet
 import codecs
-from gi.repository import Gtk
-from gi.repository import Pango
 import subprocess
 
 from gi.repository import Gtk, Gdk, Pango, GObject, GdkPixbuf
-from ..common import executable_exists, disp_fn
-from ..widgets.status_bar import StatusBar
-from ..plugin_base.provider import Mode as FileMode
+from sunflower.common import executable_exists, disp_fn
+from sunflower.widgets.status_bar import StatusBar
+from sunflower.plugin_base.provider import Mode as FileMode
 
 
 class Viewer:

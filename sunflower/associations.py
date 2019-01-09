@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+
 import sys
 if sys.version_info[0] == 2:
 	import future.standard_library
@@ -9,13 +10,13 @@ import shlex
 import subprocess
 
 from gi.repository import Gtk, Gio
-from urllib.request import pathname2url
 from collections import namedtuple
-from .common import is_x_app, disp_fn, encode_fn
-from .parameters import Parameters
-from .plugin_base.provider import Mode
-from .plugin_base.terminal import TerminalType
-from .gui.input_dialog import ApplicationSelectDialog
+from urllib.request import pathname2url
+from sunflower.common import is_x_app, disp_fn, encode_fn
+from sunflower.parameters import Parameters
+from sunflower.plugin_base.provider import Mode
+from sunflower.plugin_base.terminal import TerminalType
+from sunflower.gui.input_dialog import ApplicationSelectDialog
 
 
 ApplicationInfo = namedtuple(

@@ -4,7 +4,7 @@ import os
 import sqlite3 as sql
 
 from gi.repository import Gtk
-from .common import get_cache_directory, encode_fn
+from sunflower.common import get_cache_directory, encode_fn
 
 
 class EmblemManager:

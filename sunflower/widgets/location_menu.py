@@ -1,18 +1,17 @@
 from __future__ import absolute_import
+
 import sys
 if sys.version_info[0] == 2:
 	import future.standard_library
 	future.standard_library.install_aliases()
 
 import os
-
 import urllib.parse
 
 from gi.repository import Gtk, Pango
-
-from .. import common
-from ..parameters import Parameters
-from ..plugin_base.item_list import ItemList
+from sunflower import common
+from sunflower.parameters import Parameters
+from sunflower.plugin_base.item_list import ItemList
 
 
 class LocationMenu:

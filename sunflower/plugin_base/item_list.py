@@ -8,17 +8,17 @@ import os
 import urllib.parse
 
 from gi.repository import Gtk, Gdk
-from .plugin import PluginBase
-from .provider import Mode as FileMode
-from .. import common
-from ..operation import CopyOperation, MoveOperation
-from ..accelerator_group import AcceleratorGroup
-from ..parameters import Parameters
-from ..tools.viewer import Viewer
-from ..gui.input_dialog import CopyDialog, MoveDialog, InputDialog, PathInputDialog
-from ..gui.preferences.display import StatusVisible
-from ..gui.history_list import HistoryList
-from ..history import HistoryManager
+from sunflower import common
+from sunflower.plugin_base.plugin import PluginBase
+from sunflower.plugin_base.provider import Mode as FileMode
+from sunflower.operation import CopyOperation, MoveOperation
+from sunflower.accelerator_group import AcceleratorGroup
+from sunflower.parameters import Parameters
+from sunflower.tools.viewer import Viewer
+from sunflower.gui.input_dialog import CopyDialog, MoveDialog, InputDialog, PathInputDialog
+from sunflower.gui.preferences.display import StatusVisible
+from sunflower.gui.history_list import HistoryList
+from sunflower.history import HistoryManager
 
 
 class ItemList(PluginBase):

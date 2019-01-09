@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import os
 
 from threading import Thread, Event, Lock
-from ..plugin_base.monitor import MonitorSignals
+from sunflower.plugin_base.monitor import MonitorSignals
 
 
 class DiskUsage:

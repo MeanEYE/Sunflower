@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import os
 
 from gi.repository import Gtk, GObject
-from ..common import disp_fn
+from sunflower.common import disp_fn
 
 class Breadcrumbs(Gtk.HBox):
 	"""Linked list of buttons navigating to different paths."""

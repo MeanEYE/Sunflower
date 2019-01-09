@@ -2,9 +2,6 @@ from __future__ import absolute_import
 
 import gi
 
-gi.require_version('Vte', '2.91')
-from gi.repository import Gtk, Gdk, Vte, Pango
-
 try:
 	gi.require_version('GConf', '1.0')
 	from gi.repository import GConf
@@ -12,8 +9,11 @@ try:
 except:
 	gconf_loaded = False
 
-from .plugin import PluginBase
-from ..accelerator_group import AcceleratorGroup
+gi.require_version('Vte', '2.91')
+
+from gi.repository import Gtk, Gdk, Vte, Pango
+from sunflower.plugin_base.plugin import PluginBase
+from sunflower.accelerator_group import AcceleratorGroup
 
 
 class TerminalType:

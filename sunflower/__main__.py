@@ -53,9 +53,9 @@ except ImportError:
 	pass
 
 
-from . import common
-from .config import Config
-from .gui.main_window import MainWindow
+from sunflower import common
+from sunflower.config import Config
+from sunflower.gui.main_window import MainWindow
 
 
 class Arguments(object):

@@ -3,11 +3,11 @@ from __future__ import absolute_import
 import getpass
 
 from gi.repository import Gtk, GObject, Gdk
-from ..accelerator_group import AcceleratorGroup
-from ..widgets.title_bar import TitleBar, Mode as TitleBarMode
-from ..widgets.status_bar import StatusBar
-from ..widgets.tab_label import TabLabel
-from ..gui.preferences.display import StatusVisible
+from sunflower.accelerator_group import AcceleratorGroup
+from sunflower.widgets.title_bar import TitleBar, Mode as TitleBarMode
+from sunflower.widgets.status_bar import StatusBar
+from sunflower.widgets.tab_label import TabLabel
+from sunflower.gui.preferences.display import StatusVisible
 
 
 class PluginBase(Gtk.VBox):

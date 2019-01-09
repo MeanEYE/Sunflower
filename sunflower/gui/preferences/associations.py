@@ -1,5 +1,5 @@
 from gi.repository import Gtk
-from ..input_dialog import InputDialog, ApplicationInputDialog
+from sunflower.gui.input_dialog import InputDialog, ApplicationInputDialog
 from sunflower.widgets.settings_page import SettingsPage
 
 
@@ -40,7 +40,7 @@ class AssociationsOptions(SettingsPage):
 
 		# create add menu
 		self._add_menu = Gtk.Menu()
-		
+
 		item_add_mime_type = Gtk.MenuItem(label=_('Add mime type'))
 		item_add_mime_type.connect('activate', self.__add_mime_type)
 
@@ -54,7 +54,7 @@ class AssociationsOptions(SettingsPage):
 
 		# create controls
 		hbox_controls = Gtk.HBox(homogeneous=False, spacing=5)
-		
+
 		button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
 		button_add.connect('clicked', self.__button_add_clicked)
 

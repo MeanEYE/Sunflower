@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+
 import sys
 if sys.version_info[0] == 2:
 	import future.standard_library
@@ -8,19 +9,17 @@ import os
 import fnmatch
 
 from gi.repository import Gtk, GObject
-from threading import Thread, Event
 from queue import Queue
+from threading import Thread, Event
 
-from .gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OperationError
-from .gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog, RenameDialog
-from .gui.error_list import ErrorList
-from .plugin_base.provider import Mode as FileMode, TrashError, Support as ProviderSupport
-from .plugin_base.monitor import MonitorSignals
-from .common import format_size
-from .queue import OperationQueue
-
-# import constants
-from .gui.input_dialog import OverwriteOption
+from sunflower.gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OperationError
+from sunflower.gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog, RenameDialog
+from sunflower.gui.error_list import ErrorList
+from sunflower.plugin_base.provider import Mode as FileMode, TrashError, Support as ProviderSupport
+from sunflower.plugin_base.monitor import MonitorSignals
+from sunflower.common import format_size
+from sunflower.queue import OperationQueue
+from sunflower.gui.input_dialog import OverwriteOption
 
 
 class BufferSize:

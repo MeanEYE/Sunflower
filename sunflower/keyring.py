@@ -1,7 +1,8 @@
 from __future__ import absolute_import
 
 from gi.repository import Gtk, GObject
-from .gui.input_dialog import InputDialog, PasswordDialog
+from sunflower.gui.input_dialog import InputDialog, PasswordDialog
+
 
 try:
 	gi.require_version('GnomeKeyring', '1.0')

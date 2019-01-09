@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import os
 
 from collections import namedtuple
-from .monitor import Monitor
+from sunflower.plugin_base.monitor import Monitor
 
 
 FileInfo = namedtuple(

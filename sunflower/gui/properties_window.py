@@ -5,11 +5,11 @@ import locale
 import time
 import pwd
 import grp
-from .. import common
 
 from gi.repository import Gtk, Gdk, Gio, Pango, GObject
-from ..plugin_base.monitor import MonitorSignals
-from ..plugin_base.provider import Support
+from sunflower import common
+from sunflower.plugin_base.provider import Support
+from sunflower.plugin_base.monitor import MonitorSignals
 
 
 class Column:

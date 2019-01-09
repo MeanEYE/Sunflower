@@ -3,7 +3,7 @@ from gi.repository import Gtk, Gdk
 from sunflower.common import AccessModeFormat
 from sunflower.widgets.breadcrumbs import Breadcrumbs
 from sunflower.widgets.settings_page import SettingsPage
-from ..input_dialog import InputDialog
+from sunflower.gui.input_dialog import InputDialog
 
 
 class Column:

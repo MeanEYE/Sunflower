@@ -3,9 +3,10 @@ from __future__ import absolute_import
 import math
 
 from gi.repository import Gtk, Pango, Gdk
-from .breadcrumbs import Breadcrumbs
-from .context_menu import ContextMenu
-from ..common import disp_fn
+from sunflower.widgets.breadcrumbs import Breadcrumbs
+from sunflower.widgets.context_menu import ContextMenu
+from sunflower.common import disp_fn
+
 
 class Mode:
 	NORMAL = 0

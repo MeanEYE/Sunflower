@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import time
 
 from gi.repository import Gtk
-from .input_dialog import PasswordDialog
+from sunflower.gui.input_dialog import PasswordDialog
 
 
 class Column:

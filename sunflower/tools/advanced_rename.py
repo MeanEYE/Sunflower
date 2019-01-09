@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import os
 
 from gi.repository import Gtk, Gdk
-from ..operation import RenameOperation
+from sunflower.operation import RenameOperation
 
 
 class Column:

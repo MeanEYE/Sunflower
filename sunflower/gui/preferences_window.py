@@ -1,17 +1,17 @@
 from __future__ import absolute_import
 
 from gi.repository import Gtk, Gdk, GObject
-from .preferences.display import DisplayOptions
-from .preferences.operation import OperationOptions
-from .preferences.item_list import ItemListOptions
-from .preferences.terminal import TerminalOptions
-from .preferences.view_and_edit import ViewEditOptions
-from .preferences.toolbar import ToolbarOptions
-from .preferences.bookmarks import BookmarksOptions
-from .preferences.commands import CommandsOptions
-from .preferences.plugins import PluginsOptions
-from .preferences.accelerators import AcceleratorOptions
-from .preferences.associations import AssociationsOptions
+from sunflower.gui.preferences.display import DisplayOptions
+from sunflower.gui.preferences.operation import OperationOptions
+from sunflower.gui.preferences.item_list import ItemListOptions
+from sunflower.gui.preferences.terminal import TerminalOptions
+from sunflower.gui.preferences.view_and_edit import ViewEditOptions
+from sunflower.gui.preferences.toolbar import ToolbarOptions
+from sunflower.gui.preferences.bookmarks import BookmarksOptions
+from sunflower.gui.preferences.commands import CommandsOptions
+from sunflower.gui.preferences.plugins import PluginsOptions
+from sunflower.gui.preferences.accelerators import AcceleratorOptions
+from sunflower.gui.preferences.associations import AssociationsOptions
 
 
 class Column:

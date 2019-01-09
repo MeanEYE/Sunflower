@@ -15,37 +15,37 @@ from pathlib import Path
 from functools import partial
 from operator import contains
 
-from .. import common
-from ..menus import MenuManager
-from ..mounts import MountsManager
-from ..icons import IconManager
-from ..emblems import EmblemManager
-from ..associations import AssociationManager
-from ..indicator import Indicator
-from ..notifications import NotificationManager
-from ..toolbar import ToolbarManager
-from ..accelerator_group import AcceleratorGroup
-from ..accelerator_manager import AcceleratorManager
-from ..keyring import KeyringManager, InvalidKeyringError
-from ..parameters import Parameters
+from sunflower import common
+from sunflower.menus import MenuManager
+from sunflower.mounts import MountsManager
+from sunflower.icons import IconManager
+from sunflower.emblems import EmblemManager
+from sunflower.associations import AssociationManager
+from sunflower.indicator import Indicator
+from sunflower.notifications import NotificationManager
+from sunflower.toolbar import ToolbarManager
+from sunflower.accelerator_group import AcceleratorGroup
+from sunflower.accelerator_manager import AcceleratorManager
+from sunflower.keyring import KeyringManager, InvalidKeyringError
+from sunflower.parameters import Parameters
 
-from ..plugin_base.item_list import ItemList
-from ..plugin_base.rename_extension import RenameExtension
-from ..plugin_base.find_extension import FindExtension
-from ..plugin_base.terminal import TerminalType
-from ..widgets.location_menu import LocationMenu
-from ..tools.advanced_rename import AdvancedRename
-from ..tools.find_files import FindFiles
-from ..tools.version_check import VersionCheck
-from ..tools.disk_usage import DiskUsage
-from ..config import Config
+from sunflower.plugin_base.item_list import ItemList
+from sunflower.plugin_base.rename_extension import RenameExtension
+from sunflower.plugin_base.find_extension import FindExtension
+from sunflower.plugin_base.terminal import TerminalType
+from sunflower.widgets.location_menu import LocationMenu
+from sunflower.tools.advanced_rename import AdvancedRename
+from sunflower.tools.find_files import FindFiles
+from sunflower.tools.version_check import VersionCheck
+from sunflower.tools.disk_usage import DiskUsage
+from sunflower.config import Config
 
 # user interface imports
-from .about_window import AboutWindow
-from .preferences_window import PreferencesWindow
-from .preferences.display import TabExpand
-from .input_dialog import InputDialog, AddBookmarkDialog
-from .keyring_manager_window import KeyringManagerWindow
+from sunflower.gui.about_window import AboutWindow
+from sunflower.gui.preferences_window import PreferencesWindow
+from sunflower.gui.preferences.display import TabExpand
+from sunflower.gui.input_dialog import InputDialog, AddBookmarkDialog
+from sunflower.gui.keyring_manager_window import KeyringManagerWindow
 
 
 class MainWindow(Gtk.ApplicationWindow):

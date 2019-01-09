@@ -6,10 +6,10 @@ import locale
 import fnmatch
 
 from gi.repository import Gtk
-from ..plugin_base.provider import FileType, Support as ProviderSupport
-from ..common import get_user_directory, UserDirectory, display_basename
-from ..widgets.completion_entry import PathCompletionEntry
-from ..queue import OperationQueue
+from sunflower.plugin_base.provider import FileType, Support as ProviderSupport
+from sunflower.common import get_user_directory, UserDirectory, display_basename
+from sunflower.widgets.completion_entry import PathCompletionEntry
+from sunflower.queue import OperationQueue
 
 
 # constants

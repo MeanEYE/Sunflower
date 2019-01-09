@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 
 from gi.repository import Gtk
-from .gui.input_dialog import CreateToolbarWidgetDialog
+from sunflower.gui.input_dialog import CreateToolbarWidgetDialog
 
 
 class ToolbarManager:

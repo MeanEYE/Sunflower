@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 
 from gi.repository import Gtk, Gio, GLib, Pango
-from .widgets.location_menu import Location
+from sunflower.widgets.location_menu import Location
 
 
 class MountsManager:

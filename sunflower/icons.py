@@ -4,9 +4,8 @@ from builtins import filter
 import os
 import sys
 
-
 from gi.repository import Gtk, Gio
-from .common import UserDirectory, get_user_directory
+from sunflower.common import UserDirectory, get_user_directory
 
 
 class IconManager:

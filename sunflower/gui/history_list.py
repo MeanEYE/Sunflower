@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import os
 
 from gi.repository import Gtk, Gdk, GObject
-from ..parameters import Parameters
+from sunflower.parameters import Parameters
 
 
 class Column:

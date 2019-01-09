@@ -991,8 +991,9 @@ class FileList(ItemList):
 		if selection is None:
 			return
 		is_dir = self.get_provider().is_dir(selection)
+
 		# get base name from selection
-		selection = common.display_basename(selection)
+		selection = common.decode_file_name(os.path.basename(selection))
 
 		dialog = RenameDialog(self._parent, selection, is_dir)
 		result = dialog.get_response()
@@ -1697,8 +1698,8 @@ class FileList(ItemList):
 
 			data = (
 					os.path.join(parent_path, filename) if parent_path else filename,
-					common.disp_fn(file_info[0]),
-					common.disp_fn(file_info[1][1:]),
+					common.decode_file_name(file_info[0]),
+					common.decode_file_name(file_info[1][1:]),
 					file_size,
 					formated_file_size,
 					file_mode,
@@ -2309,11 +2310,11 @@ class FileList(ItemList):
 		if path_name == "":
 			path_name = self.path
 
-		self._change_tab_text(common.disp_fn(path_name))
+		self._change_tab_text(common.decode_file_name(path_name))
 		self._change_title_text(self.path)
 
 		if self._parent.get_active_object() is self:
-			self._parent.set_location_label(common.disp_fn(self.path))
+			self._parent.set_location_label(common.decode_file_name(self.path))
 
 		# change list icon
 		self._title_bar.set_icon_from_name(provider.get_protocol_icon())
@@ -2350,7 +2351,7 @@ class FileList(ItemList):
 									_(
 										"Error changing working directory to:"
 										"\n{1}\n\n{0}\n\nWould you like to retry?"
-									).format(error, common.disp_fn(path))
+									).format(error, common.decode_file_name(path))
 								)
 			dialog.set_default_response(Gtk.ResponseType.YES)
 			result = dialog.run()

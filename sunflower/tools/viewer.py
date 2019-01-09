@@ -6,7 +6,7 @@ import codecs
 import subprocess
 
 from gi.repository import Gtk, Gdk, Pango, GObject, GdkPixbuf
-from sunflower.common import executable_exists, disp_fn
+from sunflower.common import executable_exists, decode_file_name
 from sunflower.widgets.status_bar import StatusBar
 from sunflower.plugin_base.provider import Mode as FileMode
 
@@ -32,7 +32,7 @@ class Viewer:
 			self._mime_type = associations_manager.get_mime_type(data=data)
 
 		# configure window
-		display_filename = disp_fn(os.path.basename(self.path))
+		display_filename = decode_file_name(os.path.basename(self.path))
 		self._window.set_title(_('{0} - Viewer').format(display_filename))
 		self._window.set_size_request(800, 600)
 		self._window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)

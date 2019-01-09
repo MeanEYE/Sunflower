@@ -4,7 +4,7 @@ import os
 import sqlite3 as sql
 
 from gi.repository import Gtk
-from sunflower.common import get_cache_directory, encode_fn
+from sunflower.common import get_cache_directory, encode_file_name
 
 
 class EmblemManager:
@@ -260,7 +260,7 @@ class EmblemManager:
 		cursor = self._get_cursor()
 
 		# get all the items in path
-		cursor.execute('SELECT id, name FROM items WHERE path=?', (encode_fn(path),))
+		cursor.execute('SELECT id, name FROM items WHERE path=?', (encode_file_name(path),))
 		items = cursor.fetchall()
 
 		# exit if there are no items in path

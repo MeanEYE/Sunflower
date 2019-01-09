@@ -135,8 +135,9 @@ def get_user_directory(directory):
 
 	return result
 
-def is_x_app(command):
+def is_gui_app(command):
 	"""Checks if command uses graphical user interfaces."""
+	# TODO: Add check for Wayland
 	try:
 		env = os.environ.copy()
 		env.update({'LD_TRACE_LOADED_OBJECTS': '1'})
@@ -189,29 +190,21 @@ def load_translation():
 			'ngettext': translation.ngettext
 		})
 
-def disp_fn(fn):
-	"""
-	Replaces surrogate codepoints in a filename with a replacement character
-	to display non-UTF-8 filenames.
-	"""
+def decode_file_name(file_name):
+	"""Replace surrogate codepoints in a filename with a replacement character
+	to display non-UTF-8 filenames."""
 	if sys.version_info[0] == 2:
-		return fn
+		return file_name
 
-	if isinstance(fn, bytes):
-		return fn.decode('utf-8', 'replace')
-	else:
-		return disp_fn(encode_fn(fn))
+	if isinstance(file_name, bytes):
+		return file_name.decode('utf-8', 'replace')
 
-def display_basename(fn):
-	return disp_fn(os.path.basename(fn))
+	return decode_file_name(encode_file_name(file_name))
 
-def encode_fn(fn):
-	"""
-	Encodes a filename to bytes so it can be passed to GI APIs that expect a
-	file name (and specify 'filename' as their argument type in the GIR 
-	bindings)
-	"""
+def encode_file_name(file_name):
+	"""Encode filename to bytes so it can be passed to GI APIs that expect a file name
+	(and specify `filename` as their argument type in the GIR bindings)."""
 	if sys.version_info[0] == 2:
-		return fn
-	else:
-		return str(fn).encode('utf-8', 'surrogateescape')
+		return file_name
+
+	return str(file_name).encode('utf-8', 'surrogateescape')

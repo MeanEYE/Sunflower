@@ -12,7 +12,7 @@ import subprocess
 from gi.repository import Gtk, Gio
 from collections import namedtuple
 from urllib.request import pathname2url
-from sunflower.common import is_x_app, disp_fn, encode_fn
+from sunflower.common import is_gui_app, decode_file_name, encode_file_name
 from sunflower.parameters import Parameters
 from sunflower.plugin_base.provider import Mode
 from sunflower.plugin_base.terminal import TerminalType
@@ -118,7 +118,7 @@ class AssociationManager:
 			# detect content type based on file name
 			# due to a bug in the GI bindings of GIO, we can't pass non-UTF-8
 			# file names in here. In this case, that probably doesn't matter.
-			path = disp_fn(path)
+			path = decode_file_name(path)
 			result = Gio.content_type_guess(filename=path)[0]
 
 		elif data is not None:
@@ -220,12 +220,12 @@ class AssociationManager:
 			if application is not None:
 				if application.supports_uris():
 					selection = [
-						'file://{0}'.format(pathname2url(encode_fn(path)))
-						if not path.startswith('file://') else encode_fn(path)
+						'file://{0}'.format(pathname2url(encode_file_name(path)))
+						if not path.startswith('file://') else encode_file_name(path)
 						for path in selection]
 					application.launch_uris(selection)
 				else:
-					application.launch([Gio.File.new_for_path(encode_fn(path)) for path in selection])
+					application.launch([Gio.File.new_for_path(encode_file_name(path)) for path in selection])
 
 		elif exec_command is not None:
 			# use specified command
@@ -238,7 +238,7 @@ class AssociationManager:
 			split_command = shlex.split(exec_string, posix=False)
 			test_command = split_command[0] if len(split_command) > 1 else exec_string
 
-			if is_x_app(test_command):
+			if is_gui_app(test_command):
 				subprocess.Popen(split_command, cwd=os.path.dirname(selection[0]))
 
 			else:
@@ -264,7 +264,7 @@ class AssociationManager:
 		test_command = split_command[0] if len(split_command) > 1 else exec_string
 
 		if (section.get('terminal_command') and section.get('type') == 1) \
-		or not is_x_app(test_command):
+		or not is_gui_app(test_command):
 			active_object = self._application.get_active_object()
 
 			options = Parameters()
@@ -296,7 +296,7 @@ class AssociationManager:
 
 		if Gio.content_type_can_be_executable(mime_type) and should_execute:
 			# file type is executable
-			if is_x_app(path):
+			if is_gui_app(path):
 				subprocess.Popen((path,), cwd=os.path.dirname(path))
 
 			else:

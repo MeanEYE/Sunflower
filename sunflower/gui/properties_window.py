@@ -199,7 +199,8 @@ class PropertiesWindow(Gtk.Window):
 
 	def _create_monitor(self):
 		"""Create item monitor"""
-		self._monitor = Gio.File.new_for_path(common.encode_fn(self._path)).monitor(Gio.FileMonitorFlags.SEND_MOVED)
+		path = common.encode_file_name(self._path)
+		self._monitor = Gio.File.new_for_path(path).monitor(Gio.FileMonitorFlags.SEND_MOVED)
 		self._monitor.connect('changed', self._item_changes)
 
 	def _load_associated_applications(self):

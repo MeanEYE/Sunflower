@@ -1878,7 +1878,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		if not handled:
 			# try executing command
 			try:
-				if common.is_x_app(command[0]):
+				if common.is_gui_app(command[0]):
 					# command is X based, just execute it
 					process = subprocess.Popen(shlex.split(raw_command), cwd=active_object.path)
 

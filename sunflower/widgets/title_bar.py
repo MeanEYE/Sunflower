@@ -5,7 +5,7 @@ import math
 from gi.repository import Gtk, Pango, Gdk
 from sunflower.widgets.breadcrumbs import Breadcrumbs
 from sunflower.widgets.context_menu import ContextMenu
-from sunflower.common import disp_fn
+from sunflower.common import decode_file_name
 
 
 class Mode:
@@ -124,7 +124,7 @@ class TitleBar:
 		if self._breadcrumbs is not None:
 			self._breadcrumbs.refresh(path)
 		else:
-			self._title_label.set_markup(disp_fn(path).replace('&', '&amp;'))
+			self._title_label.set_markup(decode_file_name(path).replace('&', '&amp;'))
 
 	def set_subtitle(self, text):
 		"""Set subtitle text"""

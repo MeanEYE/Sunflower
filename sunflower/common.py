@@ -193,9 +193,6 @@ def load_translation():
 def decode_file_name(file_name):
 	"""Replace surrogate codepoints in a filename with a replacement character
 	to display non-UTF-8 filenames."""
-	if sys.version_info[0] == 2:
-		return file_name
-
 	if isinstance(file_name, bytes):
 		return file_name.decode('utf-8', 'replace')
 
@@ -204,7 +201,4 @@ def decode_file_name(file_name):
 def encode_file_name(file_name):
 	"""Encode filename to bytes so it can be passed to GI APIs that expect a file name
 	(and specify `filename` as their argument type in the GIR bindings)."""
-	if sys.version_info[0] == 2:
-		return file_name
-
 	return str(file_name).encode('utf-8', 'surrogateescape')

@@ -230,8 +230,6 @@ class LocalProvider(Provider):
 
 	def list_dir(self, path, relative_to=None):
 		"""Get directory list"""
-		if sys.version_info[0] == 2 and type(path) == unicode:
-			path = path.encode('utf-8')
 		real_path = self.real_path(path, relative_to)
 		return os.listdir(real_path)
 

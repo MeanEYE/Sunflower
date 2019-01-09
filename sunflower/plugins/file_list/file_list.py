@@ -66,9 +66,6 @@ class FileList(ItemList):
 
 		self.scheme = 'file'
 		self.path = self._options.get('path', os.path.expanduser('~'))
-		if sys.version_info[0] == 2 and type(self.path) == unicode:
-			self.path = self.path.encode('utf-8')
-
 		self._sort_column = self._options.get('sort_column', 0)
 		self._sort_ascending = self._options.get('sort_ascending', True)
 

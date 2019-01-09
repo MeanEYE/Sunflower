@@ -1,12 +1,7 @@
 from __future__ import absolute_import
-import sys
-if sys.version_info[0] == 2:
-	import future.standard_library
-	future.standard_library.install_aliases()
-
-from urllib.request import urlopen
 
 from gi.repository import Gtk, Gdk, GObject
+from urllib.request import urlopen
 from json import JSONDecoder
 from threading import Thread
 
@@ -22,7 +17,6 @@ class VersionCheck:
 
 	def __init__(self, application):
 		self._dialog = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
-
 		self._application = application
 
 		# configure window

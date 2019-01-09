@@ -1,11 +1,6 @@
 from __future__ import absolute_import
-import sys
-if sys.version_info[0] == 2:
-	import future.standard_library
-	future.standard_library.install_aliases()
 
 from gi.repository import Gtk
-
 from threading import Lock
 from queue import Queue, Empty
 

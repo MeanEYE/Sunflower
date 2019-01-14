@@ -121,7 +121,7 @@ class Volume(Location):
 		self._title.set_ellipsize(Pango.EllipsizeMode.END)
 
 		# create controls
-		self._unmount = Gtk.Button.new_from_icon_name('unmount', Gtk.IconSize.BUTTON)
+		self._unmount = Gtk.Button.new_from_icon_name('media-eject-symbolic', Gtk.IconSize.BUTTON)
 
 		# pack interface
 		container.pack_start(self._icon, False, False, 0)

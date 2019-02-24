@@ -1493,8 +1493,7 @@ class MainWindow(Gtk.ApplicationWindow):
 			reference = target_object.locations_button
 
 		# show locations menu
-		self.locations.set_current(target_object)
-		self.locations.show(reference)
+		self.locations.show(reference, target_object)
 
 		return True
 

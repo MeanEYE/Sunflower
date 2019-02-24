@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 
 from gi.repository import Gtk, Gio, GLib, Pango
-from sunflower.widgets.location_menu import Location
+from sunflower.widgets.location_menu import Location, GenericHeader
 
 
 class MountsManager:
@@ -10,7 +10,6 @@ class MountsManager:
 	def __init__(self, application):
 		self._application = application
 		self._mounts = {}
-		self._mounts_list = None
 		self._location_menu = None
 
 		# create volume monitor
@@ -20,10 +19,10 @@ class MountsManager:
 	def attach_location_menu(self, location_menu):
 		"""Use notification from location menu to populate list with mounts and volumes."""
 		self._location_menu = location_menu
-		self._mounts_list = self._location_menu.get_list('mounts')
+		self._location_menu.add_header(Volume, GenericHeader(_('Mounts')))
 
 		for volume in self._volume_monitor.get_volumes():
-			self._mounts_list.add(Volume(self, volume))
+			self._location_menu.add_location(Volume(self, volume))
 
 		# get list of volumes
 		# volumes = self._volume_monitor.get_volumes()
@@ -39,11 +38,11 @@ class MountsManager:
 
 	def _handle_add_volume(self, monitor, volume):
 		"""Event called when new volume is connected."""
-		self._mounts_list.add(Volume(self, volume))
+		self._location_menu.add_location(Volume(self, volume))
 
 	def _handle_remove_volume(self, widget, volume):
 		"""Event called when volume is removed."""
-		self._mounts_list.remove(widget)
+		self._location_menu.remove_location(widget)
 
 	def __handle_unmount_finish(self, mount, result, user_data=None):
 		"""Callback for unmount events"""
@@ -120,17 +119,26 @@ class Volume(Location):
 		self._title.set_alignment(0, 0.5)
 		self._title.set_ellipsize(Pango.EllipsizeMode.END)
 
-		# create controls
-		self._unmount = Gtk.Button.new_from_icon_name('media-eject-symbolic', Gtk.IconSize.BUTTON)
-
 		# pack interface
 		container.pack_start(self._icon, False, False, 0)
 		container.pack_start(self._title, True, True, 0)
-		container.pack_start(self._unmount, False, False, 0)
+
+		# create unmount button
+		if self._volume.can_eject():
+			self._unmount = Gtk.Button.new_from_icon_name('media-eject-symbolic', Gtk.IconSize.BUTTON)
+			container.pack_start(self._unmount, False, False, 0)
 
 		self.add(container)
 
 	def get_location(self):
 		"""Return location path."""
-		return None
+		result = None
+		mount = self._volume.get_mount()
+
+		if mount:
+			root = mount.get_root()
+			result = root.get_uri()
+			root.unref()
+
+		return result
 

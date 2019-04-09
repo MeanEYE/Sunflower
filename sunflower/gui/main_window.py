@@ -8,6 +8,8 @@ import shlex
 import subprocess
 import signal
 import fcntl
+import zipfile
+import re
 
 from gi.repository import Gtk, Gdk, GLib, GObject, Pango, Gio
 from importlib import import_module
@@ -1109,15 +1111,27 @@ class MainWindow(Gtk.ApplicationWindow):
 		"""Get list of plugins"""
 		user_path = Path(self.user_plugin_path)
 		system_path = Path(self.system_plugin_path)
+		plugin_list = []
 
 		# get list of system wide plugins
-		plugin_list = [ plugin_dir.name for plugin_dir in system_path.iterdir()
-						if plugin_dir.is_dir() and (plugin_dir/'plugin.py').exists() ]
+		if system_path.is_dir():
+			plugin_list += [ plugin_dir.name for plugin_dir in system_path.iterdir()
+					if plugin_dir.is_dir() and (plugin_dir/'plugin.py').exists() ]
+
+		# get zip file plugins
+		if os.path.isfile(sys.path[0]) and sys.path[0] != '':
+			archive = zipfile.ZipFile(sys.path[0])
+			plugin_file = re.compile('sunflower/plugins/(.{1,})/plugin.py')
+
+			# explore zip file and find plugins
+			file_list = filter(lambda name: plugin_file.match(name), archive.namelist())
+			plugin_list += map(lambda name: plugin_file.match(name).group(1), file_list)
+			archive.close()
 
 		# get user specific plugins
 		if user_path.is_dir():
 			plugin_list += [ plugin_dir.name for plugin_dir in user_path.iterdir()
-						     if plugin_dir.is_dir() and (plugin_dir/'plugin.py').exists() ]
+					if plugin_dir.is_dir() and (plugin_dir/'plugin.py').exists() ]
 
 		return plugin_list
 
@@ -1168,8 +1182,18 @@ class MainWindow(Gtk.ApplicationWindow):
 		base_path = os.path.dirname(sys.argv[0])
 		file_name = os.path.join(base_path, 'styles', 'main.css')
 
-		# load and apply style
-		provider.load_from_file(Gio.File.new_for_path(file_name))
+		# try loading from zip file
+		if os.path.isfile(sys.path[0]) and sys.path[0] != '':
+			archive = zipfile.ZipFile(sys.path[0])
+			with archive.open('sunflower/styles/main.css') as raw_file:
+				provider.load_from_data(raw_file.read())
+			archive.close()
+
+		# load styles from a file
+		else:
+			provider.load_from_file(Gio.File.new_for_path(file_name))
+
+		# apply styles
 		Gtk.StyleContext.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
 	def _command_reload(self, widget=None, data=None):

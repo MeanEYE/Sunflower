@@ -1030,9 +1030,10 @@ class DavExtension(GioExtension):
 					try:
 						# prepare attributes
 						attributes = {
-						'server': uri,
-						'user': response[1][DavResult.USERNAME]
+							'server': uri,
+							'user': response[1][DavResult.USERNAME]
 						}
+
 						# first, try to store password with keyring
 						keyring_manager.store_password(
 							name,

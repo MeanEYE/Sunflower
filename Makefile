@@ -6,10 +6,10 @@ ARCH_BUILD_DIRECTORY = $(BUILD_DIRECTORY)/Arch
 FEDORA_BUILD_DIRECTORY = $(BUILD_DIRECTORY)/Fedora
 
 # version
-VERSION_MAJOR := $(shell cat $(WORKING_DIRECTORY)/application/gui/main_window.py | grep \'major\': | cut -f 2 -d : | tr -d [:space:][,])
-VERSION_MINOR := $(shell cat $(WORKING_DIRECTORY)/application/gui/main_window.py | grep \'minor\': | cut -f 2 -d : | tr -d [:space:][,])
-VERSION_BUILD := $(shell cat $(WORKING_DIRECTORY)/application/gui/main_window.py | grep \'build\': | cut -f 2 -d : | tr -d [:space:][,])
-VERSION_STAGE := $(shell cat $(WORKING_DIRECTORY)/application/gui/main_window.py | grep \'stage\': | cut -f 2 -d : | tr -d [:space:][\'][,])
+VERSION_MAJOR := $(shell cat $(WORKING_DIRECTORY)/sunflower/gui/main_window.py | grep \'major\': | cut -f 2 -d : | tr -d [:space:][,])
+VERSION_MINOR := $(shell cat $(WORKING_DIRECTORY)/sunflower/gui/main_window.py | grep \'minor\': | cut -f 2 -d : | tr -d [:space:][,])
+VERSION_BUILD := $(shell cat $(WORKING_DIRECTORY)/sunflower/gui/main_window.py | grep \'build\': | cut -f 2 -d : | tr -d [:space:][,])
+VERSION_STAGE := $(shell cat $(WORKING_DIRECTORY)/sunflower/gui/main_window.py | grep \'stage\': | cut -f 2 -d : | tr -d [:space:][\'][,])
 
 # generate file name based on version
 ifeq ($(VERSION_STAGE),f)
@@ -147,10 +147,19 @@ language-compile:
 	find translations -iname "*.po" -execdir msgfmt sunflower.po -o sunflower.mo \;
 
 clean:
-	rm -rf $(BUILD_DIRECTORY)
+	$(RM) -rf $(BUILD_DIRECTORY)
+	$(RM) -rf sunflower.*
 
 version:
 	$(info Sunflower $(VERSION))
+
+standalone:
+	zip --quiet sunflower -r sunflower -x *.pyc
+	zip --quiet --junk-paths sunflower sunflower/__main__.py
+	echo '#!/usr/bin/python3' > sunflower.app
+	cat sunflower.zip >> sunflower.app
+	rm sunflower.zip
+	chmod a+x sunflower.app
 
 help:
 	@echo "$$HELP"

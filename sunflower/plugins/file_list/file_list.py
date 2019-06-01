@@ -1861,13 +1861,6 @@ class FileList(ItemList):
 		size_available = common.format_size(system_size.size_available, self._size_format)
 		size_total = common.format_size(system_size.size_total, self._size_format)
 
-		# calculate percent available
-		if system_size.size_total > 0:
-			percent_available = 100.0 * system_size.size_available / system_size.size_total
-
-		else:
-			percent_available = 0
-
 		# set title and subtitle
 		self._title_bar.set_title(text)
 		self._label_free_space.set_text('{2} {0} - {3} {1}'.format(
@@ -1876,7 +1869,8 @@ class FileList(ItemList):
 							_('Free:'),
 							_('Total:')
 						))
-		self._progress_free_space.set_fraction(1 - (percent_available / 100))
+		self._progress_free_space.set_max_value(system_size.size_total)
+		self._progress_free_space.set_value(system_size.size_total - system_size.size_available)
 
 	def _drag_motion(self, widget, drag_context, x, y, timestamp):
 		"""Handle dragging data over widget"""

@@ -126,7 +126,7 @@ class ItemList(PluginBase):
 		self._label_free_space.set_alignment(0, 0.5)
 		vbox_free_space.pack_start(self._label_free_space, False, False, 0)
 
-		self._progress_free_space = Gtk.ProgressBar.new()
+		self._progress_free_space = Gtk.LevelBar.new()
 		vbox_free_space.pack_start(self._progress_free_space, False, False, 0)
 
 		# create context menu button container

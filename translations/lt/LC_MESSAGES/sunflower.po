@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the Sunflower package.
 # 
 # Translators:
+# Dainius Pazera <dainiasas@gmail.com>, 2019
 # Moo, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-02 01:35+0100\n"
-"PO-Revision-Date: 2018-11-02 00:52+0000\n"
-"Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
+"PO-Revision-Date: 2019-06-04 16:06+0000\n"
+"Last-Translator: Dainius Pazera <dainiasas@gmail.com>\n"
 "Language-Team: Lithuanian (http://www.transifex.com/way2cu/sunflower/language/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -37,7 +38,7 @@ msgstr "Prireikus, rodyti slankjuostes"
 
 #: application/gui/preferences/terminal.py:29
 msgid "Use the system fixed width font"
-msgstr ""
+msgstr "Naudoti fiksuoto pločio šriftą"
 
 #: application/gui/preferences/terminal.py:32
 msgid "Font:"
@@ -121,7 +122,7 @@ msgstr "Nuleisti"
 
 #: application/gui/preferences/associations.py:15
 msgid "Associations"
-msgstr ""
+msgstr "Asociacijos"
 
 #: application/gui/preferences/associations.py:44
 #: application/gui/preferences/associations.py:76
@@ -401,7 +402,7 @@ msgid ""
 "With trashing disabled you will not be able to restore accidentally deleted "
 "items. Are you sure you want to disable confirmation dialog when deleting "
 "items?"
-msgstr ""
+msgstr "Išjungus šiukšlinę nebegalėsite atstatyti atsitiktinai ištrintų objektų.\nAr tikrai išjungti trynimo patvirtinimo dialogą?"
 
 #: application/gui/preferences/display.py:22
 msgid "Display"
@@ -491,7 +492,7 @@ msgstr "Kita"
 
 #: application/gui/preferences/display.py:101
 msgid "Hide operation window on minimize"
-msgstr ""
+msgstr "Sumažinant paslėpti veiklųjį langą"
 
 #: application/gui/preferences/display.py:102
 msgid "Show notifications"
@@ -499,7 +500,7 @@ msgstr "Rodyti pranešimus"
 
 #: application/gui/preferences/display.py:103
 msgid "Use path completion on non-local paths"
-msgstr ""
+msgstr "Naudoti kelio spėjimą ne vietiniuose keliuose (path)"
 
 #: application/gui/preferences/display.py:111
 msgid "Size format:"
@@ -545,11 +546,11 @@ msgstr ""
 
 #: application/gui/preferences/item_list.py:64
 msgid "Case sensitive item sorting"
-msgstr ""
+msgstr "Rūšiuoti atsižvelgiant į didžiasias / mažasias raides"
 
 #: application/gui/preferences/item_list.py:65
 msgid "Number sensitive item sorting"
-msgstr ""
+msgstr "Rūšiuoti atsižvelgiant į skaitmenis"
 
 #: application/gui/preferences/item_list.py:66
 msgid "Single click navigation"
@@ -557,7 +558,7 @@ msgstr "Naršymas vienkarčiu pelės mygtuko spustelėjimu"
 
 #: application/gui/preferences/item_list.py:67
 msgid "Right click selects items"
-msgstr ""
+msgstr "Objektus pasirinkti dešiniuoju pelės spragtelėjimu"
 
 #: application/gui/preferences/item_list.py:68
 msgid "Show list headers"
@@ -569,7 +570,7 @@ msgstr ""
 
 #: application/gui/preferences/item_list.py:70
 msgid "Show tree expanders"
-msgstr ""
+msgstr "Rodyti medžio išskleidimą"
 
 #: application/gui/preferences/item_list.py:71
 msgid "Hide horizontal scrollbar"
@@ -577,7 +578,7 @@ msgstr "Slėpti horizontaliąją slankjuostę"
 
 #: application/gui/preferences/item_list.py:72
 msgid "Support second level extension"
-msgstr ""
+msgstr "Leisti antrojo lygmens plėtinius"
 
 #: application/gui/preferences/item_list.py:87
 msgid "Access mode format:"
@@ -597,11 +598,11 @@ msgstr ""
 
 #: application/gui/preferences/item_list.py:103
 msgid "Horizontal"
-msgstr ""
+msgstr "Horizontalus"
 
 #: application/gui/preferences/item_list.py:104
 msgid "Vertical"
-msgstr ""
+msgstr "Vertikalus"
 
 #: application/gui/preferences/item_list.py:110
 msgid "Selection color:"
@@ -625,7 +626,7 @@ msgstr "Alt"
 
 #: application/gui/preferences/item_list.py:140
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #: application/gui/preferences/item_list.py:149
 msgid "Date format:"
@@ -649,15 +650,15 @@ msgstr ""
 
 #: application/gui/preferences/item_list.py:207
 msgid "Directory"
-msgstr ""
+msgstr "Segtuvas"
 
 #: application/gui/preferences/item_list.py:212
 msgid "Left list"
-msgstr ""
+msgstr "Kairysis sąrašas"
 
 #: application/gui/preferences/item_list.py:213
 msgid "Right list"
-msgstr ""
+msgstr "Dešinysis sąrašas"
 
 #: application/gui/preferences/item_list.py:245
 msgid "Custom directory"
@@ -673,7 +674,7 @@ msgstr ""
 
 #: application/gui/preferences/item_list.py:302
 msgid "Column"
-msgstr ""
+msgstr "Stulpelis"
 
 #: application/gui/preferences/item_list.py:307
 #: application/plugins/file_list/file_list.py:133
@@ -683,7 +684,7 @@ msgstr "Dydis"
 
 #: application/gui/preferences/item_list.py:310
 msgid "Visible"
-msgstr ""
+msgstr "Matomas"
 
 #: application/gui/preferences/item_list.py:313
 msgid "Font"
@@ -691,7 +692,7 @@ msgstr "Šriftas"
 
 #: application/gui/preferences/item_list.py:432
 msgid "Add always visible item"
-msgstr ""
+msgstr "Pridėti visuomet matomą objektą"
 
 #: application/gui/preferences/item_list.py:433
 msgid "Full name of file or directory to always show:"
@@ -703,7 +704,7 @@ msgstr ""
 
 #: application/gui/preferences/item_list.py:460
 msgid "Full path:"
-msgstr ""
+msgstr "Pilnas kelias:"
 
 #: application/gui/preferences/item_list.py:541
 msgid ""
@@ -930,11 +931,11 @@ msgstr ""
 
 #: application/gui/main_window.py:584
 msgid "Tools"
-msgstr ""
+msgstr "Įrankinė"
 
 #: application/gui/main_window.py:585
 msgid "Help"
-msgstr ""
+msgstr "Pagalba"
 
 #: application/gui/main_window.py:586 application/gui/preferences_window.py:30
 #: application/gui/preferences_window.py:45
@@ -943,11 +944,11 @@ msgstr "Nuostatos"
 
 #: application/gui/main_window.py:588
 msgid "Quit"
-msgstr ""
+msgstr "Išeiti"
 
 #: application/gui/main_window.py:653
 msgid "Execute command:"
-msgstr ""
+msgstr "Vykdyti komandą:"
 
 #: application/gui/main_window.py:692
 msgid "Refresh"
@@ -1012,7 +1013,7 @@ msgstr "Ištrinti pažymėtus elementus"
 
 #: application/gui/main_window.py:813
 msgid "_Edit commands"
-msgstr ""
+msgstr "R_edaguoti komandas"
 
 #: application/gui/main_window.py:1543
 msgid "Select items"
@@ -1207,12 +1208,12 @@ msgstr "Tomas:"
 
 #: application/gui/properties_window.py:451
 msgid "Accessed:"
-msgstr ""
+msgstr "Pasiekta:"
 
 #: application/gui/properties_window.py:452
 #: application/gui/input_dialog.py:1195 application/gui/input_dialog.py:1212
 msgid "Modified:"
-msgstr ""
+msgstr "Modifikuota:"
 
 #: application/gui/properties_window.py:527
 msgid "Access"
@@ -1314,7 +1315,7 @@ msgstr "Slaptažodis:"
 
 #: application/gui/input_dialog.py:379
 msgid "Confirm:"
-msgstr ""
+msgstr "Patvirtinti:"
 
 #: application/gui/input_dialog.py:434
 msgid "Create empty file"
@@ -1369,7 +1370,7 @@ msgstr "Paveiktų elementų sąrašas"
 
 #: application/gui/input_dialog.py:706
 msgid "Set owner on destination"
-msgstr ""
+msgstr "Nustatyti paskirties savininką"
 
 #: application/gui/input_dialog.py:707
 msgid "Set access mode on destination"
@@ -1485,16 +1486,16 @@ msgstr ""
 
 #: application/gui/input_dialog.py:1245
 msgid "File conflict"
-msgstr ""
+msgstr "Failų konfliktas"
 
 #: application/gui/input_dialog.py:1250 application/gui/input_dialog.py:1260
 msgid "Replace"
-msgstr ""
+msgstr "Pakeisti"
 
 #: application/gui/input_dialog.py:1267
 #, python-brace-format
 msgid "Replace file \"{0}\"?"
-msgstr ""
+msgstr "Pakeisti failą \"{0}\"?"
 
 #: application/gui/input_dialog.py:1273
 #, python-brace-format
@@ -1509,12 +1510,12 @@ msgstr ""
 
 #: application/gui/input_dialog.py:1290
 msgid "Merge"
-msgstr ""
+msgstr "Sulieti"
 
 #: application/gui/input_dialog.py:1300
 #, python-brace-format
 msgid "Merge directory \"{0}\"?"
-msgstr ""
+msgstr "Sulieti segtuvą \"{0}\"?"
 
 #: application/gui/input_dialog.py:1306
 #, python-brace-format
@@ -1526,7 +1527,7 @@ msgstr ""
 
 #: application/gui/input_dialog.py:1324
 msgid "Add bookmark"
-msgstr ""
+msgstr "Pridėti žymelę"
 
 #: application/gui/input_dialog.py:1342
 msgid ""
@@ -1541,11 +1542,11 @@ msgstr "Operacijos klaida"
 
 #: application/gui/input_dialog.py:1452
 msgid "Skip all"
-msgstr ""
+msgstr "Viską praleisti"
 
 #: application/gui/input_dialog.py:1453
 msgid "Retry"
-msgstr ""
+msgstr "Bandyti dar kartą"
 
 #: application/gui/input_dialog.py:1501
 msgid "Add toolbar widget"
@@ -1557,7 +1558,7 @@ msgstr ""
 
 #: application/gui/input_dialog.py:1611
 msgid "Select part of the text:"
-msgstr ""
+msgstr "Pažymėti dalį teksto:"
 
 #: application/gui/input_dialog.py:1635
 msgid "Add application"
@@ -1569,7 +1570,7 @@ msgstr ""
 
 #: application/gui/input_dialog.py:1646
 msgid "Select"
-msgstr ""
+msgstr "Pažymėti"
 
 #: application/gui/input_dialog.py:1714
 msgid "Select application:"
@@ -1586,31 +1587,31 @@ msgstr ""
 
 #: application/gui/operation_dialog.py:90 application/gui/error_list.py:46
 msgid "Source:"
-msgstr ""
+msgstr "Šaltinis:"
 
 #: application/gui/operation_dialog.py:91 application/gui/error_list.py:52
 msgid "Destination:"
-msgstr ""
+msgstr "Paskirtis:"
 
 #: application/gui/operation_dialog.py:148
 msgid "ETA:"
-msgstr ""
+msgstr "Liko laiko:"
 
 #: application/gui/operation_dialog.py:149
 msgid "Speed:"
-msgstr ""
+msgstr "Greitis:"
 
 #: application/gui/operation_dialog.py:150
 msgid "Total size:"
-msgstr ""
+msgstr "Visas dydis:"
 
 #: application/gui/operation_dialog.py:151
 msgid "Total count:"
-msgstr ""
+msgstr "Bendras skaičius:"
 
 #: application/gui/operation_dialog.py:204
 msgid "Minimize"
-msgstr ""
+msgstr "Sumažinti"
 
 #: application/gui/operation_dialog.py:212
 #: application/gui/operation_dialog.py:267
@@ -1651,15 +1652,15 @@ msgstr[3] ""
 
 #: application/gui/operation_dialog.py:500
 msgid "Copy Selection"
-msgstr ""
+msgstr "Kopijuoti pažymėtus"
 
 #: application/gui/operation_dialog.py:521
 msgid "Move Selection"
-msgstr ""
+msgstr "Perkelti pažymėtus"
 
 #: application/gui/operation_dialog.py:546
 msgid "Delete Selection"
-msgstr ""
+msgstr "Trinti pažymėtus"
 
 #: application/gui/operation_dialog.py:547
 msgid "Removing items..."
@@ -1667,7 +1668,7 @@ msgstr "Šalinami elementai..."
 
 #: application/gui/operation_dialog.py:573
 msgid "Rename Items"
-msgstr ""
+msgstr "Pervadinti objektus"
 
 #: application/gui/operation_dialog.py:574
 msgid "Renaming items..."
@@ -1683,11 +1684,11 @@ msgstr "ID"
 
 #: application/gui/keyring_manager_window.py:54
 msgid "Modified"
-msgstr ""
+msgstr "Pakeista"
 
 #: application/gui/keyring_manager_window.py:127
 msgid "Please select an entry to delete!"
-msgstr ""
+msgstr "Pasirinkite objektą trynimui!"
 
 #: application/gui/keyring_manager_window.py:143
 #, python-brace-format
@@ -1703,7 +1704,7 @@ msgstr ""
 
 #: application/gui/keyring_manager_window.py:178
 msgid "Change password"
-msgstr ""
+msgstr "Keisti slaptažodį"
 
 #: application/gui/keyring_manager_window.py:179
 msgid "Enter new password for selected keyring entry."
@@ -1711,23 +1712,23 @@ msgstr ""
 
 #: application/gui/keyring_manager_window.py:194
 msgid "Password was changed!"
-msgstr ""
+msgstr "Slaptažodis pakeistas!"
 
 #: application/gui/keyring_manager_window.py:209
 msgid "Passwords do not match! Please try again."
-msgstr ""
+msgstr "Slaptažodžiai nesutampa! Mėginkite dar kartą."
 
 #: application/gui/about_window.py:109
 msgid "Twin-panel file manager for Linux."
-msgstr ""
+msgstr "Dviejų langų failų tvarkyklė Linux sistemai"
 
 #: application/gui/about_window.py:112
 msgid "Copyright © 2010-2018 by Mladen Mijatov and contributors."
-msgstr ""
+msgstr "Copyright © 2010-2018 Mladen Mijatov ir kiti."
 
 #: application/gui/error_list.py:21
 msgid "Error list"
-msgstr ""
+msgstr "Klaidų sąrašas"
 
 #: application/gui/error_list.py:40
 msgid "For:"
@@ -1735,7 +1736,7 @@ msgstr ""
 
 #: application/sunflower.py:95
 msgid "Show version number"
-msgstr ""
+msgstr "Rodyti versijos numerį"
 
 #: application/sunflower.py:104 application/sunflower.py:113
 msgid "Skip loading additional plugins"
@@ -1743,11 +1744,11 @@ msgstr ""
 
 #: application/sunflower.py:122
 msgid "Open new tab on the left notebook"
-msgstr ""
+msgstr "Atverti naują kortelę kairiojoje užrašinėje"
 
 #: application/sunflower.py:131
 msgid "Open new tab on the right notebook"
-msgstr ""
+msgstr "Atverti naują kortelę dešiniojoje užrašinėje"
 
 #: application/sunflower.py:140
 msgid "Open terminal tab on the left notebook"
@@ -2004,11 +2005,11 @@ msgstr ""
 
 #: application/plugins/file_list/file_list.py:1866
 msgid "Free:"
-msgstr ""
+msgstr "Laisva:"
 
 #: application/plugins/file_list/file_list.py:1867
 msgid "Total:"
-msgstr ""
+msgstr "Iš viso:"
 
 #: application/plugins/file_list/file_list.py:1937
 msgid "Copy here"
@@ -2024,7 +2025,7 @@ msgstr ""
 
 #: application/plugins/file_list/file_list.py:2326
 msgid "No such file or directory"
-msgstr ""
+msgstr "Nėra tokio failo ar aplanko"
 
 #: application/plugins/file_list/file_list.py:2345
 #, python-brace-format
@@ -2192,21 +2193,21 @@ msgstr "Nieko nedaryti"
 
 #: application/plugins/rename_extensions/letter_case.py:16
 msgid "Capitalize"
-msgstr ""
+msgstr "Pakeisti pirmas raides didžiosiomis"
 
 #: application/plugins/rename_extensions/letter_case.py:17
 #: application/plugins/rename_extensions/letter_case.py:24
 msgid "Upper case"
-msgstr ""
+msgstr "Pakeisti visas raides didžiosiomis"
 
 #: application/plugins/rename_extensions/letter_case.py:18
 #: application/plugins/rename_extensions/letter_case.py:25
 msgid "Lower case"
-msgstr ""
+msgstr "Pakeisti visas raides mažosiomis"
 
 #: application/plugins/rename_extensions/letter_case.py:19
 msgid "Swap case"
-msgstr ""
+msgstr "Keisti mažąsias raides didžiosiomis ir atvirkščiai"
 
 #: application/plugins/rename_extensions/letter_case.py:29
 msgid "Item name:"
@@ -2536,67 +2537,67 @@ msgstr "Invertuoti žymėjimą"
 
 #: application/plugin_base/item_list.py:229
 msgid "Toggle selection"
-msgstr ""
+msgstr "Apkeisti pažymėjimą"
 
 #: application/plugin_base/item_list.py:230
 msgid "Toggle selection and move marker up"
-msgstr ""
+msgstr "Apkeisti pažymėjimą ir perkelti žymeklį viršun"
 
 #: application/plugin_base/item_list.py:231
 msgid "Trash or delete selected items"
-msgstr ""
+msgstr "Pasirinktus objektus ištrinti arba perkelti į šiukšlinę"
 
 #: application/plugin_base/item_list.py:232
 msgid "Force deleting selected items"
-msgstr ""
+msgstr "Priverstinai trinti pažymėtus objektus"
 
 #: application/plugin_base/item_list.py:233
 msgid "Show bookmarks for current list"
-msgstr ""
+msgstr "Rodyti šio sąrašo adresyną"
 
 #: application/plugin_base/item_list.py:234
 msgid "Show bookmarks for left list"
-msgstr ""
+msgstr "Rodyti kairiojo sąrašo adresyną"
 
 #: application/plugin_base/item_list.py:235
 msgid "Show bookmarks for right list"
-msgstr ""
+msgstr "Rodyti dešiniojo sąrašo adresyną"
 
 #: application/plugin_base/item_list.py:236
 msgid "Rename selected item"
-msgstr ""
+msgstr "Pervadinti pasirinktą objektą"
 
 #: application/plugin_base/item_list.py:237
 msgid "View selected item"
-msgstr ""
+msgstr "Peržiūrėti pasirinktą objektą"
 
 #: application/plugin_base/item_list.py:238
 msgid "Edit selected item"
-msgstr ""
+msgstr "Redaguoti pasirinktą objektą"
 
 #: application/plugin_base/item_list.py:239
 msgid "Copy selected items"
-msgstr ""
+msgstr "Kopijuoti pasirinktą objektą"
 
 #: application/plugin_base/item_list.py:240
 msgid "Move selected items"
-msgstr ""
+msgstr "Perkelti pasirinktą objektą"
 
 #: application/plugin_base/item_list.py:241
 msgid "Show context menu"
-msgstr ""
+msgstr "Rodyti kontekstinį meniu"
 
 #: application/plugin_base/item_list.py:242
 msgid "Show \"open with\" menu"
-msgstr ""
+msgstr "Rodyti \"atverti su\" meniu"
 
 #: application/plugin_base/item_list.py:243
 msgid "Assign path from left list"
-msgstr ""
+msgstr "Priskirti kelią iš kairiojo sąrašo"
 
 #: application/plugin_base/item_list.py:244
 msgid "Assign path from right list"
-msgstr ""
+msgstr "Priskirti kelią iš dešiniojo sąrašo"
 
 #: application/plugin_base/item_list.py:246
 msgid "Move selection marker up"
@@ -2901,45 +2902,45 @@ msgstr ""
 
 #: application/tools/viewer.py:138
 msgid "Viewer is unable to display this file type."
-msgstr "Žiūryklei nepavyko parodyti šį failo tipą."
+msgstr "Žiūryklei nepavyko parodyti šio failo tipo."
 
 #: application/tools/find_files.py:43 application/tools/find_files.py:317
 msgid "Find files"
-msgstr ""
+msgstr "Rasti failus"
 
 #: application/tools/find_files.py:61
 msgid "Search in:"
-msgstr ""
+msgstr "Ieškoti čia:"
 
 #: application/tools/find_files.py:78
 msgid "Search recursively"
-msgstr ""
+msgstr "Rekursyvi paieška"
 
 #: application/tools/find_files.py:130 application/tools/find_files.py:242
 msgid "Start"
-msgstr ""
+msgstr "Pradėti"
 
 #: application/tools/find_files.py:192
 msgid ""
 "Active object doesn't support changing path. Set focus on a different "
 "object, preferably file list, and try again."
-msgstr ""
+msgstr "Aktyvusis objektas nepalaiko kelio (path) keitimo. Pasirinkite kitą objektą, pageidautina failų sąrašą ir pamėginkite dar kartą."
 
 #: application/tools/find_files.py:230
 msgid "Stop"
-msgstr ""
+msgstr "Stabdyti"
 
 #: application/tools/find_files.py:363
 msgid ""
 "Specified path is not valid or doesn't exist anymore. Please check your "
 "selection and try again."
-msgstr ""
+msgstr "Pasirinktas kelias neteisingas arba nebeegzistuoja. Patikrinkite pasirinkimą ir mėginkite dar kartą."
 
 #: application/tools/find_files.py:386
 msgid ""
 "You need to enable at least one extension in order to find files and "
 "directories!"
-msgstr ""
+msgstr "Norint ieškoti failų ar aplankų reikia įgalinti bent vieną plėtinį!"
 
 #: application/tools/version_check.py:23
 msgid "Version check"
@@ -2971,7 +2972,7 @@ msgstr "Naujas pavadinimas"
 
 #: application/tools/advanced_rename.py:78
 msgid "Items located in:"
-msgstr ""
+msgstr "Elementų vieta:"
 
 #: application/tools/advanced_rename.py:201
 #, python-brace-format

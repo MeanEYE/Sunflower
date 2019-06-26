@@ -11,7 +11,6 @@ Sunflower package can be downloaded from following locations:
 
 * [Arch Linux AUR](https://aur.archlinux.org/packages/sunflower/)
 * [Arch Linux AUR, repository version](https://aur.archlinux.org/packages/sunflower-hg/)
-* [Ubuntu PPA](https://launchpad.net/~atareao/+archive/sunflower) (usually late by a version or two)
 * [Gentoo](http://packages.gentoo.org/package/x11-misc/sunflower)
     Installation: `emerge --ask x11-misc/sunflower`
 

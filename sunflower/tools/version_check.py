@@ -78,7 +78,8 @@ class VersionCheck:
 		try:
 			# get data from web
 			url_handler = urlopen(self.URL)
-			data = url_handler.read()
+			encoding = url_handler.headers.get_content_charset()
+			data = url_handler.read().decode(encoding)
 
 		finally:
 			decoder = JSONDecoder()

@@ -60,8 +60,12 @@ class ZipProvider(Provider):
 				key_name, file_name = os.path.split(info.filename)
 				file_type = FileType.REGULAR
 
-			# prepate file timestamp
-			file_timestamp = time.mktime(datetime.datetime(*info.date_time).timetuple())
+			# prepare file timestamp
+			try:
+				file_timestamp = time.mktime(datetime.datetime(*info.date_time).timetuple())
+			except ValueError:
+				# set fallback timestamp for files with invalid date_time value
+				file_timestamp = 0
 
 			# prepare file info
 			file_info = FileInfo(

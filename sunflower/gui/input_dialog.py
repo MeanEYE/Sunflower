@@ -591,7 +591,7 @@ class DeleteDialog:
 		button_yes.set_can_default(True)
 		button_no = Gtk.Button.new_with_label(_('No'))
 
-		button_queue = Gtk.Button.new_from_icon_name('stock_bottom', Gtk.IconSize.BUTTON)
+		button_queue = Gtk.Button.new_from_icon_name('go-bottom', Gtk.IconSize.BUTTON)
 		button_queue.set_always_show_image(True)
 		button_queue.set_label('None')
 

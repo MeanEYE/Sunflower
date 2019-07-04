@@ -2669,7 +2669,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def set_clipboard_text(self, text):
 		"""Set text data to clipboard"""
-		self.clipboard.set_text(text)
+		self.clipboard.set_text(text, -1)
 
 	def set_clipboard_item_list(self, operation, uri_list):
 		"""Set clipboard to contain list of items

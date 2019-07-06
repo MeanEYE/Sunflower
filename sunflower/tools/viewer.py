@@ -192,7 +192,8 @@ class Viewer:
 		if encoding is not None:
 			content = codecs.decode(content, encoding)
 
-		text_view.get_buffer().set_text(content)
+		if len(content) > 0:
+			text_view.get_buffer().set_text(content)
 
 		# add container to notebook
 		container.add(text_view)

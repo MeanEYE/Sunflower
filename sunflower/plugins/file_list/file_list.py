@@ -1587,6 +1587,19 @@ class FileList(ItemList):
 		"""Abstract method to edit currently selected item"""
 		selection_list = self._get_selection_list(relative=False, files_only=True)
 
+		# display error message if selection has no files
+		if selection_list is None:
+			dialog = Gtk.MessageDialog(
+									widget,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.INFO,
+									Gtk.ButtonsType.OK,
+									_('No files selected.')
+								)
+			dialog.run()
+			dialog.destroy()
+			return True
+
 		if len(selection_list) > 0:
 			self._parent.associations_manager.edit_file(selection_list)
 

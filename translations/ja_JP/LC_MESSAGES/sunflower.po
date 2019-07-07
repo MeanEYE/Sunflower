@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-02 01:35+0100\n"
-"PO-Revision-Date: 2019-06-10 07:20+0000\n"
+"PO-Revision-Date: 2019-07-06 07:22+0000\n"
 "Last-Translator: Rentaro YOSHIDUMI <rentaroyoshidumi4592307816@gmail.com>\n"
 "Language-Team: Japanese (Japan) (http://www.transifex.com/way2cu/sunflower/language/ja_JP/)\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,7 @@ msgstr "VTEベースの端末エミュレータ"
 
 #: application/gui/preferences/terminal.py:21
 msgid "Show scrollbars when needed"
-msgstr "スクロールバーが必要であれば表示する"
+msgstr "必要であればスクロールバーを表示する"
 
 #: application/gui/preferences/terminal.py:29
 msgid "Use the system fixed width font"
@@ -50,11 +50,11 @@ msgstr "カーソルの形状:"
 
 #: application/gui/preferences/terminal.py:45
 msgid "Block"
-msgstr "ブロック"
+msgstr "矩形"
 
 #: application/gui/preferences/terminal.py:46
 msgid "I-Beam"
-msgstr "Iビーム"
+msgstr "縦線"
 
 #: application/gui/preferences/terminal.py:47
 msgid "Underline"
@@ -66,7 +66,7 @@ msgstr "太字を許可する"
 
 #: application/gui/preferences/terminal.py:61
 msgid "Automatically hide mouse when typing"
-msgstr "入力する際、自動的にマウスポインタを隠す"
+msgstr "入力時、自動的にマウスポインタを隠す"
 
 #: application/gui/preferences/terminal.py:69
 msgid "External terminal"
@@ -79,7 +79,7 @@ msgstr "コマンドライン:"
 
 #: application/gui/preferences/terminal.py:78
 msgid "Command line for executing specific program:"
-msgstr "特別に実行するコマンドライン:"
+msgstr "特定のプログラムを実行するコマンドライン:"
 
 #: application/gui/preferences/terminal.py:84
 #, python-brace-format
@@ -89,7 +89,7 @@ msgid ""
 "\t{0} will be replaced with socket/window id.\n"
 "\t{1} will be replaced with specified command and its parameters.\n"
 "\t{2} will be replaced with current working directory.</i></small>"
-msgstr "<small><i>註:\n\t{0}を省略した場合はタブの代わりに新規端末エミュレータを開きます。\n\t{0}はソケットまたはウィンドウのIDに置換されます。\n\t{1}は指定したコマンドおよびその引数に置換されます。\n\t{2}は現在の作業ディレクトリに置換されます。</i></small>"
+msgstr "<small><i>註:\n\t{0}を省略した場合はタブの代わりに新規端末エミュレータを開きます。\n\t{0}はソケット・ウィンドウ識別子に置き換わります。\n\t{1}は指定したコマンド及びその引数に置き換わります。\n\t{2}は現在の作業ディレクトリに置き換わります。</i></small>"
 
 #: application/gui/preferences/commands.py:14
 #: application/gui/main_window.py:168
@@ -187,7 +187,7 @@ msgstr "{0}は通常の操作に必須であるので、無効にすることは
 
 #: application/gui/preferences/plugins.py:213
 msgid "This plugin has no description"
-msgstr "説明がありません"
+msgstr "プラグインの説明がありません"
 
 #: application/gui/preferences/plugins.py:272
 msgid "No plugin selected"
@@ -379,7 +379,7 @@ msgstr "設定"
 
 #: application/gui/preferences/operation.py:25
 msgid "Delete items to trashcan"
-msgstr "アイテムをゴミ箱に捨てる"
+msgstr "項目をゴミ箱に捨てる"
 
 #: application/gui/preferences/operation.py:26
 msgid "Reserve free space on copy/move"
@@ -395,14 +395,14 @@ msgstr "リムーバブルドライブが挿入されたら自動的にマウン
 
 #: application/gui/preferences/operation.py:29
 msgid "Show confirmation dialog before deleting items"
-msgstr "アイテムを消去する前に確認ダイアログを表示する"
+msgstr "項目を消去する前に確認ダイアログを表示する"
 
 #: application/gui/preferences/operation.py:63
 msgid ""
 "With trashing disabled you will not be able to restore accidentally deleted "
 "items. Are you sure you want to disable confirmation dialog when deleting "
 "items?"
-msgstr "ゴミ箱を無効にすると、誤って削除したアイテムを復元できなくなります。アイテムを消去する前の確認ダイアログを非表示にしてよろしいですか？"
+msgstr "ゴミ箱を無効にすると、誤って削除した項目を復元できなくなります。項目を消去する前の確認ダイアログを非表示にしてよろしいですか？"
 
 #: application/gui/preferences/display.py:22
 msgid "Display"
@@ -522,7 +522,7 @@ msgstr "国際電気標準会議規格（1 KiB = 1024 B）"
 #: application/plugins/file_list/column_editor.py:70
 #: application/plugin_base/item_list.py:205
 msgid "Item List"
-msgstr "アイテム表示欄"
+msgstr "項目表示欄"
 
 #: application/gui/preferences/item_list.py:42
 msgid "Look & feel"
@@ -558,7 +558,7 @@ msgstr "シングルクリックで操作する"
 
 #: application/gui/preferences/item_list.py:67
 msgid "Right click selects items"
-msgstr "右クリックでアイテムを選択する"
+msgstr "右クリックで項目を選択する"
 
 #: application/gui/preferences/item_list.py:68
 msgid "Show list headers"
@@ -692,7 +692,7 @@ msgstr "フォント"
 
 #: application/gui/preferences/item_list.py:432
 msgid "Add always visible item"
-msgstr "常に表示するアイテムを追加"
+msgstr "常に表示する項目を追加"
 
 #: application/gui/preferences/item_list.py:433
 msgid "Full name of file or directory to always show:"
@@ -745,7 +745,7 @@ msgstr "新しいタブで開く(_B)"
 #: application/gui/main_window.py:238
 #: application/plugin_base/item_list.py:1152
 msgid "_Properties"
-msgstr "プロパティ(_P)"
+msgstr "属性情報(_P)"
 
 #: application/gui/main_window.py:248 application/indicator.py:50
 msgid "_Quit"
@@ -859,15 +859,15 @@ msgstr "高度な名前の変更(_R)"
 
 #: application/gui/main_window.py:426 application/gui/main_window.py:578
 msgid "_Keyring manager"
-msgstr "キーリングマネージャ(_K)"
+msgstr "鍵管理(_K)"
 
 #: application/gui/main_window.py:434
 msgid "_View"
-msgstr "閲覧(_V)"
+msgstr "表示(_V)"
 
 #: application/gui/main_window.py:437
 msgid "Rel_oad item list"
-msgstr "アイテム一覧を再読込(_O)"
+msgstr "項目一覧を再読込(_O)"
 
 #: application/gui/main_window.py:447
 msgid "Fast m_edia preview"
@@ -891,7 +891,7 @@ msgstr "水平分割(_H)"
 
 #: application/gui/main_window.py:492
 msgid "_Commands"
-msgstr "垂直分割(_C)"
+msgstr "コマンド(_C)"
 
 #: application/gui/main_window.py:496
 msgid "_Operations"
@@ -985,7 +985,7 @@ msgstr "コピー"
 
 #: application/gui/main_window.py:696
 msgid "Copy selected items from active to opposite list"
-msgstr "選択したアイテムを反対側へコピー"
+msgstr "選択した項目を反対側へコピー"
 
 #: application/gui/main_window.py:697 application/gui/input_dialog.py:1015
 msgid "Move"
@@ -993,7 +993,7 @@ msgstr "移動"
 
 #: application/gui/main_window.py:697
 msgid "Move selected items from active to opposite list"
-msgstr "選択したアイテムを反対側へ移動"
+msgstr "選択した項目を反対側へ移動"
 
 #: application/gui/main_window.py:698
 msgid "Create"
@@ -1009,7 +1009,7 @@ msgstr "削除"
 
 #: application/gui/main_window.py:699
 msgid "Delete selected items"
-msgstr "選択したファイルを削除"
+msgstr "選択した項目を削除"
 
 #: application/gui/main_window.py:813
 msgid "_Edit commands"
@@ -1017,7 +1017,7 @@ msgstr "コマンドを編集する(_E)"
 
 #: application/gui/main_window.py:1543
 msgid "Select items"
-msgstr "アイテムを選択"
+msgstr "項目を選択"
 
 #: application/gui/main_window.py:1544 application/gui/main_window.py:1600
 msgid "Selection pattern (eg.: *.jpg):"
@@ -1025,7 +1025,7 @@ msgstr "選択パターン（例: *.jpg）"
 
 #: application/gui/main_window.py:1599
 msgid "Deselect items"
-msgstr "アイテムの選択を解除"
+msgstr "項目の選択を解除"
 
 #: application/gui/main_window.py:1636
 msgid "First level of compared directories is identical."
@@ -1063,117 +1063,117 @@ msgstr "設定ファイルをホームディレクトリ配下に保存する際
 msgid ""
 "Active object is not item list. Advanced rename tool needs files and "
 "directories."
-msgstr "対象はアイテムリストではありません。発展的な名前の変更にはファイル・ディレクトリが必要です。"
+msgstr "対象は項目リストではありません。発展的な名前の変更にはファイル・ディレクトリが必要です。"
 
 #: application/gui/main_window.py:2740
 msgid ""
 "No rename extensions were found. Please enable basic rename options plugin "
 "and try again."
-msgstr ""
+msgstr "名前の変更に関わる拡張機能が見付かりません。基本名前変更オプションプラグインを有効にして，やり直して下さい。"
 
 #: application/gui/main_window.py:2767
 msgid ""
 "No extensions for finding files were found. Please enable basic find file "
 "options plugin and try again."
-msgstr ""
+msgstr "ファイルの検索に関わる拡張機能が見付かりません。基本ファイル検索オプションプラグインを有効にして，やり直して下さい。"
 
 #: application/gui/main_window.py:2793
 msgid "Keyring is empty!"
-msgstr ""
+msgstr "鍵情報が空です！"
 
 #: application/gui/main_window.py:2806
 msgid ""
 "Keyring is not available. Make sure you have Python Gnome keyring module "
 "installed."
-msgstr ""
+msgstr "鍵情報が利用可能ではありません。Python GNOME鍵管理モジュールを導入しているか確かめてください。"
 
 #: application/gui/preferences_window.py:103
 msgid "Program restart required!"
-msgstr ""
+msgstr "プログラムの再起動が必要です。"
 
 #: application/gui/preferences_window.py:139
 msgid ""
 "There are unsaved changes.\n"
 "Do you want to save them?"
-msgstr ""
+msgstr "保存されていない変更があります。\nそれら変更を保存しますか。"
 
 #: application/gui/history_list.py:25
 msgid "History"
-msgstr ""
+msgstr "履歴"
 
 #: application/gui/history_list.py:48
 msgid "Path"
-msgstr ""
+msgstr "パス"
 
 #: application/gui/history_list.py:65 application/widgets/location_menu.py:42
 msgid "Open"
-msgstr ""
+msgstr "開く"
 
 #: application/gui/history_list.py:74
 msgid "Open in tab"
-msgstr ""
+msgstr "タブで開く"
 
 #: application/gui/history_list.py:75 application/widgets/location_menu.py:47
 msgid "Open selected path in new tab"
-msgstr ""
+msgstr "選択したパスを新規タブで開く"
 
 #: application/gui/history_list.py:78
 msgid "Open in opposite list"
-msgstr ""
+msgstr "反対側の項目で開く"
 
 #: application/gui/history_list.py:79 application/widgets/location_menu.py:52
 msgid "Open selected path in opposite list"
-msgstr ""
+msgstr "選択したパスを反対側の項目で開く"
 
 #: application/gui/properties_window.py:56
 #, python-brace-format
 msgid "{0} Properties"
-msgstr ""
+msgstr "{0}の属性情報"
 
 #: application/gui/properties_window.py:87
 #: application/plugins/rename_extensions/default.py:265
 #: application/plugins/find_file_extensions/default.py:117
 msgid "Basic"
-msgstr ""
+msgstr "一般"
 
 #: application/gui/properties_window.py:91
 msgid "Permissions"
-msgstr ""
+msgstr "権限"
 
 #: application/gui/properties_window.py:95
 #: application/gui/input_dialog.py:1696
 msgid "Open With"
-msgstr ""
+msgstr "これで開く:"
 
 #: application/gui/properties_window.py:99
 msgid "Emblems"
-msgstr ""
+msgstr "記章"
 
 #: application/gui/properties_window.py:156
 #: application/plugins/file_list/file_list.py:1025
 msgid ""
 "File or directory with specified name already exists in current directory. "
 "Item could not be renamed."
-msgstr ""
+msgstr "現行ディレクトリには指定した名前のファイル又はディレクトリが既に存在しています。項目の名前は変更されませんでした。"
 
 #: application/gui/properties_window.py:191
 #: application/plugins/file_list/file_list.py:1010
 msgid "Error renaming specified item. Make sure you have enough permissions."
-msgstr ""
+msgstr "指定した項目の名前の変更に失敗しました。十分な権限かどうかを確かめて下さい。"
 
 #: application/gui/properties_window.py:247
 msgid "item"
 msgid_plural "items"
-msgstr[0] ""
+msgstr[0] "項目"
 
 #: application/gui/properties_window.py:264
 #: application/gui/operation_dialog.py:361
 msgid "unknown"
-msgstr ""
+msgstr "不明"
 
 #: application/gui/properties_window.py:373
 msgid "Error changing owner or group"
-msgstr ""
+msgstr "所有者又はグループの変更に失敗しました"
 
 #: application/gui/properties_window.py:446
 #: application/gui/input_dialog.py:1337 application/gui/input_dialog.py:1516
@@ -1182,56 +1182,56 @@ msgstr ""
 #: application/plugins/file_list/dialogs.py:273
 #: application/plugins/file_list/dialogs.py:467
 msgid "Name:"
-msgstr ""
+msgstr "名前:"
 
 #: application/gui/properties_window.py:447
 #: application/gui/input_dialog.py:1524
 msgid "Type:"
-msgstr ""
+msgstr "種別:"
 
 #: application/gui/properties_window.py:448
 #: application/gui/input_dialog.py:1194 application/gui/input_dialog.py:1211
 msgid "Size:"
-msgstr ""
+msgstr "大きさ:"
 
 #: application/gui/properties_window.py:449
 #: application/gui/input_dialog.py:1350
 msgid "Location:"
-msgstr ""
+msgstr "場所:"
 
 #: application/gui/properties_window.py:450
 msgid "Volume:"
-msgstr ""
+msgstr "ボリューム"
 
 #: application/gui/properties_window.py:451
 msgid "Accessed:"
-msgstr ""
+msgstr "閲覧日時:"
 
 #: application/gui/properties_window.py:452
 #: application/gui/input_dialog.py:1195 application/gui/input_dialog.py:1212
 msgid "Modified:"
-msgstr ""
+msgstr "変更日時:"
 
 #: application/gui/properties_window.py:527
 msgid "Access"
-msgstr ""
+msgstr "権限"
 
 #: application/gui/properties_window.py:533
 #: application/gui/properties_window.py:603
 #: application/gui/input_dialog.py:220
 msgid "User:"
-msgstr ""
+msgstr "所有者:"
 
 #: application/gui/properties_window.py:537
 #: application/gui/properties_window.py:607
 #: application/gui/input_dialog.py:224
 msgid "Group:"
-msgstr ""
+msgstr "グループ:"
 
 #: application/gui/properties_window.py:541
 #: application/gui/input_dialog.py:228
 msgid "Others:"
-msgstr ""
+msgstr "他の利用者:"
 
 #: application/gui/properties_window.py:546
 #: application/gui/properties_window.py:559
@@ -1239,7 +1239,7 @@ msgstr ""
 #: application/gui/input_dialog.py:233 application/gui/input_dialog.py:246
 #: application/gui/input_dialog.py:259
 msgid "Read"
-msgstr ""
+msgstr "読取"
 
 #: application/gui/properties_window.py:550
 #: application/gui/properties_window.py:563
@@ -1247,7 +1247,7 @@ msgstr ""
 #: application/gui/input_dialog.py:237 application/gui/input_dialog.py:250
 #: application/gui/input_dialog.py:263
 msgid "Write"
-msgstr ""
+msgstr "書込"
 
 #: application/gui/properties_window.py:554
 #: application/gui/properties_window.py:567
@@ -1255,252 +1255,252 @@ msgstr ""
 #: application/gui/input_dialog.py:241 application/gui/input_dialog.py:254
 #: application/gui/input_dialog.py:267
 msgid "Execute"
-msgstr ""
+msgstr "実行"
 
 #: application/gui/properties_window.py:585
 #: application/gui/input_dialog.py:272
 msgid "Octal:"
-msgstr ""
+msgstr "8進数表記:"
 
 #: application/gui/properties_window.py:597
 msgid "Ownership"
-msgstr ""
+msgstr "所有者"
 
 #: application/gui/properties_window.py:671
 #, python-brace-format
 msgid "Select an application to open <i>{0}</i> and other files of type \"{1}\""
-msgstr ""
+msgstr "<i>{0}</i>及び種別{1}のファイルを開くアプリーションを選択する"
 
 #: application/gui/input_dialog.py:114
 msgid "Create link"
-msgstr ""
+msgstr "リンク作成"
 
 #: application/gui/input_dialog.py:115
 msgid "Enter new link name:"
-msgstr ""
+msgstr "新規リンク名を入力:"
 
 #: application/gui/input_dialog.py:123
 msgid "Original path:"
-msgstr ""
+msgstr "元のパス:"
 
 #: application/gui/input_dialog.py:128
 msgid "Create hard link"
-msgstr ""
+msgstr "ハードリンクを作成する"
 
 #: application/gui/input_dialog.py:131 application/tools/find_files.py:75
 msgid "Browse"
-msgstr ""
+msgstr "参照"
 
 #: application/gui/input_dialog.py:150
 msgid "Select original path"
-msgstr ""
+msgstr "元のパスを選択"
 
 #: application/gui/input_dialog.py:210
 msgid "Advanced options"
-msgstr ""
+msgstr "高度なオプション"
 
 #: application/gui/input_dialog.py:289 application/gui/input_dialog.py:924
 msgid "Save as default configuration"
-msgstr ""
+msgstr "規定の設定として保存"
 
 #: application/gui/input_dialog.py:377
 #: application/plugins/file_list/dialogs.py:96
 #: application/plugins/file_list/dialogs.py:304
 #: application/plugins/file_list/dialogs.py:507
 msgid "Password:"
-msgstr ""
+msgstr "パスワード:"
 
 #: application/gui/input_dialog.py:379
 msgid "Confirm:"
-msgstr ""
+msgstr "確認:"
 
 #: application/gui/input_dialog.py:434
 msgid "Create empty file"
-msgstr ""
+msgstr "空のファイルを作成"
 
 #: application/gui/input_dialog.py:435
 msgid "Enter new file name:"
-msgstr ""
+msgstr "新規ファイル名を入力:"
 
 #: application/gui/input_dialog.py:438
 msgid "Open file in editor"
-msgstr ""
+msgstr "ファイルをエディタで開く"
 
 #: application/gui/input_dialog.py:442
 #: application/plugins/rename_extensions/default.py:52
 #: application/plugins/rename_extensions/audio_metadata.py:31
 msgid "Template:"
-msgstr ""
+msgstr "雛形:"
 
 #: application/gui/input_dialog.py:502
 msgid "Empty File"
-msgstr ""
+msgstr "空ファイル"
 
 #: application/gui/input_dialog.py:555
 #: application/plugin_base/item_list.py:1029
 msgid "Create directory"
-msgstr ""
+msgstr "ディレクトリを作成"
 
 #: application/gui/input_dialog.py:556
 msgid "Enter new directory name:"
-msgstr ""
+msgstr "新規ディレクトリ名を入力:"
 
 #: application/gui/input_dialog.py:590
 msgid "Yes"
-msgstr ""
+msgstr "はい"
 
 #: application/gui/input_dialog.py:592
 msgid "No"
-msgstr ""
+msgstr "いいえ"
 
 #: application/gui/input_dialog.py:656
 msgid "Only files of this type:"
-msgstr ""
+msgstr "ファイルの種別を限定:"
 
 #: application/gui/input_dialog.py:663
 msgid "Operation queue:"
-msgstr ""
+msgstr "操作キュー:"
 
 #: application/gui/input_dialog.py:683
 msgid "Affected item list"
-msgstr ""
+msgstr "影響を受ける項目一覧"
 
 #: application/gui/input_dialog.py:706
 msgid "Set owner on destination"
-msgstr ""
+msgstr "宛先の所有者を設定"
 
 #: application/gui/input_dialog.py:707
 msgid "Set access mode on destination"
-msgstr ""
+msgstr "宛先の権限を設定"
 
 #: application/gui/input_dialog.py:708
 msgid "Set date and time on destination"
-msgstr ""
+msgstr "宛先の日時を設定"
 
 #: application/gui/input_dialog.py:709
 msgid "Silent mode"
-msgstr ""
+msgstr "静粛に実行"
 
 #: application/gui/input_dialog.py:714
 msgid "Merge directories"
-msgstr ""
+msgstr "ディレクトリを統合"
 
 #: application/gui/input_dialog.py:715
 msgid "Overwrite files"
-msgstr ""
+msgstr "ファイルを上書き"
 
 #: application/gui/input_dialog.py:719
 msgid ""
 "Silent mode will enable operation to finish without disturbing you. If any "
 "errors occur, they will be presented to you after completion."
-msgstr ""
+msgstr "「静粛に実行」すると、操作の間利用者を邪魔しません。何かエラーが生じた場合、操作が完了した後に通知します。"
 
 #: application/gui/input_dialog.py:724
 msgid "Follow symlinks"
-msgstr ""
+msgstr "シンボリックリンクを解決する"
 
 #: application/gui/input_dialog.py:800 application/gui/input_dialog.py:804
 #: application/gui/input_dialog.py:808 application/gui/input_dialog.py:812
 msgid "Not supported by file system provider"
-msgstr ""
+msgstr "ファイルシステムが対応していません"
 
 #: application/gui/input_dialog.py:877
 msgid "Only options supported by file system providers were saved."
-msgstr ""
+msgstr "ファイルシステムが対応しているオプションのみ保持されます。"
 
 #: application/gui/input_dialog.py:901
 msgid "Copy item"
 msgid_plural "Copy items"
-msgstr[0] ""
+msgstr[0] "項目をコピー"
 
 #: application/gui/input_dialog.py:906
 #, python-brace-format
 msgid "Copy <b>{0}</b> item to:"
 msgid_plural "Copy <b>{0}</b> items to:"
-msgstr[0] ""
+msgstr[0] "<b>{0}</b>件の項目をコピー:"
 
 #: application/gui/input_dialog.py:915 application/gui/input_dialog.py:1014
 #: application/gui/input_dialog.py:1450
 #: application/gui/operation_dialog.py:205
 #: application/plugins/file_list/file_list.py:1977
 msgid "Cancel"
-msgstr ""
+msgstr "取り止め"
 
 #: application/gui/input_dialog.py:1000
 msgid "Move item"
 msgid_plural "Move items"
-msgstr[0] ""
+msgstr[0] "項目を移動"
 
 #: application/gui/input_dialog.py:1005
 #, python-brace-format
 msgid "Move <b>{0}</b> item to:"
 msgid_plural "Move <b>{0}</b> items to:"
-msgstr[0] ""
+msgstr[0] "<b>{0}</b>件の項目を移動:"
 
 #: application/gui/input_dialog.py:1028
 msgid "Rename file/directory"
-msgstr ""
+msgstr "ファイル・ディレクトリの名前を変更"
 
 #: application/gui/input_dialog.py:1029
 msgid "Enter a new name for this item:"
-msgstr ""
+msgstr "この項目の新しい名前を入力:"
 
 #: application/gui/input_dialog.py:1093
 msgid "Select a new name for the destination"
-msgstr ""
+msgstr "宛先への新しい名前を選択"
 
 #: application/gui/input_dialog.py:1098
 msgid "Reset"
-msgstr ""
+msgstr "遣り直し"
 
 #: application/gui/input_dialog.py:1102
 msgid "Apply this action to all files"
-msgstr ""
+msgstr "この操作を全ファイルに適用"
 
 #: application/gui/input_dialog.py:1137 application/gui/input_dialog.py:1451
 msgid "Skip"
-msgstr ""
+msgstr "飛ばす"
 
 #: application/gui/input_dialog.py:1193
 msgid "Original"
-msgstr ""
+msgstr "原本"
 
 #: application/gui/input_dialog.py:1210
 msgid "Replace with"
-msgstr ""
+msgstr "置換対象:"
 
 #: application/gui/input_dialog.py:1245
 msgid "File conflict"
-msgstr ""
+msgstr "ファイル名競合"
 
 #: application/gui/input_dialog.py:1250 application/gui/input_dialog.py:1260
 msgid "Replace"
-msgstr ""
+msgstr "置き換える"
 
 #: application/gui/input_dialog.py:1267
 #, python-brace-format
 msgid "Replace file \"{0}\"?"
-msgstr ""
+msgstr "ファイル\"{0}\"を置き換えますか。"
 
 #: application/gui/input_dialog.py:1273
 #, python-brace-format
 msgid ""
 "Another file with the same name already exists in \"{0}\". Replacing it will"
 " overwrite its content."
-msgstr ""
+msgstr "\"{0}\"には同名のファイルが既に存在しています。内容を上書きして置き換えます。"
 
 #: application/gui/input_dialog.py:1286
 msgid "Directory conflict"
-msgstr ""
+msgstr "ディレクトリ競合"
 
 #: application/gui/input_dialog.py:1290
 msgid "Merge"
-msgstr ""
+msgstr "統合"
 
 #: application/gui/input_dialog.py:1300
 #, python-brace-format
 msgid "Merge directory \"{0}\"?"
-msgstr ""
+msgstr "ディレクトリ\"{0}\"を統合しますか。"
 
 #: application/gui/input_dialog.py:1306
 #, python-brace-format
@@ -1508,163 +1508,163 @@ msgid ""
 "Directory with the same name already exists in \"{0}\". Merging will ask for"
 " confirmation before replacing any files in the directory that conflict with"
 " the files being copied."
-msgstr ""
+msgstr "\"{0}\"には同名のディレクトリが既に存在しています。統合する際、コピー中のファイルと競合するディレクトリ内のファイルを置き換える前に確認します。"
 
 #: application/gui/input_dialog.py:1324
 msgid "Add bookmark"
-msgstr ""
+msgstr "栞を追加する"
 
 #: application/gui/input_dialog.py:1342
 msgid ""
 "Underscore in the label text indicates the next character should be "
 "underlined and used for the mnemonic accelerator key if it is the first "
 "character so marked."
-msgstr ""
+msgstr "ラベル中の文字の前に下線記号を入力することで、その文字がアクセスキーとなります。"
 
 #: application/gui/input_dialog.py:1417
 msgid "Operation error"
-msgstr ""
+msgstr "操作が失敗しました"
 
 #: application/gui/input_dialog.py:1452
 msgid "Skip all"
-msgstr ""
+msgstr "全て飛ばす"
 
 #: application/gui/input_dialog.py:1453
 msgid "Retry"
-msgstr ""
+msgstr "遣り直す"
 
 #: application/gui/input_dialog.py:1501
 msgid "Add toolbar widget"
-msgstr ""
+msgstr "ツールバーにウィジェットを追加する"
 
 #: application/gui/input_dialog.py:1610
 msgid "Select range"
-msgstr ""
+msgstr "範囲を選択"
 
 #: application/gui/input_dialog.py:1611
 msgid "Select part of the text:"
-msgstr ""
+msgstr "文章の一部を選択する:"
 
 #: application/gui/input_dialog.py:1635
 msgid "Add application"
-msgstr ""
+msgstr "アプリケーションを追加する"
 
 #: application/gui/input_dialog.py:1636
 msgid "Application name:"
-msgstr ""
+msgstr "アプリケーションの名前:"
 
 #: application/gui/input_dialog.py:1646
 msgid "Select"
-msgstr ""
+msgstr "選択"
 
 #: application/gui/input_dialog.py:1714
 msgid "Select application:"
-msgstr ""
+msgstr "アプリケーションを選択:"
 
 #: application/gui/input_dialog.py:1717
 #, python-brace-format
 msgid "Open <i>{0}</i> with:"
-msgstr ""
+msgstr "<i>{0}</i>を開くもの:"
 
 #: application/gui/input_dialog.py:1753
 msgid "Use a custom command"
-msgstr ""
+msgstr "利用者が定義したコマンドを使用する"
 
 #: application/gui/operation_dialog.py:90 application/gui/error_list.py:46
 msgid "Source:"
-msgstr ""
+msgstr "原本:"
 
 #: application/gui/operation_dialog.py:91 application/gui/error_list.py:52
 msgid "Destination:"
-msgstr ""
+msgstr "宛先:"
 
 #: application/gui/operation_dialog.py:148
 msgid "ETA:"
-msgstr ""
+msgstr "予定時刻:"
 
 #: application/gui/operation_dialog.py:149
 msgid "Speed:"
-msgstr ""
+msgstr "速度:"
 
 #: application/gui/operation_dialog.py:150
 msgid "Total size:"
-msgstr ""
+msgstr "総量:"
 
 #: application/gui/operation_dialog.py:151
 msgid "Total count:"
-msgstr ""
+msgstr "総数:"
 
 #: application/gui/operation_dialog.py:204
 msgid "Minimize"
-msgstr ""
+msgstr "最小化"
 
 #: application/gui/operation_dialog.py:212
 #: application/gui/operation_dialog.py:267
 msgid "Pause"
-msgstr ""
+msgstr "停止"
 
 #: application/gui/operation_dialog.py:260
 msgid "Resume"
-msgstr ""
+msgstr "再開"
 
 #: application/gui/operation_dialog.py:272
 msgid "Are you sure about canceling current operation?"
-msgstr ""
+msgstr "現行操作を取り止めますか。"
 
 #: application/gui/operation_dialog.py:342
 msgid "second"
 msgid_plural "seconds"
-msgstr[0] ""
+msgstr[0] "秒"
 
 #: application/gui/operation_dialog.py:348
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
+msgstr[0] "分"
 
 #: application/gui/operation_dialog.py:355
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
+msgstr[0] "時"
 
 #: application/gui/operation_dialog.py:500
 msgid "Copy Selection"
-msgstr ""
+msgstr "選択範囲をコピー"
 
 #: application/gui/operation_dialog.py:521
 msgid "Move Selection"
-msgstr ""
+msgstr "選択範囲を移動"
 
 #: application/gui/operation_dialog.py:546
 msgid "Delete Selection"
-msgstr ""
+msgstr "選択範囲を削除"
 
 #: application/gui/operation_dialog.py:547
 msgid "Removing items..."
-msgstr ""
+msgstr "項目を削除しています……"
 
 #: application/gui/operation_dialog.py:573
 msgid "Rename Items"
-msgstr ""
+msgstr "項目の名前を変更"
 
 #: application/gui/operation_dialog.py:574
 msgid "Renaming items..."
-msgstr ""
+msgstr "項目の名前を変更しています……"
 
 #: application/gui/keyring_manager_window.py:27
 msgid "Keyring manager"
-msgstr ""
+msgstr "鍵管理"
 
 #: application/gui/keyring_manager_window.py:51
 msgid "ID"
-msgstr ""
+msgstr "識別子"
 
 #: application/gui/keyring_manager_window.py:54
 msgid "Modified"
-msgstr ""
+msgstr "変更済み"
 
 #: application/gui/keyring_manager_window.py:127
 msgid "Please select an entry to delete!"
-msgstr ""
+msgstr "削除する対象を選択して下さい。"
 
 #: application/gui/keyring_manager_window.py:143
 #, python-brace-format
@@ -1672,282 +1672,282 @@ msgid ""
 "You are about to remove the following entry from your keyring. If you do this you will have to provide password manually when needed. Are you sure?\n"
 "\n"
 "{0}"
-msgstr ""
+msgstr "次の項目を鍵管理対象から削除しようとしています。削除した場合、次回以降の接続時にパスワードが要求されます。宜しいですか。\n\n{0}"
 
 #: application/gui/keyring_manager_window.py:171
 msgid "Please select an entry to change!"
-msgstr ""
+msgstr "変更する対象を選択して下さい。"
 
 #: application/gui/keyring_manager_window.py:178
 msgid "Change password"
-msgstr ""
+msgstr "パスワードを変更"
 
 #: application/gui/keyring_manager_window.py:179
 msgid "Enter new password for selected keyring entry."
-msgstr ""
+msgstr "選択した鍵管理対象の新しいパスワードを入力して下さい。"
 
 #: application/gui/keyring_manager_window.py:194
 msgid "Password was changed!"
-msgstr ""
+msgstr "パスワードが変更されました。"
 
 #: application/gui/keyring_manager_window.py:209
 msgid "Passwords do not match! Please try again."
-msgstr ""
+msgstr "パスワードが一致しません。遣り直して下さい。"
 
 #: application/gui/about_window.py:109
 msgid "Twin-panel file manager for Linux."
-msgstr ""
+msgstr "Linux向けの双パネルファイルマネージャ。"
 
 #: application/gui/about_window.py:112
 msgid "Copyright © 2010-2018 by Mladen Mijatov and contributors."
-msgstr ""
+msgstr "Copyright &copy; 2010-2018, Mladen Mijatov及び貢献者。"
 
 #: application/gui/error_list.py:21
 msgid "Error list"
-msgstr ""
+msgstr "不具合一覧"
 
 #: application/gui/error_list.py:40
 msgid "For:"
-msgstr ""
+msgstr "宛先:"
 
 #: application/sunflower.py:95
 msgid "Show version number"
-msgstr ""
+msgstr "バージョン番号を表示する"
 
 #: application/sunflower.py:104 application/sunflower.py:113
 msgid "Skip loading additional plugins"
-msgstr ""
+msgstr "追加のプラグインを読み込まない"
 
 #: application/sunflower.py:122
 msgid "Open new tab on the left notebook"
-msgstr ""
+msgstr "新規タブを左の帳簿に開く"
 
 #: application/sunflower.py:131
 msgid "Open new tab on the right notebook"
-msgstr ""
+msgstr "新規タブを右の帳簿に開く"
 
 #: application/sunflower.py:140
 msgid "Open terminal tab on the left notebook"
-msgstr ""
+msgstr "端末エミュレータタブを左の帳簿に開く"
 
 #: application/sunflower.py:149
 msgid "Open terminal tab on the right notebook"
-msgstr ""
+msgstr "端末エミュレータタブを右の帳簿に開く"
 
 #: application/widgets/location_menu.py:57
 msgid "Open terminal at selected path"
-msgstr ""
+msgstr "端末エミュレータを選択したパスで開く"
 
 #: application/widgets/location_menu.py:102
 msgid "User defined"
-msgstr ""
+msgstr "利用者定義"
 
 #: application/widgets/location_menu.py:119
 msgid "System wide"
-msgstr ""
+msgstr "システム全体"
 
 #: application/widgets/title_bar.py:52
 msgid "Context menu"
-msgstr ""
+msgstr "コンテクストメニュー"
 
 #: application/widgets/tab_label.py:73
 msgid "Unlock"
-msgstr ""
+msgstr "タブの固定を解除"
 
 #: application/widgets/tab_label.py:73
 msgid "Lock"
-msgstr ""
+msgstr "タブを固定"
 
 #: application/widgets/tab_label.py:77 application/plugin_base/plugin.py:135
 msgid "Duplicate tab"
-msgstr ""
+msgstr "タブを複製"
 
 #: application/widgets/tab_label.py:81
 msgid "Move to opposite panel"
-msgstr ""
+msgstr "逆側のパネルに移動"
 
 #: application/widgets/tab_label.py:88
 msgid "Close Tab"
-msgstr ""
+msgstr "タブを閉じる"
 
 #: application/widgets/tab_label.py:94
 msgid "Close All"
-msgstr ""
+msgstr "全てのタブを閉じる"
 
 #: application/widgets/tab_label.py:99
 msgid "Close Other Tabs"
-msgstr ""
+msgstr "他のタブを閉じる"
 
 #: application/queue.py:32 application/plugins/sessions/plugin.py:6
 msgid "Default"
-msgstr ""
+msgstr "規定"
 
 #: application/queue.py:45
 msgid "New queue"
-msgstr ""
+msgstr "新規キュー"
 
 #: application/queue.py:138
 msgid "New operation queue"
-msgstr ""
+msgstr "新規操作キュー"
 
 #: application/queue.py:139
 msgid "Enter name for new operation queue:"
-msgstr ""
+msgstr "新規操作キューの名前を入力:"
 
 #: application/queue.py:155
 msgid "Operation queue with specified name already exists."
-msgstr ""
+msgstr "指定した名前の操作キューが既に存在します。"
 
 #: application/mounts.py:63
 msgid "Specified item can not be unmounted."
-msgstr ""
+msgstr "指定した項目のマウントを解除できません。"
 
 #: application/keyring.py:57
 msgid "Keyring is unlocked"
-msgstr ""
+msgstr "鍵情報は開錠されています"
 
 #: application/keyring.py:58
 msgid "Keyring is locked"
-msgstr ""
+msgstr "鍵情報は施錠されています"
 
 #: application/keyring.py:105
 msgid "Unlock keyring"
-msgstr ""
+msgstr "鍵情報を開錠する"
 
 #: application/keyring.py:106
 msgid "Please enter your keyring password:"
-msgstr ""
+msgstr "鍵情報へのパスワードを入力して下さい:"
 
 #: application/keyring.py:306
 msgid "New keyring"
-msgstr ""
+msgstr "新規鍵情報"
 
 #: application/keyring.py:308
 msgid ""
 "We need to create a new keyring to safely store your passwords. Choose the "
 "password you want to use for it."
-msgstr ""
+msgstr "パスワードを安全に保管する為に新たな鍵情報を作る必要があります。それに用いるパスワードを選択して下さい。"
 
 #: application/toolbar.py:130
 msgid ""
 "Error adding widget. You need to enter unique name and select widget type."
-msgstr ""
+msgstr "ウィジェットを追加できませんでした。一意な名前及びウィジェット種別を入力する必要があります。"
 
 #: application/toolbar.py:145
 msgid ""
 "Widget with specified name already exists. You need to enter unique name and"
 " select widget type."
-msgstr ""
+msgstr "指定された名前のウィジェットが既に存在します。一意な名前及びウィジェット種別を入力する必要があります。 "
 
 #: application/toolbar.py:179
 msgid ""
 "Plugin used to create selected toolbar widget is not active or not present. "
 "In order to edit this entry you need to activate plugin used to create it."
-msgstr ""
+msgstr "選択したツールバーウィジェットを作成する為のプラグインが作動中でないか存在しません。本エントリを編集する為にはそれを作成するプラグインを作動させる必要があります。"
 
 #: application/plugins/default_toolbar/parent_directory_button.py:14
 #: application/plugins/default_toolbar/parent_directory_button.py:15
 #: application/plugin_base/item_list.py:220
 msgid "Go to parent directory"
-msgstr ""
+msgstr "親ディレクトリヘ移動"
 
 #: application/plugins/default_toolbar/bookmark_button.py:59
 msgid "Configure bookmark button"
-msgstr ""
+msgstr "栞ボタンの設定"
 
 #: application/plugins/default_toolbar/bookmark_button.py:85
 msgid "Path:"
-msgstr ""
+msgstr "パス:"
 
 #: application/plugins/default_toolbar/bookmark_button.py:89
 msgid "Show label"
-msgstr ""
+msgstr "ラベルを表示する"
 
 #: application/plugins/default_toolbar/plugin.py:23
 msgid "Parent directory button"
-msgstr ""
+msgstr "親ディレクトリへのボタン"
 
 #: application/plugins/default_toolbar/plugin.py:29
 msgid "Home directory button"
-msgstr ""
+msgstr "ホームディレクトリへのボタン"
 
 #: application/plugins/default_toolbar/plugin.py:35
 msgid "Bookmark button"
-msgstr ""
+msgstr "栞ボタン"
 
 #: application/plugins/default_toolbar/plugin.py:41
 msgid "Bookmarks menu"
-msgstr ""
+msgstr "栞のメニュー"
 
 #: application/plugins/default_toolbar/plugin.py:47
 msgid "Separator"
-msgstr ""
+msgstr "区切り子"
 
 #: application/plugins/default_toolbar/plugin.py:102
 msgid "This widget has no configuration dialog."
-msgstr ""
+msgstr "このウィジェットには設定画面がありません。"
 
 #: application/plugins/owner_column/plugin.py:65
 msgid "Owner"
-msgstr ""
+msgstr "所有者"
 
 #: application/plugins/owner_column/plugin.py:93
 msgid "Group"
-msgstr ""
+msgstr "グループ"
 
 #: application/plugins/file_list/plugin.py:11
 msgid "Local file list"
-msgstr ""
+msgstr "ローカルファイル一覧"
 
 #: application/plugins/file_list/plugin.py:12
 msgid "Trash can"
-msgstr ""
+msgstr "ゴミ箱"
 
 #: application/plugins/file_list/file_list.py:132
 msgid "Ext"
-msgstr ""
+msgstr "拡張子"
 
 #: application/plugins/file_list/file_list.py:134
 msgid "Mode"
-msgstr ""
+msgstr "状態"
 
 #: application/plugins/file_list/file_list.py:135
 #: application/plugins/rename_extensions/audio_metadata.py:26
 msgid "Date"
-msgstr ""
+msgstr "日時"
 
 #: application/plugins/file_list/file_list.py:492
 msgid "Invalid selection!"
-msgstr ""
+msgstr "選択が正しくありません。"
 
 #: application/plugins/file_list/file_list.py:667
 msgid ""
 "There was an error creating directory. Make sure you have enough "
 "permissions. "
-msgstr ""
+msgstr "ディレクトリの作成に失敗しました。十分な権限かどうかを確かめて下さい。 "
 
 #: application/plugins/file_list/file_list.py:694
 #, python-brace-format
 msgid "File already exists: {0}"
-msgstr ""
+msgstr "ファイル{0}は既に存在します"
 
 #: application/plugins/file_list/file_list.py:697
 #, python-brace-format
 msgid "Directory with same name exists: {0}"
-msgstr ""
+msgstr "同名のディレクトリ{0}が存在します"
 
 #: application/plugins/file_list/file_list.py:733
 msgid ""
 "There was an error creating file. Make sure you have enough permissions."
-msgstr ""
+msgstr "ファイルの作成に失敗しました。十分な権限かどうかを確かめて下さい。 "
 
 #: application/plugins/file_list/file_list.py:795
 msgid "Error creating new link."
-msgstr ""
+msgstr "新規リンクの作成に失敗しました。"
 
 #: application/plugins/file_list/file_list.py:811
 msgid "Current file system does not support linking."
-msgstr ""
+msgstr "現在のファイルシステムはリンクに対応していません。"
 
 #: application/plugins/file_list/file_list.py:835
 #, python-brace-format
@@ -1957,7 +1957,7 @@ msgid ""
 msgid_plural ""
 "You are about to <i><b>delete</b></i> {0} items.\n"
 "Are you sure about this?"
-msgstr[0] ""
+msgstr[0] "{0}件の項目を<i><b>削除</b></i>します。\n宜しいですか。"
 
 #: application/plugins/file_list/file_list.py:844
 #, python-brace-format
@@ -1967,35 +1967,35 @@ msgid ""
 msgid_plural ""
 "You are about to move {0} items to <i><b>trash</b></i>.\n"
 "Are you sure about this?"
-msgstr[0] ""
+msgstr[0] "{0}件の項目を<i><b>ゴミ箱に</b></i>移動します。\n宜しいですか。"
 
 #: application/plugins/file_list/file_list.py:1194
 msgid "Other application..."
-msgstr ""
+msgstr "他のアプリケーション……"
 
 #: application/plugins/file_list/file_list.py:1866
 msgid "Free:"
-msgstr ""
+msgstr "空き:"
 
 #: application/plugins/file_list/file_list.py:1867
 msgid "Total:"
-msgstr ""
+msgstr "合計:"
 
 #: application/plugins/file_list/file_list.py:1937
 msgid "Copy here"
-msgstr ""
+msgstr "ここにコピー"
 
 #: application/plugins/file_list/file_list.py:1942
 msgid "Move here"
-msgstr ""
+msgstr "ここに移動"
 
 #: application/plugins/file_list/file_list.py:1947
 msgid "Link here"
-msgstr ""
+msgstr "ここにリンク"
 
 #: application/plugins/file_list/file_list.py:2326
 msgid "No such file or directory"
-msgstr ""
+msgstr "そのようなファイルやディレクトリはありません"
 
 #: application/plugins/file_list/file_list.py:2345
 #, python-brace-format
@@ -2006,19 +2006,19 @@ msgid ""
 "{0}\n"
 "\n"
 "Would you like to retry?"
-msgstr ""
+msgstr "作業ディレクトリを\n{0}\nから\n{1}\nに変更できませんでした。\nもう一度試しますか。"
 
 #: application/plugins/file_list/trash_list.py:27
 msgid "Empty trash"
-msgstr ""
+msgstr "ゴミ箱を空にする"
 
 #: application/plugins/file_list/trash_list.py:40
 msgid "All items in the Trash will be permanently deleted. Are you sure?"
-msgstr ""
+msgstr "ゴミ箱にある全項目は永遠に削除され，二度と復元できません。実行しますか。"
 
 #: application/plugins/file_list/gio_extension.py:65
 msgid "Mount operation"
-msgstr ""
+msgstr "マウント操作"
 
 #: application/plugins/file_list/gio_extension.py:110
 #, python-brace-format
@@ -2027,25 +2027,25 @@ msgid ""
 "{0}\n"
 "\n"
 "{1}"
-msgstr ""
+msgstr "マウントできません。\n{0}\n\n{1}"
 
 #: application/plugins/file_list/gio_extension.py:163
 #: application/plugins/file_list/gio_extension.py:517
 #: application/plugins/file_list/gio_extension.py:869
 msgid "URI"
-msgstr ""
+msgstr " 統一資源識別子"
 
 #: application/plugins/file_list/gio_extension.py:192
 #: application/plugins/file_list/gio_extension.py:546
 #: application/plugins/file_list/gio_extension.py:898
 msgid "Mount"
-msgstr ""
+msgstr "マウント"
 
 #: application/plugins/file_list/gio_extension.py:195
 #: application/plugins/file_list/gio_extension.py:549
 #: application/plugins/file_list/gio_extension.py:901
 msgid "Unmount"
-msgstr ""
+msgstr "マウント解除"
 
 #: application/plugins/file_list/gio_extension.py:421
 #: application/plugins/file_list/gio_extension.py:724
@@ -2054,142 +2054,142 @@ msgstr ""
 msgid ""
 "You are about to remove '{0}'.\n"
 "Are you sure about this?"
-msgstr ""
+msgstr "{0}を削除します。\n宜しいですか。"
 
 #: application/plugins/file_list/dialogs.py:38
 msgid "Create Samba mount"
-msgstr ""
+msgstr "Sambaマウントを作成"
 
 #: application/plugins/file_list/dialogs.py:69
 #: application/plugins/file_list/dialogs.py:282
 #: application/plugins/file_list/dialogs.py:476
 msgid "Server:"
-msgstr ""
+msgstr "サーバー:"
 
 #: application/plugins/file_list/dialogs.py:77
 msgid "Share:"
-msgstr ""
+msgstr "共有:"
 
 #: application/plugins/file_list/dialogs.py:79
 #: application/plugins/file_list/dialogs.py:289
 #: application/plugins/file_list/dialogs.py:492
 msgid "Directory:"
-msgstr ""
+msgstr "ディレクトリ:"
 
 #: application/plugins/file_list/dialogs.py:94
 msgid "Domain:"
-msgstr ""
+msgstr "ドメイン:"
 
 #: application/plugins/file_list/dialogs.py:95
 #: application/plugins/file_list/dialogs.py:303
 #: application/plugins/file_list/dialogs.py:506
 msgid "Username:"
-msgstr ""
+msgstr "利用者名:"
 
 #: application/plugins/file_list/dialogs.py:173
 msgid ""
 "One or more required fields are empty. Please make sure you have entered "
 "name, server and share."
-msgstr ""
+msgstr "一つ又は複数の必須入力欄が空です。名前，サーバー及び共有を入力したか確かめて下さい。"
 
 #: application/plugins/file_list/dialogs.py:251
 msgid "Create FTP mount"
-msgstr ""
+msgstr "FTPマウントを作成"
 
 #: application/plugins/file_list/dialogs.py:370
 #: application/plugins/file_list/dialogs.py:577
 msgid ""
 "One or more required fields is empty. Please make sure you have entered name"
 " and server."
-msgstr ""
+msgstr "一つ又は複数の必須入力欄が空です。名前及びサーバーを入力したか確かめて下さい。"
 
 #: application/plugins/file_list/dialogs.py:435
 msgid "Create SFTP mount"
-msgstr ""
+msgstr "SFTPマウントを作成"
 
 #: application/plugins/file_list/dialogs.py:445
 msgid "Create WebDav mount"
-msgstr ""
+msgstr "WebDavマウントを作成"
 
 #: application/plugins/file_list/dialogs.py:483
 msgid "Server type:"
-msgstr ""
+msgstr "サーバー種別:"
 
 #: application/plugins/sessions/plugin.py:32
 #: application/plugins/sessions/plugin.py:356
 msgid "Sessions"
-msgstr ""
+msgstr "セッション"
 
 #: application/plugins/sessions/plugin.py:65
 msgid "Locked"
-msgstr ""
+msgstr "固定"
 
 #: application/plugins/sessions/plugin.py:85
 msgid "Move up"
-msgstr ""
+msgstr "上に移動"
 
 #: application/plugins/sessions/plugin.py:92
 msgid "Move down"
-msgstr ""
+msgstr "下に移動"
 
 #: application/plugins/sessions/plugin.py:182
 msgid "Session with this name already exists."
-msgstr ""
+msgstr "同名のセッションが既に存在します。"
 
 #: application/plugins/sessions/plugin.py:212
 msgid "New session"
-msgstr ""
+msgstr "新規セッション"
 
 #: application/plugins/sessions/plugin.py:320
 msgid "Locked session preserves tab layout at the time of locking."
-msgstr ""
+msgstr "セッションを固定することでタブ配置を保持できます。"
 
 #: application/plugins/sessions/plugin.py:323
 msgid "Manage sessions"
-msgstr ""
+msgstr "セッションを管理する"
 
 #: application/plugins/sessions/plugin.py:326
 msgid "Save session"
-msgstr ""
+msgstr "セッションを保存する"
 
 #: application/plugins/sessions/plugin.py:360
 msgid "Show session list"
-msgstr ""
+msgstr "セッション一覧を表示"
 
 #: application/plugins/rename_extensions/letter_case.py:15
 #: application/plugins/rename_extensions/letter_case.py:23
 msgid "Do nothing"
-msgstr ""
+msgstr "何もしない"
 
 #: application/plugins/rename_extensions/letter_case.py:16
 msgid "Capitalize"
-msgstr ""
+msgstr "大文字化"
 
 #: application/plugins/rename_extensions/letter_case.py:17
 #: application/plugins/rename_extensions/letter_case.py:24
 msgid "Upper case"
-msgstr ""
+msgstr "大文字"
 
 #: application/plugins/rename_extensions/letter_case.py:18
 #: application/plugins/rename_extensions/letter_case.py:25
 msgid "Lower case"
-msgstr ""
+msgstr "小文字"
 
 #: application/plugins/rename_extensions/letter_case.py:19
 msgid "Swap case"
-msgstr ""
+msgstr "大文字・小文字を入れ替える"
 
 #: application/plugins/rename_extensions/letter_case.py:29
 msgid "Item name:"
-msgstr ""
+msgstr "項目名:"
 
 #: application/plugins/rename_extensions/letter_case.py:32
 msgid "Extension:"
-msgstr ""
+msgstr "拡張子:"
 
 #: application/plugins/rename_extensions/letter_case.py:87
 msgid "Letter Case"
-msgstr ""
+msgstr "大文字・小文字"
 
 #: application/plugins/rename_extensions/default.py:40
 msgid ""
@@ -2200,98 +2200,98 @@ msgid ""
 "\n"
 "For name and extension you can\n"
 "use range in format [N#-#]."
-msgstr ""
+msgstr "<b>雛形の文法</b>\n[N]\t項目名\n[E]\t拡張子\n[C]\t連番\n\n項目名及び拡張子に関しては\n範囲指定[N#-#]が利用できます。"
 
 #: application/plugins/rename_extensions/default.py:76
 msgid "Part of name"
-msgstr ""
+msgstr "名前のパス"
 
 #: application/plugins/rename_extensions/default.py:81
 msgid "Extension"
-msgstr ""
+msgstr "拡張子"
 
 #: application/plugins/rename_extensions/default.py:84
 msgid "Part of extension"
-msgstr ""
+msgstr "拡張子部"
 
 #: application/plugins/rename_extensions/default.py:89
 #: application/plugins/rename_extensions/default.py:103
 msgid "Counter"
-msgstr ""
+msgstr "連番"
 
 #: application/plugins/rename_extensions/default.py:109
 msgid "Start:"
-msgstr ""
+msgstr "開始:"
 
 #: application/plugins/rename_extensions/default.py:116
 msgid "Step:"
-msgstr ""
+msgstr "増分:"
 
 #: application/plugins/rename_extensions/default.py:123
 msgid "Digits:"
-msgstr ""
+msgstr "数値:"
 
 #: application/plugins/rename_extensions/default.py:252
 msgid "Item list is empty. Unable to get item for range selection!"
-msgstr ""
+msgstr "項目リストが空です。範囲選択した項目を取得できません。"
 
 #: application/plugins/rename_extensions/audio_metadata.py:22
 msgid "Album"
-msgstr ""
+msgstr "アルバム"
 
 #: application/plugins/rename_extensions/audio_metadata.py:23
 msgid "Artist"
-msgstr ""
+msgstr "アーティスト"
 
 #: application/plugins/rename_extensions/audio_metadata.py:25
 msgid "Genre"
-msgstr ""
+msgstr "ジャンル"
 
 #: application/plugins/rename_extensions/audio_metadata.py:27
 msgid "Track number"
-msgstr ""
+msgstr "トラック番号"
 
 #: application/plugins/rename_extensions/audio_metadata.py:39
 msgid "Replace:"
-msgstr ""
+msgstr "置換:"
 
 #: application/plugins/rename_extensions/audio_metadata.py:47
 msgid "With:"
-msgstr ""
+msgstr "対象:"
 
 #: application/plugins/rename_extensions/audio_metadata.py:60
 msgid "Template syntax"
-msgstr ""
+msgstr "雛形の文法"
 
 #: application/plugins/rename_extensions/audio_metadata.py:71
 msgid "Character replacement"
-msgstr ""
+msgstr "文字の置換"
 
 #: application/plugins/rename_extensions/audio_metadata.py:78
 msgid ""
 "In order to use this extension you need <b>mutagen</b> module installed!"
-msgstr ""
+msgstr "この拡張を用いるには<b>mutagen</b>モジュールが必要です。"
 
 #: application/plugins/rename_extensions/audio_metadata.py:110
 msgid "Audio Metadata"
-msgstr ""
+msgstr "音声メタデータ"
 
 #: application/plugins/find_file_extensions/size.py:20
 msgid "Match file size"
-msgstr ""
+msgstr "ファイルの大きさで合致させる"
 
 #: application/plugins/find_file_extensions/size.py:24
 msgid "Minimum:"
-msgstr ""
+msgstr "最小:"
 
 #: application/plugins/find_file_extensions/size.py:26
 #: application/plugins/find_file_extensions/size.py:30
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 #: application/plugins/find_file_extensions/size.py:28
 msgid "Maximum:"
-msgstr ""
+msgstr "最大:"
 
 #: application/plugins/find_file_extensions/default.py:33
 msgid ""
@@ -2300,92 +2300,92 @@ msgid ""
 "?\t\tAny single character\n"
 "[seq]\tAny character in <i>seq</i>\n"
 "[!seq]\tAny character <u>not</u> in <i>seq</i>"
-msgstr ""
+msgstr "<b>適合するパターン</b>\n*\t\t全て\n?\t\t任意の一文字\n[seq]\t<i>seq</i>の孰れか一文字\n[!seq]\t<i>seq</i>に含まれて<u>いない</u>一文字"
 
 #: application/plugins/find_file_extensions/default.py:48
 #: application/plugins/find_file_extensions/contents.py:23
 msgid "Search for:"
-msgstr ""
+msgstr "検索:"
 
 #: application/plugins/find_file_extensions/default.py:54
 msgid "Case sensitive"
-msgstr ""
+msgstr "大文字・小文字を区別する"
 
 #: application/plugins/find_file_extensions/contents.py:44
 msgid "Content"
-msgstr ""
+msgstr "内容"
 
 #: application/plugins/system_terminal/plugin.py:14
 msgid "System terminal"
-msgstr ""
+msgstr "システムの端末エミュレータ"
 
 #: application/plugins/gvim_viewer/plugin.py:50
 msgid "GVim"
-msgstr ""
+msgstr "GVim"
 
 #: application/plugin_base/rename_extension.py:22
 #: application/plugin_base/find_extension.py:23
 msgid "Use this extension"
-msgstr ""
+msgstr "この拡張を用いる"
 
 #: application/plugin_base/plugin.py:129
 msgid "Plugin Base"
-msgstr ""
+msgstr "プラグインの基礎"
 
 #: application/plugin_base/plugin.py:132
 #: application/plugin_base/terminal.py:266
 msgid "Focus opposite object"
-msgstr ""
+msgstr "反対側に注目する"
 
 #: application/plugin_base/plugin.py:133
 msgid "Next tab"
-msgstr ""
+msgstr "次のタブ"
 
 #: application/plugin_base/plugin.py:134
 msgid "Previous tab"
-msgstr ""
+msgstr "前のタブ"
 
 #: application/plugin_base/plugin.py:136
 #: application/plugin_base/terminal.py:267
 msgid "Close tab"
-msgstr ""
+msgstr "タブを閉じる"
 
 #: application/plugin_base/plugin.py:137
 msgid "Focus left object"
-msgstr ""
+msgstr "左に注目する"
 
 #: application/plugin_base/plugin.py:138
 msgid "Focus right object"
-msgstr ""
+msgstr "右に注目する"
 
 #: application/plugin_base/terminal.py:68
 msgid "Open current directory"
-msgstr ""
+msgstr "現在のディレクトリを開く"
 
 #: application/plugin_base/terminal.py:108
 msgid ""
 "\n"
 "\n"
 "Python VTE module is not installed on this system!"
-msgstr ""
+msgstr "\n\n本システムにはPython VTEモジュールが導入されていません。"
 
 #: application/plugin_base/terminal.py:177
 msgid "Terminal menu"
-msgstr ""
+msgstr "端末エミュレータの操作"
 
 #: application/plugin_base/terminal.py:263
 #: application/plugin_base/item_list.py:219
 msgid "Create terminal tab"
-msgstr ""
+msgstr "端末エミュレータタブを作成する"
 
 #: application/plugin_base/terminal.py:264
 #: application/plugin_base/item_list.py:214
 msgid "Copy selection to clipboard"
-msgstr ""
+msgstr "選択範囲をクリップボードにコピー"
 
 #: application/plugin_base/terminal.py:265
 msgid "Paste from clipboard"
-msgstr ""
+msgstr "クリップボードから貼り付け"
 
 #: application/plugin_base/terminal.py:310
 #, python-brace-format
@@ -2393,314 +2393,314 @@ msgid ""
 "You are about to feed child process with following data. Are you sure?\n"
 "\n"
 "{0}"
-msgstr ""
+msgstr "子プロセスに次のデータを入力します。宜しいですか。\n\n{0}"
 
 #: application/plugin_base/item_list.py:73
 msgid "Directories (selected/total)"
-msgstr ""
+msgstr "ディレクトリ（選択/合計）"
 
 #: application/plugin_base/item_list.py:74
 msgid "Files (selected/total)"
-msgstr ""
+msgstr "ファイル（選択/合計）"
 
 #: application/plugin_base/item_list.py:75
 msgid "Size (selected/total)"
-msgstr ""
+msgstr "大きさ（選択/合計）"
 
 #: application/plugin_base/item_list.py:104
 msgid "Search:"
-msgstr ""
+msgstr "検索:"
 
 #: application/plugin_base/item_list.py:137
 #: application/plugin_base/item_list.py:245
 msgid "Swap right and left paths"
-msgstr ""
+msgstr "左右のパスを入れ替える"
 
 #: application/plugin_base/item_list.py:143
 msgid "Reload item list"
-msgstr ""
+msgstr "項目一覧を再読込"
 
 #: application/plugin_base/item_list.py:149
 #: application/plugin_base/item_list.py:249
 msgid "Copy path to clipboard"
-msgstr ""
+msgstr "パスをクリップボードにコピー"
 
 #: application/plugin_base/item_list.py:155
 msgid "Enter path..."
-msgstr ""
+msgstr "パスを入力して下さい……"
 
 #: application/plugin_base/item_list.py:184
 msgid "Locations"
-msgstr ""
+msgstr "場所"
 
 #: application/plugin_base/item_list.py:208
 msgid "Execute selected item"
-msgstr ""
+msgstr "選択した項目を実行する"
 
 #: application/plugin_base/item_list.py:209
 msgid "Select application and execute item"
-msgstr ""
+msgstr "アプリケーションを選択して項目を実行する"
 
 #: application/plugin_base/item_list.py:210
 msgid "Show selected item properties"
-msgstr ""
+msgstr "選択した項目の属性情報を表示する"
 
 #: application/plugin_base/item_list.py:211
 msgid "Bookmark current directory"
-msgstr ""
+msgstr "現在のディレクトリを栞に登録する"
 
 #: application/plugin_base/item_list.py:212
 msgid "Edit bookmarks"
-msgstr ""
+msgstr "栞を編集する"
 
 #: application/plugin_base/item_list.py:213
 msgid "Cut selection to clipboard"
-msgstr ""
+msgstr "選択範囲をクリップボードに切り取り"
 
 #: application/plugin_base/item_list.py:215
 msgid "Paste items from clipboard"
-msgstr ""
+msgstr "項目をクリップボードから貼り付け"
 
 #: application/plugin_base/item_list.py:216
 msgid "Open selected directory in new tab"
-msgstr ""
+msgstr "選択したディレクトリを新規タブで開く"
 
 #: application/plugin_base/item_list.py:217
 msgid "Open selected directory"
-msgstr ""
+msgstr "選択したディレクトリを開く"
 
 #: application/plugin_base/item_list.py:218
 msgid "Calculate disk usage for directory"
-msgstr ""
+msgstr "ディレクトリのディスク使用量を計算する"
 
 #: application/plugin_base/item_list.py:221
 msgid "Go to root directory"
-msgstr ""
+msgstr "根ディレクトリに移動"
 
 #: application/plugin_base/item_list.py:222
 msgid "Reload items in current directory"
-msgstr ""
+msgstr "現行ディレクトリの項目を再読込"
 
 #: application/plugin_base/item_list.py:223
 msgid "Show history browser"
-msgstr ""
+msgstr "履歴を閲覧する"
 
 #: application/plugin_base/item_list.py:224
 msgid "Go back in history"
-msgstr ""
+msgstr "履歴を遡る"
 
 #: application/plugin_base/item_list.py:225
 msgid "Go forward in history"
-msgstr ""
+msgstr "履歴を辿る"
 
 #: application/plugin_base/item_list.py:226
 msgid "Select all"
-msgstr ""
+msgstr "全選択"
 
 #: application/plugin_base/item_list.py:227
 msgid "Deselect all"
-msgstr ""
+msgstr "全選択を解除"
 
 #: application/plugin_base/item_list.py:228
 msgid "Invert selection"
-msgstr ""
+msgstr "選択範囲を反転"
 
 #: application/plugin_base/item_list.py:229
 msgid "Toggle selection"
-msgstr ""
+msgstr "選択範囲を入れ替える"
 
 #: application/plugin_base/item_list.py:230
 msgid "Toggle selection and move marker up"
-msgstr ""
+msgstr "選択範囲を入れ替えてマーカーを上に移動する"
 
 #: application/plugin_base/item_list.py:231
 msgid "Trash or delete selected items"
-msgstr ""
+msgstr "選択した項目をゴミ箱に捨てる・消去する"
 
 #: application/plugin_base/item_list.py:232
 msgid "Force deleting selected items"
-msgstr ""
+msgstr "選択した項目を強制的に削除"
 
 #: application/plugin_base/item_list.py:233
 msgid "Show bookmarks for current list"
-msgstr ""
+msgstr "現在のリストに対する栞を表示する"
 
 #: application/plugin_base/item_list.py:234
 msgid "Show bookmarks for left list"
-msgstr ""
+msgstr "左のリストに対する栞を表示する"
 
 #: application/plugin_base/item_list.py:235
 msgid "Show bookmarks for right list"
-msgstr ""
+msgstr "右のリストに対する栞を表示する"
 
 #: application/plugin_base/item_list.py:236
 msgid "Rename selected item"
-msgstr ""
+msgstr "選択した項目の名前を変更"
 
 #: application/plugin_base/item_list.py:237
 msgid "View selected item"
-msgstr ""
+msgstr "選択した項目を表示する"
 
 #: application/plugin_base/item_list.py:238
 msgid "Edit selected item"
-msgstr ""
+msgstr "選択した項目を編集"
 
 #: application/plugin_base/item_list.py:239
 msgid "Copy selected items"
-msgstr ""
+msgstr "選択した項目をコピー"
 
 #: application/plugin_base/item_list.py:240
 msgid "Move selected items"
-msgstr ""
+msgstr "選択した項目を移動"
 
 #: application/plugin_base/item_list.py:241
 msgid "Show context menu"
-msgstr ""
+msgstr "コンテクストメニューを表示する"
 
 #: application/plugin_base/item_list.py:242
 msgid "Show \"open with\" menu"
-msgstr ""
+msgstr "「次で開く」メニューを表示する"
 
 #: application/plugin_base/item_list.py:243
 msgid "Assign path from left list"
-msgstr ""
+msgstr "左のリストからパスを割り当てる"
 
 #: application/plugin_base/item_list.py:244
 msgid "Assign path from right list"
-msgstr ""
+msgstr "右のリストからパスを割り当てる"
 
 #: application/plugin_base/item_list.py:246
 msgid "Move selection marker up"
-msgstr ""
+msgstr "選択マーカーを上に移動する"
 
 #: application/plugin_base/item_list.py:247
 msgid "Move selection marker down"
-msgstr ""
+msgstr "選択マーカーを下に移動する"
 
 #: application/plugin_base/item_list.py:248
 msgid "Show tab menu"
-msgstr ""
+msgstr "タブメニューを表示する"
 
 #: application/plugin_base/item_list.py:250
 msgid "Copy selected path to clipboard"
-msgstr ""
+msgstr "選択したパスをクリップボードにコピー"
 
 #: application/plugin_base/item_list.py:251
 msgid "Copy selected item name to clipboard"
-msgstr ""
+msgstr "選択した項目名をクリップボードにコピー"
 
 #: application/plugin_base/item_list.py:252
 msgid "Copy path to command entry"
-msgstr ""
+msgstr "パスをコマンド欄にコピー"
 
 #: application/plugin_base/item_list.py:253
 msgid "Copy selection to command entry"
-msgstr ""
+msgstr "選択範囲をコマンド欄にコピー"
 
 #: application/plugin_base/item_list.py:254
 msgid "Ask and navigate to path"
-msgstr ""
+msgstr "対話的にパスへ移動する"
 
 #: application/plugin_base/item_list.py:255
 msgid "Start quick search"
-msgstr ""
+msgstr "簡易検索を開始"
 
 #: application/plugin_base/item_list.py:256
 msgid "Expand directory"
-msgstr ""
+msgstr "ディレクトリを展開"
 
 #: application/plugin_base/item_list.py:257
 msgid "Collapse directory"
-msgstr ""
+msgstr "ディレクトリを折り畳む"
 
 #: application/plugin_base/item_list.py:258
 msgid "Create symbolic or hard link"
-msgstr ""
+msgstr "シンボリックリンク又はハードリンクを作成する"
 
 #: application/plugin_base/item_list.py:259
 msgid "Show emblem menu"
-msgstr ""
+msgstr "記章メニューを表示する"
 
 #: application/plugin_base/item_list.py:320
 #: application/plugin_base/item_list.py:326
 #, python-brace-format
 msgid "Go to '{0}'"
-msgstr ""
+msgstr "‘{0}’に移動する"
 
 #: application/plugin_base/item_list.py:670
 msgid ""
 "Directory does not exist anymore or is not valid. If path is not local check"
 " if specified volume is mounted."
-msgstr ""
+msgstr "ディレクトリが存在しないか不正です。パスがローカルにない場合はボリュームがマウントされているか確かめて下さい。"
 
 #: application/plugin_base/item_list.py:708
 #, python-brace-format
 msgid ""
 "Specified protocol ({0}) is not supported by this application. Please check "
 "for available plugins or create a feature request."
-msgstr ""
+msgstr "このアプリケーションは指定された規約 ({0}) に対応していません。利用可能なプラグインを見付けるか，機能の追加を提案して下さい。"
 
 #: application/plugin_base/item_list.py:740
 msgid ""
 "Application is unable to handle specified data. Check if source items still "
 "exist."
-msgstr ""
+msgstr "指定したデータをアプリケーションが処理できません。原本が未だ存在することを確かめて下さい。"
 
 #: application/plugin_base/item_list.py:993
 msgid "Open _with"
-msgstr ""
+msgstr "これで開く(_W)"
 
 #: application/plugin_base/item_list.py:1005
 msgid "Additional options"
-msgstr ""
+msgstr "追加オプション"
 
 #: application/plugin_base/item_list.py:1019
 msgid "Create file"
-msgstr ""
+msgstr "ファイルを作成"
 
 #: application/plugin_base/item_list.py:1075
 msgid "Copy to other..."
-msgstr ""
+msgstr "他へコピー"
 
 #: application/plugin_base/item_list.py:1081
 msgid "Move to other..."
-msgstr ""
+msgstr "他へ移動"
 
 #: application/plugin_base/item_list.py:1091
 msgid "Copy file name"
-msgstr ""
+msgstr "ファイル名をコピー"
 
 #: application/plugin_base/item_list.py:1097
 msgid "Copy path"
-msgstr ""
+msgstr "パスをコピー"
 
 #: application/plugin_base/item_list.py:1122
 msgid "Send to..."
-msgstr ""
+msgstr "送る"
 
 #: application/plugin_base/item_list.py:1200
 msgid "View complete history..."
-msgstr ""
+msgstr "全履歴を表示する"
 
 #: application/plugin_base/item_list.py:1206
 msgid "History is empty"
-msgstr ""
+msgstr "履歴が空です"
 
 #: application/plugin_base/item_list.py:1553
 msgid "Path entry"
-msgstr ""
+msgstr "パス項目"
 
 #: application/plugin_base/item_list.py:1554
 msgid "Navigate to:"
-msgstr ""
+msgstr "次に移動:"
 
 #: application/indicator.py:32
 msgid "Sh_ow main window"
-msgstr ""
+msgstr "主ウィンドウを表示(_O)"
 
 #: application/indicator.py:41
 msgid "_Hide main window"
-msgstr ""
+msgstr "主ウィンドウを隠す(_H)"
 
 #: application/operation.py:115
 #, python-brace-format
@@ -2708,7 +2708,7 @@ msgid ""
 "Aborted. Not enough free space on target file system.\n"
 "Needed: {0}\n"
 "Available: {1}"
-msgstr ""
+msgstr "中止しました。対象のファイルシステムに十分な空き領域がありません。\n必要な領域: {0}\n利用可能な領域: {1}"
 
 #: application/operation.py:130
 #, python-brace-format
@@ -2719,131 +2719,131 @@ msgid ""
 "Available: {1}\n"
 "\n"
 "Do you wish to continue?"
-msgstr ""
+msgstr "対象のファイルシステムにこの操作を続行するのに十分な空き領域がありません。\n\n必要な領域: {0}\n利用可能な領域: {1}\n\n本当に実行しますか？"
 
 #: application/operation.py:265
 msgid ""
 "There is a problem writing data to destination file. What would you like to "
 "do?"
-msgstr ""
+msgstr "宛先ファイルへのデータ書き込みに問題があります。何をしますか？"
 
 #: application/operation.py:307
 msgid ""
 "An error occurred while trying to create specified file. What would you like"
 " to do?"
-msgstr ""
+msgstr "指定されたファイルを作成中に問題が生じました。何をしますか？"
 
 #: application/operation.py:314
 msgid ""
 "An error occurred while trying to create specified directory. What would you"
 " like to do?"
-msgstr ""
+msgstr "指定されたディレクトリを作成中に問題が生じました。何をしますか？"
 
 #: application/operation.py:354
 msgid ""
 "Problem with setting path parameter for specified path. What would you like "
 "to do?"
-msgstr ""
+msgstr "指定されたパスのパラメータの設定中に問題が生じました。何をしますか？"
 
 #: application/operation.py:393
 msgid ""
 "There was a problem removing specified path. What would you like to do?"
-msgstr ""
+msgstr "指定されたパスの削除中に問題が生じました。何をしますか？"
 
 #: application/operation.py:432
 msgid ""
 "There was a problem trashing specified path. Would you like to try removing "
 "it instead?"
-msgstr ""
+msgstr "指定されたパスをゴミ箱に棄てている途中に問題が生じました。代わりに削除しますか？"
 
 #: application/operation.py:471
 msgid "There was a problem moving specified path. What would you like to do?"
-msgstr ""
+msgstr "指定されたパスの移動中に問題が生じました。何をしますか？"
 
 #: application/operation.py:510
 msgid ""
 "There was a problem renaming specified path. What would you like to do?"
-msgstr ""
+msgstr "指定されたパスの名前を変更している途中に問題が生じました。何をしますか？"
 
 #: application/operation.py:549
 msgid ""
 "There was a problem with reading specified directory. What would you like to"
 " do?"
-msgstr ""
+msgstr "指定されたディレクトリの読込l中に問題が生じました。何をしますか？"
 
 #: application/operation.py:659
 msgid "Searching for files..."
-msgstr ""
+msgstr "ファイルを検索中……"
 
 #: application/operation.py:885
 msgid ""
 "Unable to create directory because file with the same name already exists in"
 " target directory."
-msgstr ""
+msgstr "対象のディレクトリには既に同名のファイルが存在している為、ディレクトリを作成できませんでした。"
 
 #: application/operation.py:1123
 msgid "Creating directories..."
-msgstr ""
+msgstr "ディレクトリを作成中……"
 
 #: application/operation.py:1140
 msgid "Copying files..."
-msgstr ""
+msgstr "ファイルを複製中……"
 
 #: application/operation.py:1156
 msgid "Creating links..."
-msgstr ""
+msgstr "リンクを作成中……"
 
 #: application/operation.py:1208 application/operation.py:1225
 msgid "Copy Operation"
-msgstr ""
+msgstr "操作を複製"
 
 #: application/operation.py:1210
 #, python-brace-format
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
-msgstr[0] ""
+msgstr[0] "\"{1}\"から\"{2}\"へ{0}件の項目をコピーし終えました。"
 
 #: application/operation.py:1338
 msgid "Moving files..."
-msgstr ""
+msgstr "ファイルを移動中……"
 
 #: application/operation.py:1352
 msgid "Deleting source files..."
-msgstr ""
+msgstr "元のファイルを削除中……"
 
 #: application/operation.py:1374
 msgid "Deleting source directories..."
-msgstr ""
+msgstr "元のディレクトリを削除中……"
 
 #: application/operation.py:1473 application/operation.py:1490
 msgid "Move Operation"
-msgstr ""
+msgstr "操作を移動"
 
 #: application/operation.py:1475
 #, python-brace-format
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
-msgstr[0] ""
+msgstr[0] "\"{1}\"から\"{2}\"へ{0}件の項目を移動し終えました。"
 
 #: application/operation.py:1620
 msgid "Delete Operation"
-msgstr ""
+msgstr "操作を削除"
 
 #: application/operation.py:1622
 #, python-brace-format
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
-msgstr[0] ""
+msgstr[0] "\"{1}\"から{0}件の項目を削除し終えました。"
 
 #: application/operation.py:1735
 msgid "Rename Operation"
-msgstr ""
+msgstr "操作の名前を変更"
 
 #: application/operation.py:1737
 #, python-brace-format
 msgid "Rename of {0} item from \"{1}\" is completed!"
 msgid_plural "Rename of {0} items from \"{1}\" is completed!"
-msgstr[0] ""
+msgstr[0] "\"{1}\"から{0}件の項目の名前を変更し終えました。"
 
 #: application/tools/viewer.py:35
 #, python-brace-format
@@ -2898,7 +2898,7 @@ msgstr "指定されたパスが不正または存在しません。選択項目
 msgid ""
 "You need to enable at least one extension in order to find files and "
 "directories!"
-msgstr ""
+msgstr "ファイルやディレクトリを検索する為には一つ以上の拡張機能を有効にする必要があります。"
 
 #: application/tools/version_check.py:23
 msgid "Version check"
@@ -2930,7 +2930,7 @@ msgstr "新しい名前"
 
 #: application/tools/advanced_rename.py:78
 msgid "Items located in:"
-msgstr "アイテムの場所:"
+msgstr "項目の場所:"
 
 #: application/tools/advanced_rename.py:201
 #, python-brace-format
@@ -2940,4 +2940,4 @@ msgid ""
 msgid_plural ""
 "You are about to rename {0} items.\n"
 "Are you sure about this?"
-msgstr[0] "{0}件の項目の名前を変更します。宜しいですか。"
+msgstr[0] "{0}件の項目の名前を変更します。\n宜しいですか。"

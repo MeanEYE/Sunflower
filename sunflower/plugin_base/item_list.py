@@ -1241,23 +1241,15 @@ class ItemList(PluginBase):
 
 	def _parent_directory(self, widget=None, data=None):
 		"""Move to parent folder"""
-		if self._search_panel.get_visible():
+		if self._search_panel.get_search_mode():
 			return False  # prevent going to parent directory if quick search is active
 
-		self.change_path(
-						os.path.dirname(self.path),
-						os.path.basename(self.path)
-					)
-
+		self.change_path(os.path.dirname(self.path), os.path.basename(self.path))
 		return True  # to prevent command or quick search in single key bindings
 
 	def _root_directory(self, widget=None, data=None):
 		"""Navigate to root directory"""
-		self.change_path(
-						os.path.sep,
-						os.path.basename(self.path)
-					)
-
+		self.change_path(os.path.sep, os.path.basename(self.path))
 		return True
 
 	def _control_got_focus(self, widget, data=None):

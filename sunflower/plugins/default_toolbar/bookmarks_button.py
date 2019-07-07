@@ -1,4 +1,4 @@
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject
 
 
 class Button(Gtk.ToolButton):
@@ -23,4 +23,4 @@ class Button(Gtk.ToolButton):
 
 	def _clicked(self, widget, data=None):
 		"""Handle click"""
-		self._application.show_bookmarks_menu(widget=self)
+		self._application.show_bookmarks_menu()

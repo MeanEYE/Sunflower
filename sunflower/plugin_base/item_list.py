@@ -101,19 +101,16 @@ class ItemList(PluginBase):
 		self._container.add(self._item_list)
 
 		# quick search
-		self._search_panel = Gtk.HBox(False, 0)
-		label = Gtk.Label(label=_('Search:'))
-
-		self._search_entry = Gtk.Entry()
+		self._search_entry = Gtk.SearchEntry.new()
 		self._search_entry.connect('key-press-event', self._handle_search_key_press)
 		self._search_entry.connect('focus-out-event', self._stop_search)
-		self._item_list.set_search_entry(self._search_entry)
+
+		self._search_panel = Gtk.SearchBar.new()
+		self._search_panel.add(self._search_entry)
 
 		compare = lambda model, column, key, iter_: key.lower() not in model.get_value(iter_, column).lower()
 		self._item_list.set_search_equal_func(compare)
-
-		self._search_panel.pack_start(label, False, False, 3)
-		self._search_panel.pack_start(self._search_entry, True, True, 0)
+		self._item_list.set_search_entry(self._search_entry)
 
 		# popup menu
 		self._open_with_item = None
@@ -173,7 +170,6 @@ class ItemList(PluginBase):
 		self.pack_start(self._search_panel, False, False, 0)
 
 		self.show_all()
-		self._search_panel.hide()
 
 	def _create_buttons(self):
 		"""Create titlebar buttons."""
@@ -794,7 +790,7 @@ class ItemList(PluginBase):
 
 	def _start_search(self, key=None):
 		"""Shows quick search panel and starts searching"""
-		self._search_panel.show()
+		self._search_panel.set_search_mode(True)
 		self._search_entry.grab_focus()
 
 		if key is not None:
@@ -803,7 +799,7 @@ class ItemList(PluginBase):
 
 	def _stop_search(self, widget=None, data=None):
 		"""Hide quick search panel and return focus to item list"""
-		self._search_panel.hide()
+		self._search_panel.set_search_mode(False)
 
 		if widget is not None:
 			self._item_list.grab_focus()

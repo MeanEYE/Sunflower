@@ -1,6 +1,6 @@
 import os
 
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject
 
 
 class Button(Gtk.ToolButton):

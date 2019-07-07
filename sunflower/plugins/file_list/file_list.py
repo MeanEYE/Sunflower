@@ -1598,7 +1598,7 @@ class FileList(ItemList):
 								)
 			dialog.run()
 			dialog.destroy()
-			return False
+			return True
 
 		if len(selection_list) > 0:
 			self._parent.associations_manager.edit_file(selection_list)

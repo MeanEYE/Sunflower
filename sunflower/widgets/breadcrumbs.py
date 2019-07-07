@@ -13,12 +13,12 @@ class Breadcrumbs(Gtk.HBox):
 
 		# change the look of container
 		self.set_focus_on_click(False)
-		self.get_style_context().add_class('linked')
-		self.get_style_context().add_class('path-bar')
+		self.get_style_context().add_class('sunflower-breadcrumbs')
 
 		self._path = None
 		self._parent = parent
 		self._updating = False
+		self._group = None
 
 	def __fragment_click(self, widget, data=None):
 		"""Handle clicking on path fragment."""
@@ -70,19 +70,7 @@ class Breadcrumbs(Gtk.HBox):
 			current_path = None
 			for element in elements:
 				current_path = os.path.join(current_path, element) if current_path is not None else element
-
-				if control is not None:
-					control = Gtk.RadioButton.new_from_widget(control)
-				else:
-					control = Gtk.RadioButton.new()
-
-				control.set_focus_on_click(False)
-				control.set_label(decode_file_name(element))
-				control.set_mode(False)
-				control.connect('clicked', self.__fragment_click)
-				control.path = current_path
-				control.show()
-
+				control = Fragment(decode_file_name(element), current_path, self.__fragment_click, control)
 				self.pack_start(control, False, False, 0)
 
 			if control is not None:
@@ -91,3 +79,40 @@ class Breadcrumbs(Gtk.HBox):
 		# prevent signal dead-loops
 		self._updating = False
 
+
+class Fragment(Gtk.HBox):
+	"""Simple path fragment containing necessary widgets."""
+
+	def __init__(self, text, path, click_handler, previous):
+		Gtk.HBox.__init__(self)
+
+		self.path = path
+
+		# create separator label
+		if previous is not None:
+			label = Gtk.Label.new('/')
+			self.pack_start(label, False, False, 0)
+
+		# create button
+		self._button = Gtk.RadioButton.new()
+		self._button.set_focus_on_click(False)
+		self._button.set_mode(False)
+		self._button.connect('clicked', click_handler)
+		self._button.path = path
+
+		if previous is None:
+			image = Gtk.Image.new_from_icon_name('drive-harddisk-symbolic', Gtk.IconSize.BUTTON)
+			self._button.set_image(image)
+		else:
+			self._button.set_label(text)
+
+		if previous is not None:
+			self._button.join_group(previous._button)
+
+		self.pack_start(self._button, False, False, 0)
+
+		self.show_all()
+
+	def set_active(self, active):
+		"""Set button active state."""
+		self._button.set_active(active)

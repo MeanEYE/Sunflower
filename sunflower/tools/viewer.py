@@ -17,6 +17,10 @@ class Viewer:
 	def __init__(self, path, provider, parent):
 		self._window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
 
+		# viewer does not support directories
+		if provider.is_dir(path):
+			return
+
 		self.path = path
 		self._provider = provider
 		self._parent = parent

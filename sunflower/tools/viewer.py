@@ -18,7 +18,7 @@ class Viewer:
 		self._window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
 
 		# viewer does not support directories
-		if os.path.isdir(path):
+		if provider.is_dir(path):
 			return
 
 		self.path = path

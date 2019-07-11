@@ -35,7 +35,7 @@ class IconManager:
 		# special user directories
 		directories = []
 		icon_names = {
-				UserDirectory.DESKTOP: 'desktop',
+				UserDirectory.DESKTOP: 'user-desktop',
 				UserDirectory.DOWNLOADS: 'folder-downloads',
 				UserDirectory.TEMPLATES: 'folder-templates',
 				UserDirectory.PUBLIC: 'folder-publicshare',

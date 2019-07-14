@@ -47,11 +47,13 @@ class LocalMonitor(Monitor):
 			if path.get_parent().get_path() == self._path and other_path.get_parent().get_path() != self._path:
 				# path moved to somewhere else - emit DELETED
 				signal = MonitorSignals.DELETED
+
 			else:
 				# path renamed within same directory - emit MOVED
 				signal = MonitorSignals.MOVED
 				if other_path is not None:
 					other_path = other_path.get_basename()
+
 		else:
 			signal = self._signal_table[event_type]
 

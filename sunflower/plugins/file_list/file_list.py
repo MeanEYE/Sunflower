@@ -1388,33 +1388,36 @@ class FileList(ItemList):
 		always_hidden = [item for item in always_hidden if item not in self._always_visible_items]
 
 		# node created
+		should_add = False
 		if event is MonitorSignals.CREATED:
-			# temporarily fix problem with duplicating items when file was saved with GIO
+			# fix problem with duplicating items when file was saved with GIO
 			if self._find_iter_by_name(path, parent) is None:
 				should_add = True
 
-				# check for hidden item or backup file
-				if not show_hidden \
-				and (path[0] == '.' or path[-1] == '~') \
-				and path not in self._always_visible_items:
-					should_add = False
+			# check for hidden item or backup file
+			if should_add \
+			and not show_hidden \
+			and (path[0] == '.' or path[-1] == '~') \
+			and path not in self._always_visible_items:
+				should_add = False
 
-				# check if path is in any of the filters
-				if should_add and len(always_hidden) > 0:
-					should_add = path not in always_hidden
+			# check if path is in any of the filters
+			if should_add and len(always_hidden) > 0:
+				should_add = path not in always_hidden
 
-				# add item
-				if should_add:
-					self._add_item(path, parent, parent_path)
-					Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
+			# add item
+			if should_add:
+				self._add_item(path, parent, parent_path)
+				Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
 
 			else:
 				self._update_item_details_by_name(relative_path, parent)
 
 		# node renamed
 		elif event is MonitorSignals.MOVED:
-
-			should_add = True
+			# fix problem with duplicating items when file was saved with GIO
+			if self._find_iter_by_name(other_path, parent) is None:
+				should_add = True
 
 			# make sure we are working with relative paths
 			if other_path.startswith(self.path):
@@ -1422,8 +1425,8 @@ class FileList(ItemList):
 
 			# check for hidden item or backup file
 			if not show_hidden \
-					and (other_path[0] == '.' or other_path[-1] == '~') \
-					and other_path not in self._always_visible_items:
+			and (other_path[0] == '.' or other_path[-1] == '~') \
+			and other_path not in self._always_visible_items:
 				should_add = False
 
 			# check if path is in any of the filters
@@ -1438,6 +1441,8 @@ class FileList(ItemList):
 			if should_add:
 				self._add_item(other_path, parent, parent_path)
 				Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
+			else:
+				self._update_item_details_by_name(other_path, parent)
 
 		# node deleted
 		elif event is MonitorSignals.DELETED:

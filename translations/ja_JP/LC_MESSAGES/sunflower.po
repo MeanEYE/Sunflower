@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-02 01:35+0100\n"
-"PO-Revision-Date: 2019-07-06 07:22+0000\n"
+"PO-Revision-Date: 2019-07-09 04:40+0000\n"
 "Last-Translator: Rentaro YOSHIDUMI <rentaroyoshidumi4592307816@gmail.com>\n"
 "Language-Team: Japanese (Japan) (http://www.transifex.com/way2cu/sunflower/language/ja_JP/)\n"
 "MIME-Version: 1.0\n"
@@ -614,7 +614,7 @@ msgstr "選択表示:"
 
 #: application/gui/preferences/item_list.py:135
 msgid "Quick search combination:"
-msgstr "入力逐次検索を行うキーl組合せ"
+msgstr "逐次検索を行うキー組合せ"
 
 #: application/gui/preferences/item_list.py:138
 msgid "Control"
@@ -710,7 +710,7 @@ msgstr "フルパス:"
 msgid ""
 "Quick search settings are in conflict with VIM navigation style. To resolve "
 "this issue your quick search settings were restored to default."
-msgstr "入力逐次検索の設定がVimバインディングと衝突しています。解消するために入力逐次検索の設定を既定に戻します。"
+msgstr "逐次検索の設定がVimバインディングと衝突しています。解消するために逐次検索の設定を既定に戻します。"
 
 #: application/gui/main_window.py:103 application/gui/main_window.py:152
 #: application/gui/about_window.py:104 application/gui/about_window.py:105

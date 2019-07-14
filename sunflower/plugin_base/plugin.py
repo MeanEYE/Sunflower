@@ -30,9 +30,6 @@ class PluginBase(Gtk.VBox):
 		self._accelerator_groups = []
 		self._configure_accelerators()
 
-		# configure self
-		# self.set_border_width(2)
-
 		# create tab label
 		self._tab_label = TabLabel(self._parent, self)
 

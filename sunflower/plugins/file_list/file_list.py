@@ -126,6 +126,7 @@ class FileList(ItemList):
 								'mode': 8,
 								'date': 8
 							}
+		self._monospace_renderers = (cell_mode, cell_date)
 
 		# create columns
 		col_name = Gtk.TreeViewColumn(_('Name'))
@@ -336,6 +337,8 @@ class FileList(ItemList):
 			for cell_renderer in column.get_cells():
 				try:
 					cell_renderer.set_property('size-points', font_size)
+					if cell_renderer in self._monospace_renderers:
+						cell_renderer.set_property('family', 'Monospace')
 
 				except TypeError:
 					pass

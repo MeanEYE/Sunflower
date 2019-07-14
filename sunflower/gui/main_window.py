@@ -2172,7 +2172,6 @@ class MainWindow(Gtk.ApplicationWindow):
 					'right_directories': [],
 					'force_directories': False,
 					'show_expanders': False,
-					'hide_horizontal_scrollbar': False,
 					'second_extension': False,
 					'always_visible': []
 				})

@@ -13,71 +13,29 @@ Contributor = namedtuple(
 				[
 					'name',  # contributor's full name
 					'email',
-					'website',  # contributor's website url
 				])
 
 
 class AboutWindow:
 	# list of contributors
 	contributors = [
-		Contributor(
-			name = 'Mladen Mijatov',
-			email = 'meaneye.rcf@gmail.com',
-			website = None,
-		),
-		Contributor(
-			name = 'Wojciech Kluczka',
-			email = 'wojtekkluczka@gmail.com',
-			website = None,
-		),
-		Contributor(
-			name = 'Grigory Petrov',
-			email = 'grigory.v.p@gmail.com',
-			website = None,
-		),
-		Contributor(
-			name = 'Sebastian Gaul',
-			email = 'sebastian@dev.mgvmedia.com',
-			website = 'http://sgaul.de',
-		),
-		Contributor(
-			name = 'Arseniy Krasnov ',
-			email = 'arseniy@krasnoff.org',
-			website = None,
-		),
-		Contributor(
-			name = 'Sevka Fedoroff',
-			email = 'sevka.fedoroff@gmail.com',
-			website = None
-		),
-		Contributor(
-			name = 'multiSnow',
-			email = 'infinity.blick.winkel@gmail.com',
-			website = None
-		)
+		Contributor(name='Wojciech Kluczka', email='wojtekkluczka@gmail.com'),
+		Contributor(name='Grigory Petrov', email='grigory.v.p@gmail.com'),
+		Contributor(name='Sebastian Gaul', email='sebastian@dev.mgvmedia.com'),
+		Contributor(name='Arseniy Krasnov ', email='arseniy@krasnoff.org'),
+		Contributor(name='Sevka Fedoroff', email='sevka.fedoroff@gmail.com'),
+		Contributor(name='multiSnow', email='infinity.blick.winkel@gmail.com')
 	]
 
 	# list of artists
 	artists = [
-		Contributor(
-			name = 'Andrea Pavlović',
-			email = 'octogirl.design@gmail.com',
-			website = None,
-		),
-		Contributor(
-			name = 'Michael Kerch',
-			email = 'michael@way2cu.com',
-			website = 'misha.co.il',
-		),
-	]
-
-	translators = [
-
+		Contributor(name='Andrea Pavlović', email='octogirl.design@gmail.com'),
+		Contributor(name='Michael Kerch', email='michael@way2cu.com'),
 	]
 
 	def __init__(self, parent):
 		# create main window
-		self._dialog = Gtk.AboutDialog()
+		self._dialog = Gtk.AboutDialog.new()
 
 		# prepare version template
 		if parent.version['stage'] != 'f':
@@ -110,7 +68,7 @@ class AboutWindow:
 		self._dialog.set_comments(_('Twin-panel file manager for Linux.'))
 
 		# set license
-		self._dialog.set_copyright(_(u'Copyright \u00a9 2010-2018 by Mladen Mijatov and contributors.'))
+		self._dialog.set_copyright(_(u'Copyright \u00a9 2010-2019 by Mladen Mijatov and contributors.'))
 
 		if os.path.isfile('COPYING'):
 			license_file = open('COPYING', 'r')
@@ -122,28 +80,19 @@ class AboutWindow:
 				self._dialog.set_license(license_text)
 
 		else:
-			# link to GPL3
 			self._dialog.set_license('http://www.gnu.org/licenses/old-licenses/gpl-3.0.html')
 
 		# set authors
-		self._dialog.set_authors(['{0} <{1}> {2}'.format(
+		self._dialog.set_authors(['Mladen Mijatov <meaneye.rcf@gmail.com>'])
+		self._dialog.add_credit_section(_('Contributors'), ['{0} <{1}>'.format(
 					contributor.name,
 					contributor.email,
-					contributor.website or ''
 				) for contributor in self.contributors])
 
-		self._dialog.set_artists(['{0} <{1}> {2}'.format(
+		self._dialog.set_artists(['{0} <{1}>'.format(
 					contributor.name,
 					contributor.email,
-					contributor.website or ''
 				) for contributor in self.artists])
-
-		self._dialog.set_translator_credits('\n'.join(['{0} <{1}> {2} - {3}'.format(
-					contributor.name,
-					contributor.email,
-					contributor.website or '',
-					contributor.language
-				) for contributor in self.translators]))
 
 	def show(self):
 		"""Show dialog"""

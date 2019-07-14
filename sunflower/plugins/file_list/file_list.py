@@ -1746,10 +1746,6 @@ class FileList(ItemList):
 		for data in self._item_queue:
 			new_iter = self._store.append(parent, data)
 
-			# force showing expanders
-			if self._show_expanders and data[Column.IS_DIR] and not data[Column.IS_PARENT_DIR]:
-				self._store.append(new_iter, (0, ) * 18)
-
 			# focus specified item
 			if self._item_to_focus == data[0]:
 				path_to_select = self._store.get_path(new_iter)
@@ -1757,8 +1753,6 @@ class FileList(ItemList):
 		# select path if needed
 		if path_to_select is not None:
 			Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._item_list.set_cursor, path_to_select)
-			# self._item_list.set_cursor(path_to_select)
-			# self._item_list.scroll_to_cell(path_to_select)
 
 		# clear item queue
 		self._item_queue[:] = []

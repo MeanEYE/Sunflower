@@ -24,10 +24,6 @@ from sunflower.plugin_base.provider import FileType, Mode as FileMode, Support a
 from sunflower.widgets.thumbnail_view import ThumbnailView
 from sunflower.widgets.emblems_renderer import CellRendererEmblems
 
-# TODO: Lowest supported is Gtk 3.20, this is not needed
-# defined here as Gtk 3.10.8 doesn't define Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID
-UNSORTED_SORT_COLUMN_ID = -2
-
 
 class Column:
 	NAME = 0
@@ -510,7 +506,7 @@ class FileList(ItemList):
 
 		if is_dir:
 			options = Parameters()
-			options.set('path', os.path.join(self.path, name))
+			options.set('path', os.path.abspath(os.path.join(self.path, name)))
 
 			self._parent.create_tab(
 							self._notebook,
@@ -1305,7 +1301,7 @@ class FileList(ItemList):
 
 	def _clear_sort_function(self):
 		"""Clear sort settings"""
-		self._store.set_sort_column_id(UNSORTED_SORT_COLUMN_ID, True)
+		self._store.set_sort_column_id(Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, True)
 
 	def _sort_list(self, item_list, iter1, iter2, data=None):
 		"""Compare two items for sorting process"""

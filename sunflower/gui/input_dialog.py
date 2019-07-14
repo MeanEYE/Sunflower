@@ -1684,7 +1684,7 @@ class ApplicationInputDialog(InputDialog):
 class ApplicationSelectDialog:
 	"""Provides user with a list of installed applications and option to enter command"""
 
-	help_url = 'standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables'
+	help_url = 'https://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables'
 
 	def __init__(self, application, path=None):
 		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)

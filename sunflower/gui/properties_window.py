@@ -29,7 +29,7 @@ class PropertiesWindow(Gtk.Window):
 	"""Properties window for files and directories"""
 
 	def __init__(self, application, provider, path):
-		GObject.GObject.__init__(self)
+		Gtk.Window.__init__(self)
 
 		# store parameters locally
 		self._application = application
@@ -55,7 +55,7 @@ class PropertiesWindow(Gtk.Window):
 		self._create_monitor()
 
 		# get item information
-		title = _('{0} Properties').format(os.path.basename(path))
+		title = _('"{0}" Properties').format(os.path.basename(path))
 
 		icon_manager = application.icon_manager
 		if self._is_file:
@@ -73,47 +73,19 @@ class PropertiesWindow(Gtk.Window):
 		hints.min_height = 410
 		self.set_geometry_hints(None, hints, Gdk.WindowHints.MIN_SIZE)
 		self.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
-		self.set_border_width(5)
 		self.set_icon_name(self._icon_name)
-		self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
-		self.set_wmclass('Sunflower', 'Sunflower')
 
 		self.connect('key-press-event', self._handle_key_press)
-		# create interface
-		vbox = Gtk.VBox(False, 5)
 
-		self._notebook = Gtk.Notebook()
+		# create notebook
+		self._notebook = Gtk.Notebook.new()
 
-		self._notebook.append_page(
-								self._create_basic_tab(),
-								Gtk.Label(label=_('Basic'))
-							)
-		self._notebook.append_page(
-								self._create_permissions_tab(),
-								Gtk.Label(label=_('Permissions'))
-							)
-		self._notebook.append_page(
-								self._create_open_with_tab(),
-								Gtk.Label(label=_('Open With'))
-							)
-		self._notebook.append_page(
-								self._create_emblems_tab(),
-								Gtk.Label(label=_('Emblems'))
-							)
+		self._notebook.append_page(self._create_basic_tab(), Gtk.Label(label=_('Basic')))
+		self._notebook.append_page(self._create_permissions_tab(), Gtk.Label(label=_('Permissions')))
+		self._notebook.append_page(self._create_open_with_tab(), Gtk.Label(label=_('Open With')))
+		self._notebook.append_page(self._create_emblems_tab(), Gtk.Label(label=_('Emblems')))
 
-		# create buttons
-		hbox_buttons = Gtk.HBox(False, 5)
-
-		button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
-		button_close.connect('clicked', self._close_window)
-
-		# pack interface
-		hbox_buttons.pack_end(button_close, False, False, 0)
-
-		vbox.pack_start(self._notebook, True, True, 0)
-		vbox.pack_start(hbox_buttons, False, False, 0)
-
-		self.add(vbox)
+		self.add(self._notebook)
 
 		# update widgets to represent item state
 		self._update_data()

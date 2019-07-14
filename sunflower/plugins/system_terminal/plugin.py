@@ -83,13 +83,14 @@ class SystemTerminal(Terminal):
 		shell_command = self._options.get('shell_command', os.environ['SHELL'])
 
 		command = {
-			'pty_flags': Vte.PtyFlags.DEFAULT,
-			'working_directory': self.path,
-			'argv': self._options.get('arguments', [shell_command]),
-			'envv': [],
-			'spawn_flags': GLib.SpawnFlags.DO_NOT_REAP_CHILD,
-			'child_setup': None,
-			'child_setup_data': None }
+				'pty_flags': Vte.PtyFlags.DEFAULT,
+				'working_directory': self.path,
+				'argv': self._options.get('arguments', [shell_command]),
+				'envv': [],
+				'spawn_flags': GLib.SpawnFlags.DO_NOT_REAP_CHILD,
+				'child_setup': None,
+				'child_setup_data': None
+			}
 
 		# since VTE 0.38 fork_command_full has been renamed spawn_sync
 		if hasattr(self._terminal, 'fork_command_full'):
@@ -99,8 +100,12 @@ class SystemTerminal(Terminal):
 
 	def __child_exited(self, widget, data=None):
 		"""Handle child process termination"""
-		if self._close_on_child_exit or self._terminal_type == TerminalType.EXTERNAL:
+		already_closing = self._notebook.page_num(self) == -1
+
+		if not already_closing and self._close_on_child_exit or self._terminal_type == TerminalType.EXTERNAL:
 			self._close_tab()
+
+		return True
 
 	def __update_path_from_pid(self):
 		"""Update terminal path from child process"""

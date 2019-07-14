@@ -1814,6 +1814,7 @@ class MainWindow(Gtk.ApplicationWindow):
 			child.destroy()
 
 	def close_all_tabs(self, notebook, excluded=None):
+		"""Close all active tabs in specified notebook."""
 		tabs = notebook.get_children()
 		for tab in tabs:
 			if tab.is_tab_locked() or tab is excluded:

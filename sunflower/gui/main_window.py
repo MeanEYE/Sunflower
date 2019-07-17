@@ -793,35 +793,36 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.commands_menu.remove_all()
 
 		command_list = self.command_options.get('commands')
+		section = Gio.Menu.new()
 
-		for command_data in command_list:
+		for num, command_data in enumerate(command_list):
 			# create menu item
 			if command_data['title'] != '-':
 				# normal menu item
-				tool = Gtk.MenuItem(label=command_data['title'])
-				tool.connect('activate', self._handle_command_click)
-				tool.command = command_data['command']
+				action = Gio.SimpleAction.new('command_{0}'.format(num))
+				action.connect('activate', self._handle_command_click)
+				action.command = command_data['command']
+				self.commands_actions.add_action(action)
+
+				item = Gio.MenuItem.new(command_data['title'], 'commands.command_{0}'.format(num))
+				section.append_item(item)
 
 			else:
 				# separator
-				tool = Gtk.SeparatorMenuItem()
+				self.commands_menu.append_section(None, section)
+				section = Gio.Menu.new()
 
-			# add item to the tools menu
-			self.menu_commands.append(tool)
-
-		# create separator
-		if len(command_list) > 1:
-			separator = Gtk.SeparatorMenuItem()
-			self.menu_commands.append(separator)
+		self.commands_menu.append_section(None, section)
 
 		# create option for editing tools
-		edit_commands = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_PREFERENCES)
-		edit_commands.set_label(_('_Edit commands'))
-		edit_commands.connect('activate', self.preferences_window._show, 'commands')
-		self.menu_commands.append(edit_commands)
-
-		self._menu_item_commands.set_sensitive(True)
-		self.menu_commands.show_all()
+		action = Gio.SimpleAction.new('open_preferences', None)
+		# FIXME: tab_name argument is added as 4th argument in _show function and results in error
+		action.connect('activate', self.preferences_window._show, 'commands')
+		self.commands_actions.add_action(action)
+		section = Gio.Menu.new()
+		item = Gio.MenuItem.new(_('Edit commands'), 'commands.open_preferences')
+		section.append_item(item)
+		self.commands_menu.append_section(None, section)
 
 	def _add_bookmark(self, widget, item_list=None):
 		"""Show dialog for adding a new bookmark"""

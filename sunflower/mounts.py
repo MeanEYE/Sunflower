@@ -138,7 +138,5 @@ class Volume(Location):
 		if mount:
 			root = mount.get_root()
 			result = root.get_uri()
-			root.unref()
 
 		return result
-

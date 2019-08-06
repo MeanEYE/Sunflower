@@ -77,7 +77,7 @@ class ItemList(PluginBase):
 
 		# file list
 		self._container = Gtk.ScrolledWindow.new()
-		self._container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+		self._container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 		self._container.set_shadow_type(Gtk.ShadowType.IN)
 
 		self._item_list = Gtk.TreeView.new()

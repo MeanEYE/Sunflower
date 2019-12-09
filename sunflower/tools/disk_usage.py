@@ -135,7 +135,7 @@ class DiskUsage:
 		"""Cancel all calculation threads for specified parent object."""
 		parent_id = id(parent_object)
 
-		for key in self._stop_events.keys():
+		for key in list(self._stop_events):
 			if key[0] != parent_id:
 				continue
 

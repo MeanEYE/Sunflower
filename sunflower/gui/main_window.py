@@ -69,7 +69,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		Gtk.ApplicationWindow.__init__(self, application=application)
 
 		# set application name
-		GLib.set_application_name('Sunflower')
+		GLib.set_application_name(_('Sunflower'))
 
 		# set window title
 		self.set_title(_('Sunflower'))

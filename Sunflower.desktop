@@ -3,6 +3,7 @@
 Type=Application
 Icon=sunflower
 Name=Sunflower
+StartupWMClass=Sunflower
 GenericName=File Manager
 GenericName[be]=Файлавы менеджар
 GenericName[bg]=Файлов мениджър

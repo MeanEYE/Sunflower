@@ -82,6 +82,9 @@ class Sunflower(Gtk.Application):
 				flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE
 			)
 
+		# set application name
+		GLib.set_prgname('Sunflower')
+
 		# load translations
 		common.load_translation()
 
@@ -171,6 +174,7 @@ class Sunflower(Gtk.Application):
 					dont_load_plugins=self.arguments is not None and self.arguments.dont_load_plugins
 				)
 
+		self.add_window(self.window)
 		self.window.create_tabs(self.arguments)
 
 	def do_command_line(self, command_line):

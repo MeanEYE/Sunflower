@@ -11,7 +11,7 @@ import fcntl
 import zipfile
 import re
 
-from gi.repository import Gtk, Gdk, GLib, GObject, Pango, Gio
+from gi.repository import Gtk, Gdk, GObject, Pango, Gio, GLib
 from importlib import import_module
 from pathlib import Path
 from functools import partial

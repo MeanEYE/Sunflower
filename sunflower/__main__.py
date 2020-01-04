@@ -163,6 +163,8 @@ class Sunflower(Gtk.Application):
 
 	def do_activate(self):
 		"""Handle application activation."""
+		Gtk.Application.do_activate(self)
+
 		if not self.window:
 			self.window = MainWindow(
 					application=self,
@@ -173,6 +175,7 @@ class Sunflower(Gtk.Application):
 
 	def do_command_line(self, command_line):
 		"""Handle command line argumens and flags."""
+		Gtk.Application.do_command_line(self, command_line)
 
 		def absolute_path(cwd, path):
 			if '://' not in path:
@@ -212,6 +215,8 @@ class Sunflower(Gtk.Application):
 
 	def do_handle_local_options(self, options):
 		"""Handle local command line options."""
+		Gtk.Application.do_handle_local_options(self, options)
+
 		if options.contains('version'):
 			print(('{0} {1[major]}.{1[minor]}{1[stage]} ({1[build]})').format(_('Sunflower'), MainWindow.version))
 			return 0

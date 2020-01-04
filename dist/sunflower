@@ -1,4 +1,4 @@
 #!/usr/bin/env python3
 import runpy
 
-runpy.run_module('sunflower')
+runpy.run_module('sunflower', run_name='__main__', alter_sys=True)

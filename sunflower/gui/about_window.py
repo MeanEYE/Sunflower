@@ -48,6 +48,9 @@ class AboutWindow:
 		image_path = os.path.join(base_path, 'images', 'splash.png')
 		path = os.path.abspath(image_path)
 
+		if not os.path.exists(path):
+			path = '/usr/share/pixmaps/sunflower/splash.png'
+
 		image = Gtk.Image()
 		image.set_from_file(path)
 

@@ -61,7 +61,9 @@ class PluginBase(Gtk.VBox):
 
 		# pack interface
 		self.pack_start(self._title_bar.get_container(), False, False, 0)
+		self.pack_start(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL), False, False, 0)
 		self.pack_end(self._status_bar, False, False, 0)
+		self.pack_end(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL), False, False, 0)
 
 	def _change_title_text(self, text):
 		"""Change title label text"""

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env python3
+import runpy
 
-exec /usr/share/sunflower/Sunflower.py "$@"
-
+runpy.run_module('sunflower')

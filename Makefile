@@ -60,11 +60,11 @@ export HELP
 define DEBIAN_INSTALL
 	mkdir -p $(DEBIAN_BUILD_DIRECTORY)
 	tar -xf $(FILE_PATH).tar -C $(BUILD_DIRECTORY)
-	install -Dm755 $(WORKING_DIRECTORY)/dist/sunflower "$(DEBIAN_BUILD_DIRECTORY)/usr/bin/sunflower"
-	install -d "$(DEBIAN_BUILD_DIRECTORY)/usr/share/sunflower"
-	cp -r $(BUILD_DIRECTORY)/Sunflower/* "$(DEBIAN_BUILD_DIRECTORY)/usr/share/sunflower"
-	install -Dm644 "$(BUILD_DIRECTORY)/Sunflower/images/sunflower.png" "$(DEBIAN_BUILD_DIRECTORY)/usr/share/pixmaps/sunflower.png"
-	install -Dm644 "$(BUILD_DIRECTORY)/Sunflower/images/sunflower.svg" "$(DEBIAN_BUILD_DIRECTORY)/usr/share/pixmaps/sunflower.svg"
+	install -Dm755 $(WORKING_DIRECTORY)/dist/sunflower "$(DEBIAN_BUILD_DIRECTORY)/usr/local/bin/sunflower"
+	install -d "$(DEBIAN_BUILD_DIRECTORY)/usr/lib/python3/dist-packages/sunflower"
+	cp -r $(BUILD_DIRECTORY)/Sunflower/sunflower/* "$(DEBIAN_BUILD_DIRECTORY)/usr/lib/python3/dist-packages/sunflower"
+	install -Dm644 "$(BUILD_DIRECTORY)/Sunflower/images/splash.png" "$(DEBIAN_BUILD_DIRECTORY)/usr/share/pixmaps/sunflower/splash.png"
+	install -Dm644 "$(BUILD_DIRECTORY)/Sunflower/images/sunflower.svg" "$(DEBIAN_BUILD_DIRECTORY)/usr/share/icons/hicolor/scalable/apps/sunflower.svg"
 	install -Dm644 "$(BUILD_DIRECTORY)/Sunflower/Sunflower.desktop" "$(DEBIAN_BUILD_DIRECTORY)/usr/share/applications/sunflower.desktop"
 endef
 
@@ -82,7 +82,7 @@ all: version help
 archive:
 	$(info Creating release archive...)
 	mkdir -p $(BUILD_DIRECTORY)
-	git archive --format=tar --output=$(FILE_PATH).tar --prefix=Sunflower/ master
+	git archive --format=tar --output=$(FILE_PATH).tar --prefix=Sunflower/ HEAD
 
 dist: archive
 	$(info Compressing release archive...)

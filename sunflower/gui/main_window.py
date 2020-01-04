@@ -71,6 +71,10 @@ class MainWindow(Gtk.ApplicationWindow):
 		# set application name
 		GLib.set_application_name('Sunflower')
 
+		# set window title
+		self.set_title(_('Sunflower'))
+		self.set_wmclass('Sunflower', 'Sunflower')
+
 		# local variables
 		self._geometry = None
 		self._active_object = None
@@ -104,10 +108,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.toolbar_manager = ToolbarManager(self)
 		self.accelerator_manager = AcceleratorManager(self)
 		self.keyring_manager = KeyringManager(self)
-
-		# set window title
-		self.set_title(_('Sunflower'))
-		self.set_wmclass('Sunflower', 'Sunflower')
 
 		# set window icon
 		self.icon_manager.set_window_icon(self)
@@ -627,14 +627,14 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._paned = Gtk.VPaned() if self.options.get('horizontal_split') else Gtk.HPaned()
 
 		self.left_notebook = Gtk.Notebook.new()
-		self.left_notebook.set_scrollable(True)
+		self.left_notebook.set_show_border = False
 		self.left_notebook.connect('focus-in-event', self._transfer_focus)
 		self.left_notebook.connect('page-added', self._page_added)
 		self.left_notebook.connect('switch-page', self._page_switched)
 		self.left_notebook.set_group_name('panel')
 
 		self.right_notebook = Gtk.Notebook.new()
-		self.right_notebook.set_scrollable(True)
+		self.right_notebook.set_show_border = False
 		self.right_notebook.connect('focus-in-event', self._transfer_focus)
 		self.right_notebook.connect('page-added', self._page_added)
 		self.right_notebook.connect('switch-page', self._page_switched)

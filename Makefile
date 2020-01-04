@@ -37,6 +37,7 @@ RPM_PCLINUXOS_FILE_PATH = $(BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE).noa
 define HELP
 Usage:
 	dist               - create a distribution tgz file
+	dist-py            - create a python egg distribution file
 	dist-deb           - create a .deb package for Debian, Mint, Ubuntu
 	dist-arch          - create a .pkg.tar.gz package for ArchLinux
 	dist-rpm           - create a .rpm package for Fedora, Mageia, Mandriva
@@ -82,11 +83,18 @@ archive:
 	$(info Creating release archive...)
 	mkdir -p $(BUILD_DIRECTORY)
 	git archive --format=tar --output=$(FILE_PATH).tar --prefix=Sunflower/ master
+
 dist: archive
 	$(info Compressing release archive...)
 	gzip -9 $(FILE_PATH).tar
 	mv $(FILE_PATH).tar.gz $(FILE_PATH).tgz
 	sha256sum $(FILE_PATH).tgz > $(FILE_PATH).tgz.sha256
+
+dist-py:
+	$(info Building package for Python...)
+	python3 setup.py sdist
+	rm -rf build Sunflower.egg-info
+	mv dist/Sunflower*.tar.gz ./
 
 dist-deb: archive
 	$(info Building package for Debian, Mint, Ubuntu...)
@@ -136,7 +144,7 @@ dist-rpm-pclinuxos: archive
 	cp ~/rpmbuild/RPMS/noarch/sunflower-$(VERSION)-$(RELEASE).noarch.rpm $(RPM_PCLINUXOS_FILE_PATH)
 	sha256sum $(RPM_PCLINUXOS_FILE_PATH) > $(RPM_PCLINUXOS_FILE_PATH).sha256
 
-dist-all: dist-deb dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-pkg
+dist-all: dist-deb dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-pkg dist-py
 
 language-template:
 	$(info Updating language template...)
@@ -164,5 +172,5 @@ standalone:
 help:
 	@echo "$$HELP"
 
-.PHONY: default dist dist-deb dist-pkg dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-all language-template clean version help
+.PHONY: default dist dist-py dist-deb dist-pkg dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-all language-template clean version help
 

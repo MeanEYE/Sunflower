@@ -40,7 +40,7 @@ class TitleBar:
 		self._button_relief = options.get('button_relief') or 0
 
 		# create container box
-		self._container = Gtk.HBox.new(False, 7)
+		self._container = Gtk.HBox.new(False, 5)
 		self._container.get_style_context().add_class('sunflower-title-bar')
 
 		self._container_controls = Gtk.HBox.new(False, 0)
@@ -73,7 +73,7 @@ class TitleBar:
 	def create_breadcrumbs(self):
 		"""Create breadcrumbs as main control."""
 		self._breadcrumbs = Breadcrumbs(self)
-		self._container.pack_start(self._breadcrumbs, True, True, 0)
+		self._container.pack_start(self._breadcrumbs.container, True, True, 0)
 
 	def create_title(self):
 		"""Create title as main control."""
@@ -148,10 +148,7 @@ class TitleBar:
 		if self._spinner is None:
 			return
 
-		# increase counter
 		self._spinner_counter += 1
-
-		# start spinner if needed
 		if self._spinner_counter == 1:
 			self._spinner.start()
 			self._spinner.show()
@@ -161,10 +158,7 @@ class TitleBar:
 		if self._spinner is None:
 			return
 
-		# reduce counter
 		self._spinner_counter -= 1
-
-		# stop spinner
 		if self._spinner_counter <= 0:
 			self._spinner_counter = 0
 			self._spinner.stop()
@@ -177,7 +171,6 @@ class TitleBar:
 
 		# apply button relief
 		relief = (Gtk.ReliefStyle.NONE, Gtk.ReliefStyle.NORMAL)[self._button_relief]
-
 		for control in self._container.get_children():
 			if issubclass(control.__class__, Gtk.Button):
 				control.set_relief(relief)

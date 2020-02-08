@@ -9,9 +9,13 @@ box.horizontal.sunflower-title-bar {
 /**
  * Breadcrumbs
  */
-box.sunflower-breadcrumbs button {
+scrolledwindow.sunflower-breadcrumbs * {
+	min-height: 0;
+}
+
+scrolledwindow.sunflower-breadcrumbs button {
 	margin: 0;
-	padding: 0.5em;
+	padding: 0.3em;
 
 	border: 0;
 	outline: 0;
@@ -19,10 +23,7 @@ box.sunflower-breadcrumbs button {
 	box-shadow: none;
 }
 
-box.sunflower-breadcrumbs button:hover {
-}
-
-box.sunflower-breadcrumbs button:checked {
+scrolledwindow.sunflower-breadcrumbs button:checked {
 	font-weight: bold;
 	color: @theme_selected_bg_color;
 }

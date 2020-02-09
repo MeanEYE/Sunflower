@@ -71,9 +71,9 @@ class ItemList(PluginBase):
 		self._columns = []
 
 		# configure status bar
-		self._status_bar.add_group_with_icon('dirs', 'folder', '0/0', tooltip=_('Directories (selected/total)'))
-		self._status_bar.add_group_with_icon('files', 'text-x-generic', '0/0', tooltip=_('Files (selected/total)'))
-		self._status_bar.add_group_with_icon('size', 'list-add', '0/0', tooltip=_('Size (selected/total)'))
+		self._status_bar.add_group_with_icon('dirs', 'folder-symbolic', '0/0', tooltip=_('Directories (selected/total)'))
+		self._status_bar.add_group_with_icon('files', 'text-x-generic-symbolic', '0/0', tooltip=_('Files (selected/total)'))
+		self._status_bar.add_group_with_icon('size', 'object-select-symbolic', '0/0', tooltip=_('Size (selected/total)'))
 
 		# file list
 		self._container = Gtk.ScrolledWindow.new()

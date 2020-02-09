@@ -372,30 +372,27 @@ class FileList(ItemList):
 		if selected_iter is None:
 			return
 
-		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
+		is_dir = self._store.get_value(selected_iter, Column.IS_DIR)
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
+
+		if is_dir or is_parent:
+			return
 
 		# create URI from item name and protocol
 		file_name = self._get_selection(relative=False)
 		protocol = self.get_provider().protocol
-		uri = '{0}://{1}'.format(protocol, file_name) if not is_parent else None
+		uri = '{0}://{1}'.format(protocol, file_name)
 
 		# show preview if thumbnail exists
-		if not is_dir and not is_parent \
-		and self.get_provider().exists(file_name) \
-		and self._thumbnail_view.can_have_thumbnail(uri):
-			# hide preview and load new image
-			self._thumbnail_view.hide()
-			self._thumbnail_view.show_thumbnail(uri)
-
-			# get position of popup menu, we use these coordinates to show thumbnail
-			position = self._get_popup_menu_position()
-			column_width = self._columns[0].get_width()
-			preview_width = self._thumbnail_view.get_size()[0]
+		if self._thumbnail_view.can_have_thumbnail(uri):
+			# calculate position for preview
+			path = self._store.get_path(selected_iter)
+			column = self._item_list.get_column(0)
+			position = self._item_list.get_cell_area(path, column)
+			position.width = self._item_list.get_allocated_width()
 
 			# show preivew in specified location
-			self._thumbnail_view.move(position[0] + (column_width - preview_width), position[1])
-			self._thumbnail_view.show()
+			self._thumbnail_view.show_thumbnail(uri, widget, position)
 
 		else:
 			# hide preview if item thumbnail is not available
@@ -2087,6 +2084,9 @@ class FileList(ItemList):
 			while self._main_thread_lock.is_set():
 				Gtk.main_iteration_do(blocking=False)
 
+		# disable updates on cursor change
+		self._item_list.handler_block_by_func(self._handle_cursor_change)
+
 		# clear list
 		if clear_store:
 			self._clear_list()
@@ -2213,6 +2213,9 @@ class FileList(ItemList):
 		# create new thread
 		self._change_path_thread = Thread(target=thread_method)
 		self._change_path_thread.start()
+
+		# enable updates on cursor change
+		self._item_list.handler_unblock_by_func(self._handle_cursor_change)
 
 	def _load_emblems(self, parent=None, parent_path=None):
 		"""Load emblems for specified path."""

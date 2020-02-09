@@ -1,18 +1,18 @@
 import os
+import gi
 
-from gi.repository import Gtk, GObject, GdkPixbuf
+from gi.repository import Gtk, Gdk, GObject, GdkPixbuf
 
 try:
 	# try to import module
-	gi.require_versoin('GnomeDesktop', '3.0')
+	gi.require_version('GnomeDesktop', '3.0')
 	from gi.repository import GnomeDesktop
 	USE_FACTORY = True
-
 except:
 	USE_FACTORY = False
 
 
-class ThumbnailView(Gtk.Window):
+class ThumbnailView:
 	"""Load and display images from Gnome thumbnail factory storage.
 
 	Idea is to create one object and then update thumbnail image as
@@ -22,15 +22,16 @@ class ThumbnailView(Gtk.Window):
 	"""
 
 	def __init__(self, parent, size=None):
-		GObject.GObject.__init__(self, type=Gtk.WindowType.POPUP)
+		self.popover = Gtk.Popover.new()
 
-		self.set_keep_above(True)
-		self.set_resizable(False)
+		self.popover.set_modal(False)
+		self.popover.set_transitions_enabled(False)
+		self.popover.set_position(Gtk.PositionType.LEFT)
 
 		# create image preview
 		self._image = Gtk.Image()
 		self._image.show()
-		self.add(self._image)
+		self.popover.add(self._image)
 
 		# store parameters locally
 		self._parent = parent
@@ -48,16 +49,22 @@ class ThumbnailView(Gtk.Window):
 		else:
 			self._factory = None
 
+	def hide(self):
+		"""Hide tooltip."""
+		self.popover.hide()
+
 	def can_have_thumbnail(self, uri):
 		"""Check if specified URI can have thumbnail"""
-		if not USE_FACTORY: return False  # if factory is not available, exit
+		if not USE_FACTORY:
+			return False
 
 		mime_type = self._parent._parent.associations_manager.get_mime_type(uri)
 		return self._factory.can_thumbnail(uri, mime_type, 0)
 
 	def get_thumbnail(self, uri):
 		"""Return thumbnail pixbuf for specified URI"""
-		if not USE_FACTORY: return None  # if factory is not available, exit
+		if not USE_FACTORY:
+			return None
 
 		result = None
 		mime_type = self._parent._parent.associations_manager.get_mime_type(uri)
@@ -76,33 +83,15 @@ class ThumbnailView(Gtk.Window):
 
 		return result
 
-	def show_thumbnail(self, uri):
+	def show_thumbnail(self, uri, widget, position):
 		"""Show thumbnail for specified image"""
 		thumbnail = self.get_thumbnail(uri)
 
-		# set preview from pixbuf
 		if thumbnail is not None:
-			# determine thumbnail size
-			width = thumbnail.get_width()
-			height = thumbnail.get_height()
-
-			# don't allow preview to be smaller than 32 pixels
-			if width < 32: width = 32
-			if height < 32: height = 32
-
-			self.set_size_request(width, height)
 			self._image.set_from_pixbuf(thumbnail)
-
-		# no pixbuf was found, show missing image
 		else:
 			self._image.set_from_icon_name('gtk-missing-image', Gtk.IconSize.DIALOG)
 
-	def move(self, left, top):
-		"""Move thumbnail window"""
-		height = self.get_size()[1]
-		screen = self.get_screen()
-
-		if top + height > screen.get_height():
-			top = screen.get_height() - height - 5
-
-		Gtk.Window.move(self, left, top)
+		self.popover.set_relative_to(widget)
+		self.popover.set_pointing_to(position)
+		self.popover.show()

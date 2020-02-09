@@ -692,7 +692,8 @@ class MainWindow(Gtk.ApplicationWindow):
 			self.status_bar.pack_start(self.keyring_manager._status_icon, False, False, 0)
 
 		# command buttons bar
-		self.command_bar = Gtk.HBox(True, 0)
+		self.command_bar = Gtk.HBox.new(True, 0)
+		self.command_bar.set_border_width(2)
 
 		buttons = (
 				(_('Refresh'), _('Reload active item list'), self._command_reload),
@@ -714,9 +715,9 @@ class MainWindow(Gtk.ApplicationWindow):
 
 			button.set_tooltip_text(tooltip)
 			button.set_focus_on_click(False)
+			button.get_style_context().add_class('flat')
 
 			button.show()  # we need to explicitly show in cases where toolbar is not visible
-
 			self.command_bar.pack_start(button, True, True, 0)
 
 		self.command_bar.set_property('no-show-all', not self.options.get('show_command_bar'))
@@ -725,13 +726,10 @@ class MainWindow(Gtk.ApplicationWindow):
 		vbox = Gtk.VBox(False, 0)
 		# TODO: Get rid of this
 		# vbox.pack_start(self.menu_bar, expand=False, fill=False, padding=0)
-		vbox.pack_start(self.toolbar_manager.get_toolbar(), expand=False, fill=False, padding=0)
+		vbox.pack_start(self.toolbar_manager.get_toolbar(), False, False, 0)
+		vbox.pack_start(self._paned, True, True, 0)
+		vbox.pack_start(self.command_bar, False, False, 0)
 
-		self._vbox2 = Gtk.VBox(False, 4)
-		self._vbox2.pack_start(self._paned, expand=True, fill=True, padding=0)
-		self._vbox2.pack_start(self.command_bar, expand=False, fill=False, padding=0)
-
-		vbox.pack_start(self._vbox2, True, True, 0)
 		self.add(vbox)
 
 		# create commands menu

@@ -22,7 +22,7 @@ class TrashList(FileList):
 		options = self._parent.options
 
 		# empty trash button
-		self._empty_button = Gtk.Button.new_from_icon_name('user-trash-full', Gtk.IconSize.MENU)
+		self._empty_button = Gtk.Button.new_from_icon_name('user-trash-symbolic', Gtk.IconSize.MENU)
 		self._empty_button.set_focus_on_click(False)
 		self._empty_button.set_tooltip_text(_('Empty trash'))
 		self._empty_button.connect('clicked', self.empty_trash)

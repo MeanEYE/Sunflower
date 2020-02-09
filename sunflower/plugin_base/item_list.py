@@ -175,14 +175,14 @@ class ItemList(PluginBase):
 		options = self._parent.options
 
 		# locations button
-		self.locations_button = Gtk.Button.new_from_icon_name('go-jump', Gtk.IconSize.BUTTON)
+		self.locations_button = Gtk.Button.new_from_icon_name('go-jump-symbolic', Gtk.IconSize.BUTTON)
 		self.locations_button.set_focus_on_click(False)
 		self.locations_button.set_tooltip_text(_('Locations'))
 		self.locations_button.connect('clicked', self._locations_button_clicked)
 		self._title_bar.add_control(self.locations_button)
 
 		# terminal button
-		self.terminal_button = Gtk.Button.new_from_icon_name('utilities-terminal', Gtk.IconSize.MENU)
+		self.terminal_button = Gtk.Button.new_from_icon_name('utilities-terminal-symbolic', Gtk.IconSize.MENU)
 		self.terminal_button.set_focus_on_click(False)
 		self.terminal_button.set_tooltip_text(_('Terminal'))
 		self.terminal_button.connect('clicked', self._create_terminal)

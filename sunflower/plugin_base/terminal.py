@@ -54,23 +54,6 @@ class Terminal(PluginBase):
 		# change list icon
 		self._title_bar.set_icon_from_name('utilities-terminal')
 
-		# pack buttons
-		self._title_bar.add_control(self._menu_button)
-
-		# terminal button
-		self._terminal_button = Gtk.Button.new_from_icon_name('utilities-terminal', Gtk.IconSize.MENU)
-		self._terminal_button.set_focus_on_click(False)
-		self._terminal_button.set_tooltip_text(_('Terminal'))
-		self._terminal_button.connect('clicked', self._create_terminal)
-		self._title_bar.add_control(self._terminal_button)
-
-		# file list button
-		self._file_list_button = Gtk.Button.new_from_icon_name('folder', Gtk.IconSize.MENU)
-		self._file_list_button.set_focus_on_click(False)
-		self._file_list_button.set_tooltip_text(_('Open current directory'))
-		self._file_list_button.connect('clicked', self._create_file_list)
-		self._title_bar.add_control(self._file_list_button)
-
 		# create main object
 		self._terminal_type = section.get('type')
 
@@ -174,10 +157,25 @@ class Terminal(PluginBase):
 		options = self._parent.options
 
 		# terminal menu button
-		self._menu_button = Gtk.Button.new_from_icon_name(Gtk.STOCK_EDIT, Gtk.IconSize.MENU)
+		self._menu_button = Gtk.Button.new_from_icon_name('document-edit-symbolic', Gtk.IconSize.MENU)
 		self._menu_button.set_focus_on_click(False)
 		self._menu_button.set_tooltip_text(_('Terminal menu'))
 		self._menu_button.connect('clicked', self._show_terminal_menu)
+		self._title_bar.add_control(self._menu_button)
+
+		# terminal button
+		self._terminal_button = Gtk.Button.new_from_icon_name('utilities-terminal-symbolic', Gtk.IconSize.MENU)
+		self._terminal_button.set_focus_on_click(False)
+		self._terminal_button.set_tooltip_text(_('Terminal'))
+		self._terminal_button.connect('clicked', self._create_terminal)
+		self._title_bar.add_control(self._terminal_button)
+
+		# file list button
+		self._file_list_button = Gtk.Button.new_from_icon_name('folder-symbolic', Gtk.IconSize.MENU)
+		self._file_list_button.set_focus_on_click(False)
+		self._file_list_button.set_tooltip_text(_('Open current directory'))
+		self._file_list_button.connect('clicked', self._create_file_list)
+		self._title_bar.add_control(self._file_list_button)
 
 	def _update_title(self, widget, data=None):
 		"""Update title with terminal window text"""

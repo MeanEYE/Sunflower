@@ -627,14 +627,14 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._paned = Gtk.VPaned() if self.options.get('horizontal_split') else Gtk.HPaned()
 
 		self.left_notebook = Gtk.Notebook.new()
-		self.left_notebook.set_show_border = False
+		self.left_notebook.set_show_border(False)
 		self.left_notebook.connect('focus-in-event', self._transfer_focus)
 		self.left_notebook.connect('page-added', self._page_added)
 		self.left_notebook.connect('switch-page', self._page_switched)
 		self.left_notebook.set_group_name('panel')
 
 		self.right_notebook = Gtk.Notebook.new()
-		self.right_notebook.set_show_border = False
+		self.right_notebook.set_show_border(False)
 		self.right_notebook.connect('focus-in-event', self._transfer_focus)
 		self.right_notebook.connect('page-added', self._page_added)
 		self.right_notebook.connect('switch-page', self._page_switched)

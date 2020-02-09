@@ -36,6 +36,7 @@ from sunflower.plugin_base.rename_extension import RenameExtension
 from sunflower.plugin_base.find_extension import FindExtension
 from sunflower.plugin_base.terminal import TerminalType
 from sunflower.widgets.location_menu import LocationMenu
+from sunflower.widgets.command_row import CommandRow
 from sunflower.tools.advanced_rename import AdvancedRename
 from sunflower.tools.find_files import FindFiles
 from sunflower.tools.version_check import VersionCheck
@@ -161,8 +162,9 @@ class MainWindow(Gtk.ApplicationWindow):
 		# create bar buttons
 		self.new_tab_actions = Gio.SimpleActionGroup.new()
 		self.new_tab_menu = Gio.Menu()
-		self.commands_actions = Gio.SimpleActionGroup.new()
-		self.commands_menu = Gio.Menu()
+
+		self.header_button_box = Gtk.HBox.new(False, 0)
+		self.header_button_box.get_style_context().add_class('linked')
 
 		image_new = Gtk.Image.new_from_icon_name('tab-new-symbolic', Gtk.IconSize.BUTTON)
 		self.button_new = Gtk.MenuButton.new()
@@ -170,13 +172,13 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.button_new.set_menu_model(self.new_tab_menu)
 		self.button_new.insert_action_group('new-tab', self.new_tab_actions)
 
-		self.button_commands = Gtk.MenuButton.new()
-		self.button_commands.set_label(_('Commands'))
-		self.button_commands.set_menu_model(self.commands_menu)
-		self.button_commands.insert_action_group('commands', self.commands_actions)
+		self.button_commands = Gtk.Button.new_from_icon_name('view-app-grid-symbolic', Gtk.IconSize.BUTTON)
+		self.button_commands.set_tooltip_text(_('Commands'))
+		self.button_commands.connect('clicked', self._handle_commands_menu_click)
 
-		self.header_bar.pack_start(self.button_new)
-		self.header_bar.pack_start(self.button_commands)
+		self.header_button_box.pack_start(self.button_new, False, False, 0)
+		self.header_button_box.pack_start(self.button_commands, False, False, 0)
+		self.header_bar.pack_start(self.header_button_box)
 
 		# define local variables
 		self._in_fullscreen = False
@@ -597,12 +599,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._application_menu.append_section(None, self._program_section)
 		application.set_app_menu(self._application_menu)
 
-		# commands menu
-		self.menu_commands = Gtk.Menu()
-
-		self._menu_item_commands = self.menu_manager.get_item_by_name('commands')
-		self._menu_item_commands.set_submenu(self.menu_commands)
-
 		# operations menu
 		self._menu_item_operations = self.menu_manager.get_item_by_name('operations')
 		self._menu_item_no_operations = self.menu_manager.get_item_by_name('no_operations')
@@ -733,7 +729,28 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.add(vbox)
 
 		# create commands menu
-		self._create_commands_menu()
+		self.commands_popover = Gtk.Popover.new()
+		self.commands_popover.set_position(Gtk.PositionType.BOTTOM)
+
+		vbox = Gtk.VBox.new(False, 5)
+		vbox.set_border_width(5)
+		self.commands_popover.add(vbox)
+
+		window = Gtk.Viewport.new()
+		window.set_size_request(200, -1)
+		window.set_shadow_type(Gtk.ShadowType.IN)
+
+		self.commands_menu = Gtk.ListBox.new()
+		self.commands_menu.connect('row-activated', self._handle_command_activate)
+		window.add(self.commands_menu)
+		vbox.pack_start(window, False, False, 0)
+
+		edit_commands = Gtk.Button.new_with_label(_('Edit commands'))
+		edit_commands.connect('clicked', self.preferences_window._show, 'commands')
+		vbox.pack_end(edit_commands, False, False, 0)
+
+		self._create_commands()
+		vbox.show_all()
 
 		# restore window size and position
 		self._restore_window_position()
@@ -786,40 +803,12 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		return True  # prevent default handler
 
-	def _create_commands_menu(self):
+	def _create_commands(self):
 		"""Create commands main menu"""
-		self.commands_menu.remove_all()
+		self.commands_menu.foreach(lambda row: self.commands_menu.remove(row))
 
-		command_list = self.command_options.get('commands')
-
-		for command_data in command_list:
-			# create menu item
-			if command_data['title'] != '-':
-				# normal menu item
-				tool = Gtk.MenuItem(label=command_data['title'])
-				tool.connect('activate', self._handle_command_click)
-				tool.command = command_data['command']
-
-			else:
-				# separator
-				tool = Gtk.SeparatorMenuItem()
-
-			# add item to the tools menu
-			self.menu_commands.append(tool)
-
-		# create separator
-		if len(command_list) > 1:
-			separator = Gtk.SeparatorMenuItem()
-			self.menu_commands.append(separator)
-
-		# create option for editing tools
-		edit_commands = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_PREFERENCES)
-		edit_commands.set_label(_('_Edit commands'))
-		edit_commands.connect('activate', self.preferences_window._show, 'commands')
-		self.menu_commands.append(edit_commands)
-
-		self._menu_item_commands.set_sensitive(True)
-		self.menu_commands.show_all()
+		for data in self.command_options.get('commands'):
+			self.commands_menu.add(CommandRow(data['title'], data['command']))
 
 	def _add_bookmark(self, widget, item_list=None):
 		"""Show dialog for adding a new bookmark"""
@@ -840,9 +829,15 @@ class MainWindow(Gtk.ApplicationWindow):
 
 			self.locations.update_bookmarks()
 
-	def _handle_command_click(self, widget, data=None):
-		"""Handle click on command menu item"""
-		command = widget.command
+	def _handle_commands_menu_click(self, widget, data=None):
+		"""Handle clicking on commands button in header bar."""
+		self.commands_popover.set_relative_to(widget)
+		self.commands_popover.popup()
+
+	def _handle_command_activate(self, widget, row, data=None):
+		"""Handle clicking on command list item."""
+		self.commands_popover.popdown()
+		command = row.command
 
 		# grab active objects
 		left_object = self.get_left_object()
@@ -2425,8 +2420,8 @@ class MainWindow(Gtk.ApplicationWindow):
 		# recreate bookmarks menu
 		self.locations.update_bookmarks()
 
-		# recreate tools menu
-		self._create_commands_menu()
+		# recreate commands menu
+		self._create_commands()
 
 		# recreate toolbar widgets
 		self.toolbar_manager.apply_settings()

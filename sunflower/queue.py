@@ -132,7 +132,7 @@ class OperationQueue:
 			return False
 
 		# import locally to avoid circular imports
-		from gui.input_dialog import InputDialog
+		from sunflower.gui.input_dialog import InputDialog
 
 		# create dialog
 		dialog = InputDialog(dialog)

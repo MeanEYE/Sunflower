@@ -157,6 +157,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.header_bar.set_has_subtitle(True)
 		self.header_bar.set_show_close_button(True)
 		self.header_bar.set_title(_('Sunflower'))
+		self.header_bar.set_property('no-show-all', not self.options.get('show_titlebar'))
 		self.set_titlebar(self.header_bar)
 
 		# create bar buttons
@@ -477,6 +478,14 @@ class MainWindow(Gtk.ApplicationWindow):
 						'callback': self._toggle_show_toolbar,
 						'name': 'show_toolbar',
 						'path': '<Sunflower>/View/ShowToolbar',
+					},
+					{
+						'label': _('Show _titlebar'),
+						'type': 'checkbox',
+						'active': self.options.get('show_titlebar'),
+						'callback': self._toggle_show_titlebar,
+						'name': 'show_titlebar',
+						'path': '<Sunflower>/View/ShowTitlebar',
 					},
 					{
 						'label': _('Show _command bar'),
@@ -1043,6 +1052,20 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		else:
 			menu_item.set_active(not self.options.get('show_toolbar'))
+
+		return True
+
+	def _toggle_show_titlebar(self, widget, data=None):
+		"""Show/hide titlebar"""
+		menu_item = self.menu_manager.get_item_by_name('show_titlebar')
+
+		if widget is menu_item:
+			show_titlebar = menu_item.get_active()
+			self.options.set('show_titlebar', show_titlebar)
+			self.header_bar.set_visible(show_titlebar)
+
+		else:
+			menu_item.set_active(not self.options.get('show_titlebar'))
 
 		return True
 
@@ -2232,6 +2255,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.options.update({
 					'plugins': ['file_list', 'system_terminal', 'default_toolbar'],
 					'show_toolbar': False,
+					'show_titlebar': True,
 					'show_command_bar': False,
 					'history_file': '.bash_history',
 					'last_version': 0,
@@ -2404,6 +2428,10 @@ class MainWindow(Gtk.ApplicationWindow):
 		# show or hide toolbar depending on settings
 		show_toolbar = self.menu_manager.get_item_by_name('show_toolbar')
 		show_toolbar.set_active(self.options.get('show_toolbar'))
+
+		# show or hide titlebar depending on settings
+		show_titlebar = self.menu_manager.get_item_by_name('show_titlebar')
+		show_titlebar.set_active(self.options.get('show_titlebar'))
 
 		# show or hide hidden files
 		show_hidden = self.menu_manager.get_item_by_name('show_hidden_files')

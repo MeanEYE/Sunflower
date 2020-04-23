@@ -31,12 +31,14 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_hide_on_close = Gtk.CheckButton(_('Hide main window on close'))
 		self._checkbox_multiple_instances = Gtk.CheckButton(_('Allow multiple instances'))
 		self._checkbox_show_toolbar = Gtk.CheckButton(_('Show toolbar'))
+		self._checkbox_show_titlebar = Gtk.CheckButton(_('Show titlebar'))
 		self._checkbox_show_command_bar = Gtk.CheckButton(_('Show command bar'))
 		self._checkbox_horizontal_split = Gtk.CheckButton(_('Horizontal split'))
 
 		self._checkbox_hide_on_close.connect('toggled', self._parent.enable_save, True)
 		self._checkbox_multiple_instances.connect('toggled', self._parent.enable_save, True)
 		self._checkbox_show_toolbar.connect('toggled', self._parent.enable_save)
+		self._checkbox_show_titlebar.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_command_bar.connect('toggled', self._parent.enable_save)
 		self._checkbox_horizontal_split.connect('toggled', self._parent.enable_save)
 
@@ -136,6 +138,7 @@ class DisplayOptions(SettingsPage):
 		vbox_main_window.pack_start(self._checkbox_hide_on_close, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_multiple_instances, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_toolbar, False, False, 0)
+		vbox_main_window.pack_start(self._checkbox_show_titlebar, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_command_bar, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_horizontal_split, False, False, 0)
 
@@ -166,6 +169,7 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_multiple_instances.set_active(options.get('multiple_instances'))
 		self._checkbox_focus_new_tab.set_active(options.get('focus_new_tab'))
 		self._checkbox_show_toolbar.set_active(options.get('show_toolbar'))
+		self._checkbox_show_titlebar.set_active(options.get('show_titlebar'))
 		self._checkbox_show_command_bar.set_active(options.get('show_command_bar'))
 		self._checkbox_tab_close_button.set_active(options.get('tab_close_button'))
 		self._checkbox_always_show_tabs.set_active(options.get('always_show_tabs'))
@@ -189,6 +193,7 @@ class DisplayOptions(SettingsPage):
 		options.set('multiple_instances', self._checkbox_multiple_instances.get_active())
 		options.set('focus_new_tab', self._checkbox_focus_new_tab.get_active())
 		options.set('show_toolbar', self._checkbox_show_toolbar.get_active())
+		options.set('show_titlebar', self._checkbox_show_titlebar.get_active())
 		options.set('show_command_bar', self._checkbox_show_command_bar.get_active())
 		options.set('tab_close_button', self._checkbox_tab_close_button.get_active())
 		options.set('always_show_tabs', self._checkbox_always_show_tabs.get_active())

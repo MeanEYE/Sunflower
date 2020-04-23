@@ -441,37 +441,27 @@ class ItemList(PluginBase):
 			if not section.has(name):
 				section.set(name, size)
 
-	def _move_marker_up(self, widget, data=None):
-		"""Move marker up"""
+	def _move_marker(self, widget, previous=False):
+		"""Move marker down or up if previous is True"""
 		selection = self._item_list.get_selection()
 		item_list, selected_iter = selection.get_selected()
+		if selected_iter is None:
+			cursor_path, focus_column = self._item_list.get_cursor()
+			selected_iter = item_list.get_iter(cursor_path)
 
-		if selected_iter is not None:
-			# get current path
-			path = item_list.get_path(selected_iter)[0]
-			previous_iter = path - 1
-
-			# if selected item is not first, move selection
-			if previous_iter >= 0:
-				self._item_list.set_cursor(previous_iter)
-
+		func = (item_list.iter_previous if previous else item_list.iter_next)
+		next_iter = func(selected_iter)
+		if next_iter is not None:
+			self._item_list.set_cursor(item_list.get_path(next_iter))
 		return True
+
+	def _move_marker_up(self, widget, data=None):
+		"""Move marker up"""
+		return self._move_marker(widget, previous=True)
 
 	def _move_marker_down(self, widget, data=None):
 		"""Move marker down"""
-		selection = self._item_list.get_selection()
-		item_list, selected_iter = selection.get_selected()
-
-		if selected_iter is not None:
-			# get current path
-			path = item_list.get_path(selected_iter)[0]
-			next_iter = path + 1
-
-			# if selected item is not last, move selection
-			if next_iter < len(item_list):
-				self._item_list.set_cursor(next_iter)
-
-		return True
+		return self._move_marker(widget)
 
 	def _handle_button_press(self, widget, event):
 		"""Handles mouse events"""

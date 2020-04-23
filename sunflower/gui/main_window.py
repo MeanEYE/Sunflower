@@ -42,6 +42,7 @@ from sunflower.tools.find_files import FindFiles
 from sunflower.tools.version_check import VersionCheck
 from sunflower.tools.disk_usage import DiskUsage
 from sunflower.config import Config
+from sunflower.clipboard import Clipboard
 
 # user interface imports
 from sunflower.gui.about_window import AboutWindow
@@ -130,7 +131,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.user_plugin_path = None
 
 		# create a clipboard manager
-		self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+		self.clipboard = Clipboard()
 
 		# load config
 		self.load_config()
@@ -2669,23 +2670,8 @@ class MainWindow(Gtk.ApplicationWindow):
 		uri_list - list of URIs
 
 		"""
-		targets = [
-				('x-special/gnome-copied-files', 0, 0),
-				("text/uri-list", 0, 0)
-			]
-		raw_data = '{0}\n'.format(operation) + '\n'.join(uri_list)
-
-		def get_func(clipboard, selection, info, data):
-			"""Handle request from application"""
-			target = selection.get_target()
-			selection.set(target, 8, raw_data)
-
-		def clear_func(clipboard, data):
-			"""Clear function"""
-			pass
-
 		# set clipboard and return result
-		return self.clipboard.set_with_data(targets, get_func, clear_func)
+		return self.clipboard.set_with_data(operation, uri_list)
 
 	def get_clipboard_text(self):
 		"""Get text from clipboard"""
@@ -2694,11 +2680,11 @@ class MainWindow(Gtk.ApplicationWindow):
 	def get_clipboard_item_list(self):
 		"""Get item list from clipboard"""
 		result = None
-		selection = self.clipboard.wait_for_contents('x-special/gnome-copied-files')
+		selection = self.clipboard.wait_for_contents()
 
 		# in case there is something to paste
 		if selection is not None:
-			data = selection.data.splitlines(False)
+			data = selection.splitlines(False)
 
 			operation = data[0]
 			uri_list = data[1:]

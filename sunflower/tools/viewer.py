@@ -126,6 +126,8 @@ class Viewer(Gtk.Window):
 				if self._options.get('word_wrap'):
 					viewer.set_wrap_mode(Gtk.WrapMode.WORD)
 
+				code_buffer.place_cursor(code_buffer.get_start_iter())
+
 				window = Gtk.ScrolledWindow.new()
 				window.set_shadow_type(Gtk.ShadowType.NONE)
 				window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
@@ -180,6 +182,7 @@ class Viewer(Gtk.Window):
 		# show all widgets if there are pages present
 		if self._page_count > 0:
 			self.show_all()
+
 		else:
 			dialog = Gtk.MessageDialog(
 									self._application,
@@ -238,7 +241,9 @@ class Viewer(Gtk.Window):
 			content = codecs.decode(content, encoding)
 
 		if len(content) > 0:
-			text_view.get_buffer().set_text(content)
+			text_buffer = text_view.get_buffer()
+			text_buffer.set_text(content)
+			text_buffer.place_cursor(text_buffer.get_start_iter())
 
 		# add container to notebook
 		container.add(text_view)

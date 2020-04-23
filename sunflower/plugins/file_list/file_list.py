@@ -1138,6 +1138,9 @@ class FileList(ItemList):
 		item_list, selected_iter = selection.get_selected()
 		associations_manager = self._parent.associations_manager
 		menu_manager = self._parent.menu_manager
+		if selected_iter is None:
+			cursor_path, focus_column = self._item_list.get_cursor()
+			selected_iter = item_list.get_iter(cursor_path)
 
 		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
@@ -1233,6 +1236,9 @@ class FileList(ItemList):
 		"""Positions menu properly for given row"""
 		selection = self._item_list.get_selection()
 		item_list, selected_iter = selection.get_selected()
+		if selected_iter is None:
+			cursor_path, focus_column = self._item_list.get_cursor()
+			selected_iter = item_list.get_iter(cursor_path)
 
 		# grab cell and tree rectangles
 		rect = self._item_list.get_cell_area(item_list.get_path(selected_iter), self._columns[0])

@@ -798,10 +798,14 @@ class ItemList(PluginBase):
 
 	def _stop_search(self, widget=None, data=None):
 		"""Hide quick search panel and return focus to item list"""
+		selection = self._item_list.get_selection()
+		item_list, selected_iter = selection.get_selected()
 		self._search_panel.set_search_mode(False)
 
 		if widget is not None:
 			self._item_list.grab_focus()
+			if selected_iter is not None:
+				selection.select_iter(selected_iter)
 
 		return False
 

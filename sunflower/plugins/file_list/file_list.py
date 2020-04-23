@@ -2057,7 +2057,7 @@ class FileList(ItemList):
 
 		selection = []
 		for file_name in self._get_selection_list():
-			if protocol is 'file':
+			if protocol == 'file':
 				file_name = '{0}://{1}'.format(protocol, file_name)
 			selection.append(file_name)
 

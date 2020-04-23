@@ -2255,6 +2255,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.options.update({
 					'plugins': ['file_list', 'system_terminal', 'default_toolbar'],
 					'show_toolbar': False,
+					'show_titlebar': True,
 					'show_command_bar': False,
 					'history_file': '.bash_history',
 					'last_version': 0,

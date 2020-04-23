@@ -222,7 +222,7 @@ class AssociationManager:
 			exec_string = self.__format_command_string(selection, command)
 
 			# open selected file(s)
-			split_command = shlex.split(exec_string, posix=False)
+			split_command = shlex.split(exec_string, posix=True)
 			test_command = split_command[0] if len(split_command) > 1 else exec_string
 
 			if is_x_app(test_command):

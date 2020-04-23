@@ -61,28 +61,15 @@ class Viewer(Gtk.Window):
 		self.set_wmclass('Sunflower', 'Sunflower')
 
 		header_bar = Gtk.HeaderBar.new()
+		header_bar.set_title(display_filename)
+		header_bar.set_subtitle(self._mime_type)
 		header_bar.set_show_close_button(True)
 		self.set_titlebar(header_bar)
 
-		stack_switcher = Gtk.StackSwitcher.new()
-		header_bar.set_custom_title(stack_switcher)
-
-		# file name and mime type
-		vbox = Gtk.VBox.new(False, 0)
-		header_bar.pack_start(vbox)
-
-		file_label = Gtk.Label.new('<b>{}</b>'.format(display_filename))
-		file_label.set_alignment(0, 1)
-		file_label.set_use_markup(True)
-		mime_label = Gtk.Label.new('<small>{}</small>'.format(self._mime_type))
-		mime_label.set_alignment(0, 0)
-		mime_label.set_use_markup(True)
-
-		vbox.pack_start(file_label, True, False, 0)
-		vbox.pack_start(mime_label, True, False, 0)
-
 		self._stack = Gtk.Stack.new()
+		stack_switcher = Gtk.StackSwitcher.new()
 		stack_switcher.set_stack(self._stack)
+		header_bar.pack_start(stack_switcher)
 
 		# create extensions
 		self._create_extensions()

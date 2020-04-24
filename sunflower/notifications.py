@@ -4,8 +4,9 @@ import os
 import sys
 
 try:
+	import gi
+	gi.require_version('Notify', '0.7')
 	from gi.repository import Notify
-
 except:
 	Notify = None
 
@@ -15,12 +16,16 @@ class NotificationManager:
 	methods to plugins and operations.
 	"""
 
+	available = Notify is not None
+
 	def __init__(self, application):
+		# initialize OS notification system
+		if not self.available:
+			return
+
 		self._application = application
 
-		# initialize OS notification system
-		if Notify is not None:
-			Notify.init('sunflower')
+		Notify.init('sunflower')
 
 		# decide which icon to use
 		if self._application.icon_manager.has_icon('sunflower'):
@@ -40,8 +45,8 @@ class NotificationManager:
 	def notify(self, title, text, icon=None):
 		"""Make system notification"""
 		if not self._application.options.get('show_notifications') \
-		or Notify is None:
-			return  # if notifications are disabled
+		or not self.available:
+			return  # if notifications are disabled or unavailable
 
 		if icon is None:  # make sure we show notification with icon
 			icon = self._default_icon

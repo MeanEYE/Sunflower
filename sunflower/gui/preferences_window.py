@@ -127,6 +127,7 @@ class PreferencesWindow(Gtk.Window):
 
 		if tab_name is not None and tab_name in self._tab_names:
 			self._tabs.set_current_page(self._tab_names[tab_name])
+		return True
 
 	def _hide(self, widget=None, data=None):
 		"""Hide dialog"""

@@ -1008,16 +1008,17 @@ class MainWindow(Gtk.ApplicationWindow):
 			horizontal_split = menu_item.get_active()
 			self.options.set('horizontal_split', horizontal_split)
 
+			vbox = self._paned.get_parent()
 			self._paned.remove(self.left_notebook)
 			self._paned.remove(self.right_notebook)
-			self._vbox2.remove(self._paned)
+			vbox.remove(self._paned)
 
 			self._paned = Gtk.VPaned() if horizontal_split else Gtk.HPaned()
 			self._paned.pack1(self.left_notebook, resize=True, shrink=False)
 			self._paned.pack2(self.right_notebook, resize=True, shrink=False)
 
-			self._vbox2.pack_start(self._paned, True, True, 0)
-			self._vbox2.reorder_child(self._paned, 0)
+			vbox.pack_start(self._paned, True, True, 0)
+			vbox.reorder_child(self._paned, 0)
 
 			self._paned.show()
 		else:

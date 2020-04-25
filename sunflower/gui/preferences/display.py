@@ -102,6 +102,7 @@ class DisplayOptions(SettingsPage):
 
 		self._checkbox_hide_window_on_minimize = Gtk.CheckButton(_('Hide operation window on minimize'))
 		self._checkbox_show_notifications = Gtk.CheckButton(_('Show notifications'))
+		self._checkbox_show_notifications.set_sensitive(self._application.notification_manager.available)
 		self._checkbox_network_path_completion = Gtk.CheckButton(_('Use path completion on non-local paths'))
 
 		self._checkbox_hide_window_on_minimize.connect('toggled', self._parent.enable_save)

@@ -28,7 +28,6 @@ try:
 	# check if gtk is available
 	import gi
 	gi.require_version('Gtk', '3.0')
-	gi.require_version('Notify', '0.7')
 
 except:
 	# print error and die
@@ -73,7 +72,7 @@ class Sunflower(Gtk.Application):
 		# temporary loading config to find multiple_instances setting
 		options = Config('config', common.get_config_path())
 		if options.get('multiple_instances'):
-			application_id = None # defining no application id enables multiple instances
+			self.application_id = None # defining no application id enables multiple instances
 
 		# call parent constructor
 		Gtk.Application.__init__(

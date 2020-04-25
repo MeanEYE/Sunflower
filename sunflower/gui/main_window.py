@@ -638,6 +638,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.left_notebook.connect('page-added', self._page_added)
 		self.left_notebook.connect('switch-page', self._page_switched)
 		self.left_notebook.set_group_name('panel')
+		self.left_notebook.set_scrollable(True)
 
 		self.right_notebook = Gtk.Notebook.new()
 		self.right_notebook.set_show_border(False)
@@ -645,6 +646,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.right_notebook.connect('page-added', self._page_added)
 		self.right_notebook.connect('switch-page', self._page_switched)
 		self.right_notebook.set_group_name('panel')
+		self.right_notebook.set_scrollable(True)
 
 		self._paned.pack1(self.left_notebook, resize=True, shrink=False)
 		self._paned.pack2(self.right_notebook, resize=True, shrink=False)

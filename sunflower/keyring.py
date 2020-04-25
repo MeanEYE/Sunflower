@@ -1,14 +1,15 @@
 from __future__ import absolute_import
 
-from gi.repository import Gtk, GObject
-from sunflower.gui.input_dialog import InputDialog, PasswordDialog
-
 
 try:
+	import gi
 	gi.require_version('GnomeKeyring', '1.0')
 	from gi.repository import GnomeKeyring as keyring
 except:
 	keyring = None
+else:
+	from gi.repository import Gtk, GObject
+	from sunflower.gui.input_dialog import InputDialog, PasswordDialog
 
 
 class EntryType:
@@ -40,6 +41,10 @@ class KeyringManager:
 			}
 
 	def __init__(self, application):
+		# initialize keyring
+		if not self.is_available():
+			return
+
 		self._application = application
 		self._info = None
 		self._timeout = None
@@ -48,9 +53,7 @@ class KeyringManager:
 		self._status_icon = Gtk.Image()
 		self._status_icon.show()
 
-		# initialize keyring
-		if self.is_available():
-			self.__initialize_keyring()
+		self.__initialize_keyring()
 
 	def __update_icon(self):
 		"""Update icon based on keyring status"""

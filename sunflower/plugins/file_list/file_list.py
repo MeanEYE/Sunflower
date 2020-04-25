@@ -1625,7 +1625,6 @@ class FileList(ItemList):
 		# find starting point
 		if parent is None:
 			found_iter = self._store.get_iter_first()
-			found_iter = self._store.iter_next(found_iter)  # skip parent directory
 
 		elif self._store.iter_has_child(parent):
 			found_iter = self._store.iter_children(parent)
@@ -1782,15 +1781,6 @@ class FileList(ItemList):
 
 		if found_iter is not None:
 			iter_name = self._store.get_value(found_iter, Column.NAME)
-
-			# if currently hovered item was removed
-			if iter_name == selected_name:
-				next_iter = item_list.iter_next(selected_iter)
-
-				if next_iter is None:  # make sure we select something
-					next_iter = item_list[-2].iter
-
-				self._item_list.set_cursor(item_list.get_path(next_iter))
 
 			if item_list.get_value(found_iter, Column.IS_DIR):
 				self._dirs['count'] -= 1

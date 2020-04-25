@@ -154,39 +154,39 @@ class Operation(Thread):
 			# we are in silent mode, do what user specified
 			merge = self._options[Option.SILENT_MERGE]
 			self._merge_all = merge
+			return merge
 
-		else:
-			# we are not in silent mode, ask user
-			def ask_user(queue):
-				dialog = OverwriteDirectoryDialog(self._application, self._dialog.get_window())
+		# we are not in silent mode, ask user
+		def ask_user(queue):
+			dialog = OverwriteDirectoryDialog(self._application, self._dialog.get_window())
 
-				title_element = os.path.basename(path)
-				message_element = os.path.basename(os.path.dirname(os.path.join(self._destination.get_path(), path)))
+			title_element = os.path.basename(path)
+			message_element = os.path.basename(os.path.dirname(os.path.join(self._destination.get_path(), path)))
 
-				dialog.set_title_element(title_element)
-				dialog.set_message_element(message_element)
-				dialog.set_rename_value(title_element)
-				dialog.set_source(
-								self._source,
-								path,
-								relative_to=self._source_path
-							)
-				dialog.set_original(
-								self._destination,
-								path,
-								relative_to=self._destination_path
-							)
+			dialog.set_title_element(title_element)
+			dialog.set_message_element(message_element)
+			dialog.set_rename_value(title_element)
+			dialog.set_source(
+					self._source,
+					path,
+					relative_to=self._source_path
+			)
+			dialog.set_original(
+					self._destination,
+					path,
+					relative_to=self._destination_path
+			)
 
-				result = dialog.get_response()
-				merge = result[0] == Gtk.ResponseType.YES
+			result = dialog.get_response()
+			merge = result[0] == Gtk.ResponseType.YES
 
-				# send result to thread
-				queue.put((result, merge))
+			# send result to thread
+			queue.put((result, merge))
 
-			# show dialog in main thread
-			queue = Queue()
-			GObject.idle_add(ask_user, queue)
-			result, merge = queue.get(True)
+		# show dialog in main thread
+		queue = Queue()
+		GObject.idle_add(ask_user, queue)
+		result, merge = queue.get(True)
 
 		if result[1][OverwriteOption.APPLY_TO_ALL]:
 			self._merge_all = merge

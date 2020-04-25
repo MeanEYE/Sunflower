@@ -314,7 +314,7 @@ class SessionManager:
 		list_container = Gtk.ScrolledWindow.new()
 		list_container.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
 		list_container.set_shadow_type(Gtk.ShadowType.IN)
-		list_container.set_size_request(300, 200)
+		list_container.set_size_request(100, 200)
 
 		list_container.add(self._item_list)
 
@@ -325,13 +325,13 @@ class SessionManager:
 		image_lock = Gtk.Image.new_from_icon_name('changes-prevent-symbolic', Gtk.IconSize.BUTTON)
 		self._button_lock = Gtk.ToggleButton.new()
 		self._button_lock.set_image(image_lock)
-		self._button_lock.set_tooltip_text(_('Locked session preserves tab layout at the time of locking.'))
+		self._button_lock.set_tooltip_markup(_('Lock current session\n<small>Locking session preserves tab layout at the time of activation.</small>'))
 		self._button_lock.connect('toggled', self._toggle_session_lock)
 
-		button_manage = Gtk.Button.new_with_label(label=_('Manage sessions'))
+		button_manage = Gtk.Button.new_with_label(label=_('Manage'))
 		button_manage.connect('clicked', self._manage_sessions)
 
-		button_save = Gtk.Button.new_with_label(label=_('Save session'))
+		button_save = Gtk.Button.new_with_label(label=_('Save'))
 		button_save.connect('clicked', self._save_session)
 
 		# pack interface elements

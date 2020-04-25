@@ -1650,7 +1650,8 @@ class ItemList(PluginBase):
 			result = self.create_provider(path, False)
 
 		# cache current provider
-		self._current_provider = result
+		if self._current_provider is None:
+			self._current_provider = result
 
 		return result
 

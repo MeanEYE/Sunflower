@@ -4,6 +4,8 @@ from gi.repository import Gtk, Pango, Gdk
 class TabLabel:
 	"""Tab label wrapper class"""
 
+	MAX_CHARS=20
+
 	def __init__(self, application, parent):
 		self._container = Gtk.EventBox.new()
 
@@ -20,7 +22,6 @@ class TabLabel:
 		self._container.add(self._hbox)
 
 		self._label = Gtk.Label.new()
-		self._label.set_max_width_chars(20)
 		self._label.set_single_line_mode(True)
 
 		self._lock_image = Gtk.Image()
@@ -131,6 +132,12 @@ class TabLabel:
 
 	def set_text(self, text):
 		"""Set label text"""
+		if len(text)>self.MAX_CHARS:
+			self._label.set_width_chars(self.MAX_CHARS)
+			self._label.set_ellipsize(Pango.EllipsizeMode.END)
+		else:
+			self._label.set_width_chars(-1)
+			self._label.set_ellipsize(Pango.EllipsizeMode.NONE)
 		self._label.set_text(text)
 
 	def lock_tab(self):

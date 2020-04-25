@@ -65,7 +65,7 @@ class SessionsOptions(SettingsPage):
 		col_name.set_expand(True)
 
 		col_locked = Gtk.TreeViewColumn(_('Locked'), cell_locked, active=Column.LOCKED)
-		col_count = Gtk.TreeViewColumn(_('Tabs'), cell_count, text=Column.TAB_COUNT)
+		col_count = Gtk.TreeViewColumn(_('Session manager'), cell_count, text=Column.TAB_COUNT)
 
 		self._list.append_column(col_name)
 		self._list.append_column(col_locked)
@@ -276,11 +276,17 @@ class SessionManager:
 						})
 
 		# create header button and its popover
+		icon = Gtk.Image.new_from_icon_name('emoji-symbols-symbolic', Gtk.IconSize.BUTTON)
+
 		self._button = Gtk.Button.new_with_label(label='Session')
+		self._button.set_image(icon)
+		self._button.set_tooltip_text(_('Session manager'))
 
 		popover = Gtk.Popover.new()
 		popover.set_relative_to(self._button)
+
 		self._button.connect('clicked', self._show_popover, popover)
+
 		vbox_popover = Gtk.VBox.new(False, 5)
 		vbox_popover.set_border_width(5)
 
@@ -329,7 +335,7 @@ class SessionManager:
 		button_save.connect('clicked', self._save_session)
 
 		# pack interface elements
-		self._application.header_bar.pack_end(self._button)
+		self._application.header_bar.pack_start(self._button)
 		popover.add(vbox_popover)
 
 		hbox_buttons.pack_start(self._button_lock, True, False, 0)

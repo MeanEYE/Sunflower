@@ -27,7 +27,10 @@ class LocalMonitor(Monitor):
 		if provider.exists(self._path):
 			try:
 				# create file/directory monitor
-				self._monitor = Gio.File.new_for_path(path).monitor(Gio.FileMonitorFlags.SEND_MOVED)
+				if (path == 'trash:///'):
+					self._monitor = Gio.File.new_for_uri(path).monitor(Gio.FileMonitorFlags.SEND_MOVED)
+				else:
+					self._monitor = Gio.File.new_for_path(path).monitor(Gio.FileMonitorFlags.SEND_MOVED)
 
 			except Exception as error:
 				raise MonitorError('Error creating monitor: {0}'.format(repr(error)))

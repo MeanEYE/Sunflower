@@ -246,7 +246,7 @@ class OperationDialog:
 
 		# support for compositing window managers
 		if self._hide_on_minimize:
-			self._application.operation_menu_changed()
+			# self._application.operation_menu_changed()
 			self._window.hide()
 
 	def _pause_click(self, widget, data=None):
@@ -283,7 +283,7 @@ class OperationDialog:
 
 		# support for compositing window managers
 		if self._hide_on_minimize:
-			self._application.operation_menu_changed()
+			# self._application.operation_menu_changed()
 			self._window.present()
 
 	def _update_total_count(self):
@@ -378,11 +378,11 @@ class OperationDialog:
 		"""Handle change of window state"""
 		if event.new_window_state == Gdk.WindowState.ICONIFIED:
 			# window was iconified, show operations menu item
-			self._application.operation_menu_changed()
+			# self._application.operation_menu_changed()
 
 		elif event.new_window_state == 0:
 			# normal window state or window was restored
-			self._application.operation_menu_changed()
+			# self._application.operation_menu_changed()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""

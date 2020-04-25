@@ -608,12 +608,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._application_menu.append_section(None, self._program_section)
 		application.set_app_menu(self._application_menu)
 
-		# operations menu
-		self._menu_item_operations = self.menu_manager.get_item_by_name('operations')
-		self._menu_item_no_operations = self.menu_manager.get_item_by_name('no_operations')
-
-		self.menu_operations = self._menu_item_operations.get_submenu()
-
 		# create toolbar
 		self.toolbar_manager.load_config(self.toolbar_options)
 		self.toolbar_manager.apply_settings()
@@ -660,8 +654,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		vbox_popover.set_border_width(5)
 		vbox_popover.set_size_request(400, -1)
 
-		self.status_bar = Gtk.HBox(False, 0)
-		self.header_bar.pack_end(self.status_bar)
 
 		label_command_entry = Gtk.Label(label=_('Execute command:'))
 		label_command_entry.set_alignment(0, 0.5)
@@ -732,7 +724,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		# pack user interface
 		vbox = Gtk.VBox(False, 0)
 		# TODO: Get rid of this
-		# vbox.pack_start(self.menu_bar, expand=False, fill=False, padding=0)
+		vbox.pack_start(self.menu_bar, expand=False, fill=False, padding=0)
 		vbox.pack_start(self.toolbar_manager.get_toolbar(), False, False, 0)
 		vbox.pack_start(self._paned, True, True, 0)
 		vbox.pack_start(self.command_bar, False, False, 0)
@@ -762,6 +754,31 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		self._create_commands()
 		vbox.show_all()
+
+		# create status bar
+		self.status_bar = Gtk.HBox(False, 0)
+		self.header_bar.pack_end(self.status_bar)
+
+		# create box for operation indicators
+		test_button = Gtk.Button.new()
+		test_button.get_style_context().add_class('flat')
+		hbox = Gtk.HBox.new(False, 0)
+
+		image = Gtk.Image.new_from_icon_name('edit-copy-symbolic', Gtk.IconSize.BUTTON)
+		hbox.pack_start(image, False, False, 0)
+
+		test_button.add(hbox)
+		self.status_bar.pack_start(test_button, False, False, 0)
+
+		test_button = Gtk.Button.new()
+		test_button.get_style_context().add_class('flat')
+		hbox = Gtk.HBox.new(False, 0)
+
+		image = Gtk.Image.new_from_icon_name('edit-cut-symbolic', Gtk.IconSize.BUTTON)
+		hbox.pack_start(image, False, False, 0)
+
+		test_button.add(hbox)
+		self.status_bar.pack_start(test_button, False, False, 0)
 
 		# restore window size and position
 		self._restore_window_position()
@@ -2400,27 +2417,14 @@ class MainWindow(Gtk.ApplicationWindow):
 		item.show_all()
 		item.hide()
 
-		self.menu_operations.append(item)
+		# self.menu_operations.append(item)
 
 		return item
 
 	def remove_operation(self, widget):
 		"""Remove operation item from menu"""
-		self.menu_operations.remove(widget)
-		self.operation_menu_changed()
-
-	def operation_menu_changed(self):
-		"""Increase count of visible operation menu items"""
-		has_operations = False
-
-		# check if there are minimized operations
-		for operation_item in self.menu_operations.get_children():
-			if operation_item is not self._menu_item_no_operations:
-				has_operations = True
-				break
-
-		# set "no operations" menu item visibility
-		self._menu_item_no_operations.set_visible(not has_operations)
+		# self.menu_operations.remove(widget)
+		# self.operation_menu_changed()
 
 	def apply_settings(self):
 		"""Apply settings to all the pluggins and main window"""

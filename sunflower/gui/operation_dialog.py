@@ -379,10 +379,12 @@ class OperationDialog:
 		if event.new_window_state == Gdk.WindowState.ICONIFIED:
 			# window was iconified, show operations menu item
 			# self._application.operation_menu_changed()
+			pass
 
 		elif event.new_window_state == 0:
 			# normal window state or window was restored
 			# self._application.operation_menu_changed()
+			pass
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""

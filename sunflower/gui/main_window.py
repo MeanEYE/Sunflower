@@ -160,453 +160,177 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.header_bar.set_property('no-show-all', not self.options.get('show_titlebar'))
 		self.set_titlebar(self.header_bar)
 
-		# create bar buttons
+		self.header_button_box = Gtk.HBox.new(False, 0)
+		self.header_button_box.get_style_context().add_class('linked')
+		self.header_bar.pack_start(self.header_button_box)
+
+		# new inode menu
+		self.new_inode_actions = Gio.SimpleActionGroup.new()
+		self.new_inode_menu = Gio.Menu()
+
+		image_new = Gtk.Image.new_from_icon_name('folder-new-symbolic', Gtk.IconSize.BUTTON)
+		button_new_inode = Gtk.MenuButton.new()
+		button_new_inode.set_image(image_new)
+		button_new_inode.set_menu_model(self.new_inode_menu)
+		button_new_inode.insert_action_group('new-inode', self.new_inode_actions)
+		button_new_inode.set_tooltip_text(_('Create new file, directory and more.'))
+
+		self.header_button_box.pack_start(button_new_inode, False, False, 0)
+
+		action = Gio.SimpleAction.new('file', None)
+		action.connect('activate', self._command_create, 'file')
+		self.new_inode_actions.add_action(action)
+		self.new_inode_menu.append(_('Create _file'), 'new-inode.file')
+
+		action = Gio.SimpleAction.new('directory', None)
+		action.connect('activate', self._command_create, 'directory')
+		self.new_inode_actions.add_action(action)
+		self.new_inode_menu.append(_('Create _directory'), 'new-inode.directory')
+
+		# new tab menu
 		self.new_tab_actions = Gio.SimpleActionGroup.new()
 		self.new_tab_menu = Gio.Menu()
 
-		self.header_button_box = Gtk.HBox.new(False, 0)
-		self.header_button_box.get_style_context().add_class('linked')
-
 		image_new = Gtk.Image.new_from_icon_name('tab-new-symbolic', Gtk.IconSize.BUTTON)
-		self.button_new = Gtk.MenuButton.new()
-		self.button_new.set_image(image_new)
-		self.button_new.set_menu_model(self.new_tab_menu)
-		self.button_new.insert_action_group('new-tab', self.new_tab_actions)
+		button_new_tab = Gtk.MenuButton.new()
+		button_new_tab.set_image(image_new)
+		button_new_tab.set_menu_model(self.new_tab_menu)
+		button_new_tab.insert_action_group('new-tab', self.new_tab_actions)
+		button_new_tab.set_tooltip_text(_('Create new tab'))
 
+		self.header_button_box.pack_start(button_new_tab, False, False, 0)
+
+		# commands menu
 		self.button_commands = Gtk.Button.new_from_icon_name('view-app-grid-symbolic', Gtk.IconSize.BUTTON)
 		self.button_commands.set_tooltip_text(_('Commands'))
 		self.button_commands.connect('clicked', self._handle_commands_menu_click)
 
-		self.header_button_box.pack_start(self.button_new, False, False, 0)
 		self.header_button_box.pack_start(self.button_commands, False, False, 0)
-		self.header_bar.pack_start(self.header_button_box)
 
 		# define local variables
 		self._in_fullscreen = False
 		self._window_state = 0
 
-		# create menu items
-		self.menu_bar = Gtk.MenuBar.new()
-
-		menu_items = (
-			{
-				'label': _('_File'),
-				'name': 'file',
-				'submenu': (
-					{
-						'label': _('New _tab'),
-						'name': 'new_tab',
-						'type': 'image',
-						'image': 'tab-new',
-						'data': 'file',
-						'path': '<Sunflower>/File/NewTab',
-						'submenu': ()
-					},
-					{
-						'type': 'separator',
-					},
-					{
-						'label': _('Create _file'),
-						'name': 'create_file',
-						'type': 'image',
-						'stock': Gtk.STOCK_NEW,
-						'callback': self._command_create,
-						'data': 'file',
-						'path': '<Sunflower>/File/CreateFile',
-					},
-					{
-						'label': _('Create _directory'),
-						'name': 'create_directory',
-						'type': 'image',
-						'image': 'folder-new',
-						'callback': self._command_create,
-						'data': 'directory',
-						'path': '<Sunflower>/File/CreateDirectory',
-					},
-					{
-						'type': 'separator',
-					},
-					{
-						'label': _('_Open'),
-						'type': 'image',
-						'stock': Gtk.STOCK_OPEN,
-						'callback': self._command_open,
-						'path': '<Sunflower>/File/Open',
-					},
-					{
-						'label': _('Open in new ta_b'),
-						'type': 'image',
-						'image': 'tab-new',
-						'callback': self._command_open_in_new_tab,
-						'path': '<Sunflower>/File/OpenInNewTab',
-					},
-					{
-						'type': 'separator',
-					},
-					{
-						'label': _('_Properties'),
-						'type': 'image',
-						'stock': Gtk.STOCK_PROPERTIES,
-						'callback': self._command_properties,
-						'path': '<Sunflower>/File/Properties',
-					},
-					{
-						'type': 'separator',
-					},
-					{
-						'label': _('_Quit'),
-						'name': 'quit_program',
-						'type': 'image',
-						'stock': Gtk.STOCK_QUIT,
-						'callback' : self._quit,
-						'path': '<Sunflower>/File/Quit'
-					},
-				)
-			},
-			{
-				'label': _('_Edit'),
-				'submenu': (
-					{
-						'label': _('Cu_t'),
-						'type': 'image',
-						'stock': Gtk.STOCK_CUT,
-						'callback': self._command_cut_to_clipboard,
-						'path': '<Sunflower>/Edit/Cut',
-					},
-					{
-						'label': _('_Copy'),
-						'type': 'image',
-						'stock': Gtk.STOCK_COPY,
-						'callback': self._command_copy_to_clipboard,
-						'path': '<Sunflower>/Edit/Copy',
-					},
-					{
-						'label': _('_Paste'),
-						'type': 'image',
-						'stock': Gtk.STOCK_PASTE,
-						'callback': self._command_paste_from_clipboard,
-						'path': '<Sunflower>/Edit/Paste',
-					},
-					{
-						'type': 'separator',
-					},
-					{
-						'label': _('_Delete'),
-						'type': 'image',
-						'stock': Gtk.STOCK_DELETE,
-						'callback': self._command_delete,
-						'path': '<Sunflower>/Edit/Delete',
-					},
-					{
-						'type': 'separator',
-					},
-					{
-						'label': _('_Send to...'),
-						'name': 'send_to',
-						'type': 'image',
-						'image': 'document-send',
-						'callback': self._command_send_to,
-						'path': '<Sunflower>/Edit/SendTo',
-						'visible': self.NAUTILUS_SEND_TO_INSTALLED,
-					},
-					{
-						'label': _('Ma_ke link'),
-						'name': 'make_link',
-						'callback': self._create_link,
-						'path': '<Sunflower>/Edit/MakeLink',
-					},
-					{
-						'label': _('_Rename...'),
-						'callback': self._command_rename,
-						'path': '<Sunflower>/Edit/Rename',
-					},
-					{
-						'type': 'separator',
-					},
-					{
-						'label': _('_Unmount'),
-						'name': 'unmount_menu',
-						'submenu': (
-							{
-								'label': _('Mount list is empty'),
-								'name': 'mount_list_empty',
-							},
-						),
-					},
-					{
-						'type': 'separator',
-					},
-					{
-						'label': _('_Preferences'),
-						'name': 'show_preferences',
-						'type': 'image',
-						'stock': Gtk.STOCK_PREFERENCES,
-						'callback': self.preferences_window._show,
-						'path': '<Sunflower>/Edit/Preferences',
-					},
-				),
-			},
-			{
-				'label': _('_Mark'),
-				'submenu': (
-					{
-						'label': _('_Select all'),
-						'type': 'image',
-						'stock': Gtk.STOCK_SELECT_ALL,
-						'callback': self.select_all,
-						'path': '<Sunflower>/Mark/SelectAll',
-					},
-					{
-						'label': _('_Deselect all'),
-						'callback': self.deselect_all,
-						'path': '<Sunflower>/Mark/DeselectAll',
-					},
-					{
-						'label': _('Invert select_ion'),
-						'callback': self.invert_selection,
-						'path': '<Sunflower>/Mark/InvertSelection',
-					},
-					{'type': 'separator'},
-					{
-						'label': _('S_elect with pattern'),
-						'name': 'select_with_pattern',
-						'callback': self.select_with_pattern,
-						'path': '<Sunflower>/Mark/SelectPattern',
-					},
-					{
-						'label': _('Deselect with pa_ttern'),
-						'name': 'deselect_with_pattern',
-						'callback': self.deselect_with_pattern,
-						'path': '<Sunflower>/Mark/DeselectPattern',
-					},
-					{'type': 'separator'},
-					{
-						'label': _('Select with same e_xtension'),
-						'name': 'select_with_same_extension',
-						'callback': self.select_with_same_extension,
-						'path': '<Sunflower>/Mark/SelectWithSameExtension',
-					},
-					{
-						'label': _('Deselect with same exte_nsion'),
-						'name': 'deselect_with_same_extension',
-						'callback': self.deselect_with_same_extension,
-						'path': '<Sunflower>/Mark/DeselectWithSameExtension',
-					},
-					{'type': 'separator'},
-					{
-						'label': _('Compare _directories'),
-						'name': 'compare_directories',
-						'callback': self.compare_directories,
-						'path': '<Sunflower>/Mark/Compare',
-					}
-				)
-			},
-			{
-				'label': _('_Tools'),
-				'name': 'tools',
-				'submenu': (
-					{
-						'label': _('_Find files'),
-						'name': 'find_files',
-						'type': 'image',
-						'image': 'system-search',
-						'path': '<Sunflower>/Tools/FindFiles',
-						'callback': self.show_find_files
-					},
-					{
-						'label': _('Find _duplicate files'),
-						'name': 'find_duplicate_files',
-						'path': '<Sunflower>/Tools/FindDuplicateFiles'
-					},
-					{
-						'label': _('_Synchronize directories'),
-						'name': 'synchronize_directories',
-						'path': '<Sunflower>/Tools/SynchronizeDirectories'
-					},
-					{'type': 'separator'},
-					{
-						'label': _('Advanced _rename'),
-						'name': 'advanced_rename',
-						'path': '<Sunflower>/Tools/AdvancedRename',
-						'callback': self.show_advanced_rename,
-					},
-					{'type': 'separator'},
-					{
-						'label': _('_Keyring manager'),
-						'name': 'keyring_manager',
-						'path': '<Sunflower>/Tools/KeyringManager',
-						'callback': self.show_keyring_manager,
-					}
-				)
-			},
-			{
-				'label': _('_View'),
-				'submenu': (
-					{
-						'label': _('Rel_oad item list'),
-						'type': 'image',
-						'image': 'reload',
-						'callback': self._command_reload,
-						'path': '<Sunflower>/View/Reload'
-					},
-					{
-						'type': 'separator',
-					},
-					{
-						'label': _('Fast m_edia preview'),
-						'type': 'checkbox',
-						'active': self.options.get('media_preview'),
-						'callback': self._toggle_media_preview,
-						'name': 'fast_media_preview',
-						'path': '<Sunflower>/View/FastMediaPreview',
-					},
-					{
-						'type': 'separator',
-					},
-					{
-						'label': _('Show _hidden files'),
-						'type': 'checkbox',
-						'active': self.options.section('item_list').get('show_hidden'),
-						'callback': self._toggle_show_hidden_files,
-						'name': 'show_hidden_files',
-						'path': '<Sunflower>/View/ShowHidden',
-					},
-					{
-						'label': _('Show _toolbar'),
-						'type': 'checkbox',
-						'active': self.options.get('show_toolbar'),
-						'callback': self._toggle_show_toolbar,
-						'name': 'show_toolbar',
-						'path': '<Sunflower>/View/ShowToolbar',
-					},
-					{
-						'label': _('Show _titlebar'),
-						'type': 'checkbox',
-						'active': self.options.get('show_titlebar'),
-						'callback': self._toggle_show_titlebar,
-						'name': 'show_titlebar',
-						'path': '<Sunflower>/View/ShowTitlebar',
-					},
-					{
-						'label': _('Show _command bar'),
-						'type': 'checkbox',
-						'active': self.options.get('show_command_bar'),
-						'callback': self._toggle_show_command_bar,
-						'name': 'show_command_bar',
-						'path': '<Sunflower>/View/ShowCommandBar',
-					},
-					{
-						'label': _('_Horizontal split'),
-						'type': 'checkbox',
-						'active': self.options.get('horizontal_split'),
-						'callback': self._toggle_horizontal_split,
-						'name': 'horizontal_split',
-						'path': '<Sunflower>/View/HorizontalSplit',
-					},
-				)
-			},
-			{
-				'label': _('_Commands'),
-				'name': 'commands',
-			},
-			{
-				'label': _('_Operations'),
-				'name': 'operations',
-				'submenu': (
-					{
-						'label': _('There are no active operations'),
-						'name': 'no_operations',
-					},
-				)
-			},
-			{
-				'label': _('_Help'),
-				'submenu': (
-					{
-						'label': _('_Home page'),
-						'type': 'image',
-						'stock': Gtk.STOCK_HOME,
-						'callback': self.goto_web,
-						'data': 'sunflower-fm.org',
-						'path': '<Sunflower>/Help/HomePage',
-					},
-					{
-						'label': _('Check for new version'),
-						'name': 'check_for_new_version',
-						'callback': self.check_for_new_version,
-						'path': '<Sunflower>/Help/CheckVersion',
-					},
-					{'type': 'separator'},
-					{
-						'label': _('File a _bug report'),
-						'type': 'image',
-						'image': 'lpi-bug',
-						'callback': self.goto_web,
-						'data': 'gitlab.com/MeanEYE/Sunflower/issues/new',
-						'path': '<Sunflower>/Help/BugReport',
-					},
-					{'type': 'separator'},
-					{
-						'label': _('_About'),
-						'type': 'image',
-						'stock': Gtk.STOCK_ABOUT,
-						'callback': self.show_about_window,
-						'path': '<Sunflower>/Help/About',
-					}
-				)
-			},
-		)
-
 		# create main menu accelerators group
-		self.configure_accelerators(menu_items)
-
-		# add items to main menu
-		for item in menu_items:
-			self.menu_bar.append(self.menu_manager.create_menu_item(item))
+		self.configure_accelerators()
 
 		# create actions
 		action_list = (
-					('tools.find_files', self.show_find_files),
-					('tools.advanced_rename', self.show_advanced_rename),
-					# ('tools.mount_manager', self.show_mounts),
-					('tools.keyring_manager', self.show_keyring_manager),
-					('help.home_page', self.goto_web),
-					('help.check_version', self.check_for_new_version),
-					('help.about', self.show_about_window),
-					('preferences', self.preferences_window._show),
-					('quit', self._quit)
+					('mark.select_all', self.select_all, None),
+					('mark.deselect_all', self.deselect_all, None),
+					('mark.invert_selection', self.invert_selection, None),
+					('mark.select_pattern', self.select_with_pattern, None),
+					('mark.deselect_pattern', self.deselect_with_pattern, None),
+					('mark.select_same_extension', self.select_with_same_extension, None),
+					('mark.deselect_same_extension', self.deselect_with_same_extension, None),
+					('mark.compare_directories', self.compare_directories, None),
+
+					('tools.find_files', self.show_find_files, None),
+					('tools.advanced_rename', self.show_advanced_rename, None),
+					('tools.keyring_manager', self.show_keyring_manager, None),
+
+					('view.fast_media_preview', self._toggle_media_preview, ('b', True)),
+					('view.hidden_files', self._toggle_show_hidden_files, None),
+					('view.show_toolbar', self._toggle_show_toolbar, None),
+					('view.show_titlebar', self._toggle_show_titlebar, None),
+					('view.show_commandbar', self._toggle_show_command_bar, None),
+					('view.horizontal_split', self._toggle_horizontal_split, None),
+
+					('help.home_page', self.goto_web, None),
+					('help.check_version', self.check_for_new_version, None),
+					('help.about', self.show_about_window, None),
+
+					('preferences', self.preferences_window._show, None),
+					('quit', self._quit, None)
 				)
 
-		for data in action_list:
-			action = Gio.SimpleAction.new(data[0], None)
-			action.connect('activate', data[1]);
+		for path, handler, state in action_list:
+			if not state:
+				action = Gio.SimpleAction.new(path, None)
+			else:
+				action = Gio.SimpleAction.new_stateful(
+						path,
+						GLib.VariantType.new(state[0]),
+						GLib.Variant(*state)
+						)
+			action.connect('activate', handler);
 			self.add_action(action)
 
 		# create application menu
 		self._application_menu = Gio.Menu.new()
 		self._features_section = Gio.Menu.new()
 		self._program_section = Gio.Menu.new()
+		self._mark_generic_menu = Gio.Menu.new()
+		self._mark_pattern_menu = Gio.Menu.new()
+		self._mark_tool_menu = Gio.Menu.new()
+		self._mark_menu = Gio.Menu.new()
 		self._tools_menu = Gio.Menu.new()
+		self._view_menu = Gio.Menu.new()
+		self._view_data_menu = Gio.Menu.new()
+		self._view_interface_menu = Gio.Menu.new()
 		self._help_menu = Gio.Menu.new()
 
+		# mark menu
+		self._mark_generic_menu.append(_('_Select all'), 'win.mark.select_all')
+		self._mark_generic_menu.append(_('_Deselect all'), 'win.mark.deselect_all')
+		self._mark_generic_menu.append(_('Invert select_ion'), 'win.mark.invert_selection')
+
+		self._mark_pattern_menu.append(_('S_elect with pattern'), 'win.mark.select_pattern')
+		self._mark_pattern_menu.append(_('Deselect with pa_ttern'), 'win.mark.deselect_pattern')
+		self._mark_pattern_menu.append(_('Select with same e_xtension'), 'win.mark.select_same_extension')
+		self._mark_pattern_menu.append(_('Deselect with same exte_nsion'), 'win.mark.deselect_same_extension')
+
+		self._mark_tool_menu.append(_('Compare _directories'), 'win.mark.compare_directories')
+
+		self._mark_menu.append_section(None, self._mark_generic_menu)
+		self._mark_menu.append_section(None, self._mark_pattern_menu)
+		self._mark_menu.append_section(None, self._mark_tool_menu)
+
+		# tools menu
 		self._tools_menu.append(_('_Find files'), 'win.tools.find_files')
 		self._tools_menu.append(_('Advanced _rename'), 'win.tools.advanced_rename')
 		self._tools_menu.append(_('_Mount manager'), 'win.tools.mount_manager')
 		self._tools_menu.append(_('_Keyring manager'), 'win.tools.keyring_manager')
 
-		self._help_menu.append(_('Home page'), 'win.help.home_page')
+		# view menu
+		item = Gio.MenuItem.new(_('Fast m_edia preview'), 'win.view.fast_media_preview')
+		item.set_action_and_target_value('win.view.fast_media_preview', GLib.Variant('b', True))
+		self._view_data_menu.append_item(item)
+
+		# self._view_data_menu.append(_('Fast m_edia preview'), 'win.view.fast_media_preview')
+		self._view_data_menu.append(_('Show _hidden files'), 'win.view.hidden_files')
+
+		self._view_interface_menu.append(_('Show _toolbar'), 'win.view.show_toolbar')
+		self._view_interface_menu.append(_('Show _titlebar'), 'win.view.show_titlebar')
+		self._view_interface_menu.append(_('Show _command bar'), 'win.view.show_commandbar')
+		self._view_interface_menu.append(_('_Horizontal split'), 'win.view.horizontal_split')
+
+		self._view_menu.append_section(None, self._view_data_menu)
+		self._view_menu.append_section(None, self._view_interface_menu)
+
+		# help menu
+		self._help_menu.append(_('_Home page'), 'win.help.home_page')
 		self._help_menu.append(_('Check for new version'), 'win.help.check_version')
 		self._help_menu.append(_('_About'), 'win.help.about')
 
-		self._features_section.append_submenu(_('Tools'), self._tools_menu)
-		self._features_section.append_submenu(_('Help'), self._help_menu)
-		self._features_section.append(_('Preferences'), 'win.preferences')
+		self._features_section.append_submenu(_('_Mark'), self._mark_menu)
+		self._features_section.append_submenu(_('_Tools'), self._tools_menu)
+		self._features_section.append_submenu(_('_View'), self._view_menu)
 
-		self._program_section.append(_('Quit'), 'win.quit')
+		self._program_section.append_submenu(_('_Help'), self._help_menu)
+		self._program_section.append(_('_Preferences'), 'win.preferences')
+		self._program_section.append(_('_Quit'), 'win.quit')
 
 		self._application_menu.append_section(None, self._features_section)
 		self._application_menu.append_section(None, self._program_section)
-		application.set_app_menu(self._application_menu)
+
+		application_menu_button = Gtk.MenuButton.new()
+		application_menu_button.set_menu_model(self._application_menu)
+
+		icon = Gtk.Image.new_from_icon_name('open-menu-symbolic', Gtk.IconSize.BUTTON)
+		application_menu_button.set_image(icon)
+
+		self.header_bar.pack_end(application_menu_button)
 
 		# create toolbar
 		self.toolbar_manager.load_config(self.toolbar_options)
@@ -617,10 +341,6 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# bookmarks menu
 		self.locations = LocationMenu(self)
-
-		# tools menu
-		menu_item_tools = self.menu_manager.get_item_by_name('tools')
-		self.menu_tools = menu_item_tools.get_submenu()
 
 		# create notebooks
 		self._paned = Gtk.VPaned() if self.options.get('horizontal_split') else Gtk.HPaned()
@@ -655,12 +375,12 @@ class MainWindow(Gtk.ApplicationWindow):
 		vbox_popover.set_size_request(400, -1)
 
 
-		label_command_entry = Gtk.Label(label=_('Execute command:'))
+		label_command_entry = Gtk.Label.new(_('Execute command:'))
 		label_command_entry.set_alignment(0, 0.5)
 		label_command_entry.show()
 
 		# create history list
-		self.command_list = Gtk.ListStore(str)
+		self.command_list = Gtk.ListStore.new((str,))
 
 		# create auto-complete entry
 		self.command_completion = Gtk.EntryCompletion.new()
@@ -685,10 +405,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		vbox_popover.pack_start(label_command_entry, False, False, 0)
 		vbox_popover.pack_start(self.command_edit, True, True, 0)
 		vbox_popover.show_all()
-
-		# pack command entry bar
-		if self.keyring_manager.is_available():
-			self.status_bar.pack_start(self.keyring_manager._status_icon, False, False, 0)
 
 		# command buttons bar
 		self.command_bar = Gtk.HBox.new(True, 0)
@@ -723,8 +439,6 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# pack user interface
 		vbox = Gtk.VBox(False, 0)
-		# TODO: Get rid of this
-		vbox.pack_start(self.menu_bar, expand=False, fill=False, padding=0)
 		vbox.pack_start(self.toolbar_manager.get_toolbar(), False, False, 0)
 		vbox.pack_start(self._paned, True, True, 0)
 		vbox.pack_start(self.command_bar, False, False, 0)
@@ -759,26 +473,8 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.status_bar = Gtk.HBox(False, 0)
 		self.header_bar.pack_end(self.status_bar)
 
-		# create box for operation indicators
-		test_button = Gtk.Button.new()
-		test_button.get_style_context().add_class('flat')
-		hbox = Gtk.HBox.new(False, 0)
-
-		image = Gtk.Image.new_from_icon_name('edit-copy-symbolic', Gtk.IconSize.BUTTON)
-		hbox.pack_start(image, False, False, 0)
-
-		test_button.add(hbox)
-		self.status_bar.pack_start(test_button, False, False, 0)
-
-		test_button = Gtk.Button.new()
-		test_button.get_style_context().add_class('flat')
-		hbox = Gtk.HBox.new(False, 0)
-
-		image = Gtk.Image.new_from_icon_name('edit-cut-symbolic', Gtk.IconSize.BUTTON)
-		hbox.pack_start(image, False, False, 0)
-
-		test_button.add(hbox)
-		self.status_bar.pack_start(test_button, False, False, 0)
+		if self.keyring_manager.is_available():
+			self.status_bar.pack_start(self.keyring_manager._status_icon, False, False, 0)
 
 		# restore window size and position
 		self._restore_window_position()
@@ -1287,10 +983,11 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		return result
 
-	def _command_create(self, widget=None, data=None):
+	def _command_create(self, widget=None, data=None, data2=None):
 		"""Handle command button click"""
 		result = False
 		active_object = self.get_active_object()
+		data = data or data2
 
 		if data is None or (data is not None and data == 'directory'):
 			# create directory
@@ -2018,7 +1715,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		return result
 
-	def configure_accelerators(self, menu):
+	def configure_accelerators(self):
 		"""Configure main accelerators group"""
 		group = AcceleratorGroup(self)
 		keyval = Gdk.keyval_from_name
@@ -2029,77 +1726,54 @@ class MainWindow(Gtk.ApplicationWindow):
 		group.set_title(_('Main Menu'))
 
 		# default accelerator map
-		default_accelerator = {
-				'<Sunflower>/File/CreateFile': (keyval('F7'), Gdk.ModifierType.CONTROL_MASK),
-				'<Sunflower>/File/CreateDirectory': (keyval('F7'), 0),
-				'<Sunflower>/File/Quit': (keyval('Q'), Gdk.ModifierType.CONTROL_MASK),
-				'<Sunflower>/Edit/Preferences': (keyval('P'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD1_MASK),
-				'<Sunflower>/Mark/SelectPattern': (keyval('KP_Add'), 0),
-				'<Sunflower>/Mark/DeselectPattern': (keyval('KP_Subtract'), 0),
-				'<Sunflower>/Mark/SelectWithSameExtension': (keyval('KP_Add'), Gdk.ModifierType.MOD1_MASK),
-				'<Sunflower>/Mark/DeselectWithSameExtension': (keyval('KP_Subtract'), Gdk.ModifierType.MOD1_MASK),
-				'<Sunflower>/Mark/Compare': (keyval('F12'), 0),
-				'<Sunflower>/Tools/FindFiles': (keyval('F7'), Gdk.ModifierType.MOD1_MASK),
-				'<Sunflower>/Tools/SynchronizeDirectories': (keyval('F8'), Gdk.ModifierType.MOD1_MASK),
-				'<Sunflower>/Tools/AdvancedRename': (keyval('M'), Gdk.ModifierType.CONTROL_MASK),
-				'<Sunflower>/Tools/MountManager': (keyval('O'), Gdk.ModifierType.CONTROL_MASK),
-				'<Sunflower>/View/Fullscreen': (keyval('F11'), 0),
-				'<Sunflower>/View/Reload': (keyval('R'), Gdk.ModifierType.CONTROL_MASK),
-				'<Sunflower>/View/FastMediaPreview': (keyval('F3'), Gdk.ModifierType.MOD1_MASK),
-				'<Sunflower>/View/ShowHidden': (keyval('H'), Gdk.ModifierType.CONTROL_MASK),
-			}
-
-		alternative_accelerator = {
-				'<Sunflower>/Mark/SelectPattern': (keyval('equal'), 0),
-				'<Sunflower>/Mark/DeselectPattern': (keyval('minus'), 0),
-				'<Sunflower>/Mark/SelectWithSameExtension': (keyval('equal'), Gdk.ModifierType.MOD1_MASK),
-				'<Sunflower>/Mark/DeselectWithSameExtension': (keyval('minus'), Gdk.ModifierType.MOD1_MASK),
-			}
-
-		# filter out menu groups without submenu
-		menu = filter(lambda menu_group: 'submenu' in menu_group, menu)
-
-		# generate group based on main menu structure
-		for menu_group in menu:
-			group_name = menu_group['label'].replace('_', '')
-
-			for menu_item in menu_group['submenu']:
-				fields = set(menu_item.keys())
-
-				if required_fields.issubset(fields):
-					path = menu_item['path']
-					label = u'{0} {1} {2}'.format(
-							group_name,
-							u'\u2192',
-							menu_item['label'].replace('_', '')
-						)
-					callback = menu_item['callback']
-					method_name = menu_item['name']
-					data = menu_item['data'] if 'data' in menu_item else None
-
-					# add method
-					group.add_method(method_name, label, callback, data)
-
-					# add default accelerator
-					if path in default_accelerator:
-						group.set_accelerator(method_name, *default_accelerator[path])
-
-					# add alternative accelerator
-					if path in alternative_accelerator:
-						group.set_alt_accelerator(method_name, *alternative_accelerator[path])
-
-					# set method path
-					group.set_path(method_name, path)
 
 		# add other methods
 		group.add_method('restore_handle_position', _('Restore handle position'), self.restore_handle_position)
 		group.add_method('move_handle_left', _('Move handle to the left'), self.move_handle, -1)
 		group.add_method('move_handle_right', _('Move handle to the right'), self.move_handle, 1)
 
+		group.add_method('create_file', _('Create _file'), self._command_create, 'file')
+		group.add_method('create_directory', _('Create _directory'), self._command_create, 'directory')
+		group.add_method('quit_program',_('_Quit'), self._destroy)
+		group.add_method('preferences', _('_Preferences'), self.preferences_window._show)
+		group.add_method('select_with_pattern', _('S_elect with pattern'), self.select_with_pattern)
+		group.add_method('deselect_with_pattern', _('Deselect with pa_ttern'), self.deselect_with_pattern)
+		group.add_method('select_with_same_extension', _('Select with same e_xtension'), self.select_with_same_extension)
+		group.add_method('deselect_with_same_extension', _('Deselect with same exte_nsion'), self.deselect_with_same_extension)
+		group.add_method('compare_directories', _('Compare _directories'), self.compare_directories)
+		group.add_method('find_files', _('_Find files'), self.show_find_files)
+		group.add_method('advanced_rename', _('_Find files'), self.show_advanced_rename)
+		# group.add_method('mount_manager', _('_Mount manager'), self.mount_manager.show)
+		# group.add_method('keyring_manager', _('_Keyring manager'), self.keyring_manager.show)
+		group.add_method('reload', _('Rel_oad item list'), self._command_reload)
+		group.add_method('fast_media_preview', _('Fast m_edia preview'), self._toggle_media_preview)
+		group.add_method('show_hidden_files', _('Show _hidden files'), self._toggle_show_hidden_files)
+
 		# set default accelerators
 		group.set_accelerator('restore_handle_position', keyval('Home'), Gdk.ModifierType.MOD1_MASK)
 		group.set_accelerator('move_handle_left', keyval('Page_Up'), Gdk.ModifierType.MOD1_MASK)
 		group.set_accelerator('move_handle_right', keyval('Page_Down'), Gdk.ModifierType.MOD1_MASK)
+
+		group.set_accelerator('create_file', keyval('F7'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('create_directory', keyval('F7'), 0)
+		group.set_accelerator('quit', keyval('Q'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('preferences', keyval('P'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('select_with_pattern', keyval('KP_Add'), 0)
+		group.set_accelerator('deselect_with_pattern', keyval('KP_Subtract'), 0)
+		group.set_accelerator('select_with_same_extension', keyval('KP_Add'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('deselect_with_same_extension', keyval('KP_Subtract'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('compare_directories', keyval('F12'), 0)
+		group.set_accelerator('find_files', keyval('F7'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('advanced_rename', keyval('M'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('mount_manager', keyval('O'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('reload', keyval('R'), Gdk.ModifierType.CONTROL_MASK)
+		group.set_accelerator('fast_media_preview', keyval('F3'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('show_hidden_files', keyval('H'), Gdk.ModifierType.CONTROL_MASK)
+
+		group.set_alt_accelerator('select_with_pattern', keyval('equal'), 0)
+		group.set_alt_accelerator('deselect_with_pattern', keyval('minus'), 0)
+		group.set_alt_accelerator('select_with_same_extension', keyval('equal'), Gdk.ModifierType.MOD1_MASK)
+		group.set_alt_accelerator('deselect_with_same_extension', keyval('minus'), Gdk.ModifierType.MOD1_MASK)
 
 		# expose object
 		self._accel_group = group
@@ -2518,17 +2192,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		"""
 		# add to plugin list
 		self.plugin_classes[name] = PluginClass
-
-		# create menu item and add it
-		menu_item = Gtk.MenuItem(title)
-		menu_item.plugin_class = PluginClass
-		menu_item.connect('activate', self._handle_new_tab_click)
-
-		menu_item.show()
-
-		# add menu item
-		menu = self.menu_manager.get_item_by_name('new_tab').get_submenu()
-		menu.append(menu_item)
 
 		# create action
 		action = Gio.SimpleAction.new(name, None)

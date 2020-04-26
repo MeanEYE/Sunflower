@@ -1845,10 +1845,10 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# create default main window options
 		self.window_options.create_section('main').update({
-					'geometry': '960x550',
+					'geometry': [960, 550],
 					'state': 0,
 					'hide_on_close': False,
-					"handle_position": 480,
+					'handle_position': 480,
 				})
 
 		# create default terminal options

@@ -216,42 +216,49 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# create actions
 		action_list = (
-					('mark.select_all', self.select_all, None),
-					('mark.deselect_all', self.deselect_all, None),
-					('mark.invert_selection', self.invert_selection, None),
-					('mark.select_pattern', self.select_with_pattern, None),
-					('mark.deselect_pattern', self.deselect_with_pattern, None),
-					('mark.select_same_extension', self.select_with_same_extension, None),
-					('mark.deselect_same_extension', self.deselect_with_same_extension, None),
-					('mark.compare_directories', self.compare_directories, None),
+				('mark.select_all', self.select_all, None),
+				('mark.deselect_all', self.deselect_all, None),
+				('mark.invert_selection', self.invert_selection, None),
+				('mark.select_pattern', self.select_with_pattern, None),
+				('mark.deselect_pattern', self.deselect_with_pattern, None),
+				('mark.select_same_extension', self.select_with_same_extension, None),
+				('mark.deselect_same_extension', self.deselect_with_same_extension, None),
+				('mark.compare_directories', self.compare_directories, None),
 
-					('tools.find_files', self.show_find_files, None),
-					('tools.advanced_rename', self.show_advanced_rename, None),
-					('tools.keyring_manager', self.show_keyring_manager, None),
+				('tools.find_files', self.show_find_files, None),
+				('tools.advanced_rename', self.show_advanced_rename, None),
+				('tools.keyring_manager', self.show_keyring_manager, None),
 
-					('view.fast_media_preview', self._toggle_media_preview, ('b', True)),
-					('view.hidden_files', self._toggle_show_hidden_files, None),
-					('view.show_toolbar', self._toggle_show_toolbar, None),
-					('view.show_titlebar', self._toggle_show_titlebar, None),
-					('view.show_commandbar', self._toggle_show_command_bar, None),
-					('view.horizontal_split', self._toggle_horizontal_split, None),
+				('view.fast_media_preview', self._toggle_media_preview, self.options.get('media_preview')),
+				('view.hidden_files', self._toggle_show_hidden_files, self.options.section('item_list').get('show_hidden')),
+				('view.show_toolbar', self._toggle_show_toolbar, self.options.get('show_toolbar')),
+				('view.show_titlebar', self._toggle_show_titlebar, self.options.get('show_titlebar')),
+				('view.show_command_bar', self._toggle_show_command_bar, self.options.get('show_command_bar')),
+				('view.horizontal_split', self._toggle_horizontal_split, self.options.get('horizontal_split')),
 
-					('help.home_page', self.goto_web, None),
-					('help.check_version', self.check_for_new_version, None),
-					('help.about', self.show_about_window, None),
+				('help.home_page', self.goto_web, None),
+				('help.check_version', self.check_for_new_version, None),
+				('help.about', self.show_about_window, None),
 
-					('preferences', self.preferences_window._show, None),
-					('quit', self._quit, None)
+				('preferences', self.preferences_window._show, None),
+				('quit', self._quit, None)
 				)
 
 		for path, handler, state in action_list:
-			if not state:
+			if state is None:
+				# regular action
 				action = Gio.SimpleAction.new(path, None)
+
+			elif isinstance(state, bool):
+				# checkbox action
+				action = Gio.SimpleAction.new_stateful(path, None, GLib.Variant.new_boolean(state))
+
 			else:
+				# radio group action
 				action = Gio.SimpleAction.new_stateful(
 						path,
 						GLib.VariantType.new(state[0]),
-						GLib.Variant(*state)
+						GLib.Variant.new_boolean(*state)
 						)
 			action.connect('activate', handler);
 			self.add_action(action)
@@ -293,16 +300,12 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._tools_menu.append(_('_Keyring manager'), 'win.tools.keyring_manager')
 
 		# view menu
-		item = Gio.MenuItem.new(_('Fast m_edia preview'), 'win.view.fast_media_preview')
-		item.set_action_and_target_value('win.view.fast_media_preview', GLib.Variant('b', True))
-		self._view_data_menu.append_item(item)
-
-		# self._view_data_menu.append(_('Fast m_edia preview'), 'win.view.fast_media_preview')
+		self._view_data_menu.append(_('Fast m_edia preview'), 'win.view.fast_media_preview')
 		self._view_data_menu.append(_('Show _hidden files'), 'win.view.hidden_files')
 
 		self._view_interface_menu.append(_('Show _toolbar'), 'win.view.show_toolbar')
 		self._view_interface_menu.append(_('Show _titlebar'), 'win.view.show_titlebar')
-		self._view_interface_menu.append(_('Show _command bar'), 'win.view.show_commandbar')
+		self._view_interface_menu.append(_('Show _command bar'), 'win.view.show_command_bar')
 		self._view_interface_menu.append(_('_Horizontal split'), 'win.view.horizontal_split')
 
 		self._view_menu.append_section(None, self._view_data_menu)
@@ -683,18 +686,15 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def _toggle_show_hidden_files(self, widget, data=None):
 		"""Transfer option event to all the lists"""
-		section = self.options.section('item_list')
-		menu_item = self.menu_manager.get_item_by_name('show_hidden_files')
-
-		# NOTE: Calling set_active emits signal causing deadloop,
-		# to work around this issue we check if calling widget is menu item.
-		if widget is menu_item:
-			show_hidden = menu_item.get_active()
-			section.set('show_hidden', show_hidden)
-
+		if not isinstance(widget, Gio.SimpleAction):
+			action = self.lookup_action('view.hidden_files')
 		else:
-			menu_item.set_active(not section.get('show_hidden'))
-			return True
+			action = widget
+		state = not action.get_state()
+
+		action.set_state(GLib.Variant.new_boolean(state))
+		section = self.options.section('item_list')
+		section.set('show_hidden', state)
 
 		# update left notebook
 		for index in range(0, self.left_notebook.get_n_pages()):
@@ -713,88 +713,71 @@ class MainWindow(Gtk.ApplicationWindow):
 		return True
 
 	def _toggle_horizontal_split(self, widget=None, data=None):
-		menu_item = self.menu_manager.get_item_by_name('horizontal_split')
-
-		# NOTE: Calling set_active emits signal causing deadloop,
-		# to work around this issue we check if calling widget is menu item.
-		if widget is menu_item:
-			horizontal_split = menu_item.get_active()
-			self.options.set('horizontal_split', horizontal_split)
-
-			vbox = self._paned.get_parent()
-			self._paned.remove(self.left_notebook)
-			self._paned.remove(self.right_notebook)
-			vbox.remove(self._paned)
-
-			self._paned = Gtk.VPaned() if horizontal_split else Gtk.HPaned()
-			self._paned.pack1(self.left_notebook, resize=True, shrink=False)
-			self._paned.pack2(self.right_notebook, resize=True, shrink=False)
-
-			vbox.pack_start(self._paned, True, True, 0)
-			vbox.reorder_child(self._paned, 0)
-
-			self._paned.show()
+		"""Handle switching between horizontal and vertical split."""
+		if not isinstance(widget, Gio.SimpleAction):
+			action = self.lookup_action('view.horizontal_split')
 		else:
-			menu_item.set_active(not self.options.get('horizontal_split'))
+			action = widget
+		state = not action.get_state()
+
+		action.set_state(GLib.Variant.new_boolean(state))
+		self.options.set('horizontal_split', state)
+		self._paned.set_orientation((Gtk.Orientation.HORIZONTAL, Gtk.Orientation.VERTICAL)[state])
 
 		return True
 
 	def _toggle_show_command_bar(self, widget, data=None):
 		"""Show/hide command bar"""
-		menu_item = self.menu_manager.get_item_by_name('show_command_bar')
-
-		# NOTE: Calling set_active emits signal causing deadloop,
-		# to work around this issue we check if calling widget is menu item.
-		if widget is menu_item:
-			show_command_bar = menu_item.get_active()
-			self.options.set('show_command_bar', show_command_bar)
-			self.command_bar.set_visible(show_command_bar)
-
+		if not isinstance(widget, Gio.SimpleAction):
+			action = self.lookup_action('view.show_command_bar')
 		else:
-			menu_item.set_active(not self.options.get('show_command_bar'))
+			action = widget
+		state = not action.get_state()
+
+		action.set_state(GLib.Variant.new_boolean(state))
+		self.options.set('show_command_bar', state)
+		self.command_bar.set_visible(state)
 
 		return True
 
 	def _toggle_show_toolbar(self, widget, data=None):
 		"""Show/hide toolbar"""
-		menu_item = self.menu_manager.get_item_by_name('show_toolbar')
-
-		# NOTE: Calling set_active emits signal causing deadloop,
-		# to work around this issue we check if calling widget is menu item.
-		if widget is menu_item:
-			show_toolbar = menu_item.get_active()
-			self.options.set('show_toolbar', show_toolbar)
-			self.toolbar_manager.get_toolbar().set_visible(show_toolbar)
-
+		if not isinstance(widget, Gio.SimpleAction):
+			action = self.lookup_action('view.show_toolbar')
 		else:
-			menu_item.set_active(not self.options.get('show_toolbar'))
+			action = widget
+		state = not action.get_state()
+
+		action.set_state(GLib.Variant.new_boolean(state))
+		self.options.set('show_toolbar', state)
+		self.toolbar_manager.get_toolbar().set_visible(state)
 
 		return True
 
 	def _toggle_show_titlebar(self, widget, data=None):
 		"""Show/hide titlebar"""
-		menu_item = self.menu_manager.get_item_by_name('show_titlebar')
-
-		if widget is menu_item:
-			show_titlebar = menu_item.get_active()
-			self.options.set('show_titlebar', show_titlebar)
-			self.header_bar.set_visible(show_titlebar)
-
+		if not isinstance(widget, Gio.SimpleAction):
+			action = self.lookup_action('view.show_titlebar')
 		else:
-			menu_item.set_active(not self.options.get('show_titlebar'))
+			action = widget
+		state = not action.get_state()
+
+		action.set_state(GLib.Variant.new_boolean(state))
+		self.options.set('show_titlebar', state)
+		self.header_bar.set_visible(state)
 
 		return True
 
 	def _toggle_media_preview(self, widget, data=None):
 		"""Enable/disable fast image preview"""
-		menu_item = self.menu_manager.get_item_by_name('fast_media_preview')
-
-		if widget is menu_item:
-			self.options.set('media_preview', menu_item.get_active())
-
+		if not isinstance(widget, Gio.SimpleAction):
+			action = self.lookup_action('view.fast_media_preview')
 		else:
-			menu_item.set_active(not self.options.get('media_preview'))
-			return True
+			action = widget
+		state = not action.get_state()
+
+		action.set_state(GLib.Variant.new_boolean(state))
+		self.options.set('media_preview', state)
 
 		# update left notebook
 		for index in range(0, self.left_notebook.get_n_pages()):
@@ -2103,28 +2086,36 @@ class MainWindow(Gtk.ApplicationWindow):
 	def apply_settings(self):
 		"""Apply settings to all the pluggins and main window"""
 		# show or hide command bar depending on settings
-		show_command_bar = self.menu_manager.get_item_by_name('show_command_bar')
-		show_command_bar.set_active(self.options.get('show_command_bar'))
+		option = self.options.get('show_command_bar')
+		show_command_bar = self.lookup_action('view.show_command_bar')
+		show_command_bar.set_state(GLib.Variant.new_boolean(option))
+		self.command_bar.set_visible(option)
 
 		# show or hide toolbar depending on settings
-		show_toolbar = self.menu_manager.get_item_by_name('show_toolbar')
-		show_toolbar.set_active(self.options.get('show_toolbar'))
+		option = self.options.get('show_toolbar')
+		show_toolbar = self.lookup_action('view.show_toolbar')
+		show_toolbar.set_state(GLib.Variant.new_boolean(option))
+		self.toolbar_manager.get_toolbar().set_visible(option)
 
 		# show or hide titlebar depending on settings
-		show_titlebar = self.menu_manager.get_item_by_name('show_titlebar')
-		show_titlebar.set_active(self.options.get('show_titlebar'))
+		option = self.options.get('show_titlebar')
+		show_titlebar = self.lookup_action('view.show_titlebar')
+		show_titlebar.set_state(GLib.Variant.new_boolean(option))
+		self.header_bar.set_visible(option)
 
 		# show or hide hidden files
-		show_hidden = self.menu_manager.get_item_by_name('show_hidden_files')
-		show_hidden.set_active(self.options.section('item_list').get('show_hidden'))
+		show_hidden = self.lookup_action('view.hidden_files')
+		show_hidden.set_state(GLib.Variant.new_boolean(self.options.section('item_list').get('show_hidden')))
 
 		# apply media preview settings
-		media_preview = self.menu_manager.get_item_by_name('fast_media_preview')
-		media_preview.set_active(self.options.get('media_preview'))
+		media_preview = self.lookup_action('view.fast_media_preview')
+		media_preview.set_state(GLib.Variant.new_boolean(self.options.get('media_preview')))
 
 		# horizontal split
-		horizontal_split = self.menu_manager.get_item_by_name('horizontal_split')
-		horizontal_split.set_active(self.options.get('horizontal_split'))
+		option = self.options.get('horizontal_split')
+		horizontal_split = self.lookup_action('view.horizontal_split')
+		horizontal_split.set_state(GLib.Variant.new_boolean(option))
+		self._paned.set_orientation((Gtk.Orientation.HORIZONTAL, Gtk.Orientation.VERTICAL)[option])
 
 		# recreate bookmarks menu
 		self.locations.update_bookmarks()

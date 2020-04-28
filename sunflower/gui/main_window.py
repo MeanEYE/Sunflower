@@ -1894,7 +1894,6 @@ class MainWindow(Gtk.ApplicationWindow):
 					'silent': False,
 					'merge_in_silent': True,
 					'overwrite_in_silent': True,
-					'hide_on_minimize': False,
 					'trash_files': True,
 					'reserve_size': False,
 					'automount_start': False,
@@ -2081,23 +2080,14 @@ class MainWindow(Gtk.ApplicationWindow):
 			if callable(method):
 				method(*args)
 
-	def add_operation(self, widget, callback, data=None):
-		"""Add operation to menu"""
-		item = Gtk.ImageMenuItem()
-		item.add(widget)
-		item.connect('activate', callback, data)
+	def add_operation(self, indicator):
+		"""Add operation indicator to header bar."""
+		self.status_bar.pack_start(indicator, False, False, 0)
+		indicator.show_all()
 
-		item.show_all()
-		item.hide()
-
-		# self.menu_operations.append(item)
-
-		return item
-
-	def remove_operation(self, widget):
-		"""Remove operation item from menu"""
-		# self.menu_operations.remove(widget)
-		# self.operation_menu_changed()
+	def remove_operation(self, indicator):
+		"""Remove operation indicator from header bar."""
+		self.status_bar.remove(indicator)
 
 	def apply_settings(self):
 		"""Apply settings to all the pluggins and main window"""

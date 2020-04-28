@@ -5,20 +5,12 @@ from sunflower import common
 
 
 class OperationDialog:
-	"""Dialog for operations
-
-	Base class for operations dialog such as
-	Copy/Move/Delete. Do *NOT* change this class
-	as it might affect other dialogs and produce
-	unpredictable behavior.
-
-	"""
+	"""Base class for operations dialog such as Copy/Move/Delete. Do *NOT* change this class
+	as it might affect other dialogs and produce unpredictable behavior."""
 
 	MAX_SPEED_POINTS = 20  # how many points to aggregate
 
 	def __init__(self, application, thread):
-		self._window = Gtk.Window.new(type=Gtk.WindowType.TOPLEVEL)
-
 		self._paused = False
 		self._application = application
 		self._thread = thread
@@ -28,7 +20,6 @@ class OperationDialog:
 		self._has_current_file = False
 		self._has_details = False
 		self._size_format_type = self._application.options.get('size_format')
-		self._hide_on_minimize = application.options.section('operations').get('hide_on_minimize')
 
 		self._total_size = 0
 		self._total_count = 0
@@ -40,45 +31,38 @@ class OperationDialog:
 		self._total_checkpoint = 0
 
 		# set window properties
-		self._window.set_title('Operation Dialog')
-		self._window.set_default_size(500, 10)
-		self._window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
-		self._window.set_resizable(True)
-		self._window.set_skip_taskbar_hint(False)
-		self._window.set_transient_for(application)
-		self._window.set_wmclass('Sunflower', 'Sunflower')
+		self._container = Gtk.Popover.new()
+		self._container.set_size_request(500, -1)
 
 		# connect signals
-		self._window.connect('destroy', self._destroy)
-		self._window.connect('delete-event', self._cancel_click)
-		self._window.connect('window-state-event', self._window_state)
+		self._container.connect('destroy', self._destroy)
+		self._container.connect('delete-event', self._cancel_click)
 
-		# set icon
-		self._application.icon_manager.set_window_icon(self._window)
+		# create indicator button
+		self._indicator = Gtk.MenuButton.new()
+		self._indicator.set_popover(self._container)
+		self._indicator.get_style_context().add_class('flat')
 
 		# create interface
 		self._vbox = Gtk.VBox(False, 5)
 
 		# operation items
-		self._operation_label = Gtk.Label()
+		self._operation_label = Gtk.Label.new()
 		self._operation_label.set_alignment(0, 0.5)
 		self._operation_progress = Gtk.ProgressBar()
-		self._operation_image = Gtk.Image()
+		self._operation_image = Gtk.Image.new()
 		self._set_operation_image()
+
+		self._indicator.set_image(self._operation_image)
 
 		vbox_operation = Gtk.VBox(False, 0)
 		vbox_operation.pack_start(self._operation_label, False, False, 0)
 		vbox_operation.pack_start(self._operation_progress, False, False, 0)
 
-		self._operation_item = self._application.add_operation(
-															vbox_operation,
-															self._operation_click
-														)
-		self._operation_item.set_image(self._operation_image)
-		self._operation_item.show_all()
+		self._application.add_operation(self._indicator)
 
 		# pack interface
-		self._window.add(self._vbox)
+		self._container.add(self._vbox)
 
 	def _add_source_destination(self):
 		"""Add source and destination labels to the GUI"""
@@ -91,8 +75,8 @@ class OperationDialog:
 		self._label_source = Gtk.Label(label=_('Source:'))
 		self._label_destination = Gtk.Label(label=_('Destination:'))
 
-		self._value_source = Gtk.Label()
-		self._value_destination = Gtk.Label()
+		self._value_source = Gtk.Label.new()
+		self._value_destination = Gtk.Label.new()
 
 		# pack interface
 		table.attach(self._label_source, 0, 1, 0, 1, Gtk.AttachOptions.FILL)
@@ -115,14 +99,14 @@ class OperationDialog:
 	def _add_current_file(self):
 		"""Add 'current file' progress to the GUI"""
 		self._has_current_file = True
-		table = Gtk.Table(2, 2, False)
+		table = Gtk.Table.new(2, 2, False)
 		table.set_border_width(7)
 		table.set_row_spacing(0, 2)
 		table.set_col_spacing(0, 10)
 
 		self._label_status = Gtk.Label(label='Current status...')
-		self._label_current_file = Gtk.Label()
-		self._pb_current_file = Gtk.ProgressBar()
+		self._label_current_file = Gtk.Label.new()
+		self._pb_current_file = Gtk.ProgressBar.new()
 		self._pb_current_file.set_pulse_step(0.005)
 
 		# pack interface
@@ -131,7 +115,7 @@ class OperationDialog:
 		table.attach(self._pb_current_file, 0, 2, 1, 2)
 
 		if self._has_source_destination:
-			separator = Gtk.HSeparator()
+			separator = Gtk.HSeparator.new()
 			self._vbox.pack_start(separator, False, False, 0)
 		self._vbox.pack_start(table, False, False, 0)
 
@@ -143,21 +127,21 @@ class OperationDialog:
 	def _add_details(self):
 		"""Add ETA to the dialog"""
 		self._has_details = True
-		table = Gtk.Table(2, 6, False)
+		table = Gtk.Table.new(2, 6, False)
 		table.set_border_width(7)
 
-		self._label_eta = Gtk.Label(label=_('ETA:'))
-		self._label_speed = Gtk.Label(label=_('Speed:'))
-		self._label_total_size = Gtk.Label(label=_('Total size:'))
-		self._label_total_count = Gtk.Label(label=_('Total count:'))
+		self._label_eta = Gtk.Label.new(_('ETA:'))
+		self._label_speed = Gtk.Label.new(_('Speed:'))
+		self._label_total_size = Gtk.Label.new(_('Total size:'))
+		self._label_total_count = Gtk.Label.new(_('Total count:'))
 
-		self._value_eta = Gtk.Label()
-		self._value_speed = Gtk.Label()
-		self._value_total_size = Gtk.Label()
-		self._value_total_count = Gtk.Label()
+		self._value_eta = Gtk.Label.new()
+		self._value_speed = Gtk.Label.new()
+		self._value_total_size = Gtk.Label.new()
+		self._value_total_count = Gtk.Label.new()
 
-		self._pb_total_size = Gtk.ProgressBar()
-		self._pb_total_count = Gtk.ProgressBar()
+		self._pb_total_size = Gtk.ProgressBar.new()
+		self._pb_total_count = Gtk.ProgressBar.new()
 
 		# pack interface
 		table.attach(self._label_eta, 0, 1, 0, 1, Gtk.AttachOptions.FILL)
@@ -202,22 +186,19 @@ class OperationDialog:
 		hbox = Gtk.HBox(False, 5)
 		hbox.set_border_width(7)
 
-		self._button_minimize = Gtk.Button(_('Minimize'))
 		self._button_cancel = Gtk.Button(_('Cancel'))
 
-		image_pause = Gtk.Image()
-		image_pause.set_from_stock(Gtk.STOCK_MEDIA_PAUSE, Gtk.IconSize.BUTTON)
+		image_pause = Gtk.Image.new()
+		image_pause.set_from_icon_name('media-playback-pause-symbolic', Gtk.IconSize.BUTTON)
 
 		self._button_pause = Gtk.Button()
 		self._button_pause.add(image_pause)
 		self._button_pause.set_tooltip_text(_('Pause'))
 
-		self._button_minimize.connect('clicked', self._minimize_click)
 		self._button_pause.connect('clicked', self._pause_click)
 		self._button_cancel.connect('clicked', self._cancel_click)
 
 		# pack interface
-		hbox.pack_start(self._button_minimize, False, False, 0)
 		hbox.pack_start(self._button_pause, False, False, 0)
 		hbox.pack_end(self._button_cancel, False, False, 0)
 
@@ -228,10 +209,10 @@ class OperationDialog:
 	def _confirm_cancel(self, message):
 		"""Create confirmation dialog with specified message and return result"""
 		dialog = Gtk.MessageDialog(
-						self._window,
-						Gtk.DialogFlags.DESTROY_WITH_PARENT, 
+						self._application,
+						Gtk.DialogFlags.DESTROY_WITH_PARENT,
 						Gtk.MessageType.QUESTION,
-						Gtk.ButtonsType.YES_NO, 
+						Gtk.ButtonsType.YES_NO,
 						message
 					)
 		dialog.set_default_response(Gtk.ResponseType.YES)
@@ -240,15 +221,6 @@ class OperationDialog:
 
 		return result == Gtk.ResponseType.YES
 
-	def _minimize_click(self, widget, data=None):
-		"""Handle minimize click"""
-		self._window.iconify()
-
-		# support for compositing window managers
-		if self._hide_on_minimize:
-			# self._application.operation_menu_changed()
-			self._window.hide()
-
 	def _pause_click(self, widget, data=None):
 		"""Lock threading object"""
 		self._paused = not self._paused
@@ -256,15 +228,15 @@ class OperationDialog:
 
 		if self._paused:
 			# thread is active, pause it
-			self._set_operation_image(Gtk.STOCK_MEDIA_PAUSE)
-			image.set_from_stock(Gtk.STOCK_MEDIA_PLAY, Gtk.IconSize.BUTTON)
+			self._set_operation_image('media-playback-pause-symbolic')
+			image.set_from_icon_name('media-playback-start-symbolic', Gtk.IconSize.BUTTON)
 			self._button_pause.set_tooltip_text(_('Resume'))
 			self._thread.pause()
 
 		else:
 			# thread is paused, resume it
 			self._set_operation_image()
-			image.set_from_stock(Gtk.STOCK_MEDIA_PAUSE, Gtk.IconSize.BUTTON)
+			image.set_from_icon_name('media-playback-pause-symbolic', Gtk.IconSize.BUTTON)
 			self._button_pause.set_tooltip_text(_('Pause'))
 			self._thread.resume()
 
@@ -277,42 +249,29 @@ class OperationDialog:
 
 		return True  # handle delete-event properly
 
-	def _operation_click(self, widget, data=None):
-		"""Handle operation menu item click"""
-		self._window.deiconify()
-
-		# support for compositing window managers
-		if self._hide_on_minimize:
-			# self._application.operation_menu_changed()
-			self._window.present()
-
 	def _update_total_count(self):
 		"""Update progress bar and labels for total count"""
-		self._value_total_count.set_label(self._count_format.format(
-															self._current_count,
-															self._total_count
-															))
+		self._value_total_count.set_label(self._count_format.format(self._current_count, self._total_count))
 		self.set_total_count_fraction(float(self._current_count) / self._total_count)
 
 	def _update_total_size(self):
 		"""Update progress bar and labels for total size"""
 		# update label
 		formated_size = self._size_format.format(
-											common.format_size(self._current_size, self._size_format_type),
-											common.format_size(self._total_size, self._size_format_type)
-										)
+				common.format_size(self._current_size, self._size_format_type),
+				common.format_size(self._total_size, self._size_format_type)
+				)
 		self._value_total_size.set_label(formated_size)
 
 		if self._total_size > 0:
 			self.set_total_size_fraction(float(self._current_size) / self._total_size)
-
 		else:
 			self.set_total_size_fraction(1)
 
 	def _update_speed(self):
-		"""Aggregate speed and update ETA label
+		"""Aggregate speed and update ETA label.
 
-		This method is automatically called by the gobject timeout.
+		This method is automatically called by the GObject timeout.
 		Don't call this method automatically!
 
 		"""
@@ -338,24 +297,15 @@ class OperationDialog:
 			hours, remainder = divmod(remainder, 3600)
 			minutes, seconds = divmod(remainder, 60)
 
-			time_text = '{0} {1}'.format(
-									seconds,
-									ngettext('second', 'seconds', seconds)
-								)
-
-			if minutes > 0:
-				time_text = '{0} {1}, {2}'.format(
-									minutes,
-									ngettext('minute', 'minutes', minutes),
-									time_text
-								)
-
 			if hours > 0:
-				time_text = '{0} {1}, {2}'.format(
-									hours,
-									ngettext('hour', 'hours', hours),
-									time_text
-								)
+				hours = int(hours)
+				time_text = '{0} {1}, {2}'.format(hours, ngettext('hour', 'hours', hours), time_text)
+			elif minutes > 0:
+				minutes = int(minutes)
+				time_text = '{0} {1}, {2}'.format(minutes, ngettext('minute', 'minutes', minutes), time_text)
+			else:
+				seconds = int(seconds)
+				time_text = '{0} {1}'.format(seconds, ngettext('second', 'seconds', seconds))
 
 		else:
 			# we don't have average speed yet
@@ -371,41 +321,25 @@ class OperationDialog:
 		return True
 
 	def _destroy(self, widget, data=None):
-		"""Remove operation menu item on dialog destroy"""
-		self._application.remove_operation(self._operation_item)
-
-	def _window_state(self, widget, event, data=None):
-		"""Handle change of window state"""
-		if event.new_window_state == Gdk.WindowState.ICONIFIED:
-			# window was iconified, show operations menu item
-			# self._application.operation_menu_changed()
-			pass
-
-		elif event.new_window_state == 0:
-			# normal window state or window was restored
-			# self._application.operation_menu_changed()
-			pass
+		"""Remove operation menu item on dialog destroy."""
+		self._application.remove_operation(self._indicator)
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
 		if icon_name is not None:
-			self._operation_image.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
+			self._operation_image.set_from_icon_name(icon_name, Gtk.IconSize.BUTTON)
 
 	def is_active(self):
 		"""Return true if window is active"""
-		return self._window.is_active()
+		return self._application.is_active()
 
 	def destroy(self):
 		"""Close window"""
-		self._window.destroy()
+		self._container.destroy()
 
 	def get_window(self):
 		"""Return container window"""
-		return self._window
-
-	def set_title(self, title_text):
-		"""Set window title"""
-		self._window.set_title(title_text)
+		return self._container
 
 	def set_status(self, status):
 		"""Set current status"""
@@ -414,7 +348,7 @@ class OperationDialog:
 
 	def set_current_file(self, path):
 		"""Set current file name"""
-		self._label_current_file.set_label(common.decode_file_name(path))
+		self._label_current_file.set_text(common.decode_file_name(path))
 
 	def set_current_file_fraction(self, fraction):
 		"""Set current file progress bar position"""
@@ -499,11 +433,8 @@ class CopyDialog(OperationDialog):
 		self._add_details()
 		self._add_buttons()
 
-		# configure layout
-		self.set_title(_('Copy Selection'))
-
 		# show all elements
-		self._window.show_all()
+		self._container.show_all()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
@@ -511,7 +442,7 @@ class CopyDialog(OperationDialog):
 
 		# set default icon
 		if icon_name is None:
-			self._operation_image.set_from_stock(Gtk.STOCK_COPY, Gtk.IconSize.MENU)
+			self._operation_image.set_from_icon_name('edit-copy-symbolic', Gtk.IconSize.BUTTON)
 
 
 class MoveDialog(CopyDialog):
@@ -520,11 +451,8 @@ class MoveDialog(CopyDialog):
 	def __init__(self, application, thread):
 		CopyDialog.__init__(self, application, thread)
 
-		# configure layout
-		self.set_title(_('Move Selection'))
-
 		# show all elements
-		self._window.show_all()
+		self._container.show_all()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
@@ -532,7 +460,7 @@ class MoveDialog(CopyDialog):
 
 		# set default icon
 		if icon_name is None:
-			self._operation_image.set_from_stock(Gtk.STOCK_CUT, Gtk.IconSize.MENU)
+			self._operation_image.set_from_icon_name('edit-cut-symbolic', Gtk.IconSize.BUTTON)
 
 
 class DeleteDialog(OperationDialog):
@@ -546,12 +474,11 @@ class DeleteDialog(OperationDialog):
 		self._add_buttons()
 
 		# configure layout
-		self.set_title(_('Delete Selection'))
 		self.set_status(_('Removing items...'))
 		self.set_current_file('')
 
 		# show all elements
-		self._window.show_all()
+		self._container.show_all()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
@@ -559,7 +486,7 @@ class DeleteDialog(OperationDialog):
 
 		# set default icon
 		if icon_name is None:
-			self._operation_image.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.MENU)
+			self._operation_image.set_from_icon_name('edit-delete-symbolic', Gtk.IconSize.BUTTON)
 
 
 class RenameDialog(OperationDialog):
@@ -573,12 +500,11 @@ class RenameDialog(OperationDialog):
 		self._add_buttons()
 
 		# configure layout
-		self.set_title(_('Rename Items'))
 		self.set_status(_('Renaming items...'))
 		self.set_current_file('')
 
 		# show all elements
-		self._window.show_all()
+		self._container.show_all()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""

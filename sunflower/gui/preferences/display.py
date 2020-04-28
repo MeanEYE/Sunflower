@@ -34,6 +34,7 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_show_titlebar = Gtk.CheckButton(_('Show titlebar'))
 		self._checkbox_show_command_bar = Gtk.CheckButton(_('Show command bar'))
 		self._checkbox_horizontal_split = Gtk.CheckButton(_('Horizontal split'))
+		self._checkbox_dark_theme = Gtk.CheckButton(_('Dark theme'))
 
 		self._checkbox_hide_on_close.connect('toggled', self._parent.enable_save, True)
 		self._checkbox_multiple_instances.connect('toggled', self._parent.enable_save, True)
@@ -41,6 +42,7 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_show_titlebar.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_command_bar.connect('toggled', self._parent.enable_save)
 		self._checkbox_horizontal_split.connect('toggled', self._parent.enable_save)
+		self._checkbox_dark_theme.connect('toggled', self._parent.enable_save)
 
 		# tab options
 		label_tabs = Gtk.Label(label=_('Tabs'))
@@ -50,13 +52,11 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_focus_new_tab = Gtk.CheckButton(_('Focus new tab after opening'))
 		self._checkbox_tab_close_button = Gtk.CheckButton(_('Show close button'))
 		self._checkbox_always_show_tabs = Gtk.CheckButton(_('Show tab(s) even if there is only one'))
-		self._checkbox_ubuntu_coloring = Gtk.CheckButton(_('Use Ubuntu coloring method for tab title bars'))
 		self._checkbox_superuser_notification = Gtk.CheckButton(_('Change title bar color when started as super user'))
 
 		self._checkbox_focus_new_tab.connect('toggled', self._parent.enable_save)
 		self._checkbox_tab_close_button.connect('toggled', self._parent.enable_save)
 		self._checkbox_always_show_tabs.connect('toggled', self._parent.enable_save)
-		self._checkbox_ubuntu_coloring.connect('toggled', self._parent.enable_save)
 		self._checkbox_superuser_notification.connect('toggled', self._parent.enable_save)
 
 		# status bar
@@ -142,11 +142,11 @@ class DisplayOptions(SettingsPage):
 		vbox_main_window.pack_start(self._checkbox_show_titlebar, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_command_bar, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_horizontal_split, False, False, 0)
+		vbox_main_window.pack_start(self._checkbox_dark_theme, False, False, 0)
 
 		vbox_tabs.pack_start(self._checkbox_focus_new_tab, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_tab_close_button, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_always_show_tabs, False, False, 0)
-		vbox_tabs.pack_start(self._checkbox_ubuntu_coloring, False, False, 0)
 		vbox_tabs.pack_start(self._checkbox_superuser_notification, False, False, 0)
 		vbox_tabs.pack_start(table, False, False, 5)
 
@@ -174,7 +174,6 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_show_command_bar.set_active(options.get('show_command_bar'))
 		self._checkbox_tab_close_button.set_active(options.get('tab_close_button'))
 		self._checkbox_always_show_tabs.set_active(options.get('always_show_tabs'))
-		self._checkbox_ubuntu_coloring.set_active(options.get('ubuntu_coloring'))
 		self._checkbox_superuser_notification.set_active(options.get('superuser_notification'))
 		self._checkbox_hide_window_on_minimize.set_active(options.section('operations').get('hide_on_minimize'))
 		self._checkbox_show_notifications.set_active(options.get('show_notifications'))
@@ -183,6 +182,7 @@ class DisplayOptions(SettingsPage):
 		self._combobox_expand_tabs.set_active(options.get('expand_tabs'))
 		self._combobox_size_format.set_active(options.get('size_format'))
 		self._checkbox_horizontal_split.set_active(options.get('horizontal_split'))
+		self._checkbox_dark_theme.set_active(options.get('dark_theme'))
 
 	def _save_options(self):
 		"""Save display options"""
@@ -198,7 +198,6 @@ class DisplayOptions(SettingsPage):
 		options.set('show_command_bar', self._checkbox_show_command_bar.get_active())
 		options.set('tab_close_button', self._checkbox_tab_close_button.get_active())
 		options.set('always_show_tabs', self._checkbox_always_show_tabs.get_active())
-		options.set('ubuntu_coloring', self._checkbox_ubuntu_coloring.get_active())
 		options.set('superuser_notification', self._checkbox_superuser_notification.get_active())
 		options.section('operations').set('hide_on_minimize', self._checkbox_hide_window_on_minimize.get_active())
 		options.set('show_notifications', self._checkbox_show_notifications.get_active())
@@ -207,3 +206,4 @@ class DisplayOptions(SettingsPage):
 		options.set('expand_tabs', self._combobox_expand_tabs.get_active())
 		options.set('size_format', self._combobox_size_format.get_active())
 		options.set('horizontal_split', self._checkbox_horizontal_split.get_active())
+		options.set('dark_theme', self._checkbox_dark_theme.get_active())

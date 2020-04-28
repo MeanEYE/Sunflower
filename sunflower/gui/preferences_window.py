@@ -90,6 +90,7 @@ class PreferencesWindow(Gtk.Window):
 		# create buttons
 		self._button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
 		self._button_save.connect('clicked', self._save_options)
+		self._button_save.set_can_default(True)
 
 		self._button_revert = Gtk.Button(stock=Gtk.STOCK_REVERT_TO_SAVED)
 		self._button_revert.connect('clicked', self._load_options)

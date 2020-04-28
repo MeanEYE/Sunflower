@@ -281,7 +281,7 @@ class AcceleratorOptions(SettingsPage):
 
 			for method_name in method_names:
 				# add all methods from the group
-				title = methods[method_name]['title']
+				title = methods[method_name]['title'].replace('_', '')
 
 				# check if specified method name has a rename value
 				key_name = '{0}.{1}'.format(group_name, method_name)

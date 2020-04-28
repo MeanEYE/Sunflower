@@ -235,6 +235,7 @@ class MainWindow(Gtk.ApplicationWindow):
 				('view.show_titlebar', self._toggle_show_titlebar, self.options.get('show_titlebar')),
 				('view.show_command_bar', self._toggle_show_command_bar, self.options.get('show_command_bar')),
 				('view.horizontal_split', self._toggle_horizontal_split, self.options.get('horizontal_split')),
+				('view.dark_theme', self._toggle_dark_theme, self.options.get('dark_theme')),
 
 				('help.home_page', self.goto_web, None),
 				('help.check_version', self.check_for_new_version, None),
@@ -307,6 +308,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._view_interface_menu.append(_('Show _titlebar'), 'win.view.show_titlebar')
 		self._view_interface_menu.append(_('Show _command bar'), 'win.view.show_command_bar')
 		self._view_interface_menu.append(_('_Horizontal split'), 'win.view.horizontal_split')
+		self._view_interface_menu.append(_('_Dark theme'), 'win.view.dark_theme')
 
 		self._view_menu.append_section(None, self._view_data_menu)
 		self._view_menu.append_section(None, self._view_interface_menu)
@@ -723,6 +725,20 @@ class MainWindow(Gtk.ApplicationWindow):
 		action.set_state(GLib.Variant.new_boolean(state))
 		self.options.set('horizontal_split', state)
 		self._paned.set_orientation((Gtk.Orientation.HORIZONTAL, Gtk.Orientation.VERTICAL)[state])
+
+		return True
+
+	def _toggle_dark_theme(self, widget=None, data=None):
+		"""Handle switching between horizontal and vertical split."""
+		if not isinstance(widget, Gio.SimpleAction):
+			action = self.lookup_action('view.dark_theme')
+		else:
+			action = widget
+		state = not action.get_state()
+
+		action.set_state(GLib.Variant.new_boolean(state))
+		self.options.set('dark_theme', state)
+		Gtk.Settings.get_default().set_property('gtk-application-prefer-dark-theme', state)
 
 		return True
 
@@ -1940,7 +1956,6 @@ class MainWindow(Gtk.ApplicationWindow):
 					'always_show_tabs': True,
 					'expand_tabs': 0,
 					'show_notifications': True,
-					'ubuntu_coloring': False,  # TODO: Remove, outdated
 					'superuser_notification': True,
 					'tab_close_button': True,
 					'show_status_bar': 0,
@@ -1949,7 +1964,8 @@ class MainWindow(Gtk.ApplicationWindow):
 					'size_format': common.SizeFormat.SI,
 					'multiple_instances': False,
 					'network_path_completion': True,
-					'horizontal_split': False
+					'horizontal_split': False,
+					'dark_theme': False
 				})
 
 		# set default commands
@@ -2116,6 +2132,12 @@ class MainWindow(Gtk.ApplicationWindow):
 		horizontal_split = self.lookup_action('view.horizontal_split')
 		horizontal_split.set_state(GLib.Variant.new_boolean(option))
 		self._paned.set_orientation((Gtk.Orientation.HORIZONTAL, Gtk.Orientation.VERTICAL)[option])
+
+		# prefer dark theme
+		option = self.options.get('dark_theme')
+		horizontal_split = self.lookup_action('view.dark_theme')
+		horizontal_split.set_state(GLib.Variant.new_boolean(option))
+		Gtk.Settings.get_default().set_property('gtk-application-prefer-dark-theme', option)
 
 		# recreate bookmarks menu
 		self.locations.update_bookmarks()

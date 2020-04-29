@@ -46,7 +46,7 @@ class ContentsFindFiles(FindExtension):
 		return _('Content')
 
 	def is_path_ok(self, path):
-		"""Check is specified path fits the cirteria"""
+		"""Check if specified path fits the criteria"""
 		result = False
 		file_type = self._provider.get_stat(path).type
 
@@ -57,7 +57,7 @@ class ContentsFindFiles(FindExtension):
 			# try finding content in file
 			try:
 				with self._provider.get_file_handle(path, Mode.READ) as raw_file:  # make sure file is closed afterwards
-					result = text in raw_file.read()
+					result = text.encode() in raw_file.read()
 
 			except IOError:
 				pass

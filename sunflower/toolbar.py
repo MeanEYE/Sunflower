@@ -17,17 +17,6 @@ class ToolbarManager:
 
 		self._toolbar = Gtk.Toolbar()
 
-	def _widget_exists(self, name):
-		"""Check if widget with specified name exists"""
-		return self._config.has_section(name)
-
-	def _add_widget(self, name, widget_type):
-		"""Add widget to list"""
-		section = self._config.create_section(name)
-		section.set('type', widget_type)
-
-		return section
-
 	def get_toolbar(self):
 		"""Return toolbar widget"""
 		return self._toolbar
@@ -71,8 +60,9 @@ class ToolbarManager:
 		self._toolbar.foreach(lambda item: self._toolbar.remove(item))
 
 		# create new widgets
-		for name in self._config.get_sections():
-			widget_type = self._config.section(name).get('type')
+		for item in self._config.get('items'):
+			widget_name = item['name']
+			widget_type = item['type']
 
 			# skip creating widget if there's no factory for specified type
 			if not widget_type in self._factory_cache: continue
@@ -81,8 +71,8 @@ class ToolbarManager:
 			factory = self._factory_cache[widget_type]
 
 			# get config
-			config = self._config.section(name)._get_data()
-			widget = factory.get_widget(name, widget_type, config)
+			config = item['config']
+			widget = factory.get_widget(widget_name, widget_type, config)
 
 			if widget is not None:
 				widget.show()
@@ -124,30 +114,15 @@ class ToolbarManager:
 			if None in (name, widget_type) or name == '':
 				# user didn't input all the data
 				dialog = Gtk.MessageDialog(
-					                    self._application,
-					                    Gtk.DialogFlags.DESTROY_WITH_PARENT,
-					                    Gtk.MessageType.ERROR,
-					                    Gtk.ButtonsType.OK,
-					                    _(
-					                        "Error adding widget. You need to enter unique "
-				                            "name and select widget type."
-					                    )
-					                )
-				dialog.run()
-				dialog.destroy()
-
-			elif self._widget_exists(name):
-				# item with the same name already exists
-				dialog = Gtk.MessageDialog(
-					                    self._application,
-					                    Gtk.DialogFlags.DESTROY_WITH_PARENT,
-					                    Gtk.MessageType.ERROR,
-					                    Gtk.ButtonsType.OK,
-					                    _(
-				                            "Widget with specified name already exists. "
-				                            "You need to enter unique name and select widget type."
-				                        )
-					                )
+					self._application,
+					Gtk.DialogFlags.DESTROY_WITH_PARENT,
+					Gtk.MessageType.ERROR,
+					Gtk.ButtonsType.OK,
+					_(
+						"Error adding widget. You need to enter unique "
+						"name and select widget type."
+					)
+				)
 				dialog.run()
 				dialog.destroy()
 
@@ -160,29 +135,29 @@ class ToolbarManager:
 
 				# save config
 				if config is not None:
-					section = self._add_widget(name, widget_type)
-					for key, value in config.items():
-						section.set(key, value)
-
-					result = True
+					result = {
+						'name': name,
+						'type': widget_type,
+						'config': config,
+					}
 
 		return result
 
-	def show_configure_widget_dialog(self, name, widget_type, window=None):
+	def show_configure_widget_dialog(self, name, widget_type, widget_config, window=None):
 		"""Show blocking configuration dialog for specified widget"""
 		if not widget_type in self._factory_cache:
 			# there is no factory for specified type, show error and return
 			dialog = Gtk.MessageDialog(
-		                            self._application,
-		                            Gtk.DialogFlags.DESTROY_WITH_PARENT,
-		                            Gtk.MessageType.ERROR,
-		                            Gtk.ButtonsType.OK,
-		                            _(
-		                                "Plugin used to create selected toolbar widget is not active "
-			                            "or not present. In order to edit this entry you need to activate "
-			                            "plugin used to create it."
-		                            )
-		                        )
+				self._application,
+				Gtk.DialogFlags.DESTROY_WITH_PARENT,
+				Gtk.MessageType.ERROR,
+				Gtk.ButtonsType.OK,
+				_(
+					"Plugin used to create selected toolbar widget is not active "
+					"or not present. In order to edit this entry you need to activate "
+					"plugin used to create it."
+				)
+			)
 			dialog.run()
 			dialog.destroy()
 
@@ -192,17 +167,23 @@ class ToolbarManager:
 		factory = self._factory_cache[widget_type]
 
 		# load config
-		section = self._config.section(name)
-		config = section._get_data()
-		config = factory.configure_widget(name, widget_type, config)
+		config = factory.configure_widget(name, widget_type, widget_config)
+		if config:
+			return config
 
-		if config is not None:
-			for key, value in config.items():
-				section.set(key, value)
-
-		return config is not None
+		return {}
 
 	def apply_settings(self):
 		"""Apply toolbar settings"""
-		self._toolbar.set_style(self._config.get('style'))
-		self._toolbar.set_icon_size(self._config.get('icon_size'))
+		self._toolbar.set_style(self._config.get('style')) # fortunately style enums are equal to internal indexes
+		# but icon sizes are not, 0 index is invalid icon, so we need a lookup table
+		icon_sizes = [
+			Gtk.IconSize.MENU,
+			Gtk.IconSize.SMALL_TOOLBAR,
+			Gtk.IconSize.LARGE_TOOLBAR,
+			Gtk.IconSize.BUTTON,
+			Gtk.IconSize.DND,
+			Gtk.IconSize.DIALOG
+		]
+
+		self._toolbar.set_icon_size(icon_sizes[self._config.get('icon_size')])

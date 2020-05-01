@@ -1,3 +1,4 @@
+import json
 from gi.repository import Gtk
 from sunflower.widgets.settings_page import SettingsPage
 
@@ -7,6 +8,7 @@ class Column:
 	DESCRIPTION = 1
 	TYPE = 2
 	ICON = 3
+	CONFIG = 4
 
 
 class ToolbarOptions(SettingsPage):
@@ -22,12 +24,15 @@ class ToolbarOptions(SettingsPage):
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 		container.set_shadow_type(Gtk.ShadowType.IN)
 
-		self._store = Gtk.ListStore(str, str, str, str)
+		self._store = Gtk.ListStore(str, str, str, str, str)
 		self._list = Gtk.TreeView()
 		self._list.set_model(self._store)
 
 		cell_icon = Gtk.CellRendererPixbuf()
 		cell_name = Gtk.CellRendererText()
+		cell_name.set_property('editable', True)
+		cell_name.set_property('mode', Gtk.CellRendererMode.EDITABLE)
+		cell_name.connect('edited', self._edited_name, 0)
 		cell_type = Gtk.CellRendererText()
 
 		# create name column
@@ -137,8 +142,7 @@ class ToolbarOptions(SettingsPage):
 		widget_added = self._toolbar_manager.show_create_widget_dialog(self._parent)
 
 		if widget_added:
-			# reload configuratin file
-			self._load_options()
+			self._add_item_to_list(widget_added)
 
 			# enable save button
 			self._parent.enable_save()
@@ -155,23 +159,36 @@ class ToolbarOptions(SettingsPage):
 			# enable save button if item was removed
 			self._parent.enable_save()
 
+	def _edited_name(self, cell, path, text, column):
+		"""Record edited text"""
+		selected_iter = self._store.get_iter(path)
+
+		if selected_iter is not None:
+			self._store.set_value(selected_iter, column, text)
+
+		# enable save button
+		self._parent.enable_save()
+
 	def _edit_widget(self, widget, data=None):
 		"""Edit selected toolbar widget"""
 		selection = self._list.get_selection()
 		list_, iter_ = selection.get_selected()
 
 		if iter_ is not None:
-			name = list_.get_value(iter_, 0)
-			widget_type = list_.get_value(iter_, 2)
+			name = list_.get_value(iter_, Column.NAME)
+			widget_type = list_.get_value(iter_, Column.TYPE)
+			widget_config = list_.get_value(iter_, Column.CONFIG)
 
 			edited = self._toolbar_manager.show_configure_widget_dialog(
-			                                                name,
-			                                                widget_type,
-			                                                self._parent
-			                                            )
+				name,
+				widget_type,
+				json.loads(widget_config),
+				self._parent
+			)
 
 			# enable save button
 			if edited:
+				self._store.set_value(iter_, Column.CONFIG, json.dumps(edited))
 				self._parent.enable_save()
 
 	def _move_widget(self, widget, direction):
@@ -191,6 +208,23 @@ class ToolbarOptions(SettingsPage):
 			# enable save button if iters were swapped
 			self._parent.enable_save()
 
+	def _add_item_to_list(self, item):
+		name = item['name']
+		widget_type = item['type']
+		widget_config = item['config'] if 'config' in item else {}
+
+		data = self._toolbar_manager.get_widget_data(widget_type)
+
+		if data is not None:
+			icon = data[1]
+			description = data[0]
+
+		else:  # failsafe, display raw widget type
+			icon = ''
+			description = '{0} <small><i>({1})</i></small>'.format(widget_type, _('missing plugin'))
+
+		self._store.append((name, description, widget_type, icon, json.dumps(widget_config)))
+
 	def _load_options(self):
 		"""Load options from file"""
 		options = self._application.toolbar_options
@@ -201,20 +235,8 @@ class ToolbarOptions(SettingsPage):
 		# clear list store
 		self._store.clear()
 
-		for name in options.get_sections():
-			section = options.section(name)
-			widget_type = section.get('type')
-			data = self._toolbar_manager.get_widget_data(widget_type)
-
-			if data is not None:
-				icon = data[1]
-				description = data[0]
-
-			else:  # failsafe, display raw widget type
-				icon = ''
-				description = '{0} <small><i>({1})</i></small>'.format(widget_type, _('missing plugin'))
-
-			self._store.append((name, description, widget_type, icon))
+		for item in options.get('items'):
+			self._add_item_to_list(item)
 
 	def _save_options(self):
 		"""Save settings to config file"""
@@ -222,15 +244,14 @@ class ToolbarOptions(SettingsPage):
 
 		options.set('style', self._combobox_styles.get_active())
 		options.set('icon_size', self._combobox_icon_size.get_active())
-		# get section list, we'll use this
-		# list to remove orphan configurations
-		section_list = options.get_sections()
 
 		# get list from configuration window
-		new_list = []
+		items = []
 		for data in self._store:
-			new_list.append(data[Column.NAME])
+			items.append({
+				'name': data[Column.NAME],
+				'type': data[Column.TYPE],
+				'config': json.loads(data[Column.CONFIG]),
+			})
 
-		for name in section_list:
-			if name not in new_list:
-				options.remove_section(name)
+		options.set('items', items)

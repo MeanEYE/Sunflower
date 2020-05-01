@@ -1976,6 +1976,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.toolbar_options.update({
 					'style': 3,
 					'icon_size': 1,
+					'items': [],
 				})
 
 	def restore_handle_position(self, widget=None, data=None):

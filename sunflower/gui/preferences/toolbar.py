@@ -248,9 +248,9 @@ class ToolbarOptions(SettingsPage):
 
 	def _get_active_combobox_value(self, combobox):
 		"""Get value from selected combobox item model"""
-		iter = combobox.get_active_iter()
+		iter_ = combobox.get_active_iter()
 		model = combobox.get_model()
-		return model[iter][1]
+		return model[iter_][1]
 
 	def _save_options(self):
 		"""Save settings to config file"""

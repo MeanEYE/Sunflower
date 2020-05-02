@@ -223,22 +223,12 @@ class ToolbarOptions(SettingsPage):
 
 		self._store.append((name, description, widget_type, icon, json.dumps(widget_config)))
 
-	def _set_selected_combobox_value(self, combobox, selected_value):
-		# find selected item by stored value (not item index)
-		active_index = 0
-		model = combobox.get_model()
-		for i, value in enumerate(model):
-			if value[1] == selected_value:
-				active_index = i
-				break
-		combobox.set_active(active_index)
-
 	def _load_options(self):
 		"""Load options from file"""
 		options = self._application.toolbar_options
 
-		self._set_selected_combobox_value(self._combobox_styles, options.get('style'))
-		self._set_selected_combobox_value(self._combobox_icon_size, options.get('icon_size'))
+		self._combobox_styles.set_active(options.get('style'))
+		self._combobox_icon_size.set_active(options.get('icon_size'))
 
 		# clear list store
 		self._store.clear()
@@ -246,18 +236,12 @@ class ToolbarOptions(SettingsPage):
 		for item in options.get('items'):
 			self._add_item_to_list(item)
 
-	def _get_active_combobox_value(self, combobox):
-		"""Get value from selected combobox item model"""
-		iter_ = combobox.get_active_iter()
-		model = combobox.get_model()
-		return model[iter_][1]
-
 	def _save_options(self):
 		"""Save settings to config file"""
 		options = self._application.toolbar_options
 
-		options.set('style', self._get_active_combobox_value(self._combobox_styles))
-		options.set('icon_size', self._get_active_combobox_value(self._combobox_icon_size))
+		options.set('style', self._combobox_styles.get_active())
+		options.set('icon_size', self._combobox_icon_size.get_active())
 
 		# save toolbar items settings
 		items = []

@@ -175,5 +175,18 @@ class ToolbarManager:
 
 	def apply_settings(self):
 		"""Apply toolbar settings"""
-		self._toolbar.set_style(self._config.get('style'))
-		self._toolbar.set_icon_size(self._config.get('icon_size'))
+		style = (
+			Gtk.ToolbarStyle.ICONS,
+			Gtk.ToolbarStyle.TEXT,
+			Gtk.ToolbarStyle.BOTH,
+			Gtk.ToolbarStyle.BOTH_HORIZ,
+		)[self._config.get('style')]
+		self._toolbar.set_style(style)
+
+		icon_size = (
+			Gtk.IconSize.SMALL_TOOLBAR,
+			Gtk.IconSize.LARGE_TOOLBAR,
+			Gtk.IconSize.DND,
+			Gtk.IconSize.DIALOG,
+		)[self._config.get('icon_size')]
+		self._toolbar.set_icon_size(icon_size)

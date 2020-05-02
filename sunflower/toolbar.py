@@ -175,15 +175,5 @@ class ToolbarManager:
 
 	def apply_settings(self):
 		"""Apply toolbar settings"""
-		self._toolbar.set_style(self._config.get('style')) # fortunately style enums are equal to internal indexes
-		# but icon sizes are not, 0 index is invalid icon, so we need a lookup table
-		icon_sizes = [
-			Gtk.IconSize.MENU,
-			Gtk.IconSize.SMALL_TOOLBAR,
-			Gtk.IconSize.LARGE_TOOLBAR,
-			Gtk.IconSize.BUTTON,
-			Gtk.IconSize.DND,
-			Gtk.IconSize.DIALOG
-		]
-
-		self._toolbar.set_icon_size(icon_sizes[self._config.get('icon_size')])
+		self._toolbar.set_style(self._config.get('style'))
+		self._toolbar.set_icon_size(self._config.get('icon_size'))

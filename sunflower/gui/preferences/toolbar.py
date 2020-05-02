@@ -110,10 +110,8 @@ class ToolbarOptions(SettingsPage):
 		# toolbar icon size
 		label_icon_size = Gtk.Label(label=_('Icon size:'))
 		list_icon_size = Gtk.ListStore(str, int)
-		list_icon_size.append((_('Same as menu item'), Gtk.IconSize.MENU))
 		list_icon_size.append((_('Small toolbar icon'), Gtk.IconSize.SMALL_TOOLBAR))
 		list_icon_size.append((_('Large toolbar icon'), Gtk.IconSize.LARGE_TOOLBAR))
-		list_icon_size.append((_('Same as buttons'), Gtk.IconSize.BUTTON))
 		list_icon_size.append((_('Same as drag icons'), Gtk.IconSize.DND))
 		list_icon_size.append((_('Same as dialog'), Gtk.IconSize.DIALOG))
 

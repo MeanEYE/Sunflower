@@ -29,9 +29,9 @@ FileInfoExtended = namedtuple(
 					'time_access',  # time of last access
 					'time_modify',  # time of last modification
 					'time_change',  # time of file creation / on win create time
-					'time_access_ns',  # time of last access in nanoseconds as an integer
-					'time_modify_ns',  # time of last modification in nanoseconds as an integer
-					'time_change_ns',  # time of file creation / on win create time in nanoseconds as an integer
+					'time_access_nanoseconds',  # time of last access in nanoseconds as an integer
+					'time_modify_nanoseconds',  # time of last modification in nanoseconds as an integer
+					'time_change_nanoseconds',  # time of file creation / on win create time in nanoseconds as an integer
 					'type',  # file type, constant from FileType class
 					'device',  # device inode resides on
 					'inode'  # inode number

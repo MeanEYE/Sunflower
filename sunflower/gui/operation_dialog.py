@@ -297,15 +297,16 @@ class OperationDialog:
 			hours, remainder = divmod(remainder, 3600)
 			minutes, seconds = divmod(remainder, 60)
 
+			seconds = int(seconds)
+			time_text = '{0} {1}'.format(seconds, ngettext('second', 'seconds', seconds))
+
+			if minutes > 0:
+				minutes = int(minutes)
+				time_text = '{0} {1}, {2}'.format(minutes, ngettext('minute', 'minutes', minutes), time_text)
+
 			if hours > 0:
 				hours = int(hours)
 				time_text = '{0} {1}, {2}'.format(hours, ngettext('hour', 'hours', hours), time_text)
-			elif minutes > 0:
-				minutes = int(minutes)
-				time_text = '{0} {1}, {2}'.format(minutes, ngettext('minute', 'minutes', minutes), time_text)
-			else:
-				seconds = int(seconds)
-				time_text = '{0} {1}'.format(seconds, ngettext('second', 'seconds', seconds))
 
 		else:
 			# we don't have average speed yet

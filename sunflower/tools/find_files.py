@@ -280,7 +280,7 @@ class FindFiles(GObject.GObject):
 		"""Prompt user for directoy selection."""
 		dialog = Gtk.FileChooserDialog(
 							title=_('Find files'),
-							parent=self._application,
+							parent=self.window,
 							action=Gtk.FileChooserAction.SELECT_FOLDER,
 							buttons=(
 								_('Cancel'), Gtk.ResponseType.REJECT,

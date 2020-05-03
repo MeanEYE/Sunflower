@@ -1059,11 +1059,12 @@ class CopyOperation(Operation):
 				# set file parameters
 				self._set_mode(dest_file, file_stat.mode)
 				self._set_owner(dest_file, file_stat.user_id, file_stat.group_id)
+				# use nanosecond based timestamp
 				self._set_timestamp(
 								dest_file,
-								file_stat.time_access,
-								file_stat.time_modify,
-								file_stat.time_change
+								file_stat.time_access_ns,
+								file_stat.time_modify_ns,
+								file_stat.time_change_ns
 							)
 
 				break

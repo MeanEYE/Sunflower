@@ -11,9 +11,6 @@ class ContentsFindFiles(FindExtension):
 	def __init__(self, parent):
 		FindExtension.__init__(self, parent)
 
-		# connect notify signal
-		parent.connect('notify-start', self.__handle_notify_start)
-
 		# create container
 		vbox = Gtk.VBox(False, 0)
 
@@ -34,21 +31,16 @@ class ContentsFindFiles(FindExtension):
 		vbox.pack_start(label_content, False, False, 0)
 		vbox.pack_start(viewport, True, True, 0)
 
-		self.vbox.pack_start(vbox, True, True, 0)
-
-	def __handle_notify_start(self, data=None):
-		"""Handle starting search."""
-		Provider = self._parent._application.get_provider_by_path(self._parent._entry_path.get_text())
-		self._provider = Provider(self._parent._application)
+		self.container.pack_start(vbox, True, True, 0)
 
 	def get_title(self):
 		"""Return i18n title for extension"""
 		return _('Content')
 
-	def is_path_ok(self, path):
+	def is_path_ok(self, provider, path):
 		"""Check if specified path fits the criteria"""
 		result = False
-		file_type = self._provider.get_stat(path).type
+		file_type = provider.get_stat(path).type
 
 		if file_type is FileType.REGULAR:
 			# get buffer
@@ -56,7 +48,7 @@ class ContentsFindFiles(FindExtension):
 
 			# try finding content in file
 			try:
-				with self._provider.get_file_handle(path, Mode.READ) as raw_file:  # make sure file is closed afterwards
+				with provider.get_file_handle(path, Mode.READ) as raw_file:  # make sure file is closed afterwards
 					result = text.encode() in raw_file.read()
 
 			except IOError:

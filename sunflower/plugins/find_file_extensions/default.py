@@ -14,6 +14,7 @@ class DefaultFindFiles(FindExtension):
 	def __init__(self, parent):
 		FindExtension.__init__(self, parent)
 
+		self.active = True
 		self._pattern = '*'
 		self._compare_method = fnmatch.fnmatch
 
@@ -23,9 +24,6 @@ class DefaultFindFiles(FindExtension):
 
 		# connect notify signal
 		parent.connect('notify-start', self.__handle_notify_start)
-
-		# enabled by default
-		self._checkbox_active.set_active(True)
 
 		# create label showing pattern help
 		label_help = Gtk.Label()
@@ -58,12 +56,9 @@ class DefaultFindFiles(FindExtension):
 		self._checkbox_case_sensitive.connect('toggled', self.__handle_case_sensitive_toggle)
 
 		# pack interface
-		self.vbox.remove(self._checkbox_active)
-
 		vbox_pattern.pack_start(label_pattern, False, False, 0)
 		vbox_pattern.pack_start(self._entry_pattern, False, False, 0)
 
-		vbox_left.pack_start(self._checkbox_active, False, False, 0)
 		vbox_left.pack_start(vbox_pattern, False, False, 0)
 		vbox_left.pack_start(self._checkbox_case_sensitive, False, False, 0)
 
@@ -72,7 +67,7 @@ class DefaultFindFiles(FindExtension):
 		hbox.pack_start(vbox_left, True, True, 0)
 		hbox.pack_start(vbox_right, True, True, 0)
 
-		self.vbox.pack_start(hbox, True, True, 0)
+		self.container.pack_start(hbox, True, True, 0)
 
 		# load saved values
 		self._load_history()
@@ -119,7 +114,7 @@ class DefaultFindFiles(FindExtension):
 		"""Return i18n title for extension"""
 		return _('Basic')
 
-	def is_path_ok(self, path):
+	def is_path_ok(self, provider, path):
 		"""Check is specified path fits the cirteria"""
 		result = False
 		file_name = os.path.basename(path)

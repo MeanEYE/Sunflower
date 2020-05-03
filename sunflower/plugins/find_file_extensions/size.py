@@ -49,7 +49,7 @@ class SizeFindFiles(FindExtension):
 		table.attach(self._entry_max, 1, 2, 2, 3, xoptions=Gtk.AttachOptions.FILL)
 		table.attach(label_max_unit, 2, 3, 2, 3, xoptions=Gtk.AttachOptions.FILL)
 
-		self.vbox.pack_start(table, False, False, 0)
+		self.container.pack_start(table, False, False, 0)
 
 	def _max_value_changed(self, entry):
 		"""Assign value to adjustment handler"""
@@ -63,9 +63,9 @@ class SizeFindFiles(FindExtension):
 		"""Return i18n title for extension"""
 		return _('Size')
 
-	def is_path_ok(self, path):
+	def is_path_ok(self, provider, path):
 		"""Check is specified path fits the cirteria"""
-		size = self._parent._provider.get_stat(path).size
+		size = provider.get_stat(path).size
 		size_max = self._entry_max.get_value() * 1048576
 		size_min = self._entry_min.get_value() * 1048576
 		return size_min < size < size_max

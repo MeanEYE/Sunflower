@@ -136,9 +136,6 @@ class LocalProvider(Provider):
 							time_access = 0,
 							time_modify = 0,
 							time_change = 0,
-							time_access_ns = 0,
-							time_modify_ns = 0,
-							time_change_ns = 0,
 							type = FileType.INVALID,
 							device = 0,
 							inode = 0
@@ -186,9 +183,6 @@ class LocalProvider(Provider):
 						time_access = file_stat.st_atime,
 						time_modify = file_stat.st_mtime,
 						time_change = file_stat.st_ctime,
-						time_access_ns = file_stat.st_atime_ns,
-						time_modify_ns = file_stat.st_mtime_ns,
-						time_change_ns = file_stat.st_ctime_ns,
 						type = item_type,
 						device = file_stat.st_dev,
 						inode = file_stat.st_ino
@@ -206,7 +200,7 @@ class LocalProvider(Provider):
 		real_path = self.real_path(path, relative_to)
 		os.chown(real_path, owner, group)
 
-	def set_timestamp(self, path, access_ns=None, modify_ns=None, change_ns=None, relative_to=None):
+	def set_timestamp(self, path, access=None, modify=None, change=None, relative_to=None):
 		"""Set timestamps for specified path
 
 		On Linux/Unix operating system we can't set metadata change timestamp
@@ -214,7 +208,7 @@ class LocalProvider(Provider):
 
 		"""
 		real_path = self.real_path(path, relative_to)
-		os.utime(real_path, ns=(access_ns, modify_ns))
+		os.utime(real_path, (access, modify))
 
 	def move_path(self, source, destination, relative_to=None):
 		"""Move path on same file system to a different parent node """

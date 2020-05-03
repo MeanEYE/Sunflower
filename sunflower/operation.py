@@ -777,7 +777,7 @@ class CopyOperation(Operation):
 
 			return
 
-	def _set_timestamp(self, path, access_nanoseconds, modify_nanoseconds, change_nanoseconds):
+	def _set_timestamp(self, path, access_time_ns, modify_time_ns, change_time_ns):
 		"""Set timestamps for specified path"""
 		if not self._options[Option.SET_TIMESTAMP]: return
 
@@ -785,9 +785,9 @@ class CopyOperation(Operation):
 			# try setting timestamp
 			self._destination.set_timestamp(
 									path,
-									access_nanoseconds,
-									modify_nanoseconds,
-									change_nanoseconds,
+									access_time_ns,
+									modify_time_ns,
+									change_time_ns,
 									relative_to=self._destination_path
 								)
 
@@ -805,7 +805,7 @@ class CopyOperation(Operation):
 
 			# try to set timestamp again
 			if response == OperationError.RESPONSE_RETRY:
-				self._set_timestamp(path, access_nanoseconds, modify_nanoseconds, change_nanoseconds)
+				self._set_timestamp(path, access_time_ns, modify_time_ns, change_time_ns)
 
 			return
 
@@ -1061,9 +1061,9 @@ class CopyOperation(Operation):
 				self._set_owner(dest_file, file_stat.user_id, file_stat.group_id)
 				self._set_timestamp(
 								dest_file,
-								file_stat.time_access_nanoseconds,
-								file_stat.time_modify_nanoseconds,
-								file_stat.time_change_nanoseconds
+								file_stat.time_access_ns,
+								file_stat.time_modify_ns,
+								file_stat.time_change_ns
 							)
 
 				break

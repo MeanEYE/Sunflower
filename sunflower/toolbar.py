@@ -114,7 +114,7 @@ class ToolbarManager:
 			if None in (name, widget_type) or name == '':
 				# user didn't input all the data
 				dialog = Gtk.MessageDialog(
-					self._application,
+					window,
 					Gtk.DialogFlags.DESTROY_WITH_PARENT,
 					Gtk.MessageType.ERROR,
 					Gtk.ButtonsType.OK,
@@ -148,7 +148,7 @@ class ToolbarManager:
 		if not widget_type in self._factory_cache:
 			# there is no factory for specified type, show error and return
 			dialog = Gtk.MessageDialog(
-				self._application,
+				window,
 				Gtk.DialogFlags.DESTROY_WITH_PARENT,
 				Gtk.MessageType.ERROR,
 				Gtk.ButtonsType.OK,
@@ -167,7 +167,7 @@ class ToolbarManager:
 		factory = self._factory_cache[widget_type]
 
 		# load config
-		config = factory.configure_widget(name, widget_type, widget_config)
+		config = factory.configure_widget(name, widget_type, widget_config, window)
 		if config:
 			return config
 

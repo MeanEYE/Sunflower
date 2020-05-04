@@ -51,13 +51,17 @@ class ConfigurationDialog(Gtk.Dialog):
 	"""Configuration dialog for bookmark button"""
 
 	def __init__(self, application, name, config=None):
-		GObject.GObject.__init__(self, parent=application)
+		Gtk.Dialog.__init__(
+			self,
+			parent=application,
+			use_header_bar=True,
+		)
 
 		self._application = application
 
 		# configure dialog
 		self.set_title(_('Configure bookmark button'))
-		self.set_default_size(340, 10)
+		self.set_default_size(450, 10)
 		self.set_resizable(True)
 		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)
@@ -70,16 +74,6 @@ class ConfigurationDialog(Gtk.Dialog):
 		vbox.set_border_width(5)
 
 		# create interface
-		vbox_name = Gtk.VBox(False, 0)
-
-		label_name = Gtk.Label(label=_('Name:'))
-		label_name.set_alignment(0, 0.5)
-
-		entry_name = Gtk.Entry()
-		entry_name.set_editable(False)
-		entry_name.set_sensitive(False)
-		entry_name.set_text(name)
-
 		vbox_path = Gtk.VBox(False, 0)
 
 		label_path = Gtk.Label(label=_('Path:'))
@@ -104,13 +98,9 @@ class ConfigurationDialog(Gtk.Dialog):
 		self.set_default_response(Gtk.ResponseType.ACCEPT)
 
 		# pack interface
-		vbox_name.pack_start(label_name, False, False, 0)
-		vbox_name.pack_start(entry_name, False, False, 0)
-
 		vbox_path.pack_start(label_path, False, False, 0)
 		vbox_path.pack_start(self._entry_path, False, False, 0)
 
-		vbox.pack_start(vbox_name, False, False, 0)
 		vbox.pack_start(vbox_path, False, False, 0)
 		vbox.pack_start(self._checkbox_show_label, False, False, 0)
 

@@ -51,7 +51,7 @@ class ConfigurationDialog(Gtk.Dialog):
 	"""Configuration dialog for bookmark button"""
 
 	def __init__(self, application, name, config=None):
-		GObject.GObject.__init__(self, parent=application)
+		Gtk.Dialog.__init__(self, parent=application)
 
 		self._application = application
 

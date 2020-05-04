@@ -35,7 +35,7 @@ class ToolbarFactory:
 		"""
 		pass
 
-	def configure_widget(self, name, widget_type, config):
+	def configure_widget(self, name, widget_type, config, transient_window=None):
 		"""Present blocking configuration dialog for specified widget type.
 
 		Returns new config if changes were made otherwise None

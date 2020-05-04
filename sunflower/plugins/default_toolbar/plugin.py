@@ -71,7 +71,7 @@ class DefaultToolbar(ToolbarFactory):
 
 		if DialogClass is not None:
 			# create configuration dialog
-			dialog = DialogClass(self._application, name)
+			dialog = DialogClass(transient_window, name)
 
 			# set transistent window
 			if transient_window is not None:
@@ -82,14 +82,14 @@ class DefaultToolbar(ToolbarFactory):
 
 		return config
 
-	def configure_widget(self, name, widget_type, config):
+	def configure_widget(self, name, widget_type, config, transient_window=None):
 		"""Configure specified widget"""
 		result = None
 		DialogClass = self._widgets[widget_type]['dialog']
 
 		if DialogClass is not None:
 			# create configuration dialog
-			dialog = DialogClass(self._application, name, config)
+			dialog = DialogClass(transient_window, name, config)
 
 			# show dialog and get use input
 			result = dialog.get_response()
@@ -97,7 +97,7 @@ class DefaultToolbar(ToolbarFactory):
 		else:
 			# there is no configuration dialog for this widget type
 			dialog = Gtk.MessageDialog(
-		                            self._application,
+		                            transient_window,
 		                            Gtk.DialogFlags.DESTROY_WITH_PARENT,
 		                            Gtk.MessageType.INFO,
 		                            Gtk.ButtonsType.OK,

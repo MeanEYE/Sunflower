@@ -333,7 +333,7 @@ class Terminal(PluginBase):
 
 	def feed_terminal(self, text):
 		"""Feed terminal process with specified text"""
-		self._terminal.feed_child(text)
+		self._terminal.feed_child(text.encode())
 
 	def apply_settings(self):
 		"""Apply terminal settings"""

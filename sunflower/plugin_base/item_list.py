@@ -1406,13 +1406,18 @@ class ItemList(PluginBase):
 	def _inherit_left_path(self, widget, data=None):
 		"""Inherit path in right list from left"""
 		opposite_object = self._parent.get_opposite_object(self)
+		selection = self._get_selection()
+		if ((selection is not None) and (self.get_provider().is_dir(selection))):
+			selected_path = selection
+		else:
+			selected_path = self.path
 
 		if self._notebook is self._parent.left_notebook:
 			if hasattr(opposite_object, 'change_path'):
-				opposite_object.change_path(self.path)
+				opposite_object.change_path(selected_path)
 
 			elif hasattr(opposite_object, 'feed_terminal'):
-				opposite_object.feed_terminal(self.path)
+				opposite_object.feed_terminal(selected_path)
 
 		else:
 			self.change_path(opposite_object.path)
@@ -1422,13 +1427,18 @@ class ItemList(PluginBase):
 	def _inherit_right_path(self, widget, data=None):
 		"""Inherit path in left list from right"""
 		opposite_object = self._parent.get_opposite_object(self)
+		selection = self._get_selection()
+		if ((selection is not None) and (self.get_provider().is_dir(selection))):
+			selected_path = selection
+		else:
+			selected_path = self.path
 
 		if self._notebook is self._parent.right_notebook:
 			if hasattr(opposite_object, 'change_path'):
-				opposite_object.change_path(self.path)
+				opposite_object.change_path(selected_path)
 
 			elif hasattr(opposite_object, 'feed_terminal'):
-				opposite_object.feed_terminal(self.path)
+				opposite_object.feed_terminal(selected_path)
 
 		else:
 			self.change_path(opposite_object.path)

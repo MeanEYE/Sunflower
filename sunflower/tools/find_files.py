@@ -224,7 +224,7 @@ class FindFiles(GObject.GObject):
 			self.button_stop.set_sensitive(False)
 			self.spinner.stop()
 
-	def __find_files(self, path, children, scan_recursively):
+	def __find_files(self, path, extensions, scan_recursively):
 		"""Threaded find files method."""
 		scan_queue = []
 		extension_list = list(map(lambda child: child.extension, children))
@@ -277,7 +277,7 @@ class FindFiles(GObject.GObject):
 		self.window.destroy()
 
 	def _browse_directory(self, widget=None, icon_position=None, event=None, data=None):
-		"""Prompt user for directoy selection."""
+		"""Prompt user for directory selection."""
 		dialog = Gtk.FileChooserDialog(
 							title=_('Find files'),
 							parent=self.window,
@@ -363,7 +363,7 @@ class FindFiles(GObject.GObject):
 		# start the thread
 		params = {
 				'path': path,
-				'children': active_extensions,
+				'extensions': active_extensions,
 				'scan_recursively': self._checkbox_recursive.get_active()
 			}
 		thread = Thread(target=self.__find_files, kwargs=params)

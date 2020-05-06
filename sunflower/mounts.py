@@ -209,6 +209,6 @@ class Volume(Location):
 
 		if mount:
 			root = mount.get_root()
-			result = root.get_uri()
+			result = root.get_path()
 
 		return result

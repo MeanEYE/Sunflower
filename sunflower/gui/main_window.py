@@ -135,6 +135,10 @@ class MainWindow(Gtk.ApplicationWindow):
 		# load config
 		self.load_config()
 
+		# apply dark theme configuration
+		state = self.options.get('dark_theme')
+		Gtk.Settings.get_default().set_property('gtk-application-prefer-dark-theme', state)
+
 		# connect delete event to main window
 		if self.window_options.section('main').get('hide_on_close'):
 			self.connect('delete-event', self._delete_event)
@@ -424,7 +428,7 @@ class MainWindow(Gtk.ApplicationWindow):
 				(_('Move'), _('Move selected items from active to opposite list'), self._command_move),
 				(_('Create'), _('Create new directory'), self._command_create),
 				(_('Delete'), _('Delete selected items'), self._command_delete)
-			)
+				)
 
 		# create buttons and pack them
 		for text, tooltip, callback in buttons:

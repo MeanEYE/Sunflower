@@ -1407,7 +1407,7 @@ class ItemList(PluginBase):
 		"""Inherit path in right list from left"""
 		opposite_object = self._parent.get_opposite_object(self)
 		selection = self._get_selection()
-		if ((selection is not None) and (self.get_provider().is_dir(selection))):
+		if selection and self.get_provider().is_dir(selection):
 			selected_path = selection
 		else:
 			selected_path = self.path
@@ -1428,7 +1428,7 @@ class ItemList(PluginBase):
 		"""Inherit path in left list from right"""
 		opposite_object = self._parent.get_opposite_object(self)
 		selection = self._get_selection()
-		if ((selection is not None) and (self.get_provider().is_dir(selection))):
+		if selection and self.get_provider().is_dir(selection):
 			selected_path = selection
 		else:
 			selected_path = self.path

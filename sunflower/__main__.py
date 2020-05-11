@@ -38,14 +38,6 @@ else:
 	# import required modules
 	from gi.repository import Gtk, Gdk, GObject, Gio, GLib
 
-# try to set process title
-try:
-	from setproctitle import setproctitle
-	setproctitle('sunflower')
-
-except ImportError:
-	pass
-
 
 from sunflower import common
 from sunflower.config import Config

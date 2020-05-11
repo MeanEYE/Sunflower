@@ -20,12 +20,8 @@ setup(
 		url='https://sunflower-fm.org',
 		license='GPLv3',
 		install_requires=[
-			'gir1.2-gtk-3.0 >= 3.22',
-			'gir1.2-notify >= 0.7',
-			'gir1.2-gdkpixbuf >= 2.0',
-			'gir1.2-vte >= 2.90',
-			'gir1.2-glib >= 2.0',
-			'gir1.2-pango',
+			'gi',
+			'chardet'
 			],
 		packages=find_packages(),
 		include_package_data=True,

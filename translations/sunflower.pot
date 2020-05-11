@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-25 20:17+0200\n"
+"POT-Creation-Date: 2020-05-11 21:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -132,10 +132,10 @@ msgid ""
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/preferences/commands.py:14
-#: build/Sunflower/sunflower/gui/main_window.py:177
+#: build/Sunflower/sunflower/gui/main_window.py:209
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/commands.py:14
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:177
-#: sunflower/gui/preferences/commands.py:14 sunflower/gui/main_window.py:205
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:209
+#: sunflower/gui/preferences/commands.py:14 sunflower/gui/main_window.py:209
 msgid "Commands"
 msgstr ""
 
@@ -159,30 +159,30 @@ msgstr ""
 
 #: build/Sunflower/sunflower/gui/preferences/commands.py:66
 #: build/Sunflower/sunflower/gui/preferences/bookmarks.py:76
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:72
+#: build/Sunflower/sunflower/gui/preferences/toolbar.py:77
 #: build/Sunflower/sunflower/gui/preferences/item_list.py:230
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/commands.py:66
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/bookmarks.py:76
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:72
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:77
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:230
 #: sunflower/gui/preferences/commands.py:66
 #: sunflower/gui/preferences/bookmarks.py:76
-#: sunflower/gui/preferences/toolbar.py:72
+#: sunflower/gui/preferences/toolbar.py:77
 #: sunflower/gui/preferences/item_list.py:230
 msgid "Move Up"
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/preferences/commands.py:74
 #: build/Sunflower/sunflower/gui/preferences/bookmarks.py:84
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:80
+#: build/Sunflower/sunflower/gui/preferences/toolbar.py:85
 #: build/Sunflower/sunflower/gui/preferences/item_list.py:238
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/commands.py:74
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/bookmarks.py:84
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:80
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:85
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:238
 #: sunflower/gui/preferences/commands.py:74
 #: sunflower/gui/preferences/bookmarks.py:84
-#: sunflower/gui/preferences/toolbar.py:80
+#: sunflower/gui/preferences/toolbar.py:85
 #: sunflower/gui/preferences/item_list.py:238
 msgid "Move Down"
 msgstr ""
@@ -332,10 +332,10 @@ msgid "Add home directory to bookmarks menu"
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/preferences/bookmarks.py:53
-#: build/Sunflower/sunflower/tools/find_files.py:96
+#: build/Sunflower/sunflower/tools/find_files.py:138
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/bookmarks.py:53
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:96
-#: sunflower/gui/preferences/bookmarks.py:53 sunflower/tools/find_files.py:96
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:138
+#: sunflower/gui/preferences/bookmarks.py:53 sunflower/tools/find_files.py:138
 msgid "Location"
 msgstr ""
 
@@ -418,11 +418,11 @@ msgid "Wrap long lines"
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/preferences/view_and_edit.py:26
-#: build/Sunflower/sunflower/gui/main_window.py:707
+#: build/Sunflower/sunflower/gui/main_window.py:426
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/view_and_edit.py:26
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:707
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:426
 #: sunflower/gui/preferences/view_and_edit.py:26
-#: sunflower/gui/main_window.py:417
+#: sunflower/gui/main_window.py:426
 msgid "Edit"
 msgstr ""
 
@@ -444,13 +444,13 @@ msgstr ""
 msgid "Execute command in terminal tab"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:16
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:16
-#: sunflower/gui/preferences/toolbar.py:16
+#: build/Sunflower/sunflower/gui/preferences/toolbar.py:18
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:18
+#: sunflower/gui/preferences/toolbar.py:18
 msgid "Toolbar"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:34
+#: build/Sunflower/sunflower/gui/preferences/toolbar.py:39
 #: build/Sunflower/sunflower/gui/history_list.py:49
 #: build/Sunflower/sunflower/gui/keyring_manager_window.py:54
 #: build/Sunflower/sunflower/plugins/file_list/file_list.py:132
@@ -459,8 +459,8 @@ msgstr ""
 #: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:870
 #: build/Sunflower/sunflower/plugins/sessions/plugin.py:62
 #: build/Sunflower/sunflower/plugins/rename_extensions/default.py:75
-#: build/Sunflower/sunflower/tools/find_files.py:93
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:34
+#: build/Sunflower/sunflower/tools/find_files.py:134
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:39
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/history_list.py:49
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/keyring_manager_window.py:54
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:132
@@ -469,8 +469,8 @@ msgstr ""
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:870
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:62
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/default.py:75
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:93
-#: sunflower/gui/preferences/toolbar.py:34 sunflower/gui/history_list.py:49
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:134
+#: sunflower/gui/preferences/toolbar.py:39 sunflower/gui/history_list.py:49
 #: sunflower/gui/keyring_manager_window.py:54
 #: sunflower/plugins/file_list/file_list.py:132
 #: sunflower/plugins/file_list/gio_extension.py:164
@@ -478,96 +478,84 @@ msgstr ""
 #: sunflower/plugins/file_list/gio_extension.py:870
 #: sunflower/plugins/sessions/plugin.py:62
 #: sunflower/plugins/rename_extensions/default.py:75
-#: sunflower/tools/find_files.py:93
+#: sunflower/tools/find_files.py:134
 msgid "Name"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:45
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:45
-#: sunflower/gui/preferences/toolbar.py:45
+#: build/Sunflower/sunflower/gui/preferences/toolbar.py:50
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:50
+#: sunflower/gui/preferences/toolbar.py:50
 msgid "Type"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:91
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:91
-#: sunflower/gui/preferences/toolbar.py:91
-msgid "Toolbar style:"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:93
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:93
-#: sunflower/gui/preferences/toolbar.py:93
-msgid "Icons"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:94
-#: build/Sunflower/sunflower/tools/viewer.py:134
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:94
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/viewer.py:134
-#: sunflower/gui/preferences/toolbar.py:94 sunflower/tools/viewer.py:134
-msgid "Text"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:95
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:103
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:95
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:103
-#: sunflower/gui/preferences/toolbar.py:95
-#: sunflower/gui/preferences/item_list.py:103
-msgid "Both"
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/preferences/toolbar.py:96
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:96
 #: sunflower/gui/preferences/toolbar.py:96
+msgid "Toolbar style:"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/preferences/toolbar.py:98
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:98
+#: sunflower/gui/preferences/toolbar.py:98
+msgid "Icons"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/preferences/toolbar.py:99
+#: build/Sunflower/sunflower/tools/viewer.py:134
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:99
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/viewer.py:134
+#: sunflower/gui/preferences/toolbar.py:99 sunflower/tools/viewer.py:134
+msgid "Text"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/preferences/toolbar.py:100
+#: build/Sunflower/sunflower/gui/preferences/item_list.py:103
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:100
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:103
+#: sunflower/gui/preferences/toolbar.py:100
+#: sunflower/gui/preferences/item_list.py:103
+msgid "Both"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/preferences/toolbar.py:101
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:101
+#: sunflower/gui/preferences/toolbar.py:101
 msgid "Both horizontal"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:106
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:106
-#: sunflower/gui/preferences/toolbar.py:106
-msgid "Icon size:"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:108
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:108
-#: sunflower/gui/preferences/toolbar.py:108
-msgid "Same as menu item"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:109
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:109
-#: sunflower/gui/preferences/toolbar.py:109
-msgid "Small toolbar icon"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:110
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:110
-#: sunflower/gui/preferences/toolbar.py:110
-msgid "Large toolbar icon"
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/preferences/toolbar.py:111
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:111
 #: sunflower/gui/preferences/toolbar.py:111
-msgid "Same as buttons"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:112
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:112
-#: sunflower/gui/preferences/toolbar.py:112
-msgid "Same as drag icons"
+msgid "Icon size:"
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/preferences/toolbar.py:113
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:113
 #: sunflower/gui/preferences/toolbar.py:113
+msgid "Small toolbar icon"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/preferences/toolbar.py:114
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:114
+#: sunflower/gui/preferences/toolbar.py:114
+msgid "Large toolbar icon"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/preferences/toolbar.py:115
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:115
+#: sunflower/gui/preferences/toolbar.py:115
+msgid "Same as drag icons"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/preferences/toolbar.py:116
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:116
+#: sunflower/gui/preferences/toolbar.py:116
 msgid "Same as dialog"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:215
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:215
-#: sunflower/gui/preferences/toolbar.py:215
+#: build/Sunflower/sunflower/gui/preferences/toolbar.py:222
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:222
+#: sunflower/gui/preferences/toolbar.py:222
 msgid "missing plugin"
 msgstr ""
 
@@ -687,41 +675,39 @@ msgstr ""
 msgid "Horizontal split"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:46
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:68
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:46
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:68
-#: sunflower/gui/preferences/display.py:46
+#: build/Sunflower/sunflower/gui/preferences/display.py:37
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:37
+#: sunflower/gui/preferences/display.py:37
+msgid "Dark theme"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/preferences/display.py:48
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:48
+#: sunflower/gui/preferences/display.py:48
 msgid "Tabs"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/preferences/display.py:50
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:50
-#: sunflower/gui/preferences/display.py:50
-msgid "Focus new tab after opening"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/preferences/display.py:51
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:51
-#: sunflower/gui/preferences/display.py:51
-msgid "Show close button"
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/preferences/display.py:52
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:52
 #: sunflower/gui/preferences/display.py:52
-msgid "Show tab(s) even if there is only one"
+msgid "Focus new tab after opening"
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/preferences/display.py:53
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:53
 #: sunflower/gui/preferences/display.py:53
-msgid "Use Ubuntu coloring method for tab title bars"
+msgid "Show close button"
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/preferences/display.py:54
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:54
 #: sunflower/gui/preferences/display.py:54
+msgid "Show tab(s) even if there is only one"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/preferences/display.py:55
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:55
+#: sunflower/gui/preferences/display.py:55
 msgid "Change title bar color when started as super user"
 msgstr ""
 
@@ -790,32 +776,32 @@ msgstr ""
 msgid "Show notifications"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:105
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:105
+#: build/Sunflower/sunflower/gui/preferences/display.py:106
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:106
 #: sunflower/gui/preferences/display.py:106
 msgid "Use path completion on non-local paths"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:113
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:113
+#: build/Sunflower/sunflower/gui/preferences/display.py:114
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:114
 #: sunflower/gui/preferences/display.py:114
 msgid "Size format:"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:117
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:117
+#: build/Sunflower/sunflower/gui/preferences/display.py:118
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:118
 #: sunflower/gui/preferences/display.py:118
 msgid "Localized"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:118
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:118
+#: build/Sunflower/sunflower/gui/preferences/display.py:119
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:119
 #: sunflower/gui/preferences/display.py:119
 msgid "SI <small>(1 kB = 1000 B)</small>"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:119
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:119
+#: build/Sunflower/sunflower/gui/preferences/display.py:120
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:120
 #: sunflower/gui/preferences/display.py:120
 msgid "IEC <small>(1 KiB = 1024 B)</small>"
 msgstr ""
@@ -1112,367 +1098,467 @@ msgstr ""
 
 #: build/Sunflower/sunflower/gui/main_window.py:73
 #: build/Sunflower/sunflower/gui/main_window.py:76
-#: build/Sunflower/sunflower/gui/main_window.py:159
+#: build/Sunflower/sunflower/gui/main_window.py:163
 #: build/Sunflower/sunflower/gui/about_window.py:66
 #: build/Sunflower/sunflower/gui/about_window.py:67
-#: build/Sunflower/sunflower/__main__.py:225
+#: build/Sunflower/sunflower/__main__.py:224
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:73
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:76
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:159
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:163
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/about_window.py:66
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/about_window.py:67
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:225
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:224
 #: sunflower/gui/main_window.py:73 sunflower/gui/main_window.py:76
-#: sunflower/gui/main_window.py:159 sunflower/gui/about_window.py:66
-#: sunflower/gui/about_window.py:67 sunflower/__main__.py:224
+#: sunflower/gui/main_window.py:163 sunflower/gui/about_window.py:66
+#: sunflower/gui/about_window.py:67 sunflower/__main__.py:216
 msgid "Sunflower"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:193
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:193
-msgid "_File"
+#: build/Sunflower/sunflower/gui/main_window.py:180
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:180
+#: sunflower/gui/main_window.py:180
+msgid "Create new file, directory and more."
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:197
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:197
-msgid "New _tab"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:209
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:209
-#: sunflower/gui/main_window.py:183 sunflower/gui/main_window.py:1735
+#: build/Sunflower/sunflower/gui/main_window.py:187
+#: build/Sunflower/sunflower/gui/main_window.py:1738
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:187
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1738
+#: sunflower/gui/main_window.py:187 sunflower/gui/main_window.py:1738
 msgid "Create _file"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:218
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:218
-#: sunflower/gui/main_window.py:188 sunflower/gui/main_window.py:1736
+#: build/Sunflower/sunflower/gui/main_window.py:192
+#: build/Sunflower/sunflower/gui/main_window.py:1739
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:192
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1739
+#: sunflower/gui/main_window.py:192 sunflower/gui/main_window.py:1739
 msgid "Create _directory"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:230
-#: build/Sunflower/sunflower/plugin_base/item_list.py:964
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:230
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:964
-#: sunflower/plugin_base/item_list.py:964
-msgid "_Open"
+#: build/Sunflower/sunflower/gui/main_window.py:203
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:203
+#: sunflower/gui/main_window.py:203
+msgid "Create new tab"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:237
-#: build/Sunflower/sunflower/plugin_base/item_list.py:973
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:237
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:973
-#: sunflower/plugin_base/item_list.py:973
-msgid "Open in new ta_b"
+#: build/Sunflower/sunflower/gui/main_window.py:286
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:286
+#: sunflower/gui/main_window.py:286
+msgid "_Select all"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:247
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1146
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:247
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1146
-#: sunflower/plugin_base/item_list.py:1146
-msgid "_Properties"
+#: build/Sunflower/sunflower/gui/main_window.py:287
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:287
+#: sunflower/gui/main_window.py:287
+msgid "_Deselect all"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:257
-#: build/Sunflower/sunflower/indicator.py:50
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:257
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/indicator.py:50
-#: sunflower/gui/main_window.py:322 sunflower/gui/main_window.py:1737
-#: sunflower/indicator.py:50
-msgid "_Quit"
+#: build/Sunflower/sunflower/gui/main_window.py:288
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:288
+#: sunflower/gui/main_window.py:288
+msgid "Invert select_ion"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:267
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:267
-msgid "_Edit"
+#: build/Sunflower/sunflower/gui/main_window.py:290
+#: build/Sunflower/sunflower/gui/main_window.py:1742
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:290
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1742
+#: sunflower/gui/main_window.py:290 sunflower/gui/main_window.py:1742
+msgid "S_elect with pattern"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:270
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1037
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:270
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1037
-#: sunflower/plugin_base/item_list.py:1037
-msgid "Cu_t"
+#: build/Sunflower/sunflower/gui/main_window.py:291
+#: build/Sunflower/sunflower/gui/main_window.py:1743
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:291
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1743
+#: sunflower/gui/main_window.py:291 sunflower/gui/main_window.py:1743
+msgid "Deselect with pa_ttern"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:277
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1046
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:277
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1046
-#: sunflower/plugin_base/item_list.py:1046
-msgid "_Copy"
+#: build/Sunflower/sunflower/gui/main_window.py:292
+#: build/Sunflower/sunflower/gui/main_window.py:1744
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:292
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1744
+#: sunflower/gui/main_window.py:292 sunflower/gui/main_window.py:1744
+msgid "Select with same e_xtension"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:284
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1055
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:284
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1055
-#: sunflower/plugin_base/item_list.py:1055
-msgid "_Paste"
+#: build/Sunflower/sunflower/gui/main_window.py:293
+#: build/Sunflower/sunflower/gui/main_window.py:1745
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:293
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1745
+#: sunflower/gui/main_window.py:293 sunflower/gui/main_window.py:1745
+msgid "Deselect with same exte_nsion"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:294
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1102
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:294
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1102
-#: sunflower/plugin_base/item_list.py:1102
-msgid "_Delete"
+#: build/Sunflower/sunflower/gui/main_window.py:295
+#: build/Sunflower/sunflower/gui/main_window.py:1746
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:295
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1746
+#: sunflower/gui/main_window.py:295 sunflower/gui/main_window.py:1746
+msgid "Compare _directories"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:302
+#: build/Sunflower/sunflower/gui/main_window.py:1747
+#: build/Sunflower/sunflower/gui/main_window.py:1748
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:302
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1747
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1748
+#: sunflower/gui/main_window.py:302 sunflower/gui/main_window.py:1747
+#: sunflower/gui/main_window.py:1748
+msgid "_Find files"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:303
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:303
+#: sunflower/gui/main_window.py:303
+msgid "Advanced _rename"
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/main_window.py:304
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:304
-msgid "_Send to..."
+#: sunflower/gui/main_window.py:304
+msgid "_Mount manager"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:305
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:305
+#: sunflower/gui/main_window.py:305
+msgid "_Keyring manager"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:308
+#: build/Sunflower/sunflower/gui/main_window.py:1752
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:308
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1752
+#: sunflower/gui/main_window.py:308 sunflower/gui/main_window.py:1752
+msgid "Fast m_edia preview"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:309
+#: build/Sunflower/sunflower/gui/main_window.py:1753
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:309
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1753
+#: sunflower/gui/main_window.py:309 sunflower/gui/main_window.py:1753
+msgid "Show _hidden files"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:311
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:311
+#: sunflower/gui/main_window.py:311
+msgid "Show _toolbar"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:312
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:312
+#: sunflower/gui/main_window.py:312
+msgid "Show _titlebar"
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/main_window.py:313
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1127
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:313
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1127
-#: sunflower/plugin_base/item_list.py:1127
-msgid "Ma_ke link"
+#: sunflower/gui/main_window.py:313
+msgid "Show _command bar"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:319
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1133
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:319
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1133
-#: sunflower/plugin_base/item_list.py:1133
-msgid "_Rename..."
+#: build/Sunflower/sunflower/gui/main_window.py:314
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:314
+#: sunflower/gui/main_window.py:314
+msgid "_Horizontal split"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:315
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:315
+#: sunflower/gui/main_window.py:315
+msgid "_Dark theme"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:321
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:321
+#: sunflower/gui/main_window.py:321
+msgid "_Home page"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:322
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:322
+#: sunflower/gui/main_window.py:322
+msgid "Check for new version"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:323
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:323
+#: sunflower/gui/main_window.py:323
+msgid "_About"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:325
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:325
+#: sunflower/gui/main_window.py:325
+msgid "_Mark"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:326
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:326
+#: sunflower/gui/main_window.py:326
+msgid "_Tools"
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/main_window.py:327
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:327
-msgid "_Unmount"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:331
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:331
-msgid "Mount list is empty"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:340
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:340
-#: sunflower/gui/main_window.py:321 sunflower/gui/main_window.py:1738
-msgid "_Preferences"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:350
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:350
-#: sunflower/gui/main_window.py:316
-msgid "_Mark"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:353
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:353
-#: sunflower/gui/main_window.py:274
-msgid "_Select all"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:360
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:360
-#: sunflower/gui/main_window.py:275
-msgid "_Deselect all"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:365
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:365
-#: sunflower/gui/main_window.py:276
-msgid "Invert select_ion"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:371
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:371
-#: sunflower/gui/main_window.py:278 sunflower/gui/main_window.py:1739
-msgid "S_elect with pattern"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:377
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:377
-#: sunflower/gui/main_window.py:279 sunflower/gui/main_window.py:1740
-msgid "Deselect with pa_ttern"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:384
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:384
-#: sunflower/gui/main_window.py:280 sunflower/gui/main_window.py:1741
-msgid "Select with same e_xtension"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:390
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:390
-#: sunflower/gui/main_window.py:281 sunflower/gui/main_window.py:1742
-msgid "Deselect with same exte_nsion"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:397
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:397
-#: sunflower/gui/main_window.py:283 sunflower/gui/main_window.py:1743
-msgid "Compare _directories"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:405
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:405
-#: sunflower/gui/main_window.py:317
-msgid "_Tools"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:409
-#: build/Sunflower/sunflower/gui/main_window.py:592
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:409
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:592
-#: sunflower/gui/main_window.py:290 sunflower/gui/main_window.py:1744
-#: sunflower/gui/main_window.py:1745
-msgid "_Find files"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:417
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:417
-msgid "Find _duplicate files"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:422
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:422
-msgid "_Synchronize directories"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:428
-#: build/Sunflower/sunflower/gui/main_window.py:593
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:428
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:593
-#: sunflower/gui/main_window.py:291
-msgid "Advanced _rename"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:435
-#: build/Sunflower/sunflower/gui/main_window.py:595
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:435
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:595
-#: sunflower/gui/main_window.py:293
-msgid "_Keyring manager"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:443
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:443
-#: sunflower/gui/main_window.py:318
+#: sunflower/gui/main_window.py:327
 msgid "_View"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:446
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:446
-#: sunflower/gui/main_window.py:1748
-msgid "Rel_oad item list"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:456
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:456
-#: sunflower/gui/main_window.py:296 sunflower/gui/main_window.py:1749
-msgid "Fast m_edia preview"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:467
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:467
-#: sunflower/gui/main_window.py:301 sunflower/gui/main_window.py:1750
-msgid "Show _hidden files"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:475
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:475
-#: sunflower/gui/main_window.py:303
-msgid "Show _toolbar"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:483
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:483
-#: sunflower/gui/main_window.py:304
-msgid "Show _titlebar"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:491
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:491
-#: sunflower/gui/main_window.py:305
-msgid "Show _command bar"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:499
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:499
-#: sunflower/gui/main_window.py:306
-msgid "_Horizontal split"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:509
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:509
-msgid "_Commands"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:513
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:513
-msgid "_Operations"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:517
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:517
-msgid "There are no active operations"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:523
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:523
-#: sunflower/gui/main_window.py:320
+#: build/Sunflower/sunflower/gui/main_window.py:329
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:329
+#: sunflower/gui/main_window.py:329
 msgid "_Help"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:526
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:526
-#: sunflower/gui/main_window.py:312
-msgid "_Home page"
+#: build/Sunflower/sunflower/gui/main_window.py:330
+#: build/Sunflower/sunflower/gui/main_window.py:1741
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:330
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1741
+#: sunflower/gui/main_window.py:330 sunflower/gui/main_window.py:1741
+msgid "_Preferences"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:534
-#: build/Sunflower/sunflower/gui/main_window.py:598
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:534
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:598
-#: sunflower/gui/main_window.py:313
-msgid "Check for new version"
+#: build/Sunflower/sunflower/gui/main_window.py:331
+#: build/Sunflower/sunflower/gui/main_window.py:1740
+#: build/Sunflower/sunflower/indicator.py:50
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:331
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1740
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/indicator.py:50
+#: sunflower/gui/main_window.py:331 sunflower/gui/main_window.py:1740
+#: sunflower/indicator.py:50
+msgid "_Quit"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:541
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:541
-msgid "File a _bug report"
+#: build/Sunflower/sunflower/gui/main_window.py:387
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:387
+#: sunflower/gui/main_window.py:387
+msgid "Execute command:"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:550
-#: build/Sunflower/sunflower/gui/main_window.py:599
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:550
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:599
-#: sunflower/gui/main_window.py:314
-msgid "_About"
+#: build/Sunflower/sunflower/gui/main_window.py:423
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:423
+#: sunflower/gui/main_window.py:423
+msgid "Refresh"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:594
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:594
-#: sunflower/gui/main_window.py:292
-msgid "_Mount manager"
+#: build/Sunflower/sunflower/gui/main_window.py:423
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:423
+#: sunflower/gui/main_window.py:423
+msgid "Reload active item list"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:597
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:597
-msgid "Home page"
+#: build/Sunflower/sunflower/gui/main_window.py:424
+#: build/Sunflower/sunflower/tools/advanced_rename.py:95
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:424
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/advanced_rename.py:95
+#: sunflower/gui/main_window.py:424 sunflower/tools/advanced_rename.py:95
+msgid "Rename"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:601
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:601
-msgid "Tools"
+#: build/Sunflower/sunflower/gui/main_window.py:424
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:424
+#: sunflower/gui/main_window.py:424
+msgid "Rename selected file"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:602
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:602
-msgid "Help"
+#: build/Sunflower/sunflower/gui/main_window.py:425
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:425
+#: sunflower/gui/main_window.py:425
+msgid "Preview"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:603
+#: build/Sunflower/sunflower/gui/main_window.py:425
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:425
+#: sunflower/gui/main_window.py:425
+msgid "Preview selected file"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:426
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:426
+#: sunflower/gui/main_window.py:426
+msgid "Edit selected file"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:427
+#: build/Sunflower/sunflower/gui/input_dialog.py:916
+#: build/Sunflower/sunflower/gui/input_dialog.py:1263
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:427
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:916
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1263
+#: sunflower/gui/main_window.py:427 sunflower/gui/input_dialog.py:916
+#: sunflower/gui/input_dialog.py:1263
+msgid "Copy"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:427
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:427
+#: sunflower/gui/main_window.py:427
+msgid "Copy selected items from active to opposite list"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:428
+#: build/Sunflower/sunflower/gui/input_dialog.py:1015
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:428
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1015
+#: sunflower/gui/main_window.py:428 sunflower/gui/input_dialog.py:1015
+msgid "Move"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:428
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:428
+#: sunflower/gui/main_window.py:428
+msgid "Move selected items from active to opposite list"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:429
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:429
+#: sunflower/gui/main_window.py:429
+msgid "Create"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:429
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:429
+#: sunflower/gui/main_window.py:429
+msgid "Create new directory"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:430
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:430
+#: sunflower/gui/main_window.py:430
+msgid "Delete"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:430
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:430
+#: sunflower/gui/main_window.py:430
+msgid "Delete selected items"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:474
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:474
+#: sunflower/gui/main_window.py:474
+msgid "Edit commands"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:1304
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1304
+#: sunflower/gui/main_window.py:1304
+msgid "Select items"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:1305
+#: build/Sunflower/sunflower/gui/main_window.py:1361
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1305
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1361
+#: sunflower/gui/main_window.py:1305 sunflower/gui/main_window.py:1361
+msgid "Selection pattern (eg.: *.jpg):"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:1360
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1360
+#: sunflower/gui/main_window.py:1360
+msgid "Deselect items"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:1397
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1397
+#: sunflower/gui/main_window.py:1397
+msgid "First level of compared directories is identical."
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:1521
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1521
+#: sunflower/gui/main_window.py:1521
+msgid ""
+"There was a problem starting external terminal application. Check if command "
+"is valid!"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:1729
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1729
+#: sunflower/gui/main_window.py:1729
+msgid "Main Menu"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:1734
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1734
+#: sunflower/gui/main_window.py:1734
+msgid "Restore handle position"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:1735
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1735
+#: sunflower/gui/main_window.py:1735
+msgid "Move handle to the left"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:1736
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1736
+#: sunflower/gui/main_window.py:1736
+msgid "Move handle to the right"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:1751
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1751
+#: sunflower/gui/main_window.py:1751
+msgid "Rel_oad item list"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:1818
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1818
+#: sunflower/gui/main_window.py:1818
+msgid ""
+"Error saving configuration to files in your home directory. Make sure you "
+"have enough permissions."
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:2451
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2451
+#: sunflower/gui/main_window.py:2451
+msgid ""
+"Active object is not item list. Advanced rename tool needs files and "
+"directories."
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:2466
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2466
+#: sunflower/gui/main_window.py:2466
+msgid ""
+"No rename extensions were found. Please enable basic rename options plugin "
+"and try again."
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:2493
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2493
+#: sunflower/gui/main_window.py:2493
+msgid ""
+"No extensions for finding files were found. Please enable basic find file "
+"options plugin and try again."
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:2519
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2519
+#: sunflower/gui/main_window.py:2519
+msgid "Keyring is empty!"
+msgstr ""
+
+#: build/Sunflower/sunflower/gui/main_window.py:2532
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2532
+#: sunflower/gui/main_window.py:2532
+msgid ""
+"Keyring is not available. Make sure you have Python Gnome keyring module "
+"installed."
+msgstr ""
+
 #: build/Sunflower/sunflower/gui/preferences_window.py:32
 #: build/Sunflower/sunflower/gui/preferences_window.py:47
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:603
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences_window.py:32
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences_window.py:47
 #: sunflower/gui/preferences_window.py:32
@@ -1480,235 +1566,15 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/main_window.py:605
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:605
-msgid "Quit"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:664
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:664
-#: sunflower/gui/main_window.py:378
-msgid "Execute command:"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:704
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:704
-#: sunflower/gui/main_window.py:414
-msgid "Refresh"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:704
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:704
-#: sunflower/gui/main_window.py:414
-msgid "Reload active item list"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:705
-#: build/Sunflower/sunflower/tools/advanced_rename.py:95
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:705
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/advanced_rename.py:95
-#: sunflower/gui/main_window.py:415 sunflower/tools/advanced_rename.py:95
-msgid "Rename"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:705
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:705
-#: sunflower/gui/main_window.py:415
-msgid "Rename selected file"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:706
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:706
-#: sunflower/gui/main_window.py:416
-msgid "Preview"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:706
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:706
-#: sunflower/gui/main_window.py:416
-msgid "Preview selected file"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:707
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:707
-#: sunflower/gui/main_window.py:417
-msgid "Edit selected file"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:708
-#: build/Sunflower/sunflower/gui/input_dialog.py:916
-#: build/Sunflower/sunflower/gui/input_dialog.py:1263
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:708
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:916
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1263
-#: sunflower/gui/main_window.py:418 sunflower/gui/input_dialog.py:916
-#: sunflower/gui/input_dialog.py:1263
-msgid "Copy"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:708
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:708
-#: sunflower/gui/main_window.py:418
-msgid "Copy selected items from active to opposite list"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:709
-#: build/Sunflower/sunflower/gui/input_dialog.py:1015
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:709
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1015
-#: sunflower/gui/main_window.py:419 sunflower/gui/input_dialog.py:1015
-msgid "Move"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:709
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:709
-#: sunflower/gui/main_window.py:419
-msgid "Move selected items from active to opposite list"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:710
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:710
-#: sunflower/gui/main_window.py:420
-msgid "Create"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:710
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:710
-#: sunflower/gui/main_window.py:420
-msgid "Create new directory"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:711
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:711
-#: sunflower/gui/main_window.py:421
-msgid "Delete"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:711
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:711
-#: sunflower/gui/main_window.py:421
-msgid "Delete selected items"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:757
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:757
-#: sunflower/gui/main_window.py:465
-msgid "Edit commands"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:1584
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1584
-#: sunflower/gui/main_window.py:1301
-msgid "Select items"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:1585
-#: build/Sunflower/sunflower/gui/main_window.py:1641
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1585
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1641
-#: sunflower/gui/main_window.py:1302 sunflower/gui/main_window.py:1358
-msgid "Selection pattern (eg.: *.jpg):"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:1640
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1640
-#: sunflower/gui/main_window.py:1357
-msgid "Deselect items"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:1677
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1677
-#: sunflower/gui/main_window.py:1394
-msgid "First level of compared directories is identical."
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:1801
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1801
-#: sunflower/gui/main_window.py:1518
-msgid ""
-"There was a problem starting external terminal application. Check if command "
-"is valid!"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:2009
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2009
-#: sunflower/gui/main_window.py:1726
-msgid "Main Menu"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:2075
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2075
-#: sunflower/gui/main_window.py:1731
-msgid "Restore handle position"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:2076
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2076
-#: sunflower/gui/main_window.py:1732
-msgid "Move handle to the left"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:2077
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2077
-#: sunflower/gui/main_window.py:1733
-msgid "Move handle to the right"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:2121
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2121
-#: sunflower/gui/main_window.py:1815
-msgid ""
-"Error saving configuration to files in your home directory. Make sure you "
-"have enough permissions."
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:2773
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2773
-#: sunflower/gui/main_window.py:2443
-msgid ""
-"Active object is not item list. Advanced rename tool needs files and "
-"directories."
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:2788
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2788
-#: sunflower/gui/main_window.py:2458
-msgid ""
-"No rename extensions were found. Please enable basic rename options plugin "
-"and try again."
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:2815
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2815
-#: sunflower/gui/main_window.py:2485
-msgid ""
-"No extensions for finding files were found. Please enable basic find file "
-"options plugin and try again."
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:2841
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2841
-#: sunflower/gui/main_window.py:2511
-msgid "Keyring is empty!"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/main_window.py:2854
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2854
-#: sunflower/gui/main_window.py:2524
-msgid ""
-"Keyring is not available. Make sure you have Python Gnome keyring module "
-"installed."
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/preferences_window.py:105
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences_window.py:105
-#: sunflower/gui/preferences_window.py:105
+#: build/Sunflower/sunflower/gui/preferences_window.py:106
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences_window.py:106
+#: sunflower/gui/preferences_window.py:106
 msgid "Program restart required!"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/preferences_window.py:141
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences_window.py:141
-#: sunflower/gui/preferences_window.py:142
+#: build/Sunflower/sunflower/gui/preferences_window.py:143
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences_window.py:143
+#: sunflower/gui/preferences_window.py:143
 msgid ""
 "There are unsaved changes.\n"
 "Do you want to save them?"
@@ -1771,13 +1637,13 @@ msgstr ""
 
 #: build/Sunflower/sunflower/gui/properties_window.py:83
 #: build/Sunflower/sunflower/plugins/rename_extensions/default.py:267
-#: build/Sunflower/sunflower/plugins/find_file_extensions/default.py:120
+#: build/Sunflower/sunflower/plugins/find_file_extensions/default.py:115
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:83
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/default.py:267
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/default.py:120
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/default.py:115
 #: sunflower/gui/properties_window.py:83
 #: sunflower/plugins/rename_extensions/default.py:267
-#: sunflower/plugins/find_file_extensions/default.py:120
+#: sunflower/plugins/find_file_extensions/default.py:115
 msgid "Basic"
 msgstr ""
 
@@ -1802,22 +1668,22 @@ msgid "Emblems"
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/properties_window.py:130
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1026
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1027
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:130
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1026
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1027
 #: sunflower/gui/properties_window.py:130
-#: sunflower/plugins/file_list/file_list.py:1026
+#: sunflower/plugins/file_list/file_list.py:1027
 msgid ""
 "File or directory with specified name already exists in current directory. "
 "Item could not be renamed."
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/properties_window.py:165
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1011
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1012
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:165
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1011
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1012
 #: sunflower/gui/properties_window.py:165
-#: sunflower/plugins/file_list/file_list.py:1011
+#: sunflower/plugins/file_list/file_list.py:1012
 msgid "Error renaming specified item. Make sure you have enough permissions."
 msgstr ""
 
@@ -1830,10 +1696,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: build/Sunflower/sunflower/gui/properties_window.py:239
-#: build/Sunflower/sunflower/gui/operation_dialog.py:362
+#: build/Sunflower/sunflower/gui/operation_dialog.py:313
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:239
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:362
-#: sunflower/gui/properties_window.py:239 sunflower/gui/operation_dialog.py:362
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:313
+#: sunflower/gui/properties_window.py:239 sunflower/gui/operation_dialog.py:313
 msgid "unknown"
 msgstr ""
 
@@ -1846,21 +1712,17 @@ msgstr ""
 #: build/Sunflower/sunflower/gui/properties_window.py:421
 #: build/Sunflower/sunflower/gui/input_dialog.py:1337
 #: build/Sunflower/sunflower/gui/input_dialog.py:1516
-#: build/Sunflower/sunflower/plugins/default_toolbar/bookmark_button.py:75
 #: build/Sunflower/sunflower/plugins/file_list/dialogs.py:60
 #: build/Sunflower/sunflower/plugins/file_list/dialogs.py:273
 #: build/Sunflower/sunflower/plugins/file_list/dialogs.py:467
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:421
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1337
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1516
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/bookmark_button.py:75
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:60
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:273
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:467
 #: sunflower/gui/properties_window.py:421 sunflower/gui/input_dialog.py:1337
-#: sunflower/gui/input_dialog.py:1516
-#: sunflower/plugins/default_toolbar/bookmark_button.py:75
-#: sunflower/plugins/file_list/dialogs.py:60
+#: sunflower/gui/input_dialog.py:1516 sunflower/plugins/file_list/dialogs.py:60
 #: sunflower/plugins/file_list/dialogs.py:273
 #: sunflower/plugins/file_list/dialogs.py:467
 msgid "Name:"
@@ -2056,10 +1918,8 @@ msgid "Create hard link"
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/input_dialog.py:132
-#: build/Sunflower/sunflower/tools/find_files.py:76
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:132
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:76
-#: sunflower/gui/input_dialog.py:132 sunflower/tools/find_files.py:76
+#: sunflower/gui/input_dialog.py:132
 msgid "Browse"
 msgstr ""
 
@@ -2272,16 +2132,19 @@ msgstr[1] ""
 #: build/Sunflower/sunflower/gui/input_dialog.py:915
 #: build/Sunflower/sunflower/gui/input_dialog.py:1014
 #: build/Sunflower/sunflower/gui/input_dialog.py:1450
-#: build/Sunflower/sunflower/gui/operation_dialog.py:206
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1995
+#: build/Sunflower/sunflower/gui/operation_dialog.py:189
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1986
+#: build/Sunflower/sunflower/tools/find_files.py:286
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:915
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1014
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1450
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:206
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1995
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:189
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1986
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:286
 #: sunflower/gui/input_dialog.py:915 sunflower/gui/input_dialog.py:1014
-#: sunflower/gui/input_dialog.py:1450 sunflower/gui/operation_dialog.py:206
-#: sunflower/plugins/file_list/file_list.py:1985
+#: sunflower/gui/input_dialog.py:1450 sunflower/gui/operation_dialog.py:189
+#: sunflower/plugins/file_list/file_list.py:1986
+#: sunflower/tools/find_files.py:286
 msgid "Cancel"
 msgstr ""
 
@@ -2475,8 +2338,10 @@ msgid "Application name:"
 msgstr ""
 
 #: build/Sunflower/sunflower/gui/input_dialog.py:1646
+#: build/Sunflower/sunflower/tools/find_files.py:287
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1646
-#: sunflower/gui/input_dialog.py:1646
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:287
+#: sunflower/gui/input_dialog.py:1646 sunflower/tools/find_files.py:287
 msgid "Select"
 msgstr ""
 
@@ -2499,129 +2364,99 @@ msgstr ""
 msgid "Use a custom command"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:91
+#: build/Sunflower/sunflower/gui/operation_dialog.py:75
 #: build/Sunflower/sunflower/gui/error_list.py:48
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:91
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:75
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/error_list.py:48
-#: sunflower/gui/operation_dialog.py:91 sunflower/gui/error_list.py:48
+#: sunflower/gui/operation_dialog.py:75 sunflower/gui/error_list.py:48
 msgid "Source:"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:92
+#: build/Sunflower/sunflower/gui/operation_dialog.py:76
 #: build/Sunflower/sunflower/gui/error_list.py:54
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:92
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:76
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/error_list.py:54
-#: sunflower/gui/operation_dialog.py:92 sunflower/gui/error_list.py:54
+#: sunflower/gui/operation_dialog.py:76 sunflower/gui/error_list.py:54
 msgid "Destination:"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:149
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:149
-#: sunflower/gui/operation_dialog.py:149
+#: build/Sunflower/sunflower/gui/operation_dialog.py:133
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:133
+#: sunflower/gui/operation_dialog.py:133
 msgid "ETA:"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:150
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:150
-#: sunflower/gui/operation_dialog.py:150
+#: build/Sunflower/sunflower/gui/operation_dialog.py:134
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:134
+#: sunflower/gui/operation_dialog.py:134
 msgid "Speed:"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:151
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:151
-#: sunflower/gui/operation_dialog.py:151
+#: build/Sunflower/sunflower/gui/operation_dialog.py:135
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:135
+#: sunflower/gui/operation_dialog.py:135
 msgid "Total size:"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:152
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:152
-#: sunflower/gui/operation_dialog.py:152
+#: build/Sunflower/sunflower/gui/operation_dialog.py:136
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:136
+#: sunflower/gui/operation_dialog.py:136
 msgid "Total count:"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:205
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:205
-#: sunflower/gui/operation_dialog.py:205
-msgid "Minimize"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/operation_dialog.py:213
-#: build/Sunflower/sunflower/gui/operation_dialog.py:268
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:213
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:268
-#: sunflower/gui/operation_dialog.py:213 sunflower/gui/operation_dialog.py:268
+#: build/Sunflower/sunflower/gui/operation_dialog.py:196
+#: build/Sunflower/sunflower/gui/operation_dialog.py:240
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:196
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:240
+#: sunflower/gui/operation_dialog.py:196 sunflower/gui/operation_dialog.py:240
 msgid "Pause"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:261
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:261
-#: sunflower/gui/operation_dialog.py:261
+#: build/Sunflower/sunflower/gui/operation_dialog.py:233
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:233
+#: sunflower/gui/operation_dialog.py:233
 msgid "Resume"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:273
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:273
-#: sunflower/gui/operation_dialog.py:273
+#: build/Sunflower/sunflower/gui/operation_dialog.py:245
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:245
+#: sunflower/gui/operation_dialog.py:245
 msgid "Are you sure about canceling current operation?"
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:343
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:343
-#: sunflower/gui/operation_dialog.py:343
+#: build/Sunflower/sunflower/gui/operation_dialog.py:301
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:301
+#: sunflower/gui/operation_dialog.py:301
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:349
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:349
-#: sunflower/gui/operation_dialog.py:349
+#: build/Sunflower/sunflower/gui/operation_dialog.py:305
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:305
+#: sunflower/gui/operation_dialog.py:305
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:356
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:356
-#: sunflower/gui/operation_dialog.py:356
+#: build/Sunflower/sunflower/gui/operation_dialog.py:309
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:309
+#: sunflower/gui/operation_dialog.py:309
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:501
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:501
-#: sunflower/gui/operation_dialog.py:503
-msgid "Copy Selection"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/operation_dialog.py:522
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:522
-#: sunflower/gui/operation_dialog.py:524
-msgid "Move Selection"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/operation_dialog.py:547
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:547
-#: sunflower/gui/operation_dialog.py:549
-msgid "Delete Selection"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/operation_dialog.py:548
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:548
-#: sunflower/gui/operation_dialog.py:550
+#: build/Sunflower/sunflower/gui/operation_dialog.py:478
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:478
+#: sunflower/gui/operation_dialog.py:478
 msgid "Removing items..."
 msgstr ""
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:574
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:574
-#: sunflower/gui/operation_dialog.py:576
-msgid "Rename Items"
-msgstr ""
-
-#: build/Sunflower/sunflower/gui/operation_dialog.py:575
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:575
-#: sunflower/gui/operation_dialog.py:577
+#: build/Sunflower/sunflower/gui/operation_dialog.py:504
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:504
+#: sunflower/gui/operation_dialog.py:504
 msgid "Renaming items..."
 msgstr ""
 
@@ -2720,41 +2555,41 @@ msgstr ""
 msgid "For:"
 msgstr ""
 
-#: build/Sunflower/sunflower/__main__.py:98
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:98
-#: sunflower/__main__.py:97
+#: build/Sunflower/sunflower/__main__.py:97
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:97
+#: sunflower/__main__.py:89
 msgid "Show version number"
 msgstr ""
 
-#: build/Sunflower/sunflower/__main__.py:107
-#: build/Sunflower/sunflower/__main__.py:116
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:107
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:116
-#: sunflower/__main__.py:106 sunflower/__main__.py:115
+#: build/Sunflower/sunflower/__main__.py:106
+#: build/Sunflower/sunflower/__main__.py:115
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:106
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:115
+#: sunflower/__main__.py:98 sunflower/__main__.py:107
 msgid "Skip loading additional plugins"
 msgstr ""
 
-#: build/Sunflower/sunflower/__main__.py:125
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:125
-#: sunflower/__main__.py:124
+#: build/Sunflower/sunflower/__main__.py:124
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:124
+#: sunflower/__main__.py:116
 msgid "Open new tab on the left notebook"
 msgstr ""
 
-#: build/Sunflower/sunflower/__main__.py:134
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:134
-#: sunflower/__main__.py:133
+#: build/Sunflower/sunflower/__main__.py:133
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:133
+#: sunflower/__main__.py:125
 msgid "Open new tab on the right notebook"
 msgstr ""
 
-#: build/Sunflower/sunflower/__main__.py:143
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:143
-#: sunflower/__main__.py:142
+#: build/Sunflower/sunflower/__main__.py:142
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:142
+#: sunflower/__main__.py:134
 msgid "Open terminal tab on the left notebook"
 msgstr ""
 
-#: build/Sunflower/sunflower/__main__.py:152
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:152
-#: sunflower/__main__.py:151
+#: build/Sunflower/sunflower/__main__.py:151
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:151
+#: sunflower/__main__.py:143
 msgid "Open terminal tab on the right notebook"
 msgstr ""
 
@@ -2770,46 +2605,46 @@ msgstr ""
 msgid "Context menu"
 msgstr ""
 
-#: build/Sunflower/sunflower/widgets/tab_label.py:73
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:73
+#: build/Sunflower/sunflower/widgets/tab_label.py:74
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:74
 #: sunflower/widgets/tab_label.py:74
 msgid "Unlock"
 msgstr ""
 
-#: build/Sunflower/sunflower/widgets/tab_label.py:73
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:73
+#: build/Sunflower/sunflower/widgets/tab_label.py:74
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:74
 #: sunflower/widgets/tab_label.py:74
 msgid "Lock"
 msgstr ""
 
-#: build/Sunflower/sunflower/widgets/tab_label.py:77
+#: build/Sunflower/sunflower/widgets/tab_label.py:78
 #: build/Sunflower/sunflower/plugin_base/plugin.py:136
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:77
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:78
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/plugin.py:136
 #: sunflower/widgets/tab_label.py:78 sunflower/plugin_base/plugin.py:136
 msgid "Duplicate tab"
 msgstr ""
 
-#: build/Sunflower/sunflower/widgets/tab_label.py:81
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:81
+#: build/Sunflower/sunflower/widgets/tab_label.py:82
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:82
 #: sunflower/widgets/tab_label.py:82
 msgid "Move to opposite panel"
 msgstr ""
 
-#: build/Sunflower/sunflower/widgets/tab_label.py:88
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:88
+#: build/Sunflower/sunflower/widgets/tab_label.py:89
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:89
 #: sunflower/widgets/tab_label.py:89
 msgid "Close Tab"
 msgstr ""
 
-#: build/Sunflower/sunflower/widgets/tab_label.py:94
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:94
+#: build/Sunflower/sunflower/widgets/tab_label.py:95
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:95
 #: sunflower/widgets/tab_label.py:95
 msgid "Close All"
 msgstr ""
 
-#: build/Sunflower/sunflower/widgets/tab_label.py:99
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:99
+#: build/Sunflower/sunflower/widgets/tab_label.py:100
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:100
 #: sunflower/widgets/tab_label.py:100
 msgid "Close Other Tabs"
 msgstr ""
@@ -2846,68 +2681,106 @@ msgstr ""
 msgid "Operation queue with specified name already exists."
 msgstr ""
 
-#: build/Sunflower/sunflower/mounts.py:64
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/mounts.py:64
-#: sunflower/mounts.py:64
-msgid "Specified item can not be unmounted."
+#: build/Sunflower/sunflower/mounts.py:65
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/mounts.py:65
+#: sunflower/mounts.py:65
+msgid "Selected volume can not be mounted."
 msgstr ""
 
-#: build/Sunflower/sunflower/keyring.py:60
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:60
+#: build/Sunflower/sunflower/mounts.py:81
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/mounts.py:81
+#: sunflower/mounts.py:81
+msgid "Selected mount can not be unmounted."
+msgstr ""
+
+#: build/Sunflower/sunflower/mounts.py:97
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/mounts.py:97
+#: sunflower/mounts.py:97
+msgid "Selected volume can not be ejected."
+msgstr ""
+
+#: build/Sunflower/sunflower/mounts.py:184
+#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:197
+#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:551
+#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:903
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/mounts.py:184
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:197
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:551
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:903
+#: sunflower/mounts.py:184 sunflower/plugins/file_list/gio_extension.py:197
+#: sunflower/plugins/file_list/gio_extension.py:551
+#: sunflower/plugins/file_list/gio_extension.py:903
+msgid "Unmount"
+msgstr ""
+
+#: build/Sunflower/sunflower/mounts.py:190
+#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:194
+#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:548
+#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:900
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/mounts.py:190
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:194
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:548
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:900
+#: sunflower/mounts.py:190 sunflower/plugins/file_list/gio_extension.py:194
+#: sunflower/plugins/file_list/gio_extension.py:548
+#: sunflower/plugins/file_list/gio_extension.py:900
+msgid "Mount"
+msgstr ""
+
+#: build/Sunflower/sunflower/mounts.py:196
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/mounts.py:196
+#: sunflower/mounts.py:196
+msgid "Eject"
+msgstr ""
+
+#: build/Sunflower/sunflower/keyring.py:63
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:63
 #: sunflower/keyring.py:63
 msgid "Keyring is unlocked"
 msgstr ""
 
-#: build/Sunflower/sunflower/keyring.py:61
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:61
+#: build/Sunflower/sunflower/keyring.py:64
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:64
 #: sunflower/keyring.py:64
 msgid "Keyring is locked"
 msgstr ""
 
-#: build/Sunflower/sunflower/keyring.py:108
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:108
+#: build/Sunflower/sunflower/keyring.py:111
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:111
 #: sunflower/keyring.py:111
 msgid "Unlock keyring"
 msgstr ""
 
-#: build/Sunflower/sunflower/keyring.py:109
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:109
+#: build/Sunflower/sunflower/keyring.py:112
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:112
 #: sunflower/keyring.py:112
 msgid "Please enter your keyring password:"
 msgstr ""
 
-#: build/Sunflower/sunflower/keyring.py:309
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:309
+#: build/Sunflower/sunflower/keyring.py:312
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:312
 #: sunflower/keyring.py:312
 msgid "New keyring"
 msgstr ""
 
-#: build/Sunflower/sunflower/keyring.py:311
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:311
+#: build/Sunflower/sunflower/keyring.py:314
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:314
 #: sunflower/keyring.py:314
 msgid ""
 "We need to create a new keyring to safely store your passwords. Choose the "
 "password you want to use for it."
 msgstr ""
 
-#: build/Sunflower/sunflower/toolbar.py:132
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/toolbar.py:132
-#: sunflower/toolbar.py:132
+#: build/Sunflower/sunflower/toolbar.py:122
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/toolbar.py:122
+#: sunflower/toolbar.py:122
 msgid ""
 "Error adding widget. You need to enter unique name and select widget type."
 msgstr ""
 
-#: build/Sunflower/sunflower/toolbar.py:147
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/toolbar.py:147
-#: sunflower/toolbar.py:147
-msgid ""
-"Widget with specified name already exists. You need to enter unique name and "
-"select widget type."
-msgstr ""
-
-#: build/Sunflower/sunflower/toolbar.py:181
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/toolbar.py:181
-#: sunflower/toolbar.py:181
+#: build/Sunflower/sunflower/toolbar.py:156
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/toolbar.py:156
+#: sunflower/toolbar.py:156
 msgid ""
 "Plugin used to create selected toolbar widget is not active or not present. "
 "In order to edit this entry you need to activate plugin used to create it."
@@ -2925,21 +2798,21 @@ msgstr ""
 msgid "Go to parent directory"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/default_toolbar/bookmark_button.py:59
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/bookmark_button.py:59
-#: sunflower/plugins/default_toolbar/bookmark_button.py:59
+#: build/Sunflower/sunflower/plugins/default_toolbar/bookmark_button.py:63
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/bookmark_button.py:63
+#: sunflower/plugins/default_toolbar/bookmark_button.py:63
 msgid "Configure bookmark button"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/default_toolbar/bookmark_button.py:85
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/bookmark_button.py:85
-#: sunflower/plugins/default_toolbar/bookmark_button.py:85
+#: build/Sunflower/sunflower/plugins/default_toolbar/bookmark_button.py:79
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/bookmark_button.py:79
+#: sunflower/plugins/default_toolbar/bookmark_button.py:79
 msgid "Path:"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/default_toolbar/bookmark_button.py:89
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/bookmark_button.py:89
-#: sunflower/plugins/default_toolbar/bookmark_button.py:89
+#: build/Sunflower/sunflower/plugins/default_toolbar/bookmark_button.py:83
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/bookmark_button.py:83
+#: sunflower/plugins/default_toolbar/bookmark_button.py:83
 msgid "Show label"
 msgstr ""
 
@@ -3024,56 +2897,56 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:492
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:492
-#: sunflower/plugins/file_list/file_list.py:492
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:493
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:493
+#: sunflower/plugins/file_list/file_list.py:493
 msgid "Invalid selection!"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:667
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:667
-#: sunflower/plugins/file_list/file_list.py:667
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:668
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:668
+#: sunflower/plugins/file_list/file_list.py:668
 msgid ""
 "There was an error creating directory. Make sure you have enough "
 "permissions. "
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:694
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:694
-#: sunflower/plugins/file_list/file_list.py:694
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:695
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:695
+#: sunflower/plugins/file_list/file_list.py:695
 #, python-brace-format
 msgid "File already exists: {0}"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:697
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:697
-#: sunflower/plugins/file_list/file_list.py:697
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:698
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:698
+#: sunflower/plugins/file_list/file_list.py:698
 #, python-brace-format
 msgid "Directory with same name exists: {0}"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:733
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:733
-#: sunflower/plugins/file_list/file_list.py:733
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:734
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:734
+#: sunflower/plugins/file_list/file_list.py:734
 msgid ""
 "There was an error creating file. Make sure you have enough permissions."
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:795
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:795
-#: sunflower/plugins/file_list/file_list.py:795
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:796
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:796
+#: sunflower/plugins/file_list/file_list.py:796
 msgid "Error creating new link."
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:811
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:811
-#: sunflower/plugins/file_list/file_list.py:811
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:812
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:812
+#: sunflower/plugins/file_list/file_list.py:812
 msgid "Current file system does not support linking."
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:835
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:835
-#: sunflower/plugins/file_list/file_list.py:835
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:836
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:836
+#: sunflower/plugins/file_list/file_list.py:836
 #, python-brace-format
 msgid ""
 "You are about to <i><b>delete</b></i> {0} item.\n"
@@ -3084,9 +2957,9 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:844
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:844
-#: sunflower/plugins/file_list/file_list.py:844
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:845
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:845
+#: sunflower/plugins/file_list/file_list.py:845
 #, python-brace-format
 msgid ""
 "You are about to move {0} item to <i><b>trash</b></i>.\n"
@@ -3097,57 +2970,57 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1198
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1198
-#: sunflower/plugins/file_list/file_list.py:1198
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1199
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1199
+#: sunflower/plugins/file_list/file_list.py:1199
 msgid "Other application..."
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1604
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1604
-#: sunflower/plugins/file_list/file_list.py:1604
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1605
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1605
+#: sunflower/plugins/file_list/file_list.py:1605
 msgid "No files selected."
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1883
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1883
-#: sunflower/plugins/file_list/file_list.py:1873
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1874
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1874
+#: sunflower/plugins/file_list/file_list.py:1874
 msgid "Free:"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1884
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1884
-#: sunflower/plugins/file_list/file_list.py:1874
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1875
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1875
+#: sunflower/plugins/file_list/file_list.py:1875
 msgid "Total:"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1955
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1955
-#: sunflower/plugins/file_list/file_list.py:1945
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1946
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1946
+#: sunflower/plugins/file_list/file_list.py:1946
 msgid "Copy here"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1960
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1960
-#: sunflower/plugins/file_list/file_list.py:1950
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1951
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1951
+#: sunflower/plugins/file_list/file_list.py:1951
 msgid "Move here"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1965
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1965
-#: sunflower/plugins/file_list/file_list.py:1955
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1956
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1956
+#: sunflower/plugins/file_list/file_list.py:1956
 msgid "Link here"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:2344
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:2344
-#: sunflower/plugins/file_list/file_list.py:2334
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:2335
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:2335
+#: sunflower/plugins/file_list/file_list.py:2335
 msgid "No such file or directory"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:2363
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:2363
-#: sunflower/plugins/file_list/file_list.py:2353
+#: build/Sunflower/sunflower/plugins/file_list/file_list.py:2354
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:2354
+#: sunflower/plugins/file_list/file_list.py:2354
 #, python-brace-format
 msgid ""
 "Error changing working directory to:\n"
@@ -3197,30 +3070,6 @@ msgstr ""
 #: sunflower/plugins/file_list/gio_extension.py:519
 #: sunflower/plugins/file_list/gio_extension.py:871
 msgid "URI"
-msgstr ""
-
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:194
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:548
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:900
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:194
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:548
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:900
-#: sunflower/plugins/file_list/gio_extension.py:194
-#: sunflower/plugins/file_list/gio_extension.py:548
-#: sunflower/plugins/file_list/gio_extension.py:900
-msgid "Mount"
-msgstr ""
-
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:197
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:551
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:903
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:197
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:551
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:903
-#: sunflower/plugins/file_list/gio_extension.py:197
-#: sunflower/plugins/file_list/gio_extension.py:551
-#: sunflower/plugins/file_list/gio_extension.py:903
-msgid "Unmount"
 msgstr ""
 
 #: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:423
@@ -3336,9 +3185,9 @@ msgid "Server type:"
 msgstr ""
 
 #: build/Sunflower/sunflower/plugins/sessions/plugin.py:34
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:358
+#: build/Sunflower/sunflower/plugins/sessions/plugin.py:364
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:34
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:358
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:364
 #: sunflower/plugins/sessions/plugin.py:34
 #: sunflower/plugins/sessions/plugin.py:364
 msgid "Sessions"
@@ -3348,6 +3197,15 @@ msgstr ""
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:67
 #: sunflower/plugins/sessions/plugin.py:67
 msgid "Locked"
+msgstr ""
+
+#: build/Sunflower/sunflower/plugins/sessions/plugin.py:68
+#: build/Sunflower/sunflower/plugins/sessions/plugin.py:283
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:68
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:283
+#: sunflower/plugins/sessions/plugin.py:68
+#: sunflower/plugins/sessions/plugin.py:283
+msgid "Session manager"
 msgstr ""
 
 #: build/Sunflower/sunflower/plugins/sessions/plugin.py:87
@@ -3374,23 +3232,29 @@ msgstr ""
 msgid "New session"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:322
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:322
-msgid "Locked session preserves tab layout at the time of locking."
-msgstr ""
-
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:325
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:325
-msgid "Manage sessions"
-msgstr ""
-
 #: build/Sunflower/sunflower/plugins/sessions/plugin.py:328
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:328
-msgid "Save session"
+#: sunflower/plugins/sessions/plugin.py:328
+msgid ""
+"Lock current session\n"
+"<small>Locking session preserves tab layout at the time of activation.</"
+"small>"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:362
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:362
+#: build/Sunflower/sunflower/plugins/sessions/plugin.py:331
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:331
+#: sunflower/plugins/sessions/plugin.py:331
+msgid "Manage"
+msgstr ""
+
+#: build/Sunflower/sunflower/plugins/sessions/plugin.py:334
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:334
+#: sunflower/plugins/sessions/plugin.py:334
+msgid "Save"
+msgstr ""
+
+#: build/Sunflower/sunflower/plugins/sessions/plugin.py:368
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:368
 #: sunflower/plugins/sessions/plugin.py:368
 msgid "Show session list"
 msgstr ""
@@ -3604,9 +3468,9 @@ msgstr ""
 msgid "Maximum:"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/find_file_extensions/default.py:36
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/default.py:36
-#: sunflower/plugins/find_file_extensions/default.py:36
+#: build/Sunflower/sunflower/plugins/find_file_extensions/default.py:34
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/default.py:34
+#: sunflower/plugins/find_file_extensions/default.py:34
 msgid ""
 "<b>Pattern matching</b>\n"
 "*\t\tEverything\n"
@@ -3615,24 +3479,24 @@ msgid ""
 "[!seq]\tAny character <u>not</u> in <i>seq</i>"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/find_file_extensions/default.py:51
-#: build/Sunflower/sunflower/plugins/find_file_extensions/contents.py:25
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/default.py:51
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/contents.py:25
-#: sunflower/plugins/find_file_extensions/default.py:51
-#: sunflower/plugins/find_file_extensions/contents.py:25
+#: build/Sunflower/sunflower/plugins/find_file_extensions/default.py:49
+#: build/Sunflower/sunflower/plugins/find_file_extensions/contents.py:22
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/default.py:49
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/contents.py:22
+#: sunflower/plugins/find_file_extensions/default.py:49
+#: sunflower/plugins/find_file_extensions/contents.py:22
 msgid "Search for:"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/find_file_extensions/default.py:57
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/default.py:57
-#: sunflower/plugins/find_file_extensions/default.py:57
+#: build/Sunflower/sunflower/plugins/find_file_extensions/default.py:55
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/default.py:55
+#: sunflower/plugins/find_file_extensions/default.py:55
 msgid "Case sensitive"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugins/find_file_extensions/contents.py:46
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/contents.py:46
-#: sunflower/plugins/find_file_extensions/contents.py:46
+#: build/Sunflower/sunflower/plugins/find_file_extensions/contents.py:38
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/contents.py:38
+#: sunflower/plugins/find_file_extensions/contents.py:38
 msgid "Content"
 msgstr ""
 
@@ -3649,11 +3513,8 @@ msgid "GVim"
 msgstr ""
 
 #: build/Sunflower/sunflower/plugin_base/rename_extension.py:22
-#: build/Sunflower/sunflower/plugin_base/find_extension.py:23
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/rename_extension.py:22
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/find_extension.py:23
 #: sunflower/plugin_base/rename_extension.py:22
-#: sunflower/plugin_base/find_extension.py:23
 msgid "Use this extension"
 msgstr ""
 
@@ -4127,6 +3988,18 @@ msgid ""
 "exist."
 msgstr ""
 
+#: build/Sunflower/sunflower/plugin_base/item_list.py:964
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:964
+#: sunflower/plugin_base/item_list.py:964
+msgid "_Open"
+msgstr ""
+
+#: build/Sunflower/sunflower/plugin_base/item_list.py:973
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:973
+#: sunflower/plugin_base/item_list.py:973
+msgid "Open in new ta_b"
+msgstr ""
+
 #: build/Sunflower/sunflower/plugin_base/item_list.py:987
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:987
 #: sunflower/plugin_base/item_list.py:987
@@ -4143,6 +4016,24 @@ msgstr ""
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1013
 #: sunflower/plugin_base/item_list.py:1013
 msgid "Create file"
+msgstr ""
+
+#: build/Sunflower/sunflower/plugin_base/item_list.py:1037
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1037
+#: sunflower/plugin_base/item_list.py:1037
+msgid "Cu_t"
+msgstr ""
+
+#: build/Sunflower/sunflower/plugin_base/item_list.py:1046
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1046
+#: sunflower/plugin_base/item_list.py:1046
+msgid "_Copy"
+msgstr ""
+
+#: build/Sunflower/sunflower/plugin_base/item_list.py:1055
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1055
+#: sunflower/plugin_base/item_list.py:1055
+msgid "_Paste"
 msgstr ""
 
 #: build/Sunflower/sunflower/plugin_base/item_list.py:1069
@@ -4169,10 +4060,34 @@ msgstr ""
 msgid "Copy path"
 msgstr ""
 
+#: build/Sunflower/sunflower/plugin_base/item_list.py:1102
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1102
+#: sunflower/plugin_base/item_list.py:1102
+msgid "_Delete"
+msgstr ""
+
 #: build/Sunflower/sunflower/plugin_base/item_list.py:1116
 #: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1116
 #: sunflower/plugin_base/item_list.py:1116
 msgid "Send to..."
+msgstr ""
+
+#: build/Sunflower/sunflower/plugin_base/item_list.py:1127
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1127
+#: sunflower/plugin_base/item_list.py:1127
+msgid "Ma_ke link"
+msgstr ""
+
+#: build/Sunflower/sunflower/plugin_base/item_list.py:1133
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1133
+#: sunflower/plugin_base/item_list.py:1133
+msgid "_Rename..."
+msgstr ""
+
+#: build/Sunflower/sunflower/plugin_base/item_list.py:1146
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1146
+#: sunflower/plugin_base/item_list.py:1146
+msgid "_Properties"
 msgstr ""
 
 #: build/Sunflower/sunflower/plugin_base/item_list.py:1194
@@ -4187,15 +4102,15 @@ msgstr ""
 msgid "History is empty"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1538
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1538
-#: sunflower/plugin_base/item_list.py:1539
+#: build/Sunflower/sunflower/plugin_base/item_list.py:1549
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1549
+#: sunflower/plugin_base/item_list.py:1549
 msgid "Path entry"
 msgstr ""
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1539
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1539
-#: sunflower/plugin_base/item_list.py:1540
+#: build/Sunflower/sunflower/plugin_base/item_list.py:1550
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1550
+#: sunflower/plugin_base/item_list.py:1550
 msgid "Navigate to:"
 msgstr ""
 
@@ -4315,100 +4230,100 @@ msgid ""
 "target directory."
 msgstr ""
 
-#: build/Sunflower/sunflower/operation.py:1121
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1121
-#: sunflower/operation.py:1121
+#: build/Sunflower/sunflower/operation.py:1122
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1122
+#: sunflower/operation.py:1122
 msgid "Creating directories..."
 msgstr ""
 
-#: build/Sunflower/sunflower/operation.py:1138
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1138
-#: sunflower/operation.py:1138
+#: build/Sunflower/sunflower/operation.py:1139
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1139
+#: sunflower/operation.py:1139
 msgid "Copying files..."
 msgstr ""
 
-#: build/Sunflower/sunflower/operation.py:1154
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1154
-#: sunflower/operation.py:1154
+#: build/Sunflower/sunflower/operation.py:1155
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1155
+#: sunflower/operation.py:1155
 msgid "Creating links..."
 msgstr ""
 
-#: build/Sunflower/sunflower/operation.py:1206
-#: build/Sunflower/sunflower/operation.py:1223
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1206
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1223
-#: sunflower/operation.py:1206 sunflower/operation.py:1223
+#: build/Sunflower/sunflower/operation.py:1207
+#: build/Sunflower/sunflower/operation.py:1224
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1207
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1224
+#: sunflower/operation.py:1207 sunflower/operation.py:1224
 msgid "Copy Operation"
 msgstr ""
 
-#: build/Sunflower/sunflower/operation.py:1208
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1208
-#: sunflower/operation.py:1208
+#: build/Sunflower/sunflower/operation.py:1209
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1209
+#: sunflower/operation.py:1209
 #, python-brace-format
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: build/Sunflower/sunflower/operation.py:1336
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1336
-#: sunflower/operation.py:1336
+#: build/Sunflower/sunflower/operation.py:1337
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1337
+#: sunflower/operation.py:1337
 msgid "Moving files..."
 msgstr ""
 
-#: build/Sunflower/sunflower/operation.py:1350
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1350
-#: sunflower/operation.py:1350
+#: build/Sunflower/sunflower/operation.py:1351
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1351
+#: sunflower/operation.py:1351
 msgid "Deleting source files..."
 msgstr ""
 
-#: build/Sunflower/sunflower/operation.py:1372
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1372
-#: sunflower/operation.py:1372
+#: build/Sunflower/sunflower/operation.py:1373
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1373
+#: sunflower/operation.py:1373
 msgid "Deleting source directories..."
 msgstr ""
 
-#: build/Sunflower/sunflower/operation.py:1471
-#: build/Sunflower/sunflower/operation.py:1488
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1471
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1488
-#: sunflower/operation.py:1471 sunflower/operation.py:1488
+#: build/Sunflower/sunflower/operation.py:1472
+#: build/Sunflower/sunflower/operation.py:1489
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1472
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1489
+#: sunflower/operation.py:1472 sunflower/operation.py:1489
 msgid "Move Operation"
 msgstr ""
 
-#: build/Sunflower/sunflower/operation.py:1473
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1473
-#: sunflower/operation.py:1473
+#: build/Sunflower/sunflower/operation.py:1474
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1474
+#: sunflower/operation.py:1474
 #, python-brace-format
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: build/Sunflower/sunflower/operation.py:1618
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1618
-#: sunflower/operation.py:1618
+#: build/Sunflower/sunflower/operation.py:1619
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1619
+#: sunflower/operation.py:1619
 msgid "Delete Operation"
 msgstr ""
 
-#: build/Sunflower/sunflower/operation.py:1620
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1620
-#: sunflower/operation.py:1620
+#: build/Sunflower/sunflower/operation.py:1621
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1621
+#: sunflower/operation.py:1621
 #, python-brace-format
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: build/Sunflower/sunflower/operation.py:1733
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1733
-#: sunflower/operation.py:1733
+#: build/Sunflower/sunflower/operation.py:1734
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1734
+#: sunflower/operation.py:1734
 msgid "Rename Operation"
 msgstr ""
 
-#: build/Sunflower/sunflower/operation.py:1735
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1735
-#: sunflower/operation.py:1735
+#: build/Sunflower/sunflower/operation.py:1736
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1736
+#: sunflower/operation.py:1736
 #, python-brace-format
 msgid "Rename of {0} item from \"{1}\" is completed!"
 msgid_plural "Rename of {0} items from \"{1}\" is completed!"
@@ -4446,59 +4361,57 @@ msgstr ""
 msgid "Viewer is unable to display this file type."
 msgstr ""
 
-#: build/Sunflower/sunflower/tools/find_files.py:44
-#: build/Sunflower/sunflower/tools/find_files.py:318
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:44
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:318
-#: sunflower/tools/find_files.py:44 sunflower/tools/find_files.py:318
+#: build/Sunflower/sunflower/tools/find_files.py:43
+#: build/Sunflower/sunflower/tools/find_files.py:282
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:43
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:282
+#: sunflower/tools/find_files.py:43 sunflower/tools/find_files.py:282
 msgid "Find files"
 msgstr ""
 
-#: build/Sunflower/sunflower/tools/find_files.py:62
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:62
-#: sunflower/tools/find_files.py:62
-msgid "Search in:"
+#: build/Sunflower/sunflower/tools/find_files.py:70
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:70
+#: sunflower/tools/find_files.py:70
+msgid "Criteria"
 msgstr ""
 
-#: build/Sunflower/sunflower/tools/find_files.py:79
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:79
-#: sunflower/tools/find_files.py:79
-msgid "Search recursively"
-msgstr ""
-
-#: build/Sunflower/sunflower/tools/find_files.py:131
-#: build/Sunflower/sunflower/tools/find_files.py:243
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:131
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:243
-#: sunflower/tools/find_files.py:131 sunflower/tools/find_files.py:243
+#: build/Sunflower/sunflower/tools/find_files.py:93
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:93
+#: sunflower/tools/find_files.py:93
 msgid "Start"
 msgstr ""
 
-#: build/Sunflower/sunflower/tools/find_files.py:193
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:193
-#: sunflower/tools/find_files.py:193
+#: build/Sunflower/sunflower/tools/find_files.py:102
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:102
+#: sunflower/tools/find_files.py:102
+msgid "Search recursively"
+msgstr ""
+
+#: build/Sunflower/sunflower/tools/find_files.py:123
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:123
+#: sunflower/tools/find_files.py:123
+msgid "Results"
+msgstr ""
+
+#: build/Sunflower/sunflower/tools/find_files.py:194
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:194
+#: sunflower/tools/find_files.py:194
 msgid ""
 "Active object doesn't support changing path. Set focus on a different "
 "object, preferably file list, and try again."
 msgstr ""
 
-#: build/Sunflower/sunflower/tools/find_files.py:231
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:231
-#: sunflower/tools/find_files.py:231
-msgid "Stop"
-msgstr ""
-
-#: build/Sunflower/sunflower/tools/find_files.py:364
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:364
-#: sunflower/tools/find_files.py:364
+#: build/Sunflower/sunflower/tools/find_files.py:328
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:328
+#: sunflower/tools/find_files.py:328
 msgid ""
 "Specified path is not valid or doesn't exist anymore. Please check your "
 "selection and try again."
 msgstr ""
 
-#: build/Sunflower/sunflower/tools/find_files.py:385
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:385
-#: sunflower/tools/find_files.py:385
+#: build/Sunflower/sunflower/tools/find_files.py:349
+#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:349
+#: sunflower/tools/find_files.py:349
 msgid ""
 "You need to enable at least one extension in order to find files and "
 "directories!"
@@ -4564,31 +4477,3 @@ msgid_plural ""
 "Are you sure about this?"
 msgstr[0] ""
 msgstr[1] ""
-
-#: sunflower/gui/main_window.py:176
-msgid "Create new file, directory and more."
-msgstr ""
-
-#: sunflower/gui/main_window.py:199
-msgid "Create new tab"
-msgstr ""
-
-#: sunflower/plugins/sessions/plugin.py:68
-#: sunflower/plugins/sessions/plugin.py:283
-msgid "Session manager"
-msgstr ""
-
-#: sunflower/plugins/sessions/plugin.py:328
-msgid ""
-"Lock current session\n"
-"<small>Locking session preserves tab layout at the time of activation.</"
-"small>"
-msgstr ""
-
-#: sunflower/plugins/sessions/plugin.py:331
-msgid "Manage"
-msgstr ""
-
-#: sunflower/plugins/sessions/plugin.py:334
-msgid "Save"
-msgstr ""

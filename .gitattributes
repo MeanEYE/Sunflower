@@ -5,3 +5,4 @@ Makefile export-ignore
 .gitignore export-ignore
 .hg* export-ignore
 .tx export-ignore
+.pylintrc export-ignore

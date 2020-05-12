@@ -123,7 +123,7 @@ dist-arch: dist
 dist-rpm: archive
 	$(info Building package for Fedora, Mageia, Mandriva...)
 	$(CREATE_RPM_SPEC_FILE)
-	sed -i "s/@requires@/python3, python3-gi, python3-chardet/" $(BUILD_DIRECTORY)/sunflower.spec
+	sed -i "s/@requires@/python3, python3-gobject, python3-chardet/" $(BUILD_DIRECTORY)/sunflower.spec
 	rpmbuild -bb $(BUILD_DIRECTORY)/sunflower.spec --build-in-place --buildroot "$(abspath $(FEDORA_BUILD_DIRECTORY))"
 	cp ~/rpmbuild/RPMS/noarch/sunflower-$(VERSION)-$(RELEASE).noarch.rpm $(RPM_FILE_PATH)
 	sha256sum $(RPM_FILE_PATH) > $(RPM_FILE_PATH).sha256

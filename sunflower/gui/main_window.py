@@ -383,7 +383,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		vbox_popover.set_border_width(5)
 		vbox_popover.set_size_request(400, -1)
 
-
 		label_command_entry = Gtk.Label.new(_('Execute command:'))
 		label_command_entry.set_alignment(0, 0.5)
 		label_command_entry.show()

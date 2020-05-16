@@ -1,17 +1,9 @@
 from __future__ import absolute_import
 
 import gi
-
-try:
-	gi.require_version('GConf', '1.0')
-	from gi.repository import GConf
-	gconf_loaded = True
-except:
-	gconf_loaded = False
-
 gi.require_version('Vte', '2.91')
 
-from gi.repository import Gtk, Gdk, Vte, Pango
+from gi.repository import Gtk, Gdk, Gio, Vte, Pango
 from sunflower.plugin_base.plugin import PluginBase
 from sunflower.accelerator_group import AcceleratorGroup
 
@@ -38,6 +30,8 @@ class Terminal(PluginBase):
 	defining your own.
 
 	"""
+
+	FONT = None
 
 	def __init__(self, parent, notebook, options):
 		PluginBase.__init__(self, parent, notebook, options)
@@ -99,7 +93,7 @@ class Terminal(PluginBase):
 		# terminal container
 		if self._terminal_type == TerminalType.VTE:
 			self._container = Gtk.ScrolledWindow()
-			self._container.set_shadow_type(Gtk.ShadowType.IN)
+			self._container.set_shadow_type(Gtk.ShadowType.NONE)
 
 			# apply scrollbar visibility
 			show_scrollbars = section.get('show_scrollbars')
@@ -125,32 +119,11 @@ class Terminal(PluginBase):
 
 	def __set_system_font(self, client=None, *args, **kwargs):
 		"""Set system font to terminal"""
-		# TODO: Switch to using dconf
-		if not gconf_loaded:
-			return
+		if not self.FONT:
+			settings = Gio.Settings.new('org.gnome.desktop.interface')
+			self.FONT = Pango.FontDescription.from_string(settings.get_string('monospace-font-name'))
 
-		path = '/desktop/gnome/interface'
-		key = '{0}/monospace_font_name'.format(path)
-
-		if client is None:
-			if not hasattr(self._terminal, 'client'):
-				# client wasn't assigned to widget, get default one and set events
-				client = GConf.Client.get_default()
-				client.add_dir(path, GConf.ClientPreloadType.PRELOAD_NONE)
-				client.notify_add(key, self.__set_system_font)
-				self._terminal.client = client
-
-			else:
-				# get assigned client
-				client = self._terminal.client
-
-		else:
-			# try to get font and set it
-			font_name = client.get_string(key)
-
-			if font_name is not None:
-				font = Pango.FontDescription(font_name)
-				self._terminal.set_font(font_name)
+		self._terminal.set_font(self.FONT)
 
 	def _create_buttons(self):
 		"""Create titlebar buttons."""

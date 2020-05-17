@@ -3,14 +3,13 @@ Sunflower
 
 Sunflower is a small and highly customizable twin-panel file manager for Linux with support for plugins. It is intended to be an easy-to-use and powerful file manager that seamlessly integrates into the GNOME desktop environment (but not limited to).
 
-![Screen shot](http://img713.imageshack.us/img713/3218/sunflowerpreview.png)
+![Screen shot](https://i.imgur.com/s2FRrmH.png)
 
 ### Packages
 
 Sunflower package can be downloaded from following locations:
 
 * [Arch Linux AUR](https://aur.archlinux.org/packages/sunflower/)
-* [Arch Linux AUR, repository version](https://aur.archlinux.org/packages/sunflower-hg/)
 * [Ubuntu PPA](https://launchpad.net/~atareao/+archive/sunflower) (usually late by a version or two)
 * [Gentoo](http://packages.gentoo.org/package/x11-misc/sunflower)
     Installation: `emerge --ask x11-misc/sunflower`
@@ -34,7 +33,7 @@ And as usual testers are more than welcome. If you wish to help translate progra
 ### Staying in touch
 Preferred way of getting in touch with us is through [mailing list](https://groups.google.com/forum/#!forum/sunflower-fm).
 
-I like talking to people a lot so please feel free to contact me any time. You can always follow me on my [twitter account](http://twitter.com/MeanEYE_rcf) and [Google+](http://gplus.to/MeanEYE). We also have IRC channel, `#sunflower` on `irc.freenode.org`. Central place for news is now on Google+ [page](https://plus.google.com/104972396836379309898).
+I like talking to people a lot so please feel free to contact me any time. You can always follow me on my [twitter account](http://twitter.com/MeanEYE_rcf), [Google+](http://gplus.to/MeanEYE) and [Reddit](https://www.reddit.com/user/MeanEYE). We also have IRC channel, `#sunflower` on `irc.freenode.org`. Central place for news is now on Google+ [page](https://plus.google.com/104972396836379309898).
 
 ### Screenshots
 Check out [screenshots](http://sunflower-fm.org/screenshots).

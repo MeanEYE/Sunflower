@@ -3,9 +3,10 @@ Version: @version@
 Section: misc
 Priority: optional
 Architecture: all
-Depends: python, python-gtk2
-Recommends: python-notify
-Suggests: python-gnome2, python-argparse, python-mutagen, python-vte
+Depends: python3, python3-gi, python3-chardet, gir1.2-gtk-3.0 (>= 3.22),
+	gir1.2-notify-0.7 (>= 0.7), gir1.2-gdkpixbuf-2.0 (>= 2.0), gir1.2-vte-2.91 (>= 0.50),
+	gir1.2-glib-2.0 (>= 1.60), gir1.2-pango-1.0 (>= 1.0)
+Suggests: python3-mutagen
 Maintainer: @packager@
 Installed-Size: @size@
 Description: Small and highly customizable twin-panel file manager for Linux with support for plugins.

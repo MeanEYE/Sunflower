@@ -3,14 +3,16 @@
 # This file is distributed under the same license as the Sunflower package.
 # 
 # Translators:
+# Heimen Stoffels <vistausss@outlook.com>, 2019-2020
 # Ruud W. Blau <rwblau@aim.com>, 2015-2016
+# Thomas Jollans <t@jollybox.de>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-06 23:05+0100\n"
-"PO-Revision-Date: 2016-01-16 11:26+0000\n"
-"Last-Translator: Ruud W. Blau <rwblau@aim.com>\n"
+"POT-Creation-Date: 2020-05-11 21:13+0200\n"
+"PO-Revision-Date: 2020-05-12 11:41+0000\n"
+"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/way2cu/sunflower/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,69 +20,68 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: application/gui/preferences/terminal.py:11
-#: application/plugins/system_terminal/plugin.py:54
-#: application/plugins/system_terminal/plugin.py:55
-#: application/plugin_base/terminal.py:76
-#: application/plugin_base/terminal.py:300
-#: application/plugin_base/item_list.py:230
+#: sunflower/gui/preferences/terminal.py:10
+#: sunflower/plugins/system_terminal/plugin.py:54
+#: sunflower/plugins/system_terminal/plugin.py:55
+#: sunflower/plugin_base/terminal.py:169 sunflower/plugin_base/terminal.py:260
+#: sunflower/plugin_base/item_list.py:187
 msgid "Terminal"
 msgstr "Terminal"
 
-#: application/gui/preferences/terminal.py:18
+#: sunflower/gui/preferences/terminal.py:17
 msgid "VTE based terminal"
 msgstr "Virtuele terminal"
 
-#: application/gui/preferences/terminal.py:22
+#: sunflower/gui/preferences/terminal.py:21
 msgid "Show scrollbars when needed"
-msgstr "Toon schuifbalken wanneer nodig"
+msgstr "Schuifbalken tonen indien nodig"
 
-#: application/gui/preferences/terminal.py:30
+#: sunflower/gui/preferences/terminal.py:29
 msgid "Use the system fixed width font"
-msgstr "Gebruik niet-proportioneel systeemlettertype"
+msgstr "Vastebreedtelettertype van systeem gebruiken"
 
-#: application/gui/preferences/terminal.py:33
+#: sunflower/gui/preferences/terminal.py:32
 msgid "Font:"
 msgstr "Lettertype:"
 
-#: application/gui/preferences/terminal.py:42
+#: sunflower/gui/preferences/terminal.py:41
 msgid "Cursor shape:"
 msgstr "Cursorvorm:"
 
-#: application/gui/preferences/terminal.py:46
+#: sunflower/gui/preferences/terminal.py:45
 msgid "Block"
 msgstr "Blok"
 
-#: application/gui/preferences/terminal.py:47
+#: sunflower/gui/preferences/terminal.py:46
 msgid "I-Beam"
 msgstr "Balk"
 
-#: application/gui/preferences/terminal.py:48
+#: sunflower/gui/preferences/terminal.py:47
 msgid "Underline"
-msgstr "Onderstrepen"
+msgstr "Liggende streep"
 
-#: application/gui/preferences/terminal.py:58
+#: sunflower/gui/preferences/terminal.py:57
 msgid "Allow bold text"
 msgstr "Vetgedrukte tekst toestaan"
 
-#: application/gui/preferences/terminal.py:62
+#: sunflower/gui/preferences/terminal.py:61
 msgid "Automatically hide mouse when typing"
-msgstr "Muis verbergen tijdens typen"
+msgstr "Cursor verbergen tijdens typen"
 
-#: application/gui/preferences/terminal.py:70
+#: sunflower/gui/preferences/terminal.py:69
 msgid "External terminal"
 msgstr "Extern terminalvenster"
 
-#: application/gui/preferences/terminal.py:73
-#: application/gui/preferences/view_and_edit.py:63
+#: sunflower/gui/preferences/terminal.py:72
+#: sunflower/gui/preferences/view_and_edit.py:62
 msgid "Command line:"
 msgstr "Opdrachtregel:"
 
-#: application/gui/preferences/terminal.py:79
+#: sunflower/gui/preferences/terminal.py:78
 msgid "Command line for executing specific program:"
-msgstr "Opdrachtregel voor uitvoeren specifiek programma:"
+msgstr "Opdrachtregel voor uitvoeren van specifiek programma:"
 
-#: application/gui/preferences/terminal.py:85
+#: sunflower/gui/preferences/terminal.py:84
 #, python-brace-format
 msgid ""
 "<small><i>Note:\n"
@@ -88,1977 +89,1807 @@ msgid ""
 "\t{0} will be replaced with socket/window id.\n"
 "\t{1} will be replaced with specified command and its parameters.\n"
 "\t{2} will be replaced with current working directory.</i></small>"
-msgstr "<small><i>Opmerking:\n⇥Weglaten {0} opent nieuwe terminal-applicatie in plaats van een tab.\n⇥{0} wordt vervangen door socket/window-id.\n⇥{1} wordt vervangen door geselecteerde commando en parameters.\n⇥{2} wordt vervangen door huidige werkdirectory.</i></small>"
+msgstr "<small><i>Let op:\n\tHet weglaten van {0} opent een nieuw terminalvenster i.p.v. een tabblad.\n\t{0} wordt vervangen door de socket-/venster-id.\n\t{1} wordt vervangen door de opgegeven opdracht en parameters.\n\t{2} wordt vervangen door de huidige werkmap.</i></small>"
 
-#: application/gui/preferences/commands.py:15
+#: sunflower/gui/preferences/commands.py:14 sunflower/gui/main_window.py:209
 msgid "Commands"
-msgstr "Commando's"
+msgstr "Opdrachten"
 
-#: application/gui/preferences/commands.py:40
-#: application/gui/preferences/bookmarks.py:50
-#: application/plugins/rename_extensions/audio_metadata.py:24
+#: sunflower/gui/preferences/commands.py:39
+#: sunflower/gui/preferences/bookmarks.py:49
+#: sunflower/plugins/rename_extensions/audio_metadata.py:26
 msgid "Title"
 msgstr "Titel"
 
-#: application/gui/preferences/commands.py:44
+#: sunflower/gui/preferences/commands.py:43
 msgid "Command"
-msgstr "Commando"
+msgstr "Opdracht"
 
-#: application/gui/preferences/commands.py:67
-#: application/gui/preferences/bookmarks.py:77
-#: application/gui/preferences/toolbar.py:74
-#: application/gui/preferences/item_list.py:263
+#: sunflower/gui/preferences/commands.py:66
+#: sunflower/gui/preferences/bookmarks.py:76
+#: sunflower/gui/preferences/toolbar.py:77
+#: sunflower/gui/preferences/item_list.py:230
 msgid "Move Up"
-msgstr "Omhoog"
+msgstr "Omhoog verplaatsen"
 
-#: application/gui/preferences/commands.py:75
-#: application/gui/preferences/bookmarks.py:85
-#: application/gui/preferences/toolbar.py:82
-#: application/gui/preferences/item_list.py:271
+#: sunflower/gui/preferences/commands.py:74
+#: sunflower/gui/preferences/bookmarks.py:84
+#: sunflower/gui/preferences/toolbar.py:85
+#: sunflower/gui/preferences/item_list.py:238
 msgid "Move Down"
-msgstr "Omlaag"
+msgstr "Omlaag verplaatsen"
 
-#: application/gui/preferences/associations.py:16
+#: sunflower/gui/preferences/associations.py:15
 msgid "Associations"
-msgstr "Koppelingen"
+msgstr "Toewijzingen"
 
-#: application/gui/preferences/associations.py:45
-#: application/gui/preferences/associations.py:81
+#: sunflower/gui/preferences/associations.py:44
+#: sunflower/gui/preferences/associations.py:76
 msgid "Add mime type"
 msgstr "MIME-type toevoegen"
 
-#: application/gui/preferences/associations.py:48
+#: sunflower/gui/preferences/associations.py:47
 msgid "Add application to mime type"
-msgstr "Applicatie aan MIME-type toevoegen"
+msgstr "Programma toevoegen aan MIME-type"
 
-#: application/gui/preferences/associations.py:82
+#: sunflower/gui/preferences/associations.py:77
 msgid "Enter MIME type (eg. image/png):"
-msgstr "Geef MIME-type (bv. image/png):"
+msgstr "Geef het MIME-type op (bv. image/png):"
 
-#: application/gui/preferences/associations.py:133
+#: sunflower/gui/preferences/associations.py:128
 msgid ""
 "You need to select mime type to which application will be added. You can "
 "also select another application in which case new one will be added to its "
 "parent."
-msgstr "Selecteer het MIME-type waaraan de applicatie wordt gekoppeld. U kunt ook een andere applicatie selecteren, in dat geval zal die worden toegevoegd aan het bovenliggende type."
+msgstr "Geef het MIME-type op waaraan het programma wordt gekoppeld. Je kunt ook een ander programma kiezen. In dat geval wordt dat programma toegevoegd aan het bovenliggende type."
 
-#: application/gui/preferences/plugins.py:34
+#: sunflower/gui/preferences/plugins.py:39
 msgid "Plugins"
-msgstr "Plugins"
+msgstr "Plug-ins"
 
-#: application/gui/preferences/plugins.py:66
-#: application/gui/preferences/display.py:93
+#: sunflower/gui/preferences/plugins.py:71
+#: sunflower/gui/preferences/display.py:88
 msgid "Active"
 msgstr "Actief"
 
-#: application/gui/preferences/plugins.py:68
+#: sunflower/gui/preferences/plugins.py:73
 msgid "Plugin name"
-msgstr "Pluginnaam"
+msgstr "Naam van plug-in"
 
-#: application/gui/preferences/plugins.py:72
+#: sunflower/gui/preferences/plugins.py:77
 msgid "Version"
 msgstr "Versie"
 
-#: application/gui/preferences/plugins.py:74
+#: sunflower/gui/preferences/plugins.py:79
 msgid "Author"
 msgstr "Auteur"
 
-#: application/gui/preferences/plugins.py:90
-#: application/gui/preferences/accelerators.py:54
+#: sunflower/gui/preferences/plugins.py:95
+#: sunflower/gui/preferences/accelerators.py:53
 msgid "Description"
 msgstr "Omschrijving"
 
-#: application/gui/preferences/plugins.py:100
+#: sunflower/gui/preferences/plugins.py:105
 msgid "Contact"
-msgstr "Contact"
+msgstr "Contact opnemen"
 
-#: application/gui/preferences/plugins.py:109
+#: sunflower/gui/preferences/plugins.py:114
 msgid "Visit site"
-msgstr "Bezoek website"
+msgstr "Website bezoeken"
 
-#: application/gui/preferences/plugins.py:182
+#: sunflower/gui/preferences/plugins.py:187
 #, python-brace-format
 msgid ""
 "{0} is required for normal program operation and therefore can not be "
 "deactivated!"
-msgstr "{0} is nodig voor het functioneren van het programma en kan daarom niet gedeactiveerd worden!"
+msgstr "{0} is nodig voor het functioneren van het programma en kan daarom niet worden uitgeschakeld!"
 
-#: application/gui/preferences/plugins.py:213
+#: sunflower/gui/preferences/plugins.py:218
 msgid "This plugin has no description"
-msgstr "Deze plugin heeft geen omschrijving"
+msgstr "Deze plug-in heeft geen omschrijving"
 
-#: application/gui/preferences/plugins.py:272
+#: sunflower/gui/preferences/plugins.py:277
 msgid "No plugin selected"
-msgstr "Geen plugin geselecteerd"
+msgstr "Geen plug-in geselecteerd"
 
-#: application/gui/preferences/bookmarks.py:15
-#: application/plugins/default_toolbar/bookmarks_button.py:16
-#: application/plugins/default_toolbar/bookmarks_button.py:17
-#: application/plugin_base/item_list.py:194
+#: sunflower/gui/preferences/bookmarks.py:14
+#: sunflower/widgets/location_menu.py:70
+#: sunflower/plugins/default_toolbar/bookmarks_button.py:16
+#: sunflower/plugins/default_toolbar/bookmarks_button.py:17
 msgid "Bookmarks"
 msgstr "Bladwijzers"
 
-#: application/gui/preferences/bookmarks.py:18
+#: sunflower/gui/preferences/bookmarks.py:17
 msgid "Show mount points in bookmarks menu"
-msgstr "Toon mountpoints in bladwijzermenu"
+msgstr "Aankoppelpunten tonen in bladwijzermenu"
 
-#: application/gui/preferences/bookmarks.py:22
+#: sunflower/gui/preferences/bookmarks.py:21
 msgid "Show system bookmarks"
-msgstr "Toon systeembladwijzers"
+msgstr "Systeembladwijzers tonen"
 
-#: application/gui/preferences/bookmarks.py:26
+#: sunflower/gui/preferences/bookmarks.py:25
 msgid "Add home directory to bookmarks menu"
-msgstr "Homedirectory toevoegen aan bladwijzermenu"
+msgstr "Persoonlijke map toevoegen aan bladwijzermenu"
 
-#: application/gui/preferences/bookmarks.py:54
-#: application/tools/find_files.py:97
+#: sunflower/gui/preferences/bookmarks.py:53 sunflower/tools/find_files.py:138
 msgid "Location"
 msgstr "Locatie"
 
-#: application/gui/preferences/accelerators.py:20
+#: sunflower/gui/preferences/accelerators.py:19
 msgid "Key bindings"
 msgstr "Sneltoetsen"
 
-#: application/gui/preferences/accelerators.py:61
+#: sunflower/gui/preferences/accelerators.py:60
 msgid "Primary"
 msgstr "Primair"
 
-#: application/gui/preferences/accelerators.py:69
+#: sunflower/gui/preferences/accelerators.py:68
 msgid "Secondary"
 msgstr "Secundair"
 
-#: application/gui/preferences/accelerators.py:82
+#: sunflower/gui/preferences/accelerators.py:81
 msgid ""
 "<b>Note:</b> You can only edit accelerators from objects created at least "
 "once in current session. To disable accelerator press <i>Backspace</i> in "
 "assign mode."
-msgstr "<b>Opmerking:</b> Sneltoetsen slechts eenmaal per sessie bewerkt worden. Druk op <i>Backspace</i> tijdens het toewijzen om de betreffende sneltoets uit te schakelen."
+msgstr "<b>Let op:</b> sneltoetsen kunnen slechts eenmaal per sessie worden aangepast. Druk, tijdens het toewijzen, op <i>Backspace</i> om de betreffende sneltoets uit te schakelen."
 
-#: application/gui/preferences/accelerators.py:92
+#: sunflower/gui/preferences/accelerators.py:91
 msgid "Double click on accelerator to assign new one."
-msgstr "Dubbelklik op sneltoets om er een nieuwe functie aan toe te wijzen,"
+msgstr "Dubbelklik op een sneltoets om er een nieuwe functie aan toe te wijzen."
 
-#: application/gui/preferences/accelerators.py:198
+#: sunflower/gui/preferences/accelerators.py:197
 #, python-brace-format
 msgid ""
 "Selected accelerator \"{0}\" is already being used. Would you still like to assign accelerator to this function? This will reset listed functions.\n"
 "\n"
 "Collisions:\n"
 "{1}"
-msgstr "De sneltoets \"{0}\" is al in gebruik. Wil je deze toch aan deze functie toewijzen? De sneltoetsen voor onderstaande functies worden dan uitgeschakeld.\n\n\nIn conflict met:\n{1}"
+msgstr "De sneltoets '{0}' wordt al gebruikt. Wil je deze tóch toewijzen aan deze functie? De sneltoetsen voor onderstaande functies worden dan uitgeschakeld.\n\n\nConflict met:\n{1}"
 
-#: application/gui/preferences/accelerators.py:258
-#: application/gui/main_window.py:784
-#: application/plugins/default_toolbar/home_directory_button.py:16
-#: application/plugins/default_toolbar/home_directory_button.py:17
+#: sunflower/gui/preferences/accelerators.py:257
+#: sunflower/widgets/location_menu.py:98
+#: sunflower/plugins/default_toolbar/home_directory_button.py:16
+#: sunflower/plugins/default_toolbar/home_directory_button.py:17
 msgid "Home directory"
-msgstr "Homedirectory"
+msgstr "Persoonlijke map"
 
-#: application/gui/preferences/view_and_edit.py:16
+#: sunflower/gui/preferences/view_and_edit.py:15
 msgid "View & Edit"
-msgstr "Bekijk & Bewerk"
+msgstr "Bekijken en bewerken"
 
-#: application/gui/preferences/view_and_edit.py:19
+#: sunflower/gui/preferences/view_and_edit.py:18
 msgid "View"
 msgstr "Bekijken"
 
-#: application/gui/preferences/view_and_edit.py:23
+#: sunflower/gui/preferences/view_and_edit.py:22
 msgid "Wrap long lines"
 msgstr "Regelafbreking"
 
-#: application/gui/preferences/view_and_edit.py:27
-#: application/gui/main_window.py:678
+#: sunflower/gui/preferences/view_and_edit.py:26
+#: sunflower/gui/main_window.py:426
 msgid "Edit"
 msgstr "Bewerken"
 
-#: application/gui/preferences/view_and_edit.py:33
+#: sunflower/gui/preferences/view_and_edit.py:32
 msgid "Use installed application"
-msgstr "Gebruik geïnstalleerde applicatie"
+msgstr "Geïnstalleerd programma gebruiken"
 
-#: application/gui/preferences/view_and_edit.py:55
+#: sunflower/gui/preferences/view_and_edit.py:54
 msgid "Use external command"
-msgstr "Gebruik extern commando"
+msgstr "Externe opdracht gebruiken"
 
-#: application/gui/preferences/view_and_edit.py:69
+#: sunflower/gui/preferences/view_and_edit.py:68
 msgid "Execute command in terminal tab"
-msgstr "Commando uitvoeren in terminaltab"
+msgstr "Opdracht uitvoeren op terminaltabblad"
 
-#: application/gui/preferences/toolbar.py:18
+#: sunflower/gui/preferences/toolbar.py:18
 msgid "Toolbar"
 msgstr "Werkbalk"
 
-#: application/gui/preferences/toolbar.py:36
-#: application/gui/history_list.py:47
-#: application/gui/mounts_manager_window.py:363
-#: application/gui/mounts_manager_window.py:541
-#: application/gui/keyring_manager_window.py:52
-#: application/plugins/file_list/file_list.py:123
-#: application/plugins/file_list/gio_extension.py:165
-#: application/plugins/file_list/gio_extension.py:519
-#: application/plugins/file_list/gio_extension.py:871
-#: application/plugins/sessions/plugin.py:50
-#: application/plugins/rename_extensions/default.py:73
-#: application/tools/find_files.py:94
+#: sunflower/gui/preferences/toolbar.py:39 sunflower/gui/history_list.py:49
+#: sunflower/gui/keyring_manager_window.py:54
+#: sunflower/plugins/file_list/file_list.py:132
+#: sunflower/plugins/file_list/gio_extension.py:164
+#: sunflower/plugins/file_list/gio_extension.py:518
+#: sunflower/plugins/file_list/gio_extension.py:870
+#: sunflower/plugins/sessions/plugin.py:62
+#: sunflower/plugins/rename_extensions/default.py:75
+#: sunflower/tools/find_files.py:134
 msgid "Name"
 msgstr "Naam"
 
-#: application/gui/preferences/toolbar.py:47
+#: sunflower/gui/preferences/toolbar.py:50
 msgid "Type"
-msgstr "Type"
+msgstr "Soort"
 
-#: application/gui/preferences/toolbar.py:93
+#: sunflower/gui/preferences/toolbar.py:96
 msgid "Toolbar style:"
 msgstr "Werkbalkstijl:"
 
-#: application/gui/preferences/toolbar.py:95
+#: sunflower/gui/preferences/toolbar.py:98
 msgid "Icons"
-msgstr "Iconen"
+msgstr "Pictogrammen"
 
-#: application/gui/preferences/toolbar.py:96 application/tools/viewer.py:88
+#: sunflower/gui/preferences/toolbar.py:99 sunflower/tools/viewer.py:134
 msgid "Text"
 msgstr "Tekst"
 
-#: application/gui/preferences/toolbar.py:97
-#: application/gui/preferences/item_list.py:127
+#: sunflower/gui/preferences/toolbar.py:100
+#: sunflower/gui/preferences/item_list.py:103
 msgid "Both"
 msgstr "Beide"
 
-#: application/gui/preferences/toolbar.py:98
+#: sunflower/gui/preferences/toolbar.py:101
 msgid "Both horizontal"
 msgstr "Beiden horizontaal"
 
-#: application/gui/preferences/toolbar.py:108
+#: sunflower/gui/preferences/toolbar.py:111
 msgid "Icon size:"
-msgstr "Icoongrootte:"
+msgstr "Pictogramgrootte:"
 
-#: application/gui/preferences/toolbar.py:110
-msgid "Same as menu item"
-msgstr "Zelfde als menu-item"
-
-#: application/gui/preferences/toolbar.py:111
+#: sunflower/gui/preferences/toolbar.py:113
 msgid "Small toolbar icon"
-msgstr "Klein werkbalkicoon"
+msgstr "Klein werkbalkpictogram"
 
-#: application/gui/preferences/toolbar.py:112
+#: sunflower/gui/preferences/toolbar.py:114
 msgid "Large toolbar icon"
-msgstr "Groot werkbalkicoon"
+msgstr "Groot werkbalkpictogram"
 
-#: application/gui/preferences/toolbar.py:113
-msgid "Same as buttons"
-msgstr "Zoals knoppen"
-
-#: application/gui/preferences/toolbar.py:114
+#: sunflower/gui/preferences/toolbar.py:115
 msgid "Same as drag icons"
-msgstr "Zoals sleepiconen"
+msgstr "Zoals sleeppictogrammen"
 
-#: application/gui/preferences/toolbar.py:115
+#: sunflower/gui/preferences/toolbar.py:116
 msgid "Same as dialog"
-msgstr "Zoals dialoog"
+msgstr "Zoals dialoogvensters"
 
-#: application/gui/preferences/toolbar.py:217
+#: sunflower/gui/preferences/toolbar.py:222
 msgid "missing plugin"
-msgstr "ontbrekende plugin"
+msgstr "ontbrekende plug-in"
 
-#: application/gui/preferences/operation.py:10
-#: application/gui/preferences/item_list.py:44
+#: sunflower/gui/preferences/operation.py:9
+#: sunflower/gui/preferences/item_list.py:44
 msgid "Operation"
 msgstr "Actie"
 
-#: application/gui/preferences/operation.py:13
+#: sunflower/gui/preferences/operation.py:12
 msgid "General"
 msgstr "Algemeen"
 
-#: application/gui/preferences/operation.py:17
-#: application/gui/main_window.py:590
-#: application/gui/mounts_manager_window.py:473
+#: sunflower/gui/preferences/operation.py:16 sunflower/mounts.py:22
 msgid "Mounts"
-msgstr "Mounts"
+msgstr "Aankoppelpunten"
 
-#: application/gui/preferences/operation.py:21
+#: sunflower/gui/preferences/operation.py:20
 msgid "Confirmation"
 msgstr "Bevestiging"
 
-#: application/gui/preferences/operation.py:26
+#: sunflower/gui/preferences/operation.py:25
 msgid "Delete items to trashcan"
-msgstr "Verwijder items naar vuilnisbak"
+msgstr "Items verplaatsen naar prullenbak"
 
-#: application/gui/preferences/operation.py:27
+#: sunflower/gui/preferences/operation.py:26
 msgid "Reserve free space on copy/move"
-msgstr "Reserveer vrije ruimte bij kopieer/verplaats"
+msgstr "Vrije ruimte reserveren bij kopiëren/verplaatsen"
 
-#: application/gui/preferences/operation.py:28
+#: sunflower/gui/preferences/operation.py:27
 msgid "Automount drives on start up"
-msgstr "Schijven automatisch mounten bij opstarten"
+msgstr "Schijven automatisch aankoppelen bij opstarten"
 
-#: application/gui/preferences/operation.py:29
+#: sunflower/gui/preferences/operation.py:28
 msgid "Automount removable drives when inserted"
-msgstr "Verwijderbare schijven automatisch mounten"
+msgstr "Verwijderbare schijven automatisch aankoppelen"
 
-#: application/gui/preferences/operation.py:30
+#: sunflower/gui/preferences/operation.py:29
 msgid "Show confirmation dialog before deleting items"
-msgstr "Om bevestiging vragen bij verwijderen"
+msgstr "Bevestiging vragen bij verwijderen van items"
 
-#: application/gui/preferences/operation.py:64
+#: sunflower/gui/preferences/operation.py:63
 msgid ""
 "With trashing disabled you will not be able to restore accidentally deleted "
 "items. Are you sure you want to disable confirmation dialog when deleting "
 "items?"
-msgstr "Indien items niet naar de vuilnisbak worden verwijderd, kunnen ze niet teruggehaald worden. Weet u zeker dat u geen bevestiging wilt bij verwijderen?"
+msgstr "Als items niet naar de prullenbak kunnen worden verplaatst, kunnen ze niet teruggehaald worden. Weet je zeker dat je geen bevestiging wilt bij het verwijderen van items?"
 
-#: application/gui/preferences/display.py:23
+#: sunflower/gui/preferences/display.py:22
 msgid "Display"
-msgstr "Beeld"
+msgstr "Weergave"
 
-#: application/gui/preferences/display.py:28
+#: sunflower/gui/preferences/display.py:27
 msgid "Main window"
 msgstr "Hoofdvenster"
 
-#: application/gui/preferences/display.py:32
+#: sunflower/gui/preferences/display.py:31
 msgid "Hide main window on close"
-msgstr "Verberg hoofdvenster bij afsluiten"
+msgstr "Hoofdvenster verbergen bij afsluiten"
 
-#: application/gui/preferences/display.py:33
+#: sunflower/gui/preferences/display.py:32
 msgid "Allow multiple instances"
-msgstr "Meerdere kopieën toestaan"
+msgstr "Meerdere vensters toestaan"
 
-#: application/gui/preferences/display.py:34
+#: sunflower/gui/preferences/display.py:33
 msgid "Show toolbar"
-msgstr "Toon werkbalk"
+msgstr "Werkbalk tonen"
 
-#: application/gui/preferences/display.py:35
+#: sunflower/gui/preferences/display.py:34
+msgid "Show titlebar"
+msgstr "Titelbalk tonen"
+
+#: sunflower/gui/preferences/display.py:35
 msgid "Show command bar"
-msgstr "Toon opdrachtbalk"
+msgstr "Opdrachtbalk tonen"
 
-#: application/gui/preferences/display.py:36
-msgid "Show command entry"
-msgstr "Toon opdrachtregel"
-
-#: application/gui/preferences/display.py:37
+#: sunflower/gui/preferences/display.py:36
 msgid "Horizontal split"
-msgstr "Horizontaal verdelen"
+msgstr "Horizontaal splitsen"
 
-#: application/gui/preferences/display.py:47
-#: application/plugins/sessions/plugin.py:57
+#: sunflower/gui/preferences/display.py:37
+msgid "Dark theme"
+msgstr "Donker thema"
+
+#: sunflower/gui/preferences/display.py:48
 msgid "Tabs"
-msgstr "Tabs"
+msgstr "Tabbladen"
 
-#: application/gui/preferences/display.py:51
+#: sunflower/gui/preferences/display.py:52
 msgid "Focus new tab after opening"
-msgstr "Focus op nieuwe tab na opening"
+msgstr "Nieuw tabblad focussen na openen"
 
-#: application/gui/preferences/display.py:52
-msgid "Show normal button relief"
-msgstr "Toon normaal knoprelief"
-
-#: application/gui/preferences/display.py:53
-msgid "Show icons instead of text in tab buttons"
-msgstr "Toon iconen in plaats van tekst op tabknoppen"
-
-#: application/gui/preferences/display.py:54
+#: sunflower/gui/preferences/display.py:53
 msgid "Show close button"
-msgstr "Toon afsluitknop"
+msgstr "Sluitknop tonen"
 
-#: application/gui/preferences/display.py:55
+#: sunflower/gui/preferences/display.py:54
 msgid "Show tab(s) even if there is only one"
-msgstr "Tab(s) tonen zelfs als er maar een van is"
+msgstr "Tabbladbalk tonen, ook als er slechts één tabblad is"
 
-#: application/gui/preferences/display.py:56
-msgid "Use Ubuntu coloring method for tab title bars"
-msgstr "Gebruik voor titelbalk van tabs de kleurmethode van Ubuntu"
-
-#: application/gui/preferences/display.py:57
+#: sunflower/gui/preferences/display.py:55
 msgid "Change title bar color when started as super user"
-msgstr "Wijzig kleur titelbalk indien opgestart als superuser"
+msgstr "Kleur van titelbalk aanpassen bij opstarten als superuser"
 
-#: application/gui/preferences/display.py:72
+#: sunflower/gui/preferences/display.py:67
 msgid "Show status bar:"
-msgstr "Toon statusbalk:"
+msgstr "Statusbalk tonen:"
 
-#: application/gui/preferences/display.py:76
+#: sunflower/gui/preferences/display.py:71
 msgid "Always"
 msgstr "Altijd"
 
-#: application/gui/preferences/display.py:77
+#: sunflower/gui/preferences/display.py:72
 msgid "When needed"
 msgstr "Indien nodig"
 
-#: application/gui/preferences/display.py:78
+#: sunflower/gui/preferences/display.py:73
 msgid "Never"
 msgstr "Nooit"
 
-#: application/gui/preferences/display.py:88
+#: sunflower/gui/preferences/display.py:83
 msgid "Expanded tabs:"
-msgstr "Verbrede tabs:"
+msgstr "Brede tabbladen:"
 
-#: application/gui/preferences/display.py:92
-#: application/gui/preferences/item_list.py:91
-#: application/gui/preferences/item_list.py:124 application/queue.py:33
+#: sunflower/gui/preferences/display.py:87
+#: sunflower/gui/preferences/item_list.py:100 sunflower/queue.py:30
 msgid "None"
 msgstr "Geen"
 
-#: application/gui/preferences/display.py:94
+#: sunflower/gui/preferences/display.py:89
 msgid "All"
 msgstr "Alle"
 
-#: application/gui/preferences/display.py:104
+#: sunflower/gui/preferences/display.py:99
 msgid "Other"
 msgstr "Overig"
 
-#: application/gui/preferences/display.py:108
+#: sunflower/gui/preferences/display.py:103
 msgid "Hide operation window on minimize"
-msgstr "Verberg uitvoeringsvenster bij minimaliseren"
+msgstr "Handelingsvenster verbergen na minimaliseren"
 
-#: application/gui/preferences/display.py:109
+#: sunflower/gui/preferences/display.py:104
 msgid "Show notifications"
-msgstr "Toon notificaties"
+msgstr "Meldingen tonen"
 
-#: application/gui/preferences/display.py:110
+#: sunflower/gui/preferences/display.py:106
 msgid "Use path completion on non-local paths"
-msgstr "Pad aanvullen bij niet lokale paden."
+msgstr "Niet-lokale paden automatisch aanvullen"
 
-#: application/gui/preferences/display.py:118
+#: sunflower/gui/preferences/display.py:114
 msgid "Size format:"
-msgstr "Format voor grootte:"
+msgstr "Grootte-opmaak:"
 
-#: application/gui/preferences/display.py:122
+#: sunflower/gui/preferences/display.py:118
 msgid "Localized"
 msgstr "Aangepast"
 
-#: application/gui/preferences/display.py:123
+#: sunflower/gui/preferences/display.py:119
 msgid "SI <small>(1 kB = 1000 B)</small>"
 msgstr "SI <small>(1 kB = 1000 B)</small>"
 
-#: application/gui/preferences/display.py:124
+#: sunflower/gui/preferences/display.py:120
 msgid "IEC <small>(1 KiB = 1024 B)</small>"
 msgstr "IEC <small>(1 KiB = 1024 B)</small>"
 
-#: application/gui/preferences/item_list.py:37
-#: application/plugins/file_list/column_editor.py:70
-#: application/plugin_base/item_list.py:245
+#: sunflower/gui/preferences/item_list.py:37
+#: sunflower/plugins/file_list/column_editor.py:72
+#: sunflower/plugin_base/item_list.py:201
 msgid "Item List"
 msgstr "Items"
 
-#: application/gui/preferences/item_list.py:42
+#: sunflower/gui/preferences/item_list.py:42
 msgid "Look & feel"
-msgstr "Look & feel"
+msgstr "Uiterlijk"
 
-#: application/gui/preferences/item_list.py:43
+#: sunflower/gui/preferences/item_list.py:43
 msgid "Hidden files"
 msgstr "Verborgen bestanden"
 
-#: application/gui/preferences/item_list.py:45
+#: sunflower/gui/preferences/item_list.py:45
 msgid "Directories"
-msgstr "Directory's"
+msgstr "Mappen"
 
-#: application/gui/preferences/item_list.py:46
+#: sunflower/gui/preferences/item_list.py:46
 msgid "Columns"
 msgstr "Kolommen"
 
-#: application/gui/preferences/item_list.py:63
+#: sunflower/gui/preferences/item_list.py:63
 msgid "Row hinting"
 msgstr "Regelaanduiding"
 
-#: application/gui/preferences/item_list.py:64
+#: sunflower/gui/preferences/item_list.py:64
 msgid "Case sensitive item sorting"
 msgstr "Hoofdlettergevoelig sorteren"
 
-#: application/gui/preferences/item_list.py:65
+#: sunflower/gui/preferences/item_list.py:65
 msgid "Number sensitive item sorting"
 msgstr "Numeriek sorteren"
 
-#: application/gui/preferences/item_list.py:66
+#: sunflower/gui/preferences/item_list.py:66
 msgid "Single click navigation"
 msgstr "Eenmaal klikken"
 
-#: application/gui/preferences/item_list.py:67
+#: sunflower/gui/preferences/item_list.py:67
 msgid "Right click selects items"
-msgstr "Items selecteren met rechter muisknop"
+msgstr "Items selecteren met rechtermuisknop"
 
-#: application/gui/preferences/item_list.py:68
+#: sunflower/gui/preferences/item_list.py:68
 msgid "Show list headers"
-msgstr "Toon lijstkoppen"
+msgstr "Lijstkoppen tonen"
 
-#: application/gui/preferences/item_list.py:69
+#: sunflower/gui/preferences/item_list.py:69
 msgid "Fast media preview"
-msgstr "Snelle media preview"
+msgstr "Snelle voorvertoning"
 
-#: application/gui/preferences/item_list.py:70
+#: sunflower/gui/preferences/item_list.py:70
 msgid "Show tree expanders"
-msgstr "Toon knop voor uitklappen boom"
+msgstr "Knop tonen om boomstructuren uit te klappen"
 
-#: application/gui/preferences/item_list.py:71
-msgid "Hide horizontal scrollbar"
-msgstr "Verberg horizontale schuifbalk"
-
-#: application/gui/preferences/item_list.py:72
+#: sunflower/gui/preferences/item_list.py:71
 msgid "Support second level extension"
-msgstr "Ondersteun tweede niveau extensie"
+msgstr "Ondersteuning voor tweedeniveau-uitbreiding"
 
-#: application/gui/preferences/item_list.py:87
-msgid "Breadcrumbs:"
-msgstr "Kruimelpad:"
-
-#: application/gui/preferences/item_list.py:92
-msgid "Normal"
-msgstr "Normaal"
-
-#: application/gui/preferences/item_list.py:93
-msgid "Smart"
-msgstr "Slim"
-
-#: application/gui/preferences/item_list.py:104
+#: sunflower/gui/preferences/item_list.py:85
 msgid "Access mode format:"
-msgstr "Format toegangsmodus:"
+msgstr "Toegangsmodusopmaak:"
 
-#: application/gui/preferences/item_list.py:108
+#: sunflower/gui/preferences/item_list.py:90
 msgid "Octal"
 msgstr "Octaal"
 
-#: application/gui/preferences/item_list.py:109
+#: sunflower/gui/preferences/item_list.py:91
 msgid "Textual"
 msgstr "Tekstueel"
 
-#: application/gui/preferences/item_list.py:120
+#: sunflower/gui/preferences/item_list.py:95
 msgid "Show grid lines:"
-msgstr "Toon gridlijnen"
+msgstr "Rasterlijnen tonen:"
 
-#: application/gui/preferences/item_list.py:125
+#: sunflower/gui/preferences/item_list.py:101
 msgid "Horizontal"
 msgstr "Horizontaal"
 
-#: application/gui/preferences/item_list.py:126
+#: sunflower/gui/preferences/item_list.py:102
 msgid "Vertical"
 msgstr "Verticaal"
 
-#: application/gui/preferences/item_list.py:139
+#: sunflower/gui/preferences/item_list.py:108
 msgid "Selection color:"
 msgstr "Selectiekleur:"
 
-#: application/gui/preferences/item_list.py:149
+#: sunflower/gui/preferences/item_list.py:118
 msgid "Selection indicator:"
 msgstr "Selectie-indicator:"
 
-#: application/gui/preferences/item_list.py:166
+#: sunflower/gui/preferences/item_list.py:133
 msgid "Quick search combination:"
 msgstr "Snel zoeken:"
 
-#: application/gui/preferences/item_list.py:169
+#: sunflower/gui/preferences/item_list.py:136
 msgid "Control"
 msgstr "Control"
 
-#: application/gui/preferences/item_list.py:170
+#: sunflower/gui/preferences/item_list.py:137
 msgid "Alt"
 msgstr "Alt"
 
-#: application/gui/preferences/item_list.py:171
+#: sunflower/gui/preferences/item_list.py:138
 msgid "Shift"
 msgstr "Shift"
 
-#: application/gui/preferences/item_list.py:180
+#: sunflower/gui/preferences/item_list.py:147
 msgid "Date format:"
-msgstr "Datumformat:"
+msgstr "Datumopmaak:"
 
-#: application/gui/preferences/item_list.py:184
+#: sunflower/gui/preferences/item_list.py:151
 msgid "Time is formed using the format located at:"
 msgstr "Tijdstip baseren op:"
 
-#: application/gui/preferences/item_list.py:193
+#: sunflower/gui/preferences/item_list.py:160
 msgid "Show hidden files"
-msgstr "Toon verborgen bestanden"
+msgstr "Verborgen bestanden tonen"
 
-#: application/gui/preferences/item_list.py:200
+#: sunflower/gui/preferences/item_list.py:167
 msgid "Always visible files and directories:"
-msgstr "Bestanden en directory's die overal zichtbaar zijn:"
+msgstr "Bestanden en mappen die overal zichtbaar zijn:"
 
-#: application/gui/preferences/item_list.py:225
+#: sunflower/gui/preferences/item_list.py:192
 msgid "Load specified tabs instead of saved"
-msgstr "Laad gespecificeerde tabs in plaats van opgeslagen tabs"
+msgstr "Opgegeven tabbladen laden in plaats van opgeslagen"
 
-#: application/gui/preferences/item_list.py:238
+#: sunflower/gui/preferences/item_list.py:205
 msgid "Directory"
-msgstr "Directory"
+msgstr "Map"
 
-#: application/gui/preferences/item_list.py:243
+#: sunflower/gui/preferences/item_list.py:210
 msgid "Left list"
-msgstr "Linker lijst"
+msgstr "Linkerlijst"
 
-#: application/gui/preferences/item_list.py:244
+#: sunflower/gui/preferences/item_list.py:211
 msgid "Right list"
-msgstr "Rechter lijst"
+msgstr "Rechterlijst"
 
-#: application/gui/preferences/item_list.py:276
+#: sunflower/gui/preferences/item_list.py:243
 msgid "Custom directory"
-msgstr "Aangepaste directory"
+msgstr "Aangepaste map"
 
-#: application/gui/preferences/item_list.py:278
+#: sunflower/gui/preferences/item_list.py:245
 msgid "Left directory"
-msgstr "Linker directory"
+msgstr "Linkermap"
 
-#: application/gui/preferences/item_list.py:279
+#: sunflower/gui/preferences/item_list.py:246
 msgid "Right directory"
-msgstr "Rechter directory"
+msgstr "Rechtermap"
 
-#: application/gui/preferences/item_list.py:333
+#: sunflower/gui/preferences/item_list.py:300
 msgid "Column"
 msgstr "Kolom"
 
-#: application/gui/preferences/item_list.py:338
-#: application/plugins/file_list/file_list.py:125
-#: application/plugins/find_file_extensions/size.py:63
+#: sunflower/gui/preferences/item_list.py:305
+#: sunflower/plugins/file_list/file_list.py:134
+#: sunflower/plugins/find_file_extensions/size.py:64
 msgid "Size"
 msgstr "Grootte"
 
-#: application/gui/preferences/item_list.py:341
+#: sunflower/gui/preferences/item_list.py:308
 msgid "Visible"
 msgstr "Zichtbaar"
 
-#: application/gui/preferences/item_list.py:344
+#: sunflower/gui/preferences/item_list.py:311
 msgid "Font"
 msgstr "Lettertype"
 
-#: application/gui/preferences/item_list.py:472
+#: sunflower/gui/preferences/item_list.py:429
 msgid "Add always visible item"
-msgstr "Altijd zichtbaar item toevoegen"
+msgstr "'Altijd zichtbaar' item toevoegen"
 
-#: application/gui/preferences/item_list.py:473
+#: sunflower/gui/preferences/item_list.py:430
 msgid "Full name of file or directory to always show:"
-msgstr "Volledige naam van bestand of directory die altijd zichtbaar moet zijn:"
+msgstr "Volledige naam van bestand of map dat/die altijd zichtbaar moet zijn:"
 
-#: application/gui/preferences/item_list.py:499
+#: sunflower/gui/preferences/item_list.py:456
 msgid "Add custom directory"
-msgstr "Aangepaste directory toevoegen"
+msgstr "Aangepaste map toevoegen"
 
-#: application/gui/preferences/item_list.py:500
+#: sunflower/gui/preferences/item_list.py:457
 msgid "Full path:"
 msgstr "Volledig pad:"
 
-#: application/gui/preferences/item_list.py:581
+#: sunflower/gui/preferences/item_list.py:538
 msgid ""
 "Quick search settings are in conflict with VIM navigation style. To resolve "
 "this issue your quick search settings were restored to default."
-msgstr "De snelzoekinstellingen wijken af van de VIM-navigatiestijl en zijn daarom teruggezet naar de standaard instellingen."
+msgstr "De snelzoekinstellingen wijken af van de VIM-navigatiestijl en zijn daarom teruggezet op de standaardwaarden."
 
-#: application/gui/main_window.py:118 application/gui/main_window.py:1516
-#: application/gui/about_window.py:101 application/gui/about_window.py:102
+#: sunflower/gui/main_window.py:73 sunflower/gui/main_window.py:76
+#: sunflower/gui/main_window.py:163 sunflower/gui/about_window.py:66
+#: sunflower/gui/about_window.py:67 sunflower/__main__.py:216
 msgid "Sunflower"
 msgstr "Sunflower"
 
-#: application/gui/main_window.py:174
-msgid "_File"
-msgstr "_Bestand"
+#: sunflower/gui/main_window.py:180
+msgid "Create new file, directory and more."
+msgstr "Maak een nieuw bestand, nieuwe map of iets anders aan."
 
-#: application/gui/main_window.py:178
-msgid "New _tab"
-msgstr "Nieuwe _tab"
-
-#: application/gui/main_window.py:190
+#: sunflower/gui/main_window.py:187 sunflower/gui/main_window.py:1738
 msgid "Create _file"
-msgstr "Maak _bestand"
+msgstr "Bestand _aanmaken"
 
-#: application/gui/main_window.py:199
+#: sunflower/gui/main_window.py:192 sunflower/gui/main_window.py:1739
 msgid "Create _directory"
-msgstr "Maak _directory"
+msgstr "Map _aanmaken"
 
-#: application/gui/main_window.py:211
-#: application/plugin_base/item_list.py:1009
-msgid "_Open"
-msgstr "_Open"
+#: sunflower/gui/main_window.py:203
+msgid "Create new tab"
+msgstr "Nieuw tabblad openen"
 
-#: application/gui/main_window.py:218
-#: application/plugin_base/item_list.py:1018
-msgid "Open in new ta_b"
-msgstr "Open in nieuwe ta_b"
-
-#: application/gui/main_window.py:228
-#: application/plugin_base/item_list.py:1175
-msgid "_Properties"
-msgstr "_Eigenschappen"
-
-#: application/gui/main_window.py:238 application/indicator.py:49
-msgid "_Quit"
-msgstr "_Afsluiten"
-
-#: application/gui/main_window.py:248
-msgid "_Edit"
-msgstr "_Bewerk"
-
-#: application/gui/main_window.py:251
-#: application/plugin_base/item_list.py:1082
-msgid "Cu_t"
-msgstr "Knippen"
-
-#: application/gui/main_window.py:258
-#: application/plugin_base/item_list.py:1091
-msgid "_Copy"
-msgstr "Kopiëren"
-
-#: application/gui/main_window.py:265
-#: application/plugin_base/item_list.py:1100
-msgid "_Paste"
-msgstr "_Plakken"
-
-#: application/gui/main_window.py:275
-#: application/plugin_base/item_list.py:1131
-msgid "_Delete"
-msgstr "Verwijderen"
-
-#: application/gui/main_window.py:285
-msgid "_Send to..."
-msgstr "_Verzenden naar..."
-
-#: application/gui/main_window.py:294
-#: application/plugin_base/item_list.py:1156
-msgid "Ma_ke link"
-msgstr "Maak snelkoppeling"
-
-#: application/gui/main_window.py:300
-#: application/plugin_base/item_list.py:1162
-msgid "_Rename..."
-msgstr "Hernoemen..."
-
-#: application/gui/main_window.py:308
-msgid "_Unmount"
-msgstr "_Unmount"
-
-#: application/gui/main_window.py:312
-msgid "Mount list is empty"
-msgstr "Mountlijst is leeg"
-
-#: application/gui/main_window.py:321
-msgid "_Preferences"
-msgstr "Voorkeuren"
-
-#: application/gui/main_window.py:331
-msgid "_Mark"
-msgstr "_Markeer"
-
-#: application/gui/main_window.py:334
+#: sunflower/gui/main_window.py:286
 msgid "_Select all"
 msgstr "Alles _selecteteren"
 
-#: application/gui/main_window.py:341
+#: sunflower/gui/main_window.py:287
 msgid "_Deselect all"
-msgstr "Alles _Deselecteren"
+msgstr "Selectie onge_daan maken"
 
-#: application/gui/main_window.py:346
+#: sunflower/gui/main_window.py:288
 msgid "Invert select_ion"
-msgstr "Inverteer select_ie"
+msgstr "Select_ie omkeren"
 
-#: application/gui/main_window.py:352
+#: sunflower/gui/main_window.py:290 sunflower/gui/main_window.py:1742
 msgid "S_elect with pattern"
-msgstr "S_electeer met patroon"
+msgstr "S_electeren met patroon"
 
-#: application/gui/main_window.py:358
+#: sunflower/gui/main_window.py:291 sunflower/gui/main_window.py:1743
 msgid "Deselect with pa_ttern"
-msgstr "Deselecteer met pa_troon"
+msgstr "Selectie ongedaan maken met pa_troon"
 
-#: application/gui/main_window.py:365
+#: sunflower/gui/main_window.py:292 sunflower/gui/main_window.py:1744
 msgid "Select with same e_xtension"
-msgstr "Selecteer zelfde e_xtensie"
+msgstr "Bestanden met dezelfde e_xtensies selecteren"
 
-#: application/gui/main_window.py:371
+#: sunflower/gui/main_window.py:293 sunflower/gui/main_window.py:1745
 msgid "Deselect with same exte_nsion"
-msgstr "Deselecteer zelfde exte_nsie"
+msgstr "Selecetie met dezelfde e_xtensies ongedaan maken"
 
-#: application/gui/main_window.py:378
+#: sunflower/gui/main_window.py:295 sunflower/gui/main_window.py:1746
 msgid "Compare _directories"
-msgstr "_Directories vergelijken"
+msgstr "_Mappen vergelijken"
 
-#: application/gui/main_window.py:386
-msgid "_Tools"
-msgstr "_Gereedschappen"
-
-#: application/gui/main_window.py:390
+#: sunflower/gui/main_window.py:302 sunflower/gui/main_window.py:1747
+#: sunflower/gui/main_window.py:1748
 msgid "_Find files"
-msgstr "_Zoek bestanden"
+msgstr "Bestanden _zoeken"
 
-#: application/gui/main_window.py:398
-msgid "Find _duplicate files"
-msgstr "Zoek _dubbele bestanden"
-
-#: application/gui/main_window.py:403
-msgid "_Synchronize directories"
-msgstr "Directory's _synchroniseren"
-
-#: application/gui/main_window.py:409
+#: sunflower/gui/main_window.py:303
 msgid "Advanced _rename"
-msgstr "Geavanceerd _hernoemen"
+msgstr "Naam wijzigen (geavancee_rd)"
 
-#: application/gui/main_window.py:416
+#: sunflower/gui/main_window.py:304
 msgid "_Mount manager"
-msgstr "_Mounts beheren"
+msgstr "_Aankoppelpunten beheren"
 
-#: application/gui/main_window.py:422
+#: sunflower/gui/main_window.py:305
 msgid "_Keyring manager"
-msgstr "_Sleutelring beheren"
+msgstr "_Sleutelhanger beheren"
 
-#: application/gui/main_window.py:430
-msgid "_View"
-msgstr "_Bekijken"
-
-#: application/gui/main_window.py:433
-msgid "Ful_lscreen"
-msgstr "Vol_ledig scherm"
-
-#: application/gui/main_window.py:441
-msgid "Rel_oad item list"
-msgstr "Itemlijst herladen"
-
-#: application/gui/main_window.py:451
+#: sunflower/gui/main_window.py:308 sunflower/gui/main_window.py:1752
 msgid "Fast m_edia preview"
-msgstr "Snelle media preview"
+msgstr "Sn_elle voorvertoning"
 
-#: application/gui/main_window.py:462
+#: sunflower/gui/main_window.py:309 sunflower/gui/main_window.py:1753
 msgid "Show _hidden files"
-msgstr "Toon verborgen bestanden"
+msgstr "Verbor_gen bestanden tonen"
 
-#: application/gui/main_window.py:470
+#: sunflower/gui/main_window.py:311
 msgid "Show _toolbar"
-msgstr "Toon werkbalk"
+msgstr "Werkbalk _tonen"
 
-#: application/gui/main_window.py:478
+#: sunflower/gui/main_window.py:312
+msgid "Show _titlebar"
+msgstr "_Titelbalk tonen"
+
+#: sunflower/gui/main_window.py:313
 msgid "Show _command bar"
-msgstr "Toon _opdrachtbalk"
+msgstr "_Opdra_chtbalk tonen"
 
-#: application/gui/main_window.py:486
-msgid "Show co_mmand entry"
-msgstr "Toon co_mmandoregel"
-
-#: application/gui/main_window.py:494
+#: sunflower/gui/main_window.py:314
 msgid "_Horizontal split"
-msgstr "_Horizontaal verdelen"
+msgstr "_Horizontaal splitsen"
 
-#: application/gui/main_window.py:504
-msgid "_Commands"
-msgstr "_Commando's"
+#: sunflower/gui/main_window.py:315
+msgid "_Dark theme"
+msgstr "_Donker thema"
 
-#: application/gui/main_window.py:508
-msgid "_Operations"
-msgstr "_Acties"
-
-#: application/gui/main_window.py:512
-msgid "There are no active operations"
-msgstr "Er zijn geen actieve acties"
-
-#: application/gui/main_window.py:518
-msgid "_Help"
-msgstr "_Help"
-
-#: application/gui/main_window.py:521
+#: sunflower/gui/main_window.py:321
 msgid "_Home page"
-msgstr "_Home page"
+msgstr "_Website"
 
-#: application/gui/main_window.py:529
+#: sunflower/gui/main_window.py:322
 msgid "Check for new version"
-msgstr "Controleer op updates"
+msgstr "Controleren op updates"
 
-#: application/gui/main_window.py:536
-msgid "File a _bug report"
-msgstr "_Bug rapporteren"
-
-#: application/gui/main_window.py:545
+#: sunflower/gui/main_window.py:323
 msgid "_About"
-msgstr "Over"
+msgstr "_Over"
 
-#: application/gui/main_window.py:675
+#: sunflower/gui/main_window.py:325
+msgid "_Mark"
+msgstr "_Markeren"
+
+#: sunflower/gui/main_window.py:326
+msgid "_Tools"
+msgstr "_Hulpmiddelen"
+
+#: sunflower/gui/main_window.py:327
+msgid "_View"
+msgstr "_Beeld"
+
+#: sunflower/gui/main_window.py:329
+msgid "_Help"
+msgstr "_Hulp"
+
+#: sunflower/gui/main_window.py:330 sunflower/gui/main_window.py:1741
+msgid "_Preferences"
+msgstr "_Voorkeuren"
+
+#: sunflower/gui/main_window.py:331 sunflower/gui/main_window.py:1740
+#: sunflower/indicator.py:50
+msgid "_Quit"
+msgstr "_Afsluiten"
+
+#: sunflower/gui/main_window.py:387
+msgid "Execute command:"
+msgstr "Opdracht uitvoeren:"
+
+#: sunflower/gui/main_window.py:423
 msgid "Refresh"
 msgstr "Verversen"
 
-#: application/gui/main_window.py:675
+#: sunflower/gui/main_window.py:423
 msgid "Reload active item list"
-msgstr "Lijst met actieve items verversen"
+msgstr "Lijst met actieve items herladen"
 
-#: application/gui/main_window.py:676 application/tools/advanced_rename.py:93
+#: sunflower/gui/main_window.py:424 sunflower/tools/advanced_rename.py:95
 msgid "Rename"
-msgstr "Hernoemen"
+msgstr "Naam wijzigen"
 
-#: application/gui/main_window.py:676
+#: sunflower/gui/main_window.py:424
 msgid "Rename selected file"
-msgstr "Hernoem geselecteerd bestand"
+msgstr "Naam van geselecteerd bestand wijzigen"
 
-#: application/gui/main_window.py:677
+#: sunflower/gui/main_window.py:425
 msgid "Preview"
-msgstr "Voorbeeldweergave"
+msgstr "Voorvertoning"
 
-#: application/gui/main_window.py:677
+#: sunflower/gui/main_window.py:425
 msgid "Preview selected file"
-msgstr "Voorbeeldweergave geselecteerd bestand"
+msgstr "Geselecteerd bestand voorvertonen"
 
-#: application/gui/main_window.py:678
+#: sunflower/gui/main_window.py:426
 msgid "Edit selected file"
-msgstr "Bewerken geselecteerd bestand"
+msgstr "Geselecteerd bestand bewerken"
 
-#: application/gui/main_window.py:679 application/gui/input_dialog.py:899
-#: application/gui/input_dialog.py:1253
+#: sunflower/gui/main_window.py:427 sunflower/gui/input_dialog.py:916
+#: sunflower/gui/input_dialog.py:1263
 msgid "Copy"
 msgstr "Kopiëren"
 
-#: application/gui/main_window.py:679
+#: sunflower/gui/main_window.py:427
 msgid "Copy selected items from active to opposite list"
-msgstr "Kopieer geselecteerde items naar tegenoverliggende lijst"
+msgstr "Geselecteerde items kopiëren naar tegenover liggende lijst"
 
-#: application/gui/main_window.py:680 application/gui/input_dialog.py:1003
+#: sunflower/gui/main_window.py:428 sunflower/gui/input_dialog.py:1015
 msgid "Move"
 msgstr "Verplaatsen"
 
-#: application/gui/main_window.py:680
+#: sunflower/gui/main_window.py:428
 msgid "Move selected items from active to opposite list"
-msgstr "Verplaats geselecteerde items naar tegenoverliggende lijst"
+msgstr "Geselecteerde items verplaatsen naar tegenover liggende lijst"
 
-#: application/gui/main_window.py:681
+#: sunflower/gui/main_window.py:429
 msgid "Create"
-msgstr "Maak"
+msgstr "Maken"
 
-#: application/gui/main_window.py:681
+#: sunflower/gui/main_window.py:429
 msgid "Create new directory"
-msgstr "Maak nieuwe directory"
+msgstr "Nieuwe map aanmaken"
 
-#: application/gui/main_window.py:682
+#: sunflower/gui/main_window.py:430
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: application/gui/main_window.py:682
+#: sunflower/gui/main_window.py:430
 msgid "Delete selected items"
-msgstr "Verwijder geselecteerde items"
+msgstr "Geselecteerde items verwijderen"
 
-#: application/gui/main_window.py:823 application/gui/input_dialog.py:1314
-msgid "Add bookmark"
-msgstr "Bladwijzer toevoegen"
+#: sunflower/gui/main_window.py:474
+msgid "Edit commands"
+msgstr "Opdrachten bewerken"
 
-#: application/gui/main_window.py:828 application/plugin_base/item_list.py:252
-msgid "Edit bookmarks"
-msgstr "Bladwijzer bewerken"
-
-#: application/gui/main_window.py:863
-msgid "_Edit commands"
-msgstr "Commando's  bewerken"
-
-#: application/gui/main_window.py:1504
-msgid "Sunflower file manager"
-msgstr "Sunflower file manager"
-
-#: application/gui/main_window.py:1519
-msgid "print version and exit"
-msgstr "Print versie en afsluiten"
-
-#: application/gui/main_window.py:1524
-msgid "skip loading additional plugins"
-msgstr "Laden additionele plugins overslaan"
-
-#: application/gui/main_window.py:1530
-msgid "skip loading saved tabs"
-msgstr "Laden opgeslagen tabs overslaan"
-
-#: application/gui/main_window.py:1536
-msgid "open new tab on the left notebook"
-msgstr "Nieuwe tab openen in linker notebook"
-
-#: application/gui/main_window.py:1544
-msgid "open new tab on the right notebook"
-msgstr "Nieuwe tab openen in rechter noteboek"
-
-#: application/gui/main_window.py:1552
-msgid "open terminal tab on the left notebook"
-msgstr "Terminal openen in linker notebook"
-
-#: application/gui/main_window.py:1560
-msgid "open terminal tab on the right notebook"
-msgstr "Terminal openen in rechter notebook"
-
-#: application/gui/main_window.py:1657
+#: sunflower/gui/main_window.py:1304
 msgid "Select items"
-msgstr "Geselecteerde items"
+msgstr "Items selecteren"
 
-#: application/gui/main_window.py:1658 application/gui/main_window.py:1714
+#: sunflower/gui/main_window.py:1305 sunflower/gui/main_window.py:1361
 msgid "Selection pattern (eg.: *.jpg):"
 msgstr "Selectiepatroon (bv.: *.jpg):"
 
-#: application/gui/main_window.py:1713
+#: sunflower/gui/main_window.py:1360
 msgid "Deselect items"
-msgstr "Deselecteer items"
+msgstr "Items deselecteren"
 
-#: application/gui/main_window.py:1750
+#: sunflower/gui/main_window.py:1397
 msgid "First level of compared directories is identical."
-msgstr "Eerste niveau van vergeleken directories is identiek"
+msgstr "Het eerste niveau van de vergeleken mappen is identiek."
 
-#: application/gui/main_window.py:1913
+#: sunflower/gui/main_window.py:1521
 msgid ""
 "There was a problem starting external terminal application. Check if command"
 " is valid!"
-msgstr "Probleem bij het starten van extern terminalvenster. Controleer of de opdracht correct is!"
+msgstr "Er is een probleem opgetreden bij het starten van een extern terminalvenster. Controleer of de opdracht juist is!"
 
-#: application/gui/main_window.py:2120
+#: sunflower/gui/main_window.py:1729
 msgid "Main Menu"
 msgstr "Hoofdmenu"
 
-#: application/gui/main_window.py:2186
+#: sunflower/gui/main_window.py:1734
 msgid "Restore handle position"
-msgstr "Herstel handvatpositie"
+msgstr "Handvatpositie herstellen"
 
-#: application/gui/main_window.py:2187
+#: sunflower/gui/main_window.py:1735
 msgid "Move handle to the left"
-msgstr "Verplaats handvat naar links"
+msgstr "Handvat naar links verplaatsen"
 
-#: application/gui/main_window.py:2188
+#: sunflower/gui/main_window.py:1736
 msgid "Move handle to the right"
-msgstr "Verplaats handvat naar rechts"
+msgstr "Handvat naar rechts verplaatsen"
 
-#: application/gui/main_window.py:2232
+#: sunflower/gui/main_window.py:1751
+msgid "Rel_oad item list"
+msgstr "Itemlijst her_laden"
+
+#: sunflower/gui/main_window.py:1818
 msgid ""
 "Error saving configuration to files in your home directory. Make sure you "
 "have enough permissions."
-msgstr "Fout bij het opslaan van configuratiebestand in Home directory. Controleer of u over de juiste rechten beschikt."
+msgstr "Het configuratiebestand kan niet worden opgeslagen in je persoonlijke map. Controleer of je hiertoe gemachtigd bent."
 
-#: application/gui/main_window.py:2869
+#: sunflower/gui/main_window.py:2451
 msgid ""
 "Active object is not item list. Advanced rename tool needs files and "
 "directories."
-msgstr "Actief object is geen itemlijst. De tool voor geavanceerd hernoemen werkt met bestanden en directory's."
+msgstr "Actief object is geen itemlijst. Het huplmiddel voor geavanceerde naamswijzigingen werkt met bestanden en mappen."
 
-#: application/gui/main_window.py:2884
+#: sunflower/gui/main_window.py:2466
 msgid ""
 "No rename extensions were found. Please enable basic rename options plugin "
 "and try again."
-msgstr "Geen programma-uitbreidingen voor hernoemen gevonden. Activeer de plugin voor hernoemopties en probeer het opnieuw. "
+msgstr "Geen programma-uitbreidingen voor naamswijzigingen aangetroffen. Schakel de plug-in voor naamswijzigingen in en probeer het opnieuw. "
 
-#: application/gui/main_window.py:2911
+#: sunflower/gui/main_window.py:2493
 msgid ""
 "No extensions for finding files were found. Please enable basic find file "
 "options plugin and try again."
-msgstr "Geen programma-uitbreidingen voor zoeken gevonden. Activeer de plugin voor zoekopties en probeer het opnieuw."
+msgstr "Geen programma-uitbreidingen voor zoeken gevonden. Schakel de plug-in voor zoekopties in en probeer het opnieuw."
 
-#: application/gui/main_window.py:2937
+#: sunflower/gui/main_window.py:2519
 msgid "Keyring is empty!"
-msgstr "Sleutelring is leeg!"
+msgstr "De sleutelhanger is leeg!"
 
-#: application/gui/main_window.py:2950
+#: sunflower/gui/main_window.py:2532
 msgid ""
 "Keyring is not available. Make sure you have Python Gnome keyring module "
 "installed."
-msgstr "Sleutelring niet beschikbaar. Controleer of de Python Gnome keyring module geïnstaleerd is."
+msgstr "De sleutelhanger is niet beschikbaar. Controleer of de Python Gnome-sleutelhangermodule geïnstalleerd is."
 
-#: application/gui/preferences_window.py:31
+#: sunflower/gui/preferences_window.py:32
+#: sunflower/gui/preferences_window.py:47
 msgid "Preferences"
 msgstr "Voorkeuren"
 
-#: application/gui/preferences_window.py:106
+#: sunflower/gui/preferences_window.py:106
 msgid "Program restart required!"
-msgstr "Programma moet opnieuw gestart worden!"
+msgstr "Herstart vereist!"
 
-#: application/gui/preferences_window.py:147
+#: sunflower/gui/preferences_window.py:143
 msgid ""
 "There are unsaved changes.\n"
 "Do you want to save them?"
-msgstr "Er zijn nog niet opgeslagen wijzigingen.\nWilt u die opslaan?"
+msgstr "Er zijn niet-opgeslagen wijzigingen.\nWil je deze opslaan?"
 
-#: application/gui/history_list.py:25 application/plugin_base/item_list.py:212
+#: sunflower/gui/history_list.py:27
 msgid "History"
 msgstr "Geschiedenis"
 
-#: application/gui/history_list.py:48
+#: sunflower/gui/history_list.py:50
 msgid "Path"
 msgstr "Pad"
 
-#: application/gui/history_list.py:65
-#: application/gui/mounts_manager_window.py:381
+#: sunflower/gui/history_list.py:67 sunflower/widgets/location_menu.py:51
 msgid "Open"
-msgstr "Open"
+msgstr "Openen"
 
-#: application/gui/history_list.py:74
-#: application/gui/mounts_manager_window.py:392
+#: sunflower/gui/history_list.py:76
 msgid "Open in tab"
-msgstr "Open in tab"
+msgstr "Openen op tabblad"
 
-#: application/gui/history_list.py:75
+#: sunflower/gui/history_list.py:77 sunflower/widgets/location_menu.py:56
 msgid "Open selected path in new tab"
-msgstr "Open geselecteerd pad in nieuwe tab"
+msgstr "Geselecteerd pad openen op nieuw tabblad"
 
-#: application/gui/history_list.py:78
+#: sunflower/gui/history_list.py:80
 msgid "Open in opposite list"
-msgstr "Open in tegenoverliggende lijst"
+msgstr "Openen in tegenoverliggende lijst"
 
-#: application/gui/history_list.py:79
+#: sunflower/gui/history_list.py:81 sunflower/widgets/location_menu.py:61
 msgid "Open selected path in opposite list"
-msgstr "Open geselecteerde pad in tegenoverliggende lijst"
+msgstr "Geselecteerd pad openen in tegenoverliggende lijst"
 
-#: application/gui/properties_window.py:58
+#: sunflower/gui/properties_window.py:58
 #, python-brace-format
-msgid "{0} Properties"
-msgstr "{0} Eigenschappen"
+msgid "\"{0}\" Properties"
+msgstr "\"{0}\" Eigenschappen"
 
-#: application/gui/properties_window.py:86
-#: application/plugins/rename_extensions/default.py:268
-#: application/plugins/find_file_extensions/default.py:118
+#: sunflower/gui/properties_window.py:83
+#: sunflower/plugins/rename_extensions/default.py:267
+#: sunflower/plugins/find_file_extensions/default.py:115
 msgid "Basic"
 msgstr "Basis"
 
-#: application/gui/properties_window.py:90
+#: sunflower/gui/properties_window.py:84
 msgid "Permissions"
-msgstr "Permissies"
+msgstr "Machtigingen"
 
-#: application/gui/properties_window.py:94
-#: application/gui/input_dialog.py:1707
+#: sunflower/gui/properties_window.py:85 sunflower/gui/input_dialog.py:1696
 msgid "Open With"
 msgstr "Openen met"
 
-#: application/gui/properties_window.py:98
+#: sunflower/gui/properties_window.py:86
 msgid "Emblems"
 msgstr "Emblemen"
 
-#: application/gui/properties_window.py:151
-#: application/plugins/file_list/file_list.py:1011
+#: sunflower/gui/properties_window.py:130
+#: sunflower/plugins/file_list/file_list.py:1027
 msgid ""
 "File or directory with specified name already exists in current directory. "
 "Item could not be renamed."
-msgstr "Bestand of directory bestaat al. Hernoemen niet uitgevoerd."
+msgstr "Het bestand of de map bestaat al. De naam kan niet worden gewijzigd."
 
-#: application/gui/properties_window.py:186
-#: application/plugins/file_list/file_list.py:996
+#: sunflower/gui/properties_window.py:165
+#: sunflower/plugins/file_list/file_list.py:1012
 msgid "Error renaming specified item. Make sure you have enough permissions."
-msgstr "Fout bij hernoemen van item. Controleer of u over voldoende rechten beschikt."
+msgstr "De itemnaam kan niet worden gewijzigd. Controleer of je hiertoe gemachtigd bent."
 
-#: application/gui/properties_window.py:242
+#: sunflower/gui/properties_window.py:222
 msgid "item"
 msgid_plural "items"
 msgstr[0] "item"
 msgstr[1] "items"
 
-#: application/gui/properties_window.py:259
-#: application/gui/operation_dialog.py:362
+#: sunflower/gui/properties_window.py:239
+#: sunflower/gui/operation_dialog.py:313
 msgid "unknown"
 msgstr "onbekend"
 
-#: application/gui/properties_window.py:368
+#: sunflower/gui/properties_window.py:348
 msgid "Error changing owner or group"
-msgstr "Fout bij wijzigen eigenaar of groep"
+msgstr "Kan eigenaar of groep niet aanpassen"
 
-#: application/gui/properties_window.py:441
-#: application/gui/input_dialog.py:1329 application/gui/input_dialog.py:1527
-#: application/plugins/default_toolbar/bookmark_button.py:74
-#: application/plugins/file_list/dialogs.py:60
-#: application/plugins/file_list/dialogs.py:273
-#: application/plugins/file_list/dialogs.py:467
+#: sunflower/gui/properties_window.py:421 sunflower/gui/input_dialog.py:1337
+#: sunflower/gui/input_dialog.py:1516
+#: sunflower/plugins/file_list/dialogs.py:60
+#: sunflower/plugins/file_list/dialogs.py:273
+#: sunflower/plugins/file_list/dialogs.py:467
 msgid "Name:"
 msgstr "Naam:"
 
-#: application/gui/properties_window.py:442
-#: application/gui/input_dialog.py:1534
+#: sunflower/gui/properties_window.py:422 sunflower/gui/input_dialog.py:1524
 msgid "Type:"
 msgstr "Type:"
 
-#: application/gui/properties_window.py:443
-#: application/gui/input_dialog.py:1184 application/gui/input_dialog.py:1201
+#: sunflower/gui/properties_window.py:423 sunflower/gui/input_dialog.py:1194
+#: sunflower/gui/input_dialog.py:1211
 msgid "Size:"
 msgstr "Grootte:"
 
-#: application/gui/properties_window.py:444
-#: application/gui/input_dialog.py:1342
+#: sunflower/gui/properties_window.py:424 sunflower/gui/input_dialog.py:1350
 msgid "Location:"
 msgstr "Locatie:"
 
-#: application/gui/properties_window.py:445
+#: sunflower/gui/properties_window.py:425
 msgid "Volume:"
 msgstr "Volume:"
 
-#: application/gui/properties_window.py:446
+#: sunflower/gui/properties_window.py:426
 msgid "Accessed:"
-msgstr "Gebruikt:"
+msgstr "Gebruikt op:"
 
-#: application/gui/properties_window.py:447
-#: application/gui/input_dialog.py:1185 application/gui/input_dialog.py:1202
+#: sunflower/gui/properties_window.py:427 sunflower/gui/input_dialog.py:1195
+#: sunflower/gui/input_dialog.py:1212
 msgid "Modified:"
-msgstr "Gewijzigd:"
+msgstr "Gewijzigd op:"
 
-#: application/gui/properties_window.py:522
+#: sunflower/gui/properties_window.py:502
 msgid "Access"
 msgstr "Toegang"
 
-#: application/gui/properties_window.py:528
-#: application/gui/properties_window.py:598
-#: application/gui/input_dialog.py:223
+#: sunflower/gui/properties_window.py:508
+#: sunflower/gui/properties_window.py:578 sunflower/gui/input_dialog.py:221
 msgid "User:"
 msgstr "Gebruiker:"
 
-#: application/gui/properties_window.py:532
-#: application/gui/properties_window.py:602
-#: application/gui/input_dialog.py:227
+#: sunflower/gui/properties_window.py:512
+#: sunflower/gui/properties_window.py:582 sunflower/gui/input_dialog.py:225
 msgid "Group:"
 msgstr "Groep:"
 
-#: application/gui/properties_window.py:536
-#: application/gui/input_dialog.py:231
+#: sunflower/gui/properties_window.py:516 sunflower/gui/input_dialog.py:229
 msgid "Others:"
 msgstr "Anderen:"
 
-#: application/gui/properties_window.py:541
-#: application/gui/properties_window.py:554
-#: application/gui/properties_window.py:567
-#: application/gui/input_dialog.py:236 application/gui/input_dialog.py:249
-#: application/gui/input_dialog.py:262
+#: sunflower/gui/properties_window.py:521
+#: sunflower/gui/properties_window.py:534
+#: sunflower/gui/properties_window.py:547 sunflower/gui/input_dialog.py:234
+#: sunflower/gui/input_dialog.py:247 sunflower/gui/input_dialog.py:260
 msgid "Read"
-msgstr "Lezen"
+msgstr "Uitlezen"
 
-#: application/gui/properties_window.py:545
-#: application/gui/properties_window.py:558
-#: application/gui/properties_window.py:571
-#: application/gui/input_dialog.py:240 application/gui/input_dialog.py:253
-#: application/gui/input_dialog.py:266
+#: sunflower/gui/properties_window.py:525
+#: sunflower/gui/properties_window.py:538
+#: sunflower/gui/properties_window.py:551 sunflower/gui/input_dialog.py:238
+#: sunflower/gui/input_dialog.py:251 sunflower/gui/input_dialog.py:264
 msgid "Write"
-msgstr "Schrijven"
+msgstr "Wegschrijven"
 
-#: application/gui/properties_window.py:549
-#: application/gui/properties_window.py:562
-#: application/gui/properties_window.py:575
-#: application/gui/input_dialog.py:244 application/gui/input_dialog.py:257
-#: application/gui/input_dialog.py:270
+#: sunflower/gui/properties_window.py:529
+#: sunflower/gui/properties_window.py:542
+#: sunflower/gui/properties_window.py:555 sunflower/gui/input_dialog.py:242
+#: sunflower/gui/input_dialog.py:255 sunflower/gui/input_dialog.py:268
 msgid "Execute"
 msgstr "Uitvoeren"
 
-#: application/gui/properties_window.py:580
-#: application/gui/input_dialog.py:275
+#: sunflower/gui/properties_window.py:560 sunflower/gui/input_dialog.py:273
 msgid "Octal:"
 msgstr "Octaal:"
 
-#: application/gui/properties_window.py:592
+#: sunflower/gui/properties_window.py:572
 msgid "Ownership"
 msgstr "Eigenaar"
 
-#: application/gui/properties_window.py:666
+#: sunflower/gui/properties_window.py:646
 #, python-brace-format
 msgid "Select an application to open <i>{0}</i> and other files of type \"{1}\""
-msgstr "Selecteer een applicatie om <i>{0}</i> en andere bestanden van het type \"{1}\" te openen"
+msgstr "Kies een programma om <i>{0}</i> en andere '{1}'-bestanden mee te openen"
 
-#: application/gui/input_dialog.py:117
+#: sunflower/gui/input_dialog.py:115
 msgid "Create link"
-msgstr "Verwijzing maken"
+msgstr "Snelkoppeling maken"
 
-#: application/gui/input_dialog.py:118
+#: sunflower/gui/input_dialog.py:116
 msgid "Enter new link name:"
-msgstr "Geef de naam voor de nieuwe verwijzing:"
+msgstr "Geef de snelkoppeling een naam:"
 
-#: application/gui/input_dialog.py:126
+#: sunflower/gui/input_dialog.py:124
 msgid "Original path:"
 msgstr "Oorspronkelijk pad:"
 
-#: application/gui/input_dialog.py:131
+#: sunflower/gui/input_dialog.py:129
 msgid "Create hard link"
-msgstr "Maak hard link"
+msgstr "Harde link maken"
 
-#: application/gui/input_dialog.py:134 application/tools/find_files.py:77
+#: sunflower/gui/input_dialog.py:132
 msgid "Browse"
 msgstr "Bladeren"
 
-#: application/gui/input_dialog.py:153
+#: sunflower/gui/input_dialog.py:151
 msgid "Select original path"
-msgstr "Selecteer origineel pad"
+msgstr "Oorspronkelijk pad selecteren"
 
-#: application/gui/input_dialog.py:213
+#: sunflower/gui/input_dialog.py:211
 msgid "Advanced options"
 msgstr "Geavanceerde opties"
 
-#: application/gui/input_dialog.py:292 application/gui/input_dialog.py:907
+#: sunflower/gui/input_dialog.py:290 sunflower/gui/input_dialog.py:924
 msgid "Save as default configuration"
-msgstr "Opslaan als standaard configuartie"
+msgstr "Opslaan als standaardconfiguartie"
 
-#: application/gui/input_dialog.py:379
-#: application/plugins/file_list/dialogs.py:96
-#: application/plugins/file_list/dialogs.py:304
-#: application/plugins/file_list/dialogs.py:507
+#: sunflower/gui/input_dialog.py:378 sunflower/plugins/file_list/dialogs.py:96
+#: sunflower/plugins/file_list/dialogs.py:304
+#: sunflower/plugins/file_list/dialogs.py:507
 msgid "Password:"
 msgstr "Wachtwoord:"
 
-#: application/gui/input_dialog.py:381
+#: sunflower/gui/input_dialog.py:380
 msgid "Confirm:"
-msgstr "Bevestig:"
+msgstr "Bevestigen:"
 
-#: application/gui/input_dialog.py:435
+#: sunflower/gui/input_dialog.py:435
 msgid "Create empty file"
-msgstr "Maak leeg bestand"
+msgstr "Leeg bestand aanmaken"
 
-#: application/gui/input_dialog.py:436
+#: sunflower/gui/input_dialog.py:436
 msgid "Enter new file name:"
-msgstr "Geef nieuwe bestandsnaam:"
+msgstr "Geef het bestand een naam:"
 
-#: application/gui/input_dialog.py:439
+#: sunflower/gui/input_dialog.py:439
 msgid "Open file in editor"
-msgstr "Open bestand in editor"
+msgstr "Bestand openen in bewerker"
 
-#: application/gui/input_dialog.py:443
-#: application/plugins/rename_extensions/default.py:52
-#: application/plugins/rename_extensions/audio_metadata.py:31
+#: sunflower/gui/input_dialog.py:443
+#: sunflower/plugins/rename_extensions/default.py:54
+#: sunflower/plugins/rename_extensions/audio_metadata.py:33
 msgid "Template:"
 msgstr "Sjabloon:"
 
-#: application/gui/input_dialog.py:503
+#: sunflower/gui/input_dialog.py:502
 msgid "Empty File"
-msgstr "Leeg Bestand"
+msgstr "Leeg bestand"
 
-#: application/gui/input_dialog.py:556
-#: application/plugin_base/item_list.py:1068
+#: sunflower/gui/input_dialog.py:555 sunflower/plugin_base/item_list.py:1023
 msgid "Create directory"
-msgstr "Nieuwe directory"
+msgstr "Nieuwe map"
 
-#: application/gui/input_dialog.py:557
+#: sunflower/gui/input_dialog.py:556
 msgid "Enter new directory name:"
-msgstr "Geen nieuwe directorynaam:"
+msgstr "Geef de map een naam:"
 
-#: application/gui/input_dialog.py:582 application/gui/input_dialog.py:661
-msgid "Operation queue:"
-msgstr "Wachtrij:"
+#: sunflower/gui/input_dialog.py:590
+msgid "Yes"
+msgstr "Ja"
 
-#: application/gui/input_dialog.py:654
+#: sunflower/gui/input_dialog.py:592
+msgid "No"
+msgstr "Nee"
+
+#: sunflower/gui/input_dialog.py:656
 msgid "Only files of this type:"
 msgstr "Alleen bestanden van het type:"
 
-#: application/gui/input_dialog.py:681
+#: sunflower/gui/input_dialog.py:663
+msgid "Operation queue:"
+msgstr "Wachtrij:"
+
+#: sunflower/gui/input_dialog.py:683
 msgid "Affected item list"
-msgstr "Lijst van geraakte bestanden"
+msgstr "Lijst met betrokken bestanden"
 
-#: application/gui/input_dialog.py:704
+#: sunflower/gui/input_dialog.py:706
 msgid "Set owner on destination"
-msgstr "Stel eigenaar in op bestemming"
+msgstr "Eigenaar instellen op bestemming"
 
-#: application/gui/input_dialog.py:705
+#: sunflower/gui/input_dialog.py:707
 msgid "Set access mode on destination"
-msgstr "Stel toegangsrechten in op bestemming"
+msgstr "Toegangsrechten instellen op bestemming"
 
-#: application/gui/input_dialog.py:706
+#: sunflower/gui/input_dialog.py:708
 msgid "Set date and time on destination"
-msgstr "Stel datum en tijd in op bestemming"
+msgstr "Datum en tijd instellen op bestemming"
 
-#: application/gui/input_dialog.py:707
+#: sunflower/gui/input_dialog.py:709
 msgid "Silent mode"
-msgstr "Silent mode"
+msgstr "Stille modus"
 
-#: application/gui/input_dialog.py:714
+#: sunflower/gui/input_dialog.py:714
 msgid "Merge directories"
-msgstr "Directory's samenvoegen"
+msgstr "Mappen samenvoegen"
 
-#: application/gui/input_dialog.py:715
+#: sunflower/gui/input_dialog.py:715
 msgid "Overwrite files"
 msgstr "Bestanden overschrijven"
 
-#: application/gui/input_dialog.py:719
+#: sunflower/gui/input_dialog.py:719
 msgid ""
 "Silent mode will enable operation to finish without disturbing you. If any "
 "errors occur, they will be presented to you after completion."
-msgstr "Silent mode zorgt dat de actie wordt uitgevoerd zonder u te storen. Eventuele fouten worden pas na afronding van de actie kenbaar gemaakt."
+msgstr "De stille modus zorgt ervoor dat acties worden uitgevoerd zonder je te storen. Eventuele fouten worden pas kenbaar gemaakt als de acties zijn afgerond."
 
-#: application/gui/input_dialog.py:795 application/gui/input_dialog.py:799
-#: application/gui/input_dialog.py:803
+#: sunflower/gui/input_dialog.py:724
+msgid "Follow symlinks"
+msgstr "Snelkoppelingen volgen"
+
+#: sunflower/gui/input_dialog.py:800 sunflower/gui/input_dialog.py:804
+#: sunflower/gui/input_dialog.py:808 sunflower/gui/input_dialog.py:812
 msgid "Not supported by file system provider"
-msgstr "Niet ondersteund door file system provider"
+msgstr "Niet ondersteund door bestandssysteem"
 
-#: application/gui/input_dialog.py:860
+#: sunflower/gui/input_dialog.py:877
 msgid "Only options supported by file system providers were saved."
-msgstr "Alleen opties die worden ondersteund door de file system provider zijn opgeslagen."
+msgstr "Alleen de opties die worden ondersteund door het bestandssysteem zijn opgeslagen."
 
-#: application/gui/input_dialog.py:884
+#: sunflower/gui/input_dialog.py:901
 msgid "Copy item"
 msgid_plural "Copy items"
-msgstr[0] "Kopieer item"
-msgstr[1] "Kopieer itens"
+msgstr[0] "Item kopiëren"
+msgstr[1] "Items kopiëren"
 
-#: application/gui/input_dialog.py:889
+#: sunflower/gui/input_dialog.py:906
 #, python-brace-format
 msgid "Copy <b>{0}</b> item to:"
 msgid_plural "Copy <b>{0}</b> items to:"
-msgstr[0] "Kopieer <b>{0}</b> item naar:"
-msgstr[1] "Kopieer <b>{0}</b> items naar:"
+msgstr[0] "<b>{0}</b> item kopiëren naar:"
+msgstr[1] "<b>{0}</b> items kopiëren naar:"
 
-#: application/gui/input_dialog.py:898 application/gui/input_dialog.py:1002
-#: application/gui/input_dialog.py:1445
-#: application/gui/operation_dialog.py:206
-#: application/plugins/file_list/file_list.py:1926
+#: sunflower/gui/input_dialog.py:915 sunflower/gui/input_dialog.py:1014
+#: sunflower/gui/input_dialog.py:1450 sunflower/gui/operation_dialog.py:189
+#: sunflower/plugins/file_list/file_list.py:1986
+#: sunflower/tools/find_files.py:286
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: application/gui/input_dialog.py:988
+#: sunflower/gui/input_dialog.py:1000
 msgid "Move item"
 msgid_plural "Move items"
-msgstr[0] "Verplaats item"
-msgstr[1] "Verplaats items"
+msgstr[0] "Item verplaatsen"
+msgstr[1] "Items verplaatsen"
 
-#: application/gui/input_dialog.py:993
+#: sunflower/gui/input_dialog.py:1005
 #, python-brace-format
 msgid "Move <b>{0}</b> item to:"
 msgid_plural "Move <b>{0}</b> items to:"
-msgstr[0] "Verplaats <b>{0}</b> items naar:"
-msgstr[1] "Verplaats <b>{0}</b> items naar:"
+msgstr[0] "<b>{0}</b> item verplaatsen naar:"
+msgstr[1] "<b>{0}</b> items verplaatsen naar:"
 
-#: application/gui/input_dialog.py:1016
+#: sunflower/gui/input_dialog.py:1028
 msgid "Rename file/directory"
-msgstr "Hernoem bestand/directory"
+msgstr "Bestands-/Mapnaam wijzigen"
 
-#: application/gui/input_dialog.py:1017
+#: sunflower/gui/input_dialog.py:1029
 msgid "Enter a new name for this item:"
-msgstr "Geef nieuwe naam voor item:"
+msgstr "Geef het item een naam:"
 
-#: application/gui/input_dialog.py:1083
+#: sunflower/gui/input_dialog.py:1093
 msgid "Select a new name for the destination"
-msgstr "Selecteer een nieuwe naam voor de bestemming"
+msgstr "Kies een nieuwe naam voor de bestemming"
 
-#: application/gui/input_dialog.py:1088
+#: sunflower/gui/input_dialog.py:1098
 msgid "Reset"
-msgstr "Reset"
+msgstr "Standaardwaarden"
 
-#: application/gui/input_dialog.py:1092
+#: sunflower/gui/input_dialog.py:1102
 msgid "Apply this action to all files"
-msgstr "Doe dit voor alle bestanden"
+msgstr "Toepassen op alle bestanden"
 
-#: application/gui/input_dialog.py:1127 application/gui/input_dialog.py:1446
+#: sunflower/gui/input_dialog.py:1137 sunflower/gui/input_dialog.py:1451
 msgid "Skip"
 msgstr "Overslaan"
 
-#: application/gui/input_dialog.py:1183
+#: sunflower/gui/input_dialog.py:1193
 msgid "Original"
 msgstr "Origineel"
 
-#: application/gui/input_dialog.py:1200
+#: sunflower/gui/input_dialog.py:1210
 msgid "Replace with"
 msgstr "Vervangen door"
 
-#: application/gui/input_dialog.py:1235
+#: sunflower/gui/input_dialog.py:1245
 msgid "File conflict"
-msgstr "bestandconflict"
+msgstr "Bestandsconflict"
 
-#: application/gui/input_dialog.py:1240 application/gui/input_dialog.py:1250
+#: sunflower/gui/input_dialog.py:1250 sunflower/gui/input_dialog.py:1260
 msgid "Replace"
 msgstr "Vervangen"
 
-#: application/gui/input_dialog.py:1257
+#: sunflower/gui/input_dialog.py:1267
 #, python-brace-format
 msgid "Replace file \"{0}\"?"
-msgstr "Vervang bestand \"{0}\"?"
+msgstr "Wil je '{0}' vervangen?"
 
-#: application/gui/input_dialog.py:1263
+#: sunflower/gui/input_dialog.py:1273
 #, python-brace-format
 msgid ""
 "Another file with the same name already exists in \"{0}\". Replacing it will"
 " overwrite its content."
-msgstr "Een bestand met die naam bestaat reeds in \"{0}\". Het zal worden overschreven."
+msgstr "Er is al een bestand met die naam in '{0}'. Het zal worden overschreven."
 
-#: application/gui/input_dialog.py:1276
+#: sunflower/gui/input_dialog.py:1286
 msgid "Directory conflict"
-msgstr "Directoryconflict"
+msgstr "Mapconflict"
 
-#: application/gui/input_dialog.py:1280
+#: sunflower/gui/input_dialog.py:1290
 msgid "Merge"
 msgstr "Samenvoegen"
 
-#: application/gui/input_dialog.py:1290
+#: sunflower/gui/input_dialog.py:1300
 #, python-brace-format
 msgid "Merge directory \"{0}\"?"
-msgstr "Directory \"{0}\" samenvoegen?"
+msgstr "Wil je '{0}' samenvoegen?"
 
-#: application/gui/input_dialog.py:1296
+#: sunflower/gui/input_dialog.py:1306
 #, python-brace-format
 msgid ""
 "Directory with the same name already exists in \"{0}\". Merging will ask for"
 " confirmation before replacing any files in the directory that conflict with"
 " the files being copied."
-msgstr "Een directory met die naam bestaat al in \"{0}\". U zult worden gevraagd om een bevestiging indien bestanden in die directory zouden worden overschreven door te kopiëren bestanden."
+msgstr "Er is al een map met die naam in '{0}'.Als bestanden in die map moeten worden overschreven door de te kopiëren bestanden, dan wordt je gevraagd om dit te bevestigen ."
 
-#: application/gui/input_dialog.py:1334
+#: sunflower/gui/input_dialog.py:1324
+msgid "Add bookmark"
+msgstr "Bladwijzer toevoegen"
+
+#: sunflower/gui/input_dialog.py:1342
 msgid ""
 "Underscore in the label text indicates the next character should be "
 "underlined and used for the mnemonic accelerator key if it is the first "
 "character so marked."
-msgstr "Met een underscore in de labeltekst wordt aangegeven dat het karakter rechts ervan moet worden onderstreept. Het eerste onderstreepte karakter in een label dient als sneltoets."
+msgstr "Met een onderliggend streepje in de labeltekst wordt aangegeven dat het teken rechts ervan moet worden onderstreept. Het eerste onderstreepte teken in een label dient als sneltoets."
 
-#: application/gui/input_dialog.py:1410
+#: sunflower/gui/input_dialog.py:1417
 msgid "Operation error"
-msgstr "Uitvoeringsfout"
+msgstr "Uitvoerfout"
 
-#: application/gui/input_dialog.py:1447
+#: sunflower/gui/input_dialog.py:1452
 msgid "Skip all"
 msgstr "Alles overslaan"
 
-#: application/gui/input_dialog.py:1448
+#: sunflower/gui/input_dialog.py:1453
 msgid "Retry"
 msgstr "Opnieuw proberen"
 
-#: application/gui/input_dialog.py:1497
-msgid "No"
-msgstr "Nee"
-
-#: application/gui/input_dialog.py:1498
-msgid "Yes"
-msgstr "Ja"
-
-#: application/gui/input_dialog.py:1510
+#: sunflower/gui/input_dialog.py:1501
 msgid "Add toolbar widget"
-msgstr "Werkbalk widget toevoegen"
+msgstr "Werkbalkwidget toevoegen"
 
-#: application/gui/input_dialog.py:1621
+#: sunflower/gui/input_dialog.py:1610
 msgid "Select range"
-msgstr "Selecteer reeks"
+msgstr "Reeks selecteren"
 
-#: application/gui/input_dialog.py:1622
+#: sunflower/gui/input_dialog.py:1611
 msgid "Select part of the text:"
-msgstr "Selecteer deel van de tekst:"
+msgstr "Deel van de tekst selecteren:"
 
-#: application/gui/input_dialog.py:1646
+#: sunflower/gui/input_dialog.py:1635
 msgid "Add application"
-msgstr "Applicatie toevoegen"
+msgstr "Programma toevoegen"
 
-#: application/gui/input_dialog.py:1647
+#: sunflower/gui/input_dialog.py:1636
 msgid "Application name:"
-msgstr "Applicatienaam:"
+msgstr "Programmanaam:"
 
-#: application/gui/input_dialog.py:1657
+#: sunflower/gui/input_dialog.py:1646 sunflower/tools/find_files.py:287
 msgid "Select"
-msgstr "Selecteer"
+msgstr "Selecteren"
 
-#: application/gui/input_dialog.py:1728
+#: sunflower/gui/input_dialog.py:1714
 msgid "Select application:"
-msgstr "Selecteer applicatie:"
+msgstr "Programma selecteren:"
 
-#: application/gui/input_dialog.py:1731
+#: sunflower/gui/input_dialog.py:1718
 #, python-brace-format
 msgid "Open <i>{0}</i> with:"
-msgstr "Open <i>{0}</i> met:"
+msgstr "<i>{0}</i> openen met:"
 
-#: application/gui/input_dialog.py:1767
+#: sunflower/gui/input_dialog.py:1754
 msgid "Use a custom command"
-msgstr "Gebruik een aangepast commando"
+msgstr "Aangepaste opdracht gebruiken"
 
-#: application/gui/operation_dialog.py:91 application/gui/error_list.py:46
+#: sunflower/gui/operation_dialog.py:75 sunflower/gui/error_list.py:48
 msgid "Source:"
 msgstr "Bron:"
 
-#: application/gui/operation_dialog.py:92 application/gui/error_list.py:52
+#: sunflower/gui/operation_dialog.py:76 sunflower/gui/error_list.py:54
 msgid "Destination:"
-msgstr "Doel:"
+msgstr "Bestemming:"
 
-#: application/gui/operation_dialog.py:149
+#: sunflower/gui/operation_dialog.py:133
 msgid "ETA:"
-msgstr "ETA:"
+msgstr "Prognose:"
 
-#: application/gui/operation_dialog.py:150
+#: sunflower/gui/operation_dialog.py:134
 msgid "Speed:"
 msgstr "Snelheid:"
 
-#: application/gui/operation_dialog.py:151
+#: sunflower/gui/operation_dialog.py:135
 msgid "Total size:"
 msgstr "Totale grootte:"
 
-#: application/gui/operation_dialog.py:152
+#: sunflower/gui/operation_dialog.py:136
 msgid "Total count:"
-msgstr "Totaal aantal:"
+msgstr "Totaalaantal:"
 
-#: application/gui/operation_dialog.py:205
-msgid "Minimize"
-msgstr "Minimaliseren"
-
-#: application/gui/operation_dialog.py:213
-#: application/gui/operation_dialog.py:268
+#: sunflower/gui/operation_dialog.py:196 sunflower/gui/operation_dialog.py:240
 msgid "Pause"
-msgstr "Pauze"
+msgstr "Pauzeren"
 
-#: application/gui/operation_dialog.py:261
+#: sunflower/gui/operation_dialog.py:233
 msgid "Resume"
-msgstr "Doorgaan"
+msgstr "Hervatten"
 
-#: application/gui/operation_dialog.py:273
+#: sunflower/gui/operation_dialog.py:245
 msgid "Are you sure about canceling current operation?"
-msgstr "Weet u zeker dat u de huidige actie wilt afbreken?"
+msgstr "Weet je zeker dat je de huidige actie wilt afbreken?"
 
-#: application/gui/operation_dialog.py:343
+#: sunflower/gui/operation_dialog.py:301
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] "seconde"
 msgstr[1] "seconden"
 
-#: application/gui/operation_dialog.py:349
+#: sunflower/gui/operation_dialog.py:305
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minuut"
 msgstr[1] "minuten"
 
-#: application/gui/operation_dialog.py:356
+#: sunflower/gui/operation_dialog.py:309
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "uur"
-msgstr[1] "uren"
+msgstr[1] "uur"
 
-#: application/gui/operation_dialog.py:501
-msgid "Copy Selection"
-msgstr "Kopieer selectie"
-
-#: application/gui/operation_dialog.py:522
-msgid "Move Selection"
-msgstr "Verplaats selectie"
-
-#: application/gui/operation_dialog.py:547
-msgid "Delete Selection"
-msgstr "Verwijder selectie"
-
-#: application/gui/operation_dialog.py:548
+#: sunflower/gui/operation_dialog.py:478
 msgid "Removing items..."
-msgstr "Verwijderen items..."
+msgstr "Bezig met verwijderen..."
 
-#: application/gui/operation_dialog.py:574
-msgid "Rename Items"
-msgstr "Items hernoemen"
-
-#: application/gui/operation_dialog.py:575
+#: sunflower/gui/operation_dialog.py:504
 msgid "Renaming items..."
-msgstr "Hernoemen items..."
+msgstr "Bezig met naamswijzigingen..."
 
-#: application/gui/mounts_manager_window.py:54
-msgid "Mount manager"
-msgstr "Mounts beheren"
-
-#: application/gui/mounts_manager_window.py:371
-msgid "Systemwide"
-msgstr "Systemwide"
-
-#: application/gui/mounts_manager_window.py:393
-msgid "Open selected URI in new tab"
-msgstr "Open geselecteerde URI in nieuwe tab"
-
-#: application/gui/mounts_manager_window.py:397
-#: application/gui/mounts_manager_window.py:560
-#: application/plugins/file_list/gio_extension.py:198
-#: application/plugins/file_list/gio_extension.py:552
-#: application/plugins/file_list/gio_extension.py:904
-msgid "Unmount"
-msgstr "Unmount"
-
-#: application/gui/mounts_manager_window.py:549
-msgid "Mounted"
-msgstr "Mounted"
-
-#: application/gui/mounts_manager_window.py:556
-#: application/plugins/file_list/gio_extension.py:195
-#: application/plugins/file_list/gio_extension.py:549
-#: application/plugins/file_list/gio_extension.py:901
-msgid "Mount"
-msgstr "Mount"
-
-#: application/gui/mounts_manager_window.py:698
-msgid "Volumes"
-msgstr "Volumes"
-
-#: application/gui/keyring_manager_window.py:27
+#: sunflower/gui/keyring_manager_window.py:29
 msgid "Keyring manager"
-msgstr "Sleutelring beheren"
+msgstr "Sleutelhanger beheren"
 
-#: application/gui/keyring_manager_window.py:51
+#: sunflower/gui/keyring_manager_window.py:53
 msgid "ID"
 msgstr "ID"
 
-#: application/gui/keyring_manager_window.py:54
+#: sunflower/gui/keyring_manager_window.py:56
 msgid "Modified"
 msgstr "Gewijzigd"
 
-#: application/gui/keyring_manager_window.py:127
+#: sunflower/gui/keyring_manager_window.py:129
 msgid "Please select an entry to delete!"
-msgstr "Geef op wat u wilt verwijderen!"
+msgstr "Kies een te verwijderen item!"
 
-#: application/gui/keyring_manager_window.py:143
+#: sunflower/gui/keyring_manager_window.py:145
 #, python-brace-format
 msgid ""
 "You are about to remove the following entry from your keyring. If you do this you will have to provide password manually when needed. Are you sure?\n"
 "\n"
 "{0}"
-msgstr "U gaat het onderstaande item van uw sleutelring verwijderen. Als u dat doet, dan moet u desgevraagd handmatig een wachtwoord invoeren. Weet u het zeker?\n\n{0}"
+msgstr "Je staat op het punt om onderstaand item te verwijderen uit je sleutelhanger. Als je dit doet, dan moet je, desgevraagd, handmatig je wachtwoord invoeren. Weet je het zeker?\n\n{0}"
 
-#: application/gui/keyring_manager_window.py:171
+#: sunflower/gui/keyring_manager_window.py:173
 msgid "Please select an entry to change!"
-msgstr "Geef op wat u wilt veranderen!"
+msgstr "Kies een aan te passen item!"
 
-#: application/gui/keyring_manager_window.py:178
+#: sunflower/gui/keyring_manager_window.py:180
 msgid "Change password"
-msgstr "Wijzig wachtwoord"
+msgstr "Wachtwoord wijzigen"
 
-#: application/gui/keyring_manager_window.py:179
+#: sunflower/gui/keyring_manager_window.py:181
 msgid "Enter new password for selected keyring entry."
-msgstr "Geef een nieuw wachtwoord voor het geselecteerde item aan uw sleutelring"
+msgstr "Geef het geselecteerde item een nieuwe naam."
 
-#: application/gui/keyring_manager_window.py:194
+#: sunflower/gui/keyring_manager_window.py:196
 msgid "Password was changed!"
 msgstr "Wachtwoord gewijzigd!"
 
-#: application/gui/keyring_manager_window.py:209
+#: sunflower/gui/keyring_manager_window.py:211
 msgid "Passwords do not match! Please try again."
-msgstr "Wachtwoorden zijn niet gelijk! Probeer opnieuw."
+msgstr "De wachtwoorden komen niet overeen! Probeer het opnieuw."
 
-#: application/gui/about_window.py:106
+#: sunflower/gui/about_window.py:71
 msgid "Twin-panel file manager for Linux."
-msgstr "Bestandsmanager met twee panelen voor Linux."
+msgstr "Bestandsbeheerder met twee panelen, voor Linux."
 
-#: application/gui/about_window.py:109
-msgid "Copyright © 2010-2015 by Mladen Mijatov and contributors."
-msgstr "Copyright © 2010-2015 by Mladen Mijatov and contributors."
+#: sunflower/gui/about_window.py:74
+msgid "Copyright © 2010-2019 by Mladen Mijatov and contributors."
+msgstr "Copyright © 2010-2019 by Mladen Mijatov en bijdragers."
 
-#: application/gui/about_window.py:137
-msgid "translator-credits"
-msgstr "Raymond W. Blau"
+#: sunflower/gui/about_window.py:90
+msgid "Contributors"
+msgstr "Bijdragers"
 
-#: application/gui/error_list.py:21
+#: sunflower/gui/error_list.py:23
 msgid "Error list"
 msgstr "Lijst met fouten"
 
-#: application/gui/error_list.py:40
+#: sunflower/gui/error_list.py:42
 msgid "For:"
 msgstr "Voor:"
 
-#: application/widgets/title_bar.py:75
+#: sunflower/__main__.py:89
+msgid "Show version number"
+msgstr "Versienummer tonen"
+
+#: sunflower/__main__.py:98 sunflower/__main__.py:107
+msgid "Skip loading additional plugins"
+msgstr "Geen extra plug-ins laden"
+
+#: sunflower/__main__.py:116
+msgid "Open new tab on the left notebook"
+msgstr "Nieuw tabblad openen in de linkerlijsl"
+
+#: sunflower/__main__.py:125
+msgid "Open new tab on the right notebook"
+msgstr "Nieuw tabblad openen in de rechterlijst"
+
+#: sunflower/__main__.py:134
+msgid "Open terminal tab on the left notebook"
+msgstr "Nieuw terminaltabblad openen in de linkerlijst"
+
+#: sunflower/__main__.py:143
+msgid "Open terminal tab on the right notebook"
+msgstr "Nieuw terminaltabblad openen in de rechterlijst"
+
+#: sunflower/widgets/location_menu.py:66
+msgid "Open terminal at selected path"
+msgstr "Terminal openen op gekozen locatie"
+
+#: sunflower/widgets/title_bar.py:55
 msgid "Context menu"
-msgstr "Contextmenu"
+msgstr "Rechtermuisknopmenu"
 
-#: application/widgets/tab_label.py:85
+#: sunflower/widgets/tab_label.py:74
 msgid "Unlock"
-msgstr "Openen"
+msgstr "Ontgrendelen"
 
-#: application/widgets/tab_label.py:85
+#: sunflower/widgets/tab_label.py:74
 msgid "Lock"
-msgstr "Sluiten"
+msgstr "Vergrendelen"
 
-#: application/widgets/tab_label.py:89 application/plugin_base/plugin.py:132
+#: sunflower/widgets/tab_label.py:78 sunflower/plugin_base/plugin.py:136
 msgid "Duplicate tab"
-msgstr "Tab dupliceren"
+msgstr "Tabblad klonen"
 
-#: application/widgets/tab_label.py:93
+#: sunflower/widgets/tab_label.py:82
 msgid "Move to opposite panel"
-msgstr "Verplaats naar tegenoverliggend paneel"
+msgstr "Verplaatsen naar tegenoverliggend paneel"
 
-#: application/widgets/tab_label.py:100
+#: sunflower/widgets/tab_label.py:89
 msgid "Close Tab"
-msgstr "Tab sluiten"
+msgstr "Tabblad sluiten"
 
-#: application/widgets/tab_label.py:106
+#: sunflower/widgets/tab_label.py:95
 msgid "Close All"
 msgstr "Alles sluiten"
 
-#: application/widgets/tab_label.py:111
+#: sunflower/widgets/tab_label.py:100
 msgid "Close Other Tabs"
-msgstr "Sluit overige tabs"
+msgstr "Overige tabbladen sluiten"
 
-#: application/queue.py:36 application/plugins/sessions/plugin.py:6
+#: sunflower/queue.py:33 sunflower/plugins/sessions/plugin.py:8
 msgid "Default"
-msgstr "Default"
+msgstr "Standaard"
 
-#: application/queue.py:49
+#: sunflower/queue.py:46
 msgid "New queue"
 msgstr "Nieuwe wachtrij"
 
-#: application/queue.py:142
+#: sunflower/queue.py:139
 msgid "New operation queue"
 msgstr "Nieuwe wachtrij"
 
-#: application/queue.py:143
+#: sunflower/queue.py:140
 msgid "Enter name for new operation queue:"
-msgstr "Geef naam voor nieuwe wachtrij:"
+msgstr "Geef de nieuwe wachtrij een naam:"
 
-#: application/queue.py:159
+#: sunflower/queue.py:156
 msgid "Operation queue with specified name already exists."
-msgstr "Er bestaat al een wachtrij met deze naam."
+msgstr "Er is al een wachtrij met deze naam."
 
-#: application/mounts.py:126
-msgid "Specified item can not be unmounted."
-msgstr "Unmounten van item is niet mogelijk"
+#: sunflower/mounts.py:65
+msgid "Selected volume can not be mounted."
+msgstr "Het opgegeven volume kan niet worden aangekoppeld."
 
-#: application/keyring.py:61
+#: sunflower/mounts.py:81
+msgid "Selected mount can not be unmounted."
+msgstr "Het opgegeven volume kan niet worden ontkoppeld."
+
+#: sunflower/mounts.py:97
+msgid "Selected volume can not be ejected."
+msgstr "Het opgegeven volume kan niet worden uitgeworpen."
+
+#: sunflower/mounts.py:184 sunflower/plugins/file_list/gio_extension.py:197
+#: sunflower/plugins/file_list/gio_extension.py:551
+#: sunflower/plugins/file_list/gio_extension.py:903
+msgid "Unmount"
+msgstr "Ontkoppelen"
+
+#: sunflower/mounts.py:190 sunflower/plugins/file_list/gio_extension.py:194
+#: sunflower/plugins/file_list/gio_extension.py:548
+#: sunflower/plugins/file_list/gio_extension.py:900
+msgid "Mount"
+msgstr "Aankoppelen"
+
+#: sunflower/mounts.py:196
+msgid "Eject"
+msgstr "Uitwerpen"
+
+#: sunflower/keyring.py:63
 msgid "Keyring is unlocked"
-msgstr "Sleutelring is geopend"
+msgstr "De sleutelhanger is ontgrendeld"
 
-#: application/keyring.py:62
+#: sunflower/keyring.py:64
 msgid "Keyring is locked"
-msgstr "Sleutelring is gesloten"
+msgstr "De sleutelhanger is vergrendeld"
 
-#: application/keyring.py:109
+#: sunflower/keyring.py:111
 msgid "Unlock keyring"
-msgstr "Sleutelring openen"
+msgstr "Sleutelhanger vergrendelen"
 
-#: application/keyring.py:110
+#: sunflower/keyring.py:112
 msgid "Please enter your keyring password:"
-msgstr "Geef het wachtwoord van uw sleutelring:"
+msgstr "Voer het wachtwoord in van je sleutelhanger:"
 
-#: application/keyring.py:310
+#: sunflower/keyring.py:312
 msgid "New keyring"
-msgstr "Nieuwe sleutelring"
+msgstr "Nieuwe sleutelhanger"
 
-#: application/keyring.py:312
+#: sunflower/keyring.py:314
 msgid ""
 "We need to create a new keyring to safely store your passwords. Choose the "
 "password you want to use for it."
-msgstr "Er moet een nieuwe sleutelring gemaakt worden om uw wachtwoorden in op de slaan. Kies een wachtwoord voor die nieuwe sleutelring."
+msgstr "Er moet een nieuwe sleutelhanger worden gemaakt om je wachtwoorden in op te slaan. Kies een wachtwoord voor de nieuwe sleutelhanger."
 
-#: application/toolbar.py:131
+#: sunflower/toolbar.py:122
 msgid ""
 "Error adding widget. You need to enter unique name and select widget type."
-msgstr "Fout bij toevoegen widget. Gebruik een unieke widgetnaam en selecteer een widgettype."
+msgstr "De widget kan niet worden toegevoegd. Voer een unieke naam in en kies het soort widget."
 
-#: application/toolbar.py:146
-msgid ""
-"Widget with specified name already exists. You need to enter unique name and"
-" select widget type."
-msgstr "Er is al een widget met deze naam. Gebruik een unieke widgetnaam en selecteer een widgettype."
-
-#: application/toolbar.py:180
+#: sunflower/toolbar.py:156
 msgid ""
 "Plugin used to create selected toolbar widget is not active or not present. "
 "In order to edit this entry you need to activate plugin used to create it."
-msgstr "De plugin waarmee de geselecteerde werkbalkwidget is gemaakt is niet actief of ontbreekt. U heeft die plugin nodig om dit item te kunnen bewerken."
+msgstr "De plug-in waarmee de geselecteerde werkbalkwidget is gemaakt is niet actief of ontbreekt. Je hebt die plug-in nodig om dit item te kunnen bewerken."
 
-#: application/plugins/default_toolbar/parent_directory_button.py:14
-#: application/plugins/default_toolbar/parent_directory_button.py:15
-#: application/plugin_base/item_list.py:260
+#: sunflower/plugins/default_toolbar/parent_directory_button.py:14
+#: sunflower/plugins/default_toolbar/parent_directory_button.py:15
+#: sunflower/plugin_base/item_list.py:216
 msgid "Go to parent directory"
-msgstr "Ga naar bovenliggende directory"
+msgstr "Ga naar bovenliggende map"
 
-#: application/plugins/default_toolbar/bookmark_button.py:58
+#: sunflower/plugins/default_toolbar/bookmark_button.py:63
 msgid "Configure bookmark button"
-msgstr "Configureer bladwijzerknop"
+msgstr "Bladwijzerknop instellen"
 
-#: application/plugins/default_toolbar/bookmark_button.py:84
+#: sunflower/plugins/default_toolbar/bookmark_button.py:79
 msgid "Path:"
 msgstr "Pad:"
 
-#: application/plugins/default_toolbar/bookmark_button.py:88
+#: sunflower/plugins/default_toolbar/bookmark_button.py:83
 msgid "Show label"
-msgstr "Toon label"
+msgstr "Label tonen"
 
-#: application/plugins/default_toolbar/plugin.py:26
+#: sunflower/plugins/default_toolbar/plugin.py:25
 msgid "Parent directory button"
-msgstr "Knop voor bovenliggende directory"
+msgstr "Knop voor bovenliggende map"
 
-#: application/plugins/default_toolbar/plugin.py:32
+#: sunflower/plugins/default_toolbar/plugin.py:31
 msgid "Home directory button"
-msgstr "Knop voor Home directory"
+msgstr "Knop voor persoonlijke map"
 
-#: application/plugins/default_toolbar/plugin.py:38
+#: sunflower/plugins/default_toolbar/plugin.py:37
 msgid "Bookmark button"
 msgstr "Knop voor bladwijzer"
 
-#: application/plugins/default_toolbar/plugin.py:44
+#: sunflower/plugins/default_toolbar/plugin.py:43
 msgid "Bookmarks menu"
 msgstr "Bladwijzermenu"
 
-#: application/plugins/default_toolbar/plugin.py:50
+#: sunflower/plugins/default_toolbar/plugin.py:49
 msgid "Separator"
-msgstr "Separator"
+msgstr "Scheidingsteken"
 
-#: application/plugins/default_toolbar/plugin.py:105
+#: sunflower/plugins/default_toolbar/plugin.py:104
 msgid "This widget has no configuration dialog."
-msgstr "Deze widget kan niet verder geconfigureerd worden."
+msgstr "Deze widget kan niet worden ingesteld."
 
-#: application/plugins/owner_column/plugin.py:65
+#: sunflower/plugins/owner_column/plugin.py:67
 msgid "Owner"
 msgstr "Eigenaar"
 
-#: application/plugins/owner_column/plugin.py:93
+#: sunflower/plugins/owner_column/plugin.py:95
 msgid "Group"
 msgstr "Groep"
 
-#: application/plugins/file_list/plugin.py:11
+#: sunflower/plugins/file_list/plugin.py:13
 msgid "Local file list"
-msgstr "Lijst van lokale bestanden"
+msgstr "Lijst met lokale bestanden"
 
-#: application/plugins/file_list/plugin.py:12
+#: sunflower/plugins/file_list/plugin.py:14
 msgid "Trash can"
 msgstr "Prullenbak"
 
-#: application/plugins/file_list/file_list.py:124
+#: sunflower/plugins/file_list/file_list.py:133
 msgid "Ext"
 msgstr "Ext"
 
-#: application/plugins/file_list/file_list.py:126
+#: sunflower/plugins/file_list/file_list.py:135
 msgid "Mode"
-msgstr "Mode"
+msgstr "Modus"
 
-#: application/plugins/file_list/file_list.py:127
-#: application/plugins/rename_extensions/audio_metadata.py:26
+#: sunflower/plugins/file_list/file_list.py:136
+#: sunflower/plugins/rename_extensions/audio_metadata.py:28
 msgid "Date"
 msgstr "Datum"
 
-#: application/plugins/file_list/file_list.py:481
+#: sunflower/plugins/file_list/file_list.py:493
 msgid "Invalid selection!"
 msgstr "Ongeldige selectie!"
 
-#: application/plugins/file_list/file_list.py:653
+#: sunflower/plugins/file_list/file_list.py:668
 msgid ""
 "There was an error creating directory. Make sure you have enough "
 "permissions. "
-msgstr "Fout bij aanmaken directory. Zorg dat u over de juiste rechten beschikt."
+msgstr "De map kan niet worden aangemaakt. Controleer of je hiertoe gemachtigd bent."
 
-#: application/plugins/file_list/file_list.py:680
+#: sunflower/plugins/file_list/file_list.py:695
 #, python-brace-format
 msgid "File already exists: {0}"
 msgstr "Bestand bestaat al: {0}"
 
-#: application/plugins/file_list/file_list.py:683
+#: sunflower/plugins/file_list/file_list.py:698
 #, python-brace-format
 msgid "Directory with same name exists: {0}"
-msgstr "Directory bestaat al: {0}"
+msgstr "Map bestaat al: {0}"
 
-#: application/plugins/file_list/file_list.py:719
+#: sunflower/plugins/file_list/file_list.py:734
 msgid ""
 "There was an error creating file. Make sure you have enough permissions."
-msgstr "Fout bij aanmaken bestand. Zorg dat u over de juiste rechten beschikt."
+msgstr "Het bestand kan niet worden aangemaakt. Controleer of je hiertoe gemachtigd bent."
 
-#: application/plugins/file_list/file_list.py:781
+#: sunflower/plugins/file_list/file_list.py:796
 msgid "Error creating new link."
-msgstr "Fout bij maken nieuwe verwijzing."
+msgstr "De snelkoppeling kan niet worden gemaakt."
 
-#: application/plugins/file_list/file_list.py:797
+#: sunflower/plugins/file_list/file_list.py:812
 msgid "Current file system does not support linking."
-msgstr "Het huidige bestandsysteem ondersteunt verwijzingen niet."
+msgstr "Het huidige bestandsysteem heeft geen ondersteuning voor snelkoppelingen."
 
-#: application/plugins/file_list/file_list.py:820
+#: sunflower/plugins/file_list/file_list.py:836
 #, python-brace-format
 msgid ""
-"You are about to delete {0} item.\n"
+"You are about to <i><b>delete</b></i> {0} item.\n"
 "Are you sure about this?"
 msgid_plural ""
-"You are about to delete {0} items.\n"
+"You are about to <i><b>delete</b></i> {0} items.\n"
 "Are you sure about this?"
-msgstr[0] "U staat op het punt {0} item te verwijderen.\nWeet u het zeker?"
-msgstr[1] "U staat op het punt {0} items te verwijderen.\nWeet u het zeker?"
+msgstr[0] "Je staat op het punt om {0} item te <i><b>verwijderen</b></i>.\nWeet je het zeker?"
+msgstr[1] "Je staat op het punt om {0} items te <i><b>verwijderen</b></i>.\nWeet je het zeker?"
 
-#: application/plugins/file_list/file_list.py:829
+#: sunflower/plugins/file_list/file_list.py:845
 #, python-brace-format
 msgid ""
-"You are about to move {0} item to trash.\n"
+"You are about to move {0} item to <i><b>trash</b></i>.\n"
 "Are you sure about this?"
 msgid_plural ""
-"You are about to move {0} items to trash.\n"
+"You are about to move {0} items to <i><b>trash</b></i>.\n"
 "Are you sure about this?"
-msgstr[0] "U staat op het punt {0} item naar de prullenbak te verplaatsen.\nWeet u het zeker?"
-msgstr[1] "U staat op het punt {0} items naar de prullenbak te verplaatsen.\nWeet u het zeker?"
+msgstr[0] "Je staat op het punt om {0} items te <i><b>verplaatsen naar de prullenbak</b></i>.\nWeet je het zeker?"
+msgstr[1] "Je staat op het punt om {0} items te <i><b>verplaatsen naar de prullenbak</b></i>.\nWeet je het zeker?"
 
-#: application/plugins/file_list/file_list.py:1180
+#: sunflower/plugins/file_list/file_list.py:1199
 msgid "Other application..."
-msgstr "Andere applicatie..."
+msgstr "Ander programma..."
 
-#: application/plugins/file_list/file_list.py:1816
+#: sunflower/plugins/file_list/file_list.py:1605
+msgid "No files selected."
+msgstr "Geen bestanden geselecteerd."
+
+#: sunflower/plugins/file_list/file_list.py:1874
 msgid "Free:"
 msgstr "Vrij:"
 
-#: application/plugins/file_list/file_list.py:1817
+#: sunflower/plugins/file_list/file_list.py:1875
 msgid "Total:"
 msgstr "Totaal:"
 
-#: application/plugins/file_list/file_list.py:1886
+#: sunflower/plugins/file_list/file_list.py:1946
 msgid "Copy here"
-msgstr "Kopieer hier"
+msgstr "Hierheen kopiëren"
 
-#: application/plugins/file_list/file_list.py:1891
+#: sunflower/plugins/file_list/file_list.py:1951
 msgid "Move here"
-msgstr "Verplaats hier"
+msgstr "Hierheen verplaatsen"
 
-#: application/plugins/file_list/file_list.py:1896
+#: sunflower/plugins/file_list/file_list.py:1956
 msgid "Link here"
-msgstr "Verwijs hier"
+msgstr "Snelkoppeling hier maken"
 
-#: application/plugins/file_list/file_list.py:2273
+#: sunflower/plugins/file_list/file_list.py:2335
 msgid "No such file or directory"
-msgstr "Bestand of directory bestaat niet"
+msgstr "Bestand of map bestaat niet"
 
-#: application/plugins/file_list/file_list.py:2290
+#: sunflower/plugins/file_list/file_list.py:2354
 #, python-brace-format
 msgid ""
 "Error changing working directory to:\n"
@@ -2067,171 +1898,187 @@ msgid ""
 "{0}\n"
 "\n"
 "Would you like to retry?"
-msgstr "Fout bij wijzigen werkdirectory naar:\n{1}\n\n{0}\n\nNogmaals proberen?"
+msgstr "De werkmap kan niet worden ingesteld op:\n{1}\n\n{0}\n\nWil je het opnieuw proberen?"
 
-#: application/plugins/file_list/trash_list.py:39
+#: sunflower/plugins/file_list/trash_list.py:27
 msgid "Empty trash"
 msgstr "Prullenbak legen"
 
-#: application/plugins/file_list/trash_list.py:53
+#: sunflower/plugins/file_list/trash_list.py:40
 msgid "All items in the Trash will be permanently deleted. Are you sure?"
-msgstr "Alle items in de prullenbak worden definitief verwijderd. Weet je het zeker?"
+msgstr "Alle items in de prullenbak worden permanent verwijderd. Weet je het zeker?"
 
-#: application/plugins/file_list/gio_extension.py:68
+#: sunflower/plugins/file_list/gio_extension.py:67
 msgid "Mount operation"
-msgstr "Mount actie"
+msgstr "Aankoppelactie"
 
-#: application/plugins/file_list/gio_extension.py:114
+#: sunflower/plugins/file_list/gio_extension.py:112
 #, python-brace-format
 msgid ""
 "Unable to mount:\n"
 "{0}\n"
 "\n"
 "{1}"
-msgstr "Mounten mislukt:\n{0}\n\n{1}"
+msgstr "Aankoppelen mislukt:\n{0}\n\n{1}"
 
-#: application/plugins/file_list/gio_extension.py:166
-#: application/plugins/file_list/gio_extension.py:520
-#: application/plugins/file_list/gio_extension.py:872
+#: sunflower/plugins/file_list/gio_extension.py:165
+#: sunflower/plugins/file_list/gio_extension.py:519
+#: sunflower/plugins/file_list/gio_extension.py:871
 msgid "URI"
 msgstr "URI"
 
-#: application/plugins/file_list/gio_extension.py:424
-#: application/plugins/file_list/gio_extension.py:727
-#: application/plugins/file_list/gio_extension.py:1081
+#: sunflower/plugins/file_list/gio_extension.py:423
+#: sunflower/plugins/file_list/gio_extension.py:726
+#: sunflower/plugins/file_list/gio_extension.py:1081
 #, python-brace-format
 msgid ""
 "You are about to remove '{0}'.\n"
 "Are you sure about this?"
-msgstr "U gaat '{0}' verwijderen.\nWeet u het zeker?"
+msgstr "Je staat op het punt om '{0}' te verwijderen.\nWeet je het zeker?"
 
-#: application/plugins/file_list/dialogs.py:38
+#: sunflower/plugins/file_list/dialogs.py:38
 msgid "Create Samba mount"
-msgstr "Maak Samba mount"
+msgstr "Samba-aankoppeling maken"
 
-#: application/plugins/file_list/dialogs.py:69
-#: application/plugins/file_list/dialogs.py:282
-#: application/plugins/file_list/dialogs.py:476
+#: sunflower/plugins/file_list/dialogs.py:69
+#: sunflower/plugins/file_list/dialogs.py:282
+#: sunflower/plugins/file_list/dialogs.py:476
 msgid "Server:"
 msgstr "Server:"
 
-#: application/plugins/file_list/dialogs.py:77
+#: sunflower/plugins/file_list/dialogs.py:77
 msgid "Share:"
-msgstr "Share:"
+msgstr "Deling:"
 
-#: application/plugins/file_list/dialogs.py:79
-#: application/plugins/file_list/dialogs.py:289
-#: application/plugins/file_list/dialogs.py:492
+#: sunflower/plugins/file_list/dialogs.py:79
+#: sunflower/plugins/file_list/dialogs.py:289
+#: sunflower/plugins/file_list/dialogs.py:492
 msgid "Directory:"
-msgstr "Directory:"
+msgstr "Map:"
 
-#: application/plugins/file_list/dialogs.py:94
+#: sunflower/plugins/file_list/dialogs.py:94
 msgid "Domain:"
-msgstr "Domain:"
+msgstr "Domein:"
 
-#: application/plugins/file_list/dialogs.py:95
-#: application/plugins/file_list/dialogs.py:303
-#: application/plugins/file_list/dialogs.py:506
+#: sunflower/plugins/file_list/dialogs.py:95
+#: sunflower/plugins/file_list/dialogs.py:303
+#: sunflower/plugins/file_list/dialogs.py:506
 msgid "Username:"
-msgstr "Username:"
+msgstr "Gebruikersnaam:"
 
-#: application/plugins/file_list/dialogs.py:173
+#: sunflower/plugins/file_list/dialogs.py:173
 msgid ""
 "One or more required fields are empty. Please make sure you have entered "
 "name, server and share."
-msgstr "Een of meerdere verplichte velden zijn leeg. Vul naam, server en share in."
+msgstr "Eén of meerdere verplichte velden zijn leeg. Voer de naam, server en deling in."
 
-#: application/plugins/file_list/dialogs.py:251
+#: sunflower/plugins/file_list/dialogs.py:251
 msgid "Create FTP mount"
-msgstr "Maak FTP mount"
+msgstr "FTP-aankoppeling maken"
 
-#: application/plugins/file_list/dialogs.py:370
-#: application/plugins/file_list/dialogs.py:577
+#: sunflower/plugins/file_list/dialogs.py:370
+#: sunflower/plugins/file_list/dialogs.py:577
 msgid ""
 "One or more required fields is empty. Please make sure you have entered name"
 " and server."
-msgstr "Een of meerdere verplichte velden zijn leeg. Vul naam en server in."
+msgstr "Eén of meerdere verplichte velden zijn leeg. Voer de naam en server in."
 
-#: application/plugins/file_list/dialogs.py:435
+#: sunflower/plugins/file_list/dialogs.py:435
 msgid "Create SFTP mount"
-msgstr "Maak SFTP mount"
+msgstr "SFTP-aankoppeling maken"
 
-#: application/plugins/file_list/dialogs.py:445
+#: sunflower/plugins/file_list/dialogs.py:445
 msgid "Create WebDav mount"
-msgstr "Maak WebDav mount"
+msgstr "WebDav-aankoppeling maken"
 
-#: application/plugins/file_list/dialogs.py:483
+#: sunflower/plugins/file_list/dialogs.py:483
 msgid "Server type:"
-msgstr "Server type:"
+msgstr "Soort server:"
 
-#: application/plugins/sessions/plugin.py:21
+#: sunflower/plugins/sessions/plugin.py:34
+#: sunflower/plugins/sessions/plugin.py:364
 msgid "Sessions"
-msgstr "Sessions"
+msgstr "Sessies"
 
-#: application/plugins/sessions/plugin.py:55
+#: sunflower/plugins/sessions/plugin.py:67
 msgid "Locked"
-msgstr "Gesloten"
+msgstr "Vergrendeld"
 
-#: application/plugins/sessions/plugin.py:76
+#: sunflower/plugins/sessions/plugin.py:68
+#: sunflower/plugins/sessions/plugin.py:283
+msgid "Session manager"
+msgstr "Sessiebeheer"
+
+#: sunflower/plugins/sessions/plugin.py:87
 msgid "Move up"
-msgstr "Omhoog"
+msgstr "Omhoog verplaatsen"
 
-#: application/plugins/sessions/plugin.py:83
+#: sunflower/plugins/sessions/plugin.py:94
 msgid "Move down"
-msgstr "Omlaag"
+msgstr "Omlaag verplaatsen"
 
-#: application/plugins/sessions/plugin.py:173
+#: sunflower/plugins/sessions/plugin.py:184
 msgid "Session with this name already exists."
-msgstr "Session met deze naam bestaat al."
+msgstr "Er is al een sessie met deze naam."
 
-#: application/plugins/sessions/plugin.py:204
+#: sunflower/plugins/sessions/plugin.py:214
 msgid "New session"
-msgstr "Nieuwe session"
+msgstr "Nieuwe sessie"
 
-#: application/plugins/sessions/plugin.py:274
-msgid "Manage sessions"
-msgstr "Beheer sessions"
+#: sunflower/plugins/sessions/plugin.py:328
+msgid ""
+"Lock current session\n"
+"<small>Locking session preserves tab layout at the time of activation.</small>"
+msgstr "Huidige sessie vergrendelen\n<small>Een vergrendelde sessie behoudt de tabbladindeling zoals die was op het moment van vergrendelen.</small>"
 
-#: application/plugins/sessions/plugin.py:281
-msgid "Save session"
-msgstr "Session opslaan"
+#: sunflower/plugins/sessions/plugin.py:331
+msgid "Manage"
+msgstr "Beheren"
 
-#: application/plugins/rename_extensions/letter_case.py:15
-#: application/plugins/rename_extensions/letter_case.py:23
+#: sunflower/plugins/sessions/plugin.py:334
+msgid "Save"
+msgstr "Opslaan"
+
+#: sunflower/plugins/sessions/plugin.py:368
+msgid "Show session list"
+msgstr "Sessielijst tonen"
+
+#: sunflower/plugins/rename_extensions/letter_case.py:17
+#: sunflower/plugins/rename_extensions/letter_case.py:25
 msgid "Do nothing"
-msgstr "Doe niets"
+msgstr "Niets doen"
 
-#: application/plugins/rename_extensions/letter_case.py:16
+#: sunflower/plugins/rename_extensions/letter_case.py:18
 msgid "Capitalize"
 msgstr "Omzetten naar hoofdletters"
 
-#: application/plugins/rename_extensions/letter_case.py:17
-#: application/plugins/rename_extensions/letter_case.py:24
+#: sunflower/plugins/rename_extensions/letter_case.py:19
+#: sunflower/plugins/rename_extensions/letter_case.py:26
 msgid "Upper case"
-msgstr "Grote letters"
+msgstr "Hoofdletters"
 
-#: application/plugins/rename_extensions/letter_case.py:18
-#: application/plugins/rename_extensions/letter_case.py:25
+#: sunflower/plugins/rename_extensions/letter_case.py:20
+#: sunflower/plugins/rename_extensions/letter_case.py:27
 msgid "Lower case"
 msgstr "Kleine letters"
 
-#: application/plugins/rename_extensions/letter_case.py:19
+#: sunflower/plugins/rename_extensions/letter_case.py:21
 msgid "Swap case"
-msgstr "Hoofdletters en kleine letters omwisselen"
+msgstr "Hoofdletters <-> Kleine letters"
 
-#: application/plugins/rename_extensions/letter_case.py:29
+#: sunflower/plugins/rename_extensions/letter_case.py:31
 msgid "Item name:"
 msgstr "Itemnaam:"
 
-#: application/plugins/rename_extensions/letter_case.py:32
+#: sunflower/plugins/rename_extensions/letter_case.py:34
 msgid "Extension:"
 msgstr "Extensie:"
 
-#: application/plugins/rename_extensions/letter_case.py:87
+#: sunflower/plugins/rename_extensions/letter_case.py:89
 msgid "Letter Case"
-msgstr "Hoofd of kleine letters"
+msgstr "Hoofdletters of kleine letters"
 
-#: application/plugins/rename_extensions/default.py:40
+#: sunflower/plugins/rename_extensions/default.py:42
 msgid ""
 "<b>Template syntax</b>\n"
 "[N]\tItem name\n"
@@ -2240,504 +2087,546 @@ msgid ""
 "\n"
 "For name and extension you can\n"
 "use range in format [N#-#]."
-msgstr "<b>Sjabloon syntax</b>\n[N]⇥Item naam\n[E]⇥Extensie\n[C]⇥Teller\n\nBij naam en extensie kunt u\neen reeks maken in het format [N#-#]."
+msgstr "<b>Sjabloonsyntax</b>\n[N]\tItemnaam\n[E]\tExtensie\n[C]\tTeller\n\nBij naam en extensie kun je\neen reeks maken met de opmaak [N#-#]."
 
-#: application/plugins/rename_extensions/default.py:76
+#: sunflower/plugins/rename_extensions/default.py:78
 msgid "Part of name"
 msgstr "Deel van de naam"
 
-#: application/plugins/rename_extensions/default.py:81
+#: sunflower/plugins/rename_extensions/default.py:83
 msgid "Extension"
 msgstr "Extensie"
 
-#: application/plugins/rename_extensions/default.py:84
+#: sunflower/plugins/rename_extensions/default.py:86
 msgid "Part of extension"
 msgstr "Deel van de extensie"
 
-#: application/plugins/rename_extensions/default.py:89
-#: application/plugins/rename_extensions/default.py:103
+#: sunflower/plugins/rename_extensions/default.py:91
+#: sunflower/plugins/rename_extensions/default.py:105
 msgid "Counter"
 msgstr "Teller"
 
-#: application/plugins/rename_extensions/default.py:109
+#: sunflower/plugins/rename_extensions/default.py:111
 msgid "Start:"
 msgstr "Start:"
 
-#: application/plugins/rename_extensions/default.py:116
+#: sunflower/plugins/rename_extensions/default.py:118
 msgid "Step:"
 msgstr "Stap:"
 
-#: application/plugins/rename_extensions/default.py:123
+#: sunflower/plugins/rename_extensions/default.py:125
 msgid "Digits:"
-msgstr "Cijfers:"
+msgstr "Getallen:"
 
-#: application/plugins/rename_extensions/default.py:255
+#: sunflower/plugins/rename_extensions/default.py:254
 msgid "Item list is empty. Unable to get item for range selection!"
-msgstr "Itemlijst is leeg. Kan geen item in deze reeks vinden!"
+msgstr "De itemlijst is leeg. Geen item in deze reeks aangetroffen!"
 
-#: application/plugins/rename_extensions/audio_metadata.py:22
+#: sunflower/plugins/rename_extensions/audio_metadata.py:24
 msgid "Album"
 msgstr "Album"
 
-#: application/plugins/rename_extensions/audio_metadata.py:23
+#: sunflower/plugins/rename_extensions/audio_metadata.py:25
 msgid "Artist"
-msgstr "Artist"
+msgstr "Artiest"
 
-#: application/plugins/rename_extensions/audio_metadata.py:25
+#: sunflower/plugins/rename_extensions/audio_metadata.py:27
 msgid "Genre"
 msgstr "Genre"
 
-#: application/plugins/rename_extensions/audio_metadata.py:27
+#: sunflower/plugins/rename_extensions/audio_metadata.py:29
 msgid "Track number"
-msgstr "Track nummer"
+msgstr "Liednummer"
 
-#: application/plugins/rename_extensions/audio_metadata.py:39
+#: sunflower/plugins/rename_extensions/audio_metadata.py:41
 msgid "Replace:"
-msgstr "Vervang:"
+msgstr "Vervangen:"
 
-#: application/plugins/rename_extensions/audio_metadata.py:47
+#: sunflower/plugins/rename_extensions/audio_metadata.py:49
 msgid "With:"
 msgstr "Door:"
 
-#: application/plugins/rename_extensions/audio_metadata.py:60
+#: sunflower/plugins/rename_extensions/audio_metadata.py:62
 msgid "Template syntax"
-msgstr "Sjabloon syntax"
+msgstr "Sjabloonsyntax"
 
-#: application/plugins/rename_extensions/audio_metadata.py:71
+#: sunflower/plugins/rename_extensions/audio_metadata.py:73
 msgid "Character replacement"
-msgstr "Karakter vervanging"
+msgstr "Tekenvervanging"
 
-#: application/plugins/rename_extensions/audio_metadata.py:78
+#: sunflower/plugins/rename_extensions/audio_metadata.py:80
 msgid ""
 "In order to use this extension you need <b>mutagen</b> module installed!"
-msgstr "Voor het gebruik van deze programma-uitbreiding moet de module <b>mutagen</b> geïnstalleerd zijn!"
+msgstr "Om deze programma-uitbreiding te gebruiken moet de module <b>mutagen</b> geïnstalleerd zijn!"
 
-#: application/plugins/rename_extensions/audio_metadata.py:110
+#: sunflower/plugins/rename_extensions/audio_metadata.py:112
 msgid "Audio Metadata"
-msgstr "Audio metadata"
+msgstr "Audio-metagegevens"
 
-#: application/plugins/find_file_extensions/size.py:21
+#: sunflower/plugins/find_file_extensions/size.py:22
 msgid "Match file size"
-msgstr "Match bestandsgrootte"
+msgstr "Bestandsgrootte moet overeenkomen"
 
-#: application/plugins/find_file_extensions/size.py:25
+#: sunflower/plugins/find_file_extensions/size.py:26
 msgid "Minimum:"
 msgstr "Minimum:"
 
-#: application/plugins/find_file_extensions/size.py:27
-#: application/plugins/find_file_extensions/size.py:31
+#: sunflower/plugins/find_file_extensions/size.py:28
+#: sunflower/plugins/find_file_extensions/size.py:32
 msgid "MB"
 msgstr "MB"
 
-#: application/plugins/find_file_extensions/size.py:29
+#: sunflower/plugins/find_file_extensions/size.py:30
 msgid "Maximum:"
 msgstr "Maximum:"
 
-#: application/plugins/find_file_extensions/default.py:33
+#: sunflower/plugins/find_file_extensions/default.py:34
 msgid ""
 "<b>Pattern matching</b>\n"
 "*\t\tEverything\n"
 "?\t\tAny single character\n"
 "[seq]\tAny character in <i>seq</i>\n"
 "[!seq]\tAny character <u>not</u> in <i>seq</i>"
-msgstr "<b>Pattern matching</b>\n*⇥⇥Alles\n?⇥⇥Een karakter\n[seq]⇥Een karakter in <i>seq</i>\n[!seq]⇥Een karakter <u>niet</u> in <i>seq</i>"
+msgstr "<b>Patroonovereenkomst</b>\n*\t\tAlles\n?\t\tEén teken\n[seq]\tEén teken in <i>seq</i>\n[!seq]\tEén teken <u>niet</u> in <i>seq</i>"
 
-#: application/plugins/find_file_extensions/default.py:48
-#: application/plugins/find_file_extensions/contents.py:24
+#: sunflower/plugins/find_file_extensions/default.py:49
+#: sunflower/plugins/find_file_extensions/contents.py:22
 msgid "Search for:"
-msgstr "Zoek naar:"
+msgstr "Zoeken naar:"
 
-#: application/plugins/find_file_extensions/default.py:55
+#: sunflower/plugins/find_file_extensions/default.py:55
 msgid "Case sensitive"
 msgstr "Hoofdlettergevoelig"
 
-#: application/plugins/find_file_extensions/contents.py:45
+#: sunflower/plugins/find_file_extensions/contents.py:38
 msgid "Content"
 msgstr "Inhoud"
 
-#: application/plugins/system_terminal/plugin.py:12
+#: sunflower/plugins/system_terminal/plugin.py:16
 msgid "System terminal"
-msgstr "System terminal"
+msgstr "Systeemterminal"
 
-#: application/plugins/system_terminal/plugin.py:21
-msgid "Open current directory"
-msgstr "Open huidige directory"
-
-#: application/plugins/gvim_viewer/plugin.py:50
+#: sunflower/plugins/gvim_viewer/plugin.py:52
 msgid "GVim"
 msgstr "GVim"
 
-#: application/plugin_base/rename_extension.py:22
-#: application/plugin_base/find_extension.py:23
+#: sunflower/plugin_base/rename_extension.py:22
 msgid "Use this extension"
-msgstr "Gebruik deze extensie"
+msgstr "Deze extensie gebruiken"
 
-#: application/plugin_base/plugin.py:126
+#: sunflower/plugin_base/plugin.py:130
 msgid "Plugin Base"
-msgstr "Plugin Base"
+msgstr "Plug-inbasis"
 
-#: application/plugin_base/plugin.py:129
-#: application/plugin_base/terminal.py:306
+#: sunflower/plugin_base/plugin.py:133 sunflower/plugin_base/terminal.py:266
 msgid "Focus opposite object"
-msgstr "Focus tegenoverliggende object"
+msgstr "Tegenover liggend object focussen"
 
-#: application/plugin_base/plugin.py:130
+#: sunflower/plugin_base/plugin.py:134
 msgid "Next tab"
-msgstr "Volgende tab"
+msgstr "Volgend tabblad"
 
-#: application/plugin_base/plugin.py:131
+#: sunflower/plugin_base/plugin.py:135
 msgid "Previous tab"
-msgstr "Vorige tab"
+msgstr "Vorig tabblad"
 
-#: application/plugin_base/plugin.py:133
-#: application/plugin_base/terminal.py:307
+#: sunflower/plugin_base/plugin.py:137 sunflower/plugin_base/terminal.py:267
 msgid "Close tab"
-msgstr "Sluit tab"
+msgstr "Tabblad sluiten"
 
-#: application/plugin_base/plugin.py:134
-msgid "Focus command entry"
-msgstr "Activeer opdrachtregel"
-
-#: application/plugin_base/plugin.py:135
+#: sunflower/plugin_base/plugin.py:138
 msgid "Focus left object"
-msgstr "Focus linker object"
+msgstr "Linkerobject focussen"
 
-#: application/plugin_base/plugin.py:136
+#: sunflower/plugin_base/plugin.py:139
 msgid "Focus right object"
-msgstr "Focus rechter object"
+msgstr "Rechterobject focussen"
 
-#: application/plugin_base/terminal.py:94
-msgid "Open file list"
-msgstr "Open bestandslijst"
-
-#: application/plugin_base/terminal.py:135
+#: sunflower/plugin_base/terminal.py:93
 msgid ""
 "\n"
 "\n"
 "Python VTE module is not installed on this system!"
-msgstr "\n\nModule Python VTE  is niet geïnstalleerd op dit systeem!"
+msgstr "\n\nDe module 'Python VTE'  is niet geïnstalleerd!"
 
-#: application/plugin_base/terminal.py:209
+#: sunflower/plugin_base/terminal.py:162
 msgid "Terminal menu"
-msgstr "Terminal menu"
+msgstr "Terminalmenu"
 
-#: application/plugin_base/terminal.py:303
-#: application/plugin_base/item_list.py:259
+#: sunflower/plugin_base/terminal.py:176
+msgid "Open current directory"
+msgstr "Huidige map openen"
+
+#: sunflower/plugin_base/terminal.py:263
+#: sunflower/plugin_base/item_list.py:215
 msgid "Create terminal tab"
-msgstr "Maak terminal tab"
+msgstr "Terminaltabblad maken"
 
-#: application/plugin_base/terminal.py:304
-#: application/plugin_base/item_list.py:254
+#: sunflower/plugin_base/terminal.py:264
+#: sunflower/plugin_base/item_list.py:210
 msgid "Copy selection to clipboard"
-msgstr "Kopieer naar klembord"
+msgstr "Kopiëren naar klembord"
 
-#: application/plugin_base/terminal.py:305
+#: sunflower/plugin_base/terminal.py:265
 msgid "Paste from clipboard"
-msgstr "Plak vanaf klembord"
+msgstr "Plakken van klembord"
 
-#: application/plugin_base/terminal.py:350
+#: sunflower/plugin_base/terminal.py:310
 #, python-brace-format
 msgid ""
 "You are about to feed child process with following data. Are you sure?\n"
 "\n"
 "{0}"
-msgstr "U staat op het punt de volgende gegevens door te geven aan het onderliggende proces. Weet u het zeker?\n\n{0}"
+msgstr "Je staat op het punt om de volgende gegevens door te geven aan het onderliggende proces. Weet je het zeker?\n\n{0}"
 
-#: application/plugin_base/item_list.py:76
+#: sunflower/plugin_base/item_list.py:74
 msgid "Directories (selected/total)"
-msgstr "Directory's (geselecteerd/totaal)"
+msgstr "Mappen (geselecteerd/totaal)"
 
-#: application/plugin_base/item_list.py:77
+#: sunflower/plugin_base/item_list.py:75
 msgid "Files (selected/total)"
 msgstr "Bestanden (geselecteerd/totaal)"
 
-#: application/plugin_base/item_list.py:78
+#: sunflower/plugin_base/item_list.py:76
 msgid "Size (selected/total)"
 msgstr "Grootte (geselecteerd/totaal)"
 
-#: application/plugin_base/item_list.py:109
-msgid "Search:"
-msgstr "Zoek:"
+#: sunflower/plugin_base/item_list.py:134
+#: sunflower/plugin_base/item_list.py:241
+msgid "Swap right and left paths"
+msgstr "Rechter- en linkerpaden omwisselen"
 
-#: application/plugin_base/item_list.py:136
+#: sunflower/plugin_base/item_list.py:140
 msgid "Reload item list"
 msgstr "Itemlijst verversen"
 
-#: application/plugin_base/item_list.py:151
-#: application/plugin_base/item_list.py:289
+#: sunflower/plugin_base/item_list.py:146
+#: sunflower/plugin_base/item_list.py:245
 msgid "Copy path to clipboard"
-msgstr "Kopieer pad naar klembord"
+msgstr "Pad kopiëren naar klembord"
 
-#: application/plugin_base/item_list.py:159
+#: sunflower/plugin_base/item_list.py:152
 msgid "Enter path..."
-msgstr "Geeft pad..."
+msgstr "Voer een pad in..."
 
-#: application/plugin_base/item_list.py:248
+#: sunflower/plugin_base/item_list.py:180
+msgid "Locations"
+msgstr "Locaties"
+
+#: sunflower/plugin_base/item_list.py:204
 msgid "Execute selected item"
-msgstr "Uitvoeren geselecteerd item"
+msgstr "Geselecteerd item uitvoeren"
 
-#: application/plugin_base/item_list.py:249
+#: sunflower/plugin_base/item_list.py:205
 msgid "Select application and execute item"
-msgstr "Selecteer applicatie en voer item uit"
+msgstr "Programma selecteren en item uitvoeren"
 
-#: application/plugin_base/item_list.py:250
+#: sunflower/plugin_base/item_list.py:206
 msgid "Show selected item properties"
-msgstr "Toon eigenschappen van geselecteerd item"
+msgstr "Eigenschappen tonen van geselecteerd item"
 
-#: application/plugin_base/item_list.py:251
+#: sunflower/plugin_base/item_list.py:207
 msgid "Bookmark current directory"
-msgstr "Maak bladwijzer voor huidige directory"
+msgstr "Huidige map toevoegen aan bladwijzers"
 
-#: application/plugin_base/item_list.py:253
+#: sunflower/plugin_base/item_list.py:208
+msgid "Edit bookmarks"
+msgstr "Bladwijzers aanpassen"
+
+#: sunflower/plugin_base/item_list.py:209
 msgid "Cut selection to clipboard"
-msgstr "Knip selectie naar klembord"
+msgstr "Selectie knippen naar klembord"
 
-#: application/plugin_base/item_list.py:255
+#: sunflower/plugin_base/item_list.py:211
 msgid "Paste items from clipboard"
-msgstr "Plak items vanaf klembord"
+msgstr "Items plakken van klembord"
 
-#: application/plugin_base/item_list.py:256
+#: sunflower/plugin_base/item_list.py:212
 msgid "Open selected directory in new tab"
-msgstr "Open geselecteerde directory in nieuwe tab"
+msgstr "Geselecteerde map openen op nieuw tabblad"
 
-#: application/plugin_base/item_list.py:257
+#: sunflower/plugin_base/item_list.py:213
 msgid "Open selected directory"
-msgstr "Open geselecteerde directory"
+msgstr "Geselecteerde map openen"
 
-#: application/plugin_base/item_list.py:258
+#: sunflower/plugin_base/item_list.py:214
 msgid "Calculate disk usage for directory"
-msgstr "Bereken schijfruimte voor directory"
+msgstr "Schijfruimte van map berekenen"
 
-#: application/plugin_base/item_list.py:261
+#: sunflower/plugin_base/item_list.py:217
 msgid "Go to root directory"
-msgstr "Ga naar root directory"
+msgstr "Ga naar rootmap"
 
-#: application/plugin_base/item_list.py:262
+#: sunflower/plugin_base/item_list.py:218
 msgid "Reload items in current directory"
-msgstr "Huidige directory opnieuw inlezen"
+msgstr "Huidige map opnieuw inlezen"
 
-#: application/plugin_base/item_list.py:263
+#: sunflower/plugin_base/item_list.py:219
 msgid "Show history browser"
-msgstr "Toon geschiedenis"
+msgstr "Geschiedenis tonen"
 
-#: application/plugin_base/item_list.py:264
+#: sunflower/plugin_base/item_list.py:220
 msgid "Go back in history"
-msgstr "Terug in geschiedenis"
+msgstr "Ga terug in geschiedenis"
 
-#: application/plugin_base/item_list.py:265
+#: sunflower/plugin_base/item_list.py:221
 msgid "Go forward in history"
-msgstr "Vooruit in geschiedenis"
+msgstr "Ga vooruit in geschiedenis"
 
-#: application/plugin_base/item_list.py:266
+#: sunflower/plugin_base/item_list.py:222
 msgid "Select all"
-msgstr "Selecteer alles"
+msgstr "Alles selecteren"
 
-#: application/plugin_base/item_list.py:267
+#: sunflower/plugin_base/item_list.py:223
 msgid "Deselect all"
-msgstr "Deselecteer alles"
+msgstr "Niets selecteren"
 
-#: application/plugin_base/item_list.py:268
+#: sunflower/plugin_base/item_list.py:224
 msgid "Invert selection"
 msgstr "Selectie omkeren"
 
-#: application/plugin_base/item_list.py:269
+#: sunflower/plugin_base/item_list.py:225
 msgid "Toggle selection"
-msgstr "Toggle selectie"
+msgstr "Selecteren/Niets selecteren"
 
-#: application/plugin_base/item_list.py:270
+#: sunflower/plugin_base/item_list.py:226
 msgid "Toggle selection and move marker up"
-msgstr "Toggle selectie en verplaats aanwijzer omhoog"
+msgstr "Selecteren/Niets selecteren en markering omhoog verplaatsen"
 
-#: application/plugin_base/item_list.py:271
+#: sunflower/plugin_base/item_list.py:227
 msgid "Trash or delete selected items"
-msgstr "Verwijder geselecteerde items"
+msgstr "Geselecteerde items verwijderen"
 
-#: application/plugin_base/item_list.py:272
+#: sunflower/plugin_base/item_list.py:228
 msgid "Force deleting selected items"
-msgstr "Definitief verwijderen geselecteerde items"
+msgstr "Geselecteerde items permanent verwijderen"
 
-#: application/plugin_base/item_list.py:273
+#: sunflower/plugin_base/item_list.py:229
 msgid "Show bookmarks for current list"
-msgstr "Toon bladwijzers voor huidige lijst"
+msgstr "Bladwijzers van huidige lijst tonen"
 
-#: application/plugin_base/item_list.py:274
+#: sunflower/plugin_base/item_list.py:230
 msgid "Show bookmarks for left list"
-msgstr "Toon bladwijzers van linker lijst"
+msgstr "Bladwijzers van linkerlijst tonen"
 
-#: application/plugin_base/item_list.py:275
+#: sunflower/plugin_base/item_list.py:231
 msgid "Show bookmarks for right list"
-msgstr "Toon bladwijzers van rechter lijst"
+msgstr "Bladwijzers van rechterlijst tonen"
 
-#: application/plugin_base/item_list.py:276
+#: sunflower/plugin_base/item_list.py:232
 msgid "Rename selected item"
-msgstr "Hernoem geselecteerde item"
+msgstr "Naam van geselecteerd item wijzigen"
 
-#: application/plugin_base/item_list.py:277
+#: sunflower/plugin_base/item_list.py:233
 msgid "View selected item"
-msgstr "Bekijk geselecteerd item"
+msgstr "Geselecteerd item bekijken"
 
-#: application/plugin_base/item_list.py:278
+#: sunflower/plugin_base/item_list.py:234
 msgid "Edit selected item"
-msgstr "Bewerk geselecteerd item"
+msgstr "Geselecteerd item bewerken"
 
-#: application/plugin_base/item_list.py:279
+#: sunflower/plugin_base/item_list.py:235
 msgid "Copy selected items"
-msgstr "Kopieer geselecteerde items"
+msgstr "Geselecteerde items kopiëren"
 
-#: application/plugin_base/item_list.py:280
+#: sunflower/plugin_base/item_list.py:236
 msgid "Move selected items"
-msgstr "Verplaats geselecteerde items"
+msgstr "Geselecteerde items verplaatsen"
 
-#: application/plugin_base/item_list.py:281
+#: sunflower/plugin_base/item_list.py:237
 msgid "Show context menu"
-msgstr "Toon contextmenu"
+msgstr "Rechtermuisknopmenu tonen"
 
-#: application/plugin_base/item_list.py:282
+#: sunflower/plugin_base/item_list.py:238
 msgid "Show \"open with\" menu"
-msgstr "Toon menu \"openen met\""
+msgstr "Menu 'openen met' tonen"
 
-#: application/plugin_base/item_list.py:283
+#: sunflower/plugin_base/item_list.py:239
 msgid "Assign path from left list"
-msgstr "Wijs pad toe uit linker lijst"
+msgstr "Pad toewijzen uit linkerlijst"
 
-#: application/plugin_base/item_list.py:284
+#: sunflower/plugin_base/item_list.py:240
 msgid "Assign path from right list"
-msgstr "Wijs pad toe uit rechter lijst"
+msgstr "Pad toewijzen uit rechterlijst"
 
-#: application/plugin_base/item_list.py:285
-msgid "Swap right and left paths"
-msgstr "Rechter en linker paden omwisselen"
-
-#: application/plugin_base/item_list.py:286
+#: sunflower/plugin_base/item_list.py:242
 msgid "Move selection marker up"
-msgstr "Aanwijzer omhoog"
+msgstr "Markering omhoog verplaatsen"
 
-#: application/plugin_base/item_list.py:287
+#: sunflower/plugin_base/item_list.py:243
 msgid "Move selection marker down"
-msgstr "Aanwijzer omlaag"
+msgstr "Markering omlaag verplaatsen"
 
-#: application/plugin_base/item_list.py:288
+#: sunflower/plugin_base/item_list.py:244
 msgid "Show tab menu"
-msgstr "Toon tabmenu"
+msgstr "Tabbladmenu tonen"
 
-#: application/plugin_base/item_list.py:290
+#: sunflower/plugin_base/item_list.py:246
 msgid "Copy selected path to clipboard"
-msgstr "Kopieer geselecteerde pad naar het klembord"
+msgstr "Geselecteerd pad kopiëren naar klembord"
 
-#: application/plugin_base/item_list.py:291
+#: sunflower/plugin_base/item_list.py:247
+msgid "Copy selected item name to clipboard"
+msgstr "Naam van geselecteerd item kopiëren naar klembord"
+
+#: sunflower/plugin_base/item_list.py:248
 msgid "Copy path to command entry"
-msgstr "Kopieer geselecteerde pad naar opdrachtregel"
+msgstr "Pad kopiëren naar opdrachtregel"
 
-#: application/plugin_base/item_list.py:292
+#: sunflower/plugin_base/item_list.py:249
 msgid "Copy selection to command entry"
-msgstr "Kopieer selectie naar opdrachtregel"
+msgstr "Selectie kopiëren naar opdrachtregel"
 
-#: application/plugin_base/item_list.py:293
+#: sunflower/plugin_base/item_list.py:250
 msgid "Ask and navigate to path"
-msgstr "Vraag en ga naar pad"
+msgstr "Vragen en naar pad gaan"
 
-#: application/plugin_base/item_list.py:294
+#: sunflower/plugin_base/item_list.py:251
 msgid "Start quick search"
-msgstr "Start snelzoeken"
+msgstr "Snelzoeken starten"
 
-#: application/plugin_base/item_list.py:295
+#: sunflower/plugin_base/item_list.py:252
 msgid "Expand directory"
-msgstr "Directory uitklappen"
+msgstr "Map uitklappen"
 
-#: application/plugin_base/item_list.py:296
+#: sunflower/plugin_base/item_list.py:253
 msgid "Collapse directory"
-msgstr "Directory inklappen"
+msgstr "Map inklappen"
 
-#: application/plugin_base/item_list.py:297
+#: sunflower/plugin_base/item_list.py:254
 msgid "Create symbolic or hard link"
-msgstr "Maak symbolic of hard link"
+msgstr "Snelkoppeling of harde verwijzing maken"
 
-#: application/plugin_base/item_list.py:298
+#: sunflower/plugin_base/item_list.py:255
 msgid "Show emblem menu"
-msgstr "Toon embleemmenu"
+msgstr "Embleemmenu tonen"
 
-#: application/plugin_base/item_list.py:358
-#: application/plugin_base/item_list.py:364
+#: sunflower/plugin_base/item_list.py:316
+#: sunflower/plugin_base/item_list.py:322
 #, python-brace-format
 msgid "Go to '{0}'"
 msgstr "Ga naar '{0}'"
 
-#: application/plugin_base/item_list.py:710
+#: sunflower/plugin_base/item_list.py:660
 msgid ""
 "Directory does not exist anymore or is not valid. If path is not local check"
 " if specified volume is mounted."
-msgstr "Directory bestaat niet of is ongeldig. Controleer of het betreffende volume gemount is."
+msgstr "De map bestaat niet meer of is ongeldig. Controleer of de betreffende schijf aangekoppeld is."
 
-#: application/plugin_base/item_list.py:748
+#: sunflower/plugin_base/item_list.py:698
 #, python-brace-format
 msgid ""
 "Specified protocol ({0}) is not supported by this application. Please check "
 "for available plugins or create a feature request."
-msgstr "Het protocol ({0}) wordt niet ondersteund door deze applicatie. Controleer of er een plugin beschikbaar is of dien een feature request in."
+msgstr "Het protocol ({0}) wordt niet ondersteund door dit programma. Controleer of er een plug-in beschikbaar is of draag het aan als idee."
 
-#: application/plugin_base/item_list.py:780
+#: sunflower/plugin_base/item_list.py:730
 msgid ""
 "Application is unable to handle specified data. Check if source items still "
 "exist."
-msgstr "De applicatie kan de data niet verwerken. Controleer of de bronitems nog bestaan."
+msgstr "Het programma kan de gegevens niet verwerken. Controleer of de bronitems nog bestaan."
 
-#: application/plugin_base/item_list.py:1032
+#: sunflower/plugin_base/item_list.py:964
+msgid "_Open"
+msgstr "_Openen"
+
+#: sunflower/plugin_base/item_list.py:973
+msgid "Open in new ta_b"
+msgstr "Openen op nieuw ta_bblad"
+
+#: sunflower/plugin_base/item_list.py:987
 msgid "Open _with"
-msgstr "Openen met"
+msgstr "Openen _met"
 
-#: application/plugin_base/item_list.py:1044
+#: sunflower/plugin_base/item_list.py:999
 msgid "Additional options"
 msgstr "Extra opties"
 
-#: application/plugin_base/item_list.py:1058
+#: sunflower/plugin_base/item_list.py:1013
 msgid "Create file"
-msgstr "Nieuw bestand"
+msgstr "Bestand aanmaken"
 
-#: application/plugin_base/item_list.py:1114
+#: sunflower/plugin_base/item_list.py:1037
+msgid "Cu_t"
+msgstr "_Knippen"
+
+#: sunflower/plugin_base/item_list.py:1046
+msgid "_Copy"
+msgstr "_Kopiëren"
+
+#: sunflower/plugin_base/item_list.py:1055
+msgid "_Paste"
+msgstr "_Plakken"
+
+#: sunflower/plugin_base/item_list.py:1069
 msgid "Copy to other..."
-msgstr "Kopieer naar andere..."
+msgstr "Kopiëren naar andere..."
 
-#: application/plugin_base/item_list.py:1120
+#: sunflower/plugin_base/item_list.py:1075
 msgid "Move to other..."
-msgstr "Verplaats naar andere..."
+msgstr "Verplaatsen naar andere..."
 
-#: application/plugin_base/item_list.py:1145
+#: sunflower/plugin_base/item_list.py:1085
+msgid "Copy file name"
+msgstr "Bestandsnaam kopiëren"
+
+#: sunflower/plugin_base/item_list.py:1091
+msgid "Copy path"
+msgstr "Pad kopiëren"
+
+#: sunflower/plugin_base/item_list.py:1102
+msgid "_Delete"
+msgstr "Verwij_deren"
+
+#: sunflower/plugin_base/item_list.py:1116
 msgid "Send to..."
-msgstr "Send to..."
+msgstr "Versturen naar..."
 
-#: application/plugin_base/item_list.py:1223
+#: sunflower/plugin_base/item_list.py:1127
+msgid "Ma_ke link"
+msgstr "Snel_koppeling maken"
+
+#: sunflower/plugin_base/item_list.py:1133
+msgid "_Rename..."
+msgstr "_Naam wijzigen..."
+
+#: sunflower/plugin_base/item_list.py:1146
+msgid "_Properties"
+msgstr "_Eigenschappen"
+
+#: sunflower/plugin_base/item_list.py:1194
 msgid "View complete history..."
-msgstr "Toon volledige geschiedenis..."
+msgstr "Volledige geschiedenis tonen..."
 
-#: application/plugin_base/item_list.py:1229
+#: sunflower/plugin_base/item_list.py:1200
 msgid "History is empty"
-msgstr "Geschiedenis is leeg"
+msgstr "Geen geschiedenis"
 
-#: application/plugin_base/item_list.py:1584
+#: sunflower/plugin_base/item_list.py:1549
 msgid "Path entry"
-msgstr "Pad invoerregel"
+msgstr "Padinvoer"
 
-#: application/plugin_base/item_list.py:1585
+#: sunflower/plugin_base/item_list.py:1550
 msgid "Navigate to:"
-msgstr "Navigeer naar:"
+msgstr "Navigeren naar:"
 
-#: application/indicator.py:31
+#: sunflower/indicator.py:32
 msgid "Sh_ow main window"
-msgstr "To_on hoofdvenster"
+msgstr "H_oofdvenster tonen"
 
-#: application/indicator.py:40
+#: sunflower/indicator.py:41
 msgid "_Hide main window"
-msgstr "Verberg hoofdvenster"
+msgstr "_Hoofdvenster verbergen"
 
-#: application/operation.py:113
+#: sunflower/operation.py:115
 #, python-brace-format
 msgid ""
 "Aborted. Not enough free space on target file system.\n"
 "Needed: {0}\n"
 "Available: {1}"
-msgstr "Afgebroken. Niet genoeg vrije ruimte op doel bestandsysteem.\nBenodigd: {0}\nBeschikbaar: {1}"
+msgstr "Afgebroken. Onvoldoende vrije ruimte op het doel- bestandssysteem.\nBenodigd: {0}\nBeschikbaar: {1}"
 
-#: application/operation.py:128
+#: sunflower/operation.py:130
 #, python-brace-format
 msgid ""
 "Target file system does not have enough free space for this operation to continue.\n"
@@ -2746,220 +2635,228 @@ msgid ""
 "Available: {1}\n"
 "\n"
 "Do you wish to continue?"
-msgstr "Doel bestandsysteem heeft onvoldoende vrije ruimte voor deze actie.\n\nBenodigd: {0}\nBeschikbaar: {1}\n\nWilt u doorgaan?"
+msgstr "Het doelbestandssysteem heeft onvoldoende vrije ruimte voor deze actie.\n\nBenodigd: {0}\nBeschikbaar: {1}\n\nWil je doorgaan?"
 
-#: application/operation.py:242
+#: sunflower/operation.py:265
 msgid ""
 "There is a problem writing data to destination file. What would you like to "
 "do?"
-msgstr "Probleem bij het schrijven van data naar het doelbestand. Wat wilt u doen?"
+msgstr "Er is een probleem opgetreden bij het wegschrijven van gegevens naar het doelbestand. Wat wil je doen?"
 
-#: application/operation.py:276
+#: sunflower/operation.py:307
 msgid ""
 "An error occurred while trying to create specified file. What would you like"
 " to do?"
-msgstr "Er trad een fout op bij het aanmaken van het opgegeven bestand. Wat wilt u doen?"
+msgstr "Er is een fout opgetreden bij het aanmaken van het opgegeven bestand. Wat wil je doen?"
 
-#: application/operation.py:283
+#: sunflower/operation.py:314
 msgid ""
 "An error occurred while trying to create specified directory. What would you"
 " like to do?"
-msgstr "Er trad een fout op bij het aanmaken van de opgegeven directory. Wat wilt u doen?"
+msgstr "Er is een fout opgetreden bij het aanmaken van de opgegeven map. Wat wil je doen?"
 
-#: application/operation.py:316
+#: sunflower/operation.py:354
 msgid ""
 "Problem with setting path parameter for specified path. What would you like "
 "to do?"
-msgstr "Probleem met het instellen van parameter voor het opgegeven pad. Wat wilt u doen? "
+msgstr "Er is een probleem opgetreden bij het instellen van de parameter voor het opgegeven pad. Wat wil je doen? "
 
-#: application/operation.py:349
+#: sunflower/operation.py:393
 msgid ""
 "There was a problem removing specified path. What would you like to do?"
-msgstr "Probleem bij het verwijderen van het opgegeven pad. Wat wilt u doen?"
+msgstr "Er is een probleem opgetreden bij het verwijderen van het opgegeven pad. Wat wil je doen?"
 
-#: application/operation.py:381
+#: sunflower/operation.py:432
 msgid ""
 "There was a problem trashing specified path. Would you like to try removing "
 "it instead?"
-msgstr "Probleem bij het verplaatsen van het opgegeven pad naar de prullenbak. Wilt u het definitief verwijderen?"
+msgstr "Er is een probleem opgetreden bij het verplaatsen van het opgegeven pad naar de prullenbak. Wil je het permanent verwijderen?"
 
-#: application/operation.py:413
+#: sunflower/operation.py:471
 msgid "There was a problem moving specified path. What would you like to do?"
-msgstr "Probleem bij het verplaatsen van het opgegeven pad. Wat wilt u doen?"
+msgstr "Er is een probleem opgetreden bij het verplaatsen van het opgegeven pad. Wat wil je doen?"
 
-#: application/operation.py:445
+#: sunflower/operation.py:510
 msgid ""
 "There was a problem renaming specified path. What would you like to do?"
-msgstr "Probleem met het hernoemen van het opgegeven pad. Wat wilt u doen?"
+msgstr "Er is een probleem opgetreden bij de naamswijziging van het opgegeven pad. Wat wil je doen?"
 
-#: application/operation.py:477
+#: sunflower/operation.py:549
 msgid ""
 "There was a problem with reading specified directory. What would you like to"
 " do?"
-msgstr "Probleem bij het lezen van de opgegeven directory. Wat wilt u doen?"
+msgstr "Er is een probleem opgetreden bij het uitlezen van de opgegeven map. Wat wil je doen?"
 
-#: application/operation.py:579
+#: sunflower/operation.py:659
 msgid "Searching for files..."
-msgstr "Bestanden zoeken..."
+msgstr "Bezig met zoeken naar bestanden..."
 
-#: application/operation.py:800
+#: sunflower/operation.py:883
 msgid ""
 "Unable to create directory because file with the same name already exists in"
 " target directory."
-msgstr "Kan directory niet maken omdat de opgegeven naam al bestaat in de doeldirectory."
+msgstr "Er is al een bestand met die naam in de doelmap; de map kan niet worden aangemaakt."
 
-#: application/operation.py:990
+#: sunflower/operation.py:1122
 msgid "Creating directories..."
-msgstr "Directory's aanmaken..."
+msgstr "Bezig met aanmaken van mappen..."
 
-#: application/operation.py:1007
+#: sunflower/operation.py:1139
 msgid "Copying files..."
-msgstr "Bestanden kopiëren..."
+msgstr "Bezig met kopiëren van bestanden..."
 
-#: application/operation.py:1062 application/operation.py:1079
+#: sunflower/operation.py:1155
+msgid "Creating links..."
+msgstr "Bezig met maken van snelkoppelingen..."
+
+#: sunflower/operation.py:1207 sunflower/operation.py:1224
 msgid "Copy Operation"
 msgstr "Kopieeractie"
 
-#: application/operation.py:1064
+#: sunflower/operation.py:1209
 #, python-brace-format
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
-msgstr[0] "Kopiëren van {0} item van \"{1}\" naar \"{2}\" gereed!"
-msgstr[1] "Kopiëren van {0} items van \"{1}\" naar \"{2}\" gereed!"
+msgstr[0] "{0} item gekopieerd van '{1}' naar '{2}'!"
+msgstr[1] "{0} items gekopieerd van '{1}' naar '{2}'!"
 
-#: application/operation.py:1190
+#: sunflower/operation.py:1337
 msgid "Moving files..."
-msgstr "Bestanden verplaatsen..."
+msgstr "Bezig met verplaatsen van bestanden..."
 
-#: application/operation.py:1204
+#: sunflower/operation.py:1351
 msgid "Deleting source files..."
-msgstr "Bronbestanden verwijderen..."
+msgstr "Bezig met verwijderen van bronbestanden..."
 
-#: application/operation.py:1226
+#: sunflower/operation.py:1373
 msgid "Deleting source directories..."
-msgstr "Brondirectory's verwijderen..."
+msgstr "Bezig met verwijderen van bronmappen..."
 
-#: application/operation.py:1323 application/operation.py:1340
+#: sunflower/operation.py:1472 sunflower/operation.py:1489
 msgid "Move Operation"
 msgstr "Verplaatsactie"
 
-#: application/operation.py:1325
+#: sunflower/operation.py:1474
 #, python-brace-format
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
-msgstr[0] "Verplaatsen van {0} item van \"{1}\" naar \"{2}\" gereed!"
-msgstr[1] "Verplaatsen van {0} items van \"{1}\" naar \"{2}\" gereed!"
+msgstr[0] "{0} item verplaatst van '{1}' naar '{2}'!"
+msgstr[1] "{0} items verplaatst van '{1}' naar '{2}'!"
 
-#: application/operation.py:1466
+#: sunflower/operation.py:1619
 msgid "Delete Operation"
 msgstr "Verwijderactie"
 
-#: application/operation.py:1468
+#: sunflower/operation.py:1621
 #, python-brace-format
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
-msgstr[0] "Verwijderen van {0} item van \"{1}\" gereed!"
-msgstr[1] "Verwijderen van {0} items van \"{1}\" gereed!"
+msgstr[0] "{0} item verwijderd uit '{1}'!"
+msgstr[1] "{0} items verwijderd uit '{1}'!"
 
-#: application/operation.py:1579
+#: sunflower/operation.py:1734
 msgid "Rename Operation"
-msgstr "Hernoemactie"
+msgstr "Naamswijzigingactie"
 
-#: application/operation.py:1581
+#: sunflower/operation.py:1736
 #, python-brace-format
 msgid "Rename of {0} item from \"{1}\" is completed!"
 msgid_plural "Rename of {0} items from \"{1}\" is completed!"
-msgstr[0] "Hernoemen van {0} item van \"{1}\" gereed!"
-msgstr[1] "Hernoemen van {0} items van \"{1}\" gereed!"
+msgstr[0] "{0} itemnaam gewijzigd in '{1}'!"
+msgstr[1] "{0} itemnamen gewijzigd in '{1}'!"
 
-#: application/tools/viewer.py:35
+#: sunflower/tools/viewer.py:56
 #, python-brace-format
 msgid "{0} - Viewer"
-msgstr "{0} - Viewer"
+msgstr "{0} - Weergave"
 
-#: application/tools/viewer.py:78
+#: sunflower/tools/viewer.py:90
 msgid "Executable"
 msgstr "Programma"
 
-#: application/tools/viewer.py:119
+#: sunflower/tools/viewer.py:124
+msgid "Code"
+msgstr "Code"
+
+#: sunflower/tools/viewer.py:164
 msgid "Image"
 msgstr "Afbeelding"
 
-#: application/tools/viewer.py:138
+#: sunflower/tools/viewer.py:179
 msgid "Viewer is unable to display this file type."
-msgstr "Viewer kan dit bestandstype niet weergeven."
+msgstr "Dit bestandstype kan niet worden voorvertoond."
 
-#: application/tools/find_files.py:45 application/tools/find_files.py:319
+#: sunflower/tools/find_files.py:43 sunflower/tools/find_files.py:282
 msgid "Find files"
-msgstr "Zoek bestanden"
+msgstr "Bestanden zoeken"
 
-#: application/tools/find_files.py:63
-msgid "Search in:"
-msgstr "Zoeken in:"
+#: sunflower/tools/find_files.py:70
+msgid "Criteria"
+msgstr "Criteria"
 
-#: application/tools/find_files.py:80
+#: sunflower/tools/find_files.py:93
+msgid "Start"
+msgstr "Starten"
+
+#: sunflower/tools/find_files.py:102
 msgid "Search recursively"
 msgstr "Recursief zoeken"
 
-#: application/tools/find_files.py:132 application/tools/find_files.py:244
-msgid "Start"
-msgstr "Start"
+#: sunflower/tools/find_files.py:123
+msgid "Results"
+msgstr "Resultaten"
 
-#: application/tools/find_files.py:194
+#: sunflower/tools/find_files.py:194
 msgid ""
 "Active object doesn't support changing path. Set focus on a different "
 "object, preferably file list, and try again."
-msgstr "Het actieve object ondersteunt het wijzigen van het pad niet. Kies een ander object, bij voorkeur de bestandslijst, en probeer het opnieuw."
+msgstr "Het actieve object heeft geen ondersteuning voor het wijzigen van het pad. Kies een ander object, bij voorkeur de bestandslijst, en probeer het opnieuw."
 
-#: application/tools/find_files.py:232
-msgid "Stop"
-msgstr "Stop"
-
-#: application/tools/find_files.py:365
+#: sunflower/tools/find_files.py:328
 msgid ""
 "Specified path is not valid or doesn't exist anymore. Please check your "
 "selection and try again."
-msgstr "Opgegeven pad bestaat niet of is ongeldig. Controleer uw selectie en probeer het opnieuw."
+msgstr "Het opgegeven pad bestaat niet of is ongeldig. Controleer de selectie en probeer het opnieuw."
 
-#: application/tools/find_files.py:388
+#: sunflower/tools/find_files.py:349
 msgid ""
 "You need to enable at least one extension in order to find files and "
 "directories!"
-msgstr "U moet minimaal één programma-uitbreiding activeren om bestanden en directory's te kunnen vinden!"
+msgstr "Je moet minimaal één programma-uitbreiding activeren om bestanden en mappen te kunnen zoeken!"
 
-#: application/tools/version_check.py:23
+#: sunflower/tools/version_check.py:23
 msgid "Version check"
 msgstr "Versiecontrole"
 
-#: application/tools/version_check.py:42
+#: sunflower/tools/version_check.py:42
 msgid "Current:"
-msgstr "Huidig:"
+msgstr "Huidige versie:"
 
-#: application/tools/version_check.py:45
+#: sunflower/tools/version_check.py:45
 msgid "Latest:"
-msgstr "Laatste:"
+msgstr "Nieuwste versie:"
 
-#: application/tools/version_check.py:107
+#: sunflower/tools/version_check.py:107
 msgid "Checking..."
-msgstr "Controleren..."
+msgstr "Bezig met controleren..."
 
-#: application/tools/advanced_rename.py:27
+#: sunflower/tools/advanced_rename.py:29
 msgid "Advanced rename"
-msgstr "Geavanceerd hernoemen"
+msgstr "Geavanceerde naamswijziging"
 
-#: application/tools/advanced_rename.py:52
+#: sunflower/tools/advanced_rename.py:54
 msgid "Old name"
 msgstr "Oude naam"
 
-#: application/tools/advanced_rename.py:55
+#: sunflower/tools/advanced_rename.py:57
 msgid "New name"
 msgstr "Nieuwe naam"
 
-#: application/tools/advanced_rename.py:78
+#: sunflower/tools/advanced_rename.py:80
 msgid "Items located in:"
 msgstr "Items aanwezig in:"
 
-#: application/tools/advanced_rename.py:201
+#: sunflower/tools/advanced_rename.py:202
 #, python-brace-format
 msgid ""
 "You are about to rename {0} item.\n"
@@ -2967,5 +2864,5 @@ msgid ""
 msgid_plural ""
 "You are about to rename {0} items.\n"
 "Are you sure about this?"
-msgstr[0] "U staat op het punt om {0} item te hernoemen.\nWeet u het zeker?"
-msgstr[1] "U staat op het punt om {0} items te hernoemen.\nWeet u het zeker?"
+msgstr[0] "Je staat op het punt om {0} itemnaam te wijzigen.\nWeet je het zeker?"
+msgstr[1] "Je staat op het punt om {0} itemnamen te wijzigen.\nWeet je het zeker?"

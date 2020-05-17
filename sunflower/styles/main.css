@@ -1,0 +1,43 @@
+/**
+ * Tab title bar.
+ */
+box.horizontal.sunflower-title-bar {
+	border: 5px solid @theme_unfocused_bg_color;
+	background-color: @theme_unfocused_bg_color;
+}
+
+/**
+ * Breadcrumbs
+ */
+scrolledwindow.sunflower-breadcrumbs * {
+	min-height: 0;
+}
+
+scrolledwindow.sunflower-breadcrumbs button {
+	margin: 0;
+	padding: 0.3em;
+
+	border: 0;
+	outline: 0;
+	background: none;
+	box-shadow: none;
+}
+
+scrolledwindow.sunflower-breadcrumbs button:checked {
+	font-weight: bold;
+	color: @theme_selected_bg_color;
+}
+
+/**
+ * Item list.
+ */
+treeview.sunflower-main-object:selected {
+	outline: none;
+	background-color: alpha(@theme_selected_bg_color, 0.3);
+	color: @theme_fg_color;
+}
+
+treeview.sunflower-main-object:selected:focus {
+	background-color: @theme_selected_bg_color;
+	color: @theme_selected_fg_color;
+}

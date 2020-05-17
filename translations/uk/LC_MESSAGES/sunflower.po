@@ -5,88 +5,87 @@
 # Translators:
 # Andrey <python36@yandex.ru>, 2015
 # FIRST AUTHOR Халіманенко Тарас <mr.haltar@yandex.ru>, 2012
-# insolor, 2016
+# insolor, 2016,2020
 # Mladen Mijatov <meaneye.rcf@gmail.com>, 2015
 # Roman Tuz <ubuntueasy.com@gmail.com>, 2015
-# Микола Ткач <Stuartlittle1970@gmail.com>, 2016
+# Микола Ткач <chistomov@gmail.com>, 2016
 # Халіманенко Тарас <mr.haltar@yandex.ru>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-06 23:05+0100\n"
-"PO-Revision-Date: 2016-02-05 09:02+0000\n"
-"Last-Translator: Микола Ткач <Stuartlittle1970@gmail.com>\n"
+"POT-Creation-Date: 2020-05-11 21:13+0200\n"
+"PO-Revision-Date: 2020-05-13 07:59+0000\n"
+"Last-Translator: insolor\n"
 "Language-Team: Ukrainian (http://www.transifex.com/way2cu/sunflower/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: uk\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
-#: application/gui/preferences/terminal.py:11
-#: application/plugins/system_terminal/plugin.py:54
-#: application/plugins/system_terminal/plugin.py:55
-#: application/plugin_base/terminal.py:76
-#: application/plugin_base/terminal.py:300
-#: application/plugin_base/item_list.py:230
+#: sunflower/gui/preferences/terminal.py:10
+#: sunflower/plugins/system_terminal/plugin.py:54
+#: sunflower/plugins/system_terminal/plugin.py:55
+#: sunflower/plugin_base/terminal.py:169 sunflower/plugin_base/terminal.py:260
+#: sunflower/plugin_base/item_list.py:187
 msgid "Terminal"
 msgstr "Термінал"
 
-#: application/gui/preferences/terminal.py:18
+#: sunflower/gui/preferences/terminal.py:17
 msgid "VTE based terminal"
 msgstr "Термінал, заснований на VTE"
 
-#: application/gui/preferences/terminal.py:22
+#: sunflower/gui/preferences/terminal.py:21
 msgid "Show scrollbars when needed"
 msgstr "Показувати смуги прокручування при необхідності"
 
-#: application/gui/preferences/terminal.py:30
+#: sunflower/gui/preferences/terminal.py:29
 msgid "Use the system fixed width font"
 msgstr "Використовувати системний моноширинний шрифт"
 
-#: application/gui/preferences/terminal.py:33
+#: sunflower/gui/preferences/terminal.py:32
 msgid "Font:"
 msgstr "Шрифт:"
 
-#: application/gui/preferences/terminal.py:42
+#: sunflower/gui/preferences/terminal.py:41
 msgid "Cursor shape:"
 msgstr "Форма вказівника:"
 
-#: application/gui/preferences/terminal.py:46
+#: sunflower/gui/preferences/terminal.py:45
 msgid "Block"
 msgstr "Блок"
 
-#: application/gui/preferences/terminal.py:47
+#: sunflower/gui/preferences/terminal.py:46
 msgid "I-Beam"
 msgstr "I-подібний"
 
-#: application/gui/preferences/terminal.py:48
+#: sunflower/gui/preferences/terminal.py:47
 msgid "Underline"
 msgstr "Підкреслення"
 
-#: application/gui/preferences/terminal.py:58
+#: sunflower/gui/preferences/terminal.py:57
 msgid "Allow bold text"
 msgstr "Дозволяти жирний текст"
 
-#: application/gui/preferences/terminal.py:62
+#: sunflower/gui/preferences/terminal.py:61
 msgid "Automatically hide mouse when typing"
 msgstr "Автоматично приховувати вказівник при наборі тексту"
 
-#: application/gui/preferences/terminal.py:70
+#: sunflower/gui/preferences/terminal.py:69
 msgid "External terminal"
 msgstr "Зовнішній термінал"
 
-#: application/gui/preferences/terminal.py:73
-#: application/gui/preferences/view_and_edit.py:63
+#: sunflower/gui/preferences/terminal.py:72
+#: sunflower/gui/preferences/view_and_edit.py:62
 msgid "Command line:"
 msgstr "Команда:"
 
-#: application/gui/preferences/terminal.py:79
+#: sunflower/gui/preferences/terminal.py:78
 msgid "Command line for executing specific program:"
 msgstr "Команда для виконання певної проґрами:"
 
-#: application/gui/preferences/terminal.py:85
+#: sunflower/gui/preferences/terminal.py:84
 #, python-brace-format
 msgid ""
 "<small><i>Note:\n"
@@ -96,155 +95,154 @@ msgid ""
 "\t{2} will be replaced with current working directory.</i></small>"
 msgstr "<small><i>Нотатка:\n\tЯкщо пропустити{0} то термінал відкриється у новому вікні, а не вкладці.\n\t{0} буде замінено на id сокета/вікна.\n\t{1} буде замінено на вказану команду та її параметри.\n\t{2} буде замінено на поточний робочий каталог.</i></small>"
 
-#: application/gui/preferences/commands.py:15
+#: sunflower/gui/preferences/commands.py:14 sunflower/gui/main_window.py:209
 msgid "Commands"
 msgstr "Команди"
 
-#: application/gui/preferences/commands.py:40
-#: application/gui/preferences/bookmarks.py:50
-#: application/plugins/rename_extensions/audio_metadata.py:24
+#: sunflower/gui/preferences/commands.py:39
+#: sunflower/gui/preferences/bookmarks.py:49
+#: sunflower/plugins/rename_extensions/audio_metadata.py:26
 msgid "Title"
 msgstr "Заголовок"
 
-#: application/gui/preferences/commands.py:44
+#: sunflower/gui/preferences/commands.py:43
 msgid "Command"
 msgstr "Команда"
 
-#: application/gui/preferences/commands.py:67
-#: application/gui/preferences/bookmarks.py:77
-#: application/gui/preferences/toolbar.py:74
-#: application/gui/preferences/item_list.py:263
+#: sunflower/gui/preferences/commands.py:66
+#: sunflower/gui/preferences/bookmarks.py:76
+#: sunflower/gui/preferences/toolbar.py:77
+#: sunflower/gui/preferences/item_list.py:230
 msgid "Move Up"
 msgstr "Перемістити вище"
 
-#: application/gui/preferences/commands.py:75
-#: application/gui/preferences/bookmarks.py:85
-#: application/gui/preferences/toolbar.py:82
-#: application/gui/preferences/item_list.py:271
+#: sunflower/gui/preferences/commands.py:74
+#: sunflower/gui/preferences/bookmarks.py:84
+#: sunflower/gui/preferences/toolbar.py:85
+#: sunflower/gui/preferences/item_list.py:238
 msgid "Move Down"
 msgstr "Перемістити нижче"
 
-#: application/gui/preferences/associations.py:16
+#: sunflower/gui/preferences/associations.py:15
 msgid "Associations"
 msgstr "Асоціяції"
 
-#: application/gui/preferences/associations.py:45
-#: application/gui/preferences/associations.py:81
+#: sunflower/gui/preferences/associations.py:44
+#: sunflower/gui/preferences/associations.py:76
 msgid "Add mime type"
 msgstr "Додати MIME-тип"
 
-#: application/gui/preferences/associations.py:48
+#: sunflower/gui/preferences/associations.py:47
 msgid "Add application to mime type"
 msgstr "Додати додаток для MIME-типу"
 
-#: application/gui/preferences/associations.py:82
+#: sunflower/gui/preferences/associations.py:77
 msgid "Enter MIME type (eg. image/png):"
 msgstr "Уведіть MIME (наприклад, image/png):"
 
-#: application/gui/preferences/associations.py:133
+#: sunflower/gui/preferences/associations.py:128
 msgid ""
 "You need to select mime type to which application will be added. You can "
 "also select another application in which case new one will be added to its "
 "parent."
 msgstr "Необхідно вибрати MIME-тип, для якого додається додаток. Ви можете так само вибрати інший додаток, в цьому випадку нове буде додано до батьківського."
 
-#: application/gui/preferences/plugins.py:34
+#: sunflower/gui/preferences/plugins.py:39
 msgid "Plugins"
 msgstr "Модулі"
 
-#: application/gui/preferences/plugins.py:66
-#: application/gui/preferences/display.py:93
+#: sunflower/gui/preferences/plugins.py:71
+#: sunflower/gui/preferences/display.py:88
 msgid "Active"
 msgstr "Активні"
 
-#: application/gui/preferences/plugins.py:68
+#: sunflower/gui/preferences/plugins.py:73
 msgid "Plugin name"
 msgstr "Ім'я модуля"
 
-#: application/gui/preferences/plugins.py:72
+#: sunflower/gui/preferences/plugins.py:77
 msgid "Version"
 msgstr "Версія"
 
-#: application/gui/preferences/plugins.py:74
+#: sunflower/gui/preferences/plugins.py:79
 msgid "Author"
 msgstr "Автор"
 
-#: application/gui/preferences/plugins.py:90
-#: application/gui/preferences/accelerators.py:54
+#: sunflower/gui/preferences/plugins.py:95
+#: sunflower/gui/preferences/accelerators.py:53
 msgid "Description"
 msgstr "Опис"
 
-#: application/gui/preferences/plugins.py:100
+#: sunflower/gui/preferences/plugins.py:105
 msgid "Contact"
 msgstr "Зв'язатися з розробником"
 
-#: application/gui/preferences/plugins.py:109
+#: sunflower/gui/preferences/plugins.py:114
 msgid "Visit site"
 msgstr "Відвідати сайт"
 
-#: application/gui/preferences/plugins.py:182
+#: sunflower/gui/preferences/plugins.py:187
 #, python-brace-format
 msgid ""
 "{0} is required for normal program operation and therefore can not be "
 "deactivated!"
 msgstr "{0} необхідний для нормального функціонування проґрами і, отже, не може бути деактивовано!"
 
-#: application/gui/preferences/plugins.py:213
+#: sunflower/gui/preferences/plugins.py:218
 msgid "This plugin has no description"
 msgstr "Цей модуль не має опису"
 
-#: application/gui/preferences/plugins.py:272
+#: sunflower/gui/preferences/plugins.py:277
 msgid "No plugin selected"
 msgstr "Не обраний жоден модуль"
 
-#: application/gui/preferences/bookmarks.py:15
-#: application/plugins/default_toolbar/bookmarks_button.py:16
-#: application/plugins/default_toolbar/bookmarks_button.py:17
-#: application/plugin_base/item_list.py:194
+#: sunflower/gui/preferences/bookmarks.py:14
+#: sunflower/widgets/location_menu.py:70
+#: sunflower/plugins/default_toolbar/bookmarks_button.py:16
+#: sunflower/plugins/default_toolbar/bookmarks_button.py:17
 msgid "Bookmarks"
 msgstr "Закладки"
 
-#: application/gui/preferences/bookmarks.py:18
+#: sunflower/gui/preferences/bookmarks.py:17
 msgid "Show mount points in bookmarks menu"
 msgstr "Показувати точки монтування в меню закладок"
 
-#: application/gui/preferences/bookmarks.py:22
+#: sunflower/gui/preferences/bookmarks.py:21
 msgid "Show system bookmarks"
 msgstr "Показати системні закладки"
 
-#: application/gui/preferences/bookmarks.py:26
+#: sunflower/gui/preferences/bookmarks.py:25
 msgid "Add home directory to bookmarks menu"
 msgstr "Додати домашній каталог в меню закладок"
 
-#: application/gui/preferences/bookmarks.py:54
-#: application/tools/find_files.py:97
+#: sunflower/gui/preferences/bookmarks.py:53 sunflower/tools/find_files.py:138
 msgid "Location"
 msgstr "Розташування"
 
-#: application/gui/preferences/accelerators.py:20
+#: sunflower/gui/preferences/accelerators.py:19
 msgid "Key bindings"
 msgstr "Сполучення клавіш"
 
-#: application/gui/preferences/accelerators.py:61
+#: sunflower/gui/preferences/accelerators.py:60
 msgid "Primary"
 msgstr "Основне"
 
-#: application/gui/preferences/accelerators.py:69
+#: sunflower/gui/preferences/accelerators.py:68
 msgid "Secondary"
 msgstr "Додаткове"
 
-#: application/gui/preferences/accelerators.py:82
+#: sunflower/gui/preferences/accelerators.py:81
 msgid ""
 "<b>Note:</b> You can only edit accelerators from objects created at least "
 "once in current session. To disable accelerator press <i>Backspace</i> in "
 "assign mode."
 msgstr "<b>Увага:</b> Ви можете змінювати сполучення клавіш тільки для об'єктів, створених як мінімум один раз на поточній сесії. Щоб вимкнути поєднання, натисніть <i>Backspace</i> в режимі призначення."
 
-#: application/gui/preferences/accelerators.py:92
+#: sunflower/gui/preferences/accelerators.py:91
 msgid "Double click on accelerator to assign new one."
 msgstr "Подвійний клац на гарячій клавіші створить нове призначення."
 
-#: application/gui/preferences/accelerators.py:198
+#: sunflower/gui/preferences/accelerators.py:197
 #, python-brace-format
 msgid ""
 "Selected accelerator \"{0}\" is already being used. Would you still like to assign accelerator to this function? This will reset listed functions.\n"
@@ -253,1316 +251,1162 @@ msgid ""
 "{1}"
 msgstr "Вибрана комбінація \"{0}\" уже використовується. Ви бажаєте її перепризначити? Ця дія скине комбінації для наступних функцій.\n\nКонфлікти:\n{1}"
 
-#: application/gui/preferences/accelerators.py:258
-#: application/gui/main_window.py:784
-#: application/plugins/default_toolbar/home_directory_button.py:16
-#: application/plugins/default_toolbar/home_directory_button.py:17
+#: sunflower/gui/preferences/accelerators.py:257
+#: sunflower/widgets/location_menu.py:98
+#: sunflower/plugins/default_toolbar/home_directory_button.py:16
+#: sunflower/plugins/default_toolbar/home_directory_button.py:17
 msgid "Home directory"
 msgstr "Домашній каталог"
 
-#: application/gui/preferences/view_and_edit.py:16
+#: sunflower/gui/preferences/view_and_edit.py:15
 msgid "View & Edit"
 msgstr "Перегляд і редагування"
 
-#: application/gui/preferences/view_and_edit.py:19
+#: sunflower/gui/preferences/view_and_edit.py:18
 msgid "View"
 msgstr "Перегляд"
 
-#: application/gui/preferences/view_and_edit.py:23
+#: sunflower/gui/preferences/view_and_edit.py:22
 msgid "Wrap long lines"
 msgstr "Переносити довгі рядки"
 
-#: application/gui/preferences/view_and_edit.py:27
-#: application/gui/main_window.py:678
+#: sunflower/gui/preferences/view_and_edit.py:26
+#: sunflower/gui/main_window.py:426
 msgid "Edit"
 msgstr "Зміни"
 
-#: application/gui/preferences/view_and_edit.py:33
+#: sunflower/gui/preferences/view_and_edit.py:32
 msgid "Use installed application"
 msgstr "Використовувати встановлену проґраму"
 
-#: application/gui/preferences/view_and_edit.py:55
+#: sunflower/gui/preferences/view_and_edit.py:54
 msgid "Use external command"
 msgstr "Використовувати зовнішню команду"
 
-#: application/gui/preferences/view_and_edit.py:69
+#: sunflower/gui/preferences/view_and_edit.py:68
 msgid "Execute command in terminal tab"
 msgstr "Виконати команду у вкладці терміналу"
 
-#: application/gui/preferences/toolbar.py:18
+#: sunflower/gui/preferences/toolbar.py:18
 msgid "Toolbar"
 msgstr "Панель інструментів"
 
-#: application/gui/preferences/toolbar.py:36
-#: application/gui/history_list.py:47
-#: application/gui/mounts_manager_window.py:363
-#: application/gui/mounts_manager_window.py:541
-#: application/gui/keyring_manager_window.py:52
-#: application/plugins/file_list/file_list.py:123
-#: application/plugins/file_list/gio_extension.py:165
-#: application/plugins/file_list/gio_extension.py:519
-#: application/plugins/file_list/gio_extension.py:871
-#: application/plugins/sessions/plugin.py:50
-#: application/plugins/rename_extensions/default.py:73
-#: application/tools/find_files.py:94
+#: sunflower/gui/preferences/toolbar.py:39 sunflower/gui/history_list.py:49
+#: sunflower/gui/keyring_manager_window.py:54
+#: sunflower/plugins/file_list/file_list.py:132
+#: sunflower/plugins/file_list/gio_extension.py:164
+#: sunflower/plugins/file_list/gio_extension.py:518
+#: sunflower/plugins/file_list/gio_extension.py:870
+#: sunflower/plugins/sessions/plugin.py:62
+#: sunflower/plugins/rename_extensions/default.py:75
+#: sunflower/tools/find_files.py:134
 msgid "Name"
 msgstr "Ім'я"
 
-#: application/gui/preferences/toolbar.py:47
+#: sunflower/gui/preferences/toolbar.py:50
 msgid "Type"
 msgstr "Тип"
 
-#: application/gui/preferences/toolbar.py:93
+#: sunflower/gui/preferences/toolbar.py:96
 msgid "Toolbar style:"
 msgstr "Стиль панелі інструментів:"
 
-#: application/gui/preferences/toolbar.py:95
+#: sunflower/gui/preferences/toolbar.py:98
 msgid "Icons"
 msgstr "Піктограми"
 
-#: application/gui/preferences/toolbar.py:96 application/tools/viewer.py:88
+#: sunflower/gui/preferences/toolbar.py:99 sunflower/tools/viewer.py:134
 msgid "Text"
 msgstr "Текст"
 
-#: application/gui/preferences/toolbar.py:97
-#: application/gui/preferences/item_list.py:127
+#: sunflower/gui/preferences/toolbar.py:100
+#: sunflower/gui/preferences/item_list.py:103
 msgid "Both"
 msgstr "Усі"
 
-#: application/gui/preferences/toolbar.py:98
+#: sunflower/gui/preferences/toolbar.py:101
 msgid "Both horizontal"
 msgstr "Обидва горизонтально"
 
-#: application/gui/preferences/toolbar.py:108
+#: sunflower/gui/preferences/toolbar.py:111
 msgid "Icon size:"
 msgstr "Розмір піктограми:"
 
-#: application/gui/preferences/toolbar.py:110
-msgid "Same as menu item"
-msgstr "Такий як у пункту меню"
-
-#: application/gui/preferences/toolbar.py:111
+#: sunflower/gui/preferences/toolbar.py:113
 msgid "Small toolbar icon"
 msgstr "Малі значки на панелі"
 
-#: application/gui/preferences/toolbar.py:112
+#: sunflower/gui/preferences/toolbar.py:114
 msgid "Large toolbar icon"
 msgstr "Великі значки на панелі"
 
-#: application/gui/preferences/toolbar.py:113
-msgid "Same as buttons"
-msgstr "Такі як у кнопок"
-
-#: application/gui/preferences/toolbar.py:114
+#: sunflower/gui/preferences/toolbar.py:115
 msgid "Same as drag icons"
 msgstr "Такі як у значків перетягування"
 
-#: application/gui/preferences/toolbar.py:115
+#: sunflower/gui/preferences/toolbar.py:116
 msgid "Same as dialog"
 msgstr "Такі як у діялоґу"
 
-#: application/gui/preferences/toolbar.py:217
+#: sunflower/gui/preferences/toolbar.py:222
 msgid "missing plugin"
 msgstr "відсутній модуль"
 
-#: application/gui/preferences/operation.py:10
-#: application/gui/preferences/item_list.py:44
+#: sunflower/gui/preferences/operation.py:9
+#: sunflower/gui/preferences/item_list.py:44
 msgid "Operation"
 msgstr "Режим роботи"
 
-#: application/gui/preferences/operation.py:13
+#: sunflower/gui/preferences/operation.py:12
 msgid "General"
 msgstr "Загальние"
 
-#: application/gui/preferences/operation.py:17
-#: application/gui/main_window.py:590
-#: application/gui/mounts_manager_window.py:473
+#: sunflower/gui/preferences/operation.py:16 sunflower/mounts.py:22
 msgid "Mounts"
 msgstr "Точки монтування"
 
-#: application/gui/preferences/operation.py:21
+#: sunflower/gui/preferences/operation.py:20
 msgid "Confirmation"
 msgstr "Підтвердження"
 
-#: application/gui/preferences/operation.py:26
+#: sunflower/gui/preferences/operation.py:25
 msgid "Delete items to trashcan"
 msgstr "Вилучення елементів у смітник"
 
-#: application/gui/preferences/operation.py:27
+#: sunflower/gui/preferences/operation.py:26
 msgid "Reserve free space on copy/move"
 msgstr "Резервування вільного простору для копіювання/переміщення"
 
-#: application/gui/preferences/operation.py:28
+#: sunflower/gui/preferences/operation.py:27
 msgid "Automount drives on start up"
 msgstr "Автоматичне монтування дисків при запуску"
 
-#: application/gui/preferences/operation.py:29
+#: sunflower/gui/preferences/operation.py:28
 msgid "Automount removable drives when inserted"
 msgstr "Автоматичне монтування знімних дисків при вставлянні"
 
-#: application/gui/preferences/operation.py:30
+#: sunflower/gui/preferences/operation.py:29
 msgid "Show confirmation dialog before deleting items"
 msgstr "Показати діялоґове вікно підтвердження перед вилученням об'єктів"
 
-#: application/gui/preferences/operation.py:64
+#: sunflower/gui/preferences/operation.py:63
 msgid ""
 "With trashing disabled you will not be able to restore accidentally deleted "
 "items. Are you sure you want to disable confirmation dialog when deleting "
 "items?"
 msgstr "При відімкненні Ви можете остаточно втратити важливі файли! Точно слід вимкнути діялоґ вилучення файлів?"
 
-#: application/gui/preferences/display.py:23
+#: sunflower/gui/preferences/display.py:22
 msgid "Display"
 msgstr "Зовнішній вигляд"
 
-#: application/gui/preferences/display.py:28
+#: sunflower/gui/preferences/display.py:27
 msgid "Main window"
 msgstr "Основне вікно"
 
-#: application/gui/preferences/display.py:32
+#: sunflower/gui/preferences/display.py:31
 msgid "Hide main window on close"
 msgstr "Згортати основне вікно в трей при закритті"
 
-#: application/gui/preferences/display.py:33
+#: sunflower/gui/preferences/display.py:32
 msgid "Allow multiple instances"
 msgstr "Дозволити декілька екземплярів проґрами"
 
-#: application/gui/preferences/display.py:34
+#: sunflower/gui/preferences/display.py:33
 msgid "Show toolbar"
 msgstr "Показувати панель інструментів"
 
-#: application/gui/preferences/display.py:35
+#: sunflower/gui/preferences/display.py:34
+msgid "Show titlebar"
+msgstr "Показувати панель інструментів"
+
+#: sunflower/gui/preferences/display.py:35
 msgid "Show command bar"
 msgstr "Показувати панель команд"
 
-#: application/gui/preferences/display.py:36
-msgid "Show command entry"
-msgstr "Показувати командний рядок"
-
-#: application/gui/preferences/display.py:37
+#: sunflower/gui/preferences/display.py:36
 msgid "Horizontal split"
 msgstr "Горизонтальне розбиття вікна"
 
-#: application/gui/preferences/display.py:47
-#: application/plugins/sessions/plugin.py:57
+#: sunflower/gui/preferences/display.py:37
+msgid "Dark theme"
+msgstr "Темна тема"
+
+#: sunflower/gui/preferences/display.py:48
 msgid "Tabs"
 msgstr "Вкладки"
 
-#: application/gui/preferences/display.py:51
+#: sunflower/gui/preferences/display.py:52
 msgid "Focus new tab after opening"
 msgstr "Переводити фокус на нову вкладку після відкриття"
 
-#: application/gui/preferences/display.py:52
-msgid "Show normal button relief"
-msgstr "Показувати нормальний рельєф кнопок"
-
-#: application/gui/preferences/display.py:53
-msgid "Show icons instead of text in tab buttons"
-msgstr "Показувати піктограми замість тексту на кнопках вкладок"
-
-#: application/gui/preferences/display.py:54
+#: sunflower/gui/preferences/display.py:53
 msgid "Show close button"
 msgstr "Показувати кнопку закриття"
 
-#: application/gui/preferences/display.py:55
+#: sunflower/gui/preferences/display.py:54
 msgid "Show tab(s) even if there is only one"
 msgstr "Показувати вкладку навіть якщо вона одна"
 
-#: application/gui/preferences/display.py:56
-msgid "Use Ubuntu coloring method for tab title bars"
-msgstr "Забарвлювати заголовок вкладки як в Ubuntu"
-
-#: application/gui/preferences/display.py:57
+#: sunflower/gui/preferences/display.py:55
 msgid "Change title bar color when started as super user"
 msgstr "Змінити колір заголовку вікна, у режимі суперкористувача"
 
-#: application/gui/preferences/display.py:72
+#: sunflower/gui/preferences/display.py:67
 msgid "Show status bar:"
 msgstr "Показувати рядок стану:"
 
-#: application/gui/preferences/display.py:76
+#: sunflower/gui/preferences/display.py:71
 msgid "Always"
 msgstr "Завжди"
 
-#: application/gui/preferences/display.py:77
+#: sunflower/gui/preferences/display.py:72
 msgid "When needed"
 msgstr "При необхідності"
 
-#: application/gui/preferences/display.py:78
+#: sunflower/gui/preferences/display.py:73
 msgid "Never"
 msgstr "Ніколи"
 
-#: application/gui/preferences/display.py:88
+#: sunflower/gui/preferences/display.py:83
 msgid "Expanded tabs:"
 msgstr "Розтягувати вкладки:"
 
-#: application/gui/preferences/display.py:92
-#: application/gui/preferences/item_list.py:91
-#: application/gui/preferences/item_list.py:124 application/queue.py:33
+#: sunflower/gui/preferences/display.py:87
+#: sunflower/gui/preferences/item_list.py:100 sunflower/queue.py:30
 msgid "None"
 msgstr "Ніколи"
 
-#: application/gui/preferences/display.py:94
+#: sunflower/gui/preferences/display.py:89
 msgid "All"
 msgstr "Усі"
 
-#: application/gui/preferences/display.py:104
+#: sunflower/gui/preferences/display.py:99
 msgid "Other"
 msgstr "Інше"
 
-#: application/gui/preferences/display.py:108
+#: sunflower/gui/preferences/display.py:103
 msgid "Hide operation window on minimize"
 msgstr "Приховувати вікно операцій при згортанні"
 
-#: application/gui/preferences/display.py:109
+#: sunflower/gui/preferences/display.py:104
 msgid "Show notifications"
 msgstr "Показувати сповіщення"
 
-#: application/gui/preferences/display.py:110
+#: sunflower/gui/preferences/display.py:106
 msgid "Use path completion on non-local paths"
 msgstr "Автодоповнення шляху нелокальних шляхів"
 
-#: application/gui/preferences/display.py:118
+#: sunflower/gui/preferences/display.py:114
 msgid "Size format:"
 msgstr "розмір формату:"
 
-#: application/gui/preferences/display.py:122
+#: sunflower/gui/preferences/display.py:118
 msgid "Localized"
 msgstr "Локалізований"
 
-#: application/gui/preferences/display.py:123
+#: sunflower/gui/preferences/display.py:119
 msgid "SI <small>(1 kB = 1000 B)</small>"
 msgstr "СІ<small>(1 КБ = 1000 Б)</small>"
 
-#: application/gui/preferences/display.py:124
+#: sunflower/gui/preferences/display.py:120
 msgid "IEC <small>(1 KiB = 1024 B)</small>"
 msgstr "МЕК <small>(1 КиБ = 1024 Б)</small>"
 
-#: application/gui/preferences/item_list.py:37
-#: application/plugins/file_list/column_editor.py:70
-#: application/plugin_base/item_list.py:245
+#: sunflower/gui/preferences/item_list.py:37
+#: sunflower/plugins/file_list/column_editor.py:72
+#: sunflower/plugin_base/item_list.py:201
 msgid "Item List"
 msgstr "Перелік файлів"
 
-#: application/gui/preferences/item_list.py:42
+#: sunflower/gui/preferences/item_list.py:42
 msgid "Look & feel"
 msgstr "Зовнішній вигляд"
 
-#: application/gui/preferences/item_list.py:43
+#: sunflower/gui/preferences/item_list.py:43
 msgid "Hidden files"
 msgstr "Приховані файли"
 
-#: application/gui/preferences/item_list.py:45
+#: sunflower/gui/preferences/item_list.py:45
 msgid "Directories"
 msgstr "Каталоги"
 
-#: application/gui/preferences/item_list.py:46
+#: sunflower/gui/preferences/item_list.py:46
 msgid "Columns"
 msgstr "Колонки"
 
-#: application/gui/preferences/item_list.py:63
+#: sunflower/gui/preferences/item_list.py:63
 msgid "Row hinting"
 msgstr "Підсвічування рядків"
 
-#: application/gui/preferences/item_list.py:64
+#: sunflower/gui/preferences/item_list.py:64
 msgid "Case sensitive item sorting"
 msgstr "Враховувати регістр при сортуванні файлів"
 
-#: application/gui/preferences/item_list.py:65
+#: sunflower/gui/preferences/item_list.py:65
 msgid "Number sensitive item sorting"
 msgstr "Числене сортування файлів"
 
-#: application/gui/preferences/item_list.py:66
+#: sunflower/gui/preferences/item_list.py:66
 msgid "Single click navigation"
 msgstr "Навігація одним клацом"
 
-#: application/gui/preferences/item_list.py:67
+#: sunflower/gui/preferences/item_list.py:67
 msgid "Right click selects items"
 msgstr "Виділяти файли правим клацом"
 
-#: application/gui/preferences/item_list.py:68
+#: sunflower/gui/preferences/item_list.py:68
 msgid "Show list headers"
 msgstr "Показувати назви стовпців"
 
-#: application/gui/preferences/item_list.py:69
+#: sunflower/gui/preferences/item_list.py:69
 msgid "Fast media preview"
 msgstr "Швидкий попередній перегляд медіяфайлів"
 
-#: application/gui/preferences/item_list.py:70
+#: sunflower/gui/preferences/item_list.py:70
 msgid "Show tree expanders"
 msgstr "Показувати піктограми розкриття дерева"
 
-#: application/gui/preferences/item_list.py:71
-msgid "Hide horizontal scrollbar"
-msgstr "Приховати горизонтальну смугу прокрутки"
-
-#: application/gui/preferences/item_list.py:72
+#: sunflower/gui/preferences/item_list.py:71
 msgid "Support second level extension"
 msgstr "Підтримка розширень другого рівню"
 
-#: application/gui/preferences/item_list.py:87
-msgid "Breadcrumbs:"
-msgstr "Хлібні крихти:"
-
-#: application/gui/preferences/item_list.py:92
-msgid "Normal"
-msgstr "нормальний"
-
-#: application/gui/preferences/item_list.py:93
-msgid "Smart"
-msgstr "розумний"
-
-#: application/gui/preferences/item_list.py:104
+#: sunflower/gui/preferences/item_list.py:85
 msgid "Access mode format:"
 msgstr "Формат режиму доступу:"
 
-#: application/gui/preferences/item_list.py:108
+#: sunflower/gui/preferences/item_list.py:90
 msgid "Octal"
 msgstr "Вісімковий вигляд"
 
-#: application/gui/preferences/item_list.py:109
+#: sunflower/gui/preferences/item_list.py:91
 msgid "Textual"
 msgstr "Текстовий"
 
-#: application/gui/preferences/item_list.py:120
+#: sunflower/gui/preferences/item_list.py:95
 msgid "Show grid lines:"
 msgstr "Показувати лінії ґратки:"
 
-#: application/gui/preferences/item_list.py:125
+#: sunflower/gui/preferences/item_list.py:101
 msgid "Horizontal"
 msgstr "Горизонтальні"
 
-#: application/gui/preferences/item_list.py:126
+#: sunflower/gui/preferences/item_list.py:102
 msgid "Vertical"
 msgstr "Вертикальні"
 
-#: application/gui/preferences/item_list.py:139
+#: sunflower/gui/preferences/item_list.py:108
 msgid "Selection color:"
 msgstr "Колір виділення:"
 
-#: application/gui/preferences/item_list.py:149
+#: sunflower/gui/preferences/item_list.py:118
 msgid "Selection indicator:"
 msgstr "Індикатор виділення:"
 
-#: application/gui/preferences/item_list.py:166
+#: sunflower/gui/preferences/item_list.py:133
 msgid "Quick search combination:"
 msgstr "Комбінація для швидкого пошуку:"
 
-#: application/gui/preferences/item_list.py:169
+#: sunflower/gui/preferences/item_list.py:136
 msgid "Control"
 msgstr "Control"
 
-#: application/gui/preferences/item_list.py:170
+#: sunflower/gui/preferences/item_list.py:137
 msgid "Alt"
 msgstr "Alt"
 
-#: application/gui/preferences/item_list.py:171
+#: sunflower/gui/preferences/item_list.py:138
 msgid "Shift"
 msgstr "Shift"
 
-#: application/gui/preferences/item_list.py:180
+#: sunflower/gui/preferences/item_list.py:147
 msgid "Date format:"
 msgstr "Формат дати:"
 
-#: application/gui/preferences/item_list.py:184
+#: sunflower/gui/preferences/item_list.py:151
 msgid "Time is formed using the format located at:"
 msgstr "Час формується з використанням формату, розташованого за адресою:"
 
-#: application/gui/preferences/item_list.py:193
+#: sunflower/gui/preferences/item_list.py:160
 msgid "Show hidden files"
 msgstr "Показувати приховані файли"
 
-#: application/gui/preferences/item_list.py:200
+#: sunflower/gui/preferences/item_list.py:167
 msgid "Always visible files and directories:"
 msgstr "Завжди видимі файли та каталоги"
 
-#: application/gui/preferences/item_list.py:225
+#: sunflower/gui/preferences/item_list.py:192
 msgid "Load specified tabs instead of saved"
 msgstr "Завантажити вказані вкладки замість збережених"
 
-#: application/gui/preferences/item_list.py:238
+#: sunflower/gui/preferences/item_list.py:205
 msgid "Directory"
 msgstr "Каталог"
 
-#: application/gui/preferences/item_list.py:243
+#: sunflower/gui/preferences/item_list.py:210
 msgid "Left list"
 msgstr "лівий перелік"
 
-#: application/gui/preferences/item_list.py:244
+#: sunflower/gui/preferences/item_list.py:211
 msgid "Right list"
 msgstr "правий перелік"
 
-#: application/gui/preferences/item_list.py:276
+#: sunflower/gui/preferences/item_list.py:243
 msgid "Custom directory"
 msgstr "вказати каталог"
 
-#: application/gui/preferences/item_list.py:278
+#: sunflower/gui/preferences/item_list.py:245
 msgid "Left directory"
 msgstr "лівий каталог"
 
-#: application/gui/preferences/item_list.py:279
+#: sunflower/gui/preferences/item_list.py:246
 msgid "Right directory"
 msgstr "правий каталог"
 
-#: application/gui/preferences/item_list.py:333
+#: sunflower/gui/preferences/item_list.py:300
 msgid "Column"
 msgstr "Колонка"
 
-#: application/gui/preferences/item_list.py:338
-#: application/plugins/file_list/file_list.py:125
-#: application/plugins/find_file_extensions/size.py:63
+#: sunflower/gui/preferences/item_list.py:305
+#: sunflower/plugins/file_list/file_list.py:134
+#: sunflower/plugins/find_file_extensions/size.py:64
 msgid "Size"
 msgstr "Розмір"
 
-#: application/gui/preferences/item_list.py:341
+#: sunflower/gui/preferences/item_list.py:308
 msgid "Visible"
 msgstr "Видимий"
 
-#: application/gui/preferences/item_list.py:344
+#: sunflower/gui/preferences/item_list.py:311
 msgid "Font"
 msgstr "Шрифт"
 
-#: application/gui/preferences/item_list.py:472
+#: sunflower/gui/preferences/item_list.py:429
 msgid "Add always visible item"
 msgstr "Додати завжди видимий елемент"
 
-#: application/gui/preferences/item_list.py:473
+#: sunflower/gui/preferences/item_list.py:430
 msgid "Full name of file or directory to always show:"
 msgstr "Повне ім’я файлу або каталогу, який не потрібно приховувати:"
 
-#: application/gui/preferences/item_list.py:499
+#: sunflower/gui/preferences/item_list.py:456
 msgid "Add custom directory"
 msgstr "додати вказаний каталог"
 
-#: application/gui/preferences/item_list.py:500
+#: sunflower/gui/preferences/item_list.py:457
 msgid "Full path:"
 msgstr "Повний шлях:"
 
-#: application/gui/preferences/item_list.py:581
+#: sunflower/gui/preferences/item_list.py:538
 msgid ""
 "Quick search settings are in conflict with VIM navigation style. To resolve "
 "this issue your quick search settings were restored to default."
 msgstr "Налаштування швидкого пошуку конфліктують з навігацією в стилі VIM. Для вирішення цієї проблеми у Ваших налаштуваннях швидкого пошуку відновлені типові значення."
 
-#: application/gui/main_window.py:118 application/gui/main_window.py:1516
-#: application/gui/about_window.py:101 application/gui/about_window.py:102
+#: sunflower/gui/main_window.py:73 sunflower/gui/main_window.py:76
+#: sunflower/gui/main_window.py:163 sunflower/gui/about_window.py:66
+#: sunflower/gui/about_window.py:67 sunflower/__main__.py:216
 msgid "Sunflower"
 msgstr "Соняшник"
 
-#: application/gui/main_window.py:174
-msgid "_File"
-msgstr "_Файл"
+#: sunflower/gui/main_window.py:180
+msgid "Create new file, directory and more."
+msgstr "Створити новий файл, каталог, тощо."
 
-#: application/gui/main_window.py:178
-msgid "New _tab"
-msgstr "Нова _вкладка"
-
-#: application/gui/main_window.py:190
+#: sunflower/gui/main_window.py:187 sunflower/gui/main_window.py:1738
 msgid "Create _file"
 msgstr "Створити _файл"
 
-#: application/gui/main_window.py:199
+#: sunflower/gui/main_window.py:192 sunflower/gui/main_window.py:1739
 msgid "Create _directory"
 msgstr "Створити _каталог"
 
-#: application/gui/main_window.py:211
-#: application/plugin_base/item_list.py:1009
-msgid "_Open"
-msgstr "Відкрити"
+#: sunflower/gui/main_window.py:203
+msgid "Create new tab"
+msgstr "Створити нову вкладку"
 
-#: application/gui/main_window.py:218
-#: application/plugin_base/item_list.py:1018
-msgid "Open in new ta_b"
-msgstr "Відкрити в новій вкладці"
-
-#: application/gui/main_window.py:228
-#: application/plugin_base/item_list.py:1175
-msgid "_Properties"
-msgstr "Властивості"
-
-#: application/gui/main_window.py:238 application/indicator.py:49
-msgid "_Quit"
-msgstr "Вийти"
-
-#: application/gui/main_window.py:248
-msgid "_Edit"
-msgstr "_Зміни"
-
-#: application/gui/main_window.py:251
-#: application/plugin_base/item_list.py:1082
-msgid "Cu_t"
-msgstr "Вирізати"
-
-#: application/gui/main_window.py:258
-#: application/plugin_base/item_list.py:1091
-msgid "_Copy"
-msgstr "Копіювати"
-
-#: application/gui/main_window.py:265
-#: application/plugin_base/item_list.py:1100
-msgid "_Paste"
-msgstr "Вставити"
-
-#: application/gui/main_window.py:275
-#: application/plugin_base/item_list.py:1131
-msgid "_Delete"
-msgstr "Вилучити"
-
-#: application/gui/main_window.py:285
-msgid "_Send to..."
-msgstr "_Відправити..."
-
-#: application/gui/main_window.py:294
-#: application/plugin_base/item_list.py:1156
-msgid "Ma_ke link"
-msgstr "Створити посилання"
-
-#: application/gui/main_window.py:300
-#: application/plugin_base/item_list.py:1162
-msgid "_Rename..."
-msgstr "Перейменувати..."
-
-#: application/gui/main_window.py:308
-msgid "_Unmount"
-msgstr "Відмонтувати"
-
-#: application/gui/main_window.py:312
-msgid "Mount list is empty"
-msgstr "Перелік точок монтування порожній"
-
-#: application/gui/main_window.py:321
-msgid "_Preferences"
-msgstr "Налаштування"
-
-#: application/gui/main_window.py:331
-msgid "_Mark"
-msgstr "В_иділення"
-
-#: application/gui/main_window.py:334
+#: sunflower/gui/main_window.py:286
 msgid "_Select all"
 msgstr "Виділити усе"
 
-#: application/gui/main_window.py:341
+#: sunflower/gui/main_window.py:287
 msgid "_Deselect all"
 msgstr "Скасувати виділення"
 
-#: application/gui/main_window.py:346
+#: sunflower/gui/main_window.py:288
 msgid "Invert select_ion"
 msgstr "Обернути виділення"
 
-#: application/gui/main_window.py:352
+#: sunflower/gui/main_window.py:290 sunflower/gui/main_window.py:1742
 msgid "S_elect with pattern"
 msgstr "Виділити за маскою"
 
-#: application/gui/main_window.py:358
+#: sunflower/gui/main_window.py:291 sunflower/gui/main_window.py:1743
 msgid "Deselect with pa_ttern"
 msgstr "Зняти виділення по масці"
 
-#: application/gui/main_window.py:365
+#: sunflower/gui/main_window.py:292 sunflower/gui/main_window.py:1744
 msgid "Select with same e_xtension"
 msgstr "Виділити файли з цим розширенням"
 
-#: application/gui/main_window.py:371
+#: sunflower/gui/main_window.py:293 sunflower/gui/main_window.py:1745
 msgid "Deselect with same exte_nsion"
 msgstr "Зняти виділення файлів з тим самим розширенням"
 
-#: application/gui/main_window.py:378
+#: sunflower/gui/main_window.py:295 sunflower/gui/main_window.py:1746
 msgid "Compare _directories"
 msgstr "Порівняти каталоги"
 
-#: application/gui/main_window.py:386
-msgid "_Tools"
-msgstr "_Знаряддя"
-
-#: application/gui/main_window.py:390
+#: sunflower/gui/main_window.py:302 sunflower/gui/main_window.py:1747
+#: sunflower/gui/main_window.py:1748
 msgid "_Find files"
 msgstr "_Шукати файли"
 
-#: application/gui/main_window.py:398
-msgid "Find _duplicate files"
-msgstr "Знайти _дублікати файлів"
-
-#: application/gui/main_window.py:403
-msgid "_Synchronize directories"
-msgstr "_Синхронізувати каталоги"
-
-#: application/gui/main_window.py:409
+#: sunflower/gui/main_window.py:303
 msgid "Advanced _rename"
 msgstr "Розширене _перейменування"
 
-#: application/gui/main_window.py:416
+#: sunflower/gui/main_window.py:304
 msgid "_Mount manager"
 msgstr "_Керування монтуванням"
 
-#: application/gui/main_window.py:422
+#: sunflower/gui/main_window.py:305
 msgid "_Keyring manager"
 msgstr "_Керування паролями"
 
-#: application/gui/main_window.py:430
-msgid "_View"
-msgstr "_Вигляд"
-
-#: application/gui/main_window.py:433
-msgid "Ful_lscreen"
-msgstr "На повний екран"
-
-#: application/gui/main_window.py:441
-msgid "Rel_oad item list"
-msgstr "Оновити перелік файлів"
-
-#: application/gui/main_window.py:451
+#: sunflower/gui/main_window.py:308 sunflower/gui/main_window.py:1752
 msgid "Fast m_edia preview"
 msgstr "Швидкий попередній перегляд медіяфайлів"
 
-#: application/gui/main_window.py:462
+#: sunflower/gui/main_window.py:309 sunflower/gui/main_window.py:1753
 msgid "Show _hidden files"
 msgstr "Показувати приховані файли"
 
-#: application/gui/main_window.py:470
+#: sunflower/gui/main_window.py:311
 msgid "Show _toolbar"
 msgstr "Показувати панель інструментів"
 
-#: application/gui/main_window.py:478
+#: sunflower/gui/main_window.py:312
+msgid "Show _titlebar"
+msgstr "Показувати панель інструментів"
+
+#: sunflower/gui/main_window.py:313
 msgid "Show _command bar"
 msgstr "Показувати кнопки операцій"
 
-#: application/gui/main_window.py:486
-msgid "Show co_mmand entry"
-msgstr "Показувати командний рядок"
-
-#: application/gui/main_window.py:494
+#: sunflower/gui/main_window.py:314
 msgid "_Horizontal split"
 msgstr "_Горизонтальне розбиття"
 
-#: application/gui/main_window.py:504
-msgid "_Commands"
-msgstr "_Команди"
+#: sunflower/gui/main_window.py:315
+msgid "_Dark theme"
+msgstr "Темна тема"
 
-#: application/gui/main_window.py:508
-msgid "_Operations"
-msgstr "_Операції"
-
-#: application/gui/main_window.py:512
-msgid "There are no active operations"
-msgstr "Активні операції відсутні"
-
-#: application/gui/main_window.py:518
-msgid "_Help"
-msgstr "_Допомога"
-
-#: application/gui/main_window.py:521
+#: sunflower/gui/main_window.py:321
 msgid "_Home page"
 msgstr "Домашня сторінка"
 
-#: application/gui/main_window.py:529
+#: sunflower/gui/main_window.py:322
 msgid "Check for new version"
 msgstr "Перевірити на наявність оновлень"
 
-#: application/gui/main_window.py:536
-msgid "File a _bug report"
-msgstr "Оформити звіт про помилку"
-
-#: application/gui/main_window.py:545
+#: sunflower/gui/main_window.py:323
 msgid "_About"
 msgstr "Про проґраму"
 
-#: application/gui/main_window.py:675
+#: sunflower/gui/main_window.py:325
+msgid "_Mark"
+msgstr "В_иділення"
+
+#: sunflower/gui/main_window.py:326
+msgid "_Tools"
+msgstr "_Знаряддя"
+
+#: sunflower/gui/main_window.py:327
+msgid "_View"
+msgstr "_Вигляд"
+
+#: sunflower/gui/main_window.py:329
+msgid "_Help"
+msgstr "_Допомога"
+
+#: sunflower/gui/main_window.py:330 sunflower/gui/main_window.py:1741
+msgid "_Preferences"
+msgstr "Налаштування"
+
+#: sunflower/gui/main_window.py:331 sunflower/gui/main_window.py:1740
+#: sunflower/indicator.py:50
+msgid "_Quit"
+msgstr "Вийти"
+
+#: sunflower/gui/main_window.py:387
+msgid "Execute command:"
+msgstr "Виконати команду:"
+
+#: sunflower/gui/main_window.py:423
 msgid "Refresh"
 msgstr "Оновити"
 
-#: application/gui/main_window.py:675
+#: sunflower/gui/main_window.py:423
 msgid "Reload active item list"
 msgstr "Оновити активну панель"
 
-#: application/gui/main_window.py:676 application/tools/advanced_rename.py:93
+#: sunflower/gui/main_window.py:424 sunflower/tools/advanced_rename.py:95
 msgid "Rename"
 msgstr "Перейменувати"
 
-#: application/gui/main_window.py:676
+#: sunflower/gui/main_window.py:424
 msgid "Rename selected file"
 msgstr "Перейменувати виділений об'єкт"
 
-#: application/gui/main_window.py:677
+#: sunflower/gui/main_window.py:425
 msgid "Preview"
 msgstr "Перегляд"
 
-#: application/gui/main_window.py:677
+#: sunflower/gui/main_window.py:425
 msgid "Preview selected file"
 msgstr "Показати обраний файл"
 
-#: application/gui/main_window.py:678
+#: sunflower/gui/main_window.py:426
 msgid "Edit selected file"
 msgstr "Змінити вибраний файл"
 
-#: application/gui/main_window.py:679 application/gui/input_dialog.py:899
-#: application/gui/input_dialog.py:1253
+#: sunflower/gui/main_window.py:427 sunflower/gui/input_dialog.py:916
+#: sunflower/gui/input_dialog.py:1263
 msgid "Copy"
 msgstr "Копіювати"
 
-#: application/gui/main_window.py:679
+#: sunflower/gui/main_window.py:427
 msgid "Copy selected items from active to opposite list"
 msgstr "Копіювати вибрані файли з активної панелі в сусідню"
 
-#: application/gui/main_window.py:680 application/gui/input_dialog.py:1003
+#: sunflower/gui/main_window.py:428 sunflower/gui/input_dialog.py:1015
 msgid "Move"
 msgstr "Перемістити"
 
-#: application/gui/main_window.py:680
+#: sunflower/gui/main_window.py:428
 msgid "Move selected items from active to opposite list"
 msgstr "Перемістити вибрані файли з активної панелі в сусідню"
 
-#: application/gui/main_window.py:681
+#: sunflower/gui/main_window.py:429
 msgid "Create"
 msgstr "Створити"
 
-#: application/gui/main_window.py:681
+#: sunflower/gui/main_window.py:429
 msgid "Create new directory"
 msgstr "Створити новий каталог"
 
-#: application/gui/main_window.py:682
+#: sunflower/gui/main_window.py:430
 msgid "Delete"
 msgstr "Вилучити"
 
-#: application/gui/main_window.py:682
+#: sunflower/gui/main_window.py:430
 msgid "Delete selected items"
 msgstr "Вилучити вибрані файли"
 
-#: application/gui/main_window.py:823 application/gui/input_dialog.py:1314
-msgid "Add bookmark"
-msgstr "Додати закладку"
-
-#: application/gui/main_window.py:828 application/plugin_base/item_list.py:252
-msgid "Edit bookmarks"
-msgstr "Змінити закладки"
-
-#: application/gui/main_window.py:863
-msgid "_Edit commands"
+#: sunflower/gui/main_window.py:474
+msgid "Edit commands"
 msgstr "Змінити команди"
 
-#: application/gui/main_window.py:1504
-msgid "Sunflower file manager"
-msgstr "Файловий менеджер Sunflower"
-
-#: application/gui/main_window.py:1519
-msgid "print version and exit"
-msgstr "показати версію і вийти"
-
-#: application/gui/main_window.py:1524
-msgid "skip loading additional plugins"
-msgstr "пропустити завантаження додаткових втулок"
-
-#: application/gui/main_window.py:1530
-msgid "skip loading saved tabs"
-msgstr "пропустити завантаження збережених вкладок"
-
-#: application/gui/main_window.py:1536
-msgid "open new tab on the left notebook"
-msgstr "відкрити нову вкладку на лівій панелі"
-
-#: application/gui/main_window.py:1544
-msgid "open new tab on the right notebook"
-msgstr "відкрити нову вкладку на правій панелі"
-
-#: application/gui/main_window.py:1552
-msgid "open terminal tab on the left notebook"
-msgstr "відкрити термінал на лівій панелі"
-
-#: application/gui/main_window.py:1560
-msgid "open terminal tab on the right notebook"
-msgstr "відкрити термінал на правій панелі"
-
-#: application/gui/main_window.py:1657
+#: sunflower/gui/main_window.py:1304
 msgid "Select items"
 msgstr "Виділити файли"
 
-#: application/gui/main_window.py:1658 application/gui/main_window.py:1714
+#: sunflower/gui/main_window.py:1305 sunflower/gui/main_window.py:1361
 msgid "Selection pattern (eg.: *.jpg):"
 msgstr "Маска виділення (тобто: *.jpg):"
 
-#: application/gui/main_window.py:1713
+#: sunflower/gui/main_window.py:1360
 msgid "Deselect items"
 msgstr "зняти виділення з файлів"
 
-#: application/gui/main_window.py:1750
+#: sunflower/gui/main_window.py:1397
 msgid "First level of compared directories is identical."
 msgstr "Перший рівень порівнюваних каталогів ідентичний."
 
-#: application/gui/main_window.py:1913
+#: sunflower/gui/main_window.py:1521
 msgid ""
 "There was a problem starting external terminal application. Check if command"
 " is valid!"
 msgstr "Проблеми із застосування зовнішнього терміналу. Перевірте, чи дійсна команда!"
 
-#: application/gui/main_window.py:2120
+#: sunflower/gui/main_window.py:1729
 msgid "Main Menu"
 msgstr "Головне меню"
 
-#: application/gui/main_window.py:2186
+#: sunflower/gui/main_window.py:1734
 msgid "Restore handle position"
 msgstr "Відновити позицію вказівника"
 
-#: application/gui/main_window.py:2187
+#: sunflower/gui/main_window.py:1735
 msgid "Move handle to the left"
 msgstr "Перемістити вказівник наліво"
 
-#: application/gui/main_window.py:2188
+#: sunflower/gui/main_window.py:1736
 msgid "Move handle to the right"
 msgstr "Перемістити вказівник направо"
 
-#: application/gui/main_window.py:2232
+#: sunflower/gui/main_window.py:1751
+msgid "Rel_oad item list"
+msgstr "Оновити перелік файлів"
+
+#: sunflower/gui/main_window.py:1818
 msgid ""
 "Error saving configuration to files in your home directory. Make sure you "
 "have enough permissions."
 msgstr "Помилка збереження кофігурації в файли у Вашому домашньому каталозі. Переконайтеся, що Ви маєте необхідні привілеї."
 
-#: application/gui/main_window.py:2869
+#: sunflower/gui/main_window.py:2451
 msgid ""
 "Active object is not item list. Advanced rename tool needs files and "
 "directories."
 msgstr "Активний об'єкт не є переліком файлів. Розширений інструмент перейменування працює з файлами і каталогами."
 
-#: application/gui/main_window.py:2884
+#: sunflower/gui/main_window.py:2466
 msgid ""
 "No rename extensions were found. Please enable basic rename options plugin "
 "and try again."
 msgstr "Модулі перейменування не знайдені. Будь ласка, увімкніть модуль \"Basic rename options\", і спробуйте знову."
 
-#: application/gui/main_window.py:2911
+#: sunflower/gui/main_window.py:2493
 msgid ""
 "No extensions for finding files were found. Please enable basic find file "
 "options plugin and try again."
 msgstr "Модулі пошуку файлів не знайдені. Будь ласка, активуйте модуль \"find_file_extensions\" і спробуйте знову."
 
-#: application/gui/main_window.py:2937
+#: sunflower/gui/main_window.py:2519
 msgid "Keyring is empty!"
 msgstr "В'язка ключів порожня!"
 
-#: application/gui/main_window.py:2950
+#: sunflower/gui/main_window.py:2532
 msgid ""
 "Keyring is not available. Make sure you have Python Gnome keyring module "
 "installed."
 msgstr "В'язка не доступна. Переконайтеся, що у Вас є Python Gnome та  встановлено модуль ключів."
 
-#: application/gui/preferences_window.py:31
+#: sunflower/gui/preferences_window.py:32
+#: sunflower/gui/preferences_window.py:47
 msgid "Preferences"
 msgstr "Налаштування"
 
-#: application/gui/preferences_window.py:106
+#: sunflower/gui/preferences_window.py:106
 msgid "Program restart required!"
 msgstr "Потрібний перезапуск проґрами!"
 
-#: application/gui/preferences_window.py:147
+#: sunflower/gui/preferences_window.py:143
 msgid ""
 "There are unsaved changes.\n"
 "Do you want to save them?"
 msgstr "Деякі зміни не збережено.\nВи волієте зберегти їх?"
 
-#: application/gui/history_list.py:25 application/plugin_base/item_list.py:212
+#: sunflower/gui/history_list.py:27
 msgid "History"
 msgstr "Журнал"
 
-#: application/gui/history_list.py:48
+#: sunflower/gui/history_list.py:50
 msgid "Path"
 msgstr "Шлях"
 
-#: application/gui/history_list.py:65
-#: application/gui/mounts_manager_window.py:381
+#: sunflower/gui/history_list.py:67 sunflower/widgets/location_menu.py:51
 msgid "Open"
 msgstr "Відкрити"
 
-#: application/gui/history_list.py:74
-#: application/gui/mounts_manager_window.py:392
+#: sunflower/gui/history_list.py:76
 msgid "Open in tab"
 msgstr "Відкрити у вкладці"
 
-#: application/gui/history_list.py:75
+#: sunflower/gui/history_list.py:77 sunflower/widgets/location_menu.py:56
 msgid "Open selected path in new tab"
 msgstr "Відкрити вибраний шлях в новій вкладці"
 
-#: application/gui/history_list.py:78
+#: sunflower/gui/history_list.py:80
 msgid "Open in opposite list"
 msgstr "Відкрити у іншій панелі"
 
-#: application/gui/history_list.py:79
+#: sunflower/gui/history_list.py:81 sunflower/widgets/location_menu.py:61
 msgid "Open selected path in opposite list"
 msgstr "Відкрити вибраний шлях у протилежній панелі"
 
-#: application/gui/properties_window.py:58
+#: sunflower/gui/properties_window.py:58
 #, python-brace-format
-msgid "{0} Properties"
-msgstr "Властивості {0}"
+msgid "\"{0}\" Properties"
+msgstr "Властивості \"{0}\""
 
-#: application/gui/properties_window.py:86
-#: application/plugins/rename_extensions/default.py:268
-#: application/plugins/find_file_extensions/default.py:118
+#: sunflower/gui/properties_window.py:83
+#: sunflower/plugins/rename_extensions/default.py:267
+#: sunflower/plugins/find_file_extensions/default.py:115
 msgid "Basic"
 msgstr "Основне"
 
-#: application/gui/properties_window.py:90
+#: sunflower/gui/properties_window.py:84
 msgid "Permissions"
 msgstr "Права"
 
-#: application/gui/properties_window.py:94
-#: application/gui/input_dialog.py:1707
+#: sunflower/gui/properties_window.py:85 sunflower/gui/input_dialog.py:1696
 msgid "Open With"
 msgstr "Відкрити за допомогою"
 
-#: application/gui/properties_window.py:98
+#: sunflower/gui/properties_window.py:86
 msgid "Emblems"
 msgstr "емблеми"
 
-#: application/gui/properties_window.py:151
-#: application/plugins/file_list/file_list.py:1011
+#: sunflower/gui/properties_window.py:130
+#: sunflower/plugins/file_list/file_list.py:1027
 msgid ""
 "File or directory with specified name already exists in current directory. "
 "Item could not be renamed."
 msgstr "Файл або каталог з вказаним ім'ям вже існує в даному каталозі. Об'єкт не може бути перейменований."
 
-#: application/gui/properties_window.py:186
-#: application/plugins/file_list/file_list.py:996
+#: sunflower/gui/properties_window.py:165
+#: sunflower/plugins/file_list/file_list.py:1012
 msgid "Error renaming specified item. Make sure you have enough permissions."
 msgstr "Помилка при перейменуванні зазначеного об'єкту. Переконайтеся, що Ви маєте достатні привілеї."
 
-#: application/gui/properties_window.py:242
+#: sunflower/gui/properties_window.py:222
 msgid "item"
 msgid_plural "items"
 msgstr[0] "об'єкт"
 msgstr[1] "об'єкта"
 msgstr[2] "об'єктів"
+msgstr[3] "об'єктів"
 
-#: application/gui/properties_window.py:259
-#: application/gui/operation_dialog.py:362
+#: sunflower/gui/properties_window.py:239
+#: sunflower/gui/operation_dialog.py:313
 msgid "unknown"
 msgstr "невідомий"
 
-#: application/gui/properties_window.py:368
+#: sunflower/gui/properties_window.py:348
 msgid "Error changing owner or group"
 msgstr "Помилка при зміні власника або групи"
 
-#: application/gui/properties_window.py:441
-#: application/gui/input_dialog.py:1329 application/gui/input_dialog.py:1527
-#: application/plugins/default_toolbar/bookmark_button.py:74
-#: application/plugins/file_list/dialogs.py:60
-#: application/plugins/file_list/dialogs.py:273
-#: application/plugins/file_list/dialogs.py:467
+#: sunflower/gui/properties_window.py:421 sunflower/gui/input_dialog.py:1337
+#: sunflower/gui/input_dialog.py:1516
+#: sunflower/plugins/file_list/dialogs.py:60
+#: sunflower/plugins/file_list/dialogs.py:273
+#: sunflower/plugins/file_list/dialogs.py:467
 msgid "Name:"
 msgstr "Ім'я:"
 
-#: application/gui/properties_window.py:442
-#: application/gui/input_dialog.py:1534
+#: sunflower/gui/properties_window.py:422 sunflower/gui/input_dialog.py:1524
 msgid "Type:"
 msgstr "Тип:"
 
-#: application/gui/properties_window.py:443
-#: application/gui/input_dialog.py:1184 application/gui/input_dialog.py:1201
+#: sunflower/gui/properties_window.py:423 sunflower/gui/input_dialog.py:1194
+#: sunflower/gui/input_dialog.py:1211
 msgid "Size:"
 msgstr "Розмір:"
 
-#: application/gui/properties_window.py:444
-#: application/gui/input_dialog.py:1342
+#: sunflower/gui/properties_window.py:424 sunflower/gui/input_dialog.py:1350
 msgid "Location:"
 msgstr "Розташування:"
 
-#: application/gui/properties_window.py:445
+#: sunflower/gui/properties_window.py:425
 msgid "Volume:"
 msgstr "Том:"
 
-#: application/gui/properties_window.py:446
+#: sunflower/gui/properties_window.py:426
 msgid "Accessed:"
 msgstr "Останній доступ:"
 
-#: application/gui/properties_window.py:447
-#: application/gui/input_dialog.py:1185 application/gui/input_dialog.py:1202
+#: sunflower/gui/properties_window.py:427 sunflower/gui/input_dialog.py:1195
+#: sunflower/gui/input_dialog.py:1212
 msgid "Modified:"
 msgstr "Змінено:"
 
-#: application/gui/properties_window.py:522
+#: sunflower/gui/properties_window.py:502
 msgid "Access"
 msgstr "Доступ"
 
-#: application/gui/properties_window.py:528
-#: application/gui/properties_window.py:598
-#: application/gui/input_dialog.py:223
+#: sunflower/gui/properties_window.py:508
+#: sunflower/gui/properties_window.py:578 sunflower/gui/input_dialog.py:221
 msgid "User:"
 msgstr "Користувач:"
 
-#: application/gui/properties_window.py:532
-#: application/gui/properties_window.py:602
-#: application/gui/input_dialog.py:227
+#: sunflower/gui/properties_window.py:512
+#: sunflower/gui/properties_window.py:582 sunflower/gui/input_dialog.py:225
 msgid "Group:"
 msgstr "Група:"
 
-#: application/gui/properties_window.py:536
-#: application/gui/input_dialog.py:231
+#: sunflower/gui/properties_window.py:516 sunflower/gui/input_dialog.py:229
 msgid "Others:"
 msgstr "Решта:"
 
-#: application/gui/properties_window.py:541
-#: application/gui/properties_window.py:554
-#: application/gui/properties_window.py:567
-#: application/gui/input_dialog.py:236 application/gui/input_dialog.py:249
-#: application/gui/input_dialog.py:262
+#: sunflower/gui/properties_window.py:521
+#: sunflower/gui/properties_window.py:534
+#: sunflower/gui/properties_window.py:547 sunflower/gui/input_dialog.py:234
+#: sunflower/gui/input_dialog.py:247 sunflower/gui/input_dialog.py:260
 msgid "Read"
 msgstr "Читання"
 
-#: application/gui/properties_window.py:545
-#: application/gui/properties_window.py:558
-#: application/gui/properties_window.py:571
-#: application/gui/input_dialog.py:240 application/gui/input_dialog.py:253
-#: application/gui/input_dialog.py:266
+#: sunflower/gui/properties_window.py:525
+#: sunflower/gui/properties_window.py:538
+#: sunflower/gui/properties_window.py:551 sunflower/gui/input_dialog.py:238
+#: sunflower/gui/input_dialog.py:251 sunflower/gui/input_dialog.py:264
 msgid "Write"
 msgstr "Запис"
 
-#: application/gui/properties_window.py:549
-#: application/gui/properties_window.py:562
-#: application/gui/properties_window.py:575
-#: application/gui/input_dialog.py:244 application/gui/input_dialog.py:257
-#: application/gui/input_dialog.py:270
+#: sunflower/gui/properties_window.py:529
+#: sunflower/gui/properties_window.py:542
+#: sunflower/gui/properties_window.py:555 sunflower/gui/input_dialog.py:242
+#: sunflower/gui/input_dialog.py:255 sunflower/gui/input_dialog.py:268
 msgid "Execute"
 msgstr "Виконання"
 
-#: application/gui/properties_window.py:580
-#: application/gui/input_dialog.py:275
+#: sunflower/gui/properties_window.py:560 sunflower/gui/input_dialog.py:273
 msgid "Octal:"
 msgstr "Вісімковий вигляд:"
 
-#: application/gui/properties_window.py:592
+#: sunflower/gui/properties_window.py:572
 msgid "Ownership"
 msgstr "Власність"
 
-#: application/gui/properties_window.py:666
+#: sunflower/gui/properties_window.py:646
 #, python-brace-format
 msgid "Select an application to open <i>{0}</i> and other files of type \"{1}\""
 msgstr "Виберіть проґраму для відкриття <i>{0}</i> та інших файлів типу \"{1}\""
 
-#: application/gui/input_dialog.py:117
+#: sunflower/gui/input_dialog.py:115
 msgid "Create link"
 msgstr "Створити посилання"
 
-#: application/gui/input_dialog.py:118
+#: sunflower/gui/input_dialog.py:116
 msgid "Enter new link name:"
 msgstr "Уведіть нове ім’я посилання:"
 
-#: application/gui/input_dialog.py:126
+#: sunflower/gui/input_dialog.py:124
 msgid "Original path:"
 msgstr "Оригінальний шлях:"
 
-#: application/gui/input_dialog.py:131
+#: sunflower/gui/input_dialog.py:129
 msgid "Create hard link"
 msgstr "стоворити жорстке посилання"
 
-#: application/gui/input_dialog.py:134 application/tools/find_files.py:77
+#: sunflower/gui/input_dialog.py:132
 msgid "Browse"
 msgstr "Огляд"
 
-#: application/gui/input_dialog.py:153
+#: sunflower/gui/input_dialog.py:151
 msgid "Select original path"
 msgstr "виберіть шлях до оригіналу"
 
-#: application/gui/input_dialog.py:213
+#: sunflower/gui/input_dialog.py:211
 msgid "Advanced options"
 msgstr "Розширені налаштування"
 
-#: application/gui/input_dialog.py:292 application/gui/input_dialog.py:907
+#: sunflower/gui/input_dialog.py:290 sunflower/gui/input_dialog.py:924
 msgid "Save as default configuration"
 msgstr "Зберегти як типову конфігурацію"
 
-#: application/gui/input_dialog.py:379
-#: application/plugins/file_list/dialogs.py:96
-#: application/plugins/file_list/dialogs.py:304
-#: application/plugins/file_list/dialogs.py:507
+#: sunflower/gui/input_dialog.py:378 sunflower/plugins/file_list/dialogs.py:96
+#: sunflower/plugins/file_list/dialogs.py:304
+#: sunflower/plugins/file_list/dialogs.py:507
 msgid "Password:"
 msgstr "Пароль:"
 
-#: application/gui/input_dialog.py:381
+#: sunflower/gui/input_dialog.py:380
 msgid "Confirm:"
 msgstr "Підтвердження:"
 
-#: application/gui/input_dialog.py:435
+#: sunflower/gui/input_dialog.py:435
 msgid "Create empty file"
 msgstr "Створити порожній файл"
 
-#: application/gui/input_dialog.py:436
+#: sunflower/gui/input_dialog.py:436
 msgid "Enter new file name:"
 msgstr "Уведіть нове ім'я файлу:"
 
-#: application/gui/input_dialog.py:439
+#: sunflower/gui/input_dialog.py:439
 msgid "Open file in editor"
 msgstr "Відкрити файл в редакторі"
 
-#: application/gui/input_dialog.py:443
-#: application/plugins/rename_extensions/default.py:52
-#: application/plugins/rename_extensions/audio_metadata.py:31
+#: sunflower/gui/input_dialog.py:443
+#: sunflower/plugins/rename_extensions/default.py:54
+#: sunflower/plugins/rename_extensions/audio_metadata.py:33
 msgid "Template:"
 msgstr "Шаблон:"
 
-#: application/gui/input_dialog.py:503
+#: sunflower/gui/input_dialog.py:502
 msgid "Empty File"
 msgstr "Порожній файл"
 
-#: application/gui/input_dialog.py:556
-#: application/plugin_base/item_list.py:1068
+#: sunflower/gui/input_dialog.py:555 sunflower/plugin_base/item_list.py:1023
 msgid "Create directory"
 msgstr "Створити каталог"
 
-#: application/gui/input_dialog.py:557
+#: sunflower/gui/input_dialog.py:556
 msgid "Enter new directory name:"
 msgstr "Уведіть нове ім'я каталогу:"
 
-#: application/gui/input_dialog.py:582 application/gui/input_dialog.py:661
-msgid "Operation queue:"
-msgstr "Черга операцій:"
+#: sunflower/gui/input_dialog.py:590
+msgid "Yes"
+msgstr "Так"
 
-#: application/gui/input_dialog.py:654
+#: sunflower/gui/input_dialog.py:592
+msgid "No"
+msgstr "Ні"
+
+#: sunflower/gui/input_dialog.py:656
 msgid "Only files of this type:"
 msgstr "Тільки файли такого типу:"
 
-#: application/gui/input_dialog.py:681
+#: sunflower/gui/input_dialog.py:663
+msgid "Operation queue:"
+msgstr "Черга операцій:"
+
+#: sunflower/gui/input_dialog.py:683
 msgid "Affected item list"
 msgstr "Перелік порушених файлів"
 
-#: application/gui/input_dialog.py:704
+#: sunflower/gui/input_dialog.py:706
 msgid "Set owner on destination"
 msgstr "Встановити власника цільового каталогу"
 
-#: application/gui/input_dialog.py:705
+#: sunflower/gui/input_dialog.py:707
 msgid "Set access mode on destination"
 msgstr "Встановити права на цільовий каталог"
 
-#: application/gui/input_dialog.py:706
+#: sunflower/gui/input_dialog.py:708
 msgid "Set date and time on destination"
 msgstr "Встановити дату і час для цільового каталогу"
 
-#: application/gui/input_dialog.py:707
+#: sunflower/gui/input_dialog.py:709
 msgid "Silent mode"
 msgstr "Тихий режим"
 
-#: application/gui/input_dialog.py:714
+#: sunflower/gui/input_dialog.py:714
 msgid "Merge directories"
 msgstr "Злити каталоги"
 
-#: application/gui/input_dialog.py:715
+#: sunflower/gui/input_dialog.py:715
 msgid "Overwrite files"
 msgstr "Перезаписувати файли"
 
-#: application/gui/input_dialog.py:719
+#: sunflower/gui/input_dialog.py:719
 msgid ""
 "Silent mode will enable operation to finish without disturbing you. If any "
 "errors occur, they will be presented to you after completion."
 msgstr "У тихому режимі операція закінчиться не турбуючи Вас. Якщо виникнуть якісь помилки, вони будуть показані Вам по завершенні."
 
-#: application/gui/input_dialog.py:795 application/gui/input_dialog.py:799
-#: application/gui/input_dialog.py:803
+#: sunflower/gui/input_dialog.py:724
+msgid "Follow symlinks"
+msgstr "Переходити за символічними посиланнями"
+
+#: sunflower/gui/input_dialog.py:800 sunflower/gui/input_dialog.py:804
+#: sunflower/gui/input_dialog.py:808 sunflower/gui/input_dialog.py:812
 msgid "Not supported by file system provider"
 msgstr "Не підтримується файловою системою постачальника"
 
-#: application/gui/input_dialog.py:860
+#: sunflower/gui/input_dialog.py:877
 msgid "Only options supported by file system providers were saved."
 msgstr "Тільки параметри, підтримувані постачальниками файлової системи, були збережені."
 
-#: application/gui/input_dialog.py:884
+#: sunflower/gui/input_dialog.py:901
 msgid "Copy item"
 msgid_plural "Copy items"
 msgstr[0] "Копіювати об'єкт"
 msgstr[1] "Копіювати об'єкти"
 msgstr[2] "Копіювати об'єкти"
+msgstr[3] "Копіювати об'єкти"
 
-#: application/gui/input_dialog.py:889
+#: sunflower/gui/input_dialog.py:906
 #, python-brace-format
 msgid "Copy <b>{0}</b> item to:"
 msgid_plural "Copy <b>{0}</b> items to:"
 msgstr[0] "Копіювати об'єкт <b>{0}</b> до:"
 msgstr[1] "Копіювати об'єкти <b>{0}</b> до:"
 msgstr[2] "Копіювати об'єкти <b>{0}</b> до:"
+msgstr[3] "Копіювати об'єкти <b>{0}</b> до:"
 
-#: application/gui/input_dialog.py:898 application/gui/input_dialog.py:1002
-#: application/gui/input_dialog.py:1445
-#: application/gui/operation_dialog.py:206
-#: application/plugins/file_list/file_list.py:1926
+#: sunflower/gui/input_dialog.py:915 sunflower/gui/input_dialog.py:1014
+#: sunflower/gui/input_dialog.py:1450 sunflower/gui/operation_dialog.py:189
+#: sunflower/plugins/file_list/file_list.py:1986
+#: sunflower/tools/find_files.py:286
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: application/gui/input_dialog.py:988
+#: sunflower/gui/input_dialog.py:1000
 msgid "Move item"
 msgid_plural "Move items"
 msgstr[0] "Перемістити об'єкт"
 msgstr[1] "Перемістити об'єкти"
 msgstr[2] "Перемістити об'єкти"
+msgstr[3] "Перемістити об'єкти"
 
-#: application/gui/input_dialog.py:993
+#: sunflower/gui/input_dialog.py:1005
 #, python-brace-format
 msgid "Move <b>{0}</b> item to:"
 msgid_plural "Move <b>{0}</b> items to:"
 msgstr[0] "Перемістити об'єкт <b>{0}</b> до:"
 msgstr[1] "Перемістити об'єкти <b>{0}</b> до:"
 msgstr[2] "Перемістити об'єкти <b>{0}</b> до:"
+msgstr[3] "Перемістити об'єкти <b>{0}</b> до:"
 
-#: application/gui/input_dialog.py:1016
+#: sunflower/gui/input_dialog.py:1028
 msgid "Rename file/directory"
 msgstr "Перейменувати файл/каталог"
 
-#: application/gui/input_dialog.py:1017
+#: sunflower/gui/input_dialog.py:1029
 msgid "Enter a new name for this item:"
 msgstr "Уведіть нове ім'я для цього об'єкту:"
 
-#: application/gui/input_dialog.py:1083
+#: sunflower/gui/input_dialog.py:1093
 msgid "Select a new name for the destination"
 msgstr "Виберіть нове ім'я для цільового каталогу"
 
-#: application/gui/input_dialog.py:1088
+#: sunflower/gui/input_dialog.py:1098
 msgid "Reset"
 msgstr "Скинути"
 
-#: application/gui/input_dialog.py:1092
+#: sunflower/gui/input_dialog.py:1102
 msgid "Apply this action to all files"
 msgstr "Застосувати до усіх файлів"
 
-#: application/gui/input_dialog.py:1127 application/gui/input_dialog.py:1446
+#: sunflower/gui/input_dialog.py:1137 sunflower/gui/input_dialog.py:1451
 msgid "Skip"
 msgstr "Пропустити"
 
-#: application/gui/input_dialog.py:1183
+#: sunflower/gui/input_dialog.py:1193
 msgid "Original"
 msgstr "Оригінал"
 
-#: application/gui/input_dialog.py:1200
+#: sunflower/gui/input_dialog.py:1210
 msgid "Replace with"
 msgstr "Замінити на"
 
-#: application/gui/input_dialog.py:1235
+#: sunflower/gui/input_dialog.py:1245
 msgid "File conflict"
 msgstr "Конфлікт файлів"
 
-#: application/gui/input_dialog.py:1240 application/gui/input_dialog.py:1250
+#: sunflower/gui/input_dialog.py:1250 sunflower/gui/input_dialog.py:1260
 msgid "Replace"
 msgstr "Замінити"
 
-#: application/gui/input_dialog.py:1257
+#: sunflower/gui/input_dialog.py:1267
 #, python-brace-format
 msgid "Replace file \"{0}\"?"
 msgstr "Замінити файл \"{0}\"?"
 
-#: application/gui/input_dialog.py:1263
+#: sunflower/gui/input_dialog.py:1273
 #, python-brace-format
 msgid ""
 "Another file with the same name already exists in \"{0}\". Replacing it will"
 " overwrite its content."
 msgstr "Файл з такою назвою вже присутній в \"{0}\". Заміна цього файлу перезапише його вміст."
 
-#: application/gui/input_dialog.py:1276
+#: sunflower/gui/input_dialog.py:1286
 msgid "Directory conflict"
 msgstr "Кофлікт каталогів"
 
-#: application/gui/input_dialog.py:1280
+#: sunflower/gui/input_dialog.py:1290
 msgid "Merge"
 msgstr "Об'єднати"
 
-#: application/gui/input_dialog.py:1290
+#: sunflower/gui/input_dialog.py:1300
 #, python-brace-format
 msgid "Merge directory \"{0}\"?"
 msgstr "Об'єднати каталог \"{0}\"?"
 
-#: application/gui/input_dialog.py:1296
+#: sunflower/gui/input_dialog.py:1306
 #, python-brace-format
 msgid ""
 "Directory with the same name already exists in \"{0}\". Merging will ask for"
@@ -1570,208 +1414,151 @@ msgid ""
 " the files being copied."
 msgstr "Каталог з таким ім'ям вже присутній в \"{0}\". При об'єднанні у Вас запитають схвалення для заміни кожного файлу в каталозі, що конфліктує з копійованими файлами."
 
-#: application/gui/input_dialog.py:1334
+#: sunflower/gui/input_dialog.py:1324
+msgid "Add bookmark"
+msgstr "Додати закладку"
+
+#: sunflower/gui/input_dialog.py:1342
 msgid ""
 "Underscore in the label text indicates the next character should be "
 "underlined and used for the mnemonic accelerator key if it is the first "
 "character so marked."
 msgstr "Знак підкреслювання у тексті означає, що наступний символ повинен бути підкреслений та буде використовуватися у якості гарячої клавіші, якщо це перший підкреслений символ."
 
-#: application/gui/input_dialog.py:1410
+#: sunflower/gui/input_dialog.py:1417
 msgid "Operation error"
 msgstr "При виконанні операції сталася помилка"
 
-#: application/gui/input_dialog.py:1447
+#: sunflower/gui/input_dialog.py:1452
 msgid "Skip all"
 msgstr "Пропустити усе"
 
-#: application/gui/input_dialog.py:1448
+#: sunflower/gui/input_dialog.py:1453
 msgid "Retry"
 msgstr "Повторити"
 
-#: application/gui/input_dialog.py:1497
-msgid "No"
-msgstr "Ні"
-
-#: application/gui/input_dialog.py:1498
-msgid "Yes"
-msgstr "Так"
-
-#: application/gui/input_dialog.py:1510
+#: sunflower/gui/input_dialog.py:1501
 msgid "Add toolbar widget"
 msgstr "Додати віджет на панель інструментів"
 
-#: application/gui/input_dialog.py:1621
+#: sunflower/gui/input_dialog.py:1610
 msgid "Select range"
 msgstr "Вибрати діяпазон"
 
-#: application/gui/input_dialog.py:1622
+#: sunflower/gui/input_dialog.py:1611
 msgid "Select part of the text:"
 msgstr "Виділити частину тексту:"
 
-#: application/gui/input_dialog.py:1646
+#: sunflower/gui/input_dialog.py:1635
 msgid "Add application"
 msgstr "Додати додаток"
 
-#: application/gui/input_dialog.py:1647
+#: sunflower/gui/input_dialog.py:1636
 msgid "Application name:"
 msgstr "Ім'я проґрами:"
 
-#: application/gui/input_dialog.py:1657
+#: sunflower/gui/input_dialog.py:1646 sunflower/tools/find_files.py:287
 msgid "Select"
 msgstr "Вибрати"
 
-#: application/gui/input_dialog.py:1728
+#: sunflower/gui/input_dialog.py:1714
 msgid "Select application:"
 msgstr "Виберіть проґраму:"
 
-#: application/gui/input_dialog.py:1731
+#: sunflower/gui/input_dialog.py:1718
 #, python-brace-format
 msgid "Open <i>{0}</i> with:"
 msgstr "Відкрити <i>{0}</i> за допомогою:"
 
-#: application/gui/input_dialog.py:1767
+#: sunflower/gui/input_dialog.py:1754
 msgid "Use a custom command"
 msgstr "Використовувати налаштовувану команду"
 
-#: application/gui/operation_dialog.py:91 application/gui/error_list.py:46
+#: sunflower/gui/operation_dialog.py:75 sunflower/gui/error_list.py:48
 msgid "Source:"
 msgstr "Джерело:"
 
-#: application/gui/operation_dialog.py:92 application/gui/error_list.py:52
+#: sunflower/gui/operation_dialog.py:76 sunflower/gui/error_list.py:54
 msgid "Destination:"
 msgstr "Призначення:"
 
-#: application/gui/operation_dialog.py:149
+#: sunflower/gui/operation_dialog.py:133
 msgid "ETA:"
 msgstr "Залишилось:"
 
-#: application/gui/operation_dialog.py:150
+#: sunflower/gui/operation_dialog.py:134
 msgid "Speed:"
 msgstr "Швидкість:"
 
-#: application/gui/operation_dialog.py:151
+#: sunflower/gui/operation_dialog.py:135
 msgid "Total size:"
 msgstr "Розмір:"
 
-#: application/gui/operation_dialog.py:152
+#: sunflower/gui/operation_dialog.py:136
 msgid "Total count:"
 msgstr "Кількість:"
 
-#: application/gui/operation_dialog.py:205
-msgid "Minimize"
-msgstr "Згорнути"
-
-#: application/gui/operation_dialog.py:213
-#: application/gui/operation_dialog.py:268
+#: sunflower/gui/operation_dialog.py:196 sunflower/gui/operation_dialog.py:240
 msgid "Pause"
 msgstr "Призупинити"
 
-#: application/gui/operation_dialog.py:261
+#: sunflower/gui/operation_dialog.py:233
 msgid "Resume"
 msgstr "Відновити"
 
-#: application/gui/operation_dialog.py:273
+#: sunflower/gui/operation_dialog.py:245
 msgid "Are you sure about canceling current operation?"
 msgstr "Ви впевнені, що бажаєте скасувати поточну операцію?"
 
-#: application/gui/operation_dialog.py:343
+#: sunflower/gui/operation_dialog.py:301
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] "секунда"
 msgstr[1] "секунди"
 msgstr[2] "секунд"
+msgstr[3] "секунд"
 
-#: application/gui/operation_dialog.py:349
+#: sunflower/gui/operation_dialog.py:305
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "хвилина"
 msgstr[1] "хвилини"
 msgstr[2] "хвилин"
+msgstr[3] "хвилин"
 
-#: application/gui/operation_dialog.py:356
+#: sunflower/gui/operation_dialog.py:309
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "годину"
 msgstr[1] "години"
 msgstr[2] "годин"
+msgstr[3] "годин"
 
-#: application/gui/operation_dialog.py:501
-msgid "Copy Selection"
-msgstr "Копіювати Виділене"
-
-#: application/gui/operation_dialog.py:522
-msgid "Move Selection"
-msgstr "Перемістити Виділене"
-
-#: application/gui/operation_dialog.py:547
-msgid "Delete Selection"
-msgstr "Вилучити Виділене"
-
-#: application/gui/operation_dialog.py:548
+#: sunflower/gui/operation_dialog.py:478
 msgid "Removing items..."
 msgstr "Вилучення..."
 
-#: application/gui/operation_dialog.py:574
-msgid "Rename Items"
-msgstr "Перейменувати файли"
-
-#: application/gui/operation_dialog.py:575
+#: sunflower/gui/operation_dialog.py:504
 msgid "Renaming items..."
 msgstr "Перейменування..."
 
-#: application/gui/mounts_manager_window.py:54
-msgid "Mount manager"
-msgstr "Керування точками монтування"
-
-#: application/gui/mounts_manager_window.py:371
-msgid "Systemwide"
-msgstr "Загольносистемний"
-
-#: application/gui/mounts_manager_window.py:393
-msgid "Open selected URI in new tab"
-msgstr "Відкрити вибраний шлях в новій вкладці"
-
-#: application/gui/mounts_manager_window.py:397
-#: application/gui/mounts_manager_window.py:560
-#: application/plugins/file_list/gio_extension.py:198
-#: application/plugins/file_list/gio_extension.py:552
-#: application/plugins/file_list/gio_extension.py:904
-msgid "Unmount"
-msgstr "Розмонтувати"
-
-#: application/gui/mounts_manager_window.py:549
-msgid "Mounted"
-msgstr "Змонтований"
-
-#: application/gui/mounts_manager_window.py:556
-#: application/plugins/file_list/gio_extension.py:195
-#: application/plugins/file_list/gio_extension.py:549
-#: application/plugins/file_list/gio_extension.py:901
-msgid "Mount"
-msgstr "Монтувати"
-
-#: application/gui/mounts_manager_window.py:698
-msgid "Volumes"
-msgstr "Томи"
-
-#: application/gui/keyring_manager_window.py:27
+#: sunflower/gui/keyring_manager_window.py:29
 msgid "Keyring manager"
 msgstr "В'язки ключів"
 
-#: application/gui/keyring_manager_window.py:51
+#: sunflower/gui/keyring_manager_window.py:53
 msgid "ID"
 msgstr "ID"
 
-#: application/gui/keyring_manager_window.py:54
+#: sunflower/gui/keyring_manager_window.py:56
 msgid "Modified"
 msgstr "Змінено"
 
-#: application/gui/keyring_manager_window.py:127
+#: sunflower/gui/keyring_manager_window.py:129
 msgid "Please select an entry to delete!"
 msgstr "Будь ласка, виберіть запис для вилучення!"
 
-#: application/gui/keyring_manager_window.py:143
+#: sunflower/gui/keyring_manager_window.py:145
 #, python-brace-format
 msgid ""
 "You are about to remove the following entry from your keyring. If you do this you will have to provide password manually when needed. Are you sure?\n"
@@ -1779,302 +1566,354 @@ msgid ""
 "{0}"
 msgstr "Ви збираєтеся вилучити наступний запис з ваших ключів. Якщо Ви зробите це, то повинні будете уводити паролі вручну за потреби. Ви впевнені?\n\n{0}"
 
-#: application/gui/keyring_manager_window.py:171
+#: sunflower/gui/keyring_manager_window.py:173
 msgid "Please select an entry to change!"
 msgstr "Будь ласка, виберіть запис, щоб змінити!"
 
-#: application/gui/keyring_manager_window.py:178
+#: sunflower/gui/keyring_manager_window.py:180
 msgid "Change password"
 msgstr "Змінити пароль"
 
-#: application/gui/keyring_manager_window.py:179
+#: sunflower/gui/keyring_manager_window.py:181
 msgid "Enter new password for selected keyring entry."
 msgstr "Уведіть новий пароль для обраних ключів."
 
-#: application/gui/keyring_manager_window.py:194
+#: sunflower/gui/keyring_manager_window.py:196
 msgid "Password was changed!"
 msgstr "Пароль був змінений!"
 
-#: application/gui/keyring_manager_window.py:209
+#: sunflower/gui/keyring_manager_window.py:211
 msgid "Passwords do not match! Please try again."
 msgstr "Паролі не збігаються! Будь ласка, спробуйте ще раз."
 
-#: application/gui/about_window.py:106
+#: sunflower/gui/about_window.py:71
 msgid "Twin-panel file manager for Linux."
 msgstr "Двопанельний файловий менеджер для Linux."
 
-#: application/gui/about_window.py:109
-msgid "Copyright © 2010-2015 by Mladen Mijatov and contributors."
-msgstr "Авторське право © 2010-2015 Mladen Mijatov та інші учасники проєкту."
+#: sunflower/gui/about_window.py:74
+msgid "Copyright © 2010-2019 by Mladen Mijatov and contributors."
+msgstr "Авторські права належать © 2010-2019 Mladen Mijatov та іншим учасникам проекту"
 
-#: application/gui/about_window.py:137
-msgid "translator-credits"
-msgstr "Roman Tuz <ubuntueasy.com@gmail.com>\nАндрій Кондратьєв <kondratiev.work@gmail.com>\nХаліманенко Тарас <mr.haltar@yandex.ru>\nМикола Ткач <Stuartlittle1970@gmail.com>"
+#: sunflower/gui/about_window.py:90
+msgid "Contributors"
+msgstr "Учасники проекту"
 
-#: application/gui/error_list.py:21
+#: sunflower/gui/error_list.py:23
 msgid "Error list"
 msgstr "Перелік помилок"
 
-#: application/gui/error_list.py:40
+#: sunflower/gui/error_list.py:42
 msgid "For:"
 msgstr "Для:"
 
-#: application/widgets/title_bar.py:75
+#: sunflower/__main__.py:89
+msgid "Show version number"
+msgstr "Показати номер версії"
+
+#: sunflower/__main__.py:98 sunflower/__main__.py:107
+msgid "Skip loading additional plugins"
+msgstr "Пропустити завантаження додаткових втулок"
+
+#: sunflower/__main__.py:116
+msgid "Open new tab on the left notebook"
+msgstr "Відкрити нову вкладку на лівій панелі"
+
+#: sunflower/__main__.py:125
+msgid "Open new tab on the right notebook"
+msgstr "Відкрити нову вкладку на правій панелі"
+
+#: sunflower/__main__.py:134
+msgid "Open terminal tab on the left notebook"
+msgstr "Відкрити термінал на лівій панелі"
+
+#: sunflower/__main__.py:143
+msgid "Open terminal tab on the right notebook"
+msgstr "Відкрити термінал на правій панелі"
+
+#: sunflower/widgets/location_menu.py:66
+msgid "Open terminal at selected path"
+msgstr "Відкрити вибраний шлях в терміналі"
+
+#: sunflower/widgets/title_bar.py:55
 msgid "Context menu"
 msgstr "Контекстне меню"
 
-#: application/widgets/tab_label.py:85
+#: sunflower/widgets/tab_label.py:74
 msgid "Unlock"
 msgstr "Розблокувати"
 
-#: application/widgets/tab_label.py:85
+#: sunflower/widgets/tab_label.py:74
 msgid "Lock"
 msgstr "Заблокувати"
 
-#: application/widgets/tab_label.py:89 application/plugin_base/plugin.py:132
+#: sunflower/widgets/tab_label.py:78 sunflower/plugin_base/plugin.py:136
 msgid "Duplicate tab"
 msgstr "Дублювати вкладку"
 
-#: application/widgets/tab_label.py:93
+#: sunflower/widgets/tab_label.py:82
 msgid "Move to opposite panel"
 msgstr "Перенести на протилежну панель"
 
-#: application/widgets/tab_label.py:100
+#: sunflower/widgets/tab_label.py:89
 msgid "Close Tab"
 msgstr "Закрити вкладку"
 
-#: application/widgets/tab_label.py:106
+#: sunflower/widgets/tab_label.py:95
 msgid "Close All"
 msgstr "Закрити усі"
 
-#: application/widgets/tab_label.py:111
+#: sunflower/widgets/tab_label.py:100
 msgid "Close Other Tabs"
 msgstr "Закрити інші вкладки"
 
-#: application/queue.py:36 application/plugins/sessions/plugin.py:6
+#: sunflower/queue.py:33 sunflower/plugins/sessions/plugin.py:8
 msgid "Default"
 msgstr "Типово"
 
-#: application/queue.py:49
+#: sunflower/queue.py:46
 msgid "New queue"
 msgstr "Нова черга"
 
-#: application/queue.py:142
+#: sunflower/queue.py:139
 msgid "New operation queue"
 msgstr "Нова черга операцій"
 
-#: application/queue.py:143
+#: sunflower/queue.py:140
 msgid "Enter name for new operation queue:"
 msgstr "Уведіть назву нової черги операцій:"
 
-#: application/queue.py:159
+#: sunflower/queue.py:156
 msgid "Operation queue with specified name already exists."
 msgstr "Черга з таким ім'ям вже існує."
 
-#: application/mounts.py:126
-msgid "Specified item can not be unmounted."
+#: sunflower/mounts.py:65
+msgid "Selected volume can not be mounted."
 msgstr "Вказаний том не може бути змонтований."
 
-#: application/keyring.py:61
+#: sunflower/mounts.py:81
+msgid "Selected mount can not be unmounted."
+msgstr "Вказаний том не може бути демонтований."
+
+#: sunflower/mounts.py:97
+msgid "Selected volume can not be ejected."
+msgstr "Вказаний том не може бути витягнутий."
+
+#: sunflower/mounts.py:184 sunflower/plugins/file_list/gio_extension.py:197
+#: sunflower/plugins/file_list/gio_extension.py:551
+#: sunflower/plugins/file_list/gio_extension.py:903
+msgid "Unmount"
+msgstr "Розмонтувати"
+
+#: sunflower/mounts.py:190 sunflower/plugins/file_list/gio_extension.py:194
+#: sunflower/plugins/file_list/gio_extension.py:548
+#: sunflower/plugins/file_list/gio_extension.py:900
+msgid "Mount"
+msgstr "Монтувати"
+
+#: sunflower/mounts.py:196
+msgid "Eject"
+msgstr "Витягнути"
+
+#: sunflower/keyring.py:63
 msgid "Keyring is unlocked"
 msgstr "В'язка ключів розблокована"
 
-#: application/keyring.py:62
+#: sunflower/keyring.py:64
 msgid "Keyring is locked"
 msgstr "В’язка ключів заблокована"
 
-#: application/keyring.py:109
+#: sunflower/keyring.py:111
 msgid "Unlock keyring"
 msgstr "Розблокувати в'язку ключів"
 
-#: application/keyring.py:110
+#: sunflower/keyring.py:112
 msgid "Please enter your keyring password:"
 msgstr "Будь ласка, уведіть ваш пароль для в'язки ключів:"
 
-#: application/keyring.py:310
+#: sunflower/keyring.py:312
 msgid "New keyring"
 msgstr "Нова в'язка ключів"
 
-#: application/keyring.py:312
+#: sunflower/keyring.py:314
 msgid ""
 "We need to create a new keyring to safely store your passwords. Choose the "
 "password you want to use for it."
 msgstr "Ви повинні створити нову в'язку ключів для безпечного зберігання паролів. Виберіть пароль, який Ви бажаєте використовувати для цього."
 
-#: application/toolbar.py:131
+#: sunflower/toolbar.py:122
 msgid ""
 "Error adding widget. You need to enter unique name and select widget type."
 msgstr "Помилка додавання віджету. Необхідно увести унікальне ім'я та вибрати тип віджету."
 
-#: application/toolbar.py:146
-msgid ""
-"Widget with specified name already exists. You need to enter unique name and"
-" select widget type."
-msgstr "Віджет з вказаним ім'ям вже існує. Необхідно увести унікальне ім'я та вибрати тип віджету."
-
-#: application/toolbar.py:180
+#: sunflower/toolbar.py:156
 msgid ""
 "Plugin used to create selected toolbar widget is not active or not present. "
 "In order to edit this entry you need to activate plugin used to create it."
 msgstr "Модуль, використаний для створення обраного віджету неактивний або відсутній. Для редагування цього елементу потрібно активувати модуль, використаний для його створення."
 
-#: application/plugins/default_toolbar/parent_directory_button.py:14
-#: application/plugins/default_toolbar/parent_directory_button.py:15
-#: application/plugin_base/item_list.py:260
+#: sunflower/plugins/default_toolbar/parent_directory_button.py:14
+#: sunflower/plugins/default_toolbar/parent_directory_button.py:15
+#: sunflower/plugin_base/item_list.py:216
 msgid "Go to parent directory"
 msgstr "Перейти в батьківський каталог"
 
-#: application/plugins/default_toolbar/bookmark_button.py:58
+#: sunflower/plugins/default_toolbar/bookmark_button.py:63
 msgid "Configure bookmark button"
 msgstr "Налаштувати кнопку закладки"
 
-#: application/plugins/default_toolbar/bookmark_button.py:84
+#: sunflower/plugins/default_toolbar/bookmark_button.py:79
 msgid "Path:"
 msgstr "Шлях:"
 
-#: application/plugins/default_toolbar/bookmark_button.py:88
+#: sunflower/plugins/default_toolbar/bookmark_button.py:83
 msgid "Show label"
 msgstr "Показувати ім'я"
 
-#: application/plugins/default_toolbar/plugin.py:26
+#: sunflower/plugins/default_toolbar/plugin.py:25
 msgid "Parent directory button"
 msgstr "Кнопка переходу в батьківський каталог"
 
-#: application/plugins/default_toolbar/plugin.py:32
+#: sunflower/plugins/default_toolbar/plugin.py:31
 msgid "Home directory button"
 msgstr "Кнопка переходу в домашній каталог"
 
-#: application/plugins/default_toolbar/plugin.py:38
+#: sunflower/plugins/default_toolbar/plugin.py:37
 msgid "Bookmark button"
 msgstr "Кнопка закладки"
 
-#: application/plugins/default_toolbar/plugin.py:44
+#: sunflower/plugins/default_toolbar/plugin.py:43
 msgid "Bookmarks menu"
 msgstr "Меню закладок"
 
-#: application/plugins/default_toolbar/plugin.py:50
+#: sunflower/plugins/default_toolbar/plugin.py:49
 msgid "Separator"
 msgstr "Роздільник"
 
-#: application/plugins/default_toolbar/plugin.py:105
+#: sunflower/plugins/default_toolbar/plugin.py:104
 msgid "This widget has no configuration dialog."
 msgstr "У цього віджету немає діялоґу налаштування."
 
-#: application/plugins/owner_column/plugin.py:65
+#: sunflower/plugins/owner_column/plugin.py:67
 msgid "Owner"
 msgstr "Власник"
 
-#: application/plugins/owner_column/plugin.py:93
+#: sunflower/plugins/owner_column/plugin.py:95
 msgid "Group"
 msgstr "Група"
 
-#: application/plugins/file_list/plugin.py:11
+#: sunflower/plugins/file_list/plugin.py:13
 msgid "Local file list"
 msgstr "Перелік локальних файлів"
 
-#: application/plugins/file_list/plugin.py:12
+#: sunflower/plugins/file_list/plugin.py:14
 msgid "Trash can"
 msgstr "Смітник"
 
-#: application/plugins/file_list/file_list.py:124
+#: sunflower/plugins/file_list/file_list.py:133
 msgid "Ext"
 msgstr "Розширення"
 
-#: application/plugins/file_list/file_list.py:126
+#: sunflower/plugins/file_list/file_list.py:135
 msgid "Mode"
 msgstr "Права"
 
-#: application/plugins/file_list/file_list.py:127
-#: application/plugins/rename_extensions/audio_metadata.py:26
+#: sunflower/plugins/file_list/file_list.py:136
+#: sunflower/plugins/rename_extensions/audio_metadata.py:28
 msgid "Date"
 msgstr "Дата"
 
-#: application/plugins/file_list/file_list.py:481
+#: sunflower/plugins/file_list/file_list.py:493
 msgid "Invalid selection!"
 msgstr "Неправильне виділення!"
 
-#: application/plugins/file_list/file_list.py:653
+#: sunflower/plugins/file_list/file_list.py:668
 msgid ""
 "There was an error creating directory. Make sure you have enough "
 "permissions. "
 msgstr "Помилка створення каталогу. Переконайтеся, що Ви маєте необхідні привілеї. "
 
-#: application/plugins/file_list/file_list.py:680
+#: sunflower/plugins/file_list/file_list.py:695
 #, python-brace-format
 msgid "File already exists: {0}"
 msgstr "Файл вже існує: {0}"
 
-#: application/plugins/file_list/file_list.py:683
+#: sunflower/plugins/file_list/file_list.py:698
 #, python-brace-format
 msgid "Directory with same name exists: {0}"
 msgstr "Каталог з таким ім'ям існує: {0}"
 
-#: application/plugins/file_list/file_list.py:719
+#: sunflower/plugins/file_list/file_list.py:734
 msgid ""
 "There was an error creating file. Make sure you have enough permissions."
 msgstr "Помилка створення файлу. Переконайтеся, що Ви маєте необхідні привілеї."
 
-#: application/plugins/file_list/file_list.py:781
+#: sunflower/plugins/file_list/file_list.py:796
 msgid "Error creating new link."
 msgstr "Помилка створення посилання"
 
-#: application/plugins/file_list/file_list.py:797
+#: sunflower/plugins/file_list/file_list.py:812
 msgid "Current file system does not support linking."
 msgstr "Поточна файлова система не підтримує посилання."
 
-#: application/plugins/file_list/file_list.py:820
+#: sunflower/plugins/file_list/file_list.py:836
 #, python-brace-format
 msgid ""
-"You are about to delete {0} item.\n"
+"You are about to <i><b>delete</b></i> {0} item.\n"
 "Are you sure about this?"
 msgid_plural ""
-"You are about to delete {0} items.\n"
+"You are about to <i><b>delete</b></i> {0} items.\n"
 "Are you sure about this?"
-msgstr[0] "Ви збираєтеся вилучити {0} об’єкт.\nВи впевнені, що волієте зробити це?"
-msgstr[1] "Ви збираєтеся вилучити {0} об’єкти.\nВи впевнені, що волієте зробити це?"
-msgstr[2] "Ви збираєтеся вилучити {0} об’єктів.\nВи впевнені, що волієте зробити це?"
+msgstr[0] "Ви збираєтеся <i><b>вилучити</b></i> {0} об’єкт.\nВи впевнені, що волієте зробити це?"
+msgstr[1] "Ви збираєтеся <i><b>вилучити</b></i> {0} об’єктів.\nВи впевнені, що волієте зробити це?"
+msgstr[2] "Ви збираєтеся <i><b>вилучити</b></i> {0} об’єктів.\nВи впевнені, що волієте зробити це?"
+msgstr[3] "Ви збираєтеся <i><b>вилучити</b></i> {0} об’єктів.\nВи впевнені, що волієте зробити це?"
 
-#: application/plugins/file_list/file_list.py:829
+#: sunflower/plugins/file_list/file_list.py:845
 #, python-brace-format
 msgid ""
-"You are about to move {0} item to trash.\n"
+"You are about to move {0} item to <i><b>trash</b></i>.\n"
 "Are you sure about this?"
 msgid_plural ""
-"You are about to move {0} items to trash.\n"
+"You are about to move {0} items to <i><b>trash</b></i>.\n"
 "Are you sure about this?"
-msgstr[0] "Ви збираєтеся перемістити {0} об’єкт у смітник.\nВи впевнені, що волієте зробити це?"
-msgstr[1] "Ви збираєтеся перемістити {0} об’єкти у смітник.\nВи впевнені, що волієте зробити це?"
-msgstr[2] "Ви збираєтеся перемістити {0} об’єктів у смітник.\nВи впевнені, що волієте зробити це?"
+msgstr[0] "Ви збираєтеся <i><b>перемістити</b></i> {0} об’єкт у смітник.\nВи впевнені, що волієте зробити це?"
+msgstr[1] "Ви збираєтеся <i><b>перемістити</b></i> {0} об’єктів у смітник.\nВи впевнені, що волієте зробити це?"
+msgstr[2] "Ви збираєтеся <i><b>перемістити</b></i> {0} об’єктів у смітник.\nВи впевнені, що волієте зробити це?"
+msgstr[3] "Ви збираєтеся <i><b>перемістити</b></i> {0} об’єктів у смітник.\nВи впевнені, що волієте зробити це?"
 
-#: application/plugins/file_list/file_list.py:1180
+#: sunflower/plugins/file_list/file_list.py:1199
 msgid "Other application..."
 msgstr "Інше додаток..."
 
-#: application/plugins/file_list/file_list.py:1816
+#: sunflower/plugins/file_list/file_list.py:1605
+msgid "No files selected."
+msgstr "Немає вибраних файлів."
+
+#: sunflower/plugins/file_list/file_list.py:1874
 msgid "Free:"
 msgstr "Вільно:"
 
-#: application/plugins/file_list/file_list.py:1817
+#: sunflower/plugins/file_list/file_list.py:1875
 msgid "Total:"
 msgstr "Всього:"
 
-#: application/plugins/file_list/file_list.py:1886
+#: sunflower/plugins/file_list/file_list.py:1946
 msgid "Copy here"
 msgstr "Копіювати сюди"
 
-#: application/plugins/file_list/file_list.py:1891
+#: sunflower/plugins/file_list/file_list.py:1951
 msgid "Move here"
 msgstr "Перемістити сюди"
 
-#: application/plugins/file_list/file_list.py:1896
+#: sunflower/plugins/file_list/file_list.py:1956
 msgid "Link here"
 msgstr "створити посилання"
 
-#: application/plugins/file_list/file_list.py:2273
+#: sunflower/plugins/file_list/file_list.py:2335
 msgid "No such file or directory"
 msgstr "Файл або каталог не знайдені"
 
-#: application/plugins/file_list/file_list.py:2290
+#: sunflower/plugins/file_list/file_list.py:2354
 #, python-brace-format
 msgid ""
 "Error changing working directory to:\n"
@@ -2085,19 +1924,19 @@ msgid ""
 "Would you like to retry?"
 msgstr "Помилка при зміні робочого каталогу на:\n{1}\n\n{0}\n\nБажаєте повторити спробу?"
 
-#: application/plugins/file_list/trash_list.py:39
+#: sunflower/plugins/file_list/trash_list.py:27
 msgid "Empty trash"
 msgstr "Спорожнити смітник"
 
-#: application/plugins/file_list/trash_list.py:53
+#: sunflower/plugins/file_list/trash_list.py:40
 msgid "All items in the Trash will be permanently deleted. Are you sure?"
 msgstr "Усі об’єкти, що знаходяться у Смітнику, будуть остаточно вилучені. Ви справді волієте це зробити?"
 
-#: application/plugins/file_list/gio_extension.py:68
+#: sunflower/plugins/file_list/gio_extension.py:67
 msgid "Mount operation"
 msgstr "Операція монтування"
 
-#: application/plugins/file_list/gio_extension.py:114
+#: sunflower/plugins/file_list/gio_extension.py:112
 #, python-brace-format
 msgid ""
 "Unable to mount:\n"
@@ -2106,148 +1945,164 @@ msgid ""
 "{1}"
 msgstr "Не вдається змонтувати:\n{0}\n\n{1}"
 
-#: application/plugins/file_list/gio_extension.py:166
-#: application/plugins/file_list/gio_extension.py:520
-#: application/plugins/file_list/gio_extension.py:872
+#: sunflower/plugins/file_list/gio_extension.py:165
+#: sunflower/plugins/file_list/gio_extension.py:519
+#: sunflower/plugins/file_list/gio_extension.py:871
 msgid "URI"
 msgstr "Шлях"
 
-#: application/plugins/file_list/gio_extension.py:424
-#: application/plugins/file_list/gio_extension.py:727
-#: application/plugins/file_list/gio_extension.py:1081
+#: sunflower/plugins/file_list/gio_extension.py:423
+#: sunflower/plugins/file_list/gio_extension.py:726
+#: sunflower/plugins/file_list/gio_extension.py:1081
 #, python-brace-format
 msgid ""
 "You are about to remove '{0}'.\n"
 "Are you sure about this?"
 msgstr "Ви збираєтеся вилучити '{0}'об'єкт.\nВи впевнені, що бажаєте зробити це?"
 
-#: application/plugins/file_list/dialogs.py:38
+#: sunflower/plugins/file_list/dialogs.py:38
 msgid "Create Samba mount"
 msgstr "Створити монтування Samba"
 
-#: application/plugins/file_list/dialogs.py:69
-#: application/plugins/file_list/dialogs.py:282
-#: application/plugins/file_list/dialogs.py:476
+#: sunflower/plugins/file_list/dialogs.py:69
+#: sunflower/plugins/file_list/dialogs.py:282
+#: sunflower/plugins/file_list/dialogs.py:476
 msgid "Server:"
 msgstr "Сервер:"
 
-#: application/plugins/file_list/dialogs.py:77
+#: sunflower/plugins/file_list/dialogs.py:77
 msgid "Share:"
 msgstr "Поділитися:"
 
-#: application/plugins/file_list/dialogs.py:79
-#: application/plugins/file_list/dialogs.py:289
-#: application/plugins/file_list/dialogs.py:492
+#: sunflower/plugins/file_list/dialogs.py:79
+#: sunflower/plugins/file_list/dialogs.py:289
+#: sunflower/plugins/file_list/dialogs.py:492
 msgid "Directory:"
 msgstr "Каталог:"
 
-#: application/plugins/file_list/dialogs.py:94
+#: sunflower/plugins/file_list/dialogs.py:94
 msgid "Domain:"
 msgstr "Домен:"
 
-#: application/plugins/file_list/dialogs.py:95
-#: application/plugins/file_list/dialogs.py:303
-#: application/plugins/file_list/dialogs.py:506
+#: sunflower/plugins/file_list/dialogs.py:95
+#: sunflower/plugins/file_list/dialogs.py:303
+#: sunflower/plugins/file_list/dialogs.py:506
 msgid "Username:"
 msgstr "Користувач:"
 
-#: application/plugins/file_list/dialogs.py:173
+#: sunflower/plugins/file_list/dialogs.py:173
 msgid ""
 "One or more required fields are empty. Please make sure you have entered "
 "name, server and share."
 msgstr "Одне або декілька із обов’язкових полів порожні. Будь ласка, переконайтеся, що Ви увели ім’я та сервер."
 
-#: application/plugins/file_list/dialogs.py:251
+#: sunflower/plugins/file_list/dialogs.py:251
 msgid "Create FTP mount"
 msgstr "Створити FTP монтування"
 
-#: application/plugins/file_list/dialogs.py:370
-#: application/plugins/file_list/dialogs.py:577
+#: sunflower/plugins/file_list/dialogs.py:370
+#: sunflower/plugins/file_list/dialogs.py:577
 msgid ""
 "One or more required fields is empty. Please make sure you have entered name"
 " and server."
 msgstr "Одне або декілька обов'язкових полів порожні. Будь ласка, переконайтеся, що увели ім'я та сервер."
 
-#: application/plugins/file_list/dialogs.py:435
+#: sunflower/plugins/file_list/dialogs.py:435
 msgid "Create SFTP mount"
 msgstr "Створити точку монтування SFTP"
 
-#: application/plugins/file_list/dialogs.py:445
+#: sunflower/plugins/file_list/dialogs.py:445
 msgid "Create WebDav mount"
 msgstr "Створити точку монтування WebDav"
 
-#: application/plugins/file_list/dialogs.py:483
+#: sunflower/plugins/file_list/dialogs.py:483
 msgid "Server type:"
 msgstr "Тип сервера:"
 
-#: application/plugins/sessions/plugin.py:21
+#: sunflower/plugins/sessions/plugin.py:34
+#: sunflower/plugins/sessions/plugin.py:364
 msgid "Sessions"
 msgstr "Сесії"
 
-#: application/plugins/sessions/plugin.py:55
+#: sunflower/plugins/sessions/plugin.py:67
 msgid "Locked"
 msgstr "Закріплено"
 
-#: application/plugins/sessions/plugin.py:76
+#: sunflower/plugins/sessions/plugin.py:68
+#: sunflower/plugins/sessions/plugin.py:283
+msgid "Session manager"
+msgstr "Менеджер сесій"
+
+#: sunflower/plugins/sessions/plugin.py:87
 msgid "Move up"
 msgstr "Перемістити вгору"
 
-#: application/plugins/sessions/plugin.py:83
+#: sunflower/plugins/sessions/plugin.py:94
 msgid "Move down"
 msgstr "Перемістити вниз"
 
-#: application/plugins/sessions/plugin.py:173
+#: sunflower/plugins/sessions/plugin.py:184
 msgid "Session with this name already exists."
 msgstr "Сесія з таким ім'ям вже існує."
 
-#: application/plugins/sessions/plugin.py:204
+#: sunflower/plugins/sessions/plugin.py:214
 msgid "New session"
 msgstr "Нова сесія"
 
-#: application/plugins/sessions/plugin.py:274
-msgid "Manage sessions"
-msgstr "Керування сесіями"
+#: sunflower/plugins/sessions/plugin.py:328
+msgid ""
+"Lock current session\n"
+"<small>Locking session preserves tab layout at the time of activation.</small>"
+msgstr "Зафіксувати поточну сесію\n<small>Фіксовані сесії зберігають той набір вкладок, який був на момент фіксації.</small>"
 
-#: application/plugins/sessions/plugin.py:281
-msgid "Save session"
-msgstr "Зберегти сесію"
+#: sunflower/plugins/sessions/plugin.py:331
+msgid "Manage"
+msgstr "Керувати"
 
-#: application/plugins/rename_extensions/letter_case.py:15
-#: application/plugins/rename_extensions/letter_case.py:23
+#: sunflower/plugins/sessions/plugin.py:334
+msgid "Save"
+msgstr "Зберегти"
+
+#: sunflower/plugins/sessions/plugin.py:368
+msgid "Show session list"
+msgstr "Показати список сесій"
+
+#: sunflower/plugins/rename_extensions/letter_case.py:17
+#: sunflower/plugins/rename_extensions/letter_case.py:25
 msgid "Do nothing"
 msgstr "Не змінювати"
 
-#: application/plugins/rename_extensions/letter_case.py:16
+#: sunflower/plugins/rename_extensions/letter_case.py:18
 msgid "Capitalize"
 msgstr "Перетворити перші літери в заголовні"
 
-#: application/plugins/rename_extensions/letter_case.py:17
-#: application/plugins/rename_extensions/letter_case.py:24
+#: sunflower/plugins/rename_extensions/letter_case.py:19
+#: sunflower/plugins/rename_extensions/letter_case.py:26
 msgid "Upper case"
 msgstr "У верхній регістр"
 
-#: application/plugins/rename_extensions/letter_case.py:18
-#: application/plugins/rename_extensions/letter_case.py:25
+#: sunflower/plugins/rename_extensions/letter_case.py:20
+#: sunflower/plugins/rename_extensions/letter_case.py:27
 msgid "Lower case"
 msgstr "У нижній регістр"
 
-#: application/plugins/rename_extensions/letter_case.py:19
+#: sunflower/plugins/rename_extensions/letter_case.py:21
 msgid "Swap case"
 msgstr "Обернути регістр"
 
-#: application/plugins/rename_extensions/letter_case.py:29
+#: sunflower/plugins/rename_extensions/letter_case.py:31
 msgid "Item name:"
 msgstr "Ім'я файлу:"
 
-#: application/plugins/rename_extensions/letter_case.py:32
+#: sunflower/plugins/rename_extensions/letter_case.py:34
 msgid "Extension:"
 msgstr "Розширення:"
 
-#: application/plugins/rename_extensions/letter_case.py:87
+#: sunflower/plugins/rename_extensions/letter_case.py:89
 msgid "Letter Case"
 msgstr "Літеровий регістр"
 
-#: application/plugins/rename_extensions/default.py:40
+#: sunflower/plugins/rename_extensions/default.py:42
 msgid ""
 "<b>Template syntax</b>\n"
 "[N]\tItem name\n"
@@ -2258,98 +2113,98 @@ msgid ""
 "use range in format [N#-#]."
 msgstr "<b>Синтаксис шаблонів</b>\n[N] \tІм'я файлу\n[E] \tРозширення\n[C] \tЛічільник\n\nДля імені та розширення Ви можете\nВикористовувати діяпазони у форматі [N#-#]."
 
-#: application/plugins/rename_extensions/default.py:76
+#: sunflower/plugins/rename_extensions/default.py:78
 msgid "Part of name"
 msgstr "Частина імені"
 
-#: application/plugins/rename_extensions/default.py:81
+#: sunflower/plugins/rename_extensions/default.py:83
 msgid "Extension"
 msgstr "Розширення"
 
-#: application/plugins/rename_extensions/default.py:84
+#: sunflower/plugins/rename_extensions/default.py:86
 msgid "Part of extension"
 msgstr "Частина розширення"
 
-#: application/plugins/rename_extensions/default.py:89
-#: application/plugins/rename_extensions/default.py:103
+#: sunflower/plugins/rename_extensions/default.py:91
+#: sunflower/plugins/rename_extensions/default.py:105
 msgid "Counter"
 msgstr "Лічильник"
 
-#: application/plugins/rename_extensions/default.py:109
+#: sunflower/plugins/rename_extensions/default.py:111
 msgid "Start:"
 msgstr "Початок:"
 
-#: application/plugins/rename_extensions/default.py:116
+#: sunflower/plugins/rename_extensions/default.py:118
 msgid "Step:"
 msgstr "Крок:"
 
-#: application/plugins/rename_extensions/default.py:123
+#: sunflower/plugins/rename_extensions/default.py:125
 msgid "Digits:"
 msgstr "Цифри:"
 
-#: application/plugins/rename_extensions/default.py:255
+#: sunflower/plugins/rename_extensions/default.py:254
 msgid "Item list is empty. Unable to get item for range selection!"
 msgstr "Перелік файлів порожній. Неможливо вибрати файл для виділення діяпазону!"
 
-#: application/plugins/rename_extensions/audio_metadata.py:22
+#: sunflower/plugins/rename_extensions/audio_metadata.py:24
 msgid "Album"
 msgstr "Альбом"
 
-#: application/plugins/rename_extensions/audio_metadata.py:23
+#: sunflower/plugins/rename_extensions/audio_metadata.py:25
 msgid "Artist"
 msgstr "Виконавець"
 
-#: application/plugins/rename_extensions/audio_metadata.py:25
+#: sunflower/plugins/rename_extensions/audio_metadata.py:27
 msgid "Genre"
 msgstr "Жанр"
 
-#: application/plugins/rename_extensions/audio_metadata.py:27
+#: sunflower/plugins/rename_extensions/audio_metadata.py:29
 msgid "Track number"
 msgstr "Номер доріжки"
 
-#: application/plugins/rename_extensions/audio_metadata.py:39
+#: sunflower/plugins/rename_extensions/audio_metadata.py:41
 msgid "Replace:"
 msgstr "Замінити:"
 
-#: application/plugins/rename_extensions/audio_metadata.py:47
+#: sunflower/plugins/rename_extensions/audio_metadata.py:49
 msgid "With:"
 msgstr "На:"
 
-#: application/plugins/rename_extensions/audio_metadata.py:60
+#: sunflower/plugins/rename_extensions/audio_metadata.py:62
 msgid "Template syntax"
 msgstr "Синтаксис шаблону"
 
-#: application/plugins/rename_extensions/audio_metadata.py:71
+#: sunflower/plugins/rename_extensions/audio_metadata.py:73
 msgid "Character replacement"
 msgstr "Заміна символів"
 
-#: application/plugins/rename_extensions/audio_metadata.py:78
+#: sunflower/plugins/rename_extensions/audio_metadata.py:80
 msgid ""
 "In order to use this extension you need <b>mutagen</b> module installed!"
 msgstr "Для використання цього розширення необхідний встановлений модуль <b>mutagen</b>!"
 
-#: application/plugins/rename_extensions/audio_metadata.py:110
+#: sunflower/plugins/rename_extensions/audio_metadata.py:112
 msgid "Audio Metadata"
 msgstr "Метадані аудіо"
 
-#: application/plugins/find_file_extensions/size.py:21
+#: sunflower/plugins/find_file_extensions/size.py:22
 msgid "Match file size"
 msgstr "Пошук за розміром файлу"
 
-#: application/plugins/find_file_extensions/size.py:25
+#: sunflower/plugins/find_file_extensions/size.py:26
 msgid "Minimum:"
 msgstr "Мінімальний:"
 
-#: application/plugins/find_file_extensions/size.py:27
-#: application/plugins/find_file_extensions/size.py:31
+#: sunflower/plugins/find_file_extensions/size.py:28
+#: sunflower/plugins/find_file_extensions/size.py:32
 msgid "MB"
 msgstr "Мб"
 
-#: application/plugins/find_file_extensions/size.py:29
+#: sunflower/plugins/find_file_extensions/size.py:30
 msgid "Maximum:"
 msgstr "Максимальний:"
 
-#: application/plugins/find_file_extensions/default.py:33
+#: sunflower/plugins/find_file_extensions/default.py:34
 msgid ""
 "<b>Pattern matching</b>\n"
 "*\t\tEverything\n"
@@ -2358,100 +2213,89 @@ msgid ""
 "[!seq]\tAny character <u>not</u> in <i>seq</i>"
 msgstr "<b>Пошук за шаблоном</b>\n*\t\tБудь-який набір символів\n?\t\tБудь-який одинарний символ\n[seq]\tБудь-який символ з <i>seq</i>\n[!seq]\tБудь-який символ <u>не</u> з <i>seq</i>"
 
-#: application/plugins/find_file_extensions/default.py:48
-#: application/plugins/find_file_extensions/contents.py:24
+#: sunflower/plugins/find_file_extensions/default.py:49
+#: sunflower/plugins/find_file_extensions/contents.py:22
 msgid "Search for:"
 msgstr "Шукати:"
 
-#: application/plugins/find_file_extensions/default.py:55
+#: sunflower/plugins/find_file_extensions/default.py:55
 msgid "Case sensitive"
 msgstr "Враховувати регістр"
 
-#: application/plugins/find_file_extensions/contents.py:45
+#: sunflower/plugins/find_file_extensions/contents.py:38
 msgid "Content"
 msgstr "Вміст"
 
-#: application/plugins/system_terminal/plugin.py:12
+#: sunflower/plugins/system_terminal/plugin.py:16
 msgid "System terminal"
 msgstr "Системний термінал"
 
-#: application/plugins/system_terminal/plugin.py:21
-msgid "Open current directory"
-msgstr "Відкрити поточну директорію"
-
-#: application/plugins/gvim_viewer/plugin.py:50
+#: sunflower/plugins/gvim_viewer/plugin.py:52
 msgid "GVim"
 msgstr "GVim"
 
-#: application/plugin_base/rename_extension.py:22
-#: application/plugin_base/find_extension.py:23
+#: sunflower/plugin_base/rename_extension.py:22
 msgid "Use this extension"
 msgstr "Використовувати це розширення"
 
-#: application/plugin_base/plugin.py:126
+#: sunflower/plugin_base/plugin.py:130
 msgid "Plugin Base"
 msgstr "База модулів"
 
-#: application/plugin_base/plugin.py:129
-#: application/plugin_base/terminal.py:306
+#: sunflower/plugin_base/plugin.py:133 sunflower/plugin_base/terminal.py:266
 msgid "Focus opposite object"
 msgstr "Фокус на протилежний об'єкт"
 
-#: application/plugin_base/plugin.py:130
+#: sunflower/plugin_base/plugin.py:134
 msgid "Next tab"
 msgstr "Наступна вкладка"
 
-#: application/plugin_base/plugin.py:131
+#: sunflower/plugin_base/plugin.py:135
 msgid "Previous tab"
 msgstr "Попередня вкладка"
 
-#: application/plugin_base/plugin.py:133
-#: application/plugin_base/terminal.py:307
+#: sunflower/plugin_base/plugin.py:137 sunflower/plugin_base/terminal.py:267
 msgid "Close tab"
 msgstr "Закрити вкладку"
 
-#: application/plugin_base/plugin.py:134
-msgid "Focus command entry"
-msgstr "Фокус на командний рядок"
-
-#: application/plugin_base/plugin.py:135
+#: sunflower/plugin_base/plugin.py:138
 msgid "Focus left object"
 msgstr "Фокус на лівий об'єкт"
 
-#: application/plugin_base/plugin.py:136
+#: sunflower/plugin_base/plugin.py:139
 msgid "Focus right object"
 msgstr "Фокус на правий об'єкт"
 
-#: application/plugin_base/terminal.py:94
-msgid "Open file list"
-msgstr "Відкрити перелік файлів"
-
-#: application/plugin_base/terminal.py:135
+#: sunflower/plugin_base/terminal.py:93
 msgid ""
 "\n"
 "\n"
 "Python VTE module is not installed on this system!"
 msgstr "\n\nVTE модуль Python не встановлено у Вашій системі!"
 
-#: application/plugin_base/terminal.py:209
+#: sunflower/plugin_base/terminal.py:162
 msgid "Terminal menu"
 msgstr "Меню терміналу"
 
-#: application/plugin_base/terminal.py:303
-#: application/plugin_base/item_list.py:259
+#: sunflower/plugin_base/terminal.py:176
+msgid "Open current directory"
+msgstr "Відкрити поточну директорію"
+
+#: sunflower/plugin_base/terminal.py:263
+#: sunflower/plugin_base/item_list.py:215
 msgid "Create terminal tab"
 msgstr "Створити вкладку з терміналом"
 
-#: application/plugin_base/terminal.py:304
-#: application/plugin_base/item_list.py:254
+#: sunflower/plugin_base/terminal.py:264
+#: sunflower/plugin_base/item_list.py:210
 msgid "Copy selection to clipboard"
 msgstr "Скопіювати виділене в буфер обміну"
 
-#: application/plugin_base/terminal.py:305
+#: sunflower/plugin_base/terminal.py:265
 msgid "Paste from clipboard"
 msgstr "Вставити з буферу обміну"
 
-#: application/plugin_base/terminal.py:350
+#: sunflower/plugin_base/terminal.py:310
 #, python-brace-format
 msgid ""
 "You are about to feed child process with following data. Are you sure?\n"
@@ -2459,293 +2303,346 @@ msgid ""
 "{0}"
 msgstr "Ви збираєтеся послати дочірньому процесові ці дані. Ви впевнені?\n\n{0}"
 
-#: application/plugin_base/item_list.py:76
+#: sunflower/plugin_base/item_list.py:74
 msgid "Directories (selected/total)"
 msgstr "Каталоги (вибрані / всього)"
 
-#: application/plugin_base/item_list.py:77
+#: sunflower/plugin_base/item_list.py:75
 msgid "Files (selected/total)"
 msgstr "Файли (вибраного / всього)"
 
-#: application/plugin_base/item_list.py:78
+#: sunflower/plugin_base/item_list.py:76
 msgid "Size (selected/total)"
 msgstr "Розмір (вибрані / всього)"
 
-#: application/plugin_base/item_list.py:109
-msgid "Search:"
-msgstr "Шукати:"
-
-#: application/plugin_base/item_list.py:136
-msgid "Reload item list"
-msgstr "Оновити перелік файлів"
-
-#: application/plugin_base/item_list.py:151
-#: application/plugin_base/item_list.py:289
-msgid "Copy path to clipboard"
-msgstr "Скопіювати виділене в буфер обміну"
-
-#: application/plugin_base/item_list.py:159
-msgid "Enter path..."
-msgstr "Уведіть шлях..."
-
-#: application/plugin_base/item_list.py:248
-msgid "Execute selected item"
-msgstr "Виконати виділений об'єкт"
-
-#: application/plugin_base/item_list.py:249
-msgid "Select application and execute item"
-msgstr "Вибрати додаток і відкрити файл"
-
-#: application/plugin_base/item_list.py:250
-msgid "Show selected item properties"
-msgstr "Показати властивості виділеного об'єкту"
-
-#: application/plugin_base/item_list.py:251
-msgid "Bookmark current directory"
-msgstr "Додати поточний каталог в закладки"
-
-#: application/plugin_base/item_list.py:253
-msgid "Cut selection to clipboard"
-msgstr "Вирізати виділене в буфер обміну"
-
-#: application/plugin_base/item_list.py:255
-msgid "Paste items from clipboard"
-msgstr "Вставити об'єкти з буферу обміну"
-
-#: application/plugin_base/item_list.py:256
-msgid "Open selected directory in new tab"
-msgstr "Відкрити виділений каталог в новій вкладці"
-
-#: application/plugin_base/item_list.py:257
-msgid "Open selected directory"
-msgstr "Відкрити виділений каталог в новій вкладці"
-
-#: application/plugin_base/item_list.py:258
-msgid "Calculate disk usage for directory"
-msgstr "Вирахувати місце, займане каталогом"
-
-#: application/plugin_base/item_list.py:261
-msgid "Go to root directory"
-msgstr "Перейти у кореневий каталог"
-
-#: application/plugin_base/item_list.py:262
-msgid "Reload items in current directory"
-msgstr "Оновити перелік файлів у поточному каталозі"
-
-#: application/plugin_base/item_list.py:263
-msgid "Show history browser"
-msgstr "Показати переглядач історії"
-
-#: application/plugin_base/item_list.py:264
-msgid "Go back in history"
-msgstr "перейди назад в історії"
-
-#: application/plugin_base/item_list.py:265
-msgid "Go forward in history"
-msgstr "перейти вперед в історії"
-
-#: application/plugin_base/item_list.py:266
-msgid "Select all"
-msgstr "Виділити усе"
-
-#: application/plugin_base/item_list.py:267
-msgid "Deselect all"
-msgstr "Скасувати виділення"
-
-#: application/plugin_base/item_list.py:268
-msgid "Invert selection"
-msgstr "Обернути виділення"
-
-#: application/plugin_base/item_list.py:269
-msgid "Toggle selection"
-msgstr "Перемикнути виділення"
-
-#: application/plugin_base/item_list.py:270
-msgid "Toggle selection and move marker up"
-msgstr "Перемикнути виділення і перемістити маркер вище"
-
-#: application/plugin_base/item_list.py:271
-msgid "Trash or delete selected items"
-msgstr "Перемістити у смітник або вилучити вибрані об'єкти"
-
-#: application/plugin_base/item_list.py:272
-msgid "Force deleting selected items"
-msgstr "Остаточно вилучити вибрані файли"
-
-#: application/plugin_base/item_list.py:273
-msgid "Show bookmarks for current list"
-msgstr "Показати закладки для даної панелі"
-
-#: application/plugin_base/item_list.py:274
-msgid "Show bookmarks for left list"
-msgstr "Показати закладки для лівої панелі"
-
-#: application/plugin_base/item_list.py:275
-msgid "Show bookmarks for right list"
-msgstr "Показати закладки для правої панелі"
-
-#: application/plugin_base/item_list.py:276
-msgid "Rename selected item"
-msgstr "Перейменувати виділений об'єкт"
-
-#: application/plugin_base/item_list.py:277
-msgid "View selected item"
-msgstr "Переглянути обраний файл"
-
-#: application/plugin_base/item_list.py:278
-msgid "Edit selected item"
-msgstr "Змінити виділений об'єкт"
-
-#: application/plugin_base/item_list.py:279
-msgid "Copy selected items"
-msgstr "Копіювати виділені об'єкти"
-
-#: application/plugin_base/item_list.py:280
-msgid "Move selected items"
-msgstr "Перемістити виділені об'єкти"
-
-#: application/plugin_base/item_list.py:281
-msgid "Show context menu"
-msgstr "Показати контекстне меню"
-
-#: application/plugin_base/item_list.py:282
-msgid "Show \"open with\" menu"
-msgstr "Показати меню \"відкрити з допомогою\""
-
-#: application/plugin_base/item_list.py:283
-msgid "Assign path from left list"
-msgstr "Призначити шлях з лівої панелі"
-
-#: application/plugin_base/item_list.py:284
-msgid "Assign path from right list"
-msgstr "Призначити шлях з правої панелі"
-
-#: application/plugin_base/item_list.py:285
+#: sunflower/plugin_base/item_list.py:134
+#: sunflower/plugin_base/item_list.py:241
 msgid "Swap right and left paths"
 msgstr "Поміняти місцями панелі"
 
-#: application/plugin_base/item_list.py:286
+#: sunflower/plugin_base/item_list.py:140
+msgid "Reload item list"
+msgstr "Оновити перелік файлів"
+
+#: sunflower/plugin_base/item_list.py:146
+#: sunflower/plugin_base/item_list.py:245
+msgid "Copy path to clipboard"
+msgstr "Скопіювати виділене в буфер обміну"
+
+#: sunflower/plugin_base/item_list.py:152
+msgid "Enter path..."
+msgstr "Уведіть шлях..."
+
+#: sunflower/plugin_base/item_list.py:180
+msgid "Locations"
+msgstr "Розташування"
+
+#: sunflower/plugin_base/item_list.py:204
+msgid "Execute selected item"
+msgstr "Виконати виділений об'єкт"
+
+#: sunflower/plugin_base/item_list.py:205
+msgid "Select application and execute item"
+msgstr "Вибрати додаток і відкрити файл"
+
+#: sunflower/plugin_base/item_list.py:206
+msgid "Show selected item properties"
+msgstr "Показати властивості виділеного об'єкту"
+
+#: sunflower/plugin_base/item_list.py:207
+msgid "Bookmark current directory"
+msgstr "Додати поточний каталог в закладки"
+
+#: sunflower/plugin_base/item_list.py:208
+msgid "Edit bookmarks"
+msgstr "Змінити закладки"
+
+#: sunflower/plugin_base/item_list.py:209
+msgid "Cut selection to clipboard"
+msgstr "Вирізати виділене в буфер обміну"
+
+#: sunflower/plugin_base/item_list.py:211
+msgid "Paste items from clipboard"
+msgstr "Вставити об'єкти з буферу обміну"
+
+#: sunflower/plugin_base/item_list.py:212
+msgid "Open selected directory in new tab"
+msgstr "Відкрити виділений каталог в новій вкладці"
+
+#: sunflower/plugin_base/item_list.py:213
+msgid "Open selected directory"
+msgstr "Відкрити виділений каталог в новій вкладці"
+
+#: sunflower/plugin_base/item_list.py:214
+msgid "Calculate disk usage for directory"
+msgstr "Вирахувати місце, займане каталогом"
+
+#: sunflower/plugin_base/item_list.py:217
+msgid "Go to root directory"
+msgstr "Перейти у кореневий каталог"
+
+#: sunflower/plugin_base/item_list.py:218
+msgid "Reload items in current directory"
+msgstr "Оновити перелік файлів у поточному каталозі"
+
+#: sunflower/plugin_base/item_list.py:219
+msgid "Show history browser"
+msgstr "Показати переглядач історії"
+
+#: sunflower/plugin_base/item_list.py:220
+msgid "Go back in history"
+msgstr "перейди назад в історії"
+
+#: sunflower/plugin_base/item_list.py:221
+msgid "Go forward in history"
+msgstr "перейти вперед в історії"
+
+#: sunflower/plugin_base/item_list.py:222
+msgid "Select all"
+msgstr "Виділити усе"
+
+#: sunflower/plugin_base/item_list.py:223
+msgid "Deselect all"
+msgstr "Скасувати виділення"
+
+#: sunflower/plugin_base/item_list.py:224
+msgid "Invert selection"
+msgstr "Обернути виділення"
+
+#: sunflower/plugin_base/item_list.py:225
+msgid "Toggle selection"
+msgstr "Перемикнути виділення"
+
+#: sunflower/plugin_base/item_list.py:226
+msgid "Toggle selection and move marker up"
+msgstr "Перемикнути виділення і перемістити маркер вище"
+
+#: sunflower/plugin_base/item_list.py:227
+msgid "Trash or delete selected items"
+msgstr "Перемістити у смітник або вилучити вибрані об'єкти"
+
+#: sunflower/plugin_base/item_list.py:228
+msgid "Force deleting selected items"
+msgstr "Остаточно вилучити вибрані файли"
+
+#: sunflower/plugin_base/item_list.py:229
+msgid "Show bookmarks for current list"
+msgstr "Показати закладки для даної панелі"
+
+#: sunflower/plugin_base/item_list.py:230
+msgid "Show bookmarks for left list"
+msgstr "Показати закладки для лівої панелі"
+
+#: sunflower/plugin_base/item_list.py:231
+msgid "Show bookmarks for right list"
+msgstr "Показати закладки для правої панелі"
+
+#: sunflower/plugin_base/item_list.py:232
+msgid "Rename selected item"
+msgstr "Перейменувати виділений об'єкт"
+
+#: sunflower/plugin_base/item_list.py:233
+msgid "View selected item"
+msgstr "Переглянути обраний файл"
+
+#: sunflower/plugin_base/item_list.py:234
+msgid "Edit selected item"
+msgstr "Змінити виділений об'єкт"
+
+#: sunflower/plugin_base/item_list.py:235
+msgid "Copy selected items"
+msgstr "Копіювати виділені об'єкти"
+
+#: sunflower/plugin_base/item_list.py:236
+msgid "Move selected items"
+msgstr "Перемістити виділені об'єкти"
+
+#: sunflower/plugin_base/item_list.py:237
+msgid "Show context menu"
+msgstr "Показати контекстне меню"
+
+#: sunflower/plugin_base/item_list.py:238
+msgid "Show \"open with\" menu"
+msgstr "Показати меню \"відкрити з допомогою\""
+
+#: sunflower/plugin_base/item_list.py:239
+msgid "Assign path from left list"
+msgstr "Призначити шлях з лівої панелі"
+
+#: sunflower/plugin_base/item_list.py:240
+msgid "Assign path from right list"
+msgstr "Призначити шлях з правої панелі"
+
+#: sunflower/plugin_base/item_list.py:242
 msgid "Move selection marker up"
 msgstr "Перемістити маркер виділення вище"
 
-#: application/plugin_base/item_list.py:287
+#: sunflower/plugin_base/item_list.py:243
 msgid "Move selection marker down"
 msgstr "Перемістити маркер виділення нижче"
 
-#: application/plugin_base/item_list.py:288
+#: sunflower/plugin_base/item_list.py:244
 msgid "Show tab menu"
 msgstr "Показати контекстне меню"
 
-#: application/plugin_base/item_list.py:290
+#: sunflower/plugin_base/item_list.py:246
 msgid "Copy selected path to clipboard"
 msgstr "Скопіювати вибраний шлях у буфер обміну"
 
-#: application/plugin_base/item_list.py:291
+#: sunflower/plugin_base/item_list.py:247
+msgid "Copy selected item name to clipboard"
+msgstr "Скопіювати ім'я об'єкта в буфер обміну"
+
+#: sunflower/plugin_base/item_list.py:248
 msgid "Copy path to command entry"
 msgstr "Скопіювати шлях у командний рядок"
 
-#: application/plugin_base/item_list.py:292
+#: sunflower/plugin_base/item_list.py:249
 msgid "Copy selection to command entry"
 msgstr "Скопіювати виділене у командний рядок"
 
-#: application/plugin_base/item_list.py:293
+#: sunflower/plugin_base/item_list.py:250
 msgid "Ask and navigate to path"
 msgstr "Запитати та перейти за адресою"
 
-#: application/plugin_base/item_list.py:294
+#: sunflower/plugin_base/item_list.py:251
 msgid "Start quick search"
 msgstr "Почати швидкий пошук"
 
-#: application/plugin_base/item_list.py:295
+#: sunflower/plugin_base/item_list.py:252
 msgid "Expand directory"
 msgstr "Розгорнути каталог"
 
-#: application/plugin_base/item_list.py:296
+#: sunflower/plugin_base/item_list.py:253
 msgid "Collapse directory"
 msgstr "Згорнути каталог"
 
-#: application/plugin_base/item_list.py:297
+#: sunflower/plugin_base/item_list.py:254
 msgid "Create symbolic or hard link"
 msgstr "Створити символьне або жорстке посилання"
 
-#: application/plugin_base/item_list.py:298
+#: sunflower/plugin_base/item_list.py:255
 msgid "Show emblem menu"
 msgstr "Відобразити меню емблем"
 
-#: application/plugin_base/item_list.py:358
-#: application/plugin_base/item_list.py:364
+#: sunflower/plugin_base/item_list.py:316
+#: sunflower/plugin_base/item_list.py:322
 #, python-brace-format
 msgid "Go to '{0}'"
 msgstr "Перейти до '{0}'"
 
-#: application/plugin_base/item_list.py:710
+#: sunflower/plugin_base/item_list.py:660
 msgid ""
 "Directory does not exist anymore or is not valid. If path is not local check"
 " if specified volume is mounted."
 msgstr "Каталог більше не існує, або невірний. Якщо шлях не локальний, перевірте, чи змонтований зазначений том."
 
-#: application/plugin_base/item_list.py:748
+#: sunflower/plugin_base/item_list.py:698
 #, python-brace-format
 msgid ""
 "Specified protocol ({0}) is not supported by this application. Please check "
 "for available plugins or create a feature request."
 msgstr "Вказаний протокол ({0}) не підтримується даним додатком. Перевірте наявність доступних модулів, або залиште побажання в багтрекері."
 
-#: application/plugin_base/item_list.py:780
+#: sunflower/plugin_base/item_list.py:730
 msgid ""
 "Application is unable to handle specified data. Check if source items still "
 "exist."
 msgstr "Додаток не може опрацювати зазначені дані. Перевірте, чи існують вихідні об'єти."
 
-#: application/plugin_base/item_list.py:1032
+#: sunflower/plugin_base/item_list.py:964
+msgid "_Open"
+msgstr "Відкрити"
+
+#: sunflower/plugin_base/item_list.py:973
+msgid "Open in new ta_b"
+msgstr "Відкрити в новій вкладці"
+
+#: sunflower/plugin_base/item_list.py:987
 msgid "Open _with"
 msgstr "Відкрити за допомогою"
 
-#: application/plugin_base/item_list.py:1044
+#: sunflower/plugin_base/item_list.py:999
 msgid "Additional options"
 msgstr "Розширені налаштування"
 
-#: application/plugin_base/item_list.py:1058
+#: sunflower/plugin_base/item_list.py:1013
 msgid "Create file"
 msgstr "Створити файл"
 
-#: application/plugin_base/item_list.py:1114
+#: sunflower/plugin_base/item_list.py:1037
+msgid "Cu_t"
+msgstr "Вирізати"
+
+#: sunflower/plugin_base/item_list.py:1046
+msgid "_Copy"
+msgstr "Копіювати"
+
+#: sunflower/plugin_base/item_list.py:1055
+msgid "_Paste"
+msgstr "Вставити"
+
+#: sunflower/plugin_base/item_list.py:1069
 msgid "Copy to other..."
 msgstr "Копіювати до іншого..."
 
-#: application/plugin_base/item_list.py:1120
+#: sunflower/plugin_base/item_list.py:1075
 msgid "Move to other..."
 msgstr "Перемістити до іншого..."
 
-#: application/plugin_base/item_list.py:1145
+#: sunflower/plugin_base/item_list.py:1085
+msgid "Copy file name"
+msgstr "Копіювати ім'я файлу"
+
+#: sunflower/plugin_base/item_list.py:1091
+msgid "Copy path"
+msgstr "Копіювати шлях"
+
+#: sunflower/plugin_base/item_list.py:1102
+msgid "_Delete"
+msgstr "Вилучити"
+
+#: sunflower/plugin_base/item_list.py:1116
 msgid "Send to..."
 msgstr "Відправити до..."
 
-#: application/plugin_base/item_list.py:1223
+#: sunflower/plugin_base/item_list.py:1127
+msgid "Ma_ke link"
+msgstr "Створити посилання"
+
+#: sunflower/plugin_base/item_list.py:1133
+msgid "_Rename..."
+msgstr "Перейменувати..."
+
+#: sunflower/plugin_base/item_list.py:1146
+msgid "_Properties"
+msgstr "Властивості"
+
+#: sunflower/plugin_base/item_list.py:1194
 msgid "View complete history..."
 msgstr "Показати повну історію..."
 
-#: application/plugin_base/item_list.py:1229
+#: sunflower/plugin_base/item_list.py:1200
 msgid "History is empty"
 msgstr "Історія відсутня"
 
-#: application/plugin_base/item_list.py:1584
+#: sunflower/plugin_base/item_list.py:1549
 msgid "Path entry"
 msgstr "Шлях"
 
-#: application/plugin_base/item_list.py:1585
+#: sunflower/plugin_base/item_list.py:1550
 msgid "Navigate to:"
 msgstr "Перейти в:"
 
-#: application/indicator.py:31
+#: sunflower/indicator.py:32
 msgid "Sh_ow main window"
 msgstr "Показати головне вікно"
 
-#: application/indicator.py:40
+#: sunflower/indicator.py:41
 msgid "_Hide main window"
 msgstr "Сховати головне вікно"
 
-#: application/operation.py:113
+#: sunflower/operation.py:115
 #, python-brace-format
 msgid ""
 "Aborted. Not enough free space on target file system.\n"
@@ -2753,7 +2650,7 @@ msgid ""
 "Available: {1}"
 msgstr "Скасовано. Бракує вільного місця на цільовій файловій системі.\nНеобхідно: {0}\nДоступно: {1}"
 
-#: application/operation.py:128
+#: sunflower/operation.py:130
 #, python-brace-format
 msgid ""
 "Target file system does not have enough free space for this operation to continue.\n"
@@ -2764,222 +2661,234 @@ msgid ""
 "Do you wish to continue?"
 msgstr "Цільова файлова система не має вдосталь вільного простору для цієї операції.\n\nНеобхідно: {0}\nДоступно: {1}\n\nПродовжити?"
 
-#: application/operation.py:242
+#: sunflower/operation.py:265
 msgid ""
 "There is a problem writing data to destination file. What would you like to "
 "do?"
 msgstr "Проблема при копіюванні даних у файл призначення. Яке Ви приймете рішення?"
 
-#: application/operation.py:276
+#: sunflower/operation.py:307
 msgid ""
 "An error occurred while trying to create specified file. What would you like"
 " to do?"
 msgstr "При спробі створити вказаний файл сталася помилка. Яке Ви приймете рішення?"
 
-#: application/operation.py:283
+#: sunflower/operation.py:314
 msgid ""
 "An error occurred while trying to create specified directory. What would you"
 " like to do?"
 msgstr "При спробі створити вказаний каталог сталася помилка. Яке Ви приймете рішення?"
 
-#: application/operation.py:316
+#: sunflower/operation.py:354
 msgid ""
 "Problem with setting path parameter for specified path. What would you like "
 "to do?"
 msgstr "Проблема при вказуванні параметрів для вказаного шляху. Яке Ви приймете рішення?"
 
-#: application/operation.py:349
+#: sunflower/operation.py:393
 msgid ""
 "There was a problem removing specified path. What would you like to do?"
 msgstr "При спробі вилучити зазначений шлях сталася помилка. Яке Ви приймете рішення?"
 
-#: application/operation.py:381
+#: sunflower/operation.py:432
 msgid ""
 "There was a problem trashing specified path. Would you like to try removing "
 "it instead?"
 msgstr "При спробі вилучити зазначений шлях сталася помилка. Повторити?"
 
-#: application/operation.py:413
+#: sunflower/operation.py:471
 msgid "There was a problem moving specified path. What would you like to do?"
 msgstr "При спробі перемістити зазначений шлях сталася помилка. Яке Ви приймете рішення?"
 
-#: application/operation.py:445
+#: sunflower/operation.py:510
 msgid ""
 "There was a problem renaming specified path. What would you like to do?"
 msgstr "При спробі перейменувати зазначений шлях сталася помилка. Яке Ви приймете рішення?"
 
-#: application/operation.py:477
+#: sunflower/operation.py:549
 msgid ""
 "There was a problem with reading specified directory. What would you like to"
 " do?"
 msgstr "При спробі прочитати зазначений каталог сталася помилка. Яке Ви приймете рішення?"
 
-#: application/operation.py:579
+#: sunflower/operation.py:659
 msgid "Searching for files..."
 msgstr "Пошук у файлах..."
 
-#: application/operation.py:800
+#: sunflower/operation.py:883
 msgid ""
 "Unable to create directory because file with the same name already exists in"
 " target directory."
 msgstr "Неможливо створити каталог, оскільки файл з вказаним ім’ям вже існує у цільовому каталозі."
 
-#: application/operation.py:990
+#: sunflower/operation.py:1122
 msgid "Creating directories..."
 msgstr "Створення каталогів..."
 
-#: application/operation.py:1007
+#: sunflower/operation.py:1139
 msgid "Copying files..."
 msgstr "Копіювання файлів..."
 
-#: application/operation.py:1062 application/operation.py:1079
+#: sunflower/operation.py:1155
+msgid "Creating links..."
+msgstr "Створення посилання..."
+
+#: sunflower/operation.py:1207 sunflower/operation.py:1224
 msgid "Copy Operation"
 msgstr "Операція копіювання"
 
-#: application/operation.py:1064
+#: sunflower/operation.py:1209
 #, python-brace-format
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] "Копіювання {0} об'єкта з \"{1}\"в \"{2}\" завершено!"
 msgstr[1] "Копіювання {0} об'єктів з \"{1}\"в \"{2}\" завершено!"
 msgstr[2] "Копіювання {0} об'єктів з \"{1}\"в \"{2}\" завершено!"
+msgstr[3] "Копіювання {0} об'єктів з \"{1}\"в \"{2}\" завершено!"
 
-#: application/operation.py:1190
+#: sunflower/operation.py:1337
 msgid "Moving files..."
 msgstr "Переміщення файлів..."
 
-#: application/operation.py:1204
+#: sunflower/operation.py:1351
 msgid "Deleting source files..."
 msgstr "Вилучення джерельних файлів..."
 
-#: application/operation.py:1226
+#: sunflower/operation.py:1373
 msgid "Deleting source directories..."
 msgstr "Вилучення джерельних каталогів..."
 
-#: application/operation.py:1323 application/operation.py:1340
+#: sunflower/operation.py:1472 sunflower/operation.py:1489
 msgid "Move Operation"
 msgstr "Операція переміщення"
 
-#: application/operation.py:1325
+#: sunflower/operation.py:1474
 #, python-brace-format
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] "Переміщення {0} об'єкта з \"{1}\" до \"{2}\" завершено!"
 msgstr[1] "Переміщення {0} об'єктів з \"{1}\" до \"{2}\" завершено!"
 msgstr[2] "Переміщення {0} об'єктів з \"{1}\" до \"{2}\" завершено!"
+msgstr[3] "Переміщення {0} об'єктів з \"{1}\" до \"{2}\" завершено!"
 
-#: application/operation.py:1466
+#: sunflower/operation.py:1619
 msgid "Delete Operation"
 msgstr "Операція вилучення"
 
-#: application/operation.py:1468
+#: sunflower/operation.py:1621
 #, python-brace-format
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
 msgstr[0] "Вилучення {0} об'єкту з \"{1}\" завершено!"
 msgstr[1] "Вилучення {0} об'єктів з \"{1}\" завершено!"
 msgstr[2] "Вилучення {0} об'єктів з \"{1}\" завершено!"
+msgstr[3] "Вилучення {0} об'єктів з \"{1}\" завершено!"
 
-#: application/operation.py:1579
+#: sunflower/operation.py:1734
 msgid "Rename Operation"
 msgstr "Операція перейменування"
 
-#: application/operation.py:1581
+#: sunflower/operation.py:1736
 #, python-brace-format
 msgid "Rename of {0} item from \"{1}\" is completed!"
 msgid_plural "Rename of {0} items from \"{1}\" is completed!"
 msgstr[0] "Перейменування {0} об'єкта з \"{1}\" завершено!"
 msgstr[1] "Перейменування {0} об'єктів з \"{1}\" завершено!"
 msgstr[2] "Перейменування {0} об'єктів з \"{1}\" завершено!"
+msgstr[3] "Перейменування {0} об'єктів з \"{1}\" завершено!"
 
-#: application/tools/viewer.py:35
+#: sunflower/tools/viewer.py:56
 #, python-brace-format
 msgid "{0} - Viewer"
 msgstr "{0} - Засіб перегляду"
 
-#: application/tools/viewer.py:78
+#: sunflower/tools/viewer.py:90
 msgid "Executable"
 msgstr "Запуск"
 
-#: application/tools/viewer.py:119
+#: sunflower/tools/viewer.py:124
+msgid "Code"
+msgstr "Код"
+
+#: sunflower/tools/viewer.py:164
 msgid "Image"
 msgstr "Зображення"
 
-#: application/tools/viewer.py:138
+#: sunflower/tools/viewer.py:179
 msgid "Viewer is unable to display this file type."
 msgstr "Засіб перегляду не може відобразити цей тип файлів."
 
-#: application/tools/find_files.py:45 application/tools/find_files.py:319
+#: sunflower/tools/find_files.py:43 sunflower/tools/find_files.py:282
 msgid "Find files"
 msgstr "Знайти файли"
 
-#: application/tools/find_files.py:63
-msgid "Search in:"
-msgstr "Шукати в:"
+#: sunflower/tools/find_files.py:70
+msgid "Criteria"
+msgstr "Критерій"
 
-#: application/tools/find_files.py:80
-msgid "Search recursively"
-msgstr "Шукати рекурсивно"
-
-#: application/tools/find_files.py:132 application/tools/find_files.py:244
+#: sunflower/tools/find_files.py:93
 msgid "Start"
 msgstr "Почати"
 
-#: application/tools/find_files.py:194
+#: sunflower/tools/find_files.py:102
+msgid "Search recursively"
+msgstr "Шукати рекурсивно"
+
+#: sunflower/tools/find_files.py:123
+msgid "Results"
+msgstr "Результати"
+
+#: sunflower/tools/find_files.py:194
 msgid ""
 "Active object doesn't support changing path. Set focus on a different "
 "object, preferably file list, and try again."
 msgstr "Активний об'єкт не підтримує зміну шляху. Перемістіть фокус на інший об'єкт, бажано, перелік файлів, і спробуйте знову."
 
-#: application/tools/find_files.py:232
-msgid "Stop"
-msgstr "Зупинити"
-
-#: application/tools/find_files.py:365
+#: sunflower/tools/find_files.py:328
 msgid ""
 "Specified path is not valid or doesn't exist anymore. Please check your "
 "selection and try again."
 msgstr "Вказаний шлях недійсний, або більше не існує. Будь ласка, перевірте Ваш вибір і спробуйте знову."
 
-#: application/tools/find_files.py:388
+#: sunflower/tools/find_files.py:349
 msgid ""
 "You need to enable at least one extension in order to find files and "
 "directories!"
 msgstr "Необхідно активувати хоча б один модуль для пошуку файлів і каталогів!"
 
-#: application/tools/version_check.py:23
+#: sunflower/tools/version_check.py:23
 msgid "Version check"
 msgstr "Перевірка версії"
 
-#: application/tools/version_check.py:42
+#: sunflower/tools/version_check.py:42
 msgid "Current:"
 msgstr "Поточна:"
 
-#: application/tools/version_check.py:45
+#: sunflower/tools/version_check.py:45
 msgid "Latest:"
 msgstr "Остання:"
 
-#: application/tools/version_check.py:107
+#: sunflower/tools/version_check.py:107
 msgid "Checking..."
 msgstr "Перевірка..."
 
-#: application/tools/advanced_rename.py:27
+#: sunflower/tools/advanced_rename.py:29
 msgid "Advanced rename"
 msgstr "Розширене перейменування"
 
-#: application/tools/advanced_rename.py:52
+#: sunflower/tools/advanced_rename.py:54
 msgid "Old name"
 msgstr "Старе ім'я"
 
-#: application/tools/advanced_rename.py:55
+#: sunflower/tools/advanced_rename.py:57
 msgid "New name"
 msgstr "Нове ім'я"
 
-#: application/tools/advanced_rename.py:78
+#: sunflower/tools/advanced_rename.py:80
 msgid "Items located in:"
 msgstr "Об'єкти, розташовані в:"
 
-#: application/tools/advanced_rename.py:201
+#: sunflower/tools/advanced_rename.py:202
 #, python-brace-format
 msgid ""
 "You are about to rename {0} item.\n"
@@ -2990,3 +2899,4 @@ msgid_plural ""
 msgstr[0] "Ви збираєтеся перейменувати {0} об'єкт.\nВи впевнені?"
 msgstr[1] "Ви збираєтеся перейменувати {0} об'єкта.\nВи впевнені?"
 msgstr[2] "Ви збираєтеся перейменувати {0} об'єктів.\nВи впевнені?"
+msgstr[3] "Ви збираєтеся перейменувати {0} об'єктів.\nВи впевнені?"

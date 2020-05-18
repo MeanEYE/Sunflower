@@ -164,7 +164,7 @@ version:
 standalone:
 	zip --quiet sunflower -r sunflower -x *.pyc
 	zip --quiet --junk-paths sunflower sunflower/__main__.py
-	echo '#!/usr/bin/python3' > sunflower.app
+	echo '#!/usr/bin/env python3' > sunflower.app
 	cat sunflower.zip >> sunflower.app
 	rm sunflower.zip
 	chmod a+x sunflower.app

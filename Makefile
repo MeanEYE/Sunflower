@@ -148,7 +148,7 @@ dist-all: dist-deb dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-pkg dist-p
 
 language-template:
 	$(info Updating language template...)
-	find . -iname "*.py" | xargs xgettext --language=Python --package-name=Sunflower --package-version=0.1 --output $(WORKING_DIRECTORY)/translations/sunflower.pot
+	find sunflower/ -iname "*.py" | xargs xgettext --language=Python --package-name=Sunflower --package-version=0.1 --output $(WORKING_DIRECTORY)/translations/sunflower.pot
 
 language-compile:
 	$(info Compiling language templates...)

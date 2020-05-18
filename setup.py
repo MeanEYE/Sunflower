@@ -20,7 +20,7 @@ setup(
 		url='https://sunflower-fm.org',
 		license='GPLv3',
 		install_requires=[
-			'gi',
+			'PyGObject',
 			'chardet'
 			],
 		packages=find_packages(),

@@ -79,6 +79,10 @@ def format_mode(mode, format):
 
 	return result
 
+def get_base_directory():
+	"""Return base directory where application is installed."""
+	return os.path.dirname(__file__)
+
 def get_cache_directory():
 	"""Get full path to cache files for curring user."""
 	if 'XDG_CACHE_HOME' in os.environ:
@@ -168,7 +172,7 @@ def executable_exists(command):
 def load_translation():
 	"""Load translation and install global functions"""
 	# get directory for translations
-	base_path = os.path.dirname(os.path.dirname(sys.argv[0]))
+	base_path = os.path.dirname(get_base_directory())
 	directory = os.path.join(base_path, 'translations')
 
 	# function params

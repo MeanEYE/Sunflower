@@ -913,8 +913,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		screen = Gdk.Screen.get_default()
 
 		# prepare path to load from
-		base_path = os.path.dirname(os.path.dirname(__file__))
-		file_name = os.path.join(base_path, 'styles', 'main.css')
+		file_name = os.path.join(common.get_base_directory(), 'styles', 'main.css')
 
 		# try loading from zip file
 		if os.path.isfile(sys.path[0]) and sys.path[0] != '':
@@ -1828,7 +1827,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# generate plugins paths
 		self.user_plugin_path = os.path.join(self.config_path, 'user_plugins')
-		self.system_plugin_path = os.path.join(os.path.dirname(sys.argv[0]), 'plugins')
+		self.system_plugin_path = os.path.join(common.get_base_directory(), 'plugins')
 
 		# create config parsers
 		self.options = Config('config', self.config_path)

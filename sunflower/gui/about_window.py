@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import os
 import sys
 
+from sunflower import common
 from gi.repository import Gtk, Gdk, Pango
 from collections import namedtuple
 
@@ -44,8 +45,7 @@ class AboutWindow:
 			version = '{0[major]}.{0[minor]} ({0[build]})'.format(parent.version)
 
 		# set about dialog image
-		base_path = os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[0])))
-		image_path = os.path.join(base_path, 'images', 'splash.png')
+		image_path = os.path.join(common.get_base_directory(), 'images', 'splash.png')
 		path = os.path.abspath(image_path)
 
 		if not os.path.exists(path):

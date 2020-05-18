@@ -5,7 +5,7 @@ import os
 import sys
 
 from gi.repository import Gtk, Gio
-from sunflower.common import UserDirectory, get_user_directory
+from sunflower.common import UserDirectory, get_user_directory, get_base_directory
 
 
 class IconManager:
@@ -121,10 +121,6 @@ class IconManager:
 			window.set_icon(self._icon_theme.load_icon('sunflower', 256, 0))
 
 		else:
-			base_path = os.path.dirname(os.path.dirname(sys.argv[0]))
-			window.set_icon_from_file(os.path.abspath(os.path.join(
-										base_path,
-										'images',
-										'sunflower.svg'
-									)))
+			base_path = os.path.dirname(get_base_directory())
+			window.set_icon_from_file(os.path.join(base_path, 'images', 'sunflower.svg'))
 

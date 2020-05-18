@@ -1,6 +1,7 @@
 import os
 import sys
 
+from sunflower import common
 from gi.repository import Gtk
 
 
@@ -12,7 +13,7 @@ class Indicator(object):
 		self._menu = Gtk.Menu()
 		self._create_menu_items()
 
-		base_path = os.path.dirname(os.path.dirname(sys.argv[0]))
+		base_path = os.path.dirname(common.get_base_directory())
 
 		self._icon = 'sunflower_64.png'
 		self._icon_path = os.path.abspath(os.path.join(base_path, 'images'))

@@ -23,7 +23,6 @@ endif
 # variables used in packages
 RELEASE ?= 1
 PACKAGER ?= ""
-INSTALLED_SIZE := $(shell du --summarize $(WORKING_DIRECTORY) --exclude=.git* --exclude=build | cut -f 1)
 
 # additional directories
 FILE_PATH = $(BUILD_DIRECTORY)/$(FILE_NAME)
@@ -58,11 +57,16 @@ export HELP
 
 # install program to fake root (this needs to be the same as dist/PKGBUILD)
 define DEBIAN_INSTALL
-	mkdir -p $(DEBIAN_BUILD_DIRECTORY)
-	mkdir -p $(DEBIAN_BUILD_DIRECTORY)/usr/share/locale
+	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)"
+	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/local/bin"
+	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/share/locale"
+	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/share/applications"
+	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/share/icons/hicolor/scalable/apps"
+	install -d "$(DEBIAN_BUILD_DIRECTORY)/usr/share/pixmaps/sunflower"
+	install -d "$(DEBIAN_BUILD_DIRECTORY)/usr/lib/python3/dist-packages/sunflower"
+
 	tar -xf $(FILE_PATH).tar -C $(BUILD_DIRECTORY)
 	install -Dm755 $(WORKING_DIRECTORY)/dist/sunflower "$(DEBIAN_BUILD_DIRECTORY)/usr/local/bin/sunflower"
-	install -d "$(DEBIAN_BUILD_DIRECTORY)/usr/lib/python3/dist-packages/sunflower"
 	cp -r $(BUILD_DIRECTORY)/Sunflower/sunflower/* "$(DEBIAN_BUILD_DIRECTORY)/usr/lib/python3/dist-packages/sunflower"
 	rsync -r $(BUILD_DIRECTORY)/Sunflower/translations/* "$(DEBIAN_BUILD_DIRECTORY)/usr/share/locale" --exclude "*.po*"
 	install -Dm644 "$(BUILD_DIRECTORY)/Sunflower/images/splash.png" "$(DEBIAN_BUILD_DIRECTORY)/usr/share/pixmaps/sunflower/splash.png"
@@ -105,7 +109,7 @@ dist-deb: archive
 	cp $(WORKING_DIRECTORY)/dist/control $(DEBIAN_BUILD_DIRECTORY)/DEBIAN
 	sed -i "s/@version@/$(VERSION)/" $(DEBIAN_BUILD_DIRECTORY)/DEBIAN/control
 	sed -i "s/@packager@/$(PACKAGER)/" $(DEBIAN_BUILD_DIRECTORY)/DEBIAN/control
-	sed -i "s/@size@/$(INSTALLED_SIZE)/" $(DEBIAN_BUILD_DIRECTORY)/DEBIAN/control
+	sed -i "s/@size@/`du --summarize $(DEBIAN_BUILD_DIRECTORY) | cut -f 1`/" $(DEBIAN_BUILD_DIRECTORY)/DEBIAN/control
 	fakeroot dpkg-deb --build $(DEBIAN_BUILD_DIRECTORY)
 	mv $(DEBIAN_BUILD_DIRECTORY).deb $(DEB_FILE_PATH)
 	sha256sum $(DEB_FILE_PATH) > $(DEB_FILE_PATH).sha256

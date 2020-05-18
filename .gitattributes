@@ -1,6 +1,7 @@
 /dist export-ignore
 /images/*.xcf export-ignore
-/translations/*/LC_MESSAGES/*.po* export-ignore
+/translations/*.pot export-ignore
+/translations/*/LC_MESSAGES/*.po export-ignore
 Makefile export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore

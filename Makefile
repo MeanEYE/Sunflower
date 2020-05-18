@@ -131,7 +131,7 @@ dist-rpm-opensuse: archive
 dist-rpm-pclinuxos: archive
 	$(info Building package for PCLinuxOS...)
 	$(CREATE_RPM_SPEC_FILE)
-	sed -i "s/@requires@/pygtk2.0, python-chardet/" $(BUILD_DIRECTORY)/sunflower.spec
+	sed -i "s/@requires@/pygtk2.0, python-chardet, gnome-python-gnomevfs/" $(BUILD_DIRECTORY)/sunflower.spec
 	rpmbuild -bb $(BUILD_DIRECTORY)/sunflower.spec --build-in-place --buildroot "$(abspath $(FEDORA_BUILD_DIRECTORY))"
 	cp ~/rpmbuild/RPMS/noarch/sunflower-$(VERSION)-$(RELEASE).noarch.rpm $(RPM_PCLINUXOS_FILE_PATH)
 	sha256sum $(RPM_PCLINUXOS_FILE_PATH) > $(RPM_PCLINUXOS_FILE_PATH).sha256

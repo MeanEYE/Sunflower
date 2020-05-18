@@ -26,8 +26,8 @@ setup(
 		packages=find_packages(),
 		include_package_data=True,
 		data_files=[
-			('share/images', ['images/sunflower.svg']),
-			('share/images', ['images/splash.png']),
+			('images', ['images/sunflower.svg']),
+			('images', ['images/splash.png']),
 			('share/applications', ['Sunflower.desktop'])
 			],
 		entry_points={'console_scripts': ['sunflower = sunflower.__main__:main']}

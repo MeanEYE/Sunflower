@@ -3,8 +3,9 @@ from builtins import filter
 
 import os
 import sys
+import zipfile
 
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk, Gio, GdkPixbuf, GLib
 from sunflower.common import UserDirectory, get_user_directory, get_base_directory
 
 
@@ -120,6 +121,16 @@ class IconManager:
 		if self.has_icon('sunflower'):
 			window.set_icon(self._icon_theme.load_icon('sunflower', 256, 0))
 
+		# try loading from zip file
+		if os.path.isfile(sys.path[0]) and sys.path[0] != '':
+			archive = zipfile.ZipFile(sys.path[0])
+			with archive.open('images/sunflower.svg') as raw_file:
+				buff = Gio.MemoryInputStream.new_from_bytes(GLib.Bytes.new(raw_file.read()))
+				icon = GdkPixbuf.Pixbuf.new_from_stream(buff, None)
+				window.set_icon(icon)
+			archive.close()
+
+		# load from local path
 		else:
 			base_path = os.path.dirname(get_base_directory())
 			window.set_icon_from_file(os.path.join(base_path, 'images', 'sunflower.svg'))

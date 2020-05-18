@@ -3,9 +3,10 @@ from __future__ import absolute_import
 
 import os
 import sys
+import zipfile
 
 from sunflower import common
-from gi.repository import Gtk, Gdk, Pango
+from gi.repository import Gtk, Gdk, Pango, GLib, GdkPixbuf, Gio
 from collections import namedtuple
 
 
@@ -45,14 +46,21 @@ class AboutWindow:
 			version = '{0[major]}.{0[minor]} ({0[build]})'.format(parent.version)
 
 		# set about dialog image
+		image = Gtk.Image()
 		image_path = os.path.join(common.get_base_directory(), 'images', 'splash.png')
 		path = os.path.abspath(image_path)
 
-		if not os.path.exists(path):
-			path = '/usr/share/pixmaps/sunflower/splash.png'
+		if os.path.isfile(sys.path[0]) and sys.path[0] != '':
+			archive = zipfile.ZipFile(sys.path[0])
+			with archive.open('images/splash.png') as raw_file:
+				buff = Gio.MemoryInputStream.new_from_bytes(GLib.Bytes.new(raw_file.read()))
+				pixbuf = GdkPixbuf.Pixbuf.new_from_stream(buff, None)
+				image.set_from_pixbuf(pixbuf)
+			archive.close()
 
-		image = Gtk.Image()
-		image.set_from_file(path)
+		elif not os.path.exists(path):
+			path = '/usr/share/pixmaps/sunflower/splash.png'
+			image.set_from_file(path)
 
 		# configure dialog
 		self._dialog.set_modal(True)

@@ -122,7 +122,7 @@ class IconManager:
 			window.set_icon(self._icon_theme.load_icon('sunflower', 256, 0))
 
 		# try loading from zip file
-		if os.path.isfile(sys.path[0]) and sys.path[0] != '':
+		elif os.path.isfile(sys.path[0]) and sys.path[0] != '':
 			archive = zipfile.ZipFile(sys.path[0])
 			with archive.open('images/sunflower.svg') as raw_file:
 				buff = Gio.MemoryInputStream.new_from_bytes(GLib.Bytes.new(raw_file.read()))

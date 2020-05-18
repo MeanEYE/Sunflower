@@ -116,8 +116,8 @@ class IconManager:
 
 	def set_window_icon(self, window):
 		"""Set window icon"""
+		# check system for icon
 		if self.has_icon('sunflower'):
-			# in case theme has its own icon, use that one
 			window.set_icon(self._icon_theme.load_icon('sunflower', 256, 0))
 
 		else:

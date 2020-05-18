@@ -26,8 +26,8 @@ setup(
 		packages=find_packages(),
 		include_package_data=True,
 		data_files=[
-			('share/icons/hicolor/scalable/apps', ['images/sunflower.svg']),
-			('share/pixmaps/sunflower', ['images/splash.png']),
+			('share/images', ['images/sunflower.svg']),
+			('share/images', ['images/splash.png']),
 			('share/applications', ['Sunflower.desktop'])
 			],
 		entry_points={'console_scripts': ['sunflower = sunflower.__main__:main']}

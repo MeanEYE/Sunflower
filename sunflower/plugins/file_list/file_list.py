@@ -1383,7 +1383,7 @@ class FileList(ItemList):
 				parent = self._find_iter_by_name(fragment, parent)
 
 		# check for list of always hidden files
-		provider = self.get_provider(parent_path)
+		provider = self.get_provider()
 		always_hidden = []
 
 		if not show_hidden and provider.exists('.hidden', relative_to=parent_path):

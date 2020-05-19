@@ -733,7 +733,7 @@ class CopyOperation(Operation):
 				event = (MonitorSignals.ATTRIBUTE_CHANGED, path, None)
 				self._destination_queue.put(event, False)
 
-		except StandardError as error:
+		except Exception as error:
 			# problem setting mode, ask user
 			if Skip.MODE_SET in self._response_cache:
 				response = self._response_cache[Skip.MODE_SET]
@@ -764,7 +764,7 @@ class CopyOperation(Operation):
 				event = (MonitorSignals.ATTRIBUTE_CHANGED, path, None)
 				self._destination_queue.put(event, False)
 
-		except StandardError as error:
+		except Exception as error:
 			# problem with setting owner, ask user
 			if Skip.MODE_SET in self._response_cache:
 				response = self._response_cache[Skip.MODE_SET]
@@ -796,7 +796,7 @@ class CopyOperation(Operation):
 				event = (MonitorSignals.ATTRIBUTE_CHANGED, path, None)
 				self._destination_queue.put(event, False)
 
-		except StandardError as error:
+		except Exception as error:
 			# problem with setting owner, ask user
 			if Skip.MODE_SET in self._response_cache:
 				response = self._response_cache[Skip.MODE_SET]
@@ -816,7 +816,7 @@ class CopyOperation(Operation):
 			# try to get listing from directory
 			item_list = self._source.list_dir(directory, relative_to=source_path)
 
-		except StandardError as error:
+		except Exception as error:
 			# problem with reading specified directory, ask user
 			if Skip.READ in self._response_cache:
 				response = self._response_cache[Skip.READ]
@@ -879,7 +879,7 @@ class CopyOperation(Operation):
 			# try to create a directory
 			if self._destination.exists(directory, relative_to=self._destination_path):
 				if not self._destination.is_dir(directory, relative_to=self._destination_path):
-					raise StandardError(_(
+					raise Exception(_(
 							'Unable to create directory because file with the same name '
 							'already exists in target directory.'
 						))
@@ -896,7 +896,7 @@ class CopyOperation(Operation):
 				event = (MonitorSignals.CREATED, directory, None)
 				self._destination_queue.put(event, False)
 
-		except StandardError as error:
+		except Exception as error:
 			# there was a problem creating directory
 			if Skip.CREATE in self._response_cache:
 				response = self._response_cache[Skip.CREATE]
@@ -959,10 +959,10 @@ class CopyOperation(Operation):
 
 			# report error properly
 			if sh is None:
-				raise StandardError('Unable to open source file in read mode.')
+				raise Exception('Unable to open source file in read mode.')
 
 			if dh is None:
-				raise StandardError('Unable to open destination file in write mode.')
+				raise Exception('Unable to open destination file in write mode.')
 
 			# reserve file size
 			if self._reserve_size:
@@ -985,7 +985,7 @@ class CopyOperation(Operation):
 				event = (MonitorSignals.CREATED, dest_file, None)
 				self._destination_queue.put(event, False)
 
-		except StandardError as error:
+		except Exception as error:
 			# close handles if they exist
 			if hasattr(sh, 'close'): sh.close()
 			if hasattr(dh, 'close'): sh.close()
@@ -1103,7 +1103,7 @@ class CopyOperation(Operation):
 				event = (MonitorSignals.CREATED, link_name, None)
 				self._destination_queue.put(event, False)
 
-		except StandardError as error:
+		except Exception as error:
 			# there was a problem creating directory
 			response = self._get_create_error_input(error, True)
 
@@ -1253,7 +1253,7 @@ class MoveOperation(CopyOperation):
 				event = (MonitorSignals.DELETED, path, None)
 				self._source_queue.put(event, False)
 
-		except StandardError as error:
+		except Exception as error:
 			# problem removing path, ask user what to do
 			if Skip.REMOVE in self._response_cache:
 				response = self._response_cache[Skip.REMOVE]
@@ -1314,7 +1314,7 @@ class MoveOperation(CopyOperation):
 				event = (MonitorSignals.CREATED, dest_file, None)
 				self._destination_queue.put(event, False)
 
-		except StandardError as error:
+		except Exception as error:
 			# problem with moving file, ask user what to do
 			if Skip.MOVE in self._response_cache:
 				response = self._response_cache[Skip.MOVE]
@@ -1526,7 +1526,7 @@ class DeleteOperation(Operation):
 				event = (MonitorSignals.DELETED, path, None)
 				self._source_queue.put(event, False)
 
-		except StandardError as error:
+		except Exception as error:
 			# problem removing path, ask user what to do
 			if Skip.REMOVE in self._response_cache:
 				response = self._response_cache[Skip.REMOVE]
@@ -1687,7 +1687,7 @@ class RenameOperation(Operation):
 					self._source_queue.put(delete_event, False)
 					self._source_queue.put(create_event, False)
 
-		except StandardError as error:
+		except Exception as error:
 			# problem renaming path, ask user what to do
 			if Skip.RENAME in self._response_cache:
 				response = self._response_cache[Skip.RENAME]

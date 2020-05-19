@@ -34,6 +34,10 @@ class Breadcrumbs:
 		if self._updating:
 			return
 
+		# ignore non active buttons
+		if not widget.props.active:
+			return
+
 		# change path
 		file_list = self._parent._parent
 		if hasattr(file_list, 'change_path'):

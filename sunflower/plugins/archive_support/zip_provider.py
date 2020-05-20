@@ -173,6 +173,9 @@ class ZipProvider(Provider):
 							time_access = 0,
 							time_modify = result.time_modify,
 							time_change = 0,
+							time_access_ns = 0,
+							time_modify_ns = result.time_modify * 10**9,
+							time_change_ns = 0,
 							type = result.type,
 							device = 0,
 							inode = 0
@@ -200,6 +203,9 @@ class ZipProvider(Provider):
 							time_access = 0,
 							time_modify = 0,
 							time_change = 0,
+							time_access_ns = 0,
+							time_modify_ns = 0,
+							time_change_ns = 0,
 							type = FileType.INVALID,
 							device = 0,
 							inode = 0

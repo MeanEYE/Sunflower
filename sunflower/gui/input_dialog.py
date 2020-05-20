@@ -1040,7 +1040,7 @@ class OverwriteDialog:
 	"""Dialog used for confirmation of file/directory overwrite"""
 
 	def __init__(self, application, parent):
-		self._dialog = Gtk.Dialog(parent=parent, use_header_bar=True)
+		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
 
 		self._application = application
 		self._rename_value = ''
@@ -1050,7 +1050,6 @@ class OverwriteDialog:
 		self._dialog.set_resizable(True)
 		self._dialog.set_skip_taskbar_hint(False)
 		self._dialog.set_modal(True)
-		self._dialog.set_transient_for(parent)
 		self._dialog.set_urgency_hint(True)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 

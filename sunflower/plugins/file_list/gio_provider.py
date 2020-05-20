@@ -157,6 +157,9 @@ class GioProvider(Provider):
 							time_access = 0,
 							time_modify = 0,
 							time_change = 0,
+							time_access_ns = 0,
+							time_modify_ns = 0,
+							time_change_ns = 0,
 							type = FileType.INVALID,
 							device = 0,
 							inode = 0
@@ -200,6 +203,9 @@ class GioProvider(Provider):
 						time_access = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_ACCESS),
 						time_modify = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_MODIFIED),
 						time_change = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_CHANGED),
+						time_access_ns = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_ACCESS) * 10**9,
+						time_modify_ns = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_MODIFIED) * 10**9,
+						time_change_ns = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_CHANGED) * 10**9,
 						type = item_type,
 						device = file_stat.get_attribute_uint32(Gio.FILE_ATTRIBUTE_UNIX_DEVICE),
 						inode = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_UNIX_INODE)

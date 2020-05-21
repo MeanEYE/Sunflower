@@ -250,7 +250,7 @@ class ZipProvider(Provider):
 
 	def get_root_path(self, path):
 		"""Get root for specified path"""
-		return os.path.dirname(self._path)
+		return 'file:///' if path.startswith('file://') else os.path.sep
 
 	def get_parent_path(self, path):
 		"""Get parent path for specified"""

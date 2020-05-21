@@ -957,7 +957,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_edit_selected'):
-			active_object._edit_selected()
+			active_object._edit_selected(self)
 			result = True
 
 		return result

@@ -136,8 +136,8 @@ class Volume(Location):
 	def __handle_change(self, volume):
 		"""Handle volume change."""
 		mount = self._volume.get_mount()
-		self._unmount_button.set_visible(mount and mount.can_unmount())
-		self._mount_button.set_visible(not mount and self._volume.can_mount())
+		self._unmount_button.set_visible(mount is not None and mount.can_unmount())
+		self._mount_button.set_visible(mount is None and self._volume.can_mount())
 		self._eject_button.set_visible(self._volume.can_eject())
 
 	def __handle_remove(self, volume):

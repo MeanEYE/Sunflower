@@ -30,6 +30,7 @@ from sunflower.accelerator_group import AcceleratorGroup
 from sunflower.accelerator_manager import AcceleratorManager
 from sunflower.keyring import KeyringManager, InvalidKeyringError
 from sunflower.parameters import Parameters
+from sunflower.clipboard import Clipboard
 
 from sunflower.plugin_base.item_list import ItemList
 from sunflower.plugin_base.rename_extension import RenameExtension
@@ -130,7 +131,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.user_plugin_path = None
 
 		# create a clipboard manager
-		self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+		self.clipboard = Clipboard()
 
 		# load config
 		self.load_config()
@@ -2364,7 +2365,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def set_clipboard_text(self, text):
 		"""Set text data to clipboard"""
-		self.clipboard.set_text(text, -1)
+		self.clipboard.set_text(text)
 
 	def set_clipboard_item_list(self, operation, uri_list):
 		"""Set clipboard to contain list of items
@@ -2373,32 +2374,19 @@ class MainWindow(Gtk.ApplicationWindow):
 		uri_list - list of URIs
 
 		"""
-		targets = [
-				('x-special/gnome-copied-files', 0, 0),
-				("text/uri-list", 0, 0)
-			]
+		targets = ['x-special/gnome-copied-files', 'text/uri-list']
 		raw_data = '{0}\n'.format(operation) + '\n'.join(uri_list)
-
-		def get_func(clipboard, selection, info, data):
-			"""Handle request from application"""
-			target = selection.get_target()
-			selection.set(target, 8, raw_data)
-
-		def clear_func(clipboard, data):
-			"""Clear function"""
-			pass
-
-		# set clipboard and return result
-		return self.clipboard.set_with_data(targets, get_func, clear_func)
+		return self.clipboard.set_data(raw_data, targets)
 
 	def get_clipboard_text(self):
 		"""Get text from clipboard"""
-		return self.clipboard.wait_for_text()
+		return self.clipboard.get_text()
 
 	def get_clipboard_item_list(self):
 		"""Get item list from clipboard"""
 		result = None
-		selection = self.clipboard.wait_for_contents('x-special/gnome-copied-files')
+		targets = ['x-special/gnome-copied-files', 'text/uri-list']
+		selection = self.clipboard.get_data(targets)
 
 		# in case there is something to paste
 		if selection is not None:
@@ -2413,11 +2401,12 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def is_clipboard_text(self):
 		"""Check if clipboard data is text"""
-		return self.clipboard.wait_is_text_available()
+		return self.clipboard.text_available()
 
 	def is_clipboard_item_list(self):
 		"""Check if clipboard data is URI list"""
-		return self.clipboard.wait_is_uris_available()
+		targets = ['x-special/gnome-copied-files', 'text/uri-list']
+		return self.clipboard.data_available(targets)
 
 	def is_archive_supported(self, mime_type):
 		"""Check if specified archive mime type is supported."""

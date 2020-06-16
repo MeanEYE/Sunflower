@@ -12,6 +12,7 @@ class Clipboard:
 		self.data_support = []
 
 		self.add_provider(GtkProvider())
+		self.add_provider(FakeProvider())
 
 	def add_provider(self, provider):
 		"""Add new clipboard provider to the system."""

@@ -2390,12 +2390,8 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# in case there is something to paste
 		if selection is not None:
-			data = selection.data.splitlines(False)
-
-			operation = data[0]
-			uri_list = data[1:]
-
-			result = (operation, uri_list)
+			data = selection.splitlines(False)
+			result = (data[0], data[1:])
 
 		return result
 

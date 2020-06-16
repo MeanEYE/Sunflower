@@ -24,7 +24,7 @@ class MountsManager:
 		automount = self._application.options.section('operations').get('automount_start')
 		for volume in self._volume_monitor.get_volumes():
 			self._location_menu.add_location(Volume(self, volume))
-			if automount and volume.can_mount():
+			if automount and volume.can_mount() and volume.get_mount() is None:
 				volume.mount(Gio.MountMountFlags.NONE, None, None, self._handle_mount_finish, None)
 
 	def _handle_add_volume(self, monitor, volume):
@@ -32,7 +32,8 @@ class MountsManager:
 		self._location_menu.add_location(Volume(self, volume))
 
 		# automount volume if needed
-		if self._application.options.section('operations').get('automount_insert') and volume.can_mount():
+		automount_insert = self._application.options.section('operations').get('automount_insert')
+		if automount_insert and volume.can_mount() and volume.get_mount() is None:
 			volume.mount(Gio.MountMountFlags.NONE, None, None, self._handle_mount_finish, None)
 
 	def _handle_remove_volume(self, widget, volume):
@@ -53,7 +54,7 @@ class MountsManager:
 
 	def mount(self, volume):
 		"""Perform volume mount."""
-		if volume.can_mount():
+		if volume.can_mount() and volume.get_mount() is None:
 			volume.mount(Gio.MountMountFlags.NONE, None, None, self._handle_mount_finish, None)
 
 		else:

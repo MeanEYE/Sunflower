@@ -159,3 +159,48 @@ class GtkProvider(Provider):
 		"""Check if clipboard with specified mime types is available."""
 		targets_available = [self.clipboard.wait_is_target_available(target) for target in mime_types]
 		return any(targets_available)
+
+
+class FakeProvider(Provider):
+	"""Fake provider which offers clipboard functionality only within application."""
+
+	def __init__(self):
+		self.text = None
+		self.data = {}
+
+	def available(self):
+		"""Test environment and return tuple of boolean values indicating usability."""
+		return True, True
+
+	def set_text(self, text):
+		"""Set text content."""
+		self.text = text
+
+	def set_data(self, data, mime_types):
+		"""Set data as content with provided list of mime types."""
+		for mime_type in mime_types:
+			self.data[mime_type] = data
+
+	def get_text(self):
+		"""Return text value stored in clipboard."""
+		return self.text
+
+	def get_data(self, mime_types):
+		"""Return data stored for provided types in clipboard."""
+		data = None
+
+		for mime_type in mime_types:
+			if mime_type in self.data:
+				data = self.data[mime_type]
+				break
+
+		return data
+
+	def text_available(self):
+		"""Check if clipboard with text is available."""
+		return self.text is not None
+
+	def data_available(self, mime_types):
+		"""Check if clipboard with specified mime types is available."""
+		targets_available = [target in self.data for target in mime_types]
+		return any(targets_available)

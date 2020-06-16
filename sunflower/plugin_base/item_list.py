@@ -888,14 +888,14 @@ class ItemList(PluginBase):
 		# clipboard data contains URI list
 		if data is not None:
 			operation = data[0]
-			list_ = data[1]
-			protocol = list_[0].split('://')[0]
+			uri_list = data[1]
+			protocol = uri_list[0].split('://')[0]
 
 			# convert URI to normal path
-			list_ = [urllib.parse.unquote(item.split('://')[1]) for item in list_]
+			uri_list = [urllib.parse.unquote(item.split('://')[1]) for item in uri_list]
 
 			# call handler
-			self._handle_external_data(operation, protocol, list_, self.path)
+			self._handle_external_data(operation, protocol, uri_list, self.path)
 
 		return True
 

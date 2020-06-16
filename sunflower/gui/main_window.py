@@ -2368,15 +2368,10 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.clipboard.set_text(text)
 
 	def set_clipboard_item_list(self, operation, uri_list):
-		"""Set clipboard to contain list of items
-
-		operation - 'copy' or 'cut' string representing operation
-		uri_list - list of URIs
-
-		"""
-		targets = ['x-special/gnome-copied-files', 'text/uri-list']
-		raw_data = '{0}\n'.format(operation) + '\n'.join(uri_list)
-		return self.clipboard.set_data(raw_data, targets)
+		"""Set clipboard to contain list of items for either `copy` or `cut` operation."""
+		targets = ['x-special/nautilus-clipboard', 'x-special/gnome-copied-files', 'text/uri-list']
+		raw_data = '{}\n{}\n{}\n'.format(targets[0], operation, '\n'.join(uri_list))
+		return self.clipboard.set_text(raw_data)
 
 	def get_clipboard_text(self):
 		"""Get text from clipboard"""
@@ -2385,13 +2380,25 @@ class MainWindow(Gtk.ApplicationWindow):
 	def get_clipboard_item_list(self):
 		"""Get item list from clipboard"""
 		result = None
-		targets = ['x-special/gnome-copied-files', 'text/uri-list']
-		selection = self.clipboard.get_data(targets)
+		targets = ['x-special/nautilus-clipboard', 'x-special/gnome-copied-files', 'text/uri-list']
 
-		# in case there is something to paste
+		# nautilus recently provides data through regular
+		# clipboard as plain text try getting data that way
+		selection = self.clipboard.get_text()
 		if selection is not None:
 			data = selection.splitlines(False)
+			data = list(filter(lambda x: len(x) > 0, data))
+			if data[0] in targets:
+				data.pop(0)
 			result = (data[0], data[1:])
+
+		# try getting data old way through mime type targets
+		else:
+			selection = self.clipboard.get_data(targets)
+			if selection is not None:
+				data = selection.splitlines(False)
+				data = list(filter(lambda x: len(x) > 0, data))
+				result = (data[0], data[1:])
 
 		return result
 
@@ -2401,8 +2408,15 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def is_clipboard_item_list(self):
 		"""Check if clipboard data is URI list"""
-		targets = ['x-special/gnome-copied-files', 'text/uri-list']
-		return self.clipboard.data_available(targets)
+		targets = ['x-special/nautilus-clipboard', 'x-special/gnome-copied-files', 'text/uri-list']
+		result = False
+
+		selection = self.clipboard.get_text()
+		if selection is not None:
+			data = selection.splitlines(False)
+			result = data[0] == targets[0] or data[0] in ('copy', 'cut')
+
+		return result
 
 	def is_archive_supported(self, mime_type):
 		"""Check if specified archive mime type is supported."""

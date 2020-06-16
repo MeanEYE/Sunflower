@@ -1,6 +1,9 @@
 import sys
 
 from gi.repository import Gtk, Gdk
+from subprocess import check_output, run
+from threading import Thread
+from sunflower.common import executable_exists
 
 
 class Clipboard:
@@ -12,6 +15,7 @@ class Clipboard:
 		self.data_support = []
 
 		self.add_provider(GtkProvider())
+		self.add_provider(CommandProvider())
 		self.add_provider(FakeProvider())
 
 	def add_provider(self, provider):
@@ -205,3 +209,91 @@ class FakeProvider(Provider):
 		"""Check if clipboard with specified mime types is available."""
 		targets_available = [target in self.data for target in mime_types]
 		return any(targets_available)
+
+
+class CommandProvider(Provider):
+	"""Clipboard integration using command line application and piping."""
+
+	def __init__(self):
+		commands = ['xclip', 'wl-copy', 'wl-paste']
+		self.available_commands = tuple(filter(lambda command: executable_exists(command), commands))
+
+	def available(self):
+		"""Test environment and return tuple of boolean values indicating usability."""
+		result = len(self.available_commands) > 0
+		return result, result
+
+	def set_text(self, text):
+		"""Set text content."""
+		commands = (
+				('wl-copy',),
+				('xclip', '-selection', 'clipboard'),
+				)
+
+		for command in commands:
+			try:
+				run(command, input=text, text=True)
+			except:
+				pass
+			else:
+				break
+
+	def set_data(self, data, mime_types):
+		"""Set data as content with provided list of mime types."""
+		commands = (
+				('wl-copy', '-t', mime_types[0]),
+				('xclip', '-selection', 'clipboard', '-t', mime_types[0]),
+				)
+
+		for command in commands:
+			try:
+				run(command, input=data, text=True)
+			except:
+				pass
+			else:
+				break
+
+	def get_text(self):
+		"""Return text value stored in clipboard."""
+		result = None
+		commands = (
+				('wl-paste',),
+				('xclip', '-selection', 'clipboard', '-o'),
+				)
+
+		for command in commands:
+			try:
+				result = check_output(command).decode('unicode-escape')
+			except:
+				pass
+			else:
+				break
+
+		return result
+
+	def get_data(self, mime_types):
+		"""Return data stored for provided types in clipboard."""
+		result = None
+		commands = (
+				('wl-paste', '-t', mime_types[0]),
+				('xclip', '-selection', 'clipboard', '-o', '-t', mime_types[0]),
+				)
+
+		for command in commands:
+			try:
+				result = check_output(command, input=data, text=True).decode('unicode-escape')
+			except:
+				pass
+			else:
+				break
+
+		return result
+
+	def text_available(self):
+		"""Check if clipboard with text is available."""
+		return self.get_text() is not None
+
+	def data_available(self, mime_types):
+		"""Check if clipboard with specified mime types is available."""
+		return self.get_data(mime_types) is not None
+

@@ -914,7 +914,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		screen = Gdk.Screen.get_default()
 
 		# prepare path to load from
-		file_name = os.path.join(common.get_base_directory(), 'styles', 'main.css')
+		file_name = os.path.join(common.get_static_assets_directory(), 'styles', 'main.css')
 
 		# try loading from zip file
 		if os.path.isfile(sys.path[0]) and sys.path[0] != '':

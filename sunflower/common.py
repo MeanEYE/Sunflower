@@ -83,6 +83,16 @@ def get_base_directory():
 	"""Return base directory where application is installed."""
 	return os.path.dirname(__file__)
 
+def get_static_assets_directory():
+	"""Return path to directory that holds static files"""
+	script_dir = os.path.dirname(__file__)
+	prefix_dir = os.path.join(sys.prefix, 'share', 'sunflower')
+
+	if os.path.exists(os.path.join(script_dir, 'images', 'sunflower.svg')):
+		return script_dir
+	else:
+		return prefix_dir
+
 def get_cache_directory():
 	"""Get full path to cache files for curring user."""
 	if 'XDG_CACHE_HOME' in os.environ:
@@ -172,7 +182,7 @@ def executable_exists(command):
 def load_translation():
 	"""Load translation and install global functions"""
 	# get directory for translations
-	base_path = os.path.dirname(get_base_directory())
+	base_path = os.path.dirname(get_static_assets_directory())
 	directory = os.path.join(base_path, 'translations')
 
 	# function params

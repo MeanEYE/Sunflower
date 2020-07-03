@@ -6,7 +6,7 @@ import sys
 import zipfile
 
 from gi.repository import Gtk, Gio, GdkPixbuf, GLib
-from sunflower.common import UserDirectory, get_user_directory, get_base_directory
+from sunflower.common import UserDirectory, get_user_directory, get_static_assets_directory
 
 
 class IconManager:
@@ -132,6 +132,6 @@ class IconManager:
 
 		# load from local path
 		else:
-			base_path = os.path.dirname(get_base_directory())
+			base_path = get_static_assets_directory()
 			window.set_icon_from_file(os.path.join(base_path, 'images', 'sunflower.svg'))
 

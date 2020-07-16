@@ -7,7 +7,7 @@ from sunflower.gui.input_dialog import PasswordDialog
 
 
 class Column:
-	ID = 0
+	OBJECT_PATH = 0
 	NAME = 1
 	MODIFIED = 2
 
@@ -43,14 +43,14 @@ class KeyringManagerWindow:
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 		container.set_shadow_type(Gtk.ShadowType.IN)
 
-		self._store = Gtk.ListStore(int, str, str)
+		self._store = Gtk.ListStore(str, str, str)
 		self._list = Gtk.TreeView(model=self._store)
 
 		cell_id = Gtk.CellRendererText()
 		cell_name = Gtk.CellRendererText()
 		cell_modified = Gtk.CellRendererText()
 
-		col_id = Gtk.TreeViewColumn(_('ID'), cell_id, text=Column.ID)
+		col_id = Gtk.TreeViewColumn(_('Object path'), cell_id, text=Column.OBJECT_PATH)
 		col_name = Gtk.TreeViewColumn(_('Name'), cell_name, text=Column.NAME)
 		col_name.set_expand(True)
 		col_modified = Gtk.TreeViewColumn(_('Modified'), cell_modified, text=Column.MODIFIED)
@@ -100,9 +100,9 @@ class KeyringManagerWindow:
 		keyring_manager = self._application.keyring_manager
 		time_format = section.get('time_format')
 
-		for uid, name, modified in keyring_manager.get_entries():
+		for object_path, name, modified in keyring_manager.get_entries():
 			formatted_time = time.strftime(time_format, time.localtime(modified))
-			self._store.append((uid, name, formatted_time))
+			self._store.append((object_path, name, formatted_time))
 
 	def __delete_event(self, widget, data=None):
 		"""Cleanup on window delete event"""
@@ -185,7 +185,7 @@ class KeyringManagerWindow:
 		if response[0] == Gtk.ResponseType.OK:
 			if response[1] == response[2]:
 				# passwords match, change value
-				item_id = item_list.get_value(selected_iter, Column.ID)
+				item_id = item_list.get_value(selected_iter, Column.OBJECT_PATH)
 				self._application.keyring_manager.change_secret(item_id, response[1])
 
 				dialog = Gtk.MessageDialog(

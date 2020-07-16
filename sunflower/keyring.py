@@ -3,13 +3,14 @@ from __future__ import absolute_import
 
 try:
 	import gi
-	gi.require_version('GnomeKeyring', '1.0')
-	from gi.repository import GnomeKeyring as keyring
+	gi.require_version('Secret', '1')
+	from gi.repository import Secret
+	from gi.repository import GLib
 except:
-	keyring = None
+	Secret = None
 else:
 	from gi.repository import Gtk, GObject
-	from sunflower.gui.input_dialog import InputDialog, PasswordDialog
+	from sunflower.gui.input_dialog import InputDialog
 
 
 class EntryType:
@@ -33,12 +34,12 @@ class KeyringManager:
 	KEYRING_NAME = 'sunflower'
 	TIMEOUT = 1
 
-	if keyring is not None:
-		KEYRING_TYPE = {
-				EntryType.GENERIC: keyring.ItemType.GENERIC_SECRET,
-				EntryType.NETWORK: keyring.ItemType.NETWORK_PASSWORD,
-				EntryType.NOTE: keyring.ItemType.NOTE
-			}
+	if Secret is not None:
+		KEYRING_SCHEMA = {
+			EntryType.GENERIC: None,
+			EntryType.NETWORK: Secret.SchemaType.COMPAT_NETWORK,
+			EntryType.NOTE: Secret.SchemaType.NOTE
+		}
 
 	def __init__(self, application):
 		# initialize keyring
@@ -46,7 +47,6 @@ class KeyringManager:
 			return
 
 		self._application = application
-		self._info = None
 		self._timeout = None
 
 		# create status icon
@@ -67,20 +67,23 @@ class KeyringManager:
 		self._status_icon.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
 		self._status_icon.set_tooltip_text(icon_tooltip)
 
-	def __initialize_keyring(self):
+	def __initialize_keyring(self, collection=None):
 		"""Initialize keyring"""
 		if not self.keyring_exists():
 			return
 
-		# update keyring information
-		self.__update_info()
+		if collection is None:
+			try:
+				collection = Secret.Collection.for_alias_sync(self.secret_service, self.KEYRING_NAME, Secret.CollectionFlags.NONE)
 
-	def __update_info(self):
-		"""Update keyring status information"""
-		self._info = keyring.get_info_sync(self.KEYRING_NAME)[1]
+				if collection is not None:
+					# update icon when locked status changes
+					collection.connect('notify::locked', self.__update_icon)
 
-		# update icon
-		self.__update_icon()
+					self.collection = collection
+			except GLib.Error as error:
+				print(error)
+				return
 
 	def __reset_timeout(self):
 		"""Reset autolock timeout"""
@@ -98,58 +101,36 @@ class KeyringManager:
 			self._timeout = None
 
 		# lock keyring
-		keyring.lock_sync(self.KEYRING_NAME)
-
-		# update information about keyring
-		self.__update_info()
+		try:
+			self.secret_service.lock_sync([self.collection])
+		except GLib.Error as error:
+			print(error)
+			raise
 
 	def __unlock_keyring(self):
 		"""Unlock keyring and schedule automatic lock"""
 		result = False
 
-		dialog = InputDialog(self._application)
-		dialog.set_title(_('Unlock keyring'))
-		dialog.set_label(_('Please enter your keyring password:'))
-		dialog.set_password()
-
-		response = dialog.get_response()
-
-		if response[0] == Gtk.ResponseType.OK:
-			# try to unlock keyring
-			keyring.unlock_sync(self.KEYRING_NAME, response[1])
-
-			# update status information
-			self.__update_info()
+		# try to unlock keyring
+		try:
+			self.secret_service.unlock_sync([self.collection])
 
 			if not self.is_locked():
 				# set timeout for automatic locking
 				self.__reset_timeout()
 				result = True
+		except GLib.Error as error:
+			print(error)
 
 		return result
 
-	def __get_entry_info(self, entry):
-		"""Get entry info object"""
+	def __get_entry(self, entry):
+		"""Get item object for given entry"""
 		result = None
 
-		for item_id in keyring.list_item_ids_sync(self.KEYRING_NAME)[1]:
-			info = keyring.item_get_info_sync(self.KEYRING_NAME, item_id)[1]
-
-			if info.get_display_name() == entry:
-				result = info
-				break
-
-		return result
-
-	def __get_entry_id(self, entry):
-		"""Get entry ID"""
-		result = None
-
-		for item_id in keyring.list_item_ids_sync(self.KEYRING_NAME)[1]:
-			info = keyring.item_get_info_sync(self.KEYRING_NAME, item_id)[1]
-
-			if info.get_display_name() == entry:
-				result = item_id
+		for item in self.collection.get_items():
+			if item.get_label() == entry:
+				result = item
 				break
 
 		return result
@@ -161,23 +142,29 @@ class KeyringManager:
 
 	def keyring_exists(self):
 		"""Check if keyring exists"""
-		result = False
 
-		if self.is_available():
-			result = self.KEYRING_NAME in keyring.list_keyring_names_sync()[1]
-
-		return result
+		return self.collection is not None
 
 	def is_available(self):
 		"""Return true if we are able to use Gnome keyring"""
-		return keyring is not None and keyring.is_available()
+		if Secret is None:
+			return False
+
+		if self.secret_service is None:
+			try:
+				self.secret_service = Secret.Service.get_sync(Secret.ServiceFlags.LOAD_COLLECTIONS)
+			except GLib.Error as error:
+				print(error)
+				return False
+
+		return True
 
 	def is_locked(self):
 		"""Return true if current keyring is locked"""
 		if not self.keyring_exists():
 			raise InvalidKeyringError('Keyring does not exist!')
 
-		return self._info.get_is_locked()
+		return self.collection.get_locked()
 
 	def rename_entry(self, entry, new_name):
 		"""Rename entry"""
@@ -191,12 +178,14 @@ class KeyringManager:
 			return result
 
 		# get entry information
-		entry_id = self.__get_entry_id(entry)
-		info = keyring.item_get_info_sync(self.KEYRING_NAME, entry_id)[1]
+		item = self.__get_entry(entry)
 
-		if info is not None:
-			info.set_display_name(new_name)
-			keyring.item_set_info_sync(self.KEYRING_NAME, entry_id, info)
+		if item is not None:
+			try:
+				item.set_label_sync(new_name)
+			except GLib.Error as error:
+				print(error)
+				raise
 			result = True
 
 		return result
@@ -213,11 +202,14 @@ class KeyringManager:
 			return result
 
 		# get entry information
-		info = keyring.item_get_info_sync(self.KEYRING_NAME, entry_id)[1]
+		item = self.__get_entry(entry)
 
-		if info is not None:
-			info.set_secret(secret)
-			keyring.item_set_info_sync(self.KEYRING_NAME, entry_id, info)
+		if item is not None:
+			try:
+				item.set_secret_sync(secret)
+			except GLib.Error as error:
+				print(error)
+				raise
 			result = True
 
 		return result
@@ -234,11 +226,14 @@ class KeyringManager:
 			return result
 
 		# get entry id
-		entry_id = self.__get_entry_id(entry)
+		item = self.__get_entry(entry)
 
-		if entry_id is not None:
-			keyring.item_delete_sync(self.KEYRING_NAME, entry_id)
-			result = True
+		if item is not None:
+			try:
+				item.delete_sync()
+				result = True
+			except GLib.Error as error:
+				print(error)
 
 		return result
 
@@ -254,9 +249,8 @@ class KeyringManager:
 			return result
 
 		# populate result list
-		for item_id in keyring.list_item_ids_sync(self.KEYRING_NAME)[1]:
-			info = keyring.item_get_info_sync(self.KEYRING_NAME, item_id)[1]
-			result.append((item_id, info.get_display_name(), info.get_mtime()))
+		for item in self.collection.get_items():
+			result.append((item.get_object_path() item.get_label(), item.get_modified()))
 
 		return result
 
@@ -272,10 +266,16 @@ class KeyringManager:
 			return result
 
 		# get password
-		item_info = self.__get_entry_info(entry)
+		item = self.__get_entry(entry)
 
 		if item_info is not None:
-			result = item_info.get_secret()
+			if item.get_secret() is None:
+				try:
+					item.load_secret_sync()
+					result = item.get_secret()
+				except GLib.Error as error:
+					print(error)
+					raise
 
 		# reset autolock timeout
 		self.__reset_timeout()
@@ -294,56 +294,46 @@ class KeyringManager:
 			return result
 
 		# get password
-		item_info = self.__get_entry_info(entry)
+		item = self.__get_entry(entry)
 
-		if item_info is not None:
-			result = item_info.get_attributes()
+		if item not None:
+			result = item.get_attributes()
 
 		# reset autolock timeout
 		self.__reset_timeout()
 
-	def store_password(self, entry, password, attributes=None, entry_type=EntryType.GENERIC):
+	def store_password(self, entry, password, attributes, entry_type=EntryType.GENERIC):
 		"""Create new entry in keyring with specified data"""
 		assert self.is_available()
 
 		# create a new keyring if it doesn't exist
-		if not self.KEYRING_NAME in keyring.list_keyring_names_sync()[1]:
-			dialog = PasswordDialog(self._application)
-			dialog.set_title(_('New keyring'))
-			dialog.set_label(_(
-						'We need to create a new keyring to safely '
-						'store your passwords. Choose the password you '
-						'want to use for it.'
-					))
-
-			response = dialog.get_response()
-
-			if response[0] == Gtk.ResponseType.OK \
-			and response[1] == response[2]:
+		if self.collection is None:
+			try:
 				# create new keyring
-				keyring.create_sync(self.KEYRING_NAME, response[1])
-				self.__update_info()
-
-			else:
-				# wrong password
-				raise KeyringCreateError('No keyring to store password to.')
+				collection = Secret.Collection.create_sync(self.secret_service, _('Sunflower file manager'), self.KEYRING_NAME, Secret.CollectionCreateFlags.NONE)
+				self.__initialize_keyring(collection)
+			except GLib.Error as error:
+				print(error)
+				raise KeyringCreateError(_('Error creating keyring.'))
 
 		# if keyring is locked, try to unlock it
 		if self.is_locked() and not self.__unlock_keyring():
 			return False
 
-		attribute_array = keyring.Attribute.list_new()
-		for key in attributes:
-			keyring.Attribute.list_append_string(attribute_array, key, attributes[key])
+		schema = self.KEYRING_SCHEMA[entry_type],
 
-		# store password to existing keyring
-		keyring.item_create_sync(
-					self.KEYRING_NAME,
-					self.KEYRING_TYPE[entry_type],
-					entry,
-					attribute_array,
-					password,
-					True  # update if exists
-				)
+		try:
+			# store password to existing keyring
+			Secret.Item.create_sync(
+				self.collection,
+				schema,
+				attributes,
+				entry,
+				password,
+				Secret.ItemCreateFlags.REPLACE  # update if exists
+			)
 
-		return True
+			return True
+		except GLib.Error as error:
+			print(error)
+			return False

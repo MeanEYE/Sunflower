@@ -43,7 +43,7 @@ class KeyringManagerWindow:
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 		container.set_shadow_type(Gtk.ShadowType.IN)
 
-		self._store = Gtk.ListStore(long, str, str)
+		self._store = Gtk.ListStore(int, str, str)
 		self._list = Gtk.TreeView(model=self._store)
 
 		cell_id = Gtk.CellRendererText()

@@ -246,21 +246,21 @@ class GioProvider(Provider):
 			temp.set_attribute(
 					Gio.FILE_ATTRIBUTE_TIME_ACCESS,
 					Gio.FILE_ATTRIBUTE_TYPE_UINT64,
-					long(access)
+					int(access)
 				)
 
 		if modify is not None:
 			temp.set_attribute(
 					Gio.FILE_ATTRIBUTE_TIME_MODIFIED,
 					Gio.FILE_ATTRIBUTE_TYPE_UINT64,
-					long(modify)
+					int(modify)
 				)
 
 		if change is not None:
 			temp.set_attribute(
 					Gio.FILE_ATTRIBUTE_TIME_CHANGED,
 					Gio.FILE_ATTRIBUTE_TYPE_UINT64,
-					long(change)
+					int(change)
 				)
 
 	def move_path(self, source, destination, relative_to=None):

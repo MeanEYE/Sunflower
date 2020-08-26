@@ -88,7 +88,7 @@ def get_static_assets_directory():
 	script_dir = os.path.dirname(__file__)
 	prefix_dir = os.path.join(sys.prefix, 'share', 'sunflower')
 
-	if os.path.exists(os.path.join(script_dir, 'images', 'sunflower.svg')):
+	if os.path.exists(os.path.join(script_dir, '..', 'images', 'sunflower.svg')):
 		return script_dir
 	else:
 		return prefix_dir

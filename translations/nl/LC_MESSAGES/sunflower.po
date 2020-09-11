@@ -4,15 +4,15 @@
 # 
 # Translators:
 # Heimen Stoffels <vistausss@outlook.com>, 2019-2020
-# Ruud W. Blau <rwblau@aim.com>, 2015-2016
+# Ruud W. Blau <rwblau@aim.com>, 2015-2016,2020
 # Thomas Jollans <t@jollybox.de>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-11 21:13+0200\n"
-"PO-Revision-Date: 2020-05-12 11:41+0000\n"
-"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
+"PO-Revision-Date: 2020-07-18 13:12+0000\n"
+"Last-Translator: Ruud W. Blau <rwblau@aim.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/way2cu/sunflower/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -38,7 +38,7 @@ msgstr "Schuifbalken tonen indien nodig"
 
 #: sunflower/gui/preferences/terminal.py:29
 msgid "Use the system fixed width font"
-msgstr "Vastebreedtelettertype van systeem gebruiken"
+msgstr "Systeemlettertype met vaste breedte gebruiken"
 
 #: sunflower/gui/preferences/terminal.py:32
 msgid "Font:"
@@ -58,7 +58,7 @@ msgstr "Balk"
 
 #: sunflower/gui/preferences/terminal.py:47
 msgid "Underline"
-msgstr "Liggende streep"
+msgstr "Onderstreep"
 
 #: sunflower/gui/preferences/terminal.py:57
 msgid "Allow bold text"
@@ -442,7 +442,7 @@ msgstr "Sluitknop tonen"
 
 #: sunflower/gui/preferences/display.py:54
 msgid "Show tab(s) even if there is only one"
-msgstr "Tabbladbalk tonen, ook als er slechts één tabblad is"
+msgstr "Tabbladbalk altijd tonen"
 
 #: sunflower/gui/preferences/display.py:55
 msgid "Change title bar color when started as super user"

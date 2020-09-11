@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-11 21:08+0200\n"
-"PO-Revision-Date: 2020-05-11 19:09+0000\n"
-"Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
+"POT-Creation-Date: 2020-05-11 21:13+0200\n"
+"PO-Revision-Date: 2020-09-10 10:19+0000\n"
+"Last-Translator: YOSHIDUMI, Rentaro\n"
 "Language-Team: Japanese (Japan) (http://www.transifex.com/way2cu/sunflower/language/ja_JP/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,18 +20,6 @@ msgstr ""
 "Language: ja_JP\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: build/Sunflower/sunflower/gui/preferences/terminal.py:10
-#: build/Sunflower/sunflower/plugins/system_terminal/plugin.py:54
-#: build/Sunflower/sunflower/plugins/system_terminal/plugin.py:55
-#: build/Sunflower/sunflower/plugin_base/terminal.py:169
-#: build/Sunflower/sunflower/plugin_base/terminal.py:260
-#: build/Sunflower/sunflower/plugin_base/item_list.py:187
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/terminal.py:10
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/system_terminal/plugin.py:54
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/system_terminal/plugin.py:55
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/terminal.py:169
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/terminal.py:260
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:187
 #: sunflower/gui/preferences/terminal.py:10
 #: sunflower/plugins/system_terminal/plugin.py:54
 #: sunflower/plugins/system_terminal/plugin.py:55
@@ -40,89 +28,59 @@ msgstr ""
 msgid "Terminal"
 msgstr "端末エミュレータ"
 
-#: build/Sunflower/sunflower/gui/preferences/terminal.py:17
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/terminal.py:17
 #: sunflower/gui/preferences/terminal.py:17
 msgid "VTE based terminal"
 msgstr "VTEベースの端末エミュレータ"
 
-#: build/Sunflower/sunflower/gui/preferences/terminal.py:21
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/terminal.py:21
 #: sunflower/gui/preferences/terminal.py:21
 msgid "Show scrollbars when needed"
 msgstr "必要であればスクロールバーを表示する"
 
-#: build/Sunflower/sunflower/gui/preferences/terminal.py:29
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/terminal.py:29
 #: sunflower/gui/preferences/terminal.py:29
 msgid "Use the system fixed width font"
 msgstr "システムの固定幅フォントを使用する"
 
-#: build/Sunflower/sunflower/gui/preferences/terminal.py:32
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/terminal.py:32
 #: sunflower/gui/preferences/terminal.py:32
 msgid "Font:"
 msgstr "フォント:"
 
-#: build/Sunflower/sunflower/gui/preferences/terminal.py:41
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/terminal.py:41
 #: sunflower/gui/preferences/terminal.py:41
 msgid "Cursor shape:"
 msgstr "カーソルの形状:"
 
-#: build/Sunflower/sunflower/gui/preferences/terminal.py:45
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/terminal.py:45
 #: sunflower/gui/preferences/terminal.py:45
 msgid "Block"
 msgstr "矩形"
 
-#: build/Sunflower/sunflower/gui/preferences/terminal.py:46
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/terminal.py:46
 #: sunflower/gui/preferences/terminal.py:46
 msgid "I-Beam"
 msgstr "縦線"
 
-#: build/Sunflower/sunflower/gui/preferences/terminal.py:47
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/terminal.py:47
 #: sunflower/gui/preferences/terminal.py:47
 msgid "Underline"
 msgstr "下線"
 
-#: build/Sunflower/sunflower/gui/preferences/terminal.py:57
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/terminal.py:57
 #: sunflower/gui/preferences/terminal.py:57
 msgid "Allow bold text"
 msgstr "太字を許可する"
 
-#: build/Sunflower/sunflower/gui/preferences/terminal.py:61
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/terminal.py:61
 #: sunflower/gui/preferences/terminal.py:61
 msgid "Automatically hide mouse when typing"
 msgstr "入力時、自動的にマウスポインタを隠す"
 
-#: build/Sunflower/sunflower/gui/preferences/terminal.py:69
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/terminal.py:69
 #: sunflower/gui/preferences/terminal.py:69
 msgid "External terminal"
 msgstr "外部端末エミュレータ"
 
-#: build/Sunflower/sunflower/gui/preferences/terminal.py:72
-#: build/Sunflower/sunflower/gui/preferences/view_and_edit.py:62
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/terminal.py:72
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/view_and_edit.py:62
 #: sunflower/gui/preferences/terminal.py:72
 #: sunflower/gui/preferences/view_and_edit.py:62
 msgid "Command line:"
 msgstr "コマンドライン:"
 
-#: build/Sunflower/sunflower/gui/preferences/terminal.py:78
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/terminal.py:78
 #: sunflower/gui/preferences/terminal.py:78
 msgid "Command line for executing specific program:"
 msgstr "特定のプログラムを実行するコマンドライン:"
 
-#: build/Sunflower/sunflower/gui/preferences/terminal.py:84
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/terminal.py:84
 #: sunflower/gui/preferences/terminal.py:84
 #, python-brace-format
 msgid ""
@@ -131,42 +89,22 @@ msgid ""
 "\t{0} will be replaced with socket/window id.\n"
 "\t{1} will be replaced with specified command and its parameters.\n"
 "\t{2} will be replaced with current working directory.</i></small>"
-msgstr "<small><i>註:\n\t{0}を省略した場合はタブの代わりに新規端末エミュレータを開きます。\n\t{0}はソケット・ウィンドウ識別子に置き換わります。\n\t{1}は指定したコマンド及びその引数に置き換わります。\n\t{2}は現在の作業ディレクトリに置き換わります。</i></small>"
+msgstr "<small><i>註:\n\t{0}を省略した場合はタブの代わりに新規端末を開きます。\n\t{0}はソケットまたはウィンドウ識別子に置き換わります。\n\t{1}は指定した命令およびその引数に置き換わります。\n\t{2}は現在の作業ディレクトリに置き換わります。</i></small>"
 
-#: build/Sunflower/sunflower/gui/preferences/commands.py:14
-#: build/Sunflower/sunflower/gui/main_window.py:209
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/commands.py:14
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:209
 #: sunflower/gui/preferences/commands.py:14 sunflower/gui/main_window.py:209
 msgid "Commands"
 msgstr "コマンド"
 
-#: build/Sunflower/sunflower/gui/preferences/commands.py:39
-#: build/Sunflower/sunflower/gui/preferences/bookmarks.py:49
-#: build/Sunflower/sunflower/plugins/rename_extensions/audio_metadata.py:26
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/commands.py:39
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/bookmarks.py:49
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/audio_metadata.py:26
 #: sunflower/gui/preferences/commands.py:39
 #: sunflower/gui/preferences/bookmarks.py:49
 #: sunflower/plugins/rename_extensions/audio_metadata.py:26
 msgid "Title"
 msgstr "タイトル"
 
-#: build/Sunflower/sunflower/gui/preferences/commands.py:43
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/commands.py:43
 #: sunflower/gui/preferences/commands.py:43
 msgid "Command"
 msgstr "コマンドの内容"
 
-#: build/Sunflower/sunflower/gui/preferences/commands.py:66
-#: build/Sunflower/sunflower/gui/preferences/bookmarks.py:76
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:77
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:230
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/commands.py:66
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/bookmarks.py:76
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:77
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:230
 #: sunflower/gui/preferences/commands.py:66
 #: sunflower/gui/preferences/bookmarks.py:76
 #: sunflower/gui/preferences/toolbar.py:77
@@ -174,14 +112,6 @@ msgstr "コマンドの内容"
 msgid "Move Up"
 msgstr "一つ上に移動"
 
-#: build/Sunflower/sunflower/gui/preferences/commands.py:74
-#: build/Sunflower/sunflower/gui/preferences/bookmarks.py:84
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:85
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:238
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/commands.py:74
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/bookmarks.py:84
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:85
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:238
 #: sunflower/gui/preferences/commands.py:74
 #: sunflower/gui/preferences/bookmarks.py:84
 #: sunflower/gui/preferences/toolbar.py:85
@@ -189,35 +119,23 @@ msgstr "一つ上に移動"
 msgid "Move Down"
 msgstr "下に移動"
 
-#: build/Sunflower/sunflower/gui/preferences/associations.py:15
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/associations.py:15
 #: sunflower/gui/preferences/associations.py:15
 msgid "Associations"
 msgstr "関連付け"
 
-#: build/Sunflower/sunflower/gui/preferences/associations.py:44
-#: build/Sunflower/sunflower/gui/preferences/associations.py:76
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/associations.py:44
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/associations.py:76
 #: sunflower/gui/preferences/associations.py:44
 #: sunflower/gui/preferences/associations.py:76
 msgid "Add mime type"
 msgstr "メディアタイプを追加する"
 
-#: build/Sunflower/sunflower/gui/preferences/associations.py:47
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/associations.py:47
 #: sunflower/gui/preferences/associations.py:47
 msgid "Add application to mime type"
 msgstr "メディアタイプに対応するアプリケーションを追加する"
 
-#: build/Sunflower/sunflower/gui/preferences/associations.py:77
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/associations.py:77
 #: sunflower/gui/preferences/associations.py:77
 msgid "Enter MIME type (eg. image/png):"
 msgstr "メディアタイプを入力する（例: image/png）:"
 
-#: build/Sunflower/sunflower/gui/preferences/associations.py:128
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/associations.py:128
 #: sunflower/gui/preferences/associations.py:128
 msgid ""
 "You need to select mime type to which application will be added. You can "
@@ -225,62 +143,40 @@ msgid ""
 "parent."
 msgstr "アプリケーションが追加されるメディアタイプを選択する必要があります。別のアプリケーションを選択して、新しいアプリケーションをその親に追加することもできます。"
 
-#: build/Sunflower/sunflower/gui/preferences/plugins.py:39
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/plugins.py:39
 #: sunflower/gui/preferences/plugins.py:39
 msgid "Plugins"
 msgstr "プラグイン"
 
-#: build/Sunflower/sunflower/gui/preferences/plugins.py:71
-#: build/Sunflower/sunflower/gui/preferences/display.py:88
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/plugins.py:71
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:88
 #: sunflower/gui/preferences/plugins.py:71
 #: sunflower/gui/preferences/display.py:88
 msgid "Active"
 msgstr "有効"
 
-#: build/Sunflower/sunflower/gui/preferences/plugins.py:73
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/plugins.py:73
 #: sunflower/gui/preferences/plugins.py:73
 msgid "Plugin name"
 msgstr "プラグイン名"
 
-#: build/Sunflower/sunflower/gui/preferences/plugins.py:77
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/plugins.py:77
 #: sunflower/gui/preferences/plugins.py:77
 msgid "Version"
 msgstr "バージョン"
 
-#: build/Sunflower/sunflower/gui/preferences/plugins.py:79
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/plugins.py:79
 #: sunflower/gui/preferences/plugins.py:79
 msgid "Author"
 msgstr "作者"
 
-#: build/Sunflower/sunflower/gui/preferences/plugins.py:95
-#: build/Sunflower/sunflower/gui/preferences/accelerators.py:53
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/plugins.py:95
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/accelerators.py:53
 #: sunflower/gui/preferences/plugins.py:95
 #: sunflower/gui/preferences/accelerators.py:53
 msgid "Description"
 msgstr "説明"
 
-#: build/Sunflower/sunflower/gui/preferences/plugins.py:105
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/plugins.py:105
 #: sunflower/gui/preferences/plugins.py:105
 msgid "Contact"
 msgstr "連絡先"
 
-#: build/Sunflower/sunflower/gui/preferences/plugins.py:114
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/plugins.py:114
 #: sunflower/gui/preferences/plugins.py:114
 msgid "Visit site"
 msgstr "Webサイト"
 
-#: build/Sunflower/sunflower/gui/preferences/plugins.py:187
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/plugins.py:187
 #: sunflower/gui/preferences/plugins.py:187
 #, python-brace-format
 msgid ""
@@ -288,26 +184,14 @@ msgid ""
 "deactivated!"
 msgstr "{0}は通常の操作に必須であるので、無効にすることは出来ません。"
 
-#: build/Sunflower/sunflower/gui/preferences/plugins.py:218
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/plugins.py:218
 #: sunflower/gui/preferences/plugins.py:218
 msgid "This plugin has no description"
 msgstr "プラグインの説明がありません"
 
-#: build/Sunflower/sunflower/gui/preferences/plugins.py:277
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/plugins.py:277
 #: sunflower/gui/preferences/plugins.py:277
 msgid "No plugin selected"
 msgstr "プラグインが選択されていません"
 
-#: build/Sunflower/sunflower/gui/preferences/bookmarks.py:14
-#: build/Sunflower/sunflower/widgets/location_menu.py:70
-#: build/Sunflower/sunflower/plugins/default_toolbar/bookmarks_button.py:16
-#: build/Sunflower/sunflower/plugins/default_toolbar/bookmarks_button.py:17
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/bookmarks.py:14
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/location_menu.py:70
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/bookmarks_button.py:16
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/bookmarks_button.py:17
 #: sunflower/gui/preferences/bookmarks.py:14
 #: sunflower/widgets/location_menu.py:70
 #: sunflower/plugins/default_toolbar/bookmarks_button.py:16
@@ -315,52 +199,34 @@ msgstr "プラグインが選択されていません"
 msgid "Bookmarks"
 msgstr "栞"
 
-#: build/Sunflower/sunflower/gui/preferences/bookmarks.py:17
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/bookmarks.py:17
 #: sunflower/gui/preferences/bookmarks.py:17
 msgid "Show mount points in bookmarks menu"
 msgstr "栞一覧にマウントポイントを表示する"
 
-#: build/Sunflower/sunflower/gui/preferences/bookmarks.py:21
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/bookmarks.py:21
 #: sunflower/gui/preferences/bookmarks.py:21
 msgid "Show system bookmarks"
 msgstr "システムの栞を表示する"
 
-#: build/Sunflower/sunflower/gui/preferences/bookmarks.py:25
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/bookmarks.py:25
 #: sunflower/gui/preferences/bookmarks.py:25
 msgid "Add home directory to bookmarks menu"
 msgstr "栞一覧にホームディレクトリを追加する"
 
-#: build/Sunflower/sunflower/gui/preferences/bookmarks.py:53
-#: build/Sunflower/sunflower/tools/find_files.py:138
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/bookmarks.py:53
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:138
 #: sunflower/gui/preferences/bookmarks.py:53 sunflower/tools/find_files.py:138
 msgid "Location"
 msgstr "場所"
 
-#: build/Sunflower/sunflower/gui/preferences/accelerators.py:19
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/accelerators.py:19
 #: sunflower/gui/preferences/accelerators.py:19
 msgid "Key bindings"
 msgstr "ショートカットキー"
 
-#: build/Sunflower/sunflower/gui/preferences/accelerators.py:60
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/accelerators.py:60
 #: sunflower/gui/preferences/accelerators.py:60
 msgid "Primary"
 msgstr "優先"
 
-#: build/Sunflower/sunflower/gui/preferences/accelerators.py:68
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/accelerators.py:68
 #: sunflower/gui/preferences/accelerators.py:68
 msgid "Secondary"
 msgstr "代替"
 
-#: build/Sunflower/sunflower/gui/preferences/accelerators.py:81
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/accelerators.py:81
 #: sunflower/gui/preferences/accelerators.py:81
 msgid ""
 "<b>Note:</b> You can only edit accelerators from objects created at least "
@@ -368,14 +234,10 @@ msgid ""
 "assign mode."
 msgstr "<b>注意:</b> You can only edit accelerators from objects created at least once in current session. また、ショートカットを無効にするには、キーの組合せを入力する際に<i>バックスペースキー</i>を押下してください。"
 
-#: build/Sunflower/sunflower/gui/preferences/accelerators.py:91
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/accelerators.py:91
 #: sunflower/gui/preferences/accelerators.py:91
 msgid "Double click on accelerator to assign new one."
 msgstr "ダブルクリックして新しいキーの組合せを入力してください。"
 
-#: build/Sunflower/sunflower/gui/preferences/accelerators.py:197
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/accelerators.py:197
 #: sunflower/gui/preferences/accelerators.py:197
 #, python-brace-format
 msgid ""
@@ -385,14 +247,6 @@ msgid ""
 "{1}"
 msgstr "キーの組合せ「{0}」は既に割当て済みです。このキーの組合せを適用すると以下の機能に割当てられていたキーの組合せは削除されます。\n\n衝突:\n{1}"
 
-#: build/Sunflower/sunflower/gui/preferences/accelerators.py:257
-#: build/Sunflower/sunflower/widgets/location_menu.py:98
-#: build/Sunflower/sunflower/plugins/default_toolbar/home_directory_button.py:16
-#: build/Sunflower/sunflower/plugins/default_toolbar/home_directory_button.py:17
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/accelerators.py:257
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/location_menu.py:98
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/home_directory_button.py:16
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/home_directory_button.py:17
 #: sunflower/gui/preferences/accelerators.py:257
 #: sunflower/widgets/location_menu.py:98
 #: sunflower/plugins/default_toolbar/home_directory_button.py:16
@@ -400,77 +254,39 @@ msgstr "キーの組合せ「{0}」は既に割当て済みです。このキー
 msgid "Home directory"
 msgstr "ホームディレクトリ"
 
-#: build/Sunflower/sunflower/gui/preferences/view_and_edit.py:15
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/view_and_edit.py:15
 #: sunflower/gui/preferences/view_and_edit.py:15
 msgid "View & Edit"
 msgstr "表示・編集"
 
-#: build/Sunflower/sunflower/gui/preferences/view_and_edit.py:18
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/view_and_edit.py:18
 #: sunflower/gui/preferences/view_and_edit.py:18
 msgid "View"
 msgstr "表示"
 
-#: build/Sunflower/sunflower/gui/preferences/view_and_edit.py:22
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/view_and_edit.py:22
 #: sunflower/gui/preferences/view_and_edit.py:22
 msgid "Wrap long lines"
 msgstr "長い行を折り返す"
 
-#: build/Sunflower/sunflower/gui/preferences/view_and_edit.py:26
-#: build/Sunflower/sunflower/gui/main_window.py:426
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/view_and_edit.py:26
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:426
 #: sunflower/gui/preferences/view_and_edit.py:26
 #: sunflower/gui/main_window.py:426
 msgid "Edit"
 msgstr "編集"
 
-#: build/Sunflower/sunflower/gui/preferences/view_and_edit.py:32
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/view_and_edit.py:32
 #: sunflower/gui/preferences/view_and_edit.py:32
 msgid "Use installed application"
 msgstr "インストールされているアプリケーションを使用する"
 
-#: build/Sunflower/sunflower/gui/preferences/view_and_edit.py:54
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/view_and_edit.py:54
 #: sunflower/gui/preferences/view_and_edit.py:54
 msgid "Use external command"
 msgstr "外部コマンドを使用する"
 
-#: build/Sunflower/sunflower/gui/preferences/view_and_edit.py:68
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/view_and_edit.py:68
 #: sunflower/gui/preferences/view_and_edit.py:68
 msgid "Execute command in terminal tab"
 msgstr "端末エミュレータタブ内でコマンドを実行する"
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:18
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:18
 #: sunflower/gui/preferences/toolbar.py:18
 msgid "Toolbar"
 msgstr "ツールバー"
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:39
-#: build/Sunflower/sunflower/gui/history_list.py:49
-#: build/Sunflower/sunflower/gui/keyring_manager_window.py:54
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:132
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:164
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:518
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:870
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:62
-#: build/Sunflower/sunflower/plugins/rename_extensions/default.py:75
-#: build/Sunflower/sunflower/tools/find_files.py:134
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:39
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/history_list.py:49
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/keyring_manager_window.py:54
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:132
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:164
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:518
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:870
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:62
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/default.py:75
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:134
 #: sunflower/gui/preferences/toolbar.py:39 sunflower/gui/history_list.py:49
 #: sunflower/gui/keyring_manager_window.py:54
 #: sunflower/plugins/file_list/file_list.py:132
@@ -483,144 +299,92 @@ msgstr "ツールバー"
 msgid "Name"
 msgstr "名前"
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:50
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:50
 #: sunflower/gui/preferences/toolbar.py:50
 msgid "Type"
 msgstr "種類"
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:96
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:96
 #: sunflower/gui/preferences/toolbar.py:96
 msgid "Toolbar style:"
 msgstr "ツールバーの表示方式:"
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:98
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:98
 #: sunflower/gui/preferences/toolbar.py:98
 msgid "Icons"
 msgstr "アイコンのみ"
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:99
-#: build/Sunflower/sunflower/tools/viewer.py:134
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:99
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/viewer.py:134
 #: sunflower/gui/preferences/toolbar.py:99 sunflower/tools/viewer.py:134
 msgid "Text"
 msgstr "文字のみ"
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:100
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:103
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:100
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:103
 #: sunflower/gui/preferences/toolbar.py:100
 #: sunflower/gui/preferences/item_list.py:103
 msgid "Both"
 msgstr "アイコンおよび文字"
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:101
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:101
 #: sunflower/gui/preferences/toolbar.py:101
 msgid "Both horizontal"
 msgstr "アイコンの下に文字"
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:111
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:111
 #: sunflower/gui/preferences/toolbar.py:111
 msgid "Icon size:"
 msgstr "アイコンの大きさ"
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:113
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:113
 #: sunflower/gui/preferences/toolbar.py:113
 msgid "Small toolbar icon"
 msgstr "小さいツールバー"
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:114
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:114
 #: sunflower/gui/preferences/toolbar.py:114
 msgid "Large toolbar icon"
 msgstr "大きいツールバー"
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:115
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:115
 #: sunflower/gui/preferences/toolbar.py:115
 msgid "Same as drag icons"
 msgstr "ドラッグ・アンド・ドロップ"
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:116
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:116
 #: sunflower/gui/preferences/toolbar.py:116
 msgid "Same as dialog"
 msgstr "ダイアログ"
 
-#: build/Sunflower/sunflower/gui/preferences/toolbar.py:222
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/toolbar.py:222
 #: sunflower/gui/preferences/toolbar.py:222
 msgid "missing plugin"
 msgstr "プラグインが見付かりません"
 
-#: build/Sunflower/sunflower/gui/preferences/operation.py:9
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:44
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/operation.py:9
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:44
 #: sunflower/gui/preferences/operation.py:9
 #: sunflower/gui/preferences/item_list.py:44
 msgid "Operation"
 msgstr "操作"
 
-#: build/Sunflower/sunflower/gui/preferences/operation.py:12
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/operation.py:12
 #: sunflower/gui/preferences/operation.py:12
 msgid "General"
 msgstr "全般"
 
-#: build/Sunflower/sunflower/gui/preferences/operation.py:16
-#: build/Sunflower/sunflower/mounts.py:22
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/operation.py:16
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/mounts.py:22
 #: sunflower/gui/preferences/operation.py:16 sunflower/mounts.py:22
 msgid "Mounts"
 msgstr "マウント"
 
-#: build/Sunflower/sunflower/gui/preferences/operation.py:20
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/operation.py:20
 #: sunflower/gui/preferences/operation.py:20
 msgid "Confirmation"
 msgstr "設定"
 
-#: build/Sunflower/sunflower/gui/preferences/operation.py:25
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/operation.py:25
 #: sunflower/gui/preferences/operation.py:25
 msgid "Delete items to trashcan"
 msgstr "項目をゴミ箱に捨てる"
 
-#: build/Sunflower/sunflower/gui/preferences/operation.py:26
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/operation.py:26
 #: sunflower/gui/preferences/operation.py:26
 msgid "Reserve free space on copy/move"
 msgstr "コピーおよび移動に十分な空き容量があるか検査する"
 
-#: build/Sunflower/sunflower/gui/preferences/operation.py:27
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/operation.py:27
 #: sunflower/gui/preferences/operation.py:27
 msgid "Automount drives on start up"
 msgstr "起動時にドライブを自動でマウントする"
 
-#: build/Sunflower/sunflower/gui/preferences/operation.py:28
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/operation.py:28
 #: sunflower/gui/preferences/operation.py:28
 msgid "Automount removable drives when inserted"
 msgstr "リムーバブルドライブが挿入されたら自動的にマウントする"
 
-#: build/Sunflower/sunflower/gui/preferences/operation.py:29
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/operation.py:29
 #: sunflower/gui/preferences/operation.py:29
 msgid "Show confirmation dialog before deleting items"
 msgstr "項目を消去する前に確認ダイアログを表示する"
 
-#: build/Sunflower/sunflower/gui/preferences/operation.py:63
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/operation.py:63
 #: sunflower/gui/preferences/operation.py:63
 msgid ""
 "With trashing disabled you will not be able to restore accidentally deleted "
@@ -628,1050 +392,660 @@ msgid ""
 "items?"
 msgstr "ゴミ箱を無効にすると、誤って削除した項目を復元できなくなります。項目を消去する前の確認ダイアログを非表示にしてよろしいですか？"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:22
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:22
 #: sunflower/gui/preferences/display.py:22
 msgid "Display"
 msgstr "表示"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:27
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:27
 #: sunflower/gui/preferences/display.py:27
 msgid "Main window"
 msgstr "主ウィンドウ"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:31
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:31
 #: sunflower/gui/preferences/display.py:31
 msgid "Hide main window on close"
 msgstr "閉じたら主ウィンドウを隠す"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:32
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:32
 #: sunflower/gui/preferences/display.py:32
 msgid "Allow multiple instances"
 msgstr "複数起動を許可する"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:33
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:33
 #: sunflower/gui/preferences/display.py:33
 msgid "Show toolbar"
 msgstr "ツールバーを表示する"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:34
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:34
 #: sunflower/gui/preferences/display.py:34
 msgid "Show titlebar"
 msgstr "題欄を表示"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:35
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:35
 #: sunflower/gui/preferences/display.py:35
 msgid "Show command bar"
 msgstr "コマンドバーを表示する"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:36
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:36
 #: sunflower/gui/preferences/display.py:36
 msgid "Horizontal split"
 msgstr "水平に分割する"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:37
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:37
 #: sunflower/gui/preferences/display.py:37
 msgid "Dark theme"
-msgstr ""
+msgstr "暗い色調"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:48
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:48
 #: sunflower/gui/preferences/display.py:48
 msgid "Tabs"
 msgstr "タブ"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:52
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:52
 #: sunflower/gui/preferences/display.py:52
 msgid "Focus new tab after opening"
 msgstr "新しいタブで開いたとき、そのタブに移動する"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:53
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:53
 #: sunflower/gui/preferences/display.py:53
 msgid "Show close button"
 msgstr "閉じるボタンを表示する"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:54
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:54
 #: sunflower/gui/preferences/display.py:54
 msgid "Show tab(s) even if there is only one"
 msgstr "常にタブを表示する"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:55
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:55
 #: sunflower/gui/preferences/display.py:55
 msgid "Change title bar color when started as super user"
 msgstr "管理者として起動した場合にタイトルバーの色を変える"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:67
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:67
 #: sunflower/gui/preferences/display.py:67
 msgid "Show status bar:"
 msgstr "ステータスバーを表示する:"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:71
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:71
 #: sunflower/gui/preferences/display.py:71
 msgid "Always"
 msgstr "常に"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:72
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:72
 #: sunflower/gui/preferences/display.py:72
 msgid "When needed"
 msgstr "賢く"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:73
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:73
 #: sunflower/gui/preferences/display.py:73
 msgid "Never"
 msgstr "しない"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:83
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:83
 #: sunflower/gui/preferences/display.py:83
 msgid "Expanded tabs:"
 msgstr "タブを幅いっぱいに広げる:"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:87
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:100
-#: build/Sunflower/sunflower/queue.py:30
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:87
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:100
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/queue.py:30
 #: sunflower/gui/preferences/display.py:87
 #: sunflower/gui/preferences/item_list.py:100 sunflower/queue.py:30
 msgid "None"
 msgstr "広げない"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:89
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:89
 #: sunflower/gui/preferences/display.py:89
 msgid "All"
 msgstr "全て"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:99
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:99
 #: sunflower/gui/preferences/display.py:99
 msgid "Other"
 msgstr "その他"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:103
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:103
 #: sunflower/gui/preferences/display.py:103
 msgid "Hide operation window on minimize"
 msgstr "最小化した際にオペレーションウィンドウを隠す"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:104
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:104
 #: sunflower/gui/preferences/display.py:104
 msgid "Show notifications"
 msgstr "通知を表示"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:106
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:106
 #: sunflower/gui/preferences/display.py:106
 msgid "Use path completion on non-local paths"
 msgstr "ローカルにないパスに対してもパスを補完する"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:114
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:114
 #: sunflower/gui/preferences/display.py:114
 msgid "Size format:"
 msgstr "大きさの形式:"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:118
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:118
 #: sunflower/gui/preferences/display.py:118
 msgid "Localized"
 msgstr "システムの設定"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:119
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:119
 #: sunflower/gui/preferences/display.py:119
 msgid "SI <small>(1 kB = 1000 B)</small>"
 msgstr "国際単位系（1 kB = 1000 B）"
 
-#: build/Sunflower/sunflower/gui/preferences/display.py:120
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/display.py:120
 #: sunflower/gui/preferences/display.py:120
 msgid "IEC <small>(1 KiB = 1024 B)</small>"
 msgstr "国際電気標準会議規格（1 KiB = 1024 B）"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:37
-#: build/Sunflower/sunflower/plugins/file_list/column_editor.py:72
-#: build/Sunflower/sunflower/plugin_base/item_list.py:201
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:37
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/column_editor.py:72
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:201
 #: sunflower/gui/preferences/item_list.py:37
 #: sunflower/plugins/file_list/column_editor.py:72
 #: sunflower/plugin_base/item_list.py:201
 msgid "Item List"
 msgstr "項目表示欄"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:42
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:42
 #: sunflower/gui/preferences/item_list.py:42
 msgid "Look & feel"
 msgstr "振る舞い"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:43
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:43
 #: sunflower/gui/preferences/item_list.py:43
 msgid "Hidden files"
 msgstr "隠しファイル"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:45
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:45
 #: sunflower/gui/preferences/item_list.py:45
 msgid "Directories"
 msgstr "ディレクトリ"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:46
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:46
 #: sunflower/gui/preferences/item_list.py:46
 msgid "Columns"
 msgstr "列"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:63
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:63
 #: sunflower/gui/preferences/item_list.py:63
 msgid "Row hinting"
 msgstr "低ヒンティング"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:64
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:64
 #: sunflower/gui/preferences/item_list.py:64
 msgid "Case sensitive item sorting"
 msgstr "大文字小文字を区別して並び換える"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:65
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:65
 #: sunflower/gui/preferences/item_list.py:65
 msgid "Number sensitive item sorting"
 msgstr "数字に従って並び換える"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:66
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:66
 #: sunflower/gui/preferences/item_list.py:66
 msgid "Single click navigation"
 msgstr "シングルクリックで操作する"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:67
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:67
 #: sunflower/gui/preferences/item_list.py:67
 msgid "Right click selects items"
 msgstr "右クリックで項目を選択する"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:68
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:68
 #: sunflower/gui/preferences/item_list.py:68
 msgid "Show list headers"
 msgstr "列を表示する"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:69
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:69
 #: sunflower/gui/preferences/item_list.py:69
 msgid "Fast media preview"
 msgstr "メディアファイルを素早くプレビューする"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:70
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:70
 #: sunflower/gui/preferences/item_list.py:70
 msgid "Show tree expanders"
 msgstr "樹展開を表示する"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:71
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:71
 #: sunflower/gui/preferences/item_list.py:71
 msgid "Support second level extension"
 msgstr "二重拡張子を考慮する"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:85
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:85
 #: sunflower/gui/preferences/item_list.py:85
 msgid "Access mode format:"
 msgstr "パーミッションの形式:"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:90
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:90
 #: sunflower/gui/preferences/item_list.py:90
 msgid "Octal"
 msgstr "8進数"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:91
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:91
 #: sunflower/gui/preferences/item_list.py:91
 msgid "Textual"
 msgstr "記号表記"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:95
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:95
 #: sunflower/gui/preferences/item_list.py:95
 msgid "Show grid lines:"
 msgstr "グリッド線の表示:"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:101
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:101
 #: sunflower/gui/preferences/item_list.py:101
 msgid "Horizontal"
 msgstr "水平方向"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:102
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:102
 #: sunflower/gui/preferences/item_list.py:102
 msgid "Vertical"
 msgstr "垂直方向"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:108
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:108
 #: sunflower/gui/preferences/item_list.py:108
 msgid "Selection color:"
 msgstr "選択色:"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:118
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:118
 #: sunflower/gui/preferences/item_list.py:118
 msgid "Selection indicator:"
 msgstr "選択表示:"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:133
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:133
 #: sunflower/gui/preferences/item_list.py:133
 msgid "Quick search combination:"
 msgstr "逐次検索を行うキー組合せ"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:136
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:136
 #: sunflower/gui/preferences/item_list.py:136
 msgid "Control"
 msgstr "Control"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:137
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:137
 #: sunflower/gui/preferences/item_list.py:137
 msgid "Alt"
 msgstr "Alt"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:138
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:138
 #: sunflower/gui/preferences/item_list.py:138
 msgid "Shift"
 msgstr "Shift"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:147
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:147
 #: sunflower/gui/preferences/item_list.py:147
 msgid "Date format:"
 msgstr "日付の形式:"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:151
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:151
 #: sunflower/gui/preferences/item_list.py:151
 msgid "Time is formed using the format located at:"
 msgstr "日時は以下に記述された表記法で表記される:"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:160
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:160
 #: sunflower/gui/preferences/item_list.py:160
 msgid "Show hidden files"
 msgstr "隠しファイルを表示する"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:167
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:167
 #: sunflower/gui/preferences/item_list.py:167
 msgid "Always visible files and directories:"
 msgstr "常に表示するファイルおよびディレクトリ"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:192
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:192
 #: sunflower/gui/preferences/item_list.py:192
 msgid "Load specified tabs instead of saved"
 msgstr "保存されたものではなく指定したタブを読み込む"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:205
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:205
 #: sunflower/gui/preferences/item_list.py:205
 msgid "Directory"
 msgstr "ディレクトリ"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:210
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:210
 #: sunflower/gui/preferences/item_list.py:210
 msgid "Left list"
 msgstr "左パネルのリスト"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:211
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:211
 #: sunflower/gui/preferences/item_list.py:211
 msgid "Right list"
 msgstr "右パネルのリスト"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:243
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:243
 #: sunflower/gui/preferences/item_list.py:243
 msgid "Custom directory"
 msgstr "任意のディレクトリ"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:245
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:245
 #: sunflower/gui/preferences/item_list.py:245
 msgid "Left directory"
 msgstr "左パネルのディレクトリ"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:246
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:246
 #: sunflower/gui/preferences/item_list.py:246
 msgid "Right directory"
 msgstr "右パネルのディレクトリ"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:300
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:300
 #: sunflower/gui/preferences/item_list.py:300
 msgid "Column"
 msgstr "列"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:305
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:134
-#: build/Sunflower/sunflower/plugins/find_file_extensions/size.py:64
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:305
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:134
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/size.py:64
 #: sunflower/gui/preferences/item_list.py:305
 #: sunflower/plugins/file_list/file_list.py:134
 #: sunflower/plugins/find_file_extensions/size.py:64
 msgid "Size"
 msgstr "大きさ"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:308
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:308
 #: sunflower/gui/preferences/item_list.py:308
 msgid "Visible"
 msgstr "表示"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:311
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:311
 #: sunflower/gui/preferences/item_list.py:311
 msgid "Font"
 msgstr "フォント"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:429
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:429
 #: sunflower/gui/preferences/item_list.py:429
 msgid "Add always visible item"
 msgstr "常に表示する項目を追加"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:430
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:430
 #: sunflower/gui/preferences/item_list.py:430
 msgid "Full name of file or directory to always show:"
 msgstr "常に表示するファイルもしくはディレクトリのフルパスを入力:"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:456
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:456
 #: sunflower/gui/preferences/item_list.py:456
 msgid "Add custom directory"
 msgstr "任意のディレクトリを追加"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:457
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:457
 #: sunflower/gui/preferences/item_list.py:457
 msgid "Full path:"
 msgstr "フルパス:"
 
-#: build/Sunflower/sunflower/gui/preferences/item_list.py:538
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences/item_list.py:538
 #: sunflower/gui/preferences/item_list.py:538
 msgid ""
 "Quick search settings are in conflict with VIM navigation style. To resolve "
 "this issue your quick search settings were restored to default."
 msgstr "逐次検索の設定がVimバインディングと衝突しています。解消するために逐次検索の設定を既定に戻します。"
 
-#: build/Sunflower/sunflower/gui/main_window.py:73
-#: build/Sunflower/sunflower/gui/main_window.py:76
-#: build/Sunflower/sunflower/gui/main_window.py:163
-#: build/Sunflower/sunflower/gui/about_window.py:66
-#: build/Sunflower/sunflower/gui/about_window.py:67
-#: build/Sunflower/sunflower/__main__.py:224
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:73
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:76
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:163
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/about_window.py:66
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/about_window.py:67
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:224
 #: sunflower/gui/main_window.py:73 sunflower/gui/main_window.py:76
 #: sunflower/gui/main_window.py:163 sunflower/gui/about_window.py:66
 #: sunflower/gui/about_window.py:67 sunflower/__main__.py:216
 msgid "Sunflower"
 msgstr "Sunflower"
 
-#: build/Sunflower/sunflower/gui/main_window.py:180
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:180
 #: sunflower/gui/main_window.py:180
 msgid "Create new file, directory and more."
 msgstr "ファイル・ディレクトリ等を新規作成"
 
-#: build/Sunflower/sunflower/gui/main_window.py:187
-#: build/Sunflower/sunflower/gui/main_window.py:1738
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:187
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1738
 #: sunflower/gui/main_window.py:187 sunflower/gui/main_window.py:1738
 msgid "Create _file"
 msgstr "ファイルの作成(_F)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:192
-#: build/Sunflower/sunflower/gui/main_window.py:1739
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:192
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1739
 #: sunflower/gui/main_window.py:192 sunflower/gui/main_window.py:1739
 msgid "Create _directory"
 msgstr "ディレクトリの作成(_D)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:203
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:203
 #: sunflower/gui/main_window.py:203
 msgid "Create new tab"
 msgstr "タブを新規作成"
 
-#: build/Sunflower/sunflower/gui/main_window.py:286
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:286
 #: sunflower/gui/main_window.py:286
 msgid "_Select all"
 msgstr "すべて選択(_S)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:287
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:287
 #: sunflower/gui/main_window.py:287
 msgid "_Deselect all"
 msgstr "全選択を解除(_D)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:288
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:288
 #: sunflower/gui/main_window.py:288
 msgid "Invert select_ion"
 msgstr "選択範囲を反転(_I)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:290
-#: build/Sunflower/sunflower/gui/main_window.py:1742
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:290
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1742
 #: sunflower/gui/main_window.py:290 sunflower/gui/main_window.py:1742
 msgid "S_elect with pattern"
 msgstr "パターンで選択(_E)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:291
-#: build/Sunflower/sunflower/gui/main_window.py:1743
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:291
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1743
 #: sunflower/gui/main_window.py:291 sunflower/gui/main_window.py:1743
 msgid "Deselect with pa_ttern"
 msgstr "パターン選択を解除(_T)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:292
-#: build/Sunflower/sunflower/gui/main_window.py:1744
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:292
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1744
 #: sunflower/gui/main_window.py:292 sunflower/gui/main_window.py:1744
 msgid "Select with same e_xtension"
 msgstr "同じ拡張子で選択(_X)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:293
-#: build/Sunflower/sunflower/gui/main_window.py:1745
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:293
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1745
 #: sunflower/gui/main_window.py:293 sunflower/gui/main_window.py:1745
 msgid "Deselect with same exte_nsion"
 msgstr "拡張子選択を解除(_N)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:295
-#: build/Sunflower/sunflower/gui/main_window.py:1746
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:295
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1746
 #: sunflower/gui/main_window.py:295 sunflower/gui/main_window.py:1746
 msgid "Compare _directories"
 msgstr "ディレクトリを比較する(_D)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:302
-#: build/Sunflower/sunflower/gui/main_window.py:1747
-#: build/Sunflower/sunflower/gui/main_window.py:1748
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:302
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1747
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1748
 #: sunflower/gui/main_window.py:302 sunflower/gui/main_window.py:1747
 #: sunflower/gui/main_window.py:1748
 msgid "_Find files"
 msgstr "ファイルを検索(_F)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:303
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:303
 #: sunflower/gui/main_window.py:303
 msgid "Advanced _rename"
 msgstr "高度な名前の変更(_R)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:304
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:304
 #: sunflower/gui/main_window.py:304
 msgid "_Mount manager"
 msgstr "マウントマネージャ(_M)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:305
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:305
 #: sunflower/gui/main_window.py:305
 msgid "_Keyring manager"
 msgstr "鍵管理(_K)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:308
-#: build/Sunflower/sunflower/gui/main_window.py:1752
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:308
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1752
 #: sunflower/gui/main_window.py:308 sunflower/gui/main_window.py:1752
 msgid "Fast m_edia preview"
 msgstr "メディアをプレビュー(_E)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:309
-#: build/Sunflower/sunflower/gui/main_window.py:1753
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:309
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1753
 #: sunflower/gui/main_window.py:309 sunflower/gui/main_window.py:1753
 msgid "Show _hidden files"
 msgstr "隠しファイルを表示(_H)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:311
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:311
 #: sunflower/gui/main_window.py:311
 msgid "Show _toolbar"
 msgstr "ツールバーを表示(_T)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:312
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:312
 #: sunflower/gui/main_window.py:312
 msgid "Show _titlebar"
 msgstr "題欄を表示 (_T)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:313
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:313
 #: sunflower/gui/main_window.py:313
 msgid "Show _command bar"
 msgstr "コマンドバーを表示する(_C)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:314
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:314
 #: sunflower/gui/main_window.py:314
 msgid "_Horizontal split"
 msgstr "水平分割(_H)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:315
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:315
 #: sunflower/gui/main_window.py:315
 msgid "_Dark theme"
-msgstr ""
+msgstr "暗い色調 (_D)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:321
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:321
 #: sunflower/gui/main_window.py:321
 msgid "_Home page"
 msgstr "ホームページ(_H)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:322
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:322
 #: sunflower/gui/main_window.py:322
 msgid "Check for new version"
 msgstr "新しいバージョンを確認する"
 
-#: build/Sunflower/sunflower/gui/main_window.py:323
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:323
 #: sunflower/gui/main_window.py:323
 msgid "_About"
 msgstr "Sunflowerについて(_A)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:325
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:325
 #: sunflower/gui/main_window.py:325
 msgid "_Mark"
 msgstr "選択(_M)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:326
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:326
 #: sunflower/gui/main_window.py:326
 msgid "_Tools"
 msgstr "ツール(_T)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:327
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:327
 #: sunflower/gui/main_window.py:327
 msgid "_View"
 msgstr "表示(_V)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:329
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:329
 #: sunflower/gui/main_window.py:329
 msgid "_Help"
 msgstr "ヘルプ(_H)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:330
-#: build/Sunflower/sunflower/gui/main_window.py:1741
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:330
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1741
 #: sunflower/gui/main_window.py:330 sunflower/gui/main_window.py:1741
 msgid "_Preferences"
 msgstr "設定(_P)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:331
-#: build/Sunflower/sunflower/gui/main_window.py:1740
-#: build/Sunflower/sunflower/indicator.py:50
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:331
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1740
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/indicator.py:50
 #: sunflower/gui/main_window.py:331 sunflower/gui/main_window.py:1740
 #: sunflower/indicator.py:50
 msgid "_Quit"
 msgstr "終了(_Q)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:387
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:387
 #: sunflower/gui/main_window.py:387
 msgid "Execute command:"
 msgstr "コマンドを実行する:"
 
-#: build/Sunflower/sunflower/gui/main_window.py:423
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:423
 #: sunflower/gui/main_window.py:423
 msgid "Refresh"
 msgstr "更新"
 
-#: build/Sunflower/sunflower/gui/main_window.py:423
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:423
 #: sunflower/gui/main_window.py:423
 msgid "Reload active item list"
 msgstr "アクティブなファイルを再読込"
 
-#: build/Sunflower/sunflower/gui/main_window.py:424
-#: build/Sunflower/sunflower/tools/advanced_rename.py:95
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:424
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/advanced_rename.py:95
 #: sunflower/gui/main_window.py:424 sunflower/tools/advanced_rename.py:95
 msgid "Rename"
 msgstr "名前を変更"
 
-#: build/Sunflower/sunflower/gui/main_window.py:424
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:424
 #: sunflower/gui/main_window.py:424
 msgid "Rename selected file"
 msgstr "選択したファイルの名前を変更"
 
-#: build/Sunflower/sunflower/gui/main_window.py:425
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:425
 #: sunflower/gui/main_window.py:425
 msgid "Preview"
 msgstr "プレビュー"
 
-#: build/Sunflower/sunflower/gui/main_window.py:425
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:425
 #: sunflower/gui/main_window.py:425
 msgid "Preview selected file"
 msgstr "選択したファイルをプレビュー"
 
-#: build/Sunflower/sunflower/gui/main_window.py:426
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:426
 #: sunflower/gui/main_window.py:426
 msgid "Edit selected file"
 msgstr "選択したファイルを編集"
 
-#: build/Sunflower/sunflower/gui/main_window.py:427
-#: build/Sunflower/sunflower/gui/input_dialog.py:916
-#: build/Sunflower/sunflower/gui/input_dialog.py:1263
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:427
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:916
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1263
 #: sunflower/gui/main_window.py:427 sunflower/gui/input_dialog.py:916
 #: sunflower/gui/input_dialog.py:1263
 msgid "Copy"
 msgstr "コピー"
 
-#: build/Sunflower/sunflower/gui/main_window.py:427
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:427
 #: sunflower/gui/main_window.py:427
 msgid "Copy selected items from active to opposite list"
 msgstr "選択した項目を反対側へコピー"
 
-#: build/Sunflower/sunflower/gui/main_window.py:428
-#: build/Sunflower/sunflower/gui/input_dialog.py:1015
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:428
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1015
 #: sunflower/gui/main_window.py:428 sunflower/gui/input_dialog.py:1015
 msgid "Move"
 msgstr "移動"
 
-#: build/Sunflower/sunflower/gui/main_window.py:428
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:428
 #: sunflower/gui/main_window.py:428
 msgid "Move selected items from active to opposite list"
 msgstr "選択した項目を反対側へ移動"
 
-#: build/Sunflower/sunflower/gui/main_window.py:429
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:429
 #: sunflower/gui/main_window.py:429
 msgid "Create"
 msgstr "作成"
 
-#: build/Sunflower/sunflower/gui/main_window.py:429
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:429
 #: sunflower/gui/main_window.py:429
 msgid "Create new directory"
 msgstr "新規ディレクトリを作成"
 
-#: build/Sunflower/sunflower/gui/main_window.py:430
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:430
 #: sunflower/gui/main_window.py:430
 msgid "Delete"
 msgstr "削除"
 
-#: build/Sunflower/sunflower/gui/main_window.py:430
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:430
 #: sunflower/gui/main_window.py:430
 msgid "Delete selected items"
 msgstr "選択した項目を削除"
 
-#: build/Sunflower/sunflower/gui/main_window.py:474
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:474
 #: sunflower/gui/main_window.py:474
 msgid "Edit commands"
 msgstr "命令を編集"
 
-#: build/Sunflower/sunflower/gui/main_window.py:1304
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1304
 #: sunflower/gui/main_window.py:1304
 msgid "Select items"
 msgstr "項目を選択"
 
-#: build/Sunflower/sunflower/gui/main_window.py:1305
-#: build/Sunflower/sunflower/gui/main_window.py:1361
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1305
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1361
 #: sunflower/gui/main_window.py:1305 sunflower/gui/main_window.py:1361
 msgid "Selection pattern (eg.: *.jpg):"
 msgstr "選択パターン（例: *.jpg）"
 
-#: build/Sunflower/sunflower/gui/main_window.py:1360
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1360
 #: sunflower/gui/main_window.py:1360
 msgid "Deselect items"
 msgstr "項目の選択を解除"
 
-#: build/Sunflower/sunflower/gui/main_window.py:1397
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1397
 #: sunflower/gui/main_window.py:1397
 msgid "First level of compared directories is identical."
 msgstr "比較されるディレクトリが同じ階層です。"
 
-#: build/Sunflower/sunflower/gui/main_window.py:1521
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1521
 #: sunflower/gui/main_window.py:1521
 msgid ""
 "There was a problem starting external terminal application. Check if command"
 " is valid!"
 msgstr "外部端末アプリケーションの起動に問題が発生しました。コマンドが正しいかどうか確かめてください。"
 
-#: build/Sunflower/sunflower/gui/main_window.py:1729
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1729
 #: sunflower/gui/main_window.py:1729
 msgid "Main Menu"
 msgstr "主要メニュー"
 
-#: build/Sunflower/sunflower/gui/main_window.py:1734
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1734
 #: sunflower/gui/main_window.py:1734
 msgid "Restore handle position"
 msgstr "ツマミの位置を元に戻す"
 
-#: build/Sunflower/sunflower/gui/main_window.py:1735
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1735
 #: sunflower/gui/main_window.py:1735
 msgid "Move handle to the left"
 msgstr "ツマミを左に動かす"
 
-#: build/Sunflower/sunflower/gui/main_window.py:1736
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1736
 #: sunflower/gui/main_window.py:1736
 msgid "Move handle to the right"
 msgstr "ツマミを右に動かす"
 
-#: build/Sunflower/sunflower/gui/main_window.py:1751
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1751
 #: sunflower/gui/main_window.py:1751
 msgid "Rel_oad item list"
 msgstr "項目一覧を再読込(_O)"
 
-#: build/Sunflower/sunflower/gui/main_window.py:1818
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:1818
 #: sunflower/gui/main_window.py:1818
 msgid ""
 "Error saving configuration to files in your home directory. Make sure you "
 "have enough permissions."
 msgstr "設定ファイルをホームディレクトリ配下に保存する際に問題が発生しました。十分な権限かどうかを確かめて下さい。"
 
-#: build/Sunflower/sunflower/gui/main_window.py:2451
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2451
 #: sunflower/gui/main_window.py:2451
 msgid ""
 "Active object is not item list. Advanced rename tool needs files and "
 "directories."
 msgstr "対象は項目リストではありません。発展的な名前の変更にはファイル・ディレクトリが必要です。"
 
-#: build/Sunflower/sunflower/gui/main_window.py:2466
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2466
 #: sunflower/gui/main_window.py:2466
 msgid ""
 "No rename extensions were found. Please enable basic rename options plugin "
 "and try again."
 msgstr "名前の変更に関わる拡張機能が見付かりません。基本名前変更オプションプラグインを有効にして，やり直して下さい。"
 
-#: build/Sunflower/sunflower/gui/main_window.py:2493
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2493
 #: sunflower/gui/main_window.py:2493
 msgid ""
 "No extensions for finding files were found. Please enable basic find file "
 "options plugin and try again."
 msgstr "ファイルの検索に関わる拡張機能が見付かりません。基本ファイル検索オプションプラグインを有効にして，やり直して下さい。"
 
-#: build/Sunflower/sunflower/gui/main_window.py:2519
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2519
 #: sunflower/gui/main_window.py:2519
 msgid "Keyring is empty!"
 msgstr "鍵情報が空です！"
 
-#: build/Sunflower/sunflower/gui/main_window.py:2532
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/main_window.py:2532
 #: sunflower/gui/main_window.py:2532
 msgid ""
 "Keyring is not available. Make sure you have Python Gnome keyring module "
 "installed."
 msgstr "鍵情報が利用可能ではありません。Python GNOME鍵管理モジュールを導入しているか確かめてください。"
 
-#: build/Sunflower/sunflower/gui/preferences_window.py:32
-#: build/Sunflower/sunflower/gui/preferences_window.py:47
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences_window.py:32
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences_window.py:47
 #: sunflower/gui/preferences_window.py:32
 #: sunflower/gui/preferences_window.py:47
 msgid "Preferences"
 msgstr "設定"
 
-#: build/Sunflower/sunflower/gui/preferences_window.py:106
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences_window.py:106
 #: sunflower/gui/preferences_window.py:106
 msgid "Program restart required!"
 msgstr "プログラムの再起動が必要です。"
 
-#: build/Sunflower/sunflower/gui/preferences_window.py:143
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/preferences_window.py:143
 #: sunflower/gui/preferences_window.py:143
 msgid ""
 "There are unsaved changes.\n"
 "Do you want to save them?"
 msgstr "保存されていない変更があります。\nそれら変更を保存しますか。"
 
-#: build/Sunflower/sunflower/gui/history_list.py:27
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/history_list.py:27
 #: sunflower/gui/history_list.py:27
 msgid "History"
 msgstr "履歴"
 
-#: build/Sunflower/sunflower/gui/history_list.py:50
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/history_list.py:50
 #: sunflower/gui/history_list.py:50
 msgid "Path"
 msgstr "パス"
 
-#: build/Sunflower/sunflower/gui/history_list.py:67
-#: build/Sunflower/sunflower/widgets/location_menu.py:51
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/history_list.py:67
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/location_menu.py:51
 #: sunflower/gui/history_list.py:67 sunflower/widgets/location_menu.py:51
 msgid "Open"
 msgstr "開く"
 
-#: build/Sunflower/sunflower/gui/history_list.py:76
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/history_list.py:76
 #: sunflower/gui/history_list.py:76
 msgid "Open in tab"
 msgstr "タブで開く"
 
-#: build/Sunflower/sunflower/gui/history_list.py:77
-#: build/Sunflower/sunflower/widgets/location_menu.py:56
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/history_list.py:77
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/location_menu.py:56
 #: sunflower/gui/history_list.py:77 sunflower/widgets/location_menu.py:56
 msgid "Open selected path in new tab"
 msgstr "選択したパスを新規タブで開く"
 
-#: build/Sunflower/sunflower/gui/history_list.py:80
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/history_list.py:80
 #: sunflower/gui/history_list.py:80
 msgid "Open in opposite list"
 msgstr "反対側の項目で開く"
 
-#: build/Sunflower/sunflower/gui/history_list.py:81
-#: build/Sunflower/sunflower/widgets/location_menu.py:61
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/history_list.py:81
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/location_menu.py:61
 #: sunflower/gui/history_list.py:81 sunflower/widgets/location_menu.py:61
 msgid "Open selected path in opposite list"
 msgstr "選択したパスを反対側の項目で開く"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:58
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:58
 #: sunflower/gui/properties_window.py:58
 #, python-brace-format
 msgid "\"{0}\" Properties"
 msgstr "\"{0}\"の属性情報"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:83
-#: build/Sunflower/sunflower/plugins/rename_extensions/default.py:267
-#: build/Sunflower/sunflower/plugins/find_file_extensions/default.py:115
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:83
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/default.py:267
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/default.py:115
 #: sunflower/gui/properties_window.py:83
 #: sunflower/plugins/rename_extensions/default.py:267
 #: sunflower/plugins/find_file_extensions/default.py:115
 msgid "Basic"
 msgstr "一般"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:84
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:84
 #: sunflower/gui/properties_window.py:84
 msgid "Permissions"
 msgstr "権限"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:85
-#: build/Sunflower/sunflower/gui/input_dialog.py:1696
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:85
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1696
 #: sunflower/gui/properties_window.py:85 sunflower/gui/input_dialog.py:1696
 msgid "Open With"
 msgstr "アプリケーション"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:86
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:86
 #: sunflower/gui/properties_window.py:86
 msgid "Emblems"
 msgstr "記章"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:130
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1027
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:130
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1027
 #: sunflower/gui/properties_window.py:130
 #: sunflower/plugins/file_list/file_list.py:1027
 msgid ""
@@ -1679,49 +1053,25 @@ msgid ""
 "Item could not be renamed."
 msgstr "現行ディレクトリには指定した名前のファイル又はディレクトリが既に存在しています。項目の名前は変更されませんでした。"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:165
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1012
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:165
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1012
 #: sunflower/gui/properties_window.py:165
 #: sunflower/plugins/file_list/file_list.py:1012
 msgid "Error renaming specified item. Make sure you have enough permissions."
 msgstr "指定した項目の名前の変更に失敗しました。十分な権限かどうかを確かめて下さい。"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:222
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:222
 #: sunflower/gui/properties_window.py:222
 msgid "item"
 msgid_plural "items"
 msgstr[0] "項目"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:239
-#: build/Sunflower/sunflower/gui/operation_dialog.py:313
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:239
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:313
 #: sunflower/gui/properties_window.py:239
 #: sunflower/gui/operation_dialog.py:313
 msgid "unknown"
 msgstr "不明"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:348
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:348
 #: sunflower/gui/properties_window.py:348
 msgid "Error changing owner or group"
 msgstr "所有者又はグループの変更に失敗しました"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:421
-#: build/Sunflower/sunflower/gui/input_dialog.py:1337
-#: build/Sunflower/sunflower/gui/input_dialog.py:1516
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:60
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:273
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:467
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:421
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1337
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1516
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:60
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:273
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:467
 #: sunflower/gui/properties_window.py:421 sunflower/gui/input_dialog.py:1337
 #: sunflower/gui/input_dialog.py:1516
 #: sunflower/plugins/file_list/dialogs.py:60
@@ -1730,104 +1080,50 @@ msgstr "所有者又はグループの変更に失敗しました"
 msgid "Name:"
 msgstr "名前:"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:422
-#: build/Sunflower/sunflower/gui/input_dialog.py:1524
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:422
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1524
 #: sunflower/gui/properties_window.py:422 sunflower/gui/input_dialog.py:1524
 msgid "Type:"
 msgstr "種別:"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:423
-#: build/Sunflower/sunflower/gui/input_dialog.py:1194
-#: build/Sunflower/sunflower/gui/input_dialog.py:1211
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:423
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1194
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1211
 #: sunflower/gui/properties_window.py:423 sunflower/gui/input_dialog.py:1194
 #: sunflower/gui/input_dialog.py:1211
 msgid "Size:"
 msgstr "大きさ:"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:424
-#: build/Sunflower/sunflower/gui/input_dialog.py:1350
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:424
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1350
 #: sunflower/gui/properties_window.py:424 sunflower/gui/input_dialog.py:1350
 msgid "Location:"
 msgstr "場所:"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:425
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:425
 #: sunflower/gui/properties_window.py:425
 msgid "Volume:"
 msgstr "ボリューム"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:426
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:426
 #: sunflower/gui/properties_window.py:426
 msgid "Accessed:"
 msgstr "閲覧日時:"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:427
-#: build/Sunflower/sunflower/gui/input_dialog.py:1195
-#: build/Sunflower/sunflower/gui/input_dialog.py:1212
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:427
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1195
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1212
 #: sunflower/gui/properties_window.py:427 sunflower/gui/input_dialog.py:1195
 #: sunflower/gui/input_dialog.py:1212
 msgid "Modified:"
 msgstr "変更日時:"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:502
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:502
 #: sunflower/gui/properties_window.py:502
 msgid "Access"
 msgstr "権限"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:508
-#: build/Sunflower/sunflower/gui/properties_window.py:578
-#: build/Sunflower/sunflower/gui/input_dialog.py:221
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:508
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:578
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:221
 #: sunflower/gui/properties_window.py:508
 #: sunflower/gui/properties_window.py:578 sunflower/gui/input_dialog.py:221
 msgid "User:"
 msgstr "所有者:"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:512
-#: build/Sunflower/sunflower/gui/properties_window.py:582
-#: build/Sunflower/sunflower/gui/input_dialog.py:225
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:512
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:582
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:225
 #: sunflower/gui/properties_window.py:512
 #: sunflower/gui/properties_window.py:582 sunflower/gui/input_dialog.py:225
 msgid "Group:"
 msgstr "グループ:"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:516
-#: build/Sunflower/sunflower/gui/input_dialog.py:229
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:516
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:229
 #: sunflower/gui/properties_window.py:516 sunflower/gui/input_dialog.py:229
 msgid "Others:"
 msgstr "他の利用者:"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:521
-#: build/Sunflower/sunflower/gui/properties_window.py:534
-#: build/Sunflower/sunflower/gui/properties_window.py:547
-#: build/Sunflower/sunflower/gui/input_dialog.py:234
-#: build/Sunflower/sunflower/gui/input_dialog.py:247
-#: build/Sunflower/sunflower/gui/input_dialog.py:260
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:521
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:534
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:547
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:234
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:247
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:260
 #: sunflower/gui/properties_window.py:521
 #: sunflower/gui/properties_window.py:534
 #: sunflower/gui/properties_window.py:547 sunflower/gui/input_dialog.py:234
@@ -1835,18 +1131,6 @@ msgstr "他の利用者:"
 msgid "Read"
 msgstr "読取"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:525
-#: build/Sunflower/sunflower/gui/properties_window.py:538
-#: build/Sunflower/sunflower/gui/properties_window.py:551
-#: build/Sunflower/sunflower/gui/input_dialog.py:238
-#: build/Sunflower/sunflower/gui/input_dialog.py:251
-#: build/Sunflower/sunflower/gui/input_dialog.py:264
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:525
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:538
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:551
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:238
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:251
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:264
 #: sunflower/gui/properties_window.py:525
 #: sunflower/gui/properties_window.py:538
 #: sunflower/gui/properties_window.py:551 sunflower/gui/input_dialog.py:238
@@ -1854,18 +1138,6 @@ msgstr "読取"
 msgid "Write"
 msgstr "書込"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:529
-#: build/Sunflower/sunflower/gui/properties_window.py:542
-#: build/Sunflower/sunflower/gui/properties_window.py:555
-#: build/Sunflower/sunflower/gui/input_dialog.py:242
-#: build/Sunflower/sunflower/gui/input_dialog.py:255
-#: build/Sunflower/sunflower/gui/input_dialog.py:268
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:529
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:542
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:555
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:242
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:255
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:268
 #: sunflower/gui/properties_window.py:529
 #: sunflower/gui/properties_window.py:542
 #: sunflower/gui/properties_window.py:555 sunflower/gui/input_dialog.py:242
@@ -1873,273 +1145,165 @@ msgstr "書込"
 msgid "Execute"
 msgstr "実行"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:560
-#: build/Sunflower/sunflower/gui/input_dialog.py:273
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:560
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:273
 #: sunflower/gui/properties_window.py:560 sunflower/gui/input_dialog.py:273
 msgid "Octal:"
 msgstr "8進数表記:"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:572
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:572
 #: sunflower/gui/properties_window.py:572
 msgid "Ownership"
 msgstr "所有者"
 
-#: build/Sunflower/sunflower/gui/properties_window.py:646
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/properties_window.py:646
 #: sunflower/gui/properties_window.py:646
 #, python-brace-format
 msgid "Select an application to open <i>{0}</i> and other files of type \"{1}\""
 msgstr "<i>{0}</i>及び種別{1}のファイルを開くアプリーションを選択する"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:115
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:115
 #: sunflower/gui/input_dialog.py:115
 msgid "Create link"
 msgstr "リンク作成"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:116
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:116
 #: sunflower/gui/input_dialog.py:116
 msgid "Enter new link name:"
 msgstr "新規リンク名を入力:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:124
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:124
 #: sunflower/gui/input_dialog.py:124
 msgid "Original path:"
 msgstr "元のパス:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:129
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:129
 #: sunflower/gui/input_dialog.py:129
 msgid "Create hard link"
 msgstr "ハードリンクを作成する"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:132
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:132
 #: sunflower/gui/input_dialog.py:132
 msgid "Browse"
 msgstr "参照"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:151
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:151
 #: sunflower/gui/input_dialog.py:151
 msgid "Select original path"
 msgstr "元のパスを選択"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:211
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:211
 #: sunflower/gui/input_dialog.py:211
 msgid "Advanced options"
 msgstr "高度なオプション"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:290
-#: build/Sunflower/sunflower/gui/input_dialog.py:924
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:290
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:924
 #: sunflower/gui/input_dialog.py:290 sunflower/gui/input_dialog.py:924
 msgid "Save as default configuration"
 msgstr "規定の設定として保存"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:378
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:96
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:304
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:507
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:378
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:96
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:304
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:507
 #: sunflower/gui/input_dialog.py:378 sunflower/plugins/file_list/dialogs.py:96
 #: sunflower/plugins/file_list/dialogs.py:304
 #: sunflower/plugins/file_list/dialogs.py:507
 msgid "Password:"
 msgstr "パスワード:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:380
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:380
 #: sunflower/gui/input_dialog.py:380
 msgid "Confirm:"
 msgstr "確認:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:435
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:435
 #: sunflower/gui/input_dialog.py:435
 msgid "Create empty file"
 msgstr "空のファイルを作成"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:436
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:436
 #: sunflower/gui/input_dialog.py:436
 msgid "Enter new file name:"
 msgstr "新規ファイル名を入力:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:439
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:439
 #: sunflower/gui/input_dialog.py:439
 msgid "Open file in editor"
 msgstr "ファイルをエディタで開く"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:443
-#: build/Sunflower/sunflower/plugins/rename_extensions/default.py:54
-#: build/Sunflower/sunflower/plugins/rename_extensions/audio_metadata.py:33
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:443
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/default.py:54
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/audio_metadata.py:33
 #: sunflower/gui/input_dialog.py:443
 #: sunflower/plugins/rename_extensions/default.py:54
 #: sunflower/plugins/rename_extensions/audio_metadata.py:33
 msgid "Template:"
 msgstr "雛形:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:502
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:502
 #: sunflower/gui/input_dialog.py:502
 msgid "Empty File"
 msgstr "空ファイル"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:555
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1023
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:555
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1023
 #: sunflower/gui/input_dialog.py:555 sunflower/plugin_base/item_list.py:1023
 msgid "Create directory"
 msgstr "ディレクトリを作成"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:556
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:556
 #: sunflower/gui/input_dialog.py:556
 msgid "Enter new directory name:"
 msgstr "新規ディレクトリ名を入力:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:590
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:590
 #: sunflower/gui/input_dialog.py:590
 msgid "Yes"
 msgstr "はい"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:592
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:592
 #: sunflower/gui/input_dialog.py:592
 msgid "No"
 msgstr "いいえ"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:656
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:656
 #: sunflower/gui/input_dialog.py:656
 msgid "Only files of this type:"
 msgstr "ファイルの種別を限定:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:663
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:663
 #: sunflower/gui/input_dialog.py:663
 msgid "Operation queue:"
 msgstr "操作キュー:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:683
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:683
 #: sunflower/gui/input_dialog.py:683
 msgid "Affected item list"
 msgstr "影響を受ける項目一覧"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:706
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:706
 #: sunflower/gui/input_dialog.py:706
 msgid "Set owner on destination"
 msgstr "宛先の所有者を設定"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:707
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:707
 #: sunflower/gui/input_dialog.py:707
 msgid "Set access mode on destination"
 msgstr "宛先の権限を設定"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:708
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:708
 #: sunflower/gui/input_dialog.py:708
 msgid "Set date and time on destination"
 msgstr "宛先の日時を設定"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:709
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:709
 #: sunflower/gui/input_dialog.py:709
 msgid "Silent mode"
 msgstr "静粛に実行"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:714
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:714
 #: sunflower/gui/input_dialog.py:714
 msgid "Merge directories"
 msgstr "ディレクトリを統合"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:715
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:715
 #: sunflower/gui/input_dialog.py:715
 msgid "Overwrite files"
 msgstr "ファイルを上書き"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:719
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:719
 #: sunflower/gui/input_dialog.py:719
 msgid ""
 "Silent mode will enable operation to finish without disturbing you. If any "
 "errors occur, they will be presented to you after completion."
 msgstr "「静粛に実行」すると、操作の間利用者を邪魔しません。何かエラーが生じた場合、操作が完了した後に通知します。"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:724
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:724
 #: sunflower/gui/input_dialog.py:724
 msgid "Follow symlinks"
 msgstr "シンボリックリンクを解決する"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:800
-#: build/Sunflower/sunflower/gui/input_dialog.py:804
-#: build/Sunflower/sunflower/gui/input_dialog.py:808
-#: build/Sunflower/sunflower/gui/input_dialog.py:812
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:800
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:804
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:808
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:812
 #: sunflower/gui/input_dialog.py:800 sunflower/gui/input_dialog.py:804
 #: sunflower/gui/input_dialog.py:808 sunflower/gui/input_dialog.py:812
 msgid "Not supported by file system provider"
 msgstr "ファイルシステムが対応していません"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:877
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:877
 #: sunflower/gui/input_dialog.py:877
 msgid "Only options supported by file system providers were saved."
 msgstr "ファイルシステムが対応しているオプションのみ保持されます。"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:901
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:901
 #: sunflower/gui/input_dialog.py:901
 msgid "Copy item"
 msgid_plural "Copy items"
 msgstr[0] "項目をコピー"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:906
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:906
 #: sunflower/gui/input_dialog.py:906
 #, python-brace-format
 msgid "Copy <b>{0}</b> item to:"
 msgid_plural "Copy <b>{0}</b> items to:"
 msgstr[0] "<b>{0}</b>件の項目をコピー:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:915
-#: build/Sunflower/sunflower/gui/input_dialog.py:1014
-#: build/Sunflower/sunflower/gui/input_dialog.py:1450
-#: build/Sunflower/sunflower/gui/operation_dialog.py:189
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1986
-#: build/Sunflower/sunflower/tools/find_files.py:286
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:915
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1014
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1450
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:189
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1986
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:286
 #: sunflower/gui/input_dialog.py:915 sunflower/gui/input_dialog.py:1014
 #: sunflower/gui/input_dialog.py:1450 sunflower/gui/operation_dialog.py:189
 #: sunflower/plugins/file_list/file_list.py:1986
@@ -2147,94 +1311,62 @@ msgstr[0] "<b>{0}</b>件の項目をコピー:"
 msgid "Cancel"
 msgstr "取り止め"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1000
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1000
 #: sunflower/gui/input_dialog.py:1000
 msgid "Move item"
 msgid_plural "Move items"
 msgstr[0] "項目を移動"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1005
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1005
 #: sunflower/gui/input_dialog.py:1005
 #, python-brace-format
 msgid "Move <b>{0}</b> item to:"
 msgid_plural "Move <b>{0}</b> items to:"
 msgstr[0] "<b>{0}</b>件の項目を移動:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1028
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1028
 #: sunflower/gui/input_dialog.py:1028
 msgid "Rename file/directory"
 msgstr "ファイル・ディレクトリの名前を変更"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1029
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1029
 #: sunflower/gui/input_dialog.py:1029
 msgid "Enter a new name for this item:"
 msgstr "この項目の新しい名前を入力:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1093
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1093
 #: sunflower/gui/input_dialog.py:1093
 msgid "Select a new name for the destination"
 msgstr "宛先への新しい名前を選択"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1098
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1098
 #: sunflower/gui/input_dialog.py:1098
 msgid "Reset"
 msgstr "遣り直し"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1102
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1102
 #: sunflower/gui/input_dialog.py:1102
 msgid "Apply this action to all files"
 msgstr "この操作を全ファイルに適用"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1137
-#: build/Sunflower/sunflower/gui/input_dialog.py:1451
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1137
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1451
 #: sunflower/gui/input_dialog.py:1137 sunflower/gui/input_dialog.py:1451
 msgid "Skip"
 msgstr "飛ばす"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1193
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1193
 #: sunflower/gui/input_dialog.py:1193
 msgid "Original"
 msgstr "原本"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1210
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1210
 #: sunflower/gui/input_dialog.py:1210
 msgid "Replace with"
 msgstr "置換対象:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1245
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1245
 #: sunflower/gui/input_dialog.py:1245
 msgid "File conflict"
 msgstr "ファイル名競合"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1250
-#: build/Sunflower/sunflower/gui/input_dialog.py:1260
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1250
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1260
 #: sunflower/gui/input_dialog.py:1250 sunflower/gui/input_dialog.py:1260
 msgid "Replace"
 msgstr "置き換える"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1267
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1267
 #: sunflower/gui/input_dialog.py:1267
 #, python-brace-format
 msgid "Replace file \"{0}\"?"
 msgstr "ファイル\"{0}\"を置き換えますか。"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1273
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1273
 #: sunflower/gui/input_dialog.py:1273
 #, python-brace-format
 msgid ""
@@ -2242,27 +1374,19 @@ msgid ""
 " overwrite its content."
 msgstr "\"{0}\"には同名のファイルが既に存在しています。内容を上書きして置き換えます。"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1286
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1286
 #: sunflower/gui/input_dialog.py:1286
 msgid "Directory conflict"
 msgstr "ディレクトリ競合"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1290
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1290
 #: sunflower/gui/input_dialog.py:1290
 msgid "Merge"
 msgstr "統合"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1300
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1300
 #: sunflower/gui/input_dialog.py:1300
 #, python-brace-format
 msgid "Merge directory \"{0}\"?"
 msgstr "ディレクトリ\"{0}\"を統合しますか。"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1306
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1306
 #: sunflower/gui/input_dialog.py:1306
 #, python-brace-format
 msgid ""
@@ -2271,14 +1395,10 @@ msgid ""
 " the files being copied."
 msgstr "\"{0}\"には同名のディレクトリが既に存在しています。統合する際、コピー中のファイルと競合するディレクトリ内のファイルを置き換える前に確認します。"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1324
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1324
 #: sunflower/gui/input_dialog.py:1324
 msgid "Add bookmark"
 msgstr "栞を追加する"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1342
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1342
 #: sunflower/gui/input_dialog.py:1342
 msgid ""
 "Underscore in the label text indicates the next character should be "
@@ -2286,200 +1406,130 @@ msgid ""
 "character so marked."
 msgstr "ラベル中の文字の前に下線記号を入力することで、その文字がアクセスキーとなります。"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1417
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1417
 #: sunflower/gui/input_dialog.py:1417
 msgid "Operation error"
 msgstr "操作が失敗しました"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1452
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1452
 #: sunflower/gui/input_dialog.py:1452
 msgid "Skip all"
 msgstr "全て飛ばす"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1453
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1453
 #: sunflower/gui/input_dialog.py:1453
 msgid "Retry"
 msgstr "遣り直す"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1501
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1501
 #: sunflower/gui/input_dialog.py:1501
 msgid "Add toolbar widget"
 msgstr "ツールバーにウィジェットを追加する"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1610
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1610
 #: sunflower/gui/input_dialog.py:1610
 msgid "Select range"
 msgstr "範囲を選択"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1611
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1611
 #: sunflower/gui/input_dialog.py:1611
 msgid "Select part of the text:"
 msgstr "文章の一部を選択する:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1635
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1635
 #: sunflower/gui/input_dialog.py:1635
 msgid "Add application"
 msgstr "アプリケーションを追加する"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1636
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1636
 #: sunflower/gui/input_dialog.py:1636
 msgid "Application name:"
 msgstr "アプリケーションの名前:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1646
-#: build/Sunflower/sunflower/tools/find_files.py:287
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1646
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:287
 #: sunflower/gui/input_dialog.py:1646 sunflower/tools/find_files.py:287
 msgid "Select"
 msgstr "選択"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1714
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1714
 #: sunflower/gui/input_dialog.py:1714
 msgid "Select application:"
 msgstr "アプリケーションを選択:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1718
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1718
 #: sunflower/gui/input_dialog.py:1718
 #, python-brace-format
 msgid "Open <i>{0}</i> with:"
 msgstr "<i>{0}</i>を開くもの:"
 
-#: build/Sunflower/sunflower/gui/input_dialog.py:1754
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/input_dialog.py:1754
 #: sunflower/gui/input_dialog.py:1754
 msgid "Use a custom command"
 msgstr "利用者が定義したコマンドを使用する"
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:75
-#: build/Sunflower/sunflower/gui/error_list.py:48
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:75
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/error_list.py:48
 #: sunflower/gui/operation_dialog.py:75 sunflower/gui/error_list.py:48
 msgid "Source:"
 msgstr "原本:"
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:76
-#: build/Sunflower/sunflower/gui/error_list.py:54
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:76
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/error_list.py:54
 #: sunflower/gui/operation_dialog.py:76 sunflower/gui/error_list.py:54
 msgid "Destination:"
 msgstr "宛先:"
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:133
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:133
 #: sunflower/gui/operation_dialog.py:133
 msgid "ETA:"
 msgstr "予定時刻:"
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:134
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:134
 #: sunflower/gui/operation_dialog.py:134
 msgid "Speed:"
 msgstr "速度:"
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:135
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:135
 #: sunflower/gui/operation_dialog.py:135
 msgid "Total size:"
 msgstr "総量:"
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:136
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:136
 #: sunflower/gui/operation_dialog.py:136
 msgid "Total count:"
 msgstr "総数:"
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:196
-#: build/Sunflower/sunflower/gui/operation_dialog.py:240
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:196
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:240
 #: sunflower/gui/operation_dialog.py:196 sunflower/gui/operation_dialog.py:240
 msgid "Pause"
 msgstr "停止"
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:233
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:233
 #: sunflower/gui/operation_dialog.py:233
 msgid "Resume"
 msgstr "再開"
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:245
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:245
 #: sunflower/gui/operation_dialog.py:245
 msgid "Are you sure about canceling current operation?"
 msgstr "現行操作を取り止めますか。"
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:301
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:301
 #: sunflower/gui/operation_dialog.py:301
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] "秒"
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:305
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:305
 #: sunflower/gui/operation_dialog.py:305
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "分"
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:309
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:309
 #: sunflower/gui/operation_dialog.py:309
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "時"
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:478
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:478
 #: sunflower/gui/operation_dialog.py:478
 msgid "Removing items..."
 msgstr "項目を削除しています……"
 
-#: build/Sunflower/sunflower/gui/operation_dialog.py:504
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/operation_dialog.py:504
 #: sunflower/gui/operation_dialog.py:504
 msgid "Renaming items..."
 msgstr "項目の名前を変更しています……"
 
-#: build/Sunflower/sunflower/gui/keyring_manager_window.py:29
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/keyring_manager_window.py:29
 #: sunflower/gui/keyring_manager_window.py:29
 msgid "Keyring manager"
 msgstr "鍵管理"
 
-#: build/Sunflower/sunflower/gui/keyring_manager_window.py:53
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/keyring_manager_window.py:53
 #: sunflower/gui/keyring_manager_window.py:53
 msgid "ID"
 msgstr "識別子"
 
-#: build/Sunflower/sunflower/gui/keyring_manager_window.py:56
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/keyring_manager_window.py:56
 #: sunflower/gui/keyring_manager_window.py:56
 msgid "Modified"
 msgstr "変更済み"
 
-#: build/Sunflower/sunflower/gui/keyring_manager_window.py:129
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/keyring_manager_window.py:129
 #: sunflower/gui/keyring_manager_window.py:129
 msgid "Please select an entry to delete!"
 msgstr "削除する対象を選択して下さい。"
 
-#: build/Sunflower/sunflower/gui/keyring_manager_window.py:145
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/keyring_manager_window.py:145
 #: sunflower/gui/keyring_manager_window.py:145
 #, python-brace-format
 msgid ""
@@ -2488,457 +1538,295 @@ msgid ""
 "{0}"
 msgstr "次の項目を鍵管理対象から削除しようとしています。削除した場合、次回以降の接続時にパスワードが要求されます。宜しいですか。\n\n{0}"
 
-#: build/Sunflower/sunflower/gui/keyring_manager_window.py:173
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/keyring_manager_window.py:173
 #: sunflower/gui/keyring_manager_window.py:173
 msgid "Please select an entry to change!"
 msgstr "変更する対象を選択して下さい。"
 
-#: build/Sunflower/sunflower/gui/keyring_manager_window.py:180
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/keyring_manager_window.py:180
 #: sunflower/gui/keyring_manager_window.py:180
 msgid "Change password"
 msgstr "パスワードを変更"
 
-#: build/Sunflower/sunflower/gui/keyring_manager_window.py:181
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/keyring_manager_window.py:181
 #: sunflower/gui/keyring_manager_window.py:181
 msgid "Enter new password for selected keyring entry."
 msgstr "選択した鍵管理対象の新しいパスワードを入力して下さい。"
 
-#: build/Sunflower/sunflower/gui/keyring_manager_window.py:196
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/keyring_manager_window.py:196
 #: sunflower/gui/keyring_manager_window.py:196
 msgid "Password was changed!"
 msgstr "パスワードが変更されました。"
 
-#: build/Sunflower/sunflower/gui/keyring_manager_window.py:211
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/keyring_manager_window.py:211
 #: sunflower/gui/keyring_manager_window.py:211
 msgid "Passwords do not match! Please try again."
 msgstr "パスワードが一致しません。遣り直して下さい。"
 
-#: build/Sunflower/sunflower/gui/about_window.py:71
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/about_window.py:71
 #: sunflower/gui/about_window.py:71
 msgid "Twin-panel file manager for Linux."
 msgstr "Linux向けの双パネルファイルマネージャ。"
 
-#: build/Sunflower/sunflower/gui/about_window.py:74
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/about_window.py:74
 #: sunflower/gui/about_window.py:74
 msgid "Copyright © 2010-2019 by Mladen Mijatov and contributors."
 msgstr "Copyright &copy; 2010-2019, Mladen Mijatov及び貢献者。"
 
-#: build/Sunflower/sunflower/gui/about_window.py:90
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/about_window.py:90
 #: sunflower/gui/about_window.py:90
 msgid "Contributors"
 msgstr "貢献者"
 
-#: build/Sunflower/sunflower/gui/error_list.py:23
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/error_list.py:23
 #: sunflower/gui/error_list.py:23
 msgid "Error list"
 msgstr "不具合一覧"
 
-#: build/Sunflower/sunflower/gui/error_list.py:42
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/gui/error_list.py:42
 #: sunflower/gui/error_list.py:42
 msgid "For:"
 msgstr "宛先:"
 
-#: build/Sunflower/sunflower/__main__.py:97
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:97
 #: sunflower/__main__.py:89
 msgid "Show version number"
 msgstr "バージョン番号を表示する"
 
-#: build/Sunflower/sunflower/__main__.py:106
-#: build/Sunflower/sunflower/__main__.py:115
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:106
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:115
 #: sunflower/__main__.py:98 sunflower/__main__.py:107
 msgid "Skip loading additional plugins"
 msgstr "追加のプラグインを読み込まない"
 
-#: build/Sunflower/sunflower/__main__.py:124
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:124
 #: sunflower/__main__.py:116
 msgid "Open new tab on the left notebook"
 msgstr "新規タブを左の帳簿に開く"
 
-#: build/Sunflower/sunflower/__main__.py:133
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:133
 #: sunflower/__main__.py:125
 msgid "Open new tab on the right notebook"
 msgstr "新規タブを右の帳簿に開く"
 
-#: build/Sunflower/sunflower/__main__.py:142
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:142
 #: sunflower/__main__.py:134
 msgid "Open terminal tab on the left notebook"
 msgstr "端末エミュレータタブを左の帳簿に開く"
 
-#: build/Sunflower/sunflower/__main__.py:151
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/__main__.py:151
 #: sunflower/__main__.py:143
 msgid "Open terminal tab on the right notebook"
 msgstr "端末エミュレータタブを右の帳簿に開く"
 
-#: build/Sunflower/sunflower/widgets/location_menu.py:66
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/location_menu.py:66
 #: sunflower/widgets/location_menu.py:66
 msgid "Open terminal at selected path"
 msgstr "端末エミュレータを選択したパスで開く"
 
-#: build/Sunflower/sunflower/widgets/title_bar.py:55
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/title_bar.py:55
 #: sunflower/widgets/title_bar.py:55
 msgid "Context menu"
 msgstr "コンテクストメニュー"
 
-#: build/Sunflower/sunflower/widgets/tab_label.py:74
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:74
 #: sunflower/widgets/tab_label.py:74
 msgid "Unlock"
 msgstr "タブの固定を解除"
 
-#: build/Sunflower/sunflower/widgets/tab_label.py:74
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:74
 #: sunflower/widgets/tab_label.py:74
 msgid "Lock"
 msgstr "タブを固定"
 
-#: build/Sunflower/sunflower/widgets/tab_label.py:78
-#: build/Sunflower/sunflower/plugin_base/plugin.py:136
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:78
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/plugin.py:136
 #: sunflower/widgets/tab_label.py:78 sunflower/plugin_base/plugin.py:136
 msgid "Duplicate tab"
 msgstr "タブを複製"
 
-#: build/Sunflower/sunflower/widgets/tab_label.py:82
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:82
 #: sunflower/widgets/tab_label.py:82
 msgid "Move to opposite panel"
 msgstr "逆側のパネルに移動"
 
-#: build/Sunflower/sunflower/widgets/tab_label.py:89
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:89
 #: sunflower/widgets/tab_label.py:89
 msgid "Close Tab"
 msgstr "タブを閉じる"
 
-#: build/Sunflower/sunflower/widgets/tab_label.py:95
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:95
 #: sunflower/widgets/tab_label.py:95
 msgid "Close All"
 msgstr "全てのタブを閉じる"
 
-#: build/Sunflower/sunflower/widgets/tab_label.py:100
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/widgets/tab_label.py:100
 #: sunflower/widgets/tab_label.py:100
 msgid "Close Other Tabs"
 msgstr "他のタブを閉じる"
 
-#: build/Sunflower/sunflower/queue.py:33
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:8
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/queue.py:33
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:8
 #: sunflower/queue.py:33 sunflower/plugins/sessions/plugin.py:8
 msgid "Default"
 msgstr "規定"
 
-#: build/Sunflower/sunflower/queue.py:46
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/queue.py:46
 #: sunflower/queue.py:46
 msgid "New queue"
 msgstr "新規キュー"
 
-#: build/Sunflower/sunflower/queue.py:139
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/queue.py:139
 #: sunflower/queue.py:139
 msgid "New operation queue"
 msgstr "新規操作キュー"
 
-#: build/Sunflower/sunflower/queue.py:140
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/queue.py:140
 #: sunflower/queue.py:140
 msgid "Enter name for new operation queue:"
 msgstr "新規操作キューの名前を入力:"
 
-#: build/Sunflower/sunflower/queue.py:156
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/queue.py:156
 #: sunflower/queue.py:156
 msgid "Operation queue with specified name already exists."
 msgstr "指定した名前の操作キューが既に存在します。"
 
-#: build/Sunflower/sunflower/mounts.py:65
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/mounts.py:65
 #: sunflower/mounts.py:65
 msgid "Selected volume can not be mounted."
-msgstr ""
+msgstr "選択した媒体はマウントできません。"
 
-#: build/Sunflower/sunflower/mounts.py:81
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/mounts.py:81
 #: sunflower/mounts.py:81
 msgid "Selected mount can not be unmounted."
-msgstr ""
+msgstr "選択した媒体のマウントを解除できません。"
 
-#: build/Sunflower/sunflower/mounts.py:97
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/mounts.py:97
 #: sunflower/mounts.py:97
 msgid "Selected volume can not be ejected."
-msgstr ""
+msgstr "選択した媒体は取り外せません。"
 
-#: build/Sunflower/sunflower/mounts.py:184
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:197
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:551
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:903
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/mounts.py:184
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:197
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:551
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:903
 #: sunflower/mounts.py:184 sunflower/plugins/file_list/gio_extension.py:197
 #: sunflower/plugins/file_list/gio_extension.py:551
 #: sunflower/plugins/file_list/gio_extension.py:903
 msgid "Unmount"
 msgstr "マウント解除"
 
-#: build/Sunflower/sunflower/mounts.py:190
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:194
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:548
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:900
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/mounts.py:190
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:194
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:548
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:900
 #: sunflower/mounts.py:190 sunflower/plugins/file_list/gio_extension.py:194
 #: sunflower/plugins/file_list/gio_extension.py:548
 #: sunflower/plugins/file_list/gio_extension.py:900
 msgid "Mount"
 msgstr "マウント"
 
-#: build/Sunflower/sunflower/mounts.py:196
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/mounts.py:196
 #: sunflower/mounts.py:196
 msgid "Eject"
-msgstr ""
+msgstr "取り出す"
 
-#: build/Sunflower/sunflower/keyring.py:63
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:63
 #: sunflower/keyring.py:63
 msgid "Keyring is unlocked"
 msgstr "鍵情報は開錠されています"
 
-#: build/Sunflower/sunflower/keyring.py:64
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:64
 #: sunflower/keyring.py:64
 msgid "Keyring is locked"
 msgstr "鍵情報は施錠されています"
 
-#: build/Sunflower/sunflower/keyring.py:111
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:111
 #: sunflower/keyring.py:111
 msgid "Unlock keyring"
 msgstr "鍵情報を開錠する"
 
-#: build/Sunflower/sunflower/keyring.py:112
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:112
 #: sunflower/keyring.py:112
 msgid "Please enter your keyring password:"
 msgstr "鍵情報へのパスワードを入力して下さい:"
 
-#: build/Sunflower/sunflower/keyring.py:312
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:312
 #: sunflower/keyring.py:312
 msgid "New keyring"
 msgstr "新規鍵情報"
 
-#: build/Sunflower/sunflower/keyring.py:314
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/keyring.py:314
 #: sunflower/keyring.py:314
 msgid ""
 "We need to create a new keyring to safely store your passwords. Choose the "
 "password you want to use for it."
 msgstr "パスワードを安全に保管する為に新たな鍵情報を作る必要があります。それに用いるパスワードを選択して下さい。"
 
-#: build/Sunflower/sunflower/toolbar.py:122
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/toolbar.py:122
 #: sunflower/toolbar.py:122
 msgid ""
 "Error adding widget. You need to enter unique name and select widget type."
 msgstr "ウィジェットを追加できませんでした。一意な名前及びウィジェット種別を入力する必要があります。"
 
-#: build/Sunflower/sunflower/toolbar.py:156
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/toolbar.py:156
 #: sunflower/toolbar.py:156
 msgid ""
 "Plugin used to create selected toolbar widget is not active or not present. "
 "In order to edit this entry you need to activate plugin used to create it."
 msgstr "選択したツールバーウィジェットを作成する為のプラグインが作動中でないか存在しません。本エントリを編集する為にはそれを作成するプラグインを作動させる必要があります。"
 
-#: build/Sunflower/sunflower/plugins/default_toolbar/parent_directory_button.py:14
-#: build/Sunflower/sunflower/plugins/default_toolbar/parent_directory_button.py:15
-#: build/Sunflower/sunflower/plugin_base/item_list.py:216
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/parent_directory_button.py:14
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/parent_directory_button.py:15
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:216
 #: sunflower/plugins/default_toolbar/parent_directory_button.py:14
 #: sunflower/plugins/default_toolbar/parent_directory_button.py:15
 #: sunflower/plugin_base/item_list.py:216
 msgid "Go to parent directory"
 msgstr "親ディレクトリヘ移動"
 
-#: build/Sunflower/sunflower/plugins/default_toolbar/bookmark_button.py:63
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/bookmark_button.py:63
 #: sunflower/plugins/default_toolbar/bookmark_button.py:63
 msgid "Configure bookmark button"
 msgstr "栞ボタンの設定"
 
-#: build/Sunflower/sunflower/plugins/default_toolbar/bookmark_button.py:79
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/bookmark_button.py:79
 #: sunflower/plugins/default_toolbar/bookmark_button.py:79
 msgid "Path:"
 msgstr "パス:"
 
-#: build/Sunflower/sunflower/plugins/default_toolbar/bookmark_button.py:83
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/bookmark_button.py:83
 #: sunflower/plugins/default_toolbar/bookmark_button.py:83
 msgid "Show label"
 msgstr "ラベルを表示する"
 
-#: build/Sunflower/sunflower/plugins/default_toolbar/plugin.py:25
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/plugin.py:25
 #: sunflower/plugins/default_toolbar/plugin.py:25
 msgid "Parent directory button"
 msgstr "親ディレクトリへのボタン"
 
-#: build/Sunflower/sunflower/plugins/default_toolbar/plugin.py:31
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/plugin.py:31
 #: sunflower/plugins/default_toolbar/plugin.py:31
 msgid "Home directory button"
 msgstr "ホームディレクトリへのボタン"
 
-#: build/Sunflower/sunflower/plugins/default_toolbar/plugin.py:37
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/plugin.py:37
 #: sunflower/plugins/default_toolbar/plugin.py:37
 msgid "Bookmark button"
 msgstr "栞ボタン"
 
-#: build/Sunflower/sunflower/plugins/default_toolbar/plugin.py:43
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/plugin.py:43
 #: sunflower/plugins/default_toolbar/plugin.py:43
 msgid "Bookmarks menu"
 msgstr "栞のメニュー"
 
-#: build/Sunflower/sunflower/plugins/default_toolbar/plugin.py:49
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/plugin.py:49
 #: sunflower/plugins/default_toolbar/plugin.py:49
 msgid "Separator"
 msgstr "区切り子"
 
-#: build/Sunflower/sunflower/plugins/default_toolbar/plugin.py:104
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/default_toolbar/plugin.py:104
 #: sunflower/plugins/default_toolbar/plugin.py:104
 msgid "This widget has no configuration dialog."
 msgstr "このウィジェットには設定画面がありません。"
 
-#: build/Sunflower/sunflower/plugins/owner_column/plugin.py:67
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/owner_column/plugin.py:67
 #: sunflower/plugins/owner_column/plugin.py:67
 msgid "Owner"
 msgstr "所有者"
 
-#: build/Sunflower/sunflower/plugins/owner_column/plugin.py:95
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/owner_column/plugin.py:95
 #: sunflower/plugins/owner_column/plugin.py:95
 msgid "Group"
 msgstr "グループ"
 
-#: build/Sunflower/sunflower/plugins/file_list/plugin.py:13
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/plugin.py:13
 #: sunflower/plugins/file_list/plugin.py:13
 msgid "Local file list"
 msgstr "ローカルファイル一覧"
 
-#: build/Sunflower/sunflower/plugins/file_list/plugin.py:14
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/plugin.py:14
 #: sunflower/plugins/file_list/plugin.py:14
 msgid "Trash can"
 msgstr "ゴミ箱"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:133
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:133
 #: sunflower/plugins/file_list/file_list.py:133
 msgid "Ext"
 msgstr "拡張子"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:135
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:135
 #: sunflower/plugins/file_list/file_list.py:135
 msgid "Mode"
 msgstr "状態"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:136
-#: build/Sunflower/sunflower/plugins/rename_extensions/audio_metadata.py:28
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:136
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/audio_metadata.py:28
 #: sunflower/plugins/file_list/file_list.py:136
 #: sunflower/plugins/rename_extensions/audio_metadata.py:28
 msgid "Date"
 msgstr "日時"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:493
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:493
 #: sunflower/plugins/file_list/file_list.py:493
 msgid "Invalid selection!"
 msgstr "選択が正しくありません。"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:668
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:668
 #: sunflower/plugins/file_list/file_list.py:668
 msgid ""
 "There was an error creating directory. Make sure you have enough "
 "permissions. "
 msgstr "ディレクトリの作成に失敗しました。十分な権限かどうかを確かめて下さい。 "
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:695
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:695
 #: sunflower/plugins/file_list/file_list.py:695
 #, python-brace-format
 msgid "File already exists: {0}"
 msgstr "ファイル{0}は既に存在します"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:698
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:698
 #: sunflower/plugins/file_list/file_list.py:698
 #, python-brace-format
 msgid "Directory with same name exists: {0}"
 msgstr "同名のディレクトリ{0}が存在します"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:734
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:734
 #: sunflower/plugins/file_list/file_list.py:734
 msgid ""
 "There was an error creating file. Make sure you have enough permissions."
 msgstr "ファイルの作成に失敗しました。十分な権限かどうかを確かめて下さい。 "
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:796
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:796
 #: sunflower/plugins/file_list/file_list.py:796
 msgid "Error creating new link."
 msgstr "新規リンクの作成に失敗しました。"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:812
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:812
 #: sunflower/plugins/file_list/file_list.py:812
 msgid "Current file system does not support linking."
 msgstr "現在のファイルシステムはリンクに対応していません。"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:836
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:836
 #: sunflower/plugins/file_list/file_list.py:836
 #, python-brace-format
 msgid ""
@@ -2949,8 +1837,6 @@ msgid_plural ""
 "Are you sure about this?"
 msgstr[0] "{0}件の項目を<i><b>削除</b></i>します。\n宜しいですか。"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:845
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:845
 #: sunflower/plugins/file_list/file_list.py:845
 #, python-brace-format
 msgid ""
@@ -2961,56 +1847,38 @@ msgid_plural ""
 "Are you sure about this?"
 msgstr[0] "{0}件の項目を<i><b>ゴミ箱に</b></i>移動します。\n宜しいですか。"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1199
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1199
 #: sunflower/plugins/file_list/file_list.py:1199
 msgid "Other application..."
 msgstr "他のアプリケーション……"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1605
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1605
 #: sunflower/plugins/file_list/file_list.py:1605
 msgid "No files selected."
 msgstr "ファイルが選択されていません。"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1874
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1874
 #: sunflower/plugins/file_list/file_list.py:1874
 msgid "Free:"
 msgstr "空き:"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1875
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1875
 #: sunflower/plugins/file_list/file_list.py:1875
 msgid "Total:"
 msgstr "合計:"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1946
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1946
 #: sunflower/plugins/file_list/file_list.py:1946
 msgid "Copy here"
 msgstr "ここにコピー"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1951
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1951
 #: sunflower/plugins/file_list/file_list.py:1951
 msgid "Move here"
 msgstr "ここに移動"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:1956
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:1956
 #: sunflower/plugins/file_list/file_list.py:1956
 msgid "Link here"
 msgstr "ここにリンク"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:2335
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:2335
 #: sunflower/plugins/file_list/file_list.py:2335
 msgid "No such file or directory"
 msgstr "そのようなファイルやディレクトリはありません"
 
-#: build/Sunflower/sunflower/plugins/file_list/file_list.py:2354
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/file_list.py:2354
 #: sunflower/plugins/file_list/file_list.py:2354
 #, python-brace-format
 msgid ""
@@ -3022,26 +1890,18 @@ msgid ""
 "Would you like to retry?"
 msgstr "作業ディレクトリを\n{0}\nから\n{1}\nに変更できませんでした。\nもう一度試しますか。"
 
-#: build/Sunflower/sunflower/plugins/file_list/trash_list.py:27
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/trash_list.py:27
 #: sunflower/plugins/file_list/trash_list.py:27
 msgid "Empty trash"
 msgstr "ゴミ箱を空にする"
 
-#: build/Sunflower/sunflower/plugins/file_list/trash_list.py:40
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/trash_list.py:40
 #: sunflower/plugins/file_list/trash_list.py:40
 msgid "All items in the Trash will be permanently deleted. Are you sure?"
 msgstr "ゴミ箱にある全項目は永遠に削除され，二度と復元できません。実行しますか。"
 
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:67
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:67
 #: sunflower/plugins/file_list/gio_extension.py:67
 msgid "Mount operation"
 msgstr "マウント操作"
 
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:112
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:112
 #: sunflower/plugins/file_list/gio_extension.py:112
 #, python-brace-format
 msgid ""
@@ -3051,24 +1911,12 @@ msgid ""
 "{1}"
 msgstr "マウントできません。\n{0}\n\n{1}"
 
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:165
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:519
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:871
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:165
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:519
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:871
 #: sunflower/plugins/file_list/gio_extension.py:165
 #: sunflower/plugins/file_list/gio_extension.py:519
 #: sunflower/plugins/file_list/gio_extension.py:871
 msgid "URI"
 msgstr " 統一資源識別子"
 
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:423
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:726
-#: build/Sunflower/sunflower/plugins/file_list/gio_extension.py:1081
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:423
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:726
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/gio_extension.py:1081
 #: sunflower/plugins/file_list/gio_extension.py:423
 #: sunflower/plugins/file_list/gio_extension.py:726
 #: sunflower/plugins/file_list/gio_extension.py:1081
@@ -3078,78 +1926,46 @@ msgid ""
 "Are you sure about this?"
 msgstr "{0}を削除します。\n宜しいですか。"
 
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:38
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:38
 #: sunflower/plugins/file_list/dialogs.py:38
 msgid "Create Samba mount"
 msgstr "Sambaマウントを作成"
 
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:69
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:282
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:476
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:69
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:282
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:476
 #: sunflower/plugins/file_list/dialogs.py:69
 #: sunflower/plugins/file_list/dialogs.py:282
 #: sunflower/plugins/file_list/dialogs.py:476
 msgid "Server:"
 msgstr "サーバー:"
 
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:77
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:77
 #: sunflower/plugins/file_list/dialogs.py:77
 msgid "Share:"
 msgstr "共有:"
 
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:79
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:289
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:492
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:79
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:289
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:492
 #: sunflower/plugins/file_list/dialogs.py:79
 #: sunflower/plugins/file_list/dialogs.py:289
 #: sunflower/plugins/file_list/dialogs.py:492
 msgid "Directory:"
 msgstr "ディレクトリ:"
 
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:94
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:94
 #: sunflower/plugins/file_list/dialogs.py:94
 msgid "Domain:"
 msgstr "ドメイン:"
 
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:95
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:303
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:506
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:95
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:303
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:506
 #: sunflower/plugins/file_list/dialogs.py:95
 #: sunflower/plugins/file_list/dialogs.py:303
 #: sunflower/plugins/file_list/dialogs.py:506
 msgid "Username:"
 msgstr "利用者名:"
 
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:173
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:173
 #: sunflower/plugins/file_list/dialogs.py:173
 msgid ""
 "One or more required fields are empty. Please make sure you have entered "
 "name, server and share."
 msgstr "一つ又は複数の必須入力欄が空です。名前，サーバー及び共有を入力したか確かめて下さい。"
 
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:251
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:251
 #: sunflower/plugins/file_list/dialogs.py:251
 msgid "Create FTP mount"
 msgstr "FTPマウントを作成"
 
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:370
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:577
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:370
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:577
 #: sunflower/plugins/file_list/dialogs.py:370
 #: sunflower/plugins/file_list/dialogs.py:577
 msgid ""
@@ -3157,157 +1973,101 @@ msgid ""
 " and server."
 msgstr "一つ又は複数の必須入力欄が空です。名前及びサーバーを入力したか確かめて下さい。"
 
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:435
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:435
 #: sunflower/plugins/file_list/dialogs.py:435
 msgid "Create SFTP mount"
 msgstr "SFTPマウントを作成"
 
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:445
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:445
 #: sunflower/plugins/file_list/dialogs.py:445
 msgid "Create WebDav mount"
 msgstr "WebDavマウントを作成"
 
-#: build/Sunflower/sunflower/plugins/file_list/dialogs.py:483
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/file_list/dialogs.py:483
 #: sunflower/plugins/file_list/dialogs.py:483
 msgid "Server type:"
 msgstr "サーバー種別:"
 
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:34
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:364
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:34
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:364
 #: sunflower/plugins/sessions/plugin.py:34
 #: sunflower/plugins/sessions/plugin.py:364
 msgid "Sessions"
 msgstr "セッション"
 
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:67
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:67
 #: sunflower/plugins/sessions/plugin.py:67
 msgid "Locked"
 msgstr "固定"
 
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:68
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:283
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:68
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:283
 #: sunflower/plugins/sessions/plugin.py:68
 #: sunflower/plugins/sessions/plugin.py:283
 msgid "Session manager"
 msgstr "状況管理"
 
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:87
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:87
 #: sunflower/plugins/sessions/plugin.py:87
 msgid "Move up"
 msgstr "上に移動"
 
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:94
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:94
 #: sunflower/plugins/sessions/plugin.py:94
 msgid "Move down"
 msgstr "下に移動"
 
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:184
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:184
 #: sunflower/plugins/sessions/plugin.py:184
 msgid "Session with this name already exists."
 msgstr "同名のセッションが既に存在します。"
 
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:214
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:214
 #: sunflower/plugins/sessions/plugin.py:214
 msgid "New session"
 msgstr "新規セッション"
 
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:328
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:328
 #: sunflower/plugins/sessions/plugin.py:328
 msgid ""
 "Lock current session\n"
 "<small>Locking session preserves tab layout at the time of activation.</small>"
 msgstr "現在の状態を固定\n<small>状態を固定すると，次回起動時にタブの配置が復元されます</small>"
 
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:331
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:331
 #: sunflower/plugins/sessions/plugin.py:331
 msgid "Manage"
 msgstr "管理"
 
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:334
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:334
 #: sunflower/plugins/sessions/plugin.py:334
 msgid "Save"
 msgstr "保存"
 
-#: build/Sunflower/sunflower/plugins/sessions/plugin.py:368
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/sessions/plugin.py:368
 #: sunflower/plugins/sessions/plugin.py:368
 msgid "Show session list"
 msgstr "セッション一覧を表示"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/letter_case.py:17
-#: build/Sunflower/sunflower/plugins/rename_extensions/letter_case.py:25
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/letter_case.py:17
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/letter_case.py:25
 #: sunflower/plugins/rename_extensions/letter_case.py:17
 #: sunflower/plugins/rename_extensions/letter_case.py:25
 msgid "Do nothing"
 msgstr "何もしない"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/letter_case.py:18
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/letter_case.py:18
 #: sunflower/plugins/rename_extensions/letter_case.py:18
 msgid "Capitalize"
 msgstr "大文字化"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/letter_case.py:19
-#: build/Sunflower/sunflower/plugins/rename_extensions/letter_case.py:26
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/letter_case.py:19
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/letter_case.py:26
 #: sunflower/plugins/rename_extensions/letter_case.py:19
 #: sunflower/plugins/rename_extensions/letter_case.py:26
 msgid "Upper case"
 msgstr "大文字"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/letter_case.py:20
-#: build/Sunflower/sunflower/plugins/rename_extensions/letter_case.py:27
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/letter_case.py:20
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/letter_case.py:27
 #: sunflower/plugins/rename_extensions/letter_case.py:20
 #: sunflower/plugins/rename_extensions/letter_case.py:27
 msgid "Lower case"
 msgstr "小文字"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/letter_case.py:21
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/letter_case.py:21
 #: sunflower/plugins/rename_extensions/letter_case.py:21
 msgid "Swap case"
 msgstr "大文字・小文字を入れ替える"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/letter_case.py:31
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/letter_case.py:31
 #: sunflower/plugins/rename_extensions/letter_case.py:31
 msgid "Item name:"
 msgstr "項目名:"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/letter_case.py:34
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/letter_case.py:34
 #: sunflower/plugins/rename_extensions/letter_case.py:34
 msgid "Extension:"
 msgstr "拡張子:"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/letter_case.py:89
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/letter_case.py:89
 #: sunflower/plugins/rename_extensions/letter_case.py:89
 msgid "Letter Case"
 msgstr "大文字・小文字"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/default.py:42
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/default.py:42
 #: sunflower/plugins/rename_extensions/default.py:42
 msgid ""
 "<b>Template syntax</b>\n"
@@ -3319,147 +2079,97 @@ msgid ""
 "use range in format [N#-#]."
 msgstr "<b>雛形の文法</b>\n[N]\t項目名\n[E]\t拡張子\n[C]\t連番\n\n項目名及び拡張子に関しては\n範囲指定[N#-#]が利用できます。"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/default.py:78
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/default.py:78
 #: sunflower/plugins/rename_extensions/default.py:78
 msgid "Part of name"
 msgstr "名前のパス"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/default.py:83
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/default.py:83
 #: sunflower/plugins/rename_extensions/default.py:83
 msgid "Extension"
 msgstr "拡張子"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/default.py:86
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/default.py:86
 #: sunflower/plugins/rename_extensions/default.py:86
 msgid "Part of extension"
 msgstr "拡張子部"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/default.py:91
-#: build/Sunflower/sunflower/plugins/rename_extensions/default.py:105
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/default.py:91
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/default.py:105
 #: sunflower/plugins/rename_extensions/default.py:91
 #: sunflower/plugins/rename_extensions/default.py:105
 msgid "Counter"
 msgstr "連番"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/default.py:111
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/default.py:111
 #: sunflower/plugins/rename_extensions/default.py:111
 msgid "Start:"
 msgstr "開始:"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/default.py:118
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/default.py:118
 #: sunflower/plugins/rename_extensions/default.py:118
 msgid "Step:"
 msgstr "増分:"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/default.py:125
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/default.py:125
 #: sunflower/plugins/rename_extensions/default.py:125
 msgid "Digits:"
 msgstr "数値:"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/default.py:254
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/default.py:254
 #: sunflower/plugins/rename_extensions/default.py:254
 msgid "Item list is empty. Unable to get item for range selection!"
 msgstr "項目リストが空です。範囲選択した項目を取得できません。"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/audio_metadata.py:24
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/audio_metadata.py:24
 #: sunflower/plugins/rename_extensions/audio_metadata.py:24
 msgid "Album"
 msgstr "アルバム"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/audio_metadata.py:25
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/audio_metadata.py:25
 #: sunflower/plugins/rename_extensions/audio_metadata.py:25
 msgid "Artist"
 msgstr "アーティスト"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/audio_metadata.py:27
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/audio_metadata.py:27
 #: sunflower/plugins/rename_extensions/audio_metadata.py:27
 msgid "Genre"
 msgstr "ジャンル"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/audio_metadata.py:29
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/audio_metadata.py:29
 #: sunflower/plugins/rename_extensions/audio_metadata.py:29
 msgid "Track number"
 msgstr "トラック番号"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/audio_metadata.py:41
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/audio_metadata.py:41
 #: sunflower/plugins/rename_extensions/audio_metadata.py:41
 msgid "Replace:"
 msgstr "置換:"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/audio_metadata.py:49
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/audio_metadata.py:49
 #: sunflower/plugins/rename_extensions/audio_metadata.py:49
 msgid "With:"
 msgstr "対象:"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/audio_metadata.py:62
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/audio_metadata.py:62
 #: sunflower/plugins/rename_extensions/audio_metadata.py:62
 msgid "Template syntax"
 msgstr "雛形の文法"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/audio_metadata.py:73
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/audio_metadata.py:73
 #: sunflower/plugins/rename_extensions/audio_metadata.py:73
 msgid "Character replacement"
 msgstr "文字の置換"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/audio_metadata.py:80
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/audio_metadata.py:80
 #: sunflower/plugins/rename_extensions/audio_metadata.py:80
 msgid ""
 "In order to use this extension you need <b>mutagen</b> module installed!"
 msgstr "この拡張を用いるには<b>mutagen</b>モジュールが必要です。"
 
-#: build/Sunflower/sunflower/plugins/rename_extensions/audio_metadata.py:112
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/rename_extensions/audio_metadata.py:112
 #: sunflower/plugins/rename_extensions/audio_metadata.py:112
 msgid "Audio Metadata"
 msgstr "音声メタデータ"
 
-#: build/Sunflower/sunflower/plugins/find_file_extensions/size.py:22
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/size.py:22
 #: sunflower/plugins/find_file_extensions/size.py:22
 msgid "Match file size"
 msgstr "ファイルの大きさで合致させる"
 
-#: build/Sunflower/sunflower/plugins/find_file_extensions/size.py:26
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/size.py:26
 #: sunflower/plugins/find_file_extensions/size.py:26
 msgid "Minimum:"
 msgstr "最小:"
 
-#: build/Sunflower/sunflower/plugins/find_file_extensions/size.py:28
-#: build/Sunflower/sunflower/plugins/find_file_extensions/size.py:32
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/size.py:28
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/size.py:32
 #: sunflower/plugins/find_file_extensions/size.py:28
 #: sunflower/plugins/find_file_extensions/size.py:32
 msgid "MB"
 msgstr "MB"
 
-#: build/Sunflower/sunflower/plugins/find_file_extensions/size.py:30
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/size.py:30
 #: sunflower/plugins/find_file_extensions/size.py:30
 msgid "Maximum:"
 msgstr "最大:"
 
-#: build/Sunflower/sunflower/plugins/find_file_extensions/default.py:34
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/default.py:34
 #: sunflower/plugins/find_file_extensions/default.py:34
 msgid ""
 "<b>Pattern matching</b>\n"
@@ -3469,93 +2179,59 @@ msgid ""
 "[!seq]\tAny character <u>not</u> in <i>seq</i>"
 msgstr "<b>適合するパターン</b>\n*\t\t全て\n?\t\t任意の一文字\n[seq]\t<i>seq</i>の孰れか一文字\n[!seq]\t<i>seq</i>に含まれて<u>いない</u>一文字"
 
-#: build/Sunflower/sunflower/plugins/find_file_extensions/default.py:49
-#: build/Sunflower/sunflower/plugins/find_file_extensions/contents.py:22
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/default.py:49
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/contents.py:22
 #: sunflower/plugins/find_file_extensions/default.py:49
 #: sunflower/plugins/find_file_extensions/contents.py:22
 msgid "Search for:"
 msgstr "検索:"
 
-#: build/Sunflower/sunflower/plugins/find_file_extensions/default.py:55
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/default.py:55
 #: sunflower/plugins/find_file_extensions/default.py:55
 msgid "Case sensitive"
 msgstr "大文字・小文字を区別する"
 
-#: build/Sunflower/sunflower/plugins/find_file_extensions/contents.py:38
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/find_file_extensions/contents.py:38
 #: sunflower/plugins/find_file_extensions/contents.py:38
 msgid "Content"
 msgstr "内容"
 
-#: build/Sunflower/sunflower/plugins/system_terminal/plugin.py:16
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/system_terminal/plugin.py:16
 #: sunflower/plugins/system_terminal/plugin.py:16
 msgid "System terminal"
 msgstr "システムの端末エミュレータ"
 
-#: build/Sunflower/sunflower/plugins/gvim_viewer/plugin.py:52
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugins/gvim_viewer/plugin.py:52
 #: sunflower/plugins/gvim_viewer/plugin.py:52
 msgid "GVim"
 msgstr "GVim"
 
-#: build/Sunflower/sunflower/plugin_base/rename_extension.py:22
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/rename_extension.py:22
 #: sunflower/plugin_base/rename_extension.py:22
 msgid "Use this extension"
 msgstr "この拡張を用いる"
 
-#: build/Sunflower/sunflower/plugin_base/plugin.py:130
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/plugin.py:130
 #: sunflower/plugin_base/plugin.py:130
 msgid "Plugin Base"
 msgstr "基本プラグイン"
 
-#: build/Sunflower/sunflower/plugin_base/plugin.py:133
-#: build/Sunflower/sunflower/plugin_base/terminal.py:266
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/plugin.py:133
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/terminal.py:266
 #: sunflower/plugin_base/plugin.py:133 sunflower/plugin_base/terminal.py:266
 msgid "Focus opposite object"
 msgstr "反対側に注目する"
 
-#: build/Sunflower/sunflower/plugin_base/plugin.py:134
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/plugin.py:134
 #: sunflower/plugin_base/plugin.py:134
 msgid "Next tab"
 msgstr "次のタブ"
 
-#: build/Sunflower/sunflower/plugin_base/plugin.py:135
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/plugin.py:135
 #: sunflower/plugin_base/plugin.py:135
 msgid "Previous tab"
 msgstr "前のタブ"
 
-#: build/Sunflower/sunflower/plugin_base/plugin.py:137
-#: build/Sunflower/sunflower/plugin_base/terminal.py:267
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/plugin.py:137
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/terminal.py:267
 #: sunflower/plugin_base/plugin.py:137 sunflower/plugin_base/terminal.py:267
 msgid "Close tab"
 msgstr "タブを閉じる"
 
-#: build/Sunflower/sunflower/plugin_base/plugin.py:138
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/plugin.py:138
 #: sunflower/plugin_base/plugin.py:138
 msgid "Focus left object"
 msgstr "左に注目する"
 
-#: build/Sunflower/sunflower/plugin_base/plugin.py:139
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/plugin.py:139
 #: sunflower/plugin_base/plugin.py:139
 msgid "Focus right object"
 msgstr "右に注目する"
 
-#: build/Sunflower/sunflower/plugin_base/terminal.py:93
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/terminal.py:93
 #: sunflower/plugin_base/terminal.py:93
 msgid ""
 "\n"
@@ -3563,44 +2239,28 @@ msgid ""
 "Python VTE module is not installed on this system!"
 msgstr "\n\n本システムにはPython VTEモジュールが導入されていません。"
 
-#: build/Sunflower/sunflower/plugin_base/terminal.py:162
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/terminal.py:162
 #: sunflower/plugin_base/terminal.py:162
 msgid "Terminal menu"
 msgstr "端末エミュレータの操作"
 
-#: build/Sunflower/sunflower/plugin_base/terminal.py:176
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/terminal.py:176
 #: sunflower/plugin_base/terminal.py:176
 msgid "Open current directory"
 msgstr "現在のディレクトリを開く"
 
-#: build/Sunflower/sunflower/plugin_base/terminal.py:263
-#: build/Sunflower/sunflower/plugin_base/item_list.py:215
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/terminal.py:263
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:215
 #: sunflower/plugin_base/terminal.py:263
 #: sunflower/plugin_base/item_list.py:215
 msgid "Create terminal tab"
 msgstr "端末エミュレータタブを作成する"
 
-#: build/Sunflower/sunflower/plugin_base/terminal.py:264
-#: build/Sunflower/sunflower/plugin_base/item_list.py:210
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/terminal.py:264
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:210
 #: sunflower/plugin_base/terminal.py:264
 #: sunflower/plugin_base/item_list.py:210
 msgid "Copy selection to clipboard"
 msgstr "選択範囲をクリップボードにコピー"
 
-#: build/Sunflower/sunflower/plugin_base/terminal.py:265
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/terminal.py:265
 #: sunflower/plugin_base/terminal.py:265
 msgid "Paste from clipboard"
 msgstr "クリップボードから貼り付け"
 
-#: build/Sunflower/sunflower/plugin_base/terminal.py:310
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/terminal.py:310
 #: sunflower/plugin_base/terminal.py:310
 #, python-brace-format
 msgid ""
@@ -3609,362 +2269,240 @@ msgid ""
 "{0}"
 msgstr "子プロセスに次のデータを入力します。宜しいですか。\n\n{0}"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:74
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:74
 #: sunflower/plugin_base/item_list.py:74
 msgid "Directories (selected/total)"
 msgstr "ディレクトリ（選択/合計）"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:75
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:75
 #: sunflower/plugin_base/item_list.py:75
 msgid "Files (selected/total)"
 msgstr "ファイル（選択/合計）"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:76
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:76
 #: sunflower/plugin_base/item_list.py:76
 msgid "Size (selected/total)"
 msgstr "大きさ（選択/合計）"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:134
-#: build/Sunflower/sunflower/plugin_base/item_list.py:241
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:134
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:241
 #: sunflower/plugin_base/item_list.py:134
 #: sunflower/plugin_base/item_list.py:241
 msgid "Swap right and left paths"
 msgstr "左右のパスを入れ替える"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:140
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:140
 #: sunflower/plugin_base/item_list.py:140
 msgid "Reload item list"
 msgstr "項目一覧を再読込"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:146
-#: build/Sunflower/sunflower/plugin_base/item_list.py:245
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:146
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:245
 #: sunflower/plugin_base/item_list.py:146
 #: sunflower/plugin_base/item_list.py:245
 msgid "Copy path to clipboard"
 msgstr "パスをクリップボードにコピー"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:152
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:152
 #: sunflower/plugin_base/item_list.py:152
 msgid "Enter path..."
 msgstr "パスを入力して下さい……"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:180
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:180
 #: sunflower/plugin_base/item_list.py:180
 msgid "Locations"
 msgstr "場所"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:204
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:204
 #: sunflower/plugin_base/item_list.py:204
 msgid "Execute selected item"
 msgstr "選択した項目を実行する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:205
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:205
 #: sunflower/plugin_base/item_list.py:205
 msgid "Select application and execute item"
 msgstr "アプリケーションを選択して項目を実行する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:206
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:206
 #: sunflower/plugin_base/item_list.py:206
 msgid "Show selected item properties"
 msgstr "選択した項目の属性情報を表示する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:207
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:207
 #: sunflower/plugin_base/item_list.py:207
 msgid "Bookmark current directory"
 msgstr "現在のディレクトリを栞に登録する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:208
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:208
 #: sunflower/plugin_base/item_list.py:208
 msgid "Edit bookmarks"
 msgstr "栞を編集する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:209
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:209
 #: sunflower/plugin_base/item_list.py:209
 msgid "Cut selection to clipboard"
 msgstr "選択範囲をクリップボードに切り取り"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:211
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:211
 #: sunflower/plugin_base/item_list.py:211
 msgid "Paste items from clipboard"
 msgstr "項目をクリップボードから貼り付け"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:212
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:212
 #: sunflower/plugin_base/item_list.py:212
 msgid "Open selected directory in new tab"
 msgstr "選択したディレクトリを新規タブで開く"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:213
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:213
 #: sunflower/plugin_base/item_list.py:213
 msgid "Open selected directory"
 msgstr "選択したディレクトリを開く"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:214
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:214
 #: sunflower/plugin_base/item_list.py:214
 msgid "Calculate disk usage for directory"
 msgstr "ディレクトリのディスク使用量を計算する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:217
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:217
 #: sunflower/plugin_base/item_list.py:217
 msgid "Go to root directory"
 msgstr "根ディレクトリに移動"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:218
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:218
 #: sunflower/plugin_base/item_list.py:218
 msgid "Reload items in current directory"
 msgstr "現行ディレクトリの項目を再読込"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:219
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:219
 #: sunflower/plugin_base/item_list.py:219
 msgid "Show history browser"
 msgstr "履歴を閲覧する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:220
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:220
 #: sunflower/plugin_base/item_list.py:220
 msgid "Go back in history"
 msgstr "履歴を遡る"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:221
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:221
 #: sunflower/plugin_base/item_list.py:221
 msgid "Go forward in history"
 msgstr "履歴を辿る"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:222
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:222
 #: sunflower/plugin_base/item_list.py:222
 msgid "Select all"
 msgstr "全選択"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:223
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:223
 #: sunflower/plugin_base/item_list.py:223
 msgid "Deselect all"
 msgstr "全選択を解除"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:224
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:224
 #: sunflower/plugin_base/item_list.py:224
 msgid "Invert selection"
 msgstr "選択範囲を反転"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:225
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:225
 #: sunflower/plugin_base/item_list.py:225
 msgid "Toggle selection"
 msgstr "選択範囲を入れ替える"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:226
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:226
 #: sunflower/plugin_base/item_list.py:226
 msgid "Toggle selection and move marker up"
 msgstr "選択範囲を入れ替えてマーカーを上に移動する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:227
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:227
 #: sunflower/plugin_base/item_list.py:227
 msgid "Trash or delete selected items"
 msgstr "選択した項目をゴミ箱に捨てる・消去する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:228
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:228
 #: sunflower/plugin_base/item_list.py:228
 msgid "Force deleting selected items"
 msgstr "選択した項目を強制的に削除"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:229
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:229
 #: sunflower/plugin_base/item_list.py:229
 msgid "Show bookmarks for current list"
 msgstr "現在のリストに対する栞を表示する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:230
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:230
 #: sunflower/plugin_base/item_list.py:230
 msgid "Show bookmarks for left list"
 msgstr "左のリストに対する栞を表示する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:231
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:231
 #: sunflower/plugin_base/item_list.py:231
 msgid "Show bookmarks for right list"
 msgstr "右のリストに対する栞を表示する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:232
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:232
 #: sunflower/plugin_base/item_list.py:232
 msgid "Rename selected item"
 msgstr "選択した項目の名前を変更"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:233
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:233
 #: sunflower/plugin_base/item_list.py:233
 msgid "View selected item"
 msgstr "選択した項目を表示する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:234
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:234
 #: sunflower/plugin_base/item_list.py:234
 msgid "Edit selected item"
 msgstr "選択した項目を編集"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:235
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:235
 #: sunflower/plugin_base/item_list.py:235
 msgid "Copy selected items"
 msgstr "選択した項目をコピー"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:236
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:236
 #: sunflower/plugin_base/item_list.py:236
 msgid "Move selected items"
 msgstr "選択した項目を移動"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:237
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:237
 #: sunflower/plugin_base/item_list.py:237
 msgid "Show context menu"
 msgstr "コンテクストメニューを表示する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:238
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:238
 #: sunflower/plugin_base/item_list.py:238
 msgid "Show \"open with\" menu"
 msgstr "「次で開く」メニューを表示する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:239
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:239
 #: sunflower/plugin_base/item_list.py:239
 msgid "Assign path from left list"
 msgstr "左のリストからパスを割り当てる"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:240
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:240
 #: sunflower/plugin_base/item_list.py:240
 msgid "Assign path from right list"
 msgstr "右のリストからパスを割り当てる"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:242
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:242
 #: sunflower/plugin_base/item_list.py:242
 msgid "Move selection marker up"
 msgstr "選択マーカーを上に移動する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:243
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:243
 #: sunflower/plugin_base/item_list.py:243
 msgid "Move selection marker down"
 msgstr "選択マーカーを下に移動する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:244
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:244
 #: sunflower/plugin_base/item_list.py:244
 msgid "Show tab menu"
 msgstr "タブメニューを表示する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:246
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:246
 #: sunflower/plugin_base/item_list.py:246
 msgid "Copy selected path to clipboard"
 msgstr "選択したパスをクリップボードにコピー"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:247
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:247
 #: sunflower/plugin_base/item_list.py:247
 msgid "Copy selected item name to clipboard"
 msgstr "選択した項目名をクリップボードにコピー"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:248
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:248
 #: sunflower/plugin_base/item_list.py:248
 msgid "Copy path to command entry"
 msgstr "パスをコマンド欄にコピー"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:249
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:249
 #: sunflower/plugin_base/item_list.py:249
 msgid "Copy selection to command entry"
 msgstr "選択範囲をコマンド欄にコピー"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:250
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:250
 #: sunflower/plugin_base/item_list.py:250
 msgid "Ask and navigate to path"
 msgstr "対話的にパスへ移動する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:251
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:251
 #: sunflower/plugin_base/item_list.py:251
 msgid "Start quick search"
 msgstr "簡易検索を開始"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:252
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:252
 #: sunflower/plugin_base/item_list.py:252
 msgid "Expand directory"
 msgstr "ディレクトリを展開"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:253
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:253
 #: sunflower/plugin_base/item_list.py:253
 msgid "Collapse directory"
 msgstr "ディレクトリを折り畳む"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:254
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:254
 #: sunflower/plugin_base/item_list.py:254
 msgid "Create symbolic or hard link"
 msgstr "シンボリックリンク又はハードリンクを作成する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:255
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:255
 #: sunflower/plugin_base/item_list.py:255
 msgid "Show emblem menu"
 msgstr "記章メニューを表示する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:316
-#: build/Sunflower/sunflower/plugin_base/item_list.py:322
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:316
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:322
 #: sunflower/plugin_base/item_list.py:316
 #: sunflower/plugin_base/item_list.py:322
 #, python-brace-format
 msgid "Go to '{0}'"
 msgstr "‘{0}’に移動する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:660
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:660
 #: sunflower/plugin_base/item_list.py:660
 msgid ""
 "Directory does not exist anymore or is not valid. If path is not local check"
 " if specified volume is mounted."
 msgstr "ディレクトリが存在しないか不正です。パスがローカルにない場合はボリュームがマウントされているか確かめて下さい。"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:698
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:698
 #: sunflower/plugin_base/item_list.py:698
 #, python-brace-format
 msgid ""
@@ -3972,154 +2510,104 @@ msgid ""
 "for available plugins or create a feature request."
 msgstr "このアプリケーションは指定された規約 ({0}) に対応していません。利用可能なプラグインを見付けるか，機能の追加を提案して下さい。"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:730
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:730
 #: sunflower/plugin_base/item_list.py:730
 msgid ""
 "Application is unable to handle specified data. Check if source items still "
 "exist."
 msgstr "指定したデータをアプリケーションが処理できません。原本が未だ存在することを確かめて下さい。"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:964
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:964
 #: sunflower/plugin_base/item_list.py:964
 msgid "_Open"
 msgstr "開く(_O)"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:973
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:973
 #: sunflower/plugin_base/item_list.py:973
 msgid "Open in new ta_b"
 msgstr "新しいタブで開く(_B)"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:987
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:987
 #: sunflower/plugin_base/item_list.py:987
 msgid "Open _with"
 msgstr "これで開く(_W)"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:999
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:999
 #: sunflower/plugin_base/item_list.py:999
 msgid "Additional options"
 msgstr "追加オプション"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1013
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1013
 #: sunflower/plugin_base/item_list.py:1013
 msgid "Create file"
 msgstr "ファイルを作成"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1037
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1037
 #: sunflower/plugin_base/item_list.py:1037
 msgid "Cu_t"
 msgstr "切り取り(_T)"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1046
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1046
 #: sunflower/plugin_base/item_list.py:1046
 msgid "_Copy"
 msgstr "コピー(_C)"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1055
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1055
 #: sunflower/plugin_base/item_list.py:1055
 msgid "_Paste"
 msgstr "貼り付け(_P)"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1069
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1069
 #: sunflower/plugin_base/item_list.py:1069
 msgid "Copy to other..."
 msgstr "他へコピー"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1075
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1075
 #: sunflower/plugin_base/item_list.py:1075
 msgid "Move to other..."
 msgstr "他へ移動"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1085
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1085
 #: sunflower/plugin_base/item_list.py:1085
 msgid "Copy file name"
 msgstr "ファイル名をコピー"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1091
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1091
 #: sunflower/plugin_base/item_list.py:1091
 msgid "Copy path"
 msgstr "パスをコピー"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1102
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1102
 #: sunflower/plugin_base/item_list.py:1102
 msgid "_Delete"
 msgstr "削除(_D)"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1116
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1116
 #: sunflower/plugin_base/item_list.py:1116
 msgid "Send to..."
 msgstr "送る"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1127
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1127
 #: sunflower/plugin_base/item_list.py:1127
 msgid "Ma_ke link"
 msgstr "リンクを張る(_K)"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1133
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1133
 #: sunflower/plugin_base/item_list.py:1133
 msgid "_Rename..."
 msgstr "名前の変更(_R)"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1146
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1146
 #: sunflower/plugin_base/item_list.py:1146
 msgid "_Properties"
 msgstr "属性情報(_P)"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1194
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1194
 #: sunflower/plugin_base/item_list.py:1194
 msgid "View complete history..."
 msgstr "全履歴を表示する"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1200
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1200
 #: sunflower/plugin_base/item_list.py:1200
 msgid "History is empty"
 msgstr "履歴が空です"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1549
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1549
 #: sunflower/plugin_base/item_list.py:1549
 msgid "Path entry"
 msgstr "パス項目"
 
-#: build/Sunflower/sunflower/plugin_base/item_list.py:1550
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/plugin_base/item_list.py:1550
 #: sunflower/plugin_base/item_list.py:1550
 msgid "Navigate to:"
 msgstr "次に移動:"
 
-#: build/Sunflower/sunflower/indicator.py:32
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/indicator.py:32
 #: sunflower/indicator.py:32
 msgid "Sh_ow main window"
 msgstr "主ウィンドウを表示(_O)"
 
-#: build/Sunflower/sunflower/indicator.py:41
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/indicator.py:41
 #: sunflower/indicator.py:41
 msgid "_Hide main window"
 msgstr "主ウィンドウを隠す(_H)"
 
-#: build/Sunflower/sunflower/operation.py:115
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:115
 #: sunflower/operation.py:115
 #, python-brace-format
 msgid ""
@@ -4128,8 +2616,6 @@ msgid ""
 "Available: {1}"
 msgstr "中止しました。対象のファイルシステムに十分な空き領域がありません。\n必要な領域: {0}\n利用可能な領域: {1}"
 
-#: build/Sunflower/sunflower/operation.py:130
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:130
 #: sunflower/operation.py:130
 #, python-brace-format
 msgid ""
@@ -4141,321 +2627,221 @@ msgid ""
 "Do you wish to continue?"
 msgstr "対象のファイルシステムにこの操作を続行するのに十分な空き領域がありません。\n\n必要な領域: {0}\n利用可能な領域: {1}\n\n本当に実行しますか？"
 
-#: build/Sunflower/sunflower/operation.py:265
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:265
 #: sunflower/operation.py:265
 msgid ""
 "There is a problem writing data to destination file. What would you like to "
 "do?"
 msgstr "宛先ファイルへのデータ書き込みに問題があります。何をしますか？"
 
-#: build/Sunflower/sunflower/operation.py:307
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:307
 #: sunflower/operation.py:307
 msgid ""
 "An error occurred while trying to create specified file. What would you like"
 " to do?"
 msgstr "指定されたファイルを作成中に問題が生じました。何をしますか？"
 
-#: build/Sunflower/sunflower/operation.py:314
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:314
 #: sunflower/operation.py:314
 msgid ""
 "An error occurred while trying to create specified directory. What would you"
 " like to do?"
 msgstr "指定されたディレクトリを作成中に問題が生じました。何をしますか？"
 
-#: build/Sunflower/sunflower/operation.py:354
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:354
 #: sunflower/operation.py:354
 msgid ""
 "Problem with setting path parameter for specified path. What would you like "
 "to do?"
 msgstr "指定されたパスのパラメータの設定中に問題が生じました。何をしますか？"
 
-#: build/Sunflower/sunflower/operation.py:393
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:393
 #: sunflower/operation.py:393
 msgid ""
 "There was a problem removing specified path. What would you like to do?"
 msgstr "指定されたパスの削除中に問題が生じました。何をしますか？"
 
-#: build/Sunflower/sunflower/operation.py:432
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:432
 #: sunflower/operation.py:432
 msgid ""
 "There was a problem trashing specified path. Would you like to try removing "
 "it instead?"
 msgstr "指定されたパスをゴミ箱に棄てている途中に問題が生じました。代わりに削除しますか？"
 
-#: build/Sunflower/sunflower/operation.py:471
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:471
 #: sunflower/operation.py:471
 msgid "There was a problem moving specified path. What would you like to do?"
 msgstr "指定されたパスの移動中に問題が生じました。何をしますか？"
 
-#: build/Sunflower/sunflower/operation.py:510
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:510
 #: sunflower/operation.py:510
 msgid ""
 "There was a problem renaming specified path. What would you like to do?"
 msgstr "指定されたパスの名前を変更している途中に問題が生じました。何をしますか？"
 
-#: build/Sunflower/sunflower/operation.py:549
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:549
 #: sunflower/operation.py:549
 msgid ""
 "There was a problem with reading specified directory. What would you like to"
 " do?"
 msgstr "指定されたディレクトリの読込l中に問題が生じました。何をしますか？"
 
-#: build/Sunflower/sunflower/operation.py:659
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:659
 #: sunflower/operation.py:659
 msgid "Searching for files..."
 msgstr "ファイルを検索中……"
 
-#: build/Sunflower/sunflower/operation.py:883
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:883
 #: sunflower/operation.py:883
 msgid ""
 "Unable to create directory because file with the same name already exists in"
 " target directory."
 msgstr "対象のディレクトリには既に同名のファイルが存在している為、ディレクトリを作成できませんでした。"
 
-#: build/Sunflower/sunflower/operation.py:1122
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1122
 #: sunflower/operation.py:1122
 msgid "Creating directories..."
 msgstr "ディレクトリを作成中……"
 
-#: build/Sunflower/sunflower/operation.py:1139
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1139
 #: sunflower/operation.py:1139
 msgid "Copying files..."
 msgstr "ファイルを複製中……"
 
-#: build/Sunflower/sunflower/operation.py:1155
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1155
 #: sunflower/operation.py:1155
 msgid "Creating links..."
 msgstr "リンクを作成中……"
 
-#: build/Sunflower/sunflower/operation.py:1207
-#: build/Sunflower/sunflower/operation.py:1224
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1207
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1224
 #: sunflower/operation.py:1207 sunflower/operation.py:1224
 msgid "Copy Operation"
 msgstr "操作を複製"
 
-#: build/Sunflower/sunflower/operation.py:1209
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1209
 #: sunflower/operation.py:1209
 #, python-brace-format
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] "\"{1}\"から\"{2}\"へ{0}件の項目をコピーし終えました。"
 
-#: build/Sunflower/sunflower/operation.py:1337
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1337
 #: sunflower/operation.py:1337
 msgid "Moving files..."
 msgstr "ファイルを移動中……"
 
-#: build/Sunflower/sunflower/operation.py:1351
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1351
 #: sunflower/operation.py:1351
 msgid "Deleting source files..."
 msgstr "元のファイルを削除中……"
 
-#: build/Sunflower/sunflower/operation.py:1373
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1373
 #: sunflower/operation.py:1373
 msgid "Deleting source directories..."
 msgstr "元のディレクトリを削除中……"
 
-#: build/Sunflower/sunflower/operation.py:1472
-#: build/Sunflower/sunflower/operation.py:1489
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1472
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1489
 #: sunflower/operation.py:1472 sunflower/operation.py:1489
 msgid "Move Operation"
 msgstr "操作を移動"
 
-#: build/Sunflower/sunflower/operation.py:1474
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1474
 #: sunflower/operation.py:1474
 #, python-brace-format
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] "\"{1}\"から\"{2}\"へ{0}件の項目を移動し終えました。"
 
-#: build/Sunflower/sunflower/operation.py:1619
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1619
 #: sunflower/operation.py:1619
 msgid "Delete Operation"
 msgstr "操作を削除"
 
-#: build/Sunflower/sunflower/operation.py:1621
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1621
 #: sunflower/operation.py:1621
 #, python-brace-format
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
 msgstr[0] "\"{1}\"から{0}件の項目を削除し終えました。"
 
-#: build/Sunflower/sunflower/operation.py:1734
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1734
 #: sunflower/operation.py:1734
 msgid "Rename Operation"
 msgstr "操作の名前を変更"
 
-#: build/Sunflower/sunflower/operation.py:1736
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/operation.py:1736
 #: sunflower/operation.py:1736
 #, python-brace-format
 msgid "Rename of {0} item from \"{1}\" is completed!"
 msgid_plural "Rename of {0} items from \"{1}\" is completed!"
 msgstr[0] "\"{1}\"から{0}件の項目の名前を変更し終えました。"
 
-#: build/Sunflower/sunflower/tools/viewer.py:56
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/viewer.py:56
 #: sunflower/tools/viewer.py:56
 #, python-brace-format
 msgid "{0} - Viewer"
 msgstr "{0}を閲覧するソフトウェア"
 
-#: build/Sunflower/sunflower/tools/viewer.py:90
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/viewer.py:90
 #: sunflower/tools/viewer.py:90
 msgid "Executable"
 msgstr "実行可能"
 
-#: build/Sunflower/sunflower/tools/viewer.py:124
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/viewer.py:124
 #: sunflower/tools/viewer.py:124
 msgid "Code"
 msgstr "コード"
 
-#: build/Sunflower/sunflower/tools/viewer.py:164
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/viewer.py:164
 #: sunflower/tools/viewer.py:164
 msgid "Image"
 msgstr "画像"
 
-#: build/Sunflower/sunflower/tools/viewer.py:179
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/viewer.py:179
 #: sunflower/tools/viewer.py:179
 msgid "Viewer is unable to display this file type."
 msgstr "このファイル形式には対応していません。"
 
-#: build/Sunflower/sunflower/tools/find_files.py:43
-#: build/Sunflower/sunflower/tools/find_files.py:282
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:43
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:282
 #: sunflower/tools/find_files.py:43 sunflower/tools/find_files.py:282
 msgid "Find files"
 msgstr "ファイルの検索"
 
-#: build/Sunflower/sunflower/tools/find_files.py:70
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:70
 #: sunflower/tools/find_files.py:70
 msgid "Criteria"
-msgstr ""
+msgstr "条件"
 
-#: build/Sunflower/sunflower/tools/find_files.py:93
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:93
 #: sunflower/tools/find_files.py:93
 msgid "Start"
 msgstr "開始"
 
-#: build/Sunflower/sunflower/tools/find_files.py:102
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:102
 #: sunflower/tools/find_files.py:102
 msgid "Search recursively"
 msgstr "再帰的に検索"
 
-#: build/Sunflower/sunflower/tools/find_files.py:123
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:123
 #: sunflower/tools/find_files.py:123
 msgid "Results"
-msgstr ""
+msgstr "結果"
 
-#: build/Sunflower/sunflower/tools/find_files.py:194
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:194
 #: sunflower/tools/find_files.py:194
 msgid ""
 "Active object doesn't support changing path. Set focus on a different "
 "object, preferably file list, and try again."
 msgstr "選択している項目はパスの変更に対応していません。違う項目（ファイルリストが望ましいです）を選択し，やり直して下さい。"
 
-#: build/Sunflower/sunflower/tools/find_files.py:328
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:328
 #: sunflower/tools/find_files.py:328
 msgid ""
 "Specified path is not valid or doesn't exist anymore. Please check your "
 "selection and try again."
 msgstr "指定されたパスが不正または存在しません。選択項目を確かめてからやり直して下さい。"
 
-#: build/Sunflower/sunflower/tools/find_files.py:349
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/find_files.py:349
 #: sunflower/tools/find_files.py:349
 msgid ""
 "You need to enable at least one extension in order to find files and "
 "directories!"
 msgstr "ファイルやディレクトリを検索する為には一つ以上の拡張機能を有効にする必要があります。"
 
-#: build/Sunflower/sunflower/tools/version_check.py:23
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/version_check.py:23
 #: sunflower/tools/version_check.py:23
 msgid "Version check"
 msgstr "バージョンの確認"
 
-#: build/Sunflower/sunflower/tools/version_check.py:42
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/version_check.py:42
 #: sunflower/tools/version_check.py:42
 msgid "Current:"
 msgstr "現在:"
 
-#: build/Sunflower/sunflower/tools/version_check.py:45
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/version_check.py:45
 #: sunflower/tools/version_check.py:45
 msgid "Latest:"
 msgstr "最新:"
 
-#: build/Sunflower/sunflower/tools/version_check.py:107
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/version_check.py:107
 #: sunflower/tools/version_check.py:107
 msgid "Checking..."
 msgstr "確認しています……"
 
-#: build/Sunflower/sunflower/tools/advanced_rename.py:29
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/advanced_rename.py:29
 #: sunflower/tools/advanced_rename.py:29
 msgid "Advanced rename"
 msgstr "高度な名前の変更"
 
-#: build/Sunflower/sunflower/tools/advanced_rename.py:54
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/advanced_rename.py:54
 #: sunflower/tools/advanced_rename.py:54
 msgid "Old name"
 msgstr "古い名前"
 
-#: build/Sunflower/sunflower/tools/advanced_rename.py:57
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/advanced_rename.py:57
 #: sunflower/tools/advanced_rename.py:57
 msgid "New name"
 msgstr "新しい名前"
 
-#: build/Sunflower/sunflower/tools/advanced_rename.py:80
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/advanced_rename.py:80
 #: sunflower/tools/advanced_rename.py:80
 msgid "Items located in:"
 msgstr "項目の場所:"
 
-#: build/Sunflower/sunflower/tools/advanced_rename.py:202
-#: build/Debian/usr/lib/python3/dist-packages/sunflower/tools/advanced_rename.py:202
 #: sunflower/tools/advanced_rename.py:202
 #, python-brace-format
 msgid ""

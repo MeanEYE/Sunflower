@@ -5,7 +5,7 @@
 # Translators:
 # eagleoneraptor <damiannohales@gmail.com>, 2012
 # David Gonzalez <leonardo.david.gonzalez@gmail.com>, 2015
-# insolor, 2020
+# Mikhail, 2020
 # Leopoldo Cendejas Pedraza <dev.leopold@gmail.com>, 2016
 # Mladen Mijatov <meaneye.rcf@gmail.com>, 2015
 # Samuel Santana Medina <ssantana@gmx.com>, 2015-2016
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-11 21:13+0200\n"
-"PO-Revision-Date: 2020-05-15 15:28+0000\n"
+"PO-Revision-Date: 2020-05-30 16:24+0000\n"
 "Last-Translator: Toni Estévez <toni.estevez@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/way2cu/sunflower/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -711,7 +711,7 @@ msgstr "Sunflower"
 
 #: sunflower/gui/main_window.py:180
 msgid "Create new file, directory and more."
-msgstr "Crear un archivo nuevo, una carpeta y más"
+msgstr "Crear un archivo, una carpeta y más"
 
 #: sunflower/gui/main_window.py:187 sunflower/gui/main_window.py:1738
 msgid "Create _file"

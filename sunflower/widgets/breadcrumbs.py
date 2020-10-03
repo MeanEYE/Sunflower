@@ -116,6 +116,7 @@ class Fragment(Gtk.HBox):
 		Gtk.HBox.__init__(self)
 
 		self.path = path
+		self.click_handler = click_handler
 
 		# create separator label
 		if previous is not None:
@@ -126,7 +127,7 @@ class Fragment(Gtk.HBox):
 		self._button = Gtk.RadioButton.new()
 		self._button.set_focus_on_click(False)
 		self._button.set_mode(False)
-		self._button.connect('clicked', click_handler)
+		self._button.connect('clicked', self.click_handler)
 		self._button.path = path
 
 		if previous is None:
@@ -144,4 +145,6 @@ class Fragment(Gtk.HBox):
 
 	def set_active(self, active):
 		"""Set button active state."""
+		self._button.handler_block_by_func(self.click_handler)
 		self._button.set_active(active)
+		self._button.handler_unblock_by_func(self.click_handler)

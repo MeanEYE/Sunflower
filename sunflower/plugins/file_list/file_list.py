@@ -1935,12 +1935,12 @@ class FileList(ItemList):
 				{
 					'action': Gdk.DragAction.COPY,
 					'name': _('Copy here'),
-					'icon': 'stock_folder-copy'
+					'icon': 'edit-copy-symbolic'
 				},
 				{
 					'action': Gdk.DragAction.MOVE,
 					'name': _('Move here'),
-					'icon': 'stock_folder-move'
+					'icon': 'edit-cut-symbolic'
 				},
 				{
 					'action': Gdk.DragAction.LINK,
@@ -1971,11 +1971,8 @@ class FileList(ItemList):
 		menu.append(Gtk.SeparatorMenuItem())
 
 		# create cancel option
-		image = Gtk.Image()
-		image.set_from_stock(Gtk.STOCK_CANCEL, Gtk.IconSize.MENU)
 		menu_item = Gtk.ImageMenuItem()
 		menu_item.set_label(_('Cancel'))
-		menu_item.set_image(image)
 		menu.append(menu_item)
 
 		# show menu in separate user interface thread

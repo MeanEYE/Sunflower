@@ -41,6 +41,8 @@ class LocationMenu:
 		self._list = Gtk.ListBox.new()
 		self._list.set_header_func(self.__handle_set_header)
 		self._list.set_filter_func(self.__handle_filter_check_location)
+		self._list.set_activate_on_single_click(False)
+		self._list.connect('row-activated', self.__handle_location_activate)
 
 		# create button box and commonly used buttons
 		hbox_buttons = Gtk.ButtonBox.new(Gtk.Orientation.HORIZONTAL)
@@ -130,6 +132,11 @@ class LocationMenu:
 	def __get_selected_location(self):
 		"""Return location object selected or None."""
 		return self._list.get_selected_row()
+
+	def __handle_location_activate(self, widget, row, data=None):
+		"""Handle activation of selected location."""
+		self.__handle_open_click(widget)
+		return True
 
 	def __handle_open_click(self, widget, data=None):
 		"""Handle clicking on open button."""

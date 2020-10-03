@@ -169,7 +169,8 @@ class FileList(ItemList):
 		col_extension.add_attribute(cell_extension, 'text', Column.EXTENSION)
 		col_size.add_attribute(cell_size, 'text', Column.FORMATED_SIZE)
 		col_mode.add_attribute(cell_mode, 'text', Column.FORMATED_MODE)
-		col_date.add_attribute(cell_date, 'text', Column.FORMATED_TIME)
+		# col_date.add_attribute(cell_date, 'text', Column.FORMATED_TIME)
+		col_date.add_attribute(cell_date, 'text', Column.SORT_DATA)
 
 		col_name.set_resizable(True)
 		col_name.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
@@ -1312,15 +1313,24 @@ class FileList(ItemList):
 		"""Clear sort settings"""
 		self._store.set_sort_column_id(Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, True)
 
-	def _generate_sort_data(self):
+	def _generate_sort_data(self, parent=None):
 		"""Generate data for sorting elements."""
 		bool_values = ['1', '0'] if self._sort_ascending else ['0', '1']
 
-		for item in self._store:
-			item_iter = item.iter
-			is_dir = self._store.get_value(item_iter, Column.IS_DIR)
-			is_parent = self._store.get_value(item_iter, Column.IS_PARENT_DIR)
-			value = self._store.get_value(item_iter, self._sort_column)
+		# find starting point
+		found_iter = None
+		if parent is None:
+			found_iter = self._store.get_iter_first()
+
+		elif self._store.iter_has_child(parent):
+			found_iter = self._store.iter_children(parent)
+
+		# check all the iters for specified name
+		update_data = []
+		while found_iter:
+			is_dir = self._store.get_value(found_iter, Column.IS_DIR)
+			is_parent = self._store.get_value(found_iter, Column.IS_PARENT_DIR)
+			value = self._store.get_value(found_iter, self._sort_column)
 
 			if self._sort_number_sensitive and self._sort_column == Column.NAME:
 				value = ''.join([part.rjust(12, '0') if part.isdigit() else part for part in self.number_split.split(value)])
@@ -1332,7 +1342,11 @@ class FileList(ItemList):
 				value = str(value).rjust(12, '0')
 
 			data = '{}{}{}'.format(bool_values[is_parent], bool_values[is_dir], value)
-			self._store.set_value(item_iter, Column.SORT_DATA, data)
+			update_data.append((found_iter, data))
+			found_iter = self._store.iter_next(found_iter)
+
+		for item_iter, sort_data in update_data:
+			self._store.set_value(item_iter, Column.SORT_DATA, sort_data)
 
 	def _clear_list(self):
 		"""Clear item list"""
@@ -2154,7 +2168,7 @@ class FileList(ItemList):
 			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._update_status_with_statistis)
 
 			# regenerate sort data
-			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._generate_sort_data)
+			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._generate_sort_data, parent)
 
 			# load emblems
 			self._load_emblems(parent, parent_path)

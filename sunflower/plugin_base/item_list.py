@@ -1281,6 +1281,14 @@ class ItemList(PluginBase):
 		"""Abstract method used for setting sort function"""
 		pass
 
+	def _apply_sort_function(self, focus_selected=True):
+		"""Apply sort settings."""
+		pass
+
+	def _generate_sort_data(self):
+		"""Generate data for sorting elements."""
+		pass
+
 	def _column_resized(self, widget, data=None):
 		"""Resize all columns accordingly"""
 		column_width = widget.get_width()
@@ -1317,10 +1325,6 @@ class ItemList(PluginBase):
 
 			if width is not None:
 				column.set_fixed_width(width)
-
-	def _sort_list(self, ascending=True):
-		"""Abstract method for manual list sorting"""
-		pass
 
 	def _clear_list(self):
 		"""Abstract method for clearing item list"""

@@ -44,6 +44,7 @@ class Column:
 	USER_ID = 15
 	GROUP_ID = 16
 	EMBLEMS = 17
+	SORT_DATA = 18
 
 
 class FileList(ItemList):
@@ -95,7 +96,8 @@ class FileList(ItemList):
 								bool,	# Column.SELECTED
 								int,	# Column.USER_ID
 								int,	# Column.GROUP_ID
-								GObject.TYPE_PYOBJECT	# Column.EMBLEMS
+								GObject.TYPE_PYOBJECT,	# Column.EMBLEMS
+								str		# Column.SORT_DATA
 							)
 
 		# set item list model
@@ -1295,10 +1297,10 @@ class FileList(ItemList):
 		# apply sorting function
 		order = [Gtk.SortType.DESCENDING, Gtk.SortType.ASCENDING][self._sort_ascending]
 		self._sort_column_widget.set_sort_order(order)
+		self._store.set_sort_column_id(Column.SORT_DATA, order)
+		self._generate_sort_data()
 
-		self._store.set_sort_func(self._sort_column, self._sort_list)
-		self._store.set_sort_column_id(self._sort_column, order)
-
+		# move cursor to previously selected element
 		if focus_selected:
 			selection = self._item_list.get_selection()
 			item_list, iter_to_scroll = selection.get_selected()
@@ -1310,45 +1312,27 @@ class FileList(ItemList):
 		"""Clear sort settings"""
 		self._store.set_sort_column_id(Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, True)
 
-	def _sort_list(self, item_list, iter1, iter2, data=None):
-		"""Compare two items for sorting process"""
-		reverse = (1, -1)[self._sort_ascending]
+	def _generate_sort_data(self):
+		"""Generate data for sorting elements."""
+		bool_values = ['1', '0'] if self._sort_ascending else ['0', '1']
 
-		sort_column = self._sort_column
-		value1 = item_list.get_value(iter1, sort_column)
-		value2 = item_list.get_value(iter2, sort_column)
+		for item in self._store:
+			item_iter = item.iter
+			is_dir = self._store.get_value(item_iter, Column.IS_DIR)
+			is_parent = self._store.get_value(item_iter, Column.IS_PARENT_DIR)
+			value = self._store.get_value(item_iter, self._sort_column)
 
-		if sort_column is Column.NAME or sort_column is Column.EXTENSION:
-			# make values lowercase for case insensitive comparison
-			if not self._sort_case_sensitive:
-				value1 = value1.lower()
+			if self._sort_number_sensitive and self._sort_column == Column.NAME:
+				value = ''.join([part.rjust(12, '0') if part.isdigit() else part for part in self.number_split.split(value)])
 
-				if value2 is not None:  # make sure we have extension to make lowercase
-					value2 = value2.lower()
+			if isinstance(value, str) and not self._sort_case_sensitive:
+				value = value.lower()
 
-			# split values to list containing characters and numbers
-			if self._sort_number_sensitive:
-				value1 = [int(part) if part.isdigit() else part for part in self.number_split.split(value1)]
-				value2 = [int(part) if part.isdigit() else part for part in self.number_split.split(value2)]
+			if isinstance(value, int) or isinstance(value, float):
+				value = str(value).rjust(12, '0')
 
-		item1 = (
-				reverse * item_list.get_value(iter1, Column.IS_PARENT_DIR),
-				reverse * item_list.get_value(iter1, Column.IS_DIR),
-				value1
-			)
-
-		item2 = (
-				reverse * item_list.get_value(iter2, Column.IS_PARENT_DIR),
-				reverse * item_list.get_value(iter2, Column.IS_DIR),
-				value2
-			)
-
-		if item1 > item2:
-			return 1
-		elif item2 == item1:
-			return 0
-		else:
-			return -1
+			data = '{}{}{}'.format(bool_values[is_parent], bool_values[is_dir], value)
+			self._store.set_value(item_iter, Column.SORT_DATA, data)
 
 	def _clear_list(self):
 		"""Clear item list"""
@@ -1633,13 +1617,12 @@ class FileList(ItemList):
 			name = os.path.join(self._store.get_value(parent, Column.NAME), name)
 
 		# check all the iters for specified name
-		if found_iter is not None:
-			while found_iter:
-				if self._store.get_value(found_iter, Column.NAME) == name:
-					result = found_iter
-					break
+		while found_iter:
+			if self._store.get_value(found_iter, Column.NAME) == name:
+				result = found_iter
+				break
 
-				found_iter = self._store.iter_next(found_iter)
+			found_iter = self._store.iter_next(found_iter)
 
 		return result
 
@@ -1731,7 +1714,8 @@ class FileList(ItemList):
 					None,
 					file_stat.user_id,
 					file_stat.group_id,
-					None
+					None,
+					''
 				)
 
 			self._item_queue.append(data)
@@ -2091,9 +2075,6 @@ class FileList(ItemList):
 		# clear item queue
 		self._item_queue[:] = []
 
-		# disable sorting while we load
-		self._clear_sort_function()
-
 		# default value for parent path
 		parent_path = None
 
@@ -2104,45 +2085,24 @@ class FileList(ItemList):
 		if path != self.get_provider().get_root_path(path):
 			if parent is None:
 				self._store.append(parent, (
-								os.path.pardir,
-								os.path.pardir,
-								'',
-								-2,
-								'<DIR>',
-								-1,
-								'',
-								-1,
-								'',
-								True,
-								True,
-								False,
-								None,
-								'go-up',
-								None,
-								0,
-								0,
-								None
-							))
+					os.path.pardir, os.path.pardir, '', -2, '<DIR>', -1, '', -1,
+					'', True, True, False, None, 'go-up', None, 0, 0, None, ''
+					))
 
 			else:
 				# prepare full parent path
 				parent_path = self._store.get_value(parent, Column.NAME)
 
-		# let the rest of items load in a separate thread
+		# load items in separate thread
 		def thread_method():
-			# set event to active
 			self._thread_active.set()
-
-			# show spinner animation
 			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._title_bar.show_spinner)
 
 			try:
-				# get list of items to add
 				provider = self.get_provider()
 				item_list = provider.list_dir(path)
 
 			except Exception as error:
-				# report error first
 				print('Load directory error: ', str(error))
 
 				# clear locks and exit
@@ -2150,7 +2110,6 @@ class FileList(ItemList):
 				self._main_thread_lock.clear()
 
 				Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._title_bar.hide_spinner)
-
 				return
 
 			# remove hidden files if we don't need them
@@ -2169,7 +2128,7 @@ class FileList(ItemList):
 				# filter out hidden items and backup files
 				item_list = [name for name in item_list if (name[0] != '.' and name[-1] != '~') or name in self._always_visible_items]
 
-				# filter out items specified in direcotry file or program
+				# filter out items specified in directory file or program
 				if len(always_hidden) > 0:
 					item_list = [name for name in item_list if name not in always_hidden]
 
@@ -2178,7 +2137,8 @@ class FileList(ItemList):
 				self._item_to_focus = None
 
 			for item_name in item_list:
-				# check if we are allowed to continue
+				# check if we are allowed to continue as we don't want
+				# items from different directory ending up in our list
 				if not self._thread_active.is_set():
 					break
 
@@ -2193,9 +2153,8 @@ class FileList(ItemList):
 			# update status bar
 			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._update_status_with_statistis)
 
-			# turn on sorting
-			focus_selected = parent is None
-			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._apply_sort_function, focus_selected)
+			# regenerate sort data
+			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._generate_sort_data)
 
 			# load emblems
 			self._load_emblems(parent, parent_path)

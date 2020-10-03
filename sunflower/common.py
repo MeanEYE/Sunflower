@@ -85,10 +85,10 @@ def get_base_directory():
 
 def get_static_assets_directory():
 	"""Return path to directory that holds static files"""
-	script_dir = os.path.dirname(__file__)
+	script_dir = os.path.join(os.path.dirname(__file__), '..')
 	prefix_dir = os.path.join(sys.prefix, 'share', 'sunflower')
 
-	if os.path.exists(os.path.join(script_dir, '..', 'images', 'sunflower.svg')):
+	if os.path.exists(os.path.join(script_dir, 'images', 'sunflower.svg')):
 		return script_dir
 	else:
 		return prefix_dir

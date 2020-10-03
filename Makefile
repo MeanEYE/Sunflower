@@ -61,7 +61,7 @@ define DEBIAN_INSTALL
 	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/local/bin"
 	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/share/locale"
 	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/share/applications"
-	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/share/sunflower"
+	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/share/sunflower/images"
 	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/share/icons/hicolor/scalable/apps"
 	install -d "$(DEBIAN_BUILD_DIRECTORY)/usr/share/pixmaps/sunflower"
 	install -d "$(DEBIAN_BUILD_DIRECTORY)/usr/lib/python3/dist-packages/sunflower"
@@ -69,9 +69,9 @@ define DEBIAN_INSTALL
 	tar -xf $(FILE_PATH).tar -C $(BUILD_DIRECTORY)
 	install -Dm755 $(WORKING_DIRECTORY)/dist/sunflower "$(DEBIAN_BUILD_DIRECTORY)/usr/local/bin/sunflower"
 	cp -r $(BUILD_DIRECTORY)/Sunflower/sunflower/* "$(DEBIAN_BUILD_DIRECTORY)/usr/lib/python3/dist-packages/sunflower"
-	cp -r $(BUILD_DIRECTORY)/Sunflower/sunflower/styles "$(DEBIAN_BUILD_DIRECTORY)/usr/share/sunflower"
+	cp -r $(BUILD_DIRECTORY)/Sunflower/styles "$(DEBIAN_BUILD_DIRECTORY)/usr/share/sunflower"
 	rsync -r $(BUILD_DIRECTORY)/Sunflower/translations/* "$(DEBIAN_BUILD_DIRECTORY)/usr/share/locale" --exclude "*.po*"
-	install -Dm644 "$(BUILD_DIRECTORY)/Sunflower/images/splash.png" "$(DEBIAN_BUILD_DIRECTORY)/usr/share/pixmaps/sunflower/splash.png"
+	install -Dm644 "$(BUILD_DIRECTORY)/Sunflower/images/splash.png" "$(DEBIAN_BUILD_DIRECTORY)/usr/share/sunflower/images/splash.png"
 	install -Dm644 "$(BUILD_DIRECTORY)/Sunflower/images/sunflower.svg" "$(DEBIAN_BUILD_DIRECTORY)/usr/share/icons/hicolor/scalable/apps/sunflower.svg"
 	install -Dm644 "$(BUILD_DIRECTORY)/Sunflower/Sunflower.desktop" "$(DEBIAN_BUILD_DIRECTORY)/usr/share/applications/sunflower.desktop"
 endef

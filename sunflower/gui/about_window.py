@@ -47,20 +47,18 @@ class AboutWindow:
 
 		# set about dialog image
 		image = Gtk.Image()
-		image_path = os.path.join(common.get_base_directory(), 'images', 'splash.png')
-		path = os.path.abspath(image_path)
+		path = os.path.join(common.get_static_assets_directory(), 'images', 'splash.png')
 
-		if os.path.isfile(sys.path[0]) and sys.path[0] != '':
+		if os.path.exists(path):
+			image.set_from_file(path)
+
+		elif os.path.isfile(sys.path[0]) and sys.path[0] != '':
 			archive = zipfile.ZipFile(sys.path[0])
 			with archive.open('images/splash.png') as raw_file:
 				buff = Gio.MemoryInputStream.new_from_bytes(GLib.Bytes.new(raw_file.read()))
 				pixbuf = GdkPixbuf.Pixbuf.new_from_stream(buff, None)
 				image.set_from_pixbuf(pixbuf)
 			archive.close()
-
-		elif not os.path.exists(path):
-			path = '/usr/share/pixmaps/sunflower/splash.png'
-			image.set_from_file(path)
 
 		# configure dialog
 		self._dialog.set_modal(True)

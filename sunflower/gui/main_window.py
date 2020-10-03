@@ -913,18 +913,16 @@ class MainWindow(Gtk.ApplicationWindow):
 		provider = Gtk.CssProvider.new()
 		screen = Gdk.Screen.get_default()
 
-		# prepare path to load from
-		file_name = os.path.join(common.get_static_assets_directory(), 'styles', 'main.css')
-
 		# try loading from zip file
 		if os.path.isfile(sys.path[0]) and sys.path[0] != '':
 			archive = zipfile.ZipFile(sys.path[0])
-			with archive.open('sunflower/styles/main.css') as raw_file:
+			with archive.open('styles/main.css') as raw_file:
 				provider.load_from_data(raw_file.read())
 			archive.close()
 
 		# load styles from a file
 		else:
+			file_name = os.path.join(common.get_static_assets_directory(), 'styles', 'main.css')
 			provider.load_from_file(Gio.File.new_for_path(file_name))
 
 		# apply styles

@@ -221,8 +221,15 @@ class LocationMenu:
 
 	def __handle_filter_check_location(self, row, data=None):
 		"""Determine whether location should be visible."""
-		row.set_header(None)
-		return self._search_query in row.get_location().lower() if self._search_query else True
+		if self._search_query:
+			# determine visibility
+			location = row.get_location()
+			result = location is not None and self._search_query in location.lower()
+		else:
+			# show location by default
+			result = True
+
+		return result
 
 	def add_header(self, Class, widget):
 		"""Add header widget for specified location class name."""

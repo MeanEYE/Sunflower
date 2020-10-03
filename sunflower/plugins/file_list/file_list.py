@@ -6,7 +6,7 @@ import time
 import sys
 import fnmatch
 
-from gi.repository import GObject, Gtk, Gdk, GLib
+from gi.repository import GObject, Gtk, Gdk, GLib, Gio
 from threading import Thread, Event
 
 from .column_editor import FileList_ColumnEditor
@@ -169,8 +169,7 @@ class FileList(ItemList):
 		col_extension.add_attribute(cell_extension, 'text', Column.EXTENSION)
 		col_size.add_attribute(cell_size, 'text', Column.FORMATED_SIZE)
 		col_mode.add_attribute(cell_mode, 'text', Column.FORMATED_MODE)
-		# col_date.add_attribute(cell_date, 'text', Column.FORMATED_TIME)
-		col_date.add_attribute(cell_date, 'text', Column.SORT_DATA)
+		col_date.add_attribute(cell_date, 'text', Column.FORMATED_TIME)
 
 		col_name.set_resizable(True)
 		col_name.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
@@ -325,6 +324,9 @@ class FileList(ItemList):
 		"""Apply font size from settings."""
 		options = self._parent.plugin_options.section(self._name)
 
+		settings = Gio.Settings.new('org.gnome.desktop.interface')
+		font = settings.get_string('monospace-font-name')
+
 		for column in columns:
 			column.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
 			font_size = options.get('font_size_{0}'.format(column.name)) or \
@@ -341,7 +343,7 @@ class FileList(ItemList):
 				try:
 					cell_renderer.set_property('size-points', font_size)
 					if cell_renderer in self._monospace_renderers:
-						cell_renderer.set_property('family', 'Monospace')
+						cell_renderer.set_property('family', font)
 
 				except TypeError:
 					pass

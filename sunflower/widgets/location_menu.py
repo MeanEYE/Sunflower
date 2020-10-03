@@ -134,7 +134,10 @@ class LocationMenu:
 	def __handle_open_click(self, widget, data=None):
 		"""Handle clicking on open button."""
 		selected_location = self.__get_selected_location()
-		assert self._active_object is not None or selected_location is not None
+
+		# make sure we have both objects
+		if self._active_object is None or selected_location is None:
+			return
 
 		# close menu
 		self._popover.popdown()
@@ -148,7 +151,10 @@ class LocationMenu:
 	def __handle_open_tab_click(self, widget, data=None):
 		"""Handle clicking on open in new tab button."""
 		selected_location = self.__get_selected_location()
-		assert self._active_object is not None or selected_location is not None
+
+		# make sure we have both objects
+		if self._active_object is None or selected_location is None:
+			return
 
 		# close menu
 		self._popover.popdown()
@@ -166,7 +172,10 @@ class LocationMenu:
 	def __handle_open_opposite_click(self, widget, data=None):
 		"""Handle slicking on open in opposite panel button."""
 		selected_location = self.__get_selected_location()
-		assert self._active_object is not None or selected_location is not None
+
+		# make sure we have both objects
+		if self._active_object is None or selected_location is None:
+			return
 
 		# close menu
 		self._popover.popdown()
@@ -181,7 +190,10 @@ class LocationMenu:
 	def __handle_open_terminal_click(self, widget, data=None):
 		"""Handle clicking on open in terminal button."""
 		selected_location = self.__get_selected_location()
-		assert self._active_object is not None or selected_location is not None
+
+		# make sure we have both objects
+		if self._active_object is None or selected_location is None:
+			return
 
 		# close menu
 		self._popover.popdown()

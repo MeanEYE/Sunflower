@@ -273,7 +273,7 @@ class ItemListOptions(SettingsPage):
 		self._active_extension = None
 
 		# create column list
-		self._columns_store = Gtk.ListStore(str, int, bool, str)
+		self._columns_store = Gtk.ListStore(str, int, bool, int)
 		self._columns_list = Gtk.TreeView()
 		self._columns_list.set_model(self._columns_store)
 		self._columns_list.set_rules_hint(True)

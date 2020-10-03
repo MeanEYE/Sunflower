@@ -170,7 +170,7 @@ version:
 	$(info Sunflower $(VERSION))
 
 standalone:
-	zip --quiet sunflower -r sunflower images -x *.pyc -x *.xcf
+	zip --quiet sunflower -r sunflower images styles -x *.pyc -x *.xcf
 	zip --quiet --junk-paths sunflower sunflower/__main__.py
 	echo '#!/usr/bin/env python3' > sunflower.app
 	cat sunflower.zip >> sunflower.app

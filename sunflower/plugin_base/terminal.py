@@ -348,7 +348,8 @@ class Terminal(PluginBase):
 				self.__set_system_font()
 
 			else:
-				self._terminal.set_font_from_string(section.get('font'))
+				font = Pango.FontDescription(section.get('font'))
+				self._terminal.set_font(font)
 
 	def focus_main_object(self):
 		"""Give focus to main object"""

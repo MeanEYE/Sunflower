@@ -1892,48 +1892,39 @@ class FileList(ItemList):
 			# check if drag destination is a directory
 			if self._store.get_value(under_cursor, Column.IS_DIR):
 				path = path_at_row
-				action = drag_context.action
+				action = drag_context.get_actions()
 			else:
 				path = self._store.get_path(self._store.iter_parent(under_cursor))
 
 		except TypeError:
 			pass
 
-		if drag_context.get_source_widget() is widget and path is None:
-			drag_context.drag_status(action, timestamp)
-
 		widget.set_drag_dest_row(path, Gtk.TreeViewDropPosition.INTO_OR_AFTER)
 
 		return True
 
 	def _drag_auto_scroll(self, widget, x, y):
-		vadj = widget.get_vadjustment()
-		hadj = widget.get_hadjustment()
+		"""Automatically scroll while dragging objects."""
+		adjustment = widget.get_vadjustment()
 
-		if vadj is not None:
-			value, upper, lower, step = vadj.get_value(), vadj.get_upper(), vadj.get_lower(), vadj.get_step_increment()
-			size = vadj.get_page_size()
-			row_height = widget.get_cell_area((0,), widget.get_column(0)).height
+		if adjustment is None:
+			return
 
-			if y < row_height*2:
-				value = value - step if value > lower else lower
-			elif y > (widget.get_allocation().height - row_height*2):
-				value = value + step if value < (upper - size) else upper - size
+		value = adjustment.get_value()
+		upper = adjustment.get_upper()
+		lower = adjustment.get_lower()
+		step = adjustment.get_step_increment()
+		size = adjustment.get_page_size()
 
-			vadj.set_value(value)
-			vadj.value_changed()
+		row_height = widget.get_cell_area((0,), widget.get_column(0)).height
 
-		if hadj is not None:
-			value, upper, lower, step = hadj.get_value(), hadj.get_upper(), hadj.get_lower(), hadj.get_step_increment()
-			size = hadj.get_page_size()
+		if y < row_height * 2:
+			value = value - step if value > lower else lower
+		elif y > (widget.get_allocation().height - row_height * 2):
+			value = value + step if value < (upper - size) else upper - size
 
-			if x < 40:
-				value = value - step if value > lower else lower
-			elif x > (widget.get_allocation().width - 40):
-				value = value + step if value < (upper - size) else upper - size
-
-			hadj.set_value(value)
-			hadj.value_changed()
+		adjustment.set_value(value)
+		adjustment.value_changed()
 
 	def _drag_ask(self):
 		"""Show popup menu and return selected action"""
@@ -1998,14 +1989,14 @@ class FileList(ItemList):
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""
 		result = False
-		action = drag_context.action
-		item_list = selection_data.data.splitlines(False)
+		action = drag_context.get_selected_action()
+		item_list = selection_data.get_data().decode('utf-8').splitlines(False)
 
 		# prepare data for copying
 		protocol, path = item_list[0].split('://', 1)
 
 		# handle data
-		if action is Gdk.DragAction.ASK:
+		if action == Gdk.DragAction.ASK:
 			action = self._drag_ask()
 
 		if action in (Gdk.DragAction.COPY, Gdk.DragAction.MOVE):
@@ -2041,7 +2032,7 @@ class FileList(ItemList):
 											destination
 										)
 
-		elif action is Gdk.DragAction.LINK:
+		elif action == Gdk.DragAction.LINK:
 			# handle linking
 			result = self._create_link(original_path=path)
 
@@ -2058,13 +2049,13 @@ class FileList(ItemList):
 				file_name = '{0}://{1}'.format(protocol, file_name)
 			selection.append(file_name)
 
-		selection_data.set(selection_data.target, 8, '\n'.join(selection))
+		selection_data.set_uris(selection)
 		return True
 
 	def _get_supported_drag_types(self):
 		"""Return list of supported data for drag'n'drop events"""
 		return [
-				('text/uri-list', 0, 0),
+				Gtk.TargetEntry.new('text/uri-list', 0, 0),
 			]
 
 	def _get_supported_drag_actions(self):

@@ -99,17 +99,17 @@ class PluginBase(Gtk.VBox):
 		if actions is not None:
 			# configure drag and drop features
 			# TODO: Fix this for GTK3
-			# self._main_object.drag_dest_set(
-			# 							Gtk.DestDefaults.ALL,
-			# 							types,
-			# 							actions
-			# 						)
+			self._main_object.drag_dest_set(
+										Gtk.DestDefaults.ALL,
+										types,
+										actions
+									)
 
-			# self._main_object.drag_source_set(
-			# 							Gdk.ModifierType.BUTTON1_MASK | Gdk.ModifierType.BUTTON3_MASK,
-			# 							types,
-			# 							actions
-			# 						)
+			self._main_object.drag_source_set(
+										Gdk.ModifierType.BUTTON1_MASK | Gdk.ModifierType.BUTTON3_MASK,
+										types,
+										actions
+									)
 
 			# connect drag and drop events
 			self._main_object.connect('drag-begin', self._drag_begin)

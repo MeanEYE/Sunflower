@@ -1591,9 +1591,11 @@ class MainWindow(Gtk.ApplicationWindow):
 	def goto_web(self, widget, uri):
 		"""Open URL stored in data"""
 		if uri is None:
-			uri = 'sunflower-fm.org'
+			uri = 'https://sunflower-fm.org'
+		elif '://' not in uri:
+			uri = 'https://{}'.format(uri)
 
-		webbrowser.open_new_tab('https://{}'.format(uri))
+		webbrowser.open_new_tab(uri)
 		return True
 
 	def execute_command(self, widget, data=None):

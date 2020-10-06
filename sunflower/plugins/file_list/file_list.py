@@ -21,6 +21,7 @@ from sunflower.parameters import Parameters
 from sunflower.plugin_base.item_list import ItemList
 from sunflower.plugin_base.monitor import MonitorSignals, MonitorError
 from sunflower.plugin_base.provider import FileType, Mode as FileMode, Support as ProviderSupport
+from sunflower.tools import system_font
 from sunflower.widgets.thumbnail_view import ThumbnailView
 from sunflower.widgets.emblems_renderer import CellRendererEmblems
 
@@ -324,8 +325,7 @@ class FileList(ItemList):
 		"""Apply font size from settings."""
 		options = self._parent.plugin_options.section(self._name)
 
-		settings = Gio.Settings.new('org.gnome.desktop.interface')
-		font = settings.get_string('monospace-font-name')
+		font = system_font.get_monospace_font_string()
 
 		for column in columns:
 			column.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)

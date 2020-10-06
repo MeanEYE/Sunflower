@@ -1250,11 +1250,8 @@ class FileList(ItemList):
 		rect = self._item_list.get_cell_area(item_list.get_path(selected_iter), self._columns[0])
 		tree_rect = self._item_list.get_visible_rect()
 
-		# grab window coordinates
-		window_x, window_y = self._parent.get_window().get_position()
-
 		# relative to tree
-		x, y = rect.x, rect.y + rect.height
+		x, y = rect.x, rect.y
 		x, y = self._item_list.convert_tree_to_widget_coords(x, y)
 
 		# modify coordinate by tree display rectangle vertical offset
@@ -1262,12 +1259,10 @@ class FileList(ItemList):
 
 		# relative to window
 		x, y = self._item_list.translate_coordinates(self._parent, x, y)
-
-		# relative to screen
-		x += window_x
-		y += window_y
-
-		return x, y, True
+		
+		# return calculated coordinates and original cell dimensions
+		rect.x, rect.y = x, y
+		return rect
 
 	def _set_sort_function(self, widget, data=None):
 		"""Set sorting method stored in data
@@ -1978,7 +1973,7 @@ class FileList(ItemList):
 		# show menu in separate user interface thread
 		menu.show_all()
 		menu.connect('deactivate', Gtk.main_quit)
-		menu.popup(None, None, None, None, 1, 0)
+		menu.popup_at_pointer()
 		Gtk.main()
 
 		return result[0] if result else None

@@ -238,15 +238,15 @@ class Operation(Thread):
 			GObject.idle_add(ask_user, queue)
 			result, overwrite = queue.get(True)
 
-		if result[1][OverwriteOption.APPLY_TO_ALL]:
-			self._overwrite_all = overwrite
+			if result[1][OverwriteOption.APPLY_TO_ALL]:
+				self._overwrite_all = overwrite
 
-		# in case user canceled operation
-		if result[0] == Gtk.ResponseType.CANCEL:
-			self.cancel()
+			# in case user canceled operation
+			if result[0] == Gtk.ResponseType.CANCEL:
+				self.cancel()
 
-		# pass options from input dialog
-		options = result[1]
+			# pass options from input dialog
+			options = result[1]
 
 		return overwrite, options
 

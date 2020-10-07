@@ -10,8 +10,8 @@ def get_monospace_font_string():
 		schema = Gio.SettingsSchemaSource.get_default()
 		gnome_interface = schema.lookup('org.gnome.desktop.interface',True)
 		if gnome_interface is None:
-			# not in gnome desktop environment, use 'monospace 10'
-			MONOSPACE_FONT_STRING = 'monospace 10'
+			# not in gnome desktop environment, use 'monospace'
+			MONOSPACE_FONT_STRING = 'monospace'
 		else:
 			settings = Gio.Settings.new('org.gnome.desktop.interface')
 			MONOSPACE_FONT_STRING = settings.get_string('monospace-font-name')

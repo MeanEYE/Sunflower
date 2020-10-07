@@ -193,27 +193,13 @@ class Terminal(PluginBase):
 		PluginBase._duplicate_tab(self, None, self._options)
 		return True
 
-	def _get_menu_position(self, menu, *args):
-		"""Get history menu position"""
-		# get coordinates
-		button = args[-1]
-		window_x, window_y = self._parent.get_position()
-		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
-		button_h = button.get_allocation().height
-
-		# calculate absolute menu position
-		pos_x = window_x + button_x
-		pos_y = window_y + button_y + button_h
-
-		return pos_x, pos_y, True
-
 	def _show_terminal_menu(self, widget, data=None):
 		"""History button click event"""
 		# prepare menu for drawing
 		self._prepare_menu()
 
-		# show the menu on calculated location
-		self._menu.popup(None, None, self._get_menu_position, widget, 1, 0)
+		# show the menu
+		self._menu.popup_at_widget(widget, Gdk.Gravity.SOUTH_WEST, Gdk.Gravity.NORTH_WEST, None)
 
 	def _configure_accelerators(self):
 		"""Configure accelerator group"""

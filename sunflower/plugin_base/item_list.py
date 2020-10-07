@@ -376,11 +376,15 @@ class ItemList(PluginBase):
 		"""Show quick emblem selection menu."""
 		if data is not None:
 			# if this method is called by accelerator data is actually keyval
-			self._emblem_menu.popup(None, None, self._get_popup_menu_position, None, 1, 0)
-
+			self._emblem_menu.popup_at_rect(self._parent.get_window(),
+				self._get_popup_menu_position(),
+				Gdk.Gravity.SOUTH_WEST,
+				Gdk.Gravity.NORTH_WEST,
+				None
+			)
 		else:
 			# if called by mouse, we don't have the need to position the menu manually
-			self._emblem_menu.popup(None, None, None, None, 1, 0)
+			self._emblem_menu.popup_at_pointer()
 
 		return True
 
@@ -918,7 +922,7 @@ class ItemList(PluginBase):
 
 	def _get_popup_menu_position(self, menu, *args):
 		"""Abstract method for positioning menu properly on given row"""
-		return 0, 0, True
+		return Gdk.Rectangle()
 
 	def _get_history_menu_position(self, menu, *args):
 		"""Get history menu position"""
@@ -1215,7 +1219,13 @@ class ItemList(PluginBase):
 		self._prepare_popup_menu()
 
 		# if this method is called by Menu key data is actually event object
-		self._open_with_menu.popup(None, None, self._get_popup_menu_position, None, 1, 0)
+		self._open_with_menu.popup_at_rect(self._parent.get_window(),
+			self._get_popup_menu_position(),
+			Gdk.Gravity.SOUTH_WEST,
+			Gdk.Gravity.NORTH_WEST,
+			None
+		)
+
 		return True
 
 	def _show_popup_menu(self, widget=None, data=None):
@@ -1225,11 +1235,16 @@ class ItemList(PluginBase):
 
 		if data is not None:
 			# if this method is called by accelerator data is actually keyval
-			self._popup_menu.popup(None, None, self._get_popup_menu_position, None, 1, 0)
+			self._popup_menu.popup_at_rect(self._parent.get_window(),
+				self._get_popup_menu_position(),
+				Gdk.Gravity.SOUTH_WEST,
+				Gdk.Gravity.NORTH_WEST,
+				None
+			)
 
 		else:
 			# if called by mouse, we don't have the need to position the menu manually
-			self._popup_menu.popup(None, None, None, None, 1, 0)
+			self._popup_menu.popup_at_pointer()
 
 		return True
 

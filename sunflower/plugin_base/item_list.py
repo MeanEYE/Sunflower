@@ -157,9 +157,6 @@ class ItemList(PluginBase):
 		self._title_bar.context_menu.add_control(vbox_free_space)
 		self._title_bar.context_menu.add_control(hbox_buttons)
 
-		# history menu
-		self._history_menu = Gtk.Menu()
-
 		# emblem menu
 		self._emblem_menu = Gtk.Menu()
 		self._prepare_emblem_menu()
@@ -924,20 +921,6 @@ class ItemList(PluginBase):
 		"""Abstract method for positioning menu properly on given row"""
 		return Gdk.Rectangle()
 
-	def _get_history_menu_position(self, menu, *args):
-		"""Get history menu position"""
-		# get coordinates
-		button = args[-1]
-		window_x, window_y = self._parent.get_position()
-		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
-		button_h = button.get_allocation().height
-
-		# calculate absolute menu position
-		pos_x = window_x + button_x
-		pos_y = window_y + button_y + button_h
-
-		return pos_x, pos_y, True
-
 	def _get_other_provider(self):
 		"""Return provider from opposite list.
 
@@ -1167,48 +1150,6 @@ class ItemList(PluginBase):
 		for item in self._additional_options_menu.get_children():
 			self._additional_options_menu.remove(item)
 
-	def _prepare_history_menu(self):
-		"""Prepare history menu contents"""
-		# remove existing items
-		for item in self._history_menu.get_children():
-			self._history_menu.remove(item)
-
-		# get menu data
-		item_count = 10
-		item_list = self.history[1:item_count]
-
-		if len(item_list) > 0:
-			# create items
-			for item in item_list:
-				menu_item = Gtk.MenuItem(item)
-				menu_item.path = item
-				menu_item.connect('activate', self._handle_history_click)
-
-				self._history_menu.append(menu_item)
-
-			# add entry to show complete history
-			separator = Gtk.SeparatorMenuItem()
-			self._history_menu.append(separator)
-
-			image = Gtk.Image()
-			image.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
-
-			menu_item = Gtk.ImageMenuItem()
-			menu_item.set_image(image)
-			menu_item.set_label(_('View complete history...'))
-			menu_item.connect('activate', self._show_history_window)
-			self._history_menu.append(menu_item)
-
-		else:
-			# no items to create, make blank item
-			menu_item = Gtk.MenuItem(_('History is empty'))
-			menu_item.set_sensitive(False)
-
-			self._history_menu.append(menu_item)
-
-		# show all menu items
-		self._history_menu.show_all()
-
 	def _prepare_emblem_menu(self):
 		"""Prepare emblem menu."""
 		pass
@@ -1270,14 +1211,6 @@ class ItemList(PluginBase):
 		"""Handle clicking on locations button."""
 		self._parent.show_bookmarks_menu(widget, self._notebook)
 		return True
-
-	def _history_button_clicked(self, widget, data=None):
-		"""History button click event"""
-		# prepare menu for drawing
-		self._prepare_history_menu()
-
-		# show the menu on calculated location
-		self._history_menu.popup(None, None, self._get_history_menu_position, widget, 1, 0)
 
 	def _duplicate_tab(self, widget, data=None):
 		"""Creates new tab with same path"""

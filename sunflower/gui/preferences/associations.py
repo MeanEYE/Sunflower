@@ -1,4 +1,4 @@
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from sunflower.gui.input_dialog import InputDialog, ApplicationInputDialog
 from sunflower.widgets.settings_page import SettingsPage
 
@@ -68,7 +68,7 @@ class AssociationsOptions(SettingsPage):
 
 	def __button_add_clicked(self, widget, data=None):
 		"""Handle clicking on add button"""
-		self._add_menu.popup(None, None, self.__get_menu_position, widget, 1, 0)
+		self._add_menu.popup_at_widget(widget, Gdk.Gravity.SOUTH_WEST, Gdk.Gravity.NORTH_WEST, None)
 
 	def __add_mime_type(self, widget, data=None):
 		"""Show dialog for adding mime type"""
@@ -132,20 +132,6 @@ class AssociationsOptions(SettingsPage):
 								)
 			dialog.run()
 			dialog.destroy()
-
-	def __get_menu_position(self, menu, *args):
-		"""Get history menu position"""
-		# get coordinates
-		button = args[-1]
-		window_x, window_y = self._parent.get_window().get_position()
-		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
-		button_h = button.get_allocation().height
-
-		# calculate absolute menu position
-		pos_x = window_x + button_x
-		pos_y = window_y + button_y + button_h
-
-		return pos_x, pos_y, True
 
 	def _load_options(self):
 		"""Load options and update interface"""

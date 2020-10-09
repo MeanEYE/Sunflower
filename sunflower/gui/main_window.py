@@ -50,6 +50,7 @@ from sunflower.gui.preferences_window import PreferencesWindow
 from sunflower.gui.preferences.display import TabExpand
 from sunflower.gui.input_dialog import InputDialog, AddBookmarkDialog
 from sunflower.gui.keyring_manager_window import KeyringManagerWindow
+from sunflower.gui.shortcuts_window import ShortcutsWindow
 
 
 class MainWindow(Gtk.ApplicationWindow):
@@ -156,6 +157,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.indicator = Indicator(self)
 		self.preferences_window = PreferencesWindow(self)
 		self.disk_usage = DiskUsage(self)
+		self.shortcuts_window = ShortcutsWindow(self)
 
 		# create header bar
 		self.header_bar = Gtk.HeaderBar.new()
@@ -245,6 +247,7 @@ class MainWindow(Gtk.ApplicationWindow):
 				('help.home_page', self.goto_web, None),
 				('help.check_version', self.check_for_new_version, None),
 				('help.about', self.show_about_window, None),
+				('help.shortcuts', self.shortcuts_window._show, None),
 
 				('preferences', self.preferences_window._show, None),
 				('quit', self._quit, None)
@@ -319,6 +322,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._view_menu.append_section(None, self._view_interface_menu)
 
 		# help menu
+		self._help_menu.append(_('Keyboard shortcuts'), 'win.help.shortcuts')
 		self._help_menu.append(_('_Home page'), 'win.help.home_page')
 		self._help_menu.append(_('Check for new version'), 'win.help.check_version')
 		self._help_menu.append(_('_About'), 'win.help.about')

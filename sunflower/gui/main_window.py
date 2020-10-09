@@ -244,10 +244,10 @@ class MainWindow(Gtk.ApplicationWindow):
 				('view.horizontal_split', self._toggle_horizontal_split, self.options.get('horizontal_split')),
 				('view.dark_theme', self._toggle_dark_theme, self.options.get('dark_theme')),
 
+				('help.shortcuts', self.shortcuts_window._show, None),
 				('help.home_page', self.goto_web, None),
 				('help.check_version', self.check_for_new_version, None),
 				('help.about', self.show_about_window, None),
-				('help.shortcuts', self.shortcuts_window._show, None),
 
 				('preferences', self.preferences_window._show, None),
 				('quit', self._quit, None)

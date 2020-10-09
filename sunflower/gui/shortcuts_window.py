@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Gdk, GObject
+from gi.repository import Gtk, Gdk
 
 class ShortcutsWindow():
 	"""Shortcuts display"""

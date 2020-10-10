@@ -2385,7 +2385,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		# nautilus recently provides data through regular
 		# clipboard as plain text try getting data that way
 		selection = self.clipboard.get_text()
-		if selection is not None:
+		if selection:
 			data = selection.splitlines(False)
 			data = list(filter(lambda x: len(x) > 0, data))
 			if data[0] in targets:
@@ -2395,7 +2395,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		# try getting data old way through mime type targets
 		else:
 			selection = self.clipboard.get_data(targets)
-			if selection is not None:
+			if selection:
 				data = selection.splitlines(False)
 				data = list(filter(lambda x: len(x) > 0, data))
 				result = (data[0], data[1:])
@@ -2412,7 +2412,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		result = False
 
 		selection = self.clipboard.get_text()
-		if selection is not None:
+		if selection:
 			data = selection.splitlines(False)
 			result = data[0] == targets[0] or data[0] in ('copy', 'cut')
 

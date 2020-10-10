@@ -31,7 +31,6 @@ class HistoryList(Gtk.Window):
 		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)
 		self.set_transient_for(application)
-		self.set_wmclass('Sunflower', 'Sunflower')
 		self.set_border_width(7)
 
 		# create UI

@@ -44,7 +44,6 @@ class FindFiles(GObject.GObject):
 		self.window.set_default_size(550, 400)
 		self.window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self.window.set_transient_for(application)
-		self.window.set_wmclass('Sunflower', 'Sunflower')
 
 		self.window.connect('key-press-event', self._handle_key_press)
 

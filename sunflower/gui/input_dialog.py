@@ -37,7 +37,6 @@ class InputDialog:
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		self._container = Gtk.VBox(False, 0)
 		self._container.set_border_width(5)
@@ -570,7 +569,6 @@ class DeleteDialog:
 
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 		self._dialog.set_default_size(-1, 0)
 
 		# create user interface for operation queue
@@ -632,7 +630,6 @@ class CopyDialog:
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		# create additional components
 		vbox = Gtk.VBox(False, 0)
@@ -1051,7 +1048,6 @@ class OverwriteDialog:
 		self._dialog.set_skip_taskbar_hint(False)
 		self._dialog.set_modal(True)
 		self._dialog.set_urgency_hint(True)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		hbox = Gtk.HBox(False, 10)
 		hbox.set_border_width(10)
@@ -1326,7 +1322,6 @@ class AddBookmarkDialog:
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		# create component container
 		vbox = Gtk.VBox(False, 5)
@@ -1419,7 +1414,6 @@ class OperationError:
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		# create component container
 		hbox = Gtk.HBox(False, 10)
@@ -1503,7 +1497,6 @@ class CreateToolbarWidgetDialog:
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		# create component container
 		vbox = Gtk.VBox(False, 5)
@@ -1698,7 +1691,6 @@ class ApplicationSelectDialog:
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		self._container = Gtk.VBox(False, 5)
 		self._container.set_border_width(5)
@@ -1841,7 +1833,6 @@ class PathInputDialog():
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		self._container = Gtk.VBox(False, 0)
 		self._container.set_border_width(5)

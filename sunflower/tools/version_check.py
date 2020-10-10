@@ -21,7 +21,6 @@ class VersionCheck:
 
 		# configure window
 		self._dialog.set_title(_('Version check'))
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 		self._dialog.set_border_width(7)
 		self._dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self._dialog.set_resizable(False)

@@ -36,7 +36,6 @@ class PreferencesWindow(Gtk.Window):
 		self.set_skip_taskbar_hint(True)
 		self.set_transient_for(parent)
 		self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
-		self.set_wmclass('Sunflower', 'Sunflower')
 
 		self.connect('delete_event', self._hide)
 		self.connect('key-press-event', self._handle_key_press)

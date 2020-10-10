@@ -43,6 +43,7 @@ class FindFiles(GObject.GObject):
 		self.window.set_title(_('Find files'))
 		self.window.set_default_size(550, 400)
 		self.window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
+		self.window.set_modal(True)
 		self.window.set_transient_for(application)
 		self.window.set_wmclass('Sunflower', 'Sunflower')
 
@@ -227,7 +228,7 @@ class FindFiles(GObject.GObject):
 	def __find_files(self, path, extensions, scan_recursively):
 		"""Threaded find files method."""
 		scan_queue = []
-		extension_list = list(map(lambda child: child.extension, children))
+		extension_list = list(map(lambda child: child.extension, extensions))
 
 		self.emit('notify-start')
 		GObject.idle_add(self.__update_status, True)

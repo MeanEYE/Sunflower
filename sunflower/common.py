@@ -54,11 +54,8 @@ def format_size(size, format_type, include_unit=True):
 
 		for name in names:
 			if size < multiplier:
-				if name == 'B':
-					# hide decimal places for byte sized values
-					template = '{0:3.0f} {1}'
-				else:
-					template = '{0:3.1f} {1}'
+				# hide decimal places for byte sized values
+				template = '{0:3.1f} {1}' if name != 'B' else '{0:3.0f} {1}'
 				result = template.format(size, name)
 				break
 

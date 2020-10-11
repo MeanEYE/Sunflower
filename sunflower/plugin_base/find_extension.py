@@ -25,7 +25,6 @@ class FindExtension:
 	def __handle_state_set(self, widget, state):
 		"""Update extension active."""
 		self._active = state
-		print('came')
 
 	def __get_active(self):
 		"""Get state of the extension."""

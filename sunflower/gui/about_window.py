@@ -63,7 +63,6 @@ class AboutWindow:
 		# configure dialog
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(parent)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		# connect signals
 		self._dialog.connect('activate-link', parent.goto_web)

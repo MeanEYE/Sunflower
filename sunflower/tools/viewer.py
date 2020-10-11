@@ -58,7 +58,6 @@ class Viewer(Gtk.Window):
 		self.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self.set_resizable(True)
 		self.set_skip_taskbar_hint(False)
-		self.set_wmclass('Sunflower', 'Sunflower')
 
 		header_bar = Gtk.HeaderBar.new()
 		header_bar.set_title(display_filename)

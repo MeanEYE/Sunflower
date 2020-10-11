@@ -25,13 +25,8 @@ class IconManager:
 	def _prepare_icons(self):
 		"""Load special user directories"""
 		# set default icons for file and directory
-		self._default_file = 'empty'
-		if not self.has_icon(self._default_file):
-			self._default_file = Gtk.STOCK_FILE
-
+		self._default_file = 'text-x-generic'
 		self._default_directory = 'folder'
-		if not self.has_icon(self._default_directory):
-			self._default_directory = Gtk.STOCK_DIRECTORY
 
 		# special user directories
 		directories = []
@@ -58,8 +53,8 @@ class IconManager:
 			directories.append((full_path, icon_name))
 
 		# add user home directory
-		if self.has_icon('folder-home'):
-			directories.append((os.path.expanduser('~'), 'folder-home'))
+		if self.has_icon('user-home'):
+			directories.append((os.path.expanduser('~'), 'user-home'))
 
 		# create a dictionary
 		self._user_directories = dict(directories)

@@ -20,7 +20,7 @@ class PathCompletionEntry(Gtk.Entry):
 
 		# create suggestion list
 		self._store = Gtk.ListStore(str)
-		self._store.set_sort_column_id(1, Gtk.SortType.ASCENDING)
+		self._store.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 		self._store.set_sort_func(0, self._sort_list)
 
 		# create entry field with completion
@@ -77,4 +77,4 @@ class PathCompletionEntry(Gtk.Entry):
 			value2 = value2.lower()
 			value2 = [int(part) if part.isdigit() else part for part in self.number_split.split(value2)]
 
-		return cmp(value1, value2)
+		return (value1 > value2) - (value1 < value2)

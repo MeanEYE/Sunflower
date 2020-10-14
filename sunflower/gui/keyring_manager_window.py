@@ -31,6 +31,7 @@ class KeyringManagerWindow:
 		self._window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self._window.set_skip_taskbar_hint(False)
 		self._window.set_modal(False)
+		self._window.set_wmclass('Sunflower', 'Sunflower')
 		self._window.set_border_width(7)
 
 		# connect signals

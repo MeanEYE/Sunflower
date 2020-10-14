@@ -41,6 +41,7 @@ class SambaInputDialog:
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(parent)
+		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		self._dialog.vbox.set_spacing(0)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)
@@ -253,6 +254,7 @@ class FtpInputDialog:
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(parent)
+		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		self._dialog.vbox.set_spacing(0)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)
@@ -446,6 +448,7 @@ class DavInputDialog:
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(parent)
+		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		self._dialog.vbox.set_spacing(0)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)

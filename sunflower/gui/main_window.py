@@ -75,6 +75,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# set window title
 		self.set_title(_('Sunflower'))
+		self.set_wmclass('Sunflower', 'Sunflower')
 
 		# local variables
 		self._geometry = None

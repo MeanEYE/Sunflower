@@ -27,6 +27,7 @@ class ErrorList:
 		self._window.set_skip_taskbar_hint(False)
 		self._window.set_modal(False)
 		self._window.set_transient_for(parent.get_window())
+		self._window.set_wmclass('Sunflower', 'Sunflower')
 		self._window.set_border_width(7)
 
 		self._window.connect('key-press-event', self._handle_key_press)

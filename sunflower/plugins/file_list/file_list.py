@@ -1231,6 +1231,7 @@ class FileList(ItemList):
 			# create menu item
 			menu_item = Gtk.ImageMenuItem(emblem)
 			menu_item.set_image(image)
+			menu_item.set_always_show_image(True)
 			menu_item.connect('activate', self._handle_emblem_toggle, emblem)
 
 			# add emblem to menu

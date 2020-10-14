@@ -406,7 +406,7 @@ class ItemListOptions(SettingsPage):
 
 	def __button_add_clicked(self, widget, data=None):
 		"""Handle clicking on add button"""
-		self._add_menu_directory.popup_at_widget(widget, Gdk.Gravity.SOUTH_WEST, Gdk.Gravity.NORTH_WEST, None)
+		self._menu_add_directory.popup_at_widget(widget, Gdk.Gravity.SOUTH_WEST, Gdk.Gravity.NORTH_WEST, None)
 
 	def _add_always_visible(self, widget, data=None):
 		"""Add item name to the list of always visible files and directories."""

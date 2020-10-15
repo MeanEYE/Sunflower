@@ -366,7 +366,7 @@ class SambaProvider(GioProvider):
 
 	def get_protocol_icon(self):
 		"""Return protocol icon name"""
-		return 'samba'
+		return 'folder-remote'
 
 	def get_support(self):
 		"""Return supported options by provider"""
@@ -381,7 +381,7 @@ class FtpProvider(GioProvider):
 
 	def get_protocol_icon(self):
 		"""Return protocol icon name"""
-		return 'network'
+		return 'folder-remote'
 
 	def get_support(self):
 		"""Return supported options by provider"""
@@ -394,7 +394,7 @@ class SftpProvider(GioProvider):
 
 	def get_protocol_icon(self):
 		"""Return protocol icon name"""
-		return 'network'
+		return 'folder-remote'
 
 	def get_support(self):
 		"""Return supported options by provider"""
@@ -442,7 +442,7 @@ class DavProvider(GioProvider):
 
 	def get_protocol_icon(self):
 		"""Return protocol icon name"""
-		return 'network'
+		return 'folder-remote'
 
 	def get_support(self):
 		"""Return supported options by provider"""
@@ -457,7 +457,7 @@ class DavsProvider(GioProvider):
 
 	def get_protocol_icon(self):
 		"""Return protocol icon name"""
-		return 'network'
+		return 'folder-remote'
 
 	def get_support(self):
 		"""Return supported options by provider"""

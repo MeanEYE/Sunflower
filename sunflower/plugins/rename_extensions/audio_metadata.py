@@ -77,10 +77,14 @@ class AudioMetadataRename(RenameExtension):
 
 		# create warning label
 		label_warning = Gtk.Label(label=_(
-							'In order to use this extension you need <b>mutagen</b> module installed!'
-						))
+			'In order to use this extension you need <b>mutagen</b> module installed!'
+		))
 		label_warning.set_use_markup(True)
-		label_warning.set_property('no-show-all', USE_MUTAGEN)
+
+		infobar = Gtk.InfoBar()
+		infobar.set_property('no-show-all', USE_MUTAGEN)
+		infobar_content = infobar.get_content_area()
+		infobar_content.add(label_warning)
 
 		# pack gui
 		vbox_template.pack_start(label_template, False, False, 0)
@@ -104,8 +108,8 @@ class AudioMetadataRename(RenameExtension):
 		hbox.pack_start(vbox_left, True, True, 0)
 		hbox.pack_start(vbox_right, True, True, 0)
 
+		self.vbox.pack_start(infobar, False, False, 0)
 		self.vbox.pack_start(hbox, False, False, 0)
-		self.vbox.pack_end(label_warning, False, False, 0)
 
 	def get_title(self):
 		"""Return extension title"""

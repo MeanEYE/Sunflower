@@ -2435,7 +2435,18 @@ class MainWindow(Gtk.ApplicationWindow):
 			active_object = self.get_active_object()
 
 			if issubclass(active_object.__class__, ItemList):
-				AdvancedRename(active_object, self)
+				if active_object._get_selection():
+					AdvancedRename(active_object, self)
+				else:
+					dialog = Gtk.MessageDialog(
+						self,
+						Gtk.DialogFlags.DESTROY_WITH_PARENT,
+						Gtk.MessageType.INFO,
+						Gtk.ButtonsType.OK,
+						_('Please select at least one file or directory.')
+					)
+					dialog.run()
+					dialog.destroy()
 
 		elif not issubclass(self._active_object.__class__, ItemList):
 			# active object is not item list

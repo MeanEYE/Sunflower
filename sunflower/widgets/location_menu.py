@@ -22,6 +22,8 @@ class LocationMenu:
 		self._popover = Gtk.Popover.new()
 		self._popover.set_position(Gtk.PositionType.BOTTOM)
 		self._popover.set_modal(True)
+		self._popover_visible = False
+		self._popover.connect('closed', self.__handle_popover_close)
 
 		# create widget container
 		container = Gtk.VBox.new(False, 0)
@@ -250,6 +252,30 @@ class LocationMenu:
 
 		return result
 
+	def __handle_popover_open(self):
+		"""Handle popover opening."""
+		self._popover_visible = True
+
+		# disable plugin accelerators
+		groups = self._application.accelerator_manager.get_groups()
+		for group_name in groups:
+			group = self._application.accelerator_manager._get_group_by_name(group_name)
+			group.deactivate()
+
+	def __handle_popover_close(self, widget, data=None):
+		"""Handle popover closing."""
+		self._popover_visible = False
+
+		# enable plugin accelerators
+		groups = self._application.accelerator_manager.get_groups()
+		for group_name in groups:
+			group = self._application.accelerator_manager._get_group_by_name(group_name)
+			group.activate(self._application)
+
+	def __get_popover_visible(self):
+		"""Return boolean denoting whether popover is visible."""
+		return self._popover_visible
+
 	def add_header(self, Class, widget):
 		"""Add header widget for specified location class name."""
 		self._headers[Class.__name__] = widget
@@ -290,6 +316,9 @@ class LocationMenu:
 		# show menu
 		self._popover.set_relative_to(reference)
 		self._popover.popup()
+		self.__handle_popover_open()
+
+	is_visible = property(__get_popover_visible)
 
 
 class GenericHeader(Gtk.VBox):

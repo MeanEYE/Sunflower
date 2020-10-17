@@ -267,8 +267,7 @@ class PluginBase(Gtk.VBox):
 				Gdk.KEY_Right,
 				Gdk.KEY_Up,
 				Gdk.KEY_Down
-			)
-
+				)
 		keyval = event.keyval
 		state = event.get_state()
 

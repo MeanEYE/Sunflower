@@ -7,10 +7,9 @@ import codecs
 import subprocess
 
 from gi.repository import Gio, Gtk, Gdk, Pango, GObject, GdkPixbuf
-from sunflower.common import executable_exists, decode_file_name
+from sunflower.common import executable_exists, decode_file_name, get_monospace_font_string
 from sunflower.widgets.status_bar import StatusBar
 from sunflower.plugin_base.provider import Mode as FileMode
-from sunflower.tools import system_font
 
 try:
 	gi.require_version('GtkSource', '4')
@@ -30,7 +29,7 @@ class Viewer(Gtk.Window):
 
 		# load font
 		if not self.FONT:
-			self.FONT = Pango.FontDescription.from_string(system_font.get_monospace_font_string())
+			self.FONT = Pango.FontDescription.from_string(get_monospace_font_string())
 
 		# viewer does not support directories
 		if provider.is_dir(path):

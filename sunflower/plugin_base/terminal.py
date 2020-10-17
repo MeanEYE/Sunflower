@@ -6,7 +6,7 @@ gi.require_version('Vte', '2.91')
 from gi.repository import Gtk, Gdk, Gio, Vte, Pango
 from sunflower.plugin_base.plugin import PluginBase
 from sunflower.accelerator_group import AcceleratorGroup
-from sunflower.tools import system_font
+from sunflower.common import get_monospace_font_string
 
 
 class TerminalType:
@@ -121,7 +121,7 @@ class Terminal(PluginBase):
 	def __set_system_font(self, client=None, *args, **kwargs):
 		"""Set system font to terminal"""
 		if not self.FONT:
-			self.FONT = Pango.FontDescription.from_string(system_font.get_monospace_font_string())
+			self.FONT = Pango.FontDescription.from_string(get_monospace_font_string())
 
 		self._terminal.set_font(self.FONT)
 

@@ -67,10 +67,16 @@ class ZipProvider(Provider):
 				# set fallback timestamp for files with invalid date_time value
 				file_timestamp = 0
 
+			# get permissions mode
+			mode = int(info.external_attr >> 16)
+			# set default permissions if file had none
+			if mode == 0:
+				mode = 0o644 if file_type == FileType.REGULAR else 0o775
+
 			# prepare file info
 			file_info = FileInfo(
 					size = info.file_size,
-					mode = int(info.external_attr >> 16),
+					mode = mode,
 					user_id = 0,
 					group_id = 0,
 					time_modify = file_timestamp,

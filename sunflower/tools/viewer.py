@@ -7,7 +7,7 @@ import codecs
 import subprocess
 
 from gi.repository import Gio, Gtk, Gdk, Pango, GObject, GdkPixbuf
-from sunflower.common import executable_exists, decode_file_name
+from sunflower.common import executable_exists, decode_file_name, get_monospace_font_string
 from sunflower.widgets.status_bar import StatusBar
 from sunflower.plugin_base.provider import Mode as FileMode
 
@@ -29,8 +29,7 @@ class Viewer(Gtk.Window):
 
 		# load font
 		if not self.FONT:
-			settings = Gio.Settings.new('org.gnome.desktop.interface')
-			self.FONT = Pango.FontDescription.from_string(settings.get_string('monospace-font-name'))
+			self.FONT = Pango.FontDescription.from_string(get_monospace_font_string())
 
 		# viewer does not support directories
 		if provider.is_dir(path):

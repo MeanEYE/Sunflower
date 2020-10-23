@@ -324,8 +324,7 @@ class FileList(ItemList):
 		"""Apply font size from settings."""
 		options = self._parent.plugin_options.section(self._name)
 
-		settings = Gio.Settings.new('org.gnome.desktop.interface')
-		font = settings.get_string('monospace-font-name')
+		font = common.get_monospace_font_string()
 
 		for column in columns:
 			column.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)

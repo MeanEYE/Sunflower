@@ -499,7 +499,7 @@ class FileCreateDialog(CreateDialog):
 			file_list = [file_ for file_ in os.listdir(directory) if file_[0] != '.']  # skip hidden files
 
 		# add empty file
-		self._templates.append((_('Empty File'), '', 'document'))
+		self._templates.append((_('Empty File'), '', 'text-x-generic-template'))
 		if len(file_list) > 0:
 			self._templates.append(('', '', ''))  # separator
 

@@ -1310,8 +1310,10 @@ class FileList(ItemList):
 		"""Clear sort settings"""
 		self._store.set_sort_column_id(Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, True)
 
-	def _generate_sort_data(self, parent=None):
-		"""Generate data for sorting elements."""
+	def _generate_sort_data(self, parent=None, iters=None):
+		"""Generate sort data for all iters in the first level or children of the provided
+		parent. Separate `iters` list is added as a convenience to allow regenerating sort
+		data for specific items in the list."""
 		bool_values = ['1', '0'] if self._sort_ascending else ['0', '1']
 
 		# find starting point
@@ -1322,12 +1324,10 @@ class FileList(ItemList):
 		elif self._store.iter_has_child(parent):
 			found_iter = self._store.iter_children(parent)
 
-		# check all the iters for specified name
-		update_data = []
-		while found_iter:
-			is_dir = self._store.get_value(found_iter, Column.IS_DIR)
-			is_parent = self._store.get_value(found_iter, Column.IS_PARENT_DIR)
-			value = self._store.get_value(found_iter, self._sort_column)
+		def generate_data(for_iter):
+			is_dir = self._store.get_value(for_iter, Column.IS_DIR)
+			is_parent = self._store.get_value(for_iter, Column.IS_PARENT_DIR)
+			value = self._store.get_value(for_iter, self._sort_column)
 
 			if self._sort_number_sensitive and self._sort_column == Column.NAME:
 				value = ''.join([part.rjust(12, '0') if part.isdigit() else part for part in self.number_split.split(value)])
@@ -1338,19 +1338,30 @@ class FileList(ItemList):
 			if isinstance(value, int) or isinstance(value, float):
 				value = str(value).rjust(12, '0')
 
-			data = '{}{}{}'.format(bool_values[is_parent], bool_values[is_dir], value)
-			update_data.append((found_iter, data))
+			return '{}{}{}'.format(bool_values[is_parent], bool_values[is_dir], value)
+
+		# collect data for all iters
+		update_data = []
+		while found_iter:
+			update_data.append((found_iter, generate_data(found_iter)))
 			found_iter = self._store.iter_next(found_iter)
 
+		# process provided list
+		if iters:
+			for found_iter in iters:
+				update_data.append((found_iter, generate_data(found_iter)))
+				found_iter = self._store.iter_next(found_iter)
+
+		# delayed data update since we can't read and write at the same time
 		for item_iter, sort_data in update_data:
 			self._store.set_value(item_iter, Column.SORT_DATA, sort_data)
 
 	def _clear_list(self):
-		"""Clear item list"""
+		"""Clear item list."""
 		self._store.clear()
 
 	def _directory_changed(self, monitor, event, path, other_path, parent=None):
-		"""Callback method fired when contents of directory has been changed"""
+		"""Callback method fired when contents of directory has been changed."""
 		show_hidden = self._parent.options.section('item_list').get('show_hidden')
 
 		# make sure we are working with relative paths
@@ -1741,15 +1752,20 @@ class FileList(ItemList):
 
 	def _flush_queue(self, parent=None):
 		"""Add items in queue to the list"""
+		queued_iters = []
 		path_to_select = None
 
 		# add items from the queue
 		for data in self._item_queue:
 			new_iter = self._store.append(parent, data)
+			queued_iters.append(new_iter)
 
 			# focus specified item
 			if self._item_to_focus == data[0]:
 				path_to_select = self._store.get_path(new_iter)
+
+		# schedule sort data update
+		Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._generate_sort_data, None, queued_iters)
 
 		# select path if needed
 		if path_to_select is not None:
@@ -1830,6 +1846,9 @@ class FileList(ItemList):
 			self._store.set_value(found_iter, Column.FORMATED_MODE, formated_file_mode)
 			self._store.set_value(found_iter, Column.FORMATED_TIME, formated_file_date)
 
+			# regenerate sort data
+			self._generate_sort_data(iters=[found_iter,])
+
 	def _update_item_attributes_by_name(self, name, parent):
 		"""Update item attributes column by name"""
 		found_iter = self._find_iter_by_name(name, parent)
@@ -1844,10 +1863,14 @@ class FileList(ItemList):
 			formated_file_mode = common.format_mode(file_mode, self._mode_format)
 			formated_file_date = time.strftime(self._time_format, time.localtime(file_date))
 
+			# update list store
 			self._store.set_value(found_iter, Column.MODE, file_mode)
 			self._store.set_value(found_iter, Column.TIME, file_date)
 			self._store.set_value(found_iter, Column.FORMATED_MODE, formated_file_mode)
 			self._store.set_value(found_iter, Column.FORMATED_TIME, formated_file_date)
+
+			# regenerate sort data
+			self._generate_sort_data(iters=[found_iter,])
 
 	def _change_title_text(self, text=None):
 		"""Change title label text and add free space display"""
@@ -2151,9 +2174,6 @@ class FileList(ItemList):
 
 			# update status bar
 			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._update_status_with_statistis)
-
-			# regenerate sort data
-			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._generate_sort_data, parent)
 
 			# load emblems
 			self._load_emblems(parent, parent_path)

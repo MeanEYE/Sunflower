@@ -1362,7 +1362,7 @@ class AddBookmarkDialog:
 		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
 
 		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
-		self._dialog.action_area.pack_end(button_ok, False, False, 0)
+		self._dialog.add_action_widget(button_ok, Gtk.ResponseType.OK)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
 		# pack interface

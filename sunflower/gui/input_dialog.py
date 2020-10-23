@@ -1867,7 +1867,7 @@ class PathInputDialog():
 		self._container.pack_start(vbox, False, False, 0)
 
 		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
-		self._dialog.action_area.pack_end(button_ok, False, False, 0)
+		self._dialog.add_action_widget(button_ok, Gtk.ResponseType.OK)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
 		self._dialog.get_content_area().pack_start(self._container, True, True, 0)

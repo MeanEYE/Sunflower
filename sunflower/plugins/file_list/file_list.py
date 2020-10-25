@@ -1298,14 +1298,6 @@ class FileList(ItemList):
 		self._store.set_sort_column_id(Column.SORT_DATA, order)
 		self._generate_sort_data()
 
-		# move cursor to previously selected element
-		if focus_selected:
-			selection = self._item_list.get_selection()
-			item_list, iter_to_scroll = selection.get_selected()
-			if iter_to_scroll:
-				path_to_scroll = item_list.get_path(iter_to_scroll)
-				self._item_list.scroll_to_cell(path_to_scroll, None, True, 0.5)
-
 	def _clear_sort_function(self):
 		"""Clear sort settings"""
 		self._store.set_sort_column_id(Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, True)
@@ -1355,6 +1347,13 @@ class FileList(ItemList):
 		# delayed data update since we can't read and write at the same time
 		for item_iter, sort_data in update_data:
 			self._store.set_value(item_iter, Column.SORT_DATA, sort_data)
+
+		# move cursor to previously selected element
+		selection = self._item_list.get_selection()
+		item_list, iter_to_scroll = selection.get_selected()
+		if iter_to_scroll:
+			path_to_scroll = item_list.get_path(iter_to_scroll)
+			self._item_list.scroll_to_cell(path_to_scroll, None, True, 0.5)
 
 	def _clear_list(self):
 		"""Clear item list."""

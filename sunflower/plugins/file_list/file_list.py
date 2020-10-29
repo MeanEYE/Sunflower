@@ -1741,7 +1741,7 @@ class FileList(ItemList):
 
 			self._item_queue.append(data)
 
-			if len(self._item_queue) > 100:
+			if len(self._item_queue) == 100:
 				Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
 
 		except Exception as error:

@@ -15,6 +15,7 @@ from sunflower.gui.input_dialog import CopyDialog, MoveDialog, InputDialog, Path
 from sunflower.gui.preferences.display import StatusVisible
 from sunflower.gui.history_list import HistoryList
 from sunflower.history import HistoryManager
+from sunflower.widgets.popup_menu import PopupMenu
 
 
 class ItemList(PluginBase):
@@ -371,6 +372,7 @@ class ItemList(PluginBase):
 
 	def _show_emblem_menu(self, widget, data=None):
 		"""Show quick emblem selection menu."""
+		# TODO: Remove. Deprecated.
 		if data is not None:
 			# if this method is called by accelerator data is actually keyval
 			self._emblem_menu.popup_at_rect(self._parent.get_window(),
@@ -550,7 +552,7 @@ class ItemList(PluginBase):
 				if event.x and event.y:
 					if not right_click_select or (right_click_select and time_valid):
 						# show popup menu
-						self._show_popup_menu(widget)
+						self._show_popup_menu()
 
 					else:
 						# toggle item mark
@@ -908,6 +910,23 @@ class ItemList(PluginBase):
 		"""Return item with path under cursor"""
 		pass
 
+	def _get_selection_rectangle(self):
+		"""Get rectangle for cursor position on the list."""
+		selection = self._item_list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		if selected_iter is None:
+			cursor_path, focus_column = self._item_list.get_cursor()
+			selected_iter = item_list.get_iter(cursor_path)
+
+		rectangle = self._item_list.get_cell_area(item_list.get_path(selected_iter), self._columns[0])
+		tree_rect = self._item_list.get_visible_rect()
+
+		rectangle.x, rectangle.y = self._item_list.convert_tree_to_widget_coords(rectangle.x, rectangle.y)
+
+		# grab cell and tree rectangles
+		return rectangle
+
 	def _get_selection_list(self, under_cursor=False, relative=False):
 		"""Return list of selected items
 
@@ -919,6 +938,7 @@ class ItemList(PluginBase):
 
 	def _get_popup_menu_position(self, menu, *args):
 		"""Abstract method for positioning menu properly on given row"""
+		# TODO: Remove. Deprecated.
 		return Gdk.Rectangle()
 
 	def _get_other_provider(self):
@@ -1156,37 +1176,24 @@ class ItemList(PluginBase):
 
 	def _show_open_with_menu(self, widget, data=None):
 		"""Show 'open with' menu"""
+		#TODO: Remove. Deprecated.
 		# prepare elements in popup menu
 		self._prepare_popup_menu()
 
 		# if this method is called by Menu key data is actually event object
 		self._open_with_menu.popup_at_rect(self._parent.get_window(),
-			self._get_popup_menu_position(),
-			Gdk.Gravity.SOUTH_WEST,
-			Gdk.Gravity.NORTH_WEST,
-			None
-		)
-
-		return True
-
-	def _show_popup_menu(self, widget=None, data=None):
-		"""Show item menu"""
-		# prepare elements in popup menu
-		self._prepare_popup_menu()
-
-		if data is not None:
-			# if this method is called by accelerator data is actually keyval
-			self._popup_menu.popup_at_rect(self._parent.get_window(),
 				self._get_popup_menu_position(),
 				Gdk.Gravity.SOUTH_WEST,
 				Gdk.Gravity.NORTH_WEST,
 				None
-			)
+				)
 
-		else:
-			# if called by mouse, we don't have the need to position the menu manually
-			self._popup_menu.popup_at_pointer()
+		return True
 
+	def _show_popup_menu(self, widget=None, data=None):
+		"""Show item menu."""
+		menu = PopupMenu(self._parent, self._main_object, '')
+		menu.show(self._item_list, self._get_selection_rectangle())
 		return True
 
 	def _parent_directory(self, widget=None, data=None):

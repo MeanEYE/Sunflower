@@ -1220,6 +1220,7 @@ class FileList(ItemList):
 
 	def _prepare_emblem_menu(self):
 		"""Prepare emblem menu."""
+		# TODO: Remove. Deprecated.
 		emblem_list = self._parent.emblem_manager.get_available_emblems()
 
 		for emblem in emblem_list:
@@ -1259,7 +1260,7 @@ class FileList(ItemList):
 
 		# relative to window
 		x, y = self._item_list.translate_coordinates(self._parent, x, y)
-		
+
 		# return calculated coordinates and original cell dimensions
 		rect.x, rect.y = x, y
 		return rect

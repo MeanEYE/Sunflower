@@ -372,19 +372,7 @@ class ItemList(PluginBase):
 
 	def _show_emblem_menu(self, widget, data=None):
 		"""Show quick emblem selection menu."""
-		# TODO: Remove. Deprecated.
-		if data is not None:
-			# if this method is called by accelerator data is actually keyval
-			self._emblem_menu.popup_at_rect(self._parent.get_window(),
-				self._get_popup_menu_position(),
-				Gdk.Gravity.SOUTH_WEST,
-				Gdk.Gravity.NORTH_WEST,
-				None
-			)
-		else:
-			# if called by mouse, we don't have the need to position the menu manually
-			self._emblem_menu.popup_at_pointer()
-
+		self._popup_menu.show(self._item_list, self._get_selection_rectangle(), page='emblems')
 		return True
 
 	def _reorder_columns(self, order=None):

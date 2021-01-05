@@ -115,7 +115,7 @@ class ItemList(PluginBase):
 		# popup menu
 		self._open_with_item = None
 		self._open_with_menu = None
-		self._popup_menu = self._create_popup_menu()
+		self._popup_menu = PopupMenu(self._parent, self)
 
 		# create free space indicator in context menu
 		vbox_free_space = Gtk.VBox.new(False, 2)
@@ -961,239 +961,22 @@ class ItemList(PluginBase):
 
 		return result
 
-	def _create_popup_menu(self):
-		"""Create popup menu and its constant elements"""
-		result = Gtk.Menu()
-		menu_manager = self._parent.menu_manager
-
-		# construct menu
-		item = menu_manager.create_menu_item({
-								'label': _('_Open'),
-								'type': 'image',
-								'stock': Gtk.STOCK_OPEN,
-								'callback': self._execute_selected_item,
-							})
-		result.append(item)
-
-		# open directory in new tab
-		item = menu_manager.create_menu_item({
-								'label': _('Open in new ta_b'),
-								'type': 'image',
-								'image': 'tab-new',
-								'callback': self._open_in_new_tab,
-							})
-		result.append(item)
-		self._open_new_tab_item = item
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		# dynamic menu
-		item = menu_manager.create_menu_item({
-								'label': _('Open _with'),
-								'type': 'image',
-								'stock': Gtk.STOCK_EXECUTE,
-							})
-		result.append(item)
-
-		self._open_with_item = item
-		self._open_with_menu = Gtk.Menu()
-		item.set_submenu(self._open_with_menu)
-
-		# additional options menu
-		item = menu_manager.create_menu_item({
-								'label': _('Additional options'),
-							})
-		result.append(item)
-
-		self._additional_options_item = item
-		self._additional_options_menu = Gtk.Menu()
-		item.set_submenu(self._additional_options_menu)
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		# create new file
-		item = menu_manager.create_menu_item({
-								'label': _('Create file'),
-								'type': 'image',
-								'stock': Gtk.STOCK_NEW,
-								'callback': self._parent._command_create,
-								'data': 'file'
-							})
-		result.append(item)
-
-		# create new directory
-		item = menu_manager.create_menu_item({
-								'label': _('Create directory'),
-								'type': 'image',
-								'image': 'folder-new',
-								'callback': self._parent._command_create,
-								'data': 'directory',
-							})
-		result.append(item)
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		# cut/copy/paste
-		item = menu_manager.create_menu_item({
-								'label': _('Cu_t'),
-								'type': 'image',
-								'stock': Gtk.STOCK_CUT,
-								'callback': self._cut_files_to_clipboard,
-							})
-		result.append(item)
-		self._cut_item = item
-
-		item = menu_manager.create_menu_item({
-								'label': _('_Copy'),
-								'type': 'image',
-								'stock': Gtk.STOCK_COPY,
-								'callback': self._copy_files_to_clipboard,
-							})
-		result.append(item)
-		self._copy_item = item
-
-		item = menu_manager.create_menu_item({
-								'label': _('_Paste'),
-								'type': 'image',
-								'stock': Gtk.STOCK_PASTE,
-								'callback': self._paste_files_from_clipboard,
-							})
-		result.append(item)
-		self._paste_item = item
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		# create move and copy to other pane items
-		item = menu_manager.create_menu_item({
-								'label': _('Copy to other...'),
-								'callback': self._copy_files
-							})
-		result.append(item)
-
-		item = menu_manager.create_menu_item({
-								'label': _('Move to other...'),
-								'callback': self._move_files
-							})
-		result.append(item)
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		item = menu_manager.create_menu_item({
-								'label': _('Copy file name'),
-								'callback': self.copy_selected_item_name_to_clipboard
-							})
-		result.append(item)
-
-		item = menu_manager.create_menu_item({
-								'label': _('Copy path'),
-								'callback': self.copy_selected_path_to_clipboard
-							})
-		result.append(item)
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		# delete
-		item = menu_manager.create_menu_item({
-								'label': _('_Delete'),
-								'type': 'image',
-								'stock': Gtk.STOCK_DELETE,
-								'callback': self._delete_files,
-							})
-		result.append(item)
-		self._delete_item = item
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		# send to
-		item = menu_manager.create_menu_item({
-								'label': _('Send to...'),
-								'callback': self._send_to,
-								'type': 'image',
-								'image': 'document-send',
-								'visible': self._parent.NAUTILUS_SEND_TO_INSTALLED,
-							})
-		result.append(item)
-		self._send_to_item = item
-
-		# link/rename
-		item = menu_manager.create_menu_item({
-								'label': _('Ma_ke link'),
-								'callback': self._create_link
-							})
-		result.append(item)
-
-		item = menu_manager.create_menu_item({
-								'label': _('_Rename...'),
-								'callback': self._rename_file,
-							})
-		result.append(item)
-		item.set_sensitive(False)
-		self._rename_item = item
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		# properties
-		item = menu_manager.create_menu_item({
-								'label': _('_Properties'),
-								'type': 'image',
-								'stock': Gtk.STOCK_PROPERTIES,
-								'callback': self._item_properties
-							})
-		result.append(item)
-		self._properties_item = item
-
-		return result
-
 	def _prepare_popup_menu(self):
 		"""Prepare popup menu contents"""
-		# remove existing items
-		for item in self._open_with_menu.get_children():
-			self._open_with_menu.remove(item)
-
-		# remove items from additional options menu
-		for item in self._additional_options_menu.get_children():
-			self._additional_options_menu.remove(item)
+		self._popup_menu.prepare('')
 
 	def _prepare_emblem_menu(self):
 		"""Prepare emblem menu."""
-		pass
+		self._popup_menu.prepare('')
 
 	def _show_open_with_menu(self, widget, data=None):
 		"""Show 'open with' menu"""
-		#TODO: Remove. Deprecated.
-		# prepare elements in popup menu
-		self._prepare_popup_menu()
-
-		# if this method is called by Menu key data is actually event object
-		self._open_with_menu.popup_at_rect(self._parent.get_window(),
-				self._get_popup_menu_position(),
-				Gdk.Gravity.SOUTH_WEST,
-				Gdk.Gravity.NORTH_WEST,
-				None
-				)
-
+		self._popup_menu.show(self._item_list, self._get_selection_rectangle(), page='open-with')
 		return True
 
 	def _show_popup_menu(self, widget=None, data=None):
-		"""Show item menu."""
-		menu = PopupMenu(self._parent, self._main_object, '')
-		menu.show(self._item_list, self._get_selection_rectangle())
+		"""Show options related to currently highlighted item."""
+		self._popup_menu.show(self._item_list, self._get_selection_rectangle())
 		return True
 
 	def _parent_directory(self, widget=None, data=None):

@@ -45,10 +45,8 @@ class CellRendererEmblems(Gtk.CellRenderer):
 		"""Get renderer property."""
 		if prop.name == 'emblems':
 			result = self.emblems
-
 		elif prop.name == 'is-link':
 			result = self.is_link
-
 		else:
 			result = getattr(self, prop.name)
 
@@ -56,7 +54,6 @@ class CellRendererEmblems(Gtk.CellRenderer):
 
 	def do_render(self, context, widget, background_area, cell_area, flags):
 		"""Render emblems on tree view."""
-		return
 		if not self.is_link and (self.emblems is None or len(self.emblems) == 0):
 			return
 
@@ -92,12 +89,6 @@ class CellRendererEmblems(Gtk.CellRenderer):
 
 		width = self.icon_size * count + (self.spacing * (count - 1))
 		height = self.icon_size
-
-		result = (
-				0,
-				0,
-				width + 2 * self.padding,
-				height + 2 * self.padding
-			)
+		result = (0, 0, width + 2 * self.padding, height + 2 * self.padding)
 
 		return result

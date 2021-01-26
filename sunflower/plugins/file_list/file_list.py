@@ -111,8 +111,7 @@ class FileList(ItemList):
 		cell_size = Gtk.CellRendererText()
 		cell_mode = Gtk.CellRendererText()
 		cell_date = Gtk.CellRendererText()
-		# TODO: Fix these
-		# cell_emblems = CellRendererEmblems()
+		cell_emblems = CellRendererEmblems()
 
 		cell_name.set_property('single-paragraph-mode', True)
 		cell_extension.set_property('single-paragraph-mode', True)
@@ -145,10 +144,10 @@ class FileList(ItemList):
 		col_date.name = 'date'
 
 		# add cell renderer to columns
-		col_name.pack_start(cell_selected, False)
-		# col_name.pack_start(cell_emblems, False)
 		col_name.pack_start(cell_icon, False)
 		col_name.pack_start(cell_name, True)
+		col_name.pack_start(cell_selected, False)
+		col_name.pack_start(cell_emblems, False)
 		col_extension.pack_start(cell_extension, True)
 		col_size.pack_start(cell_size, True)
 		col_mode.pack_start(cell_mode, True)
@@ -163,8 +162,8 @@ class FileList(ItemList):
 		col_date.add_attribute(cell_date, 'foreground', Column.COLOR)
 
 		col_name.add_attribute(cell_icon, 'icon-name', Column.ICON)
-		# col_name.add_attribute(cell_emblems, 'emblems', Column.EMBLEMS)
-		# col_name.add_attribute(cell_emblems, 'is-link', Column.IS_LINK)
+		col_name.add_attribute(cell_emblems, 'emblems', Column.EMBLEMS)
+		col_name.add_attribute(cell_emblems, 'is-link', Column.IS_LINK)
 		col_name.add_attribute(cell_name, 'text', Column.FORMATED_NAME)
 		col_extension.add_attribute(cell_extension, 'text', Column.EXTENSION)
 		col_size.add_attribute(cell_size, 'text', Column.FORMATED_SIZE)

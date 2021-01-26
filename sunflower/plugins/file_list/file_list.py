@@ -74,6 +74,7 @@ class FileList(ItemList):
 		self._main_thread_lock = Event()
 
 		self._item_queue = []
+		self._emblem_cache = {}
 
 		# storage system for list items
 		self._store = Gtk.TreeStore(
@@ -1735,7 +1736,7 @@ class FileList(ItemList):
 					None,
 					file_stat.user_id,
 					file_stat.group_id,
-					None,
+					self._emblem_cache[filename] if filename in self._emblem_cache else None,
 					''
 				)
 
@@ -2119,6 +2120,10 @@ class FileList(ItemList):
 			self._thread_active.set()
 			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._title_bar.show_spinner)
 
+			# preload emblems for faster operation
+			self._emblem_cache = self._parent.emblem_manager.get_emblems_for_path(path)
+
+			# get initial directory listing
 			try:
 				provider = self.get_provider()
 				item_list = provider.list_dir(path)
@@ -2174,9 +2179,6 @@ class FileList(ItemList):
 			# update status bar
 			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._update_status_with_statistis)
 
-			# load emblems
-			self._load_emblems(parent, parent_path)
-
 			# release locks
 			self._thread_active.clear()
 			self._main_thread_lock.clear()
@@ -2190,40 +2192,6 @@ class FileList(ItemList):
 
 		# enable updates on cursor change
 		self._item_list.handler_unblock_by_func(self._handle_cursor_change)
-
-	def _load_emblems(self, parent=None, parent_path=None):
-		"""Load emblems for specified path."""
-		icon_manager = self._parent.icon_manager
-		emblem_manager = self._parent.emblem_manager
-		item_store = self._store  # avoid namespace lookups
-
-		# get path to load emblems for
-		path = self._options.get('path')
-		if parent is not None:
-			path = os.path.join(path, parent_path)
-
-		# get emblems for current path
-		emblems = emblem_manager.get_emblems_for_path(path)
-
-		# avoid wasting time
-		if len(emblems) == 0:
-			return
-
-		# iterate over items in the list
-		list_iter = item_store.iter_children(parent) if parent else item_store.get_iter_first()
-
-		while list_iter:
-			name = item_store.get_value(list_iter, Column.NAME)
-
-			if parent is not None:
-				name = os.path.split(name)[1]
-
-			# set emblems for item
-			if name in emblems:
-				item_store.set_value(list_iter, Column.EMBLEMS, emblems[name])
-
-			# get next item in list
-			list_iter = item_store.iter_next(list_iter)
 
 	def _update_emblems_by_name(self, name, parent=None, parent_path=None):
 		"""Update emblem list for specified iter in list."""

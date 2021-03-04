@@ -42,7 +42,19 @@ class MountsManager:
 
 	def _handle_mount_finish(self, mount, result, data=None):
 		"""Callback for mount events."""
-		mount.mount_finish(result)
+		try:
+			mount.mount_finish(result)
+
+		except GLib.Error as error:
+			dialog = Gtk.MessageDialog(
+									self._application,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.WARNING,
+									Gtk.ButtonsType.OK,
+									_('Unable to finish mounting:\n{}'.format(error.message))
+								)
+			dialog.run()
+			dialog.destroy()
 
 	def _handle_unmount_finish(self, mount, result, data=None):
 		"""Callback for unmount events."""

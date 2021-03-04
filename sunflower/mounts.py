@@ -58,11 +58,35 @@ class MountsManager:
 
 	def _handle_unmount_finish(self, mount, result, data=None):
 		"""Callback for unmount events."""
-		mount.unmount_finish(result)
+		try:
+			mount.unmount_finish(result)
+
+		except GLib.Error as error:
+			dialog = Gtk.MessageDialog(
+									self._application,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.WARNING,
+									Gtk.ButtonsType.OK,
+									_('Unable to finish unmounting:\n{}'.format(error.message))
+								)
+			dialog.run()
+			dialog.destroy()
 
 	def _handle_eject_finish(self, volume, result, data=None):
 		"""Callback for eject event."""
-		volume.eject_finish(result)
+		try:
+			volume.eject_finish(result)
+
+		except GLib.Error as error:
+			dialog = Gtk.MessageDialog(
+									self._application,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.WARNING,
+									Gtk.ButtonsType.OK,
+									_('Unable to finish ejecting:\n{}'.format(error.message))
+								)
+			dialog.run()
+			dialog.destroy()
 
 	def mount(self, volume):
 		"""Perform volume mount."""

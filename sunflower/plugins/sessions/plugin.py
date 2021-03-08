@@ -335,7 +335,7 @@ class SessionManager:
 		button_save.connect('clicked', self._save_session)
 
 		# pack interface elements
-		self._application.header_bar.pack_start(self._button)
+		self._application.header_bar.pack_end(self._button)
 		popover.add(vbox_popover)
 
 		hbox_buttons.pack_start(self._button_lock, True, False, 0)

@@ -1458,7 +1458,7 @@ class MainWindow(Gtk.ApplicationWindow):
 			# focus active notebook
 			active_notebook_index = self.options.get('active_notebook')
 			notebook = (self.left_notebook, self.right_notebook)[active_notebook_index]
-			notebook.grab_focus()
+			notebook.get_nth_page(notebook.get_current_page()).focus_main_object()
 
 	def create_tab(self, notebook, plugin_class=None, options=None):
 		"""Safe create tab"""

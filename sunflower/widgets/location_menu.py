@@ -155,6 +155,7 @@ class LocationMenu:
 		# open selected path in currently active list
 		if isinstance(self._active_object, ItemList):
 			self._active_object.change_path(selected_location.get_location())
+			self._active_object.focus_main_object()
 
 		return True
 

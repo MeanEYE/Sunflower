@@ -463,7 +463,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.commands_popover.set_position(Gtk.PositionType.BOTTOM)
 
 		vbox = Gtk.VBox.new(False, 5)
-		vbox.set_border_width(5)
+		vbox.set_border_width(10)
 		self.commands_popover.add(vbox)
 
 		window = Gtk.Viewport.new()

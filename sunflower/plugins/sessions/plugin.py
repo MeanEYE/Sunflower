@@ -288,7 +288,7 @@ class SessionManager:
 		self._button.connect('clicked', self._show_popover, popover)
 
 		vbox_popover = Gtk.VBox.new(False, 5)
-		vbox_popover.set_border_width(5)
+		vbox_popover.set_border_width(10)
 
 		# create session list storage
 		quick_search = Gtk.SearchEntry.new()

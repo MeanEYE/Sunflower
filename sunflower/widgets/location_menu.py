@@ -27,7 +27,7 @@ class LocationMenu:
 
 		# create widget container
 		container = Gtk.VBox.new(False, 0)
-		container.set_border_width(5)
+		container.set_border_width(10)
 
 		# create search field
 		self._search_field = Gtk.SearchEntry.new()
@@ -400,6 +400,7 @@ class Bookmark(Location):
 		self._subtitle.set_alignment(0, 0.5)
 		self._subtitle.set_use_markup(True)
 		self._subtitle.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
+		self._subtitle.set_opacity(0.5)
 
 		# pack user interface
 		title_container.pack_start(self._title, True, False, 0)

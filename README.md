@@ -35,7 +35,7 @@ And as usual testers are more than welcome. If you wish to help translate progra
 ### Staying in touch
 Preferred way of getting in touch with us is through [mailing list](https://groups.google.com/forum/#!forum/sunflower-fm).
 
-I like talking to people a lot so please feel free to contact me any time. You can always follow me on my [twitter account](http://twitter.com/MeanEYE_rcf) and [Reddit](https://www.reddit.com/user/MeanEYE). We also have IRC channel, `#sunflower` on `irc.freenode.org`.
+I like talking to people a lot so please feel free to contact me any time. You can always follow me on my [twitter account](http://twitter.com/MeanEYE_rcf) and [Reddit](https://www.reddit.com/user/MeanEYE). We also have IRC channel, `#sunflower` on `libera.chat`.
 
 ### Screenshots
 Check out [screenshots](http://sunflower-fm.org/screenshots).

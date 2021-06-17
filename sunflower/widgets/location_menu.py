@@ -53,6 +53,7 @@ class LocationMenu:
 		button_open = Gtk.Button.new_from_icon_name('document-open-symbolic', Gtk.IconSize.BUTTON)
 		button_open.connect('clicked', self.__handle_open_click)
 		button_open.set_tooltip_text(_('Open'))
+		button_open.get_style_context().add_class('suggested-action')
 		hbox_buttons.pack_start(button_open, False, False, 0)
 
 		button_open_tab = Gtk.Button.new_from_icon_name('tab-new-symbolic', Gtk.IconSize.BUTTON)

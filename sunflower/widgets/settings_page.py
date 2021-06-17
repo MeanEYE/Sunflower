@@ -26,7 +26,7 @@ class SettingsPage(Gtk.ScrolledWindow):
 		box = Gtk.VBox.new(False, 0)
 
 		# create section title
-		label_title = Gtk.Label.new('<b>{}</b>'.format(title))
+		label_title = Gtk.Label.new('<big>{}</big>'.format(title))
 		label_title.set_alignment(0, 0.5)
 		label_title.set_use_markup(True)
 		box.pack_start(label_title, True, False, 0)
@@ -42,7 +42,7 @@ class SettingsPage(Gtk.ScrolledWindow):
 		box = Gtk.VBox.new(False, 0)
 
 		# create section title
-		label_title = Gtk.Label.new('<b>{}</b>'.format(title))
+		label_title = Gtk.Label.new('<big>{}</big>'.format(title))
 		label_title.set_alignment(0, 0.5)
 		label_title.set_use_markup(True)
 		radio_title = Gtk.RadioButton.new_from_widget(group)

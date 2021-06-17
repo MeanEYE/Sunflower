@@ -28,19 +28,20 @@ class InputDialog:
 	"""
 
 	def __init__(self, application):
-		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
+		self._dialog = Gtk.MessageDialog(parent=application)
 
 		self._application = application
 
-		self._dialog.set_default_size(450, 10)
+		self._dialog.set_default_size(400, 10)
 		self._dialog.set_resizable(True)
 		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
 		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
-		self._container = Gtk.VBox(False, 0)
-		self._container.set_border_width(5)
+		# remove existing children
+		self._container = self._dialog.get_message_area()
+		self._container.foreach(lambda widget: self._container.remove(widget))
 
 		# create interface
 		vbox = Gtk.VBox(False, 0)
@@ -50,23 +51,23 @@ class InputDialog:
 		self._entry = Gtk.Entry()
 		self._entry.connect('activate', self._confirm_entry)
 
-		button_ok = Gtk.Button(stock=Gtk.STOCK_OK)
-		button_ok.connect('clicked', self._confirm_entry)
-		button_ok.set_can_default(True)
+		self._button_positive = Gtk.Button.new_with_label(_('OK'))
+		self._button_positive.connect('clicked', self._confirm_entry)
+		self._button_positive.get_style_context().add_class('suggested-action')
+		self._button_positive.set_can_default(True)
 
-		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
+		self._button_negative = Gtk.Button.new_with_label(_('Cancel'))
 
 		# pack interface
 		vbox.pack_start(self._label, False, False, 0)
 		vbox.pack_start(self._entry, False, False, 0)
 
-		self._container.pack_start(vbox, False, False, 0)
+		self._dialog.get_message_area().pack_start(vbox, False, False, 0)
 
-		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
-		self._dialog.add_action_widget(button_ok, Gtk.ResponseType.OK)
+		self._dialog.add_action_widget(self._button_negative, Gtk.ResponseType.CANCEL)
+		self._dialog.add_action_widget(self._button_positive, Gtk.ResponseType.OK)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
-		self._dialog.get_content_area().pack_start(self._container, True, True, 0)
 		self._dialog.show_all()
 
 	def _confirm_entry(self, widget, data=None):
@@ -205,17 +206,18 @@ class CreateDialog(InputDialog):
 		self._mode = 0o644
 		self._dialog_size = None
 
-		self._container.set_spacing(5)
-
 		# create advanced options expander
-		expander = Gtk.Expander.new(_('Advanced options'))
-		expander.connect('activate', self._expander_event)
-		expander.set_border_width(0)
+		advanced_box = Gtk.VBox.new(False, 0)
+		advanced_box.set_margin_top(10)
+		self._container.pack_start(advanced_box, True, True, 0)
 
-		self._advanced = Gtk.VBox(False, 5)
-		self._advanced.set_border_width(5)
+		label = Gtk.Label.new(_('<b>Advanced options:</b>'))
+		label.set_use_markup(True)
+		label.set_alignment(0, 0.5)
+		advanced_box.pack_start(label, False, False, 0)
 
 		table = Gtk.Table(4, 4, False)
+		advanced_box.pack_start(table, True, True, 0)
 
 		# create widgets
 		label = Gtk.Label(label=_('User:'))
@@ -281,28 +283,18 @@ class CreateDialog(InputDialog):
 		table.set_row_spacing(2, 10)
 
 		# create button for saving default configuration
-		image_save = Gtk.Image()
-		image_save.set_from_stock(Gtk.STOCK_SAVE, Gtk.IconSize.BUTTON)
-
-		button_save = Gtk.Button()
-		button_save.set_image(image_save)
+		button_save = Gtk.Button.new_from_icon_name('document-save-symbolic', Gtk.IconSize.BUTTON)
 		button_save.connect('clicked', self._save_configuration)
 		button_save.set_tooltip_text(_('Save as default configuration'))
+		button_save.show()
+		button_save.set_halign(Gtk.Align.END)
 
-		#TODO: Gtk.Alignment deprecated since version 3.14: Use Gtk.Widget alignment and margin properties
-		align_save = Gtk.Alignment.new(0,0,0,0)
-		align_save.add(button_save)
+		table.attach(button_save, 3, 4, 3, 4)
+
+		self._label.set_text('Test')
 
 		# pack interface
-		self._dialog.action_area.pack_start(align_save, True, True, 0)
-		self._dialog.action_area.set_child_secondary(align_save, True)
-
-		self._advanced.pack_start(table, False, False, 0)
-		expander.add(self._advanced)
-		self._container.pack_start(expander, False, False, 0)
-
-		expander.show_all()
-		align_save.show_all()
+		self._container.show_all()
 
 	def _save_configuration(self, widget=None, data=None):
 		"""Save default configuration for create dialog"""
@@ -440,7 +432,7 @@ class FileCreateDialog(CreateDialog):
 
 		# create template list
 		vbox_templates = Gtk.VBox(False, 0)
-		label_templates = Gtk.Label(label=_('Template:'))
+		label_templates = Gtk.Label.new(_('Template:'))
 		label_templates.set_alignment(0, 0.5)
 
 		self._templates = Gtk.ListStore(str, str, str)

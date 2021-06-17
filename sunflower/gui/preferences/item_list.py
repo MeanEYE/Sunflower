@@ -36,28 +36,21 @@ class ItemListOptions(SettingsPage):
 	def __init__(self, parent, application):
 		SettingsPage.__init__(self, parent, application, 'item_list', _('Item List'))
 
-		notebook = Gtk.Notebook()
-
-		# create frames
-		label_look_and_feel = Gtk.Label(label=_('Look & feel'))
-		label_hidden_files = Gtk.Label(label=_('Hidden files'))
-		label_operation = Gtk.Label(label=_('Operation'))
-		label_directories = Gtk.Label(label=_('Directories'))
-		label_columns = Gtk.Label(label=_('Columns'))
-
-		# vertical boxes
+		# section containers
 		vbox_look_and_feel = Gtk.VBox(False, 0)
-		vbox_hidden_files = Gtk.VBox(False, 0)
-		vbox_operation = Gtk.VBox(False, 0)
-		vbox_directory = Gtk.VBox(False, 0)
-		vbox_columns = Gtk.VBox(False, 0)
+		self._create_section(_('Look and feel'), vbox_look_and_feel)
 
-		vbox_look_and_feel.set_border_width(5)
-		vbox_hidden_files.set_border_width(5)
-		vbox_operation.set_border_width(5)
-		vbox_directory.set_border_width(5)
-		vbox_directory.set_spacing(5)
-		vbox_columns.set_border_width(5)
+		vbox_hidden_files = Gtk.VBox(False, 0)
+		self._create_section(_('Hidden files'), vbox_hidden_files)
+
+		vbox_operation = Gtk.VBox(False, 0)
+		self._create_section(_('Operation'), vbox_operation)
+
+		vbox_directory = Gtk.VBox(False, 0)
+		self._create_section(_('Directories'), vbox_directory)
+
+		vbox_columns = Gtk.VBox(False, 0)
+		self._create_section(_('Columns'), vbox_columns)
 
 		# file list options
 		self._checkbox_row_hinting = Gtk.CheckButton(_('Row hinting'))
@@ -395,14 +388,6 @@ class ItemListOptions(SettingsPage):
 		vbox_directory.pack_start(hbox_directory, False, False, 0)
 
 		vbox_columns.pack_start(hbox_columns, True, True, 0)
-
-		notebook.append_page(vbox_look_and_feel, label_look_and_feel)
-		notebook.append_page(vbox_hidden_files, label_hidden_files)
-		notebook.append_page(vbox_operation, label_operation)
-		notebook.append_page(vbox_directory, label_directories)
-		notebook.append_page(vbox_columns, label_columns)
-
-		self.pack_start(notebook, True, True, 0)
 
 	def __button_add_clicked(self, widget, data=None):
 		"""Handle clicking on add button"""

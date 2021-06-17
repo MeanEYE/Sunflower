@@ -12,7 +12,7 @@ class AssociationsOptions(SettingsPage):
 	"""Mime-type associations options extension class"""
 
 	def __init__(self, parent, application):
-		SettingsPage.__init__(self, parent, application, 'accelerators', _('Associations'))
+		SettingsPage.__init__(self, parent, application, 'associations', _('Associations'))
 
 		# create interface
 		container = Gtk.ScrolledWindow()

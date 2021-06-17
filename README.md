@@ -28,7 +28,7 @@ Check some of the plugins made by community:
 Plugins can be installed locally to: `~/.config/sunflower/user_plugins/<plugin_name>`
 
 ### How to contribute
-You can be a part of this project in many ways. We suggest posting on our mailing list or visiting our IRC channel on FreeNode and we'll try to help you get started.
+You can be a part of this project in many ways. We suggest posting on our mailing list or visiting our IRC channel #sunflower on Libera chat and we'll try to help you get started.
 
 And as usual testers are more than welcome. If you wish to help translate program to your language please join translation team(s) on [Transifex](http://transifex.com/projects/p/sunflower/).
 

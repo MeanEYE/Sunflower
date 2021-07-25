@@ -1369,13 +1369,11 @@ class FileList(ItemList):
 			path = path[len(self.path)+1:]
 
 		# get parent path
-		relative_path = path
 		parent_path = None
 
 		if parent is not None:
 			# form relative path for easier handling
 			parent_path = self._store.get_value(parent, Column.NAME)
-			relative_path = os.path.join(parent_path, path)
 
 		elif parent is None and os.path.sep in path:
 			# find parent for fallback monitor
@@ -1424,7 +1422,7 @@ class FileList(ItemList):
 				Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
 
 			else:
-				self._update_item_details_by_name(relative_path, parent)
+				self._update_item_details_by_name(path, parent, parent_path)
 
 		# node renamed
 		elif event is MonitorSignals.MOVED:
@@ -1446,28 +1444,25 @@ class FileList(ItemList):
 			if should_add and len(always_hidden) > 0:
 				should_add = other_path not in always_hidden
 
-			self._delete_item_by_name(relative_path, parent)
-
-			if other_path is None:
-				return
+			self._delete_item_by_name(path, parent)
 
 			if should_add:
 				self._add_item(other_path, parent, parent_path)
 				Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
 			else:
-				self._update_item_details_by_name(other_path, parent)
+				self._update_item_details_by_name(other_path, parent, parent_path)
 
 		# node deleted
 		elif event is MonitorSignals.DELETED:
-			self._delete_item_by_name(relative_path, parent)
+			self._delete_item_by_name(path, parent)
 
 		# node changed
 		elif event is MonitorSignals.CHANGED:
-			self._update_item_details_by_name(relative_path, parent)
+			self._update_item_details_by_name(path, parent, parent_path)
 
 		# attributes changes
 		elif event is MonitorSignals.ATTRIBUTE_CHANGED:
-			self._update_item_attributes_by_name(relative_path, parent)
+			self._update_item_attributes_by_name(path, parent, parent_path)
 
 		# emblem changes
 		elif event is MonitorSignals.EMBLEM_CHANGED:
@@ -1635,7 +1630,6 @@ class FileList(ItemList):
 
 		elif self._store.iter_has_child(parent):
 			found_iter = self._store.iter_children(parent)
-			relative_parent = parent
 			name = os.path.join(self._store.get_value(parent, Column.NAME), name)
 
 		# check all the iters for specified name
@@ -1813,7 +1807,7 @@ class FileList(ItemList):
 			# remove
 			self._store.remove(found_iter)
 
-	def _update_item_details_by_name(self, name, parent):
+	def _update_item_details_by_name(self, name, parent, parent_path):
 		"""Update item details (size, time, etc.) on changed event"""
 		found_iter = self._find_iter_by_name(name, parent)
 		provider = self.get_provider()
@@ -1821,7 +1815,8 @@ class FileList(ItemList):
 		if found_iter is not None:
 			# get node stats
 			is_dir = self._store.get_value(found_iter, Column.IS_DIR)
-			file_stat = provider.get_stat(name, relative_to=self.path)
+			path = self.path if parent_path is None else os.path.join(self.path, parent_path)
+			file_stat = provider.get_stat(name, relative_to=path)
 
 			file_size = file_stat.size
 			file_mode = file_stat.mode
@@ -1849,14 +1844,15 @@ class FileList(ItemList):
 			# regenerate sort data
 			self._generate_sort_data(iters=[found_iter,])
 
-	def _update_item_attributes_by_name(self, name, parent):
+	def _update_item_attributes_by_name(self, name, parent, parent_path):
 		"""Update item attributes column by name"""
 		found_iter = self._find_iter_by_name(name, parent)
 		provider = self.get_provider()
 
 		if found_iter is not None:
 			# get node stats
-			file_stat = provider.get_stat(name, relative_to=self.path)
+			path = self.path if parent_path is None else os.path.join(self.path, parent_path)
+			file_stat = provider.get_stat(name, relative_to=path)
 
 			file_mode = file_stat.mode
 			file_date = file_stat.time_modify

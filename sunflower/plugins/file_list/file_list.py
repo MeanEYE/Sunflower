@@ -1008,7 +1008,7 @@ class FileList(ItemList):
 				except IOError as error:
 					# problem renaming item
 					dialog = Gtk.MessageDialog(
-											self,
+											self._parent,
 											Gtk.DialogFlags.DESTROY_WITH_PARENT,
 											Gtk.MessageType.ERROR,
 											Gtk.ButtonsType.OK,

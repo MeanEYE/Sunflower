@@ -643,7 +643,7 @@ class ItemList(PluginBase):
 		else:
 			# invalid path, notify user
 			dialog = Gtk.MessageDialog(
-									self,
+									self._parent,
 									Gtk.DialogFlags.DESTROY_WITH_PARENT,
 									Gtk.MessageType.ERROR,
 									Gtk.ButtonsType.OK,

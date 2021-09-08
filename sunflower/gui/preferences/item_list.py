@@ -30,6 +30,11 @@ class Source:
 	CUSTOM = 2
 
 
+class ExecutableAction:
+	EXECUTE = 0
+	OPEN = 1
+
+
 class ItemListOptions(SettingsPage):
 	"""Options related to item lists"""
 
@@ -82,6 +87,16 @@ class ItemListOptions(SettingsPage):
 		self._combobox_mode_format.connect('changed', self._parent.enable_save)
 		self._combobox_mode_format.append(str(AccessModeFormat.OCTAL), _('Octal'))
 		self._combobox_mode_format.append(str(AccessModeFormat.TEXTUAL), _('Textual'))
+
+		# action when executable files are activated
+		hbox_executable_action = Gtk.HBox(False, 5)
+		label_executable_action = Gtk.Label(label=_('Action on executable files:'))
+		label_executable_action.set_alignment(0, 0.5)
+
+		self._combobox_executable_action = Gtk.ComboBoxText.new()
+		self._combobox_executable_action.connect('changed', self._parent.enable_save)
+		self._combobox_executable_action.append(str(ExecutableAction.EXECUTE), _('Run them'))
+		self._combobox_executable_action.append(str(ExecutableAction.OPEN), _('Open them'))
 
 		# grid lines
 		hbox_grid_lines = Gtk.HBox(False, 5)
@@ -357,6 +372,9 @@ class ItemListOptions(SettingsPage):
 		hbox_mode_format.pack_start(label_mode_format, False, False, 0)
 		hbox_mode_format.pack_start(self._combobox_mode_format, False, False, 0)
 
+		hbox_executable_action.pack_start(label_executable_action, False, False, 0)
+		hbox_executable_action.pack_start(self._combobox_executable_action, False, False, 0)
+
 		hbox_grid_lines.pack_start(label_grid_lines, False, False, 0)
 		hbox_grid_lines.pack_start(self._combobox_grid_lines, False, False, 0)
 
@@ -380,6 +398,7 @@ class ItemListOptions(SettingsPage):
 		vbox_operation.pack_start(self._checkbox_single_click, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_right_click, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_second_extension, False, False, 0)
+		vbox_operation.pack_start(hbox_executable_action, False, False, 5)
 		vbox_operation.pack_start(hbox_quick_search, False, False, 5)
 		vbox_operation.pack_start(vbox_time_format, False, False, 5)
 
@@ -645,6 +664,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_case_sensitive.set_active(section.get('case_sensitive_sort'))
 		self._checkbox_number_sensitive.set_active(section.get('number_sensitive_sort'))
 		self._checkbox_single_click.set_active(section.get('single_click_navigation'))
+		self._combobox_executable_action.set_active(section.get('executable_action'))
 		self._checkbox_right_click.set_active(section.get('right_click_select'))
 		self._checkbox_show_headers.set_active(section.get('headers_visible'))
 		self._checkbox_media_preview.set_active(options.get('media_preview'))
@@ -696,6 +716,7 @@ class ItemListOptions(SettingsPage):
 		section.set('case_sensitive_sort', self._checkbox_case_sensitive.get_active())
 		section.set('number_sensitive_sort', self._checkbox_number_sensitive.get_active())
 		section.set('single_click_navigation', self._checkbox_single_click.get_active())
+		section.set('executable_action', self._combobox_executable_action.get_active())
 		section.set('right_click_select', self._checkbox_right_click.get_active())
 		section.set('headers_visible', self._checkbox_show_headers.get_active())
 		options.set('media_preview', self._checkbox_media_preview.get_active())

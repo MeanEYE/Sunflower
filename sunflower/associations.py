@@ -12,6 +12,7 @@ from sunflower.parameters import Parameters
 from sunflower.plugin_base.provider import Mode
 from sunflower.plugin_base.terminal import TerminalType
 from sunflower.gui.input_dialog import ApplicationSelectDialog
+from sunflower.gui.preferences.item_list import ExecutableAction
 
 
 ApplicationInfo = namedtuple(
@@ -277,6 +278,7 @@ class AssociationManager:
 		"""Execute specified item properly."""
 		mime_type = self.get_mime_type(path)
 		terminal_type = self._application.options.section('terminal').get('type')
+		executable_action = self._application.options.section('item_list').get('executable_action')
 		should_execute = False
 
 		if provider is not None and provider.is_local:
@@ -288,6 +290,9 @@ class AssociationManager:
 			if self.is_mime_type_unknown(mime_type):
 				data = self.get_sample_data(path, provider)
 				mime_type = self.get_mime_type(data=data)
+
+		if executable_action != ExecutableAction.EXECUTE:
+			should_execute = False
 
 		if Gio.content_type_can_be_executable(mime_type) and should_execute:
 			# file type is executable

@@ -177,7 +177,8 @@ class PopupMenu:
 
 	def prepare(self, path):
 		"""Allow popup to prepare for provided path."""
-		pass
+		print('came')
+		self.__populate_open_with_menu()
 
 	def show(self, widget, position, page='main'):
 		"""Show menu `relative_to` rectangle."""

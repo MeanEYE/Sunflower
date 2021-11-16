@@ -40,11 +40,11 @@ class ItemListOptions(SettingsPage):
 		vbox_look_and_feel = Gtk.VBox(False, 0)
 		self._create_section(_('Look and feel'), vbox_look_and_feel)
 
-		vbox_hidden_files = Gtk.VBox(False, 0)
-		self._create_section(_('Hidden files'), vbox_hidden_files)
-
 		vbox_operation = Gtk.VBox(False, 0)
 		self._create_section(_('Operation'), vbox_operation)
+
+		vbox_hidden_files = Gtk.VBox(False, 0)
+		self._create_section(_('Hidden files'), vbox_hidden_files)
 
 		vbox_directory = Gtk.VBox(False, 0)
 		self._create_section(_('Directories'), vbox_directory)
@@ -96,16 +96,12 @@ class ItemListOptions(SettingsPage):
 		self._combobox_grid_lines.append(str(Gtk.TreeViewGridLines.BOTH), _('Both'))
 
 		# selection color
-		hbox_selection_color = Gtk.HBox(False, 5)
-
-		label_selection_color = Gtk.Label(label=_('Selection color:'))
-		label_selection_color.set_alignment(0, 0.5)
-
 		self._button_selection_color = Gtk.ColorButton()
 		self._button_selection_color.set_use_alpha(False)
 		self._button_selection_color.connect('color-set', self._parent.enable_save)
 
 		# selection indicator
+		vbox_indicator = Gtk.VBox(False, 0)
 		hbox_indicator = Gtk.HBox(False, 5)
 
 		label_indicator = Gtk.Label(label=_('Selection indicator:'))
@@ -113,7 +109,6 @@ class ItemListOptions(SettingsPage):
 
 		self._combobox_indicator = Gtk.ComboBoxText.new_with_entry()
 		self._combobox_indicator.connect('changed', self._parent.enable_save)
-		self._combobox_indicator.set_size_request(100, -1)
 		self._combobox_indicator.append_text(u'\u25b6',)
 		self._combobox_indicator.append_text(u'\u25e2',)
 		self._combobox_indicator.append_text(u'\u25c8',)
@@ -156,6 +151,7 @@ class ItemListOptions(SettingsPage):
 		container_always_visible = Gtk.ScrolledWindow()
 		container_always_visible.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 		container_always_visible.set_shadow_type(Gtk.ShadowType.IN)
+		container_always_visible.set_size_request(-1, 200)
 
 		label_always_visible = Gtk.Label(label=_('Always visible files and directories:'))
 		label_always_visible.set_alignment(0, 0.5)
@@ -181,6 +177,7 @@ class ItemListOptions(SettingsPage):
 		container_directory = Gtk.ScrolledWindow()
 		container_directory.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 		container_directory.set_shadow_type(Gtk.ShadowType.IN)
+		container_directory.set_size_request(-1, 200)
 
 		self._checkbox_load_directories = Gtk.CheckButton(_('Load specified tabs instead of saved'))
 		self._checkbox_load_directories.connect('toggled', self._parent.enable_save)
@@ -255,6 +252,7 @@ class ItemListOptions(SettingsPage):
 		container_columns = Gtk.ScrolledWindow()
 		container_columns.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 		container_columns.set_shadow_type(Gtk.ShadowType.IN)
+		container_columns.set_size_request(-1, 200)
 
 		container_plugin = Gtk.ScrolledWindow()
 		container_plugin.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
@@ -343,11 +341,10 @@ class ItemListOptions(SettingsPage):
 		hbox_columns.pack_start(container_plugin, False, False, 0)
 		hbox_columns.pack_start(container_columns, True, True, 0)
 
-		hbox_indicator.pack_start(label_indicator, False, False, 0)
+		vbox_indicator.pack_start(label_indicator, False, False, 0)
+		vbox_indicator.pack_start(hbox_indicator, False, False, 0)
+		hbox_indicator.pack_start(self._button_selection_color, False, False, 0)
 		hbox_indicator.pack_start(self._combobox_indicator, False, False, 0)
-
-		hbox_selection_color.pack_start(label_selection_color, False, False, 0)
-		hbox_selection_color.pack_start(self._button_selection_color, False, False, 0)
 
 		hbox_quick_search.pack_start(label_quick_search, False, False, 0)
 		hbox_quick_search.pack_start(self._checkbox_control, False, False, 0)
@@ -369,8 +366,7 @@ class ItemListOptions(SettingsPage):
 		vbox_look_and_feel.pack_start(self._checkbox_show_expanders, False, False, 0)
 		vbox_look_and_feel.pack_start(hbox_mode_format, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_grid_lines, False, False, 5)
-		vbox_look_and_feel.pack_start(hbox_selection_color, False, False, 5)
-		vbox_look_and_feel.pack_start(hbox_indicator, False, False, 5)
+		vbox_look_and_feel.pack_start(vbox_indicator, False, False, 5)
 
 		vbox_hidden_files.pack_start(self._checkbox_show_hidden, False, False, 0)
 		vbox_hidden_files.pack_start(table_always_visible, True, True, 0)

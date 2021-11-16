@@ -42,7 +42,7 @@ class IconManager:
 			}
 
 		# add all directories
-		for directory in icon_names.keys():
+		for directory in icon_names:
 			full_path = get_user_directory(directory)
 			icon_name = icon_names[directory]
 
@@ -67,7 +67,7 @@ class IconManager:
 		"""Get icon sizes for specified name"""
 		return self._icon_theme.get_icon_sizes(icon_name)
 
-	def get_icon_for_file(self, filename, size=Gtk.IconSize.MENU):
+	def get_icon_for_file(self, filename):
 		"""Load icon for specified file"""
 		result = self._default_file
 		mime_type = self._parent.associations_manager.get_mime_type(filename)
@@ -87,7 +87,7 @@ class IconManager:
 
 		return result
 
-	def get_icon_for_directory(self, path, size=Gtk.IconSize.MENU):
+	def get_icon_for_directory(self, path):
 		"""Get icon for specified directory"""
 		result = self._default_directory
 
@@ -129,4 +129,3 @@ class IconManager:
 		else:
 			base_path = get_static_assets_directory()
 			window.set_icon_from_file(os.path.join(base_path, 'images', 'sunflower.svg'))
-

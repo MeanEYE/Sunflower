@@ -93,11 +93,12 @@ def get_static_assets_directory():
 	"""Return path to directory that holds static files"""
 	script_dir = os.path.join(os.path.dirname(__file__), '..')
 	prefix_dir = os.path.join(sys.prefix, 'share', 'sunflower')
+	result = prefix_dir
 
 	if os.path.exists(os.path.join(script_dir, 'images', 'sunflower.svg')):
-		return script_dir
-	else:
-		return prefix_dir
+		result = script_dir
+
+	return result
 
 def get_cache_directory():
 	"""Get full path to cache files for curring user."""
@@ -110,27 +111,27 @@ def get_cache_directory():
 
 def get_config_directory():
 	"""Get full path to configuration files for current user."""
+	result = os.path.expanduser('~/.config')
+
 	if 'XDG_CONFIG_HOME' in os.environ:
 		result = os.path.abspath(os.environ['XDG_CONFIG_HOME'])
-	else:
-		result = os.path.expanduser('~/.config')
 
 	return result
 
 def get_config_path():
 	"""Get path to configuration files"""
 	config_directory = get_config_directory()
+	result = os.path.expanduser('~/.sunflower')
+
 	if os.path.isdir(config_directory):
 		return os.path.join(config_directory, 'sunflower')
-	else:
-		return os.path.expanduser('~/.sunflower')
 
 def get_data_directory():
 	"""Get full path to user data files."""
+	result = os.path.expanduser('~/.local', 'share')
+
 	if 'XDG_DATA_HOME' in os.environ:
 		result = os.path.abspath(os.environ['XDG_DATA_HOME'])
-	else:
-		result = os.path.expanduser('~/.local', 'share')
 
 	return result
 
@@ -157,7 +158,6 @@ def get_user_directory(directory):
 
 def is_gui_app(command):
 	"""Checks if command uses graphical user interfaces."""
-	# TODO: Add check for Wayland
 	try:
 		env = os.environ.copy()
 		env.update({'LD_TRACE_LOADED_OBJECTS': '1'})
@@ -171,7 +171,7 @@ def is_gui_app(command):
 		# report error to user
 		raise error
 
-	libraries = (b'libX11.so', b'libvlc.so')
+	libraries = (b'libX11.so', b'libvlc.so', 'libwayland-client.so')
 	matching = [library for library in libraries if library in output[0]]
 
 	return len(matching) > 0
@@ -183,7 +183,6 @@ def executable_exists(command):
 	found_commands = [path for path in search_paths if os.path.exists(os.path.join(path, command))]
 
 	return len(found_commands) > 0
-
 
 def load_translation():
 	"""Load translation and install global functions"""
@@ -224,14 +223,18 @@ def encode_file_name(file_name):
 	return str(file_name).encode('utf-8', 'surrogateescape')
 
 def get_monospace_font_string():
+	"""Return monospace font name."""
 	global MONOSPACE_FONT_STRING
+
 	if MONOSPACE_FONT_STRING is None:
 		schema = Gio.SettingsSchemaSource.get_default()
 		gnome_interface = schema.lookup('org.gnome.desktop.interface',True)
+
 		if gnome_interface is None:
 			# not in gnome desktop environment, use 'monospace'
 			MONOSPACE_FONT_STRING = 'monospace'
 		else:
 			settings = Gio.Settings.new('org.gnome.desktop.interface')
 			MONOSPACE_FONT_STRING = settings.get_string('monospace-font-name')
+
 	return MONOSPACE_FONT_STRING

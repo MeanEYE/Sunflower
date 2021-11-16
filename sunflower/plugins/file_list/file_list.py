@@ -468,10 +468,7 @@ class FileList(ItemList):
 			response = dialog.get_response()
 
 			if response[0] == Gtk.ResponseType.OK:
-				self._parent.associations_manager.open_file(
-														selection,
-														exec_command=response[2]
-													)
+				self._parent.associations_manager.open_file(selection, exec_command=response[2])
 
 		else:
 			# invalid selection, warn user
@@ -520,7 +517,6 @@ class FileList(ItemList):
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
 
 		if is_dir:
-			# selected item is directory, we need to change path
 			if is_parent:
 				# call specialized change path method
 				self._parent_directory(widget, data)

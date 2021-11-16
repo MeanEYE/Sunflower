@@ -398,11 +398,7 @@ class FileList(ItemList):
 	def _handle_tab_close(self):
 		"""Handle tab closing"""
 		ItemList._handle_tab_close(self)
-
-		# cancel current directory monitor
 		self.cancel_monitors()
-
-		# cancel disk usage calculations
 		self._parent.disk_usage.cancel_all_for_object(self)
 
 	def _handle_emblem_toggle(self, widget, emblem=None):

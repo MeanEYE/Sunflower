@@ -389,18 +389,8 @@ class FileList(ItemList):
 
 		# show preview if thumbnail exists
 		if self._thumbnail_view.can_have_thumbnail(uri):
-			# calculate position for preview
-			path = self._store.get_path(selected_iter)
-			column = self._item_list.get_column(0)
-			position = self._item_list.get_cell_area(path, column)
-			position.width = self._item_list.get_allocated_width()
-			position.x, position.y = self._item_list.convert_tree_to_widget_coords(position.x, position.y)
-
-			# show preivew in specified location
-			self._thumbnail_view.show_thumbnail(uri, widget, position)
-
+			self._thumbnail_view.show_thumbnail(uri, widget, self._get_selection_rectangle())
 		else:
-			# hide preview if item thumbnail is not available
 			self._thumbnail_view.hide()
 
 		return True

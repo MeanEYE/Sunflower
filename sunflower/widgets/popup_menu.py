@@ -184,14 +184,13 @@ class PopupMenu:
 		associations_manager = self._application.associations_manager
 		mime_type = associations_manager.get_mime_type(path)
 
-		print(mime_type)
-
 		# try to detect by content
 		if associations_manager.is_mime_type_unknown(mime_type):
-			data = associations_manager.get_sample_data(path, provider)
-			mime_type = associations_manager.get_mime_type(data=data)
-
-		print(mime_type)
+			try:
+				data = associations_manager.get_sample_data(path, provider)
+				mime_type = associations_manager.get_mime_type(data=data)
+			except IsADirectoryError:
+				mime_type = 'inode/directory'
 
 		self.__update_emblem_selection(path)
 		self.__populate_open_with_menu(path, mime_type)

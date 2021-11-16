@@ -114,9 +114,13 @@ class PopupMenu:
 
 			self._emblems.add(image)
 
-	def __populate_open_with_menu(self):
-		"""Populate submenu for application selection."""
+	def __update_emblem_selection(self, path):
+		"""Update which emblems are selected for provided path."""
 		pass
+
+	def __populate_open_with_menu(self, path, mime_type):
+		"""Populate submenu for application selection."""
+		container = self._stack.get_child_by_name('open-with')
 
 	def __handle_popover_open(self):
 		"""Handle popover opening."""
@@ -175,10 +179,22 @@ class PopupMenu:
 
 		return container
 
-	def prepare(self, path):
+	def prepare(self, path, provider):
 		"""Allow popup to prepare for provided path."""
-		print('came')
-		self.__populate_open_with_menu()
+		associations_manager = self._application.associations_manager
+		mime_type = associations_manager.get_mime_type(path)
+
+		print(mime_type)
+
+		# try to detect by content
+		if associations_manager.is_mime_type_unknown(mime_type):
+			data = associations_manager.get_sample_data(path, provider)
+			mime_type = associations_manager.get_mime_type(data=data)
+
+		print(mime_type)
+
+		self.__update_emblem_selection(path)
+		self.__populate_open_with_menu(path, mime_type)
 
 	def show(self, widget, position, page='main'):
 		"""Show menu `relative_to` rectangle."""

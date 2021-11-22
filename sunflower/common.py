@@ -171,7 +171,7 @@ def is_gui_app(command):
 		# report error to user
 		raise error
 
-	libraries = (b'libX11.so', b'libvlc.so', 'libwayland-client.so')
+	libraries = (b'libX11.so', b'libvlc.so', b'libwayland-client.so')
 	matching = [library for library in libraries if library in output[0]]
 
 	return len(matching) > 0

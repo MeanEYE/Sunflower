@@ -113,8 +113,6 @@ class ItemList(PluginBase):
 		self._item_list.set_search_entry(self._search_entry)
 
 		# popup menu
-		self._open_with_item = None
-		self._open_with_menu = None
 		self._popup_menu = PopupMenu(self._parent, self)
 
 		# create free space indicator in context menu
@@ -157,10 +155,6 @@ class ItemList(PluginBase):
 		# add containers to context menu
 		self._title_bar.context_menu.add_control(vbox_free_space)
 		self._title_bar.context_menu.add_control(hbox_buttons)
-
-		# emblem menu
-		self._emblem_menu = Gtk.Menu()
-		self._prepare_emblem_menu()
 
 		# pack gui
 		self.pack_start(self._container, True, True, 0)
@@ -372,6 +366,7 @@ class ItemList(PluginBase):
 
 	def _show_emblem_menu(self, widget, data=None):
 		"""Show quick emblem selection menu."""
+		self._popup_menu.prepare(self._get_selection(), self.get_provider())
 		self._popup_menu.show(self._item_list, self._get_selection_rectangle(), page='emblems')
 		return True
 
@@ -643,7 +638,7 @@ class ItemList(PluginBase):
 		else:
 			# invalid path, notify user
 			dialog = Gtk.MessageDialog(
-									self,
+									self._parent,
 									Gtk.DialogFlags.DESTROY_WITH_PARENT,
 									Gtk.MessageType.ERROR,
 									Gtk.ButtonsType.OK,
@@ -911,6 +906,8 @@ class ItemList(PluginBase):
 		tree_rect = self._item_list.get_visible_rect()
 
 		rectangle.x, rectangle.y = self._item_list.convert_tree_to_widget_coords(rectangle.x, rectangle.y)
+		rectangle.y += tree_rect.y
+		rectangle.x += tree_rect.x
 
 		# grab cell and tree rectangles
 		return rectangle
@@ -949,21 +946,15 @@ class ItemList(PluginBase):
 
 		return result
 
-	def _prepare_popup_menu(self):
-		"""Prepare popup menu contents"""
-		self._popup_menu.prepare('')
-
-	def _prepare_emblem_menu(self):
-		"""Prepare emblem menu."""
-		self._popup_menu.prepare('')
-
 	def _show_open_with_menu(self, widget, data=None):
-		"""Show 'open with' menu"""
+		"""Show list of applications capable of opening selected file."""
+		self._popup_menu.prepare(self._get_selection(), self.get_provider())
 		self._popup_menu.show(self._item_list, self._get_selection_rectangle(), page='open-with')
 		return True
 
 	def _show_popup_menu(self, widget=None, data=None):
 		"""Show options related to currently highlighted item."""
+		self._popup_menu.prepare(self._get_selection(), self.get_provider())
 		self._popup_menu.show(self._item_list, self._get_selection_rectangle())
 		return True
 

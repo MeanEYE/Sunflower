@@ -1883,6 +1883,7 @@ class MainWindow(Gtk.ApplicationWindow):
 					'number_sensitive_sort': False,
 					'right_click_select': False,
 					'single_click_navigation': False,
+					'executable_action': 0,
 					'headers_visible': True,
 					'mode_format': 1,
 					'left_directories': [],

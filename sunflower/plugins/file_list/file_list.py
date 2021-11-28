@@ -389,18 +389,8 @@ class FileList(ItemList):
 
 		# show preview if thumbnail exists
 		if self._thumbnail_view.can_have_thumbnail(uri):
-			# calculate position for preview
-			path = self._store.get_path(selected_iter)
-			column = self._item_list.get_column(0)
-			position = self._item_list.get_cell_area(path, column)
-			position.width = self._item_list.get_allocated_width()
-			position.x, position.y = self._item_list.convert_tree_to_widget_coords(position.x, position.y)
-
-			# show preivew in specified location
-			self._thumbnail_view.show_thumbnail(uri, widget, position)
-
+			self._thumbnail_view.show_thumbnail(uri, widget, self._get_selection_rectangle())
 		else:
-			# hide preview if item thumbnail is not available
 			self._thumbnail_view.hide()
 
 		return True
@@ -408,11 +398,7 @@ class FileList(ItemList):
 	def _handle_tab_close(self):
 		"""Handle tab closing"""
 		ItemList._handle_tab_close(self)
-
-		# cancel current directory monitor
 		self.cancel_monitors()
-
-		# cancel disk usage calculations
 		self._parent.disk_usage.cancel_all_for_object(self)
 
 	def _handle_emblem_toggle(self, widget, emblem=None):
@@ -482,10 +468,7 @@ class FileList(ItemList):
 			response = dialog.get_response()
 
 			if response[0] == Gtk.ResponseType.OK:
-				self._parent.associations_manager.open_file(
-														selection,
-														exec_command=response[2]
-													)
+				self._parent.associations_manager.open_file(selection, exec_command=response[2])
 
 		else:
 			# invalid selection, warn user
@@ -534,7 +517,6 @@ class FileList(ItemList):
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
 
 		if is_dir:
-			# selected item is directory, we need to change path
 			if is_parent:
 				# call specialized change path method
 				self._parent_directory(widget, data)
@@ -1008,7 +990,7 @@ class FileList(ItemList):
 				except IOError as error:
 					# problem renaming item
 					dialog = Gtk.MessageDialog(
-											self,
+											self._parent,
 											Gtk.DialogFlags.DESTROY_WITH_PARENT,
 											Gtk.MessageType.ERROR,
 											Gtk.ButtonsType.OK,
@@ -1136,108 +1118,6 @@ class FileList(ItemList):
 					result.append(selection)
 
 		return result
-
-	def _prepare_popup_menu(self):
-		"""Populate pop-up menu items"""
-		selection = self._item_list.get_selection()
-		item_list, selected_iter = selection.get_selected()
-		associations_manager = self._parent.associations_manager
-		menu_manager = self._parent.menu_manager
-		if selected_iter is None:
-			cursor_path, focus_column = self._item_list.get_cursor()
-			selected_iter = item_list.get_iter(cursor_path)
-
-		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
-		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
-
-		# get selected item
-		filename = self._get_selection()
-		selection = self._get_selection_list()
-
-		# detect mime type
-		if is_dir:
-			mime_type = 'inode/directory'
-
-		else:
-			mime_type = associations_manager.get_mime_type(filename)
-
-			# try to detect by content
-			if associations_manager.is_mime_type_unknown(mime_type):
-				data = associations_manager.get_sample_data(filename, self.get_provider())
-				mime_type = associations_manager.get_mime_type(data=data)
-
-		# call parent method which removes existing menu items
-		ItemList._prepare_popup_menu(self)
-
-		# update additional options menu
-		additional_options = menu_manager.get_additional_options_for_type(mime_type, selection, self.get_provider())
-		for menu_item in additional_options:
-			self._additional_options_menu.append(menu_item)
-
-		# get associated applications
-		program_list = menu_manager.get_items_for_type(mime_type, selection)
-		custom_list = menu_manager.get_custom_items_for_type(mime_type, selection)
-
-		# create open with menu
-		for menu_item in program_list:
-			self._open_with_menu.append(menu_item)
-
-		# add separator if there are other menu items
-		if len(program_list) > 0:
-			separator = Gtk.SeparatorMenuItem()
-			separator.show()
-			self._open_with_menu.append(separator)
-
-		# add custom menu items if needed
-		if len(custom_list) > 0:
-			for menu_item in custom_list:
-				self._open_with_menu.append(menu_item)
-
-			# add separator if needed
-			if len(program_list) > 0:
-				separator = Gtk.SeparatorMenuItem()
-				separator.show()
-				self._open_with_menu.append(separator)
-
-		# create an option for opening selection with custom command
-		open_with_other = Gtk.MenuItem(_('Other application...'))
-		open_with_other.connect('activate', self._execute_with_application)
-		open_with_other.show()
-
-		self._open_with_menu.append(open_with_other)
-
-		# disable/enable items
-		self._open_with_item.set_sensitive(not is_parent)
-		self._open_new_tab_item.set_visible(is_dir)
-		self._additional_options_item.set_sensitive(len(additional_options) > 0)
-		self._cut_item.set_sensitive(not is_parent)
-		self._copy_item.set_sensitive(not is_parent)
-		self._paste_item.set_sensitive(self._parent.is_clipboard_item_list())
-		self._send_to_item.set_sensitive(self.get_provider().is_local and not is_parent)
-		self._rename_item.set_sensitive(not is_parent)
-		self._delete_item.set_sensitive(not is_parent)
-		self._properties_item.set_sensitive(not is_parent)
-
-	def _prepare_emblem_menu(self):
-		"""Prepare emblem menu."""
-		# TODO: Remove. Deprecated.
-		emblem_list = self._parent.emblem_manager.get_available_emblems()
-
-		for emblem in emblem_list:
-			# create image
-			image = Gtk.Image()
-			image.set_from_icon_name(emblem, Gtk.IconSize.MENU)
-
-			# create menu item
-			menu_item = Gtk.ImageMenuItem(emblem)
-			menu_item.set_image(image)
-			menu_item.set_always_show_image(True)
-			menu_item.connect('activate', self._handle_emblem_toggle, emblem)
-
-			# add emblem to menu
-			self._emblem_menu.append(menu_item)
-
-		self._emblem_menu.show_all()
 
 	def _get_popup_menu_position(self, menu=None, *args):
 		"""Positions menu properly for given row"""

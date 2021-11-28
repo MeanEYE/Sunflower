@@ -23,20 +23,19 @@ from __future__ import absolute_import, print_function
 import os
 import sys
 
-
 try:
 	# check if gtk is available
 	import gi
 	gi.require_version('Gtk', '3.0')
 
-except:
+except ValueError:
 	# print error and die
 	print('Error starting Sunflower, missing GTK 3.0+')
 	sys.exit(1)
 
 else:
 	# import required modules
-	from gi.repository import Gtk, Gdk, GObject, Gio, GLib
+	from gi.repository import Gtk, Gio, GLib
 
 
 from sunflower import common
@@ -44,7 +43,8 @@ from sunflower.config import Config
 from sunflower.gui.main_window import MainWindow
 
 
-class Arguments(object):
+class Arguments:
+	"""Command line arguments."""
 	def __init__(self):
 		self.dont_load_plugins = False
 		self.dont_load_tabs = False
@@ -56,10 +56,12 @@ class Arguments(object):
 
 
 class Sunflower(Gtk.Application):
+	"""Main application class."""
 	application_id = 'org.sunflower'
 
 	def __init__(self):
 		self.window = None
+		self.arguments = None
 
 		# temporary loading config to find multiple_instances setting
 		options = Config('config', common.get_config_path())

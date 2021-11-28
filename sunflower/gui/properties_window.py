@@ -382,7 +382,6 @@ class PropertiesWindow(Gtk.Window):
 					self._application.emblem_manager.remove_emblem,
 					self._application.emblem_manager.add_emblem
 				)[is_selected]
-
 		path, item_name = os.path.split(self._path)
 		update_method(path, item_name, emblem)
 
@@ -392,7 +391,6 @@ class PropertiesWindow(Gtk.Window):
 
 		if parent_path == self._provider.get_root_path(parent_path):
 			item_path = self._path[len(parent_path):]
-
 		else:
 			item_path = self._path[len(parent_path) + 1:]
 

@@ -20,7 +20,7 @@ class PopupMenu:
 		self._popover.set_border_width(5)
 		self._popover.set_size_request(250, -1)
 		self._popover.set_modal(True)
-		# self._popover.connect('closed', self.__handle_popover_close)
+		self._popover.connect('closed', self.__handle_popover_close)
 
 		left_object = application.get_left_object()
 		self._popover.set_position(Gtk.PositionType.RIGHT if plugin is left_object else Gtk.PositionType.LEFT)
@@ -151,21 +151,21 @@ class PopupMenu:
 		"""Handle popover opening."""
 		self._popover_visible = True
 
-		# disable plugin accelerators
-		groups = self._application.accelerator_manager.get_groups()
-		for group_name in groups:
-			group = self._application.accelerator_manager._get_group_by_name(group_name)
-			group.deactivate()
+		# # disable plugin accelerators
+		# groups = self._application.accelerator_manager.get_groups()
+		# for group_name in groups:
+		# 	group = self._application.accelerator_manager._get_group_by_name(group_name)
+		# 	group.deactivate()
 
 	def __handle_popover_close(self, widget, data=None):
 		"""Handle popover closing."""
 		self._popover_visible = False
 
-		# enable plugin accelerators
-		groups = self._application.accelerator_manager.get_groups()
-		for group_name in groups:
-			group = self._application.accelerator_manager._get_group_by_name(group_name)
-			group.activate(self._application)
+		# # enable plugin accelerators
+		# groups = self._application.accelerator_manager.get_groups()
+		# for group_name in groups:
+		# 	group = self._application.accelerator_manager._get_group_by_name(group_name)
+		# 	group.activate(self._application)
 
 		# remove references to help clear memory
 		self._provider = None
@@ -251,8 +251,10 @@ class PopupMenu:
 
 	def show(self, widget, position, page='main'):
 		"""Show menu relative to provided rectangle."""
-		# self.__handle_popover_open()
+		self.__handle_popover_open()
 		self._popover.set_relative_to(widget)
 		self._popover.set_pointing_to(position)
 		self._stack.set_visible_child_name(page)
 		self._popover.popup()
+
+	visible = property(lambda self: self._popover_visible)

@@ -426,6 +426,10 @@ class FileList(ItemList):
 		selection = self._item_list.get_selection()
 		item_list, selected_iter = selection.get_selected()
 
+		# don't override key strokes for popup menus
+		if self._popup_menu.visible:
+			return False
+
 		# we need selection for this
 		if selected_iter is None:
 			return
@@ -454,7 +458,6 @@ class FileList(ItemList):
 
 		else:
 			# selected item is just a file, execute it
-			selected_file = self._get_selection()
 			self._parent.associations_manager.execute_file(selected_file, provider=self.get_provider())
 
 		return True  # to prevent command or quick search in single key bindings

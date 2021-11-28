@@ -19,10 +19,10 @@ class LocationMenu:
 		self._assigned = {}
 
 		# create popover interface
+		self._popover_visible = False
 		self._popover = Gtk.Popover.new()
 		self._popover.set_position(Gtk.PositionType.BOTTOM)
 		self._popover.set_modal(True)
-		self._popover_visible = False
 		self._popover.connect('closed', self.__handle_popover_close)
 
 		# create widget container

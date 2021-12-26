@@ -9,14 +9,14 @@
 # Leopoldo Cendejas Pedraza <dev.leopold@gmail.com>, 2016
 # Mladen Mijatov <meaneye.rcf@gmail.com>, 2015
 # Samuel Santana Medina <ssantana@gmx.com>, 2015-2016
-# Toni Estévez <toni.estevez@gmail.com>, 2019-2020
+# Toni Estévez <toni.estevez@gmail.com>, 2019-2021
 msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-22 19:44+0100\n"
-"PO-Revision-Date: 2021-12-22 18:44+0000\n"
-"Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
+"PO-Revision-Date: 2021-12-26 09:38+0000\n"
+"Last-Translator: Toni Estévez <toni.estevez@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/way2cu/sunflower/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -521,7 +521,7 @@ msgstr "Listas"
 
 #: sunflower/gui/preferences/item_list.py:46
 msgid "Look and feel"
-msgstr ""
+msgstr "Apariencia"
 
 #: sunflower/gui/preferences/item_list.py:52
 msgid "Hidden files"
@@ -585,15 +585,15 @@ msgstr "Textual"
 
 #: sunflower/gui/preferences/item_list.py:93
 msgid "Action on executable files:"
-msgstr ""
+msgstr "Acción sobre los archivos ejecutables:"
 
 #: sunflower/gui/preferences/item_list.py:98
 msgid "Run them"
-msgstr ""
+msgstr "Ejecutarlos"
 
 #: sunflower/gui/preferences/item_list.py:99
 msgid "Open them"
-msgstr ""
+msgstr "Abrirlos"
 
 #: sunflower/gui/preferences/item_list.py:103
 msgid "Show grid lines:"
@@ -812,7 +812,7 @@ msgstr "Tema oscuro"
 
 #: sunflower/gui/main_window.py:325 sunflower/gui/shortcuts_window.py:11
 msgid "Keyboard shortcuts"
-msgstr ""
+msgstr "Atajos de teclado"
 
 #: sunflower/gui/main_window.py:326
 msgid "_Home page"
@@ -970,7 +970,7 @@ msgstr "Se ha producido un error al guardar los archivos de configuración en su
 
 #: sunflower/gui/main_window.py:2451
 msgid "Please select at least one file or directory."
-msgstr ""
+msgstr "Seleccione al menos un archivo o una carpeta."
 
 #: sunflower/gui/main_window.py:2464
 msgid ""
@@ -1012,7 +1012,7 @@ msgstr "Guardar"
 
 #: sunflower/gui/preferences_window.py:74
 msgid "Revert"
-msgstr ""
+msgstr "Revertir"
 
 #: sunflower/gui/preferences_window.py:78
 msgid "Program restart required!"
@@ -1191,7 +1191,7 @@ msgstr "Seleccione una aplicación para abrir <i>{0}</i> y otros archivos de tip
 
 #: sunflower/gui/input_dialog.py:54
 msgid "OK"
-msgstr ""
+msgstr "Aceptar"
 
 #: sunflower/gui/input_dialog.py:59 sunflower/gui/input_dialog.py:907
 #: sunflower/gui/input_dialog.py:1006 sunflower/gui/input_dialog.py:1441
@@ -1227,7 +1227,7 @@ msgstr "Seleccione la ruta original"
 
 #: sunflower/gui/input_dialog.py:214
 msgid "<b>Advanced options:</b>"
-msgstr ""
+msgstr "<b>Opciones avanzadas:</b>"
 
 #: sunflower/gui/input_dialog.py:288 sunflower/gui/input_dialog.py:916
 msgid "Save as default configuration"
@@ -1631,7 +1631,7 @@ msgstr "Omitir la carga de complementos adicionales"
 
 #: sunflower/__main__.py:109
 msgid "Skip loading additional tabs"
-msgstr ""
+msgstr "Omitir la carga de pestañas adicionales"
 
 #: sunflower/__main__.py:118
 msgid "Open new tab on the left notebook"
@@ -1640,7 +1640,7 @@ msgstr "Abrir una pestaña en el panel izquierdo"
 #: sunflower/__main__.py:119 sunflower/__main__.py:128
 #: sunflower/__main__.py:137 sunflower/__main__.py:146
 msgid "DIRECTORY"
-msgstr ""
+msgstr "CARPETA"
 
 #: sunflower/__main__.py:127
 msgid "Open new tab on the right notebook"
@@ -1664,23 +1664,23 @@ msgstr "Menú contextual"
 
 #: sunflower/widgets/popup_menu.py:68
 msgid "Open in new tab"
-msgstr ""
+msgstr "Abrir en una pestaña nueva"
 
 #: sunflower/widgets/popup_menu.py:70
 msgid "Open with"
-msgstr ""
+msgstr "Abrir con"
 
 #: sunflower/widgets/popup_menu.py:73
 msgid "Copy to other"
-msgstr ""
+msgstr "Copiar al otro"
 
 #: sunflower/widgets/popup_menu.py:74
 msgid "Move to other"
-msgstr ""
+msgstr "Mover al otro"
 
 #: sunflower/widgets/popup_menu.py:79
 msgid "Path operations"
-msgstr ""
+msgstr "Operaciones en la ruta"
 
 #: sunflower/widgets/popup_menu.py:82
 msgid "Send to..."
@@ -1688,7 +1688,7 @@ msgstr "Enviar a..."
 
 #: sunflower/widgets/popup_menu.py:83
 msgid "Make link"
-msgstr ""
+msgstr "Crear un enlace"
 
 #: sunflower/widgets/popup_menu.py:87
 msgid "Copy file name"
@@ -1700,7 +1700,7 @@ msgstr "Copiar la ruta"
 
 #: sunflower/widgets/popup_menu.py:108
 msgid "Properties"
-msgstr ""
+msgstr "Propiedades"
 
 #: sunflower/widgets/tab_label.py:74
 msgid "Unlock"
@@ -1754,19 +1754,19 @@ msgstr "Ya existe una cola de operaciones con el nombre especificado."
 msgid ""
 "Unable to finish mounting:\n"
 "{}"
-msgstr ""
+msgstr "No se ha podido montar:\n{}"
 
 #: sunflower/mounts.py:70
 msgid ""
 "Unable to finish unmounting:\n"
 "{}"
-msgstr ""
+msgstr "No se ha podido desmontar:\n{}"
 
 #: sunflower/mounts.py:86
 msgid ""
 "Unable to finish ejecting:\n"
 "{}"
-msgstr ""
+msgstr "No se ha podido desmontar:\n{}"
 
 #: sunflower/mounts.py:102
 msgid "Selected volume can not be mounted."

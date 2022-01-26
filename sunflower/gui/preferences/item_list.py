@@ -726,10 +726,10 @@ class ItemListOptions(SettingsPage):
 		section.set('second_extension', self._checkbox_second_extension.get_active())
 
 		search_modifier = "%d%d%d" % (
-								self._checkbox_control.get_active(),
-								self._checkbox_alt.get_active(),
-								self._checkbox_shift.get_active()
-							)
+				self._checkbox_control.get_active(),
+				self._checkbox_alt.get_active(),
+				self._checkbox_shift.get_active()
+				)
 		section.set('search_modifier', search_modifier)
 
 		# save always visible items

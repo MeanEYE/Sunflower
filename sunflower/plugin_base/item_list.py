@@ -1187,7 +1187,7 @@ class ItemList(PluginBase):
 
 	def _edit_bookmarks(self, widget, data=None):
 		"""Open preferences window with bookmarks tab selected"""
-		self._parent.preferences_window._show(widget, 'bookmarks')
+		self._parent.preferences_window.show(widget, 'bookmarks')
 		return True
 
 	def _directory_changed(self, event, path, other_path, parent=None):

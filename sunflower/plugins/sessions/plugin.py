@@ -494,4 +494,4 @@ class SessionManager:
 
 	def _manage_sessions(self, widget, data=None):
 		"""Show preferences window for managing sessions."""
-		self._application.preferences_window._show(widget, 'sessions')
+		self._application.preferences_window.show(widget, 'sessions')

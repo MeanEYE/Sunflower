@@ -90,12 +90,12 @@ class PreferencesWindow(Gtk.Window):
 
 		self.add(hbox)
 
-	def _show(self, widget, tab_name=None):
-		"""Show dialog and reload options"""
+	def show(self, widget, tab_name=None):
+		"""Show dialog, focusing requested page, and reload options."""
 		self._load_options()
+		self.show_all()
 		if tab_name:
 			self._tabs.set_visible_child_name(tab_name)
-		self.show_all()
 		return True
 
 	def _hide(self, widget=None, data=None):

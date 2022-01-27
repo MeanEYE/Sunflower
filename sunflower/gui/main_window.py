@@ -234,6 +234,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 				('tools.find_files', self.show_find_files, None),
 				('tools.advanced_rename', self.show_advanced_rename, None),
+				('tools.mount_manager', self.mount_manager.show, None),
 				('tools.keyring_manager', self.show_keyring_manager, None),
 
 				('view.fast_media_preview', self._toggle_media_preview, self.options.get('media_preview')),
@@ -249,7 +250,7 @@ class MainWindow(Gtk.ApplicationWindow):
 				('help.check_version', self.check_for_new_version, None),
 				('help.about', self.show_about_window, None),
 
-				('preferences', self.preferences_window._show, None),
+				('preferences', self.preferences_window.show, None),
 				('quit', self._quit, None)
 				)
 
@@ -476,7 +477,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		vbox.pack_start(window, False, False, 0)
 
 		edit_commands = Gtk.Button.new_with_label(_('Edit commands'))
-		edit_commands.connect('clicked', self.preferences_window._show, 'commands')
+		edit_commands.connect('clicked', self.preferences_window.show, 'commands')
 		vbox.pack_end(edit_commands, False, False, 0)
 
 		self._create_commands()
@@ -1741,7 +1742,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		group.add_method('create_file', _('Create _file'), self._command_create, 'file')
 		group.add_method('create_directory', _('Create _directory'), self._command_create, 'directory')
 		group.add_method('quit_program',_('_Quit'), self._destroy)
-		group.add_method('preferences', _('_Preferences'), self.preferences_window._show)
+		group.add_method('preferences', _('_Preferences'), self.preferences_window.show)
 		group.add_method('select_with_pattern', _('S_elect with pattern'), self.select_with_pattern)
 		group.add_method('deselect_with_pattern', _('Deselect with pa_ttern'), self.deselect_with_pattern)
 		group.add_method('select_with_same_extension', _('Select with same e_xtension'), self.select_with_same_extension)
@@ -2485,7 +2486,7 @@ class MainWindow(Gtk.ApplicationWindow):
 			dialog.destroy()
 
 			# show preferences window
-			self.preferences_window._show(None, tab_name='plugins')
+			self.preferences_window.show(None, tab_name='plugins')
 
 		return True
 
@@ -2511,7 +2512,7 @@ class MainWindow(Gtk.ApplicationWindow):
 			dialog.destroy()
 
 			# show preferences window
-			self.preferences_window._show(None, tab_name='plugins')
+			self.preferences_window.show(None, tab_name='plugins')
 
 		return True
 

@@ -197,7 +197,9 @@ class PluginBase(Gtk.VBox):
 
 		# update states
 		self.update_state(Gtk.StateType.SELECTED)
-		self._parent.get_opposite_object(self).update_state(Gtk.StateType.NORMAL)
+		opposite_object = self._parent.get_opposite_object(self)
+		if opposite_object:
+			opposite_object.update_state(Gtk.StateType.NORMAL)
 
 		# deactivate scheduled accelerators
 		deactivated = self._parent.accelerator_manager.deactivate_scheduled_groups(self)

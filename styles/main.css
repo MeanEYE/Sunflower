@@ -24,7 +24,6 @@ scrolledwindow.sunflower-breadcrumbs button {
 }
 
 scrolledwindow.sunflower-breadcrumbs button:checked {
-	font-weight: bold;
 	color: @theme_selected_bg_color;
 }
 

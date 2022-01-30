@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-22 19:44+0100\n"
-"PO-Revision-Date: 2021-12-23 13:21+0000\n"
-"Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
+"POT-Creation-Date: 2022-01-30 22:25+0100\n"
+"PO-Revision-Date: 2022-01-30 21:25+0000\n"
+"Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/way2cu/sunflower/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -268,7 +268,7 @@ msgid "Wrap long lines"
 msgstr "Regelafbreking"
 
 #: sunflower/gui/preferences/view_and_edit.py:26
-#: sunflower/gui/main_window.py:430
+#: sunflower/gui/main_window.py:431
 msgid "Edit"
 msgstr "Bewerken"
 
@@ -289,6 +289,8 @@ msgid "Toolbar"
 msgstr "Werkbalk"
 
 #: sunflower/gui/preferences/toolbar.py:39 sunflower/gui/history_list.py:49
+#: sunflower/gui/mounts_manager_window.py:362
+#: sunflower/gui/mounts_manager_window.py:540
 #: sunflower/gui/keyring_manager_window.py:54
 #: sunflower/plugins/file_list/file_list.py:134
 #: sunflower/plugins/file_list/gio_extension.py:164
@@ -358,7 +360,8 @@ msgstr "Actie"
 msgid "General"
 msgstr "Algemeen"
 
-#: sunflower/gui/preferences/operation.py:16 sunflower/mounts.py:22
+#: sunflower/gui/preferences/operation.py:16
+#: sunflower/gui/mounts_manager_window.py:472 sunflower/mounts.py:27
 msgid "Mounts"
 msgstr "Aankoppelpunten"
 
@@ -718,11 +721,11 @@ msgstr "Sunflower"
 msgid "Create new file, directory and more."
 msgstr "Maak een nieuw bestand, nieuwe map of iets anders aan."
 
-#: sunflower/gui/main_window.py:190 sunflower/gui/main_window.py:1741
+#: sunflower/gui/main_window.py:190 sunflower/gui/main_window.py:1742
 msgid "Create _file"
 msgstr "Bestand _aanmaken"
 
-#: sunflower/gui/main_window.py:195 sunflower/gui/main_window.py:1742
+#: sunflower/gui/main_window.py:195 sunflower/gui/main_window.py:1743
 msgid "Create _directory"
 msgstr "Map _aanmaken"
 
@@ -730,268 +733,268 @@ msgstr "Map _aanmaken"
 msgid "Create new tab"
 msgstr "Nieuw tabblad openen"
 
-#: sunflower/gui/main_window.py:290
+#: sunflower/gui/main_window.py:291
 msgid "_Select all"
 msgstr "Alles _selecteren"
 
-#: sunflower/gui/main_window.py:291
+#: sunflower/gui/main_window.py:292
 msgid "_Deselect all"
 msgstr "Nie_ts selecteren"
 
-#: sunflower/gui/main_window.py:292
+#: sunflower/gui/main_window.py:293
 msgid "Invert select_ion"
 msgstr "Select_ie omkeren"
 
-#: sunflower/gui/main_window.py:294 sunflower/gui/main_window.py:1745
+#: sunflower/gui/main_window.py:295 sunflower/gui/main_window.py:1746
 msgid "S_elect with pattern"
 msgstr "S_electeren met patroon"
 
-#: sunflower/gui/main_window.py:295 sunflower/gui/main_window.py:1746
+#: sunflower/gui/main_window.py:296 sunflower/gui/main_window.py:1747
 msgid "Deselect with pa_ttern"
 msgstr "Niets selecteren met pa_troon"
 
-#: sunflower/gui/main_window.py:296 sunflower/gui/main_window.py:1747
+#: sunflower/gui/main_window.py:297 sunflower/gui/main_window.py:1748
 msgid "Select with same e_xtension"
 msgstr "Bestanden met dezelfde e_xtensies selecteren"
 
-#: sunflower/gui/main_window.py:297 sunflower/gui/main_window.py:1748
+#: sunflower/gui/main_window.py:298 sunflower/gui/main_window.py:1749
 msgid "Deselect with same exte_nsion"
 msgstr "Niets selecteren met dezelfde e_xtensies"
 
-#: sunflower/gui/main_window.py:299 sunflower/gui/main_window.py:1749
+#: sunflower/gui/main_window.py:300 sunflower/gui/main_window.py:1750
 msgid "Compare _directories"
 msgstr "_Mappen vergelijken"
 
-#: sunflower/gui/main_window.py:306 sunflower/gui/main_window.py:1750
-#: sunflower/gui/main_window.py:1751
+#: sunflower/gui/main_window.py:307 sunflower/gui/main_window.py:1751
+#: sunflower/gui/main_window.py:1752
 msgid "_Find files"
 msgstr "Bestanden _zoeken"
 
-#: sunflower/gui/main_window.py:307
+#: sunflower/gui/main_window.py:308
 msgid "Advanced _rename"
 msgstr "Naam wijzigen (geavancee_rd)"
 
-#: sunflower/gui/main_window.py:308
+#: sunflower/gui/main_window.py:309
 msgid "_Mount manager"
 msgstr "_Aankoppelpunten beheren"
 
-#: sunflower/gui/main_window.py:309
+#: sunflower/gui/main_window.py:310
 msgid "_Keyring manager"
 msgstr "_Sleutelhanger beheren"
 
-#: sunflower/gui/main_window.py:312 sunflower/gui/main_window.py:1755
+#: sunflower/gui/main_window.py:313 sunflower/gui/main_window.py:1756
 msgid "Fast m_edia preview"
 msgstr "Sn_elle voorvertoning"
 
-#: sunflower/gui/main_window.py:313 sunflower/gui/main_window.py:1756
+#: sunflower/gui/main_window.py:314 sunflower/gui/main_window.py:1757
 msgid "Show _hidden files"
 msgstr "Verbor_gen bestanden tonen"
 
-#: sunflower/gui/main_window.py:315
+#: sunflower/gui/main_window.py:316
 msgid "Show _toolbar"
 msgstr "Werkbalk _tonen"
 
-#: sunflower/gui/main_window.py:316
+#: sunflower/gui/main_window.py:317
 msgid "Show _titlebar"
 msgstr "_Titelbalk tonen"
 
-#: sunflower/gui/main_window.py:317
+#: sunflower/gui/main_window.py:318
 msgid "Show _command bar"
 msgstr "_Opdra_chtbalk tonen"
 
-#: sunflower/gui/main_window.py:318
+#: sunflower/gui/main_window.py:319
 msgid "_Horizontal split"
 msgstr "_Horizontaal splitsen"
 
-#: sunflower/gui/main_window.py:319
+#: sunflower/gui/main_window.py:320
 msgid "_Dark theme"
 msgstr "_Donker thema"
 
-#: sunflower/gui/main_window.py:325 sunflower/gui/shortcuts_window.py:11
+#: sunflower/gui/main_window.py:326 sunflower/gui/shortcuts_window.py:11
 msgid "Keyboard shortcuts"
 msgstr "Sneltoetsen"
 
-#: sunflower/gui/main_window.py:326
+#: sunflower/gui/main_window.py:327
 msgid "_Home page"
 msgstr "_Website"
 
-#: sunflower/gui/main_window.py:327
+#: sunflower/gui/main_window.py:328
 msgid "Check for new version"
 msgstr "Controleren op updates"
 
-#: sunflower/gui/main_window.py:328
+#: sunflower/gui/main_window.py:329
 msgid "_About"
 msgstr "_Over"
 
-#: sunflower/gui/main_window.py:330
+#: sunflower/gui/main_window.py:331
 msgid "_Mark"
 msgstr "_Markeren"
 
-#: sunflower/gui/main_window.py:331
+#: sunflower/gui/main_window.py:332
 msgid "_Tools"
 msgstr "_Hulpmiddelen"
 
-#: sunflower/gui/main_window.py:332
+#: sunflower/gui/main_window.py:333
 msgid "_View"
 msgstr "_Beeld"
 
-#: sunflower/gui/main_window.py:334
+#: sunflower/gui/main_window.py:335
 msgid "_Help"
 msgstr "_Hulp"
 
-#: sunflower/gui/main_window.py:335 sunflower/gui/main_window.py:1744
+#: sunflower/gui/main_window.py:336 sunflower/gui/main_window.py:1745
 msgid "_Preferences"
 msgstr "_Instellingen"
 
-#: sunflower/gui/main_window.py:336 sunflower/gui/main_window.py:1743
+#: sunflower/gui/main_window.py:337 sunflower/gui/main_window.py:1744
 #: sunflower/indicator.py:51
 msgid "_Quit"
 msgstr "_Afsluiten"
 
-#: sunflower/gui/main_window.py:391
+#: sunflower/gui/main_window.py:392
 msgid "Execute command:"
 msgstr "Opdracht uitvoeren:"
 
-#: sunflower/gui/main_window.py:427
+#: sunflower/gui/main_window.py:428
 msgid "Refresh"
 msgstr "Verversen"
 
-#: sunflower/gui/main_window.py:427
+#: sunflower/gui/main_window.py:428
 msgid "Reload active item list"
 msgstr "Lijst met actieve items herladen"
 
-#: sunflower/gui/main_window.py:428 sunflower/tools/advanced_rename.py:96
+#: sunflower/gui/main_window.py:429 sunflower/tools/advanced_rename.py:96
 msgid "Rename"
 msgstr "Naam wijzigen"
 
-#: sunflower/gui/main_window.py:428
+#: sunflower/gui/main_window.py:429
 msgid "Rename selected file"
 msgstr "Naam van geselecteerd bestand wijzigen"
 
-#: sunflower/gui/main_window.py:429
+#: sunflower/gui/main_window.py:430
 msgid "Preview"
 msgstr "Voorvertonen"
 
-#: sunflower/gui/main_window.py:429
+#: sunflower/gui/main_window.py:430
 msgid "Preview selected file"
 msgstr "Geselecteerd bestand voorvertonen"
 
-#: sunflower/gui/main_window.py:430
+#: sunflower/gui/main_window.py:431
 msgid "Edit selected file"
 msgstr "Geselecteerd bestand bewerken"
 
-#: sunflower/gui/main_window.py:431 sunflower/gui/input_dialog.py:908
+#: sunflower/gui/main_window.py:432 sunflower/gui/input_dialog.py:908
 #: sunflower/gui/input_dialog.py:1254
 msgid "Copy"
 msgstr "Kopiëren"
 
-#: sunflower/gui/main_window.py:431
+#: sunflower/gui/main_window.py:432
 msgid "Copy selected items from active to opposite list"
 msgstr "Geselecteerde items kopiëren naar tegenover liggende lijst"
 
-#: sunflower/gui/main_window.py:432 sunflower/gui/input_dialog.py:1007
+#: sunflower/gui/main_window.py:433 sunflower/gui/input_dialog.py:1007
 msgid "Move"
 msgstr "Verplaatsen"
 
-#: sunflower/gui/main_window.py:432
+#: sunflower/gui/main_window.py:433
 msgid "Move selected items from active to opposite list"
 msgstr "Geselecteerde items verplaatsen naar tegenover liggende lijst"
 
-#: sunflower/gui/main_window.py:433
+#: sunflower/gui/main_window.py:434
 msgid "Create"
 msgstr "Maken"
 
-#: sunflower/gui/main_window.py:433
+#: sunflower/gui/main_window.py:434
 msgid "Create new directory"
 msgstr "Nieuwe map aanmaken"
 
-#: sunflower/gui/main_window.py:434
+#: sunflower/gui/main_window.py:435
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: sunflower/gui/main_window.py:434
+#: sunflower/gui/main_window.py:435
 msgid "Delete selected items"
 msgstr "Geselecteerde items verwijderen"
 
-#: sunflower/gui/main_window.py:478
+#: sunflower/gui/main_window.py:479
 msgid "Edit commands"
 msgstr "Opdrachten bewerken"
 
-#: sunflower/gui/main_window.py:1305
+#: sunflower/gui/main_window.py:1306
 msgid "Select items"
 msgstr "Items selecteren"
 
-#: sunflower/gui/main_window.py:1306 sunflower/gui/main_window.py:1362
+#: sunflower/gui/main_window.py:1307 sunflower/gui/main_window.py:1363
 msgid "Selection pattern (eg.: *.jpg):"
 msgstr "Selectiepatroon (bv.: *.jpg):"
 
-#: sunflower/gui/main_window.py:1361
+#: sunflower/gui/main_window.py:1362
 msgid "Deselect items"
 msgstr "Niets selecteren"
 
-#: sunflower/gui/main_window.py:1398
+#: sunflower/gui/main_window.py:1399
 msgid "First level of compared directories is identical."
 msgstr "Het eerste niveau van de vergeleken mappen is identiek."
 
-#: sunflower/gui/main_window.py:1522
+#: sunflower/gui/main_window.py:1523
 msgid ""
 "There was a problem starting external terminal application. Check if command"
 " is valid!"
 msgstr "Er is een probleem opgetreden bij het starten van een extern terminalvenster. Controleer of de opdracht juist is!"
 
-#: sunflower/gui/main_window.py:1732
+#: sunflower/gui/main_window.py:1733
 msgid "Main Menu"
 msgstr "Hoofdmenu"
 
-#: sunflower/gui/main_window.py:1737
+#: sunflower/gui/main_window.py:1738
 msgid "Restore handle position"
 msgstr "Handvatpositie herstellen"
 
-#: sunflower/gui/main_window.py:1738
+#: sunflower/gui/main_window.py:1739
 msgid "Move handle to the left"
 msgstr "Handvat naar links verplaatsen"
 
-#: sunflower/gui/main_window.py:1739
+#: sunflower/gui/main_window.py:1740
 msgid "Move handle to the right"
 msgstr "Handvat naar rechts verplaatsen"
 
-#: sunflower/gui/main_window.py:1754
+#: sunflower/gui/main_window.py:1755
 msgid "Rel_oad item list"
 msgstr "Itemlijst her_laden"
 
-#: sunflower/gui/main_window.py:1821
+#: sunflower/gui/main_window.py:1822
 msgid ""
 "Error saving configuration to files in your home directory. Make sure you "
 "have enough permissions."
 msgstr "Het configuratiebestand kan niet worden opgeslagen in uw persoonlijke map. Controleer of u hiertoe bevoegd bent."
 
-#: sunflower/gui/main_window.py:2451
+#: sunflower/gui/main_window.py:2452
 msgid "Please select at least one file or directory."
 msgstr "Selecteer minimaal één bestand of map."
 
-#: sunflower/gui/main_window.py:2464
+#: sunflower/gui/main_window.py:2465
 msgid ""
 "Active object is not item list. Advanced rename tool needs files and "
 "directories."
 msgstr "Het actieve object is geen itemlijst. Het hulpmiddel voor geavanceerde naamswijzigingen werkt met bestanden en mappen."
 
-#: sunflower/gui/main_window.py:2479
+#: sunflower/gui/main_window.py:2480
 msgid ""
 "No rename extensions were found. Please enable basic rename options plugin "
 "and try again."
 msgstr "Geen programma-uitbreidingen voor naamswijzigingen aangetroffen. Schakel de plug-in voor naamswijzigingen in en probeer het opnieuw. "
 
-#: sunflower/gui/main_window.py:2506
+#: sunflower/gui/main_window.py:2507
 msgid ""
 "No extensions for finding files were found. Please enable basic find file "
 "options plugin and try again."
 msgstr "Geen programma-uitbreidingen voor zoeken gevonden. Schakel de plug-in voor zoekopties in en probeer het opnieuw."
 
-#: sunflower/gui/main_window.py:2532
+#: sunflower/gui/main_window.py:2533
 msgid "Keyring is empty!"
 msgstr "De sleutelhanger is leeg!"
 
-#: sunflower/gui/main_window.py:2545
+#: sunflower/gui/main_window.py:2546
 msgid ""
 "Keyring is not available. Make sure you have Python Gnome keyring module "
 "installed."
@@ -1029,12 +1032,12 @@ msgstr "Geschiedenis"
 msgid "Path"
 msgstr "Locatie"
 
-#: sunflower/gui/history_list.py:67 sunflower/widgets/location_menu.py:55
-#: sunflower/widgets/popup_menu.py:67
+#: sunflower/gui/history_list.py:67 sunflower/gui/mounts_manager_window.py:380
+#: sunflower/widgets/location_menu.py:55 sunflower/widgets/popup_menu.py:67
 msgid "Open"
 msgstr "Openen"
 
-#: sunflower/gui/history_list.py:76
+#: sunflower/gui/history_list.py:76 sunflower/gui/mounts_manager_window.py:391
 msgid "Open in tab"
 msgstr "Openen op tabblad"
 
@@ -1554,6 +1557,41 @@ msgstr "Bezig met verwijderen…"
 msgid "Renaming items..."
 msgstr "Bezig met naamswijzigingen…"
 
+#: sunflower/gui/mounts_manager_window.py:47
+msgid "Mount manager"
+msgstr ""
+
+#: sunflower/gui/mounts_manager_window.py:370
+msgid "Systemwide"
+msgstr ""
+
+#: sunflower/gui/mounts_manager_window.py:392
+msgid "Open selected URI in new tab"
+msgstr ""
+
+#: sunflower/gui/mounts_manager_window.py:396
+#: sunflower/gui/mounts_manager_window.py:559 sunflower/mounts.py:226
+#: sunflower/plugins/file_list/gio_extension.py:197
+#: sunflower/plugins/file_list/gio_extension.py:551
+#: sunflower/plugins/file_list/gio_extension.py:903
+msgid "Unmount"
+msgstr "Ontkoppelen"
+
+#: sunflower/gui/mounts_manager_window.py:548
+msgid "Mounted"
+msgstr ""
+
+#: sunflower/gui/mounts_manager_window.py:555 sunflower/mounts.py:232
+#: sunflower/plugins/file_list/gio_extension.py:194
+#: sunflower/plugins/file_list/gio_extension.py:548
+#: sunflower/plugins/file_list/gio_extension.py:900
+msgid "Mount"
+msgstr "Aankoppelen"
+
+#: sunflower/gui/mounts_manager_window.py:697
+msgid "Volumes"
+msgstr ""
+
 #: sunflower/gui/keyring_manager_window.py:29
 msgid "Keyring manager"
 msgstr "Sleutelhanger beheren"
@@ -1747,49 +1785,37 @@ msgstr "Geef de nieuwe wachtrij een naam:"
 msgid "Operation queue with specified name already exists."
 msgstr "Er is al een wachtrij met deze naam."
 
-#: sunflower/mounts.py:54
+#: sunflower/mounts.py:59
 msgid ""
 "Unable to finish mounting:\n"
 "{}"
 msgstr "{} kan niet worden aangekoppeld."
 
-#: sunflower/mounts.py:70
+#: sunflower/mounts.py:75
 msgid ""
 "Unable to finish unmounting:\n"
 "{}"
 msgstr "{} kan niet worden ontkoppeld."
 
-#: sunflower/mounts.py:86
+#: sunflower/mounts.py:91
 msgid ""
 "Unable to finish ejecting:\n"
 "{}"
 msgstr "{} kan niet worden uitgeworpen."
 
-#: sunflower/mounts.py:102
+#: sunflower/mounts.py:107
 msgid "Selected volume can not be mounted."
 msgstr "Het opgegeven volume kan niet worden aangekoppeld."
 
-#: sunflower/mounts.py:118
+#: sunflower/mounts.py:123
 msgid "Selected mount can not be unmounted."
 msgstr "Het opgegeven volume kan niet worden ontkoppeld."
 
-#: sunflower/mounts.py:134
+#: sunflower/mounts.py:139
 msgid "Selected volume can not be ejected."
 msgstr "Het opgegeven volume kan niet worden uitgeworpen."
 
-#: sunflower/mounts.py:221 sunflower/plugins/file_list/gio_extension.py:197
-#: sunflower/plugins/file_list/gio_extension.py:551
-#: sunflower/plugins/file_list/gio_extension.py:903
-msgid "Unmount"
-msgstr "Ontkoppelen"
-
-#: sunflower/mounts.py:227 sunflower/plugins/file_list/gio_extension.py:194
-#: sunflower/plugins/file_list/gio_extension.py:548
-#: sunflower/plugins/file_list/gio_extension.py:900
-msgid "Mount"
-msgstr "Aankoppelen"
-
-#: sunflower/mounts.py:233
+#: sunflower/mounts.py:238
 msgid "Eject"
 msgstr "Uitwerpen"
 

@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from gi.repository import Gtk, Gio, GLib, Pango
 from sunflower.widgets.location_menu import Location, GenericHeader
+from sunflower.gui.mounts_manager_window import MountsManagerWindow
 
 
 class MountsManager:
@@ -11,10 +12,14 @@ class MountsManager:
 		self._application = application
 		self._mounts = {}
 		self._location_menu = None
+		self._window = MountsManagerWindow(self)
 
 		# create volume monitor
 		self._volume_monitor = Gio.VolumeMonitor.get()
 		self._volume_monitor.connect('volume-added', self._handle_add_volume)
+
+	def show(self, widget, data=None):
+		self._window.show_all()
 
 	def attach_location_menu(self, location_menu):
 		"""Use notification from location menu to populate list with mounts and volumes."""
@@ -138,7 +143,7 @@ class MountsManager:
 
 	def create_extensions(self):
 		"""Create mounts manager extensions"""
-		pass
+		self._window.create_extensions()
 
 	def is_mounted(self, path):
 		"""Check if specified path is mounted"""

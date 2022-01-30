@@ -1,6 +1,7 @@
 from gi.repository import Gtk, Gdk, Gio, GObject, GLib
-from parameters import Parameters
-from plugin_base.mount_manager_extension import MountManagerExtension, ExtensionFeatures
+from sunflower.parameters import Parameters
+from sunflower.plugin_base.mount_manager_extension import MountManagerExtension, ExtensionFeatures
+
 
 class MountsColumn:
 	ICON = 0
@@ -30,8 +31,7 @@ class PagesColumn:
 class MountsManagerWindow(Gtk.Window):
 
 	def __init__(self, parent):
-		# create mount manager window
-		GObject.GObject.__init__(self, type=Gtk.WindowType.TOPLEVEL)
+		Gtk.Window.__init__(self, type=Gtk.WindowType.TOPLEVEL)
 
 		self._parent = parent
 		self._application = self._parent._application
@@ -136,7 +136,7 @@ class MountsManagerWindow(Gtk.Window):
 				self._volumes = extension
 
 		# tell parent we are ready for mount list population
-		GLib.idle_add(self._parent._populate_list)
+		# GLib.idle_add(self._parent._populate_list)
 
 	def _mount_count_data_function(self, column, renderer, model, current_iter, data=None):
 		"""Set content of cell renderer when drawing number of mounts extension has"""

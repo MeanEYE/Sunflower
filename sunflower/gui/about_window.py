@@ -77,7 +77,7 @@ class AboutWindow:
 		self._dialog.set_comments(_('Twin-panel file manager for Linux.'))
 
 		# set license
-		self._dialog.set_copyright(_(u'Copyright \u00a9 2010-2019 by Mladen Mijatov and contributors.'))
+		self._dialog.set_copyright(_(u'Copyright \u00a9 2010-2022 by Mladen Mijatov and contributors.'))
 
 		if os.path.isfile('COPYING'):
 			license_file = open('COPYING', 'r')

@@ -151,25 +151,21 @@ class AssociationsOptions(SettingsPage):
 
 			# get all applications
 			applications = config.get(mime_type)
-			count = len(applications) / 2
-
-			for index in range(1, count + 1):
-				application = applications[index-1]
+			for application in applications:
 				self._associations.append(parent, (application['name'], application['command']))
 
 	def _save_options(self):
 		"""Method called when save button is clicked"""
 		config = self._application.association_options
 
-		# iterate over groups
+		# iterate over mime type groups
 		for row in self._associations:
 			mime_type = self._associations.get_value(row.iter, Column.COMMAND)
 			children = row.iterchildren()
 			applications = []
 
 			# store accelerators for current group
-			for index, child in enumerate(children, 0):
-
+			for child in children:
 				application = {
 						'name': self._associations.get_value(child.iter, Column.NAME),
 						'command': self._associations.get_value(child.iter, Column.COMMAND)

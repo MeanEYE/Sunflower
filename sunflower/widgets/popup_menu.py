@@ -1,7 +1,7 @@
 import os
 
 from random import choice
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, Gio
 
 from sunflower.plugin_base.monitor import MonitorSignals
 
@@ -146,6 +146,67 @@ class PopupMenu:
 	def __populate_open_with_menu(self, path, mime_type):
 		"""Populate submenu for application selection."""
 		container = self._stack.get_child_by_name('open-with')
+		associations_manager = self._application.associations_manager
+
+		# remove old items skipping first which returns to main menu
+		old_items = container.get_children()[1:]
+		list(map(lambda item: container.remove(item), old_items))
+
+		# populate list with globally assigned applications
+		for application in associations_manager.get_application_list_for_type(mime_type):
+			menu_item = Gtk.ModelButton.new()
+			menu_item.set_property('text', application.name)
+
+			# assign icon if available
+			if application.icon:
+				icon = Gio.Icon.new_for_string(application.icon)
+				menu_item.set_property('icon', icon)
+				menu_item.get_child().get_children()[0].set_visible(True)  # show it the hard way
+
+			# connect click handler
+			handler_data = {
+					'selection': path,
+					'application': application
+					}
+			menu_item.connect('clicked', self.__handle_open_with_click, handler_data)
+			container.pack_start(menu_item, False, True, 0)
+
+		# add custom associations to the menu
+		custom_associations = self._application.association_options
+		custom_commands = custom_associations.get(mime_type)
+
+		if custom_commands:
+			# add menu separator so user can differentiate
+			separator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
+			container.pack_start(separator, False, True, 0)
+
+			# add custom commands to menu
+			for custom_command in custom_commands:
+				# create menu item
+				menu_item = Gtk.ModelButton.new()
+				menu_item.set_property('text', custom_command['name'])
+
+				# prepare data for item
+				handler_data = {
+						'selection': path,
+						'command': custom_command['command']
+						}
+				menu_item.connect('clicked', self.__handle_open_with_click, handler_data)
+				container.pack_start(menu_item, False, True, 0)
+
+		container.show_all()
+
+	def __handle_open_with_click(self, widget, data):
+		"""Handle clicking on application in open with menu."""
+		associations_manager = self._application.associations_manager
+
+		if 'application' in data:
+			associations_manager.open_file(data['selection'], application_info=data['application'])
+
+		elif 'command' in data:
+			associations_manager.open_file(data['selection'], exec_command=data['command'])
+
+		return True
 
 	def __handle_popover_open(self):
 		"""Handle popover opening."""

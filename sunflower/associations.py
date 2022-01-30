@@ -47,9 +47,7 @@ class AssociationManager:
 
 	def __format_command_string(self, selection, command):
 		"""Format command string"""
-		# we modify exec_string and use
-		# command for testing to avoid problem
-		# with Unicode characters in URI
+		# start with provided value and replace placeholders to avoid unicode issues
 		exec_string = command
 
 		if selection is not None:

@@ -75,6 +75,7 @@ class AboutWindow:
 		self._dialog.set_logo(image.get_pixbuf())
 		self._dialog.set_website('sunflower-fm.org')
 		self._dialog.set_comments(_('Twin-panel file manager for Linux.'))
+		self._dialog.set_translator_credits(_('translator-credits'))
 
 		# set license
 		self._dialog.set_copyright(_(u'Copyright \u00a9 2010-2022 by Mladen Mijatov and contributors.'))

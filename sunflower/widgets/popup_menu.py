@@ -165,7 +165,7 @@ class PopupMenu:
 
 			# connect click handler
 			handler_data = {
-					'selection': path,
+					'selection': [path,],
 					'application': application
 					}
 			menu_item.connect('clicked', self.__handle_open_with_click, handler_data)
@@ -188,7 +188,7 @@ class PopupMenu:
 
 				# prepare data for item
 				handler_data = {
-						'selection': path,
+						'selection': [path,],
 						'command': custom_command['command']
 						}
 				menu_item.connect('clicked', self.__handle_open_with_click, handler_data)

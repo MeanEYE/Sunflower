@@ -4,6 +4,7 @@
 # 
 # Translators:
 # Andrey <python36@yandex.ru>, 2015
+# Dmytro Korchynskyi, 2022
 # FIRST AUTHOR Халіманенко Тарас <mr.haltar@yandex.ru>, 2012
 # insolor, 2016,2020
 # Mladen Mijatov <meaneye.rcf@gmail.com>, 2015
@@ -14,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-30 22:25+0100\n"
-"PO-Revision-Date: 2022-01-30 21:25+0000\n"
-"Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
+"POT-Creation-Date: 2022-01-30 22:52+0100\n"
+"PO-Revision-Date: 2022-01-31 01:02+0000\n"
+"Last-Translator: Dmytro Korchynskyi\n"
 "Language-Team: Ukrainian (http://www.transifex.com/way2cu/sunflower/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -524,7 +525,7 @@ msgstr "Перелік файлів"
 
 #: sunflower/gui/preferences/item_list.py:46
 msgid "Look and feel"
-msgstr ""
+msgstr "Зовнішній вигляд"
 
 #: sunflower/gui/preferences/item_list.py:52
 msgid "Hidden files"
@@ -588,15 +589,15 @@ msgstr "Текстовий"
 
 #: sunflower/gui/preferences/item_list.py:93
 msgid "Action on executable files:"
-msgstr ""
+msgstr "Дія над файлами виконання:"
 
 #: sunflower/gui/preferences/item_list.py:98
 msgid "Run them"
-msgstr ""
+msgstr "Запустити їх"
 
 #: sunflower/gui/preferences/item_list.py:99
 msgid "Open them"
-msgstr ""
+msgstr "Відкрити їх"
 
 #: sunflower/gui/preferences/item_list.py:103
 msgid "Show grid lines:"
@@ -815,7 +816,7 @@ msgstr "Темна тема"
 
 #: sunflower/gui/main_window.py:326 sunflower/gui/shortcuts_window.py:11
 msgid "Keyboard shortcuts"
-msgstr ""
+msgstr "Гарячі клавіши"
 
 #: sunflower/gui/main_window.py:327
 msgid "_Home page"
@@ -973,7 +974,7 @@ msgstr "Помилка збереження кофігурації в файли
 
 #: sunflower/gui/main_window.py:2452
 msgid "Please select at least one file or directory."
-msgstr ""
+msgstr "Виберіть хоча б один файл чи папку."
 
 #: sunflower/gui/main_window.py:2465
 msgid ""
@@ -1015,7 +1016,7 @@ msgstr "Зберегти"
 
 #: sunflower/gui/preferences_window.py:74
 msgid "Revert"
-msgstr ""
+msgstr "Повернути назад"
 
 #: sunflower/gui/preferences_window.py:78
 msgid "Program restart required!"
@@ -1196,7 +1197,7 @@ msgstr "Виберіть проґраму для відкриття <i>{0}</i> �
 
 #: sunflower/gui/input_dialog.py:54
 msgid "OK"
-msgstr ""
+msgstr "Так"
 
 #: sunflower/gui/input_dialog.py:59 sunflower/gui/input_dialog.py:907
 #: sunflower/gui/input_dialog.py:1006 sunflower/gui/input_dialog.py:1441
@@ -1232,7 +1233,7 @@ msgstr "виберіть шлях до оригіналу"
 
 #: sunflower/gui/input_dialog.py:214
 msgid "<b>Advanced options:</b>"
-msgstr ""
+msgstr "<b>Розширені налаштування:</b>"
 
 #: sunflower/gui/input_dialog.py:288 sunflower/gui/input_dialog.py:916
 msgid "Save as default configuration"
@@ -1578,15 +1579,15 @@ msgstr "Перейменування..."
 
 #: sunflower/gui/mounts_manager_window.py:47
 msgid "Mount manager"
-msgstr ""
+msgstr "Керування монтуванням"
 
 #: sunflower/gui/mounts_manager_window.py:370
 msgid "Systemwide"
-msgstr ""
+msgstr "Загольносистемний"
 
 #: sunflower/gui/mounts_manager_window.py:392
 msgid "Open selected URI in new tab"
-msgstr ""
+msgstr "Відкрити вибраний шлях в новій вкладці"
 
 #: sunflower/gui/mounts_manager_window.py:396
 #: sunflower/gui/mounts_manager_window.py:559 sunflower/mounts.py:226
@@ -1598,7 +1599,7 @@ msgstr "Розмонтувати"
 
 #: sunflower/gui/mounts_manager_window.py:548
 msgid "Mounted"
-msgstr ""
+msgstr "Змонтований"
 
 #: sunflower/gui/mounts_manager_window.py:555 sunflower/mounts.py:232
 #: sunflower/plugins/file_list/gio_extension.py:194
@@ -1609,7 +1610,7 @@ msgstr "Монтувати"
 
 #: sunflower/gui/mounts_manager_window.py:697
 msgid "Volumes"
-msgstr ""
+msgstr "Томи"
 
 #: sunflower/gui/keyring_manager_window.py:29
 msgid "Keyring manager"
@@ -1659,11 +1660,15 @@ msgstr "Паролі не збігаються! Будь ласка, спроб�
 msgid "Twin-panel file manager for Linux."
 msgstr "Двопанельний файловий менеджер для Linux."
 
-#: sunflower/gui/about_window.py:80
-msgid "Copyright © 2010-2019 by Mladen Mijatov and contributors."
-msgstr "Авторські права належать © 2010-2019 Mladen Mijatov та іншим учасникам проекту"
+#: sunflower/gui/about_window.py:78
+msgid "translator-credits"
+msgstr "перекладачі"
 
-#: sunflower/gui/about_window.py:96
+#: sunflower/gui/about_window.py:81
+msgid "Copyright © 2010-2022 by Mladen Mijatov and contributors."
+msgstr "Авторські права належать © 2010-2022 Mladen Mijatov та іншим учасникам проекту."
+
+#: sunflower/gui/about_window.py:97
 msgid "Contributors"
 msgstr "Учасники проекту"
 
@@ -1685,7 +1690,7 @@ msgstr "Пропустити завантаження додаткових вт�
 
 #: sunflower/__main__.py:109
 msgid "Skip loading additional tabs"
-msgstr ""
+msgstr "Пропустити завантаження додаткових вкладок"
 
 #: sunflower/__main__.py:118
 msgid "Open new tab on the left notebook"
@@ -1694,7 +1699,7 @@ msgstr "Відкрити нову вкладку на лівій панелі"
 #: sunflower/__main__.py:119 sunflower/__main__.py:128
 #: sunflower/__main__.py:137 sunflower/__main__.py:146
 msgid "DIRECTORY"
-msgstr ""
+msgstr "ПАПКА"
 
 #: sunflower/__main__.py:127
 msgid "Open new tab on the right notebook"
@@ -1718,23 +1723,23 @@ msgstr "Контекстне меню"
 
 #: sunflower/widgets/popup_menu.py:68
 msgid "Open in new tab"
-msgstr ""
+msgstr "Відкрити в новій вкладці"
 
 #: sunflower/widgets/popup_menu.py:70
 msgid "Open with"
-msgstr ""
+msgstr "Відкрити за допомогою"
 
 #: sunflower/widgets/popup_menu.py:73
 msgid "Copy to other"
-msgstr ""
+msgstr "Копіювати до іншого"
 
 #: sunflower/widgets/popup_menu.py:74
 msgid "Move to other"
-msgstr ""
+msgstr "Перемістити до іншого"
 
 #: sunflower/widgets/popup_menu.py:79
 msgid "Path operations"
-msgstr ""
+msgstr "Операції з шляхом"
 
 #: sunflower/widgets/popup_menu.py:82
 msgid "Send to..."
@@ -1742,7 +1747,7 @@ msgstr "Відправити до..."
 
 #: sunflower/widgets/popup_menu.py:83
 msgid "Make link"
-msgstr ""
+msgstr "Створити посилання"
 
 #: sunflower/widgets/popup_menu.py:87
 msgid "Copy file name"
@@ -1754,7 +1759,7 @@ msgstr "Копіювати шлях"
 
 #: sunflower/widgets/popup_menu.py:108
 msgid "Properties"
-msgstr ""
+msgstr "Властивості"
 
 #: sunflower/widgets/tab_label.py:74
 msgid "Unlock"
@@ -1808,19 +1813,19 @@ msgstr "Черга з таким ім'ям вже існує."
 msgid ""
 "Unable to finish mounting:\n"
 "{}"
-msgstr ""
+msgstr "Не вдалось завершити монтування:\n{}"
 
 #: sunflower/mounts.py:75
 msgid ""
 "Unable to finish unmounting:\n"
 "{}"
-msgstr ""
+msgstr "Не вдалось завершити демонтування:\n{}"
 
 #: sunflower/mounts.py:91
 msgid ""
 "Unable to finish ejecting:\n"
 "{}"
-msgstr ""
+msgstr "Не вдалось завершити витягування:\n{}"
 
 #: sunflower/mounts.py:107
 msgid "Selected volume can not be mounted."

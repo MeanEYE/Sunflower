@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-30 22:25+0100\n"
-"PO-Revision-Date: 2022-01-30 21:25+0000\n"
+"POT-Creation-Date: 2022-01-30 22:52+0100\n"
+"PO-Revision-Date: 2022-01-30 21:52+0000\n"
 "Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
 "Language-Team: Czech (http://www.transifex.com/way2cu/sunflower/language/cs/)\n"
 "MIME-Version: 1.0\n"
@@ -1655,11 +1655,15 @@ msgstr "Hesla nesouhlasí! Zkuste to prosím znovu."
 msgid "Twin-panel file manager for Linux."
 msgstr "Doupanelový správce souborů pro Linux."
 
-#: sunflower/gui/about_window.py:80
-msgid "Copyright © 2010-2019 by Mladen Mijatov and contributors."
+#: sunflower/gui/about_window.py:78
+msgid "translator-credits"
 msgstr ""
 
-#: sunflower/gui/about_window.py:96
+#: sunflower/gui/about_window.py:81
+msgid "Copyright © 2010-2022 by Mladen Mijatov and contributors."
+msgstr ""
+
+#: sunflower/gui/about_window.py:97
 msgid "Contributors"
 msgstr ""
 

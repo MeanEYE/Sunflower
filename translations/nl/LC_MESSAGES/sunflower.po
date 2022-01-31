@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the Sunflower package.
 # 
 # Translators:
-# Heimen Stoffels <vistausss@fastmail.com>, 2021
+# Heimen Stoffels <vistausss@fastmail.com>, 2021-2022
 # Heimen Stoffels <vistausss@fastmail.com>, 2019-2020
 # Ruud W. Blau <rwblau@aim.com>, 2015-2016,2020
 # Thomas Jollans <t@jollybox.de>, 2018
@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-30 22:25+0100\n"
-"PO-Revision-Date: 2022-01-30 21:25+0000\n"
-"Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
+"POT-Creation-Date: 2022-01-30 22:52+0100\n"
+"PO-Revision-Date: 2022-01-31 10:35+0000\n"
+"Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/way2cu/sunflower/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1559,15 +1559,15 @@ msgstr "Bezig met naamswijzigingen…"
 
 #: sunflower/gui/mounts_manager_window.py:47
 msgid "Mount manager"
-msgstr ""
+msgstr "Aankoppelpunten beheren"
 
 #: sunflower/gui/mounts_manager_window.py:370
 msgid "Systemwide"
-msgstr ""
+msgstr "Systeembreed"
 
 #: sunflower/gui/mounts_manager_window.py:392
 msgid "Open selected URI in new tab"
-msgstr ""
+msgstr "Geselecteerde locatie openen op nieuw tabblad"
 
 #: sunflower/gui/mounts_manager_window.py:396
 #: sunflower/gui/mounts_manager_window.py:559 sunflower/mounts.py:226
@@ -1579,7 +1579,7 @@ msgstr "Ontkoppelen"
 
 #: sunflower/gui/mounts_manager_window.py:548
 msgid "Mounted"
-msgstr ""
+msgstr "Aangekoppeld"
 
 #: sunflower/gui/mounts_manager_window.py:555 sunflower/mounts.py:232
 #: sunflower/plugins/file_list/gio_extension.py:194
@@ -1590,7 +1590,7 @@ msgstr "Aankoppelen"
 
 #: sunflower/gui/mounts_manager_window.py:697
 msgid "Volumes"
-msgstr ""
+msgstr "Volumes"
 
 #: sunflower/gui/keyring_manager_window.py:29
 msgid "Keyring manager"
@@ -1640,11 +1640,15 @@ msgstr "De wachtwoorden komen niet overeen! Probeer het opnieuw."
 msgid "Twin-panel file manager for Linux."
 msgstr "Een Linux-bestandsbeheerder met twee panelen."
 
-#: sunflower/gui/about_window.py:80
-msgid "Copyright © 2010-2019 by Mladen Mijatov and contributors."
-msgstr "Copyright © 2010-2019 by Mladen Mijatov en bijdragers."
+#: sunflower/gui/about_window.py:78
+msgid "translator-credits"
+msgstr "Heimen Stoffels <vistausss@fastmail.com>"
 
-#: sunflower/gui/about_window.py:96
+#: sunflower/gui/about_window.py:81
+msgid "Copyright © 2010-2022 by Mladen Mijatov and contributors."
+msgstr "Copyright © 2010-2022 Mladen Mijatov en bijdragers."
+
+#: sunflower/gui/about_window.py:97
 msgid "Contributors"
 msgstr "Bijdragers"
 

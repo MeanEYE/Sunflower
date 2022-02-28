@@ -244,9 +244,9 @@ class EmblemManager:
 		cursor.execute('SELECT value FROM emblems WHERE item=?', (item_id,))
 
 		# prepare result
-		icom_theme = Gtk.IconTheme.get_default()
+		icon_theme = Gtk.IconTheme.get_default()
 		result = tuple(row[0] for row in cursor.fetchall())
-		result = [icon for icon in result if icom_theme.has_icon(icon)]
+		result = [icon for icon in result if icon_theme.has_icon(icon)]
 
 		return result
 
@@ -260,7 +260,7 @@ class EmblemManager:
 		cursor = self._get_cursor()
 
 		# get all the items in path
-		cursor.execute('SELECT id, name FROM items WHERE path=?', (encode_file_name(path),))
+		cursor.execute('SELECT id, name FROM items WHERE path=?', (path,))
 		items = cursor.fetchall()
 
 		# exit if there are no items in path
@@ -268,10 +268,10 @@ class EmblemManager:
 			return result
 
 		# get emblems for each item
+		icon_theme = Gtk.IconTheme.get_default()
 		for item_id, item_name in items:
 			cursor.execute('SELECT value FROM emblems WHERE item=?', (item_id,))
-			icom_theme = Gtk.IconTheme.get_default()
 			emblems = tuple(row[0] for row in cursor.fetchall())
-			result[item_name] = [icon for icon in emblems if icom_theme.has_icon(icon)]
+			result[item_name] = [icon for icon in emblems if icon_theme.has_icon(icon)]
 
 		return result

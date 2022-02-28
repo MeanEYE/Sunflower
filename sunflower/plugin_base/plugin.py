@@ -99,17 +99,17 @@ class PluginBase(Gtk.VBox):
 		if actions is not None:
 			# configure drag and drop features
 			# TODO: Fix this for GTK3
-			# self._main_object.drag_dest_set(
-			# 							Gtk.DestDefaults.ALL,
-			# 							types,
-			# 							actions
-			# 						)
+			self._main_object.drag_dest_set(
+										Gtk.DestDefaults.ALL,
+										types,
+										actions
+									)
 
-			# self._main_object.drag_source_set(
-			# 							Gdk.ModifierType.BUTTON1_MASK | Gdk.ModifierType.BUTTON3_MASK,
-			# 							types,
-			# 							actions
-			# 						)
+			self._main_object.drag_source_set(
+										Gdk.ModifierType.BUTTON1_MASK | Gdk.ModifierType.BUTTON3_MASK,
+										types,
+										actions
+									)
 
 			# connect drag and drop events
 			self._main_object.connect('drag-begin', self._drag_begin)
@@ -197,7 +197,9 @@ class PluginBase(Gtk.VBox):
 
 		# update states
 		self.update_state(Gtk.StateType.SELECTED)
-		self._parent.get_opposite_object(self).update_state(Gtk.StateType.NORMAL)
+		opposite_object = self._parent.get_opposite_object(self)
+		if opposite_object:
+			opposite_object.update_state(Gtk.StateType.NORMAL)
 
 		# deactivate scheduled accelerators
 		deactivated = self._parent.accelerator_manager.deactivate_scheduled_groups(self)
@@ -267,8 +269,7 @@ class PluginBase(Gtk.VBox):
 				Gdk.KEY_Right,
 				Gdk.KEY_Up,
 				Gdk.KEY_Down
-			)
-
+				)
 		keyval = event.keyval
 		state = event.get_state()
 

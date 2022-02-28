@@ -32,6 +32,7 @@ class AdvancedRename:
 		self.window.set_transient_for(application)
 		self.window.set_border_width(7)
 		self.window.set_type_hint(Gdk.WindowTypeHint.DIALOG)
+		self.window.set_modal(True)
 		self.window.set_wmclass('Sunflower', 'Sunflower')
 
 		self.window.connect('key-press-event', self._handle_key_press)

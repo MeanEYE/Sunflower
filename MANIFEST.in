@@ -1,1 +1,2 @@
 recursive-include sunflower *.css
+recursive-include sunflower *.conf

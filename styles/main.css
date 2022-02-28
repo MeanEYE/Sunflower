@@ -1,5 +1,5 @@
 /**
- * Tab title bar.
+ * Tab title bar
  */
 box.horizontal.sunflower-title-bar {
 	border: 5px solid @theme_unfocused_bg_color;
@@ -24,12 +24,11 @@ scrolledwindow.sunflower-breadcrumbs button {
 }
 
 scrolledwindow.sunflower-breadcrumbs button:checked {
-	font-weight: bold;
 	color: @theme_selected_bg_color;
 }
 
 /**
- * Item list.
+ * Item list
  */
 treeview.sunflower-main-object:selected {
 	outline: none;

@@ -94,7 +94,8 @@ class Config(Container):
 
 		try:
 			# try loading config file
-			data = self._decoder.decode(open(file_name).read())
+			with open(file_name) as raw_file:
+				data = self._decoder.decode(raw_file.read())
 
 		except ValueError:
 			# if error occurs, we'll just ignore it

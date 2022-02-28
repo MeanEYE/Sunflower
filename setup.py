@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from setuptools import setup, find_packages
+from pathlib import Path
 
 def get_version():
 	"""Get software version from the main window."""
@@ -11,7 +12,7 @@ def get_version():
 	return '{major}.{minor}.{build}'.format(**MainWindow.version)
 
 
-setup(
+setup (
 		name='Sunflower',
 		version=get_version(),
 		description='Twin-panel file manager.',
@@ -26,8 +27,9 @@ setup(
 		packages=find_packages(),
 		include_package_data=True,
 		data_files=[
-			('images', ['images/sunflower.svg']),
-			('images', ['images/splash.png']),
+			('share/sunflower/images/', list(str(i) for i in Path('images/').rglob('*') if i.is_file())),
+			('share/sunflower/translations', list(str(i) for i in Path('translations/').rglob('*.po') if i.is_file())),
+			('share/sunflower/styles', ['styles/main.css']),
 			('share/applications', ['Sunflower.desktop'])
 			],
 		entry_points={'console_scripts': ['sunflower = sunflower.__main__:main']}

@@ -6,7 +6,7 @@ import time
 import sys
 import fnmatch
 
-from gi.repository import GObject, Gtk, Gdk, GLib
+from gi.repository import GObject, Gtk, Gdk, GLib, Gio
 from threading import Thread, Event
 
 from .column_editor import FileList_ColumnEditor
@@ -44,6 +44,7 @@ class Column:
 	USER_ID = 15
 	GROUP_ID = 16
 	EMBLEMS = 17
+	SORT_DATA = 18
 
 
 class FileList(ItemList):
@@ -73,6 +74,7 @@ class FileList(ItemList):
 		self._main_thread_lock = Event()
 
 		self._item_queue = []
+		self._emblem_cache = {}
 
 		# storage system for list items
 		self._store = Gtk.TreeStore(
@@ -95,7 +97,8 @@ class FileList(ItemList):
 								bool,	# Column.SELECTED
 								int,	# Column.USER_ID
 								int,	# Column.GROUP_ID
-								GObject.TYPE_PYOBJECT	# Column.EMBLEMS
+								GObject.TYPE_PYOBJECT,	# Column.EMBLEMS
+								str		# Column.SORT_DATA
 							)
 
 		# set item list model
@@ -109,8 +112,7 @@ class FileList(ItemList):
 		cell_size = Gtk.CellRendererText()
 		cell_mode = Gtk.CellRendererText()
 		cell_date = Gtk.CellRendererText()
-		# TODO: Fix these
-		# cell_emblems = CellRendererEmblems()
+		cell_emblems = CellRendererEmblems()
 
 		cell_name.set_property('single-paragraph-mode', True)
 		cell_extension.set_property('single-paragraph-mode', True)
@@ -143,10 +145,10 @@ class FileList(ItemList):
 		col_date.name = 'date'
 
 		# add cell renderer to columns
-		col_name.pack_start(cell_selected, False)
-		# col_name.pack_start(cell_emblems, False)
 		col_name.pack_start(cell_icon, False)
 		col_name.pack_start(cell_name, True)
+		col_name.pack_start(cell_selected, False)
+		col_name.pack_start(cell_emblems, False)
 		col_extension.pack_start(cell_extension, True)
 		col_size.pack_start(cell_size, True)
 		col_mode.pack_start(cell_mode, True)
@@ -161,8 +163,8 @@ class FileList(ItemList):
 		col_date.add_attribute(cell_date, 'foreground', Column.COLOR)
 
 		col_name.add_attribute(cell_icon, 'icon-name', Column.ICON)
-		# col_name.add_attribute(cell_emblems, 'emblems', Column.EMBLEMS)
-		# col_name.add_attribute(cell_emblems, 'is-link', Column.IS_LINK)
+		col_name.add_attribute(cell_emblems, 'emblems', Column.EMBLEMS)
+		col_name.add_attribute(cell_emblems, 'is-link', Column.IS_LINK)
 		col_name.add_attribute(cell_name, 'text', Column.FORMATED_NAME)
 		col_extension.add_attribute(cell_extension, 'text', Column.EXTENSION)
 		col_size.add_attribute(cell_size, 'text', Column.FORMATED_SIZE)
@@ -322,6 +324,8 @@ class FileList(ItemList):
 		"""Apply font size from settings."""
 		options = self._parent.plugin_options.section(self._name)
 
+		font = common.get_monospace_font_string()
+
 		for column in columns:
 			column.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
 			font_size = options.get('font_size_{0}'.format(column.name)) or \
@@ -338,7 +342,7 @@ class FileList(ItemList):
 				try:
 					cell_renderer.set_property('size-points', font_size)
 					if cell_renderer in self._monospace_renderers:
-						cell_renderer.set_property('family', 'Monospace')
+						cell_renderer.set_property('family', font)
 
 				except TypeError:
 					pass
@@ -385,18 +389,8 @@ class FileList(ItemList):
 
 		# show preview if thumbnail exists
 		if self._thumbnail_view.can_have_thumbnail(uri):
-			# calculate position for preview
-			path = self._store.get_path(selected_iter)
-			column = self._item_list.get_column(0)
-			position = self._item_list.get_cell_area(path, column)
-			position.width = self._item_list.get_allocated_width()
-			position.x, position.y = self._item_list.convert_tree_to_widget_coords(position.x, position.y)
-
-			# show preivew in specified location
-			self._thumbnail_view.show_thumbnail(uri, widget, position)
-
+			self._thumbnail_view.show_thumbnail(uri, widget, self._get_selection_rectangle())
 		else:
-			# hide preview if item thumbnail is not available
 			self._thumbnail_view.hide()
 
 		return True
@@ -404,11 +398,7 @@ class FileList(ItemList):
 	def _handle_tab_close(self):
 		"""Handle tab closing"""
 		ItemList._handle_tab_close(self)
-
-		# cancel current directory monitor
 		self.cancel_monitors()
-
-		# cancel disk usage calculations
 		self._parent.disk_usage.cancel_all_for_object(self)
 
 	def _handle_emblem_toggle(self, widget, emblem=None):
@@ -435,6 +425,10 @@ class FileList(ItemList):
 		"""Execute/Open selected item"""
 		selection = self._item_list.get_selection()
 		item_list, selected_iter = selection.get_selected()
+
+		# don't override key strokes for popup menus
+		if self._popup_menu.visible:
+			return False
 
 		# we need selection for this
 		if selected_iter is None:
@@ -464,7 +458,6 @@ class FileList(ItemList):
 
 		else:
 			# selected item is just a file, execute it
-			selected_file = self._get_selection()
 			self._parent.associations_manager.execute_file(selected_file, provider=self.get_provider())
 
 		return True  # to prevent command or quick search in single key bindings
@@ -478,10 +471,7 @@ class FileList(ItemList):
 			response = dialog.get_response()
 
 			if response[0] == Gtk.ResponseType.OK:
-				self._parent.associations_manager.open_file(
-														selection,
-														exec_command=response[2]
-													)
+				self._parent.associations_manager.open_file(selection, exec_command=response[2])
 
 		else:
 			# invalid selection, warn user
@@ -530,7 +520,6 @@ class FileList(ItemList):
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
 
 		if is_dir:
-			# selected item is directory, we need to change path
 			if is_parent:
 				# call specialized change path method
 				self._parent_directory(widget, data)
@@ -1004,7 +993,7 @@ class FileList(ItemList):
 				except IOError as error:
 					# problem renaming item
 					dialog = Gtk.MessageDialog(
-											self,
+											self._parent,
 											Gtk.DialogFlags.DESTROY_WITH_PARENT,
 											Gtk.MessageType.ERROR,
 											Gtk.ButtonsType.OK,
@@ -1133,106 +1122,6 @@ class FileList(ItemList):
 
 		return result
 
-	def _prepare_popup_menu(self):
-		"""Populate pop-up menu items"""
-		selection = self._item_list.get_selection()
-		item_list, selected_iter = selection.get_selected()
-		associations_manager = self._parent.associations_manager
-		menu_manager = self._parent.menu_manager
-		if selected_iter is None:
-			cursor_path, focus_column = self._item_list.get_cursor()
-			selected_iter = item_list.get_iter(cursor_path)
-
-		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
-		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
-
-		# get selected item
-		filename = self._get_selection()
-		selection = self._get_selection_list()
-
-		# detect mime type
-		if is_dir:
-			mime_type = 'inode/directory'
-
-		else:
-			mime_type = associations_manager.get_mime_type(filename)
-
-			# try to detect by content
-			if associations_manager.is_mime_type_unknown(mime_type):
-				data = associations_manager.get_sample_data(filename, self.get_provider())
-				mime_type = associations_manager.get_mime_type(data=data)
-
-		# call parent method which removes existing menu items
-		ItemList._prepare_popup_menu(self)
-
-		# update additional options menu
-		additional_options = menu_manager.get_additional_options_for_type(mime_type, selection, self.get_provider())
-		for menu_item in additional_options:
-			self._additional_options_menu.append(menu_item)
-
-		# get associated applications
-		program_list = menu_manager.get_items_for_type(mime_type, selection)
-		custom_list = menu_manager.get_custom_items_for_type(mime_type, selection)
-
-		# create open with menu
-		for menu_item in program_list:
-			self._open_with_menu.append(menu_item)
-
-		# add separator if there are other menu items
-		if len(program_list) > 0:
-			separator = Gtk.SeparatorMenuItem()
-			separator.show()
-			self._open_with_menu.append(separator)
-
-		# add custom menu items if needed
-		if len(custom_list) > 0:
-			for menu_item in custom_list:
-				self._open_with_menu.append(menu_item)
-
-			# add separator if needed
-			if len(program_list) > 0:
-				separator = Gtk.SeparatorMenuItem()
-				separator.show()
-				self._open_with_menu.append(separator)
-
-		# create an option for opening selection with custom command
-		open_with_other = Gtk.MenuItem(_('Other application...'))
-		open_with_other.connect('activate', self._execute_with_application)
-		open_with_other.show()
-
-		self._open_with_menu.append(open_with_other)
-
-		# disable/enable items
-		self._open_with_item.set_sensitive(not is_parent)
-		self._open_new_tab_item.set_visible(is_dir)
-		self._additional_options_item.set_sensitive(len(additional_options) > 0)
-		self._cut_item.set_sensitive(not is_parent)
-		self._copy_item.set_sensitive(not is_parent)
-		self._paste_item.set_sensitive(self._parent.is_clipboard_item_list())
-		self._send_to_item.set_sensitive(self.get_provider().is_local and not is_parent)
-		self._rename_item.set_sensitive(not is_parent)
-		self._delete_item.set_sensitive(not is_parent)
-		self._properties_item.set_sensitive(not is_parent)
-
-	def _prepare_emblem_menu(self):
-		"""Prepare emblem menu."""
-		emblem_list = self._parent.emblem_manager.get_available_emblems()
-
-		for emblem in emblem_list:
-			# create image
-			image = Gtk.Image()
-			image.set_from_icon_name(emblem, Gtk.IconSize.MENU)
-
-			# create menu item
-			menu_item = Gtk.ImageMenuItem(emblem)
-			menu_item.set_image(image)
-			menu_item.connect('activate', self._handle_emblem_toggle, emblem)
-
-			# add emblem to menu
-			self._emblem_menu.append(menu_item)
-
-		self._emblem_menu.show_all()
-
 	def _get_popup_menu_position(self, menu=None, *args):
 		"""Positions menu properly for given row"""
 		selection = self._item_list.get_selection()
@@ -1245,11 +1134,8 @@ class FileList(ItemList):
 		rect = self._item_list.get_cell_area(item_list.get_path(selected_iter), self._columns[0])
 		tree_rect = self._item_list.get_visible_rect()
 
-		# grab window coordinates
-		window_x, window_y = self._parent.get_window().get_position()
-
 		# relative to tree
-		x, y = rect.x, rect.y + rect.height
+		x, y = rect.x, rect.y
 		x, y = self._item_list.convert_tree_to_widget_coords(x, y)
 
 		# modify coordinate by tree display rectangle vertical offset
@@ -1258,11 +1144,9 @@ class FileList(ItemList):
 		# relative to window
 		x, y = self._item_list.translate_coordinates(self._parent, x, y)
 
-		# relative to screen
-		x += window_x
-		y += window_y
-
-		return x, y, True
+		# return calculated coordinates and original cell dimensions
+		rect.x, rect.y = x, y
+		return rect
 
 	def _set_sort_function(self, widget, data=None):
 		"""Set sorting method stored in data
@@ -1295,67 +1179,72 @@ class FileList(ItemList):
 		# apply sorting function
 		order = [Gtk.SortType.DESCENDING, Gtk.SortType.ASCENDING][self._sort_ascending]
 		self._sort_column_widget.set_sort_order(order)
-
-		self._store.set_sort_func(self._sort_column, self._sort_list)
-		self._store.set_sort_column_id(self._sort_column, order)
-
-		if focus_selected:
-			selection = self._item_list.get_selection()
-			item_list, iter_to_scroll = selection.get_selected()
-			if iter_to_scroll:
-				path_to_scroll = item_list.get_path(iter_to_scroll)
-				self._item_list.scroll_to_cell(path_to_scroll, None, True, 0.5)
+		self._store.set_sort_column_id(Column.SORT_DATA, order)
+		self._generate_sort_data()
 
 	def _clear_sort_function(self):
 		"""Clear sort settings"""
 		self._store.set_sort_column_id(Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, True)
 
-	def _sort_list(self, item_list, iter1, iter2, data=None):
-		"""Compare two items for sorting process"""
-		reverse = (1, -1)[self._sort_ascending]
+	def _generate_sort_data(self, parent=None, iters=None):
+		"""Generate sort data for all iters in the first level or children of the provided
+		parent. Separate `iters` list is added as a convenience to allow regenerating sort
+		data for specific items in the list."""
+		bool_values = ['1', '0'] if self._sort_ascending else ['0', '1']
 
-		sort_column = self._sort_column
-		value1 = item_list.get_value(iter1, sort_column)
-		value2 = item_list.get_value(iter2, sort_column)
+		# find starting point
+		found_iter = None
+		if parent is None:
+			found_iter = self._store.get_iter_first()
 
-		if sort_column is Column.NAME or sort_column is Column.EXTENSION:
-			# make values lowercase for case insensitive comparison
-			if not self._sort_case_sensitive:
-				value1 = value1.lower()
+		elif self._store.iter_has_child(parent):
+			found_iter = self._store.iter_children(parent)
 
-				if value2 is not None:  # make sure we have extension to make lowercase
-					value2 = value2.lower()
+		def generate_data(for_iter):
+			is_dir = self._store.get_value(for_iter, Column.IS_DIR)
+			is_parent = self._store.get_value(for_iter, Column.IS_PARENT_DIR)
+			value = self._store.get_value(for_iter, self._sort_column)
 
-			# split values to list containing characters and numbers
-			if self._sort_number_sensitive:
-				value1 = [int(part) if part.isdigit() else part for part in self.number_split.split(value1)]
-				value2 = [int(part) if part.isdigit() else part for part in self.number_split.split(value2)]
+			if self._sort_number_sensitive and self._sort_column == Column.NAME:
+				value = ''.join([part.rjust(12, '0') if part.isdigit() else part for part in self.number_split.split(value)])
 
-		item1 = (
-				reverse * item_list.get_value(iter1, Column.IS_PARENT_DIR),
-				reverse * item_list.get_value(iter1, Column.IS_DIR),
-				value1
-			)
+			if isinstance(value, str) and not self._sort_case_sensitive:
+				value = value.lower()
 
-		item2 = (
-				reverse * item_list.get_value(iter2, Column.IS_PARENT_DIR),
-				reverse * item_list.get_value(iter2, Column.IS_DIR),
-				value2
-			)
+			if isinstance(value, int) or isinstance(value, float):
+				value = str(value).rjust(12, '0')
 
-		if item1 > item2:
-			return 1
-		elif item2 == item1:
-			return 0
-		else:
-			return -1
+			return '{}{}{}'.format(bool_values[is_parent], bool_values[is_dir], value)
+
+		# collect data for all iters
+		update_data = []
+		while found_iter:
+			update_data.append((found_iter, generate_data(found_iter)))
+			found_iter = self._store.iter_next(found_iter)
+
+		# process provided list
+		if iters:
+			for found_iter in iters:
+				update_data.append((found_iter, generate_data(found_iter)))
+				found_iter = self._store.iter_next(found_iter)
+
+		# delayed data update since we can't read and write at the same time
+		for item_iter, sort_data in update_data:
+			self._store.set_value(item_iter, Column.SORT_DATA, sort_data)
+
+		# move cursor to previously selected element
+		selection = self._item_list.get_selection()
+		item_list, iter_to_scroll = selection.get_selected()
+		if iter_to_scroll:
+			path_to_scroll = item_list.get_path(iter_to_scroll)
+			self._item_list.scroll_to_cell(path_to_scroll, None, True, 0.5)
 
 	def _clear_list(self):
-		"""Clear item list"""
+		"""Clear item list."""
 		self._store.clear()
 
 	def _directory_changed(self, monitor, event, path, other_path, parent=None):
-		"""Callback method fired when contents of directory has been changed"""
+		"""Callback method fired when contents of directory has been changed."""
 		show_hidden = self._parent.options.section('item_list').get('show_hidden')
 
 		# make sure we are working with relative paths
@@ -1363,13 +1252,11 @@ class FileList(ItemList):
 			path = path[len(self.path)+1:]
 
 		# get parent path
-		relative_path = path
 		parent_path = None
 
 		if parent is not None:
 			# form relative path for easier handling
 			parent_path = self._store.get_value(parent, Column.NAME)
-			relative_path = os.path.join(parent_path, path)
 
 		elif parent is None and os.path.sep in path:
 			# find parent for fallback monitor
@@ -1383,7 +1270,7 @@ class FileList(ItemList):
 				parent = self._find_iter_by_name(fragment, parent)
 
 		# check for list of always hidden files
-		provider = self.get_provider(parent_path)
+		provider = self.get_provider()
 		always_hidden = []
 
 		if not show_hidden and provider.exists('.hidden', relative_to=parent_path):
@@ -1418,7 +1305,7 @@ class FileList(ItemList):
 				Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
 
 			else:
-				self._update_item_details_by_name(relative_path, parent)
+				self._update_item_details_by_name(path, parent, parent_path)
 
 		# node renamed
 		elif event is MonitorSignals.MOVED:
@@ -1440,28 +1327,25 @@ class FileList(ItemList):
 			if should_add and len(always_hidden) > 0:
 				should_add = other_path not in always_hidden
 
-			self._delete_item_by_name(relative_path, parent)
-
-			if other_path is None:
-				return
+			self._delete_item_by_name(path, parent)
 
 			if should_add:
 				self._add_item(other_path, parent, parent_path)
 				Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
 			else:
-				self._update_item_details_by_name(other_path, parent)
+				self._update_item_details_by_name(other_path, parent, parent_path)
 
 		# node deleted
 		elif event is MonitorSignals.DELETED:
-			self._delete_item_by_name(relative_path, parent)
+			self._delete_item_by_name(path, parent)
 
 		# node changed
 		elif event is MonitorSignals.CHANGED:
-			self._update_item_details_by_name(relative_path, parent)
+			self._update_item_details_by_name(path, parent, parent_path)
 
 		# attributes changes
 		elif event is MonitorSignals.ATTRIBUTE_CHANGED:
-			self._update_item_attributes_by_name(relative_path, parent)
+			self._update_item_attributes_by_name(path, parent, parent_path)
 
 		# emblem changes
 		elif event is MonitorSignals.EMBLEM_CHANGED:
@@ -1629,17 +1513,15 @@ class FileList(ItemList):
 
 		elif self._store.iter_has_child(parent):
 			found_iter = self._store.iter_children(parent)
-			relative_parent = parent
 			name = os.path.join(self._store.get_value(parent, Column.NAME), name)
 
 		# check all the iters for specified name
-		if found_iter is not None:
-			while found_iter:
-				if self._store.get_value(found_iter, Column.NAME) == name:
-					result = found_iter
-					break
+		while found_iter:
+			if self._store.get_value(found_iter, Column.NAME) == name:
+				result = found_iter
+				break
 
-				found_iter = self._store.iter_next(found_iter)
+			found_iter = self._store.iter_next(found_iter)
 
 		return result
 
@@ -1731,12 +1613,13 @@ class FileList(ItemList):
 					None,
 					file_stat.user_id,
 					file_stat.group_id,
-					None
+					self._emblem_cache[filename] if filename in self._emblem_cache else None,
+					''
 				)
 
 			self._item_queue.append(data)
 
-			if len(self._item_queue) > 100:
+			if len(self._item_queue) == 100:
 				Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
 
 		except Exception as error:
@@ -1746,15 +1629,20 @@ class FileList(ItemList):
 
 	def _flush_queue(self, parent=None):
 		"""Add items in queue to the list"""
+		queued_iters = []
 		path_to_select = None
 
 		# add items from the queue
 		for data in self._item_queue:
 			new_iter = self._store.append(parent, data)
+			queued_iters.append(new_iter)
 
 			# focus specified item
 			if self._item_to_focus == data[0]:
 				path_to_select = self._store.get_path(new_iter)
+
+		# schedule sort data update
+		Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._generate_sort_data, None, queued_iters)
 
 		# select path if needed
 		if path_to_select is not None:
@@ -1802,7 +1690,7 @@ class FileList(ItemList):
 			# remove
 			self._store.remove(found_iter)
 
-	def _update_item_details_by_name(self, name, parent):
+	def _update_item_details_by_name(self, name, parent, parent_path):
 		"""Update item details (size, time, etc.) on changed event"""
 		found_iter = self._find_iter_by_name(name, parent)
 		provider = self.get_provider()
@@ -1810,7 +1698,8 @@ class FileList(ItemList):
 		if found_iter is not None:
 			# get node stats
 			is_dir = self._store.get_value(found_iter, Column.IS_DIR)
-			file_stat = provider.get_stat(name, relative_to=self.path)
+			path = self.path if parent_path is None else os.path.join(self.path, parent_path)
+			file_stat = provider.get_stat(name, relative_to=path)
 
 			file_size = file_stat.size
 			file_mode = file_stat.mode
@@ -1835,24 +1724,32 @@ class FileList(ItemList):
 			self._store.set_value(found_iter, Column.FORMATED_MODE, formated_file_mode)
 			self._store.set_value(found_iter, Column.FORMATED_TIME, formated_file_date)
 
-	def _update_item_attributes_by_name(self, name, parent):
+			# regenerate sort data
+			self._generate_sort_data(iters=[found_iter,])
+
+	def _update_item_attributes_by_name(self, name, parent, parent_path):
 		"""Update item attributes column by name"""
 		found_iter = self._find_iter_by_name(name, parent)
 		provider = self.get_provider()
 
 		if found_iter is not None:
 			# get node stats
-			file_stat = provider.get_stat(name, relative_to=self.path)
+			path = self.path if parent_path is None else os.path.join(self.path, parent_path)
+			file_stat = provider.get_stat(name, relative_to=path)
 
 			file_mode = file_stat.mode
 			file_date = file_stat.time_modify
 			formated_file_mode = common.format_mode(file_mode, self._mode_format)
 			formated_file_date = time.strftime(self._time_format, time.localtime(file_date))
 
+			# update list store
 			self._store.set_value(found_iter, Column.MODE, file_mode)
 			self._store.set_value(found_iter, Column.TIME, file_date)
 			self._store.set_value(found_iter, Column.FORMATED_MODE, formated_file_mode)
 			self._store.set_value(found_iter, Column.FORMATED_TIME, formated_file_date)
+
+			# regenerate sort data
+			self._generate_sort_data(iters=[found_iter,])
 
 	def _change_title_text(self, text=None):
 		"""Change title label text and add free space display"""
@@ -1892,48 +1789,39 @@ class FileList(ItemList):
 			# check if drag destination is a directory
 			if self._store.get_value(under_cursor, Column.IS_DIR):
 				path = path_at_row
-				action = drag_context.action
+				action = drag_context.get_actions()
 			else:
 				path = self._store.get_path(self._store.iter_parent(under_cursor))
 
 		except TypeError:
 			pass
 
-		if drag_context.get_source_widget() is widget and path is None:
-			drag_context.drag_status(action, timestamp)
-
 		widget.set_drag_dest_row(path, Gtk.TreeViewDropPosition.INTO_OR_AFTER)
 
 		return True
 
 	def _drag_auto_scroll(self, widget, x, y):
-		vadj = widget.get_vadjustment()
-		hadj = widget.get_hadjustment()
+		"""Automatically scroll while dragging objects."""
+		adjustment = widget.get_vadjustment()
 
-		if vadj is not None:
-			value, upper, lower, step = vadj.get_value(), vadj.get_upper(), vadj.get_lower(), vadj.get_step_increment()
-			size = vadj.get_page_size()
-			row_height = widget.get_cell_area((0,), widget.get_column(0)).height
+		if adjustment is None:
+			return
 
-			if y < row_height*2:
-				value = value - step if value > lower else lower
-			elif y > (widget.get_allocation().height - row_height*2):
-				value = value + step if value < (upper - size) else upper - size
+		value = adjustment.get_value()
+		upper = adjustment.get_upper()
+		lower = adjustment.get_lower()
+		step = adjustment.get_step_increment()
+		size = adjustment.get_page_size()
 
-			vadj.set_value(value)
-			vadj.value_changed()
+		row_height = widget.get_cell_area((0,), widget.get_column(0)).height
 
-		if hadj is not None:
-			value, upper, lower, step = hadj.get_value(), hadj.get_upper(), hadj.get_lower(), hadj.get_step_increment()
-			size = hadj.get_page_size()
+		if y < row_height * 2:
+			value = value - step if value > lower else lower
+		elif y > (widget.get_allocation().height - row_height * 2):
+			value = value + step if value < (upper - size) else upper - size
 
-			if x < 40:
-				value = value - step if value > lower else lower
-			elif x > (widget.get_allocation().width - 40):
-				value = value + step if value < (upper - size) else upper - size
-
-			hadj.set_value(value)
-			hadj.value_changed()
+		adjustment.set_value(value)
+		adjustment.value_changed()
 
 	def _drag_ask(self):
 		"""Show popup menu and return selected action"""
@@ -1944,12 +1832,12 @@ class FileList(ItemList):
 				{
 					'action': Gdk.DragAction.COPY,
 					'name': _('Copy here'),
-					'icon': 'stock_folder-copy'
+					'icon': 'edit-copy-symbolic'
 				},
 				{
 					'action': Gdk.DragAction.MOVE,
 					'name': _('Move here'),
-					'icon': 'stock_folder-move'
+					'icon': 'edit-cut-symbolic'
 				},
 				{
 					'action': Gdk.DragAction.LINK,
@@ -1980,17 +1868,14 @@ class FileList(ItemList):
 		menu.append(Gtk.SeparatorMenuItem())
 
 		# create cancel option
-		image = Gtk.Image()
-		image.set_from_stock(Gtk.STOCK_CANCEL, Gtk.IconSize.MENU)
 		menu_item = Gtk.ImageMenuItem()
 		menu_item.set_label(_('Cancel'))
-		menu_item.set_image(image)
 		menu.append(menu_item)
 
 		# show menu in separate user interface thread
 		menu.show_all()
 		menu.connect('deactivate', Gtk.main_quit)
-		menu.popup(None, None, None, None, 1, 0)
+		menu.popup_at_pointer()
 		Gtk.main()
 
 		return result[0] if result else None
@@ -1998,14 +1883,14 @@ class FileList(ItemList):
 	def _drag_data_received(self, widget, drag_context, x, y, selection_data, info, timestamp):
 		"""Handle dropping files on file list"""
 		result = False
-		action = drag_context.action
-		item_list = selection_data.data.splitlines(False)
+		action = drag_context.get_selected_action()
+		item_list = selection_data.get_data().decode('utf-8').splitlines(False)
 
 		# prepare data for copying
 		protocol, path = item_list[0].split('://', 1)
 
 		# handle data
-		if action is Gdk.DragAction.ASK:
+		if action == Gdk.DragAction.ASK:
 			action = self._drag_ask()
 
 		if action in (Gdk.DragAction.COPY, Gdk.DragAction.MOVE):
@@ -2041,7 +1926,7 @@ class FileList(ItemList):
 											destination
 										)
 
-		elif action is Gdk.DragAction.LINK:
+		elif action == Gdk.DragAction.LINK:
 			# handle linking
 			result = self._create_link(original_path=path)
 
@@ -2058,13 +1943,13 @@ class FileList(ItemList):
 				file_name = '{0}://{1}'.format(protocol, file_name)
 			selection.append(file_name)
 
-		selection_data.set(selection_data.target, 8, '\n'.join(selection))
+		selection_data.set_uris(selection)
 		return True
 
 	def _get_supported_drag_types(self):
 		"""Return list of supported data for drag'n'drop events"""
 		return [
-				('text/uri-list', 0, 0),
+				Gtk.TargetEntry.new('text/uri-list', 0, 0),
 			]
 
 	def _get_supported_drag_actions(self):
@@ -2091,9 +1976,6 @@ class FileList(ItemList):
 		# clear item queue
 		self._item_queue[:] = []
 
-		# disable sorting while we load
-		self._clear_sort_function()
-
 		# default value for parent path
 		parent_path = None
 
@@ -2104,45 +1986,28 @@ class FileList(ItemList):
 		if path != self.get_provider().get_root_path(path):
 			if parent is None:
 				self._store.append(parent, (
-								os.path.pardir,
-								os.path.pardir,
-								'',
-								-2,
-								'<DIR>',
-								-1,
-								'',
-								-1,
-								'',
-								True,
-								True,
-								False,
-								None,
-								'go-up',
-								None,
-								0,
-								0,
-								None
-							))
+					os.path.pardir, os.path.pardir, '', -2, '<DIR>', -1, '', -1,
+					'', True, True, False, None, 'go-up', None, 0, 0, None, ''
+					))
 
 			else:
 				# prepare full parent path
 				parent_path = self._store.get_value(parent, Column.NAME)
 
-		# let the rest of items load in a separate thread
+		# load items in separate thread
 		def thread_method():
-			# set event to active
 			self._thread_active.set()
-
-			# show spinner animation
 			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._title_bar.show_spinner)
 
+			# preload emblems for faster operation
+			self._emblem_cache = self._parent.emblem_manager.get_emblems_for_path(path)
+
+			# get initial directory listing
 			try:
-				# get list of items to add
 				provider = self.get_provider()
 				item_list = provider.list_dir(path)
 
 			except Exception as error:
-				# report error first
 				print('Load directory error: ', str(error))
 
 				# clear locks and exit
@@ -2150,7 +2015,6 @@ class FileList(ItemList):
 				self._main_thread_lock.clear()
 
 				Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._title_bar.hide_spinner)
-
 				return
 
 			# remove hidden files if we don't need them
@@ -2169,7 +2033,7 @@ class FileList(ItemList):
 				# filter out hidden items and backup files
 				item_list = [name for name in item_list if (name[0] != '.' and name[-1] != '~') or name in self._always_visible_items]
 
-				# filter out items specified in direcotry file or program
+				# filter out items specified in directory file or program
 				if len(always_hidden) > 0:
 					item_list = [name for name in item_list if name not in always_hidden]
 
@@ -2178,7 +2042,8 @@ class FileList(ItemList):
 				self._item_to_focus = None
 
 			for item_name in item_list:
-				# check if we are allowed to continue
+				# check if we are allowed to continue as we don't want
+				# items from different directory ending up in our list
 				if not self._thread_active.is_set():
 					break
 
@@ -2193,13 +2058,6 @@ class FileList(ItemList):
 			# update status bar
 			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._update_status_with_statistis)
 
-			# turn on sorting
-			focus_selected = parent is None
-			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._apply_sort_function, focus_selected)
-
-			# load emblems
-			self._load_emblems(parent, parent_path)
-
 			# release locks
 			self._thread_active.clear()
 			self._main_thread_lock.clear()
@@ -2213,40 +2071,6 @@ class FileList(ItemList):
 
 		# enable updates on cursor change
 		self._item_list.handler_unblock_by_func(self._handle_cursor_change)
-
-	def _load_emblems(self, parent=None, parent_path=None):
-		"""Load emblems for specified path."""
-		icon_manager = self._parent.icon_manager
-		emblem_manager = self._parent.emblem_manager
-		item_store = self._store  # avoid namespace lookups
-
-		# get path to load emblems for
-		path = self._options.get('path')
-		if parent is not None:
-			path = os.path.join(path, parent_path)
-
-		# get emblems for current path
-		emblems = emblem_manager.get_emblems_for_path(path)
-
-		# avoid wasting time
-		if len(emblems) == 0:
-			return
-
-		# iterate over items in the list
-		list_iter = item_store.iter_children(parent) if parent else item_store.get_iter_first()
-
-		while list_iter:
-			name = item_store.get_value(list_iter, Column.NAME)
-
-			if parent is not None:
-				name = os.path.split(name)[1]
-
-			# set emblems for item
-			if name in emblems:
-				item_store.set_value(list_iter, Column.EMBLEMS, emblems[name])
-
-			# get next item in list
-			list_iter = item_store.iter_next(list_iter)
 
 	def _update_emblems_by_name(self, name, parent=None, parent_path=None):
 		"""Update emblem list for specified iter in list."""

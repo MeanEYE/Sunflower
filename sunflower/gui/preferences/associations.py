@@ -1,4 +1,4 @@
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from sunflower.gui.input_dialog import InputDialog, ApplicationInputDialog
 from sunflower.widgets.settings_page import SettingsPage
 
@@ -12,7 +12,7 @@ class AssociationsOptions(SettingsPage):
 	"""Mime-type associations options extension class"""
 
 	def __init__(self, parent, application):
-		SettingsPage.__init__(self, parent, application, 'accelerators', _('Associations'))
+		SettingsPage.__init__(self, parent, application, 'associations', _('Associations'))
 
 		# create interface
 		container = Gtk.ScrolledWindow()
@@ -68,7 +68,7 @@ class AssociationsOptions(SettingsPage):
 
 	def __button_add_clicked(self, widget, data=None):
 		"""Handle clicking on add button"""
-		self._add_menu.popup(None, None, self.__get_menu_position, widget, 1, 0)
+		self._add_menu.popup_at_widget(widget, Gdk.Gravity.SOUTH_WEST, Gdk.Gravity.NORTH_WEST, None)
 
 	def __add_mime_type(self, widget, data=None):
 		"""Show dialog for adding mime type"""
@@ -133,20 +133,6 @@ class AssociationsOptions(SettingsPage):
 			dialog.run()
 			dialog.destroy()
 
-	def __get_menu_position(self, menu, *args):
-		"""Get history menu position"""
-		# get coordinates
-		button = args[-1]
-		window_x, window_y = self._parent.get_window().get_position()
-		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
-		button_h = button.get_allocation().height
-
-		# calculate absolute menu position
-		pos_x = window_x + button_x
-		pos_y = window_y + button_y + button_h
-
-		return pos_x, pos_y, True
-
 	def _load_options(self):
 		"""Load options and update interface"""
 		config = self._application.association_options
@@ -165,25 +151,21 @@ class AssociationsOptions(SettingsPage):
 
 			# get all applications
 			applications = config.get(mime_type)
-			count = len(applications) / 2
-
-			for index in range(1, count + 1):
-				application = applications[index-1]
+			for application in applications:
 				self._associations.append(parent, (application['name'], application['command']))
 
 	def _save_options(self):
 		"""Method called when save button is clicked"""
 		config = self._application.association_options
 
-		# iterate over groups
+		# iterate over mime type groups
 		for row in self._associations:
 			mime_type = self._associations.get_value(row.iter, Column.COMMAND)
 			children = row.iterchildren()
 			applications = []
 
 			# store accelerators for current group
-			for index, child in enumerate(children, 0):
-
+			for child in children:
 				application = {
 						'name': self._associations.get_value(child.iter, Column.NAME),
 						'command': self._associations.get_value(child.iter, Column.COMMAND)

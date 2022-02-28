@@ -288,7 +288,7 @@ class SessionManager:
 		self._button.connect('clicked', self._show_popover, popover)
 
 		vbox_popover = Gtk.VBox.new(False, 5)
-		vbox_popover.set_border_width(5)
+		vbox_popover.set_border_width(10)
 
 		# create session list storage
 		quick_search = Gtk.SearchEntry.new()
@@ -335,7 +335,7 @@ class SessionManager:
 		button_save.connect('clicked', self._save_session)
 
 		# pack interface elements
-		self._application.header_bar.pack_start(self._button)
+		self._application.header_bar.pack_end(self._button)
 		popover.add(vbox_popover)
 
 		hbox_buttons.pack_start(self._button_lock, True, False, 0)
@@ -494,4 +494,4 @@ class SessionManager:
 
 	def _manage_sessions(self, widget, data=None):
 		"""Show preferences window for managing sessions."""
-		self._application.preferences_window._show(widget, 'sessions')
+		self._application.preferences_window.show(widget, 'sessions')

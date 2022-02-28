@@ -9,17 +9,14 @@ class OperationOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'operation', _('Operation'))
 
 		# create frames
-		frame_general = Gtk.Frame(label=_('General'))
 		vbox_general = Gtk.VBox(False, 0)
-		vbox_general.set_border_width(5)
+		self._create_section(_('General'), vbox_general)
 
-		frame_mounts = Gtk.Frame(label=_('Mounts'))
 		vbox_mounts = Gtk.VBox(False, 0)
-		vbox_mounts.set_border_width(5)
+		self._create_section(_('Mounts'), vbox_mounts)
 
-		frame_confirmations = Gtk.Frame(label=_('Confirmation'))
 		vbox_confirmations = Gtk.VBox(False, 0)
-		vbox_confirmations.set_border_width(5)
+		self._create_section(_('Confirmation'), vbox_confirmations)
 
 		# create components
 		self._checkbox_trash_files = Gtk.CheckButton(_('Delete items to trashcan'))
@@ -42,14 +39,6 @@ class OperationOptions(SettingsPage):
 		vbox_mounts.pack_start(self._checkbox_automount_on_insert, False, False, 0)
 
 		vbox_confirmations.pack_start(self._checkbox_confirm_delete, False, False, 0)
-
-		frame_general.add(vbox_general)
-		frame_mounts.add(vbox_mounts)
-		frame_confirmations.add(vbox_confirmations)
-
-		self.pack_start(frame_general, False, False, 0)
-		self.pack_start(frame_mounts, False, False, 0)
-		self.pack_start(frame_confirmations, False, False, 0)
 
 	def _confirm_delete_toggle(self, widget, data=None):
 		"""Make sure user really wants to disable confirmation dialog"""

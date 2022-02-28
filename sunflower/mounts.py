@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from gi.repository import Gtk, Gio, GLib, Pango
 from sunflower.widgets.location_menu import Location, GenericHeader
+from sunflower.gui.mounts_manager_window import MountsManagerWindow
 
 
 class MountsManager:
@@ -11,10 +12,14 @@ class MountsManager:
 		self._application = application
 		self._mounts = {}
 		self._location_menu = None
+		self._window = MountsManagerWindow(self)
 
 		# create volume monitor
 		self._volume_monitor = Gio.VolumeMonitor.get()
 		self._volume_monitor.connect('volume-added', self._handle_add_volume)
+
+	def show(self, widget, data=None):
+		self._window.show_all()
 
 	def attach_location_menu(self, location_menu):
 		"""Use notification from location menu to populate list with mounts and volumes."""
@@ -24,7 +29,7 @@ class MountsManager:
 		automount = self._application.options.section('operations').get('automount_start')
 		for volume in self._volume_monitor.get_volumes():
 			self._location_menu.add_location(Volume(self, volume))
-			if automount and volume.can_mount():
+			if automount and volume.can_mount() and volume.get_mount() is None:
 				volume.mount(Gio.MountMountFlags.NONE, None, None, self._handle_mount_finish, None)
 
 	def _handle_add_volume(self, monitor, volume):
@@ -32,7 +37,8 @@ class MountsManager:
 		self._location_menu.add_location(Volume(self, volume))
 
 		# automount volume if needed
-		if self._application.options.section('operations').get('automount_insert') and volume.can_mount():
+		automount_insert = self._application.options.section('operations').get('automount_insert')
+		if automount_insert and volume.can_mount() and volume.get_mount() is None:
 			volume.mount(Gio.MountMountFlags.NONE, None, None, self._handle_mount_finish, None)
 
 	def _handle_remove_volume(self, widget, volume):
@@ -41,19 +47,55 @@ class MountsManager:
 
 	def _handle_mount_finish(self, mount, result, data=None):
 		"""Callback for mount events."""
-		mount.mount_finish(result)
+		try:
+			mount.mount_finish(result)
+
+		except GLib.Error as error:
+			dialog = Gtk.MessageDialog(
+									self._application,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.WARNING,
+									Gtk.ButtonsType.OK,
+									_('Unable to finish mounting:\n{}'.format(error.message))
+								)
+			dialog.run()
+			dialog.destroy()
 
 	def _handle_unmount_finish(self, mount, result, data=None):
 		"""Callback for unmount events."""
-		mount.unmount_finish(result)
+		try:
+			mount.unmount_finish(result)
+
+		except GLib.Error as error:
+			dialog = Gtk.MessageDialog(
+									self._application,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.WARNING,
+									Gtk.ButtonsType.OK,
+									_('Unable to finish unmounting:\n{}'.format(error.message))
+								)
+			dialog.run()
+			dialog.destroy()
 
 	def _handle_eject_finish(self, volume, result, data=None):
 		"""Callback for eject event."""
-		volume.eject_finish(result)
+		try:
+			volume.eject_finish(result)
+
+		except GLib.Error as error:
+			dialog = Gtk.MessageDialog(
+									self._application,
+									Gtk.DialogFlags.DESTROY_WITH_PARENT,
+									Gtk.MessageType.WARNING,
+									Gtk.ButtonsType.OK,
+									_('Unable to finish ejecting:\n{}'.format(error.message))
+								)
+			dialog.run()
+			dialog.destroy()
 
 	def mount(self, volume):
 		"""Perform volume mount."""
-		if volume.can_mount():
+		if volume.can_mount() and volume.get_mount() is None:
 			volume.mount(Gio.MountMountFlags.NONE, None, None, self._handle_mount_finish, None)
 
 		else:
@@ -101,7 +143,7 @@ class MountsManager:
 
 	def create_extensions(self):
 		"""Create mounts manager extensions"""
-		pass
+		self._window.create_extensions()
 
 	def is_mounted(self, path):
 		"""Check if specified path is mounted"""
@@ -136,8 +178,8 @@ class Volume(Location):
 	def __handle_change(self, volume):
 		"""Handle volume change."""
 		mount = self._volume.get_mount()
-		self._unmount_button.set_visible(mount and mount.can_unmount())
-		self._mount_button.set_visible(not mount and self._volume.can_mount())
+		self._unmount_button.set_visible(mount is not None and mount.can_unmount())
+		self._mount_button.set_visible(mount is None and self._volume.can_mount())
 		self._eject_button.set_visible(self._volume.can_eject())
 
 	def __handle_remove(self, volume):

@@ -30,34 +30,32 @@ class Source:
 	CUSTOM = 2
 
 
+class ExecutableAction:
+	EXECUTE = 0
+	OPEN = 1
+
+
 class ItemListOptions(SettingsPage):
 	"""Options related to item lists"""
 
 	def __init__(self, parent, application):
 		SettingsPage.__init__(self, parent, application, 'item_list', _('Item List'))
 
-		notebook = Gtk.Notebook()
-
-		# create frames
-		label_look_and_feel = Gtk.Label(label=_('Look & feel'))
-		label_hidden_files = Gtk.Label(label=_('Hidden files'))
-		label_operation = Gtk.Label(label=_('Operation'))
-		label_directories = Gtk.Label(label=_('Directories'))
-		label_columns = Gtk.Label(label=_('Columns'))
-
-		# vertical boxes
+		# section containers
 		vbox_look_and_feel = Gtk.VBox(False, 0)
-		vbox_hidden_files = Gtk.VBox(False, 0)
-		vbox_operation = Gtk.VBox(False, 0)
-		vbox_directory = Gtk.VBox(False, 0)
-		vbox_columns = Gtk.VBox(False, 0)
+		self._create_section(_('Look and feel'), vbox_look_and_feel)
 
-		vbox_look_and_feel.set_border_width(5)
-		vbox_hidden_files.set_border_width(5)
-		vbox_operation.set_border_width(5)
-		vbox_directory.set_border_width(5)
-		vbox_directory.set_spacing(5)
-		vbox_columns.set_border_width(5)
+		vbox_operation = Gtk.VBox(False, 0)
+		self._create_section(_('Operation'), vbox_operation)
+
+		vbox_hidden_files = Gtk.VBox(False, 0)
+		self._create_section(_('Hidden files'), vbox_hidden_files)
+
+		vbox_directory = Gtk.VBox(False, 0)
+		self._create_section(_('Directories'), vbox_directory)
+
+		vbox_columns = Gtk.VBox(False, 0)
+		self._create_section(_('Columns'), vbox_columns)
 
 		# file list options
 		self._checkbox_row_hinting = Gtk.CheckButton(_('Row hinting'))
@@ -90,6 +88,16 @@ class ItemListOptions(SettingsPage):
 		self._combobox_mode_format.append(str(AccessModeFormat.OCTAL), _('Octal'))
 		self._combobox_mode_format.append(str(AccessModeFormat.TEXTUAL), _('Textual'))
 
+		# action when executable files are activated
+		hbox_executable_action = Gtk.HBox(False, 5)
+		label_executable_action = Gtk.Label(label=_('Action on executable files:'))
+		label_executable_action.set_alignment(0, 0.5)
+
+		self._combobox_executable_action = Gtk.ComboBoxText.new()
+		self._combobox_executable_action.connect('changed', self._parent.enable_save)
+		self._combobox_executable_action.append(str(ExecutableAction.EXECUTE), _('Run them'))
+		self._combobox_executable_action.append(str(ExecutableAction.OPEN), _('Open them'))
+
 		# grid lines
 		hbox_grid_lines = Gtk.HBox(False, 5)
 		label_grid_lines = Gtk.Label(label=_('Show grid lines:'))
@@ -103,16 +111,12 @@ class ItemListOptions(SettingsPage):
 		self._combobox_grid_lines.append(str(Gtk.TreeViewGridLines.BOTH), _('Both'))
 
 		# selection color
-		hbox_selection_color = Gtk.HBox(False, 5)
-
-		label_selection_color = Gtk.Label(label=_('Selection color:'))
-		label_selection_color.set_alignment(0, 0.5)
-
 		self._button_selection_color = Gtk.ColorButton()
 		self._button_selection_color.set_use_alpha(False)
 		self._button_selection_color.connect('color-set', self._parent.enable_save)
 
 		# selection indicator
+		vbox_indicator = Gtk.VBox(False, 0)
 		hbox_indicator = Gtk.HBox(False, 5)
 
 		label_indicator = Gtk.Label(label=_('Selection indicator:'))
@@ -120,7 +124,6 @@ class ItemListOptions(SettingsPage):
 
 		self._combobox_indicator = Gtk.ComboBoxText.new_with_entry()
 		self._combobox_indicator.connect('changed', self._parent.enable_save)
-		self._combobox_indicator.set_size_request(100, -1)
 		self._combobox_indicator.append_text(u'\u25b6',)
 		self._combobox_indicator.append_text(u'\u25e2',)
 		self._combobox_indicator.append_text(u'\u25c8',)
@@ -163,6 +166,7 @@ class ItemListOptions(SettingsPage):
 		container_always_visible = Gtk.ScrolledWindow()
 		container_always_visible.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 		container_always_visible.set_shadow_type(Gtk.ShadowType.IN)
+		container_always_visible.set_size_request(-1, 200)
 
 		label_always_visible = Gtk.Label(label=_('Always visible files and directories:'))
 		label_always_visible.set_alignment(0, 0.5)
@@ -188,6 +192,7 @@ class ItemListOptions(SettingsPage):
 		container_directory = Gtk.ScrolledWindow()
 		container_directory.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 		container_directory.set_shadow_type(Gtk.ShadowType.IN)
+		container_directory.set_size_request(-1, 200)
 
 		self._checkbox_load_directories = Gtk.CheckButton(_('Load specified tabs instead of saved'))
 		self._checkbox_load_directories.connect('toggled', self._parent.enable_save)
@@ -262,6 +267,7 @@ class ItemListOptions(SettingsPage):
 		container_columns = Gtk.ScrolledWindow()
 		container_columns.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 		container_columns.set_shadow_type(Gtk.ShadowType.IN)
+		container_columns.set_size_request(-1, 200)
 
 		container_plugin = Gtk.ScrolledWindow()
 		container_plugin.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
@@ -273,7 +279,7 @@ class ItemListOptions(SettingsPage):
 		self._active_extension = None
 
 		# create column list
-		self._columns_store = Gtk.ListStore(str, int, bool, str)
+		self._columns_store = Gtk.ListStore(str, int, bool, int)
 		self._columns_list = Gtk.TreeView()
 		self._columns_list.set_model(self._columns_store)
 		self._columns_list.set_rules_hint(True)
@@ -350,11 +356,10 @@ class ItemListOptions(SettingsPage):
 		hbox_columns.pack_start(container_plugin, False, False, 0)
 		hbox_columns.pack_start(container_columns, True, True, 0)
 
-		hbox_indicator.pack_start(label_indicator, False, False, 0)
+		vbox_indicator.pack_start(label_indicator, False, False, 0)
+		vbox_indicator.pack_start(hbox_indicator, False, False, 0)
+		hbox_indicator.pack_start(self._button_selection_color, False, False, 0)
 		hbox_indicator.pack_start(self._combobox_indicator, False, False, 0)
-
-		hbox_selection_color.pack_start(label_selection_color, False, False, 0)
-		hbox_selection_color.pack_start(self._button_selection_color, False, False, 0)
 
 		hbox_quick_search.pack_start(label_quick_search, False, False, 0)
 		hbox_quick_search.pack_start(self._checkbox_control, False, False, 0)
@@ -363,6 +368,9 @@ class ItemListOptions(SettingsPage):
 
 		hbox_mode_format.pack_start(label_mode_format, False, False, 0)
 		hbox_mode_format.pack_start(self._combobox_mode_format, False, False, 0)
+
+		hbox_executable_action.pack_start(label_executable_action, False, False, 0)
+		hbox_executable_action.pack_start(self._combobox_executable_action, False, False, 0)
 
 		hbox_grid_lines.pack_start(label_grid_lines, False, False, 0)
 		hbox_grid_lines.pack_start(self._combobox_grid_lines, False, False, 0)
@@ -376,8 +384,7 @@ class ItemListOptions(SettingsPage):
 		vbox_look_and_feel.pack_start(self._checkbox_show_expanders, False, False, 0)
 		vbox_look_and_feel.pack_start(hbox_mode_format, False, False, 5)
 		vbox_look_and_feel.pack_start(hbox_grid_lines, False, False, 5)
-		vbox_look_and_feel.pack_start(hbox_selection_color, False, False, 5)
-		vbox_look_and_feel.pack_start(hbox_indicator, False, False, 5)
+		vbox_look_and_feel.pack_start(vbox_indicator, False, False, 5)
 
 		vbox_hidden_files.pack_start(self._checkbox_show_hidden, False, False, 0)
 		vbox_hidden_files.pack_start(table_always_visible, True, True, 0)
@@ -387,6 +394,7 @@ class ItemListOptions(SettingsPage):
 		vbox_operation.pack_start(self._checkbox_single_click, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_right_click, False, False, 0)
 		vbox_operation.pack_start(self._checkbox_second_extension, False, False, 0)
+		vbox_operation.pack_start(hbox_executable_action, False, False, 5)
 		vbox_operation.pack_start(hbox_quick_search, False, False, 5)
 		vbox_operation.pack_start(vbox_time_format, False, False, 5)
 
@@ -396,31 +404,9 @@ class ItemListOptions(SettingsPage):
 
 		vbox_columns.pack_start(hbox_columns, True, True, 0)
 
-		notebook.append_page(vbox_look_and_feel, label_look_and_feel)
-		notebook.append_page(vbox_hidden_files, label_hidden_files)
-		notebook.append_page(vbox_operation, label_operation)
-		notebook.append_page(vbox_directory, label_directories)
-		notebook.append_page(vbox_columns, label_columns)
-
-		self.pack_start(notebook, True, True, 0)
-
 	def __button_add_clicked(self, widget, data=None):
 		"""Handle clicking on add button"""
-		self._menu_add_directory.popup(None, None, self.__get_menu_position, widget, 1, 0)
-
-	def __get_menu_position(self, menu, *args):
-		"""Get history menu position"""
-		# get coordinates
-		button = args[-1]
-		window_x, window_y = self._parent.get_window().get_position()
-		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
-		button_h = button.get_allocation().height
-
-		# calculate absolute menu position
-		pos_x = window_x + button_x
-		pos_y = window_y + button_y + button_h
-
-		return pos_x, pos_y, True
+		self._menu_add_directory.popup_at_widget(widget, Gdk.Gravity.SOUTH_WEST, Gdk.Gravity.NORTH_WEST, None)
 
 	def _add_always_visible(self, widget, data=None):
 		"""Add item name to the list of always visible files and directories."""
@@ -674,6 +660,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_case_sensitive.set_active(section.get('case_sensitive_sort'))
 		self._checkbox_number_sensitive.set_active(section.get('number_sensitive_sort'))
 		self._checkbox_single_click.set_active(section.get('single_click_navigation'))
+		self._combobox_executable_action.set_active(section.get('executable_action'))
 		self._checkbox_right_click.set_active(section.get('right_click_select'))
 		self._checkbox_show_headers.set_active(section.get('headers_visible'))
 		self._checkbox_media_preview.set_active(options.get('media_preview'))
@@ -725,6 +712,7 @@ class ItemListOptions(SettingsPage):
 		section.set('case_sensitive_sort', self._checkbox_case_sensitive.get_active())
 		section.set('number_sensitive_sort', self._checkbox_number_sensitive.get_active())
 		section.set('single_click_navigation', self._checkbox_single_click.get_active())
+		section.set('executable_action', self._combobox_executable_action.get_active())
 		section.set('right_click_select', self._checkbox_right_click.get_active())
 		section.set('headers_visible', self._checkbox_show_headers.get_active())
 		options.set('media_preview', self._checkbox_media_preview.get_active())
@@ -738,10 +726,10 @@ class ItemListOptions(SettingsPage):
 		section.set('second_extension', self._checkbox_second_extension.get_active())
 
 		search_modifier = "%d%d%d" % (
-								self._checkbox_control.get_active(),
-								self._checkbox_alt.get_active(),
-								self._checkbox_shift.get_active()
-							)
+				self._checkbox_control.get_active(),
+				self._checkbox_alt.get_active(),
+				self._checkbox_shift.get_active()
+				)
 		section.set('search_modifier', search_modifier)
 
 		# save always visible items

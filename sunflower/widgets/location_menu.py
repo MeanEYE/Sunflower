@@ -19,13 +19,15 @@ class LocationMenu:
 		self._assigned = {}
 
 		# create popover interface
+		self._popover_visible = False
 		self._popover = Gtk.Popover.new()
 		self._popover.set_position(Gtk.PositionType.BOTTOM)
 		self._popover.set_modal(True)
+		self._popover.connect('closed', self.__handle_popover_close)
 
 		# create widget container
 		container = Gtk.VBox.new(False, 0)
-		container.set_border_width(5)
+		container.set_border_width(10)
 
 		# create search field
 		self._search_field = Gtk.SearchEntry.new()
@@ -41,6 +43,8 @@ class LocationMenu:
 		self._list = Gtk.ListBox.new()
 		self._list.set_header_func(self.__handle_set_header)
 		self._list.set_filter_func(self.__handle_filter_check_location)
+		self._list.set_activate_on_single_click(False)
+		self._list.connect('row-activated', self.__handle_location_activate)
 
 		# create button box and commonly used buttons
 		hbox_buttons = Gtk.ButtonBox.new(Gtk.Orientation.HORIZONTAL)
@@ -49,6 +53,7 @@ class LocationMenu:
 		button_open = Gtk.Button.new_from_icon_name('document-open-symbolic', Gtk.IconSize.BUTTON)
 		button_open.connect('clicked', self.__handle_open_click)
 		button_open.set_tooltip_text(_('Open'))
+		button_open.get_style_context().add_class('suggested-action')
 		hbox_buttons.pack_start(button_open, False, False, 0)
 
 		button_open_tab = Gtk.Button.new_from_icon_name('tab-new-symbolic', Gtk.IconSize.BUTTON)
@@ -131,10 +136,18 @@ class LocationMenu:
 		"""Return location object selected or None."""
 		return self._list.get_selected_row()
 
+	def __handle_location_activate(self, widget, row, data=None):
+		"""Handle activation of selected location."""
+		self.__handle_open_click(widget)
+		return True
+
 	def __handle_open_click(self, widget, data=None):
 		"""Handle clicking on open button."""
 		selected_location = self.__get_selected_location()
-		assert self._active_object is not None or selected_location is not None
+
+		# make sure we have both objects
+		if self._active_object is None or selected_location is None:
+			return
 
 		# close menu
 		self._popover.popdown()
@@ -142,13 +155,17 @@ class LocationMenu:
 		# open selected path in currently active list
 		if isinstance(self._active_object, ItemList):
 			self._active_object.change_path(selected_location.get_location())
+			self._active_object.focus_main_object()
 
 		return True
 
 	def __handle_open_tab_click(self, widget, data=None):
 		"""Handle clicking on open in new tab button."""
 		selected_location = self.__get_selected_location()
-		assert self._active_object is not None or selected_location is not None
+
+		# make sure we have both objects
+		if self._active_object is None or selected_location is None:
+			return
 
 		# close menu
 		self._popover.popdown()
@@ -166,7 +183,10 @@ class LocationMenu:
 	def __handle_open_opposite_click(self, widget, data=None):
 		"""Handle slicking on open in opposite panel button."""
 		selected_location = self.__get_selected_location()
-		assert self._active_object is not None or selected_location is not None
+
+		# make sure we have both objects
+		if self._active_object is None or selected_location is None:
+			return
 
 		# close menu
 		self._popover.popdown()
@@ -181,7 +201,10 @@ class LocationMenu:
 	def __handle_open_terminal_click(self, widget, data=None):
 		"""Handle clicking on open in terminal button."""
 		selected_location = self.__get_selected_location()
-		assert self._active_object is not None or selected_location is not None
+
+		# make sure we have both objects
+		if self._active_object is None or selected_location is None:
+			return
 
 		# close menu
 		self._popover.popdown()
@@ -221,8 +244,39 @@ class LocationMenu:
 
 	def __handle_filter_check_location(self, row, data=None):
 		"""Determine whether location should be visible."""
-		row.set_header(None)
-		return self._search_query in row.get_location().lower() if self._search_query else True
+		if self._search_query:
+			# determine visibility
+			location = row.get_location()
+			result = location is not None and self._search_query in location.lower()
+		else:
+			# show location by default
+			result = True
+
+		return result
+
+	def __handle_popover_open(self):
+		"""Handle popover opening."""
+		self._popover_visible = True
+
+		# disable plugin accelerators
+		groups = self._application.accelerator_manager.get_groups()
+		for group_name in groups:
+			group = self._application.accelerator_manager._get_group_by_name(group_name)
+			group.deactivate()
+
+	def __handle_popover_close(self, widget, data=None):
+		"""Handle popover closing."""
+		self._popover_visible = False
+
+		# enable plugin accelerators
+		groups = self._application.accelerator_manager.get_groups()
+		for group_name in groups:
+			group = self._application.accelerator_manager._get_group_by_name(group_name)
+			group.activate(self._application)
+
+	def __get_popover_visible(self):
+		"""Return boolean denoting whether popover is visible."""
+		return self._popover_visible
 
 	def add_header(self, Class, widget):
 		"""Add header widget for specified location class name."""
@@ -264,6 +318,9 @@ class LocationMenu:
 		# show menu
 		self._popover.set_relative_to(reference)
 		self._popover.popup()
+		self.__handle_popover_open()
+
+	is_visible = property(__get_popover_visible)
 
 
 class GenericHeader(Gtk.VBox):
@@ -344,6 +401,7 @@ class Bookmark(Location):
 		self._subtitle.set_alignment(0, 0.5)
 		self._subtitle.set_use_markup(True)
 		self._subtitle.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
+		self._subtitle.set_opacity(0.5)
 
 		# pack user interface
 		title_container.pack_start(self._title, True, False, 0)

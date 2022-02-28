@@ -10,11 +10,8 @@ class TerminalOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'terminal', _('Terminal'))
 
 		# create vte terminal options
-		align_vte = Gtk.Alignment.new(0, 0, 1, 0)
-		align_vte.set_padding(0, 10, 15, 15)
-		self._vbox_vte = Gtk.VBox(False, 0)
-
-		self._radio_vte = Gtk.RadioButton(label=_('VTE based terminal'))
+		vbox_vte = Gtk.VBox.new(False, 0)
+		self._radio_vte = self._create_radio_section(_('VTE based terminal'), vbox_vte)
 		self._radio_vte.connect('toggled', self._parent.enable_save)
 
 		# option for showing scrollbars
@@ -22,9 +19,7 @@ class TerminalOptions(SettingsPage):
 		self._checkbox_scrollbars_visible.connect('toggled', self._parent.enable_save)
 
 		# option for custom font
-		self._align_font = Gtk.Alignment.new(0, 0, 0, 0)
-		self._align_font.set_padding(0, 0, 15, 15)
-		hbox_font = Gtk.HBox(False, 5)
+		hbox_font = Gtk.HBox.new(False, 5)
 
 		self._checkbox_system_font = Gtk.CheckButton(_('Use the system fixed width font'))
 		self._checkbox_system_font.connect('toggled', self.__toggled_system_font)
@@ -62,11 +57,12 @@ class TerminalOptions(SettingsPage):
 		self._checkbox_autohide_mouse.connect('toggled', self._parent.enable_save)
 
 		# create external terminal options
-		align_external = Gtk.Alignment.new(0, 0, 1, 0)
-		align_external.set_padding(0, 0, 15, 15)
-		self._vbox_external = Gtk.VBox(False, 5)
-
-		self._radio_external = Gtk.RadioButton(group=self._radio_vte, label=_('External terminal'))
+		vbox_external = Gtk.VBox(False, 5)
+		self._radio_external = self._create_radio_section(
+				_('External terminal'),
+				vbox_external,
+				self._radio_vte
+				)
 
 		vbox_command = Gtk.VBox(False, 0)
 		label_command = Gtk.Label(label=_('Command line:'))
@@ -95,39 +91,27 @@ class TerminalOptions(SettingsPage):
 		hbox_font.pack_start(label_font, False, False, 0)
 		hbox_font.pack_start(self._button_font, True, True, 0)
 
-		self._align_font.add(hbox_font)
-
 		hbox_cursor_shape.pack_start(label_cursor_shape, False, False, 0)
 		hbox_cursor_shape.pack_start(self._combobox_cursor_shape, False, False, 0)
-
 
 		vbox_command.pack_start(label_command, False, False, 0)
 		vbox_command.pack_start(self._entry_command, False, False, 0)
 		vbox_command2.pack_start(label_command2, False, False, 0)
 		vbox_command2.pack_start(self._entry_command2, False, False, 0)
 
-		self._vbox_vte.pack_start(self._checkbox_scrollbars_visible, False, False, 0)
-		self._vbox_vte.pack_start(self._checkbox_system_font, False, False, 0)
-		self._vbox_vte.pack_start(self._align_font, False, False, 0)
-		self._vbox_vte.pack_start(hbox_cursor_shape, False, False, 5)
-		self._vbox_vte.pack_start(self._checkbox_allow_bold, False, False, 0)
-		self._vbox_vte.pack_start(self._checkbox_autohide_mouse, False, False, 0)
+		vbox_vte.pack_start(self._checkbox_scrollbars_visible, False, False, 0)
+		vbox_vte.pack_start(self._checkbox_system_font, False, False, 0)
+		vbox_vte.pack_start(hbox_font, False, False, 0)
+		vbox_vte.pack_start(hbox_cursor_shape, False, False, 5)
+		vbox_vte.pack_start(self._checkbox_allow_bold, False, False, 0)
+		vbox_vte.pack_start(self._checkbox_autohide_mouse, False, False, 0)
 
-		self._vbox_external.pack_start(vbox_command, False, False, 0)
-		self._vbox_external.pack_start(vbox_command2, False, False, 0)
-		self._vbox_external.pack_start(label_note, False, False, 0)
-
-		align_vte.add(self._vbox_vte)
-		align_external.add(self._vbox_external)
-
-		self.pack_start(self._radio_vte, False, False, 0)
-		self.pack_start(align_vte, False, False, 0)
-		self.pack_start(self._radio_external, False, False, 0)
-		self.pack_start(align_external, False, False, 0)
+		vbox_external.pack_start(vbox_command, False, False, 0)
+		vbox_external.pack_start(vbox_command2, False, False, 0)
+		vbox_external.pack_start(label_note, False, False, 0)
 
 	def __toggled_system_font(self, widget, data=None):
 		"""Handle toggle of system font checkbox"""
-		self._align_font.set_sensitive(not widget.get_active())
 		self._parent.enable_save()
 
 	def _load_options(self):
@@ -142,9 +126,6 @@ class TerminalOptions(SettingsPage):
 		self._checkbox_allow_bold.set_active(options.get('allow_bold'))
 		self._checkbox_autohide_mouse.set_active(options.get('mouse_autohide'))
 		self._button_font.set_font_name(options.get('font'))
-
-		# set sensitivity of font selection according to checkbox
-		self._align_font.set_sensitive(not self._checkbox_system_font.get_active())
 
 		# apply terminal type
 		terminal_type = options.get('type')

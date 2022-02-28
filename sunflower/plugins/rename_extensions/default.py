@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import re
 import os
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from sunflower.plugin_base.rename_extension import RenameExtension
 from sunflower.gui.input_dialog import InputRangeDialog
 from sunflower.tools.advanced_rename import Column as RenameColumn
@@ -178,21 +178,7 @@ class DefaultRename(RenameExtension):
 
 	def __button_add_clicked(self, widget, data=None):
 		"""Handle clicking on add button"""
-		self._add_menu.popup(None, None, self.__get_menu_position, widget, 1, 0)
-
-	def __get_menu_position(self, menu, *args):
-		"""Get history menu position"""
-		# get coordinates
-		button = args[-1]
-		window_x, window_y = self._parent.window.get_window().get_position()
-		button_x, button_y = button.translate_coordinates(self._parent.window, 0, 0)
-		button_h = button.get_allocation().height
-
-		# calculate absolute menu position
-		pos_x = window_x + button_x
-		pos_y = window_y + button_y + button_h
-
-		return pos_x, pos_y, True
+		self._add_menu.popup_at_widget(widget, Gdk.Gravity.SOUTH_WEST, Gdk.Gravity.NORTH_WEST, None)
 
 	def __add_to_template(self, widget, type):
 		"""Add variable to template"""

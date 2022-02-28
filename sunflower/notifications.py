@@ -36,7 +36,7 @@ class NotificationManager:
 
 		else:
 			# use local icon
-			icon_file = os.path.join(os.path.dirname(common.get_base_directory()), 'images', 'sunflower_64.png')
+			icon_file = os.path.join(os.path.dirname(common.get_static_assets_directory()), 'images', 'sunflower_64.png')
 			self._default_icon = 'file://{0}'.format(icon_file)
 
 	def notify(self, title, text, icon=None):

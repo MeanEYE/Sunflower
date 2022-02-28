@@ -14,7 +14,7 @@ class ContextMenu:
 
 		# create widget container
 		self._container = Gtk.VBox.new(False, 10)
-		self._container.set_border_width(5)
+		self._container.set_border_width(10)
 
 		# show all widgets inside of container
 		self._container.show_all()

@@ -1,7 +1,9 @@
+Note: Prefered repository hosting is [GitLab](https://gitlab.com/MeanEYE/Sunflower). If you don't have an account there and don't wish to make one interacting with one on GitHub is fine.
+
 Sunflower
 =========
 
-Sunflower is a small and highly customizable twin-panel file manager for Linux with support for plugins. It is intended to be an easy-to-use and powerful file manager that seamlessly integrates into the GNOME desktop environment (but not limited to).
+Sunflower is a small and highly customizable twin-panel file manager for Linux with support for plugins. It is intended to be an easy-to-use and powerful file manager that seamlessly integrates into the GNOME desktop environment (but not limited to). Fully compatible and native to Wayland compositors.
 
 ![Screen shot](https://i.imgur.com/s2FRrmH.png)
 
@@ -26,14 +28,14 @@ Check some of the plugins made by community:
 Plugins can be installed locally to: `~/.config/sunflower/user_plugins/<plugin_name>`
 
 ### How to contribute
-You can be a part of this project in many ways. We suggest posting on our mailing list or visiting our IRC channel on FreeNode and we'll try to help you get started.
+You can be a part of this project in many ways. We suggest posting on our mailing list or visiting our IRC channel #sunflower on Libera chat and we'll try to help you get started.
 
 And as usual testers are more than welcome. If you wish to help translate program to your language please join translation team(s) on [Transifex](http://transifex.com/projects/p/sunflower/).
 
 ### Staying in touch
 Preferred way of getting in touch with us is through [mailing list](https://groups.google.com/forum/#!forum/sunflower-fm).
 
-I like talking to people a lot so please feel free to contact me any time. You can always follow me on my [twitter account](http://twitter.com/MeanEYE_rcf), [Google+](http://gplus.to/MeanEYE) and [Reddit](https://www.reddit.com/user/MeanEYE). We also have IRC channel, `#sunflower` on `irc.freenode.org`. Central place for news is now on Google+ [page](https://plus.google.com/104972396836379309898).
+I like talking to people a lot so please feel free to contact me any time. You can always follow me on my [twitter account](http://twitter.com/MeanEYE_rcf) and [Reddit](https://www.reddit.com/user/MeanEYE). We also have IRC channel, `#sunflower` on `libera.chat`.
 
 ### Screenshots
 Check out [screenshots](http://sunflower-fm.org/screenshots).

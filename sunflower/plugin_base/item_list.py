@@ -15,6 +15,7 @@ from sunflower.gui.input_dialog import CopyDialog, MoveDialog, InputDialog, Path
 from sunflower.gui.preferences.display import StatusVisible
 from sunflower.gui.history_list import HistoryList
 from sunflower.history import HistoryManager
+from sunflower.widgets.popup_menu import PopupMenu
 
 
 class ItemList(PluginBase):
@@ -112,9 +113,7 @@ class ItemList(PluginBase):
 		self._item_list.set_search_entry(self._search_entry)
 
 		# popup menu
-		self._open_with_item = None
-		self._open_with_menu = None
-		self._popup_menu = self._create_popup_menu()
+		self._popup_menu = PopupMenu(self._parent, self)
 
 		# create free space indicator in context menu
 		vbox_free_space = Gtk.VBox.new(False, 2)
@@ -156,13 +155,6 @@ class ItemList(PluginBase):
 		# add containers to context menu
 		self._title_bar.context_menu.add_control(vbox_free_space)
 		self._title_bar.context_menu.add_control(hbox_buttons)
-
-		# history menu
-		self._history_menu = Gtk.Menu()
-
-		# emblem menu
-		self._emblem_menu = Gtk.Menu()
-		self._prepare_emblem_menu()
 
 		# pack gui
 		self.pack_start(self._container, True, True, 0)
@@ -374,14 +366,8 @@ class ItemList(PluginBase):
 
 	def _show_emblem_menu(self, widget, data=None):
 		"""Show quick emblem selection menu."""
-		if data is not None:
-			# if this method is called by accelerator data is actually keyval
-			self._emblem_menu.popup(None, None, self._get_popup_menu_position, None, 1, 0)
-
-		else:
-			# if called by mouse, we don't have the need to position the menu manually
-			self._emblem_menu.popup(None, None, None, None, 1, 0)
-
+		self._popup_menu.prepare(self._get_selection(), self.get_provider())
+		self._popup_menu.show(self._item_list, self._get_selection_rectangle(), page='emblems')
 		return True
 
 	def _reorder_columns(self, order=None):
@@ -549,7 +535,7 @@ class ItemList(PluginBase):
 				if event.x and event.y:
 					if not right_click_select or (right_click_select and time_valid):
 						# show popup menu
-						self._show_popup_menu(widget)
+						self._show_popup_menu()
 
 					else:
 						# toggle item mark
@@ -652,7 +638,7 @@ class ItemList(PluginBase):
 		else:
 			# invalid path, notify user
 			dialog = Gtk.MessageDialog(
-									self,
+									self._parent,
 									Gtk.DialogFlags.DESTROY_WITH_PARENT,
 									Gtk.MessageType.ERROR,
 									Gtk.ButtonsType.OK,
@@ -888,14 +874,14 @@ class ItemList(PluginBase):
 		# clipboard data contains URI list
 		if data is not None:
 			operation = data[0]
-			list_ = data[1]
-			protocol = list_[0].split('://')[0]
+			uri_list = data[1]
+			protocol = uri_list[0].split('://')[0]
 
 			# convert URI to normal path
-			list_ = [urllib.parse.unquote(item.split('://')[1]) for item in list_]
+			uri_list = [urllib.parse.unquote(item.split('://')[1]) for item in uri_list]
 
 			# call handler
-			self._handle_external_data(operation, protocol, list_, self.path)
+			self._handle_external_data(operation, protocol, uri_list, self.path)
 
 		return True
 
@@ -906,6 +892,25 @@ class ItemList(PluginBase):
 	def _get_selection(self, relative=False):
 		"""Return item with path under cursor"""
 		pass
+
+	def _get_selection_rectangle(self):
+		"""Get rectangle for cursor position on the list."""
+		selection = self._item_list.get_selection()
+		item_list, selected_iter = selection.get_selected()
+
+		if selected_iter is None:
+			cursor_path, focus_column = self._item_list.get_cursor()
+			selected_iter = item_list.get_iter(cursor_path)
+
+		rectangle = self._item_list.get_cell_area(item_list.get_path(selected_iter), self._columns[0])
+		tree_rect = self._item_list.get_visible_rect()
+
+		rectangle.x, rectangle.y = self._item_list.convert_tree_to_widget_coords(rectangle.x, rectangle.y)
+		rectangle.y += tree_rect.y
+		rectangle.x += tree_rect.x
+
+		# grab cell and tree rectangles
+		return rectangle
 
 	def _get_selection_list(self, under_cursor=False, relative=False):
 		"""Return list of selected items
@@ -918,21 +923,8 @@ class ItemList(PluginBase):
 
 	def _get_popup_menu_position(self, menu, *args):
 		"""Abstract method for positioning menu properly on given row"""
-		return 0, 0, True
-
-	def _get_history_menu_position(self, menu, *args):
-		"""Get history menu position"""
-		# get coordinates
-		button = args[-1]
-		window_x, window_y = self._parent.get_position()
-		button_x, button_y = button.translate_coordinates(self._parent, 0, 0)
-		button_h = button.get_allocation().height
-
-		# calculate absolute menu position
-		pos_x = window_x + button_x
-		pos_y = window_y + button_y + button_h
-
-		return pos_x, pos_y, True
+		# TODO: Remove. Deprecated.
+		return Gdk.Rectangle()
 
 	def _get_other_provider(self):
 		"""Return provider from opposite list.
@@ -954,283 +946,16 @@ class ItemList(PluginBase):
 
 		return result
 
-	def _create_popup_menu(self):
-		"""Create popup menu and its constant elements"""
-		result = Gtk.Menu()
-		menu_manager = self._parent.menu_manager
-
-		# construct menu
-		item = menu_manager.create_menu_item({
-								'label': _('_Open'),
-								'type': 'image',
-								'stock': Gtk.STOCK_OPEN,
-								'callback': self._execute_selected_item,
-							})
-		result.append(item)
-
-		# open directory in new tab
-		item = menu_manager.create_menu_item({
-								'label': _('Open in new ta_b'),
-								'type': 'image',
-								'image': 'tab-new',
-								'callback': self._open_in_new_tab,
-							})
-		result.append(item)
-		self._open_new_tab_item = item
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		# dynamic menu
-		item = menu_manager.create_menu_item({
-								'label': _('Open _with'),
-								'type': 'image',
-								'stock': Gtk.STOCK_EXECUTE,
-							})
-		result.append(item)
-
-		self._open_with_item = item
-		self._open_with_menu = Gtk.Menu()
-		item.set_submenu(self._open_with_menu)
-
-		# additional options menu
-		item = menu_manager.create_menu_item({
-								'label': _('Additional options'),
-							})
-		result.append(item)
-
-		self._additional_options_item = item
-		self._additional_options_menu = Gtk.Menu()
-		item.set_submenu(self._additional_options_menu)
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		# create new file
-		item = menu_manager.create_menu_item({
-								'label': _('Create file'),
-								'type': 'image',
-								'stock': Gtk.STOCK_NEW,
-								'callback': self._parent._command_create,
-								'data': 'file'
-							})
-		result.append(item)
-
-		# create new directory
-		item = menu_manager.create_menu_item({
-								'label': _('Create directory'),
-								'type': 'image',
-								'image': 'folder-new',
-								'callback': self._parent._command_create,
-								'data': 'directory',
-							})
-		result.append(item)
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		# cut/copy/paste
-		item = menu_manager.create_menu_item({
-								'label': _('Cu_t'),
-								'type': 'image',
-								'stock': Gtk.STOCK_CUT,
-								'callback': self._cut_files_to_clipboard,
-							})
-		result.append(item)
-		self._cut_item = item
-
-		item = menu_manager.create_menu_item({
-								'label': _('_Copy'),
-								'type': 'image',
-								'stock': Gtk.STOCK_COPY,
-								'callback': self._copy_files_to_clipboard,
-							})
-		result.append(item)
-		self._copy_item = item
-
-		item = menu_manager.create_menu_item({
-								'label': _('_Paste'),
-								'type': 'image',
-								'stock': Gtk.STOCK_PASTE,
-								'callback': self._paste_files_from_clipboard,
-							})
-		result.append(item)
-		self._paste_item = item
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		# create move and copy to other pane items
-		item = menu_manager.create_menu_item({
-								'label': _('Copy to other...'),
-								'callback': self._copy_files
-							})
-		result.append(item)
-
-		item = menu_manager.create_menu_item({
-								'label': _('Move to other...'),
-								'callback': self._move_files
-							})
-		result.append(item)
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		item = menu_manager.create_menu_item({
-								'label': _('Copy file name'),
-								'callback': self.copy_selected_item_name_to_clipboard
-							})
-		result.append(item)
-
-		item = menu_manager.create_menu_item({
-								'label': _('Copy path'),
-								'callback': self.copy_selected_path_to_clipboard
-							})
-		result.append(item)
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		# delete
-		item = menu_manager.create_menu_item({
-								'label': _('_Delete'),
-								'type': 'image',
-								'stock': Gtk.STOCK_DELETE,
-								'callback': self._delete_files,
-							})
-		result.append(item)
-		self._delete_item = item
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		# send to
-		item = menu_manager.create_menu_item({
-								'label': _('Send to...'),
-								'callback': self._send_to,
-								'type': 'image',
-								'image': 'document-send',
-								'visible': self._parent.NAUTILUS_SEND_TO_INSTALLED,
-							})
-		result.append(item)
-		self._send_to_item = item
-
-		# link/rename
-		item = menu_manager.create_menu_item({
-								'label': _('Ma_ke link'),
-								'callback': self._create_link
-							})
-		result.append(item)
-
-		item = menu_manager.create_menu_item({
-								'label': _('_Rename...'),
-								'callback': self._rename_file,
-							})
-		result.append(item)
-		item.set_sensitive(False)
-		self._rename_item = item
-
-		# separator
-		item = menu_manager.create_menu_item({'type': 'separator'})
-		result.append(item)
-
-		# properties
-		item = menu_manager.create_menu_item({
-								'label': _('_Properties'),
-								'type': 'image',
-								'stock': Gtk.STOCK_PROPERTIES,
-								'callback': self._item_properties
-							})
-		result.append(item)
-		self._properties_item = item
-
-		return result
-
-	def _prepare_popup_menu(self):
-		"""Prepare popup menu contents"""
-		# remove existing items
-		for item in self._open_with_menu.get_children():
-			self._open_with_menu.remove(item)
-
-		# remove items from additional options menu
-		for item in self._additional_options_menu.get_children():
-			self._additional_options_menu.remove(item)
-
-	def _prepare_history_menu(self):
-		"""Prepare history menu contents"""
-		# remove existing items
-		for item in self._history_menu.get_children():
-			self._history_menu.remove(item)
-
-		# get menu data
-		item_count = 10
-		item_list = self.history[1:item_count]
-
-		if len(item_list) > 0:
-			# create items
-			for item in item_list:
-				menu_item = Gtk.MenuItem(item)
-				menu_item.path = item
-				menu_item.connect('activate', self._handle_history_click)
-
-				self._history_menu.append(menu_item)
-
-			# add entry to show complete history
-			separator = Gtk.SeparatorMenuItem()
-			self._history_menu.append(separator)
-
-			image = Gtk.Image()
-			image.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
-
-			menu_item = Gtk.ImageMenuItem()
-			menu_item.set_image(image)
-			menu_item.set_label(_('View complete history...'))
-			menu_item.connect('activate', self._show_history_window)
-			self._history_menu.append(menu_item)
-
-		else:
-			# no items to create, make blank item
-			menu_item = Gtk.MenuItem(_('History is empty'))
-			menu_item.set_sensitive(False)
-
-			self._history_menu.append(menu_item)
-
-		# show all menu items
-		self._history_menu.show_all()
-
-	def _prepare_emblem_menu(self):
-		"""Prepare emblem menu."""
-		pass
-
 	def _show_open_with_menu(self, widget, data=None):
-		"""Show 'open with' menu"""
-		# prepare elements in popup menu
-		self._prepare_popup_menu()
-
-		# if this method is called by Menu key data is actually event object
-		self._open_with_menu.popup(None, None, self._get_popup_menu_position, None, 1, 0)
+		"""Show list of applications capable of opening selected file."""
+		self._popup_menu.prepare(self._get_selection(), self.get_provider())
+		self._popup_menu.show(self._item_list, self._get_selection_rectangle(), page='open-with')
 		return True
 
 	def _show_popup_menu(self, widget=None, data=None):
-		"""Show item menu"""
-		# prepare elements in popup menu
-		self._prepare_popup_menu()
-
-		if data is not None:
-			# if this method is called by accelerator data is actually keyval
-			self._popup_menu.popup(None, None, self._get_popup_menu_position, None, 1, 0)
-
-		else:
-			# if called by mouse, we don't have the need to position the menu manually
-			self._popup_menu.popup(None, None, None, None, 1, 0)
-
+		"""Show options related to currently highlighted item."""
+		self._popup_menu.prepare(self._get_selection(), self.get_provider())
+		self._popup_menu.show(self._item_list, self._get_selection_rectangle())
 		return True
 
 	def _parent_directory(self, widget=None, data=None):
@@ -1256,14 +981,6 @@ class ItemList(PluginBase):
 		self._parent.show_bookmarks_menu(widget, self._notebook)
 		return True
 
-	def _history_button_clicked(self, widget, data=None):
-		"""History button click event"""
-		# prepare menu for drawing
-		self._prepare_history_menu()
-
-		# show the menu on calculated location
-		self._history_menu.popup(None, None, self._get_history_menu_position, widget, 1, 0)
-
 	def _duplicate_tab(self, widget, data=None):
 		"""Creates new tab with same path"""
 		PluginBase._duplicate_tab(self, None, self.path)
@@ -1279,6 +996,14 @@ class ItemList(PluginBase):
 
 	def _set_sort_function(self, widget, data=None):
 		"""Abstract method used for setting sort function"""
+		pass
+
+	def _apply_sort_function(self, focus_selected=True):
+		"""Apply sort settings."""
+		pass
+
+	def _generate_sort_data(self):
+		"""Generate data for sorting elements."""
 		pass
 
 	def _column_resized(self, widget, data=None):
@@ -1317,10 +1042,6 @@ class ItemList(PluginBase):
 
 			if width is not None:
 				column.set_fixed_width(width)
-
-	def _sort_list(self, ascending=True):
-		"""Abstract method for manual list sorting"""
-		pass
 
 	def _clear_list(self):
 		"""Abstract method for clearing item list"""
@@ -1466,7 +1187,7 @@ class ItemList(PluginBase):
 
 	def _edit_bookmarks(self, widget, data=None):
 		"""Open preferences window with bookmarks tab selected"""
-		self._parent.preferences_window._show(widget, 'bookmarks')
+		self._parent.preferences_window.show(widget, 'bookmarks')
 		return True
 
 	def _directory_changed(self, event, path, other_path, parent=None):
@@ -1660,8 +1381,7 @@ class ItemList(PluginBase):
 			result = self.create_provider(path, False)
 
 		# cache current provider
-		if self._current_provider is None:
-			self._current_provider = result
+		self._current_provider = result
 
 		return result
 

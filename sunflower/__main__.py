@@ -23,20 +23,19 @@ from __future__ import absolute_import, print_function
 import os
 import sys
 
-
 try:
 	# check if gtk is available
 	import gi
 	gi.require_version('Gtk', '3.0')
 
-except:
+except ValueError:
 	# print error and die
 	print('Error starting Sunflower, missing GTK 3.0+')
 	sys.exit(1)
 
 else:
 	# import required modules
-	from gi.repository import Gtk, Gdk, GObject, Gio, GLib
+	from gi.repository import Gtk, Gio, GLib
 
 
 from sunflower import common
@@ -44,7 +43,8 @@ from sunflower.config import Config
 from sunflower.gui.main_window import MainWindow
 
 
-class Arguments(object):
+class Arguments:
+	"""Command line arguments."""
 	def __init__(self):
 		self.dont_load_plugins = False
 		self.dont_load_tabs = False
@@ -56,10 +56,12 @@ class Arguments(object):
 
 
 class Sunflower(Gtk.Application):
+	"""Main application class."""
 	application_id = 'org.sunflower'
 
 	def __init__(self):
 		self.window = None
+		self.arguments = None
 
 		# temporary loading config to find multiple_instances setting
 		options = Config('config', common.get_config_path())
@@ -104,7 +106,7 @@ class Sunflower(Gtk.Application):
 		no_load_tabs_entry.flags = 0
 		no_load_tabs_entry.arg = GLib.OptionArg.NONE
 		no_load_tabs_entry.arg_date = None
-		no_load_tabs_entry.description = _('Skip loading additional plugins')
+		no_load_tabs_entry.description = _('Skip loading additional tabs')
 		no_load_tabs_entry.arg_description = None
 
 		left_tab_entry = GLib.OptionEntry()
@@ -114,7 +116,7 @@ class Sunflower(Gtk.Application):
 		left_tab_entry.arg = GLib.OptionArg.STRING_ARRAY
 		left_tab_entry.arg_date = None
 		left_tab_entry.description = _('Open new tab on the left notebook')
-		left_tab_entry.arg_description = None
+		left_tab_entry.arg_description = _('DIRECTORY')
 
 		right_tab_entry = GLib.OptionEntry()
 		right_tab_entry.long_name = 'right-tab'
@@ -123,7 +125,7 @@ class Sunflower(Gtk.Application):
 		right_tab_entry.arg = GLib.OptionArg.STRING_ARRAY
 		right_tab_entry.arg_date = None
 		right_tab_entry.description = _('Open new tab on the right notebook')
-		right_tab_entry.arg_description = None
+		right_tab_entry.arg_description = _('DIRECTORY')
 
 		left_terminal_entry = GLib.OptionEntry()
 		left_terminal_entry.long_name = 'left-terminal'
@@ -132,7 +134,7 @@ class Sunflower(Gtk.Application):
 		left_terminal_entry.arg = GLib.OptionArg.STRING_ARRAY
 		left_terminal_entry.arg_date = None
 		left_terminal_entry.description = _('Open terminal tab on the left notebook')
-		left_terminal_entry.arg_description = None
+		left_terminal_entry.arg_description = _('DIRECTORY')
 
 		right_terminal_entry = GLib.OptionEntry()
 		right_terminal_entry.long_name = 'right-terminal'
@@ -141,7 +143,7 @@ class Sunflower(Gtk.Application):
 		right_terminal_entry.arg = GLib.OptionArg.STRING_ARRAY
 		right_terminal_entry.arg_date = None
 		right_terminal_entry.description = _('Open terminal tab on the right notebook')
-		right_terminal_entry.arg_description = None
+		right_terminal_entry.arg_description = _('DIRECTORY')
 
 		option_entries = [
 				version_entry, no_plugins_entry, no_load_tabs_entry,

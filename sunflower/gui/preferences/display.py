@@ -21,12 +21,9 @@ class DisplayOptions(SettingsPage):
 	def __init__(self, parent, application):
 		SettingsPage.__init__(self, parent, application, 'display', _('Display'))
 
-		notebook = Gtk.Notebook()
-
 		# main window options
-		label_main_window = Gtk.Label(label=_('Main window'))
 		vbox_main_window = Gtk.VBox(False, 0)
-		vbox_main_window.set_border_width(5)
+		self._create_section(_('Main window'), vbox_main_window)
 
 		self._checkbox_hide_on_close = Gtk.CheckButton(_('Hide main window on close'))
 		self._checkbox_multiple_instances = Gtk.CheckButton(_('Allow multiple instances'))
@@ -45,9 +42,8 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_dark_theme.connect('toggled', self._parent.enable_save)
 
 		# tab options
-		label_tabs = Gtk.Label(label=_('Tabs'))
 		vbox_tabs = Gtk.VBox(False, 0)
-		vbox_tabs.set_border_width(5)
+		self._create_section(_('Tabs'), vbox_tabs)
 
 		self._checkbox_focus_new_tab = Gtk.CheckButton(_('Focus new tab after opening'))
 		self._checkbox_tab_close_button = Gtk.CheckButton(_('Show close button'))
@@ -96,9 +92,8 @@ class DisplayOptions(SettingsPage):
 		self._combobox_expand_tabs.add_attribute(cell_expand_tab, 'text', 0)
 
 		# other options
-		label_other = Gtk.Label(label=_('Other'))
 		vbox_other = Gtk.VBox(False, 0)
-		vbox_other.set_border_width(5)
+		self._create_section(_('Other'), vbox_other)
 
 		self._checkbox_hide_window_on_minimize = Gtk.CheckButton(_('Hide operation window on minimize'))
 		self._checkbox_show_notifications = Gtk.CheckButton(_('Show notifications'))
@@ -154,12 +149,6 @@ class DisplayOptions(SettingsPage):
 		vbox_other.pack_start(self._checkbox_show_notifications, False, False, 0)
 		vbox_other.pack_start(self._checkbox_network_path_completion, False, False, 0)
 		vbox_other.pack_start(hbox_size_format, False, False, 0)
-
-		notebook.append_page(vbox_main_window, label_main_window)
-		notebook.append_page(vbox_tabs, label_tabs)
-		notebook.append_page(vbox_other, label_other)
-
-		self.pack_start(notebook, True, True, 0)
 
 	def _load_options(self):
 		"""Load display options"""

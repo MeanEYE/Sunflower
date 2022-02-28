@@ -30,6 +30,7 @@ from sunflower.accelerator_group import AcceleratorGroup
 from sunflower.accelerator_manager import AcceleratorManager
 from sunflower.keyring import KeyringManager, InvalidKeyringError
 from sunflower.parameters import Parameters
+from sunflower.clipboard import Clipboard
 
 from sunflower.plugin_base.item_list import ItemList
 from sunflower.plugin_base.rename_extension import RenameExtension
@@ -49,6 +50,7 @@ from sunflower.gui.preferences_window import PreferencesWindow
 from sunflower.gui.preferences.display import TabExpand
 from sunflower.gui.input_dialog import InputDialog, AddBookmarkDialog
 from sunflower.gui.keyring_manager_window import KeyringManagerWindow
+from sunflower.gui.shortcuts_window import ShortcutsWindow
 
 
 class MainWindow(Gtk.ApplicationWindow):
@@ -58,8 +60,8 @@ class MainWindow(Gtk.ApplicationWindow):
 	# continue increasing and will never be reset.
 	version = {
 			'major': 0,
-			'minor': 4,
-			'build': 62,
+			'minor': 5,
+			'build': 63,
 			'stage': 'f'
 		}
 
@@ -130,7 +132,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.user_plugin_path = None
 
 		# create a clipboard manager
-		self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+		self.clipboard = Clipboard()
 
 		# load config
 		self.load_config()
@@ -155,6 +157,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.indicator = Indicator(self)
 		self.preferences_window = PreferencesWindow(self)
 		self.disk_usage = DiskUsage(self)
+		self.shortcuts_window = ShortcutsWindow(self)
 
 		# create header bar
 		self.header_bar = Gtk.HeaderBar.new()
@@ -231,6 +234,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 				('tools.find_files', self.show_find_files, None),
 				('tools.advanced_rename', self.show_advanced_rename, None),
+				('tools.mount_manager', self.mount_manager.show, None),
 				('tools.keyring_manager', self.show_keyring_manager, None),
 
 				('view.fast_media_preview', self._toggle_media_preview, self.options.get('media_preview')),
@@ -241,11 +245,12 @@ class MainWindow(Gtk.ApplicationWindow):
 				('view.horizontal_split', self._toggle_horizontal_split, self.options.get('horizontal_split')),
 				('view.dark_theme', self._toggle_dark_theme, self.options.get('dark_theme')),
 
+				('help.shortcuts', self.shortcuts_window._show, None),
 				('help.home_page', self.goto_web, None),
 				('help.check_version', self.check_for_new_version, None),
 				('help.about', self.show_about_window, None),
 
-				('preferences', self.preferences_window._show, None),
+				('preferences', self.preferences_window.show, None),
 				('quit', self._quit, None)
 				)
 
@@ -318,6 +323,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._view_menu.append_section(None, self._view_interface_menu)
 
 		# help menu
+		self._help_menu.append(_('Keyboard shortcuts'), 'win.help.shortcuts')
 		self._help_menu.append(_('_Home page'), 'win.help.home_page')
 		self._help_menu.append(_('Check for new version'), 'win.help.check_version')
 		self._help_menu.append(_('_About'), 'win.help.about')
@@ -458,7 +464,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.commands_popover.set_position(Gtk.PositionType.BOTTOM)
 
 		vbox = Gtk.VBox.new(False, 5)
-		vbox.set_border_width(5)
+		vbox.set_border_width(10)
 		self.commands_popover.add(vbox)
 
 		window = Gtk.Viewport.new()
@@ -471,7 +477,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		vbox.pack_start(window, False, False, 0)
 
 		edit_commands = Gtk.Button.new_with_label(_('Edit commands'))
-		edit_commands.connect('clicked', self.preferences_window._show, 'commands')
+		edit_commands.connect('clicked', self.preferences_window.show, 'commands')
 		vbox.pack_end(edit_commands, False, False, 0)
 
 		self._create_commands()
@@ -912,18 +918,16 @@ class MainWindow(Gtk.ApplicationWindow):
 		provider = Gtk.CssProvider.new()
 		screen = Gdk.Screen.get_default()
 
-		# prepare path to load from
-		file_name = os.path.join(common.get_base_directory(), 'styles', 'main.css')
-
 		# try loading from zip file
 		if os.path.isfile(sys.path[0]) and sys.path[0] != '':
 			archive = zipfile.ZipFile(sys.path[0])
-			with archive.open('sunflower/styles/main.css') as raw_file:
+			with archive.open('styles/main.css') as raw_file:
 				provider.load_from_data(raw_file.read())
 			archive.close()
 
 		# load styles from a file
 		else:
+			file_name = os.path.join(common.get_static_assets_directory(), 'styles', 'main.css')
 			provider.load_from_file(Gio.File.new_for_path(file_name))
 
 		# apply styles
@@ -957,7 +961,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		active_object = self.get_active_object()
 
 		if hasattr(active_object, '_edit_selected'):
-			active_object._edit_selected()
+			active_object._edit_selected(self)
 			result = True
 
 		return result
@@ -1455,7 +1459,7 @@ class MainWindow(Gtk.ApplicationWindow):
 			# focus active notebook
 			active_notebook_index = self.options.get('active_notebook')
 			notebook = (self.left_notebook, self.right_notebook)[active_notebook_index]
-			notebook.grab_focus()
+			notebook.get_nth_page(notebook.get_current_page()).focus_main_object()
 
 	def create_tab(self, notebook, plugin_class=None, options=None):
 		"""Safe create tab"""
@@ -1592,9 +1596,11 @@ class MainWindow(Gtk.ApplicationWindow):
 	def goto_web(self, widget, uri):
 		"""Open URL stored in data"""
 		if uri is None:
-			uri = 'sunflower-fm.org'
+			uri = 'https://sunflower-fm.org'
+		elif '://' not in uri:
+			uri = 'https://{}'.format(uri)
 
-		webbrowser.open_new_tab('https://{}'.format(uri))
+		webbrowser.open_new_tab(uri)
 		return True
 
 	def execute_command(self, widget, data=None):
@@ -1736,7 +1742,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		group.add_method('create_file', _('Create _file'), self._command_create, 'file')
 		group.add_method('create_directory', _('Create _directory'), self._command_create, 'directory')
 		group.add_method('quit_program',_('_Quit'), self._destroy)
-		group.add_method('preferences', _('_Preferences'), self.preferences_window._show)
+		group.add_method('preferences', _('_Preferences'), self.preferences_window.show)
 		group.add_method('select_with_pattern', _('S_elect with pattern'), self.select_with_pattern)
 		group.add_method('deselect_with_pattern', _('Deselect with pa_ttern'), self.deselect_with_pattern)
 		group.add_method('select_with_same_extension', _('Select with same e_xtension'), self.select_with_same_extension)
@@ -1878,6 +1884,7 @@ class MainWindow(Gtk.ApplicationWindow):
 					'number_sensitive_sort': False,
 					'right_click_select': False,
 					'single_click_navigation': False,
+					'executable_action': 0,
 					'headers_visible': True,
 					'mode_format': 1,
 					'left_directories': [],
@@ -2364,60 +2371,58 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def set_clipboard_text(self, text):
 		"""Set text data to clipboard"""
-		self.clipboard.set_text(text, -1)
+		self.clipboard.set_text(text)
 
 	def set_clipboard_item_list(self, operation, uri_list):
-		"""Set clipboard to contain list of items
-
-		operation - 'copy' or 'cut' string representing operation
-		uri_list - list of URIs
-
-		"""
-		targets = [
-				('x-special/gnome-copied-files', 0, 0),
-				("text/uri-list", 0, 0)
-			]
-		raw_data = '{0}\n'.format(operation) + '\n'.join(uri_list)
-
-		def get_func(clipboard, selection, info, data):
-			"""Handle request from application"""
-			target = selection.get_target()
-			selection.set(target, 8, raw_data)
-
-		def clear_func(clipboard, data):
-			"""Clear function"""
-			pass
-
-		# set clipboard and return result
-		return self.clipboard.set_with_data(targets, get_func, clear_func)
+		"""Set clipboard to contain list of items for either `copy` or `cut` operation."""
+		targets = ['x-special/nautilus-clipboard', 'x-special/gnome-copied-files', 'text/uri-list']
+		raw_data = '{}\n{}\n{}\n'.format(targets[0], operation, '\n'.join(uri_list))
+		return self.clipboard.set_text(raw_data)
 
 	def get_clipboard_text(self):
 		"""Get text from clipboard"""
-		return self.clipboard.wait_for_text()
+		return self.clipboard.get_text()
 
 	def get_clipboard_item_list(self):
 		"""Get item list from clipboard"""
 		result = None
-		selection = self.clipboard.wait_for_contents('x-special/gnome-copied-files')
+		targets = ['x-special/nautilus-clipboard', 'x-special/gnome-copied-files', 'text/uri-list']
 
-		# in case there is something to paste
-		if selection is not None:
-			data = selection.data.splitlines(False)
+		# nautilus recently provides data through regular
+		# clipboard as plain text try getting data that way
+		selection = self.clipboard.get_text()
+		if selection:
+			data = selection.splitlines(False)
+			data = list(filter(lambda x: len(x) > 0, data))
+			if data[0] in targets:
+				data.pop(0)
+			result = (data[0], data[1:])
 
-			operation = data[0]
-			uri_list = data[1:]
-
-			result = (operation, uri_list)
+		# try getting data old way through mime type targets
+		else:
+			selection = self.clipboard.get_data(targets)
+			if selection:
+				data = selection.splitlines(False)
+				data = list(filter(lambda x: len(x) > 0, data))
+				result = (data[0], data[1:])
 
 		return result
 
 	def is_clipboard_text(self):
 		"""Check if clipboard data is text"""
-		return self.clipboard.wait_is_text_available()
+		return self.clipboard.text_available()
 
 	def is_clipboard_item_list(self):
 		"""Check if clipboard data is URI list"""
-		return self.clipboard.wait_is_uris_available()
+		targets = ['x-special/nautilus-clipboard', 'x-special/gnome-copied-files', 'text/uri-list']
+		result = False
+
+		selection = self.clipboard.get_text()
+		if selection:
+			data = selection.splitlines(False)
+			result = data[0] == targets[0] or data[0] in ('copy', 'cut')
+
+		return result
 
 	def is_archive_supported(self, mime_type):
 		"""Check if specified archive mime type is supported."""
@@ -2436,7 +2441,18 @@ class MainWindow(Gtk.ApplicationWindow):
 			active_object = self.get_active_object()
 
 			if issubclass(active_object.__class__, ItemList):
-				AdvancedRename(active_object, self)
+				if active_object._get_selection():
+					AdvancedRename(active_object, self)
+				else:
+					dialog = Gtk.MessageDialog(
+						self,
+						Gtk.DialogFlags.DESTROY_WITH_PARENT,
+						Gtk.MessageType.INFO,
+						Gtk.ButtonsType.OK,
+						_('Please select at least one file or directory.')
+					)
+					dialog.run()
+					dialog.destroy()
 
 		elif not issubclass(self._active_object.__class__, ItemList):
 			# active object is not item list
@@ -2470,7 +2486,7 @@ class MainWindow(Gtk.ApplicationWindow):
 			dialog.destroy()
 
 			# show preferences window
-			self.preferences_window._show(None, tab_name='plugins')
+			self.preferences_window.show(None, tab_name='plugins')
 
 		return True
 
@@ -2496,7 +2512,7 @@ class MainWindow(Gtk.ApplicationWindow):
 			dialog.destroy()
 
 			# show preferences window
-			self.preferences_window._show(None, tab_name='plugins')
+			self.preferences_window.show(None, tab_name='plugins')
 
 		return True
 

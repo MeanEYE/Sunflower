@@ -6,7 +6,7 @@ import sys
 import zipfile
 
 from gi.repository import Gtk, Gio, GdkPixbuf, GLib
-from sunflower.common import UserDirectory, get_user_directory, get_base_directory
+from sunflower.common import UserDirectory, get_user_directory, get_static_assets_directory
 
 
 class IconManager:
@@ -25,19 +25,14 @@ class IconManager:
 	def _prepare_icons(self):
 		"""Load special user directories"""
 		# set default icons for file and directory
-		self._default_file = 'empty'
-		if not self.has_icon(self._default_file):
-			self._default_file = Gtk.STOCK_FILE
-
+		self._default_file = 'text-x-generic'
 		self._default_directory = 'folder'
-		if not self.has_icon(self._default_directory):
-			self._default_directory = Gtk.STOCK_DIRECTORY
 
 		# special user directories
 		directories = []
 		icon_names = {
 				UserDirectory.DESKTOP: 'user-desktop',
-				UserDirectory.DOWNLOADS: 'folder-downloads',
+				UserDirectory.DOWNLOADS: 'folder-download',
 				UserDirectory.TEMPLATES: 'folder-templates',
 				UserDirectory.PUBLIC: 'folder-publicshare',
 				UserDirectory.DOCUMENTS: 'folder-documents',
@@ -47,7 +42,7 @@ class IconManager:
 			}
 
 		# add all directories
-		for directory in icon_names.keys():
+		for directory in icon_names:
 			full_path = get_user_directory(directory)
 			icon_name = icon_names[directory]
 
@@ -58,8 +53,8 @@ class IconManager:
 			directories.append((full_path, icon_name))
 
 		# add user home directory
-		if self.has_icon('folder-home'):
-			directories.append((os.path.expanduser('~'), 'folder-home'))
+		if self.has_icon('user-home'):
+			directories.append((os.path.expanduser('~'), 'user-home'))
 
 		# create a dictionary
 		self._user_directories = dict(directories)
@@ -72,7 +67,7 @@ class IconManager:
 		"""Get icon sizes for specified name"""
 		return self._icon_theme.get_icon_sizes(icon_name)
 
-	def get_icon_for_file(self, filename, size=Gtk.IconSize.MENU):
+	def get_icon_for_file(self, filename):
 		"""Load icon for specified file"""
 		result = self._default_file
 		mime_type = self._parent.associations_manager.get_mime_type(filename)
@@ -92,7 +87,7 @@ class IconManager:
 
 		return result
 
-	def get_icon_for_directory(self, path, size=Gtk.IconSize.MENU):
+	def get_icon_for_directory(self, path):
 		"""Get icon for specified directory"""
 		result = self._default_directory
 
@@ -132,6 +127,5 @@ class IconManager:
 
 		# load from local path
 		else:
-			base_path = os.path.dirname(get_base_directory())
+			base_path = get_static_assets_directory()
 			window.set_icon_from_file(os.path.join(base_path, 'images', 'sunflower.svg'))
-

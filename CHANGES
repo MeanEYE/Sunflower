@@ -1,3 +1,52 @@
+Version 0.5-63
+
+  * Fix issue with opening multiple files through popup menu.
+  + Implement new open with menu.
+  * Fix issue with loading associations in preferences window.
+  + Bring back mount manager. Still not fully functional but it will be.
+  * Fix issue when switching sessions.
+  * Fix pages not being focused on preferences window showing.
+  * Prevent stealing key presses from menu.
+  * Improve look of container lists.
+  * RPM spec: Fix build issues.
+  * Fix issue when detecting executable is GUI.
+  + Introduced back new emblem menu.
+  * Fix error when detecting mime type of directory in popup menu.
+  * Fix media preview positioning issue.
+  * Fix issue with popup menu positioning.
+  * File list: Fix Gtk.MessageDialog transient_for.
+  * File list: Make executing files optional.
+  * File list: Fix updating upon monitor events.
+  * Fix help for command-line arguments
+  * Improved layout of preferences window for easier navigation.
+  * Focus main object after path change.
+  * Switched input dialogs to MessageDialog for better integration.
+  * Fix initial notebook focus sometimes not working.
+  * Fix issue with queuing too many queue flushes.
+  * Always scroll to selection after file list sorted. Not an ideal solution but will get better.
+  * Fix navigating to location with keyboard in location menu.
+  * Improvements to multi-rename tool.
+  * Zip provider: Set default permissions.
+  * Update context menu icons for network providers.
+  * Fix add directory menu.
+  * Fix issues with clipboard selection.
+  * Fix search functionality.
+  * Fix standalone build.
+  * Fixed drag and drop of files and directories.
+  * Fix sorting for expanded directories.
+  * Improve sorting speed when loading large directories.
+  * Breadcrumbs: Fix double triggering of path change.
+  * Moved main style to a dedicated location.
+  * Fix opening plug-in homepage
+  * Fixed icon loading code.
+  * Fix image loading for standalone application.
+  * Fixed path lookup for images and styles.
+  + Main: Fixed issue with `xdg-open`.
+
+Version 0.4-62
+
+  + Switched to GTK+ 3.20 with too many changes to list.
+
 Version 0.3-60
   + Ability to find text inside remote directories.
   + Add MTP, Gphoto2 and GIO Provider to handle Android phones and other multimedia devices.

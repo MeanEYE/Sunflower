@@ -9,14 +9,14 @@
 # Leopoldo Cendejas Pedraza <dev.leopold@gmail.com>, 2016
 # Mladen Mijatov <meaneye.rcf@gmail.com>, 2015
 # Samuel Santana Medina <ssantana@gmx.com>, 2015-2016
-# Toni Estévez <toni.estevez@gmail.com>, 2019-2021
+# Toni Estévez <toni.estevez@gmail.com>, 2019-2022
 msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-30 22:52+0100\n"
-"PO-Revision-Date: 2022-01-30 21:52+0000\n"
-"Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>\n"
+"PO-Revision-Date: 2022-01-31 21:53+0000\n"
+"Last-Translator: Toni Estévez <toni.estevez@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/way2cu/sunflower/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1562,15 +1562,15 @@ msgstr "Cambiando el nombre..."
 
 #: sunflower/gui/mounts_manager_window.py:47
 msgid "Mount manager"
-msgstr ""
+msgstr "Gestor de montaje"
 
 #: sunflower/gui/mounts_manager_window.py:370
 msgid "Systemwide"
-msgstr ""
+msgstr "Todo el sistema"
 
 #: sunflower/gui/mounts_manager_window.py:392
 msgid "Open selected URI in new tab"
-msgstr ""
+msgstr "Abrir el URI seleccionado en una pestaña nueva"
 
 #: sunflower/gui/mounts_manager_window.py:396
 #: sunflower/gui/mounts_manager_window.py:559 sunflower/mounts.py:226
@@ -1582,7 +1582,7 @@ msgstr "Desmontar"
 
 #: sunflower/gui/mounts_manager_window.py:548
 msgid "Mounted"
-msgstr ""
+msgstr "Montado"
 
 #: sunflower/gui/mounts_manager_window.py:555 sunflower/mounts.py:232
 #: sunflower/plugins/file_list/gio_extension.py:194
@@ -1593,7 +1593,7 @@ msgstr "Montar"
 
 #: sunflower/gui/mounts_manager_window.py:697
 msgid "Volumes"
-msgstr ""
+msgstr "Volúmenes"
 
 #: sunflower/gui/keyring_manager_window.py:29
 msgid "Keyring manager"
@@ -1645,11 +1645,11 @@ msgstr "Gestor de archivos de doble panel para Linux."
 
 #: sunflower/gui/about_window.py:78
 msgid "translator-credits"
-msgstr ""
+msgstr "Toni Estevez <toni.estevez@gmail.com>,\nDamián Nohales <damiannohales@gmail.com>, \nDavid Gonzalez <leonardo.david.gonzalez@gmail.com>, \nSamuel Santana <slsantana@posgrado.imta.edu.mx>"
 
 #: sunflower/gui/about_window.py:81
 msgid "Copyright © 2010-2022 by Mladen Mijatov and contributors."
-msgstr ""
+msgstr "Copyright © 2010-2022 por Mladen Mijatov y colaboradores."
 
 #: sunflower/gui/about_window.py:97
 msgid "Contributors"

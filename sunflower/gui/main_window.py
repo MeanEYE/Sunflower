@@ -1749,7 +1749,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		group.add_method('deselect_with_same_extension', _('Deselect with same exte_nsion'), self.deselect_with_same_extension)
 		group.add_method('compare_directories', _('Compare _directories'), self.compare_directories)
 		group.add_method('find_files', _('_Find files'), self.show_find_files)
-		group.add_method('advanced_rename', _('_Find files'), self.show_advanced_rename)
+		group.add_method('advanced_rename', _('Advanced Rename'), self.show_advanced_rename)
 		# group.add_method('mount_manager', _('_Mount manager'), self.mount_manager.show)
 		# group.add_method('keyring_manager', _('_Keyring manager'), self.keyring_manager.show)
 		group.add_method('reload', _('Rel_oad item list'), self._command_reload)

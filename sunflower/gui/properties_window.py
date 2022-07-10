@@ -582,7 +582,7 @@ class PropertiesWindow(Gtk.Window):
 		table_ownership.attach(label, 0, 1, 1, 2)
 
 		# create owner combobox
-		self._list_owner = Gtk.ListStore(str, int)
+		self._list_owner = Gtk.ListStore(str, GObject.TYPE_INT64)
 		cell_owner = Gtk.CellRendererText()
 
 		self._combobox_owner = Gtk.ComboBox.new_with_model(self._list_owner)
@@ -593,7 +593,7 @@ class PropertiesWindow(Gtk.Window):
 		table_ownership.attach(self._combobox_owner, 1, 2, 0, 1)
 
 		# create group combobox
-		self._list_group = Gtk.ListStore(str, int)
+		self._list_group = Gtk.ListStore(str, GObject.TYPE_INT64)
 		cell_group = Gtk.CellRendererText()
 
 		self._combobox_group = Gtk.ComboBox.new_with_model(self._list_group)

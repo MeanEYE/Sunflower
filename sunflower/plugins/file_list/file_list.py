@@ -95,8 +95,8 @@ class FileList(ItemList):
 								str,	# Column.COLOR
 								str,	# Column.ICON
 								bool,	# Column.SELECTED
-								int,	# Column.USER_ID
-								int,	# Column.GROUP_ID
+								GObject.TYPE_INT64,	# Column.USER_ID
+								GObject.TYPE_INT64,	# Column.GROUP_ID
 								GObject.TYPE_PYOBJECT,	# Column.EMBLEMS
 								str		# Column.SORT_DATA
 							)

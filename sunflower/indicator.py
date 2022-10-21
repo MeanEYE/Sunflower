@@ -6,7 +6,7 @@ from gi.repository import Gtk
 
 
 class Indicator(object):
-	"""This class provides access to application indicators in Gnome envirnoments"""
+	"""This class provides access to application indicators in Gnome environments"""
 
 	def __init__(self, parent):
 		self._parent = parent

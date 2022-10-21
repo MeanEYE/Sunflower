@@ -686,7 +686,7 @@ class CopyOperation(Operation):
 
 			if self._source.is_dir(item, relative_to=source_path):
 				# item is directory
-				can_procede = True
+				can_proceed = True
 				can_create = True
 
 				# check if directory exists on destination
@@ -694,12 +694,12 @@ class CopyOperation(Operation):
 					can_create = False
 
 					if self._merge_all is not None:
-						can_procede = self._merge_all
+						can_proceed = self._merge_all
 					else:
-						can_procede = self._get_merge_input(item)
+						can_proceed = self._get_merge_input(item)
 
 				# if user didn't skip directory, scan and update lists
-				if can_procede:
+				if can_proceed:
 					self._dir_list.append((item, relative_path))
 					if can_create: self._dir_list_create.append((item, relative_path))
 					self._scan_directory(item, relative_path)
@@ -840,18 +840,18 @@ class CopyOperation(Operation):
 
 			# item is a directory, scan it
 			if self._source.is_dir(full_name, relative_to=source_path):
-				can_procede = True
+				can_proceed = True
 				can_create = True
 
 				if self._destination.exists(full_name, relative_to=self._destination_path):
 					can_create = False
 
 					if self._merge_all is not None:
-						can_procede = self._merge_all
+						can_proceed = self._merge_all
 					else:
-						can_procede = self._get_merge_input(full_name)
+						can_proceed = self._get_merge_input(full_name)
 
-				if can_procede:
+				if can_proceed:
 					# allow processing specified directory
 					self._dir_list.append((full_name, source_path))
 					if can_create: self._dir_list_create.append((full_name, source_path))
@@ -915,7 +915,7 @@ class CopyOperation(Operation):
 
 	def _copy_file(self, file_name, relative_path=None):
 		"""Copy file content"""
-		can_procede = True
+		can_proceed = True
 		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
 		dest_file = file_name
 		sh = None
@@ -924,10 +924,10 @@ class CopyOperation(Operation):
 		# check if destination file exists
 		if self._destination.exists(file_name, relative_to=self._destination_path):
 			if self._overwrite_all is not None:
-				can_procede = self._overwrite_all
+				can_proceed = self._overwrite_all
 
 			else:
-				can_procede, options = self._get_overwrite_input(file_name)
+				can_proceed, options = self._get_overwrite_input(file_name)
 
 				# get new name if user specified
 				if options[OverwriteOption.RENAME]:
@@ -937,10 +937,10 @@ class CopyOperation(Operation):
 					                )
 
 				elif source_path == self._destination_path:
-					can_procede = False
+					can_proceed = False
 
 		# if user skipped this file return
-		if not can_procede:
+		if not can_proceed:
 			self._file_list.pop(self._file_list.index((file_name, relative_path)))
 
 			# update total size
@@ -1071,7 +1071,7 @@ class CopyOperation(Operation):
 
 	def _create_link(self, link_name, relative_path=None):
 		"""Create specified link"""
-		can_procede = True
+		can_proceed = True
 		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
 		file_stat = self._source.get_stat(link_name, relative_to=source_path)
 		target = self._source.readlink(link_name, relative_to=source_path)
@@ -1079,21 +1079,21 @@ class CopyOperation(Operation):
 		try:
 			if self._destination.exists(link_name, relative_to=self._destination_path):
 				if self._overwrite_all is not None:
-					can_procede = self._overwrite_all
+					can_proceed = self._overwrite_all
 				else:
-					can_procede, options = self._get_overwrite_input(link_name)
+					can_proceed, options = self._get_overwrite_input(link_name)
 
 					# get new name if user specified
 					if options[OverwriteOption.RENAME]:
 						link_name = options[OverwriteOption.NEW_NAME]
 					elif source_path == self._destination_path:
-						can_procede = False
+						can_proceed = False
 					else:
 						self._source.remove_path(link_name, relative_to=self._destination_path)
 
 
 			# if user skipped this file return
-			if not can_procede:
+			if not can_proceed:
 				self._link_list.pop(self._file_list.index(link_name))
 				return
 
@@ -1274,16 +1274,16 @@ class MoveOperation(CopyOperation):
 
 	def _move_file(self, file_name, relative_path=None):
 		"""Move specified file using provider rename method"""
-		can_procede = True
+		can_proceed = True
 		source_path = self._source_path if relative_path is None else os.path.join(self._source_path, relative_path)
 		dest_file = file_name
 
 		# check if destination file exists
 		if self._destination.exists(file_name, relative_to=self._destination_path):
 			if self._overwrite_all is not None:
-				can_procede = self._overwrite_all
+				can_proceed = self._overwrite_all
 			else:
-				can_procede, options = self._get_overwrite_input(file_name)
+				can_proceed, options = self._get_overwrite_input(file_name)
 
 				# get new name if user specified
 				if options[OverwriteOption.RENAME]:
@@ -1293,7 +1293,7 @@ class MoveOperation(CopyOperation):
 					                )
 
 		# if user skipped this file return
-		if not can_procede:
+		if not can_proceed:
 			self._file_list.pop(self._file_list.index((file_name, relative_path)))
 			return
 
@@ -1656,12 +1656,12 @@ class RenameOperation(Operation):
 
 	def _rename_path(self, old_name, new_name, index):
 		"""Rename specified path"""
-		can_procede = True
+		can_proceed = True
 
 		try:
 			# check if specified path already exists
 			if self._destination.exists(new_name, relative_to=self._source_path):
-				can_procede, options = self._get_overwrite_input(new_name)
+				can_proceed, options = self._get_overwrite_input(new_name)
 
 				# get new name if user specified
 				if options[OverwriteOption.RENAME]:
@@ -1670,7 +1670,7 @@ class RenameOperation(Operation):
 					                    options[OverwriteOption.NEW_NAME]
 					                )
 
-			if not can_procede:
+			if not can_proceed:
 				# user canceled overwrite, skip the file
 				self._file_list.pop(index)
 				return

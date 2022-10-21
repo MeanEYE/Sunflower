@@ -78,7 +78,7 @@ class Monitor(GObject.GObject):
 		for event in set(events):
 			self._emit_signal(*event)
 
-		# if paused break inteval cycle
+		# if paused break interval cycle
 		return not self._paused.isSet()
 
 	def _emit_signal(self, signal, path, other_path):

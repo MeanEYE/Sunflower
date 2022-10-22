@@ -257,11 +257,11 @@ class OperationDialog:
 	def _update_total_size(self):
 		"""Update progress bar and labels for total size"""
 		# update label
-		formated_size = self._size_format.format(
+		formatted_size = self._size_format.format(
 				common.format_size(self._current_size, self._size_format_type),
 				common.format_size(self._total_size, self._size_format_type)
 				)
-		self._value_total_size.set_label(formated_size)
+		self._value_total_size.set_label(formatted_size)
 
 		if self._total_size > 0:
 			self.set_total_size_fraction(float(self._current_size) / self._total_size)

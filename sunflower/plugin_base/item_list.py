@@ -572,7 +572,7 @@ class ItemList(PluginBase):
 
 		if not result and key_value > 0 \
 		and event.keyval != Gdk.KEY_Escape:
-			# generate state sting based on modifier state (control, alt, shift)
+			# generate state string based on modifier state (control, alt, shift)
 			state = "%d%d%d" % (
 						bool(event.get_state() & Gdk.ModifierType.CONTROL_MASK),
 						bool(event.get_state() & Gdk.ModifierType.MOD1_MASK),
@@ -838,7 +838,7 @@ class ItemList(PluginBase):
 		return True
 
 	def _rename_file(self, widget=None, data=None):
-		"""Rename highlighed item"""
+		"""Rename highlighted item"""
 		return True
 
 	def _send_to(self, widget=None, data=None):
@@ -1106,7 +1106,7 @@ class ItemList(PluginBase):
 		return True
 
 	def _select_range(self, start_path, end_path):
-		"""Set items in range to status opposite from frist item in selection"""
+		"""Set items in range to status opposite from first item in selection"""
 		if self._parent.options.get('show_status_bar') == StatusVisible.WHEN_NEEDED:
 			selected_items = self._dirs['selected'] + self._files['selected']
 			(self._hide_status_bar, self._show_status_bar)[selected_items > 0]()

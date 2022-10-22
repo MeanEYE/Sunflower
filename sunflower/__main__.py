@@ -171,7 +171,7 @@ class Sunflower(Gtk.Application):
 		self.window.create_tabs(self.arguments)
 
 	def do_command_line(self, command_line):
-		"""Handle command line argumens and flags."""
+		"""Handle command line arguments and flags."""
 		Gtk.Application.do_command_line(self, command_line)
 
 		def absolute_path(cwd, path):

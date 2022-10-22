@@ -1379,7 +1379,7 @@ class AddBookmarkDialog:
 	def get_response(self):
 		"""Return value and self-destruct
 
-		This method returns tupple with response code and
+		This method returns tuple with response code and
 		input text.
 
 		"""
@@ -1394,7 +1394,7 @@ class AddBookmarkDialog:
 
 
 class OperationError:
-	"""Dialog used to ask user about error occured during certain operation."""
+	"""Dialog used to ask user about error occurred during certain operation."""
 	RESPONSE_CANCEL = 0
 	RESPONSE_RETRY = 1
 	RESPONSE_SKIP = 2
@@ -1482,7 +1482,7 @@ class OperationError:
 
 
 class CreateToolbarWidgetDialog:
-	"""Create widget persisten dialog."""
+	"""Create widget persistent dialog."""
 
 	def __init__(self, application):
 		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
@@ -1501,7 +1501,7 @@ class CreateToolbarWidgetDialog:
 		vbox = Gtk.VBox(False, 5)
 		vbox.set_border_width(5)
 
-		# create interfacce
+		# create interface
 		vbox_name = Gtk.VBox(False, 0)
 
 		label_name = Gtk.Label(label=_('Name:'))
@@ -1616,7 +1616,7 @@ class InputRangeDialog(InputDialog):
 
 
 class ApplicationInputDialog(InputDialog):
-	"""Input dialog for associations manager. Offers two fiels
+	"""Input dialog for associations manager. Offers two fields
 	for entry: application name and command."""
 
 	def __init__(self, application):

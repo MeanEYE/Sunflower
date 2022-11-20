@@ -158,7 +158,7 @@ class BookmarksOptions(SettingsPage):
 		self._checkbox_add_home.set_active(options.get('add_home'))
 		self._checkbox_system_bookmarks.set_active(options.get('system_bookmarks'))
 
-		# load and parse bookmars
+		# load and parse bookmarks
 		self._bookmarks.clear()
 
 		bookmarks = options.get('bookmarks')

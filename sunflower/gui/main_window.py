@@ -530,7 +530,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		# TODO: Make sure all threads are stopped at this point.
 
 	def _quit(self, widget=None, data=None):
-		"""Trigger destory action from Quit menu item"""
+		"""Trigger destroy action from Quit menu item"""
 		if not self.emit('delete-event', Gdk.Event.new(Gdk.EventType.DELETE)):
 			self.destroy()
 
@@ -671,7 +671,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._window_state = event.new_window_state
 
 	def _page_added(self, notebook, child, page_num):
-		"""Handle adding/moving tab accross notebooks"""
+		"""Handle adding/moving tab across notebooks"""
 		if hasattr(child, 'update_notebook'):
 			child.update_notebook(notebook)
 
@@ -1154,7 +1154,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._accel_group.deactivate()
 
 	def _command_edit_lost_focus(self, widget, event):
-		"""Handle command entry loosing focus"""
+		"""Handle command entry losing focus"""
 		self._accel_group.activate(self)
 
 	def _save_window_position(self):

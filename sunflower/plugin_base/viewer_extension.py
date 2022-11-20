@@ -9,7 +9,7 @@ class ViewerExtension:
 		pass
 
 	def get_container(self):
-		"""Return container widget to be embeded to notebook"""
+		"""Return container widget to be embedded to notebook"""
 		pass
 
 	def focus_object(self):

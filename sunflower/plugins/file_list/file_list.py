@@ -27,14 +27,14 @@ from sunflower.widgets.emblems_renderer import CellRendererEmblems
 
 class Column:
 	NAME = 0
-	FORMATED_NAME = 1
+	FORMATTED_NAME = 1
 	EXTENSION = 2
 	SIZE = 3
-	FORMATED_SIZE = 4
+	FORMATTED_SIZE = 4
 	MODE = 5
-	FORMATED_MODE = 6
+	FORMATTED_MODE = 6
 	TIME = 7
-	FORMATED_TIME = 8
+	FORMATTED_TIME = 8
 	IS_DIR = 9
 	IS_PARENT_DIR = 10
 	IS_LINK = 11
@@ -81,14 +81,14 @@ class FileList(ItemList):
 								# name is a string, but it can contain surrogates,
 								# so it can't be marshalled as a gstring.
 								GObject.TYPE_PYOBJECT,	# Column.NAME
-								str,	# Column.FORMATED_NAME
+								str,	# Column.FORMATTED_NAME
 								str,	# Column.EXTENSION
 								float,	# Column.SIZE
-								str,	# Column.FORMATED_SIZE
+								str,	# Column.FORMATTED_SIZE
 								int,	# Column.MODE
-								str,	# Column.FORMATED_MODE
+								str,	# Column.FORMATTED_MODE
 								int,	# Column.DATE
-								str,	# Column.FORMATED_DATE
+								str,	# Column.FORMATTED_DATE
 								bool,	# Column.IS_DIR
 								bool,	# Column.IS_PARENT_DIR
 								bool,	# Column.IS_LINK
@@ -165,11 +165,11 @@ class FileList(ItemList):
 		col_name.add_attribute(cell_icon, 'icon-name', Column.ICON)
 		col_name.add_attribute(cell_emblems, 'emblems', Column.EMBLEMS)
 		col_name.add_attribute(cell_emblems, 'is-link', Column.IS_LINK)
-		col_name.add_attribute(cell_name, 'text', Column.FORMATED_NAME)
+		col_name.add_attribute(cell_name, 'text', Column.FORMATTED_NAME)
 		col_extension.add_attribute(cell_extension, 'text', Column.EXTENSION)
-		col_size.add_attribute(cell_size, 'text', Column.FORMATED_SIZE)
-		col_mode.add_attribute(cell_mode, 'text', Column.FORMATED_MODE)
-		col_date.add_attribute(cell_date, 'text', Column.FORMATED_TIME)
+		col_size.add_attribute(cell_size, 'text', Column.FORMATTED_SIZE)
+		col_mode.add_attribute(cell_mode, 'text', Column.FORMATTED_MODE)
+		col_date.add_attribute(cell_date, 'text', Column.FORMATTED_TIME)
 
 		col_name.set_resizable(True)
 		col_name.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
@@ -358,7 +358,7 @@ class FileList(ItemList):
 			self._handle_cursor_change()
 
 	def _control_lost_focus(self, widget, data=None):
-		"""Handle control loosing focus"""
+		"""Handle control losing focus"""
 		ItemList._control_lost_focus(self, widget, data)
 
 		if self._enable_media_preview:
@@ -734,10 +734,10 @@ class FileList(ItemList):
 		result = False
 		if original_path is None:
 			provider = self._get_other_provider()
-			destintation = self._parent.get_opposite_object(self).path
+			destination = self._parent.get_opposite_object(self).path
 		else:
 			provider = self.get_provider()
-			destintation = self.path
+			destination = self.path
 
 		supported_options = provider.get_support()
 
@@ -770,7 +770,7 @@ class FileList(ItemList):
 					provider.link(
 							original_path,
 							link_name,
-							relative_to=destintation,
+							relative_to=destination,
 							symbolic=not hard_link
 						)
 
@@ -1572,8 +1572,8 @@ class FileList(ItemList):
 		# add item to the list
 		try:
 			# don't allow extension splitting on directories
-			formated_file_mode = common.format_mode(file_mode, self._mode_format)
-			formated_file_date = time.strftime(self._time_format, time.localtime(file_date))
+			formatted_file_mode = common.format_mode(file_mode, self._mode_format)
+			formatted_file_date = time.strftime(self._time_format, time.localtime(file_date))
 
 			if not is_dir:
 				if not self._second_extension:
@@ -1588,23 +1588,23 @@ class FileList(ItemList):
 				if self._show_full_name:
 					file_info = (filename, file_info[1])
 
-				formated_file_size = common.format_size(file_size, self._size_format, False)
+				formatted_file_size = common.format_size(file_size, self._size_format, False)
 
 			else:
 				# item is a directory
 				file_info = (filename, '')
-				formated_file_size = '<DIR>'
+				formatted_file_size = '<DIR>'
 
 			data = (
 					os.path.join(parent_path, filename) if parent_path else filename,
 					common.decode_file_name(file_info[0]),
 					common.decode_file_name(file_info[1][1:]),
 					file_size,
-					formated_file_size,
+					formatted_file_size,
 					file_mode,
-					formated_file_mode,
+					formatted_file_mode,
 					file_date,
-					formated_file_date,
+					formatted_file_date,
 					is_dir,
 					False,
 					is_link,
@@ -1707,22 +1707,22 @@ class FileList(ItemList):
 
 			if not is_dir:
 				# format file size
-				formated_file_size = common.format_size(file_size, self._size_format, False)
+				formatted_file_size = common.format_size(file_size, self._size_format, False)
 
 			else:
 				# item is a directory
-				formated_file_size = '<DIR>'
+				formatted_file_size = '<DIR>'
 
-			formated_file_mode = common.format_mode(file_mode, self._mode_format)
-			formated_file_date = time.strftime(self._time_format, time.localtime(file_date))
+			formatted_file_mode = common.format_mode(file_mode, self._mode_format)
+			formatted_file_date = time.strftime(self._time_format, time.localtime(file_date))
 
 			# update list store
 			self._store.set_value(found_iter, Column.SIZE, file_size)
 			self._store.set_value(found_iter, Column.MODE, file_mode)
 			self._store.set_value(found_iter, Column.TIME, file_date)
-			self._store.set_value(found_iter, Column.FORMATED_SIZE, formated_file_size)
-			self._store.set_value(found_iter, Column.FORMATED_MODE, formated_file_mode)
-			self._store.set_value(found_iter, Column.FORMATED_TIME, formated_file_date)
+			self._store.set_value(found_iter, Column.FORMATTED_SIZE, formatted_file_size)
+			self._store.set_value(found_iter, Column.FORMATTED_MODE, formatted_file_mode)
+			self._store.set_value(found_iter, Column.FORMATTED_TIME, formatted_file_date)
 
 			# regenerate sort data
 			self._generate_sort_data(iters=[found_iter,])
@@ -1739,14 +1739,14 @@ class FileList(ItemList):
 
 			file_mode = file_stat.mode
 			file_date = file_stat.time_modify
-			formated_file_mode = common.format_mode(file_mode, self._mode_format)
-			formated_file_date = time.strftime(self._time_format, time.localtime(file_date))
+			formatted_file_mode = common.format_mode(file_mode, self._mode_format)
+			formatted_file_date = time.strftime(self._time_format, time.localtime(file_date))
 
 			# update list store
 			self._store.set_value(found_iter, Column.MODE, file_mode)
 			self._store.set_value(found_iter, Column.TIME, file_date)
-			self._store.set_value(found_iter, Column.FORMATED_MODE, formated_file_mode)
-			self._store.set_value(found_iter, Column.FORMATED_TIME, formated_file_date)
+			self._store.set_value(found_iter, Column.FORMATTED_MODE, formatted_file_mode)
+			self._store.set_value(found_iter, Column.FORMATTED_TIME, formatted_file_date)
 
 			# regenerate sort data
 			self._generate_sort_data(iters=[found_iter,])
@@ -2101,10 +2101,10 @@ class FileList(ItemList):
 		name = self._store.get_value(found_iter, Column.NAME)
 		absolute_path = os.path.join(self.path, name)
 		total_count, total_size = self._parent.disk_usage.get(self, absolute_path)
-		formated_size = common.format_size(total_size, self._size_format, False)
+		formatted_size = common.format_size(total_size, self._size_format, False)
 
 		# update list
-		self._store.set_value(found_iter, Column.FORMATED_SIZE, formated_size)
+		self._store.set_value(found_iter, Column.FORMATTED_SIZE, formatted_size)
 
 	def change_path(self, path=None, selected=None):
 		"""Change file list path."""

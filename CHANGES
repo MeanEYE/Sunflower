@@ -298,7 +298,7 @@ Version 0.1a-50
   * Set cursor on first menu item in bookmarks menu.
   * Select first extension in column editor.
   * Properly detect file type when preparing popup menu.
-  * Lazy command forking to avoid problems with programs wich measure size of terminal window.
+  * Lazy command forking to avoid problems with programs which measure size of terminal window.
   * Get list of selected items before starting operation to avoid potential problems.
   * Fixed problem with removing files on remote file systems.
   * Check for supported options in providers and only allow supported in copy/move dialog.
@@ -372,7 +372,7 @@ Version 0.1a-44
   + Samba extension for mount manager. Editing and removing still doesn't work.
   + Volumes extension for mount manager.
   + "Copy/move to other" context menu options.
-  + Ability to disable red color when starting program with superuser priviledges.
+  + Ability to disable red color when starting program with superuser privileges.
   * Fixed mount manager to properly handle different extensions.
   * Properly handle all exceptions in delete operation.
   * Ask user what to do when trashing files is not possible.
@@ -429,13 +429,13 @@ Version 0.1a-41
   + Created simple file viewer.
   + Show information dialog when compared directories are identical.
   + Added support for selecting items using Shift + Up/Down arrows.
-  * Sessions: Fix for problem occured after change of way tabs are stored
+  * Sessions: Fix for problem occurred after change of way tabs are stored
   * Updated Russian translation.
   * Fixed random crashes when inheriting path. (issue #175)
   * Properly handle toggle selection when assigned to key other than default. (issue #176)
   * Updated Polish translation
   * Fix random crashes when closing tab with keyboard accelerator.
-  * Fixed problem with list grabing focus on path change.
+  * Fixed problem with list grabbing focus on path change.
   * Properly form bookmark replacement list to include home directory key bindings editor.
   * Fixed problem with Ubuntu coloring method.
   * Changed default search modifier.
@@ -575,7 +575,7 @@ Version 0.1a-33
   + Support for rename extension reordering
   + Find files tool
   + Keybindings editor
-  + Open path from history browser in oposite list
+  + Open path from history browser in opposite list
   * Issue #76 - Notify user when rename fails
   * Issue #78 - Fixed exception when sort is set for extension column
   * Fixed problem with loading secondary accelerator
@@ -641,7 +641,7 @@ Version 0.1a-27
   + Tab close buttons
   + Display sizes in more friendly format
   + Ability to unmount items
-  * Optional command line paramters
+  * Optional command line parameters
   * Optional plugin status bars
   * Set WM_CLASS to fix issues with global menu
   - Unused indicator entries and dependencies
@@ -680,7 +680,7 @@ Version 0.1a-24
   * Clear selection on source list after operation has started
   * Modified startup method to be even more robust
   * Fixed regression bug with bookmarks menu
-  * Increas plugin border width to fix issues on some themes (eg. Equinox)
+  * Increase plugin border width to fix issues on some themes (eg. Equinox)
   * Fixed language template so Poedit can use it
 
 Version 0.1a-23
@@ -746,7 +746,7 @@ Version 0.1a-19
   * Use of xdg-open instead of gnome-open
   * Open with list didn't show all associated programs
   * Fixed popup menu behavior
-  * Fixed bug #28: Focus oposite notebook with hidden tabs
+  * Fixed bug #28: Focus opposite notebook with hidden tabs
   * Update fullscreen menu image properly
   * Proper directory statistics update on item removal
 
@@ -877,7 +877,7 @@ Version 0.1a-7
   + Reload list icons on theme change
   + Saving window size and position
   + Free/total space display
-  + Added setting/getting path from oposite list (CTRL+Left CTRL+Right)
+  + Added setting/getting path from opposite list (CTRL+Left CTRL+Right)
   + Pressing Up (or Escape) in command edit will focus last used list
   * Changed status bar type to fit system theme natively
   * Fixed handling of `cd` command

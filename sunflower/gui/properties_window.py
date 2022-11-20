@@ -197,7 +197,7 @@ class PropertiesWindow(Gtk.Window):
 		"""Update widgets to represent item state"""
 		associations_manager = self._application.associations_manager
 
-		# get the rest of the infromation
+		# get the rest of the information
 		description = associations_manager.get_mime_description(self._mime_type)
 		time_format = self._application.options.section('item_list').get('time_format')
 		size_format = self._application.options.get('size_format')

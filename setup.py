@@ -33,4 +33,4 @@ setup (
 			('share/applications', ['Sunflower.desktop'])
 			],
 		entry_points={'console_scripts': ['sunflower = sunflower.__main__:main']}
-		)
+	)

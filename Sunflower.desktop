@@ -1,7 +1,7 @@
 #!/usr/bin/env python3 -m sunflower
 [Desktop Entry]
 Type=Application
-Icon=sunflower
+Icon=/usr/share/sunflower/images/sunflower.svg
 Name=Sunflower
 StartupWMClass=Sunflower
 GenericName=File Manager

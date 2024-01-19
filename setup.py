@@ -3,6 +3,12 @@
 from setuptools import setup, find_packages
 from pathlib import Path
 
+def molist():
+    trdir = "translations/"
+    langs = [x.name for x in Path(trdir).iterdir() if x.is_dir()]
+    molist = [ (f'share/locale/{l}/LC_MESSAGES/', [f"translations/{l}/LC_MESSAGES/sunflower.mo"]) for l in langs]
+    return molist
+
 def get_version():
 	"""Get software version from the main window."""
 	import gi
@@ -28,9 +34,9 @@ setup (
 		include_package_data=True,
 		data_files=[
 			('share/sunflower/images/', list(str(i) for i in Path('images/').rglob('*') if i.is_file())),
-			('share/sunflower/translations', list(str(i) for i in Path('translations/').rglob('*.po') if i.is_file())),
 			('share/sunflower/styles', ['styles/main.css']),
-			('share/applications', ['Sunflower.desktop'])
+			('share/applications', ['Sunflower.desktop']),
+            *molist()
 			],
 		entry_points={'console_scripts': ['sunflower = sunflower.__main__:main']}
 	)

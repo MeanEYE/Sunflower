@@ -1642,7 +1642,7 @@ class FileList(ItemList):
 				path_to_select = self._store.get_path(new_iter)
 
 		# schedule sort data update
-		Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._generate_sort_data, None, queued_iters)
+		Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._generate_sort_data)
 
 		# select path if needed
 		if path_to_select is not None:

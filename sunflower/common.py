@@ -49,7 +49,7 @@ def format_size(size, format_type, include_unit=True):
 
 	# format as localized decimal number
 	if format_type == SizeFormat.LOCAL:
-		result = ('{0}', '{0} B')[include_unit].format(locale.format('%d', size, True))
+		result = ('{0}', '{0} B')[include_unit].format(locale.format_string('%d', size, True))
 
 	# format based on specified standard
 	else:

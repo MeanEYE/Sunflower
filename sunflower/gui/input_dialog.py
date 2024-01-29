@@ -1157,7 +1157,7 @@ class OverwriteDialog:
 			size = item_stat.size
 			icon = self._application.icon_manager.get_icon_for_file(full_path)
 
-		str_size = locale.format('%d', size, True)
+		str_size = locale.format_string('%d', size, True)
 		str_date = time.strftime(self._time_format, time.localtime(item_stat.time_modify))
 
 		return str_size, str_date, icon

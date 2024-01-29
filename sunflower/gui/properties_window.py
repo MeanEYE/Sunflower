@@ -218,7 +218,7 @@ class PropertiesWindow(Gtk.Window):
 
 			finally:
 				item_size = '{0} {1}'.format(
-									locale.format('%d', dir_size, True),
+									locale.format_string('%d', dir_size, True),
 									ngettext('item', 'items', dir_size)
 								)
 

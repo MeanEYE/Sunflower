@@ -215,7 +215,7 @@ class AssociationManager:
 				if application.supports_uris():
 					selection = [
 						'file://{0}'.format(pathname2url(encode_file_name(path)))
-						if not path.startswith('file://') else encode_file_name(path)
+						if '://' not in path else path
 						for path in selection]
 					application.launch_uris(selection)
 				else:

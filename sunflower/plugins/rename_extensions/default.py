@@ -19,7 +19,7 @@ class DefaultRename(RenameExtension):
 		self._checkbox_active.set_active(True)
 
 		# create expressions
-		self._regexp_name = re.compile('\[(N|E|C)([\d][^-]*)?-?([\d][^\]]*)?\]', re.I | re.U)
+		self._regexp_name = re.compile(r'\[(N|E|C)([\d][^-]*)?-?([\d][^\]]*)?\]', re.I | re.U)
 
 		self._template = '[N][E]'
 		self._counter = 0

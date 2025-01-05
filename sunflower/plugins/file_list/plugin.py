@@ -4,7 +4,7 @@ from .file_list import FileList
 from .trash_list import TrashList
 from .gio_extension import SambaExtension, FtpExtension, DavExtension, SftpExtension
 from .gio_provider import NetworkProvider, TrashProvider, DavProvider, DavsProvider, Gphoto2Provider, MtpProvider
-from .gio_provider import SambaProvider, FtpProvider, SftpProvider, ArchiveProvider
+from .gio_provider import SambaProvider, FtpProvider, SftpProvider, ArchiveProvider, GioProvider
 from .local_provider import LocalProvider
 
 
@@ -14,7 +14,7 @@ def register_plugin(application):
 	application.register_class('trash_list', _('Trash can'), TrashList)
 
 	# register providers
-	application.register_provider(LocalProvider)
+	application.register_provider(GioProvider)
 	application.register_provider(SambaProvider)
 	application.register_provider(FtpProvider)
 	application.register_provider(SftpProvider)

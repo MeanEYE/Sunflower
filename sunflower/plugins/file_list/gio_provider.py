@@ -12,8 +12,8 @@ from sunflower.plugin_base.provider import Support
 
 class GioProvider(Provider):
 	"""Generic provider for file systems supported by GIO"""
-	is_local = False
-	protocol = ''
+	is_local = True
+	protocol = 'file'
 
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
@@ -21,7 +21,9 @@ class GioProvider(Provider):
 		real_path = self.real_path(path, relative_to)
 
 		try:
-			info = Gio.File.new_for_commandline_arg(real_path).query_info('standard::type', Gio.FileQueryInfoFlags.NONE, None)
+			info = Gio.File.new_for_commandline_arg(real_path).query_info(
+					'standard::type', Gio.FileQueryInfoFlags.NONE, None
+					)
 			result = info.get_file_type() == Gio.FileType.REGULAR
 		except GLib.GError as error:
 			pass
@@ -34,7 +36,9 @@ class GioProvider(Provider):
 		real_path = self.real_path(path, relative_to)
 
 		try:
-			info = Gio.File.new_for_commandline_arg(real_path).query_info('standard::type', Gio.FileQueryInfoFlags.NONE, None)
+			info = Gio.File.new_for_commandline_arg(real_path).query_info(
+					'standard::type', Gio.FileQueryInfoFlags.NONE, None
+					)
 			result = info.get_file_type() == Gio.FileType.DIRECTORY
 		except GLib.GError as error:
 			pass
@@ -44,7 +48,9 @@ class GioProvider(Provider):
 	def is_link(self, path, relative_to=None):
 		"""Test if given path is a link"""
 		real_path = self.real_path(path, relative_to)
-		info = Gio.File.new_for_commandline_arg(real_path).query_info('standard::type', Gio.FileQueryInfoFlags.NONE, None)
+		info = Gio.File.new_for_commandline_arg(real_path).query_info(
+				'standard::type', Gio.FileQueryInfoFlags.NONE, None
+				)
 
 		return info.get_file_type() == Gio.FileType.SYMBOLIC_LINK
 
@@ -53,9 +59,26 @@ class GioProvider(Provider):
 		real_path = self.real_path(path, relative_to)
 		return Gio.File.new_for_commandline_arg(real_path).query_exists()
 
+	def link(self, existing_path, destination_path, relative_to=None, symbolic=True):
+		"""Create hard or symbolic link from existing path"""
+		link_path = self.real_path(destination_path, relative_to)
+
+		if symbolic:
+			# create a symbolic link on destination path from existing path
+			Gio.File.new_for_commandline_arg(link_path).make_symbolic_link(existing_path)
+
 	def unlink(self, path, relative_to=None):
 		"""Unlink given path"""
-		pass
+		real_path = self.real_path(path, relative_to)
+		Gio.File.new_for_commandline_arg(real_path).delete()
+
+	def readlink(self, path, relative_to=None):
+		"""Return a string representing the path to which the symbolic link points."""
+		real_path = self.real_path(path, relative_to)
+		result = Gio.File.new_for_commandline_arg(real_path).query_info(
+				'standard::symlink-target', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, None
+				).get_symlink_target()
+		return result
 
 	def remove_directory(self, path, relative_to=None):
 		"""Remove directory and optionally its contents"""
@@ -68,10 +91,11 @@ class GioProvider(Provider):
 		to_scan.append(real_path)
 
 		# traverse through directories
-		# TODO: Check if this is really necessary. Recursive removal seems to be automatic.
 		while len(to_scan) > 0:
 			current_path = to_scan.pop(0)
-			info_list = Gio.File.new_for_commandline_arg(current_path).enumerate_children('standard::name,standard::type', Gio.FileQueryInfoFlags.NONE, None)
+			info_list = Gio.File.new_for_commandline_arg(current_path).enumerate_children(
+					'standard::name,standard::type', Gio.FileQueryInfoFlags.NONE, None
+					)
 
 			for info in info_list:
 				name = info.get_name()
@@ -95,6 +119,11 @@ class GioProvider(Provider):
 		"""Remove file"""
 		real_path = self.real_path(path, relative_to)
 		Gio.File.new_for_commandline_arg(real_path).delete()
+
+	def trash_path(self, path, relative_to=None):
+		"""Move path to the trash"""
+		real_path = self.real_path(path, relative_to)
+		Gio.File.new_for_commandline_arg(real_path).trash()
 
 	def create_file(self, path, mode=None, relative_to=None):
 		"""Create empty file with specified mode set"""
@@ -293,18 +322,21 @@ class GioProvider(Provider):
 
 	def get_root_path(self, path):
 		"""Get root for specified path"""
-		result = None
+		result = '/'
 
 		# try to get mount
-		mount = Gio.File.new_for_commandline_arg(path).find_enclosing_mount()
+		try:
+			mount = Gio.File.new_for_commandline_arg(path).find_enclosing_mount()
 
-		# get root directory from mount
-		if mount is not None:
-			result = mount.get_root().get_uri()
+			# get root directory from mount
+			if mount is not None:
+				result = mount.get_root().get_uri()
 
-		# remove trailing slash
-		if result[-1] == os.path.sep:
-			result = result[:-1]
+			if result[-1] == os.path.sep:
+				result = result[:-1]
+
+		except GLib.GError:
+			pass
 
 		return unquote(result)
 
@@ -353,9 +385,12 @@ class GioProvider(Provider):
 		"""Return supported options by provider"""
 		return (
 			Support.MONITOR,
-			Support.SET_TIMESTAMP,
-			Support.SET_ACCESS,
+			Support.TRASH,
+			Support.SYMBOLIC_LINK,
+			Support.RESERVE_SIZE,
 			Support.SET_OWNER,
+			Support.SET_ACCESS,
+			Support.SET_TIMESTAMP,
 			Support.SYSTEM_SIZE
 		)
 

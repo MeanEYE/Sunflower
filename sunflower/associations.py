@@ -214,9 +214,10 @@ class AssociationManager:
 			if application is not None:
 				if application.supports_uris():
 					selection = [
-						'file://{0}'.format(pathname2url(encode_file_name(path)))
+						'file://{0}'.format(pathname2url(path))
 						if not path.startswith('file://') else encode_file_name(path)
-						for path in selection]
+						for path in selection
+						]
 					application.launch_uris(selection)
 				else:
 					application.launch([Gio.File.new_for_path(encode_file_name(path)) for path in selection])

@@ -165,6 +165,7 @@ language-compile:
 clean:
 	$(RM) -rf $(BUILD_DIRECTORY)
 	$(RM) -rf sunflower.*
+	$(RM) -rf Sunflower.egg-info
 
 version:
 	$(info Sunflower $(VERSION))

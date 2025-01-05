@@ -530,7 +530,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		# TODO: Make sure all threads are stopped at this point.
 
 	def _quit(self, widget=None, data=None):
-		"""Trigger destory action from Quit menu item"""
+		"""Trigger destroy action from Quit menu item"""
 		if not self.emit('delete-event', Gdk.Event.new(Gdk.EventType.DELETE)):
 			self.destroy()
 
@@ -671,7 +671,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._window_state = event.new_window_state
 
 	def _page_added(self, notebook, child, page_num):
-		"""Handle adding/moving tab accross notebooks"""
+		"""Handle adding/moving tab across notebooks"""
 		if hasattr(child, 'update_notebook'):
 			child.update_notebook(notebook)
 
@@ -1154,7 +1154,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._accel_group.deactivate()
 
 	def _command_edit_lost_focus(self, widget, event):
-		"""Handle command entry loosing focus"""
+		"""Handle command entry losing focus"""
 		self._accel_group.activate(self)
 
 	def _save_window_position(self):
@@ -1595,11 +1595,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def goto_web(self, widget, uri):
 		"""Open URL stored in data"""
-		if uri is None:
-			uri = 'https://sunflower-fm.org'
-		elif '://' not in uri:
-			uri = 'https://{}'.format(uri)
-
+		uri = uri or 'https://sunflower-fm.org'
 		webbrowser.open_new_tab(uri)
 		return True
 
@@ -1749,7 +1745,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		group.add_method('deselect_with_same_extension', _('Deselect with same exte_nsion'), self.deselect_with_same_extension)
 		group.add_method('compare_directories', _('Compare _directories'), self.compare_directories)
 		group.add_method('find_files', _('_Find files'), self.show_find_files)
-		group.add_method('advanced_rename', _('_Find files'), self.show_advanced_rename)
+		group.add_method('advanced_rename', _('Advanced Rename'), self.show_advanced_rename)
 		# group.add_method('mount_manager', _('_Mount manager'), self.mount_manager.show)
 		# group.add_method('keyring_manager', _('_Keyring manager'), self.keyring_manager.show)
 		group.add_method('reload', _('Rel_oad item list'), self._command_reload)

@@ -42,7 +42,7 @@ class Config(Container):
 	"""This class provides easy way to create and edit configuration files
 	located in project's configuration directory.
 
-	It is recomended that this class is used for all purposes of storing
+	It is recommended that this class is used for all purposes of storing
 	data used by program itself and	plugins!
 
 	"""
@@ -114,7 +114,7 @@ class Config(Container):
 					self._values[name] = values
 
 	def add_section(self, name, section):
-		"""Add new section to configutation"""
+		"""Add new section to configuration"""
 		self._sections[name] = section
 
 	def create_section(self, name):
@@ -139,5 +139,5 @@ class Config(Container):
 		return self._sections[name]
 
 	def has_section(self, name):
-		"""Check for existance of section"""
+		"""Check for existence of section"""
 		return name in self._sections

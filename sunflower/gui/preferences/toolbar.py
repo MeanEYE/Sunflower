@@ -40,7 +40,7 @@ class ToolbarOptions(SettingsPage):
 		col_name.set_min_width(200)
 		col_name.set_resizable(True)
 
-		# pack and configure renderes
+		# pack and configure renderer's
 		col_name.pack_start(cell_icon, False)
 		col_name.pack_start(cell_name, True)
 		col_name.add_attribute(cell_icon, 'icon-name', Column.ICON)

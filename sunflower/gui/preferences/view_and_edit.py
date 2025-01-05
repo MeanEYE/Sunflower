@@ -100,7 +100,7 @@ class ViewEditOptions(SettingsPage):
 					application.command_line
 				))
 
-		# make selected aplication active
+		# make selected application active
 		if selected_index is not None:
 			self._combobox_application.set_active(selected_index)
 

@@ -1,4 +1,4 @@
-Note: Prefered repository hosting is [GitLab](https://gitlab.com/MeanEYE/Sunflower). If you don't have an account there and don't wish to make one interacting with one on GitHub is fine.
+Note: Preferred repository hosting is [GitLab](https://gitlab.com/MeanEYE/Sunflower). If you don't have an account there and don't wish to make one interacting with one on GitHub is fine.
 
 Sunflower
 =========

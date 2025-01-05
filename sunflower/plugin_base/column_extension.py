@@ -2,7 +2,7 @@ class ColumnExtension:
 	"""Class used for extending item lists.
 
 	Object of this class is created for every tab individually
-	and for this reason class parameters are higly discouraged
+	and for this reason class parameters are highly discouraged
 	unless you know what you are doing.
 
 	"""

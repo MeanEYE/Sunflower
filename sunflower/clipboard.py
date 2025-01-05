@@ -7,7 +7,7 @@ from sunflower.common import executable_exists
 
 
 class Clipboard:
-	"""Support for various clipboard implementations accross different platforms
+	"""Support for various clipboard implementations across different platforms
 	and different protocols."""
 
 	def __init__(self):

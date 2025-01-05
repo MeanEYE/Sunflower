@@ -52,7 +52,7 @@ class GVimViewer(ViewerExtension):
 		return _('GVim')
 
 	def get_container(self):
-		"""Return container widget to be embeded to notebook"""
+		"""Return container widget to be embedded to notebook"""
 		return self._container
 
 	def focus_object(self):

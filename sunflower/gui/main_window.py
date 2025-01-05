@@ -527,8 +527,6 @@ class MainWindow(Gtk.ApplicationWindow):
 		# save config changes
 		self.save_config()
 
-		# TODO: Make sure all threads are stopped at this point.
-
 	def _quit(self, widget=None, data=None):
 		"""Trigger destroy action from Quit menu item"""
 		if not self.emit('delete-event', Gdk.Event.new(Gdk.EventType.DELETE)):

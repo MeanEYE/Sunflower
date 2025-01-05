@@ -40,7 +40,7 @@ class GioProvider(Provider):
 					'standard::type', Gio.FileQueryInfoFlags.NONE, None
 					)
 			result = info.get_file_type() == Gio.FileType.DIRECTORY
-		except GLib.GError as error:
+		except GLib.GError:
 			pass
 
 		return result
@@ -128,7 +128,7 @@ class GioProvider(Provider):
 	def create_file(self, path, mode=None, relative_to=None):
 		"""Create empty file with specified mode set"""
 		real_path = self.real_path(path, relative_to)
-		Gio.File.new_for_commandline_arg(real_path).create()
+		Gio.File.new_for_commandline_arg(real_path).create(Gio.FileCreateFlags.REPLACE_DESTINATION)
 
 		if Support.SET_ACCESS in self.get_support():
 			self.set_mode(real_path, mode)
@@ -232,9 +232,9 @@ class GioProvider(Provider):
 						time_access = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_ACCESS),
 						time_modify = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_MODIFIED),
 						time_change = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_CHANGED),
-						time_access_ns = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_ACCESS) * 10**9,
-						time_modify_ns = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_MODIFIED) * 10**9,
-						time_change_ns = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_CHANGED) * 10**9,
+						time_access_ns = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_ACCESS),
+						time_modify_ns = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_MODIFIED),
+						time_change_ns = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_CHANGED),
 						type = item_type,
 						device = file_stat.get_attribute_uint32(Gio.FILE_ATTRIBUTE_UNIX_DEVICE),
 						inode = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_UNIX_INODE)
@@ -245,52 +245,35 @@ class GioProvider(Provider):
 	def set_mode(self, path, mode, relative_to=None):
 		"""Set access mode to specified path"""
 		real_path = self.real_path(path, relative_to)
-		Gio.File.new_for_commandline_arg(real_path).set_attribute(
-					Gio.FILE_ATTRIBUTE_UNIX_MODE,
-					Gio.FILE_ATTRIBUTE_TYPE_UINT32,
-					mode
-				)
+		file = Gio.File.new_for_commandline_arg(real_path)
+		flags = Gio.FileQueryInfoFlags.NONE
+
+		file.set_attribute_uint32(Gio.FILE_ATTRIBUTE_UNIX_MODE, mode, flags)
 
 	def set_owner(self, path, owner=-1, group=-1, relative_to=None):
 		"""Set owner and/or group for specified path"""
 		real_path = self.real_path(path, relative_to)
-		temp = Gio.File.new_for_commandline_arg(real_path)
-		temp.set_attribute(
-					Gio.FILE_ATTRIBUTE_UNIX_UID,
-					Gio.FILE_ATTRIBUTE_TYPE_UINT32,
-					owner
-				)
-		temp.set_attribute(
-					Gio.FILE_ATTRIBUTE_UNIX_GID,
-					Gio.FILE_ATTRIBUTE_TYPE_UINT32,
-					group
-				)
+		file = Gio.File.new_for_commandline_arg(real_path)
+		flags = Gio.FileQueryInfoFlags.NONE
+
+		file.set_attribute_uint32(Gio.FILE_ATTRIBUTE_UNIX_UID, owner, flags)
+		file.set_attribute_uint32(Gio.FILE_ATTRIBUTE_UNIX_GID, group, flags)
 
 	def set_timestamp(self, path, access=None, modify=None, change=None, relative_to=None):
 		"""Set timestamp for specified path"""
 		real_path = self.real_path(path, relative_to)
-		temp = Gio.File.new_for_commandline_arg(real_path)
+		file = Gio.File.new_for_commandline_arg(real_path)
+		flags = Gio.FileQueryInfoFlags.NONE
+		settable = file.query_settable_attributes()
 
-		if access is not None:
-			temp.set_attribute(
-					Gio.FILE_ATTRIBUTE_TIME_ACCESS,
-					Gio.FILE_ATTRIBUTE_TYPE_UINT64,
-					int(access)
-				)
+		if access is not None and settable.lookup(Gio.FILE_ATTRIBUTE_TIME_ACCESS):
+			file.set_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_ACCESS, access, flags)
 
-		if modify is not None:
-			temp.set_attribute(
-					Gio.FILE_ATTRIBUTE_TIME_MODIFIED,
-					Gio.FILE_ATTRIBUTE_TYPE_UINT64,
-					int(modify)
-				)
+		if modify is not None and settable.lookup(Gio.FILE_ATTRIBUTE_TIME_MODIFIED):
+			file.set_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_MODIFIED, modify, flags)
 
-		if change is not None:
-			temp.set_attribute(
-					Gio.FILE_ATTRIBUTE_TIME_CHANGED,
-					Gio.FILE_ATTRIBUTE_TYPE_UINT64,
-					int(change)
-				)
+		if change is not None and settable.lookup(Gio.FILE_ATTRIBUTE_TIME_CHANGED):
+			file.set_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_CHANGED, change, flags)
 
 	def move_path(self, source, destination, relative_to=None):
 		"""Move path on same file system to a different parent node """

@@ -1,10 +1,10 @@
-from __future__ import absolute_import
-
 from gi.repository import Gio, GLib, GObject
 from sunflower.plugin_base.provider import Mode
 
-# GFile.read_bytes() has upper limit for size of G_MAXSSIZE (9223372036854775807) which is unsensibly large
+# GFile.read_bytes() has upper limit for size of
+# G_MAXSSIZE (9223372036854775807) which is insensibly large
 MAX_READ_FILE_SIZE = 4*1024*1024*1024
+
 
 class File:
 	"""This is a wrapper class that provides file-like object but
@@ -16,8 +16,11 @@ class File:
 
 		elif mode == Mode.WRITE:
 			if Gio.File.new_for_commandline_arg(path).query_exists():
-				Gio.File.new_for_commandline_arg(path).delete()
-			self._resource = Gio.File.new_for_commandline_arg(path).create()
+				Gio.File.new_for_commandline_arg(path).delete()  # have to manually remove since flag doesn't work
+
+			self._resource = Gio.File.new_for_commandline_arg(path).create(
+					Gio.FileCreateFlags.REPLACE_DESTINATION  # doesn't seem to do anything
+					)
 
 		elif mode == Mode.APPEND:
 			self._resource = Gio.File.new_for_commandline_arg(path).append_to()

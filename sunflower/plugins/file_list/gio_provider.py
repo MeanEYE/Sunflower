@@ -278,7 +278,13 @@ class GioProvider(Provider):
 	def move_path(self, source, destination, relative_to=None):
 		"""Move path on same file system to a different parent node """
 		real_source = self.real_path(source, relative_to)
-		Gio.File.new_for_commandline_arg(real_source).move(Gio.File.new_for_commandline_arg(destination))
+		Gio.File.new_for_commandline_arg(real_source).move(
+				Gio.File.new_for_commandline_arg(destination),
+				Gio.FileQueryInfoFlags.NONE,  # flags
+				None,  # cancelable
+				None,  # progress callback
+				None   # callback data
+				)
 
 	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""

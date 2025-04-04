@@ -319,18 +319,48 @@ class GioProvider(Provider):
 
 			# get root directory from mount
 			if mount is not None:
-				result = mount.get_root().get_uri()
+				result = mount.get_root().get_path()
 
 			if result[-1] == os.path.sep:
 				result = result[:-1]
-
-			if result.startswith('file://'):
-				result = result[7:]
 
 		except GLib.GError:
 			pass
 
 		return unquote(result)
+
+	def get_root_name(self, path):
+		"""Get name for root path. This is usually volume name or
+		something generic like 'Home', 'System', etc."""
+		result = 'System'
+
+		# try to get mount
+		try:
+			mount = Gio.File.new_for_commandline_arg(path).find_enclosing_mount()
+
+			if mount is not None:
+				result = mount.get_name()
+
+		except GLib.GError:
+			pass
+
+		return unquote(result)
+
+	def get_root_symbolic_icon(self, path):
+		"""Get symbolic icon for root path."""
+		result = 'drive-harddisk-symbolic'
+
+		# try to get mount
+		try:
+			mount = Gio.File.new_for_commandline_arg(path).find_enclosing_mount()
+
+			if mount is not None:
+				result = mount.get_symbolic_icon()
+
+		except GLib.GError:
+			pass
+
+		return result
 
 	def get_parent_path(self, path):
 		"""Get parent path for specified"""

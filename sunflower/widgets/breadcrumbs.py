@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 import os
 
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, GObject, Gio
 from sunflower.common import decode_file_name
 
 
@@ -84,6 +84,8 @@ class Breadcrumbs:
 
 			# split root element from others
 			root_element = provider.get_root_path(path)
+			root_name = provider.get_root_name(path)
+			root_icon = provider.get_root_symbolic_icon(path)
 			other_elements = path[len(root_element):]
 
 			# make sure our path doesn't begin with slash
@@ -99,7 +101,13 @@ class Breadcrumbs:
 			current_path = None
 			for element in elements:
 				current_path = os.path.join(current_path, element) if current_path is not None else element
-				control = Fragment(decode_file_name(element), current_path, self.__fragment_click, control)
+				control = Fragment(
+						decode_file_name(element) if control is not None else root_name,
+						current_path,
+						self.__fragment_click,
+						control,
+						None if control is not None else root_icon  # icon
+						)
 				self.box.pack_start(control, False, False, 0)
 
 			if control is not None:
@@ -112,7 +120,7 @@ class Breadcrumbs:
 class Fragment(Gtk.HBox):
 	"""Simple path fragment containing necessary widgets."""
 
-	def __init__(self, text, path, click_handler, previous):
+	def __init__(self, text, path, click_handler, previous, icon=None):
 		Gtk.HBox.__init__(self)
 
 		self.path = path
@@ -130,11 +138,22 @@ class Fragment(Gtk.HBox):
 		self._button.connect('clicked', self.click_handler)
 		self._button.path = path
 
-		if previous is None:
-			image = Gtk.Image.new_from_icon_name('drive-harddisk-symbolic', Gtk.IconSize.BUTTON)
-			self._button.set_image(image)
-		else:
+		if icon is None:
 			self._button.set_label(text)
+
+		else:
+			if isinstance(icon, Gio.ThemedIcon):
+				image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+			else:
+				image = Gtk.Image.new_from_icon_name(icon, Gtk.IconSize.BUTTON)
+			label = Gtk.Label.new(text)
+			label.set_alignment(0, 0.5)
+
+			hbox = Gtk.HBox.new(False, 2)
+			hbox.pack_start(image, False, False, 0)
+			hbox.pack_start(label, False, False, 0)
+
+			self._button.add(hbox)
 
 		if previous is not None:
 			self._button.join_group(previous._button)

@@ -250,6 +250,15 @@ class Provider:
 		"""Get root for specified path"""
 		pass
 
+	def get_root_name(self, path):
+		"""Get name for root path. This is usually volume name or
+		something generic like 'Home', 'System', etc."""
+		pass
+
+	def get_root_symbolic_icon(self, path):
+		"""Get symbolic icon for root path."""
+		pass
+
 	def get_parent_path(self, path):
 		"""Get parent path for specified"""
 		pass

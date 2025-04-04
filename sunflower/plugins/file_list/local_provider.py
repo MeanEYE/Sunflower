@@ -243,7 +243,16 @@ class LocalProvider(Provider):
 
 	def get_root_path(self, path):
 		"""Get root for specified path"""
-		return 'file:///' if path.startswith('file://') else os.path.sep
+		return os.path.sep
+
+	def get_root_name(self, path):
+		"""Get name for root path. This is usually volume name or
+		something generic like 'Home', 'System', etc."""
+		return 'System'
+
+	def get_root_symbolic_icon(self, path):
+		"""Get symbolic icon for root path."""
+		return 'drive-harddisk-symbolic'
 
 	def get_parent_path(self, path):
 		"""Get parent path for specified"""

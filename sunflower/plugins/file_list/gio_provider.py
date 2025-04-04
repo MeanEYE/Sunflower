@@ -324,6 +324,9 @@ class GioProvider(Provider):
 			if result[-1] == os.path.sep:
 				result = result[:-1]
 
+			if result.startswith('file://'):
+				result = result[7:]
+
 		except GLib.GError:
 			pass
 

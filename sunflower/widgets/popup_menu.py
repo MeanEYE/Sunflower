@@ -1,7 +1,7 @@
 import os
 
 from random import choice
-from gi.repository import Gtk, Gdk, Gio
+from gi.repository import Gtk, Gdk, Gio, GLib
 
 from sunflower.plugin_base.monitor import MonitorSignals
 
@@ -304,6 +304,11 @@ class PopupMenu:
 			try:
 				data = associations_manager.get_sample_data(path, provider)
 				mime_type = associations_manager.get_mime_type(data=data)
+			except GLib.Error as error:
+				if error.matches(Gio.io_error_quark(), Gio.IOErrorEnum.IS_DIRECTORY):
+					mime_type = 'inode/directory'
+				else:
+					raise error
 			except IsADirectoryError:
 				mime_type = 'inode/directory'
 

@@ -111,7 +111,7 @@ class Breadcrumbs:
 				self.box.pack_start(control, False, False, 0)
 
 			if control is not None:
-				GObject.idle_add(self._focus_fragment, control, is_new=True)
+				GObject.idle_add(self._focus_fragment, control)
 
 		# prevent signal dead-loops
 		self._updating = False

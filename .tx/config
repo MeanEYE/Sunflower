@@ -1,9 +1,11 @@
 [main]
 host = https://www.transifex.com
 
-[sunflower.main]
-file_filter = translations/<lang>/LC_MESSAGES/sunflower.po
-source_file = translations/sunflower.pot
-source_lang = en
-type = PO
+[o:way2cu:p:sunflower:r:main]
+file_filter            = translations/<lang>/LC_MESSAGES/sunflower.po
+source_file            = translations/sunflower.pot
+source_lang            = en
+type                   = PO
+replace_edited_strings = false
+keep_translations      = false
 

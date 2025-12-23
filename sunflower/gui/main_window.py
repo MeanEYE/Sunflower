@@ -425,18 +425,20 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.command_bar.set_border_width(2)
 
 		buttons = (
-				(_('Refresh'), _('Reload active item list'), self._command_reload),
-				(_('Rename'), _('Rename selected file'), self._command_rename),
-				(_('Preview'), _('Preview selected file'), self._command_view),
-				(_('Edit'), _('Edit selected file'), self._command_edit),
-				(_('Copy'), _('Copy selected items from active to opposite list'), self._command_copy),
-				(_('Move'), _('Move selected items from active to opposite list'), self._command_move),
-				(_('Create'), _('Create new directory'), self._command_create),
-				(_('Delete'), _('Delete selected items'), self._command_delete)
+				(_('Refresh'), _('Reload active item list'), self._command_reload, 'item_list', 'refresh_list'),
+				(_('Rename'), _('Rename selected file'), self._command_rename, 'item_list', 'rename_file'),
+				(_('Preview'), _('Preview selected file'), self._command_view, 'item_list', 'view_selected'),
+				(_('Edit'), _('Edit selected file'), self._command_edit, 'item_list', 'edit_selected'),
+				(_('Copy'), _('Copy selected items from active to opposite list'), self._command_copy, 'item_list', 'copy_files'),
+				(_('Move'), _('Move selected items from active to opposite list'), self._command_move, 'item_list', 'move_files'),
+				(_('Create'), _('Create new directory'), self._command_create, 'main_menu', 'create_directory'),
+				(_('Delete'), _('Delete selected items'), self._command_delete, 'item_list', 'delete_files')
 				)
 
+		self._command_bar_buttons = []
+
 		# create buttons and pack them
-		for text, tooltip, callback in buttons:
+		for text, tooltip, callback, accel_group, accel_name in buttons:
 			button = Gtk.Button(label=text)
 
 			if callback is not None:
@@ -449,7 +451,18 @@ class MainWindow(Gtk.ApplicationWindow):
 			button.show()  # we need to explicitly show in cases where toolbar is not visible
 			self.command_bar.pack_start(button, True, True, 0)
 
+			# store button info for label updates
+			self._command_bar_buttons.append({
+				'button': button,
+				'label': text,
+				'accel_group': accel_group,
+				'accel_name': accel_name
+			})
+
 		self.command_bar.set_property('no-show-all', not self.options.get('show_command_bar'))
+
+		# update button labels based on initial settings
+		self._update_command_bar_labels()
 
 		# pack user interface
 		vbox = Gtk.VBox(False, 0)
@@ -507,6 +520,42 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# show widgets
 		self.show_all()
+
+	def _update_command_bar_labels(self):
+		"""Update command bar button labels to optionally include shortcuts."""
+		show_shortcuts = self.options.get('show_command_bar_shortcuts')
+
+		for button_info in self._command_bar_buttons:
+			button = button_info['button']
+			base_label = button_info['label']
+
+			if show_shortcuts:
+				group = button_info['accel_group']
+				name = button_info['accel_name']
+
+				# Get both primary and secondary accelerators
+				primary_accel = self.accelerator_manager.get_accelerator(group, name, primary=True)
+				secondary_accel = self.accelerator_manager.get_accelerator(group, name, primary=False)
+
+				# Prefer function key (F1-F12) if available, matching Norton Commander tradition
+				accel = None
+				if primary_accel and primary_accel[0] > 0:
+					if Gdk.KEY_F1 <= primary_accel[0] <= Gdk.KEY_F12:
+						accel = primary_accel
+					elif secondary_accel and secondary_accel[0] > 0 and Gdk.KEY_F1 <= secondary_accel[0] <= Gdk.KEY_F12:
+						accel = secondary_accel
+					else:
+						accel = primary_accel  # fallback to primary
+				elif secondary_accel and secondary_accel[0] > 0:
+					accel = secondary_accel
+
+				if accel:
+					shortcut = Gtk.accelerator_get_label(accel[0], accel[1])
+					button.set_label('{} ({})'.format(base_label, shortcut))
+				else:
+					button.set_label(base_label)
+			else:
+				button.set_label(base_label)
 
 	def _destroy(self, widget=None, data=None):
 		"""Application destructor"""
@@ -1952,6 +2001,7 @@ class MainWindow(Gtk.ApplicationWindow):
 					'show_toolbar': False,
 					'show_titlebar': True,
 					'show_command_bar': False,
+					'show_command_bar_shortcuts': False,  # TODO: Consider defaulting to True in future
 					'history_file': '.bash_history',
 					'last_version': 0,
 					'focus_new_tab': True,
@@ -2189,6 +2239,9 @@ class MainWindow(Gtk.ApplicationWindow):
 			# call plugin apply_settings
 			if hasattr(page, 'apply_settings'):
 				page.apply_settings()
+
+		# update command bar button labels
+		self._update_command_bar_labels()
 
 	def register_class(self, name, title, PluginClass):
 		"""Register plugin class

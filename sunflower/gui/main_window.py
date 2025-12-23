@@ -2001,7 +2001,7 @@ class MainWindow(Gtk.ApplicationWindow):
 					'show_toolbar': False,
 					'show_titlebar': True,
 					'show_command_bar': False,
-					'show_command_bar_shortcuts': False,  # TODO: Consider defaulting to True in future
+					'show_command_bar_shortcuts': True,
 					'history_file': '.bash_history',
 					'last_version': 0,
 					'focus_new_tab': True,

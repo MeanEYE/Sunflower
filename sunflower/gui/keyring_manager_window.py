@@ -32,7 +32,6 @@ class KeyringManagerWindow:
 		self._window.set_title(_('Keyring manager'))
 		self._window.set_size_request(500, 300)
 		self._window.set_modal(False)
-		# self._window.set_border_width(7)
 
 		# connect signals
 		event_name = 'delete-event' if Gtk.get_major_version() == 3 else 'close-request'
@@ -40,6 +39,7 @@ class KeyringManagerWindow:
 
 		# create user interface
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
+		vbox.set_border_width(7)
 		container = Gtk.ScrolledWindow()
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 		container.set_shadow_type(Gtk.ShadowType.IN)

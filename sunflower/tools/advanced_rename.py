@@ -32,7 +32,6 @@ class AdvancedRename:
 		self.window.set_title(_('Advanced rename'))
 		self.window.set_default_size(640, 600)
 		self.window.set_transient_for(application)
-		# self.window.set_border_width(7)
 		self.window.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 		self.window.set_modal(True)
 
@@ -40,6 +39,7 @@ class AdvancedRename:
 
 		# create interface
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 7)
+		vbox.set_border_width(7)
 
 		# create modifiers notebook
 		self._extension_list = Gtk.Notebook()

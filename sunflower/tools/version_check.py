@@ -24,7 +24,6 @@ class VersionCheck:
 
 		# configure window
 		self._dialog.set_title(_('Version check'))
-		# self._dialog.set_border_width(7)
 		self._dialog.set_resizable(False)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
@@ -33,6 +32,7 @@ class VersionCheck:
 
 		# create user interface
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
+		vbox.set_border_width(7)
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		table = Gtk.Table(2, 2)
 

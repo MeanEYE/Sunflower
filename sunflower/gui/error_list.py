@@ -28,12 +28,12 @@ class ErrorList:
 		self._window.set_resizable(True)
 		self._window.set_modal(False)
 		self._window.set_transient_for(parent.get_window())
-		# self._window.set_border_width(7)
 
 		self._window.connect('key-press-event', self._handle_key_press)
 
 		# create user interface
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 7)
+		vbox.set_border_width(7)
 
 		table = Gtk.Table(rows=4, columns=2, homogeneous=False)
 		table.set_row_spacings(5)

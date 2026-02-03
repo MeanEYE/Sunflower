@@ -48,7 +48,6 @@ class MountsManagerWindow(Gtk.Window):
 		self.set_default_size(700, 400)
 		self.set_modal(True)
 		self.set_transient_for(self._application)
-		# self.set_border_width(7)
 
 		event_name = 'delete-event' if Gtk.get_major_version() == 3 else 'close-request'
 		self.connect(event_name, self._hide)
@@ -59,6 +58,7 @@ class MountsManagerWindow(Gtk.Window):
 
 		# create user interface
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
+		vbox.set_border_width(7)
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		hbox_controls = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 

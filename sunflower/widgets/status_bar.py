@@ -7,7 +7,7 @@ class StatusBar(Gtk.Box):
 	def __init__(self):
 		Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
 
-		self.set_border_width(4)
+		set_border_width(self, 4)
 		self.set_property('no-show-all', True)
 
 		self._icons = {}

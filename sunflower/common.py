@@ -6,6 +6,7 @@ import sys
 
 from gi.repository import Gio, Pango
 
+
 # user directories
 class UserDirectory:
 	DESKTOP = 'XDG_DESKTOP_DIR'
@@ -205,8 +206,20 @@ def load_translation():
 
 	# install global functions for translating
 	__builtins__.update({
-			'_': translation.gettext,
-			'ngettext': translation.ngettext
+		'_': translation.gettext,
+		'ngettext': translation.ngettext
+		})
+
+def install_helper_methods():
+	"""Add helper methods to the builtins list for easy access."""
+	def set_border_width(widget, border):
+		widget.set_margin_start(border)
+		widget.set_margin_end(border)
+		widget.set_margin_top(border)
+		widget.set_margin_bottom(border)
+
+	__builtins__.update({
+		'set_border_width': set_border_width
 		})
 
 def decode_file_name(file_name):

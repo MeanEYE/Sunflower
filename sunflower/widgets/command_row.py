@@ -15,7 +15,7 @@ class CommandRow(Gtk.ListBoxRow):
 
 		# create interface
 		box = Gtk.EventBox.new()
-		box.set_border_width(5)
+		set_border_width(box, 5)
 		self.add(box)
 
 		label = Gtk.Label.new(name)

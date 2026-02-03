@@ -19,7 +19,7 @@ class FindExtension:
 
 		# create and configure container
 		self.container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-		self.container.set_border_width(10)
+		set_border_width(self.container, 10)
 		self.container.extension = self
 
 	def __handle_state_set(self, widget, state):
@@ -68,7 +68,7 @@ class TitleRow(Gtk.ListBoxRow):
 
 		# create interface
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 10)
-		hbox.set_border_width(5)
+		set_border_width(hbox, 5)
 		self.add(hbox)
 
 		label = Gtk.Label.new(extension.get_title())

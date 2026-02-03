@@ -68,7 +68,7 @@ class AudioMetadataRename(RenameExtension):
 		vbox_right = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		vbox_template = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		table_replace = Gtk.Table(2, 2, False)
-		table_replace.set_border_width(5)
+		set_border_width(table_replace, 5)
 
 		frame_replace = Gtk.Frame(label=_('Character replacement'))
 

@@ -81,8 +81,8 @@ class Sunflower(Gtk.Application):
 		# set application name
 		GLib.set_prgname('Sunflower')
 
-		# load translations
 		common.load_translation()
+		common.install_helper_methods()
 
 		# create command line option entries
 		version_entry = GLib.OptionEntry()

@@ -39,7 +39,7 @@ class AdvancedRename:
 
 		# create interface
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 7)
-		vbox.set_border_width(7)
+		set_border_width(vbox, 7)
 
 		# create modifiers notebook
 		self._extension_list = Gtk.Notebook()

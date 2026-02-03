@@ -12,7 +12,7 @@ class SizeFindFiles(FindExtension):
 
 		# create container
 		table =  Gtk.Table(2, 4, False)
-		table.set_border_width(5)
+		set_border_width(table, 5)
 		table.set_col_spacings(5)
 
 		# create interface

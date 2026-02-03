@@ -14,7 +14,7 @@ class RenameExtension:
 
 		# create and configure container
 		self.vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-		self.vbox.set_border_width(7)
+		set_border_width(self.vbox, 7)
 		self.vbox.extension = self
 
 		# create activity toggle

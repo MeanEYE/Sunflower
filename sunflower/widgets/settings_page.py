@@ -15,7 +15,7 @@ class SettingsPage(Gtk.ScrolledWindow):
 		# configure main container
 		self._box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._box.set_spacing(15)
-		self._box.set_border_width(15)
+		set_border_width(self._box, 15)
 
 		# add page to preferences window
 		self.add(self._box)
@@ -34,7 +34,7 @@ class SettingsPage(Gtk.ScrolledWindow):
 
 		# pack container
 		box.pack_start(container, True, False, 0)
-		container.set_border_width(10)
+		set_border_width(container, 10)
 		self._box.pack_start(box, False, False, 0)
 
 	def _create_radio_section(self, title, container, group=None):
@@ -52,7 +52,7 @@ class SettingsPage(Gtk.ScrolledWindow):
 
 		# pack container
 		box.pack_start(container, True, False, 0)
-		container.set_border_width(10)
+		set_border_width(container, 10)
 		self._box.pack_start(box, False, False, 0)
 
 		return radio_title

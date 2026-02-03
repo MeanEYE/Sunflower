@@ -49,16 +49,22 @@ class MountsManagerWindow(Gtk.Window):
 		self.set_modal(True)
 		self.set_transient_for(self._application)
 
-		event_name = 'delete-event' if Gtk.get_major_version() == 3 else 'close-request'
-		self.connect(event_name, self._hide)
-		self.connect('key-press-event', self._handle_key_press)
+		if Gtk.get_major_version() == 3:
+			self.connect('delete-event', self._hide)
+
+		else:
+			event_controller = Gtk.EventControllerKey.new()
+			event_controller.connect('key-pressed', self._handle_key_press)
+
+			self.connect('close-request', self._hide)
+			self.add_controller(event_controller)
 
 		# create store for window list
 		self._pages_store = Gtk.ListStore(str, str, int, int)
 
 		# create user interface
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-		vbox.set_border_width(7)
+		set_border_width(vbox, 7)
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		hbox_controls = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 

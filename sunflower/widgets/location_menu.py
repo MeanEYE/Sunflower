@@ -27,7 +27,7 @@ class LocationMenu:
 
 		# create widget container
 		container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
-		container.set_border_width(10)
+		set_border_width(container, 10)
 
 		# create search field
 		self._search_field = Gtk.SearchEntry.new()
@@ -328,7 +328,7 @@ class GenericHeader(Gtk.Box):
 
 	def __init__(self, title):
 		Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=0)
-		self.set_border_width(5)
+		set_border_width(self, 5)
 
 		# create title
 		self._title = Gtk.Label.new('<b>{}</b>'.format(title))
@@ -386,7 +386,7 @@ class Bookmark(Location):
 	def _create_interface(self):
 		"""Create interface for the widget to display."""
 		container = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
-		container.set_border_width(5)
+		set_border_width(container, 5)
 		title_container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		# create bookmark icon

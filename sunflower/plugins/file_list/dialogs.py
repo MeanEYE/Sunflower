@@ -46,7 +46,7 @@ class SambaInputDialog:
 
 		# create user interface
 		self._container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-		self._container.set_border_width(5)
+		set_border_width(self._container, 5)
 
 		hbox_icon = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		vbox_icon = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
@@ -257,7 +257,7 @@ class FtpInputDialog:
 
 		# create user interface
 		self._container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-		self._container.set_border_width(5)
+		set_border_width(self._container, 5)
 
 		hbox_icon = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		vbox_icon = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
@@ -449,7 +449,7 @@ class DavInputDialog:
 
 		# create user interface
 		self._container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-		self._container.set_border_width(5)
+		set_border_width(self._container, 5)
 
 		hbox_icon = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		vbox_icon = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)

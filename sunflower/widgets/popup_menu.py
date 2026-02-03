@@ -17,7 +17,7 @@ class PopupMenu:
 		self._popover_visible = False
 		self._popover = Gtk.Popover.new()
 		self._popover.get_style_context().add_class('menu')
-		self._popover.set_border_width(5)
+		set_border_width(self._popover, 5)
 		self._popover.set_size_request(250, -1)
 		self._popover.set_modal(True)
 		self._popover.connect('closed', self.__handle_popover_close)

@@ -70,7 +70,7 @@ class ConfigurationDialog(Gtk.Dialog):
 
 		# interface container
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-		vbox.set_border_width(5)
+		set_border_width(vbox, 5)
 
 		# create interface
 		vbox_path = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)

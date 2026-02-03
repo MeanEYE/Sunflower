@@ -39,7 +39,7 @@ class KeyringManagerWindow:
 
 		# create user interface
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-		vbox.set_border_width(7)
+		set_border_width(vbox, 7)
 		container = Gtk.ScrolledWindow()
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 		container.set_shadow_type(Gtk.ShadowType.IN)

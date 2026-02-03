@@ -386,7 +386,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.command_popover.connect('closed', self.hide_command_entry)
 
 		vbox_popover = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
-		vbox_popover.set_border_width(5)
+		set_border_width(vbox_popover, 5)
 		vbox_popover.set_size_request(400, -1)
 
 		label_command_entry = Gtk.Label.new(_('Execute command:'))
@@ -422,7 +422,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# command buttons bar
 		self.command_bar = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
-		self.command_bar.set_border_width(2)
+		set_border_width(self.command_bar, 2)
 
 		buttons = (
 				(_('Refresh'), _('Reload active item list'), self._command_reload),
@@ -464,7 +464,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.commands_popover.set_position(Gtk.PositionType.BOTTOM)
 
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-		vbox.set_border_width(10)
+		set_border_width(vbox, 10)
 		self.commands_popover.add(vbox)
 
 		window = Gtk.Viewport.new()

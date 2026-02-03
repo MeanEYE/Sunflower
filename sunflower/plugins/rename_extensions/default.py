@@ -105,7 +105,7 @@ class DefaultRename(RenameExtension):
 		frame_counter = Gtk.Frame(label=_('Counter'))
 
 		table_counter = Gtk.Table(3, 2)
-		table_counter.set_border_width(5)
+		set_border_width(table_counter, 5)
 		table_counter.set_col_spacings(5)
 
 		label_start = Gtk.Label(label=_('Start:'))

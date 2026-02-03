@@ -29,7 +29,7 @@ class HistoryList(Gtk.Window):
 		self.set_resizable(True)
 		self.set_modal(True)
 		self.set_transient_for(application)
-		self.set_border_width(7)
+		set_border_width(self, 7)
 
 		# create UI
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 7)

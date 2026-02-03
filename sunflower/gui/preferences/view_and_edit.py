@@ -32,7 +32,7 @@ class ViewEditOptions(SettingsPage):
 		align_application = Gtk.Alignment.new(0, 0, 1, 0)
 		align_application.set_padding(0, 10, 15, 15)
 		vbox_application = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
-		vbox_application.set_border_width(5)
+		set_border_width(vbox_application, 5)
 
 		self._store = Gtk.ListStore(str, str, str)
 		self._combobox_application = Gtk.ComboBox(model=self._store)
@@ -54,7 +54,7 @@ class ViewEditOptions(SettingsPage):
 		align_external = Gtk.Alignment.new(0, 0, 1, 0)
 		align_external.set_padding(0, 10, 15, 15)
 		vbox_external = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
-		vbox_external.set_border_width(5)
+		set_border_width(vbox_external, 5)
 
 		label_editor = Gtk.Label(label=_('Command line:'))
 		label_editor.set_alignment(0, 0.5)

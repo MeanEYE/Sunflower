@@ -71,7 +71,7 @@ class OperationDialog:
 		"""Add source and destination labels to the GUI"""
 		self._has_source_destination = True
 		table = Gtk.Table(2, 2, False)
-		table.set_border_width(7)
+		set_border_width(table, 7)
 		table.set_col_spacing(0, 10)
 		table.set_row_spacing(0, 2)
 
@@ -103,7 +103,7 @@ class OperationDialog:
 		"""Add 'current file' progress to the GUI"""
 		self._has_current_file = True
 		table = Gtk.Table.new(2, 2, False)
-		table.set_border_width(7)
+		set_border_width(table, 7)
 		table.set_row_spacing(0, 2)
 		table.set_col_spacing(0, 10)
 
@@ -131,7 +131,7 @@ class OperationDialog:
 		"""Add ETA to the dialog"""
 		self._has_details = True
 		table = Gtk.Table.new(2, 6, False)
-		table.set_border_width(7)
+		set_border_width(table, 7)
 
 		self._label_eta = Gtk.Label.new(_('ETA:'))
 		self._label_speed = Gtk.Label.new(_('Speed:'))
@@ -187,7 +187,7 @@ class OperationDialog:
 	def _add_buttons(self):
 		"""Add button bar"""
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
-		hbox.set_border_width(7)
+		set_border_width(hbox, 7)
 
 		self._button_cancel = Gtk.Button(_('Cancel'))
 

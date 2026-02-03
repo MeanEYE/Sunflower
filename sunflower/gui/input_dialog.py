@@ -585,7 +585,7 @@ class DeleteDialog:
 		button_queue.set_label('None')
 
 		content_area = self._dialog.get_content_area()
-		content_area.set_border_width(10)
+		set_border_width(content_area, 10)
 		content_area.pack_start(label_message, True, True, 0)
 
 		self._dialog.add_action_widget(button_yes, Gtk.ResponseType.YES)
@@ -623,7 +623,7 @@ class CopyDialog:
 
 		# create additional components
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
-		vbox.set_border_width(5)
+		set_border_width(vbox, 5)
 
 		self.label_destination = Gtk.Label()
 		self.label_destination.set_alignment(0, 0.5)
@@ -1039,7 +1039,7 @@ class OverwriteDialog:
 		self._dialog.set_urgency_hint(True)
 
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 10)
-		hbox.set_border_width(10)
+		set_border_width(hbox, 10)
 
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 10)
 		vbox_icon = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
@@ -1313,7 +1313,7 @@ class AddBookmarkDialog:
 
 		# create component container
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-		vbox.set_border_width(5)
+		set_border_width(vbox, 5)
 
 		# bookmark name
 		label_name = Gtk.Label(label=_('Name:'))
@@ -1404,7 +1404,7 @@ class OperationError:
 
 		# create component container
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 10)
-		hbox.set_border_width(5)
+		set_border_width(hbox, 5)
 
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 10)
 		vbox_icon = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
@@ -1486,7 +1486,7 @@ class CreateToolbarWidgetDialog:
 
 		# create component container
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-		vbox.set_border_width(5)
+		set_border_width(vbox, 5)
 
 		# create interface
 		vbox_name = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
@@ -1678,7 +1678,7 @@ class ApplicationSelectDialog:
 		self._dialog.set_transient_for(application)
 
 		self._container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-		self._container.set_border_width(5)
+		set_border_width(self._container, 5)
 
 		# create interface
 		vbox_list = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
@@ -1819,7 +1819,7 @@ class PathInputDialog():
 		self._dialog.set_transient_for(application)
 
 		self._container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
-		self._container.set_border_width(5)
+		set_border_width(self._container, 5)
 
 		# create interface
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)

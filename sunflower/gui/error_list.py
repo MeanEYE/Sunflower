@@ -33,7 +33,7 @@ class ErrorList:
 
 		# create user interface
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 7)
-		vbox.set_border_width(7)
+		set_border_width(vbox, 7)
 
 		table = Gtk.Table(rows=4, columns=2, homogeneous=False)
 		table.set_row_spacings(5)

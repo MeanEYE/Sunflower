@@ -404,7 +404,7 @@ class PropertiesWindow(Gtk.Window):
 		table = Gtk.Table(7, 3)
 
 		# configure table
-		tab.set_border_width(10)
+		set_border_width(tab, 10)
 
 		# create icon
 		icon = Gtk.Image()
@@ -492,14 +492,14 @@ class PropertiesWindow(Gtk.Window):
 	def _create_permissions_tab(self):
 		"""Create tab containing item permissions and ownership"""
 		tab = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-		tab.set_border_width(10)
+		set_border_width(tab, 10)
 
 		# create 'Access' frame
 		frame_access = Gtk.Frame()
 		frame_access.set_label(_('Access'))
 
 		table_access = Gtk.Table(4, 4, False)
-		table_access.set_border_width(5)
+		set_border_width(table_access, 5)
 
 		# create widgets
 		label = Gtk.Label(label=_('User:'))
@@ -569,7 +569,7 @@ class PropertiesWindow(Gtk.Window):
 		frame_ownership.set_label(_('Ownership'))
 
 		table_ownership = Gtk.Table(2, 2, False)
-		table_ownership.set_border_width(5)
+		set_border_width(table_ownership, 5)
 
 		# create widgets
 		label = Gtk.Label(label=_('User:'))
@@ -633,7 +633,7 @@ class PropertiesWindow(Gtk.Window):
 	def _create_open_with_tab(self):
 		"""Create tab containing list of applications that can open this file"""
 		tab = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-		tab.set_border_width(10)
+		set_border_width(tab, 10)
 
 		# get item description
 		description = self._application.associations_manager.get_mime_description(self._mime_type)
@@ -694,7 +694,7 @@ class PropertiesWindow(Gtk.Window):
 	def _create_emblems_tab(self):
 		"""Create tab for editing emblems"""
 		tab = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-		tab.set_border_width(10)
+		set_border_width(tab, 10)
 
 		# create scrollable container
 		container = Gtk.ScrolledWindow()

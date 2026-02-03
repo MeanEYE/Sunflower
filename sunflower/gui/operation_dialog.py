@@ -36,7 +36,10 @@ class OperationDialog:
 
 		# connect signals
 		self._container.connect('destroy', self._destroy)
-		self._container.connect('delete-event', self._cancel_click)
+		self._container.connect(
+				'delete-event' if Gtk.get_major_version() == 3 else 'close-request',
+				self._cancel_click
+				)
 
 		# create indicator button
 		self._indicator = Gtk.MenuButton.new()
@@ -247,7 +250,7 @@ class OperationDialog:
 
 		# TODO: Add 5-10 seconds timeout before forced cancel occurs.
 
-		return True  # handle delete-event properly
+		return True  # handle event properly
 
 	def _update_total_count(self):
 		"""Update progress bar and labels for total count"""

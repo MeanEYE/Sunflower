@@ -50,7 +50,8 @@ class MountsManagerWindow(Gtk.Window):
 		self.set_transient_for(self._application)
 		# self.set_border_width(7)
 
-		self.connect('delete-event', self._hide)
+		event_name = 'delete-event' if Gtk.get_major_version() == 3 else 'close-request'
+		self.connect(event_name, self._hide)
 		self.connect('key-press-event', self._handle_key_press)
 
 		# create store for window list

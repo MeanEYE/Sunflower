@@ -35,7 +35,8 @@ class KeyringManagerWindow:
 		# self._window.set_border_width(7)
 
 		# connect signals
-		self._window.connect('delete-event', self.__delete_event)
+		event_name = 'delete-event' if Gtk.get_major_version() == 3 else 'close-request'
+		self._window.connect(event_name, self.__delete_event)
 
 		# create user interface
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)

@@ -141,10 +141,11 @@ class MainWindow(Gtk.ApplicationWindow):
 		Gtk.Settings.get_default().set_property('gtk-application-prefer-dark-theme', state)
 
 		# connect delete event to main window
+		event_name = 'delete-event' if Gtk.get_major_version() == 3 else 'close-request'
 		if self.window_options.section('main').get('hide_on_close'):
-			self.connect('delete-event', self._delete_event)
+			self.connect(event_name, self._delete_event)
 		else:
-			self.connect('delete-event', self._destroy)
+			self.connect(event_name, self._destroy)
 
 		signal.signal(signal.SIGTERM, self._destroy)
 		signal.signal(signal.SIGINT, self._destroy)
@@ -528,7 +529,8 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def _quit(self, widget=None, data=None):
 		"""Trigger destroy action from Quit menu item"""
-		if not self.emit('delete-event', Gdk.Event.new(Gdk.EventType.DELETE)):
+		event_name = 'delete-event' if Gtk.get_major_version() == 3 else 'close-request'
+		if not self.emit(event_name, Gdk.Event.new(Gdk.EventType.DELETE)):
 			self.destroy()
 
 	def _delete_event(self, widget, data=None):

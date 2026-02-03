@@ -15,7 +15,7 @@ class Breadcrumbs:
 		self.container.set_placement(Gtk.CornerType.TOP_RIGHT)
 		self.container.get_hscrollbar().hide()
 
-		self.box = Gtk.HBox.new(False, 0)
+		self.box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		self.container.add_with_viewport(self.box)
 
 		# change the look of container
@@ -117,11 +117,11 @@ class Breadcrumbs:
 		self._updating = False
 
 
-class Fragment(Gtk.HBox):
+class Fragment(Gtk.Box):
 	"""Simple path fragment containing necessary widgets."""
 
 	def __init__(self, text, path, click_handler, previous, icon=None):
-		Gtk.HBox.__init__(self)
+		Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
 
 		self.path = path
 		self.click_handler = click_handler
@@ -149,7 +149,7 @@ class Fragment(Gtk.HBox):
 			label = Gtk.Label.new(text)
 			label.set_alignment(0, 0.5)
 
-			hbox = Gtk.HBox.new(False, 2)
+			hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 2)
 			hbox.pack_start(image, False, False, 0)
 			hbox.pack_start(label, False, False, 0)
 

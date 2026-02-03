@@ -18,7 +18,7 @@ class FindExtension:
 		self.title.check.connect('state-set', self.__handle_state_set)
 
 		# create and configure container
-		self.container = Gtk.VBox.new(False, 5)
+		self.container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		self.container.set_border_width(10)
 		self.container.extension = self
 
@@ -67,7 +67,7 @@ class TitleRow(Gtk.ListBoxRow):
 		self.set_focus_on_click(True)
 
 		# create interface
-		hbox = Gtk.HBox.new(False, 10)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 10)
 		hbox.set_border_width(5)
 		self.add(hbox)
 

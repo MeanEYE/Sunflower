@@ -13,7 +13,10 @@ class ErrorList:
 
 	def __init__(self, parent):
 		# create main window
-		self._window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
+		if Gtk.get_major_version() == 3:
+			self._window = Gtk.Window.new(Gtk.WindowType.TOPLEVEL)
+		else:
+			self._window = Gtk.Window.new()
 
 		# store parameters locally, we'll need them later
 		self._parent = parent
@@ -22,18 +25,15 @@ class ErrorList:
 		# configure dialog
 		self._window.set_title(_('Error list'))
 		self._window.set_size_request(500, 400)
-		self._window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self._window.set_resizable(True)
-		self._window.set_skip_taskbar_hint(False)
 		self._window.set_modal(False)
 		self._window.set_transient_for(parent.get_window())
-		self._window.set_wmclass('Sunflower', 'Sunflower')
-		self._window.set_border_width(7)
+		# self._window.set_border_width(7)
 
 		self._window.connect('key-press-event', self._handle_key_press)
 
 		# create user interface
-		vbox = Gtk.VBox(False, 7)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 7)
 
 		table = Gtk.Table(rows=4, columns=2, homogeneous=False)
 		table.set_row_spacings(5)
@@ -72,7 +72,7 @@ class ErrorList:
 		self._list.append_column(col_error)
 
 		# create controls
-		hbox = Gtk.HBox(False, 5)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
 		button_close.connect('clicked', self._close)

@@ -1,11 +1,11 @@
 from gi.repository import Gtk, GObject
 
 
-class StatusBar(Gtk.HBox):
+class StatusBar(Gtk.Box):
 	"""Plugin status bar"""
 
 	def __init__(self):
-		GObject.GObject.__init__(self, homogeneous=False, spacing=15)
+		Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
 
 		self.set_border_width(4)
 		self.set_property('no-show-all', True)
@@ -49,7 +49,7 @@ class StatusBar(Gtk.HBox):
 			icon.set_tooltip_text(tooltip)
 
 		# pack group
-		hbox = Gtk.HBox(False, 3)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 3)
 		hbox.show()
 
 		hbox.pack_start(icon, False, False, 0)

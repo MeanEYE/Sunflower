@@ -38,14 +38,15 @@ class FindFiles(GObject.GObject):
 			self._provider = self._parent.get_provider()
 
 		# configure window
-		self.window = Gtk.Window.new(Gtk.WindowType.TOPLEVEL)
+		if Gtk.get_major_version() == 3:
+			self.window = Gtk.Window.new(Gtk.WindowType.TOPLEVEL)
+		else:
+			self.window = Gtk.Window.new()
 
 		self.window.set_title(_('Find files'))
 		self.window.set_default_size(550, 400)
-		self.window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self.window.set_modal(True)
 		self.window.set_transient_for(application)
-		self.window.set_wmclass('Sunflower', 'Sunflower')
 
 		self.window.connect('key-press-event', self._handle_key_press)
 
@@ -67,7 +68,7 @@ class FindFiles(GObject.GObject):
 		self.header_bar.pack_start(self.spinner)
 
 		# create configuration interface
-		vbox = Gtk.VBox.new(False, 0)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self.stack.add_titled(vbox, 'criteria', _('Criteria'))
 
 		search_bar = Gtk.SearchBar.new()
@@ -75,10 +76,10 @@ class FindFiles(GObject.GObject):
 		vbox.pack_start(search_bar, False, False, 0)
 
 		# create path and basic options
-		vbox_search = Gtk.VBox.new(False, 5)
+		vbox_search = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		search_bar.add(vbox_search)
 
-		hbox = Gtk.HBox.new(False, 5)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		vbox_search.pack_start(hbox, True, False, 0)
 
 		self._entry_path = Gtk.Entry()
@@ -105,7 +106,7 @@ class FindFiles(GObject.GObject):
 		vbox_search.pack_start(self._checkbox_recursive, False, False, 0)
 
 		# create extensions container
-		hbox = Gtk.HBox.new(False, 0)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		vbox.pack_start(hbox, True, True, 0)
 
 		self.extensions_list = Gtk.ListBox.new()

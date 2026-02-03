@@ -116,7 +116,7 @@ class ItemList(PluginBase):
 		self._popup_menu = PopupMenu(self._parent, self)
 
 		# create free space indicator in context menu
-		vbox_free_space = Gtk.VBox.new(False, 2)
+		vbox_free_space = Gtk.Box.new(Gtk.Orientation.VERTICAL, 2)
 		self._label_free_space = Gtk.Label.new()
 		self._label_free_space.set_alignment(0, 0.5)
 		vbox_free_space.pack_start(self._label_free_space, False, False, 0)

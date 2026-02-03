@@ -10,16 +10,14 @@ class ShortcutsWindow():
 		self._window = Gtk.ShortcutsWindow()
 		self._window.set_title(_('Keyboard shortcuts'))
 		self._window.set_default_size(750, 500)
-		self._window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self._window.set_modal(True)
-		self._window.set_skip_taskbar_hint(True)
 		self._window.set_transient_for(self._parent)
 
 		manager = self._parent.accelerator_manager
 		bookmarks = self._parent.bookmark_options.get('bookmarks')
 		groups = manager.get_groups()
 		groups.sort()
-		
+
 		# create rename list
 		replace_list = {}
 
@@ -51,7 +49,7 @@ class ShortcutsWindow():
 
 			group = Gtk.ShortcutsGroup()
 			group.show()
-			
+
 			i = 0
 
 			for method_name in method_names:

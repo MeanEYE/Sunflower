@@ -230,7 +230,7 @@ class Mount(Location):
 
 	def _create_interface(self):
 		"""Create interface for the widget to display."""
-		container = Gtk.HBox.new(False, 5)
+		container = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		container.set_border_width(5)
 
 		# create volume icon
@@ -319,7 +319,7 @@ class Volume(Location):
 
 	def _create_interface(self):
 		"""Create interface for the widget to display."""
-		container = Gtk.HBox.new(False, 5)
+		container = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		container.set_border_width(5)
 
 		# create volume icon

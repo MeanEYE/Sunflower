@@ -28,10 +28,10 @@ class DefaultRename(RenameExtension):
 		self._counter_digits = 1
 
 		# create user interface
-		hbox = Gtk.HBox(True, 15)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 15)
 
-		vbox_left = Gtk.VBox(False, 5)
-		vbox_right = Gtk.VBox(False, 5)
+		vbox_left = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
+		vbox_right = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 
 		# help
 		label_help = Gtk.Label()
@@ -48,8 +48,8 @@ class DefaultRename(RenameExtension):
 						))
 
 		# template
-		vbox_template = Gtk.VBox(False, 0)
-		hbox_template = Gtk.HBox(False, 2)
+		vbox_template = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+		hbox_template = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 2)
 
 		label_template = Gtk.Label(label=_('Template:'))
 		label_template.set_alignment(0, 0.5)

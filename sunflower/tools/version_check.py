@@ -16,24 +16,24 @@ class VersionCheck:
 	URL = 'https://api.github.com/repos/MeanEYE/Sunflower/releases'
 
 	def __init__(self, application):
-		self._dialog = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
+		if Gtk.get_major_version() == 3:
+			self._dialog = Gtk.Window.new(Gtk.WindowType.TOPLEVEL)
+		else:
+			self._dialog = Gtk.Window.new()
 		self._application = application
 
 		# configure window
 		self._dialog.set_title(_('Version check'))
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
-		self._dialog.set_border_width(7)
-		self._dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
+		# self._dialog.set_border_width(7)
 		self._dialog.set_resizable(False)
-		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
 		self._dialog.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 		self._dialog.connect('key-press-event', self._handle_key_press)
 
 		# create user interface
-		vbox = Gtk.VBox(False, 5)
-		hbox = Gtk.HBox(False, 0)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		table = Gtk.Table(2, 2)
 
 		table.set_row_spacings(5)

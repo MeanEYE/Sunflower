@@ -10,7 +10,7 @@ class TerminalOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'terminal', _('Terminal'))
 
 		# create vte terminal options
-		vbox_vte = Gtk.VBox.new(False, 0)
+		vbox_vte = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._radio_vte = self._create_radio_section(_('VTE based terminal'), vbox_vte)
 		self._radio_vte.connect('toggled', self._parent.enable_save)
 
@@ -19,7 +19,7 @@ class TerminalOptions(SettingsPage):
 		self._checkbox_scrollbars_visible.connect('toggled', self._parent.enable_save)
 
 		# option for custom font
-		hbox_font = Gtk.HBox.new(False, 5)
+		hbox_font = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		self._checkbox_system_font = Gtk.CheckButton(_('Use the system fixed width font'))
 		self._checkbox_system_font.connect('toggled', self.__toggled_system_font)
@@ -31,7 +31,7 @@ class TerminalOptions(SettingsPage):
 		self._button_font.connect('font-set', self._parent.enable_save)
 
 		# option for cursor shape
-		hbox_cursor_shape = Gtk.HBox(False, 5)
+		hbox_cursor_shape = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		label_cursor_shape = Gtk.Label(label=_('Cursor shape:'))
 		label_cursor_shape.set_alignment(0, 0.5)
@@ -57,20 +57,20 @@ class TerminalOptions(SettingsPage):
 		self._checkbox_autohide_mouse.connect('toggled', self._parent.enable_save)
 
 		# create external terminal options
-		vbox_external = Gtk.VBox(False, 5)
+		vbox_external = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		self._radio_external = self._create_radio_section(
 				_('External terminal'),
 				vbox_external,
 				self._radio_vte
 				)
 
-		vbox_command = Gtk.VBox(False, 0)
+		vbox_command = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		label_command = Gtk.Label(label=_('Command line:'))
 		label_command.set_alignment(0, 0.5)
 		self._entry_command = Gtk.Entry()
 		self._entry_command.connect('changed', self._parent.enable_save)
 
-		vbox_command2 = Gtk.VBox(False, 0)
+		vbox_command2 = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		label_command2 = Gtk.Label(label=_('Command line for executing specific program:'))
 		label_command2.set_alignment(0, 0.5)
 		self._entry_command2 = Gtk.Entry()

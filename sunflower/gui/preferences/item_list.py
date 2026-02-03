@@ -42,19 +42,19 @@ class ItemListOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'item_list', _('Item List'))
 
 		# section containers
-		vbox_look_and_feel = Gtk.VBox(False, 0)
+		vbox_look_and_feel = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('Look and feel'), vbox_look_and_feel)
 
-		vbox_operation = Gtk.VBox(False, 0)
+		vbox_operation = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('Operation'), vbox_operation)
 
-		vbox_hidden_files = Gtk.VBox(False, 0)
+		vbox_hidden_files = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('Hidden files'), vbox_hidden_files)
 
-		vbox_directory = Gtk.VBox(False, 0)
+		vbox_directory = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('Directories'), vbox_directory)
 
-		vbox_columns = Gtk.VBox(False, 0)
+		vbox_columns = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('Columns'), vbox_columns)
 
 		# file list options
@@ -79,7 +79,7 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_second_extension.connect('toggled', self._parent.enable_save)
 
 		# file access mode format
-		hbox_mode_format = Gtk.HBox(False, 5)
+		hbox_mode_format = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		label_mode_format = Gtk.Label(label=_('Access mode format:'))
 		label_mode_format.set_alignment(0, 0.5)
 
@@ -89,7 +89,7 @@ class ItemListOptions(SettingsPage):
 		self._combobox_mode_format.append(str(AccessModeFormat.TEXTUAL), _('Textual'))
 
 		# action when executable files are activated
-		hbox_executable_action = Gtk.HBox(False, 5)
+		hbox_executable_action = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		label_executable_action = Gtk.Label(label=_('Action on executable files:'))
 		label_executable_action.set_alignment(0, 0.5)
 
@@ -99,7 +99,7 @@ class ItemListOptions(SettingsPage):
 		self._combobox_executable_action.append(str(ExecutableAction.OPEN), _('Open them'))
 
 		# grid lines
-		hbox_grid_lines = Gtk.HBox(False, 5)
+		hbox_grid_lines = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		label_grid_lines = Gtk.Label(label=_('Show grid lines:'))
 		label_grid_lines.set_alignment(0, 0.5)
 
@@ -116,8 +116,8 @@ class ItemListOptions(SettingsPage):
 		self._button_selection_color.connect('color-set', self._parent.enable_save)
 
 		# selection indicator
-		vbox_indicator = Gtk.VBox(False, 0)
-		hbox_indicator = Gtk.HBox(False, 5)
+		vbox_indicator = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+		hbox_indicator = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		label_indicator = Gtk.Label(label=_('Selection indicator:'))
 		label_indicator.set_alignment(0, 0.5)
@@ -144,9 +144,9 @@ class ItemListOptions(SettingsPage):
 		self._checkbox_alt.connect('toggled', self._parent.enable_save)
 		self._checkbox_shift.connect('toggled', self._parent.enable_save)
 
-		hbox_quick_search = Gtk.HBox(False, 5)
+		hbox_quick_search = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		vbox_time_format = Gtk.VBox(False, 0)
+		vbox_time_format = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		label_time_format = Gtk.Label(label=_('Date format:'))
 		label_time_format.set_alignment(0, 0.5)
 		self._entry_time_format = Gtk.Entry()
@@ -180,7 +180,7 @@ class ItemListOptions(SettingsPage):
 
 		self._always_visible_list.append_column(col_name)
 
-		hbox_always_visible = Gtk.HBox(False, 5)
+		hbox_always_visible = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		button_add_always_visible = Gtk.Button(stock=Gtk.STOCK_ADD)
 		button_add_always_visible.connect('clicked', self._add_always_visible)
@@ -219,7 +219,7 @@ class ItemListOptions(SettingsPage):
 		self._directory_list.append_column(col_left_list)
 		self._directory_list.append_column(col_right_list)
 
-		hbox_directory = Gtk.HBox(False, 5)
+		hbox_directory = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		button_add_directory = Gtk.Button(stock=Gtk.STOCK_ADD)
 		button_add_directory.connect('clicked', self.__button_add_clicked)
@@ -262,7 +262,7 @@ class ItemListOptions(SettingsPage):
 		self._menu_add_directory.show_all()
 
 		# create columns editor
-		hbox_columns = Gtk.HBox(False, 5)
+		hbox_columns = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		container_columns = Gtk.ScrolledWindow()
 		container_columns.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)

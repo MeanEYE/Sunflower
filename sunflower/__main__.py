@@ -23,14 +23,17 @@ from __future__ import absolute_import, print_function
 import os
 import sys
 
+
 try:
 	# check if gtk is available
 	import gi
-	gi.require_version('Gtk', '3.0')
+
+	version = '4.0' if os.getenv('SUNFLOWER_GTK') == '4' else '3.0'
+	gi.require_version('Gtk', version)
 
 except ValueError:
 	# print error and die
-	print('Error starting Sunflower, missing GTK 3.0+')
+	print('Error starting Sunflower, missing GTK+')
 	sys.exit(1)
 
 else:

@@ -25,7 +25,7 @@ class Viewer(Gtk.Window):
 	FONT = None
 
 	def __init__(self, path, provider, parent):
-		Gtk.Window.__init__(self, Gtk.WindowType.TOPLEVEL)
+		Gtk.Window.__init__(self)
 
 		# load font
 		if not self.FONT:
@@ -54,10 +54,7 @@ class Viewer(Gtk.Window):
 		display_filename = decode_file_name(os.path.basename(self.path))
 		self.set_title(_('{0} - Viewer').format(display_filename))
 		self.set_size_request(800, 600)
-		self.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self.set_resizable(True)
-		self.set_skip_taskbar_hint(False)
-		self.set_wmclass('Sunflower', 'Sunflower')
 
 		header_bar = Gtk.HeaderBar.new()
 		header_bar.set_title(display_filename)

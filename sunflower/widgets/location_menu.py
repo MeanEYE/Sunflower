@@ -26,7 +26,7 @@ class LocationMenu:
 		self._popover.connect('closed', self.__handle_popover_close)
 
 		# create widget container
-		container = Gtk.VBox.new(False, 0)
+		container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		container.set_border_width(10)
 
 		# create search field
@@ -323,11 +323,11 @@ class LocationMenu:
 	is_visible = property(__get_popover_visible)
 
 
-class GenericHeader(Gtk.VBox):
+class GenericHeader(Gtk.Box):
 	"""Simple group title for locations."""
 
 	def __init__(self, title):
-		Gtk.VBox.__init__(self)
+		Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=0)
 		self.set_border_width(5)
 
 		# create title
@@ -385,9 +385,9 @@ class Bookmark(Location):
 
 	def _create_interface(self):
 		"""Create interface for the widget to display."""
-		container = Gtk.HBox.new(False, 5)
+		container = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		container.set_border_width(5)
-		title_container = Gtk.VBox.new(False, 0)
+		title_container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		# create bookmark icon
 		self._icon = Gtk.Image.new()

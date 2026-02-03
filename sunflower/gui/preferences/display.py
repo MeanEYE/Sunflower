@@ -22,7 +22,7 @@ class DisplayOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'display', _('Display'))
 
 		# main window options
-		vbox_main_window = Gtk.VBox(False, 0)
+		vbox_main_window = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('Main window'), vbox_main_window)
 
 		self._checkbox_hide_on_close = Gtk.CheckButton(_('Hide main window on close'))
@@ -42,7 +42,7 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_dark_theme.connect('toggled', self._parent.enable_save)
 
 		# tab options
-		vbox_tabs = Gtk.VBox(False, 0)
+		vbox_tabs = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('Tabs'), vbox_tabs)
 
 		self._checkbox_focus_new_tab = Gtk.CheckButton(_('Focus new tab after opening'))
@@ -92,7 +92,7 @@ class DisplayOptions(SettingsPage):
 		self._combobox_expand_tabs.add_attribute(cell_expand_tab, 'text', 0)
 
 		# other options
-		vbox_other = Gtk.VBox(False, 0)
+		vbox_other = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('Other'), vbox_other)
 
 		self._checkbox_hide_window_on_minimize = Gtk.CheckButton(_('Hide operation window on minimize'))
@@ -105,7 +105,7 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_network_path_completion.connect('toggled', self._parent.enable_save)
 
 		# size format
-		hbox_size_format = Gtk.HBox(False, 5)
+		hbox_size_format = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		label_size_format = Gtk.Label(label=_('Size format:'))
 		label_size_format.set_alignment(0, 0.5)
 

@@ -31,7 +31,7 @@ class PagesColumn:
 class MountsManagerWindow(Gtk.Window):
 
 	def __init__(self, parent):
-		Gtk.Window.__init__(self, type=Gtk.WindowType.TOPLEVEL)
+		Gtk.Window.__init__(self)
 
 		self._parent = parent
 		self._application = self._parent._application
@@ -46,12 +46,9 @@ class MountsManagerWindow(Gtk.Window):
 		# configure window
 		self.set_title(_('Mount manager'))
 		self.set_default_size(700, 400)
-		self.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
-		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)
 		self.set_transient_for(self._application)
-		self.set_wmclass('Sunflower', 'Sunflower')
-		self.set_border_width(7)
+		# self.set_border_width(7)
 
 		self.connect('delete-event', self._hide)
 		self.connect('key-press-event', self._handle_key_press)
@@ -60,9 +57,9 @@ class MountsManagerWindow(Gtk.Window):
 		self._pages_store = Gtk.ListStore(str, str, int, int)
 
 		# create user interface
-		vbox = Gtk.VBox(False, 5)
-		hbox = Gtk.HBox(False, 5)
-		hbox_controls = Gtk.HBox(False, 5)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
+		hbox_controls = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		self._tabs = Gtk.Notebook()
 		self._tabs.set_show_tabs(False)
@@ -165,7 +162,7 @@ class MountsManagerWindow(Gtk.Window):
 		image.set_from_icon_name(icon, Gtk.IconSize.MENU)
 
 		menu_item = Gtk.MenuItem()
-		menu_item_box = Gtk.VBox(False, 0)
+		menu_item_box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		menu_item_box.pack_start(image, True, True, 0)
 		menu_item_box.pack_start(Gtk.Label(text), True, True, 0)
 		menu_item.add(menu_item_box)

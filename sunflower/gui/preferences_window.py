@@ -23,18 +23,15 @@ class PreferencesWindow(Gtk.Window):
 	"""Container class for options editors"""
 
 	def __init__(self, parent):
-		GObject.GObject.__init__(self, type=Gtk.WindowType.TOPLEVEL)
+		Gtk.Window.__init__(self)
 
 		self._parent = parent
 
 		# configure window
 		self.set_title(_('Preferences'))
 		self.set_default_size(750, 500)
-		self.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self.set_modal(True)
-		self.set_skip_taskbar_hint(True)
 		self.set_transient_for(parent)
-		self.set_wmclass('Sunflower', 'Sunflower')
 
 		self.connect('delete_event', self._hide)
 		self.connect('key-press-event', self._handle_key_press)
@@ -45,7 +42,7 @@ class PreferencesWindow(Gtk.Window):
 		header_bar.set_title(_('Preferences'))
 		self.set_titlebar(header_bar)
 
-		hbox = Gtk.HBox.new(False, 0)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 
 		# create tab stack and switcher
 		self._tabs = Gtk.Stack.new()

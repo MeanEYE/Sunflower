@@ -5,7 +5,7 @@ import os
 import sys
 import zipfile
 
-from gi.repository import Gtk, Gio, GdkPixbuf, GLib
+from gi.repository import Gtk, Gdk, Gio, GdkPixbuf, GLib
 from sunflower.common import UserDirectory, get_user_directory, get_static_assets_directory
 
 
@@ -14,10 +14,15 @@ class IconManager:
 
 	def __init__(self, parent):
 		self._parent = parent
-		self._icon_theme = Gtk.IconTheme.get_default()
 		self._user_directories = None
 		self._default_file = None
 		self._default_directory = None
+
+		if Gtk.get_major_version() == 3:
+			self._icon_theme = Gtk.IconTheme.get_default()
+		else:
+			display = Gdk.Display.get_default()
+			self._icon_theme = Gtk.IconTheme.get_for_display(display)
 
 		# preload information
 		self._prepare_icons()

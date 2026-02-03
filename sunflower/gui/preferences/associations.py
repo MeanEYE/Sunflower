@@ -53,7 +53,7 @@ class AssociationsOptions(SettingsPage):
 		self._add_menu.show_all()
 
 		# create controls
-		hbox_controls = Gtk.HBox(homogeneous=False, spacing=5)
+		hbox_controls = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
 		button_add.connect('clicked', self.__button_add_clicked)

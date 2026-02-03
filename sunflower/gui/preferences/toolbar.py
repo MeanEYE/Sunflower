@@ -58,7 +58,7 @@ class ToolbarOptions(SettingsPage):
 		container.add(self._list)
 
 		# create controls
-		button_box = Gtk.HBox(False, 5)
+		button_box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
 		button_add.connect('clicked', self._add_widget)
@@ -122,11 +122,11 @@ class ToolbarOptions(SettingsPage):
 		self._combobox_icon_size.add_attribute(renderer, 'text', 0)
 		self._combobox_icon_size.connect('changed', self._parent.enable_save)
 
-		style_box = Gtk.HBox(False, 5)
+		style_box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		style_box.pack_start(label_style, False, False, 0)
 		style_box.pack_start(self._combobox_styles, False, False, 0)
 
-		size_box = Gtk.HBox(False, 5)
+		size_box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		size_box.pack_start(label_icon_size, False, False, 0)
 		size_box.pack_start(self._combobox_icon_size, False, False, 0)
 

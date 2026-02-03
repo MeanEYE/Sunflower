@@ -13,7 +13,7 @@ class SettingsPage(Gtk.ScrolledWindow):
 		self._page_title = title
 
 		# configure main container
-		self._box = Gtk.VBox.new(False, 0)
+		self._box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._box.set_spacing(15)
 		self._box.set_border_width(15)
 
@@ -23,7 +23,7 @@ class SettingsPage(Gtk.ScrolledWindow):
 
 	def _create_section(self, title, container):
 		"""Create widget section with title."""
-		box = Gtk.VBox.new(False, 0)
+		box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		# create section title
 		label_title = Gtk.Label.new('<big>{}</big>'.format(title))
@@ -39,7 +39,7 @@ class SettingsPage(Gtk.ScrolledWindow):
 
 	def _create_radio_section(self, title, container, group=None):
 		"""Create section which contains radio button and return radio button."""
-		box = Gtk.VBox.new(False, 0)
+		box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		# create section title
 		label_title = Gtk.Label.new('<big>{}</big>'.format(title))

@@ -13,7 +13,7 @@ class ContextMenu:
 		self._popover.set_position(Gtk.PositionType.BOTTOM)
 
 		# create widget container
-		self._container = Gtk.VBox.new(False, 10)
+		self._container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 10)
 		self._container.set_border_width(10)
 
 		# show all widgets inside of container

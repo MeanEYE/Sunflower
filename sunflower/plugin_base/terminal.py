@@ -1,7 +1,10 @@
 from __future__ import absolute_import
 
+import os
 import gi
-gi.require_version('Vte', '2.91')
+
+version = '3.91' if os.getenv('SUNFLOWER_GTK') == '4' else '2.91'
+gi.require_version('Vte', version)
 
 from gi.repository import Gtk, Gdk, Gio, Vte, Pango
 from sunflower.plugin_base.plugin import PluginBase

@@ -15,14 +15,14 @@ class ViewEditOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'view_and_edit', _('View & Edit'))
 
 		# viewer options
-		vbox_view = Gtk.VBox(False, 0)
+		vbox_view = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('View'), vbox_view)
 
 		self._checkbox_view_word_wrap = Gtk.CheckButton(_('Wrap long lines'))
 		self._checkbox_view_word_wrap.connect('toggled', self._parent.enable_save)
 
 		# editor options
-		vbox_edit = Gtk.VBox(False, 0)
+		vbox_edit = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('Edit'), vbox_edit)
 
 		# installed application
@@ -31,7 +31,7 @@ class ViewEditOptions(SettingsPage):
 
 		align_application = Gtk.Alignment.new(0, 0, 1, 0)
 		align_application.set_padding(0, 10, 15, 15)
-		vbox_application = Gtk.VBox(False, 0)
+		vbox_application = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		vbox_application.set_border_width(5)
 
 		self._store = Gtk.ListStore(str, str, str)
@@ -53,7 +53,7 @@ class ViewEditOptions(SettingsPage):
 
 		align_external = Gtk.Alignment.new(0, 0, 1, 0)
 		align_external.set_padding(0, 10, 15, 15)
-		vbox_external = Gtk.VBox(False, 0)
+		vbox_external = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		vbox_external.set_border_width(5)
 
 		label_editor = Gtk.Label(label=_('Command line:'))

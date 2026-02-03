@@ -63,18 +63,17 @@ class ConfigurationDialog(Gtk.Dialog):
 		self.set_title(_('Configure bookmark button'))
 		self.set_default_size(450, 10)
 		self.set_resizable(True)
-		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)
 		self.set_transient_for(application)
 
 		self.vbox.set_spacing(0)
 
 		# interface container
-		vbox = Gtk.VBox(False, 5)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		vbox.set_border_width(5)
 
 		# create interface
-		vbox_path = Gtk.VBox(False, 0)
+		vbox_path = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_path = Gtk.Label(label=_('Path:'))
 		label_path.set_alignment(0, 0.5)

@@ -23,8 +23,8 @@ class MountManagerExtension:
 		self._application = self._parent._application
 
 		# create user interface
-		self._container = Gtk.VBox(False, 5)
-		self._controls = Gtk.HBox(False, 5)
+		self._container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
+		self._controls = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		separator = Gtk.HSeparator()
 

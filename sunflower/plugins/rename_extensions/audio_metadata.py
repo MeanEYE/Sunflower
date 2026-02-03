@@ -63,10 +63,10 @@ class AudioMetadataRename(RenameExtension):
 			'\n'.join(['{0}\t{1}'.format(k, v[1]) for k, v in self._templates.items()])))
 
 		# create boxes
-		hbox = Gtk.HBox(True, 15)
-		vbox_left = Gtk.VBox(False, 5)
-		vbox_right = Gtk.VBox(False, 0)
-		vbox_template = Gtk.VBox(False, 0)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 15)
+		vbox_left = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
+		vbox_right = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+		vbox_template = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		table_replace = Gtk.Table(2, 2, False)
 		table_replace.set_border_width(5)
 

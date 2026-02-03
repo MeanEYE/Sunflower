@@ -12,7 +12,7 @@ class ContentsFindFiles(FindExtension):
 		FindExtension.__init__(self, parent)
 
 		# create container
-		vbox = Gtk.VBox(False, 0)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		viewport = Gtk.ScrolledWindow()
 		viewport.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)

@@ -72,7 +72,6 @@ class PropertiesWindow(Gtk.Window):
 		hints.min_width = 410
 		hints.min_height = 410
 		self.set_geometry_hints(None, hints, Gdk.WindowHints.MIN_SIZE)
-		self.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self.set_icon_name(self._icon_name)
 
 		self.connect('key-press-event', self._handle_key_press)
@@ -401,7 +400,7 @@ class PropertiesWindow(Gtk.Window):
 
 	def _create_basic_tab(self):
 		"""Create tab containing basic information"""
-		tab = Gtk.VBox(False, 0)
+		tab = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		table = Gtk.Table(7, 3)
 
 		# configure table
@@ -411,7 +410,7 @@ class PropertiesWindow(Gtk.Window):
 		icon = Gtk.Image()
 		icon.set_from_icon_name(self._icon_name, Gtk.IconSize.DIALOG)
 
-		vbox_icon = Gtk.VBox(False, 0)
+		vbox_icon = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		vbox_icon.pack_start(icon, False, False, 0)
 		table.attach(vbox_icon, 0, 1, 0, 7, Gtk.AttachOptions.SHRINK)
 
@@ -492,7 +491,7 @@ class PropertiesWindow(Gtk.Window):
 
 	def _create_permissions_tab(self):
 		"""Create tab containing item permissions and ownership"""
-		tab = Gtk.VBox(False, 5)
+		tab = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		tab.set_border_width(10)
 
 		# create 'Access' frame
@@ -633,7 +632,7 @@ class PropertiesWindow(Gtk.Window):
 
 	def _create_open_with_tab(self):
 		"""Create tab containing list of applications that can open this file"""
-		tab = Gtk.VBox(False, 5)
+		tab = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		tab.set_border_width(10)
 
 		# get item description
@@ -694,7 +693,7 @@ class PropertiesWindow(Gtk.Window):
 
 	def _create_emblems_tab(self):
 		"""Create tab for editing emblems"""
-		tab = Gtk.VBox(False, 5)
+		tab = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		tab.set_border_width(10)
 
 		# create scrollable container

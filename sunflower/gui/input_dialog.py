@@ -34,17 +34,15 @@ class InputDialog:
 
 		self._dialog.set_default_size(400, 10)
 		self._dialog.set_resizable(True)
-		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		# remove existing children
 		self._container = self._dialog.get_message_area()
 		self._container.foreach(lambda widget: self._container.remove(widget))
 
 		# create interface
-		vbox = Gtk.VBox(False, 0)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._label = Gtk.Label(label='Label')
 		self._label.set_alignment(0, 0.5)
 
@@ -119,8 +117,8 @@ class LinkDialog(InputDialog):
 		self._container.set_spacing(5)
 
 		# create user interface
-		vbox_original_path = Gtk.VBox(False, 0)
-		hbox_original_path = Gtk.HBox(False, 5)
+		vbox_original_path = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+		hbox_original_path = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		label_original_path = Gtk.Label(label=_('Original path:'))
 		label_original_path.set_alignment(0, 0.5)
@@ -207,7 +205,7 @@ class CreateDialog(InputDialog):
 		self._dialog_size = None
 
 		# create advanced options expander
-		advanced_box = Gtk.VBox.new(False, 0)
+		advanced_box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		advanced_box.set_margin_top(10)
 		self._container.pack_start(advanced_box, True, True, 0)
 
@@ -360,7 +358,7 @@ class PasswordDialog(InputDialog):
 		InputDialog.__init__(self, application)
 
 		# create user interface
-		vbox = Gtk.VBox(False, 0)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		self._label_description = Gtk.Label()
 		self._label_description.set_alignment(0, 0)
@@ -431,7 +429,7 @@ class FileCreateDialog(CreateDialog):
 		self._checkbox_edit_after = Gtk.CheckButton(_('Open file in editor'))
 
 		# create template list
-		vbox_templates = Gtk.VBox(False, 0)
+		vbox_templates = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		label_templates = Gtk.Label.new(_('Template:'))
 		label_templates.set_alignment(0, 0.5)
 
@@ -562,7 +560,6 @@ class DeleteDialog:
 
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 		self._dialog.set_default_size(-1, 0)
 
 		# create user interface for operation queue
@@ -621,13 +618,11 @@ class CopyDialog:
 		self._dialog_size = None
 		self._dialog.set_default_size(500, 10)
 		self._dialog.set_resizable(True)
-		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		# create additional components
-		vbox = Gtk.VBox(False, 0)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		vbox.set_border_width(5)
 
 		self.label_destination = Gtk.Label()
@@ -640,10 +635,10 @@ class CopyDialog:
 		self.entry_destination.connect('activate', self._confirm_entry)
 
 		# additional options
-		hbox_additional = Gtk.HBox(False, 10)
+		hbox_additional = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 10)
 		separator_file_type = Gtk.HSeparator()
-		vbox_type = Gtk.VBox(False, 0)
-		vbox_queue = Gtk.VBox(False, 0)
+		vbox_type = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+		vbox_queue = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_type = Gtk.Label(label=_('Only files of this type:'))
 		label_type.set_alignment(0, 0.5)
@@ -700,7 +695,7 @@ class CopyDialog:
 		self.checkbox_timestamp = Gtk.CheckButton(_('Set date and time on destination'))
 		self.checkbox_silent = Gtk.CheckButton(_('Silent mode'))
 
-		vbox_silent = Gtk.VBox(False, 0)
+		vbox_silent = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		vbox_silent.set_sensitive(False)
 
 		self.checkbox_merge = Gtk.CheckButton(_('Merge directories'))
@@ -1040,16 +1035,14 @@ class OverwriteDialog:
 
 		self._dialog.set_default_size(500, 10)
 		self._dialog.set_resizable(True)
-		self._dialog.set_skip_taskbar_hint(False)
 		self._dialog.set_modal(True)
 		self._dialog.set_urgency_hint(True)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
-		hbox = Gtk.HBox(False, 10)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 10)
 		hbox.set_border_width(10)
 
-		vbox = Gtk.VBox(False, 10)
-		vbox_icon = Gtk.VBox(False, 0)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 10)
+		vbox_icon = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		# create interface
 		icon = Gtk.Image()
@@ -1065,7 +1058,7 @@ class OverwriteDialog:
 		self._label_message.set_line_wrap(True)
 
 		# inner hbox for original file
-		hbox_original = Gtk.HBox(False, 0)
+		hbox_original = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 
 		self._icon_original = Gtk.Image()
 		self._label_original = Gtk.Label()
@@ -1073,7 +1066,7 @@ class OverwriteDialog:
 		self._label_original.set_alignment(0, 0.5)
 
 		# inner hbox for source file
-		hbox_source = Gtk.HBox(False, 0)
+		hbox_source = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 
 		self._icon_source = Gtk.Image()
 		self._label_source = Gtk.Label()
@@ -1083,7 +1076,7 @@ class OverwriteDialog:
 		# rename expander
 		self._expander_rename = Gtk.Expander(label=_('Select a new name for the destination'))
 		self._expander_rename.connect('activate', self._rename_toggled)
-		hbox_rename = Gtk.HBox(False, 10)
+		hbox_rename = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 10)
 
 		self._entry_rename = Gtk.Entry()
 		button_reset = Gtk.Button(_('Reset'))
@@ -1315,13 +1308,11 @@ class AddBookmarkDialog:
 		self._dialog.set_title(_('Add bookmark'))
 		self._dialog.set_default_size(450, 10)
 		self._dialog.set_resizable(True)
-		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		# create component container
-		vbox = Gtk.VBox(False, 5)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		vbox.set_border_width(5)
 
 		# bookmark name
@@ -1335,7 +1326,7 @@ class AddBookmarkDialog:
 					'key if it is the first character so marked.'
 				))
 
-		vbox_name = Gtk.VBox(False, 0)
+		vbox_name = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		# bookmark path
 		label_path = Gtk.Label(label=_('Location:'))
@@ -1344,7 +1335,7 @@ class AddBookmarkDialog:
 		self._entry_path.set_text(path)
 		self._entry_path.set_editable(False)
 
-		vbox_path = Gtk.VBox(False, 0)
+		vbox_path = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		# controls
 		button_ok = Gtk.Button(stock=Gtk.STOCK_OK)
@@ -1408,17 +1399,15 @@ class OperationError:
 		self._dialog.set_title(_('Operation error'))
 		self._dialog.set_default_size(450, 10)
 		self._dialog.set_resizable(True)
-		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		# create component container
-		hbox = Gtk.HBox(False, 10)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 10)
 		hbox.set_border_width(5)
 
-		vbox = Gtk.VBox(False, 10)
-		vbox_icon = Gtk.VBox(False, 0)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 10)
+		vbox_icon = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		# create interface
 		icon = Gtk.Image()
@@ -1492,17 +1481,15 @@ class CreateToolbarWidgetDialog:
 		self._dialog.set_title(_('Add toolbar widget'))
 		self._dialog.set_default_size(450, 10)
 		self._dialog.set_resizable(True)
-		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		# create component container
-		vbox = Gtk.VBox(False, 5)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		vbox.set_border_width(5)
 
 		# create interface
-		vbox_name = Gtk.VBox(False, 0)
+		vbox_name = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_name = Gtk.Label(label=_('Name:'))
 		label_name.set_alignment(0, 0.5)
@@ -1510,7 +1497,7 @@ class CreateToolbarWidgetDialog:
 		self._entry_name = Gtk.Entry()
 		self._entry_name.set_max_width_chars(30)
 
-		vbox_type = Gtk.VBox(False, 0)
+		vbox_type = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_type = Gtk.Label(label=_('Type:'))
 		label_type.set_alignment(0, 0.5)
@@ -1627,8 +1614,8 @@ class ApplicationInputDialog(InputDialog):
 		self.set_label(_('Application name:'))
 
 		# create additional components
-		vbox_command = Gtk.VBox(False, 0)
-		hbox_command = Gtk.HBox(False, 5)
+		vbox_command = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+		hbox_command = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		label_command = Gtk.Label(label='Command:')
 		label_command.set_alignment(0, 0.5)
@@ -1687,16 +1674,14 @@ class ApplicationSelectDialog:
 		self._dialog.set_title(_('Open With'))
 		self._dialog.set_default_size(500, 400)
 		self._dialog.set_resizable(True)
-		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
-		self._container = Gtk.VBox(False, 5)
+		self._container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		self._container.set_border_width(5)
 
 		# create interface
-		vbox_list = Gtk.VBox(False, 0)
+		vbox_list = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_open_with = Gtk.Label()
 		label_open_with.set_use_markup(True)
@@ -1743,7 +1728,7 @@ class ApplicationSelectDialog:
 
 		# create custom command entry
 		self._expander_custom = Gtk.Expander(label=_('Use a custom command'))
-		hbox_custom = Gtk.HBox(False, 7)
+		hbox_custom = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 7)
 		self._entry_custom = Gtk.Entry()
 
 		# pack interface
@@ -1830,16 +1815,14 @@ class PathInputDialog():
 
 		self._dialog.set_default_size(450, 10)
 		self._dialog.set_resizable(True)
-		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
-		self._container = Gtk.VBox(False, 0)
+		self._container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._container.set_border_width(5)
 
 		# create interface
-		vbox = Gtk.VBox(False, 0)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._label = Gtk.Label(label='Label')
 		self._label.set_alignment(0, 0.5)
 

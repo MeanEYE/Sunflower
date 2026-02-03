@@ -60,7 +60,7 @@ class BookmarksOptions(SettingsPage):
 		container.add(self._list)
 
 		# create controls
-		button_box = Gtk.HBox(False, 5)
+		button_box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
 		button_add.connect('clicked', self._add_bookmark)
@@ -91,7 +91,7 @@ class BookmarksOptions(SettingsPage):
 		button_box.pack_end(button_move_up, False, False, 0)
 
 		# pack checkboxes
-		vbox = Gtk.VBox(False, 0)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		vbox.pack_start(self._checkbox_show_mount_points, False, False, 0)
 		vbox.pack_start(self._checkbox_system_bookmarks, False, False, 0)

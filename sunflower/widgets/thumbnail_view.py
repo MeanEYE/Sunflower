@@ -5,9 +5,12 @@ from gi.repository import Gtk, Gdk, GObject, GdkPixbuf
 
 try:
 	# try to import module
-	gi.require_version('GnomeDesktop', '3.0')
+	version = '4.0' if os.getenv('SUNFLOWER_GTK') == '4' else '3.0'
+	gi.require_version('GnomeDesktop', version)
+
 	from gi.repository import GnomeDesktop
 	USE_FACTORY = True
+
 except:
 	USE_FACTORY = False
 

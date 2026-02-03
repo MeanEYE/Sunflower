@@ -44,7 +44,7 @@ class OperationDialog:
 		self._indicator.get_style_context().add_class('flat')
 
 		# create interface
-		self._vbox = Gtk.VBox(False, 5)
+		self._vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 
 		# operation items
 		self._operation_label = Gtk.Label.new()
@@ -55,7 +55,7 @@ class OperationDialog:
 
 		self._indicator.set_image(self._operation_image)
 
-		vbox_operation = Gtk.VBox(False, 0)
+		vbox_operation = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		vbox_operation.pack_start(self._operation_label, False, False, 0)
 		vbox_operation.pack_start(self._operation_progress, False, False, 0)
 
@@ -183,7 +183,7 @@ class OperationDialog:
 
 	def _add_buttons(self):
 		"""Add button bar"""
-		hbox = Gtk.HBox(False, 5)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		hbox.set_border_width(7)
 
 		self._button_cancel = Gtk.Button(_('Cancel'))

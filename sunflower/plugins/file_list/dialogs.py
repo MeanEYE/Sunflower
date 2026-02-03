@@ -38,24 +38,22 @@ class SambaInputDialog:
 		self.set_title(_('Create Samba mount'))
 		self._dialog.set_default_size(340, 10)
 		self._dialog.set_resizable(True)
-		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(parent)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		self._dialog.vbox.set_spacing(0)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
 		# create user interface
-		self._container = Gtk.VBox(False, 5)
+		self._container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		self._container.set_border_width(5)
 
-		hbox_icon = Gtk.HBox(False, 0)
-		vbox_icon = Gtk.VBox(False, 0)
+		hbox_icon = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+		vbox_icon = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		icon = Gtk.Image()
 		icon.set_from_icon_name('samba', Gtk.IconSize.DIALOG)
 
-		vbox_name = Gtk.VBox(False, 0)
+		vbox_name = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_name = Gtk.Label(label=_('Name:'))
 		label_name.set_alignment(0, 0.5)
@@ -64,15 +62,15 @@ class SambaInputDialog:
 
 		hseparator = Gtk.HSeparator()
 
-		vbox_server = Gtk.VBox(False, 0)
+		vbox_server = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_server = Gtk.Label(label=_('Server:'))
 		label_server.set_alignment(0, 0.5)
 		self._entry_server = Gtk.Entry()
 		self._entry_server.connect('activate', self._confirm_entry)
 
-		vbox_share = Gtk.VBox(False, 0)
-		vbox_directory = Gtk.VBox(False, 0)
+		vbox_share = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+		vbox_directory = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_share = Gtk.Label(label=_('Share:'))
 		label_share.set_alignment(0, 0.5)
@@ -87,10 +85,10 @@ class SambaInputDialog:
 		# access information
 		hseparator2 = Gtk.HSeparator()
 
-		vbox_domain = Gtk.VBox(False, 0)
-		vbox_username = Gtk.VBox(False, 0)
-		vbox_password = Gtk.VBox(False, 0)
-		
+		vbox_domain = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+		vbox_username = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+		vbox_password = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+
 		label_domain = Gtk.Label(label=_('Domain:'))
 		label_username = Gtk.Label(label=_('Username:'))
 		label_password = Gtk.Label(label=_('Password:'))
@@ -251,24 +249,22 @@ class FtpInputDialog:
 		self.set_title(_('Create FTP mount'))
 		self._dialog.set_default_size(340, 10)
 		self._dialog.set_resizable(True)
-		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(parent)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		self._dialog.vbox.set_spacing(0)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
 		# create user interface
-		self._container = Gtk.VBox(False, 5)
+		self._container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		self._container.set_border_width(5)
 
-		hbox_icon = Gtk.HBox(False, 0)
-		vbox_icon = Gtk.VBox(False, 0)
+		hbox_icon = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+		vbox_icon = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		icon = Gtk.Image()
 		icon.set_from_icon_name('folder-remote-ftp', Gtk.IconSize.DIALOG)
 
-		vbox_name = Gtk.VBox(False, 0)
+		vbox_name = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_name = Gtk.Label(label=_('Name:'))
 		label_name.set_alignment(0, 0.5)
@@ -277,14 +273,14 @@ class FtpInputDialog:
 
 		hseparator = Gtk.HSeparator()
 
-		vbox_server = Gtk.VBox(False, 0)
+		vbox_server = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_server = Gtk.Label(label=_('Server:'))
 		label_server.set_alignment(0, 0.5)
 		self._entry_server = Gtk.Entry()
 		self._entry_server.connect('activate', self._confirm_entry)
 
-		vbox_directory = Gtk.VBox(False, 0)
+		vbox_directory = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_directory = Gtk.Label(label=_('Directory:'))
 		label_directory.set_alignment(0, 0.5)
@@ -297,9 +293,9 @@ class FtpInputDialog:
 		# access information
 		hseparator2 = Gtk.HSeparator()
 
-		vbox_username = Gtk.VBox(False, 0)
-		vbox_password = Gtk.VBox(False, 0)
-		
+		vbox_username = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+		vbox_password = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+
 		label_username = Gtk.Label(label=_('Username:'))
 		label_password = Gtk.Label(label=_('Password:'))
 
@@ -445,24 +441,22 @@ class DavInputDialog:
 		self.set_title(_('Create WebDav mount'))
 		self._dialog.set_default_size(340, 10)
 		self._dialog.set_resizable(True)
-		self._dialog.set_skip_taskbar_hint(True)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(parent)
-		self._dialog.set_wmclass('Sunflower', 'Sunflower')
 
 		self._dialog.vbox.set_spacing(0)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
 		# create user interface
-		self._container = Gtk.VBox(False, 5)
+		self._container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		self._container.set_border_width(5)
 
-		hbox_icon = Gtk.HBox(False, 0)
-		vbox_icon = Gtk.VBox(False, 0)
+		hbox_icon = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+		vbox_icon = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		icon = Gtk.Image()
 		icon.set_from_icon_name('folder-remote-ftp', Gtk.IconSize.DIALOG)
 
-		vbox_name = Gtk.VBox(False, 0)
+		vbox_name = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_name = Gtk.Label(label=_('Name:'))
 		label_name.set_alignment(0, 0.5)
@@ -471,14 +465,14 @@ class DavInputDialog:
 
 		hseparator = Gtk.HSeparator()
 
-		vbox_server = Gtk.VBox(False, 0)
+		vbox_server = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_server = Gtk.Label(label=_('Server:'))
 		label_server.set_alignment(0, 0.5)
 		self._entry_server = Gtk.Entry()
 		self._entry_server.connect('activate', self._confirm_entry)
 
-		vbox_server_type = Gtk.VBox(False, 0)
+		vbox_server_type = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_server_type = Gtk.Label(label=_('Server type:'))
 		label_server_type.set_alignment(0, 0.5)
@@ -487,7 +481,7 @@ class DavInputDialog:
 		self._entry_server_type.append_text('https')
 		self._entry_server_type.set_active(0)
 
-		vbox_directory = Gtk.VBox(False, 0)
+		vbox_directory = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_directory = Gtk.Label(label=_('Directory:'))
 		label_directory.set_alignment(0, 0.5)
@@ -500,8 +494,8 @@ class DavInputDialog:
 		# access information
 		hseparator2 = Gtk.HSeparator()
 
-		vbox_username = Gtk.VBox(False, 0)
-		vbox_password = Gtk.VBox(False, 0)
+		vbox_username = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+		vbox_password = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_username = Gtk.Label(label=_('Username:'))
 		label_password = Gtk.Label(label=_('Password:'))

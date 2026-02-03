@@ -9,13 +9,13 @@ class OperationOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'operation', _('Operation'))
 
 		# create frames
-		vbox_general = Gtk.VBox(False, 0)
+		vbox_general = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('General'), vbox_general)
 
-		vbox_mounts = Gtk.VBox(False, 0)
+		vbox_mounts = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('Mounts'), vbox_mounts)
 
-		vbox_confirmations = Gtk.VBox(False, 0)
+		vbox_confirmations = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('Confirmation'), vbox_confirmations)
 
 		# create components

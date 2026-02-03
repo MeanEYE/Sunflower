@@ -18,7 +18,7 @@ class TabLabel:
 		self._container.set_visible_window(False)
 
 		# create interface
-		self._hbox = Gtk.HBox(homogeneous=False, spacing=0)
+		self._hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		self._container.add(self._hbox)
 
 		self._label = Gtk.Label.new()

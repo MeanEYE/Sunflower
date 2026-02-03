@@ -24,21 +24,22 @@ class AdvancedRename:
 		self._path = self._parent.path
 
 		# create and configure window
-		self.window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
+		if Gtk.get_major_version() == 3:
+			self.window = Gtk.Window.new(Gtk.WindowType.TOPLEVEL)
+		else:
+			self.window = Gtk.Window.new()
 
 		self.window.set_title(_('Advanced rename'))
 		self.window.set_default_size(640, 600)
-		self.window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self.window.set_transient_for(application)
-		self.window.set_border_width(7)
+		# self.window.set_border_width(7)
 		self.window.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 		self.window.set_modal(True)
-		self.window.set_wmclass('Sunflower', 'Sunflower')
 
 		self.window.connect('key-press-event', self._handle_key_press)
 
 		# create interface
-		vbox = Gtk.VBox(False, 7)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 7)
 
 		# create modifiers notebook
 		self._extension_list = Gtk.Notebook()
@@ -76,7 +77,7 @@ class AdvancedRename:
 		container.set_shadow_type(Gtk.ShadowType.IN)
 
 		# create location
-		vbox_location = Gtk.VBox(False, 0)
+		vbox_location = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_location = Gtk.Label(label=_('Items located in:'))
 		label_location.set_alignment(0, 0.5)
@@ -86,7 +87,7 @@ class AdvancedRename:
 		entry_location.set_editable(False)
 
 		# create controls
-		hbox = Gtk.HBox(False, 5)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
 		button_close.connect('clicked', lambda widget: self.window.destroy())

@@ -50,7 +50,7 @@ class CommandsOptions(SettingsPage):
 		container.add(self._list)
 
 		# create controls
-		button_box = Gtk.HBox(False, 5)
+		button_box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
 		button_add.connect('clicked', self._add_command)

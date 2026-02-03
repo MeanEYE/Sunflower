@@ -39,12 +39,12 @@ class DefaultFindFiles(FindExtension):
 						))
 
 		# create containers
-		hbox = Gtk.HBox(True, 15)
-		vbox_left = Gtk.VBox(False, 5)
-		vbox_right = Gtk.VBox(False, 0)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 15)
+		vbox_left = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
+		vbox_right = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		# create interface
-		vbox_pattern = Gtk.VBox(False, 0)
+		vbox_pattern = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_pattern = Gtk.Label(label=_('Search for:'))
 		label_pattern.set_alignment(0, 0.5)

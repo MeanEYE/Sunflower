@@ -33,11 +33,11 @@ class PopupMenu:
 		self._popover.add(self._stack)
 
 		# main menu box
-		box = Gtk.VBox.new(False, 0)
+		box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._stack.add_named(box, 'main')
 
 		# operation items
-		hbox = Gtk.HBox.new(True, 0)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		hbox.get_style_context().add_class('linked')
 		hbox.get_style_context().add_class('flat')
 		hbox.set_margin_bottom(5)
@@ -286,7 +286,7 @@ class PopupMenu:
 
 		# add container to the stack
 		if not container:
-			container = Gtk.VBox.new(False, 0)
+			container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 			container.pack_start(back_button, False, False, 0)
 		self._stack.add_named(container, name)
 

@@ -76,7 +76,6 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# set window title
 		self.set_title(_('Sunflower'))
-		self.set_wmclass('Sunflower', 'Sunflower')
 
 		# local variables
 		self._geometry = None
@@ -167,7 +166,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.header_bar.set_property('no-show-all', not self.options.get('show_titlebar'))
 		self.set_titlebar(self.header_bar)
 
-		self.header_button_box = Gtk.HBox.new(False, 0)
+		self.header_button_box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		self.header_button_box.get_style_context().add_class('linked')
 		self.header_bar.pack_start(self.header_button_box)
 
@@ -385,7 +384,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.command_popover.set_modal(False)
 		self.command_popover.connect('closed', self.hide_command_entry)
 
-		vbox_popover = Gtk.VBox.new(False, 0)
+		vbox_popover = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		vbox_popover.set_border_width(5)
 		vbox_popover.set_size_request(400, -1)
 
@@ -421,7 +420,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		vbox_popover.show_all()
 
 		# command buttons bar
-		self.command_bar = Gtk.HBox.new(True, 0)
+		self.command_bar = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		self.command_bar.set_border_width(2)
 
 		buttons = (
@@ -452,7 +451,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.command_bar.set_property('no-show-all', not self.options.get('show_command_bar'))
 
 		# pack user interface
-		vbox = Gtk.VBox(False, 0)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		vbox.pack_start(self.toolbar_manager.get_toolbar(), False, False, 0)
 		vbox.pack_start(self._paned, True, True, 0)
 		vbox.pack_start(self.command_bar, False, False, 0)
@@ -463,7 +462,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.commands_popover = Gtk.Popover.new()
 		self.commands_popover.set_position(Gtk.PositionType.BOTTOM)
 
-		vbox = Gtk.VBox.new(False, 5)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		vbox.set_border_width(10)
 		self.commands_popover.add(vbox)
 
@@ -484,7 +483,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		vbox.show_all()
 
 		# create status bar
-		self.status_bar = Gtk.HBox(False, 0)
+		self.status_bar = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		self.header_bar.pack_end(self.status_bar)
 
 		if self.keyring_manager.is_available():
@@ -914,7 +913,6 @@ class MainWindow(Gtk.ApplicationWindow):
 	def _load_styles(self):
 		"""Load custom application CSS styles."""
 		provider = Gtk.CssProvider.new()
-		screen = Gdk.Screen.get_default()
 
 		# try loading from zip file
 		if os.path.isfile(sys.path[0]) and sys.path[0] != '':
@@ -929,7 +927,13 @@ class MainWindow(Gtk.ApplicationWindow):
 			provider.load_from_file(Gio.File.new_for_path(file_name))
 
 		# apply styles
-		Gtk.StyleContext.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
+		if Gtk.get_major_version() == 3:
+			screen = Gdk.Screen.get_default()
+			Gtk.StyleContext.add_provider_for_screen(screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
+
+		else:
+			display = Gdk.Display.get_default()
+			Gtk.StyleContext.add_provider_for_display(display, provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
 	def _command_reload(self, widget=None, data=None):
 		"""Handle command button click"""

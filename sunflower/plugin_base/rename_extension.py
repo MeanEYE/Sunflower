@@ -13,7 +13,7 @@ class RenameExtension:
 		self._parent = parent
 
 		# create and configure container
-		self.vbox = Gtk.VBox(False, 5)
+		self.vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		self.vbox.set_border_width(7)
 		self.vbox.extension = self
 

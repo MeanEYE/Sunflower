@@ -26,16 +26,13 @@ class HistoryList(Gtk.Window):
 		# configure dialog
 		self.set_title(_('History'))
 		self.set_size_request(500, 300)
-		self.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 		self.set_resizable(True)
-		self.set_skip_taskbar_hint(True)
 		self.set_modal(True)
 		self.set_transient_for(application)
-		self.set_wmclass('Sunflower', 'Sunflower')
 		self.set_border_width(7)
 
 		# create UI
-		vbox = Gtk.VBox(False, 7)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 7)
 
 		list_container = Gtk.ScrolledWindow()
 		list_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
@@ -55,7 +52,7 @@ class HistoryList(Gtk.Window):
 		self._history_list.append_column(col_path)
 
 		# create controls
-		hbox_controls = Gtk.HBox(False, 5)
+		hbox_controls = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
 		button_close.connect('clicked', self._close)

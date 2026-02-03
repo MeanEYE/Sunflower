@@ -96,7 +96,7 @@ class PluginsOptions(SettingsPage):
 		self._expander_description.add(self._label_description)
 
 		# create controls
-		hbox_controls = Gtk.HBox(False, 5)
+		hbox_controls = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		image_contact = Gtk.Image()
 		image_contact.set_from_icon_name('gnome-stock-mail-new', Gtk.IconSize.BUTTON)

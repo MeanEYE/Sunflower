@@ -10,7 +10,7 @@ from sunflower.widgets.tab_label import TabLabel
 from sunflower.gui.preferences.display import StatusVisible
 
 
-class PluginBase(Gtk.VBox):
+class PluginBase(Gtk.Box):
 	"""Abstract plugin class
 
 	This class provides basic and common GUI components for
@@ -19,7 +19,7 @@ class PluginBase(Gtk.VBox):
 	"""
 
 	def __init__(self, parent, notebook, options):
-		GObject.GObject.__init__(self, homogeneous=False, spacing=0)
+		Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=0)
 
 		self._parent = parent
 		self._options = options

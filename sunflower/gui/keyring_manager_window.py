@@ -23,22 +23,22 @@ class KeyringManagerWindow:
 		self._active_keyring = application.keyring_manager.KEYRING_NAME
 
 		# create window
-		self._window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
+		if Gtk.get_major_version() == 3:
+			self._window = Gtk.Window.new(Gtk.WindowType.TOPLEVEL)
+		else:
+			self._window = Gtk.Window.new()
 
 		# configure window
 		self._window.set_title(_('Keyring manager'))
 		self._window.set_size_request(500, 300)
-		self._window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
-		self._window.set_skip_taskbar_hint(False)
 		self._window.set_modal(False)
-		self._window.set_wmclass('Sunflower', 'Sunflower')
-		self._window.set_border_width(7)
+		# self._window.set_border_width(7)
 
 		# connect signals
 		self._window.connect('delete-event', self.__delete_event)
 
 		# create user interface
-		vbox = Gtk.VBox(homogeneous=False, spacing=5)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		container = Gtk.ScrolledWindow()
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 		container.set_shadow_type(Gtk.ShadowType.IN)
@@ -60,7 +60,7 @@ class KeyringManagerWindow:
 		self._list.append_column(col_modified)
 
 		# create controls
-		hbox = Gtk.HBox(homogeneous=False, spacing=5)
+		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		button_edit = Gtk.Button(stock=Gtk.STOCK_EDIT)
 		button_edit.connect('clicked', self.__edit_selected)

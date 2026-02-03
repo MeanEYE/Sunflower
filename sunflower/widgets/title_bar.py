@@ -40,10 +40,10 @@ class TitleBar:
 		self._button_relief = options.get('button_relief') or 0
 
 		# create container box
-		self._container = Gtk.HBox.new(False, 5)
+		self._container = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		self._container.get_style_context().add_class('sunflower-title-bar')
 
-		self._container_controls = Gtk.HBox.new(False, 0)
+		self._container_controls = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		self._container_controls.get_style_context().add_class('linked')
 
 		# top folder icon as default
@@ -77,7 +77,7 @@ class TitleBar:
 
 	def create_title(self):
 		"""Create title as main control."""
-		vbox = Gtk.VBox.new(False, 0)
+		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		# create main tab title
 		self._title_label = Gtk.Label.new()

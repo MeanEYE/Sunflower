@@ -38,6 +38,8 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_show_toolbar.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_titlebar.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_command_bar.connect('toggled', self._parent.enable_save)
+		self._checkbox_show_command_bar_shortcuts = Gtk.CheckButton(_('Show keyboard shortcuts on command bar buttons'))
+		self._checkbox_show_command_bar_shortcuts.connect('toggled', self._parent.enable_save)
 		self._checkbox_horizontal_split.connect('toggled', self._parent.enable_save)
 		self._checkbox_dark_theme.connect('toggled', self._parent.enable_save)
 
@@ -136,6 +138,7 @@ class DisplayOptions(SettingsPage):
 		vbox_main_window.pack_start(self._checkbox_show_toolbar, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_titlebar, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_show_command_bar, False, False, 0)
+		vbox_main_window.pack_start(self._checkbox_show_command_bar_shortcuts, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_horizontal_split, False, False, 0)
 		vbox_main_window.pack_start(self._checkbox_dark_theme, False, False, 0)
 
@@ -161,6 +164,7 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_show_toolbar.set_active(options.get('show_toolbar'))
 		self._checkbox_show_titlebar.set_active(options.get('show_titlebar'))
 		self._checkbox_show_command_bar.set_active(options.get('show_command_bar'))
+		self._checkbox_show_command_bar_shortcuts.set_active(options.get('show_command_bar_shortcuts'))
 		self._checkbox_tab_close_button.set_active(options.get('tab_close_button'))
 		self._checkbox_always_show_tabs.set_active(options.get('always_show_tabs'))
 		self._checkbox_superuser_notification.set_active(options.get('superuser_notification'))
@@ -184,6 +188,7 @@ class DisplayOptions(SettingsPage):
 		options.set('show_toolbar', self._checkbox_show_toolbar.get_active())
 		options.set('show_titlebar', self._checkbox_show_titlebar.get_active())
 		options.set('show_command_bar', self._checkbox_show_command_bar.get_active())
+		options.set('show_command_bar_shortcuts', self._checkbox_show_command_bar_shortcuts.get_active())
 		options.set('tab_close_button', self._checkbox_tab_close_button.get_active())
 		options.set('always_show_tabs', self._checkbox_always_show_tabs.get_active())
 		options.set('superuser_notification', self._checkbox_superuser_notification.get_active())

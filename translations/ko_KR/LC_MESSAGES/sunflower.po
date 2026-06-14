@@ -10,12 +10,12 @@ msgstr ""
 "POT-Creation-Date: 2026-05-04 23:37+0200\n"
 "PO-Revision-Date: 2014-07-27 12:02+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Latvian (http://app.transifex.com/way2cu/sunflower/language/lv/)\n"
+"Language-Team: Korean (Korea) (http://app.transifex.com/way2cu/sunflower/language/ko_KR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: lv\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);\n"
+"Language: ko_KR\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: sunflower/operation.py:115
 #, python-brace-format
@@ -117,8 +117,6 @@ msgstr ""
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: sunflower/operation.py:1338
 msgid "Moving files..."
@@ -141,8 +139,6 @@ msgstr ""
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: sunflower/operation.py:1620
 msgid "Delete Operation"
@@ -153,8 +149,6 @@ msgstr ""
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: sunflower/operation.py:1735
 msgid "Rename Operation"
@@ -165,8 +159,6 @@ msgstr ""
 msgid "Rename of {0} item from \"{1}\" is completed!"
 msgid_plural "Rename of {0} items from \"{1}\" is completed!"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: sunflower/keyring.py:63
 msgid "Keyring is unlocked"
@@ -491,16 +483,12 @@ msgstr ""
 msgid "Copy item"
 msgid_plural "Copy items"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: sunflower/gui/input_dialog.py:893
 #, python-brace-format
 msgid "Copy <b>{0}</b> item to:"
 msgid_plural "Copy <b>{0}</b> items to:"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: sunflower/gui/input_dialog.py:903 sunflower/gui/input_dialog.py:1247
 #: sunflower/gui/main_window.py:432
@@ -511,16 +499,12 @@ msgstr ""
 msgid "Move item"
 msgid_plural "Move items"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: sunflower/gui/input_dialog.py:992
 #, python-brace-format
 msgid "Move <b>{0}</b> item to:"
 msgid_plural "Move <b>{0}</b> items to:"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: sunflower/gui/input_dialog.py:1002 sunflower/gui/main_window.py:433
 msgid "Move"
@@ -729,22 +713,16 @@ msgstr ""
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: sunflower/gui/operation_dialog.py:308
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: sunflower/gui/operation_dialog.py:312
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: sunflower/gui/operation_dialog.py:316
 #: sunflower/gui/properties_window.py:238
@@ -1896,8 +1874,6 @@ msgstr ""
 msgid "item"
 msgid_plural "items"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: sunflower/gui/properties_window.py:347
 msgid "Error changing owner or group"
@@ -2158,8 +2134,6 @@ msgid_plural ""
 "You are about to <i><b>delete</b></i> {0} items.\n"
 "Are you sure about this?"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: sunflower/plugins/file_list/file_list.py:834
 #, python-brace-format
@@ -2170,8 +2144,6 @@ msgid_plural ""
 "You are about to move {0} items to <i><b>trash</b></i>.\n"
 "Are you sure about this?"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: sunflower/plugins/file_list/file_list.py:1489
 msgid "No files selected."
@@ -2557,8 +2529,6 @@ msgid_plural ""
 "You are about to rename {0} items.\n"
 "Are you sure about this?"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: sunflower/queue.py:46
 msgid "New queue"

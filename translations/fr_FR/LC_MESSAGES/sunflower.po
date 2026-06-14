@@ -10,12 +10,12 @@ msgstr ""
 "POT-Creation-Date: 2026-05-04 23:37+0200\n"
 "PO-Revision-Date: 2014-07-27 12:02+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Latvian (http://app.transifex.com/way2cu/sunflower/language/lv/)\n"
+"Language-Team: French (France) (http://app.transifex.com/way2cu/sunflower/language/fr_FR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: lv\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);\n"
+"Language: fr_FR\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: sunflower/operation.py:115
 #, python-brace-format

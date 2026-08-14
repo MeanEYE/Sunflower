@@ -114,10 +114,6 @@ class AudioMetadataRename(RenameExtension):
 		if Gtk.get_major_version() == 3:
 			frame_replace.add(table_replace)
 
-		else:
-			frame_replace.set_child(table_replace)
-
-		if Gtk.get_major_version() == 3:
 			vbox_left.pack_start(self._checkbox_active, False, False, 0)
 			vbox_left.pack_start(vbox_template, False, False, 0)
 			vbox_left.pack_start(frame_replace, False, False, 0)
@@ -131,6 +127,8 @@ class AudioMetadataRename(RenameExtension):
 			self.vbox.pack_start(hbox, False, False, 0)
 
 		else:
+			frame_replace.set_child(table_replace)
+
 			vbox_left.append(self._checkbox_active)
 			vbox_left.append(vbox_template)
 			vbox_left.append(frame_replace)

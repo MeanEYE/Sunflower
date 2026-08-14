@@ -97,18 +97,33 @@ class SettingsPage(Gtk.ScrolledWindow):
 		"""Method called when save button is clicked"""
 		pass
 
-	def pack_start(self, *args, **kwargs):
+	def __apply_packing(self, child, expand, fill, padding):
+		"""Translate GTK 3 packing arguments to child properties. (GTK 4)"""
+		if expand:
+			child.set_vexpand(True)
+
+			# in GTK 3 expanding child which doesn't fill gets centered
+			if not fill:
+				child.set_valign(Gtk.Align.CENTER)
+
+		if padding:
+			child.set_margin_top(padding)
+			child.set_margin_bottom(padding)
+
+	def pack_start(self, child, expand=False, fill=False, padding=0):
 		"""Pack things in container."""
 		if Gtk.get_major_version() == 3:
-			self._box.pack_start(*args, **kwargs)
+			self._box.pack_start(child, expand, fill, padding)
 
 		else:
-			self._box.append(args[0])
+			self.__apply_packing(child, expand, fill, padding)
+			self._box.append(child)
 
-	def pack_end(self, *args, **kwargs):
+	def pack_end(self, child, expand=False, fill=False, padding=0):
 		"""Pack things in container."""
 		if Gtk.get_major_version() == 3:
-			self._box.pack_end(*args, **kwargs)
+			self._box.pack_end(child, expand, fill, padding)
 
 		else:
-			self._box.append(args[0])
+			self.__apply_packing(child, expand, fill, padding)
+			self._box.append(child)

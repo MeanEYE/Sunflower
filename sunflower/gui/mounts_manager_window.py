@@ -105,11 +105,7 @@ class MountsManagerWindow(Gtk.Window):
 		self._tab_labels.connect('cursor-changed', self._handle_cursor_change)
 
 		# create buttons
-		if Gtk.get_major_version() == 3:
-			button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
-
-		else:
-			button_close = Gtk.Button.new_with_label(_('Close'))
+		button_close = Gtk.Button.new_with_label(_('Close'))
 
 		button_close.connect('clicked', self._hide)
 
@@ -175,72 +171,10 @@ class MountsManagerWindow(Gtk.Window):
 		count = model.get_value(current_iter, PagesColumn.COUNT)
 		renderer.set_property('text', str(count) if count > 0 else '')
 
-	def _attach_menus(self):
-		"""Attach menu items to main window"""
-		menu_manager = self._application.menu_manager
-
-		# get unmount menu item from main menu
-		self._menu_unmount = menu_manager.get_item_by_name('unmount_menu').get_submenu()
-
-		# create item for usage when there are no mounts
-		self._menu_item_no_mounts = menu_manager.get_item_by_name('mount_list_empty')
-		if Gtk.get_major_version() == 3:
-			self._menu_item_no_mounts.set_property('no-show-all', True)
-
-		else:
-			self._menu_item_no_mounts.hide()
-
 	def _add_item(self, text, uri, icon):
 		"""Add new menu item to the list"""
 		# TODO: Implement locations menu
 		# self._application.bookmarks.add_mount(text, icon, uri)
-
-	def _add_unmount_item(self, text, uri, icon):
-		"""Add new menu item used for unmounting"""
-		# GTK 4 has no menus, unmounting is available from the mount manager
-		if Gtk.get_major_version() != 3:
-			return
-
-		image = Gtk.Image()
-		image.set_from_icon_name(icon, Gtk.IconSize.MENU)
-
-		menu_item = Gtk.MenuItem()
-		menu_item_box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
-		menu_item_box.pack_start(image, True, True, 0)
-		menu_item_box.pack_start(Gtk.Label(text), True, True, 0)
-		menu_item.add(menu_item_box)
-		menu_item.uri = uri
-		menu_item.connect('activate', self._parent._unmount_item_menu_callback)
-		menu_item.show()
-
-		self._menu_unmount.append(menu_item)
-
-		# update menu
-		self._menu_updated()
-
-	def _remove_item(self, mount_point):
-		"""Remove item based on device name"""
-		# TODO: Implement locations menu
-		# self._application.bookmarks.remove_mount(mount_point)
-
-		for item in self._menu_unmount.get_children():
-			if self._menu_item_no_mounts != item and item.uri == mount_point:
-				self._menu_unmount.remove(item)
-
-		# update menu
-		self._menu_updated()
-
-	def _menu_updated(self):
-		"""Method called whenever menu is updated"""
-		# TODO: Probably no longer needed
-		# has_mounts = self._application.bookmarks.get_mount_count() > 0
-		return
-
-		try:
-			self._menu_item_no_mounts.set_visible(not has_mounts)
-
-		except AttributeError:
-			self._menu_item_no_mounts.set_property('visible', not has_mounts)
 
 	def _handle_key_pressed(self, controller, keyval, keycode, state):
 		"""Handle pressing keys in mount manager list (GTK 4)"""
@@ -427,7 +361,7 @@ class MountsExtension(MountManagerExtension):
 		# create controls
 		image_jump = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			image_jump.set_from_icon_name(Gtk.STOCK_OPEN, Gtk.IconSize.BUTTON)
+			image_jump.set_from_icon_name('document-open-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
 			image_jump.set_from_icon_name('document-open-symbolic')
@@ -442,12 +376,8 @@ class MountsExtension(MountManagerExtension):
 			button_jump.set_child(button_content)
 		button_jump.set_label(_('Open'))
 		button_jump.connect('clicked', self._open_selected, False)
-		try:
-			if Gtk.get_major_version() == 3:
-				button_jump.set_can_default(True)
-		except AttributeError:
-			if Gtk.get_major_version() == 3:
-				button_jump.set_property('can-default', True)
+		if Gtk.get_major_version() == 3:
+			button_jump.set_can_default(True)
 
 		image_new_tab = Gtk.Image()
 		if Gtk.get_major_version() == 3:
@@ -473,26 +403,18 @@ class MountsExtension(MountManagerExtension):
 		button_unmount.connect('clicked', self._unmount_selected)
 
 		# use spinner if possible to denote busy operation
-		if hasattr(Gtk, 'Spinner'):
-			self._spinner = Gtk.Spinner()
-			self._spinner.set_size_request(20, 20)
-			if Gtk.get_major_version() == 3:
-				self._spinner.set_property('no-show-all', True)
-
-			else:
-				self._spinner.hide()
+		self._spinner = Gtk.Spinner()
+		self._spinner.set_size_request(20, 20)
+		if Gtk.get_major_version() == 3:
+			self._spinner.set_property('no-show-all', True)
 
 		else:
-			self._spinner = None
+			self._spinner.hide()
 
 		# pack interface
 		if Gtk.get_major_version() == 3:
 			container.add(self._list)
 
-		else:
-			container.set_child(self._list)
-
-		if Gtk.get_major_version() == 3:
 			self._controls.pack_start(button_jump, False, False, 0)
 			self._controls.pack_start(button_new_tab, False, False, 0)
 			self._controls.pack_end(button_unmount, False, False, 0)
@@ -500,6 +422,8 @@ class MountsExtension(MountManagerExtension):
 			self._container.pack_start(container, True, True, 0)
 
 		else:
+			container.set_child(self._list)
+
 			self._controls.append(button_jump)
 			self._controls.append(button_new_tab)
 
@@ -662,26 +586,18 @@ class VolumesExtension(MountManagerExtension):
 		button_unmount.connect('clicked', self._unmount_volume)
 
 		# use spinner if possible to denote busy operation
-		if hasattr(Gtk, 'Spinner'):
-			self._spinner = Gtk.Spinner()
-			self._spinner.set_size_request(20, 20)
-			if Gtk.get_major_version() == 3:
-				self._spinner.set_property('no-show-all', True)
-
-			else:
-				self._spinner.hide()
+		self._spinner = Gtk.Spinner()
+		self._spinner.set_size_request(20, 20)
+		if Gtk.get_major_version() == 3:
+			self._spinner.set_property('no-show-all', True)
 
 		else:
-			self._spinner = None
+			self._spinner.hide()
 
 		# pack interface
 		if Gtk.get_major_version() == 3:
 			container.add(self._list)
 
-		else:
-			container.set_child(self._list)
-
-		if Gtk.get_major_version() == 3:
 			if self._spinner is not None:
 				self._controls.pack_start(self._spinner, False, False, 0)
 			self._controls.pack_end(button_unmount, False, False, 0)
@@ -690,6 +606,8 @@ class VolumesExtension(MountManagerExtension):
 			self._container.pack_start(container, True, True, 0)
 
 		else:
+			container.set_child(self._list)
+
 			if self._spinner is not None:
 				self._controls.append(self._spinner)
 

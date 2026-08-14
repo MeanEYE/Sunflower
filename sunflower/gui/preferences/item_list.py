@@ -193,18 +193,10 @@ class ItemListOptions(SettingsPage):
 
 		hbox_always_visible = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		if Gtk.get_major_version() == 3:
-			button_add_always_visible = Gtk.Button(stock=Gtk.STOCK_ADD)
-
-		else:
-			button_add_always_visible = Gtk.Button.new_with_label(_('Add'))
+		button_add_always_visible = Gtk.Button.new_with_label(_('Add'))
 		button_add_always_visible.connect('clicked', self._add_always_visible)
 
-		if Gtk.get_major_version() == 3:
-			button_delete_always_visible = Gtk.Button(stock=Gtk.STOCK_DELETE)
-
-		else:
-			button_delete_always_visible = Gtk.Button.new_with_label(_('Delete'))
+		button_delete_always_visible = Gtk.Button.new_with_label(_('Delete'))
 		button_delete_always_visible.connect('clicked', self._delete_always_visible)
 
 		# create list of directories
@@ -244,18 +236,10 @@ class ItemListOptions(SettingsPage):
 
 		hbox_directory = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		if Gtk.get_major_version() == 3:
-			button_add_directory = Gtk.Button(stock=Gtk.STOCK_ADD)
-
-		else:
-			button_add_directory = Gtk.Button.new_with_label(_('Add'))
+		button_add_directory = Gtk.Button.new_with_label(_('Add'))
 		button_add_directory.connect('clicked', self.__button_add_clicked)
 
-		if Gtk.get_major_version() == 3:
-			button_delete_directory = Gtk.Button(stock=Gtk.STOCK_DELETE)
-
-		else:
-			button_delete_directory = Gtk.Button.new_with_label(_('Delete'))
+		button_delete_directory = Gtk.Button.new_with_label(_('Delete'))
 		button_delete_directory.connect('clicked', self._delete_path)
 
 		image_up = Gtk.Image()
@@ -413,29 +397,24 @@ class ItemListOptions(SettingsPage):
 		if Gtk.get_major_version() == 3:
 			container_directory.add(self._directory_list)
 
-		else:
-			container_directory.set_child(self._directory_list)
-		if Gtk.get_major_version() == 3:
 			container_columns.add(self._columns_list)
 
-		else:
-			container_columns.set_child(self._columns_list)
-		if Gtk.get_major_version() == 3:
 			container_plugin.add(self._extension_list)
 
-		else:
-			container_plugin.set_child(self._extension_list)
-		if Gtk.get_major_version() == 3:
 			container_always_visible.add(self._always_visible_list)
 
-		else:
-			container_always_visible.set_child(self._always_visible_list)
-
-		if Gtk.get_major_version() == 3:
 			hbox_always_visible.pack_start(button_add_always_visible, False, False, 0)
 			hbox_always_visible.pack_start(button_delete_always_visible, False, False, 0)
 
 		else:
+			container_directory.set_child(self._directory_list)
+
+			container_columns.set_child(self._columns_list)
+
+			container_plugin.set_child(self._extension_list)
+
+			container_always_visible.set_child(self._always_visible_list)
+
 			hbox_always_visible.append(button_add_always_visible)
 			hbox_always_visible.append(button_delete_always_visible)
 

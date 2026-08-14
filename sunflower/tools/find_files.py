@@ -40,6 +40,7 @@ class FindFiles(GObject.GObject):
 		# configure window
 		if Gtk.get_major_version() == 3:
 			self.window = Gtk.Window.new(Gtk.WindowType.TOPLEVEL)
+
 		else:
 			self.window = Gtk.Window.new()
 
@@ -132,13 +133,11 @@ class FindFiles(GObject.GObject):
 		if Gtk.get_major_version() == 3:
 			hbox.pack_start(self.button_start, False, False, 0)
 
-		else:
-			hbox.append(self.button_start)
-
-		if Gtk.get_major_version() == 3:
 			self.button_stop = Gtk.Button.new_from_icon_name('media-playback-stop-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
+			hbox.append(self.button_start)
+
 			self.button_stop = Gtk.Button.new_from_icon_name('media-playback-stop-symbolic')
 		self.button_stop.connect('clicked', self.stop_search)
 		self.button_stop.set_sensitive(False)

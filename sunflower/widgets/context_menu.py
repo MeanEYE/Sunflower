@@ -39,12 +39,11 @@ class ContextMenu:
 		if Gtk.get_major_version() == 3:
 			control.show_all()
 
-		else:
-			control.show()
-		if Gtk.get_major_version() == 3:
 			self._container.pack_start(control, fill, False, spacing)
 
 		else:
+			control.show()
+
 			set_border_width(control, spacing)
 			self._container.append(control)
 

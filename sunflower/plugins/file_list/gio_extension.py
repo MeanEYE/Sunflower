@@ -226,26 +226,18 @@ class SambaExtension(GioExtension):
 		button_unmount.connect('clicked', self._unmount_selected)
 
 		# use spinner if possible to denote busy operation
-		if hasattr(Gtk, 'Spinner'):
-			self._spinner = Gtk.Spinner()
-			self._spinner.set_size_request(20, 20)
-			if Gtk.get_major_version() == 3:
-				self._spinner.set_property('no-show-all', True)
-
-			else:
-				self._spinner.hide()
+		self._spinner = Gtk.Spinner()
+		self._spinner.set_size_request(20, 20)
+		if Gtk.get_major_version() == 3:
+			self._spinner.set_property('no-show-all', True)
 
 		else:
-			self._spinner = None
+			self._spinner.hide()
 
 		# pack user interface
 		if Gtk.get_major_version() == 3:
 			list_container.add(self._list)
 
-		else:
-			list_container.set_child(self._list)
-
-		if Gtk.get_major_version() == 3:
 			self._container.pack_start(list_container, True, True, 0)
 
 			self._controls.pack_start(button_add, False, False, 0)
@@ -253,6 +245,8 @@ class SambaExtension(GioExtension):
 			self._controls.pack_start(button_delete, False, False, 0)
 
 		else:
+			list_container.set_child(self._list)
+
 			list_container.set_vexpand(True)
 			self._container.append(list_container)
 
@@ -639,26 +633,18 @@ class FtpExtension(GioExtension):
 		button_unmount.connect('clicked', self._unmount_selected)
 
 		# use spinner if possible to denote busy operation
-		if hasattr(Gtk, 'Spinner'):
-			self._spinner = Gtk.Spinner()
-			self._spinner.set_size_request(20, 20)
-			if Gtk.get_major_version() == 3:
-				self._spinner.set_property('no-show-all', True)
-
-			else:
-				self._spinner.hide()
+		self._spinner = Gtk.Spinner()
+		self._spinner.set_size_request(20, 20)
+		if Gtk.get_major_version() == 3:
+			self._spinner.set_property('no-show-all', True)
 
 		else:
-			self._spinner = None
+			self._spinner.hide()
 
 		# pack user interface
 		if Gtk.get_major_version() == 3:
 			list_container.add(self._list)
 
-		else:
-			list_container.set_child(self._list)
-
-		if Gtk.get_major_version() == 3:
 			self._container.pack_start(list_container, True, True, 0)
 
 			self._controls.pack_start(button_add, False, False, 0)
@@ -666,6 +652,8 @@ class FtpExtension(GioExtension):
 			self._controls.pack_start(button_delete, False, False, 0)
 
 		else:
+			list_container.set_child(self._list)
+
 			list_container.set_vexpand(True)
 			self._container.append(list_container)
 
@@ -1050,26 +1038,18 @@ class DavExtension(GioExtension):
 		button_unmount.connect('clicked', self._unmount_selected)
 
 		# use spinner if possible to denote busy operation
-		if hasattr(Gtk, 'Spinner'):
-			self._spinner = Gtk.Spinner()
-			self._spinner.set_size_request(20, 20)
-			if Gtk.get_major_version() == 3:
-				self._spinner.set_property('no-show-all', True)
-
-			else:
-				self._spinner.hide()
+		self._spinner = Gtk.Spinner()
+		self._spinner.set_size_request(20, 20)
+		if Gtk.get_major_version() == 3:
+			self._spinner.set_property('no-show-all', True)
 
 		else:
-			self._spinner = None
+			self._spinner.hide()
 
 		# pack user interface
 		if Gtk.get_major_version() == 3:
 			list_container.add(self._list)
 
-		else:
-			list_container.set_child(self._list)
-
-		if Gtk.get_major_version() == 3:
 			self._container.pack_start(list_container, True, True, 0)
 
 			self._controls.pack_start(button_add, False, False, 0)
@@ -1077,6 +1057,8 @@ class DavExtension(GioExtension):
 			self._controls.pack_start(button_delete, False, False, 0)
 
 		else:
+			list_container.set_child(self._list)
+
 			list_container.set_vexpand(True)
 			self._container.append(list_container)
 

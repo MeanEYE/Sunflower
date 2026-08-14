@@ -280,30 +280,26 @@ class Mount(Location):
 		if Gtk.get_major_version() == 3:
 			self._unmount_button.set_property('no-show-all', True)
 
-		else:
-			self._unmount_button.hide()
-		if Gtk.get_major_version() == 3:
 			container.pack_start(self._unmount_button, False, False, 0)
 
-		else:
-			container.append(self._unmount_button)
-
-		if Gtk.get_major_version() == 3:
 			self._eject_button = Gtk.Button.new_from_icon_name('media-eject-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
+			self._unmount_button.hide()
+
+			container.append(self._unmount_button)
+
 			self._eject_button = Gtk.Button.new_from_icon_name('media-eject-symbolic')
 		self._eject_button.connect('clicked', self.__handle_eject_click)
 		self._eject_button.set_tooltip_text(_('Eject'))
 		if Gtk.get_major_version() == 3:
 			self._eject_button.set_property('no-show-all', True)
 
-		else:
-			self._eject_button.hide()
-		if Gtk.get_major_version() == 3:
 			container.pack_start(self._eject_button, False, False, 0)
 
 		else:
+			self._eject_button.hide()
+
 			container.append(self._eject_button)
 
 		# apply button visibility
@@ -414,48 +410,41 @@ class Volume(Location):
 		if Gtk.get_major_version() == 3:
 			self._unmount_button.set_property('no-show-all', True)
 
-		else:
-			self._unmount_button.hide()
-		if Gtk.get_major_version() == 3:
 			container.pack_start(self._unmount_button, False, False, 0)
 
-		else:
-			container.append(self._unmount_button)
-
-		if Gtk.get_major_version() == 3:
 			self._mount_button = Gtk.Button.new_from_icon_name('media-playback-start-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
+			self._unmount_button.hide()
+
+			container.append(self._unmount_button)
+
 			self._mount_button = Gtk.Button.new_from_icon_name('media-playback-start-symbolic')
 		self._mount_button.connect('clicked', self.__handle_mount_click)
 		self._mount_button.set_tooltip_text(_('Mount'))
 		if Gtk.get_major_version() == 3:
 			self._mount_button.set_property('no-show-all', True)
 
-		else:
-			self._mount_button.hide()
-		if Gtk.get_major_version() == 3:
 			container.pack_start(self._mount_button, False, False, 0)
 
-		else:
-			container.append(self._mount_button)
-
-		if Gtk.get_major_version() == 3:
 			self._eject_button = Gtk.Button.new_from_icon_name('media-eject-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
+			self._mount_button.hide()
+
+			container.append(self._mount_button)
+
 			self._eject_button = Gtk.Button.new_from_icon_name('media-eject-symbolic')
 		self._eject_button.connect('clicked', self.__handle_eject_click)
 		self._eject_button.set_tooltip_text(_('Eject'))
 		if Gtk.get_major_version() == 3:
 			self._eject_button.set_property('no-show-all', True)
 
-		else:
-			self._eject_button.hide()
-		if Gtk.get_major_version() == 3:
 			container.pack_start(self._eject_button, False, False, 0)
 
 		else:
+			self._eject_button.hide()
+
 			container.append(self._eject_button)
 
 		# apply button visibility

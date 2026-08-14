@@ -34,16 +34,14 @@ class ContentsFindFiles(FindExtension):
 		if Gtk.get_major_version() == 3:
 			viewport.add(self._text_view)
 
-		else:
-			viewport.set_child(self._text_view)
-
-		if Gtk.get_major_version() == 3:
 			vbox.pack_start(label_content, False, False, 0)
 			vbox.pack_start(viewport, True, True, 0)
 
 			self.container.pack_start(vbox, True, True, 0)
 
 		else:
+			viewport.set_child(self._text_view)
+
 			vbox.append(label_content)
 			viewport.set_vexpand(True)
 			vbox.append(viewport)

@@ -12,7 +12,8 @@ from sunflower.widgets.status_bar import StatusBar
 from sunflower.plugin_base.provider import Mode as FileMode
 
 try:
-	gi.require_version('GtkSource', '4')
+	# GtkSource 4 links against GTK 3, GTK 4 needs GtkSource 5
+	gi.require_version('GtkSource', '5' if os.getenv('SUNFLOWER_GTK') == '4' else '4')
 	from gi.repository import GtkSource
 	GTK_SOURCE_AVAILABLE = True
 except:
@@ -198,12 +199,11 @@ class Viewer(Gtk.Window):
 			if Gtk.get_major_version() == 3:
 				viewport.add(image)
 
-			else:
-				viewport.set_child(image)
-			if Gtk.get_major_version() == 3:
 				container.add(viewport)
 
 			else:
+				viewport.set_child(image)
+
 				container.set_child(viewport)
 			self.add_page(_('Image'), container)
 

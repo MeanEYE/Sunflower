@@ -186,7 +186,11 @@ class Fragment(Gtk.Box):
 
 		else:
 			if isinstance(icon, Gio.ThemedIcon):
-				image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+				if Gtk.get_major_version() == 3:
+					image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+
+				else:
+					image = Gtk.Image.new_from_gicon(icon)
 			else:
 				if Gtk.get_major_version() == 3:
 					image = Gtk.Image.new_from_icon_name(icon, Gtk.IconSize.BUTTON)
@@ -202,14 +206,12 @@ class Fragment(Gtk.Box):
 				hbox.pack_start(image, False, False, 0)
 				hbox.pack_start(label, False, False, 0)
 
+				self._button.add(hbox)
+
 			else:
 				hbox.append(image)
 				hbox.append(label)
 
-			if Gtk.get_major_version() == 3:
-				self._button.add(hbox)
-
-			else:
 				self._button.set_child(hbox)
 
 		if previous is not None:
@@ -222,13 +224,11 @@ class Fragment(Gtk.Box):
 		if Gtk.get_major_version() == 3:
 			self.pack_start(self._button, False, False, 0)
 
-		else:
-			self.append(self._button)
-
-		if Gtk.get_major_version() == 3:
 			self.show_all()
 
 		else:
+			self.append(self._button)
+
 			self.show()
 
 	def set_active(self, active):

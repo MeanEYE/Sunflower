@@ -73,39 +73,33 @@ class LocationMenu:
 		if Gtk.get_major_version() == 3:
 			hbox_buttons.pack_start(button_open, False, False, 0)
 
-		else:
-			hbox_buttons.append(button_open)
-
-		if Gtk.get_major_version() == 3:
 			button_open_tab = Gtk.Button.new_from_icon_name('tab-new-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
+			hbox_buttons.append(button_open)
+
 			button_open_tab = Gtk.Button.new_from_icon_name('tab-new-symbolic')
 		button_open_tab.connect('clicked', self.__handle_open_tab_click)
 		button_open_tab.set_tooltip_text(_('Open selected path in new tab'))
 		if Gtk.get_major_version() == 3:
 			hbox_buttons.pack_start(button_open_tab, False, False, 0)
 
-		else:
-			hbox_buttons.append(button_open_tab)
-
-		if Gtk.get_major_version() == 3:
 			self._button_open_opposite = Gtk.Button.new_from_icon_name('go-next-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
+			hbox_buttons.append(button_open_tab)
+
 			self._button_open_opposite = Gtk.Button.new_from_icon_name('go-next-symbolic')
 		self._button_open_opposite.connect('clicked', self.__handle_open_opposite_click)
 		self._button_open_opposite.set_tooltip_text(_('Open selected path in opposite list'))
 		if Gtk.get_major_version() == 3:
 			hbox_buttons.pack_start(self._button_open_opposite, False, False, 0)
 
-		else:
-			hbox_buttons.append(self._button_open_opposite)
-
-		if Gtk.get_major_version() == 3:
 			button_open_terminal = Gtk.Button.new_from_icon_name('utilities-terminal-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
+			hbox_buttons.append(self._button_open_opposite)
+
 			button_open_terminal = Gtk.Button.new_from_icon_name('utilities-terminal-symbolic')
 		button_open_terminal.connect('clicked', self.__handle_open_terminal_click)
 		button_open_terminal.set_tooltip_text(_('Open terminal at selected path'))
@@ -125,15 +119,17 @@ class LocationMenu:
 		if Gtk.get_major_version() == 3:
 			list_container.add(self._list)
 
-		else:
-			list_container.set_child(self._list)
-
-		if Gtk.get_major_version() == 3:
 			container.pack_start(self._search_field, True, False, 0)
 			container.pack_start(list_container, True, True, 5)
 			container.pack_start(hbox_buttons, True, False, 0)
 
+			container.show_all()
+
+			self._popover.add(container)
+
 		else:
+			list_container.set_child(self._list)
+
 			self._search_field.set_hexpand(True)
 			container.append(self._search_field)
 			# GTK 3 button box style enforced 85px wide buttons which is
@@ -147,15 +143,8 @@ class LocationMenu:
 			hbox_buttons.set_homogeneous(True)
 			container.append(hbox_buttons)
 
-		if Gtk.get_major_version() == 3:
-			container.show_all()
-
-		else:
 			container.show()
-		if Gtk.get_major_version() == 3:
-			self._popover.add(container)
 
-		else:
 			self._popover.set_child(container)
 
 		# attach location menu to mount manager
@@ -519,16 +508,15 @@ class Bookmark(Location):
 			container.pack_start(self._icon, False, False, 0)
 			container.pack_start(title_container, True, True, 0)
 
+			self.add(container)
+
 		else:
 			title_container.append(self._title)
 			title_container.append(self._subtitle)
 			container.append(self._icon)
 			title_container.set_hexpand(True)
 			container.append(title_container)
-		if Gtk.get_major_version() == 3:
-			self.add(container)
 
-		else:
 			self.set_child(container)
 
 	def get_location(self):

@@ -101,14 +101,14 @@ class PluginsOptions(SettingsPage):
 		if Gtk.get_major_version() == 3:
 			self._label_description.set_padding(5, 5)
 
+			self._label_description.connect('size-allocate', self.__adjust_label)
+
 		else:
 			# GTK 4 dropped widget padding in favor of margins
 			self._label_description.set_margin_start(5)
 			self._label_description.set_margin_end(5)
 			self._label_description.set_margin_top(5)
 			self._label_description.set_margin_bottom(5)
-		if Gtk.get_major_version() == 3:
-			self._label_description.connect('size-allocate', self.__adjust_label)
 
 		self._expander_description = Gtk.Expander(label=_('Description'))
 		if Gtk.get_major_version() == 3:
@@ -164,15 +164,12 @@ class PluginsOptions(SettingsPage):
 		if Gtk.get_major_version() == 3:
 			container.add(self._list)
 
-		else:
-			container.set_child(self._list)
-
-		if Gtk.get_major_version() == 3:
 			hbox_controls.pack_start(self._button_contact, False, False, 0)
 			hbox_controls.pack_start(self._button_home_page, False, False, 0)
 
-
 		else:
+			container.set_child(self._list)
+
 			hbox_controls.append(self._button_contact)
 			hbox_controls.append(self._button_home_page)
 

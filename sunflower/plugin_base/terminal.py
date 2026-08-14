@@ -9,14 +9,7 @@ gi.require_version('Vte', version)
 from gi.repository import Gtk, Gdk, Gio, Vte, Pango
 from sunflower.plugin_base.plugin import PluginBase
 from sunflower.accelerator_group import AcceleratorGroup
-from sunflower.common import get_monospace_font_string
-
-# GTK 4 renamed the Alt key modifier from MOD1
-if Gtk.get_major_version() == 3:
-	ALT_MASK = Gdk.ModifierType.MOD1_MASK
-
-else:
-	ALT_MASK = Gdk.ModifierType.ALT_MASK
+from sunflower.common import get_monospace_font_string, ALT_MASK
 
 
 class TerminalType:
@@ -90,7 +83,17 @@ class Terminal(PluginBase):
 				self._terminal.set_font(font)
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
-			self._terminal = Gtk.Socket()
+			if Gtk.get_major_version() == 3:
+				self._terminal = Gtk.Socket()
+
+			else:
+				# GTK 4 removed XEmbed support needed to host external terminals
+				self._terminal = Gtk.TextView()
+				text = _('\n\nExternal terminal is not supported when running GTK 4!')
+				self._terminal.get_buffer().set_text(text)
+				self._terminal.set_editable(False)
+				self._terminal.set_justification(Gtk.Justification.CENTER)
+				self._terminal.set_wrap_mode(Gtk.WrapMode.WORD)
 
 		else:
 			# failsafe when VTE module is not present
@@ -124,19 +127,15 @@ class Terminal(PluginBase):
 			if Gtk.get_major_version() == 3:
 				self._container.set_shadow_type(Gtk.ShadowType.IN)
 
-			else:
-				pass
-
 		# pack terminal
 		if Gtk.get_major_version() == 3:
 			self._container.add(self._terminal)
 
-		else:
-			self._container.set_child(self._terminal)
-		if Gtk.get_major_version() == 3:
 			self.pack_start(self._container, True, True, 0)
 
 		else:
+			self._container.set_child(self._terminal)
+
 			self._container.set_vexpand(True)
 			self.append(self._container)
 

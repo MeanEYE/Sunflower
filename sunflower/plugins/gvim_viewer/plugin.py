@@ -8,6 +8,10 @@ from sunflower.plugin_base.viewer_extension import ViewerExtension
 
 def register_plugin(application):
 	"""Register plugin class with application"""
+	# embedding GVim requires XEmbed which GTK 4 removed
+	if Gtk.get_major_version() != 3:
+		return
+
 	application.register_viewer_extension(('text/plain',), GVimViewer)
 
 
@@ -26,9 +30,6 @@ class GVimViewer(ViewerExtension):
 		self._container = Gtk.Viewport()
 		if Gtk.get_major_version() == 3:
 			self._container.set_shadow_type(Gtk.ShadowType.IN)
-
-		else:
-			pass
 
 		# create socket for embeding GVim window
 		self._socket = Gtk.Socket()

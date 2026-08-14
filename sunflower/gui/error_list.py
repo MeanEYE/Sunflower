@@ -15,6 +15,7 @@ class ErrorList:
 		# create main window
 		if Gtk.get_major_version() == 3:
 			self._window = Gtk.Window.new(Gtk.WindowType.TOPLEVEL)
+
 		else:
 			self._window = Gtk.Window.new()
 
@@ -86,11 +87,7 @@ class ErrorList:
 		# create controls
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		if Gtk.get_major_version() == 3:
-			button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
-
-		else:
-			button_close = Gtk.Button.new_with_label(_('Close'))
+		button_close = Gtk.Button.new_with_label(_('Close'))
 		button_close.connect('clicked', self._close)
 
 		# pack user interface
@@ -116,6 +113,8 @@ class ErrorList:
 			vbox.pack_start(table, True, True, 0)
 			vbox.pack_start(hbox, False, False, 0)
 
+			self._window.add(vbox)
+
 		else:
 			button_close.set_hexpand(True)
 			button_close.set_halign(Gtk.Align.END)
@@ -125,10 +124,6 @@ class ErrorList:
 			vbox.append(table)
 			vbox.append(hbox)
 
-		if Gtk.get_major_version() == 3:
-			self._window.add(vbox)
-
-		else:
 			self._window.set_child(vbox)
 
 		# show all items

@@ -18,6 +18,7 @@ class VersionCheck:
 	def __init__(self, application):
 		if Gtk.get_major_version() == 3:
 			self._dialog = Gtk.Window.new(Gtk.WindowType.TOPLEVEL)
+
 		else:
 			self._dialog = Gtk.Window.new()
 		self._application = application
@@ -27,8 +28,9 @@ class VersionCheck:
 		self._dialog.set_resizable(False)
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
-		self._dialog.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 		if Gtk.get_major_version() == 3:
+			self._dialog.set_type_hint(Gdk.WindowTypeHint.DIALOG)
+
 			self._dialog.connect('key-press-event', self._handle_key_press)
 
 		else:
@@ -61,21 +63,13 @@ class VersionCheck:
 		separator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
 
 		# create controls
-		if Gtk.get_major_version() == 3:
-			button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
-
-		else:
-			button_close = Gtk.Button.new_with_label(_('Close'))
+		button_close = Gtk.Button.new_with_label(_('Close'))
 		button_close.connect('clicked', lambda widget: self._dialog.hide())
 
 		# pack user interface
 		if Gtk.get_major_version() == 3:
 			self._dialog.add(vbox)
 
-		else:
-			self._dialog.set_child(vbox)
-
-		if Gtk.get_major_version() == 3:
 			vbox.pack_start(table, True, True, 0)
 			vbox.pack_start(separator, True, True, 0)
 			vbox.pack_start(hbox, True, True, 0)
@@ -83,6 +77,8 @@ class VersionCheck:
 			hbox.pack_end(button_close, False, False, 0)
 
 		else:
+			self._dialog.set_child(vbox)
+
 			table.set_vexpand(True)
 			vbox.append(table)
 			separator.set_vexpand(True)

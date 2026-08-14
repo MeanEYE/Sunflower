@@ -94,10 +94,10 @@ class AcceleratorOptions(SettingsPage):
 		if Gtk.get_major_version() == 3:
 			label_warning.set_line_wrap(True)
 
+			label_warning.connect('size-allocate', self._adjust_label)
+
 		else:
 			label_warning.set_wrap(True)
-		if Gtk.get_major_version() == 3:
-			label_warning.connect('size-allocate', self._adjust_label)
 
 		label_note = Gtk.Label(label=_('Double click on accelerator to assign new one.'))
 		label_note.set_xalign(0)

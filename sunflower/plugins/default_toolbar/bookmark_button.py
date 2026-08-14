@@ -2,12 +2,7 @@ import os
 
 from gi.repository import Gtk, GObject
 
-# GTK 4 removed tool items, plain buttons are used on the toolbar box
-if Gtk.get_major_version() == 3:
-	ToolbarButton = Gtk.ToolButton
-
-else:
-	ToolbarButton = Gtk.Button
+from sunflower.plugins.default_toolbar import ToolbarButton
 
 
 class Button(ToolbarButton):
@@ -73,7 +68,7 @@ class ConfigurationDialog(Gtk.Dialog):
 		self.set_modal(True)
 		self.set_transient_for(application)
 
-		self.vbox.set_spacing(0)
+		self.get_content_area().set_spacing(0)
 
 		# interface container
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
@@ -95,18 +90,10 @@ class ConfigurationDialog(Gtk.Dialog):
 			self._checkbox_show_label.set_active(config['show_label'] == True)
 
 		# create controls
-		if Gtk.get_major_version() == 3:
-			button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
-
-		else:
-			button_save = Gtk.Button.new_with_label(_('Save'))
+		button_save = Gtk.Button.new_with_label(_('Save'))
 		if Gtk.get_major_version() == 3:
 			button_save.set_can_default(True)
-		if Gtk.get_major_version() == 3:
-			button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
-
-		else:
-			button_cancel = Gtk.Button.new_with_label(_('Cancel'))
+		button_cancel = Gtk.Button.new_with_label(_('Cancel'))
 
 		self.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
 		self.add_action_widget(button_save, Gtk.ResponseType.ACCEPT)
@@ -123,6 +110,8 @@ class ConfigurationDialog(Gtk.Dialog):
 
 			self.vbox.pack_start(vbox, False, False, 0)
 
+			self.show_all()
+
 		else:
 			vbox_path.append(label_path)
 			vbox_path.append(self._entry_path)
@@ -130,12 +119,8 @@ class ConfigurationDialog(Gtk.Dialog):
 			vbox.append(vbox_path)
 			vbox.append(self._checkbox_show_label)
 
-			self.vbox.append(vbox)
+			self.get_content_area().append(vbox)
 
-		if Gtk.get_major_version() == 3:
-			self.show_all()
-
-		else:
 			self.show()
 
 	def get_response(self):

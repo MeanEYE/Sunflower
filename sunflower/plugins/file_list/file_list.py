@@ -117,6 +117,12 @@ class FileList(ItemList):
 		cell_name.set_property('single-paragraph-mode', True)
 		cell_extension.set_property('single-paragraph-mode', True)
 
+		# pad rows vertically, horizontal spacing between cells stays default
+		cell_padding = 3 if Gtk.get_major_version() == 3 else 5
+		for renderer in (cell_icon, cell_name, cell_selected, cell_extension,
+				cell_size, cell_mode, cell_date):
+			renderer.set_padding(2, cell_padding)
+
 		# cell_selected.set_property('width', 30)  # leave enough room for various characters
 		cell_selected.set_property('xalign', 1)
 		cell_size.set_property('xalign', 1)
@@ -1187,12 +1193,31 @@ class FileList(ItemList):
 		"""Clear sort settings"""
 		self._store.set_sort_column_id(Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, True)
 
+	def _generate_sort_key(self, is_parent, is_dir, value):
+		"""Generate sort data from provided values.
+
+		Called from the directory loading thread as well, so rows can be
+		inserted at their final position keeping the list sorted while
+		contents are still being loaded.
+
+		"""
+		bool_values = ['1', '0'] if self._sort_ascending else ['0', '1']
+
+		if self._sort_number_sensitive and self._sort_column == Column.NAME:
+			value = ''.join([part.rjust(12, '0') if part.isdigit() else part for part in self.number_split.split(value)])
+
+		if isinstance(value, str) and not self._sort_case_sensitive:
+			value = value.lower()
+
+		if isinstance(value, int) or isinstance(value, float):
+			value = str(value).rjust(12, '0')
+
+		return '{}{}{}'.format(bool_values[is_parent], bool_values[is_dir], value)
+
 	def _generate_sort_data(self, parent=None, iters=None):
 		"""Generate sort data for all iters in the first level or children of the provided
 		parent. Separate `iters` list is added as a convenience to allow regenerating sort
 		data for specific items in the list."""
-		bool_values = ['1', '0'] if self._sort_ascending else ['0', '1']
-
 		# find starting point
 		found_iter = None
 		if parent is None:
@@ -1206,16 +1231,7 @@ class FileList(ItemList):
 			is_parent = self._store.get_value(for_iter, Column.IS_PARENT_DIR)
 			value = self._store.get_value(for_iter, self._sort_column)
 
-			if self._sort_number_sensitive and self._sort_column == Column.NAME:
-				value = ''.join([part.rjust(12, '0') if part.isdigit() else part for part in self.number_split.split(value)])
-
-			if isinstance(value, str) and not self._sort_case_sensitive:
-				value = value.lower()
-
-			if isinstance(value, int) or isinstance(value, float):
-				value = str(value).rjust(12, '0')
-
-			return '{}{}{}'.format(bool_values[is_parent], bool_values[is_dir], value)
+			return self._generate_sort_key(is_parent, is_dir, value)
 
 		# collect data for all iters
 		update_data = []
@@ -1617,6 +1633,10 @@ class FileList(ItemList):
 					''
 				)
 
+			# rows carry final sort data so the store can insert them at the
+			# right position, keeping list sorted and usable during load
+			data = data[:Column.SORT_DATA] + (self._generate_sort_key(False, is_dir, data[self._sort_column]),)
+
 			self._item_queue.append(data)
 
 			if len(self._item_queue) == 100:
@@ -1631,8 +1651,12 @@ class FileList(ItemList):
 		queued_iters = []
 		path_to_select = None
 
-		# add items from the queue
-		for data in self._item_queue:
+		# atomically take over the queue, loading thread can keep appending
+		# to the new list without items getting lost on clear
+		item_queue, self._item_queue = self._item_queue, []
+
+		# add items from the queue, sort data is already part of each row
+		for data in item_queue:
 			new_iter = self._store.append(parent, data)
 			queued_iters.append(new_iter)
 
@@ -1640,13 +1664,9 @@ class FileList(ItemList):
 			if self._item_to_focus == data[0]:
 				path_to_select = self._store.get_path(new_iter)
 
-		# schedule sort data update
-		GLib.idle_add(self._generate_sort_data, priority=GLib.PRIORITY_DEFAULT_IDLE)
 		# select path if needed
 		if path_to_select is not None:
 			GLib.idle_add(self._item_list.set_cursor, path_to_select, priority=GLib.PRIORITY_HIGH_IDLE)
-		# clear item queue
-		self._item_queue[:] = []
 
 		# expand row if needed
 		if parent is not None:
@@ -1853,12 +1873,11 @@ class FileList(ItemList):
 				if Gtk.get_major_version() == 3:
 					image.set_from_icon_name(action['icon'], Gtk.IconSize.MENU)
 
-				else:
-					image.set_from_icon_name(action['icon'])
-				if Gtk.get_major_version() == 3:
 					menu_item.set_image(image)
 
 				else:
+					image.set_from_icon_name(action['icon'])
+
 					button_content = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 					button_content.append(image)
 					button_content.append(Gtk.Label.new(menu_item.get_label()))
@@ -1976,7 +1995,7 @@ class FileList(ItemList):
 			self._thread_active.clear()
 
 			while self._main_thread_lock.is_set():
-				Gtk.main_iteration_do(blocking=False)
+				GLib.MainContext.default().iteration(False)
 
 		# disable updates on cursor change
 		self._item_list.handler_block_by_func(self._handle_cursor_change)
@@ -1997,10 +2016,13 @@ class FileList(ItemList):
 		# add parent option for parent directory
 		if path != self.get_provider().get_root_path(path):
 			if parent is None:
-				self._store.append(parent, (
+				parent_data = (
 					os.path.pardir, os.path.pardir, '', -2, '<DIR>', -1, '', -1,
 					'', True, True, False, None, 'go-up', None, 0, 0, None, ''
-					))
+					)
+				parent_data = parent_data[:Column.SORT_DATA] \
+						+ (self._generate_sort_key(True, True, parent_data[self._sort_column]),)
+				self._store.append(parent, parent_data)
 
 			else:
 				# prepare full parent path
@@ -2051,6 +2073,15 @@ class FileList(ItemList):
 			# assign item for selection
 			if not self._item_to_focus in item_list:
 				self._item_to_focus = None
+
+			# adding items in sorted order keeps the list ordered during
+			# load and makes store insertions cheap since rows mostly land
+			# at the end of their section instead of arbitrary positions
+			if self._sort_column == Column.NAME:
+				item_list.sort(
+						key=lambda name: self._generate_sort_key(False, False, name),
+						reverse=not self._sort_ascending
+					)
 
 			for item_name in item_list:
 				# check if we are allowed to continue as we don't want

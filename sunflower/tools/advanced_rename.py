@@ -26,6 +26,7 @@ class AdvancedRename:
 		# create and configure window
 		if Gtk.get_major_version() == 3:
 			self.window = Gtk.Window.new(Gtk.WindowType.TOPLEVEL)
+
 		else:
 			self.window = Gtk.Window.new()
 
@@ -100,11 +101,7 @@ class AdvancedRename:
 		# create controls
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		if Gtk.get_major_version() == 3:
-			button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
-
-		else:
-			button_close = Gtk.Button.new_with_label(_('Close'))
+		button_close = Gtk.Button.new_with_label(_('Close'))
 		button_close.connect('clicked', lambda widget: self.window.destroy())
 
 		image_rename = Gtk.Image()
@@ -129,6 +126,15 @@ class AdvancedRename:
 			hbox.pack_end(button_rename, False, False, 0)
 			hbox.pack_end(button_close, False, False, 0)
 
+			container.add(self._names)
+
+			vbox.pack_start(self._extension_list, False, False, 0)
+			vbox.pack_end(hbox, False, False, 0)
+			vbox.pack_end(vbox_location, False, False, 0)
+			vbox.pack_end(container, True, True, 0)
+
+			self.window.add(vbox)
+
 		else:
 			vbox_location.append(label_location)
 			vbox_location.append(entry_location)
@@ -139,19 +145,8 @@ class AdvancedRename:
 			hbox.append(button_close)
 			hbox.append(button_rename)
 
-		if Gtk.get_major_version() == 3:
-			container.add(self._names)
-
-		else:
 			container.set_child(self._names)
 
-		if Gtk.get_major_version() == 3:
-			vbox.pack_start(self._extension_list, False, False, 0)
-			vbox.pack_end(hbox, False, False, 0)
-			vbox.pack_end(vbox_location, False, False, 0)
-			vbox.pack_end(container, True, True, 0)
-
-		else:
 			vbox.append(self._extension_list)
 
 			# end packed children are shown in reverse order of addition
@@ -160,10 +155,6 @@ class AdvancedRename:
 			vbox.append(vbox_location)
 			vbox.append(hbox)
 
-		if Gtk.get_major_version() == 3:
-			self.window.add(vbox)
-
-		else:
 			self.window.set_child(vbox)
 
 		# prepare UI

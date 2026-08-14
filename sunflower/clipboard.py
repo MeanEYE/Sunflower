@@ -1,6 +1,6 @@
 import sys
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, Gio, GLib, GObject
 from subprocess import check_output, run
 from threading import Thread
 from sunflower.common import executable_exists
@@ -14,7 +14,11 @@ class Clipboard:
 		self.text_support = []
 		self.data_support = []
 
-		self.add_provider(GtkProvider())
+		if Gtk.get_major_version() == 3:
+			self.add_provider(GtkProvider())
+
+		else:
+			self.add_provider(Gtk4Provider())
 		self.add_provider(CommandProvider())
 		self.add_provider(FakeProvider())
 
@@ -107,7 +111,7 @@ class Provider:
 
 
 class GtkProvider(Provider):
-	"""Clipboard functionality provided through Gtk API."""
+	"""Clipboard functionality provided through Gtk API. (GTK 3)"""
 
 	def __init__(self):
 		try:
@@ -117,15 +121,8 @@ class GtkProvider(Provider):
 
 	def available(self):
 		"""Test environment and return boolean value indicating usability."""
-		text, data = False, False
-
-		if not self.clipboard:
-			return text, data
-
-		text = hasattr(self.clipboard, 'set_text') and callable(self.clipboard.set_text)
-		data = hasattr(self.clipboard, 'set_with_data') and callable(self.clipboard.set_text)
-
-		return text, data
+		result = self.clipboard is not None
+		return result, result
 
 	def set_text(self, text):
 		"""Set text content."""
@@ -164,6 +161,114 @@ class GtkProvider(Provider):
 		"""Check if clipboard with specified mime types is available."""
 		targets_available = [self.clipboard.wait_is_target_available(target) for target in mime_types]
 		return any(targets_available)
+
+
+class Gtk4Provider(Provider):
+	"""Clipboard functionality provided through GDK clipboard API. (GTK 4)
+
+	GDK 4 only offers asynchronous reading so a nested main loop is used
+	to keep the provider interface synchronous, same as `run_dialog`.
+
+	"""
+
+	def __init__(self):
+		display = Gdk.Display.get_default()
+		self.clipboard = display.get_clipboard() if display is not None else None
+
+	def __wait_for(self, start_operation, timeout=1000):
+		"""Start asynchronous operation and wait for its result."""
+		state = {'result': None, 'source': None}
+		loop = GLib.MainLoop()
+
+		def handle_finish(clipboard, task, finish_operation):
+			try:
+				state['result'] = finish_operation(task)
+			except GLib.Error:
+				state['result'] = None
+			if state['source'] is not None:
+				GLib.source_remove(state['source'])
+				state['source'] = None
+			loop.quit()
+
+		def handle_timeout():
+			state['source'] = None
+			loop.quit()
+			return False
+
+		start_operation(handle_finish)
+		state['source'] = GLib.timeout_add(timeout, handle_timeout)
+		loop.run()
+
+		return state['result']
+
+	def available(self):
+		"""Test environment and return tuple of boolean values indicating usability."""
+		result = self.clipboard is not None
+		return result, result
+
+	def set_text(self, text):
+		"""Set text content."""
+		value = GObject.Value(str, text)
+		self.clipboard.set_content(Gdk.ContentProvider.new_for_value(value))
+
+	def set_data(self, data, mime_types):
+		"""Set data as content with provided list of mime types."""
+		raw_data = GLib.Bytes.new(data.encode('utf-8') if isinstance(data, str) else data)
+		providers = [Gdk.ContentProvider.new_for_bytes(mime_type, raw_data) for mime_type in mime_types]
+
+		if len(providers) > 1:
+			content = Gdk.ContentProvider.new_union(providers)
+		else:
+			content = providers[0]
+
+		self.clipboard.set_content(content)
+
+	def get_text(self):
+		"""Return text value stored in clipboard."""
+		def start_operation(handle_finish):
+			self.clipboard.read_text_async(
+					None,
+					handle_finish,
+					self.clipboard.read_text_finish
+				)
+
+		return self.__wait_for(start_operation)
+
+	def get_data(self, mime_types):
+		"""Return data stored for provided types in clipboard."""
+		def finish_operation(task):
+			stream, mime_type = self.clipboard.read_finish(task)
+			collected = []
+
+			while True:
+				chunk = stream.read_bytes(65536, None)
+				if chunk.get_size() == 0:
+					break
+				collected.append(chunk.get_data())
+			stream.close(None)
+
+			return b''.join(collected).decode('utf-8')
+
+		def start_operation(handle_finish):
+			self.clipboard.read_async(
+					mime_types,
+					GLib.PRIORITY_DEFAULT,
+					None,
+					handle_finish,
+					finish_operation
+				)
+
+		return self.__wait_for(start_operation)
+
+	def text_available(self):
+		"""Check if clipboard with text is available."""
+		formats = self.clipboard.get_formats().union_deserialize_gtypes()
+		return formats.contain_gtype(GObject.TYPE_STRING)
+
+	def data_available(self, mime_types):
+		"""Check if clipboard with specified mime types is available."""
+		formats = self.clipboard.get_formats()
+		return any(formats.contain_mime_type(mime_type) for mime_type in mime_types)
 
 
 class FakeProvider(Provider):
@@ -281,7 +386,7 @@ class CommandProvider(Provider):
 
 		for command in commands:
 			try:
-				result = check_output(command, input=data, text=True).decode('unicode-escape')
+				result = check_output(command).decode('unicode-escape')
 			except:
 				pass
 			else:

@@ -667,19 +667,16 @@ class PropertiesWindow(Gtk.Window):
 		if Gtk.get_major_version() == 3:
 			frame_access.add(table_access)
 
-		else:
-			frame_access.set_child(table_access)
-		if Gtk.get_major_version() == 3:
 			frame_ownership.add(table_ownership)
 
-		else:
-			frame_ownership.set_child(table_ownership)
-
-		if Gtk.get_major_version() == 3:
 			tab.pack_start(frame_access, False, False, 0)
 			tab.pack_start(frame_ownership, False, False, 0)
 
 		else:
+			frame_access.set_child(table_access)
+
+			frame_ownership.set_child(table_ownership)
+
 			tab.append(frame_access)
 			tab.append(frame_ownership)
 
@@ -752,13 +749,12 @@ class PropertiesWindow(Gtk.Window):
 		if Gtk.get_major_version() == 3:
 			container.add(self._list)
 
-		else:
-			container.set_child(self._list)
-		if Gtk.get_major_version() == 3:
 			tab.pack_start(label, False, False, 0)
 			tab.pack_start(container, True, True, 0)
 
 		else:
+			container.set_child(self._list)
+
 			tab.append(label)
 			container.set_vexpand(True)
 			tab.append(container)
@@ -829,13 +825,11 @@ class PropertiesWindow(Gtk.Window):
 		if Gtk.get_major_version() == 3:
 			container.add(grid)
 
-		else:
-			container.set_child(grid)
-
-		if Gtk.get_major_version() == 3:
 			tab.pack_start(container, True, True, 0)
 
 		else:
+			container.set_child(grid)
+
 			container.set_vexpand(True)
 			tab.append(container)
 

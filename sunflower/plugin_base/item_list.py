@@ -17,12 +17,7 @@ from sunflower.gui.history_list import HistoryList
 from sunflower.history import HistoryManager
 from sunflower.widgets.popup_menu import PopupMenu
 
-# GTK 4 renamed the Alt key modifier from MOD1
-if Gtk.get_major_version() == 3:
-	ALT_MASK = Gdk.ModifierType.MOD1_MASK
-
-else:
-	ALT_MASK = Gdk.ModifierType.ALT_MASK
+from sunflower.common import ALT_MASK
 
 
 class ItemList(PluginBase):
@@ -125,14 +120,13 @@ class ItemList(PluginBase):
 		if Gtk.get_major_version() == 3:
 			self._search_entry.connect('key-press-event', self._handle_search_key_press)
 
+			self._search_entry.connect('focus-out-event', self._stop_search)
+
 		else:
 			key_controller = Gtk.EventControllerKey.new()
 			key_controller.connect('key-pressed', self._handle_search_key_pressed)
 			self._search_entry.add_controller(key_controller)
-		if Gtk.get_major_version() == 3:
-			self._search_entry.connect('focus-out-event', self._stop_search)
 
-		else:
 			focus_controller = Gtk.EventControllerFocus.new()
 			focus_controller.connect('leave', self._stop_search)
 			self._search_entry.add_controller(focus_controller)

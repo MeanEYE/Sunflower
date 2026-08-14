@@ -35,16 +35,11 @@ class ViewEditOptions(SettingsPage):
 
 		self._radio_application.connect('toggled', self._parent.enable_save)
 
-		if Gtk.get_major_version() == 3:
-			align_application = Gtk.Alignment.new(0, 0, 1, 0)
-			align_application.set_padding(0, 10, 15, 15)
-
-		else:
-			# GTK 4 dropped alignment widgets, margins provide the same padding
-			align_application = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
-			align_application.set_margin_bottom(10)
-			align_application.set_margin_start(15)
-			align_application.set_margin_end(15)
+		# margins on a plain box replace deprecated alignment padding
+		align_application = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+		align_application.set_margin_bottom(10)
+		align_application.set_margin_start(15)
+		align_application.set_margin_end(15)
 		vbox_application = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		set_border_width(vbox_application, 5)
 
@@ -71,15 +66,10 @@ class ViewEditOptions(SettingsPage):
 
 		self._radio_external.connect('toggled', self._parent.enable_save)
 
-		if Gtk.get_major_version() == 3:
-			align_external = Gtk.Alignment.new(0, 0, 1, 0)
-			align_external.set_padding(0, 10, 15, 15)
-
-		else:
-			align_external = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
-			align_external.set_margin_bottom(10)
-			align_external.set_margin_start(15)
-			align_external.set_margin_end(15)
+		align_external = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+		align_external.set_margin_bottom(10)
+		align_external.set_margin_start(15)
+		align_external.set_margin_end(15)
 		vbox_external = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		set_border_width(vbox_external, 5)
 
@@ -99,38 +89,32 @@ class ViewEditOptions(SettingsPage):
 
 			vbox_application.pack_start(self._combobox_application, False, False, 0)
 
-		else:
-			vbox_view.append(self._checkbox_view_word_wrap)
+			align_application.pack_start(vbox_application, False, False, 0)
 
-			vbox_application.append(self._combobox_application)
-		if Gtk.get_major_version() == 3:
-			align_application.add(vbox_application)
-
-		else:
-			align_application.append(vbox_application)
-
-		if Gtk.get_major_version() == 3:
 			vbox_external.pack_start(label_editor, False, False, 0)
 			vbox_external.pack_start(self._entry_editor, False, False, 0)
 			vbox_external.pack_start(self._checkbox_terminal_command, False, False, 0)
 
-		else:
-			vbox_external.append(label_editor)
-			vbox_external.append(self._entry_editor)
-			vbox_external.append(self._checkbox_terminal_command)
-		if Gtk.get_major_version() == 3:
-			align_external.add(vbox_external)
+			align_external.pack_start(vbox_external, False, False, 0)
 
-		else:
-			align_external.append(vbox_external)
-
-		if Gtk.get_major_version() == 3:
 			vbox_edit.pack_start(self._radio_application, False, False, 0)
 			vbox_edit.pack_start(align_application, False, False, 0)
 			vbox_edit.pack_start(self._radio_external, False, False, 0)
 			vbox_edit.pack_start(align_external, False, False, 0)
 
 		else:
+			vbox_view.append(self._checkbox_view_word_wrap)
+
+			vbox_application.append(self._combobox_application)
+
+			align_application.append(vbox_application)
+
+			vbox_external.append(label_editor)
+			vbox_external.append(self._entry_editor)
+			vbox_external.append(self._checkbox_terminal_command)
+
+			align_external.append(vbox_external)
+
 			vbox_edit.append(self._radio_application)
 			vbox_edit.append(align_application)
 			vbox_edit.append(self._radio_external)

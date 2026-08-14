@@ -68,25 +68,13 @@ class ToolbarOptions(SettingsPage):
 		# create controls
 		button_box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		if Gtk.get_major_version() == 3:
-			button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
-
-		else:
-			button_add = Gtk.Button.new_with_label(_('Add'))
+		button_add = Gtk.Button.new_with_label(_('Add'))
 		button_add.connect('clicked', self._add_widget)
 
-		if Gtk.get_major_version() == 3:
-			button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
-
-		else:
-			button_delete = Gtk.Button.new_with_label(_('Delete'))
+		button_delete = Gtk.Button.new_with_label(_('Delete'))
 		button_delete.connect('clicked', self._delete_widget)
 
-		if Gtk.get_major_version() == 3:
-			button_edit = Gtk.Button(stock=Gtk.STOCK_EDIT)
-
-		else:
-			button_edit = Gtk.Button.new_with_label(_('Edit'))
+		button_edit = Gtk.Button.new_with_label(_('Edit'))
 		button_edit.connect('clicked', self._edit_widget)
 
 		image_up = Gtk.Image()
@@ -144,18 +132,11 @@ class ToolbarOptions(SettingsPage):
 		label_style = Gtk.Label(label=_('Toolbar style:'))
 		list_styles = Gtk.ListStore(str, int)
 
-		if Gtk.get_major_version() == 3:
-			list_styles.append((_('Icons'), Gtk.ToolbarStyle.ICONS))
-			list_styles.append((_('Text'), Gtk.ToolbarStyle.TEXT))
-			list_styles.append((_('Both'), Gtk.ToolbarStyle.BOTH))
-			list_styles.append((_('Both horizontal'), Gtk.ToolbarStyle.BOTH_HORIZ))
-
-		else:
-			# GTK 4 has no toolbar style, option order matches the values stored in config
-			list_styles.append((_('Icons'), 0))
-			list_styles.append((_('Text'), 1))
-			list_styles.append((_('Both'), 2))
-			list_styles.append((_('Both horizontal'), 3))
+		# option order matches Gtk.ToolbarStyle values stored in config
+		list_styles.append((_('Icons'), 0))
+		list_styles.append((_('Text'), 1))
+		list_styles.append((_('Both'), 2))
+		list_styles.append((_('Both horizontal'), 3))
 
 		renderer = Gtk.CellRendererText()
 

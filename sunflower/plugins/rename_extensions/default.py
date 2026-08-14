@@ -191,10 +191,6 @@ class DefaultRename(RenameExtension):
 		if Gtk.get_major_version() == 3:
 			frame_counter.add(table_counter)
 
-		else:
-			frame_counter.set_child(table_counter)
-
-		if Gtk.get_major_version() == 3:
 			hbox_template.pack_start(self._entry_template, True, True, 0)
 			hbox_template.pack_start(button_add, False, False, 0)
 
@@ -211,7 +207,11 @@ class DefaultRename(RenameExtension):
 
 			self.vbox.pack_start(hbox, True, True, 0)
 
+			self.vbox.show_all()
+
 		else:
+			frame_counter.set_child(table_counter)
+
 			self._entry_template.set_hexpand(True)
 			hbox_template.append(self._entry_template)
 			hbox_template.append(button_add)
@@ -233,10 +233,6 @@ class DefaultRename(RenameExtension):
 			hbox.set_vexpand(True)
 			self.vbox.append(hbox)
 
-		if Gtk.get_major_version() == 3:
-			self.vbox.show_all()
-
-		else:
 			self.vbox.show()
 
 	def __template_changed(self, widget, data=None):

@@ -71,18 +71,10 @@ class BookmarksOptions(SettingsPage):
 		# create controls
 		button_box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		if Gtk.get_major_version() == 3:
-			button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
-
-		else:
-			button_add = Gtk.Button.new_with_label(_('Add'))
+		button_add = Gtk.Button.new_with_label(_('Add'))
 		button_add.connect('clicked', self._add_bookmark)
 
-		if Gtk.get_major_version() == 3:
-			button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
-
-		else:
-			button_delete = Gtk.Button.new_with_label(_('Delete'))
+		button_delete = Gtk.Button.new_with_label(_('Delete'))
 		button_delete.connect('clicked', self._delete_bookmark)
 
 		image_up = Gtk.Image()

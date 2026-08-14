@@ -4,7 +4,14 @@ import subprocess
 import locale
 import sys
 
-from gi.repository import Gio, Pango, GObject
+from gi.repository import Gtk, Gdk, Gio, Pango, GObject
+
+# GTK 4 renamed the Alt key modifier from MOD1
+if Gtk.get_major_version() == 3:
+	ALT_MASK = Gdk.ModifierType.MOD1_MASK
+
+else:
+	ALT_MASK = Gdk.ModifierType.ALT_MASK
 
 
 # user directories

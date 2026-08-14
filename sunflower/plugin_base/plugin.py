@@ -9,12 +9,7 @@ from sunflower.widgets.status_bar import StatusBar
 from sunflower.widgets.tab_label import TabLabel
 from sunflower.gui.preferences.display import StatusVisible
 
-# GTK 4 renamed the Alt key modifier from MOD1
-if Gtk.get_major_version() == 3:
-	ALT_MASK = Gdk.ModifierType.MOD1_MASK
-
-else:
-	ALT_MASK = Gdk.ModifierType.ALT_MASK
+from sunflower.common import ALT_MASK
 
 
 class PluginBase(Gtk.Box):

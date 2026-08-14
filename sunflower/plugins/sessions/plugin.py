@@ -4,12 +4,7 @@ from gi.repository import Gtk, Gio, GLib, Gdk
 from sunflower.widgets.settings_page import SettingsPage
 from sunflower.accelerator_group import AcceleratorGroup
 
-# GTK 4 renamed the Alt key modifier from MOD1
-if Gtk.get_major_version() == 3:
-	ALT_MASK = Gdk.ModifierType.MOD1_MASK
-
-else:
-	ALT_MASK = Gdk.ModifierType.ALT_MASK
+from sunflower.common import ALT_MASK
 
 
 DEFAULT_NAME = _('Default')
@@ -86,18 +81,10 @@ class SessionsOptions(SettingsPage):
 		# create controls
 		button_box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		if Gtk.get_major_version() == 3:
-			button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
-
-		else:
-			button_add = Gtk.Button.new_with_label(_('Add'))
+		button_add = Gtk.Button.new_with_label(_('Add'))
 		button_add.connect('clicked', self._handle_add_session)
 
-		if Gtk.get_major_version() == 3:
-			button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
-
-		else:
-			button_delete = Gtk.Button.new_with_label(_('Delete'))
+		button_delete = Gtk.Button.new_with_label(_('Delete'))
 		button_delete.connect('clicked', self._handle_delete_session)
 
 		image_up = Gtk.Image()
@@ -134,17 +121,14 @@ class SessionsOptions(SettingsPage):
 		if Gtk.get_major_version() == 3:
 			container.add(self._list)
 
-		else:
-			container.set_child(self._list)
-
-		if Gtk.get_major_version() == 3:
 			button_box.pack_start(button_add, False, False, 0)
 			button_box.pack_start(button_delete, False, False, 0)
 			button_box.pack_end(button_move_down, False, False, 0)
 			button_box.pack_end(button_move_up, False, False, 0)
 
-
 		else:
+			container.set_child(self._list)
+
 			button_box.append(button_add)
 			button_box.append(button_delete)
 
@@ -423,15 +407,13 @@ class SessionManager:
 		if Gtk.get_major_version() == 3:
 			popover.add(vbox_popover)
 
-		else:
-			popover.set_child(vbox_popover)
-
-		if Gtk.get_major_version() == 3:
 			hbox_buttons.pack_start(self._button_lock, True, False, 0)
 			hbox_buttons.pack_start(button_manage, True, True, 0)
 			hbox_buttons.pack_start(button_save, True, True, 0)
 
 		else:
+			popover.set_child(vbox_popover)
+
 			self._button_lock.set_hexpand(True)
 			self._button_lock.set_halign(Gtk.Align.CENTER)
 			hbox_buttons.append(self._button_lock)
@@ -444,15 +426,13 @@ class SessionManager:
 		if Gtk.get_major_version() == 3:
 			hbox_buttons.set_child_non_homogeneous(self._button_lock, True)
 
-		else:
-			self._button_lock.set_hexpand(False)
-
-		if Gtk.get_major_version() == 3:
 			vbox_popover.pack_start(quick_search, True, False, 0)
 			vbox_popover.pack_start(list_container, True, True, 0)
 			vbox_popover.pack_start(hbox_buttons, True, False, 0)
 
 		else:
+			self._button_lock.set_hexpand(False)
+
 			quick_search.set_vexpand(True)
 			quick_search.set_valign(Gtk.Align.CENTER)
 			vbox_popover.append(quick_search)

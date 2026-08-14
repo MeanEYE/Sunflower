@@ -25,6 +25,7 @@ class KeyringManagerWindow:
 		# create window
 		if Gtk.get_major_version() == 3:
 			self._window = Gtk.Window.new(Gtk.WindowType.TOPLEVEL)
+
 		else:
 			self._window = Gtk.Window.new()
 
@@ -67,25 +68,13 @@ class KeyringManagerWindow:
 		# create controls
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		if Gtk.get_major_version() == 3:
-			button_edit = Gtk.Button(stock=Gtk.STOCK_EDIT)
-
-		else:
-			button_edit = Gtk.Button.new_with_label(_('Edit'))
+		button_edit = Gtk.Button.new_with_label(_('Edit'))
 		button_edit.connect('clicked', self.__edit_selected)
 
-		if Gtk.get_major_version() == 3:
-			button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
-
-		else:
-			button_delete = Gtk.Button.new_with_label(_('Delete'))
+		button_delete = Gtk.Button.new_with_label(_('Delete'))
 		button_delete.connect('clicked', self.__delete_selected)
 
-		if Gtk.get_major_version() == 3:
-			button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
-
-		else:
-			button_close = Gtk.Button.new_with_label(_('Close'))
+		button_close = Gtk.Button.new_with_label(_('Close'))
 		button_close.connect('clicked', self.__handle_close)
 
 		# pack components
@@ -93,6 +82,13 @@ class KeyringManagerWindow:
 			hbox.pack_start(button_edit, False, False, 0)
 			hbox.pack_start(button_delete, False, False, 0)
 			hbox.pack_end(button_close, False, False, 0)
+
+			container.add(self._list)
+
+			vbox.pack_start(container, True, True, 0)
+			vbox.pack_start(hbox, False, False, 0)
+
+			self._window.add(vbox)
 
 		else:
 			hbox.append(button_edit)
@@ -102,25 +98,12 @@ class KeyringManagerWindow:
 			button_close.set_halign(Gtk.Align.END)
 			hbox.append(button_close)
 
-		if Gtk.get_major_version() == 3:
-			container.add(self._list)
-
-		else:
 			container.set_child(self._list)
 
-		if Gtk.get_major_version() == 3:
-			vbox.pack_start(container, True, True, 0)
-			vbox.pack_start(hbox, False, False, 0)
-
-		else:
 			container.set_vexpand(True)
 			vbox.append(container)
 			vbox.append(hbox)
 
-		if Gtk.get_major_version() == 3:
-			self._window.add(vbox)
-
-		else:
 			self._window.set_child(vbox)
 
 		# populate list

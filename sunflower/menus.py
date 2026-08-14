@@ -117,12 +117,11 @@ class MenuManager:
 				if Gtk.get_major_version() == 3:
 					image.set_from_icon_name(application.icon, Gtk.IconSize.MENU)
 
-				else:
-					image.set_from_icon_name(application.icon)
-				if Gtk.get_major_version() == 3:
 					item.set_image(image)
 
 				else:
+					image.set_from_icon_name(application.icon)
+
 					item.set_child(image)
 
 			# data for handler

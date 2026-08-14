@@ -41,9 +41,11 @@ class SystemTerminal(Terminal):
 			self._terminal.connect('realize', self.__terminal_realized)
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
-			# connect signals
-			self._terminal.connect('realize', self.__socket_realized)
-			self._terminal.connect('plug-removed', self.__child_exited)
+			# socket exists only in GTK 3, base class shows notice otherwise
+			if Gtk.get_major_version() == 3:
+				# connect signals
+				self._terminal.connect('realize', self.__socket_realized)
+				self._terminal.connect('plug-removed', self.__child_exited)
 
 			# disable controls
 			self._menu_button.set_sensitive(False)

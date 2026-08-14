@@ -64,11 +64,7 @@ class HistoryList(Gtk.Window):
 		# create controls
 		hbox_controls = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		if Gtk.get_major_version() == 3:
-			button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
-
-		else:
-			button_close = Gtk.Button.new_with_label(_('Close'))
+		button_close = Gtk.Button.new_with_label(_('Close'))
 		button_close.connect('clicked', self._close)
 
 		image_jump = Gtk.Image()
@@ -119,10 +115,6 @@ class HistoryList(Gtk.Window):
 		if Gtk.get_major_version() == 3:
 			list_container.add(self._history_list)
 
-		else:
-			list_container.set_child(self._history_list)
-
-		if Gtk.get_major_version() == 3:
 			hbox_controls.pack_end(button_close, False, False, 0)
 			hbox_controls.pack_end(button_jump, False, False, 0)
 			hbox_controls.pack_end(button_new_tab, False, False, 0)
@@ -131,7 +123,11 @@ class HistoryList(Gtk.Window):
 			vbox.pack_start(list_container, True, True, 0)
 			vbox.pack_start(hbox_controls, False, False, 0)
 
+			self.add(vbox)
+
 		else:
+			list_container.set_child(self._history_list)
+
 			# end packed children are shown in reverse order of addition
 			button_opposite.set_hexpand(True)
 			button_opposite.set_halign(Gtk.Align.END)
@@ -144,10 +140,6 @@ class HistoryList(Gtk.Window):
 			vbox.append(list_container)
 			vbox.append(hbox_controls)
 
-		if Gtk.get_major_version() == 3:
-			self.add(vbox)
-
-		else:
 			self.set_child(vbox)
 
 		# populate history list

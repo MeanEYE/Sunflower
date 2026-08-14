@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Pango, Gdk
+from gi.repository import Gtk, Pango, Gdk, Gio
 
 
 class TabLabel:
@@ -9,6 +9,7 @@ class TabLabel:
 	def __init__(self, application, parent):
 		self._application = application
 		self._parent = parent
+		self._menu_popover = None
 
 		# create interface
 		self._hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
@@ -113,7 +114,16 @@ class TabLabel:
 
 	def _show_menu(self):
 		"""Show tab menu."""
-		menu_manager = self._application.menu_manager
+		close_item = {
+					'label': _('Close Tab'),
+					'callback': self._close_tab,
+				}
+
+		# stock items exist only in GTK 3
+		if Gtk.get_major_version() == 3:
+			close_item['type'] = 'image'
+			close_item['stock'] = Gtk.STOCK_CLOSE
+
 		menu_items = (
 					{
 						'label': _('Unlock') if self._parent.is_tab_locked() else _('Lock'),
@@ -130,12 +140,7 @@ class TabLabel:
 					{
 						'type': 'separator'
 					},
-					{
-						'label': _('Close Tab'),
-						'type': 'image',
-						'stock': Gtk.STOCK_CLOSE,
-						'callback': self._close_tab,
-					},
+					close_item,
 					{
 						'label': _('Close All'),
 						'data': 'all',
@@ -148,19 +153,52 @@ class TabLabel:
 					},
 				)
 
-		# create menu
-		menu = Gtk.Menu()
-
-		for item in menu_items:
-			item = menu_manager.create_menu_item(item)
-			menu.append(item)
-
-		menu.popup_at_pointer()
 		if Gtk.get_major_version() == 3:
+			# create menu
+			menu_manager = self._application.menu_manager
+			menu = Gtk.Menu()
+
+			for item in menu_items:
+				item = menu_manager.create_menu_item(item)
+				menu.append(item)
+
+			menu.popup_at_pointer()
 			menu.show_all()
+			return
+
+		# GTK 4 menus are built from a model with actions
+		actions = Gio.SimpleActionGroup.new()
+		model = Gio.Menu.new()
+		section = Gio.Menu.new()
+
+		for index, item in enumerate(menu_items):
+			if item.get('type') == 'separator':
+				model.append_section(None, section)
+				section = Gio.Menu.new()
+				continue
+
+			action_name = 'item-{0}'.format(index)
+			action = Gio.SimpleAction.new(action_name, None)
+			action.connect('activate', self._handle_menu_action, item)
+			actions.add_action(action)
+			section.append(item['label'], 'tab-menu.{0}'.format(action_name))
+
+		model.append_section(None, section)
+
+		# popover is created on first use and reused with fresh model
+		if self._menu_popover is None:
+			self._menu_popover = Gtk.PopoverMenu.new_from_model(model)
+			self._menu_popover.set_parent(self._container)
 
 		else:
-			menu.show()
+			self._menu_popover.set_menu_model(model)
+
+		self._menu_popover.insert_action_group('tab-menu', actions)
+		self._menu_popover.popup()
+
+	def _handle_menu_action(self, action, parameter, item):
+		"""Forward menu action to item callback. (GTK 4)"""
+		item['callback'](None, item.get('data'))
 
 	def _button_release_event(self, widget, event, data=None):
 		"""

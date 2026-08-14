@@ -428,8 +428,13 @@ class OperationDialog:
 			self._indicator.set_popover(None)
 
 	def get_window(self):
-		"""Return container window"""
-		return self._container
+		"""Return window operation dialog belongs to.
+
+		Callers use this as transient parent for their dialogs and the
+		operation indicator itself is just a popover in the main window.
+
+		"""
+		return self._application
 
 	def set_status(self, status):
 		"""Set current status"""

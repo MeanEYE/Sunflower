@@ -52,12 +52,7 @@ from sunflower.gui.input_dialog import InputDialog, AddBookmarkDialog
 from sunflower.gui.keyring_manager_window import KeyringManagerWindow
 from sunflower.gui.shortcuts_window import ShortcutsWindow
 
-# GTK 4 renamed the Alt key modifier from MOD1
-if Gtk.get_major_version() == 3:
-	ALT_MASK = Gdk.ModifierType.MOD1_MASK
-
-else:
-	ALT_MASK = Gdk.ModifierType.ALT_MASK
+from sunflower.common import ALT_MASK
 
 
 class MainWindow(Gtk.ApplicationWindow):
@@ -419,12 +414,11 @@ class MainWindow(Gtk.ApplicationWindow):
 		if Gtk.get_major_version() == 3:
 			icon = Gtk.Image.new_from_icon_name('open-menu-symbolic', Gtk.IconSize.BUTTON)
 
-		else:
-			icon = Gtk.Image.new_from_icon_name('open-menu-symbolic')
-		if Gtk.get_major_version() == 3:
 			application_menu_button.set_image(icon)
 
 		else:
+			icon = Gtk.Image.new_from_icon_name('open-menu-symbolic')
+
 			application_menu_button.set_child(icon)
 
 		self.header_bar.pack_end(application_menu_button)
@@ -496,12 +490,11 @@ class MainWindow(Gtk.ApplicationWindow):
 		if Gtk.get_major_version() == 3:
 			self.command_popover.set_relative_to(self.header_bar)
 
-		else:
-			self.command_popover.set_parent(self.header_bar)
-		if Gtk.get_major_version() == 3:
 			self.command_popover.set_modal(False)
 
 		else:
+			self.command_popover.set_parent(self.header_bar)
+
 			self.command_popover.set_autohide(False)
 		self.command_popover.connect('closed', self.hide_command_entry)
 
@@ -530,15 +523,14 @@ class MainWindow(Gtk.ApplicationWindow):
 		if Gtk.get_major_version() == 3:
 			self.command_edit.connect('key-press-event', self._command_edit_key_press)
 
-		else:
-			key_controller = Gtk.EventControllerKey.new()
-			key_controller.connect('key-pressed', self._command_edit_key_pressed)
-			self.command_edit.add_controller(key_controller)
-		if Gtk.get_major_version() == 3:
 			self.command_edit.connect('focus-in-event', self._command_edit_focused)
 			self.command_edit.connect('focus-out-event', self._command_edit_lost_focus)
 
 		else:
+			key_controller = Gtk.EventControllerKey.new()
+			key_controller.connect('key-pressed', self._command_edit_key_pressed)
+			self.command_edit.add_controller(key_controller)
+
 			focus_controller = Gtk.EventControllerFocus.new()
 			focus_controller.connect('enter', self._command_edit_focus_entered)
 			focus_controller.connect('leave', self._command_edit_focus_left)
@@ -552,20 +544,18 @@ class MainWindow(Gtk.ApplicationWindow):
 		if Gtk.get_major_version() == 3:
 			self.command_popover.add(vbox_popover)
 
-		else:
-			self.command_popover.set_child(vbox_popover)
-		if Gtk.get_major_version() == 3:
 			vbox_popover.pack_start(label_command_entry, False, False, 0)
 			vbox_popover.pack_start(self.command_edit, True, True, 0)
 
-		else:
-			vbox_popover.append(label_command_entry)
-			self.command_edit.set_vexpand(True)
-			vbox_popover.append(self.command_edit)
-		if Gtk.get_major_version() == 3:
 			vbox_popover.show_all()
 
 		else:
+			self.command_popover.set_child(vbox_popover)
+
+			vbox_popover.append(label_command_entry)
+			self.command_edit.set_vexpand(True)
+			vbox_popover.append(self.command_edit)
+
 			vbox_popover.show()
 
 		# command buttons bar
@@ -628,16 +618,14 @@ class MainWindow(Gtk.ApplicationWindow):
 			vbox.pack_start(self._paned, True, True, 0)
 			vbox.pack_start(self.command_bar, False, False, 0)
 
+			self.add(vbox)
+
 		else:
 			vbox.append(self.toolbar_manager.get_toolbar())
 			self._paned.set_vexpand(True)
 			vbox.append(self._paned)
 			vbox.append(self.command_bar)
 
-		if Gtk.get_major_version() == 3:
-			self.add(vbox)
-
-		else:
 			self.set_child(vbox)
 
 		# create commands menu
@@ -657,20 +645,16 @@ class MainWindow(Gtk.ApplicationWindow):
 		if Gtk.get_major_version() == 3:
 			window.set_shadow_type(Gtk.ShadowType.IN)
 
-		else:
-			pass
-
 		self.commands_menu = Gtk.ListBox.new()
 		self.commands_menu.connect('row-activated', self._handle_command_activate)
 		if Gtk.get_major_version() == 3:
 			window.add(self.commands_menu)
 
-		else:
-			window.set_child(self.commands_menu)
-		if Gtk.get_major_version() == 3:
 			vbox.pack_start(window, False, False, 0)
 
 		else:
+			window.set_child(self.commands_menu)
+
 			vbox.append(window)
 
 		edit_commands = Gtk.Button.new_with_label(_('Edit commands'))
@@ -971,12 +955,11 @@ class MainWindow(Gtk.ApplicationWindow):
 			if Gtk.get_major_version() == 3:
 				notebook.child_set_property(current_page, 'tab-expand', False)
 
-			else:
-				notebook.get_page(current_page).set_property('tab-expand', False)
-			if Gtk.get_major_version() == 3:
 				notebook.child_set_property(new_page, 'tab-expand', True)
 
 			else:
+				notebook.get_page(current_page).set_property('tab-expand', False)
+
 				notebook.get_page(new_page).set_property('tab-expand', True)
 
 	def _transfer_focus(self, notebook, data=None):
@@ -2444,12 +2427,11 @@ class MainWindow(Gtk.ApplicationWindow):
 		if Gtk.get_major_version() == 3:
 			self.status_bar.pack_start(indicator, False, False, 0)
 
-		else:
-			self.status_bar.append(indicator)
-		if Gtk.get_major_version() == 3:
 			indicator.show_all()
 
 		else:
+			self.status_bar.append(indicator)
+
 			indicator.show()
 
 	def remove_operation(self, indicator):

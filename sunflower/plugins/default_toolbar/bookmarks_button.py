@@ -1,11 +1,6 @@
 from gi.repository import Gtk, GObject
 
-# GTK 4 removed tool items, plain buttons are used on the toolbar box
-if Gtk.get_major_version() == 3:
-	ToolbarButton = Gtk.ToolButton
-
-else:
-	ToolbarButton = Gtk.Button
+from sunflower.plugins.default_toolbar import ToolbarButton
 
 
 class Button(ToolbarButton):

@@ -41,7 +41,7 @@ class SambaInputDialog:
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(parent)
 
-		self._dialog.vbox.set_spacing(0)
+		self._dialog.get_content_area().set_spacing(0)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
 		# create user interface
@@ -112,7 +112,8 @@ class SambaInputDialog:
 		self._entry_username = Gtk.Entry()
 		self._entry_password = Gtk.Entry()
 
-		self._entry_password.set_property('caps-lock-warning', True)
+		if Gtk.get_major_version() == 3:
+			self._entry_password.set_property('caps-lock-warning', True)
 		self._entry_password.set_visibility(False)
 
 		self._entry_domain.connect('activate', self._confirm_entry)
@@ -120,20 +121,12 @@ class SambaInputDialog:
 		self._entry_password.connect('activate', self._confirm_entry)
 
 		# create controls
-		if Gtk.get_major_version() == 3:
-			button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
-
-		else:
-			button_save = Gtk.Button.new_with_label(_('Save'))
+		button_save = Gtk.Button.new_with_label(_('Save'))
 		button_save.connect('clicked', self._confirm_entry)
 		if Gtk.get_major_version() == 3:
 			button_save.set_can_default(True)
 
-		if Gtk.get_major_version() == 3:
-			button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
-
-		else:
-			button_cancel = Gtk.Button.new_with_label(_('Cancel'))
+		button_cancel = Gtk.Button.new_with_label(_('Cancel'))
 
 		# pack user interface
 		if Gtk.get_major_version() == 3:
@@ -212,10 +205,11 @@ class SambaInputDialog:
 
 			self._dialog.vbox.pack_start(hbox_icon, True, True, 0)
 
+			self._dialog.show_all()
+
 		else:
-			button_save.set_hexpand(True)
-			button_save.set_halign(Gtk.Align.END)
-			self._dialog.action_area.append(button_save)
+			# GTK 4 dialogs have no direct action area access
+			self._dialog.add_action_widget(button_save, Gtk.ResponseType.OK)
 
 			vbox_icon.append(icon)
 			vbox_icon.set_hexpand(True)
@@ -224,11 +218,8 @@ class SambaInputDialog:
 			hbox_icon.append(self._container)
 
 			hbox_icon.set_vexpand(True)
-			self._dialog.vbox.append(hbox_icon)
-		if Gtk.get_major_version() == 3:
-			self._dialog.show_all()
+			self._dialog.get_content_area().append(hbox_icon)
 
-		else:
 			self._dialog.show()
 
 	def _confirm_entry(self, widget, data=None):
@@ -326,7 +317,7 @@ class FtpInputDialog:
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(parent)
 
-		self._dialog.vbox.set_spacing(0)
+		self._dialog.get_content_area().set_spacing(0)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
 		# create user interface
@@ -388,27 +379,20 @@ class FtpInputDialog:
 		self._entry_username = Gtk.Entry()
 		self._entry_password = Gtk.Entry()
 
-		self._entry_password.set_property('caps-lock-warning', True)
+		if Gtk.get_major_version() == 3:
+			self._entry_password.set_property('caps-lock-warning', True)
 		self._entry_password.set_visibility(False)
 
 		self._entry_username.connect('activate', self._confirm_entry)
 		self._entry_password.connect('activate', self._confirm_entry)
 
 		# create controls
-		if Gtk.get_major_version() == 3:
-			button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
-
-		else:
-			button_save = Gtk.Button.new_with_label(_('Save'))
+		button_save = Gtk.Button.new_with_label(_('Save'))
 		button_save.connect('clicked', self._confirm_entry)
 		if Gtk.get_major_version() == 3:
 			button_save.set_can_default(True)
 
-		if Gtk.get_major_version() == 3:
-			button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
-
-		else:
-			button_cancel = Gtk.Button.new_with_label(_('Cancel'))
+		button_cancel = Gtk.Button.new_with_label(_('Cancel'))
 
 		# pack user interface
 		if Gtk.get_major_version() == 3:
@@ -471,10 +455,11 @@ class FtpInputDialog:
 
 			self._dialog.vbox.pack_start(hbox_icon, True, True, 0)
 
+			self._dialog.show_all()
+
 		else:
-			button_save.set_hexpand(True)
-			button_save.set_halign(Gtk.Align.END)
-			self._dialog.action_area.append(button_save)
+			# GTK 4 dialogs have no direct action area access
+			self._dialog.add_action_widget(button_save, Gtk.ResponseType.OK)
 
 			vbox_icon.append(icon)
 			vbox_icon.set_hexpand(True)
@@ -483,11 +468,8 @@ class FtpInputDialog:
 			hbox_icon.append(self._container)
 
 			hbox_icon.set_vexpand(True)
-			self._dialog.vbox.append(hbox_icon)
-		if Gtk.get_major_version() == 3:
-			self._dialog.show_all()
+			self._dialog.get_content_area().append(hbox_icon)
 
-		else:
 			self._dialog.show()
 
 	def _confirm_entry(self, widget, data=None):
@@ -582,7 +564,7 @@ class DavInputDialog:
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(parent)
 
-		self._dialog.vbox.set_spacing(0)
+		self._dialog.get_content_area().set_spacing(0)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)
 
 		# create user interface
@@ -654,27 +636,20 @@ class DavInputDialog:
 		self._entry_username = Gtk.Entry()
 		self._entry_password = Gtk.Entry()
 
-		self._entry_password.set_property('caps-lock-warning', True)
+		if Gtk.get_major_version() == 3:
+			self._entry_password.set_property('caps-lock-warning', True)
 		self._entry_password.set_visibility(False)
 
 		self._entry_username.connect('activate', self._confirm_entry)
 		self._entry_password.connect('activate', self._confirm_entry)
 
 		# create controls
-		if Gtk.get_major_version() == 3:
-			button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
-
-		else:
-			button_save = Gtk.Button.new_with_label(_('Save'))
+		button_save = Gtk.Button.new_with_label(_('Save'))
 		button_save.connect('clicked', self._confirm_entry)
 		if Gtk.get_major_version() == 3:
 			button_save.set_can_default(True)
 
-		if Gtk.get_major_version() == 3:
-			button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
-
-		else:
-			button_cancel = Gtk.Button.new_with_label(_('Cancel'))
+		button_cancel = Gtk.Button.new_with_label(_('Cancel'))
 
 		# pack user interface
 		if Gtk.get_major_version() == 3:
@@ -745,10 +720,11 @@ class DavInputDialog:
 
 			self._dialog.vbox.pack_start(hbox_icon, True, True, 0)
 
+			self._dialog.show_all()
+
 		else:
-			button_save.set_hexpand(True)
-			button_save.set_halign(Gtk.Align.END)
-			self._dialog.action_area.append(button_save)
+			# GTK 4 dialogs have no direct action area access
+			self._dialog.add_action_widget(button_save, Gtk.ResponseType.OK)
 
 			vbox_icon.append(icon)
 			vbox_icon.set_hexpand(True)
@@ -757,11 +733,8 @@ class DavInputDialog:
 			hbox_icon.append(self._container)
 
 			hbox_icon.set_vexpand(True)
-			self._dialog.vbox.append(hbox_icon)
-		if Gtk.get_major_version() == 3:
-			self._dialog.show_all()
+			self._dialog.get_content_area().append(hbox_icon)
 
-		else:
 			self._dialog.show()
 
 	def _confirm_entry(self, widget, data=None):

@@ -71,14 +71,12 @@ class InputDialog:
 			vbox.pack_start(self._label, False, False, 0)
 			vbox.pack_start(self._entry, False, False, 0)
 
+			self._dialog.get_message_area().pack_start(vbox, False, False, 0)
+
 		else:
 			vbox.append(self._label)
 			vbox.append(self._entry)
 
-		if Gtk.get_major_version() == 3:
-			self._dialog.get_message_area().pack_start(vbox, False, False, 0)
-
-		else:
 			self._dialog.get_message_area().append(vbox)
 
 		self._dialog.add_action_widget(self._button_negative, Gtk.ResponseType.CANCEL)
@@ -110,7 +108,8 @@ class InputDialog:
 
 	def set_password(self):
 		"""Set field as password input"""
-		self._entry.set_property('caps-lock-warning', True)
+		if Gtk.get_major_version() == 3:
+			self._entry.set_property('caps-lock-warning', True)
 		self._entry.set_visibility(False)
 
 	def get_response(self):
@@ -188,23 +187,25 @@ class LinkDialog(InputDialog):
 		"""Show file selection dialog"""
 		dialog = Gtk.FileChooserDialog(
 							title=_('Select original path'),
-							parent=self._application,
-							action=Gtk.FileChooserAction.OPEN,
-							buttons=(
-								Gtk.STOCK_CANCEL,
-								Gtk.ResponseType.REJECT,
-								Gtk.STOCK_OK,
-								Gtk.ResponseType.ACCEPT
-							)
+							transient_for=self._application,
+							action=Gtk.FileChooserAction.OPEN
 						)
+		dialog.add_button(_('Cancel'), Gtk.ResponseType.REJECT)
+		dialog.add_button(_('Open'), Gtk.ResponseType.ACCEPT)
 		response = run_dialog(dialog)
 
 		if response == Gtk.ResponseType.ACCEPT:
-			self._entry_original_path.set_text(dialog.get_filename())
+			if Gtk.get_major_version() == 3:
+				selected_path = dialog.get_filename()
+
+			else:
+				selected_path = dialog.get_file().get_path()
+
+			self._entry_original_path.set_text(selected_path)
 
 			# if link name is empty, add original path name
 			if self._entry.get_text() == '':
-				self._entry.set_text(decode_file_name(os.path.basename(dialog.get_filename())))
+				self._entry.set_text(decode_file_name(os.path.basename(selected_path)))
 
 		dialog.destroy()
 
@@ -433,10 +434,10 @@ class PasswordDialog(InputDialog):
 		if Gtk.get_major_version() == 3:
 			self._label_description.set_line_wrap(True)
 
+			self._label_description.connect('size-allocate', self._adjust_label)
+
 		else:
 			self._label_description.set_wrap(True)
-		if Gtk.get_major_version() == 3:
-			self._label_description.connect('size-allocate', self._adjust_label)
 
 		self._label.set_text(_('Password:'))
 
@@ -445,8 +446,10 @@ class PasswordDialog(InputDialog):
 		label_confirm.set_yalign(0.5)
 		self._entry_confirm = Gtk.Entry()
 
-		self._entry.set_property('caps-lock-warning', True)
-		self._entry_confirm.set_property('caps-lock-warning', True)
+		# GTK 4 entries have no caps lock warning
+		if Gtk.get_major_version() == 3:
+			self._entry.set_property('caps-lock-warning', True)
+			self._entry_confirm.set_property('caps-lock-warning', True)
 		self._entry.set_visibility(False)
 		self._entry_confirm.set_visibility(False)
 
@@ -461,6 +464,8 @@ class PasswordDialog(InputDialog):
 			self._container.pack_start(vbox, False, False, 0)
 			self._container.pack_start(self._label_description, False, False, 0)
 
+			self._container.reorder_child(self._label_description, 0)
+
 		else:
 			vbox.append(label_confirm)
 			vbox.append(self._entry_confirm)
@@ -468,7 +473,7 @@ class PasswordDialog(InputDialog):
 			self._container.append(vbox)
 			self._container.append(self._label_description)
 
-		self._container.reorder_child(self._label_description, 0)
+			self._container.reorder_child_after(self._label_description, None)
 
 		# show all elements
 		if Gtk.get_major_version() == 3:
@@ -543,6 +548,9 @@ class FileCreateDialog(CreateDialog):
 			self._container.pack_start(self._checkbox_edit_after, False, False, 0)
 			self._container.pack_start(vbox_templates, False, False, 0)
 
+			self._container.reorder_child(self._checkbox_edit_after, 1)
+			self._container.reorder_child(vbox_templates, 1)
+
 		else:
 			vbox_templates.append(label_templates)
 			vbox_templates.append(self._template_list)
@@ -550,8 +558,10 @@ class FileCreateDialog(CreateDialog):
 			self._container.append(self._checkbox_edit_after)
 			self._container.append(vbox_templates)
 
-		self._container.reorder_child(self._checkbox_edit_after, 1)
-		self._container.reorder_child(vbox_templates, 1)
+			# same order as GTK 3 version, templates then checkbox after first child
+			first_child = self._container.get_first_child()
+			self._container.reorder_child_after(self._checkbox_edit_after, first_child)
+			self._container.reorder_child_after(vbox_templates, first_child)
 
 		# populate template list
 		self._populate_templates()
@@ -837,15 +847,8 @@ class CopyDialog:
 		if Gtk.get_major_version() == 3:
 			list_container.add(affected_list)
 
-		else:
-			list_container.set_child(affected_list)
-		if Gtk.get_major_version() == 3:
 			expand_details.add(list_container)
 
-		else:
-			expand_details.set_child(list_container)
-
-		if Gtk.get_major_version() == 3:
 			vbox_silent.pack_start(self.checkbox_merge, False, False, 0)
 			vbox_silent.pack_start(self.checkbox_overwrite, False, False, 0)
 
@@ -871,7 +874,13 @@ class CopyDialog:
 			vbox.pack_start(vbox_silent, False, False, 0)
 			vbox.pack_start(self.checkbox_symlink, False, False, 0)
 
+			self._dialog.get_content_area().pack_start(vbox, False, False, 0)
+
 		else:
+			list_container.set_child(affected_list)
+
+			expand_details.set_child(list_container)
+
 			vbox_silent.append(self.checkbox_merge)
 			vbox_silent.append(self.checkbox_overwrite)
 
@@ -901,10 +910,6 @@ class CopyDialog:
 			vbox.append(vbox_silent)
 			vbox.append(self.checkbox_symlink)
 
-		if Gtk.get_major_version() == 3:
-			self._dialog.get_content_area().pack_start(vbox, False, False, 0)
-
-		else:
 			self._dialog.get_content_area().append(vbox)
 
 		# prepare dialog
@@ -1290,26 +1295,8 @@ class OverwriteDialog:
 			hbox_source.pack_start(self._icon_source, False, False, 10)
 			hbox_source.pack_start(self._label_source, True, True, 0)
 
-		else:
-			vbox_icon.append(icon)
-
-			set_border_width(self._icon_original, 10)
-			hbox_original.append(self._icon_original)
-			self._label_original.set_hexpand(True)
-			hbox_original.append(self._label_original)
-
-			set_border_width(self._icon_source, 10)
-			hbox_source.append(self._icon_source)
-			self._label_source.set_hexpand(True)
-			hbox_source.append(self._label_source)
-
-		if Gtk.get_major_version() == 3:
 			self._expander_rename.add(hbox_rename)
 
-		else:
-			self._expander_rename.set_child(hbox_rename)
-
-		if Gtk.get_major_version() == 3:
 			hbox_rename.pack_start(self._entry_rename, False, False, 0)
 			hbox_rename.pack_start(button_reset, False, False, 0)
 
@@ -1323,7 +1310,23 @@ class OverwriteDialog:
 			hbox.pack_start(vbox_icon, False, False, 0)
 			hbox.pack_start(vbox, True, True, 0)
 
+			self._dialog.get_content_area().pack_start(hbox, True, True, 0)
+
 		else:
+			vbox_icon.append(icon)
+
+			set_border_width(self._icon_original, 10)
+			hbox_original.append(self._icon_original)
+			self._label_original.set_hexpand(True)
+			hbox_original.append(self._label_original)
+
+			set_border_width(self._icon_source, 10)
+			hbox_source.append(self._icon_source)
+			self._label_source.set_hexpand(True)
+			hbox_source.append(self._label_source)
+
+			self._expander_rename.set_child(hbox_rename)
+
 			hbox_rename.append(self._entry_rename)
 			hbox_rename.append(button_reset)
 
@@ -1338,10 +1341,6 @@ class OverwriteDialog:
 			vbox.set_hexpand(True)
 			hbox.append(vbox)
 
-		if Gtk.get_major_version() == 3:
-			self._dialog.get_content_area().pack_start(hbox, True, True, 0)
-
-		else:
 			hbox.set_vexpand(True)
 			self._dialog.get_content_area().append(hbox)
 
@@ -1354,11 +1353,7 @@ class OverwriteDialog:
 
 	def _create_buttons(self):
 		"""Create basic buttons"""
-		if Gtk.get_major_version() == 3:
-			button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
-
-		else:
-			button_cancel = Gtk.Button.new_with_label(_('Cancel'))
+		button_cancel = Gtk.Button.new_with_label(_('Cancel'))
 		button_skip = Gtk.Button(label=_('Skip'))
 
 		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
@@ -1591,20 +1586,12 @@ class AddBookmarkDialog:
 		vbox_path = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		# controls
-		if Gtk.get_major_version() == 3:
-			button_ok = Gtk.Button(stock=Gtk.STOCK_OK)
-
-		else:
-			button_ok = Gtk.Button.new_with_label(_('OK'))
+		button_ok = Gtk.Button.new_with_label(_('OK'))
 		button_ok.connect('clicked', self._confirm_entry)
 		if Gtk.get_major_version() == 3:
 			button_ok.set_can_default(True)
 
-		if Gtk.get_major_version() == 3:
-			button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
-
-		else:
-			button_cancel = Gtk.Button.new_with_label(_('Cancel'))
+		button_cancel = Gtk.Button.new_with_label(_('Cancel'))
 
 		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
 		self._dialog.add_action_widget(button_ok, Gtk.ResponseType.OK)
@@ -1621,6 +1608,10 @@ class AddBookmarkDialog:
 			vbox.pack_start(vbox_name, False, False, 0)
 			vbox.pack_start(vbox_path, False, False, 0)
 
+			self._dialog.get_content_area().pack_start(vbox, False, False, 0)
+
+			self._dialog.show_all()
+
 		else:
 			vbox_name.append(label_name)
 			vbox_name.append(self._entry_name)
@@ -1631,16 +1622,8 @@ class AddBookmarkDialog:
 			vbox.append(vbox_name)
 			vbox.append(vbox_path)
 
-		if Gtk.get_major_version() == 3:
-			self._dialog.get_content_area().pack_start(vbox, False, False, 0)
-
-		else:
 			self._dialog.get_content_area().append(vbox)
 
-		if Gtk.get_major_version() == 3:
-			self._dialog.show_all()
-
-		else:
 			self._dialog.show()
 
 	def _confirm_entry(self, widget, data=None):
@@ -1746,6 +1729,8 @@ class OperationError:
 			hbox.pack_start(vbox_icon, False, False, 0)
 			hbox.pack_start(vbox, True, True, 0)
 
+			self._dialog.get_content_area().pack_start(hbox, False, False, 0)
+
 		else:
 			vbox_icon.append(icon)
 
@@ -1756,10 +1741,6 @@ class OperationError:
 			vbox.set_hexpand(True)
 			hbox.append(vbox)
 
-		if Gtk.get_major_version() == 3:
-			self._dialog.get_content_area().pack_start(hbox, False, False, 0)
-
-		else:
 			self._dialog.get_content_area().append(hbox)
 
 		# show all components
@@ -1831,18 +1812,10 @@ class CreateToolbarWidgetDialog:
 		self._combobox_type.add_attribute(cell_renderer_text, 'text', 1)
 
 		# create controls
-		if Gtk.get_major_version() == 3:
-			button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
-
-		else:
-			button_add = Gtk.Button.new_with_label(_('Add'))
+		button_add = Gtk.Button.new_with_label(_('Add'))
 		if Gtk.get_major_version() == 3:
 			button_add.set_can_default(True)
-		if Gtk.get_major_version() == 3:
-			button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
-
-		else:
-			button_cancel = Gtk.Button.new_with_label(_('Cancel'))
+		button_cancel = Gtk.Button.new_with_label(_('Cancel'))
 
 		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
 		self._dialog.add_action_widget(button_add, Gtk.ResponseType.ACCEPT)
@@ -1860,6 +1833,8 @@ class CreateToolbarWidgetDialog:
 			vbox.pack_start(vbox_name, False, False, 0)
 			vbox.pack_start(vbox_type, False, False, 0)
 
+			self._dialog.get_content_area().pack_start(vbox, False, False, 0)
+
 		else:
 			vbox_name.append(label_name)
 			vbox_name.append(self._entry_name)
@@ -1870,10 +1845,6 @@ class CreateToolbarWidgetDialog:
 			vbox.append(vbox_name)
 			vbox.append(vbox_type)
 
-		if Gtk.get_major_version() == 3:
-			self._dialog.get_content_area().pack_start(vbox, False, False, 0)
-
-		else:
 			self._dialog.get_content_area().append(vbox)
 
 		# show all widgets
@@ -2101,78 +2072,59 @@ class ApplicationSelectDialog:
 		if Gtk.get_major_version() == 3:
 			list_container.add(self._list)
 
-		else:
-			list_container.set_child(self._list)
-		if Gtk.get_major_version() == 3:
 			vbox_list.pack_start(label_open_with, False, False, 0)
 			vbox_list.pack_start(list_container, True, True, 0)
 
 			hbox_custom.pack_start(self._entry_custom, True, True, 0)
 
+			self._expander_custom.add(hbox_custom)
+
+			self._container.pack_start(vbox_list, True, True, 0)
+			self._container.pack_start(self._expander_custom, False, False, 0)
+
+			self._dialog.get_content_area().pack_start(self._container, True, True, 0)
+
 		else:
+			list_container.set_child(self._list)
+
 			vbox_list.append(label_open_with)
 			list_container.set_vexpand(True)
 			vbox_list.append(list_container)
 
 			self._entry_custom.set_hexpand(True)
 			hbox_custom.append(self._entry_custom)
-		if Gtk.get_major_version() == 3:
-			self._expander_custom.add(hbox_custom)
 
-		else:
 			self._expander_custom.set_child(hbox_custom)
 
-		if Gtk.get_major_version() == 3:
-			self._container.pack_start(vbox_list, True, True, 0)
-			self._container.pack_start(self._expander_custom, False, False, 0)
-
-		else:
 			vbox_list.set_vexpand(True)
 			self._container.append(vbox_list)
 			self._container.append(self._expander_custom)
 
-		if Gtk.get_major_version() == 3:
-			self._dialog.get_content_area().pack_start(self._container, True, True, 0)
-
-		else:
 			self._container.set_vexpand(True)
 			self._dialog.get_content_area().append(self._container)
 
 		# create controls
-		if Gtk.get_major_version() == 3:
-			button_help = Gtk.Button(stock=Gtk.STOCK_HELP)
-
-		else:
-			button_help = Gtk.Button.new_with_label(_('Help'))
+		button_help = Gtk.Button.new_with_label(_('Help'))
 		button_help.connect('clicked', self._application.goto_web, self.help_url)
 
 		if path is not None:
-			if Gtk.get_major_version() == 3:
-				button_ok = Gtk.Button(stock=Gtk.STOCK_OPEN)
-
-			else:
-				button_ok = Gtk.Button.new_with_label(_('Open'))
+			button_ok = Gtk.Button.new_with_label(_('Open'))
 
 		else:
-			if Gtk.get_major_version() == 3:
-				button_ok = Gtk.Button(stock=Gtk.STOCK_OK)
-
-			else:
-				button_ok = Gtk.Button.new_with_label(_('OK'))
+			button_ok = Gtk.Button.new_with_label(_('OK'))
 
 		if Gtk.get_major_version() == 3:
 			button_ok.set_can_default(True)
-		if Gtk.get_major_version() == 3:
-			button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
-
-		else:
-			button_cancel = Gtk.Button.new_with_label(_('Cancel'))
+		button_cancel = Gtk.Button.new_with_label(_('Cancel'))
 
 		if Gtk.get_major_version() == 3:
 			self._dialog.action_area.pack_start(button_help, False, False, 0)
 
 		else:
-			self._dialog.action_area.append(button_help)
+			# GTK 4 dialogs have no direct action area access, adding help
+			# button as action widget would close the dialog on click
+			button_help.set_halign(Gtk.Align.START)
+			self._dialog.get_content_area().append(button_help)
 		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
 		self._dialog.add_action_widget(button_ok, Gtk.ResponseType.OK)
 		self._dialog.set_default_response(Gtk.ResponseType.OK)
@@ -2249,20 +2201,12 @@ class PathInputDialog():
 		self._entry = PathCompletionEntry(application)
 		self._entry.connect('activate', self._confirm_entry)
 
-		if Gtk.get_major_version() == 3:
-			button_ok = Gtk.Button(stock=Gtk.STOCK_OK)
-
-		else:
-			button_ok = Gtk.Button.new_with_label(_('OK'))
+		button_ok = Gtk.Button.new_with_label(_('OK'))
 		button_ok.connect('clicked', self._confirm_entry)
 		if Gtk.get_major_version() == 3:
 			button_ok.set_can_default(True)
 
-		if Gtk.get_major_version() == 3:
-			button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
-
-		else:
-			button_cancel = Gtk.Button.new_with_label(_('Cancel'))
+		button_cancel = Gtk.Button.new_with_label(_('Cancel'))
 
 		# pack interface
 		if Gtk.get_major_version() == 3:
@@ -2284,13 +2228,12 @@ class PathInputDialog():
 		if Gtk.get_major_version() == 3:
 			self._dialog.get_content_area().pack_start(self._container, True, True, 0)
 
-		else:
-			self._container.set_vexpand(True)
-			self._dialog.get_content_area().append(self._container)
-		if Gtk.get_major_version() == 3:
 			self._dialog.show_all()
 
 		else:
+			self._container.set_vexpand(True)
+			self._dialog.get_content_area().append(self._container)
+
 			self._dialog.show()
 
 	def _confirm_entry(self, widget, data=None):

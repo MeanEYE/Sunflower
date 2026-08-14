@@ -77,25 +77,18 @@ class AssociationsOptions(SettingsPage):
 		# create controls
 		hbox_controls = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		if Gtk.get_major_version() == 3:
-			button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
-
-		else:
-			button_add = Gtk.Button.new_with_label(_('Add'))
+		button_add = Gtk.Button.new_with_label(_('Add'))
 		button_add.connect('clicked', self.__button_add_clicked)
 
 		# pack interface
 		if Gtk.get_major_version() == 3:
 			container.add(self._list)
 
+			hbox_controls.pack_start(button_add, False, False, 0)
+
 		else:
 			container.set_child(self._list)
 
-		if Gtk.get_major_version() == 3:
-			hbox_controls.pack_start(button_add, False, False, 0)
-
-
-		else:
 			hbox_controls.append(button_add)
 
 		self.pack_start(container, True, True, 0)

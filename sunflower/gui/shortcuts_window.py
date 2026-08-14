@@ -79,19 +79,31 @@ class ShortcutsWindow():
 
 				short = Gtk.ShortcutsShortcut(title=title, accelerator=accelerator_name)
 				short.show()
-				group.add(short)
+				if Gtk.get_major_version() == 3:
+					group.add(short)
+
+				else:
+					group.add_shortcut(short)
 
 				i += 1
 
 				# split shortcuts into groups to fit them on screen
 				if (i % 10 == 0):
-					section.add(group)
+					if Gtk.get_major_version() == 3:
+						section.add(group)
+
+					else:
+						section.add_group(group)
 					group = Gtk.ShortcutsGroup()
 					group.show()
 
-			section.add(group)
+			if Gtk.get_major_version() == 3:
+				section.add(group)
+				self._window.add(section)
 
-			self._window.add(section)
+			else:
+				section.add_group(group)
+				self._window.add_section(section)
 
 		if Gtk.get_major_version() == 3:
 			self._window.show_all()

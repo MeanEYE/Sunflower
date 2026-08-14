@@ -14,27 +14,32 @@ class BookmarksOptions(SettingsPage):
 		SettingsPage.__init__(self, parent, application, 'bookmarks', _('Bookmarks'))
 
 		# mounts checkbox
-		self._checkbox_show_mount_points = Gtk.CheckButton(_('Show mount points in bookmarks menu'))
+		self._checkbox_show_mount_points = Gtk.CheckButton.new_with_label(_('Show mount points in bookmarks menu'))
 		self._checkbox_show_mount_points.connect('toggled', self._parent.enable_save)
 
 		# system bookmarks checkbox
-		self._checkbox_system_bookmarks = Gtk.CheckButton(_('Show system bookmarks'))
+		self._checkbox_system_bookmarks = Gtk.CheckButton.new_with_label(_('Show system bookmarks'))
 		self._checkbox_system_bookmarks.connect('toggled', self._parent.enable_save)
 
 		# bookmarks checkbox
-		self._checkbox_add_home = Gtk.CheckButton(_('Add home directory to bookmarks menu'))
+		self._checkbox_add_home = Gtk.CheckButton.new_with_label(_('Add home directory to bookmarks menu'))
 		self._checkbox_add_home.connect('toggled', self._parent.enable_save)
 
 		# create list box
 		container = Gtk.ScrolledWindow()
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
-		container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			container.set_has_frame(True)
 
 		self._bookmarks = Gtk.ListStore(str, str)
 
 		self._list = Gtk.TreeView()
 		self._list.set_model(self._bookmarks)
-		self._list.set_rules_hint(True)
+		if Gtk.get_major_version() == 3:
+			self._list.set_rules_hint(True)
 
 		cell_title = Gtk.CellRendererText()
 		cell_title.set_property('editable', True)
@@ -57,45 +62,91 @@ class BookmarksOptions(SettingsPage):
 		self._list.append_column(col_title)
 		self._list.append_column(col_command)
 
-		container.add(self._list)
+		if Gtk.get_major_version() == 3:
+			container.add(self._list)
+
+		else:
+			container.set_child(self._list)
 
 		# create controls
 		button_box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
+		if Gtk.get_major_version() == 3:
+			button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
+
+		else:
+			button_add = Gtk.Button.new_with_label(_('Add'))
 		button_add.connect('clicked', self._add_bookmark)
 
-		button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
+		if Gtk.get_major_version() == 3:
+			button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
+
+		else:
+			button_delete = Gtk.Button.new_with_label(_('Delete'))
 		button_delete.connect('clicked', self._delete_bookmark)
 
 		image_up = Gtk.Image()
-		image_up.set_from_stock(Gtk.STOCK_GO_UP, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_up.set_from_stock(Gtk.STOCK_GO_UP, Gtk.IconSize.BUTTON)
+
+		else:
+			image_up.set_from_icon_name('go-up-symbolic')
 
 		button_move_up = Gtk.Button(label=None)
-		button_move_up.add(image_up)
+		if Gtk.get_major_version() == 3:
+			button_move_up.add(image_up)
+
+		else:
+			button_move_up.set_child(image_up)
 		button_move_up.set_tooltip_text(_('Move Up'))
 		button_move_up.connect('clicked', self._move_bookmark, -1)
 
 		image_down = Gtk.Image()
-		image_down.set_from_stock(Gtk.STOCK_GO_DOWN, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_down.set_from_stock(Gtk.STOCK_GO_DOWN, Gtk.IconSize.BUTTON)
+
+		else:
+			image_down.set_from_icon_name('go-down-symbolic')
 
 		button_move_down = Gtk.Button(label=None)
-		button_move_down.add(image_down)
+		if Gtk.get_major_version() == 3:
+			button_move_down.add(image_down)
+
+		else:
+			button_move_down.set_child(image_down)
 		button_move_down.set_tooltip_text(_('Move Down'))
 		button_move_down.connect('clicked', self._move_bookmark, 1)
 
 		# pack ui
-		button_box.pack_start(button_add, False, False, 0)
-		button_box.pack_start(button_delete, False, False, 0)
-		button_box.pack_end(button_move_down, False, False, 0)
-		button_box.pack_end(button_move_up, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			button_box.pack_start(button_add, False, False, 0)
+			button_box.pack_start(button_delete, False, False, 0)
+			button_box.pack_end(button_move_down, False, False, 0)
+			button_box.pack_end(button_move_up, False, False, 0)
+
+		else:
+			button_box.append(button_add)
+			button_box.append(button_delete)
+
+			# end packed children are shown in reverse order of addition
+			button_move_up.set_hexpand(True)
+			button_move_up.set_halign(Gtk.Align.END)
+			button_box.append(button_move_up)
+			button_box.append(button_move_down)
 
 		# pack checkboxes
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
-		vbox.pack_start(self._checkbox_show_mount_points, False, False, 0)
-		vbox.pack_start(self._checkbox_system_bookmarks, False, False, 0)
-		vbox.pack_start(self._checkbox_add_home, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox.pack_start(self._checkbox_show_mount_points, False, False, 0)
+			vbox.pack_start(self._checkbox_system_bookmarks, False, False, 0)
+			vbox.pack_start(self._checkbox_add_home, False, False, 0)
+
+
+		else:
+			vbox.append(self._checkbox_show_mount_points)
+			vbox.append(self._checkbox_system_bookmarks)
+			vbox.append(self._checkbox_add_home)
 
 		self.pack_start(vbox, False, False, 0)
 		self.pack_start(container, True, True, 0)

@@ -3,8 +3,67 @@ from __future__ import absolute_import
 import os
 import sqlite3 as sql
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from sunflower.common import get_cache_directory, encode_file_name
+
+
+# Emblems are stored by their historic name, but rendered through symbolic
+# icons. Full color emblem sets only ship with legacy icon themes which GTK 4
+# no longer falls back to, while these symbolic icons are present in current
+# themes and follow the theme color.
+EMBLEM_ICONS = {
+		'emblem-default': ('emblem-default-symbolic', 'object-select-symbolic'),
+		'emblem-documents': ('emblem-documents-symbolic', 'folder-documents-symbolic'),
+		'emblem-downloads': ('emblem-downloads-symbolic', 'folder-download-symbolic'),
+		'emblem-favorite': ('emblem-favorite-symbolic', 'starred-symbolic'),
+		'emblem-generic': ('emblem-generic-symbolic', 'view-pin-symbolic'),
+		'emblem-important': ('emblem-important-symbolic',),
+		'emblem-mail': ('emblem-mail-symbolic', 'mail-unread-symbolic'),
+		'emblem-new': ('emblem-new-symbolic', 'document-new-symbolic'),
+		'emblem-package': ('emblem-package-symbolic', 'package-x-generic-symbolic'),
+		'emblem-photos': ('emblem-photos-symbolic', 'image-x-generic-symbolic'),
+		'emblem-readonly': ('emblem-readonly-symbolic', 'changes-prevent-symbolic'),
+		'emblem-shared': ('emblem-shared-symbolic', 'folder-remote-symbolic'),
+		'emblem-symbolic-link': ('emblem-symbolic-link-symbolic', 'insert-link-symbolic'),
+		'emblem-synchronizing': ('emblem-synchronizing-symbolic', 'view-refresh-symbolic'),
+		'emblem-system': ('emblem-system-symbolic',),
+		'emblem-unreadable': ('emblem-unreadable-symbolic', 'action-unavailable-symbolic'),
+		'emblem-urgent': ('emblem-urgent-symbolic', 'alarm-symbolic'),
+		'emblem-web': ('emblem-web-symbolic', 'web-browser-symbolic'),
+	}
+
+_icon_name_cache = {}
+
+
+def get_icon_theme():
+	"""Return icon theme for the default display."""
+	if Gtk.get_major_version() == 3:
+		return Gtk.IconTheme.get_default()
+
+	return Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
+
+
+def get_emblem_icon(emblem):
+	"""Return name of icon used to render specified emblem.
+
+	Symbolic icons are preferred, the emblem name itself is used as last
+	resort so themes which still provide full color emblems keep working.
+	Returns None when theme has no icon for the emblem.
+
+	"""
+	if emblem in _icon_name_cache:
+		return _icon_name_cache[emblem]
+
+	icon_theme = get_icon_theme()
+	result = None
+
+	for name in EMBLEM_ICONS.get(emblem, ()) + (emblem,):
+		if icon_theme.has_icon(name):
+			result = name
+			break
+
+	_icon_name_cache[emblem] = result
+	return result
 
 
 class EmblemManager:
@@ -244,9 +303,8 @@ class EmblemManager:
 		cursor.execute('SELECT value FROM emblems WHERE item=?', (item_id,))
 
 		# prepare result
-		icon_theme = Gtk.IconTheme.get_default()
 		result = tuple(row[0] for row in cursor.fetchall())
-		result = [icon for icon in result if icon_theme.has_icon(icon)]
+		result = [emblem for emblem in result if get_emblem_icon(emblem) is not None]
 
 		return result
 
@@ -268,10 +326,9 @@ class EmblemManager:
 			return result
 
 		# get emblems for each item
-		icon_theme = Gtk.IconTheme.get_default()
 		for item_id, item_name in items:
 			cursor.execute('SELECT value FROM emblems WHERE item=?', (item_id,))
 			emblems = tuple(row[0] for row in cursor.fetchall())
-			result[item_name] = [icon for icon in emblems if icon_theme.has_icon(icon)]
+			result[item_name] = [emblem for emblem in emblems if get_emblem_icon(emblem) is not None]
 
 		return result

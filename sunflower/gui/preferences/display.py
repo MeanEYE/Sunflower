@@ -25,20 +25,20 @@ class DisplayOptions(SettingsPage):
 		vbox_main_window = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('Main window'), vbox_main_window)
 
-		self._checkbox_hide_on_close = Gtk.CheckButton(_('Hide main window on close'))
-		self._checkbox_multiple_instances = Gtk.CheckButton(_('Allow multiple instances'))
-		self._checkbox_show_toolbar = Gtk.CheckButton(_('Show toolbar'))
-		self._checkbox_show_titlebar = Gtk.CheckButton(_('Show titlebar'))
-		self._checkbox_show_command_bar = Gtk.CheckButton(_('Show command bar'))
-		self._checkbox_horizontal_split = Gtk.CheckButton(_('Horizontal split'))
-		self._checkbox_dark_theme = Gtk.CheckButton(_('Dark theme'))
+		self._checkbox_hide_on_close = Gtk.CheckButton.new_with_label(_('Hide main window on close'))
+		self._checkbox_multiple_instances = Gtk.CheckButton.new_with_label(_('Allow multiple instances'))
+		self._checkbox_show_toolbar = Gtk.CheckButton.new_with_label(_('Show toolbar'))
+		self._checkbox_show_titlebar = Gtk.CheckButton.new_with_label(_('Show titlebar'))
+		self._checkbox_show_command_bar = Gtk.CheckButton.new_with_label(_('Show command bar'))
+		self._checkbox_horizontal_split = Gtk.CheckButton.new_with_label(_('Horizontal split'))
+		self._checkbox_dark_theme = Gtk.CheckButton.new_with_label(_('Dark theme'))
 
 		self._checkbox_hide_on_close.connect('toggled', self._parent.enable_save, True)
 		self._checkbox_multiple_instances.connect('toggled', self._parent.enable_save, True)
 		self._checkbox_show_toolbar.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_titlebar.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_command_bar.connect('toggled', self._parent.enable_save)
-		self._checkbox_show_command_bar_shortcuts = Gtk.CheckButton(_('Show keyboard shortcuts on command bar buttons'))
+		self._checkbox_show_command_bar_shortcuts = Gtk.CheckButton.new_with_label(_('Show keyboard shortcuts on command bar buttons'))
 		self._checkbox_show_command_bar_shortcuts.connect('toggled', self._parent.enable_save)
 		self._checkbox_horizontal_split.connect('toggled', self._parent.enable_save)
 		self._checkbox_dark_theme.connect('toggled', self._parent.enable_save)
@@ -47,10 +47,10 @@ class DisplayOptions(SettingsPage):
 		vbox_tabs = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('Tabs'), vbox_tabs)
 
-		self._checkbox_focus_new_tab = Gtk.CheckButton(_('Focus new tab after opening'))
-		self._checkbox_tab_close_button = Gtk.CheckButton(_('Show close button'))
-		self._checkbox_always_show_tabs = Gtk.CheckButton(_('Show tab(s) even if there is only one'))
-		self._checkbox_superuser_notification = Gtk.CheckButton(_('Change title bar color when started as super user'))
+		self._checkbox_focus_new_tab = Gtk.CheckButton.new_with_label(_('Focus new tab after opening'))
+		self._checkbox_tab_close_button = Gtk.CheckButton.new_with_label(_('Show close button'))
+		self._checkbox_always_show_tabs = Gtk.CheckButton.new_with_label(_('Show tab(s) even if there is only one'))
+		self._checkbox_superuser_notification = Gtk.CheckButton.new_with_label(_('Change title bar color when started as super user'))
 
 		self._checkbox_focus_new_tab.connect('toggled', self._parent.enable_save)
 		self._checkbox_tab_close_button.connect('toggled', self._parent.enable_save)
@@ -58,12 +58,13 @@ class DisplayOptions(SettingsPage):
 		self._checkbox_superuser_notification.connect('toggled', self._parent.enable_save)
 
 		# status bar
-		table = Gtk.Table(2, 2, False)
-		table.set_col_spacing(0, 5)
-		table.set_row_spacings(5)
+		table = Gtk.Grid.new()
+		table.set_column_spacing(5)
+		table.set_row_spacing(5)
 
 		label_status_bar = Gtk.Label(label=_('Show status bar:'))
-		label_status_bar.set_alignment(0, 0.5)
+		label_status_bar.set_xalign(0)
+		label_status_bar.set_yalign(0.5)
 
 		list_status_bar = Gtk.ListStore(str, int)
 		list_status_bar.append((_('Always'), StatusVisible.ALWAYS))
@@ -79,7 +80,8 @@ class DisplayOptions(SettingsPage):
 
 		# expand tabs
 		label_expand_tab = Gtk.Label(label=_('Expanded tabs:'))
-		label_expand_tab.set_alignment(0, 0.5)
+		label_expand_tab.set_xalign(0)
+		label_expand_tab.set_yalign(0.5)
 
 		list_expand_tab = Gtk.ListStore(str, int)
 		list_expand_tab.append((_('None'), TabExpand.NONE))
@@ -97,10 +99,10 @@ class DisplayOptions(SettingsPage):
 		vbox_other = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('Other'), vbox_other)
 
-		self._checkbox_hide_window_on_minimize = Gtk.CheckButton(_('Hide operation window on minimize'))
-		self._checkbox_show_notifications = Gtk.CheckButton(_('Show notifications'))
+		self._checkbox_hide_window_on_minimize = Gtk.CheckButton.new_with_label(_('Hide operation window on minimize'))
+		self._checkbox_show_notifications = Gtk.CheckButton.new_with_label(_('Show notifications'))
 		self._checkbox_show_notifications.set_sensitive(self._application.notification_manager.available)
-		self._checkbox_network_path_completion = Gtk.CheckButton(_('Use path completion on non-local paths'))
+		self._checkbox_network_path_completion = Gtk.CheckButton.new_with_label(_('Use path completion on non-local paths'))
 
 		self._checkbox_hide_window_on_minimize.connect('toggled', self._parent.enable_save)
 		self._checkbox_show_notifications.connect('toggled', self._parent.enable_save)
@@ -109,7 +111,8 @@ class DisplayOptions(SettingsPage):
 		# size format
 		hbox_size_format = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		label_size_format = Gtk.Label(label=_('Size format:'))
-		label_size_format.set_alignment(0, 0.5)
+		label_size_format.set_xalign(0)
+		label_size_format.set_yalign(0.5)
 
 		list_size_format = Gtk.ListStore(str, int)
 		list_size_format.append((_('Localized'), SizeFormat.LOCAL))
@@ -124,34 +127,68 @@ class DisplayOptions(SettingsPage):
 		self._combobox_size_format.add_attribute(cell_size_format, 'markup', 0)
 
 		# pack ui
-		hbox_size_format.pack_start(label_size_format, False, False, 0)
-		hbox_size_format.pack_start(self._combobox_size_format, False, False, 0)
+		table.attach(label_status_bar, 0, 0, 1, 1)
+		table.attach(self._combobox_status_bar, 1, 0, 1, 1)
 
-		table.attach(label_status_bar, 0, 1, 0, 1, xoptions=Gtk.AttachOptions.FILL)
-		table.attach(self._combobox_status_bar, 1, 2, 0, 1, xoptions=Gtk.AttachOptions.FILL)
+		table.attach(label_expand_tab, 0, 1, 1, 1)
+		table.attach(self._combobox_expand_tabs, 1, 1, 1, 1)
 
-		table.attach(label_expand_tab, 0, 1, 1, 2, xoptions=Gtk.AttachOptions.FILL)
-		table.attach(self._combobox_expand_tabs, 1, 2, 1, 2, xoptions=Gtk.AttachOptions.FILL)
+		main_window_options = (
+				self._checkbox_hide_on_close,
+				self._checkbox_multiple_instances,
+				self._checkbox_show_toolbar,
+				self._checkbox_show_titlebar,
+				self._checkbox_show_command_bar,
+				self._checkbox_show_command_bar_shortcuts,
+				self._checkbox_horizontal_split,
+				self._checkbox_dark_theme
+			)
+		tab_options = (
+				self._checkbox_focus_new_tab,
+				self._checkbox_tab_close_button,
+				self._checkbox_always_show_tabs,
+				self._checkbox_superuser_notification
+			)
+		other_options = (
+				self._checkbox_hide_window_on_minimize,
+				self._checkbox_show_notifications,
+				self._checkbox_network_path_completion
+			)
 
-		vbox_main_window.pack_start(self._checkbox_hide_on_close, False, False, 0)
-		vbox_main_window.pack_start(self._checkbox_multiple_instances, False, False, 0)
-		vbox_main_window.pack_start(self._checkbox_show_toolbar, False, False, 0)
-		vbox_main_window.pack_start(self._checkbox_show_titlebar, False, False, 0)
-		vbox_main_window.pack_start(self._checkbox_show_command_bar, False, False, 0)
-		vbox_main_window.pack_start(self._checkbox_show_command_bar_shortcuts, False, False, 0)
-		vbox_main_window.pack_start(self._checkbox_horizontal_split, False, False, 0)
-		vbox_main_window.pack_start(self._checkbox_dark_theme, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox_size_format.pack_start(label_size_format, False, False, 0)
+			hbox_size_format.pack_start(self._combobox_size_format, False, False, 0)
 
-		vbox_tabs.pack_start(self._checkbox_focus_new_tab, False, False, 0)
-		vbox_tabs.pack_start(self._checkbox_tab_close_button, False, False, 0)
-		vbox_tabs.pack_start(self._checkbox_always_show_tabs, False, False, 0)
-		vbox_tabs.pack_start(self._checkbox_superuser_notification, False, False, 0)
-		vbox_tabs.pack_start(table, False, False, 5)
+			for widget in main_window_options:
+				vbox_main_window.pack_start(widget, False, False, 0)
 
-		vbox_other.pack_start(self._checkbox_hide_window_on_minimize, False, False, 0)
-		vbox_other.pack_start(self._checkbox_show_notifications, False, False, 0)
-		vbox_other.pack_start(self._checkbox_network_path_completion, False, False, 0)
-		vbox_other.pack_start(hbox_size_format, False, False, 0)
+			for widget in tab_options:
+				vbox_tabs.pack_start(widget, False, False, 0)
+
+			vbox_tabs.pack_start(table, False, False, 5)
+
+			for widget in other_options:
+				vbox_other.pack_start(widget, False, False, 0)
+
+			vbox_other.pack_start(hbox_size_format, False, False, 0)
+
+		else:
+			hbox_size_format.append(label_size_format)
+			hbox_size_format.append(self._combobox_size_format)
+
+			for widget in main_window_options:
+				vbox_main_window.append(widget)
+
+			for widget in tab_options:
+				vbox_tabs.append(widget)
+
+			set_border_width(table, 5)
+			vbox_tabs.append(table)
+
+			for widget in other_options:
+				vbox_other.append(widget)
+
+			vbox_other.append(hbox_size_format)
 
 	def _load_options(self):
 		"""Load display options"""

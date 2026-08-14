@@ -18,7 +18,7 @@ class ViewEditOptions(SettingsPage):
 		vbox_view = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		self._create_section(_('View'), vbox_view)
 
-		self._checkbox_view_word_wrap = Gtk.CheckButton(_('Wrap long lines'))
+		self._checkbox_view_word_wrap = Gtk.CheckButton.new_with_label(_('Wrap long lines'))
 		self._checkbox_view_word_wrap.connect('toggled', self._parent.enable_save)
 
 		# editor options
@@ -26,11 +26,25 @@ class ViewEditOptions(SettingsPage):
 		self._create_section(_('Edit'), vbox_edit)
 
 		# installed application
-		self._radio_application = Gtk.RadioButton(label=_('Use installed application'))
+		if Gtk.get_major_version() == 3:
+			self._radio_application = Gtk.RadioButton(label=_('Use installed application'))
+
+		else:
+			# GTK 4 dropped radio buttons in favor of grouped check buttons
+			self._radio_application = Gtk.CheckButton.new_with_label(_('Use installed application'))
+
 		self._radio_application.connect('toggled', self._parent.enable_save)
 
-		align_application = Gtk.Alignment.new(0, 0, 1, 0)
-		align_application.set_padding(0, 10, 15, 15)
+		if Gtk.get_major_version() == 3:
+			align_application = Gtk.Alignment.new(0, 0, 1, 0)
+			align_application.set_padding(0, 10, 15, 15)
+
+		else:
+			# GTK 4 dropped alignment widgets, margins provide the same padding
+			align_application = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+			align_application.set_margin_bottom(10)
+			align_application.set_margin_start(15)
+			align_application.set_margin_end(15)
 		vbox_application = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		set_border_width(vbox_application, 5)
 
@@ -48,38 +62,79 @@ class ViewEditOptions(SettingsPage):
 		self._combobox_application.add_attribute(cell_name, 'text', Column.NAME)
 
 		# external options
-		self._radio_external = Gtk.RadioButton(group=self._radio_application, label=_('Use external command'))
+		if Gtk.get_major_version() == 3:
+			self._radio_external = Gtk.RadioButton(group=self._radio_application, label=_('Use external command'))
+
+		else:
+			self._radio_external = Gtk.CheckButton.new_with_label(_('Use external command'))
+			self._radio_external.set_group(self._radio_application)
+
 		self._radio_external.connect('toggled', self._parent.enable_save)
 
-		align_external = Gtk.Alignment.new(0, 0, 1, 0)
-		align_external.set_padding(0, 10, 15, 15)
+		if Gtk.get_major_version() == 3:
+			align_external = Gtk.Alignment.new(0, 0, 1, 0)
+			align_external.set_padding(0, 10, 15, 15)
+
+		else:
+			align_external = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+			align_external.set_margin_bottom(10)
+			align_external.set_margin_start(15)
+			align_external.set_margin_end(15)
 		vbox_external = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		set_border_width(vbox_external, 5)
 
 		label_editor = Gtk.Label(label=_('Command line:'))
-		label_editor.set_alignment(0, 0.5)
+		label_editor.set_xalign(0)
+		label_editor.set_yalign(0.5)
 		label_editor.set_use_markup(True)
 		self._entry_editor = Gtk.Entry()
 		self._entry_editor.connect('changed', self._parent.enable_save)
 
-		self._checkbox_terminal_command = Gtk.CheckButton(_('Execute command in terminal tab'))
+		self._checkbox_terminal_command = Gtk.CheckButton.new_with_label(_('Execute command in terminal tab'))
 		self._checkbox_terminal_command.connect('toggled', self._parent.enable_save)
 
 		# pack ui
-		vbox_view.pack_start(self._checkbox_view_word_wrap, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox_view.pack_start(self._checkbox_view_word_wrap, False, False, 0)
 
-		vbox_application.pack_start(self._combobox_application, False, False, 0)
-		align_application.add(vbox_application)
+			vbox_application.pack_start(self._combobox_application, False, False, 0)
 
-		vbox_external.pack_start(label_editor, False, False, 0)
-		vbox_external.pack_start(self._entry_editor, False, False, 0)
-		vbox_external.pack_start(self._checkbox_terminal_command, False, False, 0)
-		align_external.add(vbox_external)
+		else:
+			vbox_view.append(self._checkbox_view_word_wrap)
 
-		vbox_edit.pack_start(self._radio_application, False, False, 0)
-		vbox_edit.pack_start(align_application, False, False, 0)
-		vbox_edit.pack_start(self._radio_external, False, False, 0)
-		vbox_edit.pack_start(align_external, False, False, 0)
+			vbox_application.append(self._combobox_application)
+		if Gtk.get_major_version() == 3:
+			align_application.add(vbox_application)
+
+		else:
+			align_application.append(vbox_application)
+
+		if Gtk.get_major_version() == 3:
+			vbox_external.pack_start(label_editor, False, False, 0)
+			vbox_external.pack_start(self._entry_editor, False, False, 0)
+			vbox_external.pack_start(self._checkbox_terminal_command, False, False, 0)
+
+		else:
+			vbox_external.append(label_editor)
+			vbox_external.append(self._entry_editor)
+			vbox_external.append(self._checkbox_terminal_command)
+		if Gtk.get_major_version() == 3:
+			align_external.add(vbox_external)
+
+		else:
+			align_external.append(vbox_external)
+
+		if Gtk.get_major_version() == 3:
+			vbox_edit.pack_start(self._radio_application, False, False, 0)
+			vbox_edit.pack_start(align_application, False, False, 0)
+			vbox_edit.pack_start(self._radio_external, False, False, 0)
+			vbox_edit.pack_start(align_external, False, False, 0)
+
+		else:
+			vbox_edit.append(self._radio_application)
+			vbox_edit.append(align_application)
+			vbox_edit.append(self._radio_external)
+			vbox_edit.append(align_external)
 
 	def _populate_list(self, selected_application):
 		"""Populate list of applications available for editing"""

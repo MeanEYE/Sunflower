@@ -42,7 +42,11 @@ class KeyringManagerWindow:
 		set_border_width(vbox, 7)
 		container = Gtk.ScrolledWindow()
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-		container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			container.set_has_frame(True)
 
 		self._store = Gtk.ListStore(int, str, str)
 		self._list = Gtk.TreeView(model=self._store)
@@ -63,32 +67,71 @@ class KeyringManagerWindow:
 		# create controls
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		button_edit = Gtk.Button(stock=Gtk.STOCK_EDIT)
+		if Gtk.get_major_version() == 3:
+			button_edit = Gtk.Button(stock=Gtk.STOCK_EDIT)
+
+		else:
+			button_edit = Gtk.Button.new_with_label(_('Edit'))
 		button_edit.connect('clicked', self.__edit_selected)
 
-		button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
+		if Gtk.get_major_version() == 3:
+			button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
+
+		else:
+			button_delete = Gtk.Button.new_with_label(_('Delete'))
 		button_delete.connect('clicked', self.__delete_selected)
 
-		button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
+		if Gtk.get_major_version() == 3:
+			button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
+
+		else:
+			button_close = Gtk.Button.new_with_label(_('Close'))
 		button_close.connect('clicked', self.__handle_close)
 
 		# pack components
-		hbox.pack_start(button_edit, False, False, 0)
-		hbox.pack_start(button_delete, False, False, 0)
-		hbox.pack_end(button_close, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox.pack_start(button_edit, False, False, 0)
+			hbox.pack_start(button_delete, False, False, 0)
+			hbox.pack_end(button_close, False, False, 0)
 
-		container.add(self._list)
+		else:
+			hbox.append(button_edit)
+			hbox.append(button_delete)
 
-		vbox.pack_start(container, True, True, 0)
-		vbox.pack_start(hbox, False, False, 0)
+			button_close.set_hexpand(True)
+			button_close.set_halign(Gtk.Align.END)
+			hbox.append(button_close)
 
-		self._window.add(vbox)
+		if Gtk.get_major_version() == 3:
+			container.add(self._list)
+
+		else:
+			container.set_child(self._list)
+
+		if Gtk.get_major_version() == 3:
+			vbox.pack_start(container, True, True, 0)
+			vbox.pack_start(hbox, False, False, 0)
+
+		else:
+			container.set_vexpand(True)
+			vbox.append(container)
+			vbox.append(hbox)
+
+		if Gtk.get_major_version() == 3:
+			self._window.add(vbox)
+
+		else:
+			self._window.set_child(vbox)
 
 		# populate list
 		self.__populate_list()
 
 		# show window
-		self._window.show_all()
+		if Gtk.get_major_version() == 3:
+			self._window.show_all()
+
+		else:
+			self._window.show()
 
 	def __populate_list(self, keyring_name=None):
 		"""Populate list with items from specified keyring"""
@@ -123,13 +166,13 @@ class KeyringManagerWindow:
 		# show error if no entry is selected
 		if selected_iter is None:
 			dialog = Gtk.MessageDialog(
-									self._window,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.WARNING,
-									Gtk.ButtonsType.OK,
-									_('Please select an entry to delete!')
+									transient_for=self._window,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.WARNING,
+									buttons=Gtk.ButtonsType.OK,
+									text=_('Please select an entry to delete!')
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 			return True
 
@@ -138,11 +181,11 @@ class KeyringManagerWindow:
 
 		# ask confirmation from user
 		dialog = Gtk.MessageDialog(
-								self._window,
-								Gtk.DialogFlags.DESTROY_WITH_PARENT,
-								Gtk.MessageType.WARNING,
-								Gtk.ButtonsType.YES_NO,
-								_(
+								transient_for=self._window,
+								destroy_with_parent=True,
+								message_type=Gtk.MessageType.WARNING,
+								buttons=Gtk.ButtonsType.YES_NO,
+								text=_(
 									'You are about to remove the following '
 									'entry from your keyring. If you do this '
 									'you will have to provide password '
@@ -150,7 +193,7 @@ class KeyringManagerWindow:
 								).format(entry_name)
 							)
 		dialog.set_default_response(Gtk.ResponseType.YES)
-		response = dialog.run()
+		response = run_dialog(dialog)
 		dialog.destroy()
 
 		if response == Gtk.ResponseType.YES:
@@ -167,13 +210,13 @@ class KeyringManagerWindow:
 		# show error if no entry is selected
 		if selected_iter is None:
 			dialog = Gtk.MessageDialog(
-									self._window,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.WARNING,
-									Gtk.ButtonsType.OK,
-									_('Please select an entry to change!')
+									transient_for=self._window,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.WARNING,
+									buttons=Gtk.ButtonsType.OK,
+									text=_('Please select an entry to change!')
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 			return True
 
@@ -190,13 +233,13 @@ class KeyringManagerWindow:
 				self._application.keyring_manager.change_secret(item_id, response[1])
 
 				dialog = Gtk.MessageDialog(
-										self._window,
-										Gtk.DialogFlags.DESTROY_WITH_PARENT,
-										Gtk.MessageType.INFO,
-										Gtk.ButtonsType.OK,
-										_('Password was changed!')
+										transient_for=self._window,
+										destroy_with_parent=True,
+										message_type=Gtk.MessageType.INFO,
+										buttons=Gtk.ButtonsType.OK,
+										text=_('Password was changed!')
 									)
-				dialog.run()
+				run_dialog(dialog)
 				dialog.destroy()
 
 				# refresh list
@@ -205,13 +248,13 @@ class KeyringManagerWindow:
 			else:
 				# passwords don't match, notify user
 				dialog = Gtk.MessageDialog(
-										self._window,
-										Gtk.DialogFlags.DESTROY_WITH_PARENT,
-										Gtk.MessageType.ERROR,
-										Gtk.ButtonsType.OK,
-										_('Passwords do not match! Please try again.')
+										transient_for=self._window,
+										destroy_with_parent=True,
+										message_type=Gtk.MessageType.ERROR,
+										buttons=Gtk.ButtonsType.OK,
+										text=_('Passwords do not match! Please try again.')
 									)
-				dialog.run()
+				run_dialog(dialog)
 				dialog.destroy()
 
 		return True

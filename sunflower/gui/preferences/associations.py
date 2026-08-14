@@ -17,11 +17,16 @@ class AssociationsOptions(SettingsPage):
 		# create interface
 		container = Gtk.ScrolledWindow()
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
-		container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			container.set_has_frame(True)
 
 		self._associations = Gtk.TreeStore(str, str)
 		self._list = Gtk.TreeView(model=self._associations)
-		self._list.set_rules_hint(True)
+		if Gtk.get_major_version() == 3:
+			self._list.set_rules_hint(True)
 		self._list.set_headers_visible(False)
 
 		cell_title = Gtk.CellRendererText()
@@ -39,36 +44,76 @@ class AssociationsOptions(SettingsPage):
 		self._list.append_column(col_command)
 
 		# create add menu
-		self._add_menu = Gtk.Menu()
+		if Gtk.get_major_version() == 3:
+			self._add_menu = Gtk.Menu()
 
-		item_add_mime_type = Gtk.MenuItem(label=_('Add mime type'))
-		item_add_mime_type.connect('activate', self.__add_mime_type)
+			item_add_mime_type = Gtk.MenuItem(label=_('Add mime type'))
+			item_add_mime_type.connect('activate', self.__add_mime_type)
 
-		item_add_application = Gtk.MenuItem(label=_('Add application to mime type'))
-		item_add_application.connect('activate', self.__add_application)
+			item_add_application = Gtk.MenuItem(label=_('Add application to mime type'))
+			item_add_application.connect('activate', self.__add_application)
 
-		self._add_menu.append(item_add_mime_type)
-		self._add_menu.append(item_add_application)
+			self._add_menu.append(item_add_mime_type)
+			self._add_menu.append(item_add_application)
 
-		self._add_menu.show_all()
+			self._add_menu.show_all()
+
+		else:
+			# GTK 4 removed menus, a popover with buttons offers the same actions
+			menu_box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+
+			for label, callback in (
+						(_('Add mime type'), self.__add_mime_type),
+						(_('Add application to mime type'), self.__add_application)
+					):
+				button = Gtk.Button.new_with_label(label)
+				button.get_style_context().add_class('flat')
+				button.connect('clicked', self.__handle_popover_option, callback)
+				menu_box.append(button)
+
+			self._add_menu = Gtk.Popover.new()
+			self._add_menu.set_child(menu_box)
 
 		# create controls
 		hbox_controls = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
+		if Gtk.get_major_version() == 3:
+			button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
+
+		else:
+			button_add = Gtk.Button.new_with_label(_('Add'))
 		button_add.connect('clicked', self.__button_add_clicked)
 
 		# pack interface
-		container.add(self._list)
+		if Gtk.get_major_version() == 3:
+			container.add(self._list)
 
-		hbox_controls.pack_start(button_add, False, False, 0)
+		else:
+			container.set_child(self._list)
+
+		if Gtk.get_major_version() == 3:
+			hbox_controls.pack_start(button_add, False, False, 0)
+
+
+		else:
+			hbox_controls.append(button_add)
 
 		self.pack_start(container, True, True, 0)
 		self.pack_end(hbox_controls, False, False, 0)
 
 	def __button_add_clicked(self, widget, data=None):
 		"""Handle clicking on add button"""
-		self._add_menu.popup_at_widget(widget, Gdk.Gravity.SOUTH_WEST, Gdk.Gravity.NORTH_WEST, None)
+		if Gtk.get_major_version() == 3:
+			self._add_menu.popup_at_widget(widget, Gdk.Gravity.SOUTH_WEST, Gdk.Gravity.NORTH_WEST, None)
+
+		else:
+			self._add_menu.set_parent(widget)
+			self._add_menu.popup()
+
+	def __handle_popover_option(self, widget, callback):
+		"""Close popover and run selected option (GTK 4)"""
+		self._add_menu.popdown()
+		callback(widget)
 
 	def __add_mime_type(self, widget, data=None):
 		"""Show dialog for adding mime type"""
@@ -120,17 +165,17 @@ class AssociationsOptions(SettingsPage):
 		else:
 			# warn user about selection
 			dialog = Gtk.MessageDialog(
-									self._parent,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.INFO,
-									Gtk.ButtonsType.OK,
-									_(
+									transient_for=self._parent,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.INFO,
+									buttons=Gtk.ButtonsType.OK,
+									text=_(
 										'You need to select mime type to which application '
 										'will be added. You can also select another application '
 										'in which case new one will be added to its parent.'
 									)
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 	def _load_options(self):

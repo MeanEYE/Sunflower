@@ -26,11 +26,32 @@ class MountManagerExtension:
 		self._container = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		self._controls = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		separator = Gtk.HSeparator()
+		separator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
 
 		# pack interface
-		self._container.pack_end(separator, False, False, 0)
-		self._container.pack_end(self._controls, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self._container.pack_end(separator, False, False, 0)
+			self._container.pack_end(self._controls, False, False, 0)
+
+		else:
+			# GTK 4 boxes have no end packing, controls are appended by
+			# _pack_end_controls once descendant class packs its own widgets
+			self._separator = separator
+
+	def _pack_end_controls(self):
+		"""Append controls at the bottom of the container.
+
+		Descendant classes call this after they pack their own widgets. GTK 3
+		keeps end packed children at the bottom regardless of when they were
+		added, GTK 4 orders children by the time they were appended.
+
+		"""
+		if Gtk.get_major_version() == 3:
+			return
+
+		# order matches GTK 3 where end packed children are shown in reverse
+		self._container.append(self._controls)
+		self._container.append(self._separator)
 
 	def can_handle(self, uri):
 		"""Returns boolean denoting if specified URI can be handled by this extension"""

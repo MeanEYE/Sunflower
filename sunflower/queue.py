@@ -149,13 +149,13 @@ class OperationQueue:
 		# make sure queue doesn't already exist
 		if response[1] in cls._queue_list:
 			dialog = Gtk.MessageDialog(
-									dialog,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.ERROR,
-									Gtk.ButtonsType.OK,
-									_('Operation queue with specified name already exists.')
+									transient_for=dialog,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.ERROR,
+									buttons=Gtk.ButtonsType.OK,
+									text=_('Operation queue with specified name already exists.')
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 			return False
 

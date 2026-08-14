@@ -35,7 +35,8 @@ class DefaultRename(RenameExtension):
 
 		# help
 		label_help = Gtk.Label()
-		label_help.set_alignment(0, 0)
+		label_help.set_xalign(0)
+		label_help.set_yalign(0)
 		label_help.set_use_markup(True)
 
 		label_help.set_markup(_(
@@ -52,7 +53,8 @@ class DefaultRename(RenameExtension):
 		hbox_template = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 2)
 
 		label_template = Gtk.Label(label=_('Template:'))
-		label_template.set_alignment(0, 0.5)
+		label_template.set_xalign(0)
+		label_template.set_yalign(0.5)
 
 		self._entry_template = Gtk.Entry()
 		self._entry_template.set_text(self._template)
@@ -63,103 +65,179 @@ class DefaultRename(RenameExtension):
 		# style.ythickness = 0
 
 		image_add = Gtk.Image()
-		image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
+
+		else:
+			image_add.set_from_icon_name('list-add-symbolic')
 		button_add = Gtk.Button()
-		button_add.set_image(image_add)
+		if Gtk.get_major_version() == 3:
+			button_add.set_image(image_add)
+
+		else:
+			button_add.set_child(image_add)
 		# button_add.modify_style(style)
 		button_add.connect('clicked', self.__button_add_clicked)
 
 		# create popup menu
-		self._add_menu = Gtk.Menu()
+		if Gtk.get_major_version() == 3:
+			self._add_menu = Gtk.Menu()
 
-		item_add_name = Gtk.MenuItem(label=_('Name'))
-		item_add_name.connect('activate', self.__add_to_template, 'N')
+			item_add_name = Gtk.MenuItem(label=_('Name'))
+			item_add_name.connect('activate', self.__add_to_template, 'N')
 
-		item_add_name_part = Gtk.MenuItem(label=_('Part of name'))
-		item_add_name_part.connect('activate', self.__add_range_to_template, 'N')
+			item_add_name_part = Gtk.MenuItem(label=_('Part of name'))
+			item_add_name_part.connect('activate', self.__add_range_to_template, 'N')
 
-		item_separator1 = Gtk.SeparatorMenuItem()
+			item_separator1 = Gtk.SeparatorMenuItem()
 
-		item_add_extension = Gtk.MenuItem(label=_('Extension'))
-		item_add_extension.connect('activate', self.__add_to_template, 'E')
+			item_add_extension = Gtk.MenuItem(label=_('Extension'))
+			item_add_extension.connect('activate', self.__add_to_template, 'E')
 
-		item_add_extension_part = Gtk.MenuItem(label=_('Part of extension'))
-		item_add_extension_part.connect('activate', self.__add_range_to_template, 'E')
+			item_add_extension_part = Gtk.MenuItem(label=_('Part of extension'))
+			item_add_extension_part.connect('activate', self.__add_range_to_template, 'E')
 
-		item_separator2 = Gtk.SeparatorMenuItem()
+			item_separator2 = Gtk.SeparatorMenuItem()
 
-		item_add_counter = Gtk.MenuItem(label=_('Counter'))
-		item_add_counter.connect('activate', self.__add_to_template, 'C')
+			item_add_counter = Gtk.MenuItem(label=_('Counter'))
+			item_add_counter.connect('activate', self.__add_to_template, 'C')
 
-		self._add_menu.append(item_add_name)
-		self._add_menu.append(item_add_name_part)
-		self._add_menu.append(item_separator1)
-		self._add_menu.append(item_add_extension)
-		self._add_menu.append(item_add_extension_part)
-		self._add_menu.append(item_separator2)
-		self._add_menu.append(item_add_counter)
+			self._add_menu.append(item_add_name)
+			self._add_menu.append(item_add_name_part)
+			self._add_menu.append(item_separator1)
+			self._add_menu.append(item_add_extension)
+			self._add_menu.append(item_add_extension_part)
+			self._add_menu.append(item_separator2)
+			self._add_menu.append(item_add_counter)
 
-		self._add_menu.show_all()
+			self._add_menu.show_all()
+
+		else:
+			# GTK 4 removed menus, a popover with buttons offers same options
+			menu_box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+
+			for label, callback, data in (
+						(_('Name'), self.__add_to_template, 'N'),
+						(_('Part of name'), self.__add_range_to_template, 'N'),
+						(None, None, None),
+						(_('Extension'), self.__add_to_template, 'E'),
+						(_('Part of extension'), self.__add_range_to_template, 'E'),
+						(None, None, None),
+						(_('Counter'), self.__add_to_template, 'C'),
+					):
+				if label is None:
+					menu_box.append(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL))
+					continue
+
+				button = Gtk.Button.new_with_label(label)
+				button.get_style_context().add_class('flat')
+				button.get_child().set_xalign(0)
+				button.connect('clicked', self.__handle_popover_option, callback, data)
+				menu_box.append(button)
+
+			self._add_menu = Gtk.Popover.new()
+			self._add_menu.set_child(menu_box)
 
 		# counter
 		frame_counter = Gtk.Frame(label=_('Counter'))
 
-		table_counter = Gtk.Table(3, 2)
+		table_counter = Gtk.Grid.new()
 		set_border_width(table_counter, 5)
-		table_counter.set_col_spacings(5)
+		table_counter.set_column_spacing(5)
 
 		label_start = Gtk.Label(label=_('Start:'))
-		label_start.set_alignment(0, 0.5)
+		label_start.set_xalign(0)
+		label_start.set_yalign(0.5)
 
-		adjustment = Gtk.Adjustment(0, 0, 10**10, 1, 10)
+		adjustment = Gtk.Adjustment.new(0, 0, 10**10, 1, 10, 0)
 		self._entry_start = Gtk.SpinButton.new(adjustment, 0, 0)
 		self._entry_start.connect('value-changed', self.__counter_changed)
 
 		label_step = Gtk.Label(label=_('Step:'))
-		label_step.set_alignment(0, 0.5)
+		label_step.set_xalign(0)
+		label_step.set_yalign(0.5)
 
-		adjustment = Gtk.Adjustment(1, 1, 10**10, 1, 10)
+		adjustment = Gtk.Adjustment.new(1, 1, 10**10, 1, 10, 0)
 		self._entry_step = Gtk.SpinButton.new(adjustment, 0, 0)
 		self._entry_step.connect('value-changed', self.__counter_changed)
 
 		label_digits = Gtk.Label(label=_('Digits:'))
-		label_digits.set_alignment(0, 0.5)
+		label_digits.set_xalign(0)
+		label_digits.set_yalign(0.5)
 
-		adjustment = Gtk.Adjustment(1, 1, 20, 1, 5)
+		adjustment = Gtk.Adjustment.new(1, 1, 20, 1, 5, 0)
 		self._entry_digits = Gtk.SpinButton.new(adjustment, 0, 0)
 		self._entry_digits.connect('value-changed', self.__counter_changed)
 
 		# repack 'active' check box
 		self.vbox.remove(self._checkbox_active)
-		vbox_left.pack_start(self._checkbox_active, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox_left.pack_start(self._checkbox_active, False, False, 0)
+
+		else:
+			vbox_left.append(self._checkbox_active)
 
 		# pack interface
-		table_counter.attach(label_start, 0, 1, 0, 1)
-		table_counter.attach(self._entry_start, 0, 1, 1, 2, xoptions=Gtk.AttachOptions.EXPAND|Gtk.AttachOptions.FILL)
-		table_counter.attach(label_step, 1, 2, 0, 1)
-		table_counter.attach(self._entry_step, 1, 2, 1, 2, xoptions=Gtk.AttachOptions.EXPAND|Gtk.AttachOptions.FILL)
-		table_counter.attach(label_digits, 2, 3, 0, 1)
-		table_counter.attach(self._entry_digits, 2, 3, 1, 2, xoptions=Gtk.AttachOptions.EXPAND|Gtk.AttachOptions.FILL)
+		table_counter.attach(label_start, 0, 0, 1, 1)
+		self._entry_start.set_hexpand(True)
+		table_counter.attach(self._entry_start, 0, 1, 1, 1)
+		table_counter.attach(label_step, 1, 0, 1, 1)
+		self._entry_step.set_hexpand(True)
+		table_counter.attach(self._entry_step, 1, 1, 1, 1)
+		table_counter.attach(label_digits, 2, 0, 1, 1)
+		self._entry_digits.set_hexpand(True)
+		table_counter.attach(self._entry_digits, 2, 1, 1, 1)
 
-		frame_counter.add(table_counter)
+		if Gtk.get_major_version() == 3:
+			frame_counter.add(table_counter)
 
-		hbox_template.pack_start(self._entry_template, True, True, 0)
-		hbox_template.pack_start(button_add, False, False, 0)
+		else:
+			frame_counter.set_child(table_counter)
 
-		vbox_template.pack_start(label_template, False, False, 0)
-		vbox_template.pack_start(hbox_template, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox_template.pack_start(self._entry_template, True, True, 0)
+			hbox_template.pack_start(button_add, False, False, 0)
 
-		vbox_left.pack_start(vbox_template, False, False, 0)
-		vbox_left.pack_start(frame_counter, False, False, 0)
+			vbox_template.pack_start(label_template, False, False, 0)
+			vbox_template.pack_start(hbox_template, False, False, 0)
 
-		vbox_right.pack_start(label_help, True, True, 0)
+			vbox_left.pack_start(vbox_template, False, False, 0)
+			vbox_left.pack_start(frame_counter, False, False, 0)
 
-		hbox.pack_start(vbox_left, True, True, 0)
-		hbox.pack_start(vbox_right, True, True, 0)
+			vbox_right.pack_start(label_help, True, True, 0)
 
-		self.vbox.pack_start(hbox, True, True, 0)
+			hbox.pack_start(vbox_left, True, True, 0)
+			hbox.pack_start(vbox_right, True, True, 0)
 
-		self.vbox.show_all()
+			self.vbox.pack_start(hbox, True, True, 0)
+
+		else:
+			self._entry_template.set_hexpand(True)
+			hbox_template.append(self._entry_template)
+			hbox_template.append(button_add)
+
+			vbox_template.append(label_template)
+			vbox_template.append(hbox_template)
+
+			vbox_left.append(vbox_template)
+			vbox_left.append(frame_counter)
+
+			label_help.set_vexpand(True)
+			vbox_right.append(label_help)
+
+			vbox_left.set_hexpand(True)
+			hbox.append(vbox_left)
+			vbox_right.set_hexpand(True)
+			hbox.append(vbox_right)
+
+			hbox.set_vexpand(True)
+			self.vbox.append(hbox)
+
+		if Gtk.get_major_version() == 3:
+			self.vbox.show_all()
+
+		else:
+			self.vbox.show()
 
 	def __template_changed(self, widget, data=None):
 		"""Handle template string change"""
@@ -178,7 +256,20 @@ class DefaultRename(RenameExtension):
 
 	def __button_add_clicked(self, widget, data=None):
 		"""Handle clicking on add button"""
-		self._add_menu.popup_at_widget(widget, Gdk.Gravity.SOUTH_WEST, Gdk.Gravity.NORTH_WEST, None)
+		if Gtk.get_major_version() == 3:
+			self._add_menu.popup_at_widget(widget, Gdk.Gravity.SOUTH_WEST, Gdk.Gravity.NORTH_WEST, None)
+
+		else:
+			if self._add_menu.get_parent() is not widget:
+				if self._add_menu.get_parent() is not None:
+					self._add_menu.unparent()
+				self._add_menu.set_parent(widget)
+			self._add_menu.popup()
+
+	def __handle_popover_option(self, widget, callback, data):
+		"""Close popover and run selected option. (GTK 4)"""
+		self._add_menu.popdown()
+		callback(widget, data)
 
 	def __add_to_template(self, widget, type):
 		"""Add variable to template"""
@@ -232,16 +323,16 @@ class DefaultRename(RenameExtension):
 		else:
 			# list is empty, notify user
 			dialog = Gtk.MessageDialog(
-									self._parent,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.INFO,
-									Gtk.ButtonsType.OK,
-									_(
+									transient_for=self._parent,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.INFO,
+									buttons=Gtk.ButtonsType.OK,
+									text=_(
 										'Item list is empty. Unable to get '
 										'item for range selection!'
 									)
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 	def reset(self):

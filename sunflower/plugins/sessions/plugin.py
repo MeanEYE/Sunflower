@@ -4,6 +4,13 @@ from gi.repository import Gtk, Gio, GLib, Gdk
 from sunflower.widgets.settings_page import SettingsPage
 from sunflower.accelerator_group import AcceleratorGroup
 
+# GTK 4 renamed the Alt key modifier from MOD1
+if Gtk.get_major_version() == 3:
+	ALT_MASK = Gdk.ModifierType.MOD1_MASK
+
+else:
+	ALT_MASK = Gdk.ModifierType.ALT_MASK
+
 
 DEFAULT_NAME = _('Default')
 DEFAULT_LOCK = False
@@ -39,12 +46,17 @@ class SessionsOptions(SettingsPage):
 		# create list box
 		container = Gtk.ScrolledWindow()
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
-		container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			container.set_has_frame(True)
 
 		self._store = Gtk.ListStore.new((str, bool, int, int))
 
 		self._list = Gtk.TreeView.new_with_model(self._store)
-		self._list.set_rules_hint(True)
+		if Gtk.get_major_version() == 3:
+			self._list.set_rules_hint(True)
 
 		# create cell renderers
 		cell_name = Gtk.CellRendererText()
@@ -74,33 +86,73 @@ class SessionsOptions(SettingsPage):
 		# create controls
 		button_box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
+		if Gtk.get_major_version() == 3:
+			button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
+
+		else:
+			button_add = Gtk.Button.new_with_label(_('Add'))
 		button_add.connect('clicked', self._handle_add_session)
 
-		button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
+		if Gtk.get_major_version() == 3:
+			button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
+
+		else:
+			button_delete = Gtk.Button.new_with_label(_('Delete'))
 		button_delete.connect('clicked', self._handle_delete_session)
 
 		image_up = Gtk.Image()
-		image_up.set_from_stock(Gtk.STOCK_GO_UP, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_up.set_from_stock(Gtk.STOCK_GO_UP, Gtk.IconSize.BUTTON)
+
+		else:
+			image_up.set_from_icon_name('go-up-symbolic')
 		button_move_up = Gtk.Button(label=None)
-		button_move_up.add(image_up)
+		if Gtk.get_major_version() == 3:
+			button_move_up.add(image_up)
+
+		else:
+			button_move_up.set_child(image_up)
 		button_move_up.set_tooltip_text(_('Move up'))
 		button_move_up.connect('clicked', self._handle_move_session, -1)
 
 		image_down = Gtk.Image()
-		image_down.set_from_stock(Gtk.STOCK_GO_DOWN, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_down.set_from_stock(Gtk.STOCK_GO_DOWN, Gtk.IconSize.BUTTON)
+
+		else:
+			image_down.set_from_icon_name('go-down-symbolic')
 		button_move_down = Gtk.Button(label=None)
-		button_move_down.add(image_down)
+		if Gtk.get_major_version() == 3:
+			button_move_down.add(image_down)
+
+		else:
+			button_move_down.set_child(image_down)
 		button_move_down.set_tooltip_text(_('Move down'))
 		button_move_down.connect('clicked', self._handle_move_session, 1)
 
 		# pack interface
-		container.add(self._list)
+		if Gtk.get_major_version() == 3:
+			container.add(self._list)
 
-		button_box.pack_start(button_add, False, False, 0)
-		button_box.pack_start(button_delete, False, False, 0)
-		button_box.pack_end(button_move_down, False, False, 0)
-		button_box.pack_end(button_move_up, False, False, 0)
+		else:
+			container.set_child(self._list)
+
+		if Gtk.get_major_version() == 3:
+			button_box.pack_start(button_add, False, False, 0)
+			button_box.pack_start(button_delete, False, False, 0)
+			button_box.pack_end(button_move_down, False, False, 0)
+			button_box.pack_end(button_move_up, False, False, 0)
+
+
+		else:
+			button_box.append(button_add)
+			button_box.append(button_delete)
+
+			# end packed children are shown in reverse order of addition
+			button_move_up.set_hexpand(True)
+			button_move_up.set_halign(Gtk.Align.END)
+			button_box.append(button_move_up)
+			button_box.append(button_move_down)
 
 		self.pack_start(container, True, True, 0)
 		self.pack_start(button_box, False, False, 0)
@@ -177,13 +229,13 @@ class SessionsOptions(SettingsPage):
 
 		if len(existing_sessions) > 0:
 			dialog = Gtk.MessageDialog(
-									self._parent,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.ERROR,
-									Gtk.ButtonsType.OK,
-									_('Session with this name already exists.')
+									transient_for=self._parent,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.ERROR,
+									buttons=Gtk.ButtonsType.OK,
+									text=_('Session with this name already exists.')
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 			return False
@@ -276,14 +328,26 @@ class SessionManager:
 						})
 
 		# create header button and its popover
-		icon = Gtk.Image.new_from_icon_name('emoji-symbols-symbolic', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			icon = Gtk.Image.new_from_icon_name('emoji-symbols-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			icon = Gtk.Image.new_from_icon_name('emoji-symbols-symbolic')
 
 		self._button = Gtk.Button.new_with_label(label='Session')
-		self._button.set_image(icon)
+		if Gtk.get_major_version() == 3:
+			self._button.set_image(icon)
+
+		else:
+			self._button.set_child(icon)
 		self._button.set_tooltip_text(_('Session manager'))
 
 		popover = Gtk.Popover.new()
-		popover.set_relative_to(self._button)
+		if Gtk.get_major_version() == 3:
+			popover.set_relative_to(self._button)
+
+		else:
+			popover.set_parent(self._button)
 
 		self._button.connect('clicked', self._show_popover, popover)
 
@@ -313,18 +377,38 @@ class SessionManager:
 		# create scrolled container for list
 		list_container = Gtk.ScrolledWindow.new()
 		list_container.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-		list_container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			list_container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			list_container.set_has_frame(True)
 		list_container.set_size_request(100, 200)
 
-		list_container.add(self._item_list)
+		if Gtk.get_major_version() == 3:
+			list_container.add(self._item_list)
+
+		else:
+			list_container.set_child(self._item_list)
 
 		# create additional popover options
-		hbox_buttons = Gtk.ButtonBox.new(Gtk.Orientation.HORIZONTAL)
+		if Gtk.get_major_version() == 3:
+			hbox_buttons = Gtk.ButtonBox.new(Gtk.Orientation.HORIZONTAL)
+
+		else:
+			hbox_buttons = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		hbox_buttons.get_style_context().add_class('linked')
 
-		image_lock = Gtk.Image.new_from_icon_name('changes-prevent-symbolic', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_lock = Gtk.Image.new_from_icon_name('changes-prevent-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			image_lock = Gtk.Image.new_from_icon_name('changes-prevent-symbolic')
 		self._button_lock = Gtk.ToggleButton.new()
-		self._button_lock.set_image(image_lock)
+		if Gtk.get_major_version() == 3:
+			self._button_lock.set_image(image_lock)
+
+		else:
+			self._button_lock.set_child(image_lock)
 		self._button_lock.set_tooltip_markup(_('Lock current session\n<small>Locking session preserves tab layout at the time of activation.</small>'))
 		self._button_lock.connect('toggled', self._toggle_session_lock)
 
@@ -336,19 +420,54 @@ class SessionManager:
 
 		# pack interface elements
 		self._application.header_bar.pack_end(self._button)
-		popover.add(vbox_popover)
+		if Gtk.get_major_version() == 3:
+			popover.add(vbox_popover)
 
-		hbox_buttons.pack_start(self._button_lock, True, False, 0)
-		hbox_buttons.pack_start(button_manage, True, True, 0)
-		hbox_buttons.pack_start(button_save, True, True, 0)
-		hbox_buttons.set_child_non_homogeneous(self._button_lock, True)
+		else:
+			popover.set_child(vbox_popover)
 
-		vbox_popover.pack_start(quick_search, True, False, 0)
-		vbox_popover.pack_start(list_container, True, True, 0)
-		vbox_popover.pack_start(hbox_buttons, True, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox_buttons.pack_start(self._button_lock, True, False, 0)
+			hbox_buttons.pack_start(button_manage, True, True, 0)
+			hbox_buttons.pack_start(button_save, True, True, 0)
+
+		else:
+			self._button_lock.set_hexpand(True)
+			self._button_lock.set_halign(Gtk.Align.CENTER)
+			hbox_buttons.append(self._button_lock)
+			button_manage.set_hexpand(True)
+			hbox_buttons.append(button_manage)
+			button_save.set_hexpand(True)
+			hbox_buttons.append(button_save)
+		# GTK 4 boxes have no per child homogeneous flag, the lock button
+		# keeps its natural size through its own expand and alignment
+		if Gtk.get_major_version() == 3:
+			hbox_buttons.set_child_non_homogeneous(self._button_lock, True)
+
+		else:
+			self._button_lock.set_hexpand(False)
+
+		if Gtk.get_major_version() == 3:
+			vbox_popover.pack_start(quick_search, True, False, 0)
+			vbox_popover.pack_start(list_container, True, True, 0)
+			vbox_popover.pack_start(hbox_buttons, True, False, 0)
+
+		else:
+			quick_search.set_vexpand(True)
+			quick_search.set_valign(Gtk.Align.CENTER)
+			vbox_popover.append(quick_search)
+			list_container.set_vexpand(True)
+			vbox_popover.append(list_container)
+			hbox_buttons.set_vexpand(True)
+			hbox_buttons.set_valign(Gtk.Align.CENTER)
+			vbox_popover.append(hbox_buttons)
 
 		# show all created widgets
-		vbox_popover.show_all()
+		if Gtk.get_major_version() == 3:
+			vbox_popover.show_all()
+
+		else:
+			vbox_popover.show()
 
 		# update menu
 		self._update_menu()
@@ -368,7 +487,7 @@ class SessionManager:
 		group.add_method('show_list', _('Show session list'), self._show_popover, popover)
 
 		# configure default accelerators
-		group.set_accelerator('show_list', keyval('s'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('show_list', keyval('s'), Gdk.ModifierType.CONTROL_MASK | ALT_MASK)
 
 		# make group active
 		group.activate(self._application)

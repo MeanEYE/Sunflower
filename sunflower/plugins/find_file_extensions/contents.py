@@ -16,22 +16,40 @@ class ContentsFindFiles(FindExtension):
 
 		viewport = Gtk.ScrolledWindow()
 		viewport.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-		viewport.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			viewport.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			viewport.set_has_frame(True)
 
 		# create entry widget
 		label_content = Gtk.Label(label=_('Search for:'))
-		label_content.set_alignment(0, 0.5)
+		label_content.set_xalign(0)
+		label_content.set_yalign(0.5)
 
 		self._buffer = Gtk.TextBuffer()
 		self._text_view = Gtk.TextView(buffer=self._buffer)
 
 		# pack interface
-		viewport.add(self._text_view)
+		if Gtk.get_major_version() == 3:
+			viewport.add(self._text_view)
 
-		vbox.pack_start(label_content, False, False, 0)
-		vbox.pack_start(viewport, True, True, 0)
+		else:
+			viewport.set_child(self._text_view)
 
-		self.container.pack_start(vbox, True, True, 0)
+		if Gtk.get_major_version() == 3:
+			vbox.pack_start(label_content, False, False, 0)
+			vbox.pack_start(viewport, True, True, 0)
+
+			self.container.pack_start(vbox, True, True, 0)
+
+		else:
+			vbox.append(label_content)
+			viewport.set_vexpand(True)
+			vbox.append(viewport)
+
+			vbox.set_vexpand(True)
+			self.container.append(vbox)
 
 	def get_title(self):
 		"""Return i18n title for extension"""

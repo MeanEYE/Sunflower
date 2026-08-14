@@ -51,21 +51,27 @@ class SambaInputDialog:
 		hbox_icon = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		vbox_icon = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		icon = Gtk.Image()
-		icon.set_from_icon_name('samba', Gtk.IconSize.DIALOG)
+		if Gtk.get_major_version() == 3:
+			icon.set_from_icon_name('samba', Gtk.IconSize.DIALOG)
+
+		else:
+			icon.set_from_icon_name('samba')
 
 		vbox_name = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_name = Gtk.Label(label=_('Name:'))
-		label_name.set_alignment(0, 0.5)
+		label_name.set_xalign(0)
+		label_name.set_yalign(0.5)
 		self._entry_name = Gtk.Entry()
 		self._entry_name.connect('activate', self._confirm_entry)
 
-		hseparator = Gtk.HSeparator()
+		hseparator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
 
 		vbox_server = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_server = Gtk.Label(label=_('Server:'))
-		label_server.set_alignment(0, 0.5)
+		label_server.set_xalign(0)
+		label_server.set_yalign(0.5)
 		self._entry_server = Gtk.Entry()
 		self._entry_server.connect('activate', self._confirm_entry)
 
@@ -73,9 +79,11 @@ class SambaInputDialog:
 		vbox_directory = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_share = Gtk.Label(label=_('Share:'))
-		label_share.set_alignment(0, 0.5)
+		label_share.set_xalign(0)
+		label_share.set_yalign(0.5)
 		label_directory = Gtk.Label(label=_('Directory:'))
-		label_directory.set_alignment(0, 0.5)
+		label_directory.set_xalign(0)
+		label_directory.set_yalign(0.5)
 		self._entry_share = Gtk.Entry()
 		self._entry_directory = Gtk.Entry()
 
@@ -83,7 +91,7 @@ class SambaInputDialog:
 		self._entry_directory.connect('activate', self._confirm_entry)
 
 		# access information
-		hseparator2 = Gtk.HSeparator()
+		hseparator2 = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
 
 		vbox_domain = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		vbox_username = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
@@ -93,9 +101,12 @@ class SambaInputDialog:
 		label_username = Gtk.Label(label=_('Username:'))
 		label_password = Gtk.Label(label=_('Password:'))
 
-		label_domain.set_alignment(0, 0.5)
-		label_username.set_alignment(0, 0.5)
-		label_password.set_alignment(0, 0.5)
+		label_domain.set_xalign(0)
+		label_domain.set_yalign(0.5)
+		label_username.set_xalign(0)
+		label_username.set_yalign(0.5)
+		label_password.set_xalign(0)
+		label_password.set_yalign(0.5)
 
 		self._entry_domain = Gtk.Entry()
 		self._entry_username = Gtk.Entry()
@@ -109,53 +120,116 @@ class SambaInputDialog:
 		self._entry_password.connect('activate', self._confirm_entry)
 
 		# create controls
-		button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
-		button_save.connect('clicked', self._confirm_entry)
-		button_save.set_can_default(True)
+		if Gtk.get_major_version() == 3:
+			button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
 
-		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
+		else:
+			button_save = Gtk.Button.new_with_label(_('Save'))
+		button_save.connect('clicked', self._confirm_entry)
+		if Gtk.get_major_version() == 3:
+			button_save.set_can_default(True)
+
+		if Gtk.get_major_version() == 3:
+			button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
+
+		else:
+			button_cancel = Gtk.Button.new_with_label(_('Cancel'))
 
 		# pack user interface
-		vbox_domain.pack_start(label_domain, False, False, 0)
-		vbox_domain.pack_start(self._entry_domain, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox_domain.pack_start(label_domain, False, False, 0)
+			vbox_domain.pack_start(self._entry_domain, False, False, 0)
 
-		vbox_username.pack_start(label_username, False, False, 0)
-		vbox_username.pack_start(self._entry_username, False, False, 0)
+			vbox_username.pack_start(label_username, False, False, 0)
+			vbox_username.pack_start(self._entry_username, False, False, 0)
 
-		vbox_password.pack_start(label_password, False, False, 0)
-		vbox_password.pack_start(self._entry_password, False, False, 0)
+			vbox_password.pack_start(label_password, False, False, 0)
+			vbox_password.pack_start(self._entry_password, False, False, 0)
 
-		vbox_share.pack_start(label_share, False, False, 0)
-		vbox_share.pack_start(self._entry_share, False, False, 0)
+			vbox_share.pack_start(label_share, False, False, 0)
+			vbox_share.pack_start(self._entry_share, False, False, 0)
 
-		vbox_directory.pack_start(label_directory, False, False, 0)
-		vbox_directory.pack_start(self._entry_directory, False, False, 0)
+			vbox_directory.pack_start(label_directory, False, False, 0)
+			vbox_directory.pack_start(self._entry_directory, False, False, 0)
 
-		vbox_server.pack_start(label_server, False, False, 0)
-		vbox_server.pack_start(self._entry_server, False, False, 0)
+			vbox_server.pack_start(label_server, False, False, 0)
+			vbox_server.pack_start(self._entry_server, False, False, 0)
 
-		vbox_name.pack_start(label_name, False, False, 0)
-		vbox_name.pack_start(self._entry_name, False, False, 0)
+			vbox_name.pack_start(label_name, False, False, 0)
+			vbox_name.pack_start(self._entry_name, False, False, 0)
 
-		self._container.pack_start(vbox_name, False, False, 0)
-		self._container.pack_start(hseparator, False, False, 2)
-		self._container.pack_start(vbox_server, False, False, 0)
-		self._container.pack_start(vbox_share, False, False, 0)
-		self._container.pack_start(vbox_directory, False, False, 0)
-		self._container.pack_start(hseparator2, False, False, 2)
-		self._container.pack_start(vbox_domain, False, False, 0)
-		self._container.pack_start(vbox_username, False, False, 0)
-		self._container.pack_start(vbox_password, False, False, 0)
+			self._container.pack_start(vbox_name, False, False, 0)
+			self._container.pack_start(hseparator, False, False, 2)
+			self._container.pack_start(vbox_server, False, False, 0)
+			self._container.pack_start(vbox_share, False, False, 0)
+			self._container.pack_start(vbox_directory, False, False, 0)
+			self._container.pack_start(hseparator2, False, False, 2)
+			self._container.pack_start(vbox_domain, False, False, 0)
+			self._container.pack_start(vbox_username, False, False, 0)
+			self._container.pack_start(vbox_password, False, False, 0)
+
+		else:
+			vbox_domain.append(label_domain)
+			vbox_domain.append(self._entry_domain)
+
+			vbox_username.append(label_username)
+			vbox_username.append(self._entry_username)
+
+			vbox_password.append(label_password)
+			vbox_password.append(self._entry_password)
+
+			vbox_share.append(label_share)
+			vbox_share.append(self._entry_share)
+
+			vbox_directory.append(label_directory)
+			vbox_directory.append(self._entry_directory)
+
+			vbox_server.append(label_server)
+			vbox_server.append(self._entry_server)
+
+			vbox_name.append(label_name)
+			vbox_name.append(self._entry_name)
+
+			self._container.append(vbox_name)
+			set_border_width(hseparator, 2)
+			self._container.append(hseparator)
+			self._container.append(vbox_server)
+			self._container.append(vbox_share)
+			self._container.append(vbox_directory)
+			set_border_width(hseparator2, 2)
+			self._container.append(hseparator2)
+			self._container.append(vbox_domain)
+			self._container.append(vbox_username)
+			self._container.append(vbox_password)
 
 		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
-		self._dialog.action_area.pack_end(button_save, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self._dialog.action_area.pack_end(button_save, False, False, 0)
 
-		vbox_icon.pack_start(icon, False, False, 0)
-		hbox_icon.pack_start(vbox_icon, True, True, 0)
-		hbox_icon.pack_start(self._container, True, True, 0)
+			vbox_icon.pack_start(icon, False, False, 0)
+			hbox_icon.pack_start(vbox_icon, True, True, 0)
+			hbox_icon.pack_start(self._container, True, True, 0)
 
-		self._dialog.vbox.pack_start(hbox_icon, True, True, 0)
-		self._dialog.show_all()
+			self._dialog.vbox.pack_start(hbox_icon, True, True, 0)
+
+		else:
+			button_save.set_hexpand(True)
+			button_save.set_halign(Gtk.Align.END)
+			self._dialog.action_area.append(button_save)
+
+			vbox_icon.append(icon)
+			vbox_icon.set_hexpand(True)
+			hbox_icon.append(vbox_icon)
+			self._container.set_hexpand(True)
+			hbox_icon.append(self._container)
+
+			hbox_icon.set_vexpand(True)
+			self._dialog.vbox.append(hbox_icon)
+		if Gtk.get_major_version() == 3:
+			self._dialog.show_all()
+
+		else:
+			self._dialog.show()
 
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""
@@ -163,17 +237,17 @@ class SambaInputDialog:
 		or self._entry_server.get_text() == '':
 			# missing required fields
 			dialog = Gtk.MessageDialog(
-									self._dialog,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.INFO,
-									Gtk.ButtonsType.OK,
-									_(
+									transient_for=self._dialog,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.INFO,
+									buttons=Gtk.ButtonsType.OK,
+									text=_(
 										'One or more required fields are empty. '
 										'Please make sure you have entered name, '
 										'server and share.'
 									)
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 		else:
@@ -222,7 +296,7 @@ class SambaInputDialog:
 		input text.
 
 		"""
-		code = self._dialog.run()
+		code = run_dialog(self._dialog)
 
 		result = (
 				self._entry_name.get_text(),
@@ -262,28 +336,35 @@ class FtpInputDialog:
 		hbox_icon = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		vbox_icon = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		icon = Gtk.Image()
-		icon.set_from_icon_name('folder-remote-ftp', Gtk.IconSize.DIALOG)
+		if Gtk.get_major_version() == 3:
+			icon.set_from_icon_name('folder-remote-ftp', Gtk.IconSize.DIALOG)
+
+		else:
+			icon.set_from_icon_name('folder-remote-ftp')
 
 		vbox_name = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_name = Gtk.Label(label=_('Name:'))
-		label_name.set_alignment(0, 0.5)
+		label_name.set_xalign(0)
+		label_name.set_yalign(0.5)
 		self._entry_name = Gtk.Entry()
 		self._entry_name.connect('activate', self._confirm_entry)
 
-		hseparator = Gtk.HSeparator()
+		hseparator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
 
 		vbox_server = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_server = Gtk.Label(label=_('Server:'))
-		label_server.set_alignment(0, 0.5)
+		label_server.set_xalign(0)
+		label_server.set_yalign(0.5)
 		self._entry_server = Gtk.Entry()
 		self._entry_server.connect('activate', self._confirm_entry)
 
 		vbox_directory = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_directory = Gtk.Label(label=_('Directory:'))
-		label_directory.set_alignment(0, 0.5)
+		label_directory.set_xalign(0)
+		label_directory.set_yalign(0.5)
 		self._entry_share = Gtk.Entry()
 		self._entry_directory = Gtk.Entry()
 
@@ -291,7 +372,7 @@ class FtpInputDialog:
 		self._entry_directory.connect('activate', self._confirm_entry)
 
 		# access information
-		hseparator2 = Gtk.HSeparator()
+		hseparator2 = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
 
 		vbox_username = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		vbox_password = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
@@ -299,8 +380,10 @@ class FtpInputDialog:
 		label_username = Gtk.Label(label=_('Username:'))
 		label_password = Gtk.Label(label=_('Password:'))
 
-		label_username.set_alignment(0, 0.5)
-		label_password.set_alignment(0, 0.5)
+		label_username.set_xalign(0)
+		label_username.set_yalign(0.5)
+		label_password.set_xalign(0)
+		label_password.set_yalign(0.5)
 
 		self._entry_username = Gtk.Entry()
 		self._entry_password = Gtk.Entry()
@@ -312,45 +395,100 @@ class FtpInputDialog:
 		self._entry_password.connect('activate', self._confirm_entry)
 
 		# create controls
-		button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
-		button_save.connect('clicked', self._confirm_entry)
-		button_save.set_can_default(True)
+		if Gtk.get_major_version() == 3:
+			button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
 
-		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
+		else:
+			button_save = Gtk.Button.new_with_label(_('Save'))
+		button_save.connect('clicked', self._confirm_entry)
+		if Gtk.get_major_version() == 3:
+			button_save.set_can_default(True)
+
+		if Gtk.get_major_version() == 3:
+			button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
+
+		else:
+			button_cancel = Gtk.Button.new_with_label(_('Cancel'))
 
 		# pack user interface
-		vbox_username.pack_start(label_username, False, False, 0)
-		vbox_username.pack_start(self._entry_username, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox_username.pack_start(label_username, False, False, 0)
+			vbox_username.pack_start(self._entry_username, False, False, 0)
 
-		vbox_password.pack_start(label_password, False, False, 0)
-		vbox_password.pack_start(self._entry_password, False, False, 0)
+			vbox_password.pack_start(label_password, False, False, 0)
+			vbox_password.pack_start(self._entry_password, False, False, 0)
 
-		vbox_directory.pack_start(label_directory, False, False, 0)
-		vbox_directory.pack_start(self._entry_directory, False, False, 0)
+			vbox_directory.pack_start(label_directory, False, False, 0)
+			vbox_directory.pack_start(self._entry_directory, False, False, 0)
 
-		vbox_server.pack_start(label_server, False, False, 0)
-		vbox_server.pack_start(self._entry_server, False, False, 0)
+			vbox_server.pack_start(label_server, False, False, 0)
+			vbox_server.pack_start(self._entry_server, False, False, 0)
 
-		vbox_name.pack_start(label_name, False, False, 0)
-		vbox_name.pack_start(self._entry_name, False, False, 0)
+			vbox_name.pack_start(label_name, False, False, 0)
+			vbox_name.pack_start(self._entry_name, False, False, 0)
 
-		self._container.pack_start(vbox_name, False, False, 0)
-		self._container.pack_start(hseparator, False, False, 2)
-		self._container.pack_start(vbox_server, False, False, 0)
-		self._container.pack_start(vbox_directory, False, False, 0)
-		self._container.pack_start(hseparator2, False, False, 2)
-		self._container.pack_start(vbox_username, False, False, 0)
-		self._container.pack_start(vbox_password, False, False, 0)
+			self._container.pack_start(vbox_name, False, False, 0)
+			self._container.pack_start(hseparator, False, False, 2)
+			self._container.pack_start(vbox_server, False, False, 0)
+			self._container.pack_start(vbox_directory, False, False, 0)
+			self._container.pack_start(hseparator2, False, False, 2)
+			self._container.pack_start(vbox_username, False, False, 0)
+			self._container.pack_start(vbox_password, False, False, 0)
+
+		else:
+			vbox_username.append(label_username)
+			vbox_username.append(self._entry_username)
+
+			vbox_password.append(label_password)
+			vbox_password.append(self._entry_password)
+
+			vbox_directory.append(label_directory)
+			vbox_directory.append(self._entry_directory)
+
+			vbox_server.append(label_server)
+			vbox_server.append(self._entry_server)
+
+			vbox_name.append(label_name)
+			vbox_name.append(self._entry_name)
+
+			self._container.append(vbox_name)
+			set_border_width(hseparator, 2)
+			self._container.append(hseparator)
+			self._container.append(vbox_server)
+			self._container.append(vbox_directory)
+			set_border_width(hseparator2, 2)
+			self._container.append(hseparator2)
+			self._container.append(vbox_username)
+			self._container.append(vbox_password)
 
 		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
-		self._dialog.action_area.pack_end(button_save, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self._dialog.action_area.pack_end(button_save, False, False, 0)
 
-		vbox_icon.pack_start(icon, False, False, 0)
-		hbox_icon.pack_start(vbox_icon, True, True, 0)
-		hbox_icon.pack_start(self._container, True, True, 0)
+			vbox_icon.pack_start(icon, False, False, 0)
+			hbox_icon.pack_start(vbox_icon, True, True, 0)
+			hbox_icon.pack_start(self._container, True, True, 0)
 
-		self._dialog.vbox.pack_start(hbox_icon, True, True, 0)
-		self._dialog.show_all()
+			self._dialog.vbox.pack_start(hbox_icon, True, True, 0)
+
+		else:
+			button_save.set_hexpand(True)
+			button_save.set_halign(Gtk.Align.END)
+			self._dialog.action_area.append(button_save)
+
+			vbox_icon.append(icon)
+			vbox_icon.set_hexpand(True)
+			hbox_icon.append(vbox_icon)
+			self._container.set_hexpand(True)
+			hbox_icon.append(self._container)
+
+			hbox_icon.set_vexpand(True)
+			self._dialog.vbox.append(hbox_icon)
+		if Gtk.get_major_version() == 3:
+			self._dialog.show_all()
+
+		else:
+			self._dialog.show()
 
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""
@@ -358,16 +496,16 @@ class FtpInputDialog:
 		or self._entry_server.get_text() == '':
 			# missing required fields
 			dialog = Gtk.MessageDialog(
-									self._dialog,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.INFO,
-									Gtk.ButtonsType.OK,
-									_(
+									transient_for=self._dialog,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.INFO,
+									buttons=Gtk.ButtonsType.OK,
+									text=_(
 										'One or more required fields is empty. '
 										'Please make sure you have entered name and server.'
 									)
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 		else:
@@ -408,7 +546,7 @@ class FtpInputDialog:
 		input text.
 
 		"""
-		code = self._dialog.run()
+		code = run_dialog(self._dialog)
 
 		result = (
 				self._entry_name.get_text(),
@@ -454,28 +592,35 @@ class DavInputDialog:
 		hbox_icon = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		vbox_icon = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		icon = Gtk.Image()
-		icon.set_from_icon_name('folder-remote-ftp', Gtk.IconSize.DIALOG)
+		if Gtk.get_major_version() == 3:
+			icon.set_from_icon_name('folder-remote-ftp', Gtk.IconSize.DIALOG)
+
+		else:
+			icon.set_from_icon_name('folder-remote-ftp')
 
 		vbox_name = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_name = Gtk.Label(label=_('Name:'))
-		label_name.set_alignment(0, 0.5)
+		label_name.set_xalign(0)
+		label_name.set_yalign(0.5)
 		self._entry_name = Gtk.Entry()
 		self._entry_name.connect('activate', self._confirm_entry)
 
-		hseparator = Gtk.HSeparator()
+		hseparator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
 
 		vbox_server = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_server = Gtk.Label(label=_('Server:'))
-		label_server.set_alignment(0, 0.5)
+		label_server.set_xalign(0)
+		label_server.set_yalign(0.5)
 		self._entry_server = Gtk.Entry()
 		self._entry_server.connect('activate', self._confirm_entry)
 
 		vbox_server_type = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_server_type = Gtk.Label(label=_('Server type:'))
-		label_server_type.set_alignment(0, 0.5)
+		label_server_type.set_xalign(0)
+		label_server_type.set_yalign(0.5)
 		self._entry_server_type = Gtk.ComboBoxText()
 		self._entry_server_type.append_text('http')
 		self._entry_server_type.append_text('https')
@@ -484,7 +629,8 @@ class DavInputDialog:
 		vbox_directory = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_directory = Gtk.Label(label=_('Directory:'))
-		label_directory.set_alignment(0, 0.5)
+		label_directory.set_xalign(0)
+		label_directory.set_yalign(0.5)
 		self._entry_share = Gtk.Entry()
 		self._entry_directory = Gtk.Entry()
 
@@ -492,7 +638,7 @@ class DavInputDialog:
 		self._entry_directory.connect('activate', self._confirm_entry)
 
 		# access information
-		hseparator2 = Gtk.HSeparator()
+		hseparator2 = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
 
 		vbox_username = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		vbox_password = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
@@ -500,8 +646,10 @@ class DavInputDialog:
 		label_username = Gtk.Label(label=_('Username:'))
 		label_password = Gtk.Label(label=_('Password:'))
 
-		label_username.set_alignment(0, 0.5)
-		label_password.set_alignment(0, 0.5)
+		label_username.set_xalign(0)
+		label_username.set_yalign(0.5)
+		label_password.set_xalign(0)
+		label_password.set_yalign(0.5)
 
 		self._entry_username = Gtk.Entry()
 		self._entry_password = Gtk.Entry()
@@ -513,49 +661,108 @@ class DavInputDialog:
 		self._entry_password.connect('activate', self._confirm_entry)
 
 		# create controls
-		button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
-		button_save.connect('clicked', self._confirm_entry)
-		button_save.set_can_default(True)
+		if Gtk.get_major_version() == 3:
+			button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
 
-		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
+		else:
+			button_save = Gtk.Button.new_with_label(_('Save'))
+		button_save.connect('clicked', self._confirm_entry)
+		if Gtk.get_major_version() == 3:
+			button_save.set_can_default(True)
+
+		if Gtk.get_major_version() == 3:
+			button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
+
+		else:
+			button_cancel = Gtk.Button.new_with_label(_('Cancel'))
 
 		# pack user interface
-		vbox_username.pack_start(label_username, False, False, 0)
-		vbox_username.pack_start(self._entry_username, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox_username.pack_start(label_username, False, False, 0)
+			vbox_username.pack_start(self._entry_username, False, False, 0)
 
-		vbox_password.pack_start(label_password, False, False, 0)
-		vbox_password.pack_start(self._entry_password, False, False, 0)
+			vbox_password.pack_start(label_password, False, False, 0)
+			vbox_password.pack_start(self._entry_password, False, False, 0)
 
-		vbox_directory.pack_start(label_directory, False, False, 0)
-		vbox_directory.pack_start(self._entry_directory, False, False, 0)
+			vbox_directory.pack_start(label_directory, False, False, 0)
+			vbox_directory.pack_start(self._entry_directory, False, False, 0)
 
-		vbox_server_type.pack_start(label_server_type, False, False, 0)
-		vbox_server_type.pack_start(self._entry_server_type, False, False, 0)
+			vbox_server_type.pack_start(label_server_type, False, False, 0)
+			vbox_server_type.pack_start(self._entry_server_type, False, False, 0)
 
-		vbox_server.pack_start(label_server, False, False, 0)
-		vbox_server.pack_start(self._entry_server, False, False, 0)
+			vbox_server.pack_start(label_server, False, False, 0)
+			vbox_server.pack_start(self._entry_server, False, False, 0)
 
-		vbox_name.pack_start(label_name, False, False, 0)
-		vbox_name.pack_start(self._entry_name, False, False, 0)
+			vbox_name.pack_start(label_name, False, False, 0)
+			vbox_name.pack_start(self._entry_name, False, False, 0)
 
-		self._container.pack_start(vbox_name, False, False, 0)
-		self._container.pack_start(hseparator, False, False, 2)
-		self._container.pack_start(vbox_server, False, False, 0)
-		self._container.pack_start(vbox_server_type, False, False, 0)
-		self._container.pack_start(vbox_directory, False, False, 0)
-		self._container.pack_start(hseparator2, False, False, 2)
-		self._container.pack_start(vbox_username, False, False, 0)
-		self._container.pack_start(vbox_password, False, False, 0)
+			self._container.pack_start(vbox_name, False, False, 0)
+			self._container.pack_start(hseparator, False, False, 2)
+			self._container.pack_start(vbox_server, False, False, 0)
+			self._container.pack_start(vbox_server_type, False, False, 0)
+			self._container.pack_start(vbox_directory, False, False, 0)
+			self._container.pack_start(hseparator2, False, False, 2)
+			self._container.pack_start(vbox_username, False, False, 0)
+			self._container.pack_start(vbox_password, False, False, 0)
+
+		else:
+			vbox_username.append(label_username)
+			vbox_username.append(self._entry_username)
+
+			vbox_password.append(label_password)
+			vbox_password.append(self._entry_password)
+
+			vbox_directory.append(label_directory)
+			vbox_directory.append(self._entry_directory)
+
+			vbox_server_type.append(label_server_type)
+			vbox_server_type.append(self._entry_server_type)
+
+			vbox_server.append(label_server)
+			vbox_server.append(self._entry_server)
+
+			vbox_name.append(label_name)
+			vbox_name.append(self._entry_name)
+
+			self._container.append(vbox_name)
+			set_border_width(hseparator, 2)
+			self._container.append(hseparator)
+			self._container.append(vbox_server)
+			self._container.append(vbox_server_type)
+			self._container.append(vbox_directory)
+			set_border_width(hseparator2, 2)
+			self._container.append(hseparator2)
+			self._container.append(vbox_username)
+			self._container.append(vbox_password)
 
 		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
-		self._dialog.action_area.pack_end(button_save, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self._dialog.action_area.pack_end(button_save, False, False, 0)
 
-		vbox_icon.pack_start(icon, False, False, 0)
-		hbox_icon.pack_start(vbox_icon, True, True, 0)
-		hbox_icon.pack_start(self._container, True, True, 0)
+			vbox_icon.pack_start(icon, False, False, 0)
+			hbox_icon.pack_start(vbox_icon, True, True, 0)
+			hbox_icon.pack_start(self._container, True, True, 0)
 
-		self._dialog.vbox.pack_start(hbox_icon, True, True, 0)
-		self._dialog.show_all()
+			self._dialog.vbox.pack_start(hbox_icon, True, True, 0)
+
+		else:
+			button_save.set_hexpand(True)
+			button_save.set_halign(Gtk.Align.END)
+			self._dialog.action_area.append(button_save)
+
+			vbox_icon.append(icon)
+			vbox_icon.set_hexpand(True)
+			hbox_icon.append(vbox_icon)
+			self._container.set_hexpand(True)
+			hbox_icon.append(self._container)
+
+			hbox_icon.set_vexpand(True)
+			self._dialog.vbox.append(hbox_icon)
+		if Gtk.get_major_version() == 3:
+			self._dialog.show_all()
+
+		else:
+			self._dialog.show()
 
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""
@@ -563,16 +770,16 @@ class DavInputDialog:
 		or self._entry_server.get_text() == '':
 			# missing required fields
 			dialog = Gtk.MessageDialog(
-				self._dialog,
-				Gtk.DialogFlags.DESTROY_WITH_PARENT,
-				Gtk.MessageType.INFO,
-				Gtk.ButtonsType.OK,
-				_(
+				transient_for=self._dialog,
+				destroy_with_parent=True,
+				message_type=Gtk.MessageType.INFO,
+				buttons=Gtk.ButtonsType.OK,
+				text=_(
 					'One or more required fields is empty. '
 					'Please make sure you have entered name and server.'
 				)
 			)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 		else:
@@ -617,7 +824,7 @@ class DavInputDialog:
 		input text.
 
 		"""
-		code = self._dialog.run()
+		code = run_dialog(self._dialog)
 
 		result = (
 			self._entry_name.get_text(),

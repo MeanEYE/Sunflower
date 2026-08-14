@@ -20,7 +20,11 @@ class MountsManager:
 		self._volume_monitor.connect('volume-added', self._handle_add_volume)
 
 	def show(self, widget, data=None):
-		self._window.show_all()
+		if Gtk.get_major_version() == 3:
+			self._window.show_all()
+
+		else:
+			self._window.show()
 
 	def attach_location_menu(self, location_menu):
 		"""Use notification from location menu to populate list with mounts and volumes."""
@@ -85,13 +89,13 @@ class MountsManager:
 
 		except GLib.Error as error:
 			dialog = Gtk.MessageDialog(
-									self._application,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.WARNING,
-									Gtk.ButtonsType.OK,
-									_('Unable to finish mounting:\n{}'.format(error.message))
+									transient_for=self._application,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.WARNING,
+									buttons=Gtk.ButtonsType.OK,
+									text=_('Unable to finish mounting:\n{}'.format(error.message))
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 	def _handle_unmount_finish(self, mount, result, data=None):
@@ -101,13 +105,13 @@ class MountsManager:
 
 		except GLib.Error as error:
 			dialog = Gtk.MessageDialog(
-									self._application,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.WARNING,
-									Gtk.ButtonsType.OK,
-									_('Unable to finish unmounting:\n{}'.format(error.message))
+									transient_for=self._application,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.WARNING,
+									buttons=Gtk.ButtonsType.OK,
+									text=_('Unable to finish unmounting:\n{}'.format(error.message))
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 	def _handle_eject_finish(self, volume, result, data=None):
@@ -117,13 +121,13 @@ class MountsManager:
 
 		except GLib.Error as error:
 			dialog = Gtk.MessageDialog(
-									self._application,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.WARNING,
-									Gtk.ButtonsType.OK,
-									_('Unable to finish ejecting:\n{}'.format(error.message))
+									transient_for=self._application,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.WARNING,
+									buttons=Gtk.ButtonsType.OK,
+									text=_('Unable to finish ejecting:\n{}'.format(error.message))
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 	def mount(self, volume):
@@ -133,13 +137,13 @@ class MountsManager:
 
 		else:
 			dialog = Gtk.MessageDialog(
-									self._application,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.WARNING,
-									Gtk.ButtonsType.OK,
-									_('Selected volume can not be mounted.')
+									transient_for=self._application,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.WARNING,
+									buttons=Gtk.ButtonsType.OK,
+									text=_('Selected volume can not be mounted.')
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 	def unmount(self, mount):
@@ -149,13 +153,13 @@ class MountsManager:
 
 		else:
 			dialog = Gtk.MessageDialog(
-									self._application,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.WARNING,
-									Gtk.ButtonsType.OK,
-									_('Selected mount can not be unmounted.')
+									transient_for=self._application,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.WARNING,
+									buttons=Gtk.ButtonsType.OK,
+									text=_('Selected mount can not be unmounted.')
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 	def eject(self, volume):
@@ -165,13 +169,13 @@ class MountsManager:
 
 		else:
 			dialog = Gtk.MessageDialog(
-									self._application,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.WARNING,
-									Gtk.ButtonsType.OK,
-									_('Selected volume can not be ejected.')
+									transient_for=self._application,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.WARNING,
+									buttons=Gtk.ButtonsType.OK,
+									text=_('Selected volume can not be ejected.')
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 	def create_extensions(self):
@@ -204,7 +208,11 @@ class Mount(Location):
 
 		# create user interface
 		self._create_interface()
-		self.show_all()
+		if Gtk.get_major_version() == 3:
+			self.show_all()
+
+		else:
+			self.show()
 
 		# connect events
 		self._mount.connect('changed', self.__handle_change)
@@ -234,37 +242,78 @@ class Mount(Location):
 		set_border_width(container, 5)
 
 		# create volume icon
-		self._icon = Gtk.Image.new_from_gicon(
-				self._mount.get_icon(),
-				Gtk.IconSize.LARGE_TOOLBAR
-				)
+		if Gtk.get_major_version() == 3:
+			self._icon = Gtk.Image.new_from_gicon(
+					self._mount.get_icon(),
+					Gtk.IconSize.LARGE_TOOLBAR
+					)
+
+		else:
+			# GTK 4 images take no size, icon scales through its pixel size
+			self._icon = Gtk.Image.new_from_gicon(self._mount.get_icon())
+			self._icon.set_pixel_size(24)
 
 		# create volume name label
 		self._title = Gtk.Label.new(self._mount.get_name())
-		self._title.set_alignment(0, 0.5)
+		self._title.set_xalign(0)
+		self._title.set_yalign(0.5)
 		self._title.set_ellipsize(Pango.EllipsizeMode.END)
 
 		# pack interface
-		container.pack_start(self._icon, False, False, 0)
-		container.pack_start(self._title, True, True, 0)
+		if Gtk.get_major_version() == 3:
+			container.pack_start(self._icon, False, False, 0)
+			container.pack_start(self._title, True, True, 0)
+
+		else:
+			container.append(self._icon)
+			self._title.set_hexpand(True)
+			container.append(self._title)
 
 		# create buttons
-		self._unmount_button = Gtk.Button.new_from_icon_name('media-playback-stop-symbolic', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			self._unmount_button = Gtk.Button.new_from_icon_name('media-playback-stop-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			self._unmount_button = Gtk.Button.new_from_icon_name('media-playback-stop-symbolic')
 		self._unmount_button.connect('clicked', self.__handle_unmount_click)
 		self._unmount_button.set_tooltip_text(_('Unmount'))
-		self._unmount_button.set_property('no-show-all', True)
-		container.pack_start(self._unmount_button, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self._unmount_button.set_property('no-show-all', True)
 
-		self._eject_button = Gtk.Button.new_from_icon_name('media-eject-symbolic', Gtk.IconSize.BUTTON)
+		else:
+			self._unmount_button.hide()
+		if Gtk.get_major_version() == 3:
+			container.pack_start(self._unmount_button, False, False, 0)
+
+		else:
+			container.append(self._unmount_button)
+
+		if Gtk.get_major_version() == 3:
+			self._eject_button = Gtk.Button.new_from_icon_name('media-eject-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			self._eject_button = Gtk.Button.new_from_icon_name('media-eject-symbolic')
 		self._eject_button.connect('clicked', self.__handle_eject_click)
 		self._eject_button.set_tooltip_text(_('Eject'))
-		self._eject_button.set_property('no-show-all', True)
-		container.pack_start(self._eject_button, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self._eject_button.set_property('no-show-all', True)
+
+		else:
+			self._eject_button.hide()
+		if Gtk.get_major_version() == 3:
+			container.pack_start(self._eject_button, False, False, 0)
+
+		else:
+			container.append(self._eject_button)
 
 		# apply button visibility
 		self.__handle_change(self._mount)
 
-		self.add(container)
+		if Gtk.get_major_version() == 3:
+			self.add(container)
+
+		else:
+			self.set_child(container)
 
 	def get_location(self):
 		"""Return location path."""
@@ -286,7 +335,11 @@ class Volume(Location):
 
 		# create user interface
 		self._create_interface()
-		self.show_all()
+		if Gtk.get_major_version() == 3:
+			self.show_all()
+
+		else:
+			self.show()
 
 		# connect events
 		self._volume.connect('changed', self.__handle_change)
@@ -323,43 +376,96 @@ class Volume(Location):
 		set_border_width(container, 5)
 
 		# create volume icon
-		self._icon = Gtk.Image.new_from_gicon(
-				self._volume.get_icon(),
-				Gtk.IconSize.LARGE_TOOLBAR
-				)
+		if Gtk.get_major_version() == 3:
+			self._icon = Gtk.Image.new_from_gicon(
+					self._volume.get_icon(),
+					Gtk.IconSize.LARGE_TOOLBAR
+					)
+
+		else:
+			# GTK 4 images take no size, icon scales through its pixel size
+			self._icon = Gtk.Image.new_from_gicon(self._volume.get_icon())
+			self._icon.set_pixel_size(24)
 
 		# create volume name label
 		self._title = Gtk.Label.new(self._volume.get_name())
-		self._title.set_alignment(0, 0.5)
+		self._title.set_xalign(0)
+		self._title.set_yalign(0.5)
 		self._title.set_ellipsize(Pango.EllipsizeMode.END)
 
 		# pack interface
-		container.pack_start(self._icon, False, False, 0)
-		container.pack_start(self._title, True, True, 0)
+		if Gtk.get_major_version() == 3:
+			container.pack_start(self._icon, False, False, 0)
+			container.pack_start(self._title, True, True, 0)
+
+		else:
+			container.append(self._icon)
+			self._title.set_hexpand(True)
+			container.append(self._title)
 
 		# create buttons
-		self._unmount_button = Gtk.Button.new_from_icon_name('media-playback-stop-symbolic', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			self._unmount_button = Gtk.Button.new_from_icon_name('media-playback-stop-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			self._unmount_button = Gtk.Button.new_from_icon_name('media-playback-stop-symbolic')
 		self._unmount_button.connect('clicked', self.__handle_unmount_click)
 		self._unmount_button.set_tooltip_text(_('Unmount'))
-		self._unmount_button.set_property('no-show-all', True)
-		container.pack_start(self._unmount_button, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self._unmount_button.set_property('no-show-all', True)
 
-		self._mount_button = Gtk.Button.new_from_icon_name('media-playback-start-symbolic', Gtk.IconSize.BUTTON)
+		else:
+			self._unmount_button.hide()
+		if Gtk.get_major_version() == 3:
+			container.pack_start(self._unmount_button, False, False, 0)
+
+		else:
+			container.append(self._unmount_button)
+
+		if Gtk.get_major_version() == 3:
+			self._mount_button = Gtk.Button.new_from_icon_name('media-playback-start-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			self._mount_button = Gtk.Button.new_from_icon_name('media-playback-start-symbolic')
 		self._mount_button.connect('clicked', self.__handle_mount_click)
 		self._mount_button.set_tooltip_text(_('Mount'))
-		self._mount_button.set_property('no-show-all', True)
-		container.pack_start(self._mount_button, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self._mount_button.set_property('no-show-all', True)
 
-		self._eject_button = Gtk.Button.new_from_icon_name('media-eject-symbolic', Gtk.IconSize.BUTTON)
+		else:
+			self._mount_button.hide()
+		if Gtk.get_major_version() == 3:
+			container.pack_start(self._mount_button, False, False, 0)
+
+		else:
+			container.append(self._mount_button)
+
+		if Gtk.get_major_version() == 3:
+			self._eject_button = Gtk.Button.new_from_icon_name('media-eject-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			self._eject_button = Gtk.Button.new_from_icon_name('media-eject-symbolic')
 		self._eject_button.connect('clicked', self.__handle_eject_click)
 		self._eject_button.set_tooltip_text(_('Eject'))
-		self._eject_button.set_property('no-show-all', True)
-		container.pack_start(self._eject_button, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self._eject_button.set_property('no-show-all', True)
+
+		else:
+			self._eject_button.hide()
+		if Gtk.get_major_version() == 3:
+			container.pack_start(self._eject_button, False, False, 0)
+
+		else:
+			container.append(self._eject_button)
 
 		# apply button visibility
 		self.__handle_change(self._volume)
 
-		self.add(container)
+		if Gtk.get_major_version() == 3:
+			self.add(container)
+
+		else:
+			self.set_child(container)
 
 	def get_location(self):
 		"""Return location path."""

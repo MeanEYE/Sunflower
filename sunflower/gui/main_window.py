@@ -52,6 +52,13 @@ from sunflower.gui.input_dialog import InputDialog, AddBookmarkDialog
 from sunflower.gui.keyring_manager_window import KeyringManagerWindow
 from sunflower.gui.shortcuts_window import ShortcutsWindow
 
+# GTK 4 renamed the Alt key modifier from MOD1
+if Gtk.get_major_version() == 3:
+	ALT_MASK = Gdk.ModifierType.MOD1_MASK
+
+else:
+	ALT_MASK = Gdk.ModifierType.ALT_MASK
+
 
 class MainWindow(Gtk.ApplicationWindow):
 	"""Main application class"""
@@ -150,8 +157,17 @@ class MainWindow(Gtk.ApplicationWindow):
 		signal.signal(signal.SIGTERM, self._destroy)
 		signal.signal(signal.SIGINT, self._destroy)
 
-		self.connect('configure-event', self._handle_configure_event)
-		self.connect('window-state-event', self._handle_window_state_event)
+		if Gtk.get_major_version() == 3:
+			self.connect('configure-event', self._handle_configure_event)
+			self.connect('window-state-event', self._handle_window_state_event)
+
+		else:
+			# GTK 4 has no configure or window state events, window
+			# properties are used to track geometry and state instead
+			self.connect('notify::default-width', self._handle_geometry_change)
+			self.connect('notify::default-height', self._handle_geometry_change)
+			self.connect('notify::maximized', self._handle_state_change)
+			self.connect('notify::fullscreened', self._handle_state_change)
 
 		# create other interfaces
 		self.indicator = Indicator(self)
@@ -161,10 +177,36 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# create header bar
 		self.header_bar = Gtk.HeaderBar.new()
-		self.header_bar.set_has_subtitle(True)
-		self.header_bar.set_show_close_button(True)
-		self.header_bar.set_title(_('Sunflower'))
-		self.header_bar.set_property('no-show-all', not self.options.get('show_titlebar'))
+
+		if Gtk.get_major_version() == 3:
+			self.header_bar.set_has_subtitle(True)
+			self.header_bar.set_show_close_button(True)
+			self.header_bar.set_title(_('Sunflower'))
+			if Gtk.get_major_version() == 3:
+				self.header_bar.set_property('no-show-all', not self.options.get('show_titlebar'))
+
+			else:
+				self.header_bar.set_visible(not (not self.options.get('show_titlebar')))
+
+		else:
+			# GTK 4 header bars have no subtitle, a title widget carries both lines
+			self.header_bar.set_show_title_buttons(True)
+			self.header_bar.set_visible(self.options.get('show_titlebar'))
+
+			self.header_title = Gtk.Label.new(_('Sunflower'))
+			self.header_title.get_style_context().add_class('title')
+
+			self.header_subtitle = Gtk.Label.new(None)
+			self.header_subtitle.get_style_context().add_class('subtitle')
+			self.header_subtitle.set_ellipsize(Pango.EllipsizeMode.START)
+
+			title_box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+			title_box.set_valign(Gtk.Align.CENTER)
+			title_box.append(self.header_title)
+			title_box.append(self.header_subtitle)
+
+			self.header_bar.set_title_widget(title_box)
+
 		self.set_titlebar(self.header_bar)
 
 		self.header_button_box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
@@ -175,14 +217,26 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.new_inode_actions = Gio.SimpleActionGroup.new()
 		self.new_inode_menu = Gio.Menu()
 
-		image_new = Gtk.Image.new_from_icon_name('folder-new-symbolic', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_new = Gtk.Image.new_from_icon_name('folder-new-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			image_new = Gtk.Image.new_from_icon_name('folder-new-symbolic')
 		button_new_inode = Gtk.MenuButton.new()
-		button_new_inode.set_image(image_new)
+		if Gtk.get_major_version() == 3:
+			button_new_inode.set_image(image_new)
+
+		else:
+			button_new_inode.set_child(image_new)
 		button_new_inode.set_menu_model(self.new_inode_menu)
 		button_new_inode.insert_action_group('new-inode', self.new_inode_actions)
 		button_new_inode.set_tooltip_text(_('Create new file, directory and more.'))
 
-		self.header_button_box.pack_start(button_new_inode, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self.header_button_box.pack_start(button_new_inode, False, False, 0)
+
+		else:
+			self.header_button_box.append(button_new_inode)
 
 		action = Gio.SimpleAction.new('file', None)
 		action.connect('activate', self._command_create, 'file')
@@ -198,21 +252,41 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.new_tab_actions = Gio.SimpleActionGroup.new()
 		self.new_tab_menu = Gio.Menu()
 
-		image_new = Gtk.Image.new_from_icon_name('tab-new-symbolic', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_new = Gtk.Image.new_from_icon_name('tab-new-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			image_new = Gtk.Image.new_from_icon_name('tab-new-symbolic')
 		button_new_tab = Gtk.MenuButton.new()
-		button_new_tab.set_image(image_new)
+		if Gtk.get_major_version() == 3:
+			button_new_tab.set_image(image_new)
+
+		else:
+			button_new_tab.set_child(image_new)
 		button_new_tab.set_menu_model(self.new_tab_menu)
 		button_new_tab.insert_action_group('new-tab', self.new_tab_actions)
 		button_new_tab.set_tooltip_text(_('Create new tab'))
 
-		self.header_button_box.pack_start(button_new_tab, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self.header_button_box.pack_start(button_new_tab, False, False, 0)
+
+		else:
+			self.header_button_box.append(button_new_tab)
 
 		# commands menu
-		self.button_commands = Gtk.Button.new_from_icon_name('view-app-grid-symbolic', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			self.button_commands = Gtk.Button.new_from_icon_name('view-app-grid-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			self.button_commands = Gtk.Button.new_from_icon_name('view-app-grid-symbolic')
 		self.button_commands.set_tooltip_text(_('Commands'))
 		self.button_commands.connect('clicked', self._handle_commands_menu_click)
 
-		self.header_button_box.pack_start(self.button_commands, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self.header_button_box.pack_start(self.button_commands, False, False, 0)
+
+		else:
+			self.header_button_box.append(self.button_commands)
 
 		# define local variables
 		self._in_fullscreen = False
@@ -342,8 +416,16 @@ class MainWindow(Gtk.ApplicationWindow):
 		application_menu_button = Gtk.MenuButton.new()
 		application_menu_button.set_menu_model(self._application_menu)
 
-		icon = Gtk.Image.new_from_icon_name('open-menu-symbolic', Gtk.IconSize.BUTTON)
-		application_menu_button.set_image(icon)
+		if Gtk.get_major_version() == 3:
+			icon = Gtk.Image.new_from_icon_name('open-menu-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			icon = Gtk.Image.new_from_icon_name('open-menu-symbolic')
+		if Gtk.get_major_version() == 3:
+			application_menu_button.set_image(icon)
+
+		else:
+			application_menu_button.set_child(icon)
 
 		self.header_bar.pack_end(application_menu_button)
 
@@ -352,17 +434,30 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.toolbar_manager.apply_settings()
 
 		toolbar = self.toolbar_manager.get_toolbar()
-		toolbar.set_property('no-show-all', not self.options.get('show_toolbar'))
+		if Gtk.get_major_version() == 3:
+			toolbar.set_property('no-show-all', not self.options.get('show_toolbar'))
+
+		else:
+			toolbar.set_visible(not (not self.options.get('show_toolbar')))
 
 		# bookmarks menu
 		self.locations = LocationMenu(self)
 
 		# create notebooks
-		self._paned = Gtk.VPaned() if self.options.get('horizontal_split') else Gtk.HPaned()
+		self._paned = Gtk.Paned.new(
+					Gtk.Orientation.VERTICAL if self.options.get('horizontal_split')
+					else Gtk.Orientation.HORIZONTAL
+				)
 
 		self.left_notebook = Gtk.Notebook.new()
 		self.left_notebook.set_show_border(False)
-		self.left_notebook.connect('focus-in-event', self._transfer_focus)
+		if Gtk.get_major_version() == 3:
+			self.left_notebook.connect('focus-in-event', self._transfer_focus)
+
+		else:
+			focus_controller = Gtk.EventControllerFocus.new()
+			focus_controller.connect('enter', self._transfer_focus_from_controller)
+			self.left_notebook.add_controller(focus_controller)
 		self.left_notebook.connect('page-added', self._page_added)
 		self.left_notebook.connect('switch-page', self._page_switched)
 		self.left_notebook.set_group_name('panel')
@@ -370,19 +465,44 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		self.right_notebook = Gtk.Notebook.new()
 		self.right_notebook.set_show_border(False)
-		self.right_notebook.connect('focus-in-event', self._transfer_focus)
+		if Gtk.get_major_version() == 3:
+			self.right_notebook.connect('focus-in-event', self._transfer_focus)
+
+		else:
+			focus_controller = Gtk.EventControllerFocus.new()
+			focus_controller.connect('enter', self._transfer_focus_from_controller)
+			self.right_notebook.add_controller(focus_controller)
 		self.right_notebook.connect('page-added', self._page_added)
 		self.right_notebook.connect('switch-page', self._page_switched)
 		self.right_notebook.set_group_name('panel')
 		self.right_notebook.set_scrollable(True)
 
-		self._paned.pack1(self.left_notebook, resize=True, shrink=False)
-		self._paned.pack2(self.right_notebook, resize=True, shrink=False)
+		if Gtk.get_major_version() == 3:
+			self._paned.pack1(self.left_notebook, resize=True, shrink=False)
+			self._paned.pack2(self.right_notebook, resize=True, shrink=False)
+
+		else:
+			# GTK 4 sets pane children and their behavior separately
+			self._paned.set_start_child(self.left_notebook)
+			self._paned.set_resize_start_child(True)
+			self._paned.set_shrink_start_child(False)
+
+			self._paned.set_end_child(self.right_notebook)
+			self._paned.set_resize_end_child(True)
+			self._paned.set_shrink_end_child(False)
 
 		# command line prompt
 		self.command_popover = Gtk.Popover.new()
-		self.command_popover.set_relative_to(self.header_bar)
-		self.command_popover.set_modal(False)
+		if Gtk.get_major_version() == 3:
+			self.command_popover.set_relative_to(self.header_bar)
+
+		else:
+			self.command_popover.set_parent(self.header_bar)
+		if Gtk.get_major_version() == 3:
+			self.command_popover.set_modal(False)
+
+		else:
+			self.command_popover.set_autohide(False)
 		self.command_popover.connect('closed', self.hide_command_entry)
 
 		vbox_popover = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
@@ -390,7 +510,8 @@ class MainWindow(Gtk.ApplicationWindow):
 		vbox_popover.set_size_request(400, -1)
 
 		label_command_entry = Gtk.Label.new(_('Execute command:'))
-		label_command_entry.set_alignment(0, 0.5)
+		label_command_entry.set_xalign(0)
+		label_command_entry.set_yalign(0.5)
 		label_command_entry.show()
 
 		# create history list
@@ -406,19 +527,46 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.command_edit = Gtk.Entry.new()
 		self.command_edit.set_completion(self.command_completion)
 		self.command_edit.connect('activate', self.execute_command)
-		self.command_edit.connect('key-press-event', self._command_edit_key_press)
-		self.command_edit.connect('focus-in-event', self._command_edit_focused)
-		self.command_edit.connect('focus-out-event', self._command_edit_lost_focus)
+		if Gtk.get_major_version() == 3:
+			self.command_edit.connect('key-press-event', self._command_edit_key_press)
+
+		else:
+			key_controller = Gtk.EventControllerKey.new()
+			key_controller.connect('key-pressed', self._command_edit_key_pressed)
+			self.command_edit.add_controller(key_controller)
+		if Gtk.get_major_version() == 3:
+			self.command_edit.connect('focus-in-event', self._command_edit_focused)
+			self.command_edit.connect('focus-out-event', self._command_edit_lost_focus)
+
+		else:
+			focus_controller = Gtk.EventControllerFocus.new()
+			focus_controller.connect('enter', self._command_edit_focus_entered)
+			focus_controller.connect('leave', self._command_edit_focus_left)
+			self.command_edit.add_controller(focus_controller)
 		self.command_edit.show()
 
 		# load history file
 		self._load_history()
 
 		# pack command entry popover
-		self.command_popover.add(vbox_popover)
-		vbox_popover.pack_start(label_command_entry, False, False, 0)
-		vbox_popover.pack_start(self.command_edit, True, True, 0)
-		vbox_popover.show_all()
+		if Gtk.get_major_version() == 3:
+			self.command_popover.add(vbox_popover)
+
+		else:
+			self.command_popover.set_child(vbox_popover)
+		if Gtk.get_major_version() == 3:
+			vbox_popover.pack_start(label_command_entry, False, False, 0)
+			vbox_popover.pack_start(self.command_edit, True, True, 0)
+
+		else:
+			vbox_popover.append(label_command_entry)
+			self.command_edit.set_vexpand(True)
+			vbox_popover.append(self.command_edit)
+		if Gtk.get_major_version() == 3:
+			vbox_popover.show_all()
+
+		else:
+			vbox_popover.show()
 
 		# command buttons bar
 		self.command_bar = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
@@ -449,7 +597,12 @@ class MainWindow(Gtk.ApplicationWindow):
 			button.get_style_context().add_class('flat')
 
 			button.show()  # we need to explicitly show in cases where toolbar is not visible
-			self.command_bar.pack_start(button, True, True, 0)
+			if Gtk.get_major_version() == 3:
+				self.command_bar.pack_start(button, True, True, 0)
+
+			else:
+				button.set_hexpand(True)
+				self.command_bar.append(button)
 
 			# store button info for label updates
 			self._command_bar_buttons.append({
@@ -459,18 +612,33 @@ class MainWindow(Gtk.ApplicationWindow):
 				'accel_name': accel_name
 			})
 
-		self.command_bar.set_property('no-show-all', not self.options.get('show_command_bar'))
+		if Gtk.get_major_version() == 3:
+			self.command_bar.set_property('no-show-all', not self.options.get('show_command_bar'))
+
+		else:
+			self.command_bar.set_visible(not (not self.options.get('show_command_bar')))
 
 		# update button labels based on initial settings
 		self._update_command_bar_labels()
 
 		# pack user interface
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
-		vbox.pack_start(self.toolbar_manager.get_toolbar(), False, False, 0)
-		vbox.pack_start(self._paned, True, True, 0)
-		vbox.pack_start(self.command_bar, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox.pack_start(self.toolbar_manager.get_toolbar(), False, False, 0)
+			vbox.pack_start(self._paned, True, True, 0)
+			vbox.pack_start(self.command_bar, False, False, 0)
 
-		self.add(vbox)
+		else:
+			vbox.append(self.toolbar_manager.get_toolbar())
+			self._paned.set_vexpand(True)
+			vbox.append(self._paned)
+			vbox.append(self.command_bar)
+
+		if Gtk.get_major_version() == 3:
+			self.add(vbox)
+
+		else:
+			self.set_child(vbox)
 
 		# create commands menu
 		self.commands_popover = Gtk.Popover.new()
@@ -478,30 +646,61 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		set_border_width(vbox, 10)
-		self.commands_popover.add(vbox)
+		if Gtk.get_major_version() == 3:
+			self.commands_popover.add(vbox)
+
+		else:
+			self.commands_popover.set_child(vbox)
 
 		window = Gtk.Viewport.new()
 		window.set_size_request(200, -1)
-		window.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			window.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			pass
 
 		self.commands_menu = Gtk.ListBox.new()
 		self.commands_menu.connect('row-activated', self._handle_command_activate)
-		window.add(self.commands_menu)
-		vbox.pack_start(window, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			window.add(self.commands_menu)
+
+		else:
+			window.set_child(self.commands_menu)
+		if Gtk.get_major_version() == 3:
+			vbox.pack_start(window, False, False, 0)
+
+		else:
+			vbox.append(window)
 
 		edit_commands = Gtk.Button.new_with_label(_('Edit commands'))
 		edit_commands.connect('clicked', self.preferences_window.show, 'commands')
-		vbox.pack_end(edit_commands, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox.pack_end(edit_commands, False, False, 0)
+
+		else:
+			# end packed child stays at the bottom of the available space
+			edit_commands.set_vexpand(True)
+			edit_commands.set_valign(Gtk.Align.END)
+			vbox.append(edit_commands)
 
 		self._create_commands()
-		vbox.show_all()
+		if Gtk.get_major_version() == 3:
+			vbox.show_all()
+
+		else:
+			vbox.show()
 
 		# create status bar
 		self.status_bar = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		self.header_bar.pack_end(self.status_bar)
 
 		if self.keyring_manager.is_available():
-			self.status_bar.pack_start(self.keyring_manager._status_icon, False, False, 0)
+			if Gtk.get_major_version() == 3:
+				self.status_bar.pack_start(self.keyring_manager._status_icon, False, False, 0)
+
+			else:
+				self.status_bar.append(self.keyring_manager._status_icon)
 
 		# restore window size and position
 		self._restore_window_position()
@@ -519,7 +718,11 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._accel_group.activate(self)
 
 		# show widgets
-		self.show_all()
+		if Gtk.get_major_version() == 3:
+			self.show_all()
+
+		else:
+			self.show()
 
 	def _update_command_bar_labels(self):
 		"""Update command bar button labels to optionally include shortcuts."""
@@ -591,10 +794,22 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def _create_commands(self):
 		"""Create commands main menu"""
-		self.commands_menu.foreach(lambda row: self.commands_menu.remove(row))
+		if Gtk.get_major_version() == 3:
+			self.commands_menu.foreach(lambda row: self.commands_menu.remove(row))
+
+		else:
+			child = self.commands_menu.get_first_child()
+			while child is not None:
+				next_child = child.get_next_sibling()
+				self.commands_menu.remove(child)
+				child = next_child
 
 		for data in self.command_options.get('commands'):
-			self.commands_menu.add(CommandRow(data['title'], data['command']))
+			if Gtk.get_major_version() == 3:
+				self.commands_menu.add(CommandRow(data['title'], data['command']))
+
+			else:
+				self.commands_menu.append(CommandRow(data['title'], data['command']))
 
 	def _add_bookmark(self, widget, item_list=None):
 		"""Show dialog for adding a new bookmark"""
@@ -617,7 +832,11 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def _handle_commands_menu_click(self, widget, data=None):
 		"""Handle clicking on commands button in header bar."""
-		self.commands_popover.set_relative_to(widget)
+		if Gtk.get_major_version() == 3:
+			self.commands_popover.set_relative_to(widget)
+
+		else:
+			self.commands_popover.set_parent(widget)
 		self.commands_popover.popup()
 
 	def _handle_command_activate(self, widget, row, data=None):
@@ -718,13 +937,27 @@ class MainWindow(Gtk.ApplicationWindow):
 		self._in_fullscreen = bool(Gdk.WindowState.FULLSCREEN & event.new_window_state)
 		self._window_state = event.new_window_state
 
+	def _handle_geometry_change(self, widget, parameter=None):
+		"""Handle window resizing (GTK 4)"""
+		# only plain window geometry is worth remembering
+		if not (self.is_maximized() or self.is_fullscreen()):
+			self._geometry = list(self.get_default_size())
+
+	def _handle_state_change(self, widget, parameter=None):
+		"""Handle window state change (GTK 4)"""
+		self._in_fullscreen = self.is_fullscreen()
+
 	def _page_added(self, notebook, child, page_num):
 		"""Handle adding/moving tab across notebooks"""
 		if hasattr(child, 'update_notebook'):
 			child.update_notebook(notebook)
 
 		if self.options.get('expand_tabs') == TabExpand.ALL:
-			notebook.child_set_property(child, 'tab-expand', True)
+			if Gtk.get_major_version() == 3:
+				notebook.child_set_property(child, 'tab-expand', True)
+
+			else:
+				notebook.get_page(child).set_property('tab-expand', True)
 
 		notebook.set_tab_reorderable(child, True)
 		notebook.set_tab_detachable(child, True)
@@ -735,13 +968,34 @@ class MainWindow(Gtk.ApplicationWindow):
 		new_page = notebook.get_nth_page(page_num)
 
 		if self.options.get('expand_tabs') == TabExpand.ACTIVE:
-			notebook.child_set_property(current_page, 'tab-expand', False)
-			notebook.child_set_property(new_page, 'tab-expand', True)
+			if Gtk.get_major_version() == 3:
+				notebook.child_set_property(current_page, 'tab-expand', False)
+
+			else:
+				notebook.get_page(current_page).set_property('tab-expand', False)
+			if Gtk.get_major_version() == 3:
+				notebook.child_set_property(new_page, 'tab-expand', True)
+
+			else:
+				notebook.get_page(new_page).set_property('tab-expand', True)
 
 	def _transfer_focus(self, notebook, data=None):
 		"""Transfer focus from notebook to child widget in active tab"""
 		selected_page = notebook.get_nth_page(notebook.get_current_page())
 		selected_page.focus_main_object()
+
+	def _transfer_focus_from_controller(self, controller):
+		"""Transfer focus using notebook the controller belongs to (GTK 4)
+
+		Focus controllers report focus entering any descendant, unlike GTK 3
+		where the event was emitted only for the widget itself. Without this
+		check focus would be pulled out of popups opened inside the notebook.
+
+		"""
+		if not controller.is_focus():
+			return
+
+		self._transfer_focus(controller.get_widget())
 
 	def _toggle_show_hidden_files(self, widget, data=None):
 		"""Transfer option event to all the lists"""
@@ -1183,45 +1437,69 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		return result
 
-	def _command_edit_key_press(self, widget, event):
+	def _command_edit_key_press(self, widget, event, data=None):
+		"""Handle key press in command edit. (GTK 3)"""
+		return self._handle_command_edit_keyval(event.keyval, event.get_state())
+
+	def _command_edit_key_pressed(self, controller, keyval, keycode, state):
+		"""Handle key press in command edit. (GTK 4)"""
+		return self._handle_command_edit_keyval(keyval, state)
+
+	def _handle_command_edit_keyval(self, keyval, state):
 		"""Handle key press in command edit."""
 		result = False
 
-		if event.get_state() & Gtk.accelerator_get_default_mod_mask() == 0:
+		if state & Gtk.accelerator_get_default_mod_mask() == 0:
 			# handle pressing down in command entry
-			if event.keyval == Gdk.KEY_Down:
+			if keyval == Gdk.KEY_Down:
 				self.get_active_object().focus_main_object()
 				result = True
 
 			# handle pressing escape in command entry
-			elif event.keyval == Gdk.KEY_Escape:
+			elif keyval == Gdk.KEY_Escape:
 				self.get_active_object().focus_main_object()
 				self.hide_command_entry()
 				result = True
 
 		return result
 
-	def _command_edit_focused(self, widget, event):
+	def _command_edit_focused(self, widget, event=None):
 		"""Handle focusing command entry"""
 		self.accelerator_manager.deactivate_scheduled_groups(widget)
 		self._accel_group.deactivate()
 
-	def _command_edit_lost_focus(self, widget, event):
+	def _command_edit_lost_focus(self, widget, event=None):
 		"""Handle command entry losing focus"""
 		self._accel_group.activate(self)
+
+	def _command_edit_focus_entered(self, controller):
+		"""Handle focusing command entry (GTK 4)"""
+		self._command_edit_focused(controller.get_widget())
+
+	def _command_edit_focus_left(self, controller):
+		"""Handle command entry losing focus (GTK 4)"""
+		self._command_edit_lost_focus(controller.get_widget())
 
 	def _save_window_position(self):
 		"""Save window position to config"""
 		section = self.window_options.section('main')
 		window_state = 0
 
-		if self._window_state & Gdk.WindowState.FULLSCREEN:
-			# window is in fullscreen
-			window_state = 2
+		if Gtk.get_major_version() == 3:
+			if self._window_state & Gdk.WindowState.FULLSCREEN:
+				# window is in fullscreen
+				window_state = 2
 
-		elif self._window_state & Gdk.WindowState.MAXIMIZED:
-			# window is maximized
-			window_state = 1
+			elif self._window_state & Gdk.WindowState.MAXIMIZED:
+				# window is maximized
+				window_state = 1
+
+		else:
+			if self.is_fullscreen():
+				window_state = 2
+
+			elif self.is_maximized():
+				window_state = 1
 
 		self.window_options.section('main').set('state', window_state)
 
@@ -1243,8 +1521,13 @@ class MainWindow(Gtk.ApplicationWindow):
 		section = self.window_options.section('main')
 
 		# block event handlers
-		self.handler_block_by_func(self._handle_configure_event)
-		self.handler_block_by_func(self._handle_window_state_event)
+		if Gtk.get_major_version() == 3:
+			self.handler_block_by_func(self._handle_configure_event)
+			self.handler_block_by_func(self._handle_window_state_event)
+
+		else:
+			self.handler_block_by_func(self._handle_geometry_change)
+			self.handler_block_by_func(self._handle_state_change)
 
 		# restore window geometry
 		geometry = section.get('geometry')
@@ -1269,8 +1552,13 @@ class MainWindow(Gtk.ApplicationWindow):
 				self._paned.set_position(section.get('handle_position'))
 
 		# restore event handlers
-		self.handler_unblock_by_func(self._handle_configure_event)
-		self.handler_unblock_by_func(self._handle_window_state_event)
+		if Gtk.get_major_version() == 3:
+			self.handler_unblock_by_func(self._handle_configure_event)
+			self.handler_unblock_by_func(self._handle_window_state_event)
+
+		else:
+			self.handler_unblock_by_func(self._handle_geometry_change)
+			self.handler_unblock_by_func(self._handle_state_change)
 
 	def activate_bookmark(self, widget=None, index=0):
 		"""Activate bookmark by index"""
@@ -1445,13 +1733,13 @@ class MainWindow(Gtk.ApplicationWindow):
 
 			if result_left == result_right == 0:
 				dialog = Gtk.MessageDialog(
-										self,
-										Gtk.DialogFlags.DESTROY_WITH_PARENT,
-										Gtk.MessageType.INFO,
-										Gtk.ButtonsType.OK,
-										_("First level of compared directories is identical.")
+										transient_for=self,
+										destroy_with_parent=True,
+										message_type=Gtk.MessageType.INFO,
+										buttons=Gtk.ButtonsType.OK,
+										text=_("First level of compared directories is identical.")
 									)
-				dialog.run()
+				run_dialog(dialog)
 				dialog.destroy()
 
 			result = True
@@ -1568,17 +1856,17 @@ class MainWindow(Gtk.ApplicationWindow):
 
 			except:
 				dialog = Gtk.MessageDialog(
-										self,
-										Gtk.DialogFlags.DESTROY_WITH_PARENT,
-										Gtk.MessageType.ERROR,
-										Gtk.ButtonsType.OK,
-										_(
+										transient_for=self,
+										destroy_with_parent=True,
+										message_type=Gtk.MessageType.ERROR,
+										buttons=Gtk.ButtonsType.OK,
+										text=_(
 											'There was a problem starting external '
 											'terminal application. Check if command '
 											'is valid!'
 										)
 									)
-				dialog.run()
+				run_dialog(dialog)
 				dialog.destroy()
 
 		return result
@@ -1602,11 +1890,14 @@ class MainWindow(Gtk.ApplicationWindow):
 				child._item_list.handler_block_by_func(child._column_changed)
 
 			# kill the component
-			child.destroy()
+			if Gtk.get_major_version() == 3:
+				child.destroy()
+
+			# GTK 4 widgets are disposed once removed from the notebook
 
 	def close_all_tabs(self, notebook, excluded=None):
 		"""Close all active tabs in specified notebook."""
-		tabs = notebook.get_children()
+		tabs = self.get_notebook_tabs(notebook)
 		for tab in tabs:
 			if tab.is_tab_locked() or tab is excluded:
 				continue
@@ -1644,7 +1935,11 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def set_location_label(self, path):
 		"""Set location label"""
-		self.header_bar.set_subtitle(path)
+		if Gtk.get_major_version() == 3:
+			self.header_bar.set_subtitle(path)
+
+		else:
+			self.header_subtitle.set_text(path)
 
 	def goto_web(self, widget, uri):
 		"""Open URL stored in data"""
@@ -1806,30 +2101,30 @@ class MainWindow(Gtk.ApplicationWindow):
 		group.add_method('show_hidden_files', _('Show _hidden files'), self._toggle_show_hidden_files)
 
 		# set default accelerators
-		group.set_accelerator('restore_handle_position', keyval('Home'), Gdk.ModifierType.MOD1_MASK)
-		group.set_accelerator('move_handle_left', keyval('Page_Up'), Gdk.ModifierType.MOD1_MASK)
-		group.set_accelerator('move_handle_right', keyval('Page_Down'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('restore_handle_position', keyval('Home'), ALT_MASK)
+		group.set_accelerator('move_handle_left', keyval('Page_Up'), ALT_MASK)
+		group.set_accelerator('move_handle_right', keyval('Page_Down'), ALT_MASK)
 
 		group.set_accelerator('create_file', keyval('F7'), Gdk.ModifierType.CONTROL_MASK)
 		group.set_accelerator('create_directory', keyval('F7'), 0)
 		group.set_accelerator('quit', keyval('Q'), Gdk.ModifierType.CONTROL_MASK)
-		group.set_accelerator('preferences', keyval('P'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('preferences', keyval('P'), Gdk.ModifierType.CONTROL_MASK | ALT_MASK)
 		group.set_accelerator('select_with_pattern', keyval('KP_Add'), 0)
 		group.set_accelerator('deselect_with_pattern', keyval('KP_Subtract'), 0)
-		group.set_accelerator('select_with_same_extension', keyval('KP_Add'), Gdk.ModifierType.MOD1_MASK)
-		group.set_accelerator('deselect_with_same_extension', keyval('KP_Subtract'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('select_with_same_extension', keyval('KP_Add'), ALT_MASK)
+		group.set_accelerator('deselect_with_same_extension', keyval('KP_Subtract'), ALT_MASK)
 		group.set_accelerator('compare_directories', keyval('F12'), 0)
-		group.set_accelerator('find_files', keyval('F7'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('find_files', keyval('F7'), ALT_MASK)
 		group.set_accelerator('advanced_rename', keyval('M'), Gdk.ModifierType.CONTROL_MASK)
 		group.set_accelerator('mount_manager', keyval('O'), Gdk.ModifierType.CONTROL_MASK)
 		group.set_accelerator('reload', keyval('R'), Gdk.ModifierType.CONTROL_MASK)
-		group.set_accelerator('fast_media_preview', keyval('F3'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('fast_media_preview', keyval('F3'), ALT_MASK)
 		group.set_accelerator('show_hidden_files', keyval('H'), Gdk.ModifierType.CONTROL_MASK)
 
 		group.set_alt_accelerator('select_with_pattern', keyval('equal'), 0)
 		group.set_alt_accelerator('deselect_with_pattern', keyval('minus'), 0)
-		group.set_alt_accelerator('select_with_same_extension', keyval('equal'), Gdk.ModifierType.MOD1_MASK)
-		group.set_alt_accelerator('deselect_with_same_extension', keyval('minus'), Gdk.ModifierType.MOD1_MASK)
+		group.set_alt_accelerator('select_with_same_extension', keyval('equal'), ALT_MASK)
+		group.set_alt_accelerator('deselect_with_same_extension', keyval('minus'), ALT_MASK)
 
 		# expose object
 		self._accel_group = group
@@ -1863,17 +2158,17 @@ class MainWindow(Gtk.ApplicationWindow):
 		except IOError as error:
 			# notify user about failure
 			dialog = Gtk.MessageDialog(
-									self,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.ERROR,
-									Gtk.ButtonsType.OK,
-									_(
+									transient_for=self,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.ERROR,
+									buttons=Gtk.ButtonsType.OK,
+									text=_(
 										'Error saving configuration to files '
 										'in your home directory. Make sure you have '
 										'enough permissions.'
 									) +	'\n\n{0}'.format(error)
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 	def load_config(self):
@@ -2112,6 +2407,10 @@ class MainWindow(Gtk.ApplicationWindow):
 		"""Return active tab from right notebook"""
 		return self.right_notebook.get_nth_page(self.right_notebook.get_current_page())
 
+	def get_notebook_tabs(self, notebook):
+		"""Return list of tabs in specified notebook."""
+		return [notebook.get_nth_page(number) for number in range(notebook.get_n_pages())]
+
 	def get_opposite_notebook(self, notebook):
 		"""Return opposite notebook"""
 		return self.left_notebook if notebook is self.right_notebook else self.right_notebook
@@ -2126,8 +2425,8 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		"""
 		# get all objects
-		objects = self.left_notebook.get_children()
-		objects.extend(self.right_notebook.get_children())
+		objects = self.get_notebook_tabs(self.left_notebook)
+		objects.extend(self.get_notebook_tabs(self.right_notebook))
 
 		# get only objects of specified class that are not caller
 		filter_objects = lambda item: item.__class__ is caller.__class__ and item is not caller
@@ -2142,8 +2441,16 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def add_operation(self, indicator):
 		"""Add operation indicator to header bar."""
-		self.status_bar.pack_start(indicator, False, False, 0)
-		indicator.show_all()
+		if Gtk.get_major_version() == 3:
+			self.status_bar.pack_start(indicator, False, False, 0)
+
+		else:
+			self.status_bar.append(indicator)
+		if Gtk.get_major_version() == 3:
+			indicator.show_all()
+
+		else:
+			indicator.show()
 
 	def remove_operation(self, indicator):
 		"""Remove operation indicator from header bar."""
@@ -2217,13 +2524,25 @@ class MainWindow(Gtk.ApplicationWindow):
 
 			# apply tab-expand
 			if expand_tabs == TabExpand.NONE:
-				self.left_notebook.child_set_property(page, 'tab-expand', False)
+				if Gtk.get_major_version() == 3:
+					self.left_notebook.child_set_property(page, 'tab-expand', False)
+
+				else:
+					self.left_notebook.get_page(page).set_property('tab-expand', False)
 
 			elif expand_tabs == TabExpand.ACTIVE:
-				self.left_notebook.child_set_property(page, 'tab-expand', page is self.get_active_object())
+				if Gtk.get_major_version() == 3:
+					self.left_notebook.child_set_property(page, 'tab-expand', page is self.get_active_object())
+
+				else:
+					self.left_notebook.get_page(page).set_property('tab-expand', page is self.get_active_object())
 
 			else:
-				self.left_notebook.child_set_property(page, 'tab-expand', True)
+				if Gtk.get_major_version() == 3:
+					self.left_notebook.child_set_property(page, 'tab-expand', True)
+
+				else:
+					self.left_notebook.get_page(page).set_property('tab-expand', True)
 
 			# call plugin apply_settings
 			if hasattr(page, 'apply_settings'):
@@ -2234,13 +2553,25 @@ class MainWindow(Gtk.ApplicationWindow):
 
 			# apply tab-expand
 			if expand_tabs == TabExpand.NONE:
-				self.right_notebook.child_set_property(page, 'tab-expand', False)
+				if Gtk.get_major_version() == 3:
+					self.right_notebook.child_set_property(page, 'tab-expand', False)
+
+				else:
+					self.right_notebook.get_page(page).set_property('tab-expand', False)
 
 			elif expand_tabs == TabExpand.ACTIVE:
-				self.right_notebook.child_set_property(page, 'tab-expand', page is self.get_active_object())
+				if Gtk.get_major_version() == 3:
+					self.right_notebook.child_set_property(page, 'tab-expand', page is self.get_active_object())
+
+				else:
+					self.right_notebook.get_page(page).set_property('tab-expand', page is self.get_active_object())
 
 			else:
-				self.right_notebook.child_set_property(page, 'tab-expand', True)
+				if Gtk.get_major_version() == 3:
+					self.right_notebook.child_set_property(page, 'tab-expand', True)
+
+				else:
+					self.right_notebook.get_page(page).set_property('tab-expand', True)
 
 			# call plugin apply_settings
 			if hasattr(page, 'apply_settings'):
@@ -2498,44 +2829,44 @@ class MainWindow(Gtk.ApplicationWindow):
 					AdvancedRename(active_object, self)
 				else:
 					dialog = Gtk.MessageDialog(
-						self,
-						Gtk.DialogFlags.DESTROY_WITH_PARENT,
-						Gtk.MessageType.INFO,
-						Gtk.ButtonsType.OK,
-						_('Please select at least one file or directory.')
+						transient_for=self,
+						destroy_with_parent=True,
+						message_type=Gtk.MessageType.INFO,
+						buttons=Gtk.ButtonsType.OK,
+						text=_('Please select at least one file or directory.')
 					)
-					dialog.run()
+					run_dialog(dialog)
 					dialog.destroy()
 
 		elif not issubclass(self._active_object.__class__, ItemList):
 			# active object is not item list
 			dialog = Gtk.MessageDialog(
-								self,
-								Gtk.DialogFlags.DESTROY_WITH_PARENT,
-								Gtk.MessageType.INFO,
-								Gtk.ButtonsType.OK,
-								_(
+								transient_for=self,
+								destroy_with_parent=True,
+								message_type=Gtk.MessageType.INFO,
+								buttons=Gtk.ButtonsType.OK,
+								text=_(
 									'Active object is not item list. Advanced '
 									'rename tool needs files and directories.'
 								)
 							)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 		elif len(self.rename_extension_classes) == 0:
 			# no extensions found, report error to user
 			dialog = Gtk.MessageDialog(
-								self,
-								Gtk.DialogFlags.DESTROY_WITH_PARENT,
-								Gtk.MessageType.INFO,
-								Gtk.ButtonsType.OK,
-								_(
+								transient_for=self,
+								destroy_with_parent=True,
+								message_type=Gtk.MessageType.INFO,
+								buttons=Gtk.ButtonsType.OK,
+								text=_(
 									'No rename extensions were found. Please '
 									'enable basic rename options plugin and try '
 									'again.'
 								)
 							)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 			# show preferences window
@@ -2552,16 +2883,16 @@ class MainWindow(Gtk.ApplicationWindow):
 		else:
 			# no extensions found, report error to user
 			dialog = Gtk.MessageDialog(
-								self,
-								Gtk.DialogFlags.DESTROY_WITH_PARENT,
-								Gtk.MessageType.INFO,
-								Gtk.ButtonsType.OK,
-								_(
+								transient_for=self,
+								destroy_with_parent=True,
+								message_type=Gtk.MessageType.INFO,
+								buttons=Gtk.ButtonsType.OK,
+								text=_(
 									'No extensions for finding files were found. Please '
 									'enable basic find file options plugin and try again.'
 								)
 							)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 			# show preferences window
@@ -2579,28 +2910,28 @@ class MainWindow(Gtk.ApplicationWindow):
 			except InvalidKeyringError:
 				# keyring is not available, let user know
 				dialog = Gtk.MessageDialog(
-									self,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.INFO,
-									Gtk.ButtonsType.OK,
-									_('Keyring is empty!')
+									transient_for=self,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.INFO,
+									buttons=Gtk.ButtonsType.OK,
+									text=_('Keyring is empty!')
 								)
-				dialog.run()
+				run_dialog(dialog)
 				dialog.destroy()
 
 		else:
 			# keyring is not available, let user know
 			dialog = Gtk.MessageDialog(
-								self,
-								Gtk.DialogFlags.DESTROY_WITH_PARENT,
-								Gtk.MessageType.INFO,
-								Gtk.ButtonsType.OK,
-								_(
+								transient_for=self,
+								destroy_with_parent=True,
+								message_type=Gtk.MessageType.INFO,
+								buttons=Gtk.ButtonsType.OK,
+								text=_(
 									'Keyring is not available. Make sure you have '
 									'Python Gnome keyring module installed.'
 								)
 							)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 		return True
@@ -2614,4 +2945,8 @@ class MainWindow(Gtk.ApplicationWindow):
 
 	def add_control_to_status_bar(self, control):
 		"""Add new control to status bar"""
-		self.status_bar.pack_start(control, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self.status_bar.pack_start(control, False, False, 0)
+
+		else:
+			self.status_bar.append(control)

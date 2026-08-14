@@ -1,7 +1,14 @@
 from gi.repository import Gtk, GObject
 
+# GTK 4 removed tool items, plain buttons are used on the toolbar box
+if Gtk.get_major_version() == 3:
+	ToolbarButton = Gtk.ToolButton
 
-class Button(Gtk.ToolButton):
+else:
+	ToolbarButton = Gtk.Button
+
+
+class Button(ToolbarButton):
 	"""Toolbar control used to popup bookmarks menu"""
 
 	def __init__(self, application, name, config):

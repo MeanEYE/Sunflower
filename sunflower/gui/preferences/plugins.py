@@ -41,7 +41,11 @@ class PluginsOptions(SettingsPage):
 		# create interface
 		container = Gtk.ScrolledWindow()
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
-		container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			container.set_has_frame(True)
 
 		# create list box
 		self._plugins = Gtk.ListStore(
@@ -57,7 +61,8 @@ class PluginsOptions(SettingsPage):
 
 		self._list = Gtk.TreeView()
 		self._list.set_model(self._plugins)
-		self._list.set_rules_hint(True)
+		if Gtk.get_major_version() == 3:
+			self._list.set_rules_hint(True)
 		self._list.connect('cursor-changed', self.__handle_cursor_change)
 
 		# create and configure cell renderers
@@ -87,40 +92,89 @@ class PluginsOptions(SettingsPage):
 		# create description
 		self._label_description = Gtk.Label()
 		self._label_description.set_use_markup(True)
-		self._label_description.set_line_wrap(True)
+		if Gtk.get_major_version() == 3:
+			self._label_description.set_line_wrap(True)
+
+		else:
+			self._label_description.set_wrap(True)
 		self._label_description.set_selectable(True)
-		self._label_description.set_padding(5, 5)
-		self._label_description.connect('size-allocate', self.__adjust_label)
+		if Gtk.get_major_version() == 3:
+			self._label_description.set_padding(5, 5)
+
+		else:
+			# GTK 4 dropped widget padding in favor of margins
+			self._label_description.set_margin_start(5)
+			self._label_description.set_margin_end(5)
+			self._label_description.set_margin_top(5)
+			self._label_description.set_margin_bottom(5)
+		if Gtk.get_major_version() == 3:
+			self._label_description.connect('size-allocate', self.__adjust_label)
 
 		self._expander_description = Gtk.Expander(label=_('Description'))
-		self._expander_description.add(self._label_description)
+		if Gtk.get_major_version() == 3:
+			self._expander_description.add(self._label_description)
+
+		else:
+			self._expander_description.set_child(self._label_description)
 
 		# create controls
 		hbox_controls = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		image_contact = Gtk.Image()
-		image_contact.set_from_icon_name('gnome-stock-mail-new', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_contact.set_from_icon_name('gnome-stock-mail-new', Gtk.IconSize.BUTTON)
+
+		else:
+			image_contact.set_from_icon_name('gnome-stock-mail-new')
 
 		self._button_contact = Gtk.Button()
 		self._button_contact.set_label(_('Contact'))
-		self._button_contact.set_image(image_contact)
+		if Gtk.get_major_version() == 3:
+			self._button_contact.set_image(image_contact)
+
+		else:
+			button_content = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
+			button_content.append(image_contact)
+			button_content.append(Gtk.Label.new(self._button_contact.get_label()))
+			self._button_contact.set_child(button_content)
 		self._button_contact.set_sensitive(False)
 		self._button_contact.connect('clicked', self.__handle_contact_button_click)
 
 		image_home_page = Gtk.Image()
-		image_home_page.set_from_stock(Gtk.STOCK_HOME, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_home_page.set_from_stock(Gtk.STOCK_HOME, Gtk.IconSize.BUTTON)
+
+		else:
+			image_home_page.set_from_icon_name('go-home-symbolic')
 
 		self._button_home_page = Gtk.Button()
 		self._button_home_page.set_label(_('Visit site'))
-		self._button_home_page.set_image(image_home_page)
+		if Gtk.get_major_version() == 3:
+			self._button_home_page.set_image(image_home_page)
+
+		else:
+			button_content = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
+			button_content.append(image_home_page)
+			button_content.append(Gtk.Label.new(self._button_home_page.get_label()))
+			self._button_home_page.set_child(button_content)
 		self._button_home_page.set_sensitive(False)
 		self._button_home_page.connect('clicked', self.__handle_home_page_button_click)
 
 		# pack containers
-		container.add(self._list)
+		if Gtk.get_major_version() == 3:
+			container.add(self._list)
 
-		hbox_controls.pack_start(self._button_contact, False, False, 0)
-		hbox_controls.pack_start(self._button_home_page, False, False, 0)
+		else:
+			container.set_child(self._list)
+
+		if Gtk.get_major_version() == 3:
+			hbox_controls.pack_start(self._button_contact, False, False, 0)
+			hbox_controls.pack_start(self._button_home_page, False, False, 0)
+
+
+		else:
+			hbox_controls.append(self._button_contact)
+			hbox_controls.append(self._button_home_page)
 
 		self.pack_start(container, True, True, 0)
 		self.pack_start(self._expander_description, False, False, 0)
@@ -179,18 +233,18 @@ class PluginsOptions(SettingsPage):
 		else:
 			# plugin is protected, show appropriate message
 			dialog = Gtk.MessageDialog(
-									self._application,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.INFO,
-									Gtk.ButtonsType.OK,
-									_(
+									transient_for=self._application,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.INFO,
+									buttons=Gtk.ButtonsType.OK,
+									text=_(
 										"{0} is required for "
 										"normal program operation and therefore can "
 										"not be deactivated!"
 									).format(plugin_name)
 								)
 
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 	def _load_options(self):

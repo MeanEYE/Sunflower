@@ -8,7 +8,11 @@ class StatusBar(Gtk.Box):
 		Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=15)
 
 		set_border_width(self, 4)
-		self.set_property('no-show-all', True)
+		if Gtk.get_major_version() == 3:
+			self.set_property('no-show-all', True)
+
+		else:
+			self.hide()
 
 		self._icons = {}
 		self._labels = {}
@@ -16,11 +20,17 @@ class StatusBar(Gtk.Box):
 		# create default label
 		self._label = Gtk.Label()
 		self._label.set_use_markup(True)
-		self._label.set_alignment(0, 0.5)
+		self._label.set_xalign(0)
+		self._label.set_yalign(0.5)
 		self._label.show()
 
 		# pack interface
-		self.pack_end(self._label, True, True, 0)
+		if Gtk.get_major_version() == 3:
+			self.pack_end(self._label, True, True, 0)
+
+		else:
+			self._label.set_hexpand(True)
+			self.append(self._label)
 
 	def set_text(self, text, group=None):
 		"""Set default label text"""
@@ -35,12 +45,17 @@ class StatusBar(Gtk.Box):
 	def add_group_with_icon(self, name, icon_name, value='', tooltip=None):
 		"""Add status bar group with icon"""
 		icon = Gtk.Image()
-		icon.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
+		if Gtk.get_major_version() == 3:
+			icon.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
+
+		else:
+			icon.set_from_icon_name(icon_name)
 		icon.show()
 
 		label = Gtk.Label(label=value)
 		label.set_use_markup(True)
-		label.set_alignment(0, 0.5)
+		label.set_xalign(0)
+		label.set_yalign(0.5)
 		label.show()
 
 		# configure tooltip
@@ -52,10 +67,19 @@ class StatusBar(Gtk.Box):
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 3)
 		hbox.show()
 
-		hbox.pack_start(icon, False, False, 0)
-		hbox.pack_start(label, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox.pack_start(icon, False, False, 0)
+			hbox.pack_start(label, False, False, 0)
 
-		self.pack_start(hbox, False, False, 0)
+			self.pack_start(hbox, False, False, 0)
+
+		else:
+			hbox.append(icon)
+			hbox.append(label)
+
+			# groups are packed at the start, default label stays at the end
+			self.append(hbox)
+			self.reorder_child_after(self._label, hbox)
 
 		# add group to local cache
 		self._labels[name] = label

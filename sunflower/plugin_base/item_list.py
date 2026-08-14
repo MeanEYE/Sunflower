@@ -17,6 +17,13 @@ from sunflower.gui.history_list import HistoryList
 from sunflower.history import HistoryManager
 from sunflower.widgets.popup_menu import PopupMenu
 
+# GTK 4 renamed the Alt key modifier from MOD1
+if Gtk.get_major_version() == 3:
+	ALT_MASK = Gdk.ModifierType.MOD1_MASK
+
+else:
+	ALT_MASK = Gdk.ModifierType.ALT_MASK
+
 
 class ItemList(PluginBase):
 	"""General item list
@@ -93,20 +100,49 @@ class ItemList(PluginBase):
 		scrollbar_horizontal.set_child_visible(not hide_scrollbar)
 
 		# connect events
-		self._item_list.connect('button-press-event', self._handle_button_press)
-		self._item_list.connect('button-release-event', self._handle_button_press)
+		if Gtk.get_major_version() == 3:
+			self._item_list.connect('button-press-event', self._handle_button_press)
+			self._item_list.connect('button-release-event', self._handle_button_press)
+
+		else:
+			# GTK 4 delivers mouse buttons through a click gesture
+			click_gesture = Gtk.GestureClick.new()
+			click_gesture.set_button(0)
+			click_gesture.connect('pressed', self._handle_button_pressed)
+			click_gesture.connect('released', self._handle_button_released)
+			self._item_list.add_controller(click_gesture)
 		self._item_list.connect('cursor-changed', self._handle_cursor_change)
 		self._item_list.connect('columns-changed', self._column_changed)
 		self._connect_main_object(self._item_list)
-		self._container.add(self._item_list)
+		if Gtk.get_major_version() == 3:
+			self._container.add(self._item_list)
+
+		else:
+			self._container.set_child(self._item_list)
 
 		# quick search
 		self._search_entry = Gtk.SearchEntry.new()
-		self._search_entry.connect('key-press-event', self._handle_search_key_press)
-		self._search_entry.connect('focus-out-event', self._stop_search)
+		if Gtk.get_major_version() == 3:
+			self._search_entry.connect('key-press-event', self._handle_search_key_press)
+
+		else:
+			key_controller = Gtk.EventControllerKey.new()
+			key_controller.connect('key-pressed', self._handle_search_key_pressed)
+			self._search_entry.add_controller(key_controller)
+		if Gtk.get_major_version() == 3:
+			self._search_entry.connect('focus-out-event', self._stop_search)
+
+		else:
+			focus_controller = Gtk.EventControllerFocus.new()
+			focus_controller.connect('leave', self._stop_search)
+			self._search_entry.add_controller(focus_controller)
 
 		self._search_panel = Gtk.SearchBar.new()
-		self._search_panel.add(self._search_entry)
+		if Gtk.get_major_version() == 3:
+			self._search_panel.add(self._search_entry)
+
+		else:
+			self._search_panel.set_child(self._search_entry)
 
 		compare = lambda model, column, key, iter_: key.lower() not in model.get_value(iter_, column).lower()
 		self._item_list.set_search_equal_func(compare)
@@ -118,63 +154,133 @@ class ItemList(PluginBase):
 		# create free space indicator in context menu
 		vbox_free_space = Gtk.Box.new(Gtk.Orientation.VERTICAL, 2)
 		self._label_free_space = Gtk.Label.new()
-		self._label_free_space.set_alignment(0, 0.5)
-		vbox_free_space.pack_start(self._label_free_space, False, False, 0)
+		self._label_free_space.set_xalign(0)
+		self._label_free_space.set_yalign(0.5)
+		if Gtk.get_major_version() == 3:
+			vbox_free_space.pack_start(self._label_free_space, False, False, 0)
+
+		else:
+			vbox_free_space.append(self._label_free_space)
 
 		self._progress_free_space = Gtk.LevelBar.new()
-		vbox_free_space.pack_start(self._progress_free_space, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox_free_space.pack_start(self._progress_free_space, False, False, 0)
+
+		else:
+			vbox_free_space.append(self._progress_free_space)
 
 		# create context menu button container
-		hbox_buttons = Gtk.ButtonBox.new(Gtk.Orientation.HORIZONTAL)
+		if Gtk.get_major_version() == 3:
+			hbox_buttons = Gtk.ButtonBox.new(Gtk.Orientation.HORIZONTAL)
+
+		else:
+			hbox_buttons = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+			# GTK 3 button box style enforced 85px wide buttons which is
+			# what defined width of the whole menu
+			hbox_buttons.set_homogeneous(True)
+			hbox_buttons.set_hexpand(True)
+			hbox_buttons.set_size_request(340, -1)
 		hbox_buttons.get_style_context().add_class('linked')
 
 		# create swap panes item
-		menu_swap_paths = Gtk.Button.new_from_icon_name('object-flip-horizontal-symbolic', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			menu_swap_paths = Gtk.Button.new_from_icon_name('object-flip-horizontal-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			menu_swap_paths = Gtk.Button.new_from_icon_name('object-flip-horizontal-symbolic')
 		menu_swap_paths.set_tooltip_text(_('Swap right and left paths'))
 		menu_swap_paths.connect('clicked', self._swap_paths)
-		hbox_buttons.pack_start(menu_swap_paths, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox_buttons.pack_start(menu_swap_paths, False, False, 0)
+
+		else:
+			hbox_buttons.append(menu_swap_paths)
 
 		# create reload menu item
-		menu_item_refresh = Gtk.Button.new_from_icon_name('view-refresh-symbolic', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			menu_item_refresh = Gtk.Button.new_from_icon_name('view-refresh-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			menu_item_refresh = Gtk.Button.new_from_icon_name('view-refresh-symbolic')
 		menu_item_refresh.set_tooltip_text(_('Reload item list'))
 		menu_item_refresh.connect('clicked', self.refresh_file_list)
-		hbox_buttons.pack_start(menu_item_refresh, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox_buttons.pack_start(menu_item_refresh, False, False, 0)
+
+		else:
+			hbox_buttons.append(menu_item_refresh)
 
 		# create copy path item
-		menu_item_copy_path = Gtk.Button.new_from_icon_name('edit-copy-symbolic', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			menu_item_copy_path = Gtk.Button.new_from_icon_name('edit-copy-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			menu_item_copy_path = Gtk.Button.new_from_icon_name('edit-copy-symbolic')
 		menu_item_copy_path.set_tooltip_text(_('Copy path to clipboard'))
 		menu_item_copy_path.connect('clicked', self.copy_path_to_clipboard)
-		hbox_buttons.pack_start(menu_item_copy_path, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox_buttons.pack_start(menu_item_copy_path, False, False, 0)
+
+		else:
+			hbox_buttons.append(menu_item_copy_path)
 
 		# create path entry item
-		menu_path_entry = Gtk.Button.new_from_icon_name('go-jump-symbolic', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			menu_path_entry = Gtk.Button.new_from_icon_name('go-jump-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			menu_path_entry = Gtk.Button.new_from_icon_name('go-jump-symbolic')
 		menu_path_entry.set_tooltip_text(_('Enter path...'))
 		menu_path_entry.connect('clicked', self.custom_path_entry)
-		hbox_buttons.pack_start(menu_path_entry, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox_buttons.pack_start(menu_path_entry, False, False, 0)
+
+		else:
+			hbox_buttons.append(menu_path_entry)
 
 		# add containers to context menu
 		self._title_bar.context_menu.add_control(vbox_free_space)
 		self._title_bar.context_menu.add_control(hbox_buttons)
 
 		# pack gui
-		self.pack_start(self._container, True, True, 0)
-		self.pack_start(self._search_panel, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self.pack_start(self._container, True, True, 0)
+			self.pack_start(self._search_panel, False, False, 0)
 
-		self.show_all()
+		else:
+			self._container.set_vexpand(True)
+			self.append(self._container)
+			self.append(self._search_panel)
+
+		self._pack_status_bar()
+
+		if Gtk.get_major_version() == 3:
+			self.show_all()
+
+		else:
+			self.show()
 
 	def _create_buttons(self):
 		"""Create titlebar buttons."""
 		options = self._parent.options
 
 		# locations button
-		self.locations_button = Gtk.Button.new_from_icon_name('go-jump-symbolic', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			self.locations_button = Gtk.Button.new_from_icon_name('go-jump-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			self.locations_button = Gtk.Button.new_from_icon_name('go-jump-symbolic')
 		self.locations_button.set_focus_on_click(False)
 		self.locations_button.set_tooltip_text(_('Locations'))
 		self.locations_button.connect('clicked', self._locations_button_clicked)
 		self._title_bar.add_control(self.locations_button)
 
 		# terminal button
-		self.terminal_button = Gtk.Button.new_from_icon_name('utilities-terminal-symbolic', Gtk.IconSize.MENU)
+		if Gtk.get_major_version() == 3:
+			self.terminal_button = Gtk.Button.new_from_icon_name('utilities-terminal-symbolic', Gtk.IconSize.MENU)
+
+		else:
+			self.terminal_button = Gtk.Button.new_from_icon_name('utilities-terminal-symbolic')
 		self.terminal_button.set_focus_on_click(False)
 		self.terminal_button.set_tooltip_text(_('Terminal'))
 		self.terminal_button.connect('clicked', self._create_terminal)
@@ -249,8 +355,8 @@ class ItemList(PluginBase):
 		# configure accelerators
 		group.set_accelerator('execute_item', keyval('Return'), 0)
 		group.set_alt_accelerator('execute_item', keyval('KP_Enter'), 0)
-		group.set_accelerator('item_properties', keyval('Return'), Gdk.ModifierType.MOD1_MASK)
-		group.set_alt_accelerator('item_properties', keyval('KP_Enter'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('item_properties', keyval('Return'), ALT_MASK)
+		group.set_alt_accelerator('item_properties', keyval('KP_Enter'), ALT_MASK)
 		group.set_accelerator('add_bookmark', keyval('d'), Gdk.ModifierType.CONTROL_MASK)
 		group.set_accelerator('edit_bookmarks', keyval('b'), Gdk.ModifierType.CONTROL_MASK)
 		group.set_accelerator('cut_to_clipboard', keyval('x'), Gdk.ModifierType.CONTROL_MASK)
@@ -263,8 +369,8 @@ class ItemList(PluginBase):
 		group.set_accelerator('root_directory', keyval('backslash'), Gdk.ModifierType.CONTROL_MASK)
 		group.set_accelerator('refresh_list', keyval('R'), Gdk.ModifierType.CONTROL_MASK)
 		group.set_accelerator('show_history', keyval('BackSpace'), Gdk.ModifierType.CONTROL_MASK)
-		group.set_accelerator('back_in_history', keyval('Left'), Gdk.ModifierType.MOD1_MASK)
-		group.set_accelerator('forward_in_history', keyval('Right'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('back_in_history', keyval('Left'), ALT_MASK)
+		group.set_accelerator('forward_in_history', keyval('Right'), ALT_MASK)
 		group.set_accelerator('select_all', keyval('A'), Gdk.ModifierType.CONTROL_MASK)
 		group.set_accelerator('deselect_all', keyval('A'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
 		group.set_accelerator('invert_selection', keyval('asterisk'), Gdk.ModifierType.SHIFT_MASK)
@@ -306,7 +412,7 @@ class ItemList(PluginBase):
 
 		# create bookmark accelerators
 		group.add_method('bookmark_home', _("Go to '{0}'"), self._parent.activate_bookmark, 0)
-		group.set_accelerator('bookmark_home', keyval('grave'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('bookmark_home', keyval('grave'), ALT_MASK)
 
 		for number in range(1, 11):
 			group.add_method(
@@ -320,7 +426,7 @@ class ItemList(PluginBase):
 			group.set_accelerator(
 						'bookmark_{0}'.format(number),
 						keyval(str(key_number)),
-						Gdk.ModifierType.MOD1_MASK
+						ALT_MASK
 					)
 
 		# add accelerator group to the list
@@ -450,23 +556,59 @@ class ItemList(PluginBase):
 		return self._move_marker(widget)
 
 	def _handle_button_press(self, widget, event):
-		"""Handles mouse events"""
+		"""Handles mouse events (GTK 3)"""
+		return self._handle_button(
+					widget,
+					event.button,
+					event.type in (Gdk.EventType.BUTTON_PRESS, Gdk.EventType._2BUTTON_PRESS),
+					2 if event.type is Gdk.EventType._2BUTTON_PRESS else 1,
+					event.x, event.y,
+					event.get_state(),
+					event.get_time()
+				)
+
+	def _handle_button_pressed(self, gesture, count, x, y):
+		"""Handle mouse button press (GTK 4)"""
+		return self._handle_gesture(gesture, True, count, x, y)
+
+	def _handle_button_released(self, gesture, count, x, y):
+		"""Handle mouse button release (GTK 4)"""
+		return self._handle_gesture(gesture, False, count, x, y)
+
+	def _handle_gesture(self, gesture, press, count, x, y):
+		"""Pass gesture data to shared button handler (GTK 4)"""
+		result = self._handle_button(
+					self._item_list,
+					gesture.get_current_button(),
+					press, count, x, y,
+					gesture.get_current_event_state(),
+					gesture.get_current_event_time()
+				)
+
+		# stop default widget behavior when event was handled
+		if result:
+			gesture.set_state(Gtk.EventSequenceState.CLAIMED)
+
+		return result
+
+	def _handle_button(self, widget, button, press, count, x, y, state, time):
+		"""Handle mouse button regardless of the toolkit version"""
 		result = False
 
 		right_click_select = self._parent.options.section('item_list').get('right_click_select')
 		single_click_navigation = self._parent.options.section('item_list').get('single_click_navigation')
 
-		shift_active = event.get_state() & Gdk.ModifierType.SHIFT_MASK
-		control_active = event.get_state() & Gdk.ModifierType.CONTROL_MASK
+		shift_active = state & Gdk.ModifierType.SHIFT_MASK
+		control_active = state & Gdk.ModifierType.CONTROL_MASK
 
 		# handle single click
-		if event.button == 1 and control_active and event.type in (Gdk.EventType.BUTTON_PRESS, Gdk.EventType.BUTTON_RELEASE):
+		if button == 1 and control_active and ((press and count == 1) or not press):
 			# we handle left mouse press and release in order to prevent
 			# default widget behavior which leads to unpredictable results
 
-			if event.type is Gdk.EventType.BUTTON_PRESS:
+			if press and count == 1:
 				# focus clicked item on button press
-				item = self._item_list.get_path_at_pos(int(event.x), int(event.y))
+				item = self._item_list.get_path_at_pos(int(x), int(y))
 
 				if item is not None:
 					path = item[0]
@@ -474,12 +616,12 @@ class ItemList(PluginBase):
 
 			else:
 				# toggle selection on button release
-				self._toggle_selection(widget, event, advance=False)
+				self._toggle_selection(widget, advance=False)
 
 			result = True
 
 		# handle range select
-		elif event.button == 1 and shift_active and event.type is Gdk.EventType.BUTTON_PRESS:
+		elif button == 1 and shift_active and press and count == 1:
 			start_path = None
 			end_path = None
 
@@ -491,7 +633,7 @@ class ItemList(PluginBase):
 				start_path = item_list.get_path(start_iter)
 
 			# get destination path
-			item = self._item_list.get_path_at_pos(int(event.x), int(event.y))
+			item = self._item_list.get_path_at_pos(int(x), int(y))
 
 			if item is not None:
 				end_path = item[0]
@@ -506,33 +648,33 @@ class ItemList(PluginBase):
 			result = True
 
 		# handle navigation with double or single click
-		elif event.button == 1 and not (shift_active or control_active) \
-		and ((event.type is Gdk.EventType._2BUTTON_PRESS and not single_click_navigation) \
-		or (event.type is Gdk.EventType.BUTTON_RELEASE and single_click_navigation)):
+		elif button == 1 and not (shift_active or control_active) \
+		and ((press and count == 2 and not single_click_navigation) \
+		or (not press and single_click_navigation)):
 			# make sure that clicking on empty space doesn't trigger any action
-			if self._item_list.get_path_at_pos(int(event.x), int(event.y)) is not None:
+			if self._item_list.get_path_at_pos(int(x), int(y)) is not None:
 				self._execute_selected_item(widget)
 				result = True
 
 		# handle middle click
-		elif event.button == 2 and event.type is Gdk.EventType.BUTTON_RELEASE:
+		elif button == 2 and not press:
 			self._open_in_new_tab()
 			result = True
 
 		# handle right click
-		elif event.button == 3:
-			if event.type is Gdk.EventType.BUTTON_PRESS:
+		elif button == 3:
+			if press and count == 1:
 				# record mouse down timestamp
-				self._popup_timestamp = event.get_time()
+				self._popup_timestamp = time
 
 				# prevent CTRL+RightClick from generating exceptions
 				if control_active:
 					result = True
 
-			elif event.type is Gdk.EventType.BUTTON_RELEASE:
+			elif not press:
 				# button was released, depending on options call specific method
-				time_valid = event.get_time() - self._popup_timestamp > 500
-				if event.x and event.y:
+				time_valid = time - self._popup_timestamp > 500
+				if x and y:
 					if not right_click_select or (right_click_select and time_valid):
 						# show popup menu
 						self._show_popup_menu()
@@ -544,39 +686,39 @@ class ItemList(PluginBase):
 				result = True
 
 		# handle back button on mouse
-		elif event.button == 8:
-			if event.type is Gdk.EventType.BUTTON_RELEASE:
+		elif button == 8:
+			if not press:
 				self.history_manager.back()
 
 			result = True
 
 		# handle forward button on mouse
-		elif event.button == 9:
-			if event.type is Gdk.EventType.BUTTON_RELEASE:
+		elif button == 9:
+			if not press:
 				self.history_manager.forward()
 
 			result = True
 
 		return result
 
-	def _handle_key_press(self, widget, event):
-		"""Handles key events in item list"""
-		result = PluginBase._handle_key_press(self, widget, event)
+	def _handle_keyval(self, keyval, state):
+		"""Handles key value regardless of the toolkit version"""
+		result = PluginBase._handle_keyval(self, keyval, state)
 
 		# bail early
 		if result:
 			return result
 
 		# retrieve human readable key representation
-		key_value = Gdk.keyval_to_unicode(event.keyval)
+		key_value = Gdk.keyval_to_unicode(keyval)
 
 		if not result and key_value > 0 \
-		and event.keyval != Gdk.KEY_Escape:
+		and keyval != Gdk.KEY_Escape:
 			# generate state string based on modifier state (control, alt, shift)
 			state = "%d%d%d" % (
-						bool(event.get_state() & Gdk.ModifierType.CONTROL_MASK),
-						bool(event.get_state() & Gdk.ModifierType.MOD1_MASK),
-						bool(event.get_state() & Gdk.ModifierType.SHIFT_MASK)
+						bool(state & Gdk.ModifierType.CONTROL_MASK),
+						bool(state & ALT_MASK),
+						bool(state & Gdk.ModifierType.SHIFT_MASK)
 					)
 
 			if state == self._parent.options.section('item_list').get('search_modifier'):
@@ -606,16 +748,24 @@ class ItemList(PluginBase):
 
 		return True
 
-	def _handle_search_key_press(self, widget, event):
+	def _handle_search_key_press(self, widget, event, data=None):
+		"""Handle return and escape keys for quick search (GTK 3)"""
+		return self._handle_search_keyval(event.keyval, event.get_state())
+
+	def _handle_search_key_pressed(self, controller, keyval, keycode, state):
+		"""Handle return and escape keys for quick search (GTK 4)"""
+		return self._handle_search_keyval(keyval, state)
+
+	def _handle_search_keyval(self, keyval, state):
 		"""Handle return and escape keys for quick search"""
 		result = False
 
-		if event.keyval == Gdk.KEY_Return:
+		if keyval == Gdk.KEY_Return:
 			self._stop_search(widget)
 			self._execute_selected_item(widget)
 			result = True
 
-		elif event.keyval == Gdk.KEY_Escape:
+		elif keyval == Gdk.KEY_Escape:
 			self._stop_search(widget)
 			result = True
 
@@ -638,17 +788,17 @@ class ItemList(PluginBase):
 		else:
 			# invalid path, notify user
 			dialog = Gtk.MessageDialog(
-									self._parent,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.ERROR,
-									Gtk.ButtonsType.OK,
-									_(
+									transient_for=self._parent,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.ERROR,
+									buttons=Gtk.ButtonsType.OK,
+									text=_(
 										'Directory does not exist anymore or is not '
 										'valid. If path is not local check if specified '
 										'volume is mounted.'
 									) +	'\n\n{0}'.format(path)
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 	def _handle_external_data(self, operation, protocol, item_list, destination):
@@ -676,17 +826,17 @@ class ItemList(PluginBase):
 		if Provider is None:
 			# no provider was found for specified protocol
 			dialog = Gtk.MessageDialog(
-									self._parent,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.ERROR,
-									Gtk.ButtonsType.OK,
-									_(
+									transient_for=self._parent,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.ERROR,
+									buttons=Gtk.ButtonsType.OK,
+									text=_(
 										'Specified protocol ({0}) is not supported by '
 										'this application. Please check for available plugins '
 										'or create a feature request.'
 									).format(protocol)
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 			# abort handling data
@@ -708,16 +858,16 @@ class ItemList(PluginBase):
 		if len(source_provider.get_selection()) == 0:
 			# no provider was found for specified protocol
 			dialog = Gtk.MessageDialog(
-									self._parent,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.ERROR,
-									Gtk.ButtonsType.OK,
-									_(
+									transient_for=self._parent,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.ERROR,
+									buttons=Gtk.ButtonsType.OK,
+									text=_(
 										'Application is unable to handle specified data. '
 										'Check if source items still exist.'
 									)
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 			# abort handling data

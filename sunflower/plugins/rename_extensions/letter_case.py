@@ -29,10 +29,12 @@ class LetterCaseRename(RenameExtension):
 
 		# create labels
 		label_basename = Gtk.Label(label=_('Item name:'))
-		label_basename.set_alignment(0, 0.5)
+		label_basename.set_xalign(0)
+		label_basename.set_yalign(0.5)
 
 		label_extension = Gtk.Label(label=_('Extension:'))
-		label_extension.set_alignment(0, 0.5)
+		label_extension.set_xalign(0)
+		label_extension.set_yalign(0.5)
 
 		# create combo boxes
 		self._combo_basename = Gtk.ComboBoxText()
@@ -52,17 +54,21 @@ class LetterCaseRename(RenameExtension):
 		self._combo_extension.set_active(0)
 
 		# pack gui
-		table = Gtk.Table(2, 2, False)
-		table.set_col_spacing(0, 5)
-		table.set_row_spacings(5)
+		table = Gtk.Grid.new()
+		table.set_column_spacing(5)
+		table.set_row_spacing(5)
 
-		table.attach(label_basename, 0, 1, 0, 1, xoptions=Gtk.AttachOptions.FILL)
-		table.attach(label_extension, 0, 1, 1, 2, xoptions=Gtk.AttachOptions.FILL)
+		table.attach(label_basename, 0, 0, 1, 1)
+		table.attach(label_extension, 0, 1, 1, 1)
 
-		table.attach(self._combo_basename, 1, 2, 0, 1, xoptions=Gtk.AttachOptions.FILL)
-		table.attach(self._combo_extension, 1, 2, 1, 2, xoptions=Gtk.AttachOptions.FILL)
+		table.attach(self._combo_basename, 1, 0, 1, 1)
+		table.attach(self._combo_extension, 1, 1, 1, 1)
 
-		self.vbox.pack_start(table, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self.vbox.pack_start(table, False, False, 0)
+
+		else:
+			self.vbox.append(table)
 
 	def __do_nothing(self, name):
 		"""Return the same string"""

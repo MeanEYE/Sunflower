@@ -57,9 +57,28 @@ class Viewer(Gtk.Window):
 		self.set_resizable(True)
 
 		header_bar = Gtk.HeaderBar.new()
-		header_bar.set_title(display_filename)
-		header_bar.set_subtitle(self._mime_type)
-		header_bar.set_show_close_button(True)
+		if Gtk.get_major_version() == 3:
+			header_bar.set_title(display_filename)
+			header_bar.set_subtitle(self._mime_type)
+			header_bar.set_show_close_button(True)
+
+		else:
+			# GTK 4 header bar has no title and subtitle, provide our own
+			title_box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+			title_box.set_valign(Gtk.Align.CENTER)
+
+			title_label = Gtk.Label.new(display_filename)
+			title_label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
+			title_label.get_style_context().add_class('title')
+			title_box.append(title_label)
+
+			subtitle_label = Gtk.Label.new(self._mime_type)
+			subtitle_label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
+			subtitle_label.get_style_context().add_class('subtitle')
+			title_box.append(subtitle_label)
+
+			header_bar.set_title_widget(title_box)
+			header_bar.set_show_title_buttons(True)
 		self.set_titlebar(header_bar)
 
 		self._stack = Gtk.Stack.new()
@@ -72,8 +91,13 @@ class Viewer(Gtk.Window):
 
 		# connect signals
 		self.connect('destroy', self._handle_destroy)
-		self.connect('key-press-event', self._handle_key_press)
+		if Gtk.get_major_version() == 3:
+			self.connect('key-press-event', self._handle_key_press)
 
+		else:
+			key_controller = Gtk.EventControllerKey.new()
+			key_controller.connect('key-pressed', self._handle_key_pressed)
+			self.add_controller(key_controller)
 		# create page for executables
 		if self._mime_type in ('application/x-executable', 'application/x-sharedlib') \
 		and executable_exists('nm'):
@@ -104,7 +128,11 @@ class Viewer(Gtk.Window):
 				viewer.set_tab_width(4)
 				viewer.set_show_line_numbers(True)
 				viewer.set_editable(False)
-				viewer.modify_font(self.FONT)
+				if Gtk.get_major_version() == 3:
+					viewer.modify_font(self.FONT)
+
+				else:
+					self.__apply_font(viewer)
 
 				if self._options.get('word_wrap'):
 					viewer.set_wrap_mode(Gtk.WrapMode.WORD)
@@ -112,9 +140,17 @@ class Viewer(Gtk.Window):
 				code_buffer.place_cursor(code_buffer.get_start_iter())
 
 				window = Gtk.ScrolledWindow.new()
-				window.set_shadow_type(Gtk.ShadowType.NONE)
+				if Gtk.get_major_version() == 3:
+					window.set_shadow_type(Gtk.ShadowType.NONE)
+
+				else:
+					window.set_has_frame(False)
 				window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-				window.add(viewer)
+				if Gtk.get_major_version() == 3:
+					window.add(viewer)
+
+				else:
+					window.set_child(viewer)
 
 				# add page
 				self.add_page(_('Code'), window)
@@ -133,7 +169,11 @@ class Viewer(Gtk.Window):
 		if self._mime_type.startswith('image/'):
 			container = Gtk.ScrolledWindow()
 			container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-			container.set_shadow_type(Gtk.ShadowType.NONE)
+			if Gtk.get_major_version() == 3:
+				container.set_shadow_type(Gtk.ShadowType.NONE)
+
+			else:
+				container.set_has_frame(False)
 			viewport = Gtk.Viewport()
 			image = Gtk.Image()
 
@@ -155,28 +195,62 @@ class Viewer(Gtk.Window):
 				# set image
 				image.set_from_pixbuf(loader.get_pixbuf())
 
-			viewport.add(image)
-			container.add(viewport)
+			if Gtk.get_major_version() == 3:
+				viewport.add(image)
+
+			else:
+				viewport.set_child(image)
+			if Gtk.get_major_version() == 3:
+				container.add(viewport)
+
+			else:
+				container.set_child(viewport)
 			self.add_page(_('Image'), container)
 
 		# pack user interface
-		self.add(self._stack)
+		if Gtk.get_major_version() == 3:
+			self.add(self._stack)
+
+		else:
+			self.set_child(self._stack)
 
 		# show all widgets if there are pages present
 		if self._page_count > 0:
-			self.show_all()
+			if Gtk.get_major_version() == 3:
+				self.show_all()
+
+			else:
+				self.show()
 
 		else:
 			dialog = Gtk.MessageDialog(
-									self._application,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.INFO,
-									Gtk.ButtonsType.OK,
-									_('Viewer is unable to display this file type.')
+									transient_for=self._application,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.INFO,
+									buttons=Gtk.ButtonsType.OK,
+									text=_('Viewer is unable to display this file type.')
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 			self.destroy()
+
+	def __apply_font(self, widget):
+		"""Apply configured font to text widget. (GTK 4)
+
+		Replacement for `modify_font` which no longer exists, font is
+		applied through widget specific style provider instead.
+
+		"""
+		rules = ['font-family: "{0}"'.format(self.FONT.get_family())]
+
+		if self.FONT.get_size() > 0:
+			size = self.FONT.get_size() / Pango.SCALE
+			unit = 'px' if self.FONT.get_size_is_absolute() else 'pt'
+			rules.append('font-size: {0}{1}'.format(size, unit))
+
+		provider = Gtk.CssProvider.new()
+		provider.load_from_string('textview {{ {0}; }}'.format('; '.join(rules)))
+		widget.get_style_context().add_provider(provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
 	def _create_extensions(self):
 		"""Create extension widgets."""
@@ -203,13 +277,21 @@ class Viewer(Gtk.Window):
 		"""Create text page with specified data."""
 		container = Gtk.ScrolledWindow()
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-		container.set_shadow_type(Gtk.ShadowType.NONE)
+		if Gtk.get_major_version() == 3:
+			container.set_shadow_type(Gtk.ShadowType.NONE)
+
+		else:
+			container.set_has_frame(False)
 
 		text_view = Gtk.TextView()
 		text_view.set_editable(False)
 		text_view.set_cursor_visible(True)
 		text_view.set_monospace(True)
-		text_view.modify_font(self.FONT)
+		if Gtk.get_major_version() == 3:
+			text_view.modify_font(self.FONT)
+
+		else:
+			self.__apply_font(text_view)
 
 		if self._options.get('word_wrap'):
 			container.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
@@ -229,7 +311,11 @@ class Viewer(Gtk.Window):
 			text_buffer.place_cursor(text_buffer.get_start_iter())
 
 		# add container to notebook
-		container.add(text_view)
+		if Gtk.get_major_version() == 3:
+			container.add(text_view)
+
+		else:
+			container.set_child(text_view)
 		self.add_page(title, container)
 
 	def _handle_destroy(self, widget):
@@ -237,19 +323,31 @@ class Viewer(Gtk.Window):
 		return False
 
 	def _handle_key_press(self, widget, event, data=None):
+		"""Handle pressing keys in history list. (GTK 3)"""
+		return self._handle_keyval(event.keyval, event.get_state())
+
+	def _handle_key_pressed(self, controller, keyval, keycode, state):
+		"""Handle pressing keys in history list. (GTK 4)"""
+		return self._handle_keyval(keyval, state)
+
+	def _handle_keyval(self, keyval, state):
 		"""Handle pressing keys in history list."""
 		result = False
 
-		if event.keyval == Gdk.KEY_Escape:
+		if keyval == Gdk.KEY_Escape:
 			# close window on escape
 			self.destroy()
 			result = True
 
-		elif event.keyval in range(Gdk.KEY_1, Gdk.KEY_9 + 1):
+		elif keyval in range(Gdk.KEY_1, Gdk.KEY_9 + 1):
 			# switch to specified page
-			index = event.keyval - Gdk.KEY_1
+			index = keyval - Gdk.KEY_1
 
-			children = self._stack.get_children()
+			if Gtk.get_major_version() == 3:
+				children = self._stack.get_children()
+
+			else:
+				children = [page.get_child() for page in self._stack.get_pages()]
 			if index < len(children):
 				self._stack.set_focus_child(children[index])
 			result = True

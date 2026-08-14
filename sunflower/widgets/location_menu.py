@@ -22,7 +22,11 @@ class LocationMenu:
 		self._popover_visible = False
 		self._popover = Gtk.Popover.new()
 		self._popover.set_position(Gtk.PositionType.BOTTOM)
-		self._popover.set_modal(True)
+		if Gtk.get_major_version() == 3:
+			self._popover.set_modal(True)
+
+		else:
+			self._popover.set_autohide(True)
 		self._popover.connect('closed', self.__handle_popover_close)
 
 		# create widget container
@@ -38,7 +42,11 @@ class LocationMenu:
 		list_container = Gtk.ScrolledWindow.new()
 		list_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 		list_container.set_size_request(-1, 300)
-		list_container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			list_container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			list_container.set_has_frame(True)
 
 		self._list = Gtk.ListBox.new()
 		self._list.set_header_func(self.__handle_set_header)
@@ -47,29 +55,65 @@ class LocationMenu:
 		self._list.connect('row-activated', self.__handle_location_activate)
 
 		# create button box and commonly used buttons
-		hbox_buttons = Gtk.ButtonBox.new(Gtk.Orientation.HORIZONTAL)
+		if Gtk.get_major_version() == 3:
+			hbox_buttons = Gtk.ButtonBox.new(Gtk.Orientation.HORIZONTAL)
+
+		else:
+			hbox_buttons = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 		hbox_buttons.get_style_context().add_class('linked')
 
-		button_open = Gtk.Button.new_from_icon_name('document-open-symbolic', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			button_open = Gtk.Button.new_from_icon_name('document-open-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			button_open = Gtk.Button.new_from_icon_name('document-open-symbolic')
 		button_open.connect('clicked', self.__handle_open_click)
 		button_open.set_tooltip_text(_('Open'))
 		button_open.get_style_context().add_class('suggested-action')
-		hbox_buttons.pack_start(button_open, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox_buttons.pack_start(button_open, False, False, 0)
 
-		button_open_tab = Gtk.Button.new_from_icon_name('tab-new-symbolic', Gtk.IconSize.BUTTON)
+		else:
+			hbox_buttons.append(button_open)
+
+		if Gtk.get_major_version() == 3:
+			button_open_tab = Gtk.Button.new_from_icon_name('tab-new-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			button_open_tab = Gtk.Button.new_from_icon_name('tab-new-symbolic')
 		button_open_tab.connect('clicked', self.__handle_open_tab_click)
 		button_open_tab.set_tooltip_text(_('Open selected path in new tab'))
-		hbox_buttons.pack_start(button_open_tab, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox_buttons.pack_start(button_open_tab, False, False, 0)
 
-		self._button_open_opposite = Gtk.Button.new_from_icon_name('go-next-symbolic', Gtk.IconSize.BUTTON)
+		else:
+			hbox_buttons.append(button_open_tab)
+
+		if Gtk.get_major_version() == 3:
+			self._button_open_opposite = Gtk.Button.new_from_icon_name('go-next-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			self._button_open_opposite = Gtk.Button.new_from_icon_name('go-next-symbolic')
 		self._button_open_opposite.connect('clicked', self.__handle_open_opposite_click)
 		self._button_open_opposite.set_tooltip_text(_('Open selected path in opposite list'))
-		hbox_buttons.pack_start(self._button_open_opposite, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox_buttons.pack_start(self._button_open_opposite, False, False, 0)
 
-		button_open_terminal = Gtk.Button.new_from_icon_name('utilities-terminal-symbolic', Gtk.IconSize.BUTTON)
+		else:
+			hbox_buttons.append(self._button_open_opposite)
+
+		if Gtk.get_major_version() == 3:
+			button_open_terminal = Gtk.Button.new_from_icon_name('utilities-terminal-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			button_open_terminal = Gtk.Button.new_from_icon_name('utilities-terminal-symbolic')
 		button_open_terminal.connect('clicked', self.__handle_open_terminal_click)
 		button_open_terminal.set_tooltip_text(_('Open terminal at selected path'))
-		hbox_buttons.pack_start(button_open_terminal, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox_buttons.pack_start(button_open_terminal, False, False, 0)
+
+		else:
+			hbox_buttons.append(button_open_terminal)
 
 		# populate headers
 		self.add_header(Bookmark, GenericHeader(_('Bookmarks')))
@@ -78,14 +122,41 @@ class LocationMenu:
 		self.update_bookmarks()
 
 		# pack interface
-		list_container.add(self._list)
+		if Gtk.get_major_version() == 3:
+			list_container.add(self._list)
 
-		container.pack_start(self._search_field, True, False, 0)
-		container.pack_start(list_container, True, True, 5)
-		container.pack_start(hbox_buttons, True, False, 0)
+		else:
+			list_container.set_child(self._list)
 
-		container.show_all()
-		self._popover.add(container)
+		if Gtk.get_major_version() == 3:
+			container.pack_start(self._search_field, True, False, 0)
+			container.pack_start(list_container, True, True, 5)
+			container.pack_start(hbox_buttons, True, False, 0)
+
+		else:
+			self._search_field.set_hexpand(True)
+			container.append(self._search_field)
+			# GTK 3 button box style enforced 85px wide buttons which is
+			# what defined width of the whole popover
+			list_container.set_hexpand(True)
+			list_container.set_size_request(340, 300)
+			list_container.set_margin_top(5)
+			list_container.set_margin_bottom(5)
+			container.append(list_container)
+			hbox_buttons.set_hexpand(True)
+			hbox_buttons.set_homogeneous(True)
+			container.append(hbox_buttons)
+
+		if Gtk.get_major_version() == 3:
+			container.show_all()
+
+		else:
+			container.show()
+		if Gtk.get_major_version() == 3:
+			self._popover.add(container)
+
+		else:
+			self._popover.set_child(container)
 
 		# attach location menu to mount manager
 		self._application.mount_manager.attach_location_menu(self)
@@ -286,7 +357,11 @@ class LocationMenu:
 	def add_location(self, widget):
 		"""Add location row. If header for this row class has been specified it will
 		be automatically assigned to the destination group."""
-		self._list.add(widget)
+		if Gtk.get_major_version() == 3:
+			self._list.add(widget)
+
+		else:
+			self._list.append(widget)
 
 	def remove_location(self, location):
 		"""Remove specified location."""
@@ -306,17 +381,30 @@ class LocationMenu:
 
 	def show(self, reference, active_object=None):
 		"""Show location menu for reference widget."""
-		# update icons
-		if self._application.get_left_object() == self._active_object:
-			self._button_open_opposite.get_image().set_from_icon_name('go-next-symbolic', Gtk.IconSize.BUTTON)
-		else:
-			self._button_open_opposite.get_image().set_from_icon_name('go-previous-symbolic', Gtk.IconSize.BUTTON)
-
 		# store active object for later use
 		self._active_object = active_object
 
+		# update icons
+		is_left = self._application.get_left_object() == self._active_object
+		icon_name = 'go-next-symbolic' if is_left else 'go-previous-symbolic'
+
+		if Gtk.get_major_version() == 3:
+			self._button_open_opposite.get_image().set_from_icon_name(icon_name, Gtk.IconSize.BUTTON)
+
+		else:
+			# GTK 4 buttons hold the icon name themselves
+			self._button_open_opposite.set_icon_name(icon_name)
+
 		# show menu
-		self._popover.set_relative_to(reference)
+		if Gtk.get_major_version() == 3:
+			self._popover.set_relative_to(reference)
+
+		else:
+			# popover needs reparenting when shown from the other panel
+			if self._popover.get_parent() is not reference:
+				if self._popover.get_parent() is not None:
+					self._popover.unparent()
+				self._popover.set_parent(reference)
 		self._popover.popup()
 		self.__handle_popover_open()
 
@@ -333,18 +421,28 @@ class GenericHeader(Gtk.Box):
 		# create title
 		self._title = Gtk.Label.new('<b>{}</b>'.format(title))
 		self._title.set_use_markup(True)
-		self._title.set_alignment(0, 0.5)
+		self._title.set_xalign(0)
+		self._title.set_yalign(0.5)
 		self._title.show()
 
 		# create separator
 		separator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
 
 		# pack user interface
-		self.pack_start(self._title, True, False, 0)
-		self.pack_start(separator, True, False, 0)
+		if Gtk.get_major_version() == 3:
+			self.pack_start(self._title, True, False, 0)
+			self.pack_start(separator, True, False, 0)
+
+		else:
+			self.append(self._title)
+			self.append(separator)
 
 		# show all components
-		self.show_all()
+		if Gtk.get_major_version() == 3:
+			self.show_all()
+
+		else:
+			self.show()
 
 
 class Location(Gtk.ListBoxRow):
@@ -377,11 +475,20 @@ class Bookmark(Location):
 
 		# create user interface
 		self._create_interface()
-		self._icon.set_from_icon_name(icon, Gtk.IconSize.LARGE_TOOLBAR)
+		if Gtk.get_major_version() == 3:
+			self._icon.set_from_icon_name(icon, Gtk.IconSize.LARGE_TOOLBAR)
+
+		else:
+			self._icon.set_from_icon_name(icon)
+			self._icon.set_pixel_size(24)
 		self._title.set_text(title)
 		self._subtitle.set_markup('<small>{}</small>'.format(location))
 
-		self.show_all()
+		if Gtk.get_major_version() == 3:
+			self.show_all()
+
+		else:
+			self.show()
 
 	def _create_interface(self):
 		"""Create interface for the widget to display."""
@@ -394,21 +501,35 @@ class Bookmark(Location):
 
 		# create title
 		self._title = Gtk.Label.new()
-		self._title.set_alignment(0, 0.5)
+		self._title.set_xalign(0)
+		self._title.set_yalign(0.5)
 		self._title.set_ellipsize(Pango.EllipsizeMode.END)
 
 		self._subtitle = Gtk.Label.new()
-		self._subtitle.set_alignment(0, 0.5)
+		self._subtitle.set_xalign(0)
+		self._subtitle.set_yalign(0.5)
 		self._subtitle.set_use_markup(True)
 		self._subtitle.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
 		self._subtitle.set_opacity(0.5)
 
 		# pack user interface
-		title_container.pack_start(self._title, True, False, 0)
-		title_container.pack_start(self._subtitle, True, False, 0)
-		container.pack_start(self._icon, False, False, 0)
-		container.pack_start(title_container, True, True, 0)
-		self.add(container)
+		if Gtk.get_major_version() == 3:
+			title_container.pack_start(self._title, True, False, 0)
+			title_container.pack_start(self._subtitle, True, False, 0)
+			container.pack_start(self._icon, False, False, 0)
+			container.pack_start(title_container, True, True, 0)
+
+		else:
+			title_container.append(self._title)
+			title_container.append(self._subtitle)
+			container.append(self._icon)
+			title_container.set_hexpand(True)
+			container.append(title_container)
+		if Gtk.get_major_version() == 3:
+			self.add(container)
+
+		else:
+			self.set_child(container)
 
 	def get_location(self):
 		"""Return location associated with bookmark."""

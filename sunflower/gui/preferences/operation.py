@@ -19,11 +19,11 @@ class OperationOptions(SettingsPage):
 		self._create_section(_('Confirmation'), vbox_confirmations)
 
 		# create components
-		self._checkbox_trash_files = Gtk.CheckButton(_('Delete items to trashcan'))
-		self._checkbox_reserve_size = Gtk.CheckButton(_('Reserve free space on copy/move'))
-		self._checkbox_automount_on_start = Gtk.CheckButton(_('Automount drives on start up'))
-		self._checkbox_automount_on_insert = Gtk.CheckButton(_('Automount removable drives when inserted'))
-		self._checkbox_confirm_delete = Gtk.CheckButton(_('Show confirmation dialog before deleting items'))
+		self._checkbox_trash_files = Gtk.CheckButton.new_with_label(_('Delete items to trashcan'))
+		self._checkbox_reserve_size = Gtk.CheckButton.new_with_label(_('Reserve free space on copy/move'))
+		self._checkbox_automount_on_start = Gtk.CheckButton.new_with_label(_('Automount drives on start up'))
+		self._checkbox_automount_on_insert = Gtk.CheckButton.new_with_label(_('Automount removable drives when inserted'))
+		self._checkbox_confirm_delete = Gtk.CheckButton.new_with_label(_('Show confirmation dialog before deleting items'))
 
 		self._checkbox_trash_files.connect('toggled', self._parent.enable_save)
 		self._checkbox_reserve_size.connect('toggled', self._parent.enable_save)
@@ -32,23 +32,33 @@ class OperationOptions(SettingsPage):
 		self._checkbox_confirm_delete.connect('toggled', self._confirm_delete_toggle)
 
 		# pack user interface
-		vbox_general.pack_start(self._checkbox_trash_files, False, False, 0)
-		vbox_general.pack_start(self._checkbox_reserve_size, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox_general.pack_start(self._checkbox_trash_files, False, False, 0)
+			vbox_general.pack_start(self._checkbox_reserve_size, False, False, 0)
 
-		vbox_mounts.pack_start(self._checkbox_automount_on_start, False, False, 0)
-		vbox_mounts.pack_start(self._checkbox_automount_on_insert, False, False, 0)
+			vbox_mounts.pack_start(self._checkbox_automount_on_start, False, False, 0)
+			vbox_mounts.pack_start(self._checkbox_automount_on_insert, False, False, 0)
 
-		vbox_confirmations.pack_start(self._checkbox_confirm_delete, False, False, 0)
+			vbox_confirmations.pack_start(self._checkbox_confirm_delete, False, False, 0)
+
+		else:
+			vbox_general.append(self._checkbox_trash_files)
+			vbox_general.append(self._checkbox_reserve_size)
+
+			vbox_mounts.append(self._checkbox_automount_on_start)
+			vbox_mounts.append(self._checkbox_automount_on_insert)
+
+			vbox_confirmations.append(self._checkbox_confirm_delete)
 
 	def _confirm_delete_toggle(self, widget, data=None):
 		"""Make sure user really wants to disable confirmation dialog"""
 		if not widget.get_active() and not self._checkbox_trash_files.get_active():
 			dialog = Gtk.MessageDialog(
-									self._parent,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.QUESTION,
-									Gtk.ButtonsType.YES_NO,
-									_(
+									transient_for=self._parent,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.QUESTION,
+									buttons=Gtk.ButtonsType.YES_NO,
+									text=_(
 										'With trashing disabled you will not be able to '
 										'restore accidentally deleted items. Are you sure '
 										'you want to disable confirmation dialog when '
@@ -56,7 +66,7 @@ class OperationOptions(SettingsPage):
 									)
 								)
 			dialog.set_default_response(Gtk.ResponseType.YES)
-			result = dialog.run()
+			result = run_dialog(dialog)
 			dialog.destroy()
 
 			if result == Gtk.ResponseType.NO:

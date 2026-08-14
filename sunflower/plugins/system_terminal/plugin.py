@@ -5,7 +5,7 @@ import os
 import shlex
 import subprocess
 
-from gi.repository import GLib, Vte
+from gi.repository import Gtk, GLib, Vte
 
 from sunflower.parameters import Parameters
 from sunflower.plugin_base.terminal import Terminal, TerminalType
@@ -55,7 +55,11 @@ class SystemTerminal(Terminal):
 		self._title_bar.set_title(_('Terminal'))
 		self._title_bar.set_subtitle(shell_command)
 
-		self.show_all()
+		if Gtk.get_major_version() == 3:
+			self.show_all()
+
+		else:
+			self.show()
 
 	def __socket_realized(self, widget, data=None):
 		"""Connect process when socket is realized"""
@@ -87,13 +91,16 @@ class SystemTerminal(Terminal):
 				'working_directory': self.path,
 				'argv': self._options.get('arguments', [shell_command]),
 				'envv': [],
-				'spawn_flags': GLib.SpawnFlags.DO_NOT_REAP_CHILD,
+				'spawn_flags': GLib.SpawnFlags.SEARCH_PATH,
 				'child_setup': None,
 				'child_setup_data': None
 			}
 
 		# since VTE 0.38 fork_command_full has been renamed spawn_sync
 		if hasattr(self._terminal, 'fork_command_full'):
+			# old VTE requires this flag, newer versions set it internally
+			# and print a warning when it is passed in
+			command['spawn_flags'] |= GLib.SpawnFlags.DO_NOT_REAP_CHILD
 			(result, self._pid) = self._terminal.fork_command_full(**command)
 		else:
 			(result, self._pid) = self._terminal.spawn_sync(**command)

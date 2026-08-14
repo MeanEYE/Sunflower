@@ -22,7 +22,11 @@ class TrashList(FileList):
 		options = self._parent.options
 
 		# empty trash button
-		self._empty_button = Gtk.Button.new_from_icon_name('user-trash-symbolic', Gtk.IconSize.MENU)
+		if Gtk.get_major_version() == 3:
+			self._empty_button = Gtk.Button.new_from_icon_name('user-trash-symbolic', Gtk.IconSize.MENU)
+
+		else:
+			self._empty_button = Gtk.Button.new_from_icon_name('user-trash-symbolic')
 		self._empty_button.set_focus_on_click(False)
 		self._empty_button.set_tooltip_text(_('Empty trash'))
 		self._empty_button.connect('clicked', self.empty_trash)
@@ -32,22 +36,23 @@ class TrashList(FileList):
 		"""Empty trash can."""
 		# ask user to confirm
 		dialog = Gtk.MessageDialog(
-								self._parent,
-								Gtk.DialogFlags.DESTROY_WITH_PARENT,
-								Gtk.MessageType.QUESTION,
-								Gtk.ButtonsType.YES_NO,
-								_(
+								transient_for=self._parent,
+								destroy_with_parent=True,
+								message_type=Gtk.MessageType.QUESTION,
+								buttons=Gtk.ButtonsType.YES_NO,
+								text=_(
 									"All items in the Trash will be permanently deleted. "
 									"Are you sure?"
 								)
 							)
 		dialog.set_default_response(Gtk.ResponseType.YES)
-		result = dialog.run()
+		result = run_dialog(dialog)
 		dialog.destroy()
 
 		# remove all items in trash
 		if result == Gtk.ResponseType.YES:
 			provider = self.get_provider()
+			root_path = provider.get_root_path(None)
 
 			# create delete operation
 			operation = DeleteOperation(
@@ -56,7 +61,10 @@ class TrashList(FileList):
 								)
 
 			operation.set_force_delete(True)
-			operation.set_selection(provider.list_dir(provider.get_root_path(None)))
+			# items are top level trash entries, resolve them against the
+			# trash root instead of the currently displayed directory
+			operation.set_source_path(root_path)
+			operation.set_selection(provider.list_dir(root_path))
 
 			# perform removal
 			operation.start()

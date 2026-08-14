@@ -36,10 +36,11 @@ class OperationDialog:
 
 		# connect signals
 		self._container.connect('destroy', self._destroy)
-		self._container.connect(
-				'delete-event' if Gtk.get_major_version() == 3 else 'close-request',
-				self._cancel_click
-				)
+
+		# GTK 4 popovers have no close request, dismissing one only hides
+		# the progress display and must not cancel a running operation
+		if Gtk.get_major_version() == 3:
+			self._container.connect('delete-event', self._cancel_click)
 
 		# create indicator button
 		self._indicator = Gtk.MenuButton.new()
@@ -51,29 +52,43 @@ class OperationDialog:
 
 		# operation items
 		self._operation_label = Gtk.Label.new()
-		self._operation_label.set_alignment(0, 0.5)
+		self._operation_label.set_xalign(0)
+		self._operation_label.set_yalign(0.5)
 		self._operation_progress = Gtk.ProgressBar()
 		self._operation_image = Gtk.Image.new()
 		self._set_operation_image()
 
-		self._indicator.set_image(self._operation_image)
+		if Gtk.get_major_version() == 3:
+			self._indicator.set_image(self._operation_image)
+
+		else:
+			self._indicator.set_child(self._operation_image)
 
 		vbox_operation = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
-		vbox_operation.pack_start(self._operation_label, False, False, 0)
-		vbox_operation.pack_start(self._operation_progress, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox_operation.pack_start(self._operation_label, False, False, 0)
+			vbox_operation.pack_start(self._operation_progress, False, False, 0)
+
+		else:
+			vbox_operation.append(self._operation_label)
+			vbox_operation.append(self._operation_progress)
 
 		self._application.add_operation(self._indicator)
 
 		# pack interface
-		self._container.add(self._vbox)
+		if Gtk.get_major_version() == 3:
+			self._container.add(self._vbox)
+
+		else:
+			self._container.set_child(self._vbox)
 
 	def _add_source_destination(self):
 		"""Add source and destination labels to the GUI"""
 		self._has_source_destination = True
-		table = Gtk.Table(2, 2, False)
+		table = Gtk.Grid.new()
 		set_border_width(table, 7)
-		table.set_col_spacing(0, 10)
-		table.set_row_spacing(0, 2)
+		table.set_column_spacing(10)
+		table.set_row_spacing(2)
 
 		self._label_source = Gtk.Label(label=_('Source:'))
 		self._label_destination = Gtk.Label(label=_('Destination:'))
@@ -82,30 +97,38 @@ class OperationDialog:
 		self._value_destination = Gtk.Label.new()
 
 		# pack interface
-		table.attach(self._label_source, 0, 1, 0, 1, Gtk.AttachOptions.FILL)
-		table.attach(self._label_destination, 0, 1, 1, 2, Gtk.AttachOptions.FILL)
+		table.attach(self._label_source, 0, 0, 1, 1)
+		table.attach(self._label_destination, 0, 1, 1, 1)
 
-		table.attach(self._value_source, 1, 2, 0, 1)
-		table.attach(self._value_destination, 1, 2, 1, 2)
+		table.attach(self._value_source, 1, 0, 1, 1)
+		table.attach(self._value_destination, 1, 1, 1, 1)
 
-		self._vbox.pack_start(table, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self._vbox.pack_start(table, False, False, 0)
+
+		else:
+			self._vbox.append(table)
 
 		# configure components
-		self._label_source.set_alignment(0, 0.5)
-		self._label_destination.set_alignment(0, 0.5)
+		self._label_source.set_xalign(0)
+		self._label_source.set_yalign(0.5)
+		self._label_destination.set_xalign(0)
+		self._label_destination.set_yalign(0.5)
 
-		self._value_source.set_alignment(0, 0.5)
-		self._value_destination.set_alignment(0, 0.5)
+		self._value_source.set_xalign(0)
+		self._value_source.set_yalign(0.5)
+		self._value_destination.set_xalign(0)
+		self._value_destination.set_yalign(0.5)
 		self._value_source.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
 		self._value_destination.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
 
 	def _add_current_file(self):
 		"""Add 'current file' progress to the GUI"""
 		self._has_current_file = True
-		table = Gtk.Table.new(2, 2, False)
+		table = Gtk.Grid.new()
 		set_border_width(table, 7)
-		table.set_row_spacing(0, 2)
-		table.set_col_spacing(0, 10)
+		table.set_row_spacing(2)
+		table.set_column_spacing(10)
 
 		self._label_status = Gtk.Label(label='Current status...')
 		self._label_current_file = Gtk.Label.new()
@@ -113,24 +136,34 @@ class OperationDialog:
 		self._pb_current_file.set_pulse_step(0.005)
 
 		# pack interface
-		table.attach(self._label_status, 0, 1, 0, 1, Gtk.AttachOptions.FILL)
-		table.attach(self._label_current_file, 1, 2, 0, 1)
-		table.attach(self._pb_current_file, 0, 2, 1, 2)
+		table.attach(self._label_status, 0, 0, 1, 1)
+		table.attach(self._label_current_file, 1, 0, 1, 1)
+		table.attach(self._pb_current_file, 0, 1, 2, 1)
 
 		if self._has_source_destination:
-			separator = Gtk.HSeparator.new()
-			self._vbox.pack_start(separator, False, False, 0)
-		self._vbox.pack_start(table, False, False, 0)
+			separator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
+			if Gtk.get_major_version() == 3:
+				self._vbox.pack_start(separator, False, False, 0)
+
+			else:
+				self._vbox.append(separator)
+		if Gtk.get_major_version() == 3:
+			self._vbox.pack_start(table, False, False, 0)
+
+		else:
+			self._vbox.append(table)
 
 		# configure components
-		self._label_status.set_alignment(0, 0.5)
-		self._label_current_file.set_alignment(1, 0.5)
+		self._label_status.set_xalign(0)
+		self._label_status.set_yalign(0.5)
+		self._label_current_file.set_xalign(1)
+		self._label_current_file.set_yalign(0.5)
 		self._label_current_file.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
 
 	def _add_details(self):
 		"""Add ETA to the dialog"""
 		self._has_details = True
-		table = Gtk.Table.new(2, 6, False)
+		table = Gtk.Grid.new()
 		set_border_width(table, 7)
 
 		self._label_eta = Gtk.Label.new(_('ETA:'))
@@ -147,39 +180,52 @@ class OperationDialog:
 		self._pb_total_count = Gtk.ProgressBar.new()
 
 		# pack interface
-		table.attach(self._label_eta, 0, 1, 0, 1, Gtk.AttachOptions.FILL)
-		table.attach(self._label_speed, 0, 1, 1, 2, Gtk.AttachOptions.FILL)
-		table.attach(self._label_total_size, 0, 1, 2, 3, Gtk.AttachOptions.FILL)
-		table.attach(self._label_total_count, 0, 1, 4, 5, Gtk.AttachOptions.FILL)
+		table.attach(self._label_eta, 0, 0, 1, 1)
+		table.attach(self._label_speed, 0, 1, 1, 1)
+		table.attach(self._label_total_size, 0, 2, 1, 1)
+		table.attach(self._label_total_count, 0, 4, 1, 1)
 
-		table.attach(self._value_eta, 1, 2, 0, 1)
-		table.attach(self._value_speed, 1, 2, 1, 2)
-		table.attach(self._value_total_size, 1, 2, 2, 3)
-		table.attach(self._pb_total_size, 0, 2, 3, 4)
-		table.attach(self._value_total_count, 1, 2, 4, 5)
-		table.attach(self._pb_total_count, 0, 2, 5, 6)
+		table.attach(self._value_eta, 1, 0, 1, 1)
+		table.attach(self._value_speed, 1, 1, 1, 1)
+		table.attach(self._value_total_size, 1, 2, 1, 1)
+		table.attach(self._pb_total_size, 0, 3, 2, 1)
+		table.attach(self._value_total_count, 1, 4, 1, 1)
+		table.attach(self._pb_total_count, 0, 5, 2, 1)
 
-		separator = Gtk.HSeparator()
-		self._vbox.pack_start(separator, False, False, 0)
-		self._vbox.pack_start(table, False, False, 0)
+		separator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
+		if Gtk.get_major_version() == 3:
+			self._vbox.pack_start(separator, False, False, 0)
+			self._vbox.pack_start(table, False, False, 0)
+
+		else:
+			self._vbox.append(separator)
+			self._vbox.append(table)
 
 		# configure components
-		self._label_eta.set_alignment(0, 0.5)
-		self._label_speed.set_alignment(0, 0.5)
-		self._label_total_size.set_alignment(0, 0.5)
-		self._label_total_count.set_alignment(0, 0.5)
+		self._label_eta.set_xalign(0)
+		self._label_eta.set_yalign(0.5)
+		self._label_speed.set_xalign(0)
+		self._label_speed.set_yalign(0.5)
+		self._label_total_size.set_xalign(0)
+		self._label_total_size.set_yalign(0.5)
+		self._label_total_count.set_xalign(0)
+		self._label_total_count.set_yalign(0.5)
 
-		self._value_eta.set_alignment(0, 0.5)
-		self._value_speed.set_alignment(0, 0.5)
-		self._value_total_size.set_alignment(0, 0.5)
-		self._value_total_count.set_alignment(0, 0.5)
+		self._value_eta.set_xalign(0)
+		self._value_eta.set_yalign(0.5)
+		self._value_speed.set_xalign(0)
+		self._value_speed.set_yalign(0.5)
+		self._value_total_size.set_xalign(0)
+		self._value_total_size.set_yalign(0.5)
+		self._value_total_count.set_xalign(0)
+		self._value_total_count.set_yalign(0.5)
 
-		table.set_row_spacing(0, 2)
-		table.set_row_spacing(1, 10)
-		table.set_row_spacing(2, 2)
-		table.set_row_spacing(3, 10)
-		table.set_row_spacing(4, 2)
-		table.set_col_spacing(0, 10)
+		table.set_row_spacing(2)
+		table.set_row_spacing(10)
+		table.set_row_spacing(2)
+		table.set_row_spacing(10)
+		table.set_row_spacing(2)
+		table.set_column_spacing(10)
 
 		# add periodical updates for dialog
 		GObject.timeout_add(1000, self._update_speed)
@@ -189,37 +235,59 @@ class OperationDialog:
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		set_border_width(hbox, 7)
 
-		self._button_cancel = Gtk.Button(_('Cancel'))
+		self._button_cancel = Gtk.Button.new_with_label(_('Cancel'))
 
 		image_pause = Gtk.Image.new()
-		image_pause.set_from_icon_name('media-playback-pause-symbolic', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_pause.set_from_icon_name('media-playback-pause-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			image_pause.set_from_icon_name('media-playback-pause-symbolic')
 
 		self._button_pause = Gtk.Button()
-		self._button_pause.add(image_pause)
+		if Gtk.get_major_version() == 3:
+			self._button_pause.add(image_pause)
+
+		else:
+			self._button_pause.set_child(image_pause)
 		self._button_pause.set_tooltip_text(_('Pause'))
 
 		self._button_pause.connect('clicked', self._pause_click)
 		self._button_cancel.connect('clicked', self._cancel_click)
 
 		# pack interface
-		hbox.pack_start(self._button_pause, False, False, 0)
-		hbox.pack_end(self._button_cancel, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox.pack_start(self._button_pause, False, False, 0)
+			hbox.pack_end(self._button_cancel, False, False, 0)
 
-		separator = Gtk.HSeparator()
-		self._vbox.pack_end(hbox, False, False, 0)
-		self._vbox.pack_end(separator, False, False, 0)
+		else:
+			hbox.append(self._button_pause)
+
+			self._button_cancel.set_hexpand(True)
+			self._button_cancel.set_halign(Gtk.Align.END)
+			hbox.append(self._button_cancel)
+
+		separator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
+		if Gtk.get_major_version() == 3:
+			self._vbox.pack_end(hbox, False, False, 0)
+			self._vbox.pack_end(separator, False, False, 0)
+
+		else:
+			# end packed children are shown in reverse order of addition
+			self._vbox.append(separator)
+			self._vbox.append(hbox)
 
 	def _confirm_cancel(self, message):
 		"""Create confirmation dialog with specified message and return result"""
 		dialog = Gtk.MessageDialog(
-						self._application,
-						Gtk.DialogFlags.DESTROY_WITH_PARENT,
-						Gtk.MessageType.QUESTION,
-						Gtk.ButtonsType.YES_NO,
-						message
+						transient_for=self._application,
+						destroy_with_parent=True,
+						message_type=Gtk.MessageType.QUESTION,
+						buttons=Gtk.ButtonsType.YES_NO,
+						text=message
 					)
 		dialog.set_default_response(Gtk.ResponseType.YES)
-		result = dialog.run()
+		result = run_dialog(dialog)
 		dialog.destroy()
 
 		return result == Gtk.ResponseType.YES
@@ -232,14 +300,22 @@ class OperationDialog:
 		if self._paused:
 			# thread is active, pause it
 			self._set_operation_image('media-playback-pause-symbolic')
-			image.set_from_icon_name('media-playback-start-symbolic', Gtk.IconSize.BUTTON)
+			if Gtk.get_major_version() == 3:
+				image.set_from_icon_name('media-playback-start-symbolic', Gtk.IconSize.BUTTON)
+
+			else:
+				image.set_from_icon_name('media-playback-start-symbolic')
 			self._button_pause.set_tooltip_text(_('Resume'))
 			self._thread.pause()
 
 		else:
 			# thread is paused, resume it
 			self._set_operation_image()
-			image.set_from_icon_name('media-playback-pause-symbolic', Gtk.IconSize.BUTTON)
+			if Gtk.get_major_version() == 3:
+				image.set_from_icon_name('media-playback-pause-symbolic', Gtk.IconSize.BUTTON)
+
+			else:
+				image.set_from_icon_name('media-playback-pause-symbolic')
 			self._button_pause.set_tooltip_text(_('Pause'))
 			self._thread.resume()
 
@@ -331,7 +407,11 @@ class OperationDialog:
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
 		if icon_name is not None:
-			self._operation_image.set_from_icon_name(icon_name, Gtk.IconSize.BUTTON)
+			if Gtk.get_major_version() == 3:
+				self._operation_image.set_from_icon_name(icon_name, Gtk.IconSize.BUTTON)
+
+			else:
+				self._operation_image.set_from_icon_name(icon_name)
 
 	def is_active(self):
 		"""Return true if window is active"""
@@ -339,7 +419,13 @@ class OperationDialog:
 
 	def destroy(self):
 		"""Close window"""
-		self._container.destroy()
+		if Gtk.get_major_version() == 3:
+			self._container.destroy()
+
+		else:
+			# GTK 4 popovers are disposed by detaching them from their button
+			self._container.popdown()
+			self._indicator.set_popover(None)
 
 	def get_window(self):
 		"""Return container window"""
@@ -438,7 +524,11 @@ class CopyDialog(OperationDialog):
 		self._add_buttons()
 
 		# show all elements
-		self._container.show_all()
+		if Gtk.get_major_version() == 3:
+			self._container.show_all()
+
+		else:
+			self._container.show()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
@@ -446,7 +536,11 @@ class CopyDialog(OperationDialog):
 
 		# set default icon
 		if icon_name is None:
-			self._operation_image.set_from_icon_name('edit-copy-symbolic', Gtk.IconSize.BUTTON)
+			if Gtk.get_major_version() == 3:
+				self._operation_image.set_from_icon_name('edit-copy-symbolic', Gtk.IconSize.BUTTON)
+
+			else:
+				self._operation_image.set_from_icon_name('edit-copy-symbolic')
 
 
 class MoveDialog(CopyDialog):
@@ -456,7 +550,11 @@ class MoveDialog(CopyDialog):
 		CopyDialog.__init__(self, application, thread)
 
 		# show all elements
-		self._container.show_all()
+		if Gtk.get_major_version() == 3:
+			self._container.show_all()
+
+		else:
+			self._container.show()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
@@ -464,7 +562,11 @@ class MoveDialog(CopyDialog):
 
 		# set default icon
 		if icon_name is None:
-			self._operation_image.set_from_icon_name('edit-cut-symbolic', Gtk.IconSize.BUTTON)
+			if Gtk.get_major_version() == 3:
+				self._operation_image.set_from_icon_name('edit-cut-symbolic', Gtk.IconSize.BUTTON)
+
+			else:
+				self._operation_image.set_from_icon_name('edit-cut-symbolic')
 
 
 class DeleteDialog(OperationDialog):
@@ -482,7 +584,11 @@ class DeleteDialog(OperationDialog):
 		self.set_current_file('')
 
 		# show all elements
-		self._container.show_all()
+		if Gtk.get_major_version() == 3:
+			self._container.show_all()
+
+		else:
+			self._container.show()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
@@ -490,7 +596,11 @@ class DeleteDialog(OperationDialog):
 
 		# set default icon
 		if icon_name is None:
-			self._operation_image.set_from_icon_name('edit-delete-symbolic', Gtk.IconSize.BUTTON)
+			if Gtk.get_major_version() == 3:
+				self._operation_image.set_from_icon_name('edit-delete-symbolic', Gtk.IconSize.BUTTON)
+
+			else:
+				self._operation_image.set_from_icon_name('edit-delete-symbolic')
 
 
 class RenameDialog(OperationDialog):
@@ -508,7 +618,11 @@ class RenameDialog(OperationDialog):
 		self.set_current_file('')
 
 		# show all elements
-		self._container.show_all()
+		if Gtk.get_major_version() == 3:
+			self._container.show_all()
+
+		else:
+			self._container.show()
 
 	def _set_operation_image(self, icon_name=None):
 		"""Set default or specified operation image"""
@@ -516,4 +630,8 @@ class RenameDialog(OperationDialog):
 
 		# set default icon
 		if icon_name is None:
-			self._operation_image.set_from_icon_name('edit-find-replace', Gtk.IconSize.MENU)
+			if Gtk.get_major_version() == 3:
+				self._operation_image.set_from_icon_name('edit-find-replace', Gtk.IconSize.MENU)
+
+			else:
+				self._operation_image.set_from_icon_name('edit-find-replace')

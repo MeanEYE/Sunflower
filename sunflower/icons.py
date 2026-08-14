@@ -117,6 +117,16 @@ class IconManager:
 
 	def set_window_icon(self, window):
 		"""Set window icon"""
+		# GTK 4 windows accept only themed icon names, make sure bundled
+		# icon is reachable through the theme and use its name
+		if Gtk.get_major_version() != 3:
+			if not self.has_icon('sunflower'):
+				base_path = get_static_assets_directory()
+				self._icon_theme.add_search_path(os.path.join(base_path, 'images'))
+
+			window.set_icon_name('sunflower')
+			return
+
 		# check system for icon
 		if self.has_icon('sunflower'):
 			window.set_icon(self._icon_theme.load_icon('sunflower', 256, 0))

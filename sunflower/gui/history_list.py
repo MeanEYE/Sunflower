@@ -36,7 +36,11 @@ class HistoryList(Gtk.Window):
 
 		list_container = Gtk.ScrolledWindow()
 		list_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-		list_container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			list_container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			list_container.set_has_frame(True)
 
 		self._history = Gtk.ListStore(str, str)
 
@@ -47,29 +51,62 @@ class HistoryList(Gtk.Window):
 		col_path = Gtk.TreeViewColumn(_('Path'), cell_path, text=Column.PATH)
 
 		self._history_list = Gtk.TreeView(self._history)
-		self._history_list.connect('key-press-event', self._handle_key_press)
+		if Gtk.get_major_version() == 3:
+			self._history_list.connect('key-press-event', self._handle_key_press)
+
+		else:
+			key_controller = Gtk.EventControllerKey.new()
+			key_controller.connect('key-pressed', self._handle_key_pressed)
+			self._history_list.add_controller(key_controller)
 		self._history_list.append_column(col_name)
 		self._history_list.append_column(col_path)
 
 		# create controls
 		hbox_controls = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
+		if Gtk.get_major_version() == 3:
+			button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
+
+		else:
+			button_close = Gtk.Button.new_with_label(_('Close'))
 		button_close.connect('clicked', self._close)
 
 		image_jump = Gtk.Image()
-		image_jump.set_from_stock(Gtk.STOCK_OPEN, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_jump.set_from_stock(Gtk.STOCK_OPEN, Gtk.IconSize.BUTTON)
+
+		else:
+			image_jump.set_from_icon_name('document-open-symbolic')
 		button_jump = Gtk.Button()
-		button_jump.set_image(image_jump)
+		if Gtk.get_major_version() == 3:
+			button_jump.set_image(image_jump)
+
+		else:
+			button_content = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
+			button_content.append(image_jump)
+			button_content.append(Gtk.Label.new(button_jump.get_label()))
+			button_jump.set_child(button_content)
 		button_jump.set_label(_('Open'))
-		button_jump.set_can_default(True)
+		if Gtk.get_major_version() == 3:
+			button_jump.set_can_default(True)
 		button_jump.connect('clicked', self._change_path, False)
 
 		image_new_tab = Gtk.Image()
-		image_new_tab.set_from_icon_name('tab-new', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_new_tab.set_from_icon_name('tab-new', Gtk.IconSize.BUTTON)
+
+		else:
+			image_new_tab.set_from_icon_name('tab-new')
 
 		button_new_tab = Gtk.Button()
-		button_new_tab.set_image(image_new_tab)
+		if Gtk.get_major_version() == 3:
+			button_new_tab.set_image(image_new_tab)
+
+		else:
+			button_content = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
+			button_content.append(image_new_tab)
+			button_content.append(Gtk.Label.new(button_new_tab.get_label()))
+			button_new_tab.set_child(button_content)
 		button_new_tab.set_label(_('Open in tab'))
 		button_new_tab.set_tooltip_text(_('Open selected path in new tab'))
 		button_new_tab.connect('clicked', self._change_path, True)
@@ -79,23 +116,49 @@ class HistoryList(Gtk.Window):
 		button_opposite.connect('clicked', self._open_in_opposite_list)
 
 		# pack UI
-		list_container.add(self._history_list)
+		if Gtk.get_major_version() == 3:
+			list_container.add(self._history_list)
 
-		hbox_controls.pack_end(button_close, False, False, 0)
-		hbox_controls.pack_end(button_jump, False, False, 0)
-		hbox_controls.pack_end(button_new_tab, False, False, 0)
-		hbox_controls.pack_end(button_opposite, False, False, 0)
+		else:
+			list_container.set_child(self._history_list)
 
-		vbox.pack_start(list_container, True, True, 0)
-		vbox.pack_start(hbox_controls, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox_controls.pack_end(button_close, False, False, 0)
+			hbox_controls.pack_end(button_jump, False, False, 0)
+			hbox_controls.pack_end(button_new_tab, False, False, 0)
+			hbox_controls.pack_end(button_opposite, False, False, 0)
 
-		self.add(vbox)
+			vbox.pack_start(list_container, True, True, 0)
+			vbox.pack_start(hbox_controls, False, False, 0)
+
+		else:
+			# end packed children are shown in reverse order of addition
+			button_opposite.set_hexpand(True)
+			button_opposite.set_halign(Gtk.Align.END)
+			hbox_controls.append(button_opposite)
+			hbox_controls.append(button_new_tab)
+			hbox_controls.append(button_jump)
+			hbox_controls.append(button_close)
+
+			list_container.set_vexpand(True)
+			vbox.append(list_container)
+			vbox.append(hbox_controls)
+
+		if Gtk.get_major_version() == 3:
+			self.add(vbox)
+
+		else:
+			self.set_child(vbox)
 
 		# populate history list
 		self._populate_list()
 
 		# show all elements
-		self.show_all()
+		if Gtk.get_major_version() == 3:
+			self.show_all()
+
+		else:
+			self.show()
 
 	def _close(self, widget=None, data=None):
 		"""Handle clicking on close button"""
@@ -146,11 +209,19 @@ class HistoryList(Gtk.Window):
 			self._close()
 
 	def _handle_key_press(self, widget, event, data=None):
+		"""Handle pressing keys in history list (GTK 3)"""
+		return self._handle_keyval(event.keyval, event.get_state())
+
+	def _handle_key_pressed(self, controller, keyval, keycode, state):
+		"""Handle pressing keys in history list (GTK 4)"""
+		return self._handle_keyval(keyval, state)
+
+	def _handle_keyval(self, keyval, state):
 		"""Handle pressing keys in history list"""
 		result = False
 
-		if event.keyval == Gdk.KEY_Return:
-			if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
+		if keyval == Gdk.KEY_Return:
+			if state & Gdk.ModifierType.CONTROL_MASK:
 				# open path in new tab
 				self._change_path(new_tab=True)
 
@@ -160,7 +231,7 @@ class HistoryList(Gtk.Window):
 
 			result = True
 
-		elif event.keyval == Gdk.KEY_Escape:
+		elif keyval == Gdk.KEY_Escape:
 			# close window on escape
 			self._close()
 			result = True

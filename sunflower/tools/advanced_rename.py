@@ -32,11 +32,17 @@ class AdvancedRename:
 		self.window.set_title(_('Advanced rename'))
 		self.window.set_default_size(640, 600)
 		self.window.set_transient_for(application)
-		self.window.set_type_hint(Gdk.WindowTypeHint.DIALOG)
+		if Gtk.get_major_version() == 3:
+			self.window.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 		self.window.set_modal(True)
 
-		self.window.connect('key-press-event', self._handle_key_press)
+		if Gtk.get_major_version() == 3:
+			self.window.connect('key-press-event', self._handle_key_press)
 
+		else:
+			key_controller = Gtk.EventControllerKey.new()
+			key_controller.connect('key-pressed', self._handle_key_pressed)
+			self.window.add_controller(key_controller)
 		# create interface
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 7)
 		set_border_width(vbox, 7)
@@ -74,13 +80,18 @@ class AdvancedRename:
 
 		container = Gtk.ScrolledWindow()
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
-		container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			container.set_has_frame(True)
 
 		# create location
 		vbox_location = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_location = Gtk.Label(label=_('Items located in:'))
-		label_location.set_alignment(0, 0.5)
+		label_location.set_xalign(0)
+		label_location.set_yalign(0.5)
 
 		entry_location = Gtk.Entry()
 		entry_location.set_text(self._path)
@@ -89,30 +100,71 @@ class AdvancedRename:
 		# create controls
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
+		if Gtk.get_major_version() == 3:
+			button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
+
+		else:
+			button_close = Gtk.Button.new_with_label(_('Close'))
 		button_close.connect('clicked', lambda widget: self.window.destroy())
 
 		image_rename = Gtk.Image()
-		image_rename.set_from_icon_name('edit-find-replace', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_rename.set_from_icon_name('edit-find-replace', Gtk.IconSize.BUTTON)
+
+		else:
+			image_rename.set_from_icon_name('edit-find-replace')
 		button_rename = Gtk.Button(label=_('Rename'))
-		button_rename.set_image(image_rename)
+		if Gtk.get_major_version() == 3:
+			button_rename.set_image(image_rename)
+
+		else:
+			button_rename.set_child(image_rename)
 		button_rename.connect('clicked', self.rename_files)
 
 		# pack interface
-		vbox_location.pack_start(label_location, False, False, 0)
-		vbox_location.pack_start(entry_location, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox_location.pack_start(label_location, False, False, 0)
+			vbox_location.pack_start(entry_location, False, False, 0)
 
-		hbox.pack_end(button_rename, False, False, 0)
-		hbox.pack_end(button_close, False, False, 0)
+			hbox.pack_end(button_rename, False, False, 0)
+			hbox.pack_end(button_close, False, False, 0)
 
-		container.add(self._names)
+		else:
+			vbox_location.append(label_location)
+			vbox_location.append(entry_location)
 
-		vbox.pack_start(self._extension_list, False, False, 0)
-		vbox.pack_end(hbox, False, False, 0)
-		vbox.pack_end(vbox_location, False, False, 0)
-		vbox.pack_end(container, True, True, 0)
+			# end packed children are shown in reverse order of addition
+			button_close.set_hexpand(True)
+			button_close.set_halign(Gtk.Align.END)
+			hbox.append(button_close)
+			hbox.append(button_rename)
 
-		self.window.add(vbox)
+		if Gtk.get_major_version() == 3:
+			container.add(self._names)
+
+		else:
+			container.set_child(self._names)
+
+		if Gtk.get_major_version() == 3:
+			vbox.pack_start(self._extension_list, False, False, 0)
+			vbox.pack_end(hbox, False, False, 0)
+			vbox.pack_end(vbox_location, False, False, 0)
+			vbox.pack_end(container, True, True, 0)
+
+		else:
+			vbox.append(self._extension_list)
+
+			# end packed children are shown in reverse order of addition
+			container.set_vexpand(True)
+			vbox.append(container)
+			vbox.append(vbox_location)
+			vbox.append(hbox)
+
+		if Gtk.get_major_version() == 3:
+			self.window.add(vbox)
+
+		else:
+			self.window.set_child(vbox)
 
 		# prepare UI
 		self.__create_extensions()
@@ -122,7 +174,11 @@ class AdvancedRename:
 		self.update_list()
 
 		# show all widgets
-		self.window.show_all()
+		if Gtk.get_major_version() == 3:
+			self.window.show_all()
+
+		else:
+			self.window.show()
 
 	def __create_extensions(self):
 		"""Create rename extensions"""
@@ -169,14 +225,23 @@ class AdvancedRename:
 		self.update_list()
 
 	def _handle_key_press(self, widget, event, data=None):
+		"""Handle pressing keys (GTK 3)"""
+		return self._handle_keyval(event.keyval, event.get_state())
+
+	def _handle_key_pressed(self, controller, keyval, keycode, state):
+		"""Handle pressing keys (GTK 4)"""
+		return self._handle_keyval(keyval, state)
+
+	def _handle_keyval(self, keyval, state):
 		"""Handle pressing keys"""
-		if event.keyval == Gdk.KEY_Escape:
+		if keyval == Gdk.KEY_Escape:
 			self.window.destroy()
 
 	def update_list(self):
 		"""Update file list"""
-		active_children = [child for child in self._extension_list.get_children()
-						   if child.extension.is_active()]
+		children = [self._extension_list.get_nth_page(number)
+					for number in range(self._extension_list.get_n_pages())]
+		active_children = [child for child in children if child.extension.is_active()]
 
 		for child in active_children:
 			# call reset on all extensions
@@ -196,11 +261,11 @@ class AdvancedRename:
 	def rename_files(self, widget=None, data=None):
 		"""Rename selected files"""
 		dialog = Gtk.MessageDialog(
-								self.window,
-								Gtk.DialogFlags.DESTROY_WITH_PARENT,
-								Gtk.MessageType.QUESTION,
-								Gtk.ButtonsType.YES_NO,
-								ngettext(
+								transient_for=self.window,
+								destroy_with_parent=True,
+								message_type=Gtk.MessageType.QUESTION,
+								buttons=Gtk.ButtonsType.YES_NO,
+								text=ngettext(
 									"You are about to rename {0} item.\n"
 									"Are you sure about this?",
 									"You are about to rename {0} items.\n"
@@ -209,7 +274,7 @@ class AdvancedRename:
 								).format(len(self._list))
 							)
 		dialog.set_default_response(Gtk.ResponseType.YES)
-		result = dialog.run()
+		result = run_dialog(dialog)
 		dialog.destroy()
 
 		if result == Gtk.ResponseType.YES:

@@ -105,5 +105,5 @@ class AboutWindow:
 
 	def show(self):
 		"""Show dialog"""
-		self._dialog.run()
+		run_dialog(self._dialog)
 		self._dialog.destroy()

@@ -47,6 +47,10 @@ class AcceleratorManager:
 		and self._config.section(section).has(name):
 			result = Gtk.accelerator_parse(self._config.section(section).get(name))
 
+			# GTK 4 returns parse success as the first element of the result
+			if Gtk.get_major_version() != 3:
+				result = (result[1], result[2]) if result[0] else None
+
 		return result
 
 	def _get_group_by_name(self, name):

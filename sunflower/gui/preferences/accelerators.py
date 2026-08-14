@@ -21,14 +21,19 @@ class AcceleratorOptions(SettingsPage):
 		# create list box
 		container = Gtk.ScrolledWindow()
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
-		container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			container.set_has_frame(True)
 
 		self._accels = Gtk.TreeStore(str, str, int, int, int, int)
 		self._accels.set_sort_column_id(Column.TITLE, Gtk.SortType.ASCENDING)
 
 		self._list = Gtk.TreeView()
 		self._list.set_model(self._accels)
-		self._list.set_rules_hint(True)
+		if Gtk.get_major_version() == 3:
+			self._list.set_rules_hint(True)
 		self._list.set_enable_search(True)
 		self._list.set_search_column(Column.TITLE)
 
@@ -83,16 +88,27 @@ class AcceleratorOptions(SettingsPage):
 							'To disable accelerator press <i>Backspace</i> '
 							'in assign mode.'
 						))
-		label_warning.set_alignment(0, 0)
+		label_warning.set_xalign(0)
+		label_warning.set_yalign(0)
 		label_warning.set_use_markup(True)
-		label_warning.set_line_wrap(True)
-		label_warning.connect('size-allocate', self._adjust_label)
+		if Gtk.get_major_version() == 3:
+			label_warning.set_line_wrap(True)
+
+		else:
+			label_warning.set_wrap(True)
+		if Gtk.get_major_version() == 3:
+			label_warning.connect('size-allocate', self._adjust_label)
 
 		label_note = Gtk.Label(label=_('Double click on accelerator to assign new one.'))
-		label_note.set_alignment(0, 0)
+		label_note.set_xalign(0)
+		label_note.set_yalign(0)
 
 		# pack interface
-		container.add(self._list)
+		if Gtk.get_major_version() == 3:
+			container.add(self._list)
+
+		else:
+			container.set_child(self._list)
 
 		self.pack_start(label_warning, False, False, 0)
 		self.pack_start(container, True, True, 0)
@@ -189,11 +205,11 @@ class AcceleratorOptions(SettingsPage):
 
 			# show dialog
 			dialog = Gtk.MessageDialog(
-									self._parent,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.QUESTION,
-									Gtk.ButtonsType.YES_NO,
-									_(
+									transient_for=self._parent,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.QUESTION,
+									buttons=Gtk.ButtonsType.YES_NO,
+									text=_(
 										'Selected accelerator "{0}" is already being '
 										'used. Would you still like to assign accelerator '
 										'to this function? This will reset listed '
@@ -203,7 +219,7 @@ class AcceleratorOptions(SettingsPage):
 									).format(accelerator_label, methods)
 								)
 			dialog.set_default_response(Gtk.ResponseType.NO)
-			result = dialog.run()
+			result = run_dialog(dialog)
 			dialog.destroy()
 
 			if result == Gtk.ResponseType.YES:

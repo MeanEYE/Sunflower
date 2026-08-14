@@ -54,7 +54,7 @@ class MountsManagerWindow(Gtk.Window):
 
 		else:
 			event_controller = Gtk.EventControllerKey.new()
-			event_controller.connect('key-pressed', self._handle_key_press)
+			event_controller.connect('key-pressed', self._handle_key_pressed)
 
 			self.connect('close-request', self._hide)
 			self.add_controller(event_controller)
@@ -76,8 +76,13 @@ class MountsManagerWindow(Gtk.Window):
 		# create page list
 		label_container = Gtk.ScrolledWindow.new()
 		label_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-		label_container.set_shadow_type(Gtk.ShadowType.IN)
 		label_container.set_size_request(130, -1)
+
+		if Gtk.get_major_version() == 3:
+			label_container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			label_container.set_has_frame(True)
 
 		self._tab_labels = Gtk.TreeView(model=self._pages_store)
 
@@ -100,21 +105,44 @@ class MountsManagerWindow(Gtk.Window):
 		self._tab_labels.connect('cursor-changed', self._handle_cursor_change)
 
 		# create buttons
-		button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
+		if Gtk.get_major_version() == 3:
+			button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
+
+		else:
+			button_close = Gtk.Button.new_with_label(_('Close'))
+
 		button_close.connect('clicked', self._hide)
 
 		# pack user interface
-		label_container.add(self._tab_labels)
+		if Gtk.get_major_version() == 3:
+			label_container.add(self._tab_labels)
 
-		hbox_controls.pack_end(button_close, False, False, 0)
+			hbox_controls.pack_end(button_close, False, False, 0)
 
-		hbox.pack_start(label_container, False, False, 0)
-		hbox.pack_start(self._tabs, True, True, 0)
+			hbox.pack_start(label_container, False, False, 0)
+			hbox.pack_start(self._tabs, True, True, 0)
 
-		vbox.pack_start(hbox, True, True, 0)
-		vbox.pack_start(hbox_controls, False, False, 0)
+			vbox.pack_start(hbox, True, True, 0)
+			vbox.pack_start(hbox_controls, False, False, 0)
 
-		self.add(vbox)
+			self.add(vbox)
+
+		else:
+			label_container.set_child(self._tab_labels)
+
+			button_close.set_halign(Gtk.Align.END)
+			button_close.set_hexpand(True)
+			hbox_controls.append(button_close)
+
+			hbox.append(label_container)
+			self._tabs.set_hexpand(True)
+			hbox.append(self._tabs)
+
+			hbox.set_vexpand(True)
+			vbox.append(hbox)
+			vbox.append(hbox_controls)
+
+			self.set_child(vbox)
 
 	def create_extensions(self):
 		"""Create all registered extensions"""
@@ -156,7 +184,11 @@ class MountsManagerWindow(Gtk.Window):
 
 		# create item for usage when there are no mounts
 		self._menu_item_no_mounts = menu_manager.get_item_by_name('mount_list_empty')
-		self._menu_item_no_mounts.set_property('no-show-all', True)
+		if Gtk.get_major_version() == 3:
+			self._menu_item_no_mounts.set_property('no-show-all', True)
+
+		else:
+			self._menu_item_no_mounts.hide()
 
 	def _add_item(self, text, uri, icon):
 		"""Add new menu item to the list"""
@@ -165,6 +197,10 @@ class MountsManagerWindow(Gtk.Window):
 
 	def _add_unmount_item(self, text, uri, icon):
 		"""Add new menu item used for unmounting"""
+		# GTK 4 has no menus, unmounting is available from the mount manager
+		if Gtk.get_major_version() != 3:
+			return
+
 		image = Gtk.Image()
 		image.set_from_icon_name(icon, Gtk.IconSize.MENU)
 
@@ -206,21 +242,29 @@ class MountsManagerWindow(Gtk.Window):
 		except AttributeError:
 			self._menu_item_no_mounts.set_property('visible', not has_mounts)
 
+	def _handle_key_pressed(self, controller, keyval, keycode, state):
+		"""Handle pressing keys in mount manager list (GTK 4)"""
+		return self._handle_keyval(keyval)
+
 	def _handle_key_press(self, widget, event, data=None):
-		"""Handle pressing keys in mount manager list"""
+		"""Handle pressing keys in mount manager list (GTK 3)"""
+		return self._handle_keyval(event.keyval)
+
+	def _handle_keyval(self, keyval):
+		"""Handle key value regardless of the toolkit version"""
 		result = False
 
-		if Gdk.KEY_1 <= event.keyval <= Gdk.KEY_9:
+		if Gdk.KEY_1 <= keyval <= Gdk.KEY_9:
 			# handle switching to page number
-			page_index = event.keyval - int(Gdk.KEY_1)
+			page_index = keyval - int(Gdk.KEY_1)
 			self._tabs.set_current_page(page_index)
 			result = True
 
-		elif event.keyval == Gdk.KEY_Return:
+		elif keyval == Gdk.KEY_Return:
 			# handle pressing return
 			result = True
 
-		elif event.keyval == Gdk.KEY_Escape:
+		elif keyval == Gdk.KEY_Escape:
 			# hide window on escape
 			self._hide()
 			result = True
@@ -346,7 +390,11 @@ class MountsExtension(MountManagerExtension):
 
 		# create interface
 		container = Gtk.ScrolledWindow.new()
-		container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			container.set_has_frame(True)
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 
 		self._list = Gtk.TreeView(model=self._store)
@@ -378,20 +426,44 @@ class MountsExtension(MountManagerExtension):
 
 		# create controls
 		image_jump = Gtk.Image()
-		image_jump.set_from_icon_name(Gtk.STOCK_OPEN, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_jump.set_from_icon_name(Gtk.STOCK_OPEN, Gtk.IconSize.BUTTON)
+
+		else:
+			image_jump.set_from_icon_name('document-open-symbolic')
 		button_jump = Gtk.Button()
-		button_jump.set_image(image_jump)
+		if Gtk.get_major_version() == 3:
+			button_jump.set_image(image_jump)
+
+		else:
+			button_content = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
+			button_content.append(image_jump)
+			button_content.append(Gtk.Label.new(button_jump.get_label()))
+			button_jump.set_child(button_content)
 		button_jump.set_label(_('Open'))
 		button_jump.connect('clicked', self._open_selected, False)
 		try:
-			button_jump.set_can_default(True)
+			if Gtk.get_major_version() == 3:
+				button_jump.set_can_default(True)
 		except AttributeError:
-			button_jump.set_property('can-default', True)
+			if Gtk.get_major_version() == 3:
+				button_jump.set_property('can-default', True)
 
 		image_new_tab = Gtk.Image()
-		image_new_tab.set_from_icon_name('tab-new', Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_new_tab.set_from_icon_name('tab-new', Gtk.IconSize.BUTTON)
+
+		else:
+			image_new_tab.set_from_icon_name('tab-new')
 		button_new_tab = Gtk.Button()
-		button_new_tab.set_image(image_new_tab)
+		if Gtk.get_major_version() == 3:
+			button_new_tab.set_image(image_new_tab)
+
+		else:
+			button_content = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
+			button_content.append(image_new_tab)
+			button_content.append(Gtk.Label.new(button_new_tab.get_label()))
+			button_new_tab.set_child(button_content)
 		button_new_tab.set_label(_('Open in tab'))
 		button_new_tab.set_tooltip_text(_('Open selected URI in new tab'))
 		button_new_tab.connect('clicked', self._open_selected, True)
@@ -404,19 +476,41 @@ class MountsExtension(MountManagerExtension):
 		if hasattr(Gtk, 'Spinner'):
 			self._spinner = Gtk.Spinner()
 			self._spinner.set_size_request(20, 20)
-			self._spinner.set_property('no-show-all', True)
+			if Gtk.get_major_version() == 3:
+				self._spinner.set_property('no-show-all', True)
+
+			else:
+				self._spinner.hide()
 
 		else:
 			self._spinner = None
 
 		# pack interface
-		container.add(self._list)
+		if Gtk.get_major_version() == 3:
+			container.add(self._list)
 
-		self._controls.pack_start(button_jump, False, False, 0)
-		self._controls.pack_start(button_new_tab, False, False, 0)
-		self._controls.pack_end(button_unmount, False, False, 0)
+		else:
+			container.set_child(self._list)
 
-		self._container.pack_start(container, True, True, 0)
+		if Gtk.get_major_version() == 3:
+			self._controls.pack_start(button_jump, False, False, 0)
+			self._controls.pack_start(button_new_tab, False, False, 0)
+			self._controls.pack_end(button_unmount, False, False, 0)
+
+			self._container.pack_start(container, True, True, 0)
+
+		else:
+			self._controls.append(button_jump)
+			self._controls.append(button_new_tab)
+
+			button_unmount.set_halign(Gtk.Align.END)
+			button_unmount.set_hexpand(True)
+			self._controls.append(button_unmount)
+
+			container.set_vexpand(True)
+			self._container.append(container)
+
+			self._pack_end_controls()
 
 	def _get_iter_by_uri(self, uri):
 		"""Get mount list iter by URI"""
@@ -529,7 +623,11 @@ class VolumesExtension(MountManagerExtension):
 
 		# create interface
 		container = Gtk.ScrolledWindow.new()
-		container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			container.set_has_frame(True)
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 
 		self._list = Gtk.TreeView(model=self._store)
@@ -567,20 +665,43 @@ class VolumesExtension(MountManagerExtension):
 		if hasattr(Gtk, 'Spinner'):
 			self._spinner = Gtk.Spinner()
 			self._spinner.set_size_request(20, 20)
-			self._spinner.set_property('no-show-all', True)
+			if Gtk.get_major_version() == 3:
+				self._spinner.set_property('no-show-all', True)
+
+			else:
+				self._spinner.hide()
 
 		else:
 			self._spinner = None
 
 		# pack interface
-		container.add(self._list)
+		if Gtk.get_major_version() == 3:
+			container.add(self._list)
 
-		if self._spinner is not None:
-			self._controls.pack_start(self._spinner, False, False, 0)
-		self._controls.pack_end(button_unmount, False, False, 0)
-		self._controls.pack_end(button_mount, False, False, 0)
+		else:
+			container.set_child(self._list)
 
-		self._container.pack_start(container, True, True, 0)
+		if Gtk.get_major_version() == 3:
+			if self._spinner is not None:
+				self._controls.pack_start(self._spinner, False, False, 0)
+			self._controls.pack_end(button_unmount, False, False, 0)
+			self._controls.pack_end(button_mount, False, False, 0)
+
+			self._container.pack_start(container, True, True, 0)
+
+		else:
+			if self._spinner is not None:
+				self._controls.append(self._spinner)
+
+			button_unmount.set_halign(Gtk.Align.END)
+			button_unmount.set_hexpand(True)
+			self._controls.append(button_unmount)
+			self._controls.append(button_mount)
+
+			container.set_vexpand(True)
+			self._container.append(container)
+
+			self._pack_end_controls()
 
 	def _get_iter_by_uuid(self, uuid):
 		"""Get volume list iter by UUID"""

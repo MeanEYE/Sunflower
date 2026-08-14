@@ -58,15 +58,15 @@ class ItemListOptions(SettingsPage):
 		self._create_section(_('Columns'), vbox_columns)
 
 		# file list options
-		self._checkbox_row_hinting = Gtk.CheckButton(_('Row hinting'))
-		self._checkbox_case_sensitive = Gtk.CheckButton(_('Case sensitive item sorting'))
-		self._checkbox_number_sensitive = Gtk.CheckButton(_('Number sensitive item sorting'))
-		self._checkbox_single_click = Gtk.CheckButton(_('Single click navigation'))
-		self._checkbox_right_click = Gtk.CheckButton(_('Right click selects items'))
-		self._checkbox_show_headers = Gtk.CheckButton(_('Show list headers'))
-		self._checkbox_media_preview = Gtk.CheckButton(_('Fast media preview'))
-		self._checkbox_show_expanders = Gtk.CheckButton(_('Show tree expanders'))
-		self._checkbox_second_extension = Gtk.CheckButton(_('Support second level extension'))
+		self._checkbox_row_hinting = Gtk.CheckButton.new_with_label(_('Row hinting'))
+		self._checkbox_case_sensitive = Gtk.CheckButton.new_with_label(_('Case sensitive item sorting'))
+		self._checkbox_number_sensitive = Gtk.CheckButton.new_with_label(_('Number sensitive item sorting'))
+		self._checkbox_single_click = Gtk.CheckButton.new_with_label(_('Single click navigation'))
+		self._checkbox_right_click = Gtk.CheckButton.new_with_label(_('Right click selects items'))
+		self._checkbox_show_headers = Gtk.CheckButton.new_with_label(_('Show list headers'))
+		self._checkbox_media_preview = Gtk.CheckButton.new_with_label(_('Fast media preview'))
+		self._checkbox_show_expanders = Gtk.CheckButton.new_with_label(_('Show tree expanders'))
+		self._checkbox_second_extension = Gtk.CheckButton.new_with_label(_('Support second level extension'))
 
 		self._checkbox_row_hinting.connect('toggled', self._parent.enable_save)
 		self._checkbox_case_sensitive.connect('toggled', self._parent.enable_save)
@@ -81,7 +81,8 @@ class ItemListOptions(SettingsPage):
 		# file access mode format
 		hbox_mode_format = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		label_mode_format = Gtk.Label(label=_('Access mode format:'))
-		label_mode_format.set_alignment(0, 0.5)
+		label_mode_format.set_xalign(0)
+		label_mode_format.set_yalign(0.5)
 
 		self._combobox_mode_format = Gtk.ComboBoxText.new()
 		self._combobox_mode_format.connect('changed', self._parent.enable_save)
@@ -91,7 +92,8 @@ class ItemListOptions(SettingsPage):
 		# action when executable files are activated
 		hbox_executable_action = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		label_executable_action = Gtk.Label(label=_('Action on executable files:'))
-		label_executable_action.set_alignment(0, 0.5)
+		label_executable_action.set_xalign(0)
+		label_executable_action.set_yalign(0.5)
 
 		self._combobox_executable_action = Gtk.ComboBoxText.new()
 		self._combobox_executable_action.connect('changed', self._parent.enable_save)
@@ -101,7 +103,8 @@ class ItemListOptions(SettingsPage):
 		# grid lines
 		hbox_grid_lines = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 		label_grid_lines = Gtk.Label(label=_('Show grid lines:'))
-		label_grid_lines.set_alignment(0, 0.5)
+		label_grid_lines.set_xalign(0)
+		label_grid_lines.set_yalign(0.5)
 
 		self._combobox_grid_lines = Gtk.ComboBoxText.new()
 		self._combobox_grid_lines.connect('changed', self._parent.enable_save)
@@ -120,7 +123,8 @@ class ItemListOptions(SettingsPage):
 		hbox_indicator = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		label_indicator = Gtk.Label(label=_('Selection indicator:'))
-		label_indicator.set_alignment(0, 0.5)
+		label_indicator.set_xalign(0)
+		label_indicator.set_yalign(0.5)
 
 		self._combobox_indicator = Gtk.ComboBoxText.new_with_entry()
 		self._combobox_indicator.connect('changed', self._parent.enable_save)
@@ -134,11 +138,12 @@ class ItemListOptions(SettingsPage):
 
 		# quick search
 		label_quick_search = Gtk.Label(label=_('Quick search combination:'))
-		label_quick_search.set_alignment(0, 0.5)
+		label_quick_search.set_xalign(0)
+		label_quick_search.set_yalign(0.5)
 		label_quick_search.set_use_markup(True)
-		self._checkbox_control = Gtk.CheckButton(_('Control'))
-		self._checkbox_alt = Gtk.CheckButton(_('Alt'))
-		self._checkbox_shift = Gtk.CheckButton(_('Shift'))
+		self._checkbox_control = Gtk.CheckButton.new_with_label(_('Control'))
+		self._checkbox_alt = Gtk.CheckButton.new_with_label(_('Alt'))
+		self._checkbox_shift = Gtk.CheckButton.new_with_label(_('Shift'))
 
 		self._checkbox_control.connect('toggled', self._parent.enable_save)
 		self._checkbox_alt.connect('toggled', self._parent.enable_save)
@@ -148,7 +153,8 @@ class ItemListOptions(SettingsPage):
 
 		vbox_time_format = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		label_time_format = Gtk.Label(label=_('Date format:'))
-		label_time_format.set_alignment(0, 0.5)
+		label_time_format.set_xalign(0)
+		label_time_format.set_yalign(0.5)
 		self._entry_time_format = Gtk.Entry()
 		self._entry_time_format.set_tooltip_markup(
 								'<b>' + _('Time is formed using the format located at:') + '</b>\n'
@@ -157,19 +163,24 @@ class ItemListOptions(SettingsPage):
 		self._entry_time_format.connect('changed', self._parent.enable_save)
 
 		# hidden files
-		table_always_visible = Gtk.Table(rows=3, columns=1, homogeneous=False)
-		table_always_visible.set_row_spacing(1, 5)
+		table_always_visible = Gtk.Grid.new()
+		table_always_visible.set_row_spacing(5)
 
-		self._checkbox_show_hidden = Gtk.CheckButton(_('Show hidden files'))
+		self._checkbox_show_hidden = Gtk.CheckButton.new_with_label(_('Show hidden files'))
 		self._checkbox_show_hidden.connect('toggled', self._parent.enable_save)
 
 		container_always_visible = Gtk.ScrolledWindow()
 		container_always_visible.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
-		container_always_visible.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			container_always_visible.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			container_always_visible.set_has_frame(True)
 		container_always_visible.set_size_request(-1, 200)
 
 		label_always_visible = Gtk.Label(label=_('Always visible files and directories:'))
-		label_always_visible.set_alignment(0, 0.5)
+		label_always_visible.set_xalign(0)
+		label_always_visible.set_yalign(0.5)
 
 		self._always_visible_store = Gtk.ListStore(str)
 		self._always_visible_list = Gtk.TreeView(model=self._always_visible_store)
@@ -182,19 +193,31 @@ class ItemListOptions(SettingsPage):
 
 		hbox_always_visible = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		button_add_always_visible = Gtk.Button(stock=Gtk.STOCK_ADD)
+		if Gtk.get_major_version() == 3:
+			button_add_always_visible = Gtk.Button(stock=Gtk.STOCK_ADD)
+
+		else:
+			button_add_always_visible = Gtk.Button.new_with_label(_('Add'))
 		button_add_always_visible.connect('clicked', self._add_always_visible)
 
-		button_delete_always_visible = Gtk.Button(stock=Gtk.STOCK_DELETE)
+		if Gtk.get_major_version() == 3:
+			button_delete_always_visible = Gtk.Button(stock=Gtk.STOCK_DELETE)
+
+		else:
+			button_delete_always_visible = Gtk.Button.new_with_label(_('Delete'))
 		button_delete_always_visible.connect('clicked', self._delete_always_visible)
 
 		# create list of directories
 		container_directory = Gtk.ScrolledWindow()
 		container_directory.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
-		container_directory.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			container_directory.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			container_directory.set_has_frame(True)
 		container_directory.set_size_request(-1, 200)
 
-		self._checkbox_load_directories = Gtk.CheckButton(_('Load specified tabs instead of saved'))
+		self._checkbox_load_directories = Gtk.CheckButton.new_with_label(_('Load specified tabs instead of saved'))
 		self._checkbox_load_directories.connect('toggled', self._parent.enable_save)
 
 		self._directory_store = Gtk.ListStore(str, bool, bool)
@@ -221,57 +244,107 @@ class ItemListOptions(SettingsPage):
 
 		hbox_directory = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		button_add_directory = Gtk.Button(stock=Gtk.STOCK_ADD)
+		if Gtk.get_major_version() == 3:
+			button_add_directory = Gtk.Button(stock=Gtk.STOCK_ADD)
+
+		else:
+			button_add_directory = Gtk.Button.new_with_label(_('Add'))
 		button_add_directory.connect('clicked', self.__button_add_clicked)
 
-		button_delete_directory = Gtk.Button(stock=Gtk.STOCK_DELETE)
+		if Gtk.get_major_version() == 3:
+			button_delete_directory = Gtk.Button(stock=Gtk.STOCK_DELETE)
+
+		else:
+			button_delete_directory = Gtk.Button.new_with_label(_('Delete'))
 		button_delete_directory.connect('clicked', self._delete_path)
 
 		image_up = Gtk.Image()
-		image_up.set_from_stock(Gtk.STOCK_GO_UP, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_up.set_from_stock(Gtk.STOCK_GO_UP, Gtk.IconSize.BUTTON)
+
+		else:
+			image_up.set_from_icon_name('go-up-symbolic')
 
 		button_directory_move_up = Gtk.Button(label=None)
-		button_directory_move_up.add(image_up)
+		if Gtk.get_major_version() == 3:
+			button_directory_move_up.add(image_up)
+
+		else:
+			button_directory_move_up.set_child(image_up)
 		button_directory_move_up.set_tooltip_text(_('Move Up'))
 		button_directory_move_up.connect('clicked', self._move_path, -1)
 
 		image_down = Gtk.Image()
-		image_down.set_from_stock(Gtk.STOCK_GO_DOWN, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_down.set_from_stock(Gtk.STOCK_GO_DOWN, Gtk.IconSize.BUTTON)
+
+		else:
+			image_down.set_from_icon_name('go-down-symbolic')
 
 		button_directory_move_down = Gtk.Button(label=None)
-		button_directory_move_down.add(image_down)
+		if Gtk.get_major_version() == 3:
+			button_directory_move_down.add(image_down)
+
+		else:
+			button_directory_move_down.set_child(image_down)
 		button_directory_move_down.set_tooltip_text(_('Move Down'))
 		button_directory_move_down.connect('clicked', self._move_path, 1)
 
-		self._menu_add_directory = Gtk.Menu()
+		if Gtk.get_major_version() == 3:
+			self._menu_add_directory = Gtk.Menu()
 
-		menu_item_custom = Gtk.MenuItem(_('Custom directory'))
-		menu_item_separator = Gtk.SeparatorMenuItem()
-		menu_item_left_directory = Gtk.MenuItem(_('Left directory'))
-		menu_item_right_directory = Gtk.MenuItem(_('Right directory'))
+			menu_item_custom = Gtk.MenuItem(_('Custom directory'))
+			menu_item_separator = Gtk.SeparatorMenuItem()
+			menu_item_left_directory = Gtk.MenuItem(_('Left directory'))
+			menu_item_right_directory = Gtk.MenuItem(_('Right directory'))
 
-		menu_item_custom.connect('activate', self._add_path, Source.CUSTOM)
-		menu_item_left_directory.connect('activate', self._add_path, Source.LEFT)
-		menu_item_right_directory.connect('activate', self._add_path, Source.RIGHT)
+			menu_item_custom.connect('activate', self._add_path, Source.CUSTOM)
+			menu_item_left_directory.connect('activate', self._add_path, Source.LEFT)
+			menu_item_right_directory.connect('activate', self._add_path, Source.RIGHT)
 
-		self._menu_add_directory.append(menu_item_custom)
-		self._menu_add_directory.append(menu_item_separator)
-		self._menu_add_directory.append(menu_item_left_directory)
-		self._menu_add_directory.append(menu_item_right_directory)
+			self._menu_add_directory.append(menu_item_custom)
+			self._menu_add_directory.append(menu_item_separator)
+			self._menu_add_directory.append(menu_item_left_directory)
+			self._menu_add_directory.append(menu_item_right_directory)
 
-		self._menu_add_directory.show_all()
+			self._menu_add_directory.show_all()
+
+		else:
+			# GTK 4 removed menus, a popover with buttons provides the same options
+			menu_box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+
+			for label, source in (
+						(_('Custom directory'), Source.CUSTOM),
+						(_('Left directory'), Source.LEFT),
+						(_('Right directory'), Source.RIGHT)
+					):
+				button = Gtk.Button.new_with_label(label)
+				button.get_style_context().add_class('flat')
+				button.connect('clicked', self._add_path_from_popover, source)
+				menu_box.append(button)
+
+			self._menu_add_directory = Gtk.Popover.new()
+			self._menu_add_directory.set_child(menu_box)
 
 		# create columns editor
 		hbox_columns = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		container_columns = Gtk.ScrolledWindow()
 		container_columns.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
-		container_columns.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			container_columns.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			container_columns.set_has_frame(True)
 		container_columns.set_size_request(-1, 200)
 
 		container_plugin = Gtk.ScrolledWindow()
 		container_plugin.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-		container_plugin.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			container_plugin.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			container_plugin.set_has_frame(True)
 		container_plugin.set_size_request(170, -1)
 
 		# create variable to store active extension to
@@ -282,7 +355,8 @@ class ItemListOptions(SettingsPage):
 		self._columns_store = Gtk.ListStore(str, int, bool, int)
 		self._columns_list = Gtk.TreeView()
 		self._columns_list.set_model(self._columns_store)
-		self._columns_list.set_rules_hint(True)
+		if Gtk.get_major_version() == 3:
+			self._columns_list.set_rules_hint(True)
 		self._columns_list.set_enable_search(True)
 		self._columns_list.set_search_column(Column.NAME)
 
@@ -297,7 +371,7 @@ class ItemListOptions(SettingsPage):
 
 		cell_font_size.set_property('editable', True)
 		cell_font_size.set_property('mode', Gtk.CellRendererMode.EDITABLE)
-		adjustment = Gtk.Adjustment(0, 0, 100, 1, 10, 0)
+		adjustment = Gtk.Adjustment.new(0, 0, 100, 1, 10, 0)
 		cell_font_size.set_property('adjustment', adjustment)
 		cell_font_size.connect('edited', self._edited_column_font_size)
 
@@ -336,77 +410,182 @@ class ItemListOptions(SettingsPage):
 		self._extension_list.append_column(col_name)
 
 		# pack interface
-		container_directory.add(self._directory_list)
-		container_columns.add(self._columns_list)
-		container_plugin.add(self._extension_list)
-		container_always_visible.add(self._always_visible_list)
+		if Gtk.get_major_version() == 3:
+			container_directory.add(self._directory_list)
 
-		hbox_always_visible.pack_start(button_add_always_visible, False, False, 0)
-		hbox_always_visible.pack_start(button_delete_always_visible, False, False, 0)
+		else:
+			container_directory.set_child(self._directory_list)
+		if Gtk.get_major_version() == 3:
+			container_columns.add(self._columns_list)
 
-		table_always_visible.attach(label_always_visible, 0, 1, 0, 1, xoptions=Gtk.AttachOptions.SHRINK | Gtk.AttachOptions.FILL, yoptions=Gtk.AttachOptions.SHRINK)
-		table_always_visible.attach(container_always_visible, 0, 1, 1, 2, xoptions=Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL, yoptions=Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL)
-		table_always_visible.attach(hbox_always_visible, 0, 1, 2, 3, xoptions=Gtk.AttachOptions.SHRINK | Gtk.AttachOptions.FILL, yoptions=Gtk.AttachOptions.SHRINK)
+		else:
+			container_columns.set_child(self._columns_list)
+		if Gtk.get_major_version() == 3:
+			container_plugin.add(self._extension_list)
 
-		hbox_directory.pack_start(button_add_directory, False, False, 0)
-		hbox_directory.pack_start(button_delete_directory, False, False, 0)
-		hbox_directory.pack_end(button_directory_move_down, False, False, 0)
-		hbox_directory.pack_end(button_directory_move_up, False, False, 0)
+		else:
+			container_plugin.set_child(self._extension_list)
+		if Gtk.get_major_version() == 3:
+			container_always_visible.add(self._always_visible_list)
 
-		hbox_columns.pack_start(container_plugin, False, False, 0)
-		hbox_columns.pack_start(container_columns, True, True, 0)
+		else:
+			container_always_visible.set_child(self._always_visible_list)
 
-		vbox_indicator.pack_start(label_indicator, False, False, 0)
-		vbox_indicator.pack_start(hbox_indicator, False, False, 0)
-		hbox_indicator.pack_start(self._button_selection_color, False, False, 0)
-		hbox_indicator.pack_start(self._combobox_indicator, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox_always_visible.pack_start(button_add_always_visible, False, False, 0)
+			hbox_always_visible.pack_start(button_delete_always_visible, False, False, 0)
 
-		hbox_quick_search.pack_start(label_quick_search, False, False, 0)
-		hbox_quick_search.pack_start(self._checkbox_control, False, False, 0)
-		hbox_quick_search.pack_start(self._checkbox_alt, False, False, 0)
-		hbox_quick_search.pack_start(self._checkbox_shift, False, False, 0)
+		else:
+			hbox_always_visible.append(button_add_always_visible)
+			hbox_always_visible.append(button_delete_always_visible)
 
-		hbox_mode_format.pack_start(label_mode_format, False, False, 0)
-		hbox_mode_format.pack_start(self._combobox_mode_format, False, False, 0)
+		table_always_visible.attach(label_always_visible, 0, 0, 1, 1)
+		container_always_visible.set_hexpand(True)
+		container_always_visible.set_vexpand(True)
+		table_always_visible.attach(container_always_visible, 0, 1, 1, 1)
+		table_always_visible.attach(hbox_always_visible, 0, 2, 1, 1)
 
-		hbox_executable_action.pack_start(label_executable_action, False, False, 0)
-		hbox_executable_action.pack_start(self._combobox_executable_action, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox_directory.pack_start(button_add_directory, False, False, 0)
+			hbox_directory.pack_start(button_delete_directory, False, False, 0)
+			hbox_directory.pack_end(button_directory_move_down, False, False, 0)
+			hbox_directory.pack_end(button_directory_move_up, False, False, 0)
 
-		hbox_grid_lines.pack_start(label_grid_lines, False, False, 0)
-		hbox_grid_lines.pack_start(self._combobox_grid_lines, False, False, 0)
+			hbox_columns.pack_start(container_plugin, False, False, 0)
+			hbox_columns.pack_start(container_columns, True, True, 0)
 
-		vbox_time_format.pack_start(label_time_format, False, False, 0)
-		vbox_time_format.pack_start(self._entry_time_format, False, False, 0)
+			vbox_indicator.pack_start(label_indicator, False, False, 0)
+			vbox_indicator.pack_start(hbox_indicator, False, False, 0)
+			hbox_indicator.pack_start(self._button_selection_color, False, False, 0)
+			hbox_indicator.pack_start(self._combobox_indicator, False, False, 0)
 
-		vbox_look_and_feel.pack_start(self._checkbox_row_hinting, False, False, 0)
-		vbox_look_and_feel.pack_start(self._checkbox_show_headers, False, False, 0)
-		vbox_look_and_feel.pack_start(self._checkbox_media_preview, False, False, 0)
-		vbox_look_and_feel.pack_start(self._checkbox_show_expanders, False, False, 0)
-		vbox_look_and_feel.pack_start(hbox_mode_format, False, False, 5)
-		vbox_look_and_feel.pack_start(hbox_grid_lines, False, False, 5)
-		vbox_look_and_feel.pack_start(vbox_indicator, False, False, 5)
+			hbox_quick_search.pack_start(label_quick_search, False, False, 0)
+			hbox_quick_search.pack_start(self._checkbox_control, False, False, 0)
+			hbox_quick_search.pack_start(self._checkbox_alt, False, False, 0)
+			hbox_quick_search.pack_start(self._checkbox_shift, False, False, 0)
 
-		vbox_hidden_files.pack_start(self._checkbox_show_hidden, False, False, 0)
-		vbox_hidden_files.pack_start(table_always_visible, True, True, 0)
+			hbox_mode_format.pack_start(label_mode_format, False, False, 0)
+			hbox_mode_format.pack_start(self._combobox_mode_format, False, False, 0)
 
-		vbox_operation.pack_start(self._checkbox_case_sensitive, False, False, 0)
-		vbox_operation.pack_start(self._checkbox_number_sensitive, False, False, 0)
-		vbox_operation.pack_start(self._checkbox_single_click, False, False, 0)
-		vbox_operation.pack_start(self._checkbox_right_click, False, False, 0)
-		vbox_operation.pack_start(self._checkbox_second_extension, False, False, 0)
-		vbox_operation.pack_start(hbox_executable_action, False, False, 5)
-		vbox_operation.pack_start(hbox_quick_search, False, False, 5)
-		vbox_operation.pack_start(vbox_time_format, False, False, 5)
+			hbox_executable_action.pack_start(label_executable_action, False, False, 0)
+			hbox_executable_action.pack_start(self._combobox_executable_action, False, False, 0)
 
-		vbox_directory.pack_start(self._checkbox_load_directories, False, False, 0)
-		vbox_directory.pack_start(container_directory, True, True, 0)
-		vbox_directory.pack_start(hbox_directory, False, False, 0)
+			hbox_grid_lines.pack_start(label_grid_lines, False, False, 0)
+			hbox_grid_lines.pack_start(self._combobox_grid_lines, False, False, 0)
 
-		vbox_columns.pack_start(hbox_columns, True, True, 0)
+			vbox_time_format.pack_start(label_time_format, False, False, 0)
+			vbox_time_format.pack_start(self._entry_time_format, False, False, 0)
+
+			vbox_look_and_feel.pack_start(self._checkbox_row_hinting, False, False, 0)
+			vbox_look_and_feel.pack_start(self._checkbox_show_headers, False, False, 0)
+			vbox_look_and_feel.pack_start(self._checkbox_media_preview, False, False, 0)
+			vbox_look_and_feel.pack_start(self._checkbox_show_expanders, False, False, 0)
+			vbox_look_and_feel.pack_start(hbox_mode_format, False, False, 5)
+			vbox_look_and_feel.pack_start(hbox_grid_lines, False, False, 5)
+			vbox_look_and_feel.pack_start(vbox_indicator, False, False, 5)
+
+			vbox_hidden_files.pack_start(self._checkbox_show_hidden, False, False, 0)
+			vbox_hidden_files.pack_start(table_always_visible, True, True, 0)
+
+			vbox_operation.pack_start(self._checkbox_case_sensitive, False, False, 0)
+			vbox_operation.pack_start(self._checkbox_number_sensitive, False, False, 0)
+			vbox_operation.pack_start(self._checkbox_single_click, False, False, 0)
+			vbox_operation.pack_start(self._checkbox_right_click, False, False, 0)
+			vbox_operation.pack_start(self._checkbox_second_extension, False, False, 0)
+			vbox_operation.pack_start(hbox_executable_action, False, False, 5)
+			vbox_operation.pack_start(hbox_quick_search, False, False, 5)
+			vbox_operation.pack_start(vbox_time_format, False, False, 5)
+
+			vbox_directory.pack_start(self._checkbox_load_directories, False, False, 0)
+			vbox_directory.pack_start(container_directory, True, True, 0)
+			vbox_directory.pack_start(hbox_directory, False, False, 0)
+
+			vbox_columns.pack_start(hbox_columns, True, True, 0)
+
+		else:
+			hbox_directory.append(button_add_directory)
+			hbox_directory.append(button_delete_directory)
+
+			# end packed children are shown in reverse order of addition
+			button_directory_move_up.set_hexpand(True)
+			button_directory_move_up.set_halign(Gtk.Align.END)
+			hbox_directory.append(button_directory_move_up)
+			hbox_directory.append(button_directory_move_down)
+
+			hbox_columns.append(container_plugin)
+			container_columns.set_hexpand(True)
+			hbox_columns.append(container_columns)
+
+			vbox_indicator.append(label_indicator)
+			vbox_indicator.append(hbox_indicator)
+			hbox_indicator.append(self._button_selection_color)
+			hbox_indicator.append(self._combobox_indicator)
+
+			hbox_quick_search.append(label_quick_search)
+			hbox_quick_search.append(self._checkbox_control)
+			hbox_quick_search.append(self._checkbox_alt)
+			hbox_quick_search.append(self._checkbox_shift)
+
+			hbox_mode_format.append(label_mode_format)
+			hbox_mode_format.append(self._combobox_mode_format)
+
+			hbox_executable_action.append(label_executable_action)
+			hbox_executable_action.append(self._combobox_executable_action)
+
+			hbox_grid_lines.append(label_grid_lines)
+			hbox_grid_lines.append(self._combobox_grid_lines)
+
+			vbox_time_format.append(label_time_format)
+			vbox_time_format.append(self._entry_time_format)
+
+			vbox_look_and_feel.append(self._checkbox_row_hinting)
+			vbox_look_and_feel.append(self._checkbox_show_headers)
+			vbox_look_and_feel.append(self._checkbox_media_preview)
+			vbox_look_and_feel.append(self._checkbox_show_expanders)
+			set_border_width(hbox_mode_format, 5)
+			vbox_look_and_feel.append(hbox_mode_format)
+			set_border_width(hbox_grid_lines, 5)
+			vbox_look_and_feel.append(hbox_grid_lines)
+			set_border_width(vbox_indicator, 5)
+			vbox_look_and_feel.append(vbox_indicator)
+
+			vbox_hidden_files.append(self._checkbox_show_hidden)
+			table_always_visible.set_vexpand(True)
+			vbox_hidden_files.append(table_always_visible)
+
+			vbox_operation.append(self._checkbox_case_sensitive)
+			vbox_operation.append(self._checkbox_number_sensitive)
+			vbox_operation.append(self._checkbox_single_click)
+			vbox_operation.append(self._checkbox_right_click)
+			vbox_operation.append(self._checkbox_second_extension)
+			set_border_width(hbox_executable_action, 5)
+			vbox_operation.append(hbox_executable_action)
+			set_border_width(hbox_quick_search, 5)
+			vbox_operation.append(hbox_quick_search)
+			set_border_width(vbox_time_format, 5)
+			vbox_operation.append(vbox_time_format)
+
+			vbox_directory.append(self._checkbox_load_directories)
+			container_directory.set_vexpand(True)
+			vbox_directory.append(container_directory)
+			vbox_directory.append(hbox_directory)
+
+			hbox_columns.set_vexpand(True)
+			vbox_columns.append(hbox_columns)
 
 	def __button_add_clicked(self, widget, data=None):
 		"""Handle clicking on add button"""
-		self._menu_add_directory.popup_at_widget(widget, Gdk.Gravity.SOUTH_WEST, Gdk.Gravity.NORTH_WEST, None)
+		if Gtk.get_major_version() == 3:
+			self._menu_add_directory.popup_at_widget(widget, Gdk.Gravity.SOUTH_WEST, Gdk.Gravity.NORTH_WEST, None)
+
+		else:
+			self._menu_add_directory.set_parent(widget)
+			self._menu_add_directory.popup()
+
+	def _add_path_from_popover(self, widget, source):
+		"""Add path from popover option and close it (GTK 4)"""
+		self._menu_add_directory.popdown()
+		self._add_path(widget, source)
 
 	def _add_always_visible(self, widget, data=None):
 		"""Add item name to the list of always visible files and directories."""
@@ -516,18 +695,18 @@ class ItemListOptions(SettingsPage):
 		and self._application.options.section('item_list').get('search_modifier') == '000':
 			# user can't have this quick search combination with VIM bindings
 			dialog = Gtk.MessageDialog(
-									self._application,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.WARNING,
-									Gtk.ButtonsType.OK,
-									_(
+									transient_for=self._application,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.WARNING,
+									buttons=Gtk.ButtonsType.OK,
+									text=_(
 										'Quick search settings are in conflict with VIM '
 										'navigation style. To resolve this issue your '
 										'quick search settings were restored to default.'
 									)
 								)
 
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 			# restore default search modifiers
@@ -668,7 +847,14 @@ class ItemListOptions(SettingsPage):
 		self._combobox_grid_lines.set_active(section.get('grid_lines'))
 		self._combobox_indicator.get_child().set_text(section.get('selection_indicator'))
 		self._entry_time_format.set_text(section.get('time_format'))
-		self._button_selection_color.set_color(Gdk.color_parse(section.get('selection_color')))
+		if Gtk.get_major_version() == 3:
+			self._button_selection_color.set_color(Gdk.color_parse(section.get('selection_color')))
+
+		else:
+			# GTK 4 color buttons work with RGBA only
+			color = Gdk.RGBA()
+			color.parse(section.get('selection_color'))
+			self._button_selection_color.set_rgba(color)
 		self._checkbox_load_directories.set_active(section.get('force_directories'))
 		self._checkbox_show_expanders.set_active(section.get('show_expanders'))
 		self._checkbox_second_extension.set_active(section.get('second_extension'))
@@ -719,7 +905,15 @@ class ItemListOptions(SettingsPage):
 		section.set('mode_format', self._combobox_mode_format.get_active())
 		section.set('grid_lines', self._combobox_grid_lines.get_active())
 		section.set('time_format', self._entry_time_format.get_text())
-		section.set('selection_color', self._button_selection_color.get_color().to_string())
+		if Gtk.get_major_version() == 3:
+			section.set('selection_color', self._button_selection_color.get_color().to_string())
+
+		else:
+			# store in the same notation GTK 3 uses so config stays portable,
+			# RGBA.to_string() would produce rgb() which Gdk.color_parse rejects
+			color = self._button_selection_color.get_rgba()
+			section.set('selection_color', '#{0:04x}{1:04x}{2:04x}'.format(
+						int(color.red * 65535), int(color.green * 65535), int(color.blue * 65535)))
 		section.set('selection_indicator', self._combobox_indicator.get_active_text())
 		section.set('force_directories', self._checkbox_load_directories.get_active())
 		section.set('show_expanders', self._checkbox_show_expanders.get_active())

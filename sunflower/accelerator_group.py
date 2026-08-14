@@ -34,7 +34,16 @@ class AcceleratorGroup:
 
 	def _create_group(self):
 		"""Create group and connect accelerators"""
-		self._accel_group = Gtk.AccelGroup()
+		if Gtk.get_major_version() == 3:
+			self._accel_group = Gtk.AccelGroup()
+
+		else:
+			# GTK 4 replaced accelerator groups with shortcut controllers.
+			# Capture phase is required to match GTK 3, where the window
+			# checks accelerators before the focused widget sees the key.
+			self._accel_group = Gtk.ShortcutController.new()
+			self._accel_group.set_scope(Gtk.ShortcutScope.LOCAL)
+			self._accel_group.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
 
 		# create accelerators
 		self._create_accelerators()
@@ -48,6 +57,10 @@ class AcceleratorGroup:
 
 	def _connect_paths(self):
 		"""Connect accelerator paths with callbacks"""
+		# GTK 4 has no accelerator paths, they are only used by menus
+		if Gtk.get_major_version() != 3:
+			return
+
 		for method_name, path in self._paths.items():
 			callback = self._methods[method_name]['callback']
 			self._accel_group.connect_by_path(path, callback)
@@ -78,13 +91,55 @@ class AcceleratorGroup:
 				self._method_names[label] = method_name
 
 				# connect accelerator
-				self._accel_group.connect(keyval, modifier, 0, self._handle_activate)
+				if Gtk.get_major_version() == 3:
+					self._accel_group.connect(keyval, modifier, 0, self._handle_activate)
+
+				else:
+					# GTK 4 rejects modifier bits it doesn't know about
+					shortcut = Gtk.Shortcut.new(
+								Gtk.KeyvalTrigger.new(keyval, modifier & Gtk.accelerator_get_default_mod_mask()),
+								Gtk.CallbackAction.new(self._handle_shortcut, method_name)
+							)
+					self._accel_group.add_shortcut(shortcut)
+
+	def _is_popover_focused(self):
+		"""Check if a popover currently holds keyboard focus (GTK 4).
+
+		Accelerators are handled in capture phase so they win over widgets,
+		which would also swallow keys menus and popovers need for their own
+		navigation.
+
+		"""
+		widget = self._window.get_focus() if self._window is not None else None
+
+		while widget is not None:
+			if isinstance(widget, Gtk.Popover):
+				return True
+
+			widget = widget.get_parent()
+
+		return False
+
+	def _handle_shortcut(self, widget, arguments, method_name):
+		"""Handle shortcut activation (GTK 4)"""
+		# let menus and popovers handle keys themselves
+		if self._is_popover_focused():
+			return False
+
+		self._call_method(method_name, widget, method_name)
+
+		# Activated accelerator consumes the key in GTK 3. Returning what the
+		# method returned would tell GTK 4 the shortcut didn't match and let
+		# the key reach the focused widget as well.
+		return True
 
 	def _handle_activate(self, group, widget, keyval, modifier):
-		"""Handle accelerator activation"""
+		"""Handle accelerator activation (GTK 3)"""
 		label = Gtk.accelerator_get_label(keyval, modifier)
-		name = self._method_names[label]
+		return self._call_method(self._method_names[label], widget, label)
 
+	def _call_method(self, name, widget, label):
+		"""Call method connected to accelerator"""
 		data = self._methods[name]['data']
 		callback_method = self._methods[name]['callback']
 
@@ -107,11 +162,15 @@ class AcceleratorGroup:
 				self._create_group()
 
 			# add accelerator group to specified window
-			self._window.add_accel_group(self._accel_group)
+			if Gtk.get_major_version() == 3:
+				self._window.add_accel_group(self._accel_group)
 
-			# activate menus
-			for menu in self._menus:
-				menu.set_accel_group(self._accel_group)
+				# activate menus
+				for menu in self._menus:
+					menu.set_accel_group(self._accel_group)
+
+			else:
+				self._window.add_controller(self._accel_group)
 
 			self._active = True
 
@@ -119,11 +178,15 @@ class AcceleratorGroup:
 		"""Deactivate accelerator group"""
 		if self._active:
 			# remove accelerator group from window
-			self._window.remove_accel_group(self._accel_group)
+			if Gtk.get_major_version() == 3:
+				self._window.remove_accel_group(self._accel_group)
 
-			# deactivate menus
-			for menu in self._menus:
-				menu.set_accel_group(None)
+				# deactivate menus
+				for menu in self._menus:
+					menu.set_accel_group(None)
+
+			else:
+				self._window.remove_controller(self._accel_group)
 
 			self._active = False
 

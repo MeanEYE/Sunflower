@@ -28,22 +28,29 @@ class VersionCheck:
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
 		self._dialog.set_type_hint(Gdk.WindowTypeHint.DIALOG)
-		self._dialog.connect('key-press-event', self._handle_key_press)
+		if Gtk.get_major_version() == 3:
+			self._dialog.connect('key-press-event', self._handle_key_press)
 
+		else:
+			key_controller = Gtk.EventControllerKey.new()
+			key_controller.connect('key-pressed', self._handle_key_pressed)
+			self._dialog.add_controller(key_controller)
 		# create user interface
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 		set_border_width(vbox, 7)
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
-		table = Gtk.Table(2, 2)
+		table = Gtk.Grid.new()
 
-		table.set_row_spacings(5)
-		table.set_col_spacings(5)
+		table.set_row_spacing(5)
+		table.set_column_spacing(5)
 
 		label_current = Gtk.Label(label=_('Current:'))
-		label_current.set_alignment(0, 0.5)
+		label_current.set_xalign(0)
+		label_current.set_yalign(0.5)
 
 		label_latest = Gtk.Label(label=_('Latest:'))
-		label_latest.set_alignment(0, 0.5)
+		label_latest.set_xalign(0)
+		label_latest.set_yalign(0.5)
 
 		self._entry_current = Gtk.Entry()
 		self._entry_current.set_editable(False)
@@ -51,27 +58,52 @@ class VersionCheck:
 		self._entry_latest = Gtk.Entry()
 		self._entry_latest.set_editable(False)
 
-		separator = Gtk.HSeparator()
+		separator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
 
 		# create controls
-		button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
+		if Gtk.get_major_version() == 3:
+			button_close = Gtk.Button(stock=Gtk.STOCK_CLOSE)
+
+		else:
+			button_close = Gtk.Button.new_with_label(_('Close'))
 		button_close.connect('clicked', lambda widget: self._dialog.hide())
 
 		# pack user interface
-		self._dialog.add(vbox)
+		if Gtk.get_major_version() == 3:
+			self._dialog.add(vbox)
 
-		vbox.pack_start(table, True, True, 0)
-		vbox.pack_start(separator, True, True, 0)
-		vbox.pack_start(hbox, True, True, 0)
+		else:
+			self._dialog.set_child(vbox)
 
-		hbox.pack_end(button_close, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox.pack_start(table, True, True, 0)
+			vbox.pack_start(separator, True, True, 0)
+			vbox.pack_start(hbox, True, True, 0)
 
-		table.attach(label_current, 0, 1, 0, 1)
-		table.attach(label_latest, 0, 1, 1, 2)
-		table.attach(self._entry_current, 1, 2, 0, 1)
-		table.attach(self._entry_latest, 1, 2, 1, 2)
+			hbox.pack_end(button_close, False, False, 0)
 
-		vbox.show_all()
+		else:
+			table.set_vexpand(True)
+			vbox.append(table)
+			separator.set_vexpand(True)
+			vbox.append(separator)
+			hbox.set_vexpand(True)
+			vbox.append(hbox)
+
+			button_close.set_hexpand(True)
+			button_close.set_halign(Gtk.Align.END)
+			hbox.append(button_close)
+
+		table.attach(label_current, 0, 0, 1, 1)
+		table.attach(label_latest, 0, 1, 1, 1)
+		table.attach(self._entry_current, 1, 0, 1, 1)
+		table.attach(self._entry_latest, 1, 1, 1, 1)
+
+		if Gtk.get_major_version() == 3:
+			vbox.show_all()
+
+		else:
+			vbox.show()
 
 	def __threaded_check(self):
 		"""Method called in separate thread"""
@@ -88,8 +120,16 @@ class VersionCheck:
 			GObject.idle_add(self._entry_latest.set_text, releases[0]['tag_name'])
 
 	def _handle_key_press(self, widget, event, data=None):
+		"""Handle pressing keys (GTK 3)"""
+		return self._handle_keyval(event.keyval, event.get_state())
+
+	def _handle_key_pressed(self, controller, keyval, keycode, state):
+		"""Handle pressing keys (GTK 4)"""
+		return self._handle_keyval(keyval, state)
+
+	def _handle_keyval(self, keyval, state):
 		"""Handle pressing keys"""
-		if event.keyval == Gdk.KEY_Escape:
+		if keyval == Gdk.KEY_Escape:
 			self._dialog.hide()
 
 	def check(self):

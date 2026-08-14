@@ -22,7 +22,11 @@ class ToolbarOptions(SettingsPage):
 		# create list box
 		container = Gtk.ScrolledWindow()
 		container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
-		container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			container.set_has_frame(True)
 
 		self._store = Gtk.ListStore(str, str, str, str, str)
 		self._list = Gtk.TreeView()
@@ -55,50 +59,103 @@ class ToolbarOptions(SettingsPage):
 		self._list.append_column(col_name)
 		self._list.append_column(col_type)
 
-		container.add(self._list)
+		if Gtk.get_major_version() == 3:
+			container.add(self._list)
+
+		else:
+			container.set_child(self._list)
 
 		# create controls
 		button_box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
+		if Gtk.get_major_version() == 3:
+			button_add = Gtk.Button(stock=Gtk.STOCK_ADD)
+
+		else:
+			button_add = Gtk.Button.new_with_label(_('Add'))
 		button_add.connect('clicked', self._add_widget)
 
-		button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
+		if Gtk.get_major_version() == 3:
+			button_delete = Gtk.Button(stock=Gtk.STOCK_DELETE)
+
+		else:
+			button_delete = Gtk.Button.new_with_label(_('Delete'))
 		button_delete.connect('clicked', self._delete_widget)
 
-		button_edit = Gtk.Button(stock=Gtk.STOCK_EDIT)
+		if Gtk.get_major_version() == 3:
+			button_edit = Gtk.Button(stock=Gtk.STOCK_EDIT)
+
+		else:
+			button_edit = Gtk.Button.new_with_label(_('Edit'))
 		button_edit.connect('clicked', self._edit_widget)
 
 		image_up = Gtk.Image()
-		image_up.set_from_stock(Gtk.STOCK_GO_UP, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_up.set_from_stock(Gtk.STOCK_GO_UP, Gtk.IconSize.BUTTON)
+
+		else:
+			image_up.set_from_icon_name('go-up-symbolic')
 
 		button_move_up = Gtk.Button(label=None)
-		button_move_up.add(image_up)
+		if Gtk.get_major_version() == 3:
+			button_move_up.add(image_up)
+
+		else:
+			button_move_up.set_child(image_up)
 		button_move_up.set_tooltip_text(_('Move Up'))
 		button_move_up.connect('clicked', self._move_widget, -1)
 
 		image_down = Gtk.Image()
-		image_down.set_from_stock(Gtk.STOCK_GO_DOWN, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_down.set_from_stock(Gtk.STOCK_GO_DOWN, Gtk.IconSize.BUTTON)
+
+		else:
+			image_down.set_from_icon_name('go-down-symbolic')
 
 		button_move_down = Gtk.Button(label=None)
-		button_move_down.add(image_down)
+		if Gtk.get_major_version() == 3:
+			button_move_down.add(image_down)
+
+		else:
+			button_move_down.set_child(image_down)
 		button_move_down.set_tooltip_text(_('Move Down'))
 		button_move_down.connect('clicked', self._move_widget, 1)
 
 		# pack ui
-		button_box.pack_start(button_add, False, False, 0)
-		button_box.pack_start(button_delete, False, False, 0)
-		button_box.pack_start(button_edit, False, False, 0)
-		button_box.pack_end(button_move_down, False, False, 0)
-		button_box.pack_end(button_move_up, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			button_box.pack_start(button_add, False, False, 0)
+			button_box.pack_start(button_delete, False, False, 0)
+			button_box.pack_start(button_edit, False, False, 0)
+			button_box.pack_end(button_move_down, False, False, 0)
+			button_box.pack_end(button_move_up, False, False, 0)
+
+		else:
+			button_box.append(button_add)
+			button_box.append(button_delete)
+			button_box.append(button_edit)
+
+			# end packed children are shown in reverse order of addition
+			button_move_up.set_hexpand(True)
+			button_move_up.set_halign(Gtk.Align.END)
+			button_box.append(button_move_up)
+			button_box.append(button_move_down)
 
 		# toolbar style
 		label_style = Gtk.Label(label=_('Toolbar style:'))
 		list_styles = Gtk.ListStore(str, int)
-		list_styles.append((_('Icons'), Gtk.ToolbarStyle.ICONS))
-		list_styles.append((_('Text'), Gtk.ToolbarStyle.TEXT))
-		list_styles.append((_('Both'), Gtk.ToolbarStyle.BOTH))
-		list_styles.append((_('Both horizontal'), Gtk.ToolbarStyle.BOTH_HORIZ))
+
+		if Gtk.get_major_version() == 3:
+			list_styles.append((_('Icons'), Gtk.ToolbarStyle.ICONS))
+			list_styles.append((_('Text'), Gtk.ToolbarStyle.TEXT))
+			list_styles.append((_('Both'), Gtk.ToolbarStyle.BOTH))
+			list_styles.append((_('Both horizontal'), Gtk.ToolbarStyle.BOTH_HORIZ))
+
+		else:
+			# GTK 4 has no toolbar style, option order matches the values stored in config
+			list_styles.append((_('Icons'), 0))
+			list_styles.append((_('Text'), 1))
+			list_styles.append((_('Both'), 2))
+			list_styles.append((_('Both horizontal'), 3))
 
 		renderer = Gtk.CellRendererText()
 
@@ -110,10 +167,19 @@ class ToolbarOptions(SettingsPage):
 		# toolbar icon size
 		label_icon_size = Gtk.Label(label=_('Icon size:'))
 		list_icon_size = Gtk.ListStore(str, int)
-		list_icon_size.append((_('Small toolbar icon'), Gtk.IconSize.SMALL_TOOLBAR))
-		list_icon_size.append((_('Large toolbar icon'), Gtk.IconSize.LARGE_TOOLBAR))
-		list_icon_size.append((_('Same as drag icons'), Gtk.IconSize.DND))
-		list_icon_size.append((_('Same as dialog'), Gtk.IconSize.DIALOG))
+
+		if Gtk.get_major_version() == 3:
+			list_icon_size.append((_('Small toolbar icon'), Gtk.IconSize.SMALL_TOOLBAR))
+			list_icon_size.append((_('Large toolbar icon'), Gtk.IconSize.LARGE_TOOLBAR))
+			list_icon_size.append((_('Same as drag icons'), Gtk.IconSize.DND))
+			list_icon_size.append((_('Same as dialog'), Gtk.IconSize.DIALOG))
+
+		else:
+			# GTK 4 sizes icons through CSS, values kept for configuration compatibility
+			list_icon_size.append((_('Small toolbar icon'), 0))
+			list_icon_size.append((_('Large toolbar icon'), 1))
+			list_icon_size.append((_('Same as drag icons'), 2))
+			list_icon_size.append((_('Same as dialog'), 3))
 
 		renderer = Gtk.CellRendererText()
 
@@ -123,12 +189,23 @@ class ToolbarOptions(SettingsPage):
 		self._combobox_icon_size.connect('changed', self._parent.enable_save)
 
 		style_box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
-		style_box.pack_start(label_style, False, False, 0)
-		style_box.pack_start(self._combobox_styles, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			style_box.pack_start(label_style, False, False, 0)
+			style_box.pack_start(self._combobox_styles, False, False, 0)
+
+		else:
+			style_box.append(label_style)
+			style_box.append(self._combobox_styles)
 
 		size_box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
-		size_box.pack_start(label_icon_size, False, False, 0)
-		size_box.pack_start(self._combobox_icon_size, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			size_box.pack_start(label_icon_size, False, False, 0)
+			size_box.pack_start(self._combobox_icon_size, False, False, 0)
+
+
+		else:
+			size_box.append(label_icon_size)
+			size_box.append(self._combobox_icon_size)
 
 		self.pack_start(style_box, False, False, 0)
 		self.pack_start(size_box, False, False, 0)

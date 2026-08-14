@@ -48,23 +48,40 @@ class FindFiles(GObject.GObject):
 		self.window.set_modal(True)
 		self.window.set_transient_for(application)
 
-		self.window.connect('key-press-event', self._handle_key_press)
+		if Gtk.get_major_version() == 3:
+			self.window.connect('key-press-event', self._handle_key_press)
 
+		else:
+			key_controller = Gtk.EventControllerKey.new()
+			key_controller.connect('key-pressed', self._handle_key_pressed)
+			self.window.add_controller(key_controller)
 		# create header
 		self.header_bar = Gtk.HeaderBar.new()
-		self.header_bar.set_show_close_button(True)
+		if Gtk.get_major_version() == 3:
+			self.header_bar.set_show_close_button(True)
+
+		else:
+			self.header_bar.set_show_title_buttons(True)
 		self.window.set_titlebar(self.header_bar)
 
 		self.stack_switcher = Gtk.StackSwitcher.new()
-		self.header_bar.set_custom_title(self.stack_switcher)
+		if Gtk.get_major_version() == 3:
+			self.header_bar.set_custom_title(self.stack_switcher)
+
+		else:
+			self.header_bar.set_title_widget(self.stack_switcher)
 
 		self.stack = Gtk.Stack.new()
 		self.stack_switcher.set_stack(self.stack)
-		self.window.add(self.stack)
+		if Gtk.get_major_version() == 3:
+			self.window.add(self.stack)
+
+		else:
+			self.window.set_child(self.stack)
 
 		# busy indicator
 		self.spinner = Gtk.Spinner.new()
-		self.spinner.set_margin_left(10)
+		self.spinner.set_margin_start(10)
 		self.header_bar.pack_start(self.spinner)
 
 		# create configuration interface
@@ -73,14 +90,28 @@ class FindFiles(GObject.GObject):
 
 		search_bar = Gtk.SearchBar.new()
 		search_bar.set_search_mode(True)
-		vbox.pack_start(search_bar, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox.pack_start(search_bar, False, False, 0)
+
+		else:
+			vbox.append(search_bar)
 
 		# create path and basic options
 		vbox_search = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-		search_bar.add(vbox_search)
+		if Gtk.get_major_version() == 3:
+			search_bar.add(vbox_search)
+
+		else:
+			search_bar.set_child(vbox_search)
 
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
-		vbox_search.pack_start(hbox, True, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox_search.pack_start(hbox, True, False, 0)
+
+		else:
+			hbox.set_vexpand(True)
+			hbox.set_valign(Gtk.Align.CENTER)
+			vbox_search.append(hbox)
 
 		self._entry_path = Gtk.Entry()
 		self._entry_path.set_size_request(300, -1)
@@ -90,24 +121,45 @@ class FindFiles(GObject.GObject):
 
 		path = self._parent.path if hasattr(self._parent, 'path') else os.path.expanduser('~')
 		self._entry_path.set_text(path)
-		hbox.pack_start(self._entry_path, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox.pack_start(self._entry_path, False, False, 0)
+
+		else:
+			hbox.append(self._entry_path)
 
 		self.button_start = Gtk.Button.new_with_label(_('Start'))
 		self.button_start.connect('clicked', self.find_files)
-		hbox.pack_start(self.button_start, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox.pack_start(self.button_start, False, False, 0)
 
-		self.button_stop = Gtk.Button.new_from_icon_name('media-playback-stop-symbolic', Gtk.IconSize.BUTTON)
+		else:
+			hbox.append(self.button_start)
+
+		if Gtk.get_major_version() == 3:
+			self.button_stop = Gtk.Button.new_from_icon_name('media-playback-stop-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			self.button_stop = Gtk.Button.new_from_icon_name('media-playback-stop-symbolic')
 		self.button_stop.connect('clicked', self.stop_search)
 		self.button_stop.set_sensitive(False)
 		self.header_bar.pack_end(self.button_stop)
 
 		self._checkbox_recursive = Gtk.CheckButton.new_with_label(_('Search recursively'))
 		self._checkbox_recursive.set_active(True)
-		vbox_search.pack_start(self._checkbox_recursive, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox_search.pack_start(self._checkbox_recursive, False, False, 0)
+
+		else:
+			vbox_search.append(self._checkbox_recursive)
 
 		# create extensions container
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
-		vbox.pack_start(hbox, True, True, 0)
+		if Gtk.get_major_version() == 3:
+			vbox.pack_start(hbox, True, True, 0)
+
+		else:
+			hbox.set_vexpand(True)
+			vbox.append(hbox)
 
 		self.extensions_list = Gtk.ListBox.new()
 		self.extensions_list.set_size_request(200, -1)
@@ -115,9 +167,15 @@ class FindFiles(GObject.GObject):
 
 		self.extensions_container = Gtk.Stack.new()
 
-		hbox.pack_start(self.extensions_list, False, False, 0)
-		hbox.pack_start(Gtk.Separator.new(Gtk.Orientation.VERTICAL), False, False, 0)
-		hbox.pack_start(self.extensions_container, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox.pack_start(self.extensions_list, False, False, 0)
+			hbox.pack_start(Gtk.Separator.new(Gtk.Orientation.VERTICAL), False, False, 0)
+			hbox.pack_start(self.extensions_container, False, False, 0)
+
+		else:
+			hbox.append(self.extensions_list)
+			hbox.append(Gtk.Separator.new(Gtk.Orientation.VERTICAL))
+			hbox.append(self.extensions_container)
 
 		# create list
 		results_container = Gtk.ScrolledWindow.new()
@@ -126,7 +184,11 @@ class FindFiles(GObject.GObject):
 
 		self._list = Gtk.ListStore.new((str, str, str))
 		self._names = Gtk.TreeView.new_with_model(self._list)
-		results_container.add(self._names)
+		if Gtk.get_major_version() == 3:
+			results_container.add(self._names)
+
+		else:
+			results_container.set_child(self._names)
 
 		cell_icon = Gtk.CellRendererPixbuf.new()
 		cell_name = Gtk.CellRendererText.new()
@@ -156,7 +218,11 @@ class FindFiles(GObject.GObject):
 		self._names.connect('row-activated', self.__handle_row_activated)
 
 		self.__create_extensions()
-		self.window.show_all()
+		if Gtk.get_major_version() == 3:
+			self.window.show_all()
+
+		else:
+			self.window.show()
 
 	def __handle_extension_click(self, widget, title, data=None):
 		"""Handle clicking on extension's title widget."""
@@ -188,17 +254,17 @@ class FindFiles(GObject.GObject):
 		else:
 			# notify user about active object
 			dialog = Gtk.MessageDialog(
-								self.window,
-								Gtk.DialogFlags.DESTROY_WITH_PARENT,
-								Gtk.MessageType.INFO,
-								Gtk.ButtonsType.OK,
-								_(
+								transient_for=self.window,
+								destroy_with_parent=True,
+								message_type=Gtk.MessageType.INFO,
+								buttons=Gtk.ButtonsType.OK,
+								text=_(
 									'Active object doesn\'t support changing '
 									'path. Set focus on a different object, '
 									'preferably file list, and try again.'
 								)
 							)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 	def __create_extensions(self):
@@ -208,7 +274,11 @@ class FindFiles(GObject.GObject):
 			title = extension.get_title()
 			list_row = extension.get_title_widget()
 
-			self.extensions_list.add(list_row)
+			if Gtk.get_major_version() == 3:
+				self.extensions_list.add(list_row)
+
+			else:
+				self.extensions_list.append(list_row)
 			self.extensions_container.add_named(extension.get_container(), title)
 
 	def __update_status(self, running=True):
@@ -290,7 +360,7 @@ class FindFiles(GObject.GObject):
 								)
 						)
 		dialog.set_filename(self._entry_path.get_text())
-		response = dialog.run()
+		response = run_dialog(dialog)
 
 		if response == Gtk.ResponseType.ACCEPT:
 			self._entry_path.set_text(dialog.get_filename())
@@ -298,8 +368,16 @@ class FindFiles(GObject.GObject):
 		dialog.destroy()
 
 	def _handle_key_press(self, widget, event, data=None):
+		"""Handle pressing keys (GTK 3)"""
+		return self._handle_keyval(event.keyval, event.get_state())
+
+	def _handle_key_pressed(self, controller, keyval, keycode, state):
+		"""Handle pressing keys (GTK 4)"""
+		return self._handle_keyval(keyval, state)
+
+	def _handle_keyval(self, keyval, state):
 		"""Handle pressing keys"""
-		if event.keyval == Gdk.KEY_Escape:
+		if keyval == Gdk.KEY_Escape:
 			self._close_window()
 
 	def stop_search(self, widget=None, data=None):
@@ -322,37 +400,41 @@ class FindFiles(GObject.GObject):
 		# check if specified path exists
 		if not self._provider.is_dir(path):
 			dialog = Gtk.MessageDialog(
-								self.window,
-								Gtk.DialogFlags.DESTROY_WITH_PARENT,
-								Gtk.MessageType.ERROR,
-								Gtk.ButtonsType.OK,
-								_(
+								transient_for=self.window,
+								destroy_with_parent=True,
+								message_type=Gtk.MessageType.ERROR,
+								buttons=Gtk.ButtonsType.OK,
+								text=_(
 									'Specified path is not valid or doesn\'t '
 									'exist anymore. Please check your selection '
 									'and try again.'
 								)
 							)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 			return
 
 		# get list of active extensions
-		extension_containers = self.extensions_container.get_children()
+		if Gtk.get_major_version() == 3:
+			extension_containers = self.extensions_container.get_children()
+
+		else:
+			extension_containers = [page.get_child() for page in self.extensions_container.get_pages()]
 		active_extensions = list(filter(lambda cont: cont.extension.active, extension_containers))
 
 		if len(active_extensions) == 0:
 			dialog = Gtk.MessageDialog(
-								self.window,
-								Gtk.DialogFlags.DESTROY_WITH_PARENT,
-								Gtk.MessageType.WARNING,
-								Gtk.ButtonsType.OK,
-								_(
+								transient_for=self.window,
+								destroy_with_parent=True,
+								message_type=Gtk.MessageType.WARNING,
+								buttons=Gtk.ButtonsType.OK,
+								text=_(
 									'You need to enable at least one extension '
 									'in order to find files and directories!'
 								)
 							)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 			return
 

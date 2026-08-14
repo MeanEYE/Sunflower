@@ -27,14 +27,24 @@ class ThumbnailView:
 	def __init__(self, parent, size=None):
 		self.popover = Gtk.Popover.new()
 
-		self.popover.set_modal(False)
-		self.popover.set_transitions_enabled(False)
+		if Gtk.get_major_version() == 3:
+			self.popover.set_modal(False)
+
+		else:
+			self.popover.set_autohide(False)
+		# GTK 4 popovers have no transitions to disable
+		if Gtk.get_major_version() == 3:
+			self.popover.set_transitions_enabled(False)
 		self.popover.set_position(Gtk.PositionType.LEFT)
 
 		# create image preview
 		self._image = Gtk.Image()
 		self._image.show()
-		self.popover.add(self._image)
+		if Gtk.get_major_version() == 3:
+			self.popover.add(self._image)
+
+		else:
+			self.popover.set_child(self._image)
 
 		# store parameters locally
 		self._parent = parent
@@ -93,8 +103,16 @@ class ThumbnailView:
 		if thumbnail is not None:
 			self._image.set_from_pixbuf(thumbnail)
 		else:
-			self._image.set_from_icon_name('gtk-missing-image', Gtk.IconSize.DIALOG)
+			if Gtk.get_major_version() == 3:
+				self._image.set_from_icon_name('gtk-missing-image', Gtk.IconSize.DIALOG)
 
-		self.popover.set_relative_to(widget)
+			else:
+				self._image.set_from_icon_name('gtk-missing-image')
+
+		if Gtk.get_major_version() == 3:
+			self.popover.set_relative_to(widget)
+
+		else:
+			self.popover.set_parent(widget)
 		self.popover.set_pointing_to(position)
 		self.popover.show()

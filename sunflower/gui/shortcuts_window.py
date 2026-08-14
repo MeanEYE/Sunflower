@@ -93,4 +93,8 @@ class ShortcutsWindow():
 
 			self._window.add(section)
 
-		self._window.show_all()
+		if Gtk.get_major_version() == 3:
+			self._window.show_all()
+
+		else:
+			self._window.show()

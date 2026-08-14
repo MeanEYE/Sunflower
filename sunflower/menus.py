@@ -41,7 +41,11 @@ class MenuManager:
 		image = Gtk.Image()
 
 		if 'image' in item:
-			image.set_from_icon_name(item['image'], Gtk.IconSize.MENU)
+			if Gtk.get_major_version() == 3:
+				image.set_from_icon_name(item['image'], Gtk.IconSize.MENU)
+
+			else:
+				image.set_from_icon_name(item['image'])
 
 		elif 'stock' in item:
 			image.set_from_stock(item['stock'], Gtk.IconSize.MENU)
@@ -53,11 +57,16 @@ class MenuManager:
 			# walk-around for problems with GTK+ on windows systems
 			item = Gtk.Label(label=item['label'])
 			item.set_use_underline(True)
-			item.set_alignment(0, 0.5)
+			item.set_xalign(0)
+			item.set_yalign(0.5)
 
 			result.add(item)
 
-		result.set_image(image)
+		if Gtk.get_major_version() == 3:
+			result.set_image(image)
+
+		else:
+			result.set_child(image)
 
 		return result
 
@@ -105,8 +114,16 @@ class MenuManager:
 			# create new image
 			if application.icon:
 				image = Gtk.Image()
-				image.set_from_icon_name(application.icon, Gtk.IconSize.MENU)
-				item.set_image(image)
+				if Gtk.get_major_version() == 3:
+					image.set_from_icon_name(application.icon, Gtk.IconSize.MENU)
+
+				else:
+					image.set_from_icon_name(application.icon)
+				if Gtk.get_major_version() == 3:
+					item.set_image(image)
+
+				else:
+					item.set_child(image)
 
 			# data for handler
 			data = {
@@ -244,6 +261,10 @@ class MenuManager:
 			# use legacy way of setting item visibility
 			if visible: new_item.show()
 
-		new_item.set_property('no-show-all', not visible)
+		if Gtk.get_major_version() == 3:
+			new_item.set_property('no-show-all', not visible)
+
+		else:
+			new_item.set_visible(not (not visible))
 
 		return new_item

@@ -2,8 +2,15 @@ import os
 
 from gi.repository import Gtk, GObject
 
+# GTK 4 removed tool items, plain buttons are used on the toolbar box
+if Gtk.get_major_version() == 3:
+	ToolbarButton = Gtk.ToolButton
 
-class Button(Gtk.ToolButton):
+else:
+	ToolbarButton = Gtk.Button
+
+
+class Button(ToolbarButton):
 	"""Bookmark toolbar button"""
 
 	def __init__(self, application, name, config):
@@ -76,10 +83,11 @@ class ConfigurationDialog(Gtk.Dialog):
 		vbox_path = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_path = Gtk.Label(label=_('Path:'))
-		label_path.set_alignment(0, 0.5)
+		label_path.set_xalign(0)
+		label_path.set_yalign(0.5)
 
 		self._entry_path = Gtk.Entry()
-		self._checkbox_show_label = Gtk.CheckButton(_('Show label'))
+		self._checkbox_show_label = Gtk.CheckButton.new_with_label(_('Show label'))
 
 		# load default values
 		if config is not None:
@@ -87,9 +95,18 @@ class ConfigurationDialog(Gtk.Dialog):
 			self._checkbox_show_label.set_active(config['show_label'] == True)
 
 		# create controls
-		button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
-		button_save.set_can_default(True)
-		button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
+		if Gtk.get_major_version() == 3:
+			button_save = Gtk.Button(stock=Gtk.STOCK_SAVE)
+
+		else:
+			button_save = Gtk.Button.new_with_label(_('Save'))
+		if Gtk.get_major_version() == 3:
+			button_save.set_can_default(True)
+		if Gtk.get_major_version() == 3:
+			button_cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
+
+		else:
+			button_cancel = Gtk.Button.new_with_label(_('Cancel'))
 
 		self.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
 		self.add_action_widget(button_save, Gtk.ResponseType.ACCEPT)
@@ -97,22 +114,36 @@ class ConfigurationDialog(Gtk.Dialog):
 		self.set_default_response(Gtk.ResponseType.ACCEPT)
 
 		# pack interface
-		vbox_path.pack_start(label_path, False, False, 0)
-		vbox_path.pack_start(self._entry_path, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox_path.pack_start(label_path, False, False, 0)
+			vbox_path.pack_start(self._entry_path, False, False, 0)
 
-		vbox.pack_start(vbox_path, False, False, 0)
-		vbox.pack_start(self._checkbox_show_label, False, False, 0)
+			vbox.pack_start(vbox_path, False, False, 0)
+			vbox.pack_start(self._checkbox_show_label, False, False, 0)
 
-		self.vbox.pack_start(vbox, False, False, 0)
+			self.vbox.pack_start(vbox, False, False, 0)
 
-		self.show_all()
+		else:
+			vbox_path.append(label_path)
+			vbox_path.append(self._entry_path)
+
+			vbox.append(vbox_path)
+			vbox.append(self._checkbox_show_label)
+
+			self.vbox.append(vbox)
+
+		if Gtk.get_major_version() == 3:
+			self.show_all()
+
+		else:
+			self.show()
 
 	def get_response(self):
 		"""Return dialog response and self-destruct"""
 		config = None
 
 		# show dialog
-		code = self.run()
+		code = run_dialog(self)
 
 		if code == Gtk.ResponseType.ACCEPT:
 			config = {

@@ -23,7 +23,7 @@ class DefaultToolbar(ToolbarFactory):
 		self._widgets = {
 		        'parent_directory_button': {
 		            'description': _('Parent directory button'),
-		            'icon': Gtk.STOCK_GO_UP,
+		            'icon': 'go-up',
 		            'dialog': None,
 		            'class': ParentDirectoryButton,
 		        },
@@ -97,13 +97,13 @@ class DefaultToolbar(ToolbarFactory):
 		else:
 			# there is no configuration dialog for this widget type
 			dialog = Gtk.MessageDialog(
-		                            transient_window,
-		                            Gtk.DialogFlags.DESTROY_WITH_PARENT,
-		                            Gtk.MessageType.INFO,
-		                            Gtk.ButtonsType.OK,
-		                            _("This widget has no configuration dialog.")
+		                            transient_for=transient_window,
+		                            destroy_with_parent=True,
+		                            message_type=Gtk.MessageType.INFO,
+		                            buttons=Gtk.ButtonsType.OK,
+		                            text=_("This widget has no configuration dialog.")
 		                        )
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 		return result

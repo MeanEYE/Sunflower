@@ -64,7 +64,11 @@ class KeyringManager:
 					_('Keyring is locked')
 				)[is_locked]
 
-		self._status_icon.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
+		if Gtk.get_major_version() == 3:
+			self._status_icon.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
+
+		else:
+			self._status_icon.set_from_icon_name(icon_name)
 		self._status_icon.set_tooltip_text(icon_tooltip)
 
 	def __initialize_keyring(self):

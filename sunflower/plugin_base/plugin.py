@@ -9,6 +9,13 @@ from sunflower.widgets.status_bar import StatusBar
 from sunflower.widgets.tab_label import TabLabel
 from sunflower.gui.preferences.display import StatusVisible
 
+# GTK 4 renamed the Alt key modifier from MOD1
+if Gtk.get_major_version() == 3:
+	ALT_MASK = Gdk.ModifierType.MOD1_MASK
+
+else:
+	ALT_MASK = Gdk.ModifierType.ALT_MASK
+
 
 class PluginBase(Gtk.Box):
 	"""Abstract plugin class
@@ -60,10 +67,43 @@ class PluginBase(Gtk.Box):
 			self.lock_tab()
 
 		# pack interface
-		self.pack_start(self._title_bar.get_container(), False, False, 0)
-		self.pack_start(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL), False, False, 0)
-		self.pack_end(self._status_bar, False, False, 0)
-		self.pack_end(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL), False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self.pack_start(self._title_bar.get_container(), False, False, 0)
+			self.pack_start(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL), False, False, 0)
+			self.pack_end(self._status_bar, False, False, 0)
+			self.pack_end(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL), False, False, 0)
+
+		else:
+			# GTK 4 boxes have no end packing, status bar is moved to the
+			# bottom by _pack_status_bar once main object is in place
+			self.append(self._title_bar.get_container())
+			self.append(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL))
+
+			self._status_bar_separator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
+			self.append(self._status_bar_separator)
+			self.append(self._status_bar)
+
+	def _pack_status_bar(self):
+		"""Move status bar below main object.
+
+		Called by descendant classes once they pack their main object. GTK 3
+		keeps the status bar at the bottom through end packing and needs no
+		help, GTK 4 orders children by the time they were added.
+
+		"""
+		if Gtk.get_major_version() == 3:
+			return
+
+		# find last child which is not part of the status bar
+		last_child = self.get_last_child()
+		while last_child in (self._status_bar, self._status_bar_separator):
+			last_child = last_child.get_prev_sibling()
+
+		if last_child is None:
+			return
+
+		self.reorder_child_after(self._status_bar_separator, last_child)
+		self.reorder_child_after(self._status_bar, self._status_bar_separator)
 
 	def _change_title_text(self, text):
 		"""Change title label text"""
@@ -85,14 +125,32 @@ class PluginBase(Gtk.Box):
 		self._main_object.get_style_context().add_class('sunflower-main-object')
 
 		# connect events
-		self._main_object.connect('focus-in-event', self._control_got_focus)
-		self._main_object.connect('focus-out-event', self._control_lost_focus)
-		self._main_object.connect('key-press-event', self._handle_key_press)
+		if Gtk.get_major_version() == 3:
+			self._main_object.connect('focus-in-event', self._control_got_focus)
+			self._main_object.connect('focus-out-event', self._control_lost_focus)
+
+			self._main_object.connect('key-press-event', self._handle_key_press)
+
+		else:
+			focus_controller = Gtk.EventControllerFocus.new()
+			focus_controller.connect('enter', self._control_got_focus)
+			focus_controller.connect('leave', self._control_lost_focus)
+			self._main_object.add_controller(focus_controller)
+
+			key_controller = Gtk.EventControllerKey.new()
+			key_controller.connect('key-pressed', self._handle_key_pressed)
+			self._main_object.add_controller(key_controller)
 
 		# set focus chain only to main object
-		self.set_focus_chain((self._main_object,))
+		if Gtk.get_major_version() == 3:
+			self.set_focus_chain((self._main_object,))
 
 		# configure drag and drop support
+		# TODO: GTK 4 replaced target entries with drag source and drop target
+		# controllers, drag and drop is unavailable there until it is ported
+		if Gtk.get_major_version() != 3:
+			return
+
 		types = self._get_supported_drag_types()
 		actions = self._get_supported_drag_actions()
 
@@ -144,8 +202,8 @@ class PluginBase(Gtk.Box):
 		group.set_accelerator('previous_tab', keyval('Tab'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
 		group.set_accelerator('duplicate_tab', keyval('t'), Gdk.ModifierType.CONTROL_MASK)
 		group.set_accelerator('close_tab', keyval('w'), Gdk.ModifierType.CONTROL_MASK)
-		group.set_accelerator('focus_left_object', keyval('Left'), Gdk.ModifierType.MOD1_MASK)
-		group.set_accelerator('focus_right_object', keyval('Right'), Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('focus_left_object', keyval('Left'), ALT_MASK)
+		group.set_accelerator('focus_right_object', keyval('Right'), ALT_MASK)
 
 		# add accelerator group to the list
 		self._accelerator_groups.append(group)
@@ -196,10 +254,10 @@ class PluginBase(Gtk.Box):
 		self._parent._set_active_object(self)
 
 		# update states
-		self.update_state(Gtk.StateType.SELECTED)
+		self.update_state(Gtk.StateFlags.SELECTED)
 		opposite_object = self._parent.get_opposite_object(self)
 		if opposite_object:
-			opposite_object.update_state(Gtk.StateType.NORMAL)
+			opposite_object.update_state(Gtk.StateFlags.NORMAL)
 
 		# deactivate scheduled accelerators
 		deactivated = self._parent.accelerator_manager.deactivate_scheduled_groups(self)
@@ -260,7 +318,15 @@ class PluginBase(Gtk.Box):
 		notebook.append_page(self, self.get_tab_label())
 
 	def _handle_key_press(self, widget, event):
-		"""Handles key events in item list"""
+		"""Handles key events in item list (GTK 3)"""
+		return self._handle_keyval(event.keyval, event.get_state())
+
+	def _handle_key_pressed(self, controller, keyval, keycode, state):
+		"""Handles key events in item list (GTK 4)"""
+		return self._handle_keyval(keyval, state)
+
+	def _handle_keyval(self, keyval, state):
+		"""Handles key value regardless of the toolkit version"""
 		result = False
 
 		special_keys = (
@@ -270,8 +336,6 @@ class PluginBase(Gtk.Box):
 				Gdk.KEY_Up,
 				Gdk.KEY_Down
 				)
-		keyval = event.keyval
-		state = event.get_state()
 
 		# pressing Shift + Tab gives ISO_Left_Tab
 		# we need to override this behavior
@@ -316,7 +380,7 @@ class PluginBase(Gtk.Box):
 		self._title_bar.set_state(state)
 
 		# set main object class
-		if state == Gtk.StateType.SELECTED:
+		if state == Gtk.StateFlags.SELECTED:
 			self._main_object.get_style_context().add_class('selected')
 		else:
 			self._main_object.get_style_context().remove_class('selected')

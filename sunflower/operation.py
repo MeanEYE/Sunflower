@@ -122,11 +122,11 @@ class Operation(Thread):
 			# ask user what to do
 			def ask_user(queue):
 				dialog = Gtk.MessageDialog(
-										self._dialog.get_window(),
-										Gtk.DialogFlags.DESTROY_WITH_PARENT,
-										Gtk.MessageType.WARNING,
-										Gtk.ButtonsType.YES_NO,
-										_(
+										transient_for=self._dialog.get_window(),
+										destroy_with_parent=True,
+										message_type=Gtk.MessageType.WARNING,
+										buttons=Gtk.ButtonsType.YES_NO,
+										text=_(
 											'Target file system does not have enough '
 											'free space for this operation to continue.\n\n'
 											'Needed: {0}\n'
@@ -135,7 +135,7 @@ class Operation(Thread):
 										).format(space_needed, space_available)
 									)
 				dialog.set_default_response(Gtk.ResponseType.YES)
-				result = dialog.run()
+				result = run_dialog(dialog)
 				dialog.destroy()
 
 				# give the result to thread
@@ -576,6 +576,16 @@ class Operation(Thread):
 	def set_selection(self, item_list):
 		"""Set list of selected items"""
 		self._selection_list.extend(item_list)
+
+	def set_source_path(self, path):
+		"""Set path selected items are relative to.
+
+		By default operations resolve item names against the source
+		provider's current path, which is not always where the selection
+		was made.
+
+		"""
+		self._source_path = path
 
 	def set_operation_queue(self, queue_name):
 		"""Set operation to wait for queue."""

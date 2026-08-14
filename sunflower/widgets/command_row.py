@@ -14,15 +14,29 @@ class CommandRow(Gtk.ListBoxRow):
 		self.set_focus_on_click(True)
 
 		# create interface
-		box = Gtk.EventBox.new()
+		if Gtk.get_major_version() == 3:
+			box = Gtk.EventBox.new()
+
+		else:
+			# GTK 4 removed event boxes, every widget receives events on its own
+			box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+
 		set_border_width(box, 5)
-		self.add(box)
+		if Gtk.get_major_version() == 3:
+			self.add(box)
+
+		else:
+			self.set_child(box)
 
 		label = Gtk.Label.new(name)
-		label.set_alignment(0, 0.5)
-		box.add(label)
+		label.set_xalign(0)
+		label.set_yalign(0.5)
+		if Gtk.get_major_version() == 3:
+			box.add(label)
+			self.show_all()
 
-		self.show_all()
+		else:
+			box.append(label)
 
 	def _get_command(self):
 		"""Return command for execution."""

@@ -19,11 +19,15 @@ class RenameExtension:
 
 		# create activity toggle
 		self._active = False
-		self._checkbox_active = Gtk.CheckButton(_('Use this extension'))
+		self._checkbox_active = Gtk.CheckButton.new_with_label(_('Use this extension'))
 		self._checkbox_active.connect('toggled', self.__toggle_active)
 		self._checkbox_active.show()
 
-		self.vbox.pack_start(self._checkbox_active, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self.vbox.pack_start(self._checkbox_active, False, False, 0)
+
+		else:
+			self.vbox.append(self._checkbox_active)
 
 	def __toggle_active(self, widget, data=None):
 		"""Toggle extension active property"""

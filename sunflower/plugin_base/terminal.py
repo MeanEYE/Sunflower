@@ -11,6 +11,13 @@ from sunflower.plugin_base.plugin import PluginBase
 from sunflower.accelerator_group import AcceleratorGroup
 from sunflower.common import get_monospace_font_string
 
+# GTK 4 renamed the Alt key modifier from MOD1
+if Gtk.get_major_version() == 3:
+	ALT_MASK = Gdk.ModifierType.MOD1_MASK
+
+else:
+	ALT_MASK = Gdk.ModifierType.ALT_MASK
+
 
 class TerminalType:
 	VTE = 0
@@ -60,7 +67,8 @@ class Terminal(PluginBase):
 			self._terminal.connect('window-title-changed', self._update_title)
 
 			# unset drag source
-			self._terminal.drag_source_unset()
+			if Gtk.get_major_version() == 3:
+				self._terminal.drag_source_unset()
 
 			# configure terminal widget
 			shape = section.get('cursor_shape')
@@ -97,7 +105,11 @@ class Terminal(PluginBase):
 		# terminal container
 		if self._terminal_type == TerminalType.VTE:
 			self._container = Gtk.ScrolledWindow()
-			self._container.set_shadow_type(Gtk.ShadowType.NONE)
+			if Gtk.get_major_version() == 3:
+				self._container.set_shadow_type(Gtk.ShadowType.NONE)
+
+			else:
+				self._container.set_has_frame(False)
 
 			# apply scrollbar visibility
 			show_scrollbars = section.get('show_scrollbars')
@@ -109,11 +121,26 @@ class Terminal(PluginBase):
 
 		elif self._terminal_type == TerminalType.EXTERNAL:
 			self._container = Gtk.Viewport()
-			self._container.set_shadow_type(Gtk.ShadowType.IN)
+			if Gtk.get_major_version() == 3:
+				self._container.set_shadow_type(Gtk.ShadowType.IN)
+
+			else:
+				pass
 
 		# pack terminal
-		self._container.add(self._terminal)
-		self.pack_start(self._container, True, True, 0)
+		if Gtk.get_major_version() == 3:
+			self._container.add(self._terminal)
+
+		else:
+			self._container.set_child(self._terminal)
+		if Gtk.get_major_version() == 3:
+			self.pack_start(self._container, True, True, 0)
+
+		else:
+			self._container.set_vexpand(True)
+			self.append(self._container)
+
+		self._pack_status_bar()
 
 		# connect events to main object
 		self._connect_main_object(self._terminal)
@@ -133,21 +160,33 @@ class Terminal(PluginBase):
 		options = self._parent.options
 
 		# terminal menu button
-		self._menu_button = Gtk.Button.new_from_icon_name('document-edit-symbolic', Gtk.IconSize.MENU)
+		if Gtk.get_major_version() == 3:
+			self._menu_button = Gtk.Button.new_from_icon_name('document-edit-symbolic', Gtk.IconSize.MENU)
+
+		else:
+			self._menu_button = Gtk.Button.new_from_icon_name('document-edit-symbolic')
 		self._menu_button.set_focus_on_click(False)
 		self._menu_button.set_tooltip_text(_('Terminal menu'))
 		self._menu_button.connect('clicked', self._show_terminal_menu)
 		self._title_bar.add_control(self._menu_button)
 
 		# terminal button
-		self._terminal_button = Gtk.Button.new_from_icon_name('utilities-terminal-symbolic', Gtk.IconSize.MENU)
+		if Gtk.get_major_version() == 3:
+			self._terminal_button = Gtk.Button.new_from_icon_name('utilities-terminal-symbolic', Gtk.IconSize.MENU)
+
+		else:
+			self._terminal_button = Gtk.Button.new_from_icon_name('utilities-terminal-symbolic')
 		self._terminal_button.set_focus_on_click(False)
 		self._terminal_button.set_tooltip_text(_('Terminal'))
 		self._terminal_button.connect('clicked', self._create_terminal)
 		self._title_bar.add_control(self._terminal_button)
 
 		# file list button
-		self._file_list_button = Gtk.Button.new_from_icon_name('folder-symbolic', Gtk.IconSize.MENU)
+		if Gtk.get_major_version() == 3:
+			self._file_list_button = Gtk.Button.new_from_icon_name('folder-symbolic', Gtk.IconSize.MENU)
+
+		else:
+			self._file_list_button = Gtk.Button.new_from_icon_name('folder-symbolic')
 		self._file_list_button.set_focus_on_click(False)
 		self._file_list_button.set_tooltip_text(_('Open current directory'))
 		self._file_list_button.connect('clicked', self._create_file_list)
@@ -171,25 +210,55 @@ class Terminal(PluginBase):
 
 	def _create_menu(self):
 		"""Create terminal menu"""
-		self._menu = Gtk.Menu()
+		if Gtk.get_major_version() == 3:
+			self._menu = Gtk.Menu()
 
-		# copy
-		self._menu_item_copy = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_COPY)
-		self._menu_item_copy.connect('activate', self._copy_selection)
-		self._menu.append(self._menu_item_copy)
+			# copy
+			self._menu_item_copy = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_COPY)
+			self._menu_item_copy.connect('activate', self._copy_selection)
+			self._menu.append(self._menu_item_copy)
 
-		# paste
-		self._menu_item_paste = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_PASTE)
-		self._menu_item_paste.connect('activate', self._paste_selection)
-		self._menu.append(self._menu_item_paste)
+			# paste
+			self._menu_item_paste = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_PASTE)
+			self._menu_item_paste.connect('activate', self._paste_selection)
+			self._menu.append(self._menu_item_paste)
 
-		# show all items
-		self._menu.show_all()
+			# show all items
+			self._menu.show_all()
+			return
+
+		# GTK 4 menus are built from a model with actions
+		self._menu_actions = Gio.SimpleActionGroup.new()
+
+		self._menu_item_copy = Gio.SimpleAction.new('copy', None)
+		self._menu_item_copy.connect('activate', self._handle_menu_action, self._copy_selection)
+		self._menu_actions.add_action(self._menu_item_copy)
+
+		self._menu_item_paste = Gio.SimpleAction.new('paste', None)
+		self._menu_item_paste.connect('activate', self._handle_menu_action, self._paste_selection)
+		self._menu_actions.add_action(self._menu_item_paste)
+
+		model = Gio.Menu.new()
+		model.append(_('Copy'), 'terminal.copy')
+		model.append(_('Paste'), 'terminal.paste')
+
+		self._menu = Gtk.PopoverMenu.new_from_model(model)
+		self._menu.insert_action_group('terminal', self._menu_actions)
+		self._menu.set_parent(self._menu_button)
+
+	def _handle_menu_action(self, action, parameter, handler):
+		"""Forward menu action to handler. (GTK 4)"""
+		handler()
 
 	def _prepare_menu(self):
 		"""Prepare terminal menu before showing"""
-		self._menu_item_copy.set_sensitive(self._terminal.get_has_selection())
-		self._menu_item_paste.set_sensitive(self._parent.is_clipboard_text())
+		if Gtk.get_major_version() == 3:
+			self._menu_item_copy.set_sensitive(self._terminal.get_has_selection())
+			self._menu_item_paste.set_sensitive(self._parent.is_clipboard_text())
+
+		else:
+			self._menu_item_copy.set_enabled(self._terminal.get_has_selection())
+			self._menu_item_paste.set_enabled(self._parent.is_clipboard_text())
 
 	def _duplicate_tab(self, widget, data=None):
 		"""Creates new tab with same path"""
@@ -202,7 +271,11 @@ class Terminal(PluginBase):
 		self._prepare_menu()
 
 		# show the menu
-		self._menu.popup_at_widget(widget, Gdk.Gravity.SOUTH_WEST, Gdk.Gravity.NORTH_WEST, None)
+		if Gtk.get_major_version() == 3:
+			self._menu.popup_at_widget(widget, Gdk.Gravity.SOUTH_WEST, Gdk.Gravity.NORTH_WEST, None)
+
+		else:
+			self._menu.popup()
 
 	def _configure_accelerators(self):
 		"""Configure accelerator group"""
@@ -232,7 +305,7 @@ class Terminal(PluginBase):
 		group.set_accelerator('create_terminal', keyval('z'), Gdk.ModifierType.CONTROL_MASK)
 		group.set_accelerator('copy_to_clipboard', keyval('c'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
 		group.set_accelerator('paste_from_clipboard', keyval('v'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
-		group.set_accelerator('focus_opposite_object', keyval('Tab'), Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD1_MASK)
+		group.set_accelerator('focus_opposite_object', keyval('Tab'), Gdk.ModifierType.CONTROL_MASK | ALT_MASK)
 		group.set_accelerator('close_tab', keyval('w'), Gdk.ModifierType.CONTROL_MASK)
 
 		# add accelerator group to the list
@@ -264,17 +337,17 @@ class Terminal(PluginBase):
 
 		# ask user what to do with data
 		dialog = Gtk.MessageDialog(
-								self._parent,
-								Gtk.DialogFlags.DESTROY_WITH_PARENT,
-								Gtk.MessageType.QUESTION,
-								Gtk.ButtonsType.YES_NO,
-								_(
+								transient_for=self._parent,
+								destroy_with_parent=True,
+								message_type=Gtk.MessageType.QUESTION,
+								buttons=Gtk.ButtonsType.YES_NO,
+								text=_(
 									'You are about to feed child process with '
 									'following data. Are you sure?\n\n{0}'
 								).format(text)
 							)
 		dialog.set_default_response(Gtk.ResponseType.YES)
-		result = dialog.run()
+		result = run_dialog(dialog)
 		dialog.destroy()
 
 		if result == Gtk.ResponseType.YES:

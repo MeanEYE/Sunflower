@@ -104,15 +104,15 @@ class GioExtension(MountManagerExtension):
 
 		except GLib.GError as error:
 			dialog = Gtk.MessageDialog(
-									self._parent.window,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.ERROR,
-									Gtk.ButtonsType.OK,
-									_(
+									transient_for=self._parent.window,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.ERROR,
+									buttons=Gtk.ButtonsType.OK,
+									text=_(
 										"Unable to mount:\n{0}\n\n{1}"
 									).format(path.get_uri(), str(error))
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 		finally:
@@ -153,7 +153,11 @@ class SambaExtension(GioExtension):
 		# create user interface
 		list_container = Gtk.ScrolledWindow()
 		list_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-		list_container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			list_container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			list_container.set_has_frame(True)
 
 		self._store = Gtk.ListStore(str, str, str, str, str, str, bool, str) 
 		self._list = Gtk.TreeView(model=self._store)
@@ -171,54 +175,109 @@ class SambaExtension(GioExtension):
 
 		# create controls
 		image_add = Gtk.Image()
-		image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
+
+		else:
+			image_add.set_from_icon_name('list-add-symbolic')
 
 		button_add = Gtk.Button()
-		button_add.set_image(image_add)
+		if Gtk.get_major_version() == 3:
+			button_add.set_image(image_add)
+
+		else:
+			button_add.set_child(image_add)
 		button_add.connect('clicked', self._add_mount)
 
 		image_edit = Gtk.Image()
-		image_edit.set_from_stock(Gtk.STOCK_EDIT, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_edit.set_from_stock(Gtk.STOCK_EDIT, Gtk.IconSize.BUTTON)
+
+		else:
+			image_edit.set_from_icon_name('document-edit-symbolic')
 
 		button_edit = Gtk.Button()
-		button_edit.set_image(image_edit)
+		if Gtk.get_major_version() == 3:
+			button_edit.set_image(image_edit)
+
+		else:
+			button_edit.set_child(image_edit)
 		button_edit.connect('clicked', self._edit_mount)
 
 		image_delete = Gtk.Image()
-		image_delete.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_delete.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.BUTTON)
+
+		else:
+			image_delete.set_from_icon_name('edit-delete-symbolic')
 
 		button_delete = Gtk.Button()
-		button_delete.set_image(image_delete)
+		if Gtk.get_major_version() == 3:
+			button_delete.set_image(image_delete)
+
+		else:
+			button_delete.set_child(image_delete)
 		button_delete.connect('clicked', self._delete_mount)
 
-		button_mount = Gtk.Button(_('Mount'))
+		button_mount = Gtk.Button.new_with_label(_('Mount'))
 		button_mount.connect('clicked', self._mount_selected)
 
-		button_unmount = Gtk.Button(_('Unmount'))
+		button_unmount = Gtk.Button.new_with_label(_('Unmount'))
 		button_unmount.connect('clicked', self._unmount_selected)
 
 		# use spinner if possible to denote busy operation
 		if hasattr(Gtk, 'Spinner'):
 			self._spinner = Gtk.Spinner()
 			self._spinner.set_size_request(20, 20)
-			self._spinner.set_property('no-show-all', True)
+			if Gtk.get_major_version() == 3:
+				self._spinner.set_property('no-show-all', True)
+
+			else:
+				self._spinner.hide()
 
 		else:
 			self._spinner = None
 
 		# pack user interface
-		list_container.add(self._list)
+		if Gtk.get_major_version() == 3:
+			list_container.add(self._list)
 
-		self._container.pack_start(list_container, True, True, 0)
+		else:
+			list_container.set_child(self._list)
 
-		self._controls.pack_start(button_add, False, False, 0)
-		self._controls.pack_start(button_edit, False, False, 0)
-		self._controls.pack_start(button_delete, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self._container.pack_start(list_container, True, True, 0)
+
+			self._controls.pack_start(button_add, False, False, 0)
+			self._controls.pack_start(button_edit, False, False, 0)
+			self._controls.pack_start(button_delete, False, False, 0)
+
+		else:
+			list_container.set_vexpand(True)
+			self._container.append(list_container)
+
+			self._pack_end_controls()
+
+			self._controls.append(button_add)
+			self._controls.append(button_edit)
+			self._controls.append(button_delete)
 
 		if self._spinner is not None:
-			self._controls.pack_start(self._spinner, False, False, 0)
-		self._controls.pack_end(button_unmount, False, False, 0)
-		self._controls.pack_end(button_mount, False, False, 0)
+			if Gtk.get_major_version() == 3:
+				self._controls.pack_start(self._spinner, False, False, 0)
+
+			else:
+				self._controls.append(self._spinner)
+		if Gtk.get_major_version() == 3:
+			self._controls.pack_end(button_unmount, False, False, 0)
+			self._controls.pack_end(button_mount, False, False, 0)
+
+		else:
+			# end packed children are shown in reverse order of addition
+			button_mount.set_hexpand(True)
+			button_mount.set_halign(Gtk.Align.END)
+			self._controls.append(button_mount)
+			self._controls.append(button_unmount)
 
 		# load entries from config file
 		self.__populate_list()
@@ -415,17 +474,17 @@ class SambaExtension(GioExtension):
 
 			# ask user to confirm removal
 			dialog = Gtk.MessageDialog(
-									self._parent.window,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.QUESTION,
-									Gtk.ButtonsType.YES_NO,
-									_(
+									transient_for=self._parent.window,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.QUESTION,
+									buttons=Gtk.ButtonsType.YES_NO,
+									text=_(
 										"You are about to remove '{0}'.\n"
 										"Are you sure about this?"
 									).format(entry_name)
 								)
 			dialog.set_default_response(Gtk.ResponseType.YES)
-			result = dialog.run()
+			result = run_dialog(dialog)
 			dialog.destroy()
 
 			# remove selected mount
@@ -507,7 +566,11 @@ class FtpExtension(GioExtension):
 		# create user interface
 		list_container = Gtk.ScrolledWindow()
 		list_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-		list_container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			list_container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			list_container.set_has_frame(True)
 
 		self._store = Gtk.ListStore(str, str, str, str, bool, str) 
 		self._list = Gtk.TreeView(model=self._store)
@@ -525,54 +588,109 @@ class FtpExtension(GioExtension):
 
 		# create controls
 		image_add = Gtk.Image()
-		image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
+
+		else:
+			image_add.set_from_icon_name('list-add-symbolic')
 
 		button_add = Gtk.Button()
-		button_add.set_image(image_add)
+		if Gtk.get_major_version() == 3:
+			button_add.set_image(image_add)
+
+		else:
+			button_add.set_child(image_add)
 		button_add.connect('clicked', self._add_mount)
 
 		image_edit = Gtk.Image()
-		image_edit.set_from_stock(Gtk.STOCK_EDIT, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_edit.set_from_stock(Gtk.STOCK_EDIT, Gtk.IconSize.BUTTON)
+
+		else:
+			image_edit.set_from_icon_name('document-edit-symbolic')
 
 		button_edit = Gtk.Button()
-		button_edit.set_image(image_edit)
+		if Gtk.get_major_version() == 3:
+			button_edit.set_image(image_edit)
+
+		else:
+			button_edit.set_child(image_edit)
 		button_edit.connect('clicked', self._edit_mount)
 
 		image_delete = Gtk.Image()
-		image_delete.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_delete.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.BUTTON)
+
+		else:
+			image_delete.set_from_icon_name('edit-delete-symbolic')
 
 		button_delete = Gtk.Button()
-		button_delete.set_image(image_delete)
+		if Gtk.get_major_version() == 3:
+			button_delete.set_image(image_delete)
+
+		else:
+			button_delete.set_child(image_delete)
 		button_delete.connect('clicked', self._delete_mount)
 
-		button_mount = Gtk.Button(_('Mount'))
+		button_mount = Gtk.Button.new_with_label(_('Mount'))
 		button_mount.connect('clicked', self._mount_selected)
 
-		button_unmount = Gtk.Button(_('Unmount'))
+		button_unmount = Gtk.Button.new_with_label(_('Unmount'))
 		button_unmount.connect('clicked', self._unmount_selected)
 
 		# use spinner if possible to denote busy operation
 		if hasattr(Gtk, 'Spinner'):
 			self._spinner = Gtk.Spinner()
 			self._spinner.set_size_request(20, 20)
-			self._spinner.set_property('no-show-all', True)
+			if Gtk.get_major_version() == 3:
+				self._spinner.set_property('no-show-all', True)
+
+			else:
+				self._spinner.hide()
 
 		else:
 			self._spinner = None
 
 		# pack user interface
-		list_container.add(self._list)
+		if Gtk.get_major_version() == 3:
+			list_container.add(self._list)
 
-		self._container.pack_start(list_container, True, True, 0)
+		else:
+			list_container.set_child(self._list)
 
-		self._controls.pack_start(button_add, False, False, 0)
-		self._controls.pack_start(button_edit, False, False, 0)
-		self._controls.pack_start(button_delete, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self._container.pack_start(list_container, True, True, 0)
+
+			self._controls.pack_start(button_add, False, False, 0)
+			self._controls.pack_start(button_edit, False, False, 0)
+			self._controls.pack_start(button_delete, False, False, 0)
+
+		else:
+			list_container.set_vexpand(True)
+			self._container.append(list_container)
+
+			self._pack_end_controls()
+
+			self._controls.append(button_add)
+			self._controls.append(button_edit)
+			self._controls.append(button_delete)
 
 		if self._spinner is not None:
-			self._controls.pack_start(self._spinner, False, False, 0)
-		self._controls.pack_end(button_unmount, False, False, 0)
-		self._controls.pack_end(button_mount, False, False, 0)
+			if Gtk.get_major_version() == 3:
+				self._controls.pack_start(self._spinner, False, False, 0)
+
+			else:
+				self._controls.append(self._spinner)
+		if Gtk.get_major_version() == 3:
+			self._controls.pack_end(button_unmount, False, False, 0)
+			self._controls.pack_end(button_mount, False, False, 0)
+
+		else:
+			# end packed children are shown in reverse order of addition
+			button_mount.set_hexpand(True)
+			button_mount.set_halign(Gtk.Align.END)
+			self._controls.append(button_mount)
+			self._controls.append(button_unmount)
 
 		# load entries from config file
 		self.__populate_list()
@@ -718,17 +836,17 @@ class FtpExtension(GioExtension):
 
 			# ask user to confirm removal
 			dialog = Gtk.MessageDialog(
-									self._parent.window,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.QUESTION,
-									Gtk.ButtonsType.YES_NO,
-									_(
+									transient_for=self._parent.window,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.QUESTION,
+									buttons=Gtk.ButtonsType.YES_NO,
+									text=_(
 										"You are about to remove '{0}'.\n"
 										"Are you sure about this?"
 									).format(entry_name)
 								)
 			dialog.set_default_response(Gtk.ResponseType.YES)
-			result = dialog.run()
+			result = run_dialog(dialog)
 			dialog.destroy()
 
 			# remove selected mount
@@ -859,7 +977,11 @@ class DavExtension(GioExtension):
 		# create user interface
 		list_container = Gtk.ScrolledWindow()
 		list_container.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-		list_container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			list_container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			list_container.set_has_frame(True)
 
 		self._store = Gtk.ListStore(str, str, int, str, str, bool, str)
 		self._list = Gtk.TreeView(model=self._store)
@@ -877,54 +999,109 @@ class DavExtension(GioExtension):
 
 		# create controls
 		image_add = Gtk.Image()
-		image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
+
+		else:
+			image_add.set_from_icon_name('list-add-symbolic')
 
 		button_add = Gtk.Button()
-		button_add.set_image(image_add)
+		if Gtk.get_major_version() == 3:
+			button_add.set_image(image_add)
+
+		else:
+			button_add.set_child(image_add)
 		button_add.connect('clicked', self._add_mount)
 
 		image_edit = Gtk.Image()
-		image_edit.set_from_stock(Gtk.STOCK_EDIT, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_edit.set_from_stock(Gtk.STOCK_EDIT, Gtk.IconSize.BUTTON)
+
+		else:
+			image_edit.set_from_icon_name('document-edit-symbolic')
 
 		button_edit = Gtk.Button()
-		button_edit.set_image(image_edit)
+		if Gtk.get_major_version() == 3:
+			button_edit.set_image(image_edit)
+
+		else:
+			button_edit.set_child(image_edit)
 		button_edit.connect('clicked', self._edit_mount)
 
 		image_delete = Gtk.Image()
-		image_delete.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.BUTTON)
+		if Gtk.get_major_version() == 3:
+			image_delete.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.BUTTON)
+
+		else:
+			image_delete.set_from_icon_name('edit-delete-symbolic')
 
 		button_delete = Gtk.Button()
-		button_delete.set_image(image_delete)
+		if Gtk.get_major_version() == 3:
+			button_delete.set_image(image_delete)
+
+		else:
+			button_delete.set_child(image_delete)
 		button_delete.connect('clicked', self._delete_mount)
 
-		button_mount = Gtk.Button(_('Mount'))
+		button_mount = Gtk.Button.new_with_label(_('Mount'))
 		button_mount.connect('clicked', self._mount_selected)
 
-		button_unmount = Gtk.Button(_('Unmount'))
+		button_unmount = Gtk.Button.new_with_label(_('Unmount'))
 		button_unmount.connect('clicked', self._unmount_selected)
 
 		# use spinner if possible to denote busy operation
 		if hasattr(Gtk, 'Spinner'):
 			self._spinner = Gtk.Spinner()
 			self._spinner.set_size_request(20, 20)
-			self._spinner.set_property('no-show-all', True)
+			if Gtk.get_major_version() == 3:
+				self._spinner.set_property('no-show-all', True)
+
+			else:
+				self._spinner.hide()
 
 		else:
 			self._spinner = None
 
 		# pack user interface
-		list_container.add(self._list)
+		if Gtk.get_major_version() == 3:
+			list_container.add(self._list)
 
-		self._container.pack_start(list_container, True, True, 0)
+		else:
+			list_container.set_child(self._list)
 
-		self._controls.pack_start(button_add, False, False, 0)
-		self._controls.pack_start(button_edit, False, False, 0)
-		self._controls.pack_start(button_delete, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self._container.pack_start(list_container, True, True, 0)
+
+			self._controls.pack_start(button_add, False, False, 0)
+			self._controls.pack_start(button_edit, False, False, 0)
+			self._controls.pack_start(button_delete, False, False, 0)
+
+		else:
+			list_container.set_vexpand(True)
+			self._container.append(list_container)
+
+			self._pack_end_controls()
+
+			self._controls.append(button_add)
+			self._controls.append(button_edit)
+			self._controls.append(button_delete)
 
 		if self._spinner is not None:
-			self._controls.pack_start(self._spinner, False, False, 0)
-		self._controls.pack_end(button_unmount, False, False, 0)
-		self._controls.pack_end(button_mount, False, False, 0)
+			if Gtk.get_major_version() == 3:
+				self._controls.pack_start(self._spinner, False, False, 0)
+
+			else:
+				self._controls.append(self._spinner)
+		if Gtk.get_major_version() == 3:
+			self._controls.pack_end(button_unmount, False, False, 0)
+			self._controls.pack_end(button_mount, False, False, 0)
+
+		else:
+			# end packed children are shown in reverse order of addition
+			button_mount.set_hexpand(True)
+			button_mount.set_halign(Gtk.Align.END)
+			self._controls.append(button_mount)
+			self._controls.append(button_unmount)
 
 		# load entries from config file
 		self.__populate_list()
@@ -1073,17 +1250,17 @@ class DavExtension(GioExtension):
 
 			# ask user to confirm removal
 			dialog = Gtk.MessageDialog(
-				self._parent.window,
-				Gtk.DialogFlags.DESTROY_WITH_PARENT,
-				Gtk.MessageType.QUESTION,
-				Gtk.ButtonsType.YES_NO,
-				_(
+				transient_for=self._parent.window,
+				destroy_with_parent=True,
+				message_type=Gtk.MessageType.QUESTION,
+				buttons=Gtk.ButtonsType.YES_NO,
+				text=_(
 					"You are about to remove '{0}'.\n"
 					"Are you sure about this?"
 				).format(entry_name)
 			)
 			dialog.set_default_response(Gtk.ResponseType.YES)
-			result = dialog.run()
+			result = run_dialog(dialog)
 			dialog.destroy()
 
 			# remove selected mount

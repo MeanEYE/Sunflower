@@ -27,7 +27,8 @@ class DefaultFindFiles(FindExtension):
 
 		# create label showing pattern help
 		label_help = Gtk.Label()
-		label_help.set_alignment(0, 0)
+		label_help.set_xalign(0)
+		label_help.set_yalign(0)
 		label_help.set_use_markup(True)
 
 		label_help.set_markup(_(
@@ -47,27 +48,47 @@ class DefaultFindFiles(FindExtension):
 		vbox_pattern = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		label_pattern = Gtk.Label(label=_('Search for:'))
-		label_pattern.set_alignment(0, 0.5)
+		label_pattern.set_xalign(0)
+		label_pattern.set_yalign(0.5)
 
 		self._entry_pattern = Gtk.ComboBoxText.new_with_entry()
 		self._entry_pattern.connect('changed', self.__handle_pattern_change)
 
-		self._checkbox_case_sensitive = Gtk.CheckButton(_('Case sensitive'))
+		self._checkbox_case_sensitive = Gtk.CheckButton.new_with_label(_('Case sensitive'))
 		self._checkbox_case_sensitive.connect('toggled', self.__handle_case_sensitive_toggle)
 
 		# pack interface
-		vbox_pattern.pack_start(label_pattern, False, False, 0)
-		vbox_pattern.pack_start(self._entry_pattern, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			vbox_pattern.pack_start(label_pattern, False, False, 0)
+			vbox_pattern.pack_start(self._entry_pattern, False, False, 0)
 
-		vbox_left.pack_start(vbox_pattern, False, False, 0)
-		vbox_left.pack_start(self._checkbox_case_sensitive, False, False, 0)
+			vbox_left.pack_start(vbox_pattern, False, False, 0)
+			vbox_left.pack_start(self._checkbox_case_sensitive, False, False, 0)
 
-		vbox_right.pack_start(label_help, True, True, 0)
+			vbox_right.pack_start(label_help, True, True, 0)
 
-		hbox.pack_start(vbox_left, True, True, 0)
-		hbox.pack_start(vbox_right, True, True, 0)
+			hbox.pack_start(vbox_left, True, True, 0)
+			hbox.pack_start(vbox_right, True, True, 0)
 
-		self.container.pack_start(hbox, True, True, 0)
+			self.container.pack_start(hbox, True, True, 0)
+
+		else:
+			vbox_pattern.append(label_pattern)
+			vbox_pattern.append(self._entry_pattern)
+
+			vbox_left.append(vbox_pattern)
+			vbox_left.append(self._checkbox_case_sensitive)
+
+			label_help.set_vexpand(True)
+			vbox_right.append(label_help)
+
+			vbox_left.set_hexpand(True)
+			hbox.append(vbox_left)
+			vbox_right.set_hexpand(True)
+			hbox.append(vbox_right)
+
+			hbox.set_vexpand(True)
+			self.container.append(hbox)
 
 		# load saved values
 		self._load_history()

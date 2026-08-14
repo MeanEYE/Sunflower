@@ -10,14 +10,21 @@ class Indicator(object):
 
 	def __init__(self, parent):
 		self._parent = parent
-		self._menu = Gtk.Menu()
-		self._create_menu_items()
+		self._menu = None
+		self._indicator = None
 
 		base_path = os.path.dirname(common.get_static_assets_directory())
 
 		self._icon = 'sunflower_64.png'
 		self._icon_path = os.path.abspath(os.path.join(base_path, 'images'))
-		self._indicator = None
+
+		# GTK 4 provides neither status icons nor menus, notification area
+		# support would have to come from a status notifier implementation
+		if Gtk.get_major_version() != 3:
+			return
+
+		self._menu = Gtk.Menu()
+		self._create_menu_items()
 
 		if self._parent.window_options.section('main').get('hide_on_close'):
 			self._indicator = Gtk.StatusIcon()
@@ -75,11 +82,17 @@ class Indicator(object):
 
 	def adjust_visibility_items(self, visible):
 		"""Adjust show/hide menu items"""
+		if self._menu is None:
+			return
+
 		self._menu_show.set_visible(not visible)
 		self._menu_hide.set_visible(visible)
 
 	def add_operation(self, widget, callback, data):
 		"""Add operation to operations menu"""
+		if self._menu is None:
+			return None
+
 		menu_item = Gtk.MenuItem()
 		menu_item.add(widget)
 

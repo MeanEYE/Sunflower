@@ -15,17 +15,18 @@ class TerminalOptions(SettingsPage):
 		self._radio_vte.connect('toggled', self._parent.enable_save)
 
 		# option for showing scrollbars
-		self._checkbox_scrollbars_visible = Gtk.CheckButton(_('Show scrollbars when needed'))
+		self._checkbox_scrollbars_visible = Gtk.CheckButton.new_with_label(_('Show scrollbars when needed'))
 		self._checkbox_scrollbars_visible.connect('toggled', self._parent.enable_save)
 
 		# option for custom font
 		hbox_font = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
-		self._checkbox_system_font = Gtk.CheckButton(_('Use the system fixed width font'))
+		self._checkbox_system_font = Gtk.CheckButton.new_with_label(_('Use the system fixed width font'))
 		self._checkbox_system_font.connect('toggled', self.__toggled_system_font)
 
 		label_font = Gtk.Label(label=_('Font:'))
-		label_font.set_alignment(0, 0.5)
+		label_font.set_xalign(0)
+		label_font.set_yalign(0.5)
 
 		self._button_font = Gtk.FontButton()
 		self._button_font.connect('font-set', self._parent.enable_save)
@@ -34,7 +35,8 @@ class TerminalOptions(SettingsPage):
 		hbox_cursor_shape = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
 
 		label_cursor_shape = Gtk.Label(label=_('Cursor shape:'))
-		label_cursor_shape.set_alignment(0, 0.5)
+		label_cursor_shape.set_xalign(0)
+		label_cursor_shape.set_yalign(0.5)
 
 		list_cursor_shape = Gtk.ListStore(str, int)
 		list_cursor_shape.append((_('Block'), CursorShape.BLOCK))
@@ -49,11 +51,11 @@ class TerminalOptions(SettingsPage):
 		self._combobox_cursor_shape.add_attribute(cell_cursor_shape, 'text', 0)
 
 		# option for allowing bold text in terminal
-		self._checkbox_allow_bold = Gtk.CheckButton(_('Allow bold text'))
+		self._checkbox_allow_bold = Gtk.CheckButton.new_with_label(_('Allow bold text'))
 		self._checkbox_allow_bold.connect('toggled', self._parent.enable_save)
 
 		# option for automatically hiding mouse when typing
-		self._checkbox_autohide_mouse = Gtk.CheckButton(_('Automatically hide mouse when typing'))
+		self._checkbox_autohide_mouse = Gtk.CheckButton.new_with_label(_('Automatically hide mouse when typing'))
 		self._checkbox_autohide_mouse.connect('toggled', self._parent.enable_save)
 
 		# create external terminal options
@@ -66,13 +68,15 @@ class TerminalOptions(SettingsPage):
 
 		vbox_command = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		label_command = Gtk.Label(label=_('Command line:'))
-		label_command.set_alignment(0, 0.5)
+		label_command.set_xalign(0)
+		label_command.set_yalign(0.5)
 		self._entry_command = Gtk.Entry()
 		self._entry_command.connect('changed', self._parent.enable_save)
 
 		vbox_command2 = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		label_command2 = Gtk.Label(label=_('Command line for executing specific program:'))
-		label_command2.set_alignment(0, 0.5)
+		label_command2.set_xalign(0)
+		label_command2.set_yalign(0.5)
 		self._entry_command2 = Gtk.Entry()
 		self._entry_command2.connect('changed', self._parent.enable_save)
 
@@ -84,31 +88,58 @@ class TerminalOptions(SettingsPage):
 					'\n\t{2} will be replaced with current working directory.'
 					'</i></small>'
 				))
-		label_note.set_alignment(0, 0)
+		label_note.set_xalign(0)
+		label_note.set_yalign(0)
 		label_note.set_use_markup(True)
 
 		# pack interface
-		hbox_font.pack_start(label_font, False, False, 0)
-		hbox_font.pack_start(self._button_font, True, True, 0)
+		if Gtk.get_major_version() == 3:
+			hbox_font.pack_start(label_font, False, False, 0)
+			hbox_font.pack_start(self._button_font, True, True, 0)
 
-		hbox_cursor_shape.pack_start(label_cursor_shape, False, False, 0)
-		hbox_cursor_shape.pack_start(self._combobox_cursor_shape, False, False, 0)
+			hbox_cursor_shape.pack_start(label_cursor_shape, False, False, 0)
+			hbox_cursor_shape.pack_start(self._combobox_cursor_shape, False, False, 0)
 
-		vbox_command.pack_start(label_command, False, False, 0)
-		vbox_command.pack_start(self._entry_command, False, False, 0)
-		vbox_command2.pack_start(label_command2, False, False, 0)
-		vbox_command2.pack_start(self._entry_command2, False, False, 0)
+			vbox_command.pack_start(label_command, False, False, 0)
+			vbox_command.pack_start(self._entry_command, False, False, 0)
+			vbox_command2.pack_start(label_command2, False, False, 0)
+			vbox_command2.pack_start(self._entry_command2, False, False, 0)
 
-		vbox_vte.pack_start(self._checkbox_scrollbars_visible, False, False, 0)
-		vbox_vte.pack_start(self._checkbox_system_font, False, False, 0)
-		vbox_vte.pack_start(hbox_font, False, False, 0)
-		vbox_vte.pack_start(hbox_cursor_shape, False, False, 5)
-		vbox_vte.pack_start(self._checkbox_allow_bold, False, False, 0)
-		vbox_vte.pack_start(self._checkbox_autohide_mouse, False, False, 0)
+			vbox_vte.pack_start(self._checkbox_scrollbars_visible, False, False, 0)
+			vbox_vte.pack_start(self._checkbox_system_font, False, False, 0)
+			vbox_vte.pack_start(hbox_font, False, False, 0)
+			vbox_vte.pack_start(hbox_cursor_shape, False, False, 5)
+			vbox_vte.pack_start(self._checkbox_allow_bold, False, False, 0)
+			vbox_vte.pack_start(self._checkbox_autohide_mouse, False, False, 0)
 
-		vbox_external.pack_start(vbox_command, False, False, 0)
-		vbox_external.pack_start(vbox_command2, False, False, 0)
-		vbox_external.pack_start(label_note, False, False, 0)
+			vbox_external.pack_start(vbox_command, False, False, 0)
+			vbox_external.pack_start(vbox_command2, False, False, 0)
+			vbox_external.pack_start(label_note, False, False, 0)
+
+		else:
+			hbox_font.append(label_font)
+			self._button_font.set_hexpand(True)
+			hbox_font.append(self._button_font)
+
+			hbox_cursor_shape.append(label_cursor_shape)
+			hbox_cursor_shape.append(self._combobox_cursor_shape)
+
+			vbox_command.append(label_command)
+			vbox_command.append(self._entry_command)
+			vbox_command2.append(label_command2)
+			vbox_command2.append(self._entry_command2)
+
+			vbox_vte.append(self._checkbox_scrollbars_visible)
+			vbox_vte.append(self._checkbox_system_font)
+			vbox_vte.append(hbox_font)
+			set_border_width(hbox_cursor_shape, 5)
+			vbox_vte.append(hbox_cursor_shape)
+			vbox_vte.append(self._checkbox_allow_bold)
+			vbox_vte.append(self._checkbox_autohide_mouse)
+
+			vbox_external.append(vbox_command)
+			vbox_external.append(vbox_command2)
+			vbox_external.append(label_note)
 
 	def __toggled_system_font(self, widget, data=None):
 		"""Handle toggle of system font checkbox"""
@@ -125,7 +156,7 @@ class TerminalOptions(SettingsPage):
 		self._combobox_cursor_shape.set_active(options.get('cursor_shape'))
 		self._checkbox_allow_bold.set_active(options.get('allow_bold'))
 		self._checkbox_autohide_mouse.set_active(options.get('mouse_autohide'))
-		self._button_font.set_font_name(options.get('font'))
+		self._button_font.set_font(options.get('font'))
 
 		# apply terminal type
 		terminal_type = options.get('type')
@@ -146,7 +177,7 @@ class TerminalOptions(SettingsPage):
 		options.set('cursor_shape', self._combobox_cursor_shape.get_active())
 		options.set('allow_bold', self._checkbox_allow_bold.get_active())
 		options.set('mouse_autohide', self._checkbox_autohide_mouse.get_active())
-		options.set('font', self._button_font.get_font_name())
+		options.set('font', self._button_font.get_font())
 
 		# save terminal type
 		terminal_type = TerminalType.VTE if self._radio_vte.get_active() else TerminalType.EXTERNAL

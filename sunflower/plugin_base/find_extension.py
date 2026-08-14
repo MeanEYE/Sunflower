@@ -69,15 +69,29 @@ class TitleRow(Gtk.ListBoxRow):
 		# create interface
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 10)
 		set_border_width(hbox, 5)
-		self.add(hbox)
+		if Gtk.get_major_version() == 3:
+			self.add(hbox)
+
+		else:
+			self.set_child(hbox)
 
 		label = Gtk.Label.new(extension.get_title())
-		label.set_alignment(0, 0.5)
-		hbox.pack_start(label, True, True, 0)
+		label.set_xalign(0)
+		label.set_yalign(0.5)
+		if Gtk.get_major_version() == 3:
+			hbox.pack_start(label, True, True, 0)
+
+		else:
+			label.set_hexpand(True)
+			hbox.append(label)
 
 		self.check = Gtk.Switch.new()
 		self.check.set_sensitive(not always_on)
-		hbox.pack_start(self.check, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			hbox.pack_start(self.check, False, False, 0)
+
+		else:
+			hbox.append(self.check)
 
 	def get_extension(self):
 		"""Return parent extension."""

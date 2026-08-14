@@ -24,14 +24,22 @@ class GVimViewer(ViewerExtension):
 
 		# create container
 		self._container = Gtk.Viewport()
-		self._container.set_shadow_type(Gtk.ShadowType.IN)
+		if Gtk.get_major_version() == 3:
+			self._container.set_shadow_type(Gtk.ShadowType.IN)
+
+		else:
+			pass
 
 		# create socket for embeding GVim window
 		self._socket = Gtk.Socket()
 		self._socket.connect('realize', self.__socket_realized)
 
 		# pack interface
-		self._container.add(self._socket)
+		if Gtk.get_major_version() == 3:
+			self._container.add(self._socket)
+
+		else:
+			self._container.set_child(self._socket)
 
 	def __socket_realized(self, widget, data=None):
 		"""Connect process when socket is realized"""

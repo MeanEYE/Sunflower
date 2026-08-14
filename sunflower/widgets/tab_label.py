@@ -7,45 +7,90 @@ class TabLabel:
 	MAX_CHARS=20
 
 	def __init__(self, application, parent):
-		self._container = Gtk.EventBox.new()
-
 		self._application = application
 		self._parent = parent
 
-		# initialize tab events
-		self._container.add_events(Gdk.EventMask.BUTTON_RELEASE_MASK)
-		self._container.connect('button-release-event', self._button_release_event)
-		self._container.set_visible_window(False)
-
 		# create interface
 		self._hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
-		self._container.add(self._hbox)
+
+		if Gtk.get_major_version() == 3:
+			self._container = Gtk.EventBox.new()
+
+			# initialize tab events
+			self._container.add_events(Gdk.EventMask.BUTTON_RELEASE_MASK)
+			self._container.connect('button-release-event', self._button_release_event)
+			self._container.set_visible_window(False)
+
+			self._container.add(self._hbox)
+
+		else:
+			# GTK 4 removed event boxes, clicks arrive through a gesture instead
+			self._container = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+
+			gesture = Gtk.GestureClick.new()
+			gesture.set_button(0)
+			gesture.connect('released', self._button_released)
+			self._container.add_controller(gesture)
+
+			self._container.append(self._hbox)
 
 		self._label = Gtk.Label.new()
 		self._label.set_single_line_mode(True)
 
 		self._lock_image = Gtk.Image()
-		self._lock_image.set_property('no-show-all', True)
-		self._lock_image.set_from_icon_name('changes-prevent-symbolic', Gtk.IconSize.MENU)
 
-		self._button = Gtk.Button.new_from_icon_name('window-close-symbolic', Gtk.IconSize.MENU)
+		if Gtk.get_major_version() == 3:
+			self._lock_image.set_property('no-show-all', True)
+			self._lock_image.set_from_icon_name('changes-prevent-symbolic', Gtk.IconSize.MENU)
+
+			self._button = Gtk.Button.new_from_icon_name('window-close-symbolic', Gtk.IconSize.MENU)
+
+		else:
+			# GTK 4 icon helpers take no size, widgets are hidden directly
+			self._lock_image.hide()
+			self._lock_image.set_from_icon_name('changes-prevent-symbolic')
+
+			self._button = Gtk.Button.new_from_icon_name('window-close-symbolic')
+
 		self._button.set_focus_on_click(False)
 		self._button.connect('clicked', self._close_tab)
-		self._button.set_property('no-show-all', True)
+
+		if Gtk.get_major_version() == 3:
+			self._button.set_property('no-show-all', True)
+
+		else:
+			self._button.hide()
+
 		self._button.get_style_context().add_class('sunflower-close-tab')
 		self._button.get_style_context().add_class('flat')
 
 		# pack interface
-		self._hbox.pack_start(self._lock_image, False, False, 0)
-		self._hbox.pack_start(self._label, True, True, 0)
-		self._hbox.pack_start(self._button, False, False, 0)
+		if Gtk.get_major_version() == 3:
+			self._hbox.pack_start(self._lock_image, False, False, 0)
+			self._hbox.pack_start(self._label, True, True, 0)
+			self._hbox.pack_start(self._button, False, False, 0)
+
+		else:
+			self._hbox.append(self._lock_image)
+			self._label.set_hexpand(True)
+			self._hbox.append(self._label)
+			self._hbox.append(self._button)
+
+			# label fills the tab but must not make the tab itself expand
+			self._hbox.set_hexpand(False)
+			self._container.set_hexpand(False)
 
 		# show controls
 		if self._application.options.get('tab_close_button'):
 			self._button.show()
 			self._hbox.set_spacing(3)
 
-		self._container.show_all()
+		if Gtk.get_major_version() == 3:
+			self._container.show_all()
+
+	def _button_released(self, gesture, count, x, y):
+		"""Handle mouse button release on tab label (GTK 4)"""
+		return self._handle_button_release(gesture.get_current_button())
 
 	def _close_tab(self, widget=None, mode=None):
 		"""Handle clicking on close button"""
@@ -111,20 +156,28 @@ class TabLabel:
 			menu.append(item)
 
 		menu.popup_at_pointer()
-		menu.show_all()
+		if Gtk.get_major_version() == 3:
+			menu.show_all()
+
+		else:
+			menu.show()
 
 	def _button_release_event(self, widget, event, data=None):
 		"""
 		Handle clicking on the tab itself, when middle button is pressed
 		the tab is closed.
 		"""
+		return self._handle_button_release(event.button)
+
+	def _handle_button_release(self, button):
+		"""Handle released mouse button regardless of the toolkit version"""
 		result = False
 
-		if event.button == 2:
+		if button == 2:
 			self._close_tab()
 			result = True
 
-		elif event.button == 3:
+		elif button == 3:
 			self._show_menu()
 			result = False
 

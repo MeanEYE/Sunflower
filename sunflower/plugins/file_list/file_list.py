@@ -264,7 +264,8 @@ class FileList(ItemList):
 		# set row hinting
 		section = self._parent.options.section('item_list')
 		row_hinting = section.get('row_hinting')
-		self._item_list.set_rules_hint(row_hinting)
+		if Gtk.get_major_version() == 3:
+			self._item_list.set_rules_hint(row_hinting)
 
 		# set visibility of tree expanders
 		self._show_expanders = section.get('show_expanders')
@@ -476,13 +477,13 @@ class FileList(ItemList):
 		else:
 			# invalid selection, warn user
 			dialog = Gtk.MessageDialog(
-									self._parent,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.WARNING,
-									Gtk.ButtonsType.OK,
-									_('Invalid selection!')
+									transient_for=self._parent,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.WARNING,
+									buttons=Gtk.ButtonsType.OK,
+									text=_('Invalid selection!')
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 		return True
@@ -649,16 +650,16 @@ class FileList(ItemList):
 			except OSError as error:
 				# error creating, report to user
 				dialog = Gtk.MessageDialog(
-										self._parent,
-										Gtk.DialogFlags.DESTROY_WITH_PARENT,
-										Gtk.MessageType.ERROR,
-										Gtk.ButtonsType.OK,
-										_(
+										transient_for=self._parent,
+										destroy_with_parent=True,
+										message_type=Gtk.MessageType.ERROR,
+										buttons=Gtk.ButtonsType.OK,
+										text=_(
 											"There was an error creating directory. "
 											"Make sure you have enough permissions. "
 										) + "\n\n{0}".format(error)
 									)
-				dialog.run()
+				run_dialog(dialog)
 				dialog.destroy()
 
 		return True
@@ -715,16 +716,16 @@ class FileList(ItemList):
 		except OSError as error:
 			# error creating, report to user
 			dialog = Gtk.MessageDialog(
-									self._parent,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.ERROR,
-									Gtk.ButtonsType.OK,
-									_(
+									transient_for=self._parent,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.ERROR,
+									buttons=Gtk.ButtonsType.OK,
+									text=_(
 										"There was an error creating file. "
 										"Make sure you have enough permissions."
 									) + "\n\n{0}".format(error)
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 		return True
@@ -777,15 +778,15 @@ class FileList(ItemList):
 				except Exception as error:
 					# there was a problem creating link, let the user know
 					dialog = Gtk.MessageDialog(
-											self._parent,
-											Gtk.DialogFlags.DESTROY_WITH_PARENT,
-											Gtk.MessageType.ERROR,
-											Gtk.ButtonsType.OK,
-											_(
+											transient_for=self._parent,
+											destroy_with_parent=True,
+											message_type=Gtk.MessageType.ERROR,
+											buttons=Gtk.ButtonsType.OK,
+											text=_(
 												"Error creating new link."
 											) +	"\n\n{0}".format(error)
 										)
-					dialog.run()
+					run_dialog(dialog)
 					dialog.destroy()
 
 				finally:
@@ -794,13 +795,13 @@ class FileList(ItemList):
 		else:
 			# current file system doesn't support linking
 			dialog = Gtk.MessageDialog(
-									self._parent,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.INFO,
-									Gtk.ButtonsType.OK,
-									_('Current file system does not support linking.')
+									transient_for=self._parent,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.INFO,
+									buttons=Gtk.ButtonsType.OK,
+									text=_('Current file system does not support linking.')
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 		return result
@@ -993,32 +994,32 @@ class FileList(ItemList):
 				except IOError as error:
 					# problem renaming item
 					dialog = Gtk.MessageDialog(
-											self._parent,
-											Gtk.DialogFlags.DESTROY_WITH_PARENT,
-											Gtk.MessageType.ERROR,
-											Gtk.ButtonsType.OK,
-											_(
+											transient_for=self._parent,
+											destroy_with_parent=True,
+											message_type=Gtk.MessageType.ERROR,
+											buttons=Gtk.ButtonsType.OK,
+											text=_(
 												"Error renaming specified item. Make sure "
 												"you have enough permissions."
 											) +	"\n\n{0}".format(error)
 										)
-					dialog.run()
+					run_dialog(dialog)
 					dialog.destroy()
 
 			else:
 				# file/directory already exists
 				dialog = Gtk.MessageDialog(
-										self._parent,
-										Gtk.DialogFlags.DESTROY_WITH_PARENT,
-										Gtk.MessageType.ERROR,
-										Gtk.ButtonsType.OK,
-										_(
+										transient_for=self._parent,
+										destroy_with_parent=True,
+										message_type=Gtk.MessageType.ERROR,
+										buttons=Gtk.ButtonsType.OK,
+										text=_(
 											"File or directory with specified name already "
 											"exists in current directory. Item could not "
 											"be renamed."
 										)
 									)
-				dialog.run()
+				run_dialog(dialog)
 				dialog.destroy()
 
 		return True
@@ -1302,8 +1303,7 @@ class FileList(ItemList):
 			# add item
 			if should_add:
 				self._add_item(path, parent, parent_path)
-				Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
-
+				GLib.idle_add(self._flush_queue, parent, priority=GLib.PRIORITY_HIGH_IDLE)
 			else:
 				self._update_item_details_by_name(path, parent, parent_path)
 
@@ -1331,7 +1331,7 @@ class FileList(ItemList):
 
 			if should_add:
 				self._add_item(other_path, parent, parent_path)
-				Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
+				GLib.idle_add(self._flush_queue, parent, priority=GLib.PRIORITY_HIGH_IDLE)
 			else:
 				self._update_item_details_by_name(other_path, parent, parent_path)
 
@@ -1482,13 +1482,13 @@ class FileList(ItemList):
 		# display error message if selection has no files
 		if selection_list is None:
 			dialog = Gtk.MessageDialog(
-									widget,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.INFO,
-									Gtk.ButtonsType.OK,
-									_('No files selected.')
+									transient_for=widget,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.INFO,
+									buttons=Gtk.ButtonsType.OK,
+									text=_('No files selected.')
 								)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 			return True
 
@@ -1620,8 +1620,7 @@ class FileList(ItemList):
 			self._item_queue.append(data)
 
 			if len(self._item_queue) == 100:
-				Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
-
+				GLib.idle_add(self._flush_queue, parent, priority=GLib.PRIORITY_HIGH_IDLE)
 		except Exception as error:
 			print(u'Error: {0} - {1}'.format(filename, str(error)))
 
@@ -1642,12 +1641,10 @@ class FileList(ItemList):
 				path_to_select = self._store.get_path(new_iter)
 
 		# schedule sort data update
-		Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._generate_sort_data)
-
+		GLib.idle_add(self._generate_sort_data, priority=GLib.PRIORITY_DEFAULT_IDLE)
 		# select path if needed
 		if path_to_select is not None:
-			Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._item_list.set_cursor, path_to_select)
-
+			GLib.idle_add(self._item_list.set_cursor, path_to_select, priority=GLib.PRIORITY_HIGH_IDLE)
 		# clear item queue
 		self._item_queue[:] = []
 
@@ -1853,8 +1850,19 @@ class FileList(ItemList):
 
 			if action['icon']:
 				image = Gtk.Image()
-				image.set_from_icon_name(action['icon'], Gtk.IconSize.MENU)
-				menu_item.set_image(image)
+				if Gtk.get_major_version() == 3:
+					image.set_from_icon_name(action['icon'], Gtk.IconSize.MENU)
+
+				else:
+					image.set_from_icon_name(action['icon'])
+				if Gtk.get_major_version() == 3:
+					menu_item.set_image(image)
+
+				else:
+					button_content = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
+					button_content.append(image)
+					button_content.append(Gtk.Label.new(menu_item.get_label()))
+					menu_item.set_child(button_content)
 
 			menu_item.set_label(action['name'])
 			menu_item.connect(
@@ -1873,7 +1881,11 @@ class FileList(ItemList):
 		menu.append(menu_item)
 
 		# show menu in separate user interface thread
-		menu.show_all()
+		if Gtk.get_major_version() == 3:
+			menu.show_all()
+
+		else:
+			menu.show()
 		menu.connect('deactivate', Gtk.main_quit)
 		menu.popup_at_pointer()
 		Gtk.main()
@@ -1997,8 +2009,7 @@ class FileList(ItemList):
 		# load items in separate thread
 		def thread_method():
 			self._thread_active.set()
-			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._title_bar.show_spinner)
-
+			GLib.idle_add(self._title_bar.show_spinner, priority=GLib.PRIORITY_DEFAULT_IDLE)
 			# preload emblems for faster operation
 			self._emblem_cache = self._parent.emblem_manager.get_emblems_for_path(path)
 
@@ -2014,7 +2025,7 @@ class FileList(ItemList):
 				self._thread_active.clear()
 				self._main_thread_lock.clear()
 
-				Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._title_bar.hide_spinner)
+				GLib.idle_add(self._title_bar.hide_spinner, priority=GLib.PRIORITY_DEFAULT_IDLE)
 				return
 
 			# remove hidden files if we don't need them
@@ -2050,14 +2061,11 @@ class FileList(ItemList):
 				# add item to the list
 				self._add_item(item_name, parent, parent_path)
 
-			Gdk.threads_add_idle(GLib.PRIORITY_HIGH_IDLE, self._flush_queue, parent)
-
+			GLib.idle_add(self._flush_queue, parent, priority=GLib.PRIORITY_HIGH_IDLE)
 			# hide spinner animation
-			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._title_bar.hide_spinner)
-
+			GLib.idle_add(self._title_bar.hide_spinner, priority=GLib.PRIORITY_DEFAULT_IDLE)
 			# update status bar
-			Gdk.threads_add_idle(GLib.PRIORITY_DEFAULT_IDLE, self._update_status_with_statistis)
-
+			GLib.idle_add(self._update_status_with_statistis, priority=GLib.PRIORITY_DEFAULT_IDLE)
 			# release locks
 			self._thread_active.clear()
 			self._main_thread_lock.clear()
@@ -2170,17 +2178,17 @@ class FileList(ItemList):
 			# TODO: Solve problem when program is not able to go up the
 			# history lane but can't change to specified directory.
 			dialog = Gtk.MessageDialog(
-									self._parent,
-									Gtk.DialogFlags.DESTROY_WITH_PARENT,
-									Gtk.MessageType.ERROR,
-									Gtk.ButtonsType.YES_NO,
-									_(
+									transient_for=self._parent,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.ERROR,
+									buttons=Gtk.ButtonsType.YES_NO,
+									text=_(
 										"Error changing working directory to:"
 										"\n{1}\n\n{0}\n\nWould you like to retry?"
 									).format(error, common.decode_file_name(path))
 								)
 			dialog.set_default_response(Gtk.ResponseType.YES)
-			result = dialog.run()
+			result = run_dialog(dialog)
 			dialog.destroy()
 
 			# remove invalid paths from history so we don't end up in a dead loop
@@ -2368,7 +2376,8 @@ class FileList(ItemList):
 
 		# apply row hinting
 		row_hinting = section.get('row_hinting')
-		self._item_list.set_rules_hint(row_hinting)
+		if Gtk.get_major_version() == 3:
+			self._item_list.set_rules_hint(row_hinting)
 
 		# apply expander visibility
 		self._show_expanders = section.get('show_expanders')

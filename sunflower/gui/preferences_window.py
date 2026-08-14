@@ -33,13 +33,28 @@ class PreferencesWindow(Gtk.Window):
 		self.set_modal(True)
 		self.set_transient_for(parent)
 
-		self.connect('delete_event', self._hide)
-		self.connect('key-press-event', self._handle_key_press)
+		if Gtk.get_major_version() == 3:
+			self.connect('delete_event', self._hide)
+			self.connect('key-press-event', self._handle_key_press)
+
+		else:
+			event_controller = Gtk.EventControllerKey.new()
+			event_controller.connect('key-pressed', self._handle_key_pressed)
+
+			self.connect('close-request', self._hide)
+			self.add_controller(event_controller)
 
 		# create user interface
 		header_bar = Gtk.HeaderBar.new()
-		header_bar.set_show_close_button(True)
-		header_bar.set_title(_('Preferences'))
+
+		if Gtk.get_major_version() == 3:
+			header_bar.set_show_close_button(True)
+			header_bar.set_title(_('Preferences'))
+
+		else:
+			# GTK 4 header bar shows window title on its own
+			header_bar.set_show_title_buttons(True)
+
 		self.set_titlebar(header_bar)
 
 		hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
@@ -73,39 +88,79 @@ class PreferencesWindow(Gtk.Window):
 
 		# restart label
 		self._label_restart = Gtk.Label(label='<i>{0}</i>'.format(_('Program restart required!')))
-		self._label_restart.set_alignment(0.5, 0.5)
 		self._label_restart.set_use_markup(True)
-		self._label_restart.set_property('no-show-all', True)
+		self._label_restart.set_xalign(0.5)
+		self._label_restart.set_yalign(0.5)
+
+		if Gtk.get_major_version() == 3:
+			self._label_restart.set_property('no-show-all', True)
+
+		else:
+			# GTK 4 has no show-all so hiding the label is enough
+			self._label_restart.hide()
 
 		# pack buttons
-		hbox.pack_start(self._labels, False, False, 0)
-		hbox.pack_start(self._tabs, True, True, 0)
+		if Gtk.get_major_version() == 3:
+			hbox.pack_start(self._labels, False, False, 0)
+			hbox.pack_start(self._tabs, True, True, 0)
+
+		else:
+			hbox.append(self._labels)
+			self._tabs.set_hexpand(True)
+			hbox.append(self._tabs)
 
 		header_bar.pack_start(self._label_restart)
 		header_bar.pack_end(self._button_save)
 		header_bar.pack_end(self._button_revert)
 
-		self.add(hbox)
+		if Gtk.get_major_version() == 3:
+			self.add(hbox)
+
+		else:
+			self.set_child(hbox)
 
 	def show(self, widget, tab_name=None):
 		"""Show dialog, focusing requested page, and reload options."""
 		self._load_options()
-		self.show_all()
+
+		if Gtk.get_major_version() == 3:
+			self.show_all()
+
+		else:
+			self.present()
+
 		if tab_name:
 			self._tabs.set_visible_child_name(tab_name)
 		return True
+
+	def _get_pages(self):
+		"""Return list of option pages regardless of the toolkit version"""
+		if Gtk.get_major_version() == 3:
+			return self._tabs.get_children()
+
+		return [page.get_child() for page in self._tabs.get_pages()]
 
 	def _hide(self, widget=None, data=None):
 		"""Hide dialog"""
 		should_close = True
 
+		# GTK 4 dialogs are asynchronous, window is closed from response handler
+		if Gtk.get_major_version() != 3:
+			if self._button_save.get_sensitive():
+				self._show_unsaved_changes_dialog()
+
+			else:
+				self.hide()
+
+			return True
+
 		if self._button_save.get_sensitive():
 			dialog = Gtk.MessageDialog(
-			                    self,
-			                    Gtk.DialogFlags.DESTROY_WITH_PARENT,
-			                    Gtk.MessageType.QUESTION,
-								Gtk.ButtonsType.NONE,
-			                    _("There are unsaved changes.\nDo you want to save them?")
+			                    transient_for=self,
+			                    destroy_with_parent=True,
+			                    message_type=Gtk.MessageType.QUESTION,
+			                    buttons=Gtk.ButtonsType.NONE,
+			                    text=_("There are unsaved changes.\nDo you want to save them?")
 			                )
 			dialog.add_buttons(
 						Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
@@ -113,7 +168,7 @@ class PreferencesWindow(Gtk.Window):
 						Gtk.STOCK_YES, Gtk.ResponseType.YES,
 					)
 			dialog.set_default_response(Gtk.ResponseType.YES)
-			result = dialog.run()
+			result = run_dialog(dialog)
 			dialog.destroy()
 
 			if result == Gtk.ResponseType.YES:
@@ -127,10 +182,39 @@ class PreferencesWindow(Gtk.Window):
 
 		return True  # avoid destroying components
 
+	def _show_unsaved_changes_dialog(self):
+		"""Ask user what to do with unsaved changes (GTK 4)"""
+		dialog = Gtk.MessageDialog(
+							transient_for=self,
+							modal=True,
+							message_type=Gtk.MessageType.QUESTION,
+							buttons=Gtk.ButtonsType.NONE,
+							text=_("There are unsaved changes.\nDo you want to save them?")
+						)
+		dialog.add_buttons(
+					_('Cancel'), Gtk.ResponseType.CANCEL,
+					_('No'), Gtk.ResponseType.NO,
+					_('Yes'), Gtk.ResponseType.YES,
+				)
+		dialog.set_default_response(Gtk.ResponseType.YES)
+		dialog.connect('response', self._handle_unsaved_changes_response)
+		dialog.present()
+
+	def _handle_unsaved_changes_response(self, dialog, response):
+		"""Handle response from unsaved changes dialog (GTK 4)"""
+		dialog.destroy()
+
+		if response == Gtk.ResponseType.YES:
+			self._save_options()
+			self.hide()
+
+		elif response == Gtk.ResponseType.NO:
+			self.hide()
+
 	def _load_options(self, widget=None, data=None):
 		"""Change interface to present current state of configuration"""
 		# call all tabs to load their options
-		pages = filter(lambda page: hasattr(page, '_load_options'), self._tabs.get_children())
+		pages = filter(lambda page: hasattr(page, '_load_options'), self._get_pages())
 		list(map(lambda page: page._load_options(), pages))
 
 		# disable save button and hide label
@@ -141,7 +225,7 @@ class PreferencesWindow(Gtk.Window):
 	def _save_options(self, widget=None, data=None):
 		"""Save options"""
 		# call all tabs to save their options
-		pages = filter(lambda page: hasattr(page, '_save_options'), self._tabs.get_children())
+		pages = filter(lambda page: hasattr(page, '_save_options'), self._get_pages())
 		list(map(lambda page: page._save_options(), pages))
 
 		# disable save button
@@ -155,9 +239,17 @@ class PreferencesWindow(Gtk.Window):
 		self._parent.save_config()
 
 	def _handle_key_press(self, widget, event, data=None):
-		"""Handle pressing keys"""
+		"""Handle pressing keys (GTK 3)"""
 		if event.keyval == Gdk.KEY_Escape:
 			self._hide()
+
+	def _handle_key_pressed(self, controller, keyval, keycode, state):
+		"""Handle pressing keys (GTK 4)"""
+		if keyval == Gdk.KEY_Escape:
+			self._hide()
+			return True
+
+		return False
 
 	def enable_save(self, widget=None, show_restart=None):
 		"""Enable save button"""

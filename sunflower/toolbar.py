@@ -15,7 +15,13 @@ class ToolbarManager:
 		self._factory_cache = {}
 		self._factories = []
 
-		self._toolbar = Gtk.Toolbar()
+		if Gtk.get_major_version() == 3:
+			self._toolbar = Gtk.Toolbar()
+
+		else:
+			# GTK 4 has no toolbar widget, style class on a box provides the same look
+			self._toolbar = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+			self._toolbar.get_style_context().add_class('toolbar')
 
 	def get_toolbar(self):
 		"""Return toolbar widget"""
@@ -57,7 +63,15 @@ class ToolbarManager:
 	def create_widgets(self):
 		"""Create widgets for toolbar"""
 		# remove existing widgets
-		self._toolbar.foreach(lambda item: self._toolbar.remove(item))
+		if Gtk.get_major_version() == 3:
+			self._toolbar.foreach(lambda item: self._toolbar.remove(item))
+
+		else:
+			child = self._toolbar.get_first_child()
+			while child is not None:
+				next_child = child.get_next_sibling()
+				self._toolbar.remove(child)
+				child = next_child
 
 		# create new widgets
 		for item in self._config.get('items'):
@@ -76,7 +90,12 @@ class ToolbarManager:
 
 			if widget is not None:
 				widget.show()
-				self._toolbar.add(widget)
+
+				if Gtk.get_major_version() == 3:
+					self._toolbar.add(widget)
+
+				else:
+					self._toolbar.append(widget)
 
 	def register_factory(self, FactoryClass):
 		"""Register and create new factory"""
@@ -114,16 +133,16 @@ class ToolbarManager:
 			if None in (name, widget_type) or name == '':
 				# user didn't input all the data
 				dialog = Gtk.MessageDialog(
-					window,
-					Gtk.DialogFlags.DESTROY_WITH_PARENT,
-					Gtk.MessageType.ERROR,
-					Gtk.ButtonsType.OK,
-					_(
+					transient_for=window,
+					destroy_with_parent=True,
+					message_type=Gtk.MessageType.ERROR,
+					buttons=Gtk.ButtonsType.OK,
+					text=_(
 						"Error adding widget. You need to enter unique "
 						"name and select widget type."
 					)
 				)
-				dialog.run()
+				run_dialog(dialog)
 				dialog.destroy()
 
 			else:
@@ -148,17 +167,17 @@ class ToolbarManager:
 		if not widget_type in self._factory_cache:
 			# there is no factory for specified type, show error and return
 			dialog = Gtk.MessageDialog(
-				window,
-				Gtk.DialogFlags.DESTROY_WITH_PARENT,
-				Gtk.MessageType.ERROR,
-				Gtk.ButtonsType.OK,
-				_(
+				transient_for=window,
+				destroy_with_parent=True,
+				message_type=Gtk.MessageType.ERROR,
+				buttons=Gtk.ButtonsType.OK,
+				text=_(
 					"Plugin used to create selected toolbar widget is not active "
 					"or not present. In order to edit this entry you need to activate "
 					"plugin used to create it."
 				)
 			)
-			dialog.run()
+			run_dialog(dialog)
 			dialog.destroy()
 
 			return False
@@ -175,6 +194,10 @@ class ToolbarManager:
 
 	def apply_settings(self):
 		"""Apply toolbar settings"""
+		# GTK 4 dropped toolbar style and icon size properties, widgets style themselves
+		if Gtk.get_major_version() != 3:
+			return
+
 		style = (
 			Gtk.ToolbarStyle.ICONS,
 			Gtk.ToolbarStyle.TEXT,

@@ -9,7 +9,11 @@ class ContextMenu:
 
 		# create popover interface
 		self._popover = Gtk.Popover.new()
-		self._popover.set_relative_to(relative_to)
+		if Gtk.get_major_version() == 3:
+			self._popover.set_relative_to(relative_to)
+
+		else:
+			self._popover.set_parent(relative_to)
 		self._popover.set_position(Gtk.PositionType.BOTTOM)
 
 		# create widget container
@@ -17,15 +21,32 @@ class ContextMenu:
 		set_border_width(self._container, 10)
 
 		# show all widgets inside of container
-		self._container.show_all()
+		if Gtk.get_major_version() == 3:
+			self._container.show_all()
+
+		else:
+			self._container.show()
 
 		# pack interface
-		self._popover.add(self._container)
+		if Gtk.get_major_version() == 3:
+			self._popover.add(self._container)
+
+		else:
+			self._popover.set_child(self._container)
 
 	def add_control(self, control, fill=False, spacing=0):
 		"""Add specified control to the context menu."""
-		control.show_all()
-		self._container.pack_start(control, fill, False, spacing)
+		if Gtk.get_major_version() == 3:
+			control.show_all()
+
+		else:
+			control.show()
+		if Gtk.get_major_version() == 3:
+			self._container.pack_start(control, fill, False, spacing)
+
+		else:
+			set_border_width(control, spacing)
+			self._container.append(control)
 
 	def show(self):
 		"""Show context menu for current directory."""

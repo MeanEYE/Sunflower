@@ -16,7 +16,13 @@ class Breadcrumbs:
 		self.container.get_hscrollbar().hide()
 
 		self.box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
-		self.container.add_with_viewport(self.box)
+
+		if Gtk.get_major_version() == 3:
+			self.container.add_with_viewport(self.box)
+
+		else:
+			# GTK 4 scrolled windows create the viewport themselves
+			self.container.set_child(self.box)
 
 		# change the look of container
 		self.container.set_focus_on_click(False)
@@ -27,7 +33,11 @@ class Breadcrumbs:
 		self._updating = False
 		self._group = None
 
-		self.container.show_all()
+		if Gtk.get_major_version() == 3:
+			self.container.show_all()
+
+		else:
+			self.container.show()
 
 	def __fragment_click(self, widget, data=None):
 		"""Handle clicking on path fragment."""
@@ -72,7 +82,18 @@ class Breadcrumbs:
 
 		if self._path is not None and self._path.startswith(path):
 			# path is a subset, update highlight and exit
-			for control in self.box.get_children():
+			if Gtk.get_major_version() == 3:
+				controls = self.box.get_children()
+
+			else:
+				# GTK 4 walks children through siblings
+				controls = []
+				child = self.box.get_first_child()
+				while child is not None:
+					controls.append(child)
+					child = child.get_next_sibling()
+
+			for control in controls:
 				if control.path == path:
 					self._focus_fragment(control, is_new=False)
 					break
@@ -80,7 +101,15 @@ class Breadcrumbs:
 		else:
 			# prepare for parsing
 			self._path = path
-			self.box.foreach(self.box.remove)
+			if Gtk.get_major_version() == 3:
+				self.box.foreach(self.box.remove)
+
+			else:
+				child = self.box.get_first_child()
+				while child is not None:
+					next_child = child.get_next_sibling()
+					self.box.remove(child)
+					child = next_child
 
 			# split root element from others
 			root_element = provider.get_root_path(path)
@@ -108,7 +137,11 @@ class Breadcrumbs:
 						control,
 						None if control is not None else root_icon  # icon
 						)
-				self.box.pack_start(control, False, False, 0)
+				if Gtk.get_major_version() == 3:
+					self.box.pack_start(control, False, False, 0)
+
+				else:
+					self.box.append(control)
 
 			if control is not None:
 				GObject.idle_add(self._focus_fragment, control)
@@ -129,12 +162,22 @@ class Fragment(Gtk.Box):
 		# create separator label
 		if previous is not None:
 			label = Gtk.Label.new('/')
-			self.pack_start(label, False, False, 0)
+			if Gtk.get_major_version() == 3:
+				self.pack_start(label, False, False, 0)
+
+			else:
+				self.append(label)
 
 		# create button
-		self._button = Gtk.RadioButton.new()
+		if Gtk.get_major_version() == 3:
+			self._button = Gtk.RadioButton.new()
+			self._button.set_mode(False)
+
+		else:
+			# GTK 4 dropped radio buttons, toggle buttons give the same look
+			self._button = Gtk.ToggleButton.new()
+
 		self._button.set_focus_on_click(False)
-		self._button.set_mode(False)
 		self._button.connect('clicked', self.click_handler)
 		self._button.path = path
 
@@ -145,22 +188,48 @@ class Fragment(Gtk.Box):
 			if isinstance(icon, Gio.ThemedIcon):
 				image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
 			else:
-				image = Gtk.Image.new_from_icon_name(icon, Gtk.IconSize.BUTTON)
+				if Gtk.get_major_version() == 3:
+					image = Gtk.Image.new_from_icon_name(icon, Gtk.IconSize.BUTTON)
+
+				else:
+					image = Gtk.Image.new_from_icon_name(icon)
 			label = Gtk.Label.new(text)
-			label.set_alignment(0, 0.5)
+			label.set_xalign(0)
+			label.set_yalign(0.5)
 
 			hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 2)
-			hbox.pack_start(image, False, False, 0)
-			hbox.pack_start(label, False, False, 0)
+			if Gtk.get_major_version() == 3:
+				hbox.pack_start(image, False, False, 0)
+				hbox.pack_start(label, False, False, 0)
 
-			self._button.add(hbox)
+			else:
+				hbox.append(image)
+				hbox.append(label)
+
+			if Gtk.get_major_version() == 3:
+				self._button.add(hbox)
+
+			else:
+				self._button.set_child(hbox)
 
 		if previous is not None:
-			self._button.join_group(previous._button)
+			if Gtk.get_major_version() == 3:
+				self._button.join_group(previous._button)
 
-		self.pack_start(self._button, False, False, 0)
+			else:
+				self._button.set_group(previous._button)
 
-		self.show_all()
+		if Gtk.get_major_version() == 3:
+			self.pack_start(self._button, False, False, 0)
+
+		else:
+			self.append(self._button)
+
+		if Gtk.get_major_version() == 3:
+			self.show_all()
+
+		else:
+			self.show()
 
 	def set_active(self, active):
 		"""Set button active state."""

@@ -18,42 +18,74 @@ class SettingsPage(Gtk.ScrolledWindow):
 		set_border_width(self._box, 15)
 
 		# add page to preferences window
-		self.add(self._box)
+		if Gtk.get_major_version() == 3:
+			self.add(self._box)
+
+		else:
+			self.set_child(self._box)
+
 		self._parent.add_tab(self._page_name, self._page_title, self)
+
+	def _create_title_label(self, title):
+		"""Create label used as section title."""
+		label_title = Gtk.Label.new('<big>{}</big>'.format(title))
+		label_title.set_use_markup(True)
+		label_title.set_xalign(0)
+		label_title.set_yalign(0.5)
+
+		return label_title
 
 	def _create_section(self, title, container):
 		"""Create widget section with title."""
 		box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		# create section title
-		label_title = Gtk.Label.new('<big>{}</big>'.format(title))
-		label_title.set_alignment(0, 0.5)
-		label_title.set_use_markup(True)
-		box.pack_start(label_title, True, False, 0)
-		box.pack_start(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL), True, False, 0)
-
-		# pack container
-		box.pack_start(container, True, False, 0)
+		label_title = self._create_title_label(title)
+		separator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
 		set_border_width(container, 10)
-		self._box.pack_start(box, False, False, 0)
+
+		if Gtk.get_major_version() == 3:
+			box.pack_start(label_title, True, False, 0)
+			box.pack_start(separator, True, False, 0)
+			box.pack_start(container, True, False, 0)
+			self._box.pack_start(box, False, False, 0)
+
+		else:
+			box.append(label_title)
+			box.append(separator)
+			box.append(container)
+			self._box.append(box)
 
 	def _create_radio_section(self, title, container, group=None):
 		"""Create section which contains radio button and return radio button."""
 		box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
 		# create section title
-		label_title = Gtk.Label.new('<big>{}</big>'.format(title))
-		label_title.set_alignment(0, 0.5)
-		label_title.set_use_markup(True)
-		radio_title = Gtk.RadioButton.new_from_widget(group)
-		radio_title.add(label_title)
-		box.pack_start(radio_title, True, False, 0)
-		box.pack_start(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL), True, False, 0)
-
-		# pack container
-		box.pack_start(container, True, False, 0)
+		label_title = self._create_title_label(title)
+		separator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
 		set_border_width(container, 10)
-		self._box.pack_start(box, False, False, 0)
+
+		if Gtk.get_major_version() == 3:
+			radio_title = Gtk.RadioButton.new_from_widget(group)
+			radio_title.add(label_title)
+
+			box.pack_start(radio_title, True, False, 0)
+			box.pack_start(separator, True, False, 0)
+			box.pack_start(container, True, False, 0)
+			self._box.pack_start(box, False, False, 0)
+
+		else:
+			# GTK 4 dropped radio buttons in favor of grouped check buttons
+			radio_title = Gtk.CheckButton.new()
+			radio_title.set_child(label_title)
+
+			if group is not None:
+				radio_title.set_group(group)
+
+			box.append(radio_title)
+			box.append(separator)
+			box.append(container)
+			self._box.append(box)
 
 		return radio_title
 
@@ -67,8 +99,16 @@ class SettingsPage(Gtk.ScrolledWindow):
 
 	def pack_start(self, *args, **kwargs):
 		"""Pack things in container."""
-		self._box.pack_start(*args, **kwargs)
+		if Gtk.get_major_version() == 3:
+			self._box.pack_start(*args, **kwargs)
+
+		else:
+			self._box.append(args[0])
 
 	def pack_end(self, *args, **kwargs):
 		"""Pack things in container."""
-		self._box.pack_end(*args, **kwargs)
+		if Gtk.get_major_version() == 3:
+			self._box.pack_end(*args, **kwargs)
+
+		else:
+			self._box.append(args[0])

@@ -4,7 +4,7 @@ import subprocess
 import locale
 import sys
 
-from gi.repository import Gio, Pango
+from gi.repository import Gio, Pango, GObject
 
 
 # user directories
@@ -212,14 +212,52 @@ def load_translation():
 
 def install_helper_methods():
 	"""Add helper methods to the builtins list for easy access."""
+	from gi.repository import Gtk, GLib
+
 	def set_border_width(widget, border):
 		widget.set_margin_start(border)
 		widget.set_margin_end(border)
 		widget.set_margin_top(border)
 		widget.set_margin_bottom(border)
 
+	def run_dialog(dialog):
+		"""Present dialog and block until user responds.
+
+		GTK 4 removed Gtk.Dialog.run so a nested main loop provides the
+		blocking behavior callers expect. Loop is also stopped when dialog
+		is destroyed without a response to avoid blocking forever.
+
+		"""
+		if Gtk.get_major_version() == 3:
+			return dialog.run()
+
+		loop = GLib.MainLoop.new(None, False)
+		response = []
+
+		def handle_response(dialog, response_id):
+			response.append(response_id)
+			loop.quit()
+
+		def handle_destroy(dialog):
+			loop.quit()
+
+		handlers = (
+				dialog.connect('response', handle_response),
+				dialog.connect('destroy', handle_destroy)
+			)
+
+		dialog.present()
+		loop.run()
+
+		for handler in handlers:
+			if GObject.signal_handler_is_connected(dialog, handler):
+				dialog.disconnect(handler)
+
+		return response[0] if response else Gtk.ResponseType.DELETE_EVENT
+
 	__builtins__.update({
-		'set_border_width': set_border_width
+		'set_border_width': set_border_width,
+		'run_dialog': run_dialog
 		})
 
 def decode_file_name(file_name):

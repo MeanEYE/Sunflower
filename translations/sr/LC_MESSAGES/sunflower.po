@@ -1,24 +1,28 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Sunflower package.
-# 
+#
 # Translators:
 # Bojan Bogdanović (Бојан Богдановић), 2015
 # Bojan Bogdanović (Бојан Богдановић), 2015
 # Mladen Mijatov <meaneye.rcf@gmail.com>, 2016,2020,2025
+# Младен Мијатов <meaneye.rcf@gmail.com>, 2026.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-04 23:37+0200\n"
-"PO-Revision-Date: 2014-07-27 12:02+0000\n"
-"Last-Translator: Mladen Mijatov <meaneye.rcf@gmail.com>, 2016,2020,2025\n"
-"Language-Team: Serbian (http://app.transifex.com/way2cu/sunflower/language/sr/)\n"
+"PO-Revision-Date: 2026-07-18 00:34+0200\n"
+"Last-Translator: Младен Мијатов <meaneye.rcf@gmail.com>\n"
+"Language-Team: Serbian\n"
+"Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sr\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : "
+"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Gtranslator 50.0\n"
 
 #: sunflower/operation.py:115
 #, python-brace-format
@@ -26,68 +30,85 @@ msgid ""
 "Aborted. Not enough free space on target file system.\n"
 "Needed: {0}\n"
 "Available: {1}"
-msgstr "Операција отказана. Недовољно слободног простора на дестинацији.Потребно: {0} Доступно: {1}"
+msgstr ""
+"Операција отказана. Недовољно слободног простора на дестинацији.\n"
+"Потребно: {0}\n"
+"Доступно: {1}"
 
 #: sunflower/operation.py:130
 #, python-brace-format
 msgid ""
-"Target file system does not have enough free space for this operation to continue.\n"
+"Target file system does not have enough free space for this operation to "
+"continue.\n"
 "\n"
 "Needed: {0}\n"
 "Available: {1}\n"
 "\n"
 "Do you wish to continue?"
-msgstr "Недовољно слободног простора на дестинацији за успешан завршетак ове операције.Потребно: {0}Доступно: {1}Да ли желите да наставите?"
+msgstr ""
+"Недовољно слободног простора на дестинацији за успешан завршетак ове "
+"операције.Потребно: {0}Доступно: {1}Да ли желите да наставите?"
 
 #: sunflower/operation.py:265
 msgid ""
 "There is a problem writing data to destination file. What would you like to "
 "do?"
-msgstr "Настао је проблем приликом писања података у датотеку на дестинацији. Која је ваша одлука?"
+msgstr ""
+"Настао је проблем приликом писања података у датотеку на дестинацији. Која "
+"је ваша одлука?"
 
 #: sunflower/operation.py:307
 msgid ""
-"An error occurred while trying to create specified file. What would you like"
-" to do?"
-msgstr "Настао је проблем приликом прављења датотеке на дестинацији. Која је ваша одлука?"
+"An error occurred while trying to create specified file. What would you like "
+"to do?"
+msgstr ""
+"Настао је проблем приликом прављења датотеке на дестинацији. Која је ваша "
+"одлука?"
 
 #: sunflower/operation.py:314
 msgid ""
-"An error occurred while trying to create specified directory. What would you"
-" like to do?"
-msgstr "Настао је проблем приликом прављења директоријума. Која је ваша одлука?"
+"An error occurred while trying to create specified directory. What would you "
+"like to do?"
+msgstr ""
+"Настао је проблем приликом прављења директоријума. Која је ваша одлука?"
 
 #: sunflower/operation.py:354
 msgid ""
 "Problem with setting path parameter for specified path. What would you like "
 "to do?"
-msgstr "Настао је проблем приликом постаљања параметара на одређеној путањи. Која је ваша одлука?"
+msgstr ""
+"Настао је проблем приликом постаљања параметара на одређеној путањи. Која је "
+"ваша одлука?"
 
 #: sunflower/operation.py:393
-msgid ""
-"There was a problem removing specified path. What would you like to do?"
+msgid "There was a problem removing specified path. What would you like to do?"
 msgstr "Настао је проблем приликом брисања путање. Која је ваша одлука?"
 
 #: sunflower/operation.py:432
 msgid ""
 "There was a problem trashing specified path. Would you like to try removing "
 "it instead?"
-msgstr "Настао је проблем приликом пребацивања путање у канту за отпатке. Која је ваша одлука?"
+msgstr ""
+"Настао је проблем приликом пребацивања путање у канту за отпатке. Која је "
+"ваша одлука?"
 
 #: sunflower/operation.py:471
 msgid "There was a problem moving specified path. What would you like to do?"
-msgstr "Настао је проблем приликом пребацивања путање на дестинацију. Која је ваша одлука?"
+msgstr ""
+"Настао је проблем приликом пребацивања путање на дестинацију. Која је ваша "
+"одлука?"
 
 #: sunflower/operation.py:510
-msgid ""
-"There was a problem renaming specified path. What would you like to do?"
+msgid "There was a problem renaming specified path. What would you like to do?"
 msgstr "Настао је проблем приликом промене имена путање. Која је ваша одлука?"
 
 #: sunflower/operation.py:549
 msgid ""
-"There was a problem with reading specified directory. What would you like to"
-" do?"
-msgstr "Настао је проблем приликом покушаја да се исчита садржај директоријума. Која је ваша одлука?"
+"There was a problem with reading specified directory. What would you like to "
+"do?"
+msgstr ""
+"Настао је проблем приликом покушаја да се исчита садржај директоријума. Која "
+"је ваша одлука?"
 
 #: sunflower/operation.py:659
 msgid "Searching for files..."
@@ -95,9 +116,11 @@ msgstr "Излиставање датотека..."
 
 #: sunflower/operation.py:883
 msgid ""
-"Unable to create directory because file with the same name already exists in"
-" target directory."
-msgstr "Програм није у могућности да направи нови директоријум јер је име већ у употреби на дестинацији."
+"Unable to create directory because file with the same name already exists in "
+"target directory."
+msgstr ""
+"Програм није у могућности да направи нови директоријум јер је име већ у "
+"употреби на дестинацији."
 
 #: sunflower/operation.py:1123
 msgid "Creating directories..."
@@ -195,7 +218,9 @@ msgstr "Нови привезак за кључеве"
 msgid ""
 "We need to create a new keyring to safely store your passwords. Choose the "
 "password you want to use for it."
-msgstr "За безбедно чување лозинки потребно је да направимо нови привезак за кључеве. Одаберите лозинку која ће бити кориштена за заштиту."
+msgstr ""
+"За безбедно чување лозинки потребно је да направимо нови привезак за "
+"кључеве. Одаберите лозинку која ће бити кориштена за заштиту."
 
 #: sunflower/widgets/popup_menu.py:67 sunflower/widgets/location_menu.py:55
 #: sunflower/gui/history_list.py:64 sunflower/gui/mounts_manager_window.py:384
@@ -475,7 +500,9 @@ msgstr "Преписивање датотека"
 msgid ""
 "Silent mode will enable operation to finish without disturbing you. If any "
 "errors occur, they will be presented to you after completion."
-msgstr "Тихи метод рада дозвољава операцијама да се заврше без узнемиравања корисника. Све грешке које се десе током рада ће бити приказане по завршетку."
+msgstr ""
+"Тихи метод рада дозвољава операцијама да се заврше без узнемиравања "
+"корисника. Све грешке које се десе током рада ће бити приказане по завршетку."
 
 #: sunflower/gui/input_dialog.py:711
 msgid "Follow symlinks"
@@ -521,9 +548,9 @@ msgstr[2] "Премештање артикала"
 #, python-brace-format
 msgid "Move <b>{0}</b> item to:"
 msgid_plural "Move <b>{0}</b> items to:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Премести <b>{0}</b> артикал у:"
+msgstr[1] "Премести <b>{0}</b> артикала у:"
+msgstr[2] "Премести <b>{0}</b> артикала у:"
 
 #: sunflower/gui/input_dialog.py:1002 sunflower/gui/main_window.py:433
 msgid "Move"
@@ -531,31 +558,31 @@ msgstr "Премештање"
 
 #: sunflower/gui/input_dialog.py:1015
 msgid "Rename file/directory"
-msgstr ""
+msgstr "Промена имена датотеке/директоријума"
 
 #: sunflower/gui/input_dialog.py:1016
 msgid "Enter a new name for this item:"
-msgstr ""
+msgstr "Унесите ново име за овај артикал:"
 
 #: sunflower/gui/input_dialog.py:1077
 msgid "Select a new name for the destination"
-msgstr ""
+msgstr "Одаберите ново име за дестинацију"
 
 #: sunflower/gui/input_dialog.py:1082
 msgid "Reset"
-msgstr ""
+msgstr "Ресет"
 
 #: sunflower/gui/input_dialog.py:1086
 msgid "Apply this action to all files"
-msgstr ""
+msgstr "Примени ову акцију за све датотеке"
 
 #: sunflower/gui/input_dialog.py:1121 sunflower/gui/input_dialog.py:1431
 msgid "Skip"
-msgstr ""
+msgstr "Прескочи"
 
 #: sunflower/gui/input_dialog.py:1177
 msgid "Original"
-msgstr ""
+msgstr "Оригинал"
 
 #: sunflower/gui/input_dialog.py:1178 sunflower/gui/input_dialog.py:1195
 #: sunflower/gui/properties_window.py:420
@@ -569,52 +596,54 @@ msgstr "Измењен:"
 
 #: sunflower/gui/input_dialog.py:1194
 msgid "Replace with"
-msgstr ""
+msgstr "Замени са"
 
 #: sunflower/gui/input_dialog.py:1229
 msgid "File conflict"
-msgstr ""
+msgstr "Конфликт датотеке"
 
 #: sunflower/gui/input_dialog.py:1234 sunflower/gui/input_dialog.py:1244
 msgid "Replace"
-msgstr ""
+msgstr "Замена"
 
 #: sunflower/gui/input_dialog.py:1251
 #, python-brace-format
 msgid "Replace file \"{0}\"?"
-msgstr ""
+msgstr "Замена датотеке \"{0}\"?"
 
 #: sunflower/gui/input_dialog.py:1257
 #, python-brace-format
 msgid ""
-"Another file with the same name already exists in \"{0}\". Replacing it will"
-" overwrite its content."
+"Another file with the same name already exists in \"{0}\". Replacing it will "
+"overwrite its content."
 msgstr ""
+"Датотека са истим именом већ постоји у \"{0}\". Замена датотеке ће променити "
+"садржај исте."
 
 #: sunflower/gui/input_dialog.py:1270
 msgid "Directory conflict"
-msgstr ""
+msgstr "Конфликт директоријума"
 
 #: sunflower/gui/input_dialog.py:1274
 msgid "Merge"
-msgstr ""
+msgstr "Спајање"
 
 #: sunflower/gui/input_dialog.py:1284
 #, python-brace-format
 msgid "Merge directory \"{0}\"?"
-msgstr ""
+msgstr "Спојити директоријум \"{0}\"?"
 
 #: sunflower/gui/input_dialog.py:1290
 #, python-brace-format
 msgid ""
-"Directory with the same name already exists in \"{0}\". Merging will ask for"
-" confirmation before replacing any files in the directory that conflict with"
-" the files being copied."
+"Directory with the same name already exists in \"{0}\". Merging will ask for "
+"confirmation before replacing any files in the directory that conflict with "
+"the files being copied."
 msgstr ""
 
 #: sunflower/gui/input_dialog.py:1308
 msgid "Add bookmark"
-msgstr ""
+msgstr "Додати у белешке"
 
 #: sunflower/gui/input_dialog.py:1319 sunflower/gui/input_dialog.py:1494
 #: sunflower/gui/properties_window.py:418
@@ -637,19 +666,19 @@ msgstr "Локација:"
 
 #: sunflower/gui/input_dialog.py:1399
 msgid "Operation error"
-msgstr ""
+msgstr "Операциона грешка"
 
 #: sunflower/gui/input_dialog.py:1432
 msgid "Skip all"
-msgstr ""
+msgstr "Прескочи све"
 
 #: sunflower/gui/input_dialog.py:1433
 msgid "Retry"
-msgstr ""
+msgstr "Покушај поново"
 
 #: sunflower/gui/input_dialog.py:1481
 msgid "Add toolbar widget"
-msgstr ""
+msgstr "Додати елемент у траку"
 
 #: sunflower/gui/input_dialog.py:1502 sunflower/gui/properties_window.py:419
 msgid "Type:"
@@ -657,7 +686,7 @@ msgstr "Тип:"
 
 #: sunflower/gui/input_dialog.py:1588
 msgid "Select range"
-msgstr ""
+msgstr "Одабрати распон"
 
 #: sunflower/gui/input_dialog.py:1589
 msgid "Select part of the text:"
@@ -718,39 +747,38 @@ msgstr ""
 
 #: sunflower/gui/operation_dialog.py:199 sunflower/gui/operation_dialog.py:243
 msgid "Pause"
-msgstr ""
+msgstr "Паузирај"
 
 #: sunflower/gui/operation_dialog.py:236
 msgid "Resume"
-msgstr ""
+msgstr "Настави"
 
 #: sunflower/gui/operation_dialog.py:248
 msgid "Are you sure about canceling current operation?"
-msgstr ""
+msgstr "Да ли сте сигурни да желите да откажете тренутну операцију?"
 
 #: sunflower/gui/operation_dialog.py:304
 msgid "second"
 msgid_plural "seconds"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "секунда"
+msgstr[1] "секунде"
+msgstr[2] "секунди"
 
 #: sunflower/gui/operation_dialog.py:308
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "минут"
+msgstr[1] "минута"
+msgstr[2] "минута"
 
 #: sunflower/gui/operation_dialog.py:312
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "сат"
+msgstr[1] "сата"
+msgstr[2] "сати"
 
-#: sunflower/gui/operation_dialog.py:316
-#: sunflower/gui/properties_window.py:238
+#: sunflower/gui/operation_dialog.py:316 sunflower/gui/properties_window.py:238
 msgid "unknown"
 msgstr "непознат"
 
@@ -988,9 +1016,11 @@ msgstr "Први ниво поређених локација је иденти�
 
 #: sunflower/gui/main_window.py:1576
 msgid ""
-"There was a problem starting external terminal application. Check if command"
-" is valid!"
-msgstr "Десила се грешка приликом покретања спољне апликације за емулацију терминала. Проверите да ли је унета команда исправна!"
+"There was a problem starting external terminal application. Check if command "
+"is valid!"
+msgstr ""
+"Десила се грешка приликом покретања спољне апликације за емулацију "
+"терминала. Проверите да ли је унета команда исправна!"
 
 #: sunflower/gui/main_window.py:1782
 msgid "Main Menu"
@@ -1020,7 +1050,9 @@ msgstr "Ос_вежавање листе"
 msgid ""
 "Error saving configuration to files in your home directory. Make sure you "
 "have enough permissions."
-msgstr "Десила се грешка приликом снимања подешавања у вашем профилном директоријуму. Проверите да имате слободног простора на том диску."
+msgstr ""
+"Десила се грешка приликом снимања подешавања у вашем профилном "
+"директоријуму. Проверите да имате слободног простора на том диску."
 
 #: sunflower/gui/main_window.py:2505
 msgid "Please select at least one file or directory."
@@ -1030,19 +1062,25 @@ msgstr ""
 msgid ""
 "Active object is not item list. Advanced rename tool needs files and "
 "directories."
-msgstr "Активни објекат није листа датотека. Напредни алат за преименовање датотека захтева датотеке и директоријуме."
+msgstr ""
+"Активни објекат није листа датотека. Напредни алат за преименовање датотека "
+"захтева датотеке и директоријуме."
 
 #: sunflower/gui/main_window.py:2533
 msgid ""
 "No rename extensions were found. Please enable basic rename options plugin "
 "and try again."
-msgstr "Додаци за алат за преименовање датотека нису пронађени. Молимо вас да укључите додатке и пробате поново."
+msgstr ""
+"Додаци за алат за преименовање датотека нису пронађени. Молимо вас да "
+"укључите додатке и пробате поново."
 
 #: sunflower/gui/main_window.py:2560
 msgid ""
 "No extensions for finding files were found. Please enable basic find file "
 "options plugin and try again."
-msgstr "Додаци за претрагу датотека нису пронађени. Молимо вас да укључите додатке и пробате поново."
+msgstr ""
+"Додаци за претрагу датотека нису пронађени. Молимо вас да укључите додатке и "
+"пробате поново."
 
 #: sunflower/gui/main_window.py:2586
 msgid "Keyring is empty!"
@@ -1052,7 +1090,9 @@ msgstr "Привезак за кључеве је празан!"
 msgid ""
 "Keyring is not available. Make sure you have Python Gnome keyring module "
 "installed."
-msgstr "Привезак за кључеве није доступан. Проверите да ли је Python Gnome keyring додатак инсталиран."
+msgstr ""
+"Привезак за кључеве није доступан. Проверите да ли је Python Gnome keyring "
+"додатак инсталиран."
 
 #: sunflower/gui/history_list.py:27
 msgid "History"
@@ -1159,7 +1199,8 @@ msgstr ""
 #: sunflower/gui/keyring_manager_window.py:146
 #, python-brace-format
 msgid ""
-"You are about to remove the following entry from your keyring. If you do this you will have to provide password manually when needed. Are you sure?\n"
+"You are about to remove the following entry from your keyring. If you do "
+"this you will have to provide password manually when needed. Are you sure?\n"
 "\n"
 "{0}"
 msgstr ""
@@ -1222,7 +1263,9 @@ msgid ""
 "With trashing disabled you will not be able to restore accidentally deleted "
 "items. Are you sure you want to disable confirmation dialog when deleting "
 "items?"
-msgstr "Са онемогућеном кантом нећете моћи да повратите случајно обрисане ставке. Да ли сте сигурни да желите да онемогућите дијалог потврде када бришете ставке?"
+msgstr ""
+"Са онемогућеном кантом нећете моћи да повратите случајно обрисане ставке. Да "
+"ли сте сигурни да желите да онемогућите дијалог потврде када бришете ставке?"
 
 #: sunflower/gui/preferences/accelerators.py:19
 msgid "Key bindings"
@@ -1246,7 +1289,10 @@ msgid ""
 "<b>Note:</b> You can only edit accelerators from objects created at least "
 "once in current session. To disable accelerator press <i>Backspace</i> in "
 "assign mode."
-msgstr "<b>Белешка:</b> Можете само изменити акцелераторе из објеката који су креирани барем једном у текућој сесији. Да онемогућите акцелератор притисните <i>Backspace</i> у моду додељивања."
+msgstr ""
+"<b>Белешка:</b> Можете само изменити акцелераторе из објеката који су "
+"креирани барем једном у текућој сесији. Да онемогућите акцелератор "
+"притисните <i>Backspace</i> у моду додељивања."
 
 #: sunflower/gui/preferences/accelerators.py:91
 msgid "Double click on accelerator to assign new one."
@@ -1255,11 +1301,17 @@ msgstr "Кликните два пута на пречицу за подешав
 #: sunflower/gui/preferences/accelerators.py:197
 #, python-brace-format
 msgid ""
-"Selected accelerator \"{0}\" is already being used. Would you still like to assign accelerator to this function? This will reset listed functions.\n"
+"Selected accelerator \"{0}\" is already being used. Would you still like to "
+"assign accelerator to this function? This will reset listed functions.\n"
 "\n"
 "Collisions:\n"
 "{1}"
-msgstr "Одабрани акцелератор \"{0}\" се већ користи. Да ли желите да доделите акцелератор овој функцији? Ово ће ресетоваи излистане функције.\n\nСукоб:\n{1}"
+msgstr ""
+"Одабрани акцелератор \"{0}\" се већ користи. Да ли желите да доделите "
+"акцелератор овој функцији? Ово ће ресетоваи излистане функције.\n"
+"\n"
+"Сукоб:\n"
+"{1}"
 
 #: sunflower/gui/preferences/plugins.py:39
 msgid "Plugins"
@@ -1295,7 +1347,9 @@ msgstr "Посети сајт"
 msgid ""
 "{0} is required for normal program operation and therefore can not be "
 "deactivated!"
-msgstr "{0} је потребан за нормално функционисање програма те стога не може бити деактивиран!"
+msgstr ""
+"{0} је потребан за нормално функционисање програма те стога не може бити "
+"деактивиран!"
 
 #: sunflower/gui/preferences/plugins.py:218
 msgid "This plugin has no description"
@@ -1327,7 +1381,9 @@ msgid ""
 "You need to select mime type to which application will be added. You can "
 "also select another application in which case new one will be added to its "
 "parent."
-msgstr "Морате одабрати миме тип ком програму треба бити додат. Можете такође одабрати други програм у ком случају ће нови бити додат матичном."
+msgstr ""
+"Морате одабрати миме тип ком програму треба бити додат. Можете такође "
+"одабрати други програм у ком случају ће нови бити додат матичном."
 
 #: sunflower/gui/preferences/item_list.py:42
 #: sunflower/plugins/file_list/column_editor.py:72
@@ -1549,7 +1605,10 @@ msgstr "Комплетна путања:"
 msgid ""
 "Quick search settings are in conflict with VIM navigation style. To resolve "
 "this issue your quick search settings were restored to default."
-msgstr "Одабрана комбинација брзе претраге је у конфликту са VIM навигацијом. Да би се избегли проблеми ваша подешавања брзе претраге су враћена на подразумевана."
+msgstr ""
+"Одабрана комбинација брзе претраге је у конфликту са VIM навигацијом. Да би "
+"се избегли проблеми ваша подешавања брзе претраге су враћена на "
+"подразумевана."
 
 #: sunflower/gui/preferences/display.py:22
 msgid "Display"
@@ -1773,8 +1832,8 @@ msgstr "Команда"
 #: sunflower/gui/preferences/terminal.py:10
 #: sunflower/plugins/system_terminal/plugin.py:54
 #: sunflower/plugins/system_terminal/plugin.py:55
-#: sunflower/plugin_base/item_list.py:179
-#: sunflower/plugin_base/terminal.py:145 sunflower/plugin_base/terminal.py:222
+#: sunflower/plugin_base/item_list.py:179 sunflower/plugin_base/terminal.py:145
+#: sunflower/plugin_base/terminal.py:222
 msgid "Terminal"
 msgstr "Терминал"
 
@@ -1834,7 +1893,12 @@ msgid ""
 "\t{0} will be replaced with socket/window id.\n"
 "\t{1} will be replaced with specified command and its parameters.\n"
 "\t{2} will be replaced with current working directory.</i></small>"
-msgstr "<small><i>Напомена:\n\tИзостављање {0} ће отворити нови терминал уместо нове картице.\n\t{0} ће бити замењено са ИД утичнице/прозора.\n\t{1} ће бити замењен посебном командом и њеним параметрима.\n\t{2} ће бити замењен тренутним радним директоријумом.</i></small>"
+msgstr ""
+"<small><i>Напомена:\n"
+"\tИзостављање {0} ће отворити нови терминал уместо нове картице.\n"
+"\t{0} ће бити замењено са ИД утичнице/прозора.\n"
+"\t{1} ће бити замењен посебном командом и њеним параметрима.\n"
+"\t{2} ће бити замењен тренутним радним директоријумом.</i></small>"
 
 #: sunflower/gui/error_list.py:26
 msgid "Error list"
@@ -1866,7 +1930,9 @@ msgstr "Рестарт програма је неопходан!"
 msgid ""
 "There are unsaved changes.\n"
 "Do you want to save them?"
-msgstr "Промене нису снимљене.\nДа ли желите да их снимите?"
+msgstr ""
+"Промене нису снимљене.\n"
+"Да ли желите да их снимите?"
 
 #: sunflower/gui/properties_window.py:58
 #, python-brace-format
@@ -1888,12 +1954,16 @@ msgstr "Дозволе"
 msgid ""
 "File or directory with specified name already exists in current directory. "
 "Item could not be renamed."
-msgstr "Датотека или директоријум са унетим именом већ постоји на тренутној локацији. Промена имена није могућа."
+msgstr ""
+"Датотека или директоријум са унетим именом већ постоји на тренутној "
+"локацији. Промена имена није могућа."
 
 #: sunflower/gui/properties_window.py:164
 #: sunflower/plugins/file_list/file_list.py:1001
 msgid "Error renaming specified item. Make sure you have enough permissions."
-msgstr "Грешка приликом промене имена. Проверите да имате права приступа за овај поступак."
+msgstr ""
+"Грешка приликом промене имена. Проверите да имате права приступа за овај "
+"поступак."
 
 #: sunflower/gui/properties_window.py:221
 msgid "item"
@@ -1924,8 +1994,11 @@ msgstr "Власништво"
 
 #: sunflower/gui/properties_window.py:643
 #, python-brace-format
-msgid "Select an application to open <i>{0}</i> and other files of type \"{1}\""
-msgstr "Одаберите апликацију са којом желите да отворите <i>{0}</i> и остале датотеке типа \"{1}\""
+msgid ""
+"Select an application to open <i>{0}</i> and other files of type \"{1}\""
+msgstr ""
+"Одаберите апликацију са којом желите да отворите <i>{0}</i> и остале "
+"датотеке типа \"{1}\""
 
 #: sunflower/plugins/rename_extensions/audio_metadata.py:24
 msgid "Album"
@@ -2095,8 +2168,8 @@ msgstr ""
 #: sunflower/plugins/file_list/dialogs.py:366
 #: sunflower/plugins/file_list/dialogs.py:571
 msgid ""
-"One or more required fields is empty. Please make sure you have entered name"
-" and server."
+"One or more required fields is empty. Please make sure you have entered name "
+"and server."
 msgstr ""
 
 #: sunflower/plugins/file_list/dialogs.py:431
@@ -2304,7 +2377,8 @@ msgstr ""
 #: sunflower/plugins/sessions/plugin.py:328
 msgid ""
 "Lock current session\n"
-"<small>Locking session preserves tab layout at the time of activation.</small>"
+"<small>Locking session preserves tab layout at the time of activation.</"
+"small>"
 msgstr ""
 
 #: sunflower/plugins/sessions/plugin.py:331
@@ -2670,8 +2744,7 @@ msgstr ""
 msgid "Cut selection to clipboard"
 msgstr ""
 
-#: sunflower/plugin_base/item_list.py:202
-#: sunflower/plugin_base/terminal.py:226
+#: sunflower/plugin_base/item_list.py:202 sunflower/plugin_base/terminal.py:226
 msgid "Copy selection to clipboard"
 msgstr ""
 
@@ -2691,8 +2764,7 @@ msgstr ""
 msgid "Calculate disk usage for directory"
 msgstr ""
 
-#: sunflower/plugin_base/item_list.py:207
-#: sunflower/plugin_base/terminal.py:225
+#: sunflower/plugin_base/item_list.py:207 sunflower/plugin_base/terminal.py:225
 msgid "Create terminal tab"
 msgstr ""
 
@@ -2852,8 +2924,8 @@ msgstr ""
 
 #: sunflower/plugin_base/item_list.py:646
 msgid ""
-"Directory does not exist anymore or is not valid. If path is not local check"
-" if specified volume is mounted."
+"Directory does not exist anymore or is not valid. If path is not local check "
+"if specified volume is mounted."
 msgstr ""
 
 #: sunflower/plugin_base/item_list.py:684

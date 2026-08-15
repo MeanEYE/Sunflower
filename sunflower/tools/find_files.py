@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 import os
 
-from gi.repository import Gtk, Gdk, Pango, GObject
+from gi.repository import Gtk, Gdk, Gio, Pango, GObject
 from threading import Thread, Event
 
 
@@ -351,18 +351,26 @@ class FindFiles(GObject.GObject):
 		"""Prompt user for directory selection."""
 		dialog = Gtk.FileChooserDialog(
 							title=_('Find files'),
-							parent=self.window,
-							action=Gtk.FileChooserAction.SELECT_FOLDER,
-							buttons=(
-								_('Cancel'), Gtk.ResponseType.REJECT,
-								_('Select'), Gtk.ResponseType.ACCEPT
-								)
+							transient_for=self.window,
+							action=Gtk.FileChooserAction.SELECT_FOLDER
 						)
-		dialog.set_filename(self._entry_path.get_text())
+		dialog.add_button(_('Cancel'), Gtk.ResponseType.REJECT)
+		dialog.add_button(_('Select'), Gtk.ResponseType.ACCEPT)
+
+		if Gtk.get_major_version() == 3:
+			dialog.set_filename(self._entry_path.get_text())
+
+		else:
+			dialog.set_file(Gio.File.new_for_path(self._entry_path.get_text()))
 		response = run_dialog(dialog)
 
 		if response == Gtk.ResponseType.ACCEPT:
-			self._entry_path.set_text(dialog.get_filename())
+			if Gtk.get_major_version() == 3:
+				selected_path = dialog.get_filename()
+
+			else:
+				selected_path = dialog.get_file().get_path()
+			self._entry_path.set_text(selected_path)
 
 		dialog.destroy()
 

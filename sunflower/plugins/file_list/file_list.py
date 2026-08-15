@@ -1649,7 +1649,7 @@ class FileList(ItemList):
 	def _flush_queue(self, parent=None):
 		"""Add items in queue to the list"""
 		queued_iters = []
-		path_to_select = None
+		row_to_select = None
 
 		# atomically take over the queue, loading thread can keep appending
 		# to the new list without items getting lost on clear
@@ -1660,13 +1660,18 @@ class FileList(ItemList):
 			new_iter = self._store.append(parent, data)
 			queued_iters.append(new_iter)
 
-			# focus specified item
+			# focus specified item, row reference is used since later
+			# insertions into the sorted store shift row paths around
 			if self._item_to_focus == data[0]:
-				path_to_select = self._store.get_path(new_iter)
+				row_to_select = Gtk.TreeRowReference.new(self._store, self._store.get_path(new_iter))
 
-		# select path if needed
-		if path_to_select is not None:
-			GLib.idle_add(self._item_list.set_cursor, path_to_select, priority=GLib.PRIORITY_HIGH_IDLE)
+		# select row if needed
+		if row_to_select is not None:
+			def select_row():
+				if row_to_select.valid():
+					self._item_list.set_cursor(row_to_select.get_path())
+				return False
+			GLib.idle_add(select_row, priority=GLib.PRIORITY_HIGH_IDLE)
 
 		# expand row if needed
 		if parent is not None:

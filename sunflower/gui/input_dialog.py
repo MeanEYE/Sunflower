@@ -665,7 +665,7 @@ class DeleteDialog:
 	"""Confirmation dialog for item removal with operation queue selection."""
 
 	def __init__(self, application, message):
-		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
+		self._dialog = Gtk.Dialog(transient_for=application, use_header_bar=True)
 
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
@@ -693,11 +693,17 @@ class DeleteDialog:
 
 		if Gtk.get_major_version() == 3:
 			button_queue = Gtk.Button.new_from_icon_name('go-bottom', Gtk.IconSize.BUTTON)
+			button_queue.set_always_show_image(True)
+			button_queue.set_label('None')
 
 		else:
-			button_queue = Gtk.Button.new_from_icon_name('go-bottom')
-		button_queue.set_always_show_image(True)
-		button_queue.set_label('None')
+			# GTK 4 buttons show either icon or label, showing both
+			# requires providing custom content
+			button_queue = Gtk.Button.new()
+			button_content = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
+			button_content.append(Gtk.Image.new_from_icon_name('go-bottom'))
+			button_content.append(Gtk.Label.new('None'))
+			button_queue.set_child(button_content)
 
 		content_area = self._dialog.get_content_area()
 		set_border_width(content_area, 10)
@@ -733,7 +739,7 @@ class CopyDialog:
 	"""Dialog which will ask user for additional options before copying"""
 
 	def __init__(self, application, source_provider, destination_provider, path):
-		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
+		self._dialog = Gtk.Dialog(transient_for=application, use_header_bar=True)
 
 		self._application = application
 		self._source_provider = source_provider
@@ -1210,7 +1216,7 @@ class OverwriteDialog:
 	"""Dialog used for confirmation of file/directory overwrite"""
 
 	def __init__(self, application, parent):
-		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
+		self._dialog = Gtk.Dialog(transient_for=application, use_header_bar=True)
 
 		self._application = application
 		self._rename_value = ''
@@ -1546,7 +1552,7 @@ class AddBookmarkDialog:
 	"""This dialog enables user to change data before adding new bookmark"""
 
 	def __init__(self, application, path):
-		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
+		self._dialog = Gtk.Dialog(transient_for=application, use_header_bar=True)
 
 		self._application = application
 
@@ -1656,7 +1662,7 @@ class OperationError:
 	RESPONSE_SKIP_ALL = 3
 
 	def __init__(self, application):
-		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
+		self._dialog = Gtk.Dialog(transient_for=application, use_header_bar=True)
 		self._application = application
 
 		# configure dialog
@@ -1770,7 +1776,7 @@ class CreateToolbarWidgetDialog:
 	"""Create widget persistent dialog."""
 
 	def __init__(self, application):
-		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
+		self._dialog = Gtk.Dialog(transient_for=application, use_header_bar=True)
 		self._application = application
 
 		# configure dialog
@@ -1997,7 +2003,7 @@ class ApplicationSelectDialog:
 	help_url = 'https://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables'
 
 	def __init__(self, application, path=None):
-		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
+		self._dialog = Gtk.Dialog(transient_for=application, use_header_bar=True)
 
 		self._application = application
 		self.path = path
@@ -2180,7 +2186,7 @@ class ApplicationSelectDialog:
 class PathInputDialog():
 	"""Input Dialog with path completion entry"""
 	def __init__(self, application):
-		self._dialog = Gtk.Dialog(parent=application, use_header_bar=True)
+		self._dialog = Gtk.Dialog(transient_for=application, use_header_bar=True)
 
 		self._application = application
 

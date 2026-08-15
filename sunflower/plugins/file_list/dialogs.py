@@ -32,7 +32,7 @@ class SambaInputDialog:
 	"""Dialog used for editing and creating Samba connections"""
 
 	def __init__(self, parent):
-		self._dialog = Gtk.Dialog(parent=parent)
+		self._dialog = Gtk.Dialog(transient_for=parent)
 
 		# configure dialog
 		self.set_title(_('Create Samba mount'))
@@ -308,7 +308,7 @@ class FtpInputDialog:
 	"""Dialog used for editing and creating FTP connections"""
 
 	def __init__(self, parent):
-		self._dialog = Gtk.Dialog(parent=parent)
+		self._dialog = Gtk.Dialog(transient_for=parent)
 
 		# configure dialog
 		self.set_title(_('Create FTP mount'))
@@ -555,7 +555,7 @@ class DavInputDialog:
 	"""Dialog used for editing and creating FTP connections"""
 
 	def __init__(self, parent):
-		self._dialog = Gtk.Dialog(parent=parent)
+		self._dialog = Gtk.Dialog(transient_for=parent)
 
 		# configure dialog
 		self.set_title(_('Create WebDav mount'))

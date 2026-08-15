@@ -424,8 +424,10 @@ class OperationDialog:
 
 		else:
 			# GTK 4 popovers are disposed by detaching them from their button
+			# and emit no destroy signal, indicator is removed explicitly
 			self._container.popdown()
 			self._indicator.set_popover(None)
+			self._application.remove_operation(self._indicator)
 
 	def get_window(self):
 		"""Return window operation dialog belongs to.

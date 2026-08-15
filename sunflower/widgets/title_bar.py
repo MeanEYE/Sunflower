@@ -52,9 +52,9 @@ class TitleBar:
 		self._button_menu = Gtk.Button.new()
 		if Gtk.get_major_version() == 3:
 			self._button_menu.add(self._icon)
-
 		else:
 			self._button_menu.set_child(self._icon)
+
 		self._button_menu.set_focus_on_click(False)
 		self._button_menu.set_tooltip_text(_('Context menu'))
 		self._button_menu.connect('clicked', self.show_context_menu)
@@ -67,7 +67,6 @@ class TitleBar:
 		self._spinner = Gtk.Spinner()
 		if Gtk.get_major_version() == 3:
 			self._spinner.set_property('no-show-all', True)
-
 		else:
 			self._spinner.hide()
 

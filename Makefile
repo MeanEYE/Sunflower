@@ -43,12 +43,12 @@ Usage:
 	dist-rpm           - create a .rpm package for Fedora, Mageia, Mandriva
 	dist-rpm-opensuse  - create a .rpm package for OpenSUSE
 	dist-rpm-pclinuxos - create a .rpm package for PCLinuxOS
-	dist-flatpak       - create a single-file .flatpak bundle (needs flatpak-builder
-	                     and the org.gnome.Platform//48 runtime installed)
+	dist-flatpak       - create a single-file .flatpak bundle (needs flatpak-builder;
+	                     runtimes are installed automatically from Flathub)
 	dist-all           - create all packages
 	language-template  - update language template
 	language-compile   - compile language files to .mo format
-	clean              - remove all build files
+	clean              - remove all build files, flatpak build cache and runtimes
 	version            - print Sunflower version
 	help               - print this help
 
@@ -156,7 +156,8 @@ dist-rpm-pclinuxos: archive
 
 dist-flatpak:
 	$(info Building Flatpak bundle...)
-	flatpak-builder --force-clean --repo=$(BUILD_DIRECTORY)/flatpak-repo $(BUILD_DIRECTORY)/flatpak-build $(WORKING_DIRECTORY)/dist/flatpak/org.sunflower.Sunflower.yml
+	flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+	flatpak-builder --force-clean --user --install-deps-from=flathub --repo=$(BUILD_DIRECTORY)/flatpak-repo $(BUILD_DIRECTORY)/flatpak-build $(WORKING_DIRECTORY)/dist/flatpak/org.sunflower.Sunflower.yml
 	flatpak build-bundle --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo $(BUILD_DIRECTORY)/flatpak-repo $(FLATPAK_FILE_PATH) org.sunflower.Sunflower
 	sha256sum $(FLATPAK_FILE_PATH) > $(FLATPAK_FILE_PATH).sha256
 
@@ -174,6 +175,11 @@ clean:
 	$(RM) -rf $(BUILD_DIRECTORY)
 	$(RM) -rf sunflower.*
 	$(RM) -rf Sunflower.egg-info
+	$(RM) -rf $(WORKING_DIRECTORY).flatpak-builder
+	for ref in $$(flatpak list --user --columns=ref 2>/dev/null | grep -E '^(org\.sunflower\.Sunflower|org\.gnome\.(Sdk|Platform))'); do \
+		flatpak uninstall --user --noninteractive $$ref 2>/dev/null || true; \
+	done
+	flatpak uninstall --user --noninteractive --unused 2>/dev/null || true
 
 version:
 	$(info Sunflower $(VERSION))

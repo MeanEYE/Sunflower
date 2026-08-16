@@ -2,3 +2,4 @@
 .idea
 build/
 *.egg-info/
+.flatpak-builder/

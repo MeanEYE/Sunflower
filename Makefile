@@ -31,6 +31,7 @@ PKG_FILE_PATH = $(BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE)-any.pkg.tar.x
 RPM_FILE_PATH = $(BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE).noarch.rpm
 RPM_OPENSUSE_FILE_PATH = $(BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE).noarch.opensuse.rpm
 RPM_PCLINUXOS_FILE_PATH = $(BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE).noarch.pclinuxos.rpm
+FLATPAK_FILE_PATH = $(BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE).flatpak
 
 # prepare help
 define HELP
@@ -42,6 +43,8 @@ Usage:
 	dist-rpm           - create a .rpm package for Fedora, Mageia, Mandriva
 	dist-rpm-opensuse  - create a .rpm package for OpenSUSE
 	dist-rpm-pclinuxos - create a .rpm package for PCLinuxOS
+	dist-flatpak       - create a single-file .flatpak bundle (needs flatpak-builder
+	                     and the org.gnome.Platform//48 runtime installed)
 	dist-all           - create all packages
 	language-template  - update language template
 	language-compile   - compile language files to .mo format
@@ -151,6 +154,12 @@ dist-rpm-pclinuxos: archive
 	cp ~/rpmbuild/RPMS/noarch/sunflower-$(VERSION)-$(RELEASE).noarch.rpm $(RPM_PCLINUXOS_FILE_PATH)
 	sha256sum $(RPM_PCLINUXOS_FILE_PATH) > $(RPM_PCLINUXOS_FILE_PATH).sha256
 
+dist-flatpak:
+	$(info Building Flatpak bundle...)
+	flatpak-builder --force-clean --repo=$(BUILD_DIRECTORY)/flatpak-repo $(BUILD_DIRECTORY)/flatpak-build $(WORKING_DIRECTORY)/dist/flatpak/org.sunflower.Sunflower.yml
+	flatpak build-bundle $(BUILD_DIRECTORY)/flatpak-repo $(FLATPAK_FILE_PATH) org.sunflower.Sunflower
+	sha256sum $(FLATPAK_FILE_PATH) > $(FLATPAK_FILE_PATH).sha256
+
 dist-all: dist-deb dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-arch dist-py
 
 language-template:
@@ -180,5 +189,5 @@ standalone:
 help:
 	@echo "$$HELP"
 
-.PHONY: default dist dist-py dist-deb dist-arch dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-all language-template clean version help
+.PHONY: default dist dist-py dist-deb dist-arch dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-flatpak dist-all language-template clean version help
 

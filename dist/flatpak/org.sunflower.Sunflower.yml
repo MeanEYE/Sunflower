@@ -1,0 +1,72 @@
+app-id: org.sunflower.Sunflower
+runtime: org.gnome.Platform
+runtime-version: '48'
+sdk: org.gnome.Sdk
+command: sunflower
+
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --share=network
+  # a file manager needs to see the real filesystem
+  - --filesystem=host
+  # access to gvfs mounts (smb, ftp, sftp, dav, mtp providers)
+  - --filesystem=xdg-run/gvfsd
+  - --talk-name=org.gtk.vfs.*
+  - --talk-name=org.freedesktop.Notifications
+  # the application registers on the session bus as org.sunflower
+  - --own-name=org.sunflower
+
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /share/gir-1.0
+  - /share/vala
+  - '*.la'
+  - '*.a'
+
+modules:
+  # GTK 3 build of VTE; the GNOME runtime only guarantees the GTK 4 one
+  - name: vte
+    buildsystem: meson
+    config-opts:
+      - -Dgtk3=true
+      - -Dgtk4=false
+      - -Dvapi=false
+      - -Ddocs=false
+      - -D_systemd=false
+    sources:
+      - type: archive
+        url: https://download.gnome.org/sources/vte/0.76/vte-0.76.6.tar.xz
+        sha256: 9ac739ad73b63e109269088a6d27029b6d45700b0993977c1e00ed1bcb1a3d39
+
+  - name: python3-chardet
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-index --find-links="file://${PWD}" --prefix=/app --no-build-isolation chardet
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/cf/6e/5a0b348fa4cd7847567a28c6e697ccf58391960bfd13a6e7473ee23ca2f2/chardet-7.6.0-py3-none-any.whl
+        sha256: 4076d795897ce45239825956a1334e134322ecc4bfe84dbb12acd5390de0fbc1
+
+  - name: sunflower
+    buildsystem: simple
+    build-commands:
+      - install -d /app/share/sunflower
+      - cp -r sunflower images styles /app/share/sunflower/
+      - find /app/share/sunflower -type d -name __pycache__ -prune -exec rm -rf '{}' +
+      # translations must sit inside the package directory, see common.load_translation()
+      - cd translations && for mo in */LC_MESSAGES/sunflower.mo; do install -Dm644 "$mo" "/app/share/sunflower/sunflower/translations/$mo"; done
+      - install -Dm755 dist/flatpak/sunflower.sh /app/bin/sunflower
+      - sed 's|^Icon=.*|Icon=org.sunflower.Sunflower|' Sunflower.desktop > org.sunflower.Sunflower.desktop
+      - install -Dm644 org.sunflower.Sunflower.desktop /app/share/applications/org.sunflower.Sunflower.desktop
+      - install -Dm644 images/sunflower.svg /app/share/icons/hicolor/scalable/apps/org.sunflower.Sunflower.svg
+      - install -Dm644 dist/flatpak/org.sunflower.Sunflower.metainfo.xml /app/share/metainfo/org.sunflower.Sunflower.metainfo.xml
+    sources:
+      - type: dir
+        path: ../..
+        skip:
+          - build
+          - .git

@@ -157,7 +157,7 @@ dist-rpm-pclinuxos: archive
 dist-flatpak:
 	$(info Building Flatpak bundle...)
 	flatpak-builder --force-clean --repo=$(BUILD_DIRECTORY)/flatpak-repo $(BUILD_DIRECTORY)/flatpak-build $(WORKING_DIRECTORY)/dist/flatpak/org.sunflower.Sunflower.yml
-	flatpak build-bundle $(BUILD_DIRECTORY)/flatpak-repo $(FLATPAK_FILE_PATH) org.sunflower.Sunflower
+	flatpak build-bundle --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo $(BUILD_DIRECTORY)/flatpak-repo $(FLATPAK_FILE_PATH) org.sunflower.Sunflower
 	sha256sum $(FLATPAK_FILE_PATH) > $(FLATPAK_FILE_PATH).sha256
 
 dist-all: dist-deb dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-arch dist-py

@@ -224,7 +224,12 @@ class Sunflower(Gtk.Application):
 		return -1
 
 
-# create application
-application = Sunflower()
-exit_status = application.run(sys.argv)
-sys.exit(exit_status)
+def main():
+	"""Create and run the application."""
+	application = Sunflower()
+	exit_status = application.run(sys.argv)
+	sys.exit(exit_status)
+
+
+if __name__ == '__main__':
+	main()

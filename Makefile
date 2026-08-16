@@ -57,17 +57,15 @@ export HELP
 
 # install program to fake root (this needs to be the same as dist/PKGBUILD)
 define DEBIAN_INSTALL
+	rm -rf "$(DEBIAN_BUILD_DIRECTORY)"
 	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)"
-	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/local/bin"
 	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/share/locale"
 	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/share/applications"
 	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/share/sunflower"
-	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/share/icons/hicolor/scalable/apps"
-	install -d "$(DEBIAN_BUILD_DIRECTORY)/usr/share/pixmaps/sunflower"
 	install -d "$(DEBIAN_BUILD_DIRECTORY)/usr/lib/python3/dist-packages/sunflower"
 
 	tar -xf $(FILE_PATH).tar -C $(BUILD_DIRECTORY)
-	install -Dm755 $(WORKING_DIRECTORY)/dist/sunflower "$(DEBIAN_BUILD_DIRECTORY)/usr/local/bin/sunflower"
+	install -Dm755 $(WORKING_DIRECTORY)/dist/sunflower "$(DEBIAN_BUILD_DIRECTORY)/usr/bin/sunflower"
 	cp -r $(BUILD_DIRECTORY)/Sunflower/sunflower/* "$(DEBIAN_BUILD_DIRECTORY)/usr/lib/python3/dist-packages/sunflower"
 	cp -r $(BUILD_DIRECTORY)/Sunflower/styles "$(DEBIAN_BUILD_DIRECTORY)/usr/share/sunflower"
 	cp -r $(BUILD_DIRECTORY)/Sunflower/images "$(DEBIAN_BUILD_DIRECTORY)/usr/share/sunflower"
@@ -81,6 +79,7 @@ define CREATE_RPM_SPEC_FILE
 	cp $(WORKING_DIRECTORY)/dist/sunflower.spec $(BUILD_DIRECTORY)
 	sed -i s/@version@/$(VERSION)/ $(BUILD_DIRECTORY)/sunflower.spec
 	sed -i s/@release@/$(RELEASE)/ $(BUILD_DIRECTORY)/sunflower.spec
+	sed -i s/@file_name@/$(FILE_NAME)/ $(BUILD_DIRECTORY)/sunflower.spec
 	sed -i s/@packager@/"$(PACKAGER)"/ $(BUILD_DIRECTORY)/sunflower.spec
 endef
 
@@ -100,9 +99,8 @@ dist: archive
 
 dist-py:
 	$(info Building package for Python...)
-	python3 setup.py sdist
-	rm -rf build Sunflower.egg-info
-	mv dist/Sunflower*.tar.gz ./
+	python3 setup.py sdist --dist-dir $(BUILD_DIRECTORY)
+	rm -rf Sunflower.egg-info
 
 dist-deb: archive
 	$(info Building package for Debian, Mint, Ubuntu...)
@@ -123,8 +121,9 @@ dist-arch: dist
 	cp $(WORKING_DIRECTORY)/dist/PKGBUILD $(WORKING_DIRECTORY)/dist/sunflower $(ARCH_BUILD_DIRECTORY)
 	sed -i s/@version@/$(VERSION)/ $(ARCH_BUILD_DIRECTORY)/PKGBUILD
 	sed -i s/@release@/$(RELEASE)/ $(ARCH_BUILD_DIRECTORY)/PKGBUILD
+	sed -i s/@file_name@/$(FILE_NAME)/ $(ARCH_BUILD_DIRECTORY)/PKGBUILD
 	cd $(ARCH_BUILD_DIRECTORY); makepkg -g >> PKGBUILD
-	cd $(ARCH_BUILD_DIRECTORY); makepkg
+	cd $(ARCH_BUILD_DIRECTORY); PKGEXT='.pkg.tar.xz' makepkg
 	mv $(ARCH_BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE)-any.pkg.tar.xz $(PKG_FILE_PATH)
 	sha256sum $(PKG_FILE_PATH) > $(PKG_FILE_PATH).sha256
 
@@ -139,7 +138,7 @@ dist-rpm: archive
 dist-rpm-opensuse: archive
 	$(info Building package for OpenSUSE...)
 	$(CREATE_RPM_SPEC_FILE)
-	sed -i "s/@requires@/python-gtk, python-chardet/" $(BUILD_DIRECTORY)/sunflower.spec
+	sed -i "s/@requires@/python3, python3-gobject, python3-chardet, typelib-1_0-Gtk-3_0/" $(BUILD_DIRECTORY)/sunflower.spec
 	rpmbuild -bb $(BUILD_DIRECTORY)/sunflower.spec --build-in-place --buildroot "$(abspath $(FEDORA_BUILD_DIRECTORY))"
 	cp ~/rpmbuild/RPMS/noarch/sunflower-$(VERSION)-$(RELEASE).noarch.rpm $(RPM_OPENSUSE_FILE_PATH)
 	sha256sum $(RPM_OPENSUSE_FILE_PATH) > $(RPM_OPENSUSE_FILE_PATH).sha256
@@ -147,12 +146,12 @@ dist-rpm-opensuse: archive
 dist-rpm-pclinuxos: archive
 	$(info Building package for PCLinuxOS...)
 	$(CREATE_RPM_SPEC_FILE)
-	sed -i "s/@requires@/pygtk2.0, python-chardet/" $(BUILD_DIRECTORY)/sunflower.spec
+	sed -i "s/@requires@/python3, python3-gobject, python3-chardet, gtk+3.0/" $(BUILD_DIRECTORY)/sunflower.spec
 	rpmbuild -bb $(BUILD_DIRECTORY)/sunflower.spec --build-in-place --buildroot "$(abspath $(FEDORA_BUILD_DIRECTORY))"
 	cp ~/rpmbuild/RPMS/noarch/sunflower-$(VERSION)-$(RELEASE).noarch.rpm $(RPM_PCLINUXOS_FILE_PATH)
 	sha256sum $(RPM_PCLINUXOS_FILE_PATH) > $(RPM_PCLINUXOS_FILE_PATH).sha256
 
-dist-all: dist-deb dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-pkg dist-py
+dist-all: dist-deb dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-arch dist-py
 
 language-template:
 	$(info Updating language template...)
@@ -181,5 +180,5 @@ standalone:
 help:
 	@echo "$$HELP"
 
-.PHONY: default dist dist-py dist-deb dist-pkg dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-all language-template clean version help
+.PHONY: default dist dist-py dist-deb dist-arch dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-all language-template clean version help
 

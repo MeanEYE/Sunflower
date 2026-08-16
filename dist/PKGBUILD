@@ -2,25 +2,35 @@ pkgname=sunflower
 pkgver=@version@
 pkgrel=@release@
 arch=(any)
-url=https://code.google.com/p/sunflower-fm/
-license=(GPLv3)
-depends=(pygtk)
-optdepends=('python2-notify: notifications',
-            'python2-gnomekeyring: access to saved passwords',
-            'vte: support for built-in terminal')
+url=https://sunflower-fm.org
+license=(GPL-3.0-or-later)
+depends=(python python-gobject python-chardet gtk3)
+optdepends=('libnotify: notifications'
+            'vte3: support for built-in terminal'
+            'gnome-keyring: access to saved passwords')
 pkgdesc="Small and highly customizable twin-panel file manager for Linux with support for plugins."
 options=(!strip !zipman)
-source=(./${pkgname}-${pkgver//a./a-}.tgz ./sunflower)
+source=(./@file_name@.tgz ./sunflower)
 
 package() {
+	local sitedir
+	sitedir=$(python -c "import sysconfig; print(sysconfig.get_path('purelib'))")
+
 	install -Dm755 sunflower "${pkgdir}/usr/bin/sunflower"
 
-	install -d "${pkgdir}/usr/share/sunflower"
 	cd Sunflower
-	cp -r * "${pkgdir}/usr/share/sunflower"
 
-	install -Dm644 images/sunflower.png "${pkgdir}/usr/share/pixmaps/sunflower.png"
+	install -d "${pkgdir}${sitedir}"
+	cp -r sunflower "${pkgdir}${sitedir}/sunflower"
+
+	install -d "${pkgdir}/usr/share/sunflower"
+	cp -r images styles "${pkgdir}/usr/share/sunflower"
+
+	local mo
+	for mo in translations/*/LC_MESSAGES/sunflower.mo; do
+		install -Dm644 "${mo}" "${pkgdir}/usr/share/locale/${mo#translations/}"
+	done
+
 	install -Dm644 images/sunflower.svg "${pkgdir}/usr/share/pixmaps/sunflower.svg"
 	install -Dm644 Sunflower.desktop "${pkgdir}/usr/share/applications/sunflower.desktop"
 }
-

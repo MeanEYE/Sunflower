@@ -24,6 +24,16 @@ endif
 RELEASE ?= 1
 PACKAGER ?= ""
 
+# container tool used by the docker-* targets (docker or podman)
+CONTAINER ?= $(shell command -v docker >/dev/null 2>&1 && echo docker || echo podman)
+# rootless podman maps container root to the invoking user, so no remap is
+# needed; rootful docker needs an explicit uid to keep build/ owned by the user
+ifeq ($(CONTAINER),podman)
+CONTAINER_RUN = $(CONTAINER) run --rm -e HOME=/tmp -v $(abspath $(WORKING_DIRECTORY)):/src -w /src
+else
+CONTAINER_RUN = $(CONTAINER) run --rm --user $(shell id -u):$(shell id -g) -e HOME=/tmp -v $(abspath $(WORKING_DIRECTORY)):/src -w /src
+endif
+
 # additional directories
 FILE_PATH = $(BUILD_DIRECTORY)/$(FILE_NAME)
 DEB_FILE_PATH = $(BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE).all.deb
@@ -46,6 +56,10 @@ Usage:
 	dist-flatpak       - create a single-file .flatpak bundle (needs flatpak-builder;
 	                     runtimes are installed automatically from Flathub)
 	dist-all           - create all packages
+	docker-dist-*      - run any dist target in a container with the matching
+	                     native toolchain (docker-dist-deb, docker-dist-py,
+	                     docker-dist-rpm[-opensuse|-pclinuxos], docker-dist-arch,
+	                     docker-dist-all); uses docker or podman (CONTAINER=)
 	language-template  - update language template
 	language-compile   - compile language files to .mo format
 	clean              - remove all build files, flatpak build cache and runtimes
@@ -84,6 +98,7 @@ define CREATE_RPM_SPEC_FILE
 	sed -i s/@release@/$(RELEASE)/ $(BUILD_DIRECTORY)/sunflower.spec
 	sed -i s/@file_name@/$(FILE_NAME)/ $(BUILD_DIRECTORY)/sunflower.spec
 	sed -i s/@packager@/"$(PACKAGER)"/ $(BUILD_DIRECTORY)/sunflower.spec
+	sed -i "/^Packager: *$$/d" $(BUILD_DIRECTORY)/sunflower.spec
 endef
 
 # configuration options
@@ -163,6 +178,30 @@ dist-flatpak:
 
 dist-all: dist-deb dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-arch dist-py
 
+# containerized builds: each package is built with its native distro toolchain
+docker-image-%:
+	$(CONTAINER) build -t sunflower-build-$* -f $(WORKING_DIRECTORY)dist/docker/Dockerfile.$* $(WORKING_DIRECTORY)dist/docker
+
+docker-dist-deb: docker-image-debian
+	$(CONTAINER_RUN) sunflower-build-debian make dist-deb
+
+docker-dist-py: docker-image-debian
+	$(CONTAINER_RUN) sunflower-build-debian make dist-py
+
+docker-dist-rpm: docker-image-fedora
+	$(CONTAINER_RUN) sunflower-build-fedora make dist-rpm
+
+docker-dist-rpm-opensuse: docker-image-fedora
+	$(CONTAINER_RUN) sunflower-build-fedora make dist-rpm-opensuse
+
+docker-dist-rpm-pclinuxos: docker-image-fedora
+	$(CONTAINER_RUN) sunflower-build-fedora make dist-rpm-pclinuxos
+
+docker-dist-arch: docker-image-arch
+	$(CONTAINER_RUN) sunflower-build-arch make dist-arch
+
+docker-dist-all: docker-dist-deb docker-dist-py docker-dist-rpm docker-dist-rpm-opensuse docker-dist-rpm-pclinuxos docker-dist-arch
+
 language-template:
 	$(info Updating language template...)
 	find sunflower/ -iname "*.py" | xargs xgettext --language=Python --package-name=Sunflower --package-version=0.1 --output $(WORKING_DIRECTORY)/translations/sunflower.pot
@@ -195,5 +234,5 @@ standalone:
 help:
 	@echo "$$HELP"
 
-.PHONY: default dist dist-py dist-deb dist-arch dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-flatpak dist-all language-template clean version help
+.PHONY: default dist dist-py dist-deb dist-arch dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-flatpak dist-all docker-dist-deb docker-dist-py docker-dist-rpm docker-dist-rpm-opensuse docker-dist-rpm-pclinuxos docker-dist-arch docker-dist-all language-template clean version help
 

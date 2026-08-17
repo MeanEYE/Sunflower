@@ -1,5 +1,5 @@
 %{!?__python3: %global __python3 /usr/bin/python3}
-%{!?python3_sitelib: %global python3_sitelib %(%{__python3} -c "import sysconfig; print(sysconfig.get_path('purelib'))")}
+%{!?python3_sitelib: %global python3_sitelib %(%{__python3} -c "import sysconfig; print(sysconfig.get_path('purelib', vars={'base': '/usr', 'platbase': '/usr'}))")}
 
 Summary: Sunflower file manager
 Name: sunflower

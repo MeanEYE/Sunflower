@@ -1,0 +1,6 @@
+FROM docker.io/library/fedora:latest
+
+RUN dnf install -y make git rpm-build desktop-file-utils rsync python3 python3-devel \
+	&& dnf clean all
+
+RUN git config --system --add safe.directory /src

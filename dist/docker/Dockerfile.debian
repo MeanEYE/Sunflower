@@ -1,0 +1,9 @@
+FROM docker.io/library/debian:stable-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+		make git fakeroot rsync \
+		python3 python3-setuptools python3-chardet python3-gi \
+		gir1.2-gtk-3.0 gir1.2-notify-0.7 gir1.2-vte-2.91 gir1.2-gdkpixbuf-2.0 \
+	&& rm -rf /var/lib/apt/lists/*
+
+RUN git config --system --add safe.directory /src

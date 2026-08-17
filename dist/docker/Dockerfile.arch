@@ -1,0 +1,12 @@
+FROM docker.io/library/archlinux:base-devel
+
+# PKGBUILD depends() are verified by makepkg, so they must be present
+RUN pacman -Syu --noconfirm git python python-gobject python-chardet gtk3 \
+	&& pacman -Scc --noconfirm
+
+RUN git config --system --add safe.directory /src
+
+# makepkg refuses to run as root; a wrapper delegates it to this user
+RUN useradd -m builder
+COPY makepkg-wrapper.sh /usr/local/bin/makepkg
+RUN chmod 755 /usr/local/bin/makepkg

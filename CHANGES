@@ -1,3 +1,27 @@
+Version 0.6-64
+
+  + Initial Flatpak packaging support.
+  + Additional work on GTK 4 port, enabled with `SUNFLOWER_GTK=4` environment variable.
+  + Add keyboard shortcuts to action buttons, prioritizing function keys.
+  + Breadcrumbs: Add thematic icons and names for mount roots.
+  + Mounts: Add support for mounts without volumes.
+  * Update INSTALL with accurate list of required and optional dependencies.
+  * Use docker as build platform and fix build recipes for different targets.
+  * Images: Make main SVG square and optimize it.
+  * File list: Deprecate local provider in favor of GIO.
+  * File list: GIO provider: Fix issues with file operations, moving paths and root path detection.
+  * File list: Fix racing conditions during directory load.
+  * File list: Change owner/user column type to 64-bit integer.
+  * Popup menu: Fix context menu on directory.
+  * Breadcrumbs: Fix restoring tabs on launch with newer PyGObject.
+  * Associations: Fix file name encoding.
+  * Rename extensions: Fix regular expression format.
+  * Fix locale format string.
+  * Fix opening contributor email and pages.
+  * Fix missing icon for desktop file.
+  * Include translations when installing through setup.py.
+  * Updated translations.
+
 Version 0.5-63
 
   * Fix issue with opening multiple files through popup menu.

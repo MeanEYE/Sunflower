@@ -42,6 +42,7 @@ RPM_FILE_PATH = $(BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE).noarch.rpm
 RPM_OPENSUSE_FILE_PATH = $(BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE).noarch.opensuse.rpm
 RPM_PCLINUXOS_FILE_PATH = $(BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE).noarch.pclinuxos.rpm
 FLATPAK_FILE_PATH = $(BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE).flatpak
+APP_FILE_PATH = $(FILE_PATH).app
 
 # prepare help
 define HELP
@@ -56,6 +57,7 @@ Usage:
 	dist-flatpak       - create a single-file .flatpak bundle (needs flatpak-builder;
 	                     runtimes are installed automatically from Flathub)
 	dist-all           - create all packages
+	standalone         - create a single-file executable (zip archive with a shebang)
 	docker-dist-*      - run any dist target in a container with the matching
 	                     native toolchain (docker-dist-deb, docker-dist-py,
 	                     docker-dist-rpm[-opensuse|-pclinuxos], docker-dist-arch,
@@ -176,7 +178,7 @@ dist-flatpak:
 	flatpak build-bundle --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo $(BUILD_DIRECTORY)/flatpak-repo $(FLATPAK_FILE_PATH) org.sunflower.Sunflower
 	sha256sum $(FLATPAK_FILE_PATH) > $(FLATPAK_FILE_PATH).sha256
 
-dist-all: dist-deb dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-arch dist-py
+dist-all: dist-deb dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-arch dist-py dist-flatpak standalone
 
 # containerized builds: each package is built with its native distro toolchain
 docker-image-%:
@@ -224,15 +226,19 @@ version:
 	$(info Sunflower $(VERSION))
 
 standalone:
-	zip --quiet sunflower -r sunflower images styles -x *.pyc -x __pycache__ -x *.xcf
-	zip --quiet --junk-paths sunflower sunflower/__main__.py
-	echo '#!/usr/bin/env python3' > sunflower.app
-	cat sunflower.zip >> sunflower.app
-	rm sunflower.zip
-	chmod a+x sunflower.app
+	$(info Building standalone executable...)
+	mkdir -p $(BUILD_DIRECTORY)
+	$(RM) -f $(FILE_PATH).zip
+	cd $(WORKING_DIRECTORY) && zip --quiet $(abspath $(FILE_PATH)).zip -r sunflower images styles -x '*.pyc' -x '*/__pycache__/*' -x '*.xcf'
+	cd $(WORKING_DIRECTORY) && zip --quiet --junk-paths $(abspath $(FILE_PATH)).zip sunflower/__main__.py
+	echo '#!/usr/bin/env python3' > $(APP_FILE_PATH)
+	cat $(FILE_PATH).zip >> $(APP_FILE_PATH)
+	$(RM) -f $(FILE_PATH).zip
+	chmod a+x $(APP_FILE_PATH)
+	sha256sum $(APP_FILE_PATH) > $(APP_FILE_PATH).sha256
 
 help:
 	@echo "$$HELP"
 
-.PHONY: default dist dist-py dist-deb dist-arch dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-flatpak dist-all docker-dist-deb docker-dist-py docker-dist-rpm docker-dist-rpm-opensuse docker-dist-rpm-pclinuxos docker-dist-arch docker-dist-all language-template clean version help
+.PHONY: default dist dist-py dist-deb dist-arch dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-flatpak dist-all standalone docker-dist-deb docker-dist-py docker-dist-rpm docker-dist-rpm-opensuse docker-dist-rpm-pclinuxos docker-dist-arch docker-dist-all language-template clean version help
 

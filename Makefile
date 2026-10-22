@@ -44,6 +44,12 @@ RPM_PCLINUXOS_FILE_PATH = $(BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE).noa
 FLATPAK_FILE_PATH = $(BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE).flatpak
 APP_FILE_PATH = $(FILE_PATH).app
 
+# publishing of built packages to the download server
+PUBLISH_HOST ?= eu2
+PUBLISH_PATH ?= /var/www/vhosts/sunflower-fm.org/httpdocs/pub
+PUBLISH_OWNER ?= meaneye:psacln
+PUBLISH_GLOBS = *.tgz *.tar.gz *.deb *.rpm *.pkg.tar.xz *.flatpak *.app *.sha256
+
 # prepare help
 define HELP
 Usage:
@@ -58,6 +64,8 @@ Usage:
 	                     runtimes are installed automatically from Flathub)
 	dist-all           - create all packages
 	standalone         - create a single-file executable (zip archive with a shebang)
+	publish            - upload built packages and checksums to the download server
+	                     (PUBLISH_HOST=, PUBLISH_PATH=, PUBLISH_OWNER= to override)
 	docker-dist-*      - run any dist target in a container with the matching
 	                     native toolchain (docker-dist-deb, docker-dist-py,
 	                     docker-dist-rpm[-opensuse|-pclinuxos], docker-dist-arch,
@@ -237,8 +245,16 @@ standalone:
 	chmod a+x $(APP_FILE_PATH)
 	sha256sum $(APP_FILE_PATH) > $(APP_FILE_PATH).sha256
 
+publish:
+	$(info Publishing packages to $(PUBLISH_HOST):$(PUBLISH_PATH)...)
+	@cd $(BUILD_DIRECTORY) && files=$$(ls $(PUBLISH_GLOBS) 2>/dev/null); \
+	if [ -z "$$files" ]; then echo "No packages found in $(BUILD_DIRECTORY), build them first."; exit 1; fi; \
+	echo "$$files" | sed 's/^/  /'; \
+	scp $$files $(PUBLISH_HOST):$(PUBLISH_PATH)/ && \
+	ssh $(PUBLISH_HOST) "cd $(PUBLISH_PATH) && chown $(PUBLISH_OWNER) $$(echo $$files)"
+
 help:
 	@echo "$$HELP"
 
-.PHONY: default dist dist-py dist-deb dist-arch dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-flatpak dist-all standalone docker-dist-deb docker-dist-py docker-dist-rpm docker-dist-rpm-opensuse docker-dist-rpm-pclinuxos docker-dist-arch docker-dist-all language-template clean version help
+.PHONY: default dist dist-py dist-deb dist-arch dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-flatpak dist-all standalone publish docker-dist-deb docker-dist-py docker-dist-rpm docker-dist-rpm-opensuse docker-dist-rpm-pclinuxos docker-dist-arch docker-dist-all language-template clean version help
 

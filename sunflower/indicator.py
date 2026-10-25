@@ -13,7 +13,7 @@ class Indicator(object):
 		self._menu = None
 		self._indicator = None
 
-		base_path = os.path.dirname(common.get_static_assets_directory())
+		base_path = common.get_static_assets_directory()
 
 		self._icon = 'sunflower_64.png'
 		self._icon_path = os.path.abspath(os.path.join(base_path, 'images'))

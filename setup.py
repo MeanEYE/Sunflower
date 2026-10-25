@@ -38,6 +38,7 @@ setup(
 		data_files=[
 			('share/sunflower/images', [str(path) for path in Path('images').rglob('*') if path.is_file() and path.suffix != '.xcf']),
 			('share/sunflower/styles', ['styles/main.css']),
+			('share/icons/hicolor/scalable/apps', ['images/sunflower.svg']),
 			('share/applications', ['Sunflower.desktop']),
 			*get_translation_files()
 			],

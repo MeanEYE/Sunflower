@@ -1,4 +1,5 @@
 import os
+import glob
 import gettext
 import subprocess
 import locale
@@ -97,16 +98,97 @@ def get_base_directory():
 	"""Return base directory where application is installed."""
 	return os.path.dirname(__file__)
 
+def _get_data_prefixes():
+	"""Return list of candidate `share` directories, most specific first.
+
+	Not every distribution follows the Filesystem Hierarchy Standard
+	(NixOS keeps each package in its own store path, for example) and
+	`sys.prefix` points to the interpreter rather than to wherever this
+	package was installed, so the list is assembled from several sources
+	and callers pick the first entry that actually holds their files.
+	"""
+	result = []
+
+	# install prefix derived from the location of this package, covers
+	# `<prefix>/lib/python3.x/{site,dist}-packages/sunflower` for any
+	# prefix: /usr, /usr/local, virtual environments, `pip install --user`
+	# and per-package store paths like /nix/store/<hash>-sunflower
+	path = os.path.abspath(os.path.dirname(__file__))
+	for _ in range(6):
+		parent = os.path.dirname(path)
+		if parent == path:
+			break
+		path = parent
+		result.append(os.path.join(path, 'share'))
+
+	# interpreter prefix, correct for traditional installations
+	result.append(os.path.join(sys.prefix, 'share'))
+
+	# per-user data directory
+	result.append(get_data_directory())
+
+	# system data directories as advertised by the environment
+	data_dirs = os.environ.get('XDG_DATA_DIRS', '').split(os.pathsep)
+	result.extend(filter(None, data_dirs))
+
+	# well known locations in case environment is not populated
+	result.extend(('/usr/local/share', '/usr/share'))
+
+	# remove duplicates while keeping order
+	unique = []
+	for path in result:
+		path = os.path.normpath(path)
+		if path not in unique:
+			unique.append(path)
+
+	return unique
+
+_static_assets_directory = None
+
 def get_static_assets_directory():
 	"""Return path to directory that holds static files"""
-	script_dir = os.path.join(os.path.dirname(__file__), '..')
-	prefix_dir = os.path.join(sys.prefix, 'share', 'sunflower')
-	result = prefix_dir
+	global _static_assets_directory
 
-	if os.path.exists(os.path.join(script_dir, 'images', 'sunflower.svg')):
-		result = script_dir
+	if _static_assets_directory is not None:
+		return _static_assets_directory
 
+	def has_assets(path):
+		return os.path.exists(os.path.join(path, 'images', 'sunflower.svg'))
+
+	# running from source tree or flatpak bundle, assets are next to the package
+	script_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+	candidates = [script_dir]
+	candidates.extend(os.path.join(prefix, 'sunflower') for prefix in _get_data_prefixes())
+
+	# fall back to interpreter prefix even if missing so callers get a sane path
+	result = os.path.join(sys.prefix, 'share', 'sunflower')
+	for path in candidates:
+		if has_assets(path):
+			result = path
+			break
+
+	_static_assets_directory = result
 	return result
+
+def get_locale_directory():
+	"""Return directory with compiled translations or None to use system default."""
+	assets_dir = get_static_assets_directory()
+	package_dir = os.path.abspath(os.path.dirname(__file__))
+
+	# source tree keeps translations next to the package, flatpak bundle
+	# inside of it, installed copies go to `<prefix>/share/locale`
+	candidates = [
+			os.path.join(assets_dir, 'translations'),
+			os.path.join(package_dir, 'translations'),
+			os.path.join(os.path.dirname(assets_dir), 'locale')
+		]
+	candidates.extend(os.path.join(prefix, 'locale') for prefix in _get_data_prefixes())
+
+	for path in candidates:
+		if glob.glob(os.path.join(path, '*', 'LC_MESSAGES', 'sunflower.mo')):
+			return path
+
+	return None
 
 def get_cache_directory():
 	"""Get full path to cache files for curring user."""
@@ -136,7 +218,7 @@ def get_config_path():
 
 def get_data_directory():
 	"""Get full path to user data files."""
-	result = os.path.expanduser('~/.local', 'share')
+	result = os.path.expanduser('~/.local/share')
 
 	if 'XDG_DATA_HOME' in os.environ:
 		result = os.path.abspath(os.environ['XDG_DATA_HOME'])
@@ -195,8 +277,7 @@ def executable_exists(command):
 def load_translation():
 	"""Load translation and install global functions"""
 	# get directory for translations
-	base_path = os.path.dirname(get_static_assets_directory())
-	directory = os.path.join(base_path, 'translations')
+	directory = get_locale_directory()
 
 	# function params
 	params = {
@@ -205,7 +286,7 @@ def load_translation():
 		}
 
 	# install translations from local directory if needed
-	if os.path.isdir(directory):
+	if directory is not None:
 		params.update({'localedir': directory})
 
 	# get translation

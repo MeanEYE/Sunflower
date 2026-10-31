@@ -5,7 +5,7 @@ import fnmatch
 
 from gi.repository import Gtk, GObject
 from queue import Queue
-from threading import Thread, Event
+from threading import Thread, Event, Lock
 
 from sunflower.gui.input_dialog import OverwriteFileDialog, OverwriteDirectoryDialog, OperationError
 from sunflower.gui.operation_dialog import CopyDialog, MoveDialog, DeleteDialog, RenameDialog
@@ -639,6 +639,12 @@ class CopyOperation(Operation):
 		self._buffer_size = 0
 		self._scan_directory_shown = None
 
+		# progress of file being copied, flushed to the dialog once per main loop pass
+		self._progress_lock = Lock()
+		self._progress_pending = False
+		self._progress_size = 0
+		self._progress_fraction = 0.0
+
 		# cache settings
 		should_reserve = self._application.options.section('operations').get('reserve_size')
 		supported_by_provider = ProviderSupport.RESERVE_SIZE in self._destination.get_support()
@@ -681,6 +687,37 @@ class CopyOperation(Operation):
 		if count > 0:
 			GObject.idle_add(self._dialog.increment_total_size, size)
 			GObject.idle_add(self._dialog.increment_total_count, count)
+
+	def _queue_file_progress(self, written, fraction):
+		"""Accumulate copy progress and queue a single dialog update.
+
+		Copying queues far more chunks per second than the main loop can paint
+		and every queued callback runs before the next frame, so progress is
+		coalesced and only one update is in flight at any time.
+
+		"""
+		with self._progress_lock:
+			self._progress_size += written
+			self._progress_fraction = fraction
+
+			if self._progress_pending:
+				return
+
+			self._progress_pending = True
+
+		GObject.idle_add(self._flush_file_progress)
+
+	def _flush_file_progress(self):
+		"""Push accumulated copy progress to the dialog, runs in main loop"""
+		with self._progress_lock:
+			written = self._progress_size
+			fraction = self._progress_fraction
+			self._progress_size = 0
+			self._progress_pending = False
+
+		self._dialog.increment_current_size(written)
+		self._dialog.set_current_file_fraction(fraction)
+		return False
 
 	def _get_lists(self):
 		"""Find all files for copying"""
@@ -1075,14 +1112,10 @@ class CopyOperation(Operation):
 					return
 
 				destination_size += len(data)
-				GObject.idle_add(self._dialog.increment_current_size, len(data))
 				if file_stat.size > 0:  # ensure we don't end up with error on 0 size files
-					GObject.idle_add(
-									self._dialog.set_current_file_fraction,
-									destination_size / float(file_stat.size)
-								)
+					self._queue_file_progress(len(data), destination_size / float(file_stat.size))
 				else:
-					GObject.idle_add(self._dialog.set_current_file_fraction, 1)
+					self._queue_file_progress(len(data), 1)
 
 				# push event to the queue
 				if self._destination_queue is not None:

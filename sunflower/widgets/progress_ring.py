@@ -1,6 +1,6 @@
 import math
 
-from gi.repository import Gtk
+from gi.repository import Gtk, GLib
 
 
 class ProgressRing(Gtk.DrawingArea):
@@ -8,19 +8,20 @@ class ProgressRing(Gtk.DrawingArea):
 	indeterminate activity.
 
 	In progress mode the ring fills clockwise from the top according to the
-	fraction. In pulse mode a short arc rotates around the ring, advancing
-	a step on every call to `pulse`, so the caller drives the animation from
-	a steady timer. Colors are taken from the widget's style context so the
-	ring matches the icon it surrounds and follows the theme.
+	fraction. In pulse mode a short arc rotates around the ring, animated by
+	the frame clock so it stays smooth regardless of how often the caller
+	pulses. Colors are taken from the widget's style context so the ring
+	matches the icon it surrounds and follows the theme.
 
 	"""
 
-	SIZE = 30  # widget size in pixels
+	SIZE = 24  # widget size in pixels, largest that fits a header bar button without growing it
+	ICON_SIZE = 12  # pixel size for an icon placed inside the ring
 	LINE_WIDTH = 2
 	TRACK_ALPHA = 0.2
 	ACCENT_COLORS = ('accent_bg_color', 'theme_selected_bg_color')  # GTK 4.18+, then older themes
 	PULSE_ARC = math.pi / 2  # length of rotating arc
-	PULSE_STEP = math.pi / 10  # rotation per pulse, full turn in 20 pulses
+	PULSE_PERIOD = 2 * 1000000  # one full rotation, in microseconds
 
 	def __init__(self):
 		Gtk.DrawingArea.__init__(self)
@@ -28,6 +29,7 @@ class ProgressRing(Gtk.DrawingArea):
 		self._fraction = 0.0
 		self._pulsing = False
 		self._angle = 0.0
+		self._tick_id = None
 
 		self.set_size_request(self.SIZE, self.SIZE)
 		self.set_halign(Gtk.Align.CENTER)
@@ -46,7 +48,7 @@ class ProgressRing(Gtk.DrawingArea):
 	def set_fraction(self, fraction):
 		"""Set progress fraction and leave pulse mode"""
 		self._fraction = min(max(fraction, 0.0), 1.0)
-		self._pulsing = False
+		self.set_pulsing(False)
 		self.queue_draw()
 
 	def get_fraction(self):
@@ -55,14 +57,30 @@ class ProgressRing(Gtk.DrawingArea):
 
 	def set_pulsing(self, pulsing):
 		"""Switch between indeterminate activity and progress display"""
+		if pulsing == self._pulsing:
+			return
+
 		self._pulsing = pulsing
+
+		if pulsing:
+			self._tick_id = self.add_tick_callback(self._handle_tick)
+
+		elif self._tick_id is not None:
+			self.remove_tick_callback(self._tick_id)
+			self._tick_id = None
+
 		self.queue_draw()
 
 	def pulse(self):
-		"""Advance rotating arc, entering pulse mode if needed"""
-		self._pulsing = True
-		self._angle = (self._angle + self.PULSE_STEP) % (2 * math.pi)
+		"""Enter pulse mode, rotation itself is driven by the frame clock"""
+		self.set_pulsing(True)
+
+	def _handle_tick(self, widget, frame_clock, data=None):
+		"""Rotate arc based on frame time, once per frame"""
+		elapsed = frame_clock.get_frame_time() % self.PULSE_PERIOD
+		self._angle = 2 * math.pi * elapsed / self.PULSE_PERIOD
 		self.queue_draw()
+		return GLib.SOURCE_CONTINUE
 
 	def _get_color(self):
 		"""Return foreground color for current widget state"""

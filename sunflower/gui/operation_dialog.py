@@ -47,7 +47,6 @@ class OperationDialog:
 		# create indicator button
 		self._indicator = Gtk.MenuButton.new()
 		self._indicator.set_popover(self._container)
-		self._indicator.get_style_context().add_class('flat')
 
 		# create interface
 		self._vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
@@ -60,6 +59,8 @@ class OperationDialog:
 		self._operation_image = Gtk.Image.new()
 		self._operation_image.set_halign(Gtk.Align.CENTER)
 		self._operation_image.set_valign(Gtk.Align.CENTER)
+		# icon is drawn smaller so ring and icon together are no taller than a regular icon button
+		self._operation_image.set_pixel_size(ProgressRing.ICON_SIZE)
 		self._set_operation_image()
 
 		operation_overlay = Gtk.Overlay.new()

@@ -637,6 +637,7 @@ class CopyOperation(Operation):
 		self._total_count = 0
 		self._total_size = 0
 		self._buffer_size = 0
+		self._scan_directory_shown = None
 
 		# cache settings
 		should_reserve = self._application.options.section('operations').get('reserve_size')
@@ -664,10 +665,30 @@ class CopyOperation(Operation):
 		self._dialog.set_current_file("")
 		self._dialog.set_current_file_fraction(0)
 
+	def _set_scan_directory(self, directory):
+		"""Show directory being scanned, pushing an update only when it changes.
+
+		Every update queued from this thread costs the main loop a label
+		relayout and the worker the GIL, so per-file updates slow scanning down.
+
+		"""
+		if directory != self._scan_directory_shown:
+			self._scan_directory_shown = directory
+			GObject.idle_add(self._dialog.set_current_file, directory)
+
+	def _add_scanned_totals(self, size, count):
+		"""Push accumulated size and count of scanned files to the dialog."""
+		if count > 0:
+			GObject.idle_add(self._dialog.increment_total_size, size)
+			GObject.idle_add(self._dialog.increment_total_count, count)
+
 	def _get_lists(self):
 		"""Find all files for copying"""
 		GObject.idle_add(self._update_status, _('Searching for files...'))
 		GObject.idle_add(self._dialog.start_pulse)
+		self._scan_directory_shown = None
+		scanned_size = 0
+		scanned_count = 0
 
 		# exclude files already selected with parent directory
 		for file_name in self._selection_list:
@@ -679,15 +700,15 @@ class CopyOperation(Operation):
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
-			# update current file label
-			GObject.idle_add(self._dialog.set_current_file, item)
-
 			if os.path.sep in item:
 				relative_path, item = os.path.split(item)
 				source_path = os.path.join(self._source_path, relative_path)
 			else:
 				relative_path = None
 				source_path = self._source_path
+
+			# update current directory label
+			self._set_scan_directory(source_path)
 
 			if not self._options[Option.FOLLOW_SYMLINK]:
 				if self._source.is_link(item, relative_to=source_path):
@@ -718,14 +739,14 @@ class CopyOperation(Operation):
 				# item is a file, get stats and update lists
 				item_stat = self._source.get_stat(item, relative_to=source_path)
 
-				GObject.idle_add(self._dialog.increment_total_size, item_stat.size)
-				GObject.idle_add(self._dialog.increment_total_count, 1)
-
+				scanned_size += item_stat.size
+				scanned_count += 1
 				self._total_count += 1
 				self._total_size += item_stat.size
 
 				self._file_list.append((item, relative_path))
 
+		self._add_scanned_totals(scanned_size, scanned_count)
 		GObject.idle_add(self._dialog.stop_pulse)
 
 	def _set_mode(self, path, mode):
@@ -841,11 +862,15 @@ class CopyOperation(Operation):
 
 			return
 
+		scanned_size = 0
+		scanned_count = 0
+
 		for item in item_list:
 			if self._abort.is_set(): break  # abort operation if requested
 			self._can_continue.wait()  # pause lock
 
-			GObject.idle_add(self._dialog.set_current_file, os.path.join(directory, item))
+			# update current directory label, also after returning from a subdirectory
+			self._set_scan_directory(os.path.join(source_path, directory))
 
 			full_name = os.path.join(directory, item)
 
@@ -872,13 +897,14 @@ class CopyOperation(Operation):
 				# item is a file, update global statistics
 				item_stat = self._source.get_stat(full_name, relative_to=source_path)
 
-				GObject.idle_add(self._dialog.increment_total_size, item_stat.size)
-				GObject.idle_add(self._dialog.increment_total_count, 1)
-
+				scanned_size += item_stat.size
+				scanned_count += 1
 				self._total_count += 1
 				self._total_size += item_stat.size
 
 				self._file_list.append((full_name, relative_path))
+
+		self._add_scanned_totals(scanned_size, scanned_count)
 
 	def _create_directory(self, directory, relative_path=None):
 		"""Create specified directory"""

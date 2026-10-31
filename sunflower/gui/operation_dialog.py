@@ -51,6 +51,9 @@ class OperationDialog:
 		# create interface
 		self._vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
 
+		# each section is a separate grid, keep their label columns the same width
+		self._label_size_group = Gtk.SizeGroup.new(Gtk.SizeGroupMode.HORIZONTAL)
+
 		# operation items
 		self._operation_label = Gtk.Label.new()
 		self._operation_label.set_xalign(0)
@@ -93,6 +96,8 @@ class OperationDialog:
 
 		self._label_source = Gtk.Label(label=_('Source:'))
 		self._label_destination = Gtk.Label(label=_('Destination:'))
+		self._label_size_group.add_widget(self._label_source)
+		self._label_size_group.add_widget(self._label_destination)
 
 		self._value_source = Gtk.Label.new()
 		self._value_destination = Gtk.Label.new()
@@ -123,6 +128,11 @@ class OperationDialog:
 		self._value_source.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
 		self._value_destination.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
 
+		# ellipsized labels still request their full text width, cap it so
+		# the dialog keeps its size instead of growing with long paths
+		self._value_source.set_max_width_chars(30)
+		self._value_destination.set_max_width_chars(30)
+
 		# grid columns only fill the dialog width if something in them expands
 		self._value_source.set_hexpand(True)
 		self._value_destination.set_hexpand(True)
@@ -136,6 +146,7 @@ class OperationDialog:
 		table.set_column_spacing(10)
 
 		self._label_status = Gtk.Label(label='Current status...')
+		self._label_size_group.add_widget(self._label_status)
 		self._label_current_file = Gtk.Label.new()
 		self._pb_current_file = Gtk.ProgressBar.new()
 		self._pb_current_file.set_pulse_step(0.05)
@@ -164,6 +175,7 @@ class OperationDialog:
 		self._label_current_file.set_xalign(1)
 		self._label_current_file.set_yalign(0.5)
 		self._label_current_file.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
+		self._label_current_file.set_max_width_chars(30)
 
 		# grid columns only fill the dialog width if something in them expands
 		self._label_current_file.set_hexpand(True)
@@ -179,6 +191,10 @@ class OperationDialog:
 		self._label_speed = Gtk.Label.new(_('Speed:'))
 		self._label_total_size = Gtk.Label.new(_('Total size:'))
 		self._label_total_count = Gtk.Label.new(_('Total count:'))
+		self._label_size_group.add_widget(self._label_eta)
+		self._label_size_group.add_widget(self._label_speed)
+		self._label_size_group.add_widget(self._label_total_size)
+		self._label_size_group.add_widget(self._label_total_count)
 
 		self._value_eta = Gtk.Label.new()
 		self._value_speed = Gtk.Label.new()

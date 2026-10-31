@@ -667,6 +667,7 @@ class CopyOperation(Operation):
 	def _get_lists(self):
 		"""Find all files for copying"""
 		GObject.idle_add(self._update_status, _('Searching for files...'))
+		GObject.idle_add(self._dialog.start_pulse)
 
 		# exclude files already selected with parent directory
 		for file_name in self._selection_list:
@@ -680,7 +681,6 @@ class CopyOperation(Operation):
 
 			# update current file label
 			GObject.idle_add(self._dialog.set_current_file, item)
-			GObject.idle_add(self._dialog.pulse)
 
 			if os.path.sep in item:
 				relative_path, item = os.path.split(item)
@@ -725,6 +725,8 @@ class CopyOperation(Operation):
 				self._total_size += item_stat.size
 
 				self._file_list.append((item, relative_path))
+
+		GObject.idle_add(self._dialog.stop_pulse)
 
 	def _set_mode(self, path, mode):
 		"""Set mode for specified path"""
@@ -844,7 +846,6 @@ class CopyOperation(Operation):
 			self._can_continue.wait()  # pause lock
 
 			GObject.idle_add(self._dialog.set_current_file, os.path.join(directory, item))
-			GObject.idle_add(self._dialog.pulse)
 
 			full_name = os.path.join(directory, item)
 

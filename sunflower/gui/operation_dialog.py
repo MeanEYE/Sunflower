@@ -25,6 +25,7 @@ class OperationDialog:
 		self._total_count = 0
 		self._current_size = 0
 		self._current_count = 0
+		self._pulse_id = None
 
 		# aggregate speeds to provide accurate time prediction
 		self._speeds = []
@@ -137,7 +138,7 @@ class OperationDialog:
 		self._label_status = Gtk.Label(label='Current status...')
 		self._label_current_file = Gtk.Label.new()
 		self._pb_current_file = Gtk.ProgressBar.new()
-		self._pb_current_file.set_pulse_step(0.005)
+		self._pb_current_file.set_pulse_step(0.05)
 
 		# pack interface
 		table.attach(self._label_status, 0, 0, 1, 1)
@@ -435,6 +436,8 @@ class OperationDialog:
 
 	def destroy(self):
 		"""Close window"""
+		self.stop_pulse()
+
 		if Gtk.get_major_version() == 3:
 			self._container.destroy()
 
@@ -465,6 +468,7 @@ class OperationDialog:
 
 	def set_current_file_fraction(self, fraction):
 		"""Set current file progress bar position"""
+		self.stop_pulse()
 		self._pb_current_file.set_fraction(fraction)
 
 		if not self._has_details:
@@ -532,6 +536,24 @@ class OperationDialog:
 	def pulse(self):
 		"""Pulse current progress bar"""
 		self._pb_current_file.pulse()
+		return True
+
+	def start_pulse(self):
+		"""Animate current file progress bar until fraction is set or stop_pulse is called.
+
+		The activity animation moves one pulse step per interval between the
+		last two pulse calls and stalls when pulses stop, so it has to be
+		driven from a steady timer rather than from the worker thread.
+
+		"""
+		if self._pulse_id is None:
+			self._pulse_id = GObject.timeout_add(100, self.pulse)
+
+	def stop_pulse(self):
+		"""Stop animating current file progress bar"""
+		if self._pulse_id is not None:
+			GObject.source_remove(self._pulse_id)
+			self._pulse_id = None
 
 
 class CopyDialog(OperationDialog):

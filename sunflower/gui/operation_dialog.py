@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from gi.repository import Gtk, Gdk, GObject, Pango
 from sunflower import common
+from sunflower.widgets.progress_ring import ProgressRing
 
 
 class OperationDialog:
@@ -54,28 +55,28 @@ class OperationDialog:
 		# each section is a separate grid, keep their label columns the same width
 		self._label_size_group = Gtk.SizeGroup.new(Gtk.SizeGroupMode.HORIZONTAL)
 
-		# operation items
-		self._operation_label = Gtk.Label.new()
-		self._operation_label.set_xalign(0)
-		self._operation_label.set_yalign(0.5)
-		self._operation_progress = Gtk.ProgressBar()
+		# operation icon with progress ring around it shown in the indicator button
+		self._operation_progress = ProgressRing()
 		self._operation_image = Gtk.Image.new()
+		self._operation_image.set_halign(Gtk.Align.CENTER)
+		self._operation_image.set_valign(Gtk.Align.CENTER)
 		self._set_operation_image()
 
+		operation_overlay = Gtk.Overlay.new()
 		if Gtk.get_major_version() == 3:
-			self._indicator.set_image(self._operation_image)
+			operation_overlay.add(self._operation_progress)
+			operation_overlay.add_overlay(self._operation_image)
+			# overlay child gets its own window, let pointer events through to the button
+			operation_overlay.set_overlay_pass_through(self._operation_image, True)
+			# button shows its image widget but not the widget's children
+			operation_overlay.show_all()
+			self._indicator.set_image(operation_overlay)
 
 		else:
-			self._indicator.set_child(self._operation_image)
-
-		vbox_operation = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
-		if Gtk.get_major_version() == 3:
-			vbox_operation.pack_start(self._operation_label, False, False, 0)
-			vbox_operation.pack_start(self._operation_progress, False, False, 0)
-
-		else:
-			vbox_operation.append(self._operation_label)
-			vbox_operation.append(self._operation_progress)
+			operation_overlay.set_child(self._operation_progress)
+			operation_overlay.add_overlay(self._operation_image)
+			self._operation_image.set_can_target(False)
+			self._indicator.set_child(operation_overlay)
 
 		self._application.add_operation(self._indicator)
 
@@ -476,7 +477,7 @@ class OperationDialog:
 	def set_status(self, status):
 		"""Set current status"""
 		self._label_status.set_label(status)
-		self._operation_label.set_text(status)
+		self._indicator.set_tooltip_text(status)
 
 	def set_current_file(self, path):
 		"""Set current file name"""
@@ -550,8 +551,9 @@ class OperationDialog:
 		self._update_total_count()
 
 	def pulse(self):
-		"""Pulse current progress bar"""
+		"""Pulse current progress bar and indicator ring"""
 		self._pb_current_file.pulse()
+		self._operation_progress.pulse()
 		return True
 
 	def start_pulse(self):
@@ -570,6 +572,7 @@ class OperationDialog:
 		if self._pulse_id is not None:
 			GObject.source_remove(self._pulse_id)
 			self._pulse_id = None
+			self._operation_progress.set_pulsing(False)
 
 
 class CopyDialog(OperationDialog):

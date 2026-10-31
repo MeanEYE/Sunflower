@@ -331,10 +331,10 @@ class OperationDialog:
 		"""Lock threading object"""
 		self._paused = not self._paused
 		image = self._button_pause.get_child()
+		self._operation_progress.set_paused(self._paused)
 
 		if self._paused:
 			# thread is active, pause it
-			self._set_operation_image('media-playback-pause-symbolic')
 			if Gtk.get_major_version() == 3:
 				image.set_from_icon_name('media-playback-start-symbolic', Gtk.IconSize.BUTTON)
 
@@ -345,7 +345,6 @@ class OperationDialog:
 
 		else:
 			# thread is paused, resume it
-			self._set_operation_image()
 			if Gtk.get_major_version() == 3:
 				image.set_from_icon_name('media-playback-pause-symbolic', Gtk.IconSize.BUTTON)
 
@@ -566,6 +565,7 @@ class OperationDialog:
 
 		"""
 		if self._pulse_id is None:
+			self.pulse()  # enter activity mode right away rather than on first timer tick
 			self._pulse_id = GObject.timeout_add(100, self.pulse)
 
 	def stop_pulse(self):

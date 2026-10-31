@@ -10,8 +10,10 @@ class ProgressRing(Gtk.DrawingArea):
 	In progress mode the ring fills clockwise from the top according to the
 	fraction. In pulse mode a short arc rotates around the ring, animated by
 	the frame clock so it stays smooth regardless of how often the caller
-	pulses. Colors are taken from the widget's style context so the ring
-	matches the icon it surrounds and follows the theme.
+	pulses. A paused ring shows two static arcs on opposite sides of the
+	circle, whatever mode it was in. Colors are taken from the widget's
+	style context so the ring matches the icon it surrounds and follows the
+	theme.
 
 	"""
 
@@ -22,12 +24,14 @@ class ProgressRing(Gtk.DrawingArea):
 	ACCENT_COLORS = ('accent_bg_color', 'theme_selected_bg_color')  # GTK 4.18+, then older themes
 	PULSE_ARC = math.pi / 2  # length of rotating arc
 	PULSE_PERIOD = 2 * 1000000  # one full rotation, in microseconds
+	PAUSE_ARCS = 2  # arcs shown while paused, evenly spaced with gaps of equal length
 
 	def __init__(self):
 		Gtk.DrawingArea.__init__(self)
 
 		self._fraction = 0.0
 		self._pulsing = False
+		self._paused = False
 		self._angle = 0.0
 		self._tick_id = None
 
@@ -46,10 +50,16 @@ class ProgressRing(Gtk.DrawingArea):
 			self.set_draw_func(self._handle_draw_func)
 
 	def set_fraction(self, fraction):
-		"""Set progress fraction and leave pulse mode"""
+		"""Set progress fraction, shown once pulse mode is switched off.
+
+		Pulse mode is left only through `set_pulsing`, totals can change
+		while activity is still indeterminate and must not interrupt it.
+
+		"""
 		self._fraction = min(max(fraction, 0.0), 1.0)
-		self.set_pulsing(False)
-		self.queue_draw()
+
+		if not self._pulsing:
+			self.queue_draw()
 
 	def get_fraction(self):
 		"""Return current progress fraction"""
@@ -61,15 +71,28 @@ class ProgressRing(Gtk.DrawingArea):
 			return
 
 		self._pulsing = pulsing
+		self._update_tick()
+		self.queue_draw()
 
-		if pulsing:
+	def set_paused(self, paused):
+		"""Show paused state, animation is suspended until resumed"""
+		if paused == self._paused:
+			return
+
+		self._paused = paused
+		self._update_tick()
+		self.queue_draw()
+
+	def _update_tick(self):
+		"""Run frame clock callback only while pulsing and not paused"""
+		animate = self._pulsing and not self._paused
+
+		if animate and self._tick_id is None:
 			self._tick_id = self.add_tick_callback(self._handle_tick)
 
-		elif self._tick_id is not None:
+		elif not animate and self._tick_id is not None:
 			self.remove_tick_callback(self._tick_id)
 			self._tick_id = None
-
-		self.queue_draw()
 
 	def pulse(self):
 		"""Enter pulse mode, rotation itself is driven by the frame clock"""
@@ -126,11 +149,20 @@ class ProgressRing(Gtk.DrawingArea):
 		cr.arc(center_x, center_y, radius, 0, 2 * math.pi)
 		cr.stroke()
 
-		# progress or activity arc
+		# paused, progress or activity arc
 		accent = self._get_accent_color()
 		cr.set_source_rgba(accent.red, accent.green, accent.blue, accent.alpha)
 
-		if self._pulsing:
+		if self._paused:
+			# arcs and gaps between them share the circle equally, first arc
+			# is centered on the right side so two arcs oppose horizontally
+			arc = math.pi / self.PAUSE_ARCS
+			for index in range(self.PAUSE_ARCS):
+				middle = index * 2 * arc
+				cr.arc(center_x, center_y, radius, middle - arc / 2, middle + arc / 2)
+				cr.stroke()
+
+		elif self._pulsing:
 			cr.arc(center_x, center_y, radius, start + self._angle, start + self._angle + self.PULSE_ARC)
 			cr.stroke()
 

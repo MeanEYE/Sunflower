@@ -311,19 +311,29 @@ class SessionManager:
 							'current': 0
 						})
 
-		# create header button and its popover
+		# create header button showing icon and name of current session
+		# along with its popover, a plain button image would be hidden by
+		# the button label on both toolkits
 		if Gtk.get_major_version() == 3:
-			icon = Gtk.Image.new_from_icon_name('emoji-symbols-symbolic', Gtk.IconSize.BUTTON)
+			icon = Gtk.Image.new_from_icon_name('view-dual-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
-			icon = Gtk.Image.new_from_icon_name('emoji-symbols-symbolic')
+			icon = Gtk.Image.new_from_icon_name('view-dual-symbolic')
 
-		self._button = Gtk.Button.new_with_label(label='Session')
+		self._label = Gtk.Label.new(None)
+		button_content = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 6)
+
+		self._button = Gtk.Button.new()
 		if Gtk.get_major_version() == 3:
-			self._button.set_image(icon)
+			button_content.pack_start(icon, False, False, 0)
+			button_content.pack_start(self._label, False, False, 0)
+			self._button.add(button_content)
+			self._button.show_all()
 
 		else:
-			self._button.set_child(icon)
+			button_content.append(icon)
+			button_content.append(self._label)
+			self._button.set_child(button_content)
 		self._button.set_tooltip_text(_('Session manager'))
 
 		popover = Gtk.Popover.new()
@@ -494,7 +504,7 @@ class SessionManager:
 		current_session = self._options.section('sessions').get('current')
 		session = self._options.section('sessions').get('list')[current_session]
 
-		self._button.set_label(session.get('name'))
+		self._label.set_text(session.get('name'))
 		self._button_lock.set_active(session.get('locked'))
 
 	def _show_popover(self, widget, popover):

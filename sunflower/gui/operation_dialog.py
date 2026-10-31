@@ -122,6 +122,10 @@ class OperationDialog:
 		self._value_source.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
 		self._value_destination.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
 
+		# grid columns only fill the dialog width if something in them expands
+		self._value_source.set_hexpand(True)
+		self._value_destination.set_hexpand(True)
+
 	def _add_current_file(self):
 		"""Add 'current file' progress to the GUI"""
 		self._has_current_file = True
@@ -159,6 +163,10 @@ class OperationDialog:
 		self._label_current_file.set_xalign(1)
 		self._label_current_file.set_yalign(0.5)
 		self._label_current_file.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
+
+		# grid columns only fill the dialog width if something in them expands
+		self._label_current_file.set_hexpand(True)
+		self._pb_current_file.set_hexpand(True)
 
 	def _add_details(self):
 		"""Add ETA to the dialog"""
@@ -219,6 +227,14 @@ class OperationDialog:
 		self._value_total_size.set_yalign(0.5)
 		self._value_total_count.set_xalign(0)
 		self._value_total_count.set_yalign(0.5)
+
+		# grid columns only fill the dialog width if something in them expands
+		self._value_eta.set_hexpand(True)
+		self._value_speed.set_hexpand(True)
+		self._value_total_size.set_hexpand(True)
+		self._value_total_count.set_hexpand(True)
+		self._pb_total_size.set_hexpand(True)
+		self._pb_total_count.set_hexpand(True)
 
 		table.set_row_spacing(2)
 		table.set_row_spacing(10)

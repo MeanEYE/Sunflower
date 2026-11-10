@@ -17,8 +17,13 @@ class File:
 	uses Gio.File for actual operations."""
 
 	def __init__(self, path, mode):
+		self._resource = None
+		self._input = None
+		self._output = None
+
 		if mode == Mode.READ:
 			self._resource = get_file(path).read()
+			self._input = self._resource
 
 		elif mode == Mode.WRITE:
 			if get_file(path).query_exists():
@@ -27,9 +32,23 @@ class File:
 			self._resource = get_file(path).create(
 					Gio.FileCreateFlags.REPLACE_DESTINATION  # doesn't seem to do anything
 					)
+			self._output = self._resource
 
 		elif mode == Mode.APPEND:
 			self._resource = get_file(path).append_to()
+			self._output = self._resource
+
+		elif mode == Mode.READ_APPEND:
+			try:
+				# single stream is used for seeking with separate ones for data
+				self._resource = get_file(path).open_readwrite()
+				self._input = self._resource.get_input_stream()
+				self._output = self._resource.get_output_stream()
+
+			except GLib.Error:
+				# not all file systems support writing, or allow it for this file
+				self._resource = get_file(path).read()
+				self._input = self._resource
 
 	def __enter__(self):
 		"""Set opened file as runtime context"""
@@ -45,28 +64,57 @@ class File:
 
 	def closed(self):
 		"""If file is closed"""
-		self._resource.is_closed()
+		return self._resource.is_closed()
+
+	def readable(self):
+		"""If file can be read from"""
+		return self._input is not None
+
+	def writable(self):
+		"""If file can be written to"""
+		return self._output is not None
+
+	def seekable(self):
+		"""If position in the file can be changed"""
+		return self._resource.can_seek()
 
 	def flush(self):
 		"""Flush internal buffer"""
-		if hasattr(self._resource, 'flush'):
-			self._resource.flush()
+		if self._output is not None:
+			self._output.flush()
 
 	def read(self, size=MAX_READ_FILE_SIZE):
 		"""Read at most _size_ bytes from the file"""
-		result = self._resource.read_bytes(size)
+		if size is None or size < 0:
+			size = MAX_READ_FILE_SIZE
 
-		if result is True:
-			result = ""
+		result = b''
 
-		return result.get_data()
+		# streams are allowed to return less data than requested,
+		# which is something code reading files doesn't expect
+		while len(result) < size:
+			data = self._input.read_bytes(size - len(result)).get_data()
+
+			if not data:
+				break
+
+			result += data
+
+		return result
 
 	def seek(self, offset, whence=0):
 		"""Set the file's current position"""
-		relative = (1, 0, 2)[whence]
+		relative = (GLib.SeekType.SET, GLib.SeekType.CUR, GLib.SeekType.END)[whence]
 
 		if self._resource.can_seek():
-			self._resource.seek(offset, relative)
+			try:
+				self._resource.seek(offset, relative)
+
+			except GLib.Error as error:
+				# report the way file objects are expected to
+				raise OSError(str(error))
+
+		return self.tell()
 
 	def tell(self):
 		"""Return file's current position"""
@@ -81,5 +129,8 @@ class File:
 			self._resource.truncate(size)
 
 	def write(self, buff):
-		"""Write string to the file"""
-		self._resource.write(buff)
+		"""Write data to the file"""
+		# plain write is allowed to store only part of the data
+		self._output.write_all(buff, None)
+
+		return len(buff)

@@ -2583,6 +2583,19 @@ class MainWindow(Gtk.ApplicationWindow):
 		# import class to globals
 		globals()[PluginClass.__name__] = PluginClass
 
+	def register_new_item(self, name, title, callback):
+		"""Register item for menu used to create new files and directories
+
+		Callback is connected to `activate` signal of the menu action and
+		is expected to create new item in the active list.
+
+		"""
+		action = Gio.SimpleAction.new(name, None)
+		action.connect('activate', callback)
+
+		self.new_inode_actions.add_action(action)
+		self.new_inode_menu.append(title, 'new-inode.{0}'.format(name))
+
 	def register_provider(self, ProviderClass):
 		"""Register file provider class for specified protocol
 

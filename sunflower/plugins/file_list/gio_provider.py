@@ -15,6 +15,19 @@ class GioProvider(Provider):
 	is_local = True
 	protocol = 'file'
 
+	def real_path(self, path, relative_to=None):
+		"""Return path GIO can resolve.
+
+		Names appended to URI have to be escaped, otherwise characters
+		with special meaning in URI, like `#`, `?` and `%`, make GIO
+		resolve completely different location.
+
+		"""
+		if relative_to is not None and '://' in relative_to:
+			path = GLib.uri_escape_string(path, '/', True)
+
+		return Provider.real_path(self, path, relative_to)
+
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
 		result = False
@@ -48,8 +61,10 @@ class GioProvider(Provider):
 	def is_link(self, path, relative_to=None):
 		"""Test if given path is a link"""
 		real_path = self.real_path(path, relative_to)
+
+		# link itself has to be tested and not the path it points to
 		info = Gio.File.new_for_commandline_arg(real_path).query_info(
-				'standard::type', Gio.FileQueryInfoFlags.NONE, None
+				'standard::type', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, None
 				)
 
 		return info.get_file_type() == Gio.FileType.SYMBOLIC_LINK
@@ -93,8 +108,10 @@ class GioProvider(Provider):
 		# traverse through directories
 		while len(to_scan) > 0:
 			current_path = to_scan.pop(0)
+			# links must not be followed, or content of directories they
+			# point to would get removed as well
 			info_list = Gio.File.new_for_commandline_arg(current_path).enumerate_children(
-					'standard::name,standard::type', Gio.FileQueryInfoFlags.NONE, None
+					'standard::name,standard::type', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, None
 					)
 
 			for info in info_list:

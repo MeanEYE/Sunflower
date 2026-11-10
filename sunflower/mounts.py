@@ -10,7 +10,8 @@ class MountsManager:
 
 	def __init__(self, application):
 		self._application = application
-		self._mounts = {}
+		self._volumes = []
+		self._mounts = []
 		self._location_menu = None
 		self._window = MountsManagerWindow(self)
 
@@ -34,27 +35,54 @@ class MountsManager:
 		# populate location list with volumes on this machine
 		automount = self._application.options.section('operations').get('automount_start')
 		for volume in self._volume_monitor.get_volumes():
-			self._location_menu.add_location(widget := Volume(self, volume))
+			self._add_volume(volume)
 
-			if (mount := volume.get_mount()) is not None:
-				# volume is already mounted, map it locally
-				root_path = mount.get_root().get_path()
-				self._mounts[root_path] = widget
-
-			elif automount and volume.can_mount():
+			if automount and volume.can_mount() and volume.get_mount() is None:
 				volume.mount(Gio.MountMountFlags.NONE, None, None, self._handle_mount_finish, None)
 
 		# populate location list with remaining mounts without volume
 		for mount in self._volume_monitor.get_mounts():
-			if (root_path := mount.get_root().get_path()) in self._mounts:
-				continue
-			self._location_menu.add_location(widget := Mount(self, mount))
-			self._mounts[root_path] = widget
+			self._add_mount(mount)
+
+	def _add_volume(self, volume):
+		"""Add volume to location list, unless it's already there."""
+		if any(widget.get_volume() == volume for widget in self._volumes):
+			return
+
+		self._location_menu.add_location(widget := Volume(self, volume))
+		self._volumes.append(widget)
+
+	def _add_mount(self, mount):
+		"""Add mount to location list, unless it's already represented.
+
+		Volumes and mounts are tracked by their objects and not paths, as
+		path is not known for unmounted volumes and some remote mounts.
+
+		"""
+		# mounts of known volumes are represented by volume itself
+		if (volume := mount.get_volume()) is not None \
+		and any(widget.get_volume() == volume for widget in self._volumes):
+			return
+
+		# shadowed mounts are not supposed to be visible to the user
+		if mount.is_shadowed():
+			return
+
+		uri = mount.get_root().get_uri()
+		if any(widget.get_mount() == mount or widget.get_uri() == uri for widget in self._mounts):
+			return
+
+		self._location_menu.add_location(widget := Mount(self, mount))
+		self._mounts.append(widget)
 
 	def _handle_add_volume(self, monitor, volume):
 		"""Event called when new volume is connected."""
-		self._location_menu.add_location(widget := Volume(self, volume))
-		self._mounts[widget.get_location()] = widget
+		self._add_volume(volume)
+
+		# volume can show up after its mount, which is now redundant
+		if (mount := volume.get_mount()) is not None:
+			for widget in [widget for widget in self._mounts if widget.get_mount() == mount]:
+				self._handle_unmount_mount(widget, mount)
 
 		# automount volume if needed
 		automount_insert = self._application.options.section('operations').get('automount_insert')
@@ -63,23 +91,22 @@ class MountsManager:
 
 	def _handle_remove_volume(self, widget, volume):
 		"""Event called when volume is removed."""
-		root_path = widget.get_location()
-		del self._mounts[root_path]
+		if widget not in self._volumes:
+			return
+
+		self._volumes.remove(widget)
 		self._location_menu.remove_location(widget)
 
 	def _handle_add_mount(self, monitor, mount):
 		"""Handle mount added to the system."""
-		root_path = mount.get_root().get_path()
-		if root_path in self._mounts:
-			return
-
-		self._location_menu.add_location(widget := Mount(self, mount))
-		self._mounts[root_path] = widget
+		self._add_mount(mount)
 
 	def _handle_unmount_mount(self, widget, mount):
 		"""Event called when mount without volume has been unmounted."""
-		root_path = widget.get_location()
-		del self._mounts[root_path]
+		if widget not in self._mounts:
+			return
+
+		self._mounts.remove(widget)
 		self._location_menu.remove_location(widget)
 
 	def _handle_mount_finish(self, mount, result, data=None):
@@ -315,6 +342,14 @@ class Mount(Location):
 		"""Return location path."""
 		return self._mount.get_root().get_path()
 
+	def get_mount(self):
+		"""Return mount object represented by this location."""
+		return self._mount
+
+	def get_uri(self):
+		"""Return URI of the mount root."""
+		return self._mount.get_root().get_uri()
+
 
 class Volume(Location):
 	"""Generic volume handling class."""
@@ -466,3 +501,7 @@ class Volume(Location):
 			result = root.get_path()
 
 		return result
+
+	def get_volume(self):
+		"""Return volume object represented by this location."""
+		return self._volume

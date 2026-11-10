@@ -1,11 +1,15 @@
 import os
+import re
 import glob
 import gettext
 import subprocess
 import locale
 import sys
 
-from gi.repository import Gtk, Gdk, Gio, Pango, GObject
+from gi.repository import Gtk, Gdk, Gio, GLib, Pango, GObject
+
+# scheme and authority part of URI, authority is never modified
+URI_LOCATION = re.compile(r'^[a-zA-Z][a-zA-Z0-9+.-]*://[^/]*')
 
 # GTK 4 renamed the Alt key modifier from MOD1
 if Gtk.get_major_version() == 3:
@@ -347,6 +351,43 @@ def install_helper_methods():
 		'set_border_width': set_border_width,
 		'run_dialog': run_dialog
 		})
+
+def _split_uri(uri):
+	"""Split URI to location, made of scheme and authority, and path. Location
+	is `None` for local paths."""
+	match = URI_LOCATION.match(uri)
+
+	if match is None:
+		return None, uri
+
+	return match.group(0), uri[match.end():]
+
+def escape_uri_path(path):
+	"""Return URI usable with GIO for path used within the program.
+
+	Paths are handled in their readable form, without escaping, even when
+	they are URIs. Names of files and directories can contain characters with
+	special meaning in URIs, like `#`, `?` and `%`, so path component needs
+	escaping before it's handed over to GIO. Local paths are returned as is.
+
+	"""
+	location, path = _split_uri(path)
+
+	if location is None:
+		return path
+
+	return location + GLib.uri_escape_string(path, '/', False)
+
+def unescape_uri_path(uri):
+	"""Return path used within the program for URI as provided by GIO or
+	other programs. Opposite of `escape_uri_path`."""
+	location, path = _split_uri(uri)
+
+	if location is None:
+		return path
+
+	# invalid escape sequences mean path was not escaped to begin with
+	return location + (GLib.uri_unescape_string(path, None) or path)
 
 def decode_file_name(file_name):
 	"""Replace surrogate codepoints in a filename with a replacement character

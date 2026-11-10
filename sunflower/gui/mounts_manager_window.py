@@ -1,4 +1,5 @@
 from gi.repository import Gtk, Gdk, Gio, GObject, GLib
+from sunflower import common
 from sunflower.parameters import Parameters
 from sunflower.plugin_base.mount_manager_extension import MountManagerExtension, ExtensionFeatures
 
@@ -454,7 +455,8 @@ class MountsExtension(MountManagerExtension):
 		item_list, selected_iter = selection.get_selected()
 
 		if selected_iter is not None:
-			uri = item_list.get_value(selected_iter, MountsColumn.URI)
+			# mounts are tracked by URI while paths are not escaped
+			uri = common.unescape_uri_path(item_list.get_value(selected_iter, MountsColumn.URI))
 			active_object = self._application.get_active_object()
 
 			if not in_new_tab and hasattr(active_object, 'change_path'):

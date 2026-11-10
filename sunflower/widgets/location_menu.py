@@ -189,7 +189,8 @@ class LocationMenu:
 					name = urllib.parse.unquote(uri.split('://')[1]) if '://' in uri else uri
 					name = os.path.basename(name)
 
-				# add entry
+				# add entry, system bookmarks are stored as escaped URIs
+				uri = common.unescape_uri_path(uri)
 				icon_name = icon_manager.get_icon_for_directory(uri)
 				self.add_location(Bookmark(uri, icon_name, name))
 

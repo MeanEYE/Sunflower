@@ -243,7 +243,7 @@ class PropertiesWindow(Gtk.Window):
 
 		# get volume
 		try:
-			mount = Gio.File.new_for_commandline_arg(self._path).find_enclosing_mount()
+			mount = Gio.File.new_for_commandline_arg(common.escape_uri_path(self._path)).find_enclosing_mount()
 			volume_name = mount.get_name()
 
 		except Exception:

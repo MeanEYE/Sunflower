@@ -3,11 +3,11 @@ from __future__ import absolute_import
 import os
 
 from gi.repository import Gio, GLib
-from urllib.parse import unquote
-from .gio_wrapper import File
+from .gio_wrapper import File, get_file
 from .local_monitor import MonitorError, LocalMonitor
 from sunflower.plugin_base.provider import Provider, FileType, FileInfo, FileInfoExtended, SystemSize
 from sunflower.plugin_base.provider import Support, TrashError
+from sunflower.common import unescape_uri_path
 
 
 class GioProvider(Provider):
@@ -15,26 +15,13 @@ class GioProvider(Provider):
 	is_local = True
 	protocol = 'file'
 
-	def real_path(self, path, relative_to=None):
-		"""Return path GIO can resolve.
-
-		Names appended to URI have to be escaped, otherwise characters
-		with special meaning in URI, like `#`, `?` and `%`, make GIO
-		resolve completely different location.
-
-		"""
-		if relative_to is not None and '://' in relative_to:
-			path = GLib.uri_escape_string(path, '/', True)
-
-		return Provider.real_path(self, path, relative_to)
-
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
 		result = False
 		real_path = self.real_path(path, relative_to)
 
 		try:
-			info = Gio.File.new_for_commandline_arg(real_path).query_info(
+			info = get_file(real_path).query_info(
 					'standard::type', Gio.FileQueryInfoFlags.NONE, None
 					)
 			result = info.get_file_type() == Gio.FileType.REGULAR
@@ -49,7 +36,7 @@ class GioProvider(Provider):
 		real_path = self.real_path(path, relative_to)
 
 		try:
-			info = Gio.File.new_for_commandline_arg(real_path).query_info(
+			info = get_file(real_path).query_info(
 					'standard::type', Gio.FileQueryInfoFlags.NONE, None
 					)
 			result = info.get_file_type() == Gio.FileType.DIRECTORY
@@ -63,7 +50,7 @@ class GioProvider(Provider):
 		real_path = self.real_path(path, relative_to)
 
 		# link itself has to be tested and not the path it points to
-		info = Gio.File.new_for_commandline_arg(real_path).query_info(
+		info = get_file(real_path).query_info(
 				'standard::type', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, None
 				)
 
@@ -72,7 +59,7 @@ class GioProvider(Provider):
 	def exists(self, path, relative_to=None):
 		"""Test if given path exists"""
 		real_path = self.real_path(path, relative_to)
-		return Gio.File.new_for_commandline_arg(real_path).query_exists()
+		return get_file(real_path).query_exists()
 
 	def link(self, existing_path, destination_path, relative_to=None, symbolic=True):
 		"""Create hard or symbolic link from existing path"""
@@ -80,17 +67,17 @@ class GioProvider(Provider):
 
 		if symbolic:
 			# create a symbolic link on destination path from existing path
-			Gio.File.new_for_commandline_arg(link_path).make_symbolic_link(existing_path)
+			get_file(link_path).make_symbolic_link(existing_path)
 
 	def unlink(self, path, relative_to=None):
 		"""Unlink given path"""
 		real_path = self.real_path(path, relative_to)
-		Gio.File.new_for_commandline_arg(real_path).delete()
+		get_file(real_path).delete()
 
 	def readlink(self, path, relative_to=None):
 		"""Return a string representing the path to which the symbolic link points."""
 		real_path = self.real_path(path, relative_to)
-		result = Gio.File.new_for_commandline_arg(real_path).query_info(
+		result = get_file(real_path).query_info(
 				'standard::symlink-target', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, None
 				).get_symlink_target()
 		return result
@@ -110,7 +97,7 @@ class GioProvider(Provider):
 			current_path = to_scan.pop(0)
 			# links must not be followed, or content of directories they
 			# point to would get removed as well
-			info_list = Gio.File.new_for_commandline_arg(current_path).enumerate_children(
+			info_list = get_file(current_path).enumerate_children(
 					'standard::name,standard::type', Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS, None
 					)
 
@@ -130,19 +117,19 @@ class GioProvider(Provider):
 		# remove all items in reverse order
 		file_list.reverse()
 		for path in file_list:
-			Gio.File.new_for_commandline_arg(path).delete()
+			get_file(path).delete()
 
 	def remove_file(self, path, relative_to=None):
 		"""Remove file"""
 		real_path = self.real_path(path, relative_to)
-		Gio.File.new_for_commandline_arg(real_path).delete()
+		get_file(real_path).delete()
 
 	def trash_path(self, path, relative_to=None):
 		"""Move path to the trash"""
 		real_path = self.real_path(path, relative_to)
 
 		try:
-			Gio.File.new_for_commandline_arg(real_path).trash()
+			get_file(real_path).trash()
 
 		except GLib.Error as error:
 			raise TrashError(error)
@@ -150,7 +137,7 @@ class GioProvider(Provider):
 	def create_file(self, path, mode=None, relative_to=None):
 		"""Create empty file with specified mode set"""
 		real_path = self.real_path(path, relative_to)
-		Gio.File.new_for_commandline_arg(real_path).create(Gio.FileCreateFlags.REPLACE_DESTINATION)
+		get_file(real_path).create(Gio.FileCreateFlags.REPLACE_DESTINATION)
 
 		if mode is not None and Support.SET_ACCESS in self.get_support(real_path):
 			self.set_mode(real_path, mode)
@@ -158,7 +145,7 @@ class GioProvider(Provider):
 	def create_directory(self, path, mode=None, relative_to=None):
 		"""Create directory with specified mode set"""
 		real_path = self.real_path(path, relative_to)
-		Gio.File.new_for_commandline_arg(real_path).make_directory_with_parents()
+		get_file(real_path).make_directory_with_parents()
 
 		if mode is not None and Support.SET_ACCESS in self.get_support(real_path):
 			self.set_mode(real_path, mode)
@@ -193,7 +180,7 @@ class GioProvider(Provider):
 					Gio.FileQueryInfoFlags.NONE
 				)[follow]
 
-			file_stat = Gio.File.new_for_commandline_arg(real_path).query_info(
+			file_stat = get_file(real_path).query_info(
 											'standard::size,unix::mode,unix::uid,unix::gid,'
 											'time::access,time::modified,time::changed,'
 											'standard::type,unix::device,unix::inode',
@@ -281,7 +268,7 @@ class GioProvider(Provider):
 	def set_mode(self, path, mode, relative_to=None):
 		"""Set access mode to specified path"""
 		real_path = self.real_path(path, relative_to)
-		file = Gio.File.new_for_commandline_arg(real_path)
+		file = get_file(real_path)
 		flags = Gio.FileQueryInfoFlags.NONE
 
 		file.set_attribute_uint32(Gio.FILE_ATTRIBUTE_UNIX_MODE, mode, flags)
@@ -289,7 +276,7 @@ class GioProvider(Provider):
 	def set_owner(self, path, owner=-1, group=-1, relative_to=None):
 		"""Set owner and/or group for specified path"""
 		real_path = self.real_path(path, relative_to)
-		file = Gio.File.new_for_commandline_arg(real_path)
+		file = get_file(real_path)
 		flags = Gio.FileQueryInfoFlags.NONE
 
 		file.set_attribute_uint32(Gio.FILE_ATTRIBUTE_UNIX_UID, owner, flags)
@@ -298,7 +285,7 @@ class GioProvider(Provider):
 	def set_timestamp(self, path, access=None, modify=None, change=None, relative_to=None):
 		"""Set timestamp for specified path"""
 		real_path = self.real_path(path, relative_to)
-		file = Gio.File.new_for_commandline_arg(real_path)
+		file = get_file(real_path)
 		flags = Gio.FileQueryInfoFlags.NONE
 		settable = file.query_settable_attributes()
 
@@ -320,8 +307,8 @@ class GioProvider(Provider):
 	def move_path(self, source, destination, relative_to=None):
 		"""Move path on same file system to a different parent node """
 		real_source = self.real_path(source, relative_to)
-		Gio.File.new_for_commandline_arg(real_source).move(
-				Gio.File.new_for_commandline_arg(destination),
+		get_file(real_source).move(
+				get_file(destination),
 				Gio.FileQueryInfoFlags.NONE,  # flags
 				None,  # cancelable
 				None,  # progress callback
@@ -331,12 +318,12 @@ class GioProvider(Provider):
 	def rename_path(self, source, destination, relative_to=None):
 		"""Rename file/directory within parents path"""
 		real_source = self.real_path(source, relative_to)
-		Gio.File.new_for_commandline_arg(real_source).set_display_name(destination)
+		get_file(real_source).set_display_name(destination)
 
 	def list_dir(self, path, relative_to=None):
 		"""Get directory list"""
 		real_path = self.real_path(path, relative_to)
-		directory = Gio.File.new_for_commandline_arg(real_path)
+		directory = get_file(real_path)
 		result = []
 
 		try:
@@ -357,7 +344,7 @@ class GioProvider(Provider):
 
 		# try to get mount
 		try:
-			mount = Gio.File.new_for_commandline_arg(path).find_enclosing_mount()
+			mount = get_file(path).find_enclosing_mount()
 
 			# get root directory from mount
 			if mount is not None:
@@ -369,7 +356,7 @@ class GioProvider(Provider):
 		except GLib.GError:
 			pass
 
-		return unquote(result)
+		return result
 
 	def get_root_name(self, path):
 		"""Get name for root path. This is usually volume name or
@@ -378,7 +365,7 @@ class GioProvider(Provider):
 
 		# try to get mount
 		try:
-			mount = Gio.File.new_for_commandline_arg(path).find_enclosing_mount()
+			mount = get_file(path).find_enclosing_mount()
 
 			if mount is not None:
 				result = mount.get_name()
@@ -386,7 +373,7 @@ class GioProvider(Provider):
 		except GLib.GError:
 			pass
 
-		return unquote(result)
+		return result
 
 	def get_root_symbolic_icon(self, path):
 		"""Get symbolic icon for root path."""
@@ -394,7 +381,7 @@ class GioProvider(Provider):
 
 		# try to get mount
 		try:
-			mount = Gio.File.new_for_commandline_arg(path).find_enclosing_mount()
+			mount = get_file(path).find_enclosing_mount()
 
 			if mount is not None:
 				result = mount.get_symbolic_icon()
@@ -406,12 +393,12 @@ class GioProvider(Provider):
 
 	def get_parent_path(self, path):
 		"""Get parent path for specified"""
-		return unquote(Gio.File.new_for_commandline_arg(path).get_parent().get_uri())
+		return unescape_uri_path(get_file(path).get_parent().get_uri())
 
 	def get_system_size(self, path):
 		"""Return system size information"""
 		try:
-			stat = Gio.File.new_for_commandline_arg(path).query_filesystem_info('filesystem::size,filesystem::free')
+			stat = get_file(path).query_filesystem_info('filesystem::size,filesystem::free')
 
 			space_free = stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_FILESYSTEM_FREE)
 			space_total = stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_FILESYSTEM_SIZE)
@@ -478,7 +465,7 @@ class GioProvider(Provider):
 			Support.SET_TIMESTAMP: Gio.FILE_ATTRIBUTE_TIME_MODIFIED
 		}
 
-		file = Gio.File.new_for_commandline_arg(path)
+		file = get_file(path)
 
 		try:
 			settable = file.query_settable_attributes()
@@ -565,7 +552,7 @@ class TrashProvider(GioProvider):
 	def remove_directory(self, path, relative_to=None):
 		"""Remove directory and optionally its contents"""
 		real_path = self.real_path(path, relative_to)
-		Gio.File.new_for_commandline_arg(real_path).delete()
+		get_file(real_path).delete()
 
 	def get_protocol_icon(self):
 		"""Return protocol icon name"""
@@ -653,11 +640,11 @@ class ArchiveProvider(GioProvider):
 		result = None
 
 		# try to get mount
-		mount = Gio.File.new_for_commandline_arg(path).find_enclosing_mount()
+		mount = get_file(path).find_enclosing_mount()
 
 		# get root directory from mount
 		if mount is not None:
-			result = mount.get_root().get_uri()
+			result = unescape_uri_path(mount.get_root().get_uri())
 
 		# remove trailing slash
 		if result[-1] == os.path.sep:

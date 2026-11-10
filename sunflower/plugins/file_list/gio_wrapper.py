@@ -1,9 +1,15 @@
 from gi.repository import Gio, GLib, GObject
+from sunflower.common import escape_uri_path
 from sunflower.plugin_base.provider import Mode
 
 # GFile.read_bytes() has upper limit for size of
 # G_MAXSSIZE (9223372036854775807) which is insensibly large
 MAX_READ_FILE_SIZE = 4*1024*1024*1024
+
+
+def get_file(path):
+	"""Return GIO file object for path used within the program."""
+	return Gio.File.new_for_commandline_arg(escape_uri_path(path))
 
 
 class File:
@@ -12,18 +18,18 @@ class File:
 
 	def __init__(self, path, mode):
 		if mode == Mode.READ:
-			self._resource = Gio.File.new_for_commandline_arg(path).read()
+			self._resource = get_file(path).read()
 
 		elif mode == Mode.WRITE:
-			if Gio.File.new_for_commandline_arg(path).query_exists():
-				Gio.File.new_for_commandline_arg(path).delete()  # have to manually remove since flag doesn't work
+			if get_file(path).query_exists():
+				get_file(path).delete()  # have to manually remove since flag doesn't work
 
-			self._resource = Gio.File.new_for_commandline_arg(path).create(
+			self._resource = get_file(path).create(
 					Gio.FileCreateFlags.REPLACE_DESTINATION  # doesn't seem to do anything
 					)
 
 		elif mode == Mode.APPEND:
-			self._resource = Gio.File.new_for_commandline_arg(path).append_to()
+			self._resource = get_file(path).append_to()
 
 	def __enter__(self):
 		"""Set opened file as runtime context"""

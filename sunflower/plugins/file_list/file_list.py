@@ -1295,6 +1295,14 @@ class FileList(ItemList):
 				fragment = path_fragments.pop(0)
 				parent = self._find_iter_by_name(fragment, parent)
 
+				if parent is None:
+					break
+
+			# content of directories is only shown when they are expanded, items
+			# in other directories don't belong to the list
+			if parent is None or parent_path not in self._expand_loads:
+				return True
+
 		# check for list of always hidden files
 		provider = self.get_provider()
 		always_hidden = []

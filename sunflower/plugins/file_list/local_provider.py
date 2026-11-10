@@ -290,7 +290,7 @@ class LocalProvider(Provider):
 		"""Get file system monitor for specified path"""
 		return LocalMonitor(self, path)
 
-	def get_support(self):
+	def get_support(self, path=None):
 		"""Return supported options by provider"""
 		return (
 			Support.MONITOR,

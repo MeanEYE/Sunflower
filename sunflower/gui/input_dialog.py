@@ -744,6 +744,7 @@ class CopyDialog:
 		self._application = application
 		self._source_provider = source_provider
 		self._destination_provider = destination_provider
+		self._destination_path = path
 
 		self._dialog_size = None
 		self._dialog.set_default_size(500, 10)
@@ -943,7 +944,7 @@ class CopyDialog:
 		source_symlink_support = ProviderSupport.SYMBOLIC_LINK in source_support
 
 		if self._destination_provider is not None:
-			destination_support = self._destination_provider.get_support()
+			destination_support = self._destination_provider.get_support(self._destination_path)
 			destination_set_owner = ProviderSupport.SET_OWNER in destination_support
 			destination_set_mode = ProviderSupport.SET_ACCESS in destination_support
 			destination_set_timestamp = ProviderSupport.SET_TIMESTAMP in destination_support
@@ -998,7 +999,7 @@ class CopyDialog:
 		source_symlink = ProviderSupport.SYMBOLIC_LINK in source_support
 
 		if self._destination_provider is not None:
-			destination_support = self._destination_provider.get_support()
+			destination_support = self._destination_provider.get_support(self._destination_path)
 			destination_set_owner = ProviderSupport.SET_OWNER in destination_support
 			destination_set_mode = ProviderSupport.SET_ACCESS in destination_support
 			destination_set_timestamp = ProviderSupport.SET_TIMESTAMP in destination_support

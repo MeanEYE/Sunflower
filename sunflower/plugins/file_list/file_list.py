@@ -826,6 +826,11 @@ class FileList(ItemList):
 		show_dialog = self._parent.options.section('confirmations').get('delete_items')
 		trash_items = self._parent.options.section('operations').get('trash_files')
 
+		# items are removed instead when file system they are on has no trash
+		if trash_items and len(selection) > 0:
+			sample_path = os.path.join(self.path, selection[0])
+			trash_items = ProviderSupport.TRASH in self.get_provider().get_support(sample_path)
+
 		if show_dialog:
 			# get context sensitive message
 			if force_delete or not trash_items:

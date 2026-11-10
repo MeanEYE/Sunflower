@@ -271,8 +271,14 @@ class Provider:
 		"""Return monitor object to be used with specified list"""
 		return Monitor(self, path)
 
-	def get_support(self):
-		"""Return supported options by provider"""
+	def get_support(self, path=None):
+		"""Return supported options by provider
+
+		When path is specified, result should only contain options which
+		are supported by that particular path, as single provider can
+		handle paths residing on different file systems.
+
+		"""
 		return ()
 
 	def get_protocol(self):

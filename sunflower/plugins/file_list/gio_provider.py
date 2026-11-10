@@ -7,7 +7,7 @@ from urllib.parse import unquote
 from .gio_wrapper import File
 from .local_monitor import MonitorError, LocalMonitor
 from sunflower.plugin_base.provider import Provider, FileType, FileInfo, FileInfoExtended, SystemSize
-from sunflower.plugin_base.provider import Support
+from sunflower.plugin_base.provider import Support, TrashError
 
 
 class GioProvider(Provider):
@@ -123,14 +123,19 @@ class GioProvider(Provider):
 	def trash_path(self, path, relative_to=None):
 		"""Move path to the trash"""
 		real_path = self.real_path(path, relative_to)
-		Gio.File.new_for_commandline_arg(real_path).trash()
+
+		try:
+			Gio.File.new_for_commandline_arg(real_path).trash()
+
+		except GLib.Error as error:
+			raise TrashError(error)
 
 	def create_file(self, path, mode=None, relative_to=None):
 		"""Create empty file with specified mode set"""
 		real_path = self.real_path(path, relative_to)
 		Gio.File.new_for_commandline_arg(real_path).create(Gio.FileCreateFlags.REPLACE_DESTINATION)
 
-		if Support.SET_ACCESS in self.get_support():
+		if mode is not None and Support.SET_ACCESS in self.get_support(real_path):
 			self.set_mode(real_path, mode)
 
 	def create_directory(self, path, mode=None, relative_to=None):
@@ -138,7 +143,7 @@ class GioProvider(Provider):
 		real_path = self.real_path(path, relative_to)
 		Gio.File.new_for_commandline_arg(real_path).make_directory_with_parents()
 
-		if Support.SET_ACCESS in self.get_support():
+		if mode is not None and Support.SET_ACCESS in self.get_support(real_path):
 			self.set_mode(real_path, mode)
 
 	def get_file_handle(self, path, mode, relative_to=None):
@@ -172,9 +177,9 @@ class GioProvider(Provider):
 				)[follow]
 
 			file_stat = Gio.File.new_for_commandline_arg(real_path).query_info(
-											'standard::size,unix::mode,unix::uid,unix::gid'
+											'standard::size,unix::mode,unix::uid,unix::gid,'
 											'time::access,time::modified,time::changed,'
-											'standard::type,unix:device,unix::inode',
+											'standard::type,unix::device,unix::inode',
 											flags, None
 										)
 
@@ -279,6 +284,12 @@ class GioProvider(Provider):
 		file = Gio.File.new_for_commandline_arg(real_path)
 		flags = Gio.FileQueryInfoFlags.NONE
 		settable = file.query_settable_attributes()
+
+		# GIO stores time as unsigned value, see `_get_time`
+		access, modify, change = [
+				value if value is None else value & ((1 << 64) - 1)
+				for value in (access, modify, change)
+			]
 
 		if access is not None and settable.lookup(Gio.FILE_ATTRIBUTE_TIME_ACCESS):
 			file.set_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_ACCESS, access, flags)
@@ -417,9 +428,9 @@ class GioProvider(Provider):
 
 		return result
 
-	def get_support(self):
+	def get_support(self, path=None):
 		"""Return supported options by provider"""
-		return (
+		result = (
 			Support.MONITOR,
 			Support.TRASH,
 			Support.SYMBOLIC_LINK,
@@ -430,6 +441,51 @@ class GioProvider(Provider):
 			Support.SYSTEM_SIZE
 		)
 
+		if path is not None:
+			result = self._filter_support_for_path(result, path)
+
+		return result
+
+	def _filter_support_for_path(self, support, path):
+		"""Remove options not supported by file system behind the path.
+
+		Local paths don't necessarily end up on local file systems. For
+		example MTP devices mounted through FUSE have regular path but
+		allow changing neither owner, access mode nor timestamps and
+		have no trash.
+
+		"""
+		required_attributes = {
+			Support.SET_OWNER: Gio.FILE_ATTRIBUTE_UNIX_UID,
+			Support.SET_ACCESS: Gio.FILE_ATTRIBUTE_UNIX_MODE,
+			Support.SET_TIMESTAMP: Gio.FILE_ATTRIBUTE_TIME_MODIFIED
+		}
+
+		file = Gio.File.new_for_commandline_arg(path)
+
+		try:
+			settable = file.query_settable_attributes()
+
+		except GLib.Error:
+			# unable to tell, assume attributes can't be changed
+			settable = None
+
+		# trash is not available on all file systems, nor for all paths
+		try:
+			info = file.query_info(Gio.FILE_ATTRIBUTE_ACCESS_CAN_TRASH, Gio.FileQueryInfoFlags.NONE, None)
+			can_trash = info.get_attribute_boolean(Gio.FILE_ATTRIBUTE_ACCESS_CAN_TRASH)
+
+		except GLib.Error:
+			can_trash = False
+
+		return tuple(
+				option for option in support
+				if (option not in required_attributes and option != Support.TRASH)
+				or (option == Support.TRASH and can_trash)
+				or (option in required_attributes
+					and settable is not None and settable.lookup(required_attributes[option]))
+			)
+
 
 class SambaProvider(GioProvider):
 	is_local = False
@@ -439,7 +495,7 @@ class SambaProvider(GioProvider):
 		"""Return protocol icon name"""
 		return 'folder-remote'
 
-	def get_support(self):
+	def get_support(self, path=None):
 		"""Return supported options by provider"""
 		return (
 			Support.SYSTEM_SIZE,
@@ -454,7 +510,7 @@ class FtpProvider(GioProvider):
 		"""Return protocol icon name"""
 		return 'folder-remote'
 
-	def get_support(self):
+	def get_support(self, path=None):
 		"""Return supported options by provider"""
 		return ()
 
@@ -467,7 +523,7 @@ class SftpProvider(GioProvider):
 		"""Return protocol icon name"""
 		return 'folder-remote'
 
-	def get_support(self):
+	def get_support(self, path=None):
 		"""Return supported options by provider"""
 		return ()
 
@@ -480,7 +536,7 @@ class NetworkProvider(GioProvider):
 		"""Return protocol icon name"""
 		return 'network-workgroup'
 
-	def get_support(self):
+	def get_support(self, path=None):
 		"""Return supported options by provider"""
 		return ()
 
@@ -498,7 +554,7 @@ class TrashProvider(GioProvider):
 		"""Return protocol icon name"""
 		return 'user-trash'
 
-	def get_support(self):
+	def get_support(self, path=None):
 		"""Return supported options by provider"""
 		return ()
 
@@ -515,7 +571,7 @@ class DavProvider(GioProvider):
 		"""Return protocol icon name"""
 		return 'folder-remote'
 
-	def get_support(self):
+	def get_support(self, path=None):
 		"""Return supported options by provider"""
 		return (
 			Support.SYSTEM_SIZE,
@@ -530,7 +586,7 @@ class DavsProvider(GioProvider):
 		"""Return protocol icon name"""
 		return 'folder-remote'
 
-	def get_support(self):
+	def get_support(self, path=None):
 		"""Return supported options by provider"""
 		return (
 			Support.SYSTEM_SIZE,
@@ -545,7 +601,7 @@ class Gphoto2Provider(GioProvider):
 		"""Return protocol icon name"""
 		return 'camera-photo'
 
-	def get_support(self):
+	def get_support(self, path=None):
 		"""Return supported options by provider"""
 		return ()
 
@@ -558,7 +614,7 @@ class MtpProvider(GioProvider):
 		"""Return protocol icon name"""
 		return 'multimedia-player'
 
-	def get_support(self):
+	def get_support(self, path=None):
 		"""Return supported options by provider"""
 		return ()
 
@@ -571,7 +627,7 @@ class ArchiveProvider(GioProvider):
 		"""Return protocol icon name"""
 		return 'drive-removable-media'
 
-	def get_support(self):
+	def get_support(self, path=None):
 		"""Return supported options by provider"""
 		return ()
 

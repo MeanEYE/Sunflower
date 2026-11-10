@@ -272,7 +272,7 @@ class ZipProvider(Provider):
 				size_available = 0
 			)
 
-	def get_support(self):
+	def get_support(self, path=None):
 		"""Return supported options by provider"""
 		return (Support.SET_TIMESTAMP, Support.SET_ACCESS)
 

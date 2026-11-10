@@ -645,9 +645,21 @@ class CopyOperation(Operation):
 		self._progress_size = 0
 		self._progress_fraction = 0.0
 
+		# don't try setting attributes target file system doesn't support
+		destination_support = self._destination.get_support(self._destination_path)
+		required_support = {
+			Option.SET_OWNER: ProviderSupport.SET_OWNER,
+			Option.SET_MODE: ProviderSupport.SET_ACCESS,
+			Option.SET_TIMESTAMP: ProviderSupport.SET_TIMESTAMP
+		}
+		self._options = list(self._options)
+		for option, support in required_support.items():
+			if support not in destination_support:
+				self._options[option] = False
+
 		# cache settings
 		should_reserve = self._application.options.section('operations').get('reserve_size')
-		supported_by_provider = ProviderSupport.RESERVE_SIZE in self._destination.get_support()
+		supported_by_provider = ProviderSupport.RESERVE_SIZE in destination_support
 		self._reserve_size = should_reserve and supported_by_provider
 
 		# detect buffer size
@@ -1022,6 +1034,9 @@ class CopyOperation(Operation):
 			GObject.idle_add(self._dialog.increment_current_size, file_stat.size)
 			return
 
+		sh = None
+		dh = None
+
 		try:
 			# get file stats
 			destination_size = 0
@@ -1062,7 +1077,7 @@ class CopyOperation(Operation):
 		except Exception as error:
 			# close handles if they exist
 			if hasattr(sh, 'close'): sh.close()
-			if hasattr(dh, 'close'): sh.close()
+			if hasattr(dh, 'close'): dh.close()
 
 			if Skip.CREATE in self._response_cache:
 				response = self._response_cache[Skip.CREATE]
@@ -1105,7 +1120,7 @@ class CopyOperation(Operation):
 					if response == OperationError.RESPONSE_RETRY:
 						GObject.idle_add(self._dialog.increment_current_size, -dh.tell())
 						if hasattr(sh, 'close'): sh.close()
-						if hasattr(dh, 'close'): sh.close()
+						if hasattr(dh, 'close'): dh.close()
 
 						self._copy_file(dest_file)
 
@@ -1652,7 +1667,12 @@ class DeleteOperation(Operation):
 
 		# select removal method
 		trash_files = self._application.options.section('operations').get('trash_files')
-		trash_available = ProviderSupport.TRASH in self._source.get_support()
+		trash_available = False
+
+		if trash_files and len(self._file_list) > 0:
+			# test on one of the items, as trash depends on file system they are on
+			sample_path = os.path.join(self._source_path, self._file_list[0])
+			trash_available = ProviderSupport.TRASH in self._source.get_support(sample_path)
 
 		if self._force_delete:
 			remove_method = self._remove_path

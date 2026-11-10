@@ -203,6 +203,21 @@ class LocationMenu:
 		self.__handle_open_click(widget)
 		return True
 
+	def __open_location(self, selected_location, callback):
+		"""Call specified method with path of the selected location.
+
+		Locations which are not mounted have no path. They are mounted
+		first and method is called once that's done.
+
+		"""
+		location = selected_location.get_location()
+
+		if location is not None:
+			callback(location)
+
+		elif hasattr(selected_location, 'mount'):
+			selected_location.mount(callback)
+
 	def __handle_open_click(self, widget, data=None):
 		"""Handle clicking on open button."""
 		selected_location = self.__get_selected_location()
@@ -215,9 +230,14 @@ class LocationMenu:
 		self._popover.popdown()
 
 		# open selected path in currently active list
-		if isinstance(self._active_object, ItemList):
-			self._active_object.change_path(selected_location.get_location())
-			self._active_object.focus_main_object()
+		active_object = self._active_object
+
+		def open_location(location):
+			active_object.change_path(location)
+			active_object.focus_main_object()
+
+		if isinstance(active_object, ItemList):
+			self.__open_location(selected_location, open_location)
 
 		return True
 
@@ -232,13 +252,18 @@ class LocationMenu:
 		# close menu
 		self._popover.popdown()
 
-		# create options to pass to new tab
-		options = Parameters()
-		options.set('path', selected_location.get_location())
+		notebook = self._active_object._notebook
 
-		# create new tab
-		TabClass = self._application.plugin_classes['file_list']
-		self._application.create_tab(self._active_object._notebook, TabClass, options)
+		def open_location(location):
+			# create options to pass to new tab
+			options = Parameters()
+			options.set('path', location)
+
+			# create new tab
+			TabClass = self._application.plugin_classes['file_list']
+			self._application.create_tab(notebook, TabClass, options)
+
+		self.__open_location(selected_location, open_location)
 
 		return True
 
@@ -256,7 +281,7 @@ class LocationMenu:
 		# open in opposite object
 		opposite_object = self._application.get_opposite_object(self._active_object)
 		if isinstance(opposite_object, ItemList):
-			opposite_object.change_path(selected_location.get_location())
+			self.__open_location(selected_location, opposite_object.change_path)
 
 		return True
 
@@ -271,13 +296,18 @@ class LocationMenu:
 		# close menu
 		self._popover.popdown()
 
-		# create options to pass to new tab
-		options = Parameters()
-		options.set('path', selected_location.get_location())
+		notebook = self._active_object._notebook
 
-		# create new tab
-		TabClass = self._application.plugin_classes['system_terminal']
-		self._application.create_tab(self._active_object._notebook, TabClass, options)
+		def open_location(location):
+			# create options to pass to new tab
+			options = Parameters()
+			options.set('path', location)
+
+			# create new tab
+			TabClass = self._application.plugin_classes['system_terminal']
+			self._application.create_tab(notebook, TabClass, options)
+
+		self.__open_location(selected_location, open_location)
 
 		return True
 

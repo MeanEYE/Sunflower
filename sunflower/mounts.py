@@ -12,12 +12,15 @@ class MountsManager:
 		self._application = application
 		self._volumes = []
 		self._mounts = []
+		self._pending_mounts = {}
 		self._location_menu = None
 		self._window = MountsManagerWindow(self)
 
 		# create volume monitor
 		self._volume_monitor = Gio.VolumeMonitor.get()
 		self._volume_monitor.connect('mount-added', self._handle_add_mount)
+		self._volume_monitor.connect('mount-changed', self._handle_change_mount)
+		self._volume_monitor.connect('mount-removed', self._handle_remove_mount)
 		self._volume_monitor.connect('volume-added', self._handle_add_volume)
 
 	def show(self, widget, data=None):
@@ -97,9 +100,64 @@ class MountsManager:
 		self._volumes.remove(widget)
 		self._location_menu.remove_location(widget)
 
+	def _update_volumes(self):
+		"""Update options offered for volumes.
+
+		Volumes don't necessarily notify when they get mounted or unmounted,
+		it's only known through mounts being added and removed.
+
+		"""
+		for widget in self._volumes:
+			widget.update()
+
 	def _handle_add_mount(self, monitor, mount):
 		"""Handle mount added to the system."""
 		self._add_mount(mount)
+		self._update_volumes()
+
+		# volume someone is waiting for might have just become available
+		if (volume := mount.get_volume()) is not None:
+			self._complete_mount(volume)
+
+	def _handle_remove_mount(self, monitor, mount):
+		"""Handle mount removed from the system."""
+		for widget in [widget for widget in self._mounts if widget.get_mount() == mount]:
+			self._handle_unmount_mount(widget, mount)
+
+		self._update_volumes()
+
+	def _complete_mount(self, volume):
+		"""Notify whoever requested the volume to be mounted that it's ready.
+
+		Mount of the volume is not necessarily known the moment mounting is
+		finished. For some devices, like phones, it's reported a bit later.
+
+		"""
+		if volume in self._pending_mounts and volume.get_mount() is not None:
+			callback = self._pending_mounts.pop(volume)
+
+			if callback is not None:
+				callback()
+
+	def _handle_change_mount(self, monitor, mount):
+		"""Handle change of a mount.
+
+		Mounts of some devices, like phones, are reported twice. Once as they
+		really are and once as mount of the volume representing the device, in
+		which case the real one gets marked as shadowed. This only happens a
+		moment after mount is reported, by which time it's already listed.
+
+		"""
+		if mount.is_shadowed():
+			for widget in [widget for widget in self._mounts if widget.get_mount() == mount]:
+				self._handle_unmount_mount(widget, mount)
+
+		elif mount in self._volume_monitor.get_mounts():
+			# mount is on its own again, unless change is reported
+			# for the one which is already gone
+			self._add_mount(mount)
+
+		self._update_volumes()
 
 	def _handle_unmount_mount(self, widget, mount):
 		"""Event called when mount without volume has been unmounted."""
@@ -113,8 +171,11 @@ class MountsManager:
 		"""Callback for mount events."""
 		try:
 			mount.mount_finish(result)
+			self._complete_mount(mount)
 
 		except GLib.Error as error:
+			self._pending_mounts.pop(mount, None)
+
 			dialog = Gtk.MessageDialog(
 									transient_for=self._application,
 									destroy_with_parent=True,
@@ -157,9 +218,18 @@ class MountsManager:
 			run_dialog(dialog)
 			dialog.destroy()
 
-	def mount(self, volume):
-		"""Perform volume mount."""
-		if volume.can_mount() and volume.get_mount() is None:
+	def mount(self, volume, callback=None):
+		"""Perform volume mount.
+
+		Callback, when specified, is called without
+		arguments once volume is mounted and ready for use.
+
+		"""
+		if volume.get_mount() is not None and callback is not None:
+			callback()
+
+		elif volume.can_mount() and volume.get_mount() is None:
+			self._pending_mounts[volume] = callback
 			volume.mount(Gio.MountMountFlags.NONE, None, None, self._handle_mount_finish, None)
 
 		else:
@@ -383,6 +453,10 @@ class Volume(Location):
 		self._mount_button.set_visible(mount is None and self._volume.can_mount())
 		self._eject_button.set_visible(self._volume.can_eject())
 
+	def update(self):
+		"""Update options to match the state of the volume."""
+		self.__handle_change(self._volume)
+
 	def __handle_remove(self, volume):
 		"""Handle volume remove event."""
 		self._manager._handle_remove_volume(self, volume)
@@ -390,6 +464,16 @@ class Volume(Location):
 	def __handle_mount_click(self, widget, data=None):
 		"""Handle clicking on mount button."""
 		self._manager.mount(self._volume)
+
+	def mount(self, callback):
+		"""Mount volume and call specified method with its location once ready."""
+		def notify():
+			location = self.get_location()
+
+			if location is not None:
+				callback(location)
+
+		self._manager.mount(self._volume, notify)
 
 	def __handle_unmount_click(self, widget, data=None):
 		"""Handle clicking on unmount button."""

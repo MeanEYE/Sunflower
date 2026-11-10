@@ -20,6 +20,7 @@ class LocationMenu:
 
 		# create popover interface
 		self._popover_visible = False
+		self._suspended_groups = []
 		self._popover = Gtk.Popover.new()
 		self._popover.set_position(Gtk.PositionType.BOTTOM)
 		if Gtk.get_major_version() == 3:
@@ -318,21 +319,38 @@ class LocationMenu:
 		"""Handle popover opening."""
 		self._popover_visible = True
 
-		# disable plugin accelerators
-		groups = self._application.accelerator_manager.get_groups()
-		for group_name in groups:
-			group = self._application.accelerator_manager._get_group_by_name(group_name)
+		# disable active accelerators, every tab has its own groups sharing
+		# the same names so they have to be tracked by object and not name
+		self._suspended_groups = self._application.accelerator_manager.get_active_groups()
+		for group in self._suspended_groups:
 			group.deactivate()
 
 	def __handle_popover_close(self, widget, data=None):
 		"""Handle popover closing."""
 		self._popover_visible = False
 
-		# enable plugin accelerators
-		groups = self._application.accelerator_manager.get_groups()
-		for group_name in groups:
-			group = self._application.accelerator_manager._get_group_by_name(group_name)
-			group.activate(self._application)
+		# find groups belonging to tabs, only one tab is allowed to have them active
+		active_object = self._application.get_active_object()
+		tab_groups = []
+		for tab in (self._application.get_left_object(), self._application.get_right_object()):
+			tab_groups.extend(getattr(tab, '_accelerator_groups', []))
+
+		# enable accelerators not related to tabs
+		restore_tab_groups = False
+		for group in self._suspended_groups:
+			if group in tab_groups:
+				restore_tab_groups = True
+
+			else:
+				group.activate(self._application)
+
+		self._suspended_groups = []
+
+		# enable accelerators for the tab which is active now, as this is
+		# not necessarily the one which was active when menu was shown
+		if restore_tab_groups:
+			for group in getattr(active_object, '_accelerator_groups', []):
+				group.activate(self._application)
 
 	def __get_popover_visible(self):
 		"""Return boolean denoting whether popover is visible."""

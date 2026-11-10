@@ -115,6 +115,10 @@ class AcceleratorManager:
 		"""Get list of unique group names"""
 		return self._group_names
 
+	def get_active_groups(self):
+		"""Get list of currently active accelerator groups"""
+		return [group for group in self._groups if group._active]
+
 	def get_group_title(self, name):
 		"""Get title for specified group name"""
 		result = ''

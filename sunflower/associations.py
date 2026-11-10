@@ -93,13 +93,13 @@ class AssociationManager:
 		"""Check if specified mime_type is unknown"""
 		return Gio.content_type_is_unknown(mime_type)
 
-	def get_sample_data(self, path, provider):
+	def get_sample_data(self, path, provider, size=128):
 		"""Get sample data needed for content detection"""
 		data = None
 		file_handle = provider.get_file_handle(path, Mode.READ)
 
 		if file_handle is not None:
-			data = file_handle.read(128)
+			data = file_handle.read(size)
 			file_handle.close()
 
 		return data

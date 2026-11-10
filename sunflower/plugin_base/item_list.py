@@ -1498,7 +1498,8 @@ class ItemList(PluginBase):
 
 		if not self._parent.is_archive_supported(result) and Gio.content_type_is_unknown(result):
 			try:
-				data = associations_manager.get_sample_data(path, provider)
+				# some formats, like TAR, are only recognizable further into the file
+				data = associations_manager.get_sample_data(path, provider, 4096)
 
 				if data:
 					result = associations_manager.get_mime_type(data=data)

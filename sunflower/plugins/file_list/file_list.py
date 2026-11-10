@@ -8,7 +8,7 @@ import datetime
 import fnmatch
 
 from gi.repository import GObject, Gtk, Gdk, GLib, Gio
-from threading import Thread, Event
+from threading import Thread
 
 from .column_editor import FileList_ColumnEditor
 
@@ -70,9 +70,12 @@ class FileList(ItemList):
 		section = self._parent.options.section('item_list')
 		self._always_visible_items = section.get('always_visible')
 
-		# event object controlling path change thread
-		self._thread_active = Event()
-		self._main_thread_lock = Event()
+		# number identifying content currently shown, increased each time list
+		# is cleared, loading threads started before that drop their results
+		self._load_generation = 0
+		self._expand_loads = {}
+		self._active_loads = 0
+		self._change_path_thread = None
 
 		self._item_queue = []
 		self._emblem_cache = {}
@@ -1568,8 +1571,17 @@ class FileList(ItemList):
 
 		return result
 
-	def _add_item(self, filename, parent=None, parent_path=None):
-		"""Add item to the list"""
+	def _add_item(self, filename, parent=None, parent_path=None, queue=None, emblems=None):
+		"""Add item to the list
+
+		Item is added to the specified queue, which caller is responsible
+		for flushing. When omitted shared queue is used instead. Emblems
+		are taken from the cache of the current path unless specified.
+
+		"""
+		if emblems is None:
+			emblems = self._emblem_cache
+
 		result = None
 		provider = self.get_provider()
 		full_path = os.path.join(self.path, parent_path) if parent_path else self.path
@@ -1656,7 +1668,7 @@ class FileList(ItemList):
 					None,
 					file_stat.user_id,
 					file_stat.group_id,
-					self._emblem_cache[filename] if filename in self._emblem_cache else None,
+					emblems[filename] if filename in emblems else None,
 					''
 				)
 
@@ -1664,23 +1676,42 @@ class FileList(ItemList):
 			# right position, keeping list sorted and usable during load
 			data = data[:Column.SORT_DATA] + (self._generate_sort_key(False, is_dir, data[self._sort_column]),)
 
-			self._item_queue.append(data)
+			if queue is not None:
+				queue.append(data)
 
-			if len(self._item_queue) == 100:
-				GLib.idle_add(self._flush_queue, parent, priority=GLib.PRIORITY_HIGH_IDLE)
+			else:
+				self._item_queue.append(data)
+
+				if len(self._item_queue) == 100:
+					GLib.idle_add(self._flush_queue, parent, priority=GLib.PRIORITY_HIGH_IDLE)
 		except Exception as error:
 			print(u'Error: {0} - {1}'.format(filename, str(error)))
 
 		return result
 
-	def _flush_queue(self, parent=None):
-		"""Add items in queue to the list"""
+	def _flush_queue(self, parent=None, item_queue=None, is_current=None):
+		"""Add items in queue to the list
+
+		Loading threads provide their own queue along with a function
+		telling if list still shows content queue was made for. Shared
+		queue is used otherwise.
+
+		"""
 		queued_iters = []
 		row_to_select = None
 
-		# atomically take over the queue, loading thread can keep appending
-		# to the new list without items getting lost on clear
-		item_queue, self._item_queue = self._item_queue, []
+		# list was cleared or reloaded in the meantime, items no longer belong to it
+		if is_current is not None and not is_current():
+			return False
+
+		# expanded directory was removed from the list while its content was loading
+		if parent is not None and not self._store.iter_is_valid(parent):
+			return False
+
+		# atomically take over the queue so items added
+		# while flushing are not lost
+		if item_queue is None:
+			item_queue, self._item_queue = self._item_queue, []
 
 		# add items from the queue, sort data is already part of each row
 		for data in item_queue:
@@ -1710,6 +1741,8 @@ class FileList(ItemList):
 		# expand row if needed
 		if parent is not None:
 			self._item_list.expand_row(self._store.get_path(parent), False)
+
+		return False
 
 	def _delete_item_by_name(self, name, parent):
 		"""Removes item with 'name' from the list"""
@@ -2027,24 +2060,26 @@ class FileList(ItemList):
 		return Gdk.DragAction.COPY | Gdk.DragAction.MOVE | Gdk.DragAction.ASK | Gdk.DragAction.LINK
 
 	def _load_directory(self, path, parent=None, clear_store=False):
-		"""Load directory content into store"""
-		# if there is already active thread, stop it
-		if self._thread_active.is_set():
-			self._main_thread_lock.set()
-			self._thread_active.clear()
+		"""Load directory content into store
 
-			while self._main_thread_lock.is_set():
-				GLib.MainContext.default().iteration(False)
+		Content is loaded in a separate thread. Threads are never waited
+		for nor stopped directly. Each one remembers generation of the list
+		it was started for and gives up as soon as list gets cleared, with
+		everything touching the list being done from the main loop.
 
+		"""
 		# disable updates on cursor change
 		self._item_list.handler_block_by_func(self._handle_cursor_change)
 
-		# clear list
+		# clear list, making threads which are still loading drop their results
 		if clear_store:
+			self._load_generation += 1
+			self._expand_loads.clear()
 			self._clear_list()
+			self._item_queue[:] = []
 
-		# clear item queue
-		self._item_queue[:] = []
+		generation = self._load_generation
+		expand_token = None
 
 		# default value for parent path
 		parent_path = None
@@ -2067,27 +2102,56 @@ class FileList(ItemList):
 				# prepare full parent path
 				parent_path = self._store.get_value(parent, Column.NAME)
 
-		# load items in separate thread
-		def thread_method():
-			self._thread_active.set()
-			GLib.idle_add(self._title_bar.show_spinner, priority=GLib.PRIORITY_DEFAULT_IDLE)
+		# expanding directory again replaces load which might still be running for it
+		if parent is not None:
+			expand_token = object()
+			expand_name = self._store.get_value(parent, Column.NAME)
+			self._expand_loads[expand_name] = expand_token
+
+		def is_current():
+			"""Check if list still shows content thread was started for"""
+			result = generation == self._load_generation
+
+			if result and expand_token is not None:
+				result = self._expand_loads.get(expand_name) is expand_token
+
+			return result
+
+		def flush(item_queue):
+			"""Schedule adding items to the list"""
+			GLib.idle_add(self._flush_queue, parent, item_queue, is_current, priority=GLib.PRIORITY_HIGH_IDLE)
+
+		def remove_stale_monitor():
+			"""Remove monitor created for content which is no longer shown"""
+			for monitor in self._monitor_list[:]:
+				if monitor.get_path() == path and path != self.path:
+					monitor.cancel()
+					self._monitor_list.remove(monitor)
+
+			return False
+
+		def finish():
+			"""Update interface once loading is done"""
+			# spinner counts its users, each load has to release it exactly once
+			self._active_loads -= 1
+			self._title_bar.hide_spinner()
+
+			if is_current():
+				self._update_status_with_statistis()
+
+			return False
+
+		def load():
+			"""Load items and queue them for adding to the list"""
+			provider = self.get_provider()
+
 			# preload emblems for faster operation
-			self._emblem_cache = self._parent.emblem_manager.get_emblems_for_path(path)
+			emblems = self._parent.emblem_manager.get_emblems_for_path(path)
+			if parent is None and is_current():
+				self._emblem_cache = emblems
 
 			# get initial directory listing
-			try:
-				provider = self.get_provider()
-				item_list = provider.list_dir(path)
-
-			except Exception as error:
-				print('Load directory error: ', str(error))
-
-				# clear locks and exit
-				self._thread_active.clear()
-				self._main_thread_lock.clear()
-
-				GLib.idle_add(self._title_bar.hide_spinner, priority=GLib.PRIORITY_DEFAULT_IDLE)
-				return
+			item_list = provider.list_dir(path)
 
 			# remove hidden files if we don't need them
 			if not show_hidden:
@@ -2109,8 +2173,11 @@ class FileList(ItemList):
 				if len(always_hidden) > 0:
 					item_list = [name for name in item_list if name not in always_hidden]
 
+			if not is_current():
+				return
+
 			# assign item for selection
-			if not self._item_to_focus in item_list:
+			if parent is None and not self._item_to_focus in item_list:
 				self._item_to_focus = None
 
 			# adding items in sorted order keeps the list ordered during
@@ -2122,29 +2189,49 @@ class FileList(ItemList):
 						reverse=not self._sort_ascending
 					)
 
+			item_queue = []
 			for item_name in item_list:
-				# check if we are allowed to continue as we don't want
-				# items from different directory ending up in our list
-				if not self._thread_active.is_set():
-					break
+				# we don't want items from different directory ending up in our list
+				if not is_current():
+					return
 
-				# add item to the list
-				self._add_item(item_name, parent, parent_path)
+				try:
+					self._add_item(item_name, parent, parent_path, item_queue, emblems)
 
-			GLib.idle_add(self._flush_queue, parent, priority=GLib.PRIORITY_HIGH_IDLE)
-			# hide spinner animation
-			GLib.idle_add(self._title_bar.hide_spinner, priority=GLib.PRIORITY_DEFAULT_IDLE)
-			# update status bar
-			GLib.idle_add(self._update_status_with_statistis, priority=GLib.PRIORITY_DEFAULT_IDLE)
-			# release locks
-			self._thread_active.clear()
-			self._main_thread_lock.clear()
+				except Exception as error:
+					# single item must not prevent the rest from being listed
+					print(u'Error: {0} - {1}'.format(item_name, str(error)))
+
+				# add items in portions, keeping list usable during load
+				if len(item_queue) >= 100:
+					flush(item_queue)
+					item_queue = []
+
+			flush(item_queue)
 
 			# create directory monitor
 			self.monitor_path(path, parent)
 
+			if not is_current():
+				GLib.idle_add(remove_stale_monitor, priority=GLib.PRIORITY_DEFAULT_IDLE)
+
+		def thread_method():
+			try:
+				load()
+
+			except Exception as error:
+				print('Load directory error: ', str(error))
+
+			finally:
+				GLib.idle_add(finish, priority=GLib.PRIORITY_DEFAULT_IDLE)
+
+		# show spinner animation
+		self._active_loads += 1
+		self._title_bar.show_spinner()
+
 		# create new thread
 		self._change_path_thread = Thread(target=thread_method)
+		self._change_path_thread.daemon = True
 		self._change_path_thread.start()
 
 		# enable updates on cursor change

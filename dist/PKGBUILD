@@ -4,7 +4,7 @@ pkgrel=@release@
 arch=(any)
 url=https://sunflower-fm.org
 license=(GPL-3.0-or-later)
-depends=(python python-gobject python-chardet gtk3)
+depends=(python python-gobject python-chardet gtk3 gnome-desktop)
 optdepends=('libnotify: notifications'
             'vte3: support for built-in terminal'
             'gnome-keyring: access to saved passwords')

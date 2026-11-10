@@ -12,14 +12,15 @@ Required:
 	gir1.2-gdkpixbuf-2.0
 	gir1.2-pango-1.0
 	gir1.2-vte-2.91 >= 0.46
+	gir1.2-gnomedesktop-3.0
 
 Optional:
 	gir1.2-notify-0.7        - desktop notifications
 	gir1.2-gtksource-4       - syntax highlighting in the file viewer
-	gir1.2-gnomedesktop-3.0  - thumbnails in the file list
 	gir1.2-gnomekeyring-1.0  - storing passwords for remote locations
 
 Experimental GTK 4 mode (SUNFLOWER_GTK=4) additionally needs:
 	gir1.2-gtk-4.0
 	gir1.2-vte-3.91
+	gir1.2-gnomedesktop-4.0  - replaces gir1.2-gnomedesktop-3.0
 	gir1.2-gtksource-5       - optional, replaces gir1.2-gtksource-4

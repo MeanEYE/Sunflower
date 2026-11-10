@@ -386,12 +386,15 @@ class FileList(ItemList):
 
 		# we need selection for this
 		if selected_iter is None:
+			self._thumbnail_view.hide()
 			return
 
 		is_dir = self._store.get_value(selected_iter, Column.IS_DIR)
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
 
+		# preview of the previous item is not to be left behind
 		if is_dir or is_parent:
+			self._thumbnail_view.hide()
 			return
 
 		# create URI from item name and protocol
@@ -401,7 +404,8 @@ class FileList(ItemList):
 
 		# show preview if thumbnail exists
 		if self._thumbnail_view.can_have_thumbnail(uri):
-			self._thumbnail_view.show_thumbnail(uri, widget, self._get_selection_rectangle())
+			# method is also called directly, without widget emitting the signal
+			self._thumbnail_view.show_thumbnail(uri, self._item_list, self._get_selection_rectangle())
 		else:
 			self._thumbnail_view.hide()
 

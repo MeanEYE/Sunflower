@@ -255,9 +255,9 @@ class GioProvider(Provider):
 						time_access = self._get_time(file_stat, Gio.FILE_ATTRIBUTE_TIME_ACCESS),
 						time_modify = self._get_time(file_stat, Gio.FILE_ATTRIBUTE_TIME_MODIFIED),
 						time_change = self._get_time(file_stat, Gio.FILE_ATTRIBUTE_TIME_CHANGED),
-						time_access_ns = self._get_time(file_stat, Gio.FILE_ATTRIBUTE_TIME_ACCESS),
-						time_modify_ns = self._get_time(file_stat, Gio.FILE_ATTRIBUTE_TIME_MODIFIED),
-						time_change_ns = self._get_time(file_stat, Gio.FILE_ATTRIBUTE_TIME_CHANGED),
+						time_access_ns = self._get_time(file_stat, Gio.FILE_ATTRIBUTE_TIME_ACCESS) * 10**9,
+						time_modify_ns = self._get_time(file_stat, Gio.FILE_ATTRIBUTE_TIME_MODIFIED) * 10**9,
+						time_change_ns = self._get_time(file_stat, Gio.FILE_ATTRIBUTE_TIME_CHANGED) * 10**9,
 						type = item_type,
 						device = file_stat.get_attribute_uint32(Gio.FILE_ATTRIBUTE_UNIX_DEVICE),
 						inode = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_UNIX_INODE)
@@ -289,9 +289,10 @@ class GioProvider(Provider):
 		flags = Gio.FileQueryInfoFlags.NONE
 		settable = file.query_settable_attributes()
 
-		# GIO stores time as unsigned value, see `_get_time`
+		# timestamps are specified in nanoseconds while GIO stores
+		# them in seconds as unsigned value, see `_get_time`
 		access, modify, change = [
-				value if value is None else value & ((1 << 64) - 1)
+				value if value is None else (int(value) // 10**9) & ((1 << 64) - 1)
 				for value in (access, modify, change)
 			]
 

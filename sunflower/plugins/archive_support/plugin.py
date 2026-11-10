@@ -5,6 +5,7 @@ import os
 from gi.repository import Gtk
 
 from .zip_provider import ZipProvider
+from .tar_provider import TarProvider
 from sunflower.gui.input_dialog import InputDialog
 from sunflower.plugin_base.item_list import ItemList
 from sunflower.plugin_base.monitor import MonitorSignals
@@ -87,6 +88,7 @@ def create_archive(application, name=None):
 def register_plugin(application):
 	"""Register plugin classes with application"""
 	application.register_provider(ZipProvider)
+	application.register_provider(TarProvider)
 
 	# add option for creating archives next to files and directories
 	application.register_new_item(

@@ -6,8 +6,57 @@ import time
 import zipfile
 import datetime
 
+from threading import RLock
+
 from sunflower.plugin_base.provider import Provider, Support, SystemSize, Mode
 from sunflower.plugin_base.provider import FileInfo, FileInfoExtended, FileType
+
+
+class ZipWriter:
+	"""File-like object used for adding new file to the archive.
+
+	Data can only be written sequentially, which is all operations
+	need. Archive is finalized once file is closed.
+
+	"""
+
+	def __init__(self, provider, stream):
+		self._provider = provider
+		self._stream = stream
+		self._position = 0
+		self._closed = False
+
+	def write(self, data):
+		"""Write data to the file"""
+		self._stream.write(data)
+		self._position += len(data)
+
+	def tell(self):
+		"""Return number of bytes written so far"""
+		return self._position
+
+	def seek(self, offset, whence=0):
+		"""Position can't be changed for files being added to archive"""
+		return self._position
+
+	def truncate(self, size=None):
+		"""File size is defined by the amount of data written"""
+		pass
+
+	def flush(self):
+		"""Data is written to archive on close"""
+		pass
+
+	def closed(self):
+		"""If file is closed"""
+		return self._closed
+
+	def close(self):
+		"""Finish adding file to the archive"""
+		if not self._closed:
+			self._closed = True
+			self._stream.close()
+			self._provider._commit()
 
 
 class ZipProvider(Provider):
@@ -27,10 +76,27 @@ class ZipProvider(Provider):
 		self._cache = {}
 		self._file_list = []
 		self._zip_file = None
+		self._writer = None
+		self._lock = RLock()
 
 		# get icon name
 		icon_manager = self._parent._parent.icon_manager
 		self._protocol_icon = icon_manager.get_icon_for_file(path)
+
+	def get_path(self):
+		"""Return path inside of the archive list is currently showing.
+
+		Operations resolve selected items against this path, so it has to
+		follow the list into directories of the archive.
+
+		"""
+		result = self._path
+		list_path = self._parent.path
+
+		if list_path is not None and list_path.startswith(self._path + os.path.sep):
+			result = list_path
+
+		return result
 
 	def real_path(self, path, relative_to=None):
 		"""Commonly used function to get real path"""
@@ -43,6 +109,8 @@ class ZipProvider(Provider):
 
 	def _update_cache(self):
 		"""Update archive cache."""
+		self._cache.clear()
+		del self._file_list[:]
 		self._cache[''] = []  # root directory
 
 		for info in self._zip_file.infolist():
@@ -96,8 +164,118 @@ class ZipProvider(Provider):
 
 	def release_archive_handle(self):
 		"""Release archive handle when it's no longer needed."""
-		self._zip_file.close()
+		with self._lock:
+			# file left open by interrupted operation would leave archive unfinished
+			if self._writer is not None:
+				self._writer.close()
+
+			self._zip_file.close()
+
 		Provider.release_archive_handle(self)
+
+	def _commit(self):
+		"""Finalize changes made to the archive.
+
+		List of files is located at the end of the archive, and is only
+		written when archive gets closed. Until then data on disk is not
+		a valid archive, so this is done after every change.
+
+		"""
+		with self._lock:
+			self._writer = None
+			self._zip_file.close()
+			self._zip_file = zipfile.ZipFile(self._handle, 'a')
+			self._update_cache()
+
+	def _move_data(self, source, destination, size):
+		"""Move block of data towards the beginning of the archive file."""
+		moved = 0
+
+		while moved < size:
+			self._handle.seek(source + moved)
+			data = self._handle.read(min(size - moved, 1024 * 1024))
+
+			if not data:
+				raise IOError(_('Unexpected end of archive.'))
+
+			self._handle.seek(destination + moved)
+			self._handle.write(data)
+			moved += len(data)
+
+	def _remove_entries(self, names):
+		"""Remove entries with specified names from the archive.
+
+		Archive format has no notion of removing files. Entries are taken out
+		of the list of files stored at the end of the archive and data which
+		follows them is moved over the space they used. Nothing is compressed
+		again, but `zipfile` doesn't offer this so its entry list is modified
+		directly.
+
+		"""
+		archive = self._zip_file
+		entries = sorted(archive.filelist, key=lambda entry: entry.header_offset)
+		removed_size = 0
+
+		for index, entry in enumerate(entries):
+			# data of each entry spans to the beginning of the next one
+			if index + 1 < len(entries):
+				entry_end = entries[index + 1].header_offset
+			else:
+				entry_end = archive.start_dir
+			entry_size = entry_end - entry.header_offset
+
+			if entry.filename in names:
+				archive.filelist.remove(entry)
+				if archive.NameToInfo.get(entry.filename) is entry:
+					del archive.NameToInfo[entry.filename]
+				removed_size += entry_size
+
+			elif removed_size > 0:
+				self._move_data(entry.header_offset, entry.header_offset - removed_size, entry_size)
+				entry.header_offset -= removed_size
+
+		# list of files is written from this position when archive is closed
+		archive.start_dir -= removed_size
+		archive._didModify = True
+
+		self._commit()
+
+	def _prepare_entry(self, real_path, mode, is_directory):
+		"""Create archive entry for new file or directory."""
+		self._check_writable()
+
+		real_path = real_path.rstrip(os.path.sep)
+		if real_path == '':
+			raise IOError(_('Invalid name.'))
+
+		# file added before the one being added now was never closed
+		if self._writer is not None:
+			self._writer.close()
+
+		if len(self._cache) == 0:
+			self._update_cache()
+
+		if real_path in self._cache:
+			raise IOError(_('Directory with the same name already exists.'))
+
+		# archive format allows multiple entries with the same name
+		# so existing file needs to be removed before adding new one
+		if real_path in self._file_list:
+			if is_directory:
+				raise IOError(_('File with the same name already exists.'))
+
+			self._remove_entries((real_path,))
+
+		if is_directory:
+			result = zipfile.ZipInfo(real_path + os.path.sep, time.localtime()[:6])
+			result.external_attr = ((0o40000 | (mode or 0o755)) << 16) | 0x10  # directory flags
+
+		else:
+			result = zipfile.ZipInfo(real_path, time.localtime()[:6])
+			result.external_attr = (0o100000 | (mode or 0o644)) << 16
+			result.compress_type = zipfile.ZIP_DEFLATED
+
+		return result
 
 	def is_file(self, path, relative_to=None):
 		"""Test if given path is file"""
@@ -116,23 +294,56 @@ class ZipProvider(Provider):
 	def exists(self, path, relative_to=None):
 		"""Test if given path exists"""
 		real_path = self.real_path(path, relative_to)
-		return real_path in self._cache or real_path == ''
+		return real_path in self._cache or real_path in self._file_list or real_path == ''
 
-	def remove_directory(self, path, recursive, relative_to=None):
-		"""Remove directory and optionally its content"""
-		pass
+	def _check_writable(self):
+		"""Make sure archive can be modified."""
+		writable = getattr(self._handle, 'writable', None)
+		if writable is not None and not writable():
+			raise IOError(_('Archive can not be modified.'))
+
+	def remove_directory(self, path, relative_to=None):
+		"""Remove directory and its content"""
+		real_path = self.real_path(path, relative_to).rstrip(os.path.sep)
+
+		if real_path == '':
+			raise IOError(_('Invalid name.'))
+
+		with self._lock:
+			self._check_writable()
+
+			# directories don't necessarily have their own entry in the archive
+			prefix = real_path + os.path.sep
+			names = [name for name in self._zip_file.namelist() if name.startswith(prefix)]
+			self._remove_entries(names)
 
 	def remove_file(self, path, relative_to=None):
 		"""Remove file"""
-		pass
+		real_path = self.real_path(path, relative_to)
+
+		with self._lock:
+			self._check_writable()
+
+			if real_path not in self._zip_file.namelist():
+				raise IOError(_('No such file in archive.'))
+
+			self._remove_entries((real_path,))
 
 	def create_file(self, path, mode=None, relative_to=None):
 		"""Create empty file with specified mode set"""
-		pass
+		real_path = self.real_path(path, relative_to)
+
+		with self._lock:
+			self._zip_file.writestr(self._prepare_entry(real_path, mode, False), b'')
+			self._commit()
 
 	def create_directory(self, path, mode=None, relative_to=None):
 		"""Create directory with specified mode set"""
-		pass
+		real_path = self.real_path(path, relative_to)
+
+		with self._lock:
+			self._zip_file.writestr(self._prepare_entry(real_path, mode, True), b'')
+			self._commit()
 
 	def get_file_handle(self, path, mode, relative_to=None):
 		"""Open path in specified mode and return its handle"""
@@ -143,7 +354,10 @@ class ZipProvider(Provider):
 			result = self._zip_file.open(real_path, 'r')
 
 		elif mode is Mode.WRITE:
-			pass
+			with self._lock:
+				entry = self._prepare_entry(real_path, None, False)
+				self._writer = ZipWriter(self, self._zip_file.open(entry, 'w', force_zip64=True))
+				result = self._writer
 
 		else:
 			pass
@@ -257,6 +471,11 @@ class ZipProvider(Provider):
 	def get_root_path(self, path):
 		"""Get root for specified path"""
 		return 'file:///' if path.startswith('file://') else os.path.sep
+
+	def get_root_name(self, path):
+		"""Get name for root path. Archives are shown as part of
+		the file system they are located on."""
+		return 'System'
 
 	def get_parent_path(self, path):
 		"""Get parent path for specified"""

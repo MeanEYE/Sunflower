@@ -74,6 +74,7 @@ class FileList(ItemList):
 		# is cleared, loading threads started before that drop their results
 		self._load_generation = 0
 		self._expand_loads = {}
+		self._auto_selected_item = None
 		self._active_loads = 0
 		self._change_path_thread = None
 
@@ -1753,7 +1754,41 @@ class FileList(ItemList):
 		if parent is not None:
 			self._item_list.expand_row(self._store.get_path(parent), False)
 
+		# make sure list has cursor as soon as there is something to put it on
+		elif row_to_select is None:
+			self._select_first_item()
+
 		return False
+
+	def _select_first_item(self, final=False):
+		"""Place cursor on the first item when list has none.
+
+		Cursor is normally placed when path is changed, on item for parent
+		directory or the one specified. Locations without parent directory,
+		like root of a mount, have nothing in the list at that point.
+
+		Items sorted before the first one can still arrive while list is
+		loading. Once loading is done, specified with `final`, cursor placed
+		by this method is moved to the item which ended up being first,
+		unless user moved it in the meantime.
+
+		"""
+		first_iter = self._store.get_iter_first()
+
+		# cursor is going to be placed on specific item once it's added
+		if first_iter is None or (self._item_to_focus is not None and not final):
+			return
+
+		item_list, selected_iter = self._item_list.get_selection().get_selected()
+
+		if selected_iter is not None:
+			selected_name = item_list.get_value(selected_iter, Column.NAME)
+
+			if not final or selected_name != self._auto_selected_item:
+				return
+
+		self._auto_selected_item = self._store.get_value(first_iter, Column.NAME)
+		self._item_list.set_cursor(self._store.get_path(first_iter))
 
 	def _delete_item_by_name(self, name, parent):
 		"""Removes item with 'name' from the list"""
@@ -2086,6 +2121,7 @@ class FileList(ItemList):
 		if clear_store:
 			self._load_generation += 1
 			self._expand_loads.clear()
+			self._auto_selected_item = None
 			self._clear_list()
 			self._item_queue[:] = []
 
@@ -2149,6 +2185,9 @@ class FileList(ItemList):
 
 			if is_current():
 				self._update_status_with_statistis()
+
+				if parent is None:
+					self._select_first_item(final=True)
 
 			return False
 

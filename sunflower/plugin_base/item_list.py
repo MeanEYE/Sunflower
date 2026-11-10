@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import os
 import urllib.parse
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, Gio
 from sunflower import common
 from sunflower.plugin_base.plugin import PluginBase
 from sunflower.plugin_base.provider import Mode as FileMode
@@ -1454,8 +1454,8 @@ class ItemList(PluginBase):
 				self._providers[root_path] = result
 
 		else:
-			mime_type = self._parent.associations_manager.get_mime_type(path=path)
 			current_provider = self.get_provider()
+			mime_type = self._get_archive_mime_type(path, current_provider)
 
 			# create archive provider
 			Provider = self._parent.get_provider_for_archive(mime_type)
@@ -1485,6 +1485,29 @@ class ItemList(PluginBase):
 		"""Allow providers to clean up after themselves."""
 		for path, provider in self._providers.items():
 			provider.release_archive_handle()
+
+	def _get_archive_mime_type(self, path, provider):
+		"""Get mime type used for deciding if path is a supported archive.
+
+		Type is detected from file name. Many archives use extensions system
+		doesn't know about, so content is checked when name tells nothing.
+
+		"""
+		associations_manager = self._parent.associations_manager
+		result = associations_manager.get_mime_type(path=path)
+
+		if not self._parent.is_archive_supported(result) and Gio.content_type_is_unknown(result):
+			try:
+				data = associations_manager.get_sample_data(path, provider)
+
+				if data:
+					result = associations_manager.get_mime_type(data=data)
+
+			except Exception:
+				# file which can't be read is not treated as archive
+				pass
+
+		return result
 
 	def get_provider(self, path=None):
 		"""Get existing list provider or create new for specified path."""

@@ -446,11 +446,14 @@ class FileList(ItemList):
 			return
 
 		selected_file = self._get_selection()
-		mime_type = self._parent.associations_manager.get_mime_type(path=selected_file)
 
 		is_dir = item_list.get_value(selected_iter, Column.IS_DIR)
 		is_parent = item_list.get_value(selected_iter, Column.IS_PARENT_DIR)
-		is_archive = self._parent.is_archive_supported(mime_type)
+		is_archive = False
+
+		if not is_dir:
+			mime_type = self._get_archive_mime_type(selected_file, self.get_provider())
+			is_archive = self._parent.is_archive_supported(mime_type)
 
 		# preemptively create provider if selected item is archive
 		if not is_parent and is_archive and not self.provider_exists(selected_file):

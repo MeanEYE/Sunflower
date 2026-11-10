@@ -201,6 +201,15 @@ class Provider:
 			# return predefined path
 			result = self._path
 
+			# predefined path of archive provider is the archive itself, while
+			# operations resolve items against path inside of the archive list
+			# is currently showing
+			if len(self.archives) > 0:
+				list_path = self._parent.path
+
+				if list_path is not None and list_path.startswith(self._path + os.path.sep):
+					result = list_path
+
 		return result
 
 	def set_mode(self, path, mode, relative_to=None):
@@ -253,7 +262,7 @@ class Provider:
 	def get_root_name(self, path):
 		"""Get name for root path. This is usually volume name or
 		something generic like 'Home', 'System', etc."""
-		pass
+		return 'System'
 
 	def get_root_symbolic_icon(self, path):
 		"""Get symbolic icon for root path."""

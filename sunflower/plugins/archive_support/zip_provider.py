@@ -64,10 +64,17 @@ class ZipProvider(Provider):
 
 	is_local = False
 	protocol = None
+	# formats which are ZIP archives under different name, documents and
+	# books are left out on purpose as those are expected to be opened
 	archives = (
 			'application/zip',
+			'application/java-archive',
+			'application/x-java-archive',
+			'application/x-jar',
 			'application/jar',
-			'application/war'
+			'application/war',
+			'application/vnd.android.package-archive',
+			'application/x-xpinstall'
 		)
 
 	def __init__(self, parent, path, selection=None):
@@ -82,21 +89,6 @@ class ZipProvider(Provider):
 		# get icon name
 		icon_manager = self._parent._parent.icon_manager
 		self._protocol_icon = icon_manager.get_icon_for_file(path)
-
-	def get_path(self):
-		"""Return path inside of the archive list is currently showing.
-
-		Operations resolve selected items against this path, so it has to
-		follow the list into directories of the archive.
-
-		"""
-		result = self._path
-		list_path = self._parent.path
-
-		if list_path is not None and list_path.startswith(self._path + os.path.sep):
-			result = list_path
-
-		return result
 
 	def real_path(self, path, relative_to=None):
 		"""Commonly used function to get real path"""
@@ -471,11 +463,6 @@ class ZipProvider(Provider):
 	def get_root_path(self, path):
 		"""Get root for specified path"""
 		return 'file:///' if path.startswith('file://') else os.path.sep
-
-	def get_root_name(self, path):
-		"""Get name for root path. Archives are shown as part of
-		the file system they are located on."""
-		return 'System'
 
 	def get_parent_path(self, path):
 		"""Get parent path for specified"""

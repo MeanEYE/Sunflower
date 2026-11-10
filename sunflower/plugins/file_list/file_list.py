@@ -4,6 +4,7 @@ import os
 import re
 import time
 import sys
+import datetime
 import fnmatch
 
 from gi.repository import GObject, Gtk, Gdk, GLib, Gio
@@ -87,7 +88,7 @@ class FileList(ItemList):
 								str,	# Column.FORMATTED_SIZE
 								int,	# Column.MODE
 								str,	# Column.FORMATTED_MODE
-								int,	# Column.DATE
+								GObject.TYPE_INT64,	# Column.DATE, dates past 2038 or before 1901 don't fit 32 bits
 								str,	# Column.FORMATTED_DATE
 								bool,	# Column.IS_DIR
 								bool,	# Column.IS_PARENT_DIR
@@ -1541,6 +1542,27 @@ class FileList(ItemList):
 
 		return result
 
+	def _format_date(self, timestamp):
+		"""Format timestamp using configured time format.
+
+		Dates far in the past or future, as commonly found on optical
+		media, can't be represented by the platform and must not prevent
+		item from being listed.
+
+		"""
+		try:
+			result = time.strftime(self._time_format, time.localtime(timestamp))
+
+		except (OverflowError, OSError, ValueError):
+			try:
+				date = datetime.datetime(1970, 1, 1) + datetime.timedelta(seconds=timestamp)
+				result = date.strftime(self._time_format)
+
+			except (OverflowError, ValueError):
+				result = ''
+
+		return result
+
 	def _add_item(self, filename, parent=None, parent_path=None):
 		"""Add item to the list"""
 		result = None
@@ -1589,7 +1611,7 @@ class FileList(ItemList):
 		try:
 			# don't allow extension splitting on directories
 			formatted_file_mode = common.format_mode(file_mode, self._mode_format)
-			formatted_file_date = time.strftime(self._time_format, time.localtime(file_date))
+			formatted_file_date = self._format_date(file_date)
 
 			if not is_dir:
 				if not self._second_extension:
@@ -1657,7 +1679,14 @@ class FileList(ItemList):
 
 		# add items from the queue, sort data is already part of each row
 		for data in item_queue:
-			new_iter = self._store.append(parent, data)
+			try:
+				new_iter = self._store.append(parent, data)
+
+			except Exception as error:
+				# single invalid row must not take the rest of the queue with it
+				print(u'Error: {0} - {1}'.format(data[0], str(error)))
+				continue
+
 			queued_iters.append(new_iter)
 
 			# focus specified item, row reference is used since later
@@ -1736,7 +1765,7 @@ class FileList(ItemList):
 				formatted_file_size = '<DIR>'
 
 			formatted_file_mode = common.format_mode(file_mode, self._mode_format)
-			formatted_file_date = time.strftime(self._time_format, time.localtime(file_date))
+			formatted_file_date = self._format_date(file_date)
 
 			# update list store
 			self._store.set_value(found_iter, Column.SIZE, file_size)
@@ -1762,7 +1791,7 @@ class FileList(ItemList):
 			file_mode = file_stat.mode
 			file_date = file_stat.time_modify
 			formatted_file_mode = common.format_mode(file_mode, self._mode_format)
-			formatted_file_date = time.strftime(self._time_format, time.localtime(file_date))
+			formatted_file_date = self._format_date(file_date)
 
 			# update list store
 			self._store.set_value(found_iter, Column.MODE, file_mode)

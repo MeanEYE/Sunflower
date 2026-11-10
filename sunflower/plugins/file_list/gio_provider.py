@@ -146,6 +146,20 @@ class GioProvider(Provider):
 		real_path = self.real_path(path, relative_to)
 		return File(real_path, mode)
 
+	def _get_time(self, file_info, attribute):
+		"""Return time attribute as signed number of seconds.
+
+		GIO exposes time as unsigned value, which turns dates before
+		1970, commonly found on optical media, into huge numbers.
+
+		"""
+		result = file_info.get_attribute_uint64(attribute)
+
+		if result >= 1 << 63:
+			result -= 1 << 64
+
+		return result
+
 	def get_stat(self, path, relative_to=None, extended=False, follow=False):
 		"""Return file statistics"""
 		real_path = self.real_path(path, relative_to)
@@ -218,7 +232,7 @@ class GioProvider(Provider):
 						mode = file_stat.get_attribute_uint32(Gio.FILE_ATTRIBUTE_UNIX_MODE),
 						user_id = file_stat.get_attribute_uint32(Gio.FILE_ATTRIBUTE_UNIX_UID),
 						group_id = file_stat.get_attribute_uint32(Gio.FILE_ATTRIBUTE_UNIX_GID),
-						time_modify = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_MODIFIED),
+						time_modify = self._get_time(file_stat, Gio.FILE_ATTRIBUTE_TIME_MODIFIED),
 						type = item_type,
 					)
 		else:
@@ -229,12 +243,12 @@ class GioProvider(Provider):
 						i_mode = 0,
 						user_id = file_stat.get_attribute_uint32(Gio.FILE_ATTRIBUTE_UNIX_UID),
 						group_id = file_stat.get_attribute_uint32(Gio.FILE_ATTRIBUTE_UNIX_GID),
-						time_access = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_ACCESS),
-						time_modify = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_MODIFIED),
-						time_change = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_CHANGED),
-						time_access_ns = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_ACCESS),
-						time_modify_ns = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_MODIFIED),
-						time_change_ns = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_TIME_CHANGED),
+						time_access = self._get_time(file_stat, Gio.FILE_ATTRIBUTE_TIME_ACCESS),
+						time_modify = self._get_time(file_stat, Gio.FILE_ATTRIBUTE_TIME_MODIFIED),
+						time_change = self._get_time(file_stat, Gio.FILE_ATTRIBUTE_TIME_CHANGED),
+						time_access_ns = self._get_time(file_stat, Gio.FILE_ATTRIBUTE_TIME_ACCESS),
+						time_modify_ns = self._get_time(file_stat, Gio.FILE_ATTRIBUTE_TIME_MODIFIED),
+						time_change_ns = self._get_time(file_stat, Gio.FILE_ATTRIBUTE_TIME_CHANGED),
 						type = item_type,
 						device = file_stat.get_attribute_uint32(Gio.FILE_ATTRIBUTE_UNIX_DEVICE),
 						inode = file_stat.get_attribute_uint64(Gio.FILE_ATTRIBUTE_UNIX_INODE)

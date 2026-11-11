@@ -37,17 +37,32 @@ class InputDialog:
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
 
-		# remove existing children
+		# remove existing children, except primary label which shows dialog title
 		self._container = self._dialog.get_message_area()
 		if Gtk.get_major_version() == 3:
-			self._container.foreach(lambda widget: self._container.remove(widget))
+			self._label_title = self._container.get_children()[0]
+			for child in self._container.get_children()[1:]:
+				self._container.remove(child)
 
 		else:
-			child = self._container.get_first_child()
+			self._label_title = self._container.get_first_child()
+			child = self._label_title.get_next_sibling()
 			while child is not None:
 				next_child = child.get_next_sibling()
 				self._container.remove(child)
 				child = next_child
+
+			# GTK 4 leaves less space between content and action buttons
+			self._container.set_margin_bottom(14)
+
+		# message dialog styles its primary label as title only when it
+		# has secondary text, whose label was just removed
+		self._dialog.set_property('secondary-text', '')
+
+		# title takes no space until it is set
+		if Gtk.get_major_version() == 3:
+			self._label_title.set_no_show_all(True)
+		self._label_title.hide()
 
 		# create interface
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
@@ -96,7 +111,8 @@ class InputDialog:
 
 	def set_title(self, title_text):
 		"""Set dialog title"""
-		self._dialog.set_title(title_text)
+		self._dialog.set_property('text', title_text)
+		self._label_title.show()
 
 	def set_label(self, label_text):
 		"""Provide an easy way to set label text"""
@@ -336,6 +352,10 @@ class CreateDialog(InputDialog):
 
 		self._permission_octal_entry = Gtk.Entry()
 		self._permission_octal_entry.set_width_chars(5)
+		# GTK 4 entries are naturally much wider than requested characters,
+		# cap the width so entry doesn't stretch the column of checkboxes
+		self._permission_octal_entry.set_max_width_chars(5)
+		self._permission_octal_entry.set_halign(Gtk.Align.START)
 		self._permission_octal_entry.connect('activate', self._entry_activate)
 		table.attach(self._permission_octal_entry, 1, 3, 1, 1)
 		table.set_row_spacing(10)
@@ -350,6 +370,8 @@ class CreateDialog(InputDialog):
 		button_save.set_tooltip_text(_('Save as default configuration'))
 		button_save.show()
 		button_save.set_halign(Gtk.Align.END)
+		# last column takes remaining width, placing button at the edge of the dialog content
+		button_save.set_hexpand(True)
 
 		table.attach(button_save, 3, 3, 1, 1)
 
@@ -464,7 +486,8 @@ class PasswordDialog(InputDialog):
 			self._container.pack_start(vbox, False, False, 0)
 			self._container.pack_start(self._label_description, False, False, 0)
 
-			self._container.reorder_child(self._label_description, 0)
+			# first child is dialog title
+			self._container.reorder_child(self._label_description, 1)
 
 		else:
 			vbox.append(label_confirm)
@@ -473,7 +496,8 @@ class PasswordDialog(InputDialog):
 			self._container.append(vbox)
 			self._container.append(self._label_description)
 
-			self._container.reorder_child_after(self._label_description, None)
+			# first child is dialog title
+			self._container.reorder_child_after(self._label_description, self._label_title)
 
 		# show all elements
 		if Gtk.get_major_version() == 3:
@@ -548,8 +572,9 @@ class FileCreateDialog(CreateDialog):
 			self._container.pack_start(self._checkbox_edit_after, False, False, 0)
 			self._container.pack_start(vbox_templates, False, False, 0)
 
-			self._container.reorder_child(self._checkbox_edit_after, 1)
-			self._container.reorder_child(vbox_templates, 1)
+			# first two children are dialog title and name entry
+			self._container.reorder_child(self._checkbox_edit_after, 2)
+			self._container.reorder_child(vbox_templates, 2)
 
 		else:
 			vbox_templates.append(label_templates)
@@ -558,10 +583,10 @@ class FileCreateDialog(CreateDialog):
 			self._container.append(self._checkbox_edit_after)
 			self._container.append(vbox_templates)
 
-			# same order as GTK 3 version, templates then checkbox after first child
-			first_child = self._container.get_first_child()
-			self._container.reorder_child_after(self._checkbox_edit_after, first_child)
-			self._container.reorder_child_after(vbox_templates, first_child)
+			# same order as GTK 3 version, templates then checkbox after name entry
+			name_entry = self._label_title.get_next_sibling()
+			self._container.reorder_child_after(self._checkbox_edit_after, name_entry)
+			self._container.reorder_child_after(vbox_templates, name_entry)
 
 		# populate template list
 		self._populate_templates()

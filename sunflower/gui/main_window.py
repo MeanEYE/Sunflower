@@ -38,6 +38,7 @@ from sunflower.plugin_base.find_extension import FindExtension
 from sunflower.plugin_base.terminal import TerminalType
 from sunflower.widgets.location_menu import LocationMenu
 from sunflower.widgets.command_row import CommandRow
+from sunflower.widgets.header_bar import HeaderBar
 from sunflower.tools.advanced_rename import AdvancedRename
 from sunflower.tools.find_files import FindFiles
 from sunflower.tools.version_check import VersionCheck
@@ -171,7 +172,7 @@ class MainWindow(Gtk.ApplicationWindow):
 		self.shortcuts_window = ShortcutsWindow(self)
 
 		# create header bar
-		self.header_bar = Gtk.HeaderBar.new()
+		self.header_bar = HeaderBar()
 
 		if Gtk.get_major_version() == 3:
 			self.header_bar.set_has_subtitle(True)

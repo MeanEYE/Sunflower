@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-11 11:21+0100\n"
+"POT-Creation-Date: 2026-11-11 20:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,78 +86,78 @@ msgid ""
 "do?"
 msgstr ""
 
-#: sunflower/operation.py:736
+#: sunflower/operation.py:740
 msgid "Searching for files..."
 msgstr ""
 
-#: sunflower/operation.py:969
+#: sunflower/operation.py:973
 msgid ""
 "Unable to create directory because file with the same name already exists in "
 "target directory."
 msgstr ""
 
-#: sunflower/operation.py:1208
+#: sunflower/operation.py:1212
 msgid "Creating directories..."
 msgstr ""
 
-#: sunflower/operation.py:1225
+#: sunflower/operation.py:1229
 msgid "Copying files..."
 msgstr ""
 
-#: sunflower/operation.py:1241
+#: sunflower/operation.py:1245
 msgid "Creating links..."
 msgstr ""
 
-#: sunflower/operation.py:1293 sunflower/operation.py:1310
+#: sunflower/operation.py:1297 sunflower/operation.py:1314
 msgid "Copy Operation"
 msgstr ""
 
-#: sunflower/operation.py:1295
+#: sunflower/operation.py:1299
 #, python-brace-format
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: sunflower/operation.py:1423
+#: sunflower/operation.py:1427
 msgid "Moving files..."
 msgstr ""
 
-#: sunflower/operation.py:1437
+#: sunflower/operation.py:1441
 msgid "Deleting source files..."
 msgstr ""
 
-#: sunflower/operation.py:1459
+#: sunflower/operation.py:1463
 msgid "Deleting source directories..."
 msgstr ""
 
-#: sunflower/operation.py:1558 sunflower/operation.py:1575
+#: sunflower/operation.py:1562 sunflower/operation.py:1579
 msgid "Move Operation"
 msgstr ""
 
-#: sunflower/operation.py:1560
+#: sunflower/operation.py:1564
 #, python-brace-format
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: sunflower/operation.py:1710
+#: sunflower/operation.py:1714
 msgid "Delete Operation"
 msgstr ""
 
-#: sunflower/operation.py:1712
+#: sunflower/operation.py:1716
 #, python-brace-format
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: sunflower/operation.py:1825
+#: sunflower/operation.py:1829
 msgid "Rename Operation"
 msgstr ""
 
-#: sunflower/operation.py:1827
+#: sunflower/operation.py:1831
 #, python-brace-format
 msgid "Rename of {0} item from \"{1}\" is completed!"
 msgid_plural "Rename of {0} items from \"{1}\" is completed!"
@@ -191,8 +191,8 @@ msgid ""
 msgstr ""
 
 #: sunflower/widgets/popup_menu.py:89 sunflower/widgets/popup_menu.py:171
-#: sunflower/widgets/location_menu.py:72 sunflower/gui/input_dialog.py:194
-#: sunflower/gui/input_dialog.py:2118 sunflower/gui/history_list.py:85
+#: sunflower/widgets/location_menu.py:72 sunflower/gui/input_dialog.py:210
+#: sunflower/gui/input_dialog.py:2201 sunflower/gui/history_list.py:85
 #: sunflower/gui/mounts_manager_window.py:378
 msgid "Open"
 msgstr ""
@@ -269,6 +269,15 @@ msgstr ""
 msgid "Home directory"
 msgstr ""
 
+#: sunflower/widgets/queue_selector.py:90
+msgid "No queue"
+msgstr ""
+
+#: sunflower/widgets/queue_selector.py:93
+#, python-brace-format
+msgid "Queue {0}"
+msgstr ""
+
 #: sunflower/widgets/title_bar.py:59
 msgid "Context menu"
 msgstr ""
@@ -301,17 +310,17 @@ msgstr ""
 msgid "Close Other Tabs"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:61 sunflower/gui/input_dialog.py:1596
-#: sunflower/gui/input_dialog.py:2121 sunflower/gui/input_dialog.py:2211
+#: sunflower/gui/input_dialog.py:76 sunflower/gui/input_dialog.py:1679
+#: sunflower/gui/input_dialog.py:2204 sunflower/gui/input_dialog.py:2294
 msgid "OK"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:67 sunflower/gui/input_dialog.py:193
-#: sunflower/gui/input_dialog.py:1082 sunflower/gui/input_dialog.py:1190
-#: sunflower/gui/input_dialog.py:1363 sunflower/gui/input_dialog.py:1601
-#: sunflower/gui/input_dialog.py:1715 sunflower/gui/input_dialog.py:1825
-#: sunflower/gui/input_dialog.py:2125 sunflower/gui/input_dialog.py:2216
-#: sunflower/gui/operation_dialog.py:273
+#: sunflower/gui/input_dialog.py:82 sunflower/gui/input_dialog.py:209
+#: sunflower/gui/input_dialog.py:1180 sunflower/gui/input_dialog.py:1272
+#: sunflower/gui/input_dialog.py:1446 sunflower/gui/input_dialog.py:1684
+#: sunflower/gui/input_dialog.py:1798 sunflower/gui/input_dialog.py:1908
+#: sunflower/gui/input_dialog.py:2208 sunflower/gui/input_dialog.py:2299
+#: sunflower/gui/operation_dialog.py:274
 #: sunflower/gui/preferences_window.py:195
 #: sunflower/plugins/file_list/dialogs.py:129
 #: sunflower/plugins/file_list/dialogs.py:395
@@ -322,291 +331,295 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:136
+#: sunflower/gui/input_dialog.py:152
 msgid "Create link"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:137
+#: sunflower/gui/input_dialog.py:153
 msgid "Enter new link name:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:145
+#: sunflower/gui/input_dialog.py:161
 msgid "Original path:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:151
+#: sunflower/gui/input_dialog.py:167
 msgid "Create hard link"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:154
+#: sunflower/gui/input_dialog.py:170
 msgid "Browse"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:189
+#: sunflower/gui/input_dialog.py:205
 msgid "Select original path"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:258
+#: sunflower/gui/input_dialog.py:274
 msgid "<b>Advanced options:</b>"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:277 sunflower/gui/properties_window.py:539
+#: sunflower/gui/input_dialog.py:293 sunflower/gui/properties_window.py:539
 #: sunflower/gui/properties_window.py:615
 msgid "User:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:282 sunflower/gui/properties_window.py:544
+#: sunflower/gui/input_dialog.py:298 sunflower/gui/properties_window.py:544
 #: sunflower/gui/properties_window.py:620
 msgid "Group:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:287 sunflower/gui/properties_window.py:549
+#: sunflower/gui/input_dialog.py:303 sunflower/gui/properties_window.py:549
 msgid "Others:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:293 sunflower/gui/input_dialog.py:306
-#: sunflower/gui/input_dialog.py:319 sunflower/gui/properties_window.py:555
+#: sunflower/gui/input_dialog.py:309 sunflower/gui/input_dialog.py:322
+#: sunflower/gui/input_dialog.py:335 sunflower/gui/properties_window.py:555
 #: sunflower/gui/properties_window.py:568
 #: sunflower/gui/properties_window.py:581
 msgid "Read"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:297 sunflower/gui/input_dialog.py:310
-#: sunflower/gui/input_dialog.py:323 sunflower/gui/properties_window.py:559
+#: sunflower/gui/input_dialog.py:313 sunflower/gui/input_dialog.py:326
+#: sunflower/gui/input_dialog.py:339 sunflower/gui/properties_window.py:559
 #: sunflower/gui/properties_window.py:572
 #: sunflower/gui/properties_window.py:585
 msgid "Write"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:301 sunflower/gui/input_dialog.py:314
-#: sunflower/gui/input_dialog.py:327 sunflower/gui/properties_window.py:563
+#: sunflower/gui/input_dialog.py:317 sunflower/gui/input_dialog.py:330
+#: sunflower/gui/input_dialog.py:343 sunflower/gui/properties_window.py:563
 #: sunflower/gui/properties_window.py:576
 #: sunflower/gui/properties_window.py:589
 msgid "Execute"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:332 sunflower/gui/properties_window.py:594
+#: sunflower/gui/input_dialog.py:348 sunflower/gui/properties_window.py:594
 msgid "Octal:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:350 sunflower/gui/input_dialog.py:1100
+#: sunflower/gui/input_dialog.py:370 sunflower/gui/input_dialog.py:938
 msgid "Save as default configuration"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:442 sunflower/plugins/file_list/dialogs.py:102
+#: sunflower/gui/input_dialog.py:464 sunflower/plugins/file_list/dialogs.py:102
 #: sunflower/plugins/file_list/dialogs.py:372
 #: sunflower/plugins/file_list/dialogs.py:629
 msgid "Password:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:444
+#: sunflower/gui/input_dialog.py:466
 msgid "Confirm:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:516
+#: sunflower/gui/input_dialog.py:540
 msgid "Create empty file"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:517
+#: sunflower/gui/input_dialog.py:541
 msgid "Enter new file name:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:520
+#: sunflower/gui/input_dialog.py:544
 msgid "Open file in editor"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:524
+#: sunflower/gui/input_dialog.py:548
 #: sunflower/plugins/rename_extensions/audio_metadata.py:33
 #: sunflower/plugins/rename_extensions/default.py:55
 msgid "Template:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:601
+#: sunflower/gui/input_dialog.py:626
 msgid "Empty File"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:654
+#: sunflower/gui/input_dialog.py:679
 msgid "Create directory"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:655
+#: sunflower/gui/input_dialog.py:680
 msgid "Enter new directory name:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:689 sunflower/gui/preferences_window.py:197
-msgid "Yes"
+#: sunflower/gui/input_dialog.py:726 sunflower/gui/main_window.py:574
+msgid "Delete selected items"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:692 sunflower/gui/preferences_window.py:196
-msgid "No"
-msgstr ""
-
-#: sunflower/gui/input_dialog.py:775
-msgid "Only files of this type:"
-msgstr ""
-
-#: sunflower/gui/input_dialog.py:783
+#: sunflower/gui/input_dialog.py:738 sunflower/gui/input_dialog.py:866
 msgid "Operation queue:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:808
+#: sunflower/gui/input_dialog.py:745 sunflower/gui/preferences_window.py:197
+msgid "Yes"
+msgstr ""
+
+#: sunflower/gui/input_dialog.py:749 sunflower/gui/preferences_window.py:196
+msgid "No"
+msgstr ""
+
+#: sunflower/gui/input_dialog.py:858
+msgid "Only files of this type:"
+msgstr ""
+
+#: sunflower/gui/input_dialog.py:885
 msgid "Affected item list"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:831
+#: sunflower/gui/input_dialog.py:908
 msgid "Set owner on destination"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:832
+#: sunflower/gui/input_dialog.py:909
 msgid "Set access mode on destination"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:833
+#: sunflower/gui/input_dialog.py:910
 msgid "Set date and time on destination"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:834
+#: sunflower/gui/input_dialog.py:911
 msgid "Silent mode"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:839
+#: sunflower/gui/input_dialog.py:916
 msgid "Merge directories"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:840
+#: sunflower/gui/input_dialog.py:917
 msgid "Overwrite files"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:844
+#: sunflower/gui/input_dialog.py:921
 msgid ""
 "Silent mode will enable operation to finish without disturbing you. If any "
 "errors occur, they will be presented to you after completion."
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:849
+#: sunflower/gui/input_dialog.py:926
 msgid "Follow symlinks"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:967 sunflower/gui/input_dialog.py:971
-#: sunflower/gui/input_dialog.py:975 sunflower/gui/input_dialog.py:979
+#: sunflower/gui/input_dialog.py:1065 sunflower/gui/input_dialog.py:1069
+#: sunflower/gui/input_dialog.py:1073 sunflower/gui/input_dialog.py:1077
 msgid "Not supported by file system provider"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1044
+#: sunflower/gui/input_dialog.py:1142
 msgid "Only options supported by file system providers were saved."
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1068
+#: sunflower/gui/input_dialog.py:1166
 msgid "Copy item"
 msgid_plural "Copy items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: sunflower/gui/input_dialog.py:1073
+#: sunflower/gui/input_dialog.py:1171
 #, python-brace-format
 msgid "Copy <b>{0}</b> item to:"
 msgid_plural "Copy <b>{0}</b> items to:"
 msgstr[0] ""
 msgstr[1] ""
 
-#: sunflower/gui/input_dialog.py:1083 sunflower/gui/input_dialog.py:1499
+#: sunflower/gui/input_dialog.py:1181 sunflower/gui/input_dialog.py:1582
 #: sunflower/gui/main_window.py:571 sunflower/plugin_base/terminal.py:241
 msgid "Copy"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1176
+#: sunflower/gui/input_dialog.py:1258
 msgid "Move item"
 msgid_plural "Move items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: sunflower/gui/input_dialog.py:1181
+#: sunflower/gui/input_dialog.py:1263
 #, python-brace-format
 msgid "Move <b>{0}</b> item to:"
 msgid_plural "Move <b>{0}</b> items to:"
 msgstr[0] ""
 msgstr[1] ""
 
-#: sunflower/gui/input_dialog.py:1191 sunflower/gui/main_window.py:572
+#: sunflower/gui/input_dialog.py:1273 sunflower/gui/main_window.py:572
 msgid "Move"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1205
+#: sunflower/gui/input_dialog.py:1288
 msgid "Rename file/directory"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1206
+#: sunflower/gui/input_dialog.py:1289
 msgid "Enter a new name for this item:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1283
+#: sunflower/gui/input_dialog.py:1366
 msgid "Select a new name for the destination"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1288
+#: sunflower/gui/input_dialog.py:1371
 msgid "Reset"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1292
+#: sunflower/gui/input_dialog.py:1375
 msgid "Apply this action to all files"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1364 sunflower/gui/input_dialog.py:1716
+#: sunflower/gui/input_dialog.py:1447 sunflower/gui/input_dialog.py:1799
 msgid "Skip"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1424
+#: sunflower/gui/input_dialog.py:1507
 msgid "Original"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1425 sunflower/gui/input_dialog.py:1446
+#: sunflower/gui/input_dialog.py:1508 sunflower/gui/input_dialog.py:1529
 #: sunflower/gui/properties_window.py:437
 msgid "Size:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1426 sunflower/gui/input_dialog.py:1447
+#: sunflower/gui/input_dialog.py:1509 sunflower/gui/input_dialog.py:1530
 #: sunflower/gui/properties_window.py:441
 msgid "Modified:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1445
+#: sunflower/gui/input_dialog.py:1528
 msgid "Replace with"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1480
+#: sunflower/gui/input_dialog.py:1563
 msgid "File conflict"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1485 sunflower/gui/input_dialog.py:1496
+#: sunflower/gui/input_dialog.py:1568 sunflower/gui/input_dialog.py:1579
 msgid "Replace"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1503
+#: sunflower/gui/input_dialog.py:1586
 #, python-brace-format
 msgid "Replace file \"{0}\"?"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1509
+#: sunflower/gui/input_dialog.py:1592
 #, python-brace-format
 msgid ""
 "Another file with the same name already exists in \"{0}\". Replacing it will "
 "overwrite its content."
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1522
+#: sunflower/gui/input_dialog.py:1605
 msgid "Directory conflict"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1526
+#: sunflower/gui/input_dialog.py:1609
 msgid "Merge"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1537
+#: sunflower/gui/input_dialog.py:1620
 #, python-brace-format
 msgid "Merge directory \"{0}\"?"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1543
+#: sunflower/gui/input_dialog.py:1626
 #, python-brace-format
 msgid ""
 "Directory with the same name already exists in \"{0}\". Merging will ask for "
@@ -614,11 +627,11 @@ msgid ""
 "the files being copied."
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1561
+#: sunflower/gui/input_dialog.py:1644
 msgid "Add bookmark"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1572 sunflower/gui/input_dialog.py:1797
+#: sunflower/gui/input_dialog.py:1655 sunflower/gui/input_dialog.py:1880
 #: sunflower/gui/properties_window.py:435
 #: sunflower/plugins/file_list/dialogs.py:62
 #: sunflower/plugins/file_list/dialogs.py:338
@@ -626,38 +639,38 @@ msgstr ""
 msgid "Name:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1578
+#: sunflower/gui/input_dialog.py:1661
 msgid ""
 "Underscore in the label text indicates the next character should be "
 "underlined and used for the mnemonic accelerator key if it is the first "
 "character so marked."
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1586 sunflower/gui/properties_window.py:438
+#: sunflower/gui/input_dialog.py:1669 sunflower/gui/properties_window.py:438
 msgid "Location:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1670
+#: sunflower/gui/input_dialog.py:1753
 msgid "Operation error"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1717
+#: sunflower/gui/input_dialog.py:1800
 msgid "Skip all"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1718
+#: sunflower/gui/input_dialog.py:1801
 msgid "Retry"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1784
+#: sunflower/gui/input_dialog.py:1867
 msgid "Add toolbar widget"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1806 sunflower/gui/properties_window.py:436
+#: sunflower/gui/input_dialog.py:1889 sunflower/gui/properties_window.py:436
 msgid "Type:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1822
+#: sunflower/gui/input_dialog.py:1905
 #: sunflower/gui/preferences/associations.py:80
 #: sunflower/gui/preferences/item_list.py:196
 #: sunflower/gui/preferences/item_list.py:239
@@ -668,110 +681,110 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1911
+#: sunflower/gui/input_dialog.py:1994
 msgid "Select range"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1912
+#: sunflower/gui/input_dialog.py:1995
 msgid "Select part of the text:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1936
+#: sunflower/gui/input_dialog.py:2019
 msgid "Add application"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1937
+#: sunflower/gui/input_dialog.py:2020
 msgid "Application name:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1948 sunflower/tools/find_files.py:358
+#: sunflower/gui/input_dialog.py:2031 sunflower/tools/find_files.py:358
 msgid "Select"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:2013 sunflower/gui/properties_window.py:89
+#: sunflower/gui/input_dialog.py:2096 sunflower/gui/properties_window.py:89
 msgid "Open With"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:2030
+#: sunflower/gui/input_dialog.py:2113
 msgid "Select application:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:2034
+#: sunflower/gui/input_dialog.py:2117
 #, python-brace-format
 msgid "Open <i>{0}</i> with:"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:2074
+#: sunflower/gui/input_dialog.py:2157
 msgid "Use a custom command"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:2114
+#: sunflower/gui/input_dialog.py:2197
 msgid "Help"
 msgstr ""
 
-#: sunflower/gui/operation_dialog.py:99 sunflower/gui/error_list.py:55
+#: sunflower/gui/operation_dialog.py:100 sunflower/gui/error_list.py:55
 msgid "Source:"
 msgstr ""
 
-#: sunflower/gui/operation_dialog.py:100 sunflower/gui/error_list.py:62
+#: sunflower/gui/operation_dialog.py:101 sunflower/gui/error_list.py:62
 msgid "Destination:"
 msgstr ""
 
-#: sunflower/gui/operation_dialog.py:192
+#: sunflower/gui/operation_dialog.py:193
 msgid "ETA:"
 msgstr ""
 
-#: sunflower/gui/operation_dialog.py:193
+#: sunflower/gui/operation_dialog.py:194
 msgid "Speed:"
 msgstr ""
 
-#: sunflower/gui/operation_dialog.py:194
+#: sunflower/gui/operation_dialog.py:195
 msgid "Total size:"
 msgstr ""
 
-#: sunflower/gui/operation_dialog.py:195
+#: sunflower/gui/operation_dialog.py:196
 msgid "Total count:"
 msgstr ""
 
-#: sunflower/gui/operation_dialog.py:288 sunflower/gui/operation_dialog.py:353
+#: sunflower/gui/operation_dialog.py:289 sunflower/gui/operation_dialog.py:354
 msgid "Pause"
 msgstr ""
 
-#: sunflower/gui/operation_dialog.py:343
+#: sunflower/gui/operation_dialog.py:344
 msgid "Resume"
 msgstr ""
 
-#: sunflower/gui/operation_dialog.py:358
+#: sunflower/gui/operation_dialog.py:359
 msgid "Are you sure about canceling current operation?"
 msgstr ""
 
-#: sunflower/gui/operation_dialog.py:414
+#: sunflower/gui/operation_dialog.py:415
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: sunflower/gui/operation_dialog.py:418
+#: sunflower/gui/operation_dialog.py:419
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: sunflower/gui/operation_dialog.py:422
+#: sunflower/gui/operation_dialog.py:423
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: sunflower/gui/operation_dialog.py:426 sunflower/gui/properties_window.py:251
+#: sunflower/gui/operation_dialog.py:427 sunflower/gui/properties_window.py:251
 msgid "unknown"
 msgstr ""
 
-#: sunflower/gui/operation_dialog.py:648
+#: sunflower/gui/operation_dialog.py:653
 msgid "Removing items..."
 msgstr ""
 
-#: sunflower/gui/operation_dialog.py:682
+#: sunflower/gui/operation_dialog.py:687
 msgid "Renaming items..."
 msgstr ""
 
@@ -981,10 +994,6 @@ msgstr ""
 #: sunflower/gui/preferences/commands.py:67
 #: sunflower/plugins/sessions/plugin.py:87
 msgid "Delete"
-msgstr ""
-
-#: sunflower/gui/main_window.py:574
-msgid "Delete selected items"
 msgstr ""
 
 #: sunflower/gui/main_window.py:661
@@ -1448,7 +1457,7 @@ msgid "Show grid lines:"
 msgstr ""
 
 #: sunflower/gui/preferences/item_list.py:111
-#: sunflower/gui/preferences/display.py:87 sunflower/queue.py:30
+#: sunflower/gui/preferences/display.py:87
 msgid "None"
 msgstr ""
 
@@ -2396,7 +2405,7 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-#: sunflower/plugins/sessions/plugin.py:10 sunflower/queue.py:33
+#: sunflower/plugins/sessions/plugin.py:10
 msgid "Default"
 msgstr ""
 
@@ -2691,22 +2700,6 @@ msgid_plural ""
 "Are you sure about this?"
 msgstr[0] ""
 msgstr[1] ""
-
-#: sunflower/queue.py:46
-msgid "New queue"
-msgstr ""
-
-#: sunflower/queue.py:139
-msgid "New operation queue"
-msgstr ""
-
-#: sunflower/queue.py:140
-msgid "Enter name for new operation queue:"
-msgstr ""
-
-#: sunflower/queue.py:156
-msgid "Operation queue with specified name already exists."
-msgstr ""
 
 #: sunflower/__main__.py:94
 msgid "Show version number"

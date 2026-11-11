@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from gi.repository import Gtk, Gdk, GObject, Pango
 from sunflower import common
+from sunflower.queue import OperationQueue
 from sunflower.widgets.progress_ring import ProgressRing
 
 
@@ -473,6 +474,10 @@ class OperationDialog:
 
 		"""
 		return self._application
+
+	def set_queue(self, queue):
+		"""Mark indicator with color of the queue operation belongs to"""
+		self._operation_progress.set_badge_color(OperationQueue.get_color(queue))
 
 	def set_status(self, status):
 		"""Set current status"""

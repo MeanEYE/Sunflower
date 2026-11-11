@@ -9,7 +9,7 @@ from gi.repository import Gtk
 from sunflower.plugin_base.provider import FileType, Support as ProviderSupport
 from sunflower.common import get_user_directory, decode_file_name, UserDirectory
 from sunflower.widgets.completion_entry import PathCompletionEntry
-from sunflower.queue import OperationQueue
+from sunflower.widgets.queue_selector import QueueSelector
 
 
 # constants
@@ -677,33 +677,13 @@ class DeleteDialog:
 		label_message.set_yalign(0)
 		label_message.set_use_markup(True)
 
-		cell_name = Gtk.CellRendererText()
-		self.combobox_queue = Gtk.ComboBox(model=OperationQueue.get_model())
-		self.combobox_queue.pack_start(cell_name, True)
-		self.combobox_queue.add_attribute(cell_name, 'text', OperationQueue.COLUMN_TEXT)
-		self.combobox_queue.set_active(0)
-		self.combobox_queue.set_row_separator_func(OperationQueue.handle_separator_check)
-		self.combobox_queue.connect('changed', OperationQueue.handle_queue_select, self)
+		self._queue_selector = QueueSelector()
 
 		# create controls
 		button_yes = Gtk.Button.new_with_label(_('Yes'))
 		if Gtk.get_major_version() == 3:
 			button_yes.set_can_default(True)
 		button_no = Gtk.Button.new_with_label(_('No'))
-
-		if Gtk.get_major_version() == 3:
-			button_queue = Gtk.Button.new_from_icon_name('go-bottom', Gtk.IconSize.BUTTON)
-			button_queue.set_always_show_image(True)
-			button_queue.set_label('None')
-
-		else:
-			# GTK 4 buttons show either icon or label, showing both
-			# requires providing custom content
-			button_queue = Gtk.Button.new()
-			button_content = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
-			button_content.append(Gtk.Image.new_from_icon_name('go-bottom'))
-			button_content.append(Gtk.Label.new('None'))
-			button_queue.set_child(button_content)
 
 		content_area = self._dialog.get_content_area()
 		set_border_width(content_area, 10)
@@ -717,7 +697,7 @@ class DeleteDialog:
 		self._dialog.add_action_widget(button_yes, Gtk.ResponseType.YES)
 		self._dialog.add_action_widget(button_no, Gtk.ResponseType.CANCEL)
 		self._dialog.set_default_response(Gtk.ResponseType.YES)
-		self._dialog.get_header_bar().pack_end(button_queue)
+		self._dialog.get_header_bar().pack_end(self._queue_selector)
 		if Gtk.get_major_version() == 3:
 			self._dialog.show_all()
 
@@ -727,8 +707,7 @@ class DeleteDialog:
 	def get_response(self):
 		"""Show dialog and get response code."""
 		code = run_dialog(self._dialog)
-		selected_iter = self.combobox_queue.get_active_iter()
-		queue_name = OperationQueue.get_name_from_iter(selected_iter)
+		queue_name = self._queue_selector.get_queue()
 
 		self._dialog.destroy()
 
@@ -784,15 +763,7 @@ class CopyDialog:
 		label_queue.set_xalign(0)
 		label_queue.set_yalign(0.5)
 
-		cell_name = Gtk.CellRendererText()
-
-		self.combobox_queue = Gtk.ComboBox(model=OperationQueue.get_model())
-		self.combobox_queue.pack_start(cell_name, True)
-		self.combobox_queue.add_attribute(cell_name, 'text', OperationQueue.COLUMN_TEXT)
-		self.combobox_queue.set_active(0)
-		self.combobox_queue.set_row_separator_func(OperationQueue.handle_separator_check)
-		self.combobox_queue.connect('changed', OperationQueue.handle_queue_select, self._dialog)
-		self.combobox_queue.set_size_request(140, -1)
+		self._queue_selector = QueueSelector()
 
 		# detailed item list
 		separator_details = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
@@ -863,7 +834,7 @@ class CopyDialog:
 			vbox_type.pack_start(self.entry_type, False, False, 0)
 
 			vbox_queue.pack_start(label_queue, False, False, 0)
-			vbox_queue.pack_start(self.combobox_queue, False, False, 0)
+			vbox_queue.pack_start(self._queue_selector, False, False, 0)
 
 			hbox_additional.pack_start(vbox_type, True, True, 0)
 			hbox_additional.pack_start(vbox_queue, True, True, 0)
@@ -895,7 +866,7 @@ class CopyDialog:
 			vbox_type.append(self.entry_type)
 
 			vbox_queue.append(label_queue)
-			vbox_queue.append(self.combobox_queue)
+			vbox_queue.append(self._queue_selector)
 
 			vbox_type.set_hexpand(True)
 			hbox_additional.append(vbox_type)
@@ -1159,8 +1130,7 @@ class CopyDialog:
 				self.checkbox_overwrite.get_active(),
 				self.checkbox_symlink.get_active()
 			)
-		selected_iter = self.combobox_queue.get_active_iter()
-		queue_name = OperationQueue.get_name_from_iter(selected_iter)
+		queue_name = self._queue_selector.get_queue()
 
 		self._dialog.destroy()
 

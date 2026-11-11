@@ -1,4 +1,5 @@
 import math
+import cairo
 
 from gi.repository import Gtk, GLib
 
@@ -25,6 +26,8 @@ class ProgressRing(Gtk.DrawingArea):
 	PULSE_ARC = math.pi / 2  # length of rotating arc
 	PULSE_PERIOD = 2 * 1000000  # one full rotation, in microseconds
 	PAUSE_ARCS = 2  # arcs shown while paused, evenly spaced with gaps of equal length
+	BADGE_RADIUS = 3.5  # circle drawn in the corner when badge color is set
+	BADGE_GAP = 1.5  # clearance between badge and the ring it overlaps
 
 	def __init__(self):
 		Gtk.DrawingArea.__init__(self)
@@ -34,6 +37,7 @@ class ProgressRing(Gtk.DrawingArea):
 		self._paused = False
 		self._angle = 0.0
 		self._tick_id = None
+		self._badge_color = None
 
 		self.set_size_request(self.SIZE, self.SIZE)
 		self.set_halign(Gtk.Align.CENTER)
@@ -81,6 +85,16 @@ class ProgressRing(Gtk.DrawingArea):
 
 		self._paused = paused
 		self._update_tick()
+		self.queue_draw()
+
+	def set_badge_color(self, color):
+		"""Show small circle of specified color in the corner of the ring.
+
+		Color is a tuple of red, green and blue components, `None` removes
+		the badge.
+
+		"""
+		self._badge_color = color
 		self.queue_draw()
 
 	def _update_tick(self):
@@ -144,6 +158,10 @@ class ProgressRing(Gtk.DrawingArea):
 
 		cr.set_line_width(self.LINE_WIDTH)
 
+		# ring is drawn to a group so badge can cut a gap in it
+		if self._badge_color is not None:
+			cr.push_group()
+
 		# track
 		cr.set_source_rgba(color.red, color.green, color.blue, color.alpha * self.TRACK_ALPHA)
 		cr.arc(center_x, center_y, radius, 0, 2 * math.pi)
@@ -169,3 +187,20 @@ class ProgressRing(Gtk.DrawingArea):
 		elif self._fraction > 0:
 			cr.arc(center_x, center_y, radius, start, start + 2 * math.pi * self._fraction)
 			cr.stroke()
+
+		# badge in the bottom right corner
+		if self._badge_color is not None:
+			badge_x = width - self.BADGE_RADIUS - 1
+			badge_y = height - self.BADGE_RADIUS - 1
+
+			cr.set_operator(cairo.OPERATOR_CLEAR)
+			cr.arc(badge_x, badge_y, self.BADGE_RADIUS + self.BADGE_GAP, 0, 2 * math.pi)
+			cr.fill()
+			cr.set_operator(cairo.OPERATOR_OVER)
+
+			cr.pop_group_to_source()
+			cr.paint()
+
+			cr.set_source_rgb(*self._badge_color)
+			cr.arc(badge_x, badge_y, self.BADGE_RADIUS, 0, 2 * math.pi)
+			cr.fill()

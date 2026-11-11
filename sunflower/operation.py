@@ -596,6 +596,10 @@ class Operation(Thread):
 		self._operation_queue = Event()
 		self._operation_queue_name = queue_name
 
+		# mark operation indicator with queue color
+		if self._dialog is not None:
+			self._dialog.set_queue(queue_name)
+
 		# schedule operation
 		OperationQueue.add(queue_name, self._operation_queue)
 

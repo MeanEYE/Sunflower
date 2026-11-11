@@ -677,7 +677,7 @@ class MainWindow(Gtk.ApplicationWindow):
 			vbox.show()
 
 		# create status bar
-		self.status_bar = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+		self.status_bar = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 2)
 		self.header_bar.pack_end(self.status_bar)
 
 		if self.keyring_manager.is_available():

@@ -665,11 +665,41 @@ class DeleteDialog:
 	"""Confirmation dialog for item removal with operation queue selection."""
 
 	def __init__(self, application, message):
-		self._dialog = Gtk.Dialog(transient_for=application, use_header_bar=True)
+		self._dialog = Gtk.MessageDialog(transient_for=application)
 
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
 		self._dialog.set_default_size(-1, 0)
+
+		# remove existing children, except primary label which shows dialog title
+		container = self._dialog.get_message_area()
+		if Gtk.get_major_version() == 3:
+			self._label_title = container.get_children()[0]
+			for child in container.get_children()[1:]:
+				container.remove(child)
+
+		else:
+			self._label_title = container.get_first_child()
+			child = self._label_title.get_next_sibling()
+			while child is not None:
+				next_child = child.get_next_sibling()
+				container.remove(child)
+				child = next_child
+
+			# GTK 4 leaves less space between content and action buttons
+			container.set_margin_bottom(14)
+
+		# message dialog styles its primary label as title only when it
+		# has secondary text, whose label was just removed
+		self._dialog.set_property('secondary-text', '')
+
+		# title takes no space until it is set
+		if Gtk.get_major_version() == 3:
+			self._label_title.set_no_show_all(True)
+		self._label_title.hide()
+
+		self._dialog.set_property('text', _('Delete selected items'))
+		self._label_title.show()
 
 		# create user interface for operation queue
 		label_message = Gtk.Label.new(message)
@@ -677,32 +707,51 @@ class DeleteDialog:
 		label_message.set_yalign(0)
 		label_message.set_use_markup(True)
 
+		separator_queue = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
+		vbox_queue = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+
+		label_queue = Gtk.Label(label=_('Operation queue:'))
+		label_queue.set_xalign(0)
+		label_queue.set_yalign(0.5)
+
 		self._queue_selector = QueueSelector()
 
 		# create controls
 		button_yes = Gtk.Button.new_with_label(_('Yes'))
+		button_yes.get_style_context().add_class('suggested-action')
 		if Gtk.get_major_version() == 3:
 			button_yes.set_can_default(True)
 		button_no = Gtk.Button.new_with_label(_('No'))
 
-		content_area = self._dialog.get_content_area()
-		set_border_width(content_area, 10)
 		if Gtk.get_major_version() == 3:
-			content_area.pack_start(label_message, True, True, 0)
+			vbox_queue.pack_start(label_queue, False, False, 0)
+			vbox_queue.pack_start(self._queue_selector, False, False, 0)
+
+			container.pack_start(label_message, True, True, 0)
+			container.pack_start(separator_queue, False, False, 0)
+			container.pack_start(vbox_queue, False, False, 0)
 
 		else:
-			label_message.set_vexpand(True)
-			content_area.append(label_message)
+			vbox_queue.append(label_queue)
+			vbox_queue.append(self._queue_selector)
 
-		self._dialog.add_action_widget(button_yes, Gtk.ResponseType.YES)
+			label_message.set_vexpand(True)
+			container.append(label_message)
+			container.append(separator_queue)
+			container.append(vbox_queue)
+
 		self._dialog.add_action_widget(button_no, Gtk.ResponseType.CANCEL)
+		self._dialog.add_action_widget(button_yes, Gtk.ResponseType.YES)
 		self._dialog.set_default_response(Gtk.ResponseType.YES)
-		self._dialog.get_header_bar().pack_end(self._queue_selector)
 		if Gtk.get_major_version() == 3:
 			self._dialog.show_all()
 
 		else:
 			self._dialog.show()
+
+		# queue selector is the first focusable widget and its buttons
+		# consume Enter, start with focus on confirmation instead
+		button_yes.grab_focus()
 
 	def get_response(self):
 		"""Show dialog and get response code."""
@@ -717,8 +766,10 @@ class DeleteDialog:
 class CopyDialog:
 	"""Dialog which will ask user for additional options before copying"""
 
+	SEPARATOR_SPACING = 12  # space above and below separators
+
 	def __init__(self, application, source_provider, destination_provider, path):
-		self._dialog = Gtk.Dialog(transient_for=application, use_header_bar=True)
+		self._dialog = Gtk.MessageDialog(transient_for=application)
 
 		self._application = application
 		self._source_provider = source_provider
@@ -731,9 +782,35 @@ class CopyDialog:
 		self._dialog.set_modal(True)
 		self._dialog.set_transient_for(application)
 
+		# remove existing children, except primary label which shows dialog title
+		container = self._dialog.get_message_area()
+		if Gtk.get_major_version() == 3:
+			self._label_title = container.get_children()[0]
+			for child in container.get_children()[1:]:
+				container.remove(child)
+
+		else:
+			self._label_title = container.get_first_child()
+			child = self._label_title.get_next_sibling()
+			while child is not None:
+				next_child = child.get_next_sibling()
+				container.remove(child)
+				child = next_child
+
+			# GTK 4 leaves less space between content and action buttons
+			container.set_margin_bottom(14)
+
+		# message dialog styles its primary label as title only when it
+		# has secondary text, whose label was just removed
+		self._dialog.set_property('secondary-text', '')
+
+		# title takes no space until it is set
+		if Gtk.get_major_version() == 3:
+			self._label_title.set_no_show_all(True)
+		self._label_title.hide()
+
 		# create additional components
 		vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
-		set_border_width(vbox, 5)
 
 		self.label_destination = Gtk.Label()
 		self.label_destination.set_xalign(0)
@@ -748,6 +825,8 @@ class CopyDialog:
 		# additional options
 		hbox_additional = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 10)
 		separator_file_type = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
+		separator_file_type.set_margin_top(self.SEPARATOR_SPACING)
+		separator_file_type.set_margin_bottom(self.SEPARATOR_SPACING)
 		vbox_type = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 		vbox_queue = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
@@ -767,6 +846,8 @@ class CopyDialog:
 
 		# detailed item list
 		separator_details = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
+		separator_details.set_margin_top(self.SEPARATOR_SPACING)
+		separator_details.set_margin_bottom(self.SEPARATOR_SPACING)
 		list_container = Gtk.ScrolledWindow()
 		list_container.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
 		if Gtk.get_major_version() == 3:
@@ -819,6 +900,20 @@ class CopyDialog:
 
 		self.checkbox_symlink = Gtk.CheckButton.new_with_label(_('Follow symlinks'))
 
+		# options are placed next to button saving them as defaults
+		hbox_options = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 10)
+		vbox_options = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+
+		if Gtk.get_major_version() == 3:
+			button_save = Gtk.Button.new_from_icon_name('document-save-symbolic', Gtk.IconSize.BUTTON)
+
+		else:
+			button_save = Gtk.Button.new_from_icon_name('document-save-symbolic')
+		button_save.connect('clicked', self._save_configuration)
+		button_save.set_tooltip_text(_('Save as default configuration'))
+		button_save.set_halign(Gtk.Align.END)
+		button_save.set_valign(Gtk.Align.END)
+
 		self._create_buttons()
 
 		# pack user interface
@@ -841,18 +936,22 @@ class CopyDialog:
 
 			vbox.pack_start(self.label_destination, False, False, 0)
 			vbox.pack_start(self.entry_destination, False, False, 0)
-			vbox.pack_start(separator_file_type, False, False, 5)
+			vbox.pack_start(separator_file_type, False, False, 0)
 			vbox.pack_start(hbox_additional, False, False, 0)
 			vbox.pack_start(expand_details, False, False, 0)
-			vbox.pack_start(separator_details, False, False, 5)
-			vbox.pack_start(self.checkbox_owner, False, False, 0)
-			vbox.pack_start(self.checkbox_mode, False, False, 0)
-			vbox.pack_start(self.checkbox_timestamp, False, False, 0)
-			vbox.pack_start(self.checkbox_silent, False, False, 0)
-			vbox.pack_start(vbox_silent, False, False, 0)
-			vbox.pack_start(self.checkbox_symlink, False, False, 0)
+			vbox.pack_start(separator_details, False, False, 0)
+			vbox_options.pack_start(self.checkbox_owner, False, False, 0)
+			vbox_options.pack_start(self.checkbox_mode, False, False, 0)
+			vbox_options.pack_start(self.checkbox_timestamp, False, False, 0)
+			vbox_options.pack_start(self.checkbox_silent, False, False, 0)
+			vbox_options.pack_start(vbox_silent, False, False, 0)
+			vbox_options.pack_start(self.checkbox_symlink, False, False, 0)
 
-			self._dialog.get_content_area().pack_start(vbox, False, False, 0)
+			hbox_options.pack_start(vbox_options, True, True, 0)
+			hbox_options.pack_start(button_save, False, False, 0)
+			vbox.pack_start(hbox_options, False, False, 0)
+
+			container.pack_start(vbox, False, False, 0)
 
 		else:
 			list_container.set_child(affected_list)
@@ -875,20 +974,23 @@ class CopyDialog:
 
 			vbox.append(self.label_destination)
 			vbox.append(self.entry_destination)
-			set_border_width(separator_file_type, 5)
 			vbox.append(separator_file_type)
 			vbox.append(hbox_additional)
 			vbox.append(expand_details)
-			set_border_width(separator_details, 5)
 			vbox.append(separator_details)
-			vbox.append(self.checkbox_owner)
-			vbox.append(self.checkbox_mode)
-			vbox.append(self.checkbox_timestamp)
-			vbox.append(self.checkbox_silent)
-			vbox.append(vbox_silent)
-			vbox.append(self.checkbox_symlink)
+			vbox_options.append(self.checkbox_owner)
+			vbox_options.append(self.checkbox_mode)
+			vbox_options.append(self.checkbox_timestamp)
+			vbox_options.append(self.checkbox_silent)
+			vbox_options.append(vbox_silent)
+			vbox_options.append(self.checkbox_symlink)
 
-			self._dialog.get_content_area().append(vbox)
+			vbox_options.set_hexpand(True)
+			hbox_options.append(vbox_options)
+			hbox_options.append(button_save)
+			vbox.append(hbox_options)
+
+			container.append(vbox)
 
 		# prepare dialog
 		self._update_label()
@@ -1052,28 +1154,12 @@ class CopyDialog:
 		"""Create action buttons"""
 		button_cancel = Gtk.Button.new_with_label(_('Cancel'))
 		button_copy = Gtk.Button.new_with_label(_('Copy'))
+		button_copy.get_style_context().add_class('suggested-action')
 		if Gtk.get_major_version() == 3:
 			button_copy.set_can_default(True)
 
-		image_save = Gtk.Image()
-		if Gtk.get_major_version() == 3:
-			image_save.set_from_stock(Gtk.STOCK_SAVE, Gtk.IconSize.BUTTON)
-
-		else:
-			image_save.set_from_icon_name('document-save-symbolic')
-		button_save = Gtk.Button()
-		if Gtk.get_major_version() == 3:
-			button_save.set_image(image_save)
-
-		else:
-			button_save.set_child(image_save)
-		button_save.connect('clicked', self._save_configuration)
-		button_save.set_tooltip_text(_('Save as default configuration'))
-		button_save.set_halign(1)
-
 		self._dialog.add_action_widget(button_cancel, Gtk.ResponseType.CANCEL)
 		self._dialog.add_action_widget(button_copy, Gtk.ResponseType.OK)
-		self._dialog.get_header_bar().pack_end(button_save)
 
 	def _confirm_entry(self, widget, data=None):
 		"""Enable user to confirm by pressing Enter"""
@@ -1109,7 +1195,8 @@ class CopyDialog:
 
 	def set_title(self, title_text):
 		"""Set dialog title"""
-		self._dialog.set_title(title_text)
+		self._dialog.set_property('text', title_text)
+		self._label_title.show()
 
 	def get_response(self):
 		"""Return value and self-destruct
@@ -1159,6 +1246,7 @@ class MoveDialog(CopyDialog):
 		"""Create action buttons"""
 		button_cancel = Gtk.Button.new_with_label(_('Cancel'))
 		button_move = Gtk.Button.new_with_label(_('Move'))
+		button_move.get_style_context().add_class('suggested-action')
 		if Gtk.get_major_version() == 3:
 			button_move.set_can_default(True)
 

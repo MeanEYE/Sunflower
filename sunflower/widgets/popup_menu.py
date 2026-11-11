@@ -39,7 +39,6 @@ class PopupMenu:
 		"""Create menu from individual widgets inside of a stack. (GTK 3)"""
 		self._popover = Gtk.Popover.new()
 		self._popover.get_style_context().add_class('menu')
-		set_border_width(self._popover, 5)
 		self._popover.set_size_request(250, -1)
 		self._popover.set_modal(True)
 		self._popover.connect('closed', self.__handle_popover_close)
@@ -52,6 +51,7 @@ class PopupMenu:
 		self._stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
 		self._stack.set_vhomogeneous(False)
 		self._stack.set_interpolate_size(True)
+		set_border_width(self._stack, 5)
 		self._popover.add(self._stack)
 
 		# main menu box

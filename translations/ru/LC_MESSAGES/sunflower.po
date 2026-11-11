@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sunflower\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-14 03:20+0200\n"
+"POT-Creation-Date: 2026-11-11 20:37+0100\n"
 "PO-Revision-Date: 2014-07-27 12:02+0000\n"
 "Last-Translator: ArseniyK <arseniy@krasnoff.org>, 2014,2016,2026\n"
 "Language-Team: Russian (http://app.transifex.com/way2cu/sunflower/language/ru/)\n"
@@ -92,33 +92,33 @@ msgid ""
 " do?"
 msgstr "При попытке прочитать указанный каталог возникла проблема. Что вы препочтёте сделать?"
 
-#: sunflower/operation.py:669
+#: sunflower/operation.py:740
 msgid "Searching for files..."
 msgstr "Поиск файлов..."
 
-#: sunflower/operation.py:893
+#: sunflower/operation.py:973
 msgid ""
 "Unable to create directory because file with the same name already exists in"
 " target directory."
 msgstr "Невозможно создать каталог, так как файл с указанным именем уже существует в целевом каталоге."
 
-#: sunflower/operation.py:1133
+#: sunflower/operation.py:1212
 msgid "Creating directories..."
 msgstr "Создание каталогов..."
 
-#: sunflower/operation.py:1150
+#: sunflower/operation.py:1229
 msgid "Copying files..."
 msgstr "Копирование файлов..."
 
-#: sunflower/operation.py:1166
+#: sunflower/operation.py:1245
 msgid "Creating links..."
 msgstr "Создание ссылок..."
 
-#: sunflower/operation.py:1218 sunflower/operation.py:1235
+#: sunflower/operation.py:1297 sunflower/operation.py:1314
 msgid "Copy Operation"
 msgstr "Операция копирования"
 
-#: sunflower/operation.py:1220
+#: sunflower/operation.py:1299
 #, python-brace-format
 msgid "Copying of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Copying of {0} items from \"{1}\" to \"{2}\" is completed!"
@@ -127,23 +127,23 @@ msgstr[1] "Копирование {0} объектов из \"{1}\" в \"{2}\" �
 msgstr[2] "Копирование {0} объектов из \"{1}\" в \"{2}\" завершено!"
 msgstr[3] "Копирование {0} объектов из \"{1}\" в \"{2}\" завершено!"
 
-#: sunflower/operation.py:1348
+#: sunflower/operation.py:1427
 msgid "Moving files..."
 msgstr "Перемещение файлов..."
 
-#: sunflower/operation.py:1362
+#: sunflower/operation.py:1441
 msgid "Deleting source files..."
 msgstr "Удаление исходных файлов..."
 
-#: sunflower/operation.py:1384
+#: sunflower/operation.py:1463
 msgid "Deleting source directories..."
 msgstr "Удаление исходных каталогов..."
 
-#: sunflower/operation.py:1483 sunflower/operation.py:1500
+#: sunflower/operation.py:1562 sunflower/operation.py:1579
 msgid "Move Operation"
 msgstr "Операция перемещения"
 
-#: sunflower/operation.py:1485
+#: sunflower/operation.py:1564
 #, python-brace-format
 msgid "Moving of {0} item from \"{1}\" to \"{2}\" is completed!"
 msgid_plural "Moving of {0} items from \"{1}\" to \"{2}\" is completed!"
@@ -152,11 +152,11 @@ msgstr[1] "Перемещение {0} объектов из \"{1}\" в \"{2}\" �
 msgstr[2] "Перемещение {0} объектов из \"{1}\" в \"{2}\" завершено!"
 msgstr[3] "Перемещение {0} объектов из \"{1}\" в \"{2}\" завершено!"
 
-#: sunflower/operation.py:1630
+#: sunflower/operation.py:1714
 msgid "Delete Operation"
 msgstr "Операция удаления"
 
-#: sunflower/operation.py:1632
+#: sunflower/operation.py:1716
 #, python-brace-format
 msgid "Removal of {0} item from \"{1}\" is completed!"
 msgid_plural "Removal of {0} items from \"{1}\" is completed!"
@@ -165,11 +165,11 @@ msgstr[1] "Удаление {0} объектов из \"{1}\" завершено
 msgstr[2] "Удаление {0} объектов из \"{1}\" завершено!"
 msgstr[3] "Удаление {0} объектов из \"{1}\" завершено!"
 
-#: sunflower/operation.py:1745
+#: sunflower/operation.py:1829
 msgid "Rename Operation"
 msgstr "Операция переименования"
 
-#: sunflower/operation.py:1747
+#: sunflower/operation.py:1831
 #, python-brace-format
 msgid "Rename of {0} item from \"{1}\" is completed!"
 msgid_plural "Rename of {0} items from \"{1}\" is completed!"
@@ -205,8 +205,9 @@ msgid ""
 msgstr "Необходимо создать новую связку ключей для безопасного хранения ваших паролей. Выберите пароль для неё."
 
 #: sunflower/widgets/popup_menu.py:89 sunflower/widgets/popup_menu.py:171
-#: sunflower/widgets/location_menu.py:71 sunflower/gui/input_dialog.py:2154
-#: sunflower/gui/history_list.py:89 sunflower/gui/mounts_manager_window.py:443
+#: sunflower/widgets/location_menu.py:72 sunflower/gui/input_dialog.py:210
+#: sunflower/gui/input_dialog.py:2201 sunflower/gui/history_list.py:85
+#: sunflower/gui/mounts_manager_window.py:378
 msgid "Open"
 msgstr "Открыть"
 
@@ -256,260 +257,274 @@ msgstr "Эмблемы"
 msgid "Properties"
 msgstr "Свойства"
 
-#: sunflower/widgets/location_menu.py:85 sunflower/gui/history_list.py:111
+#: sunflower/widgets/location_menu.py:84 sunflower/gui/history_list.py:107
 msgid "Open selected path in new tab"
 msgstr "Открыть выбранный путь в новой вкладке"
 
-#: sunflower/widgets/location_menu.py:98 sunflower/gui/history_list.py:115
+#: sunflower/widgets/location_menu.py:95 sunflower/gui/history_list.py:111
 msgid "Open selected path in opposite list"
 msgstr "Открыть выбранный путь в противоположной панели"
 
-#: sunflower/widgets/location_menu.py:111
+#: sunflower/widgets/location_menu.py:106
 msgid "Open terminal at selected path"
 msgstr "Открыть выбранный путь в терминале"
 
-#: sunflower/widgets/location_menu.py:119
+#: sunflower/widgets/location_menu.py:114
 #: sunflower/gui/preferences/bookmarks.py:14
-#: sunflower/plugins/default_toolbar/bookmarks_button.py:23
-#: sunflower/plugins/default_toolbar/bookmarks_button.py:24
+#: sunflower/plugins/default_toolbar/bookmarks_button.py:18
+#: sunflower/plugins/default_toolbar/bookmarks_button.py:19
 msgid "Bookmarks"
 msgstr "Закладки"
 
-#: sunflower/widgets/location_menu.py:174 sunflower/gui/shortcuts_window.py:25
+#: sunflower/widgets/location_menu.py:164 sunflower/gui/shortcuts_window.py:25
 #: sunflower/gui/preferences/accelerators.py:273
 #: sunflower/plugins/default_toolbar/home_directory_button.py:16
 #: sunflower/plugins/default_toolbar/home_directory_button.py:17
 msgid "Home directory"
 msgstr "Домашний каталог"
 
+#: sunflower/widgets/queue_selector.py:90
+msgid "No queue"
+msgstr ""
+
+#: sunflower/widgets/queue_selector.py:93
+#, python-brace-format
+msgid "Queue {0}"
+msgstr ""
+
 #: sunflower/widgets/title_bar.py:59
 msgid "Context menu"
 msgstr "Контекстное меню"
 
-#: sunflower/widgets/tab_label.py:119
-msgid "Unlock"
-msgstr "Открепить"
-
-#: sunflower/widgets/tab_label.py:119
-msgid "Lock"
-msgstr "Закрепить"
-
-#: sunflower/widgets/tab_label.py:123 sunflower/plugin_base/plugin.py:194
-msgid "Duplicate tab"
-msgstr "Дублировать вкладку"
-
-#: sunflower/widgets/tab_label.py:127
-msgid "Move to opposite panel"
-msgstr "Перенести на противоположную панель"
-
-#: sunflower/widgets/tab_label.py:134
+#: sunflower/widgets/tab_label.py:118
 msgid "Close Tab"
 msgstr "Закрыть вкладку"
 
-#: sunflower/widgets/tab_label.py:140
+#: sunflower/widgets/tab_label.py:129
+msgid "Unlock"
+msgstr "Открепить"
+
+#: sunflower/widgets/tab_label.py:129
+msgid "Lock"
+msgstr "Закрепить"
+
+#: sunflower/widgets/tab_label.py:133 sunflower/plugin_base/plugin.py:189
+msgid "Duplicate tab"
+msgstr "Дублировать вкладку"
+
+#: sunflower/widgets/tab_label.py:137
+msgid "Move to opposite panel"
+msgstr "Перенести на противоположную панель"
+
+#: sunflower/widgets/tab_label.py:145
 msgid "Close All"
 msgstr "Закрыть все"
 
-#: sunflower/widgets/tab_label.py:145
+#: sunflower/widgets/tab_label.py:150
 msgid "Close Other Tabs"
 msgstr "Закрыть остальные вкладки"
 
-#: sunflower/gui/input_dialog.py:61 sunflower/gui/input_dialog.py:1598
-#: sunflower/gui/input_dialog.py:2161 sunflower/gui/input_dialog.py:2256
+#: sunflower/gui/input_dialog.py:76 sunflower/gui/input_dialog.py:1679
+#: sunflower/gui/input_dialog.py:2204 sunflower/gui/input_dialog.py:2294
 msgid "OK"
 msgstr "ОК"
 
-#: sunflower/gui/input_dialog.py:67 sunflower/gui/input_dialog.py:1070
-#: sunflower/gui/input_dialog.py:1178 sunflower/gui/input_dialog.py:1361
-#: sunflower/gui/input_dialog.py:1607 sunflower/gui/input_dialog.py:1725
-#: sunflower/gui/input_dialog.py:1845 sunflower/gui/input_dialog.py:2169
-#: sunflower/gui/input_dialog.py:2265 sunflower/gui/operation_dialog.py:238
+#: sunflower/gui/input_dialog.py:82 sunflower/gui/input_dialog.py:209
+#: sunflower/gui/input_dialog.py:1180 sunflower/gui/input_dialog.py:1272
+#: sunflower/gui/input_dialog.py:1446 sunflower/gui/input_dialog.py:1684
+#: sunflower/gui/input_dialog.py:1798 sunflower/gui/input_dialog.py:1908
+#: sunflower/gui/input_dialog.py:2208 sunflower/gui/input_dialog.py:2299
+#: sunflower/gui/operation_dialog.py:274
 #: sunflower/gui/preferences_window.py:195
-#: sunflower/plugins/file_list/dialogs.py:136
-#: sunflower/plugins/file_list/dialogs.py:411
-#: sunflower/plugins/file_list/dialogs.py:677
-#: sunflower/plugins/file_list/file_list.py:1880
-#: sunflower/plugins/default_toolbar/bookmark_button.py:109
-#: sunflower/tools/find_files.py:358
+#: sunflower/plugins/file_list/dialogs.py:129
+#: sunflower/plugins/file_list/dialogs.py:395
+#: sunflower/plugins/file_list/dialogs.py:652
+#: sunflower/plugins/file_list/file_list.py:2021
+#: sunflower/plugins/default_toolbar/bookmark_button.py:96
+#: sunflower/tools/find_files.py:357
 msgid "Cancel"
 msgstr "Отменить"
 
-#: sunflower/gui/input_dialog.py:137
+#: sunflower/gui/input_dialog.py:152
 msgid "Create link"
 msgstr "Создать ссылку"
 
-#: sunflower/gui/input_dialog.py:138
+#: sunflower/gui/input_dialog.py:153
 msgid "Enter new link name:"
 msgstr "Введите новое имя ссылки:"
 
-#: sunflower/gui/input_dialog.py:146
+#: sunflower/gui/input_dialog.py:161
 msgid "Original path:"
 msgstr "Путь к оригиналу:"
 
-#: sunflower/gui/input_dialog.py:152
+#: sunflower/gui/input_dialog.py:167
 msgid "Create hard link"
 msgstr "Создать жёсткую ссылку"
 
-#: sunflower/gui/input_dialog.py:155
+#: sunflower/gui/input_dialog.py:170
 msgid "Browse"
 msgstr "Обзор"
 
-#: sunflower/gui/input_dialog.py:190
+#: sunflower/gui/input_dialog.py:205
 msgid "Select original path"
 msgstr "Выберите путь к оригиналу"
 
-#: sunflower/gui/input_dialog.py:257
+#: sunflower/gui/input_dialog.py:274
 msgid "<b>Advanced options:</b>"
 msgstr "<b>Расширенные настройки:</b>"
 
-#: sunflower/gui/input_dialog.py:276 sunflower/gui/properties_window.py:539
+#: sunflower/gui/input_dialog.py:293 sunflower/gui/properties_window.py:539
 #: sunflower/gui/properties_window.py:615
 msgid "User:"
 msgstr "Пользователь:"
 
-#: sunflower/gui/input_dialog.py:281 sunflower/gui/properties_window.py:544
+#: sunflower/gui/input_dialog.py:298 sunflower/gui/properties_window.py:544
 #: sunflower/gui/properties_window.py:620
 msgid "Group:"
 msgstr "Группа:"
 
-#: sunflower/gui/input_dialog.py:286 sunflower/gui/properties_window.py:549
+#: sunflower/gui/input_dialog.py:303 sunflower/gui/properties_window.py:549
 msgid "Others:"
 msgstr "Остальные:"
 
-#: sunflower/gui/input_dialog.py:292 sunflower/gui/input_dialog.py:305
-#: sunflower/gui/input_dialog.py:318 sunflower/gui/properties_window.py:555
+#: sunflower/gui/input_dialog.py:309 sunflower/gui/input_dialog.py:322
+#: sunflower/gui/input_dialog.py:335 sunflower/gui/properties_window.py:555
 #: sunflower/gui/properties_window.py:568
 #: sunflower/gui/properties_window.py:581
 msgid "Read"
 msgstr "Чтение"
 
-#: sunflower/gui/input_dialog.py:296 sunflower/gui/input_dialog.py:309
-#: sunflower/gui/input_dialog.py:322 sunflower/gui/properties_window.py:559
+#: sunflower/gui/input_dialog.py:313 sunflower/gui/input_dialog.py:326
+#: sunflower/gui/input_dialog.py:339 sunflower/gui/properties_window.py:559
 #: sunflower/gui/properties_window.py:572
 #: sunflower/gui/properties_window.py:585
 msgid "Write"
 msgstr "Запись"
 
-#: sunflower/gui/input_dialog.py:300 sunflower/gui/input_dialog.py:313
-#: sunflower/gui/input_dialog.py:326 sunflower/gui/properties_window.py:563
+#: sunflower/gui/input_dialog.py:317 sunflower/gui/input_dialog.py:330
+#: sunflower/gui/input_dialog.py:343 sunflower/gui/properties_window.py:563
 #: sunflower/gui/properties_window.py:576
 #: sunflower/gui/properties_window.py:589
 msgid "Execute"
 msgstr "Исполнение"
 
-#: sunflower/gui/input_dialog.py:331 sunflower/gui/properties_window.py:594
+#: sunflower/gui/input_dialog.py:348 sunflower/gui/properties_window.py:594
 msgid "Octal:"
 msgstr "Восьмеричный вид:"
 
-#: sunflower/gui/input_dialog.py:349 sunflower/gui/input_dialog.py:1088
+#: sunflower/gui/input_dialog.py:370 sunflower/gui/input_dialog.py:938
 msgid "Save as default configuration"
 msgstr "Сохранить как конфигурацию по умолчанию"
 
-#: sunflower/gui/input_dialog.py:441
+#: sunflower/gui/input_dialog.py:464
 #: sunflower/plugins/file_list/dialogs.py:102
-#: sunflower/plugins/file_list/dialogs.py:381
-#: sunflower/plugins/file_list/dialogs.py:647
+#: sunflower/plugins/file_list/dialogs.py:372
+#: sunflower/plugins/file_list/dialogs.py:629
 msgid "Password:"
 msgstr "Пароль:"
 
-#: sunflower/gui/input_dialog.py:443
+#: sunflower/gui/input_dialog.py:466
 msgid "Confirm:"
 msgstr "Подтверждение:"
 
-#: sunflower/gui/input_dialog.py:511
+#: sunflower/gui/input_dialog.py:540
 msgid "Create empty file"
 msgstr "Создать пустой файл"
 
-#: sunflower/gui/input_dialog.py:512
+#: sunflower/gui/input_dialog.py:541
 msgid "Enter new file name:"
 msgstr "Введите новое имя файла:"
 
-#: sunflower/gui/input_dialog.py:515
+#: sunflower/gui/input_dialog.py:544
 msgid "Open file in editor"
 msgstr "Открыть файл в редакторе"
 
-#: sunflower/gui/input_dialog.py:519
+#: sunflower/gui/input_dialog.py:548
 #: sunflower/plugins/rename_extensions/audio_metadata.py:33
 #: sunflower/plugins/rename_extensions/default.py:55
 msgid "Template:"
 msgstr "Шаблон:"
 
-#: sunflower/gui/input_dialog.py:591
+#: sunflower/gui/input_dialog.py:626
 msgid "Empty File"
 msgstr "Пустой файл"
 
-#: sunflower/gui/input_dialog.py:644
+#: sunflower/gui/input_dialog.py:679
 msgid "Create directory"
 msgstr "Создать каталог"
 
-#: sunflower/gui/input_dialog.py:645
+#: sunflower/gui/input_dialog.py:680
 msgid "Enter new directory name:"
 msgstr "Введите новое имя каталога:"
 
-#: sunflower/gui/input_dialog.py:679 sunflower/gui/preferences_window.py:197
-msgid "Yes"
-msgstr "Да"
+#: sunflower/gui/input_dialog.py:726 sunflower/gui/main_window.py:574
+msgid "Delete selected items"
+msgstr "Удалить выбранные файлы"
 
-#: sunflower/gui/input_dialog.py:682 sunflower/gui/preferences_window.py:196
-msgid "No"
-msgstr "Нет"
-
-#: sunflower/gui/input_dialog.py:758
-msgid "Only files of this type:"
-msgstr "Только файлы следующего типа:"
-
-#: sunflower/gui/input_dialog.py:766
+#: sunflower/gui/input_dialog.py:738 sunflower/gui/input_dialog.py:866
 msgid "Operation queue:"
 msgstr "Очередь операций:"
 
-#: sunflower/gui/input_dialog.py:791
+#: sunflower/gui/input_dialog.py:745 sunflower/gui/preferences_window.py:197
+msgid "Yes"
+msgstr "Да"
+
+#: sunflower/gui/input_dialog.py:749 sunflower/gui/preferences_window.py:196
+msgid "No"
+msgstr "Нет"
+
+#: sunflower/gui/input_dialog.py:858
+msgid "Only files of this type:"
+msgstr "Только файлы следующего типа:"
+
+#: sunflower/gui/input_dialog.py:885
 msgid "Affected item list"
 msgstr "Список затронутых файлов"
 
-#: sunflower/gui/input_dialog.py:814
+#: sunflower/gui/input_dialog.py:908
 msgid "Set owner on destination"
 msgstr "Установить владельца целевого каталога"
 
-#: sunflower/gui/input_dialog.py:815
+#: sunflower/gui/input_dialog.py:909
 msgid "Set access mode on destination"
 msgstr "Установить права на целевой каталог"
 
-#: sunflower/gui/input_dialog.py:816
+#: sunflower/gui/input_dialog.py:910
 msgid "Set date and time on destination"
 msgstr "Установить дату и время для целевого каталога"
 
-#: sunflower/gui/input_dialog.py:817
+#: sunflower/gui/input_dialog.py:911
 msgid "Silent mode"
 msgstr "Тихий режим"
 
-#: sunflower/gui/input_dialog.py:822
+#: sunflower/gui/input_dialog.py:916
 msgid "Merge directories"
 msgstr "Слить каталоги"
 
-#: sunflower/gui/input_dialog.py:823
+#: sunflower/gui/input_dialog.py:917
 msgid "Overwrite files"
 msgstr "Перезаписывать файлы"
 
-#: sunflower/gui/input_dialog.py:827
+#: sunflower/gui/input_dialog.py:921
 msgid ""
 "Silent mode will enable operation to finish without disturbing you. If any "
 "errors occur, they will be presented to you after completion."
 msgstr "В тихом режиме операция закончится не беспокоя вас. Если возникнут какие-либо ошибки, они будут показаны вам по завершении."
 
-#: sunflower/gui/input_dialog.py:832
+#: sunflower/gui/input_dialog.py:926
 msgid "Follow symlinks"
 msgstr "Переходить по символическим ссылкам"
 
-#: sunflower/gui/input_dialog.py:955 sunflower/gui/input_dialog.py:959
-#: sunflower/gui/input_dialog.py:963 sunflower/gui/input_dialog.py:967
+#: sunflower/gui/input_dialog.py:1065 sunflower/gui/input_dialog.py:1069
+#: sunflower/gui/input_dialog.py:1073 sunflower/gui/input_dialog.py:1077
 msgid "Not supported by file system provider"
 msgstr "Не поддерживается файловой системой"
 
-#: sunflower/gui/input_dialog.py:1032
+#: sunflower/gui/input_dialog.py:1142
 msgid "Only options supported by file system providers were saved."
 msgstr "Были сохранены только опции, поддерживаемые файловой системой."
 
-#: sunflower/gui/input_dialog.py:1056
+#: sunflower/gui/input_dialog.py:1166
 msgid "Copy item"
 msgid_plural "Copy items"
 msgstr[0] "Копировать объект"
@@ -517,7 +532,7 @@ msgstr[1] "Копировать объекты"
 msgstr[2] "Копировать объекты"
 msgstr[3] "Копировать объекты"
 
-#: sunflower/gui/input_dialog.py:1061
+#: sunflower/gui/input_dialog.py:1171
 #, python-brace-format
 msgid "Copy <b>{0}</b> item to:"
 msgid_plural "Copy <b>{0}</b> items to:"
@@ -526,12 +541,12 @@ msgstr[1] "Копировать объекты <b>{0}</b> в"
 msgstr[2] "Копировать объекты <b>{0}</b> в"
 msgstr[3] "Копировать объекты <b>{0}</b> в"
 
-#: sunflower/gui/input_dialog.py:1071 sunflower/gui/input_dialog.py:1497
-#: sunflower/gui/main_window.py:580 sunflower/plugin_base/terminal.py:242
+#: sunflower/gui/input_dialog.py:1181 sunflower/gui/input_dialog.py:1582
+#: sunflower/gui/main_window.py:571 sunflower/plugin_base/terminal.py:241
 msgid "Copy"
 msgstr "Копировать"
 
-#: sunflower/gui/input_dialog.py:1164
+#: sunflower/gui/input_dialog.py:1258
 msgid "Move item"
 msgid_plural "Move items"
 msgstr[0] "Переместить объект"
@@ -539,7 +554,7 @@ msgstr[1] "Переместить объекты"
 msgstr[2] "Переместить объекты"
 msgstr[3] "Переместить объекты"
 
-#: sunflower/gui/input_dialog.py:1169
+#: sunflower/gui/input_dialog.py:1263
 #, python-brace-format
 msgid "Move <b>{0}</b> item to:"
 msgid_plural "Move <b>{0}</b> items to:"
@@ -548,86 +563,86 @@ msgstr[1] "Переместить объекты <b>{0}</b> в"
 msgstr[2] "Переместить объекты <b>{0}</b> в"
 msgstr[3] "Переместить объекты <b>{0}</b> в"
 
-#: sunflower/gui/input_dialog.py:1179 sunflower/gui/main_window.py:581
+#: sunflower/gui/input_dialog.py:1273 sunflower/gui/main_window.py:572
 msgid "Move"
 msgstr "Переместить"
 
-#: sunflower/gui/input_dialog.py:1193
+#: sunflower/gui/input_dialog.py:1288
 msgid "Rename file/directory"
 msgstr "Переименовать файл/каталог"
 
-#: sunflower/gui/input_dialog.py:1194
+#: sunflower/gui/input_dialog.py:1289
 msgid "Enter a new name for this item:"
 msgstr "Введите новое имя для этого объекта:"
 
-#: sunflower/gui/input_dialog.py:1271
+#: sunflower/gui/input_dialog.py:1366
 msgid "Select a new name for the destination"
 msgstr "Выберите новое имя для целевого каталога"
 
-#: sunflower/gui/input_dialog.py:1276
+#: sunflower/gui/input_dialog.py:1371
 msgid "Reset"
 msgstr "Сбросить"
 
-#: sunflower/gui/input_dialog.py:1280
+#: sunflower/gui/input_dialog.py:1375
 msgid "Apply this action to all files"
 msgstr "Применить ко всем файлам"
 
-#: sunflower/gui/input_dialog.py:1362 sunflower/gui/input_dialog.py:1726
+#: sunflower/gui/input_dialog.py:1447 sunflower/gui/input_dialog.py:1799
 msgid "Skip"
 msgstr "Пропустить"
 
-#: sunflower/gui/input_dialog.py:1422
+#: sunflower/gui/input_dialog.py:1507
 msgid "Original"
 msgstr "Оригинал"
 
-#: sunflower/gui/input_dialog.py:1423 sunflower/gui/input_dialog.py:1444
+#: sunflower/gui/input_dialog.py:1508 sunflower/gui/input_dialog.py:1529
 #: sunflower/gui/properties_window.py:437
 msgid "Size:"
 msgstr "Размер:"
 
-#: sunflower/gui/input_dialog.py:1424 sunflower/gui/input_dialog.py:1445
+#: sunflower/gui/input_dialog.py:1509 sunflower/gui/input_dialog.py:1530
 #: sunflower/gui/properties_window.py:441
 msgid "Modified:"
 msgstr "Изменён:"
 
-#: sunflower/gui/input_dialog.py:1443
+#: sunflower/gui/input_dialog.py:1528
 msgid "Replace with"
 msgstr "Заменить на"
 
-#: sunflower/gui/input_dialog.py:1478
+#: sunflower/gui/input_dialog.py:1563
 msgid "File conflict"
 msgstr "Конфликт файлов"
 
-#: sunflower/gui/input_dialog.py:1483 sunflower/gui/input_dialog.py:1494
+#: sunflower/gui/input_dialog.py:1568 sunflower/gui/input_dialog.py:1579
 msgid "Replace"
 msgstr "Заменить"
 
-#: sunflower/gui/input_dialog.py:1501
+#: sunflower/gui/input_dialog.py:1586
 #, python-brace-format
 msgid "Replace file \"{0}\"?"
 msgstr "Заменить файл \"{0}\"?"
 
-#: sunflower/gui/input_dialog.py:1507
+#: sunflower/gui/input_dialog.py:1592
 #, python-brace-format
 msgid ""
 "Another file with the same name already exists in \"{0}\". Replacing it will"
 " overwrite its content."
 msgstr "Файл с таким именем уже присутствует в \"{0}\". Замена этого файла перезапишет его содержимое."
 
-#: sunflower/gui/input_dialog.py:1520
+#: sunflower/gui/input_dialog.py:1605
 msgid "Directory conflict"
 msgstr "Кофликт каталогов"
 
-#: sunflower/gui/input_dialog.py:1524
+#: sunflower/gui/input_dialog.py:1609
 msgid "Merge"
 msgstr "Объединить"
 
-#: sunflower/gui/input_dialog.py:1535
+#: sunflower/gui/input_dialog.py:1620
 #, python-brace-format
 msgid "Merge directory \"{0}\"?"
 msgstr "Объединить каталог \"{0}\"?"
 
-#: sunflower/gui/input_dialog.py:1541
+#: sunflower/gui/input_dialog.py:1626
 #, python-brace-format
 msgid ""
 "Directory with the same name already exists in \"{0}\". Merging will ask for"
@@ -635,138 +650,138 @@ msgid ""
 " the files being copied."
 msgstr "Каталог с таким именем уже присутствует в \"{0}\". При объединении у вас запросят подтверждение для замены каждого файла в каталоге, конфликтующего с копируемыми файлами."
 
-#: sunflower/gui/input_dialog.py:1559
+#: sunflower/gui/input_dialog.py:1644
 msgid "Add bookmark"
 msgstr "Добавить закладку"
 
-#: sunflower/gui/input_dialog.py:1570 sunflower/gui/input_dialog.py:1809
+#: sunflower/gui/input_dialog.py:1655 sunflower/gui/input_dialog.py:1880
 #: sunflower/gui/properties_window.py:435
 #: sunflower/plugins/file_list/dialogs.py:62
-#: sunflower/plugins/file_list/dialogs.py:347
-#: sunflower/plugins/file_list/dialogs.py:603
+#: sunflower/plugins/file_list/dialogs.py:338
+#: sunflower/plugins/file_list/dialogs.py:585
 msgid "Name:"
 msgstr "Имя:"
 
-#: sunflower/gui/input_dialog.py:1576
+#: sunflower/gui/input_dialog.py:1661
 msgid ""
 "Underscore in the label text indicates the next character should be "
 "underlined and used for the mnemonic accelerator key if it is the first "
 "character so marked."
 msgstr "Знак подчёркивания в тексте означает, что следующий символ должен быть подчёркнут и будет использоваться в качестве горячей клавиши, если это первый подчёркнутый символ."
 
-#: sunflower/gui/input_dialog.py:1584 sunflower/gui/properties_window.py:438
+#: sunflower/gui/input_dialog.py:1669 sunflower/gui/properties_window.py:438
 msgid "Location:"
 msgstr "Расположение:"
 
-#: sunflower/gui/input_dialog.py:1680
+#: sunflower/gui/input_dialog.py:1753
 msgid "Operation error"
 msgstr "При выполнении операции произошла ошибка"
 
-#: sunflower/gui/input_dialog.py:1727
+#: sunflower/gui/input_dialog.py:1800
 msgid "Skip all"
 msgstr "Пропустить все"
 
-#: sunflower/gui/input_dialog.py:1728
+#: sunflower/gui/input_dialog.py:1801
 msgid "Retry"
 msgstr "Повторить"
 
-#: sunflower/gui/input_dialog.py:1796
+#: sunflower/gui/input_dialog.py:1867
 msgid "Add toolbar widget"
 msgstr "Довать виджет на панель инструментов"
 
-#: sunflower/gui/input_dialog.py:1818 sunflower/gui/properties_window.py:436
+#: sunflower/gui/input_dialog.py:1889 sunflower/gui/properties_window.py:436
 msgid "Type:"
 msgstr "Тип:"
 
-#: sunflower/gui/input_dialog.py:1838
-#: sunflower/gui/preferences/associations.py:84
-#: sunflower/gui/preferences/item_list.py:200
-#: sunflower/gui/preferences/item_list.py:251
-#: sunflower/gui/preferences/bookmarks.py:78
-#: sunflower/gui/preferences/toolbar.py:75
-#: sunflower/gui/preferences/commands.py:68
-#: sunflower/plugins/sessions/plugin.py:93
+#: sunflower/gui/input_dialog.py:1905
+#: sunflower/gui/preferences/associations.py:80
+#: sunflower/gui/preferences/item_list.py:196
+#: sunflower/gui/preferences/item_list.py:239
+#: sunflower/gui/preferences/bookmarks.py:74
+#: sunflower/gui/preferences/toolbar.py:71
+#: sunflower/gui/preferences/commands.py:64
+#: sunflower/plugins/sessions/plugin.py:84
 msgid "Add"
 msgstr ""
 
-#: sunflower/gui/input_dialog.py:1933
+#: sunflower/gui/input_dialog.py:1994
 msgid "Select range"
 msgstr "Выбрать диапазон"
 
-#: sunflower/gui/input_dialog.py:1934
+#: sunflower/gui/input_dialog.py:1995
 msgid "Select part of the text:"
 msgstr "Выделить часть текста:"
 
-#: sunflower/gui/input_dialog.py:1958
+#: sunflower/gui/input_dialog.py:2019
 msgid "Add application"
 msgstr "Добавить приложение"
 
-#: sunflower/gui/input_dialog.py:1959
+#: sunflower/gui/input_dialog.py:2020
 msgid "Application name:"
 msgstr "Имя приложения:"
 
-#: sunflower/gui/input_dialog.py:1970 sunflower/tools/find_files.py:359
+#: sunflower/gui/input_dialog.py:2031 sunflower/tools/find_files.py:358
 msgid "Select"
 msgstr "Выбрать"
 
-#: sunflower/gui/input_dialog.py:2035 sunflower/gui/properties_window.py:89
+#: sunflower/gui/input_dialog.py:2096 sunflower/gui/properties_window.py:89
 msgid "Open With"
 msgstr "Открыть с помощью"
 
-#: sunflower/gui/input_dialog.py:2052
+#: sunflower/gui/input_dialog.py:2113
 msgid "Select application:"
 msgstr "Выберите приложение:"
 
-#: sunflower/gui/input_dialog.py:2056
+#: sunflower/gui/input_dialog.py:2117
 #, python-brace-format
 msgid "Open <i>{0}</i> with:"
 msgstr "Открыть <i>{0}</i> с помощью:"
 
-#: sunflower/gui/input_dialog.py:2096
+#: sunflower/gui/input_dialog.py:2157
 msgid "Use a custom command"
 msgstr "Использовать пользовательскую команду"
 
-#: sunflower/gui/input_dialog.py:2146
+#: sunflower/gui/input_dialog.py:2197
 msgid "Help"
 msgstr "Помощь"
 
-#: sunflower/gui/operation_dialog.py:93 sunflower/gui/error_list.py:54
+#: sunflower/gui/operation_dialog.py:100 sunflower/gui/error_list.py:55
 msgid "Source:"
 msgstr "Источник:"
 
-#: sunflower/gui/operation_dialog.py:94 sunflower/gui/error_list.py:61
+#: sunflower/gui/operation_dialog.py:101 sunflower/gui/error_list.py:62
 msgid "Destination:"
 msgstr "Назначение:"
 
-#: sunflower/gui/operation_dialog.py:169
+#: sunflower/gui/operation_dialog.py:193
 msgid "ETA:"
 msgstr "Осталось:"
 
-#: sunflower/gui/operation_dialog.py:170
+#: sunflower/gui/operation_dialog.py:194
 msgid "Speed:"
 msgstr "Скорость:"
 
-#: sunflower/gui/operation_dialog.py:171
+#: sunflower/gui/operation_dialog.py:195
 msgid "Total size:"
 msgstr "Размер:"
 
-#: sunflower/gui/operation_dialog.py:172
+#: sunflower/gui/operation_dialog.py:196
 msgid "Total count:"
 msgstr "Количество:"
 
-#: sunflower/gui/operation_dialog.py:253 sunflower/gui/operation_dialog.py:319
+#: sunflower/gui/operation_dialog.py:289 sunflower/gui/operation_dialog.py:354
 msgid "Pause"
 msgstr "Приостановить"
 
-#: sunflower/gui/operation_dialog.py:308
+#: sunflower/gui/operation_dialog.py:344
 msgid "Resume"
 msgstr "Возобновить"
 
-#: sunflower/gui/operation_dialog.py:324
+#: sunflower/gui/operation_dialog.py:359
 msgid "Are you sure about canceling current operation?"
 msgstr "Вы уверены, что хотите отменить текущую операцию?"
 
-#: sunflower/gui/operation_dialog.py:380
+#: sunflower/gui/operation_dialog.py:415
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] "секунда"
@@ -774,7 +789,7 @@ msgstr[1] "секуны"
 msgstr[2] "секунд"
 msgstr[3] "секунд"
 
-#: sunflower/gui/operation_dialog.py:384
+#: sunflower/gui/operation_dialog.py:419
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "минута"
@@ -782,7 +797,7 @@ msgstr[1] "минуты"
 msgstr[2] "минут"
 msgstr[3] "минут"
 
-#: sunflower/gui/operation_dialog.py:388
+#: sunflower/gui/operation_dialog.py:423
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "час"
@@ -790,314 +805,310 @@ msgstr[1] "часа"
 msgstr[2] "часов"
 msgstr[3] "часов"
 
-#: sunflower/gui/operation_dialog.py:392
+#: sunflower/gui/operation_dialog.py:427
 #: sunflower/gui/properties_window.py:251
 msgid "unknown"
 msgstr "неизвестный"
 
-#: sunflower/gui/operation_dialog.py:583
+#: sunflower/gui/operation_dialog.py:653
 msgid "Removing items..."
 msgstr "Удаление..."
 
-#: sunflower/gui/operation_dialog.py:617
+#: sunflower/gui/operation_dialog.py:687
 msgid "Renaming items..."
 msgstr "Переименование..."
 
-#: sunflower/gui/main_window.py:82 sunflower/gui/main_window.py:85
-#: sunflower/gui/main_window.py:184 sunflower/gui/main_window.py:196
+#: sunflower/gui/main_window.py:78 sunflower/gui/main_window.py:81
+#: sunflower/gui/main_window.py:180 sunflower/gui/main_window.py:192
 #: sunflower/gui/about_window.py:71 sunflower/gui/about_window.py:72
 #: sunflower/__main__.py:221
 msgid "Sunflower"
 msgstr "Sunflower"
 
-#: sunflower/gui/main_window.py:233
+#: sunflower/gui/main_window.py:229
 msgid "Create new file, directory and more."
 msgstr "Создать новый файл, каталог и т.д."
 
-#: sunflower/gui/main_window.py:244 sunflower/gui/main_window.py:2086
+#: sunflower/gui/main_window.py:240 sunflower/gui/main_window.py:2070
 msgid "Create _file"
 msgstr "Создать _файл"
 
-#: sunflower/gui/main_window.py:249 sunflower/gui/main_window.py:2087
+#: sunflower/gui/main_window.py:245 sunflower/gui/main_window.py:2071
 msgid "Create _directory"
 msgstr "Создать _каталог"
 
-#: sunflower/gui/main_window.py:268
+#: sunflower/gui/main_window.py:264
 msgid "Create new tab"
 msgstr "Создать новую вкладку"
 
-#: sunflower/gui/main_window.py:282 sunflower/gui/preferences/commands.py:14
+#: sunflower/gui/main_window.py:278 sunflower/gui/preferences/commands.py:14
 msgid "Commands"
 msgstr "Команды"
 
-#: sunflower/gui/main_window.py:365
+#: sunflower/gui/main_window.py:361
 msgid "_Select all"
 msgstr "Выделить всё"
 
-#: sunflower/gui/main_window.py:366
+#: sunflower/gui/main_window.py:362
 msgid "_Deselect all"
 msgstr "Отменить выделение"
 
-#: sunflower/gui/main_window.py:367
+#: sunflower/gui/main_window.py:363
 msgid "Invert select_ion"
 msgstr "Обратить выделение"
 
-#: sunflower/gui/main_window.py:369 sunflower/gui/main_window.py:2090
+#: sunflower/gui/main_window.py:365 sunflower/gui/main_window.py:2074
 msgid "S_elect with pattern"
 msgstr "Выделить по маске"
 
-#: sunflower/gui/main_window.py:370 sunflower/gui/main_window.py:2091
+#: sunflower/gui/main_window.py:366 sunflower/gui/main_window.py:2075
 msgid "Deselect with pa_ttern"
 msgstr "Снять выделение по маске"
 
-#: sunflower/gui/main_window.py:371 sunflower/gui/main_window.py:2092
+#: sunflower/gui/main_window.py:367 sunflower/gui/main_window.py:2076
 msgid "Select with same e_xtension"
 msgstr "Выделить файлы с этим расширением"
 
-#: sunflower/gui/main_window.py:372 sunflower/gui/main_window.py:2093
+#: sunflower/gui/main_window.py:368 sunflower/gui/main_window.py:2077
 msgid "Deselect with same exte_nsion"
 msgstr "Снять выделение файлов с тем же расширением"
 
-#: sunflower/gui/main_window.py:374 sunflower/gui/main_window.py:2094
+#: sunflower/gui/main_window.py:370 sunflower/gui/main_window.py:2078
 msgid "Compare _directories"
 msgstr "Сравнить каталоги"
 
-#: sunflower/gui/main_window.py:381 sunflower/gui/main_window.py:2095
+#: sunflower/gui/main_window.py:377 sunflower/gui/main_window.py:2079
 msgid "_Find files"
 msgstr "_Поиск файлов"
 
-#: sunflower/gui/main_window.py:382
+#: sunflower/gui/main_window.py:378
 msgid "Advanced _rename"
 msgstr "Улучшенное _переименование"
 
-#: sunflower/gui/main_window.py:383
+#: sunflower/gui/main_window.py:379
 msgid "_Mount manager"
 msgstr "_Менеджер монтирования"
 
-#: sunflower/gui/main_window.py:384
+#: sunflower/gui/main_window.py:380
 msgid "_Keyring manager"
 msgstr "Менеджер _паролей"
 
-#: sunflower/gui/main_window.py:387 sunflower/gui/main_window.py:2100
+#: sunflower/gui/main_window.py:383 sunflower/gui/main_window.py:2084
 msgid "Fast m_edia preview"
 msgstr "Быстрый предварительный просмотр медиафайлов"
 
-#: sunflower/gui/main_window.py:388 sunflower/gui/main_window.py:2101
+#: sunflower/gui/main_window.py:384 sunflower/gui/main_window.py:2085
 msgid "Show _hidden files"
 msgstr "Показывать скрытые файлы"
 
-#: sunflower/gui/main_window.py:390
+#: sunflower/gui/main_window.py:386
 msgid "Show _toolbar"
 msgstr "Показывать панель инструментов"
 
-#: sunflower/gui/main_window.py:391
+#: sunflower/gui/main_window.py:387
 msgid "Show _titlebar"
 msgstr "Показывать заголовок"
 
-#: sunflower/gui/main_window.py:392
+#: sunflower/gui/main_window.py:388
 msgid "Show _command bar"
 msgstr "Показывать кнопки операций"
 
-#: sunflower/gui/main_window.py:393
+#: sunflower/gui/main_window.py:389
 msgid "_Horizontal split"
 msgstr "_Горизонтальное разбиение"
 
-#: sunflower/gui/main_window.py:394
+#: sunflower/gui/main_window.py:390
 msgid "_Dark theme"
 msgstr "Тёмная тема"
 
-#: sunflower/gui/main_window.py:400 sunflower/gui/shortcuts_window.py:11
+#: sunflower/gui/main_window.py:396 sunflower/gui/shortcuts_window.py:11
 msgid "Keyboard shortcuts"
 msgstr "Горячие клавиши"
 
-#: sunflower/gui/main_window.py:401
+#: sunflower/gui/main_window.py:397
 msgid "_Home page"
 msgstr "Домашняя страница"
 
-#: sunflower/gui/main_window.py:402
+#: sunflower/gui/main_window.py:398
 msgid "Check for new version"
 msgstr "Проверить обновления"
 
-#: sunflower/gui/main_window.py:403
+#: sunflower/gui/main_window.py:399
 msgid "_About"
 msgstr "О программе"
 
-#: sunflower/gui/main_window.py:405
+#: sunflower/gui/main_window.py:401
 msgid "_Mark"
 msgstr "В_ыделение"
 
-#: sunflower/gui/main_window.py:406
+#: sunflower/gui/main_window.py:402
 msgid "_Tools"
 msgstr "_Инструменты"
 
-#: sunflower/gui/main_window.py:407
+#: sunflower/gui/main_window.py:403
 msgid "_View"
 msgstr "_Вид"
 
-#: sunflower/gui/main_window.py:409
+#: sunflower/gui/main_window.py:405
 msgid "_Help"
 msgstr "Помощь"
 
-#: sunflower/gui/main_window.py:410 sunflower/gui/main_window.py:2089
+#: sunflower/gui/main_window.py:406 sunflower/gui/main_window.py:2073
 msgid "_Preferences"
 msgstr "Настройки"
 
-#: sunflower/gui/main_window.py:411 sunflower/gui/main_window.py:2088
+#: sunflower/gui/main_window.py:407 sunflower/gui/main_window.py:2072
 #: sunflower/indicator.py:58
 msgid "_Quit"
 msgstr "_Выйти"
 
-#: sunflower/gui/main_window.py:512
+#: sunflower/gui/main_window.py:506
 msgid "Execute command:"
 msgstr "Запустить команду:"
 
-#: sunflower/gui/main_window.py:576
+#: sunflower/gui/main_window.py:567
 msgid "Refresh"
 msgstr "Обновить"
 
-#: sunflower/gui/main_window.py:576
+#: sunflower/gui/main_window.py:567
 msgid "Reload active item list"
 msgstr "Обновить активную панель"
 
-#: sunflower/gui/main_window.py:577 sunflower/tools/advanced_rename.py:116
+#: sunflower/gui/main_window.py:568 sunflower/tools/advanced_rename.py:113
 msgid "Rename"
 msgstr "Переименовать"
 
-#: sunflower/gui/main_window.py:577
+#: sunflower/gui/main_window.py:568
 msgid "Rename selected file"
 msgstr "Переименовать выделенный объект"
 
-#: sunflower/gui/main_window.py:578
+#: sunflower/gui/main_window.py:569
 msgid "Preview"
 msgstr "Просмотр"
 
-#: sunflower/gui/main_window.py:578
+#: sunflower/gui/main_window.py:569
 msgid "Preview selected file"
 msgstr "Показать выбранный файл"
 
-#: sunflower/gui/main_window.py:579 sunflower/gui/keyring_manager_window.py:74
+#: sunflower/gui/main_window.py:570 sunflower/gui/keyring_manager_window.py:71
 #: sunflower/gui/preferences/view_and_edit.py:26
-#: sunflower/gui/preferences/toolbar.py:89
+#: sunflower/gui/preferences/toolbar.py:77
 msgid "Edit"
 msgstr "Правка"
 
-#: sunflower/gui/main_window.py:579
+#: sunflower/gui/main_window.py:570
 msgid "Edit selected file"
 msgstr "Изменить выбранный файл"
 
-#: sunflower/gui/main_window.py:580
+#: sunflower/gui/main_window.py:571
 msgid "Copy selected items from active to opposite list"
 msgstr "Копировать выбранные файлы из активной панели в соседнюю"
 
-#: sunflower/gui/main_window.py:581
+#: sunflower/gui/main_window.py:572
 msgid "Move selected items from active to opposite list"
 msgstr "Переместить выбранные файлы из активной панели в соседнюю"
 
-#: sunflower/gui/main_window.py:582
+#: sunflower/gui/main_window.py:573
 msgid "Create"
 msgstr "Создать"
 
-#: sunflower/gui/main_window.py:582
+#: sunflower/gui/main_window.py:573
 msgid "Create new directory"
 msgstr "Создать новый каталог"
 
-#: sunflower/gui/main_window.py:583 sunflower/gui/keyring_manager_window.py:81
-#: sunflower/gui/preferences/item_list.py:207
-#: sunflower/gui/preferences/item_list.py:258
-#: sunflower/gui/preferences/bookmarks.py:85
-#: sunflower/gui/preferences/toolbar.py:82
-#: sunflower/gui/preferences/commands.py:75
-#: sunflower/plugins/sessions/plugin.py:100
+#: sunflower/gui/main_window.py:574 sunflower/gui/keyring_manager_window.py:74
+#: sunflower/gui/preferences/item_list.py:199
+#: sunflower/gui/preferences/item_list.py:242
+#: sunflower/gui/preferences/bookmarks.py:77
+#: sunflower/gui/preferences/toolbar.py:74
+#: sunflower/gui/preferences/commands.py:67
+#: sunflower/plugins/sessions/plugin.py:87
 msgid "Delete"
 msgstr "Удалить"
 
-#: sunflower/gui/main_window.py:583
-msgid "Delete selected items"
-msgstr "Удалить выбранные файлы"
-
-#: sunflower/gui/main_window.py:676
+#: sunflower/gui/main_window.py:661
 msgid "Edit commands"
 msgstr "Изменить команды"
 
-#: sunflower/gui/main_window.py:1647
+#: sunflower/gui/main_window.py:1631
 msgid "Select items"
 msgstr "Выделить файлы"
 
-#: sunflower/gui/main_window.py:1648 sunflower/gui/main_window.py:1704
+#: sunflower/gui/main_window.py:1632 sunflower/gui/main_window.py:1688
 msgid "Selection pattern (eg.: *.jpg):"
 msgstr "Маска выделения (т.е.: *.jpg):"
 
-#: sunflower/gui/main_window.py:1703
+#: sunflower/gui/main_window.py:1687
 msgid "Deselect items"
 msgstr "Снять выделение с файлов"
 
-#: sunflower/gui/main_window.py:1740
+#: sunflower/gui/main_window.py:1724
 msgid "First level of compared directories is identical."
 msgstr "Первый уровень сравниваемых каталогов идентичен."
 
-#: sunflower/gui/main_window.py:1864
+#: sunflower/gui/main_window.py:1848
 msgid ""
 "There was a problem starting external terminal application. Check if command"
 " is valid!"
 msgstr "При открытии внешнего терминала возникла проблема. Проверьте правильность команды."
 
-#: sunflower/gui/main_window.py:2077
+#: sunflower/gui/main_window.py:2061
 msgid "Main Menu"
 msgstr "Главное меню"
 
-#: sunflower/gui/main_window.py:2082
+#: sunflower/gui/main_window.py:2066
 msgid "Restore handle position"
 msgstr "Восстановить позицию курсора"
 
-#: sunflower/gui/main_window.py:2083
+#: sunflower/gui/main_window.py:2067
 msgid "Move handle to the left"
 msgstr "Переместить курсор налево"
 
-#: sunflower/gui/main_window.py:2084
+#: sunflower/gui/main_window.py:2068
 msgid "Move handle to the right"
 msgstr "Переместить курсор направо"
 
-#: sunflower/gui/main_window.py:2096
+#: sunflower/gui/main_window.py:2080
 msgid "Advanced Rename"
 msgstr "Расширенное переименование"
 
-#: sunflower/gui/main_window.py:2099
+#: sunflower/gui/main_window.py:2083
 msgid "Rel_oad item list"
 msgstr "Обновить список файлов"
 
-#: sunflower/gui/main_window.py:2166
+#: sunflower/gui/main_window.py:2150
 msgid ""
 "Error saving configuration to files in your home directory. Make sure you "
 "have enough permissions."
 msgstr "Ошибка сохранения кофигурации в файлы в вашем домашнем каталоге. Убедитесь, что вы имеете необходимые привилегии."
 
-#: sunflower/gui/main_window.py:2836
+#: sunflower/gui/main_window.py:2832
 msgid "Please select at least one file or directory."
 msgstr "Выберите как минимум один файл или каталог"
 
-#: sunflower/gui/main_window.py:2849
+#: sunflower/gui/main_window.py:2845
 msgid ""
 "Active object is not item list. Advanced rename tool needs files and "
 "directories."
 msgstr "Активный объект не является списком файлов. Расширенный инструмент переименования раотает с файлами и каталогами."
 
-#: sunflower/gui/main_window.py:2864
+#: sunflower/gui/main_window.py:2860
 msgid ""
 "No rename extensions were found. Please enable basic rename options plugin "
 "and try again."
 msgstr "Модули переименования не найдены. Пожалуйста, включите модуль \"Basic rename options\", и попробуйте снова."
 
-#: sunflower/gui/main_window.py:2891
+#: sunflower/gui/main_window.py:2887
 msgid ""
 "No extensions for finding files were found. Please enable basic find file "
 "options plugin and try again."
 msgstr "Модули поиска файлов не найдены. Пожалуйста, активируйте модуль \"find_file_extensions\" и попробуйте снова."
 
-#: sunflower/gui/main_window.py:2917
+#: sunflower/gui/main_window.py:2913
 msgid "Keyring is empty!"
 msgstr "Связка ключей пуста!"
 
-#: sunflower/gui/main_window.py:2930
+#: sunflower/gui/main_window.py:2926
 msgid ""
 "Keyring is not available. Make sure you have Python Gnome keyring module "
 "installed."
@@ -1107,17 +1118,17 @@ msgstr "Связка ключей недоступна. Убедитесь, чт
 msgid "History"
 msgstr "Журнал"
 
-#: sunflower/gui/history_list.py:50 sunflower/gui/mounts_manager_window.py:414
-#: sunflower/gui/mounts_manager_window.py:642
-#: sunflower/gui/keyring_manager_window.py:59
+#: sunflower/gui/history_list.py:50 sunflower/gui/mounts_manager_window.py:349
+#: sunflower/gui/mounts_manager_window.py:568
+#: sunflower/gui/keyring_manager_window.py:60
 #: sunflower/gui/preferences/toolbar.py:43
 #: sunflower/plugins/rename_extensions/default.py:86
 #: sunflower/plugins/rename_extensions/default.py:120
-#: sunflower/plugins/file_list/file_list.py:134
+#: sunflower/plugins/file_list/file_list.py:145
 #: sunflower/plugins/file_list/gio_extension.py:168
-#: sunflower/plugins/file_list/gio_extension.py:581
-#: sunflower/plugins/file_list/gio_extension.py:992
-#: sunflower/plugins/sessions/plugin.py:74 sunflower/tools/find_files.py:198
+#: sunflower/plugins/file_list/gio_extension.py:575
+#: sunflower/plugins/file_list/gio_extension.py:980
+#: sunflower/plugins/sessions/plugin.py:69 sunflower/tools/find_files.py:197
 msgid "Name"
 msgstr "Имя"
 
@@ -1125,18 +1136,18 @@ msgstr "Имя"
 msgid "Path"
 msgstr "Путь"
 
-#: sunflower/gui/history_list.py:71 sunflower/gui/mounts_manager_window.py:112
-#: sunflower/gui/keyring_manager_window.py:88 sunflower/gui/error_list.py:93
-#: sunflower/tools/version_check.py:68 sunflower/tools/advanced_rename.py:107
+#: sunflower/gui/history_list.py:67 sunflower/gui/mounts_manager_window.py:109
+#: sunflower/gui/keyring_manager_window.py:77 sunflower/gui/error_list.py:90
+#: sunflower/tools/version_check.py:66 sunflower/tools/advanced_rename.py:104
 msgid "Close"
 msgstr ""
 
-#: sunflower/gui/history_list.py:110
-#: sunflower/gui/mounts_manager_window.py:467
+#: sunflower/gui/history_list.py:106
+#: sunflower/gui/mounts_manager_window.py:398
 msgid "Open in tab"
 msgstr "Открыть во вкладке"
 
-#: sunflower/gui/history_list.py:114
+#: sunflower/gui/history_list.py:110
 msgid "Open in opposite list"
 msgstr "Открыть в противоположной панели"
 
@@ -1156,64 +1167,64 @@ msgstr "Авторские права принадлежат © 2010-2022 Mladen
 msgid "Contributors"
 msgstr "Участники проекта"
 
-#: sunflower/gui/mounts_manager_window.py:47
+#: sunflower/gui/mounts_manager_window.py:48
 msgid "Mount manager"
 msgstr "Менеджер точек монтирования"
 
-#: sunflower/gui/mounts_manager_window.py:422
+#: sunflower/gui/mounts_manager_window.py:357
 msgid "Systemwide"
 msgstr "Системная"
 
-#: sunflower/gui/mounts_manager_window.py:468
+#: sunflower/gui/mounts_manager_window.py:399
 msgid "Open selected URI in new tab"
 msgstr "Открыть выбранный путь в новой вкладке"
 
-#: sunflower/gui/mounts_manager_window.py:472
-#: sunflower/gui/mounts_manager_window.py:661
+#: sunflower/gui/mounts_manager_window.py:403
+#: sunflower/gui/mounts_manager_window.py:587
 #: sunflower/plugins/file_list/gio_extension.py:225
-#: sunflower/plugins/file_list/gio_extension.py:638
-#: sunflower/plugins/file_list/gio_extension.py:1049 sunflower/mounts.py:279
-#: sunflower/mounts.py:413
+#: sunflower/plugins/file_list/gio_extension.py:632
+#: sunflower/plugins/file_list/gio_extension.py:1037 sunflower/mounts.py:376
+#: sunflower/mounts.py:528
 msgid "Unmount"
 msgstr "Размонтировать"
 
-#: sunflower/gui/mounts_manager_window.py:570
-#: sunflower/gui/preferences/operation.py:16 sunflower/mounts.py:32
+#: sunflower/gui/mounts_manager_window.py:496
+#: sunflower/gui/preferences/operation.py:16 sunflower/mounts.py:36
 msgid "Mounts"
 msgstr "Точки монтирования"
 
-#: sunflower/gui/mounts_manager_window.py:650
+#: sunflower/gui/mounts_manager_window.py:576
 msgid "Mounted"
 msgstr "Смонтирован"
 
-#: sunflower/gui/mounts_manager_window.py:657
+#: sunflower/gui/mounts_manager_window.py:583
 #: sunflower/plugins/file_list/gio_extension.py:222
-#: sunflower/plugins/file_list/gio_extension.py:635
-#: sunflower/plugins/file_list/gio_extension.py:1046 sunflower/mounts.py:431
+#: sunflower/plugins/file_list/gio_extension.py:629
+#: sunflower/plugins/file_list/gio_extension.py:1034 sunflower/mounts.py:543
 msgid "Mount"
 msgstr "Монтировать"
 
-#: sunflower/gui/mounts_manager_window.py:822
+#: sunflower/gui/mounts_manager_window.py:742
 msgid "Volumes"
 msgstr "Тома"
 
-#: sunflower/gui/keyring_manager_window.py:32
+#: sunflower/gui/keyring_manager_window.py:33
 msgid "Keyring manager"
 msgstr "Менеджер связок ключей"
 
-#: sunflower/gui/keyring_manager_window.py:58
+#: sunflower/gui/keyring_manager_window.py:59
 msgid "ID"
 msgstr "ID"
 
-#: sunflower/gui/keyring_manager_window.py:61
+#: sunflower/gui/keyring_manager_window.py:62
 msgid "Modified"
 msgstr "Изменён"
 
-#: sunflower/gui/keyring_manager_window.py:173
+#: sunflower/gui/keyring_manager_window.py:156
 msgid "Please select an entry to delete!"
 msgstr "Пожалуйста, укажите запись для удаления!"
 
-#: sunflower/gui/keyring_manager_window.py:189
+#: sunflower/gui/keyring_manager_window.py:172
 #, python-brace-format
 msgid ""
 "You are about to remove the following entry from your keyring. If you do this you will have to provide password manually when needed. Are you sure?\n"
@@ -1221,23 +1232,23 @@ msgid ""
 "{0}"
 msgstr "Вы собираетесь удалить указанную запись из вашей связки ключей. Если вы сделаете это, вам придётся указывать пароль вручную при необходимости. Вы уверены, что хотите продолжить?\n\n{0}"
 
-#: sunflower/gui/keyring_manager_window.py:217
+#: sunflower/gui/keyring_manager_window.py:200
 msgid "Please select an entry to change!"
 msgstr "Пожалуйста, укажите запись для изменения!"
 
-#: sunflower/gui/keyring_manager_window.py:224
+#: sunflower/gui/keyring_manager_window.py:207
 msgid "Change password"
 msgstr "Изменить пароль"
 
-#: sunflower/gui/keyring_manager_window.py:225
+#: sunflower/gui/keyring_manager_window.py:208
 msgid "Enter new password for selected keyring entry."
 msgstr "Введите новый пароль для выбранной записи в связке ключей."
 
-#: sunflower/gui/keyring_manager_window.py:240
+#: sunflower/gui/keyring_manager_window.py:223
 msgid "Password was changed!"
 msgstr "Пароль был изменён!"
 
-#: sunflower/gui/keyring_manager_window.py:255
+#: sunflower/gui/keyring_manager_window.py:238
 msgid "Passwords do not match! Please try again."
 msgstr "Пароли не совпадают! Пожалуйста, попробуйте ещё раз."
 
@@ -1347,18 +1358,18 @@ msgstr "Связаться с разработчиком"
 msgid "Visit site"
 msgstr "Посетить сайт"
 
-#: sunflower/gui/preferences/plugins.py:241
+#: sunflower/gui/preferences/plugins.py:238
 #, python-brace-format
 msgid ""
 "{0} is required for normal program operation and therefore can not be "
 "deactivated!"
 msgstr "{0} необходим для нормального функционирования программы и, следовательно, не может быть деактивирован!"
 
-#: sunflower/gui/preferences/plugins.py:272
+#: sunflower/gui/preferences/plugins.py:269
 msgid "This plugin has no description"
 msgstr "Этот модуль не имеет описания"
 
-#: sunflower/gui/preferences/plugins.py:331
+#: sunflower/gui/preferences/plugins.py:328
 msgid "No plugin selected"
 msgstr "Не выбран ни один модуль"
 
@@ -1368,7 +1379,7 @@ msgstr "Ассоциации"
 
 #: sunflower/gui/preferences/associations.py:50
 #: sunflower/gui/preferences/associations.py:66
-#: sunflower/gui/preferences/associations.py:121
+#: sunflower/gui/preferences/associations.py:114
 msgid "Add mime type"
 msgstr "Добавить MIME-тип"
 
@@ -1377,11 +1388,11 @@ msgstr "Добавить MIME-тип"
 msgid "Add application to mime type"
 msgstr "Добавить приложение для MIME-типа"
 
-#: sunflower/gui/preferences/associations.py:122
+#: sunflower/gui/preferences/associations.py:115
 msgid "Enter MIME type (eg. image/png):"
 msgstr "Введите MIME (например, image/png):"
 
-#: sunflower/gui/preferences/associations.py:173
+#: sunflower/gui/preferences/associations.py:166
 msgid ""
 "You need to select mime type to which application will be added. You can "
 "also select another application in which case new one will be added to its "
@@ -1390,7 +1401,7 @@ msgstr "Необходимо выбрать MIME-тип, для которого
 
 #: sunflower/gui/preferences/item_list.py:42
 #: sunflower/plugins/file_list/column_editor.py:72
-#: sunflower/plugin_base/item_list.py:299
+#: sunflower/plugin_base/item_list.py:293
 msgid "Item List"
 msgstr "Список файлов"
 
@@ -1475,7 +1486,7 @@ msgid "Show grid lines:"
 msgstr "Показывать линии сетки:"
 
 #: sunflower/gui/preferences/item_list.py:111
-#: sunflower/gui/preferences/display.py:87 sunflower/queue.py:30
+#: sunflower/gui/preferences/display.py:87
 msgid "None"
 msgstr "Никогда"
 
@@ -1488,8 +1499,7 @@ msgid "Vertical"
 msgstr "Вертикальные"
 
 #: sunflower/gui/preferences/item_list.py:114
-#: sunflower/gui/preferences/toolbar.py:150
-#: sunflower/gui/preferences/toolbar.py:157
+#: sunflower/gui/preferences/toolbar.py:138
 msgid "Both"
 msgstr "Все"
 
@@ -1529,86 +1539,86 @@ msgstr "Показывать скрытые файлы"
 msgid "Always visible files and directories:"
 msgstr "Всегда видимые файлы и каталоги"
 
-#: sunflower/gui/preferences/item_list.py:220
+#: sunflower/gui/preferences/item_list.py:212
 msgid "Load specified tabs instead of saved"
 msgstr "Загрузить указанные вкладки вместо сохранённых"
 
-#: sunflower/gui/preferences/item_list.py:233
+#: sunflower/gui/preferences/item_list.py:225
 msgid "Directory"
 msgstr "Каталог"
 
-#: sunflower/gui/preferences/item_list.py:238
+#: sunflower/gui/preferences/item_list.py:230
 msgid "Left list"
 msgstr "Слева"
 
-#: sunflower/gui/preferences/item_list.py:239
+#: sunflower/gui/preferences/item_list.py:231
 msgid "Right list"
 msgstr "Справа"
 
-#: sunflower/gui/preferences/item_list.py:274
-#: sunflower/gui/preferences/bookmarks.py:101
-#: sunflower/gui/preferences/toolbar.py:105
-#: sunflower/gui/preferences/commands.py:91
+#: sunflower/gui/preferences/item_list.py:258
+#: sunflower/gui/preferences/bookmarks.py:93
+#: sunflower/gui/preferences/toolbar.py:93
+#: sunflower/gui/preferences/commands.py:83
 msgid "Move Up"
 msgstr "Переместить выше"
 
-#: sunflower/gui/preferences/item_list.py:290
-#: sunflower/gui/preferences/bookmarks.py:117
-#: sunflower/gui/preferences/toolbar.py:121
-#: sunflower/gui/preferences/commands.py:107
+#: sunflower/gui/preferences/item_list.py:274
+#: sunflower/gui/preferences/bookmarks.py:109
+#: sunflower/gui/preferences/toolbar.py:109
+#: sunflower/gui/preferences/commands.py:99
 msgid "Move Down"
 msgstr "Переместить ниже"
 
-#: sunflower/gui/preferences/item_list.py:296
-#: sunflower/gui/preferences/item_list.py:317
+#: sunflower/gui/preferences/item_list.py:280
+#: sunflower/gui/preferences/item_list.py:301
 msgid "Custom directory"
 msgstr "Указать каталог"
 
-#: sunflower/gui/preferences/item_list.py:298
-#: sunflower/gui/preferences/item_list.py:318
+#: sunflower/gui/preferences/item_list.py:282
+#: sunflower/gui/preferences/item_list.py:302
 msgid "Left directory"
 msgstr "Каталог слева"
 
-#: sunflower/gui/preferences/item_list.py:299
-#: sunflower/gui/preferences/item_list.py:319
+#: sunflower/gui/preferences/item_list.py:283
+#: sunflower/gui/preferences/item_list.py:303
 msgid "Right directory"
 msgstr "Каталог справа"
 
-#: sunflower/gui/preferences/item_list.py:380
+#: sunflower/gui/preferences/item_list.py:364
 msgid "Column"
 msgstr "Столбец"
 
-#: sunflower/gui/preferences/item_list.py:385
-#: sunflower/plugins/file_list/file_list.py:136
+#: sunflower/gui/preferences/item_list.py:369
+#: sunflower/plugins/file_list/file_list.py:147
 #: sunflower/plugins/find_file_extensions/size.py:71
 msgid "Size"
 msgstr "Размер"
 
-#: sunflower/gui/preferences/item_list.py:388
+#: sunflower/gui/preferences/item_list.py:372
 msgid "Visible"
 msgstr "Показывать"
 
-#: sunflower/gui/preferences/item_list.py:391
+#: sunflower/gui/preferences/item_list.py:375
 msgid "Font"
 msgstr "Шрифт"
 
-#: sunflower/gui/preferences/item_list.py:594
+#: sunflower/gui/preferences/item_list.py:573
 msgid "Add always visible item"
 msgstr "Добавить всегда видимый элемент"
 
-#: sunflower/gui/preferences/item_list.py:595
+#: sunflower/gui/preferences/item_list.py:574
 msgid "Full name of file or directory to always show:"
 msgstr "Полное имя файла или каталога, который не нужно скрывать:"
 
-#: sunflower/gui/preferences/item_list.py:621
+#: sunflower/gui/preferences/item_list.py:600
 msgid "Add custom directory"
 msgstr "Добавить указанный каталог"
 
-#: sunflower/gui/preferences/item_list.py:622
+#: sunflower/gui/preferences/item_list.py:601
 msgid "Full path:"
 msgstr "Полный путь:"
 
-#: sunflower/gui/preferences/item_list.py:703
+#: sunflower/gui/preferences/item_list.py:682
 msgid ""
 "Quick search settings are in conflict with VIM navigation style. To resolve "
 "this issue your quick search settings were restored to default."
@@ -1747,17 +1757,17 @@ msgstr "Переносить длинные строки"
 msgid "Use installed application"
 msgstr "Использовать установленное приложение"
 
-#: sunflower/gui/preferences/view_and_edit.py:66
-#: sunflower/gui/preferences/view_and_edit.py:69
+#: sunflower/gui/preferences/view_and_edit.py:61
+#: sunflower/gui/preferences/view_and_edit.py:64
 msgid "Use external command"
 msgstr "Использовать внешнюю команду"
 
-#: sunflower/gui/preferences/view_and_edit.py:86
+#: sunflower/gui/preferences/view_and_edit.py:76
 #: sunflower/gui/preferences/terminal.py:70
 msgid "Command line:"
 msgstr "Команда:"
 
-#: sunflower/gui/preferences/view_and_edit.py:93
+#: sunflower/gui/preferences/view_and_edit.py:83
 msgid "Execute command in terminal tab"
 msgstr "Выполнить команду во вкладке с терминалом"
 
@@ -1779,7 +1789,7 @@ msgstr "Добавить домашний каталог в меню закла�
 msgid "Title"
 msgstr "Заголовок"
 
-#: sunflower/gui/preferences/bookmarks.py:58 sunflower/tools/find_files.py:202
+#: sunflower/gui/preferences/bookmarks.py:58 sunflower/tools/find_files.py:201
 msgid "Location"
 msgstr "Расположение"
 
@@ -1791,50 +1801,47 @@ msgstr "Панель инструментов"
 msgid "Type"
 msgstr "Тип"
 
-#: sunflower/gui/preferences/toolbar.py:144
+#: sunflower/gui/preferences/toolbar.py:132
 msgid "Toolbar style:"
 msgstr "Стиль панели инструментов:"
 
-#: sunflower/gui/preferences/toolbar.py:148
-#: sunflower/gui/preferences/toolbar.py:155
+#: sunflower/gui/preferences/toolbar.py:136
 msgid "Icons"
 msgstr "Иконки"
 
-#: sunflower/gui/preferences/toolbar.py:149
-#: sunflower/gui/preferences/toolbar.py:156 sunflower/tools/viewer.py:166
+#: sunflower/gui/preferences/toolbar.py:137 sunflower/tools/viewer.py:167
 msgid "Text"
 msgstr "Текст"
 
-#: sunflower/gui/preferences/toolbar.py:151
-#: sunflower/gui/preferences/toolbar.py:158
+#: sunflower/gui/preferences/toolbar.py:139
 msgid "Both horizontal"
 msgstr "Все горизонтально"
 
-#: sunflower/gui/preferences/toolbar.py:168
+#: sunflower/gui/preferences/toolbar.py:149
 msgid "Icon size:"
 msgstr "Размер значков:"
 
-#: sunflower/gui/preferences/toolbar.py:172
-#: sunflower/gui/preferences/toolbar.py:179
+#: sunflower/gui/preferences/toolbar.py:153
+#: sunflower/gui/preferences/toolbar.py:160
 msgid "Small toolbar icon"
 msgstr "Маленькие значки на панели"
 
-#: sunflower/gui/preferences/toolbar.py:173
-#: sunflower/gui/preferences/toolbar.py:180
+#: sunflower/gui/preferences/toolbar.py:154
+#: sunflower/gui/preferences/toolbar.py:161
 msgid "Large toolbar icon"
 msgstr "Большие значки на панели"
 
-#: sunflower/gui/preferences/toolbar.py:174
-#: sunflower/gui/preferences/toolbar.py:181
+#: sunflower/gui/preferences/toolbar.py:155
+#: sunflower/gui/preferences/toolbar.py:162
 msgid "Same as drag icons"
 msgstr "Как у значков перетаскивания"
 
-#: sunflower/gui/preferences/toolbar.py:175
-#: sunflower/gui/preferences/toolbar.py:182
+#: sunflower/gui/preferences/toolbar.py:156
+#: sunflower/gui/preferences/toolbar.py:163
 msgid "Same as dialog"
 msgstr "Как у диалогового окна"
 
-#: sunflower/gui/preferences/toolbar.py:299
+#: sunflower/gui/preferences/toolbar.py:280
 msgid "missing plugin"
 msgstr "Отсутствующий модуль"
 
@@ -1843,10 +1850,10 @@ msgid "Command"
 msgstr "Команда"
 
 #: sunflower/gui/preferences/terminal.py:10
-#: sunflower/plugins/system_terminal/plugin.py:54
-#: sunflower/plugins/system_terminal/plugin.py:55
-#: sunflower/plugin_base/item_list.py:285
-#: sunflower/plugin_base/terminal.py:180 sunflower/plugin_base/terminal.py:295
+#: sunflower/plugins/system_terminal/plugin.py:56
+#: sunflower/plugins/system_terminal/plugin.py:57
+#: sunflower/plugin_base/item_list.py:279
+#: sunflower/plugin_base/terminal.py:179 sunflower/plugin_base/terminal.py:294
 msgid "Terminal"
 msgstr "Терминал"
 
@@ -1908,11 +1915,11 @@ msgid ""
 "\t{2} will be replaced with current working directory.</i></small>"
 msgstr "<small><i>Примечание:\n\tЕсли пропустить {0}, то терминал откроется в новом окне, а не во вкладке.\n\t{0} будет заменён на id сокета/окна.\n\t{1} будет заменён на указанную команду и её параметры.\n\t{2} будет заменён на текущий рабочий каталог.</i></small>"
 
-#: sunflower/gui/error_list.py:26
+#: sunflower/gui/error_list.py:27
 msgid "Error list"
 msgstr "Список ошибок"
 
-#: sunflower/gui/error_list.py:47
+#: sunflower/gui/error_list.py:48
 msgid "For:"
 msgstr "Для:"
 
@@ -1922,11 +1929,11 @@ msgid "Preferences"
 msgstr "Настройки"
 
 #: sunflower/gui/preferences_window.py:82
-#: sunflower/plugins/file_list/dialogs.py:127
-#: sunflower/plugins/file_list/dialogs.py:402
-#: sunflower/plugins/file_list/dialogs.py:668
-#: sunflower/plugins/sessions/plugin.py:418
-#: sunflower/plugins/default_toolbar/bookmark_button.py:102
+#: sunflower/plugins/file_list/dialogs.py:124
+#: sunflower/plugins/file_list/dialogs.py:390
+#: sunflower/plugins/file_list/dialogs.py:647
+#: sunflower/plugins/sessions/plugin.py:412
+#: sunflower/plugins/default_toolbar/bookmark_button.py:93
 msgid "Save"
 msgstr "Сохранить"
 
@@ -1951,7 +1958,7 @@ msgid "\"{0}\" Properties"
 msgstr "Свойства \"{0}\""
 
 #: sunflower/gui/properties_window.py:87
-#: sunflower/plugins/rename_extensions/default.py:344
+#: sunflower/plugins/rename_extensions/default.py:340
 #: sunflower/plugins/find_file_extensions/default.py:136
 msgid "Basic"
 msgstr "Основное"
@@ -1961,14 +1968,14 @@ msgid "Permissions"
 msgstr "Права"
 
 #: sunflower/gui/properties_window.py:142
-#: sunflower/plugins/file_list/file_list.py:1017
+#: sunflower/plugins/file_list/file_list.py:1040
 msgid ""
 "File or directory with specified name already exists in current directory. "
 "Item could not be renamed."
 msgstr "Файл или каталог с указанным именем уже существует в данном каталоге. Объект не может быть переименован."
 
 #: sunflower/gui/properties_window.py:177
-#: sunflower/plugins/file_list/file_list.py:1002
+#: sunflower/plugins/file_list/file_list.py:1025
 msgid "Error renaming specified item. Make sure you have enough permissions."
 msgstr "Ошибка при переименовании указанного объекта. Убедитесь, что вы имеете достаточные привилегии."
 
@@ -2000,7 +2007,7 @@ msgstr "Доступ"
 msgid "Ownership"
 msgstr "Владелец"
 
-#: sunflower/gui/properties_window.py:698
+#: sunflower/gui/properties_window.py:695
 #, python-brace-format
 msgid "Select an application to open <i>{0}</i> and other files of type \"{1}\""
 msgstr "Выберите приложение для открытия <i>{0}</i> и других файлов типа \"{1}\""
@@ -2018,7 +2025,7 @@ msgid "Genre"
 msgstr "Жанр"
 
 #: sunflower/plugins/rename_extensions/audio_metadata.py:28
-#: sunflower/plugins/file_list/file_list.py:138
+#: sunflower/plugins/file_list/file_list.py:149
 msgid "Date"
 msgstr "Дата"
 
@@ -2047,7 +2054,7 @@ msgid ""
 "In order to use this extension you need <b>mutagen</b> module installed!"
 msgstr "Для использования этого расширения необходим установленный модуль <b>mutagen</b>!"
 
-#: sunflower/plugins/rename_extensions/audio_metadata.py:150
+#: sunflower/plugins/rename_extensions/audio_metadata.py:148
 msgid "Audio Metadata"
 msgstr "Метаданные аудио"
 
@@ -2130,17 +2137,98 @@ msgstr "Шаг:"
 msgid "Digits:"
 msgstr "Цифры:"
 
-#: sunflower/plugins/rename_extensions/default.py:331
+#: sunflower/plugins/rename_extensions/default.py:327
 msgid "Item list is empty. Unable to get item for range selection!"
 msgstr "Список файлов пуст. Невозможно выбрать файл для выделения диапазона!"
+
+#: sunflower/plugins/archive_support/tar_provider.py:262
+msgid "Compressed TAR archives can not be modified."
+msgstr ""
+
+#: sunflower/plugins/archive_support/tar_provider.py:266
+#: sunflower/plugins/archive_support/zip_provider.py:295
+msgid "Archive can not be modified."
+msgstr ""
+
+#: sunflower/plugins/archive_support/tar_provider.py:285
+#: sunflower/plugins/archive_support/zip_provider.py:241
+#: sunflower/plugins/archive_support/zip_provider.py:302
+msgid "Invalid name."
+msgstr ""
+
+#: sunflower/plugins/archive_support/tar_provider.py:292
+#: sunflower/plugins/archive_support/zip_provider.py:251
+msgid "Directory with the same name already exists."
+msgstr ""
+
+#: sunflower/plugins/archive_support/tar_provider.py:295
+#: sunflower/plugins/archive_support/zip_provider.py:257
+msgid "File with the same name already exists."
+msgstr ""
+
+#: sunflower/plugins/archive_support/tar_provider.py:320
+msgid "Unexpected end of data."
+msgstr ""
+
+#: sunflower/plugins/archive_support/tar_provider.py:384
+#: sunflower/plugins/archive_support/tar_provider.py:430
+#: sunflower/plugins/archive_support/zip_provider.py:320
+msgid "No such file in archive."
+msgstr ""
+
+#: sunflower/plugins/archive_support/tar_provider.py:390
+msgid "Items in TAR archives can not be removed, renamed or linked."
+msgstr ""
+
+#: sunflower/plugins/archive_support/tar_provider.py:436
+msgid "Item is not a file."
+msgstr ""
+
+#: sunflower/plugins/archive_support/tar_provider.py:511
+msgid "No such directory in archive."
+msgstr ""
+
+#: sunflower/plugins/archive_support/zip_provider.py:191
+msgid "Unexpected end of archive."
+msgstr ""
+
+#: sunflower/plugins/archive_support/plugin.py:31
+msgid "Create archive"
+msgstr ""
+
+#: sunflower/plugins/archive_support/plugin.py:32
+msgid "Enter name for the new archive:"
+msgstr ""
+
+#: sunflower/plugins/archive_support/plugin.py:33
+msgid "archive"
+msgstr ""
+
+#: sunflower/plugins/archive_support/plugin.py:49
+#, python-brace-format
+msgid "Item with the same name already exists: {0}"
+msgstr ""
+
+#: sunflower/plugins/archive_support/plugin.py:58
+msgid "Files can not be created in this location."
+msgstr ""
+
+#: sunflower/plugins/archive_support/plugin.py:76
+msgid ""
+"There was an error creating archive. Make sure you have enough permissions."
+msgstr ""
+
+#: sunflower/plugins/archive_support/plugin.py:96
+msgid "Create _archive"
+msgstr ""
 
 #: sunflower/plugins/file_list/dialogs.py:38
 msgid "Create Samba mount"
 msgstr "Создать точку монтирования Samba"
 
 #: sunflower/plugins/file_list/dialogs.py:72
-#: sunflower/plugins/file_list/dialogs.py:357
-#: sunflower/plugins/file_list/dialogs.py:613
+#: sunflower/plugins/file_list/dialogs.py:348
+#: sunflower/plugins/file_list/dialogs.py:595
 msgid "Server:"
 msgstr "Сервер:"
 
@@ -2149,8 +2237,8 @@ msgid "Share:"
 msgstr "Ресурс:"
 
 #: sunflower/plugins/file_list/dialogs.py:84
-#: sunflower/plugins/file_list/dialogs.py:365
-#: sunflower/plugins/file_list/dialogs.py:631
+#: sunflower/plugins/file_list/dialogs.py:356
+#: sunflower/plugins/file_list/dialogs.py:613
 msgid "Directory:"
 msgstr "Каталог:"
 
@@ -2159,82 +2247,82 @@ msgid "Domain:"
 msgstr "Домен:"
 
 #: sunflower/plugins/file_list/dialogs.py:101
-#: sunflower/plugins/file_list/dialogs.py:380
-#: sunflower/plugins/file_list/dialogs.py:646
+#: sunflower/plugins/file_list/dialogs.py:371
+#: sunflower/plugins/file_list/dialogs.py:628
 msgid "Username:"
 msgstr "Имя пользователя:"
 
-#: sunflower/plugins/file_list/dialogs.py:245
+#: sunflower/plugins/file_list/dialogs.py:236
 msgid ""
 "One or more required fields are empty. Please make sure you have entered "
 "name, server and share."
 msgstr "Одно или несколько из обязательных полей пусты. Пожалуйста, убедитесь, что вы ввели имя и сервер."
 
-#: sunflower/plugins/file_list/dialogs.py:323
+#: sunflower/plugins/file_list/dialogs.py:314
 msgid "Create FTP mount"
 msgstr "Создать точку монтирования FTP"
 
-#: sunflower/plugins/file_list/dialogs.py:504
-#: sunflower/plugins/file_list/dialogs.py:778
+#: sunflower/plugins/file_list/dialogs.py:486
+#: sunflower/plugins/file_list/dialogs.py:751
 msgid ""
 "One or more required fields is empty. Please make sure you have entered name"
 " and server."
 msgstr "Одно или несколько из обязательных полей пусты. Пожалуйста, убедитесь, что вы ввели имя и сервер."
 
-#: sunflower/plugins/file_list/dialogs.py:569
+#: sunflower/plugins/file_list/dialogs.py:551
 msgid "Create SFTP mount"
 msgstr "Создать точку монтирования SFTP"
 
-#: sunflower/plugins/file_list/dialogs.py:579
+#: sunflower/plugins/file_list/dialogs.py:561
 msgid "Create WebDav mount"
 msgstr "Создать точку монтирования WebDav"
 
-#: sunflower/plugins/file_list/dialogs.py:621
+#: sunflower/plugins/file_list/dialogs.py:603
 msgid "Server type:"
 msgstr "Тип сервера:"
 
-#: sunflower/plugins/file_list/file_list.py:135
+#: sunflower/plugins/file_list/file_list.py:146
 msgid "Ext"
 msgstr "Расширение"
 
-#: sunflower/plugins/file_list/file_list.py:137
+#: sunflower/plugins/file_list/file_list.py:148
 msgid "Mode"
 msgstr "Права"
 
-#: sunflower/plugins/file_list/file_list.py:484
+#: sunflower/plugins/file_list/file_list.py:502
 msgid "Invalid selection!"
 msgstr "Неверное выделение!"
 
-#: sunflower/plugins/file_list/file_list.py:658
+#: sunflower/plugins/file_list/file_list.py:676
 msgid ""
 "There was an error creating directory. Make sure you have enough "
 "permissions. "
 msgstr "Ошибка создания каталога. Убедитесь, что вы имеете необходимые привилегии. "
 
-#: sunflower/plugins/file_list/file_list.py:685
+#: sunflower/plugins/file_list/file_list.py:703
 #, python-brace-format
 msgid "File already exists: {0}"
 msgstr "Файл уже существует: {0}"
 
-#: sunflower/plugins/file_list/file_list.py:688
+#: sunflower/plugins/file_list/file_list.py:706
 #, python-brace-format
 msgid "Directory with same name exists: {0}"
 msgstr "Каталог с таким именем существует: {0}"
 
-#: sunflower/plugins/file_list/file_list.py:724
+#: sunflower/plugins/file_list/file_list.py:742
 msgid ""
 "There was an error creating file. Make sure you have enough permissions."
 msgstr "Ошибка создания файла. Убедитесь, что вы имеете необходимые привилегии."
 
-#: sunflower/plugins/file_list/file_list.py:786
+#: sunflower/plugins/file_list/file_list.py:804
 msgid "Error creating new link."
 msgstr "Ошибка создания ссылки"
 
-#: sunflower/plugins/file_list/file_list.py:802
+#: sunflower/plugins/file_list/file_list.py:820
 msgid "Current file system does not support linking."
 msgstr "Текущая файловая система не поддерживает ссылки."
 
-#: sunflower/plugins/file_list/file_list.py:826
+#: sunflower/plugins/file_list/file_list.py:849
 #, python-brace-format
 msgid ""
 "You are about to <i><b>delete</b></i> {0} item.\n"
@@ -2247,7 +2335,7 @@ msgstr[1] "Вы собираетесь <i><b>удалить</b></i> {0} объе
 msgstr[2] "Вы собираетесь <i><b>удалить</b></i> {0} объектов.\nВы уверены, что хотите это сделать?"
 msgstr[3] "Вы собираетесь <i><b>удалить</b></i> {0} объектов.\nВы уверены, что хотите это сделать?"
 
-#: sunflower/plugins/file_list/file_list.py:835
+#: sunflower/plugins/file_list/file_list.py:858
 #, python-brace-format
 msgid ""
 "You are about to move {0} item to <i><b>trash</b></i>.\n"
@@ -2260,35 +2348,35 @@ msgstr[1] "Вы собираетесь переместить {0} объекто
 msgstr[2] "Вы собираетесь переместить {0} объектов в <i><b>корзину</b></i>.\nВы уверены, что хотите это сделать?"
 msgstr[3] "Вы собираетесь переместить {0} объектов в <i><b>корзину</b></i>.\nВы уверены, что хотите это сделать?"
 
-#: sunflower/plugins/file_list/file_list.py:1489
+#: sunflower/plugins/file_list/file_list.py:1530
 msgid "No files selected."
 msgstr "Нет выбранных файлов."
 
-#: sunflower/plugins/file_list/file_list.py:1768
+#: sunflower/plugins/file_list/file_list.py:1910
 msgid "Free:"
 msgstr "Свободно:"
 
-#: sunflower/plugins/file_list/file_list.py:1769
+#: sunflower/plugins/file_list/file_list.py:1911
 msgid "Total:"
 msgstr "Всего:"
 
-#: sunflower/plugins/file_list/file_list.py:1831
+#: sunflower/plugins/file_list/file_list.py:1973
 msgid "Copy here"
 msgstr "Копировать сюда"
 
-#: sunflower/plugins/file_list/file_list.py:1836
+#: sunflower/plugins/file_list/file_list.py:1978
 msgid "Move here"
 msgstr "Переместить сюда"
 
-#: sunflower/plugins/file_list/file_list.py:1841
+#: sunflower/plugins/file_list/file_list.py:1983
 msgid "Link here"
 msgstr "Создать ссылку"
 
-#: sunflower/plugins/file_list/file_list.py:2167
+#: sunflower/plugins/file_list/file_list.py:2378
 msgid "No such file or directory"
 msgstr "Файл или каталог не найдены"
 
-#: sunflower/plugins/file_list/file_list.py:2186
+#: sunflower/plugins/file_list/file_list.py:2397
 #, python-brace-format
 msgid ""
 "Error changing working directory to:\n"
@@ -2321,14 +2409,14 @@ msgid ""
 msgstr "Невозможно смонтировать:\n{0}\n\n{1}"
 
 #: sunflower/plugins/file_list/gio_extension.py:169
-#: sunflower/plugins/file_list/gio_extension.py:582
-#: sunflower/plugins/file_list/gio_extension.py:993
+#: sunflower/plugins/file_list/gio_extension.py:576
+#: sunflower/plugins/file_list/gio_extension.py:981
 msgid "URI"
 msgstr "URI"
 
-#: sunflower/plugins/file_list/gio_extension.py:482
-#: sunflower/plugins/file_list/gio_extension.py:844
-#: sunflower/plugins/file_list/gio_extension.py:1258
+#: sunflower/plugins/file_list/gio_extension.py:476
+#: sunflower/plugins/file_list/gio_extension.py:832
+#: sunflower/plugins/file_list/gio_extension.py:1240
 #, python-brace-format
 msgid ""
 "You are about to remove '{0}'.\n"
@@ -2351,51 +2439,51 @@ msgstr "Владелец"
 msgid "Group"
 msgstr "Группа"
 
-#: sunflower/plugins/sessions/plugin.py:15 sunflower/queue.py:33
+#: sunflower/plugins/sessions/plugin.py:10
 msgid "Default"
 msgstr "По умолчанию"
 
-#: sunflower/plugins/sessions/plugin.py:41
-#: sunflower/plugins/sessions/plugin.py:483
+#: sunflower/plugins/sessions/plugin.py:36
+#: sunflower/plugins/sessions/plugin.py:473
 msgid "Sessions"
 msgstr "Сессии"
 
-#: sunflower/plugins/sessions/plugin.py:79
+#: sunflower/plugins/sessions/plugin.py:74
 msgid "Locked"
 msgstr "Закреплено"
 
-#: sunflower/plugins/sessions/plugin.py:80
-#: sunflower/plugins/sessions/plugin.py:343
+#: sunflower/plugins/sessions/plugin.py:75
+#: sunflower/plugins/sessions/plugin.py:337
 msgid "Session manager"
 msgstr "Менеджер сессий"
 
-#: sunflower/plugins/sessions/plugin.py:115
+#: sunflower/plugins/sessions/plugin.py:102
 msgid "Move up"
 msgstr "Переместить выше"
 
-#: sunflower/plugins/sessions/plugin.py:130
+#: sunflower/plugins/sessions/plugin.py:117
 msgid "Move down"
 msgstr "Переместить ниже"
 
-#: sunflower/plugins/sessions/plugin.py:236
+#: sunflower/plugins/sessions/plugin.py:220
 msgid "Session with this name already exists."
 msgstr "Сессия с таким именем уже существует."
 
-#: sunflower/plugins/sessions/plugin.py:266
+#: sunflower/plugins/sessions/plugin.py:250
 msgid "New session"
 msgstr "Новая сессия"
 
-#: sunflower/plugins/sessions/plugin.py:412
+#: sunflower/plugins/sessions/plugin.py:406
 msgid ""
 "Lock current session\n"
 "<small>Locking session preserves tab layout at the time of activation.</small>"
 msgstr "Фиксировать текущую сессию\n<small>Фиксированные сессии сохраняют тот набор вкладок, который был на момент фиксации.</small>"
 
-#: sunflower/plugins/sessions/plugin.py:415
+#: sunflower/plugins/sessions/plugin.py:409
 msgid "Manage"
 msgstr "Настроить"
 
-#: sunflower/plugins/sessions/plugin.py:487
+#: sunflower/plugins/sessions/plugin.py:477
 msgid "Show session list"
 msgstr "Показать список сессий"
 
@@ -2403,25 +2491,25 @@ msgstr "Показать список сессий"
 msgid "System terminal"
 msgstr "Системный терминал"
 
-#: sunflower/plugins/gvim_viewer/plugin.py:60
+#: sunflower/plugins/gvim_viewer/plugin.py:61
 msgid "GVim"
 msgstr "Gvim"
 
-#: sunflower/plugins/default_toolbar/bookmark_button.py:70
+#: sunflower/plugins/default_toolbar/bookmark_button.py:65
 msgid "Configure bookmark button"
 msgstr "Настроить кнопку закладки"
 
-#: sunflower/plugins/default_toolbar/bookmark_button.py:85
+#: sunflower/plugins/default_toolbar/bookmark_button.py:80
 msgid "Path:"
 msgstr "Путь:"
 
-#: sunflower/plugins/default_toolbar/bookmark_button.py:90
+#: sunflower/plugins/default_toolbar/bookmark_button.py:85
 msgid "Show label"
 msgstr "Показывать имя"
 
-#: sunflower/plugins/default_toolbar/parent_directory_button.py:21
-#: sunflower/plugins/default_toolbar/parent_directory_button.py:22
-#: sunflower/plugin_base/item_list.py:314
+#: sunflower/plugins/default_toolbar/parent_directory_button.py:16
+#: sunflower/plugins/default_toolbar/parent_directory_button.py:17
+#: sunflower/plugin_base/item_list.py:308
 msgid "Go to parent directory"
 msgstr "Перейти в родительский каталог"
 
@@ -2471,7 +2559,7 @@ msgstr "Максимальный:"
 msgid "Search for:"
 msgstr "Искать:"
 
-#: sunflower/plugins/find_file_extensions/contents.py:56
+#: sunflower/plugins/find_file_extensions/contents.py:54
 msgid "Content"
 msgstr "Содержимое"
 
@@ -2496,40 +2584,40 @@ msgstr "Показать главное окно"
 msgid "_Hide main window"
 msgstr "Скрыть главное окно"
 
-#: sunflower/mounts.py:96
+#: sunflower/mounts.py:184
 #, python-brace-format
 msgid ""
 "Unable to finish mounting:\n"
 "{}"
 msgstr "Не удалось завершить монтирование:\n{}"
 
-#: sunflower/mounts.py:112
+#: sunflower/mounts.py:200
 #, python-brace-format
 msgid ""
 "Unable to finish unmounting:\n"
 "{}"
 msgstr "Не удалось завершить отключение:\n{}"
 
-#: sunflower/mounts.py:128
+#: sunflower/mounts.py:216
 #, python-brace-format
 msgid ""
 "Unable to finish ejecting:\n"
 "{}"
 msgstr "Не удалось завершить извлечение:\n{}"
 
-#: sunflower/mounts.py:144
+#: sunflower/mounts.py:241
 msgid "Selected volume can not be mounted."
 msgstr "Указанный том не может быть смонтирован."
 
-#: sunflower/mounts.py:160
+#: sunflower/mounts.py:257
 msgid "Selected mount can not be unmounted."
 msgstr "Указанный том не может быть демонтирован."
 
-#: sunflower/mounts.py:176
+#: sunflower/mounts.py:273
 msgid "Selected volume can not be ejected."
 msgstr "Указанный том не может быть извлечён."
 
-#: sunflower/mounts.py:297 sunflower/mounts.py:449
+#: sunflower/mounts.py:391 sunflower/mounts.py:558
 msgid "Eject"
 msgstr "Извлечь"
 
@@ -2544,70 +2632,70 @@ msgid ""
 "In order to edit this entry you need to activate plugin used to create it."
 msgstr "Модуль, использованный для создания выбранного виджета неактивен или отсутствует. Для редактирования этого элемента нужно активировать модуль, использованный для его создания."
 
-#: sunflower/tools/version_check.py:26
+#: sunflower/tools/version_check.py:27
 msgid "Version check"
 msgstr "Проверка версии"
 
-#: sunflower/tools/version_check.py:47
+#: sunflower/tools/version_check.py:49
 msgid "Current:"
 msgstr "Текущая:"
 
-#: sunflower/tools/version_check.py:51
+#: sunflower/tools/version_check.py:53
 msgid "Latest:"
 msgstr "Последняя:"
 
-#: sunflower/tools/version_check.py:147
+#: sunflower/tools/version_check.py:143
 msgid "Checking..."
 msgstr "Проверяю..."
 
-#: sunflower/tools/find_files.py:46 sunflower/tools/find_files.py:354
+#: sunflower/tools/find_files.py:47 sunflower/tools/find_files.py:353
 msgid "Find files"
 msgstr "Найти файлы"
 
-#: sunflower/tools/find_files.py:89
+#: sunflower/tools/find_files.py:90
 msgid "Criteria"
 msgstr "Критерий"
 
-#: sunflower/tools/find_files.py:130
+#: sunflower/tools/find_files.py:131
 msgid "Start"
 msgstr "Начать"
 
-#: sunflower/tools/find_files.py:147
+#: sunflower/tools/find_files.py:146
 msgid "Search recursively"
 msgstr "Искать рекурсивно"
 
-#: sunflower/tools/find_files.py:183
+#: sunflower/tools/find_files.py:182
 msgid "Results"
 msgstr "Результаты"
 
-#: sunflower/tools/find_files.py:262
+#: sunflower/tools/find_files.py:261
 msgid ""
 "Active object doesn't support changing path. Set focus on a different "
 "object, preferably file list, and try again."
 msgstr "Активный объект не поддерживает изменение пути. Переместите фокус на другой объект, желательно, список файлов, и попробуйте снова."
 
-#: sunflower/tools/find_files.py:408
+#: sunflower/tools/find_files.py:415
 msgid ""
 "Specified path is not valid or doesn't exist anymore. Please check your "
 "selection and try again."
 msgstr "Указанный путь недействителен, или более не существует. Пожалуйста, проверьте ваш выбор и попробуйте снова."
 
-#: sunflower/tools/find_files.py:433
+#: sunflower/tools/find_files.py:440
 msgid ""
 "You need to enable at least one extension in order to find files and "
 "directories!"
 msgstr "Необходимо включить хотя бы один модуль для поиска файлог и каталогов!"
 
-#: sunflower/tools/viewer.py:55
+#: sunflower/tools/viewer.py:56
 #, python-brace-format
 msgid "{0} - Viewer"
 msgstr "{0} - Средство просмотра"
 
-#: sunflower/tools/viewer.py:110
+#: sunflower/tools/viewer.py:111
 msgid "Executable"
 msgstr "Исполняемый"
 
-#: sunflower/tools/viewer.py:156
+#: sunflower/tools/viewer.py:157
 msgid "Code"
 msgstr "Код"
 
@@ -2619,23 +2707,23 @@ msgstr "Изображение"
 msgid "Viewer is unable to display this file type."
 msgstr "Средство просмотра не может отобразить этот тип файла."
 
-#: sunflower/tools/advanced_rename.py:32
+#: sunflower/tools/advanced_rename.py:33
 msgid "Advanced rename"
 msgstr "Расширенное переименование"
 
-#: sunflower/tools/advanced_rename.py:62
+#: sunflower/tools/advanced_rename.py:63
 msgid "Old name"
 msgstr "Старое имя"
 
-#: sunflower/tools/advanced_rename.py:65
+#: sunflower/tools/advanced_rename.py:66
 msgid "New name"
 msgstr "Новое имя"
 
-#: sunflower/tools/advanced_rename.py:92
+#: sunflower/tools/advanced_rename.py:93
 msgid "Items located in:"
 msgstr "Объекты, расположенные в:"
 
-#: sunflower/tools/advanced_rename.py:269
+#: sunflower/tools/advanced_rename.py:260
 #, python-brace-format
 msgid ""
 "You are about to rename {0} item.\n"
@@ -2647,22 +2735,6 @@ msgstr[0] "Вы собираетесь переименовать {0} объек
 msgstr[1] "Вы собираетесь переименовать {0} объекта.\nВы уверены?"
 msgstr[2] "Вы собираетесь переименовать {0} объектов.\nВы уверены?"
 msgstr[3] "Вы собираетесь переименовать {0} объектов.\nВы уверены?"
-
-#: sunflower/queue.py:46
-msgid "New queue"
-msgstr "Новая очередь"
-
-#: sunflower/queue.py:139
-msgid "New operation queue"
-msgstr "Новая очередь операций"
-
-#: sunflower/queue.py:140
-msgid "Enter name for new operation queue:"
-msgstr "Введите название новой очереди операций:"
-
-#: sunflower/queue.py:156
-msgid "Operation queue with specified name already exists."
-msgstr "Очередь с данным именем уже существует."
 
 #: sunflower/__main__.py:94
 msgid "Show version number"
@@ -2697,303 +2769,310 @@ msgstr "Открыть терминал в левой панели"
 msgid "Open terminal tab on the right notebook"
 msgstr "Открыть терминал в правой панели"
 
-#: sunflower/plugin_base/item_list.py:82
+#: sunflower/plugin_base/item_list.py:77
 msgid "Directories (selected/total)"
 msgstr "Каталоги (выделенные/всего)"
 
-#: sunflower/plugin_base/item_list.py:83
+#: sunflower/plugin_base/item_list.py:78
 msgid "Files (selected/total)"
 msgstr "Файлы (выделенные/всего)"
 
-#: sunflower/plugin_base/item_list.py:84
+#: sunflower/plugin_base/item_list.py:79
 msgid "Size (selected/total)"
 msgstr "Размер (выделенные/всего)"
 
-#: sunflower/plugin_base/item_list.py:191
-#: sunflower/plugin_base/item_list.py:339
+#: sunflower/plugin_base/item_list.py:185
+#: sunflower/plugin_base/item_list.py:333
 msgid "Swap right and left paths"
 msgstr "Поменять местами панели"
 
-#: sunflower/plugin_base/item_list.py:205
+#: sunflower/plugin_base/item_list.py:199
 msgid "Reload item list"
 msgstr "Обновить список файлов"
 
-#: sunflower/plugin_base/item_list.py:219
-#: sunflower/plugin_base/item_list.py:343
+#: sunflower/plugin_base/item_list.py:213
+#: sunflower/plugin_base/item_list.py:337
 msgid "Copy path to clipboard"
 msgstr "Скопировать выделенное в буфер обмена"
 
-#: sunflower/plugin_base/item_list.py:233
+#: sunflower/plugin_base/item_list.py:227
 msgid "Enter path..."
 msgstr "Введите путь..."
 
-#: sunflower/plugin_base/item_list.py:274
+#: sunflower/plugin_base/item_list.py:268
 msgid "Locations"
 msgstr "Места"
 
-#: sunflower/plugin_base/item_list.py:302
+#: sunflower/plugin_base/item_list.py:296
 msgid "Execute selected item"
 msgstr "Выполнить выделенный объект"
 
-#: sunflower/plugin_base/item_list.py:303
+#: sunflower/plugin_base/item_list.py:297
 msgid "Select application and execute item"
 msgstr "Выбрать приложение и открыть файл"
 
-#: sunflower/plugin_base/item_list.py:304
+#: sunflower/plugin_base/item_list.py:298
 msgid "Show selected item properties"
 msgstr "Показать свойства выделенного объекта"
 
-#: sunflower/plugin_base/item_list.py:305
+#: sunflower/plugin_base/item_list.py:299
 msgid "Bookmark current directory"
 msgstr "Добавить текущий каталог в закладки"
 
-#: sunflower/plugin_base/item_list.py:306
+#: sunflower/plugin_base/item_list.py:300
 msgid "Edit bookmarks"
 msgstr "Править закладки"
 
-#: sunflower/plugin_base/item_list.py:307
+#: sunflower/plugin_base/item_list.py:301
 msgid "Cut selection to clipboard"
 msgstr "Вырезать выделенное в буфер обмена"
 
-#: sunflower/plugin_base/item_list.py:308
-#: sunflower/plugin_base/terminal.py:299
+#: sunflower/plugin_base/item_list.py:302
+#: sunflower/plugin_base/terminal.py:298
 msgid "Copy selection to clipboard"
 msgstr "Скопировать выделенное в буфер обмена"
 
-#: sunflower/plugin_base/item_list.py:309
+#: sunflower/plugin_base/item_list.py:303
 msgid "Paste items from clipboard"
 msgstr "Вставить объекты из буфера обмена"
 
-#: sunflower/plugin_base/item_list.py:310
+#: sunflower/plugin_base/item_list.py:304
 msgid "Open selected directory in new tab"
 msgstr "Открыть выделенный каталог в новой вкладке"
 
-#: sunflower/plugin_base/item_list.py:311
+#: sunflower/plugin_base/item_list.py:305
 msgid "Open selected directory"
 msgstr "Открыть выделенный каталог в новой вкладке"
 
-#: sunflower/plugin_base/item_list.py:312
+#: sunflower/plugin_base/item_list.py:306
 msgid "Calculate disk usage for directory"
 msgstr "Подсчитать место, занимаемое каталогом"
 
-#: sunflower/plugin_base/item_list.py:313
-#: sunflower/plugin_base/terminal.py:298
+#: sunflower/plugin_base/item_list.py:307
+#: sunflower/plugin_base/terminal.py:297
 msgid "Create terminal tab"
 msgstr "Создать вкладку с терминалом"
 
-#: sunflower/plugin_base/item_list.py:315
+#: sunflower/plugin_base/item_list.py:309
 msgid "Go to root directory"
 msgstr "Перейти в корневой каталог"
 
-#: sunflower/plugin_base/item_list.py:316
+#: sunflower/plugin_base/item_list.py:310
 msgid "Reload items in current directory"
 msgstr "Обновить список файлов в текущем каталоге"
 
-#: sunflower/plugin_base/item_list.py:317
+#: sunflower/plugin_base/item_list.py:311
 msgid "Show history browser"
 msgstr "Показать браузер истории"
 
-#: sunflower/plugin_base/item_list.py:318
+#: sunflower/plugin_base/item_list.py:312
 msgid "Go back in history"
 msgstr "Перейти назад по истории"
 
-#: sunflower/plugin_base/item_list.py:319
+#: sunflower/plugin_base/item_list.py:313
 msgid "Go forward in history"
 msgstr "Перейти вперёд по истории"
 
-#: sunflower/plugin_base/item_list.py:320
+#: sunflower/plugin_base/item_list.py:314
 msgid "Select all"
 msgstr "Выделить всё"
 
-#: sunflower/plugin_base/item_list.py:321
+#: sunflower/plugin_base/item_list.py:315
 msgid "Deselect all"
 msgstr "Отменить выделение"
 
-#: sunflower/plugin_base/item_list.py:322
+#: sunflower/plugin_base/item_list.py:316
 msgid "Invert selection"
 msgstr "Обратить выделение"
 
-#: sunflower/plugin_base/item_list.py:323
+#: sunflower/plugin_base/item_list.py:317
 msgid "Toggle selection"
 msgstr "Переключить выделение"
 
-#: sunflower/plugin_base/item_list.py:324
+#: sunflower/plugin_base/item_list.py:318
 msgid "Toggle selection and move marker up"
 msgstr "Переключить выделение и переместить маркер выше"
 
-#: sunflower/plugin_base/item_list.py:325
+#: sunflower/plugin_base/item_list.py:319
 msgid "Trash or delete selected items"
 msgstr "Удалить выбранные файлы"
 
-#: sunflower/plugin_base/item_list.py:326
+#: sunflower/plugin_base/item_list.py:320
 msgid "Force deleting selected items"
 msgstr "Безвозвратно удалить выбранные файлы"
 
-#: sunflower/plugin_base/item_list.py:327
+#: sunflower/plugin_base/item_list.py:321
 msgid "Show bookmarks for current list"
 msgstr "Показать закладки для данной панели"
 
-#: sunflower/plugin_base/item_list.py:328
+#: sunflower/plugin_base/item_list.py:322
 msgid "Show bookmarks for left list"
 msgstr "Показать закладки для левой панели"
 
-#: sunflower/plugin_base/item_list.py:329
+#: sunflower/plugin_base/item_list.py:323
 msgid "Show bookmarks for right list"
 msgstr "Показать закладки для правой панели"
 
-#: sunflower/plugin_base/item_list.py:330
+#: sunflower/plugin_base/item_list.py:324
 msgid "Rename selected item"
 msgstr "Переименовать выделенный объект"
 
-#: sunflower/plugin_base/item_list.py:331
+#: sunflower/plugin_base/item_list.py:325
 msgid "View selected item"
 msgstr "Просмотреть выбранный файл"
 
-#: sunflower/plugin_base/item_list.py:332
+#: sunflower/plugin_base/item_list.py:326
 msgid "Edit selected item"
 msgstr "Править выделенный объект"
 
-#: sunflower/plugin_base/item_list.py:333
+#: sunflower/plugin_base/item_list.py:327
 msgid "Copy selected items"
 msgstr "Копировать выделенный объект"
 
-#: sunflower/plugin_base/item_list.py:334
+#: sunflower/plugin_base/item_list.py:328
 msgid "Move selected items"
 msgstr "Переместить выделенные объекты"
 
-#: sunflower/plugin_base/item_list.py:335
+#: sunflower/plugin_base/item_list.py:329
 msgid "Show context menu"
 msgstr "Показать контекстное меню"
 
-#: sunflower/plugin_base/item_list.py:336
+#: sunflower/plugin_base/item_list.py:330
 msgid "Show \"open with\" menu"
 msgstr "Показать меню \"открыть с помощью\""
 
-#: sunflower/plugin_base/item_list.py:337
+#: sunflower/plugin_base/item_list.py:331
 msgid "Assign path from left list"
 msgstr "Назначить путь из левой панели"
 
-#: sunflower/plugin_base/item_list.py:338
+#: sunflower/plugin_base/item_list.py:332
 msgid "Assign path from right list"
 msgstr "Назначить путь из правой панели"
 
-#: sunflower/plugin_base/item_list.py:340
+#: sunflower/plugin_base/item_list.py:334
 msgid "Move selection marker up"
 msgstr "Переместить маркер выделения выше"
 
-#: sunflower/plugin_base/item_list.py:341
+#: sunflower/plugin_base/item_list.py:335
 msgid "Move selection marker down"
 msgstr "Переместить маркер выделения ниже"
 
-#: sunflower/plugin_base/item_list.py:342
+#: sunflower/plugin_base/item_list.py:336
 msgid "Show tab menu"
 msgstr "Показать контекстное меню"
 
-#: sunflower/plugin_base/item_list.py:344
+#: sunflower/plugin_base/item_list.py:338
 msgid "Copy selected path to clipboard"
 msgstr "Скопировать выбранный путь в буфер обмена"
 
-#: sunflower/plugin_base/item_list.py:345
+#: sunflower/plugin_base/item_list.py:339
 msgid "Copy selected item name to clipboard"
 msgstr "Копировать имя объекта в буфер обмена"
 
-#: sunflower/plugin_base/item_list.py:346
+#: sunflower/plugin_base/item_list.py:340
 msgid "Copy path to command entry"
 msgstr "Скопировать путь в командную строку"
 
-#: sunflower/plugin_base/item_list.py:347
+#: sunflower/plugin_base/item_list.py:341
 msgid "Copy selection to command entry"
 msgstr "Скопировать выделенное в командную строку"
 
-#: sunflower/plugin_base/item_list.py:348
+#: sunflower/plugin_base/item_list.py:342
 msgid "Ask and navigate to path"
 msgstr "Спросить и перейти по адресу"
 
-#: sunflower/plugin_base/item_list.py:349
+#: sunflower/plugin_base/item_list.py:343
 msgid "Start quick search"
 msgstr "Начать быстрый поиск"
 
-#: sunflower/plugin_base/item_list.py:350
+#: sunflower/plugin_base/item_list.py:344
 msgid "Expand directory"
 msgstr "Раскрыть каталог"
 
-#: sunflower/plugin_base/item_list.py:351
+#: sunflower/plugin_base/item_list.py:345
 msgid "Collapse directory"
 msgstr "Свернуть каталог"
 
-#: sunflower/plugin_base/item_list.py:352
+#: sunflower/plugin_base/item_list.py:346
 msgid "Create symbolic or hard link"
 msgstr "Создать символическую или жёсткую ссылку"
 
-#: sunflower/plugin_base/item_list.py:353
+#: sunflower/plugin_base/item_list.py:347
 msgid "Show emblem menu"
 msgstr "Отобразить меню эмблем"
 
+#: sunflower/plugin_base/item_list.py:408
 #: sunflower/plugin_base/item_list.py:414
-#: sunflower/plugin_base/item_list.py:420
 #, python-brace-format
 msgid "Go to '{0}'"
 msgstr "Перейти к '{0}'"
 
-#: sunflower/plugin_base/item_list.py:796
+#: sunflower/plugin_base/item_list.py:790
 msgid ""
 "Directory does not exist anymore or is not valid. If path is not local check"
 " if specified volume is mounted."
 msgstr "Каталог больше не существует, или неверен. Если путь не локален, проверьте, примонтирован ли указанный том."
 
-#: sunflower/plugin_base/item_list.py:834
+#: sunflower/plugin_base/item_list.py:828
 #, python-brace-format
 msgid ""
 "Specified protocol ({0}) is not supported by this application. Please check "
 "for available plugins or create a feature request."
 msgstr "Указанный протокол ({0}) не поддерживается данным приложением. Проверьте наличие доступных модулей, или оставьте пожелание в багтрекере."
 
-#: sunflower/plugin_base/item_list.py:866
+#: sunflower/plugin_base/item_list.py:860
 msgid ""
 "Application is unable to handle specified data. Check if source items still "
 "exist."
 msgstr "Приложение не может обработать указанные данные. Проверьте, существуют ли исходные объкеты."
 
-#: sunflower/plugin_base/item_list.py:1420
+#: sunflower/plugin_base/item_list.py:1414
 msgid "Path entry"
 msgstr "Путь"
 
-#: sunflower/plugin_base/item_list.py:1421
+#: sunflower/plugin_base/item_list.py:1415
 msgid "Navigate to:"
 msgstr "Перейти в:"
 
-#: sunflower/plugin_base/terminal.py:99
+#: sunflower/plugin_base/terminal.py:92
+msgid ""
+"\n"
+"\n"
+"External terminal is not supported when running GTK 4!"
+msgstr ""
+
+#: sunflower/plugin_base/terminal.py:102
 msgid ""
 "\n"
 "\n"
 "Python VTE module is not installed on this system!"
 msgstr "\n\nVTE модуль Python не установлен в вашей системе!"
 
-#: sunflower/plugin_base/terminal.py:169
+#: sunflower/plugin_base/terminal.py:168
 msgid "Terminal menu"
 msgstr "Меню терминала"
 
-#: sunflower/plugin_base/terminal.py:191
+#: sunflower/plugin_base/terminal.py:190
 msgid "Open current directory"
 msgstr "Открыть текущую директорию"
 
-#: sunflower/plugin_base/terminal.py:243
+#: sunflower/plugin_base/terminal.py:242
 msgid "Paste"
 msgstr ""
 
-#: sunflower/plugin_base/terminal.py:300
+#: sunflower/plugin_base/terminal.py:299
 msgid "Paste from clipboard"
 msgstr "Вставить из буфера обмена"
 
-#: sunflower/plugin_base/terminal.py:301 sunflower/plugin_base/plugin.py:191
+#: sunflower/plugin_base/terminal.py:300 sunflower/plugin_base/plugin.py:186
 msgid "Focus opposite object"
 msgstr "Фокус на противоположный объект"
 
-#: sunflower/plugin_base/terminal.py:302 sunflower/plugin_base/plugin.py:195
+#: sunflower/plugin_base/terminal.py:301 sunflower/plugin_base/plugin.py:190
 msgid "Close tab"
 msgstr "Закрыть вкладку"
 
-#: sunflower/plugin_base/terminal.py:345
+#: sunflower/plugin_base/terminal.py:344
 #, python-brace-format
 msgid ""
 "You are about to feed child process with following data. Are you sure?\n"
@@ -3001,23 +3080,23 @@ msgid ""
 "{0}"
 msgstr "Вы собираетесь послать дочернему процессу эти данные. Вы уверены?\n\n{0}"
 
-#: sunflower/plugin_base/plugin.py:188
+#: sunflower/plugin_base/plugin.py:183
 msgid "Plugin Base"
 msgstr "База модулей"
 
-#: sunflower/plugin_base/plugin.py:192
+#: sunflower/plugin_base/plugin.py:187
 msgid "Next tab"
 msgstr "Следующая вкладка"
 
-#: sunflower/plugin_base/plugin.py:193
+#: sunflower/plugin_base/plugin.py:188
 msgid "Previous tab"
 msgstr "Предыдущая вкладка"
 
-#: sunflower/plugin_base/plugin.py:196
+#: sunflower/plugin_base/plugin.py:191
 msgid "Focus left object"
 msgstr "Фокус на левый объект"
 
-#: sunflower/plugin_base/plugin.py:197
+#: sunflower/plugin_base/plugin.py:192
 msgid "Focus right object"
 msgstr "Фокус на правый объект"
 

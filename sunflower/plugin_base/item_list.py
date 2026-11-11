@@ -119,7 +119,6 @@ class ItemList(PluginBase):
 		self._search_entry = Gtk.SearchEntry.new()
 		if Gtk.get_major_version() == 3:
 			self._search_entry.connect('key-press-event', self._handle_search_key_press)
-
 			self._search_entry.connect('focus-out-event', self._stop_search)
 
 		else:
@@ -132,9 +131,10 @@ class ItemList(PluginBase):
 			self._search_entry.add_controller(focus_controller)
 
 		self._search_panel = Gtk.SearchBar.new()
+		self._search_panel.get_style_context().add_class('top-border')
+		self._search_panel.set_show_close_button(True)
 		if Gtk.get_major_version() == 3:
 			self._search_panel.add(self._search_entry)
-
 		else:
 			self._search_panel.set_child(self._search_entry)
 
@@ -152,14 +152,12 @@ class ItemList(PluginBase):
 		self._label_free_space.set_yalign(0.5)
 		if Gtk.get_major_version() == 3:
 			vbox_free_space.pack_start(self._label_free_space, False, False, 0)
-
 		else:
 			vbox_free_space.append(self._label_free_space)
 
 		self._progress_free_space = Gtk.LevelBar.new()
 		if Gtk.get_major_version() == 3:
 			vbox_free_space.pack_start(self._progress_free_space, False, False, 0)
-
 		else:
 			vbox_free_space.append(self._progress_free_space)
 
@@ -179,28 +177,24 @@ class ItemList(PluginBase):
 		# create swap panes item
 		if Gtk.get_major_version() == 3:
 			menu_swap_paths = Gtk.Button.new_from_icon_name('object-flip-horizontal-symbolic', Gtk.IconSize.BUTTON)
-
 		else:
 			menu_swap_paths = Gtk.Button.new_from_icon_name('object-flip-horizontal-symbolic')
 		menu_swap_paths.set_tooltip_text(_('Swap right and left paths'))
 		menu_swap_paths.connect('clicked', self._swap_paths)
 		if Gtk.get_major_version() == 3:
 			hbox_buttons.pack_start(menu_swap_paths, False, False, 0)
-
 		else:
 			hbox_buttons.append(menu_swap_paths)
 
 		# create reload menu item
 		if Gtk.get_major_version() == 3:
 			menu_item_refresh = Gtk.Button.new_from_icon_name('view-refresh-symbolic', Gtk.IconSize.BUTTON)
-
 		else:
 			menu_item_refresh = Gtk.Button.new_from_icon_name('view-refresh-symbolic')
 		menu_item_refresh.set_tooltip_text(_('Reload item list'))
 		menu_item_refresh.connect('clicked', self.refresh_file_list)
 		if Gtk.get_major_version() == 3:
 			hbox_buttons.pack_start(menu_item_refresh, False, False, 0)
-
 		else:
 			hbox_buttons.append(menu_item_refresh)
 
@@ -214,21 +208,18 @@ class ItemList(PluginBase):
 		menu_item_copy_path.connect('clicked', self.copy_path_to_clipboard)
 		if Gtk.get_major_version() == 3:
 			hbox_buttons.pack_start(menu_item_copy_path, False, False, 0)
-
 		else:
 			hbox_buttons.append(menu_item_copy_path)
 
 		# create path entry item
 		if Gtk.get_major_version() == 3:
 			menu_path_entry = Gtk.Button.new_from_icon_name('go-jump-symbolic', Gtk.IconSize.BUTTON)
-
 		else:
 			menu_path_entry = Gtk.Button.new_from_icon_name('go-jump-symbolic')
 		menu_path_entry.set_tooltip_text(_('Enter path...'))
 		menu_path_entry.connect('clicked', self.custom_path_entry)
 		if Gtk.get_major_version() == 3:
 			hbox_buttons.pack_start(menu_path_entry, False, False, 0)
-
 		else:
 			hbox_buttons.append(menu_path_entry)
 

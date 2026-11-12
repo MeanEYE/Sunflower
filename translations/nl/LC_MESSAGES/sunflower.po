@@ -275,12 +275,12 @@ msgstr "Persoonlijke map"
 
 #: sunflower/widgets/queue_selector.py:90
 msgid "No queue"
-msgstr ""
+msgstr "Geen wachtrij"
 
 #: sunflower/widgets/queue_selector.py:93
 #, python-brace-format
 msgid "Queue {0}"
-msgstr ""
+msgstr "Wachtrij {0}"
 
 #: sunflower/widgets/title_bar.py:59
 msgid "Context menu"
@@ -2117,84 +2117,84 @@ msgstr "De itemlijst is leeg. Geen item in deze reeks aangetroffen!"
 
 #: sunflower/plugins/archive_support/tar_provider.py:262
 msgid "Compressed TAR archives can not be modified."
-msgstr ""
+msgstr "Gecomprimeerde tar-archieven kunnen niet worden aangepast."
 
 #: sunflower/plugins/archive_support/tar_provider.py:266
 #: sunflower/plugins/archive_support/zip_provider.py:295
 msgid "Archive can not be modified."
-msgstr ""
+msgstr "Het archief kan niet worden aangepast."
 
 #: sunflower/plugins/archive_support/tar_provider.py:285
 #: sunflower/plugins/archive_support/zip_provider.py:241
 #: sunflower/plugins/archive_support/zip_provider.py:302
 msgid "Invalid name."
-msgstr ""
+msgstr "De naam is ongeldig."
 
 #: sunflower/plugins/archive_support/tar_provider.py:292
 #: sunflower/plugins/archive_support/zip_provider.py:251
 msgid "Directory with the same name already exists."
-msgstr ""
+msgstr "Er is al een map met deze naam."
 
 #: sunflower/plugins/archive_support/tar_provider.py:295
 #: sunflower/plugins/archive_support/zip_provider.py:257
 msgid "File with the same name already exists."
-msgstr ""
+msgstr "Er is al een bestand met deze naam."
 
 #: sunflower/plugins/archive_support/tar_provider.py:320
 msgid "Unexpected end of data."
-msgstr ""
+msgstr "Onverwacht einde van gegevens."
 
 #: sunflower/plugins/archive_support/tar_provider.py:384
 #: sunflower/plugins/archive_support/tar_provider.py:430
 #: sunflower/plugins/archive_support/zip_provider.py:320
 msgid "No such file in archive."
-msgstr ""
+msgstr "Dit bestand is niet aanwezig in het archief."
 
 #: sunflower/plugins/archive_support/tar_provider.py:390
 msgid "Items in TAR archives can not be removed, renamed or linked."
-msgstr ""
+msgstr "Items in tar-archieven kunnen niet worden verwijderd, hernoemd of gelinkt."
 
 #: sunflower/plugins/archive_support/tar_provider.py:436
 msgid "Item is not a file."
-msgstr ""
+msgstr "Dit item is geen bestand."
 
 #: sunflower/plugins/archive_support/tar_provider.py:511
 msgid "No such directory in archive."
-msgstr ""
+msgstr "Deze map is niet aanwezig in het archief."
 
 #: sunflower/plugins/archive_support/zip_provider.py:191
 msgid "Unexpected end of archive."
-msgstr ""
+msgstr "Onverwacht einde van archief."
 
 #: sunflower/plugins/archive_support/plugin.py:31
 msgid "Create archive"
-msgstr ""
+msgstr "Archief samenstellen"
 
 #: sunflower/plugins/archive_support/plugin.py:32
 msgid "Enter name for the new archive:"
-msgstr ""
+msgstr "Geef het archief een naam:"
 
 #: sunflower/plugins/archive_support/plugin.py:33
 msgid "archive"
-msgstr ""
+msgstr "archief"
 
 #: sunflower/plugins/archive_support/plugin.py:49
 #, python-brace-format
 msgid "Item with the same name already exists: {0}"
-msgstr ""
+msgstr "Er is al een bestand met deze naam: {0}"
 
 #: sunflower/plugins/archive_support/plugin.py:58
 msgid "Files can not be created in this location."
-msgstr ""
+msgstr "Op deze locatie kunnen geen bestanden worden aangemaakt."
 
 #: sunflower/plugins/archive_support/plugin.py:76
 msgid ""
 "There was an error creating archive. Make sure you have enough permissions."
-msgstr ""
+msgstr "Het archief kan niet worden samengesteld. Controleer of u hiertoe bevoegd bent."
 
 #: sunflower/plugins/archive_support/plugin.py:96
 msgid "Create _archive"
-msgstr ""
+msgstr "_Archief samenstellen"
 
 #: sunflower/plugins/file_list/dialogs.py:38
 msgid "Create Samba mount"
@@ -3007,7 +3007,7 @@ msgid ""
 "\n"
 "\n"
 "External terminal is not supported when running GTK 4!"
-msgstr ""
+msgstr "\n\nExterne terminals worden niet ondersteund bij gebruik van GTK 4!"
 
 #: sunflower/plugin_base/terminal.py:102
 msgid ""

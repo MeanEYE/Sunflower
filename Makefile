@@ -20,18 +20,25 @@ VERSION = $(VERSION_MAJOR).$(VERSION_MINOR)$(VERSION_STAGE).$(VERSION_BUILD)
 FILE_NAME = sunflower-$(VERSION_MAJOR).$(VERSION_MINOR)$(VERSION_STAGE)-$(VERSION_BUILD)
 endif
 
-# variables used in packages
+# variables used in packages, packager defaults to the identity configured in git
 RELEASE ?= 1
-PACKAGER ?= ""
+GIT_USER_NAME := $(shell git config user.name 2>/dev/null)
+GIT_USER_EMAIL := $(shell git config user.email 2>/dev/null)
+ifneq ($(GIT_USER_NAME),)
+PACKAGER ?= $(GIT_USER_NAME) <$(GIT_USER_EMAIL)>
+else
+PACKAGER ?=
+endif
 
 # container tool used by the docker-* targets (docker or podman)
 CONTAINER ?= $(shell command -v docker >/dev/null 2>&1 && echo docker || echo podman)
 # rootless podman maps container root to the invoking user, so no remap is
-# needed; rootful docker needs an explicit uid to keep build/ owned by the user
+# needed; rootful docker needs an explicit uid to keep build/ owned by the user.
+# Packager and release are handed over, as git identity is not known inside.
 ifeq ($(CONTAINER),podman)
-CONTAINER_RUN = $(CONTAINER) run --rm -e HOME=/tmp -v $(abspath $(WORKING_DIRECTORY)):/src -w /src
+CONTAINER_RUN = $(CONTAINER) run --rm -e HOME=/tmp -e PACKAGER="$(PACKAGER)" -e RELEASE="$(RELEASE)" -v $(abspath $(WORKING_DIRECTORY)):/src -w /src
 else
-CONTAINER_RUN = $(CONTAINER) run --rm --user $(shell id -u):$(shell id -g) -e HOME=/tmp -v $(abspath $(WORKING_DIRECTORY)):/src -w /src
+CONTAINER_RUN = $(CONTAINER) run --rm --user $(shell id -u):$(shell id -g) -e HOME=/tmp -e PACKAGER="$(PACKAGER)" -e RELEASE="$(RELEASE)" -v $(abspath $(WORKING_DIRECTORY)):/src -w /src
 endif
 
 # additional directories
@@ -78,7 +85,8 @@ Usage:
 
 Options for dist-* passed through environment variables:
 	RELEASE=1   - release number
-	PACKAGER="" - packagers name (e.i. "John Smith <mail@example.com>")
+	PACKAGER="" - packagers name (e.i. "John Smith <mail@example.com>"),
+	              defaults to user name and email configured in git
 endef
 export HELP
 
@@ -151,7 +159,7 @@ dist-arch: dist
 	sed -i s/@release@/$(RELEASE)/ $(ARCH_BUILD_DIRECTORY)/PKGBUILD
 	sed -i s/@file_name@/$(FILE_NAME)/ $(ARCH_BUILD_DIRECTORY)/PKGBUILD
 	cd $(ARCH_BUILD_DIRECTORY); makepkg -g >> PKGBUILD
-	cd $(ARCH_BUILD_DIRECTORY); PKGEXT='.pkg.tar.xz' makepkg
+	cd $(ARCH_BUILD_DIRECTORY); PACKAGER="$(PACKAGER)" PKGEXT='.pkg.tar.xz' makepkg
 	mv $(ARCH_BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE)-any.pkg.tar.xz $(PKG_FILE_PATH)
 	sha256sum $(PKG_FILE_PATH) > $(PKG_FILE_PATH).sha256
 

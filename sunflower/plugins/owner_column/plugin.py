@@ -1,5 +1,8 @@
 from __future__ import absolute_import
 
+import grp
+import pwd
+
 from gi.repository import Gtk
 from sunflower.plugins.file_list.file_list import Column
 from sunflower.plugins.file_list.plugin import FileList
@@ -18,6 +21,8 @@ class BaseColumn(ColumnExtension):
 	def __init__(self, parent, store):
 		ColumnExtension.__init__(self, parent, store)
 		self._parent = parent
+		self._names = {}  # cache as looking names up can be slow
+
 		# create column object
 		self._create_column()
 
@@ -50,8 +55,21 @@ class OwnerColumn(BaseColumn):
 		"""Set column value"""
 		is_parent = store.get_value(selected_iter, Column.IS_PARENT_DIR)
 
-		value = (store.get_value(selected_iter, Column.USER_ID), '')[is_parent]
-		cell.set_property('text', str(value))
+		if is_parent:
+			cell.set_property('text', '')
+			return
+
+		user_id = store.get_value(selected_iter, Column.USER_ID)
+
+		if user_id not in self._names:
+			try:
+				self._names[user_id] = pwd.getpwuid(user_id).pw_name
+
+			except (KeyError, OverflowError):
+				# there's no user with this id on the system
+				self._names[user_id] = str(user_id)
+
+		cell.set_property('text', self._names[user_id])
 
 	def _create_column(self):
 		"""Configure column"""
@@ -78,8 +96,21 @@ class GroupColumn(BaseColumn):
 		"""Set column value"""
 		is_parent = store.get_value(selected_iter, Column.IS_PARENT_DIR)
 
-		value = (store.get_value(selected_iter, Column.GROUP_ID), '')[is_parent]
-		cell.set_property('text', str(value))
+		if is_parent:
+			cell.set_property('text', '')
+			return
+
+		group_id = store.get_value(selected_iter, Column.GROUP_ID)
+
+		if group_id not in self._names:
+			try:
+				self._names[group_id] = grp.getgrgid(group_id).gr_name
+
+			except (KeyError, OverflowError):
+				# there's no group with this id on the system
+				self._names[group_id] = str(group_id)
+
+		cell.set_property('text', self._names[group_id])
 
 	def _create_column(self):
 		"""Configure column"""

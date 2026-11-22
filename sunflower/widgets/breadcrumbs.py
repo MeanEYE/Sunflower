@@ -121,8 +121,8 @@ class Breadcrumbs:
 			if other_elements.startswith(os.path.sep):
 				other_elements = other_elements[1:]
 
-			# split elements
-			elements = other_elements.split(os.path.sep)
+			# split elements, trailing slash would otherwise produce a nameless one
+			elements = [element for element in other_elements.split(os.path.sep) if element != '']
 			elements.insert(0, root_element)
 
 			# create controls

@@ -76,7 +76,9 @@ Usage:
 	docker-dist-*      - run any dist target in a container with the matching
 	                     native toolchain (docker-dist-deb, docker-dist-py,
 	                     docker-dist-rpm[-opensuse|-pclinuxos], docker-dist-arch,
-	                     docker-dist-all); uses docker or podman (CONTAINER=)
+	                     docker-dist-standalone); uses docker or podman (CONTAINER=)
+	docker-dist-all    - create all packages, in containers where possible;
+	                     flatpak bundle is built with flatpak-builder directly
 	language-template  - update language template
 	language-compile   - compile language files to .mo format
 	clean              - remove all build files, flatpak build cache and runtimes
@@ -218,7 +220,12 @@ docker-dist-rpm-pclinuxos: docker-image-fedora
 docker-dist-arch: docker-image-arch
 	$(CONTAINER_RUN) sunflower-build-arch make dist-arch
 
-docker-dist-all: docker-dist-deb docker-dist-py docker-dist-rpm docker-dist-rpm-opensuse docker-dist-rpm-pclinuxos docker-dist-arch
+docker-dist-standalone: docker-image-debian
+	$(CONTAINER_RUN) sunflower-build-debian make standalone
+
+# flatpak-builder brings its own sandbox and runtimes, so that bundle is built
+# directly instead of nesting one container tool inside of another
+docker-dist-all: docker-dist-deb docker-dist-py docker-dist-rpm docker-dist-rpm-opensuse docker-dist-rpm-pclinuxos docker-dist-arch docker-dist-standalone dist-flatpak
 
 language-template:
 	$(info Updating language template...)
@@ -264,5 +271,5 @@ publish:
 help:
 	@echo "$$HELP"
 
-.PHONY: default dist dist-py dist-deb dist-arch dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-flatpak dist-all standalone publish docker-dist-deb docker-dist-py docker-dist-rpm docker-dist-rpm-opensuse docker-dist-rpm-pclinuxos docker-dist-arch docker-dist-all language-template clean version help
+.PHONY: default dist dist-py dist-deb dist-arch dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-flatpak dist-all standalone publish docker-dist-deb docker-dist-py docker-dist-rpm docker-dist-rpm-opensuse docker-dist-rpm-pclinuxos docker-dist-arch docker-dist-standalone docker-dist-all language-template clean version help
 

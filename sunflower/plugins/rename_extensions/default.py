@@ -66,7 +66,7 @@ class DefaultRename(RenameExtension):
 
 		image_add = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
+			image_add.set_from_icon_name('list-add-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
 			image_add.set_from_icon_name('list-add-symbolic')

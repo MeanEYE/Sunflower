@@ -142,7 +142,7 @@ class PluginsOptions(SettingsPage):
 
 		image_home_page = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			image_home_page.set_from_stock(Gtk.STOCK_HOME, Gtk.IconSize.BUTTON)
+			image_home_page.set_from_icon_name('go-home-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
 			image_home_page.set_from_icon_name('go-home-symbolic')

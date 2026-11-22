@@ -69,7 +69,7 @@ class CommandsOptions(SettingsPage):
 
 		image_up = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			image_up.set_from_stock(Gtk.STOCK_GO_UP, Gtk.IconSize.BUTTON)
+			image_up.set_from_icon_name('go-up-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
 			image_up.set_from_icon_name('go-up-symbolic')
@@ -85,7 +85,7 @@ class CommandsOptions(SettingsPage):
 
 		image_down = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			image_down.set_from_stock(Gtk.STOCK_GO_DOWN, Gtk.IconSize.BUTTON)
+			image_down.set_from_icon_name('go-down-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
 			image_down.set_from_icon_name('go-down-symbolic')

@@ -176,7 +176,7 @@ class SambaExtension(GioExtension):
 		# create controls
 		image_add = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
+			image_add.set_from_icon_name('list-add-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
 			image_add.set_from_icon_name('list-add-symbolic')
@@ -191,7 +191,7 @@ class SambaExtension(GioExtension):
 
 		image_edit = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			image_edit.set_from_stock(Gtk.STOCK_EDIT, Gtk.IconSize.BUTTON)
+			image_edit.set_from_icon_name('document-edit-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
 			image_edit.set_from_icon_name('document-edit-symbolic')
@@ -206,7 +206,7 @@ class SambaExtension(GioExtension):
 
 		image_delete = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			image_delete.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.BUTTON)
+			image_delete.set_from_icon_name('edit-delete-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
 			image_delete.set_from_icon_name('edit-delete-symbolic')
@@ -583,7 +583,7 @@ class FtpExtension(GioExtension):
 		# create controls
 		image_add = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
+			image_add.set_from_icon_name('list-add-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
 			image_add.set_from_icon_name('list-add-symbolic')
@@ -598,7 +598,7 @@ class FtpExtension(GioExtension):
 
 		image_edit = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			image_edit.set_from_stock(Gtk.STOCK_EDIT, Gtk.IconSize.BUTTON)
+			image_edit.set_from_icon_name('document-edit-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
 			image_edit.set_from_icon_name('document-edit-symbolic')
@@ -613,7 +613,7 @@ class FtpExtension(GioExtension):
 
 		image_delete = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			image_delete.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.BUTTON)
+			image_delete.set_from_icon_name('edit-delete-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
 			image_delete.set_from_icon_name('edit-delete-symbolic')
@@ -988,7 +988,7 @@ class DavExtension(GioExtension):
 		# create controls
 		image_add = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			image_add.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.BUTTON)
+			image_add.set_from_icon_name('list-add-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
 			image_add.set_from_icon_name('list-add-symbolic')
@@ -1003,7 +1003,7 @@ class DavExtension(GioExtension):
 
 		image_edit = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			image_edit.set_from_stock(Gtk.STOCK_EDIT, Gtk.IconSize.BUTTON)
+			image_edit.set_from_icon_name('document-edit-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
 			image_edit.set_from_icon_name('document-edit-symbolic')
@@ -1018,7 +1018,7 @@ class DavExtension(GioExtension):
 
 		image_delete = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			image_delete.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.BUTTON)
+			image_delete.set_from_icon_name('edit-delete-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
 			image_delete.set_from_icon_name('edit-delete-symbolic')

@@ -58,7 +58,7 @@ class Indicator(object):
 														'label': _('_Quit'),
 														'type': 'image',
 														'callback': self._parent._destroy,
-														'stock': Gtk.STOCK_QUIT,
+														'image': 'application-exit-symbolic',
 													}))
 
 		# separator

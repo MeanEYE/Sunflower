@@ -1320,7 +1320,7 @@ class OverwriteDialog:
 		# create interface
 		icon = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			icon.set_from_stock(Gtk.STOCK_DIALOG_WARNING, Gtk.IconSize.DIALOG)
+			icon.set_from_icon_name('dialog-warning', Gtk.IconSize.DIALOG)
 
 		else:
 			icon.set_from_icon_name('dialog-warning')
@@ -1766,7 +1766,7 @@ class OperationError:
 		# create interface
 		icon = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			icon.set_from_stock(Gtk.STOCK_DIALOG_ERROR, Gtk.IconSize.DIALOG)
+			icon.set_from_icon_name('dialog-error', Gtk.IconSize.DIALOG)
 
 		else:
 			icon.set_from_icon_name('dialog-error')

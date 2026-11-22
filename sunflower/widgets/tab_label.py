@@ -119,10 +119,10 @@ class TabLabel:
 					'callback': self._close_tab,
 				}
 
-		# stock items exist only in GTK 3
+		# icon is shown only in GTK 3
 		if Gtk.get_major_version() == 3:
 			close_item['type'] = 'image'
-			close_item['stock'] = Gtk.STOCK_CLOSE
+			close_item['image'] = 'window-close-symbolic'
 
 		menu_items = (
 					{

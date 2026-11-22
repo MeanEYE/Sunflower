@@ -69,7 +69,7 @@ class HistoryList(Gtk.Window):
 
 		image_jump = Gtk.Image()
 		if Gtk.get_major_version() == 3:
-			image_jump.set_from_stock(Gtk.STOCK_OPEN, Gtk.IconSize.BUTTON)
+			image_jump.set_from_icon_name('document-open-symbolic', Gtk.IconSize.BUTTON)
 
 		else:
 			image_jump.set_from_icon_name('document-open-symbolic')

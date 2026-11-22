@@ -47,9 +47,6 @@ class MenuManager:
 			else:
 				image.set_from_icon_name(item['image'])
 
-		elif 'stock' in item:
-			image.set_from_stock(item['stock'], Gtk.IconSize.MENU)
-
 		try:
 			result.set_label(item['label'])
 			result.set_use_underline(True)

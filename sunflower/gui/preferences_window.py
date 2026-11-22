@@ -163,9 +163,9 @@ class PreferencesWindow(Gtk.Window):
 			                    text=_("There are unsaved changes.\nDo you want to save them?")
 			                )
 			dialog.add_buttons(
-						Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-						Gtk.STOCK_NO, Gtk.ResponseType.NO,
-						Gtk.STOCK_YES, Gtk.ResponseType.YES,
+						_('Cancel'), Gtk.ResponseType.CANCEL,
+						_('No'), Gtk.ResponseType.NO,
+						_('Yes'), Gtk.ResponseType.YES,
 					)
 			dialog.set_default_response(Gtk.ResponseType.YES)
 			result = run_dialog(dialog)

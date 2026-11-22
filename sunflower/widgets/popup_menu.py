@@ -570,12 +570,13 @@ class PopupMenu:
 				data = associations_manager.get_sample_data(path, provider)
 				mime_type = associations_manager.get_mime_type(data=data)
 			except GLib.Error as error:
+				# type stays unknown for items which can't be read, like broken links
 				if error.matches(Gio.io_error_quark(), Gio.IOErrorEnum.IS_DIRECTORY):
 					mime_type = 'inode/directory'
-				else:
-					raise error
 			except IsADirectoryError:
 				mime_type = 'inode/directory'
+			except OSError:
+				pass
 
 		self.__update_emblem_selection(path)
 		self.__populate_open_with_menu(path, mime_type)

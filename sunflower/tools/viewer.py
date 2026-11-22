@@ -6,7 +6,7 @@ import chardet
 import codecs
 import subprocess
 
-from gi.repository import Gio, Gtk, Gdk, Pango, GObject, GdkPixbuf
+from gi.repository import Gio, GLib, Gtk, Gdk, Pango, GObject, GdkPixbuf
 from sunflower.common import executable_exists, decode_file_name, get_monospace_font_string
 from sunflower.widgets.status_bar import StatusBar
 from sunflower.plugin_base.provider import Mode as FileMode
@@ -34,6 +34,23 @@ class Viewer(Gtk.Window):
 
 		# viewer does not support directories
 		if provider.is_dir(path):
+			return
+
+		# make sure file can be read, which is not the case with broken links
+		try:
+			provider.get_file_handle(path, FileMode.READ).close()
+
+		except (GLib.Error, OSError) as error:
+			dialog = Gtk.MessageDialog(
+									transient_for=parent._parent,
+									destroy_with_parent=True,
+									message_type=Gtk.MessageType.ERROR,
+									buttons=Gtk.ButtonsType.OK,
+									text=error.message if isinstance(error, GLib.Error) else str(error)
+								)
+			run_dialog(dialog)
+			dialog.destroy()
+			self.destroy()
 			return
 
 		self.path = path

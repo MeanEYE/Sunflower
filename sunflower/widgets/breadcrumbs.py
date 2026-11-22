@@ -18,10 +18,10 @@ class Breadcrumbs:
 		self.box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 
 		if Gtk.get_major_version() == 3:
-			self.container.add_with_viewport(self.box)
+			self.container.add(self.box)
 
 		else:
-			# GTK 4 scrolled windows create the viewport themselves
+			# scrolled windows create the viewport themselves in both versions
 			self.container.set_child(self.box)
 
 		# change the look of container

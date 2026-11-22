@@ -140,7 +140,13 @@ class GioProvider(Provider):
 		get_file(real_path).create(Gio.FileCreateFlags.REPLACE_DESTINATION)
 
 		if mode is not None and Support.SET_ACCESS in self.get_support(real_path):
-			self.set_mode(real_path, mode)
+			try:
+				self.set_mode(real_path, mode)
+
+			except GLib.Error:
+				# file is created at this point, some file systems report mode
+				# as changeable but refuse to do so, NTFS and FAT for example
+				pass
 
 	def create_directory(self, path, mode=None, relative_to=None):
 		"""Create directory with specified mode set"""
@@ -148,7 +154,13 @@ class GioProvider(Provider):
 		get_file(real_path).make_directory_with_parents()
 
 		if mode is not None and Support.SET_ACCESS in self.get_support(real_path):
-			self.set_mode(real_path, mode)
+			try:
+				self.set_mode(real_path, mode)
+
+			except GLib.Error:
+				# directory is created at this point, some file systems report mode
+				# as changeable but refuse to do so, NTFS and FAT for example
+				pass
 
 	def get_file_handle(self, path, mode, relative_to=None):
 		"""Open path in specified mode and return its handle"""

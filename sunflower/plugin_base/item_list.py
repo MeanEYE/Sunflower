@@ -746,12 +746,12 @@ class ItemList(PluginBase):
 		result = False
 
 		if keyval == Gdk.KEY_Return:
-			self._stop_search()
+			self._stop_search(self._search_entry)
 			self._execute_selected_item()
 			result = True
 
 		elif keyval == Gdk.KEY_Escape:
-			self._stop_search()
+			self._stop_search(self._search_entry)
 			result = True
 
 		return result

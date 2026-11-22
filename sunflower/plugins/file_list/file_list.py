@@ -912,12 +912,18 @@ class FileList(ItemList):
 			destination_provider = opposite_object.get_provider()
 			destination_monitor = opposite_object.get_monitor()
 
+		else:
+			# opposite tab is not a list, terminal for example, its path is used as destination
+			destination_path = getattr(opposite_object, 'path', self.path)
+			Provider = self._parent.get_provider_by_path(destination_path)
+			destination_provider = Provider(self, destination_path)
+
 		# ask confirmation from user
 		dialog = CopyDialog(
 						self._parent,
 						source_provider,
 						destination_provider,
-						self._get_other_provider().get_path()
+						destination_provider.get_path()
 					)
 		result = dialog.get_response()
 
@@ -958,12 +964,18 @@ class FileList(ItemList):
 		if hasattr(opposite_object, 'get_provider'):
 			destination_provider = opposite_object.get_provider()
 
+		else:
+			# opposite tab is not a list, terminal for example, its path is used as destination
+			destination_path = getattr(opposite_object, 'path', self.path)
+			Provider = self._parent.get_provider_by_path(destination_path)
+			destination_provider = Provider(self, destination_path)
+
 		# ask confirmation from user
 		dialog = MoveDialog(
 						self._parent,
 						source_provider,
 						destination_provider,
-						self._get_other_provider().get_path()
+						destination_provider.get_path()
 					)
 		result = dialog.get_response()
 
@@ -981,9 +993,10 @@ class FileList(ItemList):
 			if source_queue is not None:
 				operation.set_source_queue(source_queue)
 
-			destination_queue = opposite_object.get_monitor_queue()
-			if destination_queue is not None:
-				operation.set_destination_queue(destination_queue)
+			if hasattr(opposite_object, 'get_monitor_queue'):
+				destination_queue = opposite_object.get_monitor_queue()
+				if destination_queue is not None:
+					operation.set_destination_queue(destination_queue)
 
 			operation.set_selection(selection)
 			operation.start()

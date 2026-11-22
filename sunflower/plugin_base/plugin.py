@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-import getpass
+import os
 
 from gi.repository import Gtk, GObject, Gdk
 from sunflower.accelerator_group import AcceleratorGroup
@@ -38,12 +38,10 @@ class PluginBase(Gtk.Box):
 		# title bar
 		self._title_bar = TitleBar(self._parent, self)
 
-		try:
-			if getpass.getuser() == 'root':
-				self._title_bar.set_mode(TitleBarMode.SUPER_USER)
-
-		except:
-			pass
+		# effective user is checked as environment is not reliable, for
+		# example `su` doesn't necessarily update user name variables
+		if os.geteuid() == 0:
+			self._title_bar.set_mode(TitleBarMode.SUPER_USER)
 
 		# create titlebar buttons
 		self._create_buttons()

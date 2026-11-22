@@ -1577,7 +1577,11 @@ class MainWindow(Gtk.ApplicationWindow):
 
 		# make sure we have reference object
 		if reference is None:
-			reference = target_object.locations_button
+			# not all tabs have locations button, trash and terminal for example
+			reference = getattr(target_object, 'locations_button', None)
+
+			if reference is None:
+				reference = target_object._title_bar.get_container()
 
 		# show locations menu
 		self.locations.show(reference, target_object)

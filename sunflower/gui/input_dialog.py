@@ -910,7 +910,9 @@ class CopyDialog:
 		self.checkbox_timestamp = Gtk.CheckButton.new_with_label(_('Set date and time on destination'))
 		self.checkbox_silent = Gtk.CheckButton.new_with_label(_('Silent mode'))
 
+		# options related to silent mode are indented below it
 		vbox_silent = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+		vbox_silent.set_margin_start(15)
 		vbox_silent.set_sensitive(False)
 
 		self.checkbox_merge = Gtk.CheckButton.new_with_label(_('Merge directories'))

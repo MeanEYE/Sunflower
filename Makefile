@@ -133,7 +133,7 @@ dist: archive
 	$(info Compressing release archive...)
 	gzip -9 $(FILE_PATH).tar
 	mv $(FILE_PATH).tar.gz $(FILE_PATH).tgz
-	sha256sum $(FILE_PATH).tgz > $(FILE_PATH).tgz.sha256
+	cd $(BUILD_DIRECTORY); sha256sum $(notdir $(FILE_PATH).tgz) > $(notdir $(FILE_PATH).tgz).sha256
 
 dist-py:
 	$(info Building package for Python...)
@@ -150,7 +150,7 @@ dist-deb: archive
 	sed -i "s/@size@/`du --summarize $(DEBIAN_BUILD_DIRECTORY) | cut -f 1`/" $(DEBIAN_BUILD_DIRECTORY)/DEBIAN/control
 	fakeroot dpkg-deb --build $(DEBIAN_BUILD_DIRECTORY)
 	mv $(DEBIAN_BUILD_DIRECTORY).deb $(DEB_FILE_PATH)
-	sha256sum $(DEB_FILE_PATH) > $(DEB_FILE_PATH).sha256
+	cd $(BUILD_DIRECTORY); sha256sum $(notdir $(DEB_FILE_PATH)) > $(notdir $(DEB_FILE_PATH)).sha256
 
 dist-arch: dist
 	$(info Building package for ArchLinux...)
@@ -163,7 +163,7 @@ dist-arch: dist
 	cd $(ARCH_BUILD_DIRECTORY); makepkg -g >> PKGBUILD
 	cd $(ARCH_BUILD_DIRECTORY); PACKAGER="$(PACKAGER)" PKGEXT='.pkg.tar.xz' makepkg
 	mv $(ARCH_BUILD_DIRECTORY)/sunflower-$(VERSION)-$(RELEASE)-any.pkg.tar.xz $(PKG_FILE_PATH)
-	sha256sum $(PKG_FILE_PATH) > $(PKG_FILE_PATH).sha256
+	cd $(BUILD_DIRECTORY); sha256sum $(notdir $(PKG_FILE_PATH)) > $(notdir $(PKG_FILE_PATH)).sha256
 
 dist-rpm: archive
 	$(info Building package for Fedora, Mageia, Mandriva...)
@@ -171,7 +171,7 @@ dist-rpm: archive
 	sed -i "s/@requires@/python3, python3-gobject, python3-chardet, gtk3, gnome-desktop3/" $(BUILD_DIRECTORY)/sunflower.spec
 	rpmbuild -bb $(BUILD_DIRECTORY)/sunflower.spec --build-in-place --buildroot "$(abspath $(FEDORA_BUILD_DIRECTORY))"
 	cp ~/rpmbuild/RPMS/noarch/sunflower-$(VERSION)-$(RELEASE).noarch.rpm $(RPM_FILE_PATH)
-	sha256sum $(RPM_FILE_PATH) > $(RPM_FILE_PATH).sha256
+	cd $(BUILD_DIRECTORY); sha256sum $(notdir $(RPM_FILE_PATH)) > $(notdir $(RPM_FILE_PATH)).sha256
 
 dist-rpm-opensuse: archive
 	$(info Building package for OpenSUSE...)
@@ -179,7 +179,7 @@ dist-rpm-opensuse: archive
 	sed -i "s/@requires@/python3, python3-gobject, python3-gobject-cairo, python3-chardet, typelib-1_0-Gtk-3_0, typelib-1_0-GnomeDesktop-3_0/" $(BUILD_DIRECTORY)/sunflower.spec
 	rpmbuild -bb $(BUILD_DIRECTORY)/sunflower.spec --build-in-place --buildroot "$(abspath $(FEDORA_BUILD_DIRECTORY))"
 	cp ~/rpmbuild/RPMS/noarch/sunflower-$(VERSION)-$(RELEASE).noarch.rpm $(RPM_OPENSUSE_FILE_PATH)
-	sha256sum $(RPM_OPENSUSE_FILE_PATH) > $(RPM_OPENSUSE_FILE_PATH).sha256
+	cd $(BUILD_DIRECTORY); sha256sum $(notdir $(RPM_OPENSUSE_FILE_PATH)) > $(notdir $(RPM_OPENSUSE_FILE_PATH)).sha256
 
 dist-rpm-pclinuxos: archive
 	$(info Building package for PCLinuxOS...)
@@ -187,14 +187,14 @@ dist-rpm-pclinuxos: archive
 	sed -i "s/@requires@/python3, python3-gobject, python3-chardet, gtk+3.0/" $(BUILD_DIRECTORY)/sunflower.spec
 	rpmbuild -bb $(BUILD_DIRECTORY)/sunflower.spec --build-in-place --buildroot "$(abspath $(FEDORA_BUILD_DIRECTORY))"
 	cp ~/rpmbuild/RPMS/noarch/sunflower-$(VERSION)-$(RELEASE).noarch.rpm $(RPM_PCLINUXOS_FILE_PATH)
-	sha256sum $(RPM_PCLINUXOS_FILE_PATH) > $(RPM_PCLINUXOS_FILE_PATH).sha256
+	cd $(BUILD_DIRECTORY); sha256sum $(notdir $(RPM_PCLINUXOS_FILE_PATH)) > $(notdir $(RPM_PCLINUXOS_FILE_PATH)).sha256
 
 dist-flatpak:
 	$(info Building Flatpak bundle...)
 	flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 	flatpak-builder --force-clean --user --install-deps-from=flathub --repo=$(BUILD_DIRECTORY)/flatpak-repo $(BUILD_DIRECTORY)/flatpak-build $(WORKING_DIRECTORY)/dist/flatpak/org.sunflower.Sunflower.yml
 	flatpak build-bundle --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo $(BUILD_DIRECTORY)/flatpak-repo $(FLATPAK_FILE_PATH) org.sunflower.Sunflower
-	sha256sum $(FLATPAK_FILE_PATH) > $(FLATPAK_FILE_PATH).sha256
+	cd $(BUILD_DIRECTORY); sha256sum $(notdir $(FLATPAK_FILE_PATH)) > $(notdir $(FLATPAK_FILE_PATH)).sha256
 
 dist-all: dist-deb dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-arch dist-py dist-flatpak standalone
 
@@ -258,7 +258,7 @@ standalone:
 	cat $(FILE_PATH).zip >> $(APP_FILE_PATH)
 	$(RM) -f $(FILE_PATH).zip
 	chmod a+x $(APP_FILE_PATH)
-	sha256sum $(APP_FILE_PATH) > $(APP_FILE_PATH).sha256
+	cd $(BUILD_DIRECTORY); sha256sum $(notdir $(APP_FILE_PATH)) > $(notdir $(APP_FILE_PATH)).sha256
 
 publish:
 	$(info Publishing packages to $(PUBLISH_HOST):$(PUBLISH_PATH)...)

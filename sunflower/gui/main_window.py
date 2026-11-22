@@ -63,8 +63,8 @@ class MainWindow(Gtk.ApplicationWindow):
 	# continue increasing and will never be reset.
 	version = {
 			'major': 0,
-			'minor': 6,
-			'build': 64,
+			'minor': 7,
+			'build': 65,
 			'stage': 'f'
 		}
 

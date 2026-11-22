@@ -1,3 +1,40 @@
+Version 0.7-65
+
+  + Archive: Full support for ZIP files, including adding and removing items.
+  + Archive: Add support for TAR files, plain and compressed.
+  + Rework queue system to three fixed, color coded queues with new selector widget.
+  + Add progress ring to operation buttons, with paused state and queue indicator.
+  + Add field of sunflowers to header bar.
+  + Owner column: Show user and group names instead of numbers.
+  + File list: Allow copy and move when opposite tab is a terminal.
+  + Location menu: Mount locations which are not mounted before opening them.
+  * Redesign copy, move and error dialogs.
+  * Detect supported operations for destination path instead of per provider.
+  * Mounts: Track changes and hide mounts shadowed by a volume.
+  * Detect super user by effective user id.
+  * Replace stock items with named icons and remove use of `add_with_viewport`.
+  * Add missing dependencies to packages and move optional ones to recommended.
+  * Location menu: Fix operations being performed on the wrong panel after menu was used.
+  * GIO provider: Fix copying to GIO destinations.
+  * GIO provider: Fix removing symbolic links to directories, which removed content of the target.
+  * GIO provider: Fix handling of names with special characters on remote mounts.
+  * GIO provider: Ignore failure to set mode on file systems without permissions.
+  * Unescape paths coming from mounts and system bookmarks.
+  * File list: Fix listing of items with dates outside of 32-bit range.
+  * File list: Fix racing conditions in directory loading.
+  * File list: Fix cases when first item in the list is not selected.
+  * File list: Ignore changes in directories which are not expanded.
+  * Mounts: Fix issues with duplicates.
+  * Fix fast media preview.
+  * Item list: Fix error on return and escape in quick search, and return focus to list when it closes.
+  * Fix showing locations menu for tabs without locations button.
+  * Fix errors when opening menu or viewer for broken symbolic links.
+  * Breadcrumbs: Fix empty fragment for paths with trailing slash.
+  * Fix asset lookup paths for styles, icons and translations.
+  * Fix leading space when formatting file sizes.
+  * Operation dialog: Fix narrow progress bars and alignment of value labels.
+  * Updated translations.
+
 Version 0.6-64
 
   + Initial Flatpak packaging support.

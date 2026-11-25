@@ -26,7 +26,7 @@ Sunflower is a small and highly customizable twin-panel file manager for Linux w
 Official packages for the latest release can be downloaded from the [download page](https://sunflower-fm.org/download) or from the releases page on [GitLab](https://gitlab.com/MeanEYE/Sunflower/-/releases) and [GitHub](https://github.com/MeanEYE/Sunflower/releases). The following formats are provided:
 
 * DEB for Debian, Ubuntu, Linux Mint and elementary
-* RPM for Fedora, RedHat, Mageia, Mandriva, OpenSUSE and PCLinuxOS
+* RPM for Fedora, AlmaLinux, RedHat, Mageia, Mandriva, OpenSUSE and PCLinuxOS
 * Arch Linux package
 * Flatpak
 * Python package

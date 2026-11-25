@@ -218,7 +218,9 @@ def get_config_path():
 	result = os.path.expanduser('~/.sunflower')
 
 	if os.path.isdir(config_directory):
-		return os.path.join(config_directory, 'sunflower')
+		result = os.path.join(config_directory, 'sunflower')
+
+	return result
 
 def get_data_directory():
 	"""Get full path to user data files."""

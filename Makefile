@@ -176,8 +176,8 @@ dist-rpm-pclinuxos: archive
 dist-flatpak:
 	$(info Building Flatpak bundle...)
 	flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-	flatpak-builder --force-clean --user --install-deps-from=flathub --repo=$(BUILD_DIRECTORY)/flatpak-repo $(BUILD_DIRECTORY)/flatpak-build $(WORKING_DIRECTORY)/dist/flatpak/org.sunflower.Sunflower.yml
-	flatpak build-bundle --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo $(BUILD_DIRECTORY)/flatpak-repo $(FLATPAK_FILE_PATH) org.sunflower.Sunflower
+	flatpak-builder --force-clean --user --install-deps-from=flathub --repo=$(BUILD_DIRECTORY)/flatpak-repo $(BUILD_DIRECTORY)/flatpak-build $(WORKING_DIRECTORY)/dist/flatpak/org.sunflower_fm.Sunflower.yml
+	flatpak build-bundle --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo $(BUILD_DIRECTORY)/flatpak-repo $(FLATPAK_FILE_PATH) org.sunflower_fm.Sunflower
 	cd $(BUILD_DIRECTORY); sha256sum $(notdir $(FLATPAK_FILE_PATH)) > $(notdir $(FLATPAK_FILE_PATH)).sha256
 
 dist-all: dist-deb dist-rpm dist-rpm-opensuse dist-rpm-pclinuxos dist-arch dist-py dist-flatpak standalone
@@ -224,7 +224,7 @@ clean:
 	$(RM) -rf sunflower.*
 	$(RM) -rf Sunflower.egg-info
 	$(RM) -rf $(WORKING_DIRECTORY).flatpak-builder
-	for ref in $$(flatpak list --user --columns=ref 2>/dev/null | grep -E '^(org\.sunflower\.Sunflower|org\.gnome\.(Sdk|Platform))'); do \
+	for ref in $$(flatpak list --user --columns=ref 2>/dev/null | grep -E '^(org\.sunflower_fm\.Sunflower|org\.gnome\.(Sdk|Platform))'); do \
 		flatpak uninstall --user --noninteractive $$ref 2>/dev/null || true; \
 	done
 	flatpak uninstall --user --noninteractive --unused 2>/dev/null || true

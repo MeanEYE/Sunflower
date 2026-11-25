@@ -1,4 +1,4 @@
-app-id: org.sunflower.Sunflower
+app-id: org.sunflower_fm.Sunflower
 runtime: org.gnome.Platform
 runtime-version: '49'
 sdk: org.gnome.Sdk
@@ -16,8 +16,6 @@ finish-args:
   - --filesystem=xdg-run/gvfsd
   - --talk-name=org.gtk.vfs.*
   - --talk-name=org.freedesktop.Notifications
-  # the application registers on the session bus as org.sunflower
-  - --own-name=org.sunflower
 
 cleanup:
   - /include
@@ -60,10 +58,12 @@ modules:
       # translations must sit inside the package directory, see common.load_translation()
       - cd translations && for mo in */LC_MESSAGES/sunflower.mo; do install -Dm644 "$mo" "/app/share/sunflower/sunflower/translations/$mo"; done
       - install -Dm755 dist/flatpak/sunflower.sh /app/bin/sunflower
-      - sed 's|^Icon=.*|Icon=org.sunflower.Sunflower|' Sunflower.desktop > org.sunflower.Sunflower.desktop
-      - install -Dm644 org.sunflower.Sunflower.desktop /app/share/applications/org.sunflower.Sunflower.desktop
-      - install -Dm644 images/sunflower.svg /app/share/icons/hicolor/scalable/apps/org.sunflower.Sunflower.svg
-      - install -Dm644 dist/flatpak/org.sunflower.Sunflower.metainfo.xml /app/share/metainfo/org.sunflower.Sunflower.metainfo.xml
+      - sed 's|^Icon=.*|Icon=org.sunflower_fm.Sunflower|' Sunflower.desktop > org.sunflower_fm.Sunflower.desktop
+      - install -Dm644 org.sunflower_fm.Sunflower.desktop /app/share/applications/org.sunflower_fm.Sunflower.desktop
+      - install -Dm644 images/sunflower.svg /app/share/icons/hicolor/scalable/apps/org.sunflower_fm.Sunflower.svg
+      # desktop entry is renamed above, metainfo has to point at the new name
+      - sed -i 's|sunflower.desktop</launchable>|org.sunflower_fm.Sunflower.desktop</launchable>|' org.sunflower_fm.Sunflower.metainfo.xml
+      - install -Dm644 org.sunflower_fm.Sunflower.metainfo.xml /app/share/metainfo/org.sunflower_fm.Sunflower.metainfo.xml
     sources:
       - type: dir
         path: ../..

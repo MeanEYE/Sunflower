@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-	<id>org.sunflower.Sunflower</id>
+	<id>org.sunflower_fm.Sunflower</id>
 	<metadata_license>CC0-1.0</metadata_license>
 	<project_license>GPL-3.0-or-later</project_license>
 	<name>Sunflower</name>
@@ -8,11 +8,17 @@
 	<description>
 		<p>Small and highly customizable twin-panel file manager for Linux with support for plugins.</p>
 	</description>
-	<launchable type="desktop-id">org.sunflower.Sunflower.desktop</launchable>
+	<launchable type="desktop-id">sunflower.desktop</launchable>
 	<url type="homepage">https://sunflower-fm.org</url>
-	<developer id="org.sunflower">
+	<developer id="org.sunflower_fm">
 		<name>Sunflower Team</name>
 	</developer>
+	<screenshots>
+		<screenshot type="default">
+			<caption>Twin panels with bookmarks, and the dark theme with a terminal tab</caption>
+			<image>https://gitlab.com/MeanEYE/Sunflower/-/raw/develop/images/screenshot.png</image>
+		</screenshot>
+	</screenshots>
 	<content_rating type="oars-1.1"/>
 	<releases>
 		<release version="0.7.65" date="2026-11-22"/>

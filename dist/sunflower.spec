@@ -30,6 +30,7 @@ cp -r build/Sunflower/images "$RPM_BUILD_ROOT/usr/share/sunflower"
 rsync -r build/Sunflower/translations/* "$RPM_BUILD_ROOT/usr/share/locale" --exclude "*.po*"
 install -Dm644 "build/Sunflower/images/sunflower.svg" "$RPM_BUILD_ROOT/usr/share/pixmaps/sunflower.svg"
 install -Dm644 "build/Sunflower/Sunflower.desktop" "$RPM_BUILD_ROOT/usr/share/applications/sunflower.desktop"
+install -Dm644 "build/Sunflower/org.sunflower_fm.Sunflower.metainfo.xml" "$RPM_BUILD_ROOT/usr/share/metainfo/org.sunflower_fm.Sunflower.metainfo.xml"
 desktop-file-edit --add-category="X-MandrivaLinux-System-FileTools" "$RPM_BUILD_ROOT/usr/share/applications/sunflower.desktop"
 
 %files
@@ -39,6 +40,7 @@ desktop-file-edit --add-category="X-MandrivaLinux-System-FileTools" "$RPM_BUILD_
 /usr/share/locale/*
 /usr/share/pixmaps/sunflower.svg
 /usr/share/applications/sunflower.desktop
+/usr/share/metainfo/org.sunflower_fm.Sunflower.metainfo.xml
 /usr/share/sunflower/images/*.png
 /usr/share/sunflower/images/*.svg
 /usr/share/sunflower/styles/*.css

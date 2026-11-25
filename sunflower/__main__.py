@@ -60,7 +60,7 @@ class Arguments:
 
 class Sunflower(Gtk.Application):
 	"""Main application class."""
-	application_id = 'org.sunflower'
+	application_id = 'org.sunflower_fm.Sunflower'
 
 	def __init__(self):
 		self.window = None

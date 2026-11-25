@@ -47,6 +47,7 @@ setup(
 			('share/sunflower/styles', ['styles/main.css']),
 			('share/icons/hicolor/scalable/apps', ['images/sunflower.svg']),
 			('share/applications', ['Sunflower.desktop']),
+			('share/metainfo', ['org.sunflower_fm.Sunflower.metainfo.xml']),
 			*get_translation_files()
 			],
 		entry_points={'console_scripts': ['sunflower = sunflower.__main__:main']}

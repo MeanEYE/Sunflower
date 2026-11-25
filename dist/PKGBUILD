@@ -33,4 +33,5 @@ package() {
 
 	install -Dm644 images/sunflower.svg "${pkgdir}/usr/share/pixmaps/sunflower.svg"
 	install -Dm644 Sunflower.desktop "${pkgdir}/usr/share/applications/sunflower.desktop"
+	install -Dm644 org.sunflower_fm.Sunflower.metainfo.xml "${pkgdir}/usr/share/metainfo/org.sunflower_fm.Sunflower.metainfo.xml"
 }

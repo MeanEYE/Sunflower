@@ -1,0 +1,6 @@
+FROM registry.opensuse.org/opensuse/leap:16.0
+
+RUN zypper --non-interactive install make git rpm-build desktop-file-utils rsync python3 \
+	&& zypper clean --all
+
+RUN git config --system --add safe.directory /src

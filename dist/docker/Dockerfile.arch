@@ -1,7 +1,7 @@
 FROM docker.io/library/archlinux:base-devel
 
 # PKGBUILD depends() are verified by makepkg, so they must be present
-RUN pacman -Syu --noconfirm git python python-gobject python-cairo python-chardet gtk3 gnome-desktop \
+RUN pacman -Syu --noconfirm git python python-gobject python-cairo python-chardet gtk3 vte3 gnome-desktop \
 	&& pacman -Scc --noconfirm
 
 RUN git config --system --add safe.directory /src

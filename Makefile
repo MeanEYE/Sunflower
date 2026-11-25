@@ -152,7 +152,7 @@ dist-arch: dist
 dist-rpm: archive
 	$(info Building package for Fedora, Mageia, Mandriva...)
 	$(CREATE_RPM_SPEC_FILE)
-	sed -i "s/@requires@/python3, python3-gobject, python3-chardet, gtk3, gnome-desktop3/" $(BUILD_DIRECTORY)/sunflower.spec
+	sed -i "s/@requires@/python3, python3-gobject, python3-chardet, gobject-introspection, gtk3, vte291, gnome-desktop3/" $(BUILD_DIRECTORY)/sunflower.spec
 	rpmbuild -bb $(BUILD_DIRECTORY)/sunflower.spec --build-in-place --buildroot "$(abspath $(FEDORA_BUILD_DIRECTORY))"
 	cp ~/rpmbuild/RPMS/noarch/sunflower-$(VERSION)-$(RELEASE).noarch.rpm $(RPM_FILE_PATH)
 	cd $(BUILD_DIRECTORY); sha256sum $(notdir $(RPM_FILE_PATH)) > $(notdir $(RPM_FILE_PATH)).sha256
@@ -160,7 +160,7 @@ dist-rpm: archive
 dist-rpm-opensuse: archive
 	$(info Building package for OpenSUSE...)
 	$(CREATE_RPM_SPEC_FILE)
-	sed -i "s/@requires@/python3, python3-gobject, python3-gobject-cairo, python3-chardet, typelib-1_0-Gtk-3_0, typelib-1_0-GnomeDesktop-3_0/" $(BUILD_DIRECTORY)/sunflower.spec
+	sed -i "s/@requires@/python3, python3-gobject, python3-gobject-cairo, python3-chardet, typelib-1_0-Gtk-3_0, typelib-1_0-Vte-2_91, typelib-1_0-GnomeDesktop-3_0/" $(BUILD_DIRECTORY)/sunflower.spec
 	rpmbuild -bb $(BUILD_DIRECTORY)/sunflower.spec --build-in-place --buildroot "$(abspath $(FEDORA_BUILD_DIRECTORY))"
 	cp ~/rpmbuild/RPMS/noarch/sunflower-$(VERSION)-$(RELEASE).noarch.rpm $(RPM_OPENSUSE_FILE_PATH)
 	cd $(BUILD_DIRECTORY); sha256sum $(notdir $(RPM_OPENSUSE_FILE_PATH)) > $(notdir $(RPM_OPENSUSE_FILE_PATH)).sha256

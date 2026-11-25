@@ -22,6 +22,7 @@ endif
 
 # variables used in packages, packager defaults to the identity configured in git
 RELEASE ?= 1
+DEBIAN_VERSION := $(shell sed -n '1s/.*(\(.*\)).*/\1/p' $(WORKING_DIRECTORY)/debian/changelog)
 GIT_USER_NAME := $(shell git config user.name 2>/dev/null)
 GIT_USER_EMAIL := $(shell git config user.email 2>/dev/null)
 ifneq ($(GIT_USER_NAME),)
@@ -92,25 +93,6 @@ Options for dist-* passed through environment variables:
 endef
 export HELP
 
-# install program to fake root (this needs to be the same as dist/PKGBUILD)
-define DEBIAN_INSTALL
-	rm -rf "$(DEBIAN_BUILD_DIRECTORY)"
-	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)"
-	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/share/locale"
-	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/share/applications"
-	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)/usr/share/sunflower"
-	install -d "$(DEBIAN_BUILD_DIRECTORY)/usr/lib/python3/dist-packages/sunflower"
-
-	tar -xf $(FILE_PATH).tar -C $(BUILD_DIRECTORY)
-	install -Dm755 $(WORKING_DIRECTORY)/dist/sunflower "$(DEBIAN_BUILD_DIRECTORY)/usr/bin/sunflower"
-	cp -r $(BUILD_DIRECTORY)/Sunflower/sunflower/* "$(DEBIAN_BUILD_DIRECTORY)/usr/lib/python3/dist-packages/sunflower"
-	cp -r $(BUILD_DIRECTORY)/Sunflower/styles "$(DEBIAN_BUILD_DIRECTORY)/usr/share/sunflower"
-	cp -r $(BUILD_DIRECTORY)/Sunflower/images "$(DEBIAN_BUILD_DIRECTORY)/usr/share/sunflower"
-	rsync -r $(BUILD_DIRECTORY)/Sunflower/translations/* "$(DEBIAN_BUILD_DIRECTORY)/usr/share/locale" --exclude "*.po*"
-	install -Dm644 "$(BUILD_DIRECTORY)/Sunflower/images/sunflower.svg" "$(DEBIAN_BUILD_DIRECTORY)/usr/share/icons/hicolor/scalable/apps/sunflower.svg"
-	install -Dm644 "$(BUILD_DIRECTORY)/Sunflower/Sunflower.desktop" "$(DEBIAN_BUILD_DIRECTORY)/usr/share/applications/sunflower.desktop"
-endef
-
 # replace variables in spec file
 define CREATE_RPM_SPEC_FILE
 	cp $(WORKING_DIRECTORY)/dist/sunflower.spec $(BUILD_DIRECTORY)
@@ -142,14 +124,16 @@ dist-py:
 
 dist-deb: archive
 	$(info Building package for Debian, Mint, Ubuntu...)
-	$(DEBIAN_INSTALL)
-	mkdir -p $(DEBIAN_BUILD_DIRECTORY)/DEBIAN
-	cp $(WORKING_DIRECTORY)/dist/control $(DEBIAN_BUILD_DIRECTORY)/DEBIAN
-	sed -i "s/@version@/$(VERSION)/" $(DEBIAN_BUILD_DIRECTORY)/DEBIAN/control
-	sed -i "s/@packager@/$(PACKAGER)/" $(DEBIAN_BUILD_DIRECTORY)/DEBIAN/control
-	sed -i "s/@size@/`du --summarize $(DEBIAN_BUILD_DIRECTORY) | cut -f 1`/" $(DEBIAN_BUILD_DIRECTORY)/DEBIAN/control
-	fakeroot dpkg-deb --build $(DEBIAN_BUILD_DIRECTORY)
-	mv $(DEBIAN_BUILD_DIRECTORY).deb $(DEB_FILE_PATH)
+	@if [ "$(DEBIAN_VERSION)" != "$(VERSION)-$(RELEASE)" ]; then \
+		echo "Version in debian/changelog ($(DEBIAN_VERSION)) does not match $(VERSION)-$(RELEASE), add a new entry first."; \
+		exit 1; \
+	fi
+	rm -rf "$(DEBIAN_BUILD_DIRECTORY)"
+	mkdir -p "$(DEBIAN_BUILD_DIRECTORY)"
+	tar -xf $(FILE_PATH).tar -C $(DEBIAN_BUILD_DIRECTORY)
+	cp -r $(WORKING_DIRECTORY)/debian $(DEBIAN_BUILD_DIRECTORY)/Sunflower
+	cd $(DEBIAN_BUILD_DIRECTORY)/Sunflower; dpkg-buildpackage --build=binary --no-sign
+	mv $(DEBIAN_BUILD_DIRECTORY)/sunflower_$(DEBIAN_VERSION)_all.deb $(DEB_FILE_PATH)
 	cd $(BUILD_DIRECTORY); sha256sum $(notdir $(DEB_FILE_PATH)) > $(notdir $(DEB_FILE_PATH)).sha256
 
 dist-arch: dist

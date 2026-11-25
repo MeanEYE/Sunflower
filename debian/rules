@@ -1,0 +1,19 @@
+#!/usr/bin/make -f
+
+# program has no automated tests
+export PYBUILD_DISABLE = test
+
+%:
+	dh $@ --buildsystem=pybuild
+
+# compile translations from their sources instead of shipping prebuilt ones
+execute_before_dh_auto_build:
+	for po in translations/*/LC_MESSAGES/sunflower.po; do \
+		msgfmt "$$po" -o "$${po%.po}.mo" || exit 1; \
+	done
+
+# desktop entry is named after the program upstream and starts with an
+# interpreter line, which makes it look like a script that is not executable
+execute_after_dh_auto_install:
+	sed '1{/^#!/d}' Sunflower.desktop > debian/sunflower/usr/share/applications/sunflower.desktop
+	rm debian/sunflower/usr/share/applications/Sunflower.desktop

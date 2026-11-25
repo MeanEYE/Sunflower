@@ -1,0 +1,47 @@
+.TH SUNFLOWER 1 "November 2026" "Sunflower 0.7" "User Commands"
+.SH NAME
+sunflower \- twin-panel file manager
+.SH SYNOPSIS
+.B sunflower
+[\fIOPTION\fR...]
+.SH DESCRIPTION
+Sunflower is a small and highly customizable twin-panel file manager with
+support for plugins.
+.SH OPTIONS
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Show help options.
+.TP
+\fB\-v\fR, \fB\-\-version\fR
+Show version number.
+.TP
+\fB\-p\fR, \fB\-\-no\-plugins\fR
+Skip loading additional plugins.
+.TP
+\fB\-t\fR, \fB\-\-no\-load\-tabs\fR
+Skip loading additional tabs.
+.TP
+\fB\-l\fR, \fB\-\-left\-tab\fR=\fIDIRECTORY\fR
+Open new tab on the left notebook.
+.TP
+\fB\-r\fR, \fB\-\-right\-tab\fR=\fIDIRECTORY\fR
+Open new tab on the right notebook.
+.TP
+\fB\-L\fR, \fB\-\-left\-terminal\fR=\fIDIRECTORY\fR
+Open terminal tab on the left notebook.
+.TP
+\fB\-R\fR, \fB\-\-right\-terminal\fR=\fIDIRECTORY\fR
+Open terminal tab on the right notebook.
+.SH ENVIRONMENT
+.TP
+.B SUNFLOWER_GTK
+Set to \fB4\fR to start the experimental GTK 4 interface.
+.SH FILES
+.TP
+.I ~/.config/sunflower/
+Configuration files.
+.TP
+.I ~/.config/sunflower/user_plugins/
+Plugins installed by the user.
+.SH AUTHOR
+Sunflower was written by Mladen Mijatov and contributors.

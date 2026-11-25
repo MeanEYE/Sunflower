@@ -1,0 +1,40 @@
+Source: sunflower
+Section: utils
+Priority: optional
+Maintainer: Mladen Mijatov <meaneye.rcf@gmail.com>
+Build-Depends: debhelper-compat (= 13),
+               dh-sequence-python3,
+               gettext,
+               python3-all,
+               python3-setuptools
+Standards-Version: 4.7.2
+Rules-Requires-Root: no
+Homepage: https://sunflower-fm.org
+Vcs-Browser: https://gitlab.com/MeanEYE/Sunflower
+Vcs-Git: https://gitlab.com/MeanEYE/Sunflower.git
+
+Package: sunflower
+Architecture: all
+Depends: gir1.2-gdkpixbuf-2.0,
+         gir1.2-glib-2.0 (>= 1.50),
+         gir1.2-gtk-3.0 (>= 3.22),
+         gir1.2-pango-1.0,
+         gir1.2-vte-2.91 (>= 0.46),
+         python3-chardet,
+         python3-gi,
+         python3-gi-cairo,
+         ${misc:Depends},
+         ${python3:Depends}
+Recommends: gir1.2-gnomedesktop-3.0,
+            gir1.2-gtksource-4,
+            gir1.2-notify-0.7,
+            gvfs-backends
+Suggests: python3-mutagen
+Description: small and highly customizable twin-panel file manager
+ Sunflower is a twin-panel file manager with support for plugins. It is
+ intended to be an easy-to-use and powerful file manager that integrates
+ into the GNOME desktop environment, without being limited to it.
+ .
+ Features include a tabbed interface with sessions, a built-in terminal
+ emulator, configurable keyboard shortcuts, bookmarks, emblems, browsing
+ of archives and access to remote locations through GIO.

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import re
+
 from setuptools import setup, find_packages
 from pathlib import Path
 
@@ -13,12 +15,17 @@ def get_translation_files():
 
 
 def get_version():
-	"""Get software version from the main window."""
-	import gi
-	gi.require_version('Gtk', '3.0')
-	gi.require_version('Notify', '0.7')
-	from sunflower.gui.main_window import MainWindow
-	return '{major}.{minor}.{build}'.format(**MainWindow.version)
+	"""Get software version from the main window.
+
+	Version is parsed out of the source instead of importing the module, as
+	that would require GTK to be available while building packages."""
+	source = Path('sunflower/gui/main_window.py').read_text()
+	major = re.search(r"'major': (\d+)", source).group(1)
+	minor = re.search(r"'minor': (\d+)", source).group(1)
+	build = re.search(r"'build': (\d+)", source).group(1)
+	result = '{0}.{1}.{2}'.format(major, minor, build)
+
+	return result
 
 
 setup(

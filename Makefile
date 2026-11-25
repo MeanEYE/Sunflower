@@ -252,7 +252,7 @@ standalone:
 	$(info Building standalone executable...)
 	mkdir -p $(BUILD_DIRECTORY)
 	$(RM) -f $(FILE_PATH).zip
-	cd $(WORKING_DIRECTORY) && zip --quiet $(abspath $(FILE_PATH)).zip -r sunflower images styles -x '*.pyc' -x '*/__pycache__/*' -x '*.xcf'
+	cd $(WORKING_DIRECTORY) && zip --quiet $(abspath $(FILE_PATH)).zip -r sunflower images styles -x '*.pyc' -x '*/__pycache__/*' -x '*.xcf' -x 'images/screenshot.png'
 	cd $(WORKING_DIRECTORY) && zip --quiet --junk-paths $(abspath $(FILE_PATH)).zip sunflower/__main__.py
 	echo '#!/usr/bin/env python3' > $(APP_FILE_PATH)
 	cat $(FILE_PATH).zip >> $(APP_FILE_PATH)

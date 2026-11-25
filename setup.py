@@ -36,7 +36,7 @@ setup(
 		packages=find_packages(),
 		package_data={'': ['plugin.conf']},
 		data_files=[
-			('share/sunflower/images', [str(path) for path in Path('images').rglob('*') if path.is_file() and path.suffix != '.xcf']),
+			('share/sunflower/images', [str(path) for path in Path('images').rglob('*') if path.is_file() and path.suffix != '.xcf' and path.name != 'screenshot.png']),
 			('share/sunflower/styles', ['styles/main.css']),
 			('share/icons/hicolor/scalable/apps', ['images/sunflower.svg']),
 			('share/applications', ['Sunflower.desktop']),

@@ -70,3 +70,4 @@ modules:
         skip:
           - build
           - .git
+          - images/screenshot.png

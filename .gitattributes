@@ -1,5 +1,6 @@
 /dist export-ignore
 /images/*.xcf export-ignore
+/images/screenshot.png export-ignore
 /translations/*.pot export-ignore
 /translations/*/LC_MESSAGES/*.po export-ignore
 Makefile export-ignore
